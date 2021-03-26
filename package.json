@@ -1,5 +1,5 @@
 {
-  "name": "toskaboiler",
+  "name": "palaute",
   "version": "1.0.0",
   "description": "Boilerplate for toska projects",
   "main": "index.js",
@@ -70,7 +70,7 @@
   "nodemonConfig": {
     "ignore": [
       "dist/*",
-      "toskaboiler/*",
+      "palaute/*",
       "client/*",
       "server/*"
     ]

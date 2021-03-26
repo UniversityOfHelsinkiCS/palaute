@@ -5,22 +5,13 @@ services:
     build:
       context: ./
       dockerfile: config/dev.Dockerfile
-    image: toskaboiler_dev
+    image: palaute_dev
     volumes:
       - ./:/usr/src/app
       - nodemod:/usr/src/app/node_modules/
     ports:
       - 3000:3000
-    container_name: toskaboiler_dev
-  db:
-    image: postgres:11
-    container_name: toskaboiler_db
-    environment:
-      - PGDATA=/data
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - pg_data:/data
+    container_name: palaute_dev
 
 volumes:
   nodemod:
-  pg_data:
