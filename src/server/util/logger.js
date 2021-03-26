@@ -1,31 +1,48 @@
 const winston = require('winston')
 const { inProduction } = require('./common')
+const { combine, timestamp, printf, splat } = winston.format
 
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'boilerplate' },
-  transports: [
-    //
-    // - Write to all logs with level `info` and below to `combined.log`
-    // - Write all logs error (and below) to `error.log`.
-    //
-    // new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    // new winston.transports.File({ filename: 'combined.log' }),
-  ],
-})
+const transports = []
 
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-//
+if (process.env.NODE_ENV !== 'test') {
+  transports.push(new winston.transports.File({ filename: 'debug.log' }))
+}
 
 if (!inProduction) {
-  logger.add(
+  const devFormat = printf(
+    ({ level, message, timestamp, ...rest }) =>
+      `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`,
+  )
+
+  transports.push(
     new winston.transports.Console({
-      format: winston.format.simple(),
+      level: 'debug',
+      format: combine(splat(), timestamp(), devFormat),
     }),
   )
 }
+
+if (inProduction) {
+  const levels = {
+    error: 0,
+    warn: 1,
+    info: 2,
+    http: 3,
+    verbose: 4,
+    debug: 5,
+    silly: 6,
+  }
+
+  const prodFormat = winston.format.printf(({ level, ...rest }) =>
+    JSON.stringify({
+      level: levels[level],
+      ...rest,
+    }),
+  )
+
+  transports.push(new winston.transports.Console({ format: prodFormat }))
+}
+
+const logger = winston.createLogger({ transports })
 
 module.exports = logger

@@ -1,21 +1,26 @@
 # Palaute
 
-### node_modules
+## Module missing? ##
 
-Install the dependencies *inside* the container. You can use `npm run install` to do so.
+Install the dependencies **inside** the container to have the application **inside** the container access them. You can use `npm run bash` to get inside the container to do so.
 
 ## How users can get started with Palaute
 
 Clone the repo, install docker to get started!
 
-`npm run start`
-To start the project in development mode use this command. It will start everything in development mode.
+To start the project in development mode use this command. It will start everything in development mode:
 
-`npm run (un)install <package-name>`
-To (un)install package, this will run the command in docker container.
+```bash
+$ npm run start
+```
 
-`npm run reset`
-If stuck reset everything. This will remove volumes and rebuild the docker images.
+## Stuck? ##
+
+If stuck reset everything and start from a clean slate:
+
+```bash
+$ npm run reset
+```
 
 ## Issues with Palaute
 
