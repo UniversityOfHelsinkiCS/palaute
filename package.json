@@ -1,0 +1,85 @@
+{
+  "name": "toskaboiler",
+  "version": "1.0.0",
+  "description": "Boilerplate for toska projects",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up",
+    "install": "docker-compose run app npm install",
+    "uninstall": "docker-compose run app npm uninstall",
+    "reset": "docker-compose down -v && docker-compose up --build",
+    "i": "npm run install",
+    "build": "react-scripts build",
+    "start:front": "react-scripts start",
+    "start:prod": "NODE_ENV=production node ./src/server/index.js",
+    "start:dev": "NODE_ENV=development concurrently \"nodemon ./src/server/index.js\" \"react-scripts start\" ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=14.7"
+  },
+  "author": "Jami Kousa",
+  "license": "ISC",
+  "dependencies": {
+    "@grp-toska/apina": "0.0.1",
+    "@material-ui/core": "^4.10.0",
+    "axios": "^0.21.1",
+    "concurrently": "^5.3.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "lodash": "^4.17.19",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-virtualized": "^9.21.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "unfuck-spa-shibboleth-session": "^3.0.8",
+    "unfuck-utf8-headers-middleware": "^1.0.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "chokidar": "^3.4.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.20.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "dist/*",
+      "toskaboiler/*",
+      "client/*",
+      "server/*"
+    ]
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@controllers": "server/controllers",
+    "@middleware": "server/middleware",
+    "@util": "server/util"
+  },
+  "proxy": "http://localhost:8000"
+}

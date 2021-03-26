@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Publish toskaboiler to DockerHub
+        uses: docker/build-push-action@v1.1.0
+        with:
+          repository: toska/${{ github.event.repository.name }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: latest
+          build_args: BASE_PATH=/toskaboiler
+
+      - name: Publish shibboboiler to DockerHub
+        uses: docker/build-push-action@v1.1.0
+        with:
+          repository: toska/${{ github.event.repository.name }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: shibboboiler
+          build_args: BASE_PATH=/shibboboiler
