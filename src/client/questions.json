@@ -1,0 +1,40 @@
+{
+    "title": "Ohjelmistotekniikka",
+    "multichoice": [
+        {
+          "id": "kysymys",
+          "index": 1,
+          "question": {
+            "fi": "Mielipide kurssista"
+          },
+          "required": true
+        },
+        {
+            "id": "kysymys2",
+            "index": 1,
+            "question": {
+            "fi": "Kurssi oli kiinnostava"
+            },
+            "required": true
+        }
+    ],
+    "textarea": [
+        {
+            "id": "yleinen",
+            "index": 2,
+            "question": {
+              "fi": "Anna yleistä palautetta kurssista"
+            },
+            "required": false
+        },
+        {
+            "id": "kehitys",
+            "index": 2,
+            "question": {
+              "fi": "Miten kehittäisit kurssia?"
+            },
+            "required": false
+        }
+    ]
+}
+  
