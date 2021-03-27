@@ -2,12 +2,12 @@
     "title": "Ohjelmistotekniikka",
     "multichoice": [
         {
-          "id": "kysymys",
-          "index": 1,
-          "question": {
-            "fi": "Mielipide kurssista"
-          },
-          "required": true
+            "id": "kysymys",
+            "index": 1,
+            "question": {
+              "fi": "Mielipide kurssista"
+            },
+            "required": true
         },
         {
             "id": "kysymys2",

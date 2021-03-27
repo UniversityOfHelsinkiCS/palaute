@@ -17,8 +17,8 @@ const Form = () => {
 
   return (
     <>
-      <h1>{questions.title}</h1>
       <Container maxWidth="md">
+        <h1>{questions.title}</h1>
         {questions.multichoice.map((question) => (
           <MultiChoiceQuestion question={question} key={question.id} />
         ))}
