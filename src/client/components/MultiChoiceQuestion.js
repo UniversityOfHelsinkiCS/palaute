@@ -1,47 +1,46 @@
 import React from 'react'
-import { Radio, RadioGroup, FormControlLabel } from '@material-ui/core'
+
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+} from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateFormField } from '../util/redux/formReducer'
+
+const FormRadioButton = ({ number, answer }) => (
+  <FormControlLabel
+    value={number}
+    control={<Radio color="primary" />}
+    label={number}
+    labelPlacement="top"
+    checked={number === answer}
+  />
+)
 
 const MultiChoiceQuestion = ({ question }) => {
+  const dispatch = useDispatch()
+  const answer = useSelector((state) => state.form[question.id])
+
   const handleChange = (event) => {
     event.preventDefault()
+    dispatch(updateFormField(question.id, event.target.value))
   }
 
   return (
-    <>
-      <h4>{question.question.fi}</h4>
-      <RadioGroup row onChange={handleChange}>
-        <FormControlLabel
-          value="1"
-          control={<Radio color="primary" />}
-          label="1"
-          labelPlacement="top"
-        />
-        <FormControlLabel
-          value="2"
-          control={<Radio color="primary" />}
-          label="2"
-          labelPlacement="top"
-        />
-        <FormControlLabel
-          value="3"
-          control={<Radio color="primary" />}
-          label="3"
-          labelPlacement="top"
-        />
-        <FormControlLabel
-          value="4"
-          control={<Radio color="primary" />}
-          label="4"
-          labelPlacement="top"
-        />
-        <FormControlLabel
-          value="5"
-          control={<Radio color="primary" />}
-          label="5"
-          labelPlacement="top"
-        />
-      </RadioGroup>
-    </>
+    <div>
+      <FormControl component="fieldset">
+        <h4>{question.question.fi}</h4>
+        <RadioGroup row onChange={handleChange}>
+          <FormRadioButton number="1" answer={answer} />
+          <FormRadioButton number="2" answer={answer} />
+          <FormRadioButton number="3" answer={answer} />
+          <FormRadioButton number="4" answer={answer} />
+          <FormRadioButton number="5" answer={answer} />
+        </RadioGroup>
+      </FormControl>
+    </div>
   )
 }
 

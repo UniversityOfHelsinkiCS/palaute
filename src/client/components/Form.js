@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Container } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import MultiChoiceQuestion from './MultiChoiceQuestion'
 import TextAreaQuestion from './TextAreaQuestion'
@@ -11,12 +11,15 @@ import questions from '../questions.json'
 
 const Form = () => {
   const dispatch = useDispatch()
-  const handleSubmit = () => {
-    dispatch(submitFormAction())
+  const answers = useSelector((state) => state.form)
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    dispatch(submitFormAction(answers))
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
         <h1>{questions.title}</h1>
         {questions.multichoice.map((question) => (
@@ -25,11 +28,11 @@ const Form = () => {
         {questions.textarea.map((question) => (
           <TextAreaQuestion question={question} key={question.id} />
         ))}
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button type="submit" variant="contained" color="primary">
           Anna palautetta!
         </Button>
       </Container>
-    </>
+    </form>
   )
 }
 
