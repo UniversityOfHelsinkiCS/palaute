@@ -9,9 +9,23 @@ services:
     volumes:
       - ./:/usr/src/app
       - nodemod:/usr/src/app/node_modules/
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
     ports:
       - 3000:3000
     container_name: palaute_dev
+  db:
+    image: postgres:13.2
+    environment:
+      - PGDATA=/data
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg_data:/data
+    container_name: palaute_db
 
 volumes:
   nodemod:
+  pg_data:

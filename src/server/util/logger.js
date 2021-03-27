@@ -1,5 +1,5 @@
 const winston = require('winston')
-const { inProduction } = require('./common')
+const { inProduction } = require('./config')
 const { combine, timestamp, printf, splat } = winston.format
 
 const transports = []

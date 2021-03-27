@@ -4,7 +4,8 @@ const path = require('path')
 const express = require('express')
 const errorMiddleware = require('./middleware/errorMiddleware')
 const shibbolethCharsetMiddleware = require('./middleware/shibbolethCharsetMiddleware')
-const { PORT, inProduction } = require('./util/common')
+const { PORT, inProduction } = require('./util/config')
+const { connectToDatabase } = require('./util/dbConnection')
 const logger = require('./util/logger')
 
 const app = express()
@@ -20,12 +21,15 @@ if (inProduction) {
 
   app.use(express.static(DIST_PATH))
   app.get('*', (req, res) => res.sendFile(INDEX_PATH))
-} else {
-  require('./util/devmode') // eslint-disable-line
 }
 
 app.use(errorMiddleware)
 
-app.listen(PORT, () => {
-  logger.info(`Started on port ${PORT}`)
-})
+const start = async () => {
+  await connectToDatabase()
+  app.listen(PORT, () => {
+    logger.info(`Started on port ${PORT}`)
+  })
+}
+
+start()
