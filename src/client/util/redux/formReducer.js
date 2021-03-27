@@ -1,7 +1,11 @@
 import { buildAction } from '@grp-toska/apina'
 
 export const submitFormAction = (data) =>
-  buildAction('form', { url: '/form', method: 'post', data })
+  buildAction('feedbacks', {
+    url: '/feedbacks',
+    method: 'post',
+    data: { data },
+  })
 
 export const updateFormField = (field, value) => ({
   type: 'UPDATE_FORM_FIELD',
