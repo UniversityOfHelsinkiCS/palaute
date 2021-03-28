@@ -36,7 +36,9 @@ const FeedbackList = () => {
       {questions.textarea.map((question) => (
         <TextFeebackList
           question={question}
-          answers={feedbacks.map((feedback) => feedback.data[question.id])}
+          answers={feedbacks
+            .map((feedback) => feedback.data[question.id])
+            .filter((feedback) => feedback !== undefined && feedback !== '')}
           key={question.id}
         />
       ))}

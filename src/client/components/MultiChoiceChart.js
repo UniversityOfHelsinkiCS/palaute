@@ -7,7 +7,8 @@ const MultiChoiceChart = ({ question, answers }) => {
     return null
   }
 
-  const averageValue = () => answers.reduce((a, b) => a + b, 0) / answers.length
+  const averageValue = () =>
+    (answers.reduce((a, b) => a + b, 0) / answers.length).toFixed(2)
 
   const options = {
     chart: {

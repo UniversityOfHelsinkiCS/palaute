@@ -25,7 +25,7 @@
             "question": {
               "fi": "Anna yleistä palautetta kurssista"
             },
-            "required": false
+            "required": true
         },
         {
             "id": "kehitys",

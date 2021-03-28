@@ -16,8 +16,6 @@ export default (state = { data: [] }, action) => {
         ...state,
         data: action.response,
       }
-    case 'GET_FEEDBACKS_FAILURE':
-      return state
     default:
       return state
   }
