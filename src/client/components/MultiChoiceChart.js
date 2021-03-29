@@ -8,7 +8,7 @@ const MultiChoiceChart = ({ answers }) => {
     .map((number) => parseInt(number, 10))
 
   if (filteredAnswers.length === 0) {
-    return <p>Palautteita on liian vähän</p>
+    return <p>Palautteita on liian vähän näytettäväksi</p>
   }
 
   const averageValue = () =>

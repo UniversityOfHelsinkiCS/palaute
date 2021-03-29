@@ -22,6 +22,15 @@ const getOne = async (req, res) => {
   res.send(feedback)
 }
 
+const getAllByUser = async (req, res) => {
+  const feedbacks = await Feedback.findAll({
+    where: {
+      userId: req.params.uid,
+    }
+  })
+  res.send(feedbacks)
+}
+
 const update = async (req, res) => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
   if (!feedback) throw new ApplicationError('Not found', 404)
@@ -42,6 +51,7 @@ const destroy = async (req, res) => {
 
 module.exports = {
   getAll,
+  getAllByUser,
   getOne,
   create,
   update,

@@ -16,8 +16,6 @@ const FeedbackList = () => {
     dispatch(getAllFeedbackAction())
   }, [feedbacks.length])
 
-  if (!feedbacks.length) return null
-
   return (
     <Container>
       <h1>Annetut palautteet:</h1>

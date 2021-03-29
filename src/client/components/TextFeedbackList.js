@@ -7,7 +7,7 @@ const TextFeebackList = ({ answers }) => {
   )
 
   if (filteredAnswers.length === 0) {
-    return <p>Palautteita on liian vähän</p>
+    return <p>Palautteita on liian vähän näytettäväksi</p>
   }
 
   return (

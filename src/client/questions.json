@@ -1,5 +1,6 @@
 {
     "title": "Ohjelmistotekniikka",
+    "id": "ohte", 
     "questions": [
         {
             "id": "kysymys",
@@ -26,7 +27,7 @@
             "question": {
               "fi": "Anna yleistä palautetta kurssista"
             },
-            "required": true
+            "required": false
         },
         {
             "id": "kehitys",
