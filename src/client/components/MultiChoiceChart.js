@@ -2,13 +2,19 @@ import React from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-const MultiChoiceChart = ({ question, answers }) => {
-  if (answers.length === 0) {
-    return null
+const MultiChoiceChart = ({ answers }) => {
+  const filteredAnswers = answers
+    .filter((number) => !Number.isNaN(number - parseInt(number, 10)))
+    .map((number) => parseInt(number, 10))
+
+  if (filteredAnswers.length === 0) {
+    return <p>Palautteita on liian vähän</p>
   }
 
   const averageValue = () =>
-    (answers.reduce((a, b) => a + b, 0) / answers.length).toFixed(2)
+    (
+      filteredAnswers.reduce((a, b) => a + b, 0) / filteredAnswers.length
+    ).toFixed(2)
 
   const options = {
     chart: {
@@ -44,23 +50,23 @@ const MultiChoiceChart = ({ question, answers }) => {
         data: [
           {
             name: '1',
-            y: answers.filter((x) => x === 1).length,
+            y: filteredAnswers.filter((x) => x === 1).length,
           },
           {
             name: '2',
-            y: answers.filter((x) => x === 2).length,
+            y: filteredAnswers.filter((x) => x === 2).length,
           },
           {
             name: '3',
-            y: answers.filter((x) => x === 3).length,
+            y: filteredAnswers.filter((x) => x === 3).length,
           },
           {
             name: '4',
-            y: answers.filter((x) => x === 4).length,
+            y: filteredAnswers.filter((x) => x === 4).length,
           },
           {
             name: '5',
-            y: answers.filter((x) => x === 5).length,
+            y: filteredAnswers.filter((x) => x === 5).length,
           },
         ],
       },
@@ -69,8 +75,7 @@ const MultiChoiceChart = ({ question, answers }) => {
 
   return (
     <div>
-      <h4>{question.question.fi}</h4>
-      Vastauksia: {answers.length} <br />
+      Vastauksia: {filteredAnswers.length} <br />
       Keskiarvo: {averageValue()}
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
