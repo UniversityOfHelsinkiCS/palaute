@@ -1,17 +1,20 @@
 import React from 'react'
 import { List, ListItem } from '@material-ui/core'
 
-const TextFeebackList = ({ question, answers }) => {
-  if (answers.length === 0) {
-    return null
+const TextFeebackList = ({ answers }) => {
+  const filteredAnswers = answers.filter(
+    (feedback) => feedback !== undefined && feedback !== '',
+  )
+
+  if (filteredAnswers.length === 0) {
+    return <p>Palautteita on liian vähän</p>
   }
 
   return (
     <div>
-      <h4>{question.question.fi}</h4>
-      Vastauksia: {answers.length} <br />
+      Vastauksia: {filteredAnswers.length} <br />
       <List>
-        {answers.map((answer) => (
+        {filteredAnswers.map((answer) => (
           // TODO use some acually unique key
           <ListItem key={answer}>{answer}</ListItem>
         ))}
