@@ -14,7 +14,7 @@ router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
-router.get('/feedbacks/user/:uid', feedbacks.getAllByUser)
+router.get('/feedbacks/user/:uid', feedbacks.getFeedbackByUser)
 
 router.use(errorMiddleware)
 

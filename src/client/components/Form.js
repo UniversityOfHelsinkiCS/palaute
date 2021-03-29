@@ -12,7 +12,7 @@ import Question from './QuestionBase'
 const Form = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const answers = useSelector((state) => state.form)
+  const answers = useSelector((state) => state.form.data)
 
   const handleSubmit = (event) => {
     event.preventDefault()

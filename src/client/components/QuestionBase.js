@@ -12,7 +12,7 @@ const mapTypeToComponent = {
 
 const Question = ({ question }) => {
   const dispatch = useDispatch()
-  const answer = useSelector((state) => state.form[question.id])
+  const answer = useSelector((state) => state.form.data[question.id])
   const error = useSelector((state) => state.error[question.id])
 
   const handleChange = (event) => {
