@@ -32,7 +32,7 @@ const Question = ({ question }) => {
 
   return (
     <Component
-      question={question.fi}
+      question={question.question.fi}
       answer={answer}
       handleChange={handleChange}
       error={error}
