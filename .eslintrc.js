@@ -12,6 +12,7 @@ module.exports = {
     'no-plusplus': 0,
     'import/no-unresolved': 'off',
     'react/jsx-filename-extension': 'off',
+    'eslintreact/jsx-props-no-spreading': 'off',
     'react/prop-types': [
       1,
       {

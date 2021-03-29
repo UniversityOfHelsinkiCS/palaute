@@ -1,3 +1,4 @@
+const { STRING } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
@@ -7,6 +8,10 @@ Feedback.init(
   {
     data: {
       type: JSONB,
+      allowNull: false,
+    },
+    userId: {
+      type: STRING,
       allowNull: false,
     },
   },

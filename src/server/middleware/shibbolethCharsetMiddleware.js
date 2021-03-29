@@ -4,7 +4,6 @@ const headers = [
   'uid',
   'givenname', // First name
   'mail', // Email
-  'schacpersonaluniquecode', // Contains student number
   'sn', // Last name
 ]
 

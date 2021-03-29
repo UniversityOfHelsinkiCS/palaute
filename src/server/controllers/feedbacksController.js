@@ -1,7 +1,7 @@
 const { ApplicationError } = require('../util/customErrors')
 const { Feedback } = require('../models')
 
-const getAll = async (_, res) => {
+const getAll = async (req, res) => {
   const feedbacks = await Feedback.findAll()
   res.send(feedbacks)
 }
@@ -9,6 +9,7 @@ const getAll = async (_, res) => {
 const create = async (req, res) => {
   const newFeedback = await Feedback.create({
     data: req.body.data,
+    userId: req.currentUser.id,
   })
 
   res.send(newFeedback)

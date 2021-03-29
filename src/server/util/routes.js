@@ -1,18 +1,20 @@
 const Router = require('express')
-const messages = require('../controllers/messagesController')
+const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
+const errorMiddleware = require('../middleware/errorMiddleware')
+const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const feedbacks = require('../controllers/feedbacksController')
+
 const router = Router()
 
-router.get('/messages', messages.getAll)
-router.post('/messages', messages.create)
-router.get('/messages/:id', messages.getOne)
-router.put('/messages/:id', messages.update)
-router.delete('/messages/:id', messages.destroy)
+router.use(shibbolethCharsetMiddleware)
+router.use(currentUserMiddleware)
 
 router.get('/feedbacks', feedbacks.getAll)
 router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
+
+router.use(errorMiddleware)
 
 module.exports = router
