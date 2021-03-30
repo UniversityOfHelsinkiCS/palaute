@@ -14,6 +14,10 @@ Feedback.init(
       type: STRING,
       allowNull: false,
     },
+    courseRealisationId: {
+      type: STRING,
+      allowNull: false,
+    }
   },
   {
     underscored: true,
