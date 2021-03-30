@@ -2,7 +2,24 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
+const { CourseRealisation } = require('../models')
+
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
+
+const createCourseRealisation = async (data) => {
+  if (!data.id || !data.activityPeriod.endDate || !data.name) {
+    console.log(data)
+  }
+  const course = await CourseRealisation.findOrCreate({
+    where: { id: data.id },
+    defaults: {
+      id: data.id,
+      endDate: data.activityPeriod.endDate,
+      name: data.name,
+    }
+  })
+  return course
+}
 
 const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
   const { startDateBefore, endDateAfter } = options
@@ -18,8 +35,8 @@ const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
     `/palaute/course_unit_realisations/enrolled/${username}`,
     { params },
   )
-
-  return data
+  const mapped = await Promise.all(data.map(async (course) => await createCourseRealisation(course)))
+  return mapped
 }
 
 module.exports = getCourseUnitRealisationsEnrolledBy

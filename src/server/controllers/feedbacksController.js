@@ -10,6 +10,7 @@ const create = async (req, res) => {
   const newFeedback = await Feedback.create({
     data: req.body.data,
     userId: req.currentUser.id,
+    courseRealisationId: req.body.courseId,
   })
 
   res.send(newFeedback)

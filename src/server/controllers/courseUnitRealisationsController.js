@@ -4,7 +4,6 @@ const getCourseUnitRealisationsEnrolledBy = require('../util/getCourseUnitRealis
 
 const getWhereFeedbackEnabled = async (req, res) => {
   const { currentUser } = req
-
   if (!currentUser) {
     return res.send([])
   }

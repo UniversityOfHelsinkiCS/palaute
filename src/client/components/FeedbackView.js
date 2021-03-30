@@ -4,7 +4,7 @@ import { useHistory, Redirect } from 'react-router'
 
 import { Container, Button } from '@material-ui/core'
 
-import { getPreviousFeedback, modifyForm } from '../util/redux/formReducer'
+import { modifyForm } from '../util/redux/formReducer'
 
 export default () => {
   const dispatch = useDispatch()
@@ -12,7 +12,7 @@ export default () => {
   const history = useHistory()
 
   useEffect(() => {
-    dispatch(getPreviousFeedback())
+    // dispatch(getPreviousFeedback())
   }, [])
 
   const handleModify = () => {

@@ -16,7 +16,7 @@ module.exports = {
         type: DATE,
         allowNull: false,
       },
-      end_data: {
+      end_date: {
         type: DATE,
         allowNull: false,
       },

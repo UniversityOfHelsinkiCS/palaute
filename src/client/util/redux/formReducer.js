@@ -1,10 +1,10 @@
 import { buildAction } from '@grp-toska/apina'
 
-export const submitFormAction = (data) =>
+export const submitFormAction = (data, courseId) =>
   buildAction('feedbacks', {
     url: '/feedbacks',
     method: 'post',
-    data: { data },
+    data: { data, courseId },
   })
 
 export const reSubmitFormAction = (data, id) =>
