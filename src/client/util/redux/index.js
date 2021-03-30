@@ -4,6 +4,7 @@ import { apiReducer as api, errorReducer as errors } from '@grp-toska/apina'
 import form from './formReducer'
 import feedback from './feedbackReducer'
 import error from './errorReducer'
+import courses from './courseReducer'
 
 export default combineReducers({
   api,
@@ -11,4 +12,5 @@ export default combineReducers({
   form,
   feedback,
   error,
+  courses,
 })

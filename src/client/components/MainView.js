@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, Redirect } from 'react-router'
+// import { useHistory } from 'react-router'
 
-import { Container, Button } from '@material-ui/core'
+import { Container } from '@material-ui/core'
 
-import { modifyForm } from '../util/redux/formReducer'
+import CourseListItem from './CourseListItem'
+
+// import { modifyForm } from '../util/redux/formReducer'
+import { getCoursesAction } from '../util/redux/courseReducer'
 
 export default () => {
   const dispatch = useDispatch()
-  const state = useSelector((state) => state.form)
-  const history = useHistory()
-
+  const state = useSelector((state) => state.courses)
+  // const history = useHistory()
   useEffect(() => {
     // dispatch(getPreviousFeedback())
+    dispatch(getCoursesAction())
   }, [])
 
-  const handleModify = () => {
+  /* const handleModify = () => {
     dispatch(modifyForm())
     history.push('/edit')
   }
@@ -37,7 +40,15 @@ export default () => {
           Katso palautteen yhteenveto
         </Button>
       </Container>
-    )
+    ) */
 
-  return <Redirect to="/edit" />
+  if (state.pending) return null
+
+  return (
+    <Container>
+      {state.data.map((course) => (
+        <CourseListItem key={course.id} course={course} />
+      ))}
+    </Container>
+  )
 }

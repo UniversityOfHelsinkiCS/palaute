@@ -1,19 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 
 import { reSubmitFormAction, submitFormAction } from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
+import { getCoursesAction } from '../util/redux/courseReducer'
 
 import questions from '../questions.json'
 import Question from './QuestionBase'
 
 const Form = () => {
   const dispatch = useDispatch()
+  const courseId = useParams().id
   const history = useHistory()
   const answers = useSelector((state) => state.form.data)
   const feedbackId = useSelector((state) => state.form.feedbackId)
+  const courseData = useSelector((state) => state.courses)
+
+  useEffect(() => {
+    dispatch(getCoursesAction())
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -31,16 +38,20 @@ const Form = () => {
       if (feedbackId) {
         dispatch(reSubmitFormAction(answers, feedbackId))
       } else {
-        dispatch(submitFormAction(answers))
+        dispatch(submitFormAction(answers, courseId))
       }
       history.push('/list')
     }
   }
 
+  if (courseData.pending) return null
+
+  const currentCourse = courseData.data.find((course) => course.id === courseId)
+
   return (
     <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
-        <h1>{questions.title}</h1>
+        <h1>{currentCourse.name.fi}</h1>
         {questions.questions.map((question) => (
           <Question question={question} key={question.id} />
         ))}

@@ -11,7 +11,7 @@ export const possibleUsers = [
     sn: 'admin',
   },
   {
-    uid: 'student',
+    uid: 'varisleo',
     employeeNumber: undefined,
     givenName: 'fuksiEtunimi',
     mail: 'grp-toska+mockstudent@helsinki.fi',

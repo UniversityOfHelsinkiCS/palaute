@@ -10,7 +10,7 @@ const createCourseRealisation = async (data) => {
   if (!data.id || !data.activityPeriod.endDate || !data.name) {
     console.log(data)
   }
-  const course = await CourseRealisation.findOrCreate({
+  const [course, _] = await CourseRealisation.findOrCreate({
     where: { id: data.id },
     defaults: {
       id: data.id,
@@ -35,8 +35,7 @@ const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
     `/palaute/course_unit_realisations/enrolled/${username}`,
     { params },
   )
-  const mapped = await Promise.all(data.map(async (course) => await createCourseRealisation(course)))
-  return mapped
+  return await Promise.all(data.map(async (course) => await createCourseRealisation(course)))
 }
 
 module.exports = getCourseUnitRealisationsEnrolledBy
