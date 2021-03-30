@@ -3,7 +3,7 @@ import { Button, Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 
-import { submitFormAction } from '../util/redux/formReducer'
+import { reSubmitFormAction, submitFormAction } from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
 
 import questions from '../questions.json'
@@ -13,6 +13,7 @@ const Form = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const answers = useSelector((state) => state.form.data)
+  const feedbackId = useSelector((state) => state.form.feedbackId)
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -27,7 +28,11 @@ const Form = () => {
       complete = false
     })
     if (complete) {
-      dispatch(submitFormAction(answers))
+      if (feedbackId) {
+        dispatch(reSubmitFormAction(answers, feedbackId))
+      } else {
+        dispatch(submitFormAction(answers))
+      }
       history.push('/list')
     }
   }

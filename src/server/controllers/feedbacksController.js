@@ -23,9 +23,14 @@ const getOne = async (req, res) => {
 }
 
 const getFeedbackByUser = async (req, res) => {
+  const { currentUser } = req
+  if (!currentUser) throw new ApplicationError('Not found', 404)
+  
+  const { id } = currentUser 
+
   const feedback = await Feedback.findOne({
     where: {
-      userId: req.params.uid,
+      userId: id,
     }
   })
   if (!feedback) throw new ApplicationError('Not found', 404)

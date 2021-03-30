@@ -1,24 +1,43 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPreviousFeedback } from '../util/redux/formReducer'
+import { useHistory, Redirect } from 'react-router'
 
-import Form from './Form'
+import { Container, Button } from '@material-ui/core'
+
+import { getPreviousFeedback, modifyForm } from '../util/redux/formReducer'
 
 export default () => {
   const dispatch = useDispatch()
   const state = useSelector((state) => state.form)
+  const history = useHistory()
 
   useEffect(() => {
     dispatch(getPreviousFeedback())
-  }, [state.found])
+  }, [])
+
+  const handleModify = () => {
+    dispatch(modifyForm())
+    history.push('/edit')
+  }
+
+  const handleList = () => {
+    history.push('/list')
+  }
 
   if (state.pending) return null
 
-  if (state.found) return <p>Olet jo vastannut</p>
+  if (state.found)
+    return (
+      <Container maxWidth="md">
+        <h4>Olet jo vastannut</h4>
+        <Button variant="contained" color="primary" onClick={handleModify}>
+          Muokkaa vastausta
+        </Button>{' '}
+        <Button variant="contained" color="primary" onClick={handleList}>
+          Katso palautteen yhteenveto
+        </Button>
+      </Container>
+    )
 
-  return (
-    <div style={{ paddingTop: '1em' }}>
-      <Form />
-    </div>
-  )
+  return <Redirect to="/edit" />
 }
