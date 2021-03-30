@@ -18,8 +18,14 @@ const DB_CONFIG = {
 
 const PORT = process.env.PORT || 8000
 
+const { IMPORTER_API_TOKEN } = process.env
+
+const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi'
+
 module.exports = {
   ...common,
   DB_CONFIG,
   PORT,
+  IMPORTER_API_TOKEN,
+  IMPORTER_API_URL,
 }

@@ -3,6 +3,7 @@ const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMidd
 const errorMiddleware = require('../middleware/errorMiddleware')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const feedbacks = require('../controllers/feedbacksController')
+const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
 
 const router = Router()
 
@@ -15,6 +16,11 @@ router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 router.get('/feedbacks/user/:uid', feedbacks.getFeedbackByUser)
+
+router.get(
+  '/course-unit-realisations/feedback-enabled',
+  courseUnitRealisations.getWhereFeedbackEnabled,
+)
 
 router.use(errorMiddleware)
 

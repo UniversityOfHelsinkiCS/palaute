@@ -1,6 +1,10 @@
 # Palaute
 
-## Module missing? ##
+## Environment configuration
+
+Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add correct values for the variables based on the documentation.
+
+## Module missing?
 
 Install the dependencies **inside** the container to have the application **inside** the container access them. You can use `npm run bash` to get inside the container to do so.
 
