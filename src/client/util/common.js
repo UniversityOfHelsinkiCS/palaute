@@ -9,8 +9,6 @@ export const images = {
   toska_grayscale: toscalogoGrayscale,
 }
 
-export const inProduction = process.env.NODE_ENV === 'production'
-
 export const colors = {}
 
 export * from '../../config'
