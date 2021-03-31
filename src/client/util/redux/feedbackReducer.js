@@ -3,6 +3,9 @@ import { buildAction } from '@grp-toska/apina'
 export const getAllFeedbackAction = () =>
   buildAction('feedbacks', { url: '/feedbacks' })
 
+export const getCourseFeedbackAction = (courseId) =>
+  buildAction('feedbacks', { url: `/courses/${courseId}/feedbacks` })
+
 export default (state = { data: [] }, action) => {
   switch (action.type) {
     case 'GET_FEEDBACKS_ATTEMPT':

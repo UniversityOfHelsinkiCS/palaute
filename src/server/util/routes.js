@@ -17,6 +17,7 @@ router.get('/feedbacks', feedbacks.getAll)
 router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/user', feedbacks.getFeedbackByUser)
 router.get('/feedbacks/:id', feedbacks.getOne)
+router.get('/courses/:id/feedbacks', feedbacks.getFeedbackByCourseId)
 router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 

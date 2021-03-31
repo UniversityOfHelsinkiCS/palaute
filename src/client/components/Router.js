@@ -8,7 +8,7 @@ import Form from './Form'
 export default () => (
   <div className="content">
     <Switch>
-      <Route path="/list" component={FeedbackList} />
+      <Route path="/view/:id" component={FeedbackList} />
       <Route path="/edit/:id" component={Form} />
       <Route path="/" component={MainView} />
     </Switch>

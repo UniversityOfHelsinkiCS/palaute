@@ -40,7 +40,7 @@ const Form = () => {
       } else {
         dispatch(submitFormAction(answers, courseId))
       }
-      history.push('/list')
+      history.push(`/view/${courseId}`)
     }
   }
 

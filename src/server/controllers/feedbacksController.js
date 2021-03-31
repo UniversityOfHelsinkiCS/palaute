@@ -39,6 +39,18 @@ const getFeedbackByUser = async (req, res) => {
   res.send(feedback)
 }
 
+const getFeedbackByCourseId = async (req, res) => {
+  const feedbacks = await Feedback.findAll({
+    where: {
+      courseRealisationId: req.params.id,
+    }
+  })
+  
+  if (!feedbacks) throw new ApplicationError('Not found', 404)
+
+  res.send(feedbacks)
+}
+
 const update = async (req, res) => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
   if (!feedback) throw new ApplicationError('Not found', 404)
@@ -60,6 +72,7 @@ const destroy = async (req, res) => {
 module.exports = {
   getAll,
   getFeedbackByUser,
+  getFeedbackByCourseId,
   getOne,
   create,
   update,
