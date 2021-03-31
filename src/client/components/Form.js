@@ -11,8 +11,8 @@ import {
 import { setError } from '../util/redux/errorReducer'
 import { getCoursesAction } from '../util/redux/courseReducer'
 
-import questions from '../questions.json'
 import Question from './QuestionBase'
+import { getCourseQuestionsAction } from '../util/redux/questionReducer'
 
 const Form = () => {
   const dispatch = useDispatch()
@@ -20,17 +20,23 @@ const Form = () => {
   const history = useHistory()
   const form = useSelector((state) => state.form)
   const courseData = useSelector((state) => state.courses)
+  const questions = useSelector((state) => state.questions)
 
   useEffect(() => {
     dispatch(getCoursesAction())
     dispatch(getUserCourseFeedbackAction(courseId))
   }, [])
 
+  // we must ensure that courses have been created before getting questions
+  useEffect(() => {
+    dispatch(getCourseQuestionsAction(courseId))
+  }, [courseData.pending])
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const answers = form.data
     let complete = true
-    questions.questions.forEach((question) => {
+    questions.data.questions.forEach((question) => {
       if (
         !question.required ||
         (answers[question.id] !== undefined && answers[question.id] !== '')
@@ -49,7 +55,7 @@ const Form = () => {
     }
   }
 
-  if (courseData.pending || form.pending) return null
+  if (courseData.pending || form.pending || questions.pending) return null
 
   const currentCourse = courseData.data.find((course) => course.id === courseId)
 
@@ -57,7 +63,7 @@ const Form = () => {
     <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
         <h1>{currentCourse.name.fi}</h1>
-        {questions.questions.map((question) => (
+        {questions.data.questions.map((question) => (
           <Question question={question} key={question.id} />
         ))}
         <Button type="submit" variant="contained" color="primary">
