@@ -14,13 +14,18 @@ export const reSubmitFormAction = (data, id) =>
     data: { data },
   })
 
-export const getPreviousFeedback = () =>
-  buildAction('previous_feedback', { url: '/feedbacks/user/' })
+export const getUserCourseFeedbackAction = (courseId) =>
+  buildAction('previous_feedback', { url: `/users/feedbacks/${courseId}` })
 
 export const updateFormField = (field, value) => ({
   type: 'UPDATE_FORM_FIELD',
   field,
   value,
+})
+
+export const setData = (data) => ({
+  type: 'SET_DATA',
+  data,
 })
 
 export const modifyForm = () => ({
@@ -41,6 +46,7 @@ export default (state = { data: {}, pending: true }, action) => {
       return {
         ...state,
         data: {},
+        found: null,
       }
     case 'PUT_FEEDBACKS_APINA_SUCCESS':
       return {
@@ -59,8 +65,8 @@ export default (state = { data: {}, pending: true }, action) => {
         ...state,
         pending: false,
         found: true,
-        data: action.response.data,
         feedbackId: action.response.id,
+        data: action.response.data,
       }
     // Fail is ok, that means there was no previous feedback
     case 'GET_PREVIOUS_FEEDBACK_APINA_FAILURE':
@@ -68,6 +74,7 @@ export default (state = { data: {}, pending: true }, action) => {
         ...state,
         pending: false,
         found: false,
+        data: {},
       }
     case 'MODIFY_FORM':
       return {

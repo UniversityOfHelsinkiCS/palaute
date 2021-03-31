@@ -16,7 +16,7 @@ const createCourseRealisation = async (data) => {
       id: data.id,
       endDate: data.activityPeriod.endDate,
       name: data.name,
-    }
+    },
   })
   return course
 }
@@ -35,7 +35,9 @@ const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
     `/palaute/course_unit_realisations/enrolled/${username}`,
     { params },
   )
-  return await Promise.all(data.map(async (course) => await createCourseRealisation(course)))
+  return await Promise.all(
+    data.map(async (course) => await createCourseRealisation(course)),
+  )
 }
 
 module.exports = getCourseUnitRealisationsEnrolledBy

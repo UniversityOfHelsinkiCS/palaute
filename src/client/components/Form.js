@@ -3,7 +3,11 @@ import { Button, Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
 
-import { reSubmitFormAction, submitFormAction } from '../util/redux/formReducer'
+import {
+  reSubmitFormAction,
+  submitFormAction,
+  getUserCourseFeedbackAction,
+} from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
 import { getCoursesAction } from '../util/redux/courseReducer'
 
@@ -14,16 +18,17 @@ const Form = () => {
   const dispatch = useDispatch()
   const courseId = useParams().id
   const history = useHistory()
-  const answers = useSelector((state) => state.form.data)
-  const feedbackId = useSelector((state) => state.form.feedbackId)
+  const form = useSelector((state) => state.form)
   const courseData = useSelector((state) => state.courses)
 
   useEffect(() => {
     dispatch(getCoursesAction())
+    dispatch(getUserCourseFeedbackAction(courseId))
   }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    const answers = form.data
     let complete = true
     questions.questions.forEach((question) => {
       if (
@@ -35,8 +40,8 @@ const Form = () => {
       complete = false
     })
     if (complete) {
-      if (feedbackId) {
-        dispatch(reSubmitFormAction(answers, feedbackId))
+      if (form.found) {
+        dispatch(reSubmitFormAction(answers, form.feedbackId))
       } else {
         dispatch(submitFormAction(answers, courseId))
       }
@@ -44,7 +49,7 @@ const Form = () => {
     }
   }
 
-  if (courseData.pending) return null
+  if (courseData.pending || form.pending) return null
 
   const currentCourse = courseData.data.find((course) => course.id === courseId)
 

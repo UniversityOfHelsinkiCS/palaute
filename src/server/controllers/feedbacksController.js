@@ -29,23 +29,40 @@ const getFeedbackByUser = async (req, res) => {
 
   const { id } = currentUser
 
-  const feedback = await Feedback.findOne({
+  const feedbacks = await Feedback.findAll({
     where: {
       userId: id,
     },
   })
-  if (!feedback) throw new ApplicationError('Not found', 404)
+  if (!feedbacks) throw new ApplicationError('Not found', 404)
 
-  res.send(feedback)
+  res.send(feedbacks)
+}
+
+const getFeedbackByUserAndCourseId = async (req, res) => {
+  const { currentUser } = req
+  if (!currentUser) throw new ApplicationError('Not found', 404)
+
+  const { id } = currentUser
+
+  const feedbacks = await Feedback.findOne({
+    where: {
+      userId: id,
+      courseRealisationId: req.params.id,
+    },
+  })
+  if (!feedbacks) throw new ApplicationError('Not found', 404)
+
+  res.send(feedbacks)
 }
 
 const getFeedbackByCourseId = async (req, res) => {
   const feedbacks = await Feedback.findAll({
     where: {
       courseRealisationId: req.params.id,
-    }
+    },
   })
-  
+
   if (!feedbacks) throw new ApplicationError('Not found', 404)
 
   res.send(feedbacks)
@@ -73,6 +90,7 @@ module.exports = {
   getAll,
   getFeedbackByUser,
   getFeedbackByCourseId,
+  getFeedbackByUserAndCourseId,
   getOne,
   create,
   update,
