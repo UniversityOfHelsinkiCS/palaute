@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import * as Sentry from '@sentry/browser'
+import { Container, Button } from '@material-ui/core'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
     this.state = {
       hasError: false,
+      eventId: undefined,
     }
   }
 
@@ -12,16 +15,34 @@ export default class ErrorBoundary extends Component {
     return { hasError: true }
   }
 
-  componentDidCatch() {
-    this.setState({ hasError: true })
+  componentDidCatch(error, errorInfo) {
+    Sentry.withScope((scope) => {
+      scope.setExtras(errorInfo)
+      const eventId = Sentry.captureException(error)
+      this.setState({ hasError: true, eventId })
+    })
   }
 
   render() {
-    const { hasError } = this.state
+    const { hasError, eventId } = this.state
     const { children } = this.props
-    if (!hasError) {
-      return children
-    }
-    return <p> An error occurred! </p>
+    if (!hasError) return children
+
+    return (
+      <Container style={{ padding: '5em' }}>
+        <h1>Something bad happened and we have been notified</h1>
+        <p>
+          You can speed up the fixes by filling the form that opens from the
+          following button:
+        </p>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => Sentry.showReportDialog({ eventId })}
+        >
+          Report error
+        </Button>
+      </Container>
+    )
   }
 }

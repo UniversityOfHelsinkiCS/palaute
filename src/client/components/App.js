@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import NavBar from './NavBar'
 import Footer from './Footer'
-import LoginAsDropdown from './LoginAsDropdown'
+import DevTools from './DevTools'
 import Router from './Router'
 
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
     <div>
       <NavBar />
       <Router />
-      <LoginAsDropdown />
+      <DevTools />
       <Footer />
     </div>
   )

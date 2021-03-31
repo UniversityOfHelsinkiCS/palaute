@@ -2,9 +2,12 @@ require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
 const express = require('express')
+const initializeSentry = require('./util/sentry')
 const { PORT, inProduction } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const logger = require('./util/logger')
+
+initializeSentry()
 
 const app = express()
 

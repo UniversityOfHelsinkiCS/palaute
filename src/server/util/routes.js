@@ -27,6 +27,11 @@ router.get(
   courseUnitRealisations.getWhereFeedbackEnabled,
 )
 
+router.get('/trigger_sentry', () => {
+  const mluukkai = 'isNotAFunction'
+  mluukkai()
+})
+
 router.use(errorMiddleware)
 
 module.exports = router

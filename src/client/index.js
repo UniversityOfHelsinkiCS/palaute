@@ -8,6 +8,9 @@ import store from './util/store'
 import { basePath } from './util/common'
 import App from './components/App'
 import ErrorBoundary from './components/ErrorBoundary'
+import initializeSentry from './util/sentry'
+
+initializeSentry()
 
 render(
   <Provider store={store}>
