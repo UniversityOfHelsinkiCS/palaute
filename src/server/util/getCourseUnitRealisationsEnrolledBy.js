@@ -7,16 +7,10 @@ const { CourseRealisation } = require('../models')
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
 const createCourseRealisation = async (data) => {
-  if (!data.id || !data.activityPeriod.endDate || !data.name) {
-    console.log(data)
-  }
-  const [course, _] = await CourseRealisation.findOrCreate({
-    where: { id: data.id },
-    defaults: {
-      id: data.id,
-      endDate: data.activityPeriod.endDate,
-      name: data.name,
-    },
+  const [course, _] = await CourseRealisation.upsert({
+    id: data.id,
+    endDate: data.activityPeriod.endDate,
+    name: data.name,
   })
   return course
 }
