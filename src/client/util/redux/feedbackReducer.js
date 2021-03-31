@@ -12,7 +12,7 @@ export const getUserFeedbackAction = () =>
 export default (
   state = {
     data: [],
-    userData: null,
+    userData: [],
     pending: true,
   },
   action,

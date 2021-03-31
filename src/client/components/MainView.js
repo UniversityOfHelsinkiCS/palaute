@@ -15,8 +15,11 @@ export default () => {
 
   useEffect(() => {
     dispatch(getCoursesAction())
-    dispatch(getUserFeedbackAction())
   }, [])
+
+  useEffect(() => {
+    dispatch(getUserFeedbackAction())
+  }, [answers.userData.length])
 
   if (courses.pending || answers.pending) return null
 
