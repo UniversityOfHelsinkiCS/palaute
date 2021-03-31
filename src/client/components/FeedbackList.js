@@ -18,8 +18,11 @@ const FeedbackList = () => {
 
   useEffect(() => {
     dispatch(getCoursesAction())
+  }, [])
+
+  useEffect(() => {
     dispatch(getCourseFeedbackAction(courseId))
-  }, [feedbacks.length])
+  }, [])
 
   if (courseData.pending || !feedbacks) return null
 
