@@ -29,9 +29,11 @@ jobs:
     needs: dockerhub-release
 
     steps:
-    - name: Use built assets from image
-      run: docker create --name palaute toska/palaute:latest && \
-           docker cp palaute:/usr/src/app/build ./build
+    - name: Pull image and create a container
+      run: docker create --name palaute toska/palaute:latest
+
+    - name: Copy assets from the container
+      run: docker cp palaute:/usr/src/app/build ./build
 
     - name: Create Sentry release
       uses: getsentry/action-release@v1
