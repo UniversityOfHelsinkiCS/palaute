@@ -32,11 +32,9 @@ const getCourseUnitRealisationsWhereResponsible = async (username) => {
     `/palaute/course_unit_realisations/responsible/${username}`,
   )
 
-
-
   return Promise.all(
     data
-      .map((course) => ({ ...course, activityPeriod: course.activity_period}))
+      .map((course) => ({ ...course, activityPeriod: course.activity_period }))
       .map(async (course) => createCourseRealisation(course)),
   )
 }

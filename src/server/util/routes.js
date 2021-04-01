@@ -25,6 +25,7 @@ router.delete('/feedbacks/:id', feedbacks.destroy)
 
 router.get('/courses/:id/feedbacks', feedbacks.getFeedbackByCourseId)
 router.get('/courses/:id/questions', questions.getQuestionsByCourseId)
+router.put('/courses/:id/questions', questions.updateQuestionsByCourseId)
 
 router.get(
   '/course-unit-realisations/feedback-enabled',

@@ -9,9 +9,9 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-			data: {
+      data: {
         type: JSONB,
-				allowNull: false,
+        allowNull: false,
       },
       created_at: {
         type: DATE,
