@@ -15,4 +15,26 @@ export const useFeedbackEnabledCourses = () => {
   return response
 }
 
-export const x = () => true
+export const useCourseFeedback = (courseId) => {
+  const queryKey = 'courseFeedback'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get(`/courses/${courseId}/feedbacks`)
+
+    return data
+  })
+
+  return response
+}
+
+export const useCourseQuestions = (courseId) => {
+  const queryKey = 'courseQuestions'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get(`/courses/${courseId}/questions`)
+
+    return data
+  })
+
+  return response
+}

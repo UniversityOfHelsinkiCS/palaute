@@ -1,36 +1,25 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
 import { useParams } from 'react-router'
 
 import { Container } from '@material-ui/core'
 
 import Feedback from './FeedbackBase'
 
-import { getCourseFeedbackAction } from '../util/redux/feedbackReducer'
-// import { getCoursesAction } from '../util/redux/courseReducer'
-import { getCourseQuestionsAction } from '../util/redux/questionReducer'
-
-import { useFeedbackEnabledCourses } from '../util/queries'
+import {
+  useFeedbackEnabledCourses,
+  useCourseFeedback,
+  useCourseQuestions,
+} from '../util/queries'
 
 const FeedbackList = () => {
-  const dispatch = useDispatch()
   const courseId = useParams().id
 
   const courseData = useFeedbackEnabledCourses()
+  const feedbacks = useCourseFeedback(courseId)
+  const questions = useCourseQuestions(courseId)
 
-  const feedbacks = useSelector((state) => state.feedback.data)
-  const questions = useSelector((state) => state.questions)
-
-  useEffect(() => {
-    dispatch(getCourseFeedbackAction(courseId))
-  }, [])
-
-  // we must ensure that courses have been created before getting questions
-  useEffect(() => {
-    dispatch(getCourseQuestionsAction(courseId))
-  }, [courseData.isLoading])
-
-  if (courseData.isLoading || !feedbacks || questions.pending) return null
+  if (courseData.isLoading || feedbacks.isLoading || questions.isLoading)
+    return null
 
   const currentCourse = courseData.data.find((course) => course.id === courseId)
 
@@ -38,10 +27,10 @@ const FeedbackList = () => {
     <Container>
       <h1>{currentCourse.name.fi}</h1>
       <h2>Annetut palautteet:</h2>
-      {questions.data.questions.map((question) => (
+      {questions.data.data.questions.map((question) => (
         <Feedback
           question={question}
-          answers={feedbacks.map((feedback) => feedback.data[question.id])}
+          answers={feedbacks.data.map((feedback) => feedback.data[question.id])}
           key={question.id}
         />
       ))}
