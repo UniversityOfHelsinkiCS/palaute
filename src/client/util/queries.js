@@ -15,6 +15,18 @@ export const useFeedbackEnabledCourses = () => {
   return response
 }
 
+export const useCourseData = (courseId) => {
+  const queryKey = 'courseData'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get(`/course-unit-realisations/${courseId}`)
+
+    return data
+  })
+
+  return response
+}
+
 export const useCourseFeedback = (courseId) => {
   const queryKey = 'courseFeedback'
 
@@ -32,6 +44,18 @@ export const useCourseQuestions = (courseId) => {
 
   const response = useQuery(queryKey, async () => {
     const { data } = await getAxios.get(`/courses/${courseId}/questions`)
+
+    return data
+  })
+
+  return response
+}
+
+export const useUserFeedback = () => {
+  const queryKey = 'userFeedback'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get('/users/feedbacks')
 
     return data
   })

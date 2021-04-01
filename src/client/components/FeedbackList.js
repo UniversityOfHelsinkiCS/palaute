@@ -6,22 +6,22 @@ import { Container } from '@material-ui/core'
 import Feedback from './FeedbackBase'
 
 import {
-  useFeedbackEnabledCourses,
   useCourseFeedback,
   useCourseQuestions,
+  useCourseData,
 } from '../util/queries'
 
 const FeedbackList = () => {
   const courseId = useParams().id
 
-  const courseData = useFeedbackEnabledCourses()
+  const courseData = useCourseData(courseId)
   const feedbacks = useCourseFeedback(courseId)
   const questions = useCourseQuestions(courseId)
 
   if (courseData.isLoading || feedbacks.isLoading || questions.isLoading)
     return null
 
-  const currentCourse = courseData.data.find((course) => course.id === courseId)
+  const currentCourse = courseData.data
 
   return (
     <Container>

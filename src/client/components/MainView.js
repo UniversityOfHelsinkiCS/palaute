@@ -1,27 +1,16 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
 
 import { Container } from '@material-ui/core'
 
 import CourseListItem from './CourseListItem'
 
-import { getCoursesAction } from '../util/redux/courseReducer'
-import { getUserFeedbackAction } from '../util/redux/feedbackReducer'
+import { useFeedbackEnabledCourses, useUserFeedback } from '../util/queries'
 
 export default () => {
-  const dispatch = useDispatch()
-  const courses = useSelector((state) => state.courses)
-  const answers = useSelector((state) => state.feedback)
+  const courses = useFeedbackEnabledCourses()
+  const answers = useUserFeedback()
 
-  useEffect(() => {
-    dispatch(getCoursesAction())
-  }, [])
-
-  useEffect(() => {
-    dispatch(getUserFeedbackAction())
-  }, [answers.userData.length])
-
-  if (courses.pending || answers.pending) return null
+  if (courses.isLoading || answers.isLoading) return null
 
   const coursesWithAnswer = new Set()
 
@@ -38,7 +27,7 @@ export default () => {
     return a.endDate < b.endDate ? -1 : 1
   }
 
-  answers.userData.forEach((answer) => {
+  answers.data.forEach((answer) => {
     coursesWithAnswer.add(answer.courseRealisationId)
   })
 
