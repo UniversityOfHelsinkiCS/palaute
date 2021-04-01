@@ -8,9 +8,8 @@ import { Container } from '@material-ui/core'
 import Feedback from './FeedbackBase'
 
 import { getCourseFeedbackAction } from '../util/redux/feedbackReducer'
-
-import questions from '../questions.json'
 import { getCoursesAction } from '../util/redux/courseReducer'
+import { getCourseQuestionsAction } from '../util/redux/questionReducer'
 
 import { getAxios } from '../util/apiConnection'
 
@@ -34,24 +33,27 @@ const FeedbackList = () => {
   const courseId = useParams().id
   const courseData = useSelector((state) => state.courses)
   const test = useFeedbackEnabledCourses()
+  const questions = useSelector((state) => state.questions)
 
   useEffect(() => {
     dispatch(getCoursesAction())
+    dispatch(getCourseFeedbackAction(courseId))
   }, [])
 
+  // we must ensure that courses have been created before getting questions
   useEffect(() => {
-    dispatch(getCourseFeedbackAction(courseId))
-  }, [feedbacks.length])
+    dispatch(getCourseQuestionsAction(courseId))
+  }, [courseData.pending])
 
-  if (courseData.pending || !feedbacks || test.isLoading) return null
-  console.log(test)
+  if (courseData.pending || !feedbacks || questions.pending || test.isLoading) return null
+
   const currentCourse = courseData.data.find((course) => course.id === courseId)
 
   return (
     <Container>
       <h1>{currentCourse.name.fi}</h1>
       <h2>Annetut palautteet:</h2>
-      {questions.questions.map((question) => (
+      {questions.data.questions.map((question) => (
         <Feedback
           question={question}
           answers={feedbacks.map((feedback) => feedback.data[question.id])}

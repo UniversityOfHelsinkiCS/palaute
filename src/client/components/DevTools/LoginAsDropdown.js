@@ -1,14 +1,14 @@
 import React from 'react'
 import { Autocomplete } from '@material-ui/lab'
 import { TextField } from '@material-ui/core'
-import { inProduction } from '../util/common'
+import { inProduction } from '../../util/common'
 
 import {
   possibleUsers,
   setHeaders,
   getHeaders,
   clearHeaders,
-} from '../util/mockHeaders'
+} from '../../util/mockHeaders'
 
 const LogInAsDropdown = () => {
   if (inProduction) return null

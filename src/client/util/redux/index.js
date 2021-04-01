@@ -5,6 +5,7 @@ import form from './formReducer'
 import feedback from './feedbackReducer'
 import error from './errorReducer'
 import courses from './courseReducer'
+import questions from './questionReducer'
 
 export default combineReducers({
   api,
@@ -13,4 +14,5 @@ export default combineReducers({
   feedback,
   error,
   courses,
+  questions,
 })

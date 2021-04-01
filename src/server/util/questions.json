@@ -1,0 +1,41 @@
+{
+  "questions": [
+    {
+      "id": "kysymys",
+      "type": "CHOICE",
+      "index": 1,
+      "question": {
+        "fi": "Mielipide kurssista"
+      },
+      "required": true
+    },
+    {
+      "id": "kysymys2",
+      "type": "CHOICE",
+      "index": 1,
+      "question": {
+      "fi": "Kurssi oli kiinnostava"
+      },
+      "required": true
+    },
+    {
+      "id": "yleinen",
+      "type": "TEXT",
+      "index": 2,
+      "question": {
+        "fi": "Anna yleistä palautetta kurssista"
+      },
+      "required": false
+    },
+    {
+      "id": "kehitys",
+      "type": "TEXT",
+      "index": 2,
+      "question": {
+        "fi": "Miten kehittäisit kurssia?"
+      },
+      "required": false
+    }
+  ]
+}
+  
