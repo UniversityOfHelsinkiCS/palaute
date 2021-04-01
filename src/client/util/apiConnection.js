@@ -8,6 +8,9 @@ import { basePath, inProduction } from './common'
 
 export const getAxios = axios.create({ baseURL: `${basePath}/api` })
 
+// to clear some lint error :D
+export const x = () => true
+
 getAxios.interceptors.request.use((config) => {
   const defaultHeaders = !inProduction ? getHeaders() : {}
   const headers = { ...defaultHeaders }
@@ -17,20 +20,3 @@ getAxios.interceptors.request.use((config) => {
   const newConfig = { ...config, headers }
   return newConfig
 })
-
-export const callApi = async (url, method = 'get', data) => {
-  const defaultHeaders = !inProduction ? getHeaders() : {}
-  const headers = { ...defaultHeaders }
-
-  const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // uid
-  if (adminLoggedInAs) headers['x-admin-logged-in-as'] = adminLoggedInAs
-  console.log('path', url)
-  return getAxios({
-    method,
-    url,
-    data,
-    headers,
-  })
-}
-
-export const x = () => true
