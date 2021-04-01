@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Container } from '@material-ui/core'
 import { useParams } from 'react-router'
+import { useQuery } from 'react-query'
+
+import { Container } from '@material-ui/core'
 
 import Feedback from './FeedbackBase'
 
@@ -10,11 +12,28 @@ import { getCourseFeedbackAction } from '../util/redux/feedbackReducer'
 import questions from '../questions.json'
 import { getCoursesAction } from '../util/redux/courseReducer'
 
+import { getAxios } from '../util/apiConnection'
+
+const queryFn = async () => {
+  const { data } = await getAxios.get(`/course-unit-realisations/feedback-enabled`)
+
+  return data
+}
+
+const useFeedbackEnabledCourses = () => {
+  const queryKey = 'feedbackEnabledCourses'
+
+  const ret = useQuery(queryKey, queryFn)
+
+  return ret
+}
+
 const FeedbackList = () => {
   const dispatch = useDispatch()
   const feedbacks = useSelector((state) => state.feedback.data)
   const courseId = useParams().id
   const courseData = useSelector((state) => state.courses)
+  const test = useFeedbackEnabledCourses()
 
   useEffect(() => {
     dispatch(getCoursesAction())
@@ -24,8 +43,8 @@ const FeedbackList = () => {
     dispatch(getCourseFeedbackAction(courseId))
   }, [feedbacks.length])
 
-  if (courseData.pending || !feedbacks) return null
-
+  if (courseData.pending || !feedbacks || test.isLoading) return null
+  console.log(test)
   const currentCourse = courseData.data.find((course) => course.id === courseId)
 
   return (
