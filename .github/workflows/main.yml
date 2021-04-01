@@ -50,3 +50,5 @@ jobs:
         environment: production
         set_commits: 'skip'
         sourcemaps: './build/static/js'
+        url_prefix: 'palaute/static/js'
+        
