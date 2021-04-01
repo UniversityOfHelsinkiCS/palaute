@@ -29,6 +29,8 @@ jobs:
     needs: dockerhub-release
 
     steps:
+    - uses: actions/checkout@v2 
+
     - name: Pull image and create a container
       run: docker create --name palaute toska/palaute:latest
 
