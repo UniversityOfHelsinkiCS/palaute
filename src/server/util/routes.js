@@ -31,6 +31,13 @@ router.get(
   courseUnitRealisations.getWhereFeedbackEnabled,
 )
 
+router.get(
+  '/course-unit-realisations/responsible',
+  courseUnitRealisations.getWhereResponsible,
+)
+
+router.get('/course-unit-realisations/:id', courseUnitRealisations.getOne)
+
 router.get('/trigger_sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()

@@ -1,14 +1,30 @@
 const dateFns = require('date-fns')
 
-const getCourseUnitRealisationsEnrolledBy = require('../util/getCourseUnitRealisationsEnrolledBy')
+const {
+  getCourseUnitRealisationsWhereResponsible,
+  getCourseUnitRealisationById,
+  getCourseUnitRealisationsEnrolledBy,
+} = require('../util/importerCourseUnitRealisations')
+
+const getOne = async (req, res) => {
+  const realisation = await getCourseUnitRealisationById(req.params.id)
+  res.send(realisation)
+}
+
+const getWhereResponsible = async (req, res) => {
+  const {
+    currentUser: { id },
+  } = req
+
+  const realisations = await getCourseUnitRealisationsWhereResponsible(id)
+
+  res.send(realisations)
+}
 
 const getWhereFeedbackEnabled = async (req, res) => {
-  const { currentUser } = req
-  if (!currentUser) {
-    return res.send([])
-  }
-
-  const { id } = currentUser
+  const {
+    currentUser: { id },
+  } = req
 
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
@@ -22,5 +38,7 @@ const getWhereFeedbackEnabled = async (req, res) => {
 }
 
 module.exports = {
+  getOne,
+  getWhereResponsible,
   getWhereFeedbackEnabled,
 }
