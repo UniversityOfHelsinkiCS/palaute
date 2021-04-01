@@ -10,21 +10,37 @@ const defaultQuestions = require('./questions.json')
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
 const createCourseRealisation = async (data) => {
-  const [course, _] = await CourseRealisation.upsert({
+  const [course] = await CourseRealisation.upsert({
     id: data.id,
     endDate: data.activityPeriod.endDate,
     name: data.name,
   })
-  const [question, created] = await Question.findOrCreate({
+  await Question.findOrCreate({
     where: {
       courseRealisationId: data.id,
     },
     defaults: {
       courseRealisationId: data.id,
       data: defaultQuestions,
-    }
+    },
   })
   return course
+}
+
+const getCourseUnitRealisationsWhereResponsible = async (username) => {
+  const { data } = await importerClient.get(
+    `/palaute/course_unit_realisations/responsible/${username}`,
+  )
+
+  return data
+}
+
+const getCourseUnitRealisationById = async (courseUnitRealisationId) => {
+  const { data } = await importerClient.get(
+    `/course_unit_realisations/${courseUnitRealisationId}`,
+  )
+
+  return data
 }
 
 const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
@@ -41,9 +57,13 @@ const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
     `/palaute/course_unit_realisations/enrolled/${username}`,
     { params },
   )
-  return await Promise.all(
-    data.map(async (course) => await createCourseRealisation(course)),
+  return Promise.all(
+    data.map(async (course) => createCourseRealisation(course)),
   )
 }
 
-module.exports = getCourseUnitRealisationsEnrolledBy
+module.exports = {
+  getCourseUnitRealisationsWhereResponsible,
+  getCourseUnitRealisationById,
+  getCourseUnitRealisationsEnrolledBy,
+}
