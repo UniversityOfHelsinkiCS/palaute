@@ -22,14 +22,13 @@ const FeedbackList = () => {
   const questions = useSelector((state) => state.questions)
 
   useEffect(() => {
-    // dispatch(getCoursesAction())
     dispatch(getCourseFeedbackAction(courseId))
   }, [])
 
   // we must ensure that courses have been created before getting questions
   useEffect(() => {
     dispatch(getCourseQuestionsAction(courseId))
-  }, [courseData.pending])
+  }, [courseData.isLoading])
 
   if (courseData.isLoading || !feedbacks || questions.pending) return null
 
