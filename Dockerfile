@@ -1,5 +1,7 @@
 FROM node:14
 
+WORKDIR /usr/src/app
+
 ARG BASE_PATH
 ENV PUBLIC_URL=$BASE_PATH
 
