@@ -22,7 +22,9 @@ jobs:
       with:
         push: true
         tags: toska/palaute:latest
-        build-args: BASE_PATH=/palaute
+        build-args: |
+          BASE_PATH=/palaute
+          GIT_SHA=${{ github.sha }}
 
   sentry-release:
     runs-on: ubuntu-latest
