@@ -32,7 +32,13 @@ const getCourseUnitRealisationsWhereResponsible = async (username) => {
     `/palaute/course_unit_realisations/responsible/${username}`,
   )
 
-  return data
+
+
+  return Promise.all(
+    data
+      .map((course) => ({ ...course, activityPeriod: course.activity_period}))
+      .map(async (course) => createCourseRealisation(course)),
+  )
 }
 
 const getCourseUnitRealisationById = async (courseUnitRealisationId) => {
@@ -40,7 +46,7 @@ const getCourseUnitRealisationById = async (courseUnitRealisationId) => {
     `/course_unit_realisations/${courseUnitRealisationId}`,
   )
 
-  return data
+  return await createCourseRealisation(data)
 }
 
 const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {

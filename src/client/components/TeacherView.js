@@ -1,0 +1,21 @@
+import React from 'react'
+
+import { useTeacherCourses } from '../util/queries'
+
+import TeacherCourseListItem from './TeacherCourseListItem'
+
+const TeacherView = () => {
+  const courses = useTeacherCourses()
+
+  if (courses.isLoading) return null
+
+  return (
+    <>
+      {courses.data.map((course) => (
+        <TeacherCourseListItem key={course.id} course={course} />
+      ))}
+    </>
+  )
+}
+
+export default TeacherView

@@ -62,3 +62,15 @@ export const useUserFeedback = () => {
 
   return response
 }
+
+export const useTeacherCourses = () => {
+  const queryKey = 'teacherCourses'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get('/course-unit-realisations/responsible')
+
+    return data
+  })
+
+  return response
+}
