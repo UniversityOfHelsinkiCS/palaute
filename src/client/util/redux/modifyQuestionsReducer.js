@@ -21,6 +21,13 @@ export const changeTypeField = (index, newType) => ({
   newType,
 })
 
+export const changeNameField = (index, name, lang) => ({
+  type: 'CHANGE_NAME',
+  index,
+  name,
+  lang,
+})
+
 const returnToggled = (questions, index) => {
   const newQuestions = questions
   newQuestions[index].required = !newQuestions[index].required
@@ -30,6 +37,12 @@ const returnToggled = (questions, index) => {
 const returnChangedType = (questions, index, type) => {
   const newQuestions = questions
   newQuestions[index].type = type
+  return newQuestions
+}
+
+const returnChangedName = (questions, index, name, lang) => {
+  const newQuestions = questions
+  newQuestions[index].question[lang] = name
   return newQuestions
 }
 
@@ -67,6 +80,18 @@ export default (state = { data: {}, pending: true }, action) => {
             state.data.questions,
             action.index,
             action.newType,
+          ),
+        },
+      }
+    case 'CHANGE_NAME':
+      return {
+        ...state,
+        data: {
+          questions: returnChangedName(
+            state.data.questions,
+            action.index,
+            action.name,
+            action.lang,
           ),
         },
       }

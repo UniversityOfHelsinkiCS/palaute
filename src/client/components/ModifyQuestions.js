@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,13 +14,20 @@ import {
   Button,
   Select,
   MenuItem,
+  IconButton,
+  TextField,
 } from '@material-ui/core'
+
+import { red, green } from '@material-ui/core/colors'
+
+import { Edit, Clear, Check } from '@material-ui/icons'
 
 import {
   getCourseQuestionsAction,
   toggleRequiredField,
   submitUpdates,
   changeTypeField,
+  changeNameField,
 } from '../util/redux/modifyQuestionsReducer'
 
 const mapTypeToText = {
@@ -33,6 +40,7 @@ const ModifyQuestions = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const questions = useSelector((state) => state.questions)
+  const [editing, setEditing] = useState({})
 
   useEffect(() => {
     dispatch(getCourseQuestionsAction(courseId))
@@ -52,9 +60,58 @@ const ModifyQuestions = () => {
       dispatch(changeTypeField(i, event.target.value))
     }
 
+    const switchToEdit = (lang) => {
+      setEditing({ id: i, lang, text: question.question[lang] })
+    }
+
+    const handleTextChange = (event) => {
+      setEditing({ ...editing, text: event.target.value })
+    }
+
+    const rejectNameChange = () => {
+      setEditing({})
+    }
+
+    const acceptNameChange = (lang) => {
+      dispatch(changeNameField(i, editing.text, lang))
+      setEditing({})
+    }
+    const formNameField = (lang) => {
+      if (editing.id === i && editing.lang === lang) {
+        return (
+          <TableCell>
+            <TextField
+              value={editing.text}
+              variant="outlined"
+              onChange={handleTextChange}
+            />
+            <IconButton
+              style={{ color: green[500] }}
+              onClick={() => acceptNameChange(lang)}
+            >
+              <Check />
+            </IconButton>
+            <IconButton style={{ color: red[500] }} onClick={rejectNameChange}>
+              <Clear />
+            </IconButton>
+          </TableCell>
+        )
+      }
+      return (
+        <TableCell>
+          {question.question[lang]}
+          {editing.id ? null : (
+            <IconButton color="primary" onClick={() => switchToEdit(lang)}>
+              <Edit />
+            </IconButton>
+          )}
+        </TableCell>
+      )
+    }
+
     return (
       <TableRow key={question.id}>
-        <TableCell>{question.question.fi}</TableCell>
+        {formNameField('fi')}
         <TableCell>Kysymys [englanti]</TableCell>
         <TableCell>Kysymys [ruotsi]</TableCell>
         <TableCell>
