@@ -20,7 +20,7 @@ import {
 
 import { red, green } from '@material-ui/core/colors'
 
-import { Edit, Clear, Check } from '@material-ui/icons'
+import { Edit, Clear, Check, Delete } from '@material-ui/icons'
 
 import {
   getCourseQuestionsAction,
@@ -28,6 +28,7 @@ import {
   submitUpdates,
   changeTypeField,
   changeNameField,
+  deleteQuestionAction,
 } from '../util/redux/modifyQuestionsReducer'
 
 const mapTypeToText = {
@@ -75,6 +76,10 @@ const ModifyQuestions = () => {
     const acceptNameChange = (lang) => {
       dispatch(changeNameField(i, editing.text, lang))
       setEditing({})
+    }
+
+    const deleteQuestion = () => {
+      dispatch(deleteQuestionAction(i))
     }
     const formNameField = (lang) => {
       if (editing.id === i && editing.lang === lang) {
@@ -129,6 +134,11 @@ const ModifyQuestions = () => {
             checked={question.required}
             onChange={() => toggleRequired(i)}
           />
+        </TableCell>
+        <TableCell>
+          <IconButton onClick={deleteQuestion}>
+            <Delete />
+          </IconButton>
         </TableCell>
       </TableRow>
     )

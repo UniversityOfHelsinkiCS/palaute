@@ -28,6 +28,11 @@ export const changeNameField = (index, name, lang) => ({
   lang,
 })
 
+export const deleteQuestionAction = (index) => ({
+  type: 'DELETE_QUESTION',
+  index,
+})
+
 const returnToggled = (questions, index) => {
   const newQuestions = questions
   newQuestions[index].required = !newQuestions[index].required
@@ -93,6 +98,13 @@ export default (state = { data: {}, pending: true }, action) => {
             action.name,
             action.lang,
           ),
+        },
+      }
+    case 'DELETE_QUESTION':
+      return {
+        ...state,
+        data: {
+          questions: state.data.questions.filter((q, i) => i !== action.index),
         },
       }
     default:
