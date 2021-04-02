@@ -16,6 +16,11 @@ import {
   MenuItem,
   IconButton,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormLabel,
 } from '@material-ui/core'
 
 import { red, green } from '@material-ui/core/colors'
@@ -29,6 +34,7 @@ import {
   changeTypeField,
   changeNameField,
   deleteQuestionAction,
+  addQuestionAction,
 } from '../util/redux/modifyQuestionsReducer'
 
 const mapTypeToText = {
@@ -42,6 +48,16 @@ const ModifyQuestions = () => {
   const dispatch = useDispatch()
   const questions = useSelector((state) => state.questions)
   const [editing, setEditing] = useState({})
+  const [dialogOpen, setOpen] = useState(false)
+  const [questionData, setQuestionData] = useState({
+    question: {
+      fi: '',
+      en: '',
+      se: '',
+    },
+    type: 'CHOICE',
+    required: false,
+  })
 
   useEffect(() => {
     dispatch(getCourseQuestionsAction(courseId))
@@ -58,6 +74,44 @@ const ModifyQuestions = () => {
 
   const backButton = () => {
     history.push('/list')
+  }
+
+  // Form action handlers
+  const handleFormOpen = () => {
+    setOpen(true)
+  }
+
+  const addQuestion = () => {
+    dispatch(addQuestionAction(questionData))
+    setOpen(false)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const toggleFormRequired = () => {
+    setQuestionData({
+      ...questionData,
+      required: !questionData.required,
+    })
+  }
+
+  const changeFormType = (event) => {
+    setQuestionData({
+      ...questionData,
+      type: event.target.value,
+    })
+  }
+
+  const changeFormName = (event) => {
+    setQuestionData({
+      ...questionData,
+      question: {
+        ...questionData.question,
+        [event.target.id]: event.target.value,
+      },
+    })
   }
 
   const formTableRow = (question, i) => {
@@ -186,6 +240,58 @@ const ModifyQuestions = () => {
         <Button variant="contained" color="primary" onClick={backButton}>
           Takaisin
         </Button>
+        <Button variant="contained" color="primary" onClick={handleFormOpen}>
+          Lisää kysymys
+        </Button>
+        <Dialog open={dialogOpen} onClose={handleClose}>
+          <DialogTitle>Lisää kysymys</DialogTitle>
+          <DialogContent>
+            <TextField
+              id="fi"
+              onChange={changeFormName}
+              margin="dense"
+              autoFocus
+              fullWidth
+              variant="outlined"
+              label="Kysymys suomeksi"
+            />
+            <TextField
+              id="en"
+              onChange={changeFormName}
+              margin="dense"
+              fullWidth
+              variant="outlined"
+              label="Kysymys englanniksi"
+            />
+            <TextField
+              id="se"
+              onChange={changeFormName}
+              margin="dense"
+              fullWidth
+              variant="outlined"
+              label="Kysymys ruotsiksi"
+            />
+            <FormLabel>Kysymyksen tyyppi </FormLabel>
+            <Select value={questionData.type} onChange={changeFormType}>
+              <MenuItem value="CHOICE">{mapTypeToText.CHOICE}</MenuItem>
+              <MenuItem value="TEXT">{mapTypeToText.TEXT}</MenuItem>
+            </Select>
+            <br />
+            <FormLabel>Pakollinen </FormLabel>
+            <Checkbox
+              checked={questionData.required}
+              onChange={toggleFormRequired}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" variant="contained" onClick={addQuestion}>
+              Lisää
+            </Button>
+            <Button color="primary" variant="contained" onClick={handleClose}>
+              Peruuta
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </>
   )

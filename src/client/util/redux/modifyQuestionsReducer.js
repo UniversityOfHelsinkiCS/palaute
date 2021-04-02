@@ -33,6 +33,11 @@ export const deleteQuestionAction = (index) => ({
   index,
 })
 
+export const addQuestionAction = (data) => ({
+  type: 'ADD_QUESTION',
+  data,
+})
+
 const returnToggled = (questions, index) => {
   const newQuestions = questions
   newQuestions[index].required = !newQuestions[index].required
@@ -98,6 +103,13 @@ export default (state = { data: {}, pending: true }, action) => {
             action.name,
             action.lang,
           ),
+        },
+      }
+    case 'ADD_QUESTION':
+      return {
+        ...state,
+        data: {
+          questions: state.data.questions.concat(action.data),
         },
       }
     case 'DELETE_QUESTION':
