@@ -56,6 +56,10 @@ const ModifyQuestions = () => {
     history.push('/list')
   }
 
+  const backButton = () => {
+    history.push('/list')
+  }
+
   const formTableRow = (question, i) => {
     const changeType = (event) => {
       dispatch(changeTypeField(i, event.target.value))
@@ -179,7 +183,7 @@ const ModifyQuestions = () => {
         <Button variant="contained" color="primary" onClick={updateQuestions}>
           Tallenna
         </Button>
-        <Button variant="contained" color="primary" href="/list">
+        <Button variant="contained" color="primary" onClick={backButton}>
           Takaisin
         </Button>
       </Container>
