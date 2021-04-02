@@ -12,12 +12,15 @@ import {
   TableBody,
   Checkbox,
   Button,
+  Select,
+  MenuItem,
 } from '@material-ui/core'
 
 import {
   getCourseQuestionsAction,
   toggleRequiredField,
   submitUpdates,
+  changeTypeField,
 } from '../util/redux/modifyQuestionsReducer'
 
 const mapTypeToText = {
@@ -44,20 +47,35 @@ const ModifyQuestions = () => {
     history.push('/list')
   }
 
-  const formTableRow = (question, i) => (
-    <TableRow key={question.id}>
-      <TableCell>{question.question.fi}</TableCell>
-      <TableCell>Kysymys [englanti]</TableCell>
-      <TableCell>Kysymys [ruotsi]</TableCell>
-      <TableCell>{mapTypeToText[question.type]}</TableCell>
-      <TableCell>
-        <Checkbox
-          checked={question.required}
-          onChange={() => toggleRequired(i)}
-        />
-      </TableCell>
-    </TableRow>
-  )
+  const formTableRow = (question, i) => {
+    const changeType = (event) => {
+      dispatch(changeTypeField(i, event.target.value))
+    }
+
+    return (
+      <TableRow key={question.id}>
+        <TableCell>{question.question.fi}</TableCell>
+        <TableCell>Kysymys [englanti]</TableCell>
+        <TableCell>Kysymys [ruotsi]</TableCell>
+        <TableCell>
+          <Select
+            variant="outlined"
+            value={question.type}
+            onChange={changeType}
+          >
+            <MenuItem value="CHOICE">{mapTypeToText.CHOICE}</MenuItem>
+            <MenuItem value="TEXT">{mapTypeToText.TEXT}</MenuItem>
+          </Select>
+        </TableCell>
+        <TableCell>
+          <Checkbox
+            checked={question.required}
+            onChange={() => toggleRequired(i)}
+          />
+        </TableCell>
+      </TableRow>
+    )
+  }
 
   if (questions.pending) return null
 
@@ -93,6 +111,9 @@ const ModifyQuestions = () => {
         </Table>
         <Button variant="contained" color="primary" onClick={updateQuestions}>
           Tallenna
+        </Button>
+        <Button variant="contained" color="primary" href="/list">
+          Takaisin
         </Button>
       </Container>
     </>

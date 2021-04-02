@@ -15,9 +15,21 @@ export const toggleRequiredField = (index) => ({
   index,
 })
 
+export const changeTypeField = (index, newType) => ({
+  type: 'CHANGE_TYPE',
+  index,
+  newType,
+})
+
 const returnToggled = (questions, index) => {
   const newQuestions = questions
   newQuestions[index].required = !newQuestions[index].required
+  return newQuestions
+}
+
+const returnChangedType = (questions, index, type) => {
+  const newQuestions = questions
+  newQuestions[index].type = type
   return newQuestions
 }
 
@@ -45,6 +57,17 @@ export default (state = { data: {}, pending: true }, action) => {
         ...state,
         data: {
           questions: returnToggled(state.data.questions, action.index),
+        },
+      }
+    case 'CHANGE_TYPE':
+      return {
+        ...state,
+        data: {
+          questions: returnChangedType(
+            state.data.questions,
+            action.index,
+            action.newType,
+          ),
         },
       }
     default:
