@@ -1,6 +1,7 @@
 require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
+const Sentry = require('@sentry/node')
 const express = require('express')
 const initializeSentry = require('./util/sentry')
 const { PORT, inProduction } = require('./util/config')
@@ -10,6 +11,14 @@ const logger = require('./util/logger')
 initializeSentry()
 
 const app = express()
+
+// According to documentation this should be first middleware
+app.use(
+  Sentry.Handlers.requestHandler({
+    serverName: false,
+    user: ['id'],
+  }),
+)
 
 app.use(express.json())
 
