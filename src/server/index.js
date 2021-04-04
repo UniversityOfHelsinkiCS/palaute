@@ -3,6 +3,8 @@ require('express-async-errors')
 const path = require('path')
 const Sentry = require('@sentry/node')
 const express = require('express')
+const currentUserMiddleware = require('../middleware/currentUserMiddleware')
+const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
 const initializeSentry = require('./util/sentry')
 const { PORT, inProduction } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
@@ -16,6 +18,9 @@ const app = express()
 app.use(Sentry.Handlers.requestHandler())
 
 app.use(express.json())
+
+app.use(shibbolethCharsetMiddleware)
+app.use(currentUserMiddleware)
 
 app.use('/api', (req, res, next) => require('./util/routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))

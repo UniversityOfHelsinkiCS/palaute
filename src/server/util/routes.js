@@ -1,16 +1,13 @@
 const Router = require('express')
-const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
+
 const errorMiddleware = require('../middleware/errorMiddleware')
-const currentUserMiddleware = require('../middleware/currentUserMiddleware')
+
 const feedbacks = require('../controllers/feedbacksController')
 const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
 const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
 
 const router = Router()
-
-router.use(shibbolethCharsetMiddleware)
-router.use(currentUserMiddleware)
 
 router.get('/login', users.getUser)
 
