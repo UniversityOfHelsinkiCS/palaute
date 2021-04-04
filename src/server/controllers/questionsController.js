@@ -1,3 +1,4 @@
+const { v4: uuid } = require('uuid')
 const { ApplicationError } = require('../util/customErrors')
 const { Question } = require('../models')
 
@@ -28,8 +29,19 @@ const updateQuestionsByCourseId = async (req, res) => {
     },
   })
   if (!questions) throw new ApplicationError('Not found', 404)
-
-  questions.data = req.body.data
+  // must mangeli ids
+  const acualData = {
+    ...req.body.data,
+    questions: req.body.data.questions.map((question) =>
+      question.id
+        ? question
+        : {
+            ...question,
+            id: uuid(),
+          },
+    ),
+  }
+  questions.data = acualData
   const updatedQuestions = await questions.save()
 
   res.send(updatedQuestions)
