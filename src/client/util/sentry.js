@@ -11,6 +11,8 @@ const initializeSentry = () => {
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
   })
+
+  Sentry.setUser({ email: 'Hello@x.fi' })
 }
 
 export default initializeSentry
