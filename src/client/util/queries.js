@@ -74,3 +74,15 @@ export const useTeacherCourses = () => {
 
   return response
 }
+
+export const useUserData = () => {
+  const queryKey = 'userData'
+
+  const response = useQuery(queryKey, async () => {
+    const { data } = await getAxios.get('/login')
+
+    return data
+  })
+
+  return response
+}
