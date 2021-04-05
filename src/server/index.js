@@ -1,7 +1,6 @@
 require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
-const Sentry = require('@sentry/node')
 const express = require('express')
 const currentUserMiddleware = require('./middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('./middleware/shibbolethCharsetMiddleware')
@@ -13,13 +12,6 @@ const logger = require('./util/logger')
 initializeSentry()
 
 const app = express()
-
-// According to documentation this should be first middleware
-app.use(
-  Sentry.Handlers.requestHandler({
-    user: ['id'],
-  }),
-)
 
 app.use(express.json())
 
