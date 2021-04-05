@@ -15,7 +15,11 @@ initializeSentry()
 const app = express()
 
 // According to documentation this should be first middleware
-app.use(Sentry.Handlers.requestHandler())
+app.use(
+  Sentry.Handlers.requestHandler({
+    user: ['id'],
+  }),
+)
 
 app.use(express.json())
 
@@ -31,7 +35,6 @@ if (inProduction) {
 
   app.use(express.static(DIST_PATH))
   app.get('*', (req, res) => res.sendFile(INDEX_PATH))
-  app.use(Sentry.Handlers.errorHandler())
 }
 
 const start = async () => {

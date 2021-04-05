@@ -1,4 +1,5 @@
 const Router = require('express')
+const Sentry = require('@sentry/node')
 
 const errorMiddleware = require('../middleware/errorMiddleware')
 
@@ -40,6 +41,9 @@ router.get('/trigger_sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()
 })
+
+// according to docs this should be after all controllers but before error middlewares
+router.use(Sentry.Handlers.errorHandler())
 
 router.use(errorMiddleware)
 
