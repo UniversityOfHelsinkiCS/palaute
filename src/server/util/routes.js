@@ -41,6 +41,11 @@ router.get('/trigger_sentry', () => {
   mluukkai()
 })
 
+router.get('/test_sentry', () => {
+  const jakousa = 'x'
+  jakousa()
+})
+
 router.use(errorMiddleware)
 
 module.exports = router
