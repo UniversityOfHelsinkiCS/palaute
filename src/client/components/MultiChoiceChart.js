@@ -16,9 +16,20 @@ const MultiChoiceChart = ({ answers }) => {
       filteredAnswers.reduce((a, b) => a + b, 0) / filteredAnswers.length
     ).toFixed(2)
 
+  const countOccurrences = (val) =>
+    filteredAnswers.filter((num) => num === val).length
+
+  const formData = (value) => ({
+    name: value,
+    y: countOccurrences(value),
+  })
+
   const options = {
     chart: {
       type: 'column',
+    },
+    credits: {
+      enabled: false,
     },
     title: {
       text: '',
@@ -27,6 +38,7 @@ const MultiChoiceChart = ({ answers }) => {
       type: 'category',
     },
     yAxis: {
+      allowDecimals: false,
       title: {
         text: 'Määrä',
       },
@@ -47,28 +59,7 @@ const MultiChoiceChart = ({ answers }) => {
       {
         name: '',
         colorByPoint: false,
-        data: [
-          {
-            name: '1',
-            y: filteredAnswers.filter((x) => x === 1).length,
-          },
-          {
-            name: '2',
-            y: filteredAnswers.filter((x) => x === 2).length,
-          },
-          {
-            name: '3',
-            y: filteredAnswers.filter((x) => x === 3).length,
-          },
-          {
-            name: '4',
-            y: filteredAnswers.filter((x) => x === 4).length,
-          },
-          {
-            name: '5',
-            y: filteredAnswers.filter((x) => x === 5).length,
-          },
-        ],
+        data: [formData(1), formData(2), formData(3), formData(4), formData(5)],
       },
     ],
   }
