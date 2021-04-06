@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query'
-import { getAxios } from './apiConnection'
+
+import apiClient from './apiClient'
 
 export const useFeedbackEnabledCourses = () => {
   const queryKey = 'feedbackEnabledCourses'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get(
+    const { data } = await apiClient.get(
       '/course-unit-realisations/feedback-enabled',
     )
 
@@ -16,10 +17,12 @@ export const useFeedbackEnabledCourses = () => {
 }
 
 export const useCourseData = (courseId) => {
-  const queryKey = 'courseData'
+  const queryKey = ['courseData', courseId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get(`/course-unit-realisations/${courseId}`)
+    const { data } = await apiClient.get(
+      `/course-unit-realisations/${courseId}`,
+    )
 
     return data
   })
@@ -28,10 +31,10 @@ export const useCourseData = (courseId) => {
 }
 
 export const useCourseFeedback = (courseId) => {
-  const queryKey = 'courseFeedback'
+  const queryKey = ['courseFeedback', courseId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get(`/courses/${courseId}/feedbacks`)
+    const { data } = await apiClient.get(`/courses/${courseId}/feedbacks`)
 
     return data
   })
@@ -40,10 +43,10 @@ export const useCourseFeedback = (courseId) => {
 }
 
 export const useCourseQuestions = (courseId) => {
-  const queryKey = 'courseQuestions'
+  const queryKey = ['courseQuestions', courseId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get(`/courses/${courseId}/questions`)
+    const { data } = await apiClient.get(`/courses/${courseId}/questions`)
 
     return data
   })
@@ -55,7 +58,7 @@ export const useUserFeedback = () => {
   const queryKey = 'userFeedback'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get('/users/feedbacks')
+    const { data } = await apiClient.get('/users/feedbacks')
 
     return data
   })
@@ -67,7 +70,9 @@ export const useTeacherCourses = () => {
   const queryKey = 'teacherCourses'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get('/course-unit-realisations/responsible')
+    const { data } = await apiClient.get(
+      '/course-unit-realisations/responsible',
+    )
 
     return data
   })
@@ -79,7 +84,7 @@ export const useUserData = () => {
   const queryKey = 'userData'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await getAxios.get('/login')
+    const { data } = await apiClient.get('/login')
 
     return data
   })

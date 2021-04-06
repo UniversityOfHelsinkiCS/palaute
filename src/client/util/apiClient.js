@@ -2,16 +2,9 @@ import axios from 'axios'
 import { getHeaders } from './mockHeaders'
 import { basePath, inProduction } from './common'
 
-/**
- * ApiConnection simplifies redux usage
- */
+const apiClient = axios.create({ baseURL: `${basePath}/api` })
 
-export const getAxios = axios.create({ baseURL: `${basePath}/api` })
-
-// to clear some lint error :D
-export const x = () => true
-
-getAxios.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
   const defaultHeaders = !inProduction ? getHeaders() : {}
   const headers = { ...defaultHeaders }
 
@@ -20,3 +13,5 @@ getAxios.interceptors.request.use((config) => {
   const newConfig = { ...config, headers }
   return newConfig
 })
+
+export default apiClient
