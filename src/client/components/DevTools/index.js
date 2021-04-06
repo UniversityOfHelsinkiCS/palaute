@@ -1,4 +1,6 @@
 import React from 'react'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 import LoginAsDropdown from './LoginAsDropdown'
 import BorkButton from './BorkButton'
 import { inProduction } from '../../util/common'
@@ -11,6 +13,7 @@ const DevTools = () => {
     <>
       <LoginAsDropdown />
       <BorkButton />
+      <ReactQueryDevtools position="bottom-right" />
     </>
   )
 }
