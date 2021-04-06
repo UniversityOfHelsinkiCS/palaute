@@ -10,5 +10,3 @@ export const getLanguageValue = (values, preferred) => {
 
   return null
 }
-
-export const x = () => true
