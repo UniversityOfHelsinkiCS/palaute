@@ -1,54 +1,53 @@
-name: Release 
+name: Release
 
 on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
-  dockerhub-release: 
+  dockerhub-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with: 
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-            
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: toska/palaute:latest
-        build-args: |
-          BASE_PATH=/palaute
-          GIT_SHA=${{ github.sha }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: toska/palaute:latest
+          build-args: |
+            BASE_PATH=/palaute
+            GIT_SHA=${{ github.sha }}
 
   sentry-release:
     runs-on: ubuntu-latest
     needs: dockerhub-release
 
     steps:
-    - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
 
-    - name: Pull image and create a container
-      run: docker create --name palaute toska/palaute:latest
+      - name: Pull image and create a container
+        run: docker create --name palaute toska/palaute:latest
 
-    - name: Copy assets from the container
-      run: docker cp palaute:/usr/src/app/build ./build
+      - name: Copy assets from the container
+        run: docker cp palaute:/usr/src/app/build ./build
 
-    - name: Create Sentry release
-      uses: getsentry/action-release@v1
-      env:
-        SENTRY_URL: ${{ secrets.SENTRY_URL }}
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      with:
-        environment: production
-        set_commits: 'skip'
-        sourcemaps: './build/static/js'
-        url_prefix: '~/palaute/static/js'
-        
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          set_commits: 'auto'
+          sourcemaps: './build/static/js'
+          url_prefix: '~/palaute/static/js'
