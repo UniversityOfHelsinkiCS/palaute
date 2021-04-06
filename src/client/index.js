@@ -10,15 +10,17 @@ import { basePath } from './util/common'
 import App from './components/App'
 import ErrorBoundary from './components/ErrorBoundary'
 import initializeSentry from './util/sentry'
+import initializeI18n from './util/i18n'
 
 initializeSentry()
+initializeI18n()
 
-const apiClient = new QueryClient()
+const queryClient = new QueryClient()
 
 render(
   <Provider store={store}>
     <BrowserRouter basename={basePath}>
-      <QueryClientProvider client={apiClient}>
+      <QueryClientProvider client={queryClient}>
         <ErrorBoundary>
           <App />
         </ErrorBoundary>
