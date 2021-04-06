@@ -5,23 +5,23 @@ import { Box, Button } from '@material-ui/core'
 
 import { getLanguageValue } from '../util/languageUtils'
 
-const NewFeedback = (handleEditButton) => {
+const NewFeedback = ({ onEdit }) => {
   const { t } = useTranslation()
   return (
-    <Button variant="contained" color="primary" onClick={handleEditButton}>
+    <Button variant="contained" color="primary" onClick={onEdit}>
       {t('feedbackEnabledCourses:giveFeedbackButton')}
     </Button>
   )
 }
 
-const EditFeedBack = (handleEditButton, handleViewButton) => {
+const EditFeedBack = ({ onEdit, onViewSummary }) => {
   const { t } = useTranslation()
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handleEditButton}>
+      <Button variant="contained" color="primary" onClick={onEdit}>
         {t('feedbackEnabledCourses:modifyFeedbackButton')}
       </Button>
-      <Button variant="contained" color="primary" onClick={handleViewButton}>
+      <Button variant="contained" color="primary" onClick={onViewSummary}>
         {t('feedbackEnabledCourses:viewFeedbackSummary')}
       </Button>
     </>
@@ -44,9 +44,14 @@ const CourseListItem = ({ course, answered }) => {
   return (
     <Box maxWidth="md" border={2} borderRadius={10} m={2} padding={2}>
       <h4>{getLanguageValue(course.name, i18n.language)}</h4>
-      {answered
-        ? EditFeedBack(handleEditButton, handleViewButton)
-        : NewFeedback(handleEditButton)}
+      {answered ? (
+        <EditFeedBack
+          onEdit={handleEditButton}
+          onViewSummary={handleViewButton}
+        />
+      ) : (
+        <NewFeedback onEdit={handleEditButton} />
+      )}
     </Box>
   )
 }

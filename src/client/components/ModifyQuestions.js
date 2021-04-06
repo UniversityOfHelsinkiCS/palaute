@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 import {
   Container,
@@ -37,14 +38,10 @@ import {
   addQuestionAction,
 } from '../util/redux/modifyQuestionsReducer'
 
-const mapTypeToText = {
-  CHOICE: 'Monivalinta',
-  TEXT: 'Tekstikenttä',
-}
-
 const ModifyQuestions = () => {
   const courseId = useParams().id
   const history = useHistory()
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const questions = useSelector((state) => state.questions)
   const [editing, setEditing] = useState({})
@@ -65,6 +62,11 @@ const ModifyQuestions = () => {
 
   const toggleRequired = (questionIndex) => {
     dispatch(toggleRequiredField(questionIndex))
+  }
+
+  const mapTypeToText = {
+    CHOICE: t('modifyForm:multichoice'),
+    TEXT: t('modifyForm:textarea'),
   }
 
   const updateQuestions = () => {
@@ -207,7 +209,7 @@ const ModifyQuestions = () => {
   return (
     <>
       <Container size="md" component={Paper}>
-        <h2>Kysymykset</h2>
+        <h2>{t('modifyForm:questions')}</h2>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -221,10 +223,10 @@ const ModifyQuestions = () => {
                 <b>Kysymys [ruotsi]</b>
               </TableCell>
               <TableCell>
-                <b>Tyyppi</b>
+                <b>{t('modifyForm:type')}</b>
               </TableCell>
               <TableCell>
-                <b>Pakollinen</b>
+                <b>{t('modifyForm:required')}</b>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -235,16 +237,16 @@ const ModifyQuestions = () => {
           </TableBody>
         </Table>
         <Button variant="contained" color="primary" onClick={updateQuestions}>
-          Tallenna
+          {t('modifyForm:saveForm')}
         </Button>
         <Button variant="contained" color="primary" onClick={backButton}>
-          Takaisin
+          {t('modifyForm:return')}
         </Button>
         <Button variant="contained" color="primary" onClick={handleFormOpen}>
-          Lisää kysymys
+          {t('modifyForm:addQuestion')}
         </Button>
         <Dialog open={dialogOpen} onClose={handleClose}>
-          <DialogTitle>Lisää kysymys</DialogTitle>
+          <DialogTitle>{t('modifyForm:addQuestion')}</DialogTitle>
           <DialogContent>
             <TextField
               id="fi"
@@ -271,13 +273,13 @@ const ModifyQuestions = () => {
               variant="outlined"
               label="Kysymys ruotsiksi"
             />
-            <FormLabel>Kysymyksen tyyppi </FormLabel>
+            <FormLabel>{t('modifyForm:questionType')} </FormLabel>
             <Select value={questionData.type} onChange={changeFormType}>
               <MenuItem value="CHOICE">{mapTypeToText.CHOICE}</MenuItem>
               <MenuItem value="TEXT">{mapTypeToText.TEXT}</MenuItem>
             </Select>
             <br />
-            <FormLabel>Pakollinen </FormLabel>
+            <FormLabel>{t('modifyForm:required')} </FormLabel>
             <Checkbox
               checked={questionData.required}
               onChange={toggleFormRequired}
@@ -285,10 +287,10 @@ const ModifyQuestions = () => {
           </DialogContent>
           <DialogActions>
             <Button color="primary" variant="contained" onClick={addQuestion}>
-              Lisää
+              {t('modifyForm:add')}
             </Button>
             <Button color="primary" variant="contained" onClick={handleClose}>
-              Peruuta
+              {t('modifyForm:return')}
             </Button>
           </DialogActions>
         </Dialog>

@@ -19,4 +19,20 @@ export default {
     answers: 'Answers',
     average: 'Average',
   },
+  teacherView: {
+    modifyForm: 'Modify form',
+    viewFeedbackSummary: 'View feedback summary',
+  },
+  modifyForm: {
+    saveForm: 'Save',
+    return: 'Back',
+    addQuestion: 'Add question',
+    questionType: 'Question type',
+    required: 'Required',
+    add: 'Add',
+    questions: 'Questions',
+    type: 'Type',
+    multichoice: 'Multiple choice',
+    textarea: 'Text field',
+  },
 }

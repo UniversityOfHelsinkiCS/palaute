@@ -22,10 +22,8 @@ export default () => {
     if (user.data) {
       Sentry.setUser({ username: user.data.id })
 
-      // TODO: set language based on user's language
-      i18n.changeLanguage('en')
-      if (user.language) {
-        i18n.changeLanguage(user.language)
+      if (user.data.language) {
+        i18n.changeLanguage(user.data.language)
       }
     }
   }, [user.data])
