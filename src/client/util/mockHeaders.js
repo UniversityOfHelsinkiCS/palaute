@@ -9,6 +9,7 @@ export const possibleUsers = [
     schacDateOfBirth: undefined,
     schacPersonalUniqueCode: undefined,
     sn: 'admin',
+    preferredLanguage: 'en',
   },
   {
     uid: 'varisleo',
@@ -19,6 +20,7 @@ export const possibleUsers = [
     schacPersonalUniqueCode:
       'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:fuksi',
     sn: 'fuksi',
+    preferredLanguage: 'en',
   },
   {
     uid: 'staff',
@@ -28,6 +30,7 @@ export const possibleUsers = [
     schacDateOfBirth: undefined,
     schacPersonalUniqueCode: undefined,
     sn: 'staff',
+    preferredLanguage: 'en',
   },
 ]
 

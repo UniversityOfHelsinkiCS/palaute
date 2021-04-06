@@ -1,14 +1,17 @@
 import React from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
+import { useTranslation } from 'react-i18next'
 
 const MultiChoiceChart = ({ answers }) => {
+  const { t } = useTranslation()
+
   const filteredAnswers = answers
     .filter((number) => !Number.isNaN(number - parseInt(number, 10)))
     .map((number) => parseInt(number, 10))
 
   if (filteredAnswers.length === 0) {
-    return <p>Palautteita on liian vähän näytettäväksi</p>
+    return <p>{t('feedbackList:notEnoughFeedbacks')}</p>
   }
 
   const averageValue = () =>
@@ -40,7 +43,7 @@ const MultiChoiceChart = ({ answers }) => {
     yAxis: {
       allowDecimals: false,
       title: {
-        text: 'Määrä',
+        text: t('feedbackList:amount'),
       },
     },
     legend: {
@@ -66,8 +69,8 @@ const MultiChoiceChart = ({ answers }) => {
 
   return (
     <div>
-      Vastauksia: {filteredAnswers.length} <br />
-      Keskiarvo: {averageValue()}
+      {t('feedbackList:answers')}: {filteredAnswers.length} <br />
+      {t('feedbackList:average')}: {averageValue()}
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   )

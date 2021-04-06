@@ -6,7 +6,7 @@ const { User } = require('../models')
 const isSuperAdmin = (id) =>
   ['varisleo', 'kalleilv', 'jakousa', 'mluukkai'].includes(id)
 
-const upsertUser = async ({ uid, givenname, sn, mail }) => {
+const upsertUser = async ({ uid, givenname, sn, mail, preferredlanguage }) => {
   const [user, created] = await User.findOrCreate({
     where: {
       id: uid,
@@ -15,6 +15,7 @@ const upsertUser = async ({ uid, givenname, sn, mail }) => {
       first_name: givenname,
       last_name: sn,
       email: mail,
+      language: preferredlanguage,
     },
   })
   if (created) {

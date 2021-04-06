@@ -1,23 +1,32 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Box, Button } from '@material-ui/core'
 
-const NewFeedback = (handleEditButton) => (
-  <Button variant="contained" color="primary" onClick={handleEditButton}>
-    Anna palautetta
-  </Button>
-)
+import { getLanguageValue } from '../util/languageUtils'
 
-const EditFeedBack = (handleEditButton, handleViewButton) => (
-  <>
+const NewFeedback = (handleEditButton) => {
+  const { t } = useTranslation()
+  return (
     <Button variant="contained" color="primary" onClick={handleEditButton}>
-      Muokkaa palautetta
+      {t('feedbackEnabledCourses:giveFeedbackButton')}
     </Button>
-    <Button variant="contained" color="primary" onClick={handleViewButton}>
-      Katso palautteen yhteenveto
-    </Button>
-  </>
-)
+  )
+}
+
+const EditFeedBack = (handleEditButton, handleViewButton) => {
+  const { t } = useTranslation()
+  return (
+    <>
+      <Button variant="contained" color="primary" onClick={handleEditButton}>
+        {t('feedbackEnabledCourses:modifyFeedbackButton')}
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleViewButton}>
+        {t('feedbackEnabledCourses:viewFeedbackSummary')}
+      </Button>
+    </>
+  )
+}
 
 const CourseListItem = ({ course, answered }) => {
   const history = useHistory()
@@ -30,9 +39,11 @@ const CourseListItem = ({ course, answered }) => {
     history.push(`/view/${course.id}`)
   }
 
+  const { i18n } = useTranslation()
+
   return (
     <Box maxWidth="md" border={2} borderRadius={10} m={2} padding={2}>
-      <h4>{course.name.fi}</h4>
+      <h4>{getLanguageValue(course.name, i18n.language)}</h4>
       {answered
         ? EditFeedBack(handleEditButton, handleViewButton)
         : NewFeedback(handleEditButton)}

@@ -19,6 +19,9 @@ User.init(
     email: {
       type: STRING,
     },
+    language: {
+      type: STRING,
+    },
   },
   {
     underscored: true,

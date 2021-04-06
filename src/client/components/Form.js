@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Button, Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
+import { useTranslation } from 'react-i18next'
 
 import {
   reSubmitFormAction,
@@ -9,6 +10,8 @@ import {
   getUserCourseFeedbackAction,
 } from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
+
+import { getLanguageValue } from '../util/languageUtils'
 
 import Question from './QuestionBase'
 
@@ -21,6 +24,7 @@ const Form = () => {
   const form = useSelector((state) => state.form)
   const courseData = useCourseData(courseId)
   const questions = useCourseQuestions(courseId)
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     dispatch(getUserCourseFeedbackAction(courseId))
@@ -56,12 +60,12 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
-        <h1>{currentCourse.name.fi}</h1>
+        <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
         {questions.data.data.questions.map((question) => (
           <Question question={question} key={question.id} />
         ))}
         <Button type="submit" variant="contained" color="primary">
-          Anna palautetta!
+          {t('feedbackForm:submitButton')}
         </Button>
       </Container>
     </form>

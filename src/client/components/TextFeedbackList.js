@@ -1,18 +1,21 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { List, ListItem } from '@material-ui/core'
 
 const TextFeebackList = ({ answers }) => {
+  const { t } = useTranslation()
+
   const filteredAnswers = answers.filter(
     (feedback) => feedback !== undefined && feedback !== '',
   )
 
   if (filteredAnswers.length === 0) {
-    return <p>Palautteita on liian vähän näytettäväksi</p>
+    return <p>{t('feedbackList:notEnoughFeedbacks')}</p>
   }
 
   return (
     <div>
-      Vastauksia: {filteredAnswers.length} <br />
+      {t('feedbackList:answers')}: {filteredAnswers.length} <br />
       <List>
         {filteredAnswers.map((answer) => (
           // TODO use some acually unique key
