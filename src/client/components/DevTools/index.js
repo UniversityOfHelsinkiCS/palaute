@@ -6,8 +6,7 @@ import BorkButton from './BorkButton'
 import { inProduction } from '../../util/common'
 
 const DevTools = () => {
-  // eslint-disable-next-line
-  if (inProduction) console.log('This is here for testing purposes') // return null
+  if (inProduction) return null
 
   return (
     <>
