@@ -6,6 +6,7 @@ const errorMiddleware = require('../middleware/errorMiddleware')
 const initializeSentry = require('./sentry')
 const feedbacks = require('../controllers/feedbacksController')
 const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
+const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
 
@@ -46,9 +47,11 @@ router.get(
   courseUnitRealisations.getWhereResponsible,
 )
 
+router.get('/assessment-items', assessmentItems.getAll)
+
 router.get('/course-unit-realisations/:id', courseUnitRealisations.getOne)
 
-router.get('/trigger_sentry', () => {
+router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()
 })
