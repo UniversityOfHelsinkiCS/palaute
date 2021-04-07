@@ -2,9 +2,8 @@ import React, { useMemo } from 'react'
 import { Typography, List, Divider, Box } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import CourseListItem from './CourseListItem'
-
-import { useFeedbackEnabledCourses, useUserFeedback } from '../util/queries'
+import FeedbackListItem from './FeedbackListItem'
+import { useFeedbackEnabledCourses, useUserFeedback } from '../../util/queries'
 
 const makeCoursesWithAnswer = (answers) => {
   const coursesWithAnswer = new Set()
@@ -31,7 +30,7 @@ const makeCompareCourses = (coursesWithAnswer) => (a, b) => {
   return a.endDate < b.endDate ? -1 : 1
 }
 
-export default () => {
+const UserFeedbacks = () => {
   const { t } = useTranslation()
   const courses = useFeedbackEnabledCourses()
   const answers = useUserFeedback()
@@ -48,14 +47,12 @@ export default () => {
 
   return (
     <div>
-      <Typography variant="h4">
-        {t('feedbackEnabledCourses:coursesHeading')}
-      </Typography>
+      <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
       <List>
         {courses.data.map((course) => (
           <>
             <Box my={2}>
-              <CourseListItem
+              <FeedbackListItem
                 key={course.id}
                 course={course}
                 answered={coursesWithAnswer.has(course.id)}
@@ -68,3 +65,5 @@ export default () => {
     </div>
   )
 }
+
+export default UserFeedbacks

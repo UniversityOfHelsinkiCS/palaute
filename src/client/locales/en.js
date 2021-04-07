@@ -2,8 +2,8 @@ export default {
   common: {
     test: 'testing stuff',
   },
-  feedbackEnabledCourses: {
-    coursesHeading: 'My feedbacks',
+  userFeedbacks: {
+    mainHeading: 'My feedbacks',
     giveFeedbackButton: 'Give feedback',
     modifyFeedbackButton: 'Modify feedback',
     viewFeedbackSummary: 'View feedback summary',

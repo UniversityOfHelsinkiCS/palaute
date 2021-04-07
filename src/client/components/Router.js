@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
 
 import FeedbackList from './FeedbackList'
-import MainView from './MainView'
+import UserFeedbacks from './UserFeedbacks'
 import Form from './Form'
 import TeacherView from './TeacherView'
 import ModifyQuestions from './ModifyQuestions'
@@ -25,7 +25,7 @@ const Router = () => {
         <Route path="/edit/:id" component={Form} />
         <Route path="/modify/:id" component={ModifyQuestions} />
         <Route path="/list" component={TeacherView} />
-        <Route path="/" component={MainView} />
+        <Route path="/" component={UserFeedbacks} />
       </Switch>
     </Container>
   )

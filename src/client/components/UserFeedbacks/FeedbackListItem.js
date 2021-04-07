@@ -6,13 +6,13 @@ import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
 import { format as formatDate, addDays } from 'date-fns'
 
-import { getLanguageValue } from '../util/languageUtils'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const NewFeedback = ({ editPath }) => {
   const { t } = useTranslation()
   return (
     <Button variant="contained" color="primary" component={Link} to={editPath}>
-      {t('feedbackEnabledCourses:giveFeedbackButton')}
+      {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
 }
@@ -22,10 +22,10 @@ const EditFeedBack = ({ editPath, viewPath }) => {
   return (
     <>
       <Button color="primary" component={Link} to={editPath}>
-        {t('feedbackEnabledCourses:modifyFeedbackButton')}
+        {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
       <Button color="primary" component={Link} to={viewPath}>
-        {t('feedbackEnabledCourses:viewFeedbackSummary')}
+        {t('userFeedbacks:viewFeedbackSummary')}
       </Button>
     </>
   )
@@ -48,7 +48,7 @@ const NoFeedbackChip = () => (
   />
 )
 
-const CourseListItem = ({ course, answered }) => {
+const FeedbackListItem = ({ course, answered }) => {
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
@@ -79,4 +79,4 @@ const CourseListItem = ({ course, answered }) => {
   )
 }
 
-export default CourseListItem
+export default FeedbackListItem
