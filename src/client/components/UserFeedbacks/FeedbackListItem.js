@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Button, ListItemText, Chip } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  ListItemText,
+  Chip,
+  Dialog,
+  DialogTitle,
+} from '@material-ui/core'
 import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
 import { format as formatDate, addDays } from 'date-fns'
@@ -17,13 +24,43 @@ const NewFeedback = ({ editPath }) => {
   )
 }
 
-const EditFeedBack = ({ editPath, viewPath }) => {
+const EditFeedback = ({ editPath, viewPath, onDelete }) => {
   const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleSubmit = async () => {
+    onDelete()
+    handleClose()
+  }
+
   return (
     <>
       <Button color="primary" component={Link} to={editPath}>
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
+      <Button color="primary" onClick={handleOpen}>
+        {t('userFeedbacks:clearFeedbackButton')}
+      </Button>
+      {/* this is for confirming the clear (according to materialui docs) */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          {t('userFeedbacks:clearConfirmationQuestion')}
+        </DialogTitle>
+        <Button onClick={handleClose} color="primary">
+          {t('userFeedbacks:no')}
+        </Button>
+        <Button onClick={handleSubmit} color="primary" autoFocus>
+          {t('userFeedbacks:yes')}
+        </Button>
+      </Dialog>
       <Button color="primary" component={Link} to={viewPath}>
         {t('userFeedbacks:viewFeedbackSummary')}
       </Button>
@@ -48,7 +85,7 @@ const NoFeedbackChip = () => (
   />
 )
 
-const FeedbackListItem = ({ course, answered }) => {
+const FeedbackListItem = ({ course, answered, onDelete }) => {
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
@@ -70,7 +107,11 @@ const FeedbackListItem = ({ course, answered }) => {
       <Box mt={2}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
         {answered ? (
-          <EditFeedBack editPath={editPath} viewPath={viewPath} />
+          <EditFeedback
+            editPath={editPath}
+            viewPath={viewPath}
+            onDelete={onDelete}
+          />
         ) : (
           <NewFeedback editPath={editPath} />
         )}
