@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Box, Button, ListItemText, Chip } from '@material-ui/core'
 import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
+import { format as formatDate, addDays } from 'date-fns'
 
 import { getLanguageValue } from '../util/languageUtils'
 
@@ -61,10 +62,19 @@ const CourseListItem = ({ course, answered }) => {
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
+  const feedbackEndDate = addDays(new Date(course.endDate), 14)
 
   return (
     <Box my={2}>
-      <ListItemText primary={courseName} />
+      <ListItemText
+        primary={courseName}
+        secondary={
+          <>
+            Feedback can be given until{' '}
+            {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
+          </>
+        }
+      />
       <Box mt={2}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
         {answered ? (
