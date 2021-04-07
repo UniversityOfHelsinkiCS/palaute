@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Container, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import CourseListItem from './CourseListItem'
@@ -47,7 +47,7 @@ export default () => {
   courses.data.sort(compareCourses)
 
   return (
-    <Container>
+    <>
       <Typography variant="h4">
         {t('feedbackEnabledCourses:coursesHeading')}
       </Typography>
@@ -58,6 +58,6 @@ export default () => {
           answered={coursesWithAnswer.has(course.id)}
         />
       ))}
-    </Container>
+    </>
   )
 }
