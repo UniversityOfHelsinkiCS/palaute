@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   AppBar,
-  Button,
   Typography,
   Toolbar,
   IconButton,
@@ -12,7 +11,7 @@ import {
 
 import { Link } from 'react-router-dom'
 
-import MenuIcon from '@material-ui/icons/Menu'
+import LogOutIcon from '@material-ui/icons/ExitToApp'
 import FeedbacksIcon from '@material-ui/icons/Assignment'
 import TeacherSettingsIcon from '@material-ui/icons/Settings'
 import { useTeacherCourses } from '../../util/queries'
@@ -33,15 +32,9 @@ const useLogoStyles = makeStyles((theme) => ({
   },
 }))
 
-const useNavBarStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-}))
-
-const useIconLinkStyles = makeStyles((theme) => ({
-  link: {
-    marginRight: theme.spacing(1),
+const useNavIconButtonStyles = makeStyles((theme) => ({
+  button: {
+    marginLeft: theme.spacing(1),
   },
 }))
 
@@ -56,18 +49,21 @@ const Logo = () => {
   )
 }
 
-const IconLink = ({ children, tooltipTitle, to }) => {
-  const classes = useIconLinkStyles()
+const NavIconButton = ({ children, tooltipTitle, to, onClick }) => {
+  const classes = useNavIconButtonStyles()
+
+  const component = to ? Link : 'button'
 
   return (
     <Tooltip title={tooltipTitle}>
       <IconButton
         edge="start"
         color="inherit"
-        component={Link}
+        component={component}
         aria-label={tooltipTitle}
         to={to}
-        className={classes.link}
+        className={classes.button}
+        onClick={onClick}
       >
         {children}
       </IconButton>
@@ -76,7 +72,6 @@ const IconLink = ({ children, tooltipTitle, to }) => {
 }
 
 const NavBar = () => {
-  const classes = useNavBarStyles()
   const { data: courses } = useTeacherCourses()
 
   const hasCourses = Boolean(courses?.length)
@@ -85,24 +80,18 @@ const NavBar = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            className={classes.menuButton}
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
           <Logo />
-          <IconLink to="/" tooltipTitle="My feedbacks">
+          <NavIconButton to="/" tooltipTitle="My feedbacks">
             <FeedbacksIcon />
-          </IconLink>
+          </NavIconButton>
           {hasCourses && (
-            <IconLink to="/list" tooltipTitle="My courses">
+            <NavIconButton to="/list" tooltipTitle="My courses">
               <TeacherSettingsIcon />
-            </IconLink>
+            </NavIconButton>
           )}
-          <Button color="inherit">Log out</Button>
+          <NavIconButton tooltipTitle="Log out">
+            <LogOutIcon />
+          </NavIconButton>
         </Toolbar>
       </AppBar>
     </>
