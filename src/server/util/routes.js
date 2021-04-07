@@ -2,17 +2,14 @@ const Router = require('express')
 const Sentry = require('@sentry/node')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
-
 const errorMiddleware = require('../middleware/errorMiddleware')
-
+const initializeSentry = require('./sentry')
 const feedbacks = require('../controllers/feedbacksController')
 const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
 const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
 
 const router = Router()
-
-const initializeSentry = require('./sentry')
 
 initializeSentry(router)
 
