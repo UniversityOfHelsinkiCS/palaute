@@ -6,6 +6,10 @@ export default {
     mainHeading: 'My feedbacks',
     giveFeedbackButton: 'Give feedback',
     modifyFeedbackButton: 'Modify feedback',
+    clearFeedbackButton: 'Clear feedback',
+    clearConfirmationQuestion: 'Are you sure you want to clear this feedback?',
+    yes: 'Yes',
+    no: 'No',
     viewFeedbackSummary: 'View feedback summary',
   },
   feedbackForm: {
