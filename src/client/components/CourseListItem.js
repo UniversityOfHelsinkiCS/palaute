@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, ListItemText, Chip } from '@material-ui/core'
 import FeedbackGivenIcon from '@material-ui/icons/Check'
@@ -8,23 +8,23 @@ import { format as formatDate, addDays } from 'date-fns'
 
 import { getLanguageValue } from '../util/languageUtils'
 
-const NewFeedback = ({ onEdit }) => {
+const NewFeedback = ({ editPath }) => {
   const { t } = useTranslation()
   return (
-    <Button variant="contained" color="primary" onClick={onEdit}>
+    <Button variant="contained" color="primary" component={Link} to={editPath}>
       {t('feedbackEnabledCourses:giveFeedbackButton')}
     </Button>
   )
 }
 
-const EditFeedBack = ({ onEdit, onViewSummary }) => {
+const EditFeedBack = ({ editPath, viewPath }) => {
   const { t } = useTranslation()
   return (
     <>
-      <Button color="primary" onClick={onEdit}>
+      <Button color="primary" component={Link} to={editPath}>
         {t('feedbackEnabledCourses:modifyFeedbackButton')}
       </Button>
-      <Button color="primary" onClick={onViewSummary}>
+      <Button color="primary" component={Link} to={viewPath}>
         {t('feedbackEnabledCourses:viewFeedbackSummary')}
       </Button>
     </>
@@ -49,20 +49,12 @@ const NoFeedbackChip = () => (
 )
 
 const CourseListItem = ({ course, answered }) => {
-  const history = useHistory()
-
-  const handleEditButton = () => {
-    history.push(`/edit/${course.id}`)
-  }
-
-  const handleViewButton = () => {
-    history.push(`/view/${course.id}`)
-  }
-
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
   const feedbackEndDate = addDays(new Date(course.endDate), 14)
+  const editPath = `/edit/${course.id}`
+  const viewPath = `/view/${course.id}`
 
   return (
     <>
@@ -78,12 +70,9 @@ const CourseListItem = ({ course, answered }) => {
       <Box mt={2}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
         {answered ? (
-          <EditFeedBack
-            onEdit={handleEditButton}
-            onViewSummary={handleViewButton}
-          />
+          <EditFeedBack editPath={editPath} viewPath={viewPath} />
         ) : (
-          <NewFeedback onEdit={handleEditButton} />
+          <NewFeedback editPath={editPath} />
         )}
       </Box>
     </>
