@@ -21,10 +21,10 @@ const EditFeedBack = ({ onEdit, onViewSummary }) => {
   const { t } = useTranslation()
   return (
     <>
-      <Button variant="contained" color="primary" onClick={onEdit}>
+      <Button color="primary" onClick={onEdit}>
         {t('feedbackEnabledCourses:modifyFeedbackButton')}
       </Button>
-      <Button variant="contained" color="primary" onClick={onViewSummary}>
+      <Button color="primary" onClick={onViewSummary}>
         {t('feedbackEnabledCourses:viewFeedbackSummary')}
       </Button>
     </>
@@ -65,7 +65,7 @@ const CourseListItem = ({ course, answered }) => {
   const feedbackEndDate = addDays(new Date(course.endDate), 14)
 
   return (
-    <Box my={2}>
+    <>
       <ListItemText
         primary={courseName}
         secondary={
@@ -86,7 +86,7 @@ const CourseListItem = ({ course, answered }) => {
           <NewFeedback onEdit={handleEditButton} />
         )}
       </Box>
-    </Box>
+    </>
   )
 }
 

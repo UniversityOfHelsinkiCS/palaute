@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Typography, List, Divider } from '@material-ui/core'
+import { Typography, List, Divider, Box } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import CourseListItem from './CourseListItem'
@@ -54,11 +54,13 @@ export default () => {
       <List>
         {courses.data.map((course) => (
           <>
-            <CourseListItem
-              key={course.id}
-              course={course}
-              answered={coursesWithAnswer.has(course.id)}
-            />
+            <Box my={2}>
+              <CourseListItem
+                key={course.id}
+                course={course}
+                answered={coursesWithAnswer.has(course.id)}
+              />
+            </Box>
             <Divider component="li" />
           </>
         ))}
