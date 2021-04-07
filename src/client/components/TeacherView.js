@@ -7,7 +7,7 @@ import TeacherCourseListItem from './TeacherCourseListItem'
 const TeacherView = () => {
   const courses = useTeacherCourses()
 
-  if (courses.isLoading) return null
+  if (!courses.data) return null
 
   return (
     <>

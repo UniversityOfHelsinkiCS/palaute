@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import * as Sentry from '@sentry/browser'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
@@ -34,10 +34,12 @@ export default () => {
   return (
     <>
       <CssBaseline />
-      <NavBar />
-      <Router />
-      <DevTools />
-      <Footer />
+      <Suspense fallback={null}>
+        <NavBar />
+        <Router />
+        <DevTools />
+        <Footer />
+      </Suspense>
     </>
   )
 }
