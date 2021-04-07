@@ -3,7 +3,7 @@ export default {
     test: 'testing stuff',
   },
   feedbackEnabledCourses: {
-    coursesHeading: 'Courses',
+    coursesHeading: 'My feedbacks',
     giveFeedbackButton: 'Give feedback',
     modifyFeedbackButton: 'Modify feedback',
     viewFeedbackSummary: 'View feedback summary',

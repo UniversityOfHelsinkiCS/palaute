@@ -1,7 +1,10 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, ListItemText, Chip } from '@material-ui/core'
+import FeedbackGivenIcon from '@material-ui/icons/Check'
+import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
+import { format as formatDate, addDays } from 'date-fns'
 
 import { getLanguageValue } from '../util/languageUtils'
 
@@ -28,6 +31,23 @@ const EditFeedBack = ({ onEdit, onViewSummary }) => {
   )
 }
 
+const FeedbackChip = () => (
+  <Chip
+    variant="outlined"
+    icon={<FeedbackGivenIcon />}
+    label="Feedback has been given"
+    color="primary"
+  />
+)
+
+const NoFeedbackChip = () => (
+  <Chip
+    variant="outlined"
+    icon={<NoFeedbackGivenIcon />}
+    label="Waiting for feedback"
+  />
+)
+
 const CourseListItem = ({ course, answered }) => {
   const history = useHistory()
 
@@ -41,17 +61,31 @@ const CourseListItem = ({ course, answered }) => {
 
   const { i18n } = useTranslation()
 
+  const courseName = getLanguageValue(course.name, i18n.language)
+  const feedbackEndDate = addDays(new Date(course.endDate), 14)
+
   return (
-    <Box maxWidth="md" border={2} borderRadius={10} m={2} padding={2}>
-      <h4>{getLanguageValue(course.name, i18n.language)}</h4>
-      {answered ? (
-        <EditFeedBack
-          onEdit={handleEditButton}
-          onViewSummary={handleViewButton}
-        />
-      ) : (
-        <NewFeedback onEdit={handleEditButton} />
-      )}
+    <Box my={2}>
+      <ListItemText
+        primary={courseName}
+        secondary={
+          <>
+            Feedback can be given until{' '}
+            {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
+          </>
+        }
+      />
+      <Box mt={2}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
+      <Box mt={2}>
+        {answered ? (
+          <EditFeedBack
+            onEdit={handleEditButton}
+            onViewSummary={handleViewButton}
+          />
+        ) : (
+          <NewFeedback onEdit={handleEditButton} />
+        )}
+      </Box>
     </Box>
   )
 }

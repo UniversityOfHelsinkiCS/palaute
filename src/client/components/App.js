@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import * as Sentry from '@sentry/browser'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
+import { CssBaseline } from '@material-ui/core'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -30,11 +31,14 @@ export default () => {
   if (user.isLoading) return null
 
   return (
-    <div>
-      <NavBar />
-      <Router />
-      <DevTools />
-      <Footer />
-    </div>
+    <>
+      <CssBaseline />
+      <Suspense fallback={null}>
+        <NavBar />
+        <Router />
+        <DevTools />
+        <Footer />
+      </Suspense>
+    </>
   )
 }

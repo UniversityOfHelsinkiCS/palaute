@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import {
-  Container,
-  Paper,
   Table,
   TableHead,
   TableCell,
@@ -208,93 +206,91 @@ const ModifyQuestions = () => {
 
   return (
     <>
-      <Container size="md" component={Paper}>
-        <h2>{t('modifyForm:questions')}</h2>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <b>Kysymys [suomi]</b>
-              </TableCell>
-              <TableCell>
-                <b>Kysymys [englanti]</b>
-              </TableCell>
-              <TableCell>
-                <b>Kysymys [ruotsi]</b>
-              </TableCell>
-              <TableCell>
-                <b>{t('modifyForm:type')}</b>
-              </TableCell>
-              <TableCell>
-                <b>{t('modifyForm:required')}</b>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {questions.data.questions.map((question, i) =>
-              formTableRow(question, i),
-            )}
-          </TableBody>
-        </Table>
-        <Button variant="contained" color="primary" onClick={updateQuestions}>
-          {t('modifyForm:saveForm')}
-        </Button>
-        <Button variant="contained" color="primary" onClick={backButton}>
-          {t('modifyForm:return')}
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleFormOpen}>
-          {t('modifyForm:addQuestion')}
-        </Button>
-        <Dialog open={dialogOpen} onClose={handleClose}>
-          <DialogTitle>{t('modifyForm:addQuestion')}</DialogTitle>
-          <DialogContent>
-            <TextField
-              id="fi"
-              onChange={changeFormName}
-              margin="dense"
-              autoFocus
-              fullWidth
-              variant="outlined"
-              label="Kysymys suomeksi"
-            />
-            <TextField
-              id="en"
-              onChange={changeFormName}
-              margin="dense"
-              fullWidth
-              variant="outlined"
-              label="Kysymys englanniksi"
-            />
-            <TextField
-              id="se"
-              onChange={changeFormName}
-              margin="dense"
-              fullWidth
-              variant="outlined"
-              label="Kysymys ruotsiksi"
-            />
-            <FormLabel>{t('modifyForm:questionType')} </FormLabel>
-            <Select value={questionData.type} onChange={changeFormType}>
-              <MenuItem value="CHOICE">{mapTypeToText.CHOICE}</MenuItem>
-              <MenuItem value="TEXT">{mapTypeToText.TEXT}</MenuItem>
-            </Select>
-            <br />
-            <FormLabel>{t('modifyForm:required')} </FormLabel>
-            <Checkbox
-              checked={questionData.required}
-              onChange={toggleFormRequired}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" variant="contained" onClick={addQuestion}>
-              {t('modifyForm:add')}
-            </Button>
-            <Button color="primary" variant="contained" onClick={handleClose}>
-              {t('modifyForm:return')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
+      <h2>{t('modifyForm:questions')}</h2>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              <b>Kysymys [suomi]</b>
+            </TableCell>
+            <TableCell>
+              <b>Kysymys [englanti]</b>
+            </TableCell>
+            <TableCell>
+              <b>Kysymys [ruotsi]</b>
+            </TableCell>
+            <TableCell>
+              <b>{t('modifyForm:type')}</b>
+            </TableCell>
+            <TableCell>
+              <b>{t('modifyForm:required')}</b>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {questions.data.questions.map((question, i) =>
+            formTableRow(question, i),
+          )}
+        </TableBody>
+      </Table>
+      <Button variant="contained" color="primary" onClick={updateQuestions}>
+        {t('modifyForm:saveForm')}
+      </Button>
+      <Button variant="contained" color="primary" onClick={backButton}>
+        {t('modifyForm:return')}
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleFormOpen}>
+        {t('modifyForm:addQuestion')}
+      </Button>
+      <Dialog open={dialogOpen} onClose={handleClose}>
+        <DialogTitle>{t('modifyForm:addQuestion')}</DialogTitle>
+        <DialogContent>
+          <TextField
+            id="fi"
+            onChange={changeFormName}
+            margin="dense"
+            autoFocus
+            fullWidth
+            variant="outlined"
+            label="Kysymys suomeksi"
+          />
+          <TextField
+            id="en"
+            onChange={changeFormName}
+            margin="dense"
+            fullWidth
+            variant="outlined"
+            label="Kysymys englanniksi"
+          />
+          <TextField
+            id="se"
+            onChange={changeFormName}
+            margin="dense"
+            fullWidth
+            variant="outlined"
+            label="Kysymys ruotsiksi"
+          />
+          <FormLabel>{t('modifyForm:questionType')} </FormLabel>
+          <Select value={questionData.type} onChange={changeFormType}>
+            <MenuItem value="CHOICE">{mapTypeToText.CHOICE}</MenuItem>
+            <MenuItem value="TEXT">{mapTypeToText.TEXT}</MenuItem>
+          </Select>
+          <br />
+          <FormLabel>{t('modifyForm:required')} </FormLabel>
+          <Checkbox
+            checked={questionData.required}
+            onChange={toggleFormRequired}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" variant="contained" onClick={addQuestion}>
+            {t('modifyForm:add')}
+          </Button>
+          <Button color="primary" variant="contained" onClick={handleClose}>
+            {t('modifyForm:return')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

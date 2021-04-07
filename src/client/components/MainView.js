@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Container, Typography } from '@material-ui/core'
+import { Typography, List, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import CourseListItem from './CourseListItem'
@@ -47,17 +47,22 @@ export default () => {
   courses.data.sort(compareCourses)
 
   return (
-    <Container>
+    <div>
       <Typography variant="h4">
         {t('feedbackEnabledCourses:coursesHeading')}
       </Typography>
-      {courses.data.map((course) => (
-        <CourseListItem
-          key={course.id}
-          course={course}
-          answered={coursesWithAnswer.has(course.id)}
-        />
-      ))}
-    </Container>
+      <List>
+        {courses.data.map((course) => (
+          <>
+            <CourseListItem
+              key={course.id}
+              course={course}
+              answered={coursesWithAnswer.has(course.id)}
+            />
+            <Divider component="li" />
+          </>
+        ))}
+      </List>
+    </div>
   )
 }

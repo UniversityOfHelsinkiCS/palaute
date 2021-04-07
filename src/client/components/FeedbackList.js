@@ -2,8 +2,6 @@ import React from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { Container } from '@material-ui/core'
-
 import { getLanguageValue } from '../util/languageUtils'
 
 import Feedback from './FeedbackBase'
@@ -29,7 +27,7 @@ const FeedbackList = () => {
   const currentCourse = courseData.data
 
   return (
-    <Container>
+    <>
       <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
       <h2>{t('feedbackList:givenFeedbacks')}:</h2>
       {questions.data.data.questions.map((question) => (
@@ -39,7 +37,7 @@ const FeedbackList = () => {
           key={question.id}
         />
       ))}
-    </Container>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, Container } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
@@ -59,15 +59,13 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Container maxWidth="md">
-        <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
-        {questions.data.data.questions.map((question) => (
-          <Question question={question} key={question.id} />
-        ))}
-        <Button type="submit" variant="contained" color="primary">
-          {t('feedbackForm:submitButton')}
-        </Button>
-      </Container>
+      <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
+      {questions.data.data.questions.map((question) => (
+        <Question question={question} key={question.id} />
+      ))}
+      <Button type="submit" variant="contained" color="primary">
+        {t('feedbackForm:submitButton')}
+      </Button>
     </form>
   )
 }
