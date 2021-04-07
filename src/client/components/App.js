@@ -19,13 +19,12 @@ export default () => {
   const user = useUserData()
 
   useEffect(() => {
-    if (user.data) {
-      Sentry.setUser({ username: user.data.id })
+    if (!user.data) return
 
-      if (user.data.language) {
-        i18n.changeLanguage(user.data.language)
-      }
-    }
+    Sentry.setUser({ username: user.data.id })
+    if (!user.data.language) return
+
+    i18n.changeLanguage(user.data.language)
   }, [user.data])
 
   if (user.isLoading) return null

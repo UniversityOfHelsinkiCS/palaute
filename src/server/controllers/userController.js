@@ -1,11 +1,11 @@
 const { ApplicationError } = require('../util/customErrors')
 
 const getUser = async (req, res) => {
-  const { currentUser } = req
+  const { user } = req
 
-  if (!currentUser) throw new ApplicationError('Not found', 404)
+  if (!user) throw new ApplicationError('Not found', 404)
 
-  res.send(currentUser)
+  res.send(user)
 }
 
 module.exports = {

@@ -1,4 +1,7 @@
 const Router = require('express')
+const Sentry = require('@sentry/node')
+const currentUserMiddleware = require('../middleware/currentUserMiddleware')
+const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
 
 const errorMiddleware = require('../middleware/errorMiddleware')
 
@@ -8,6 +11,18 @@ const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
 
 const router = Router()
+
+const initializeSentry = require('./sentry')
+
+initializeSentry(router)
+
+router.use(Sentry.Handlers.requestHandler())
+router.use(Sentry.Handlers.tracingHandler())
+
+router.use(Router.json())
+
+router.use(shibbolethCharsetMiddleware)
+router.use(currentUserMiddleware)
 
 router.get('/login', users.getUser)
 
@@ -40,6 +55,8 @@ router.get('/trigger_sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()
 })
+
+router.use(Sentry.Handlers.errorHandler())
 
 router.use(errorMiddleware)
 

@@ -13,7 +13,7 @@ const getOne = async (req, res) => {
 
 const getWhereResponsible = async (req, res) => {
   const {
-    currentUser: { id },
+    user: { id },
   } = req
 
   const realisations = await getCourseUnitRealisationsWhereResponsible(id)
@@ -23,7 +23,7 @@ const getWhereResponsible = async (req, res) => {
 
 const getWhereFeedbackEnabled = async (req, res) => {
   const {
-    currentUser: { id },
+    user: { id },
   } = req
 
   const startDateBefore = dateFns.subDays(new Date(), 14)

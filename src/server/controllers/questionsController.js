@@ -3,9 +3,9 @@ const { ApplicationError } = require('../util/customErrors')
 const { Question } = require('../models')
 
 const getQuestionsByCourseId = async (req, res) => {
-  const { currentUser } = req
+  const { user } = req
 
-  if (!currentUser) throw new ApplicationError('Not found', 404)
+  if (!user) throw new ApplicationError('Not found', 404)
 
   const questions = await Question.findOne({
     where: {
@@ -19,9 +19,9 @@ const getQuestionsByCourseId = async (req, res) => {
 }
 
 const updateQuestionsByCourseId = async (req, res) => {
-  const { currentUser } = req
+  const { user } = req
 
-  if (!currentUser) throw new ApplicationError('Not found', 404)
+  if (!user) throw new ApplicationError('Not found', 404)
 
   const questions = await Question.findOne({
     where: {

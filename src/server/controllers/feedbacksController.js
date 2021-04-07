@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
 const create = async (req, res) => {
   const newFeedback = await Feedback.create({
     data: req.body.data,
-    userId: req.currentUser.id,
+    userId: req.user.id,
     courseRealisationId: req.body.courseId,
   })
 
@@ -24,10 +24,10 @@ const getOne = async (req, res) => {
 }
 
 const getFeedbackByUser = async (req, res) => {
-  const { currentUser } = req
-  if (!currentUser) throw new ApplicationError('Not found', 404)
+  const { user } = req
+  if (!user) throw new ApplicationError('Not found', 404)
 
-  const { id } = currentUser
+  const { id } = user
 
   const feedbacks = await Feedback.findAll({
     where: {
@@ -40,10 +40,10 @@ const getFeedbackByUser = async (req, res) => {
 }
 
 const getFeedbackByUserAndCourseId = async (req, res) => {
-  const { currentUser } = req
-  if (!currentUser) throw new ApplicationError('Not found', 404)
+  const { user } = req
+  if (!user) throw new ApplicationError('Not found', 404)
 
-  const { id } = currentUser
+  const { id } = user
 
   const feedbacks = await Feedback.findOne({
     where: {
