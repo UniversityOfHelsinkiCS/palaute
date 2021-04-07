@@ -26,11 +26,12 @@ const getAssessmentItemsByCourseUnitRealisationId = async (
   )
 
   const assessmentItems = await data.reduce(
-    async (prevPromise, assessmentItem) => {
-      await prevPromise
-      return createAssessmentItem(assessmentItem)
+    async (prevPromises, assessmentItem) => {
+      const prevItems = await Promise.all(prevPromises)
+      const item = await createAssessmentItem(assessmentItem)
+      return [...prevItems, item.dataValues]
     },
-    Promise.resolve(),
+    [],
   )
 
   return assessmentItems
