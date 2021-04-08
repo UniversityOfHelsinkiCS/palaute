@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { Typography, List, Divider, Box } from '@material-ui/core'
+import React, { useMemo, Fragment } from 'react'
+import { Typography, List, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from 'react-query'
 
@@ -72,21 +72,20 @@ const UserFeedbacks = () => {
   if (courses.isLoading || answers.isLoading) return null
 
   courses.data.sort(compareCourses)
+
   return (
     <div>
       <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
       <List>
         {courses.data.map((course) => (
-          <div key={course.id}>
-            <Box my={2}>
-              <FeedbackListItem
-                course={course}
-                answered={coursesWithAnswer.has(course.id)}
-                onDelete={() => onDelete(course.id)}
-              />
-            </Box>
+          <Fragment key={course.id}>
+            <FeedbackListItem
+              course={course}
+              answered={coursesWithAnswer.has(course.id)}
+              onDelete={() => onDelete(course.id)}
+            />
             <Divider component="li" />
-          </div>
+          </Fragment>
         ))}
       </List>
     </div>

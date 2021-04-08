@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+
 import {
   Box,
   Button,
@@ -8,7 +9,9 @@ import {
   Chip,
   Dialog,
   DialogTitle,
+  ListItem,
 } from '@material-ui/core'
+
 import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
 import { format as formatDate, addDays } from 'date-fns'
@@ -94,29 +97,31 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
   const viewPath = `/view/${course.id}`
 
   return (
-    <>
-      <ListItemText
-        primary={courseName}
-        secondary={
-          <>
-            Feedback can be given until{' '}
-            {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
-          </>
-        }
-      />
-      <Box mt={2}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
-      <Box mt={2}>
-        {answered ? (
-          <EditFeedback
-            editPath={editPath}
-            viewPath={viewPath}
-            onDelete={onDelete}
-          />
-        ) : (
-          <NewFeedback editPath={editPath} />
-        )}
-      </Box>
-    </>
+    <ListItem>
+      <div>
+        <ListItemText
+          primary={courseName}
+          secondary={
+            <>
+              Feedback can be given until{' '}
+              {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
+            </>
+          }
+        />
+        <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
+        <Box mt={2}>
+          {answered ? (
+            <EditFeedback
+              editPath={editPath}
+              viewPath={viewPath}
+              onDelete={onDelete}
+            />
+          ) : (
+            <NewFeedback editPath={editPath} />
+          )}
+        </Box>
+      </div>
+    </ListItem>
   )
 }
 

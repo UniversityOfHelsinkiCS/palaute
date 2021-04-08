@@ -22,6 +22,9 @@ const useLogoStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexGrow: 1,
+  },
+  link: {
+    display: 'flex',
     color: 'inherit',
     textDecoration: 'none',
   },
@@ -42,10 +45,12 @@ const Logo = () => {
   const classes = useLogoStyles()
 
   return (
-    <Link to="/" className={classes.container}>
-      <Typography variant="h6">Palaute</Typography>
-      <img src={toskaLogo} alt="Toska" className={classes.image} />
-    </Link>
+    <div className={classes.container}>
+      <Link to="/" className={classes.link}>
+        <Typography variant="h6">Palaute</Typography>
+        <img src={toskaLogo} alt="Toska" className={classes.image} />
+      </Link>
+    </div>
   )
 }
 
