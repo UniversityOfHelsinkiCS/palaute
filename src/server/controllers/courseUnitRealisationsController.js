@@ -12,13 +12,13 @@ const getOne = async (req, res) => {
 }
 
 const getWhereResponsible = async (req, res) => {
-  const {
-    user: { id },
-  } = req
+  /* const {
+    user: { username: id },
+  } = req */
 
-  const realisations = await getCourseUnitRealisationsWhereResponsible(id)
+  // const realisations = await getCourseUnitRealisationsWhereResponsible(id)
 
-  res.send(realisations)
+  res.send([])
 }
 
 const getWhereFeedbackEnabled = async (req, res) => {

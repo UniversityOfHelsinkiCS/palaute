@@ -6,9 +6,7 @@ export const useFeedbackEnabledCourses = () => {
   const queryKey = 'feedbackEnabledCourses'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(
-      '/course-unit-realisations/feedback-enabled',
-    )
+    const { data } = await apiClient.get('/enrollments')
 
     return data
   })
