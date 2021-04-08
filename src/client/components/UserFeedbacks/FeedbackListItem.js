@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogTitle,
   ListItem,
+  makeStyles,
 } from '@material-ui/core'
 
 import FeedbackGivenIcon from '@material-ui/icons/Check'
@@ -17,6 +18,15 @@ import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
 import { format as formatDate, addDays } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
+
+const useStyles = makeStyles((theme) => ({
+  listItem: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+}))
 
 const NewFeedback = ({ editPath }) => {
   const { t } = useTranslation()
@@ -89,6 +99,7 @@ const NoFeedbackChip = () => (
 )
 
 const FeedbackListItem = ({ course, answered, onDelete }) => {
+  const classes = useStyles()
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
@@ -97,30 +108,28 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
   const viewPath = `/view/${course.id}`
 
   return (
-    <ListItem>
-      <div>
-        <ListItemText
-          primary={courseName}
-          secondary={
-            <>
-              Feedback can be given until{' '}
-              {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
-            </>
-          }
-        />
-        <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
-        <Box mt={2}>
-          {answered ? (
-            <EditFeedback
-              editPath={editPath}
-              viewPath={viewPath}
-              onDelete={onDelete}
-            />
-          ) : (
-            <NewFeedback editPath={editPath} />
-          )}
-        </Box>
-      </div>
+    <ListItem className={classes.listItem}>
+      <ListItemText
+        primary={courseName}
+        secondary={
+          <>
+            Feedback can be given until{' '}
+            {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
+          </>
+        }
+      />
+      <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
+      <Box mt={2}>
+        {answered ? (
+          <EditFeedback
+            editPath={editPath}
+            viewPath={viewPath}
+            onDelete={onDelete}
+          />
+        ) : (
+          <NewFeedback editPath={editPath} />
+        )}
+      </Box>
     </ListItem>
   )
 }
