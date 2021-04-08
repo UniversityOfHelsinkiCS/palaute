@@ -35,7 +35,7 @@ const upsertUser = async ({
 
 const currentUserMiddleware = async (req, res, next) => {
   const { uid: id } = req.headers
-
+  console.log('headers', req.headers)
   if (!id) throw new ApplicationError('Missing uid header', 403)
 
   req.user = await upsertUser(req.headers)
