@@ -1,9 +1,13 @@
+const dateFns = require('date-fns')
+
 const importerClient = require('./importerClient')
 
 const { CourseRealisation } = require('../models')
 const { Question } = require('../models')
 
 const defaultQuestions = require('./questions.json')
+
+const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
 const createCourseRealisation = async (data) => {
   const [course] = await CourseRealisation.upsert({
@@ -23,8 +27,17 @@ const createCourseRealisation = async (data) => {
   return course
 }
 
-const getEnrollmentByPersonId = async (personId) => {
-  const { data } = await importerClient.get(`/palaute/enrolled/${personId}`)
+const getEnrollmentByPersonId = async (personId, options = {}) => {
+  const { startDateBefore, endDateAfter } = options
+
+  const params = {
+    ...(startDateBefore && { startDateBefore: formatDate(startDateBefore) }),
+    ...(endDateAfter && { endDateAfter: formatDate(endDateAfter) }),
+  }
+
+  const { data } = await importerClient.get(`/palaute/enrolled/${personId}`, {
+    params,
+  })
 
   return Promise.all(
     data.map(async (enrollment) =>
