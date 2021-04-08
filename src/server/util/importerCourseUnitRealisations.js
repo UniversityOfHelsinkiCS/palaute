@@ -59,6 +59,7 @@ const getCourseUnitRealisationsEnrolledBy = async (username, options = {}) => {
     `/palaute/course_unit_realisations/enrolled/${username}`,
     { params },
   )
+
   return Promise.all(
     data.map(async (course) => createCourseRealisation(course)),
   )

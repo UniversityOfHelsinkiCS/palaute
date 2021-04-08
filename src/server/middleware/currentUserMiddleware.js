@@ -5,16 +5,24 @@ const { User } = require('../models')
 const isSuperAdmin = (id) =>
   ['varisleo', 'kalleilv', 'jakousa', 'mluukkai'].includes(id)
 
-const upsertUser = async ({ uid, givenname, sn, mail, preferredlanguage }) => {
+const upsertUser = async ({
+  uid,
+  givenname,
+  sn,
+  mail,
+  preferredlanguage,
+  hypersonsisuid,
+}) => {
   const [user, created] = await User.findOrCreate({
     where: {
-      id: uid,
+      id: hypersonsisuid,
     },
     defaults: {
       first_name: givenname,
       last_name: sn,
       email: mail,
       language: preferredlanguage,
+      username: uid,
     },
   })
   if (created) {

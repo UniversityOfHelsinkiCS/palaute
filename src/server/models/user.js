@@ -10,6 +10,10 @@ User.init(
       primaryKey: true,
       allowNull: false,
     },
+    username: {
+      type: STRING,
+      allowNull: false,
+    },
     first_name: {
       type: STRING,
     },

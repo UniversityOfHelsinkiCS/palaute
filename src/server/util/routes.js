@@ -9,6 +9,7 @@ const courseUnitRealisations = require('../controllers/courseUnitRealisationsCon
 const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
+const enrollments = require('../controllers/enrollmentController')
 
 const router = Router()
 
@@ -46,6 +47,8 @@ router.get(
   '/course-unit-realisations/responsible',
   courseUnitRealisations.getWhereResponsible,
 )
+
+router.get('/enrollments', enrollments.getEnrollmentsByUser)
 
 router.get('/assessment-items', assessmentItems.getAll)
 

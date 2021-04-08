@@ -23,7 +23,7 @@ const getWhereResponsible = async (req, res) => {
 
 const getWhereFeedbackEnabled = async (req, res) => {
   const {
-    user: { id },
+    user: { username: id },
   } = req
 
   const startDateBefore = dateFns.subDays(new Date(), 14)

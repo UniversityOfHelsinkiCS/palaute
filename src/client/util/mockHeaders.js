@@ -10,6 +10,7 @@ export const possibleUsers = [
     schacPersonalUniqueCode: undefined,
     sn: 'admin',
     preferredLanguage: 'en',
+    hyPersonSisuId: 'admin',
   },
   {
     uid: 'varisleo',
@@ -21,6 +22,7 @@ export const possibleUsers = [
       'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:fuksi',
     sn: 'fuksi',
     preferredLanguage: 'en',
+    hyPersonSisuId: 'hy-hlo-135680147',
   },
   {
     uid: 'staff',
@@ -31,6 +33,7 @@ export const possibleUsers = [
     schacPersonalUniqueCode: undefined,
     sn: 'staff',
     preferredLanguage: 'en',
+    hyPersonSisuId: 'staff',
   },
 ]
 
