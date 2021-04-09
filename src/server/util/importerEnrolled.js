@@ -2,18 +2,17 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { CourseRealisation } = require('../models')
+const { FeedbackTarget } = require('../models')
 const { Question } = require('../models')
 
 const defaultQuestions = require('./questions.json')
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
-const createCourseRealisation = async (data) => {
-  const [course] = await CourseRealisation.upsert({
+const createFeedbackTarget = async (data) => {
+  const [course] = await FeedbackTarget.upsert({
     id: data.id,
     endDate: data.activityPeriod.endDate,
-    name: data.name,
   })
   await Question.findOrCreate({
     where: {
@@ -27,7 +26,7 @@ const createCourseRealisation = async (data) => {
   return course
 }
 
-const getEnrollmentByPersonId = async (personId, options = {}) => {
+const getEnrolmentByPersonId = async (personId, options = {}) => {
   const { startDateBefore, endDateAfter } = options
 
   const params = {
@@ -41,11 +40,11 @@ const getEnrollmentByPersonId = async (personId, options = {}) => {
 
   return Promise.all(
     data.map(async (enrollment) =>
-      createCourseRealisation(enrollment.course_unit_realisation),
+      createFeedbackTarget(enrollment.course_unit_realisation),
     ),
   )
 }
 
 module.exports = {
-  getEnrollmentByPersonId,
+  getEnrolmentByPersonId,
 }

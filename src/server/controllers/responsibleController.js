@@ -1,9 +1,9 @@
 const dateFns = require('date-fns')
 const { ApplicationError } = require('../util/customErrors')
 
-const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
+const { getResponsibleByPersonId } = require('../util/importerResponsible')
 
-const getEnrolmentsByUser = async (req, res) => {
+const getResponsibleByUser = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Missing uid header', 403)
@@ -12,7 +12,7 @@ const getEnrolmentsByUser = async (req, res) => {
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
 
-  const enrolments = await getEnrolmentByPersonId(id, {
+  const enrolments = await getResponsibleByPersonId(id, {
     startDateBefore,
     endDateAfter,
   })
@@ -21,5 +21,5 @@ const getEnrolmentsByUser = async (req, res) => {
 }
 
 module.exports = {
-  getEnrolmentsByUser,
+  getResponsibleByUser,
 }

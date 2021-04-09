@@ -1,21 +1,17 @@
-const { STRING } = require('sequelize')
+const { INTEGER } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
-class Feedback extends Model {}
+class Survey extends Model {}
 
-Feedback.init(
+Survey.init(
   {
     data: {
       type: JSONB,
       allowNull: false,
     },
-    userId: {
-      type: STRING,
-      allowNull: false,
-    },
-    surveyId: {
-      type: STRING,
+    feedbackTargetId: {
+      type: INTEGER,
       allowNull: false,
     },
   },
@@ -25,4 +21,4 @@ Feedback.init(
   },
 )
 
-module.exports = Feedback
+module.exports = Survey

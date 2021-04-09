@@ -10,6 +10,7 @@ const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const questions = require('../controllers/questionsController')
 const enrollments = require('../controllers/enrollmentController')
+const responsible = require('../controllers/responsibleController')
 
 const router = Router()
 
@@ -48,7 +49,8 @@ router.get(
   courseUnitRealisations.getWhereResponsible,
 )
 
-router.get('/enrollments', enrollments.getEnrollmentsByUser)
+router.get('/enrolments', enrollments.getEnrolmentsByUser)
+router.get('/responsible', responsible.getResponsibleByUser)
 
 router.get('/assessment-items', assessmentItems.getAll)
 
