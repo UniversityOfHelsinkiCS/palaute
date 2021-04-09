@@ -32,6 +32,16 @@ const createFeedbackTargetFromAssessmentItem = async (data) => {
   return course
 }
 
+const getAssessmentItemIdsFromCompletionMethods = (data) => {
+  const ids = new Set()
+
+  data.forEach((method) => {
+    method.assessmentItemIds.forEach((id) => ids.add(id))
+  })
+
+  return ids
+}
+
 const getResponsibleByPersonId = async (personId, options = {}) => {
   const { startDateBefore, endDateAfter } = options
 
@@ -52,6 +62,11 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
   const feedbackTargets = await Promise.all(
     assessmentItems
       .filter((item) => acceptedItemTypes.includes(item.assessmentItemType))
+      .filter((item) =>
+        getAssessmentItemIdsFromCompletionMethods(
+          item.courseUnit.completionMethods,
+        ).has(item.id),
+      )
       .map(async (item) => createFeedbackTargetFromAssessmentItem(item)),
   )
 
