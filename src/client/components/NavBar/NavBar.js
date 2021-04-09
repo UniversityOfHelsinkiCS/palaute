@@ -24,7 +24,8 @@ const useLogoStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   link: {
-    display: 'flex',
+    display: 'inline-flex',
+    alignItems: 'center',
     color: 'inherit',
     textDecoration: 'none',
   },
