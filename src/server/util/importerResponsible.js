@@ -3,6 +3,7 @@ const dateFns = require('date-fns')
 const importerClient = require('./importerClient')
 
 const { FeedbackTarget } = require('../models')
+const logger = require('./logger')
 // const { Question } = require('../models')
 
 // const defaultQuestions = require('./questions.json')
@@ -13,23 +14,54 @@ const acceptedItemTypes = [
   'urn:code:assessment-item-type:teaching-participation',
 ]
 
-const createFeedbackTargetFromCourseRealisation = async (data) => {
-  const { endDate } = data.activityPeriod
+const createFeedbackTargetFromAssessmentItem = async (data, endDate) => {
   const [course] = await FeedbackTarget.upsert({
-    feedbackType: 'courseRealisation',
+    feedbackType: 'assessmentItem',
     typeId: data.id,
-    opensAt: endDate,
-    closesAt: endDate,
+    courseUnitId: data.courseUnit.id,
+    opensAt: formatDate(dateFns.subDays(endDate, 14)),
+    closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
   return course
 }
 
-const createFeedbackTargetFromAssessmentItem = async (data) => {
+const createFeedbackTargetFromCourseRealisation = async (
+  data,
+  assessmentIdToItem,
+  shouldCreateTarget,
+) => {
+  const endDate = dateFns.parse(
+    data.activityPeriod.endDate,
+    'yyyy-MM-dd',
+    new Date(),
+  )
+  const assessmentItems = await Promise.all(
+    data.assessmentItemIds.map((id) => {
+      if (shouldCreateTarget.has(id)) {
+        return createFeedbackTargetFromAssessmentItem(
+          assessmentIdToItem.get(id),
+          endDate,
+        )
+      }
+      return { courseUnitId: assessmentIdToItem.get(id).courseUnit.id }
+    }),
+  )
+  const ids = assessmentItems.map((item) => item.courseUnitId)
+  if (!ids.every((id) => id === ids[0])) {
+    logger.info(
+      'AssessmentItems have differing course unit ids!',
+      assessmentItems,
+    )
+  }
   const [course] = await FeedbackTarget.upsert({
-    feedbackType: 'assessmentItem',
+    feedbackType: 'courseRealisation',
     typeId: data.id,
+    courseUnitId: ids[0],
+    opensAt: formatDate(dateFns.subDays(endDate, 14)),
+    closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
-  return course
+  assessmentItems.push(course)
+  return assessmentItems.filter((item) => item.id)
 }
 
 const getAssessmentItemIdsFromCompletionMethods = (data) => {
@@ -59,32 +91,42 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
 
   const { courseUnitRealisations, assessmentItems } = data
 
-  const feedbackTargets = await Promise.all(
-    assessmentItems
-      .filter((item) => acceptedItemTypes.includes(item.assessmentItemType))
-      .filter((item) =>
-        getAssessmentItemIdsFromCompletionMethods(
-          item.courseUnit.completionMethods,
-        ).has(item.id),
-      )
-      .map(async (item) => createFeedbackTargetFromAssessmentItem(item)),
-  )
+  // Mankelin idea
+  // Aloita realisaatioista, joiden assessmentItemIds-taulusta tallennat kaikki itemit
+  // AssessmentItemin kautta saadaan ja tallennetaan courseUnit,
+  // jonka tietoja käytetään myös realisaatioissa.
+  // Tehokkuuden vuoksi luodaan hakemisto, jolla saadaan assessmentItemit tehokkaasti.
 
-  feedbackTargets.push(
-    ...(await Promise.all(
-      courseUnitRealisations.map(async (courseRealisation) =>
-        createFeedbackTargetFromCourseRealisation(courseRealisation),
-      ),
-    )),
-  )
+  const filteredAssessmentItems = assessmentItems
+    .filter((item) => acceptedItemTypes.includes(item.assessmentItemType))
+    .filter((item) =>
+      getAssessmentItemIdsFromCompletionMethods(
+        item.courseUnit.completionMethods,
+      ).has(item.id),
+    )
 
-  const feedbackIds = new Set()
+  const assessmentIdToItem = new Map()
+  const shouldCreateTarget = new Set()
 
-  return feedbackTargets.filter((target) => {
-    if (feedbackIds.has(target.id)) return false
-    feedbackIds.add(target.id)
-    return true
+  filteredAssessmentItems.forEach((item) => {
+    shouldCreateTarget.add(item.id)
   })
+
+  assessmentItems.forEach((item) => {
+    assessmentIdToItem.set(item.id, item)
+  })
+
+  return (
+    await Promise.all(
+      courseUnitRealisations.map(async (realisation) =>
+        createFeedbackTargetFromCourseRealisation(
+          realisation,
+          assessmentIdToItem,
+          shouldCreateTarget,
+        ),
+      ),
+    )
+  ).flat()
 }
 
 module.exports = {

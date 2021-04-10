@@ -16,6 +16,9 @@ FeedbackTarget.init(
       allowNull: false,
       unique: 'source',
     },
+    courseUnitId: {
+      type: STRING,
+    },
     opensAt: {
       type: DATE,
     },
