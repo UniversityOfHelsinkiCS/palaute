@@ -1,4 +1,4 @@
-const { DATE, ENUM, STRING, Model } = require('sequelize')
+const { DATE, ENUM, STRING, Model, JSONB } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class FeedbackTarget extends Model {}
@@ -18,6 +18,11 @@ FeedbackTarget.init(
     },
     courseUnitId: {
       type: STRING,
+      allowNull: false,
+    },
+    name: {
+      type: JSONB,
+      allowNull: false,
     },
     opensAt: {
       type: DATE,

@@ -1,4 +1,4 @@
-const { INTEGER, DATE, ENUM, STRING } = require('sequelize')
+const { INTEGER, DATE, ENUM, STRING, JSONB } = require('sequelize')
 
 module.exports = {
   up: async (queryInterface) => {
@@ -16,6 +16,10 @@ module.exports = {
       },
       type_id: {
         type: STRING,
+        allowNull: false,
+      },
+      name: {
+        type: JSONB,
         allowNull: false,
       },
       opens_at: {

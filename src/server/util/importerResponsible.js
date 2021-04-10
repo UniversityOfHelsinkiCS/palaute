@@ -2,7 +2,7 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { FeedbackTarget } = require('../models')
+const { FeedbackTarget, CourseUnit } = require('../models')
 const logger = require('./logger')
 // const { Question } = require('../models')
 
@@ -14,11 +14,20 @@ const acceptedItemTypes = [
   'urn:code:assessment-item-type:teaching-participation',
 ]
 
+const createCourseUnit = async (data) => {
+  await CourseUnit.upsert({
+    id: data.id,
+    name: data.name,
+  })
+}
+
 const createFeedbackTargetFromAssessmentItem = async (data, endDate) => {
+  await createCourseUnit(data.courseUnit)
   const [course] = await FeedbackTarget.upsert({
     feedbackType: 'assessmentItem',
     typeId: data.id,
     courseUnitId: data.courseUnit.id,
+    name: data.name,
     opensAt: formatDate(dateFns.subDays(endDate, 14)),
     closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
@@ -36,13 +45,14 @@ const createFeedbackTargetFromCourseRealisation = async (
     new Date(),
   )
   const assessmentItems = await Promise.all(
-    data.assessmentItemIds.map((id) => {
+    data.assessmentItemIds.map(async (id) => {
       if (shouldCreateTarget.has(id)) {
         return createFeedbackTargetFromAssessmentItem(
           assessmentIdToItem.get(id),
           endDate,
         )
       }
+      await createCourseUnit(assessmentIdToItem.get(id).courseUnit)
       return { courseUnitId: assessmentIdToItem.get(id).courseUnit.id }
     }),
   )
@@ -57,6 +67,7 @@ const createFeedbackTargetFromCourseRealisation = async (
     feedbackType: 'courseRealisation',
     typeId: data.id,
     courseUnitId: ids[0],
+    name: data.name,
     opensAt: formatDate(dateFns.subDays(endDate, 14)),
     closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
