@@ -15,7 +15,13 @@ import initializeI18n from './util/i18n'
 initializeSentry()
 initializeI18n()
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 render(
   <Provider store={store}>

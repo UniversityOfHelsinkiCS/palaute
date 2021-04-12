@@ -71,22 +71,23 @@ const UserFeedbacks = () => {
 
   if (courses.isLoading || answers.isLoading) return null
 
-  courses.data.sort(compareCourses)
+  if (courses.isSuccess) courses.data.sort(compareCourses)
 
   return (
     <div>
       <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
       <List>
-        {courses.data.map((course) => (
-          <Fragment key={course.id}>
-            <FeedbackListItem
-              course={course}
-              answered={coursesWithAnswer.has(course.id)}
-              onDelete={() => onDelete(course.id)}
-            />
-            <Divider component="li" />
-          </Fragment>
-        ))}
+        {courses.isSuccess &&
+          courses.data.map((course) => (
+            <Fragment key={course.id}>
+              <FeedbackListItem
+                course={course}
+                answered={coursesWithAnswer.has(course.id)}
+                onDelete={() => onDelete(course.id)}
+              />
+              <Divider component="li" />
+            </Fragment>
+          ))}
       </List>
     </div>
   )
