@@ -1,4 +1,5 @@
 const { DATE, ENUM, STRING, Model, JSONB } = require('sequelize')
+const CourseUnit = require('./courseUnit')
 const { sequelize } = require('../util/dbConnection')
 
 class FeedbackTarget extends Model {}
@@ -36,5 +37,7 @@ FeedbackTarget.init(
     sequelize,
   },
 )
+
+FeedbackTarget.CourseUnit = FeedbackTarget.belongsTo(CourseUnit)
 
 module.exports = FeedbackTarget
