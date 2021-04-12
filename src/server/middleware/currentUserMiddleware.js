@@ -2,8 +2,8 @@ const { ApplicationError } = require('../util/customErrors')
 const logger = require('../util/logger')
 const { User } = require('../models')
 
-const isSuperAdmin = (id) =>
-  ['varisleo', 'kalleilv', 'jakousa', 'mluukkai'].includes(id)
+const isSuperAdmin = (username) =>
+  ['varisleo', 'kalleilv', 'jakousa', 'mluukkai'].includes(username)
 
 const upsertUser = async ({
   uid,
@@ -34,16 +34,16 @@ const upsertUser = async ({
 }
 
 const currentUserMiddleware = async (req, res, next) => {
-  const { uid: id } = req.headers
-  if (!id) throw new ApplicationError('Missing uid header', 403)
+  const { uid: username } = req.headers
+  if (!username) throw new ApplicationError('Missing uid header', 403)
 
   req.user = await upsertUser(req.headers)
-  if (!isSuperAdmin(id)) return next()
+  if (!isSuperAdmin(username)) return next()
 
   const loggedInAs = req.headers['x-admin-logged-in-as']
   if (!loggedInAs) return next()
 
-  req.user = await User.findOne({ where: { id: loggedInAs } })
+  req.user = await User.findOne({ where: { username: loggedInAs } })
   return next()
 }
 
