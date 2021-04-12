@@ -34,6 +34,22 @@ const createFeedbackTargetFromAssessmentItem = async (data, endDate) => {
   return course
 }
 
+const createFeedbackTargetFromStudyGroup = async (
+  data,
+  endDate,
+  courseUnitId,
+) => {
+  const [target] = await FeedbackTarget.upsert({
+    feedbackType: 'studySubGroup',
+    typeId: data.id,
+    courseUnitId,
+    name: data.name,
+    opensAt: formatDate(dateFns.subDays(endDate, 14)),
+    closesAt: formatDate(dateFns.addDays(endDate, 14)),
+  })
+  return target
+}
+
 const createFeedbackTargetFromCourseRealisation = async (
   data,
   assessmentIdToItem,
@@ -63,6 +79,18 @@ const createFeedbackTargetFromCourseRealisation = async (
       assessmentItems,
     )
   }
+  const studySubGroupItems = (
+    await Promise.all(
+      data.studyGroupSets.map(async (studySet) => {
+        const studySetItems = await Promise.all(
+          studySet.studySubGroups.map(async (item) =>
+            createFeedbackTargetFromStudyGroup(item, endDate, ids[0]),
+          ),
+        )
+        return studySetItems
+      }),
+    )
+  ).flat()
   const [course] = await FeedbackTarget.upsert({
     feedbackType: 'courseRealisation',
     typeId: data.id,
@@ -72,6 +100,7 @@ const createFeedbackTargetFromCourseRealisation = async (
     closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
   assessmentItems.push(course)
+  assessmentItems.push(...studySubGroupItems)
   return assessmentItems.filter((item) => item.id)
 }
 
