@@ -25,6 +25,7 @@ router.use(shibbolethCharsetMiddleware)
 router.use(currentUserMiddleware)
 
 router.get('/login', users.getUser)
+router.get('/logout', users.logout)
 
 router.get('/users/feedbacks', feedbacks.getFeedbackByUser)
 router.get('/users/feedbacks/:id', feedbacks.getFeedbackByUserAndCourseId)

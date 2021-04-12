@@ -1,21 +1,15 @@
 import React from 'react'
 
-import {
-  AppBar,
-  Typography,
-  Toolbar,
-  IconButton,
-  Tooltip,
-  makeStyles,
-} from '@material-ui/core'
+import { AppBar, Typography, Toolbar, makeStyles } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
 
-import LogOutIcon from '@material-ui/icons/ExitToApp'
 import FeedbacksIcon from '@material-ui/icons/Assignment'
 import TeacherSettingsIcon from '@material-ui/icons/Settings'
 import { useTeacherCourses } from '../../util/queries'
 
+import LogOutNavButton from './LogOutNavButton'
+import NavIconButton from './NavIconButton'
 import toskaLogo from '../../assets/toscalogo_white.svg'
 
 const useLogoStyles = makeStyles((theme) => ({
@@ -36,12 +30,6 @@ const useLogoStyles = makeStyles((theme) => ({
   },
 }))
 
-const useNavIconButtonStyles = makeStyles((theme) => ({
-  button: {
-    marginLeft: theme.spacing(1),
-  },
-}))
-
 const Logo = () => {
   const classes = useLogoStyles()
 
@@ -52,28 +40,6 @@ const Logo = () => {
         <img src={toskaLogo} alt="Toska" className={classes.image} />
       </Link>
     </div>
-  )
-}
-
-const NavIconButton = ({ children, tooltipTitle, to, onClick }) => {
-  const classes = useNavIconButtonStyles()
-
-  const component = to ? Link : 'button'
-
-  return (
-    <Tooltip title={tooltipTitle}>
-      <IconButton
-        edge="start"
-        color="inherit"
-        component={component}
-        aria-label={tooltipTitle}
-        to={to}
-        className={classes.button}
-        onClick={onClick}
-      >
-        {children}
-      </IconButton>
-    </Tooltip>
   )
 }
 
@@ -95,9 +61,7 @@ const NavBar = () => {
               <TeacherSettingsIcon />
             </NavIconButton>
           )}
-          <NavIconButton tooltipTitle="Log out">
-            <LogOutIcon />
-          </NavIconButton>
+          <LogOutNavButton />
         </Toolbar>
       </AppBar>
     </>
