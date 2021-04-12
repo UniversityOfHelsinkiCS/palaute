@@ -15,7 +15,6 @@ import {
 
 import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
-import { format as formatDate, addDays } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -103,7 +102,6 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
-  const feedbackEndDate = addDays(new Date(course.endDate), 14)
   const editPath = `/edit/${course.id}`
   const viewPath = `/view/${course.id}`
 
@@ -111,12 +109,7 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
     <ListItem className={classes.listItem}>
       <ListItemText
         primary={courseName}
-        secondary={
-          <>
-            Feedback can be given until{' '}
-            {formatDate(feedbackEndDate, 'dd.MM.yyyy')}
-          </>
-        }
+        secondary="Feedback can be given until some day in the future"
       />
       <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
