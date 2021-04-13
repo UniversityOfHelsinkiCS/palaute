@@ -1,10 +1,10 @@
 import { buildAction } from '@grp-toska/apina'
 
-export const submitFormAction = (data, courseId) =>
+export const submitFormAction = (data, surveyId) =>
   buildAction('feedbacks', {
     url: '/feedbacks',
     method: 'post',
-    data: { data, courseId },
+    data: { data, surveyId },
   })
 
 export const reSubmitFormAction = (data, id) =>
@@ -14,8 +14,8 @@ export const reSubmitFormAction = (data, id) =>
     data: { data },
   })
 
-export const getUserCourseFeedbackAction = (courseId) =>
-  buildAction('previous_feedback', { url: `/users/feedbacks/${courseId}` })
+export const getUserCourseFeedbackAction = (surveyId) =>
+  buildAction('previous_feedback', { url: `/users/feedbacks/${surveyId}` })
 
 export const updateFormField = (field, value) => ({
   type: 'UPDATE_FORM_FIELD',

@@ -49,7 +49,7 @@ const Form = () => {
       } else {
         dispatch(submitFormAction(answers, targetId))
       }
-      history.push(`/view/${targetId}`)
+      history.push(`/`)
     }
   }
 
