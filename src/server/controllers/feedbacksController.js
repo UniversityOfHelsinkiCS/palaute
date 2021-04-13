@@ -48,7 +48,7 @@ const getFeedbackByUserAndCourseId = async (req, res) => {
   const feedbacks = await Feedback.findOne({
     where: {
       userId: id,
-      courseRealisationId: req.params.id,
+      surveyId: req.params.id,
     },
   })
   if (!feedbacks) throw new ApplicationError('Not found', 404)
