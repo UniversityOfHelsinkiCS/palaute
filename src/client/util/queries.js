@@ -18,9 +18,7 @@ export const useCourseData = (courseId) => {
   const queryKey = ['courseData', courseId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(
-      `/course-unit-realisations/${courseId}`,
-    )
+    const { data } = await apiClient.get(`/feedback-targets/${courseId}`)
 
     return data
   })

@@ -60,9 +60,10 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
-      {questions.data.data.questions.map((question) => (
-        <Question question={question} key={question.id} />
-      ))}
+      {questions.data &&
+        questions.data.data.questions.map((question) => (
+          <Question question={question} key={question.id} />
+        ))}
       <Button type="submit" variant="contained" color="primary">
         {t('feedbackForm:submitButton')}
       </Button>
