@@ -19,15 +19,15 @@ import { useCourseData, useCourseQuestions } from '../util/queries'
 
 const Form = () => {
   const dispatch = useDispatch()
-  const courseId = useParams().id
+  const targetId = useParams().id
   const history = useHistory()
   const form = useSelector((state) => state.form)
-  const courseData = useCourseData(courseId)
-  const questions = useCourseQuestions(courseId)
+  const courseData = useCourseData(targetId)
+  const questions = useCourseQuestions(targetId)
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    dispatch(getUserCourseFeedbackAction(courseId))
+    dispatch(getUserCourseFeedbackAction(targetId))
   }, [])
 
   const handleSubmit = (event) => {
@@ -47,9 +47,9 @@ const Form = () => {
       if (form.found) {
         dispatch(reSubmitFormAction(answers, form.feedbackId))
       } else {
-        dispatch(submitFormAction(answers, courseId))
+        dispatch(submitFormAction(answers, targetId))
       }
-      history.push(`/view/${courseId}`)
+      history.push(`/view/${targetId}`)
     }
   }
 

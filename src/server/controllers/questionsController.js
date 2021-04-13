@@ -1,16 +1,21 @@
 const { v4: uuid } = require('uuid')
 const { ApplicationError } = require('../util/customErrors')
-const { Question } = require('../models')
+const { Survey } = require('../models')
+const defaultQuestions = require('../util/questions.json')
 
 const getQuestionsByCourseId = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
 
-  const questions = await Question.findOne({
+  const [questions, created] = await Survey.findOrCreate({
     where: {
-      courseRealisationId: req.params.id,
+      feedbackTargetId: req.params.id,
     },
+    defaults: {
+      feedbackTargetId: req.params.id,
+      data: defaultQuestions
+    }
   })
 
   if (!questions) throw new ApplicationError('Not found', 404)
@@ -23,9 +28,9 @@ const updateQuestionsByCourseId = async (req, res) => {
 
   if (!user) throw new ApplicationError('Not found', 404)
 
-  const questions = await Question.findOne({
+  const questions = await Survey.findOne({
     where: {
-      courseRealisationId: req.params.id,
+      feedbackTargetId: req.params.id,
     },
   })
   if (!questions) throw new ApplicationError('Not found', 404)
@@ -36,9 +41,9 @@ const updateQuestionsByCourseId = async (req, res) => {
       question.id
         ? question
         : {
-            ...question,
-            id: uuid(),
-          },
+          ...question,
+          id: uuid(),
+        },
     ),
   }
   questions.data = acualData

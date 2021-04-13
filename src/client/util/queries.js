@@ -14,11 +14,11 @@ export const useFeedbackEnabledCourses = () => {
   return response
 }
 
-export const useCourseData = (courseId) => {
-  const queryKey = ['courseData', courseId]
+export const useCourseData = (targetId) => {
+  const queryKey = ['courseData', targetId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(`/feedback-targets/${courseId}`)
+    const { data } = await apiClient.get(`/feedback-targets/${targetId}`)
 
     return data
   })
@@ -38,11 +38,11 @@ export const useCourseFeedback = (courseId) => {
   return response
 }
 
-export const useCourseQuestions = (courseId) => {
-  const queryKey = ['courseQuestions', courseId]
+export const useCourseQuestions = (targetId) => {
+  const queryKey = ['courseQuestions', targetId]
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(`/courses/${courseId}/questions`)
+    const { data } = await apiClient.get(`/courses/${targetId}/questions`)
 
     return data
   })
