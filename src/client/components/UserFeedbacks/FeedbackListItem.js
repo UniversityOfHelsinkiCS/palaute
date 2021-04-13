@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { lightFormat, parseISO } from 'date-fns'
 
 import {
   Box,
@@ -109,7 +110,7 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
     <ListItem className={classes.listItem}>
       <ListItemText
         primary={courseName}
-        secondary="Feedback can be given until some day in the future"
+        secondary={`Feedback can be given until ${lightFormat(parseISO(course.closesAt), 'd.M.yyyy')} `}
       />
       <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
