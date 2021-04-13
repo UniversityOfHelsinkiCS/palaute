@@ -6,6 +6,7 @@ const Question = require('./question')
 const FeedbackTarget = require('./feedbackTarget')
 const Survey = require('./survey')
 const CourseUnit = require('./courseUnit')
+const UserFeedbackTarget = require('./userFeedbackTarget')
 
 module.exports = {
   AssessmentItem,
@@ -16,4 +17,5 @@ module.exports = {
   FeedbackTarget,
   Survey,
   CourseUnit,
+  UserFeedbackTarget,
 }

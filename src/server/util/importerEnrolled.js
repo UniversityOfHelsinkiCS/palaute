@@ -2,7 +2,7 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { FeedbackTarget, CourseUnit } = require('../models')
+const { FeedbackTarget, CourseUnit, UserFeedbackTarget } = require('../models')
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
@@ -13,20 +13,40 @@ const createCourseUnit = async (data) => {
   })
 }
 
+const createFeedbackTargetWithUserTargetTable = async (upsertData, userId) => {
+  const [feedbackTarget] = await FeedbackTarget.upsert(upsertData)
+  await UserFeedbackTarget.findOrCreate({
+    where: {
+      userId,
+      feedbackTargetId: Number(feedbackTarget.id),
+    },
+    defaults: {
+      accessStatus: 'STUDENT',
+      userId,
+      feedbackTargetId: Number(feedbackTarget.id),
+    },
+  })
+  return feedbackTarget
+}
+
 const createFeedbackTargetFromAssessmentItem = async (
   data,
   endDate,
   courseUnit,
+  userId,
 ) => {
   await createCourseUnit(courseUnit)
-  const [course] = await FeedbackTarget.upsert({
-    feedbackType: 'assessmentItem',
-    typeId: data.id,
-    courseUnitId: courseUnit.id,
-    name: data.name,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
-  })
+  const course = await createFeedbackTargetWithUserTargetTable(
+    {
+      feedbackType: 'assessmentItem',
+      typeId: data.id,
+      courseUnitId: courseUnit.id,
+      name: data.name,
+      opensAt: formatDate(dateFns.subDays(endDate, 14)),
+      closesAt: formatDate(dateFns.addDays(endDate, 14)),
+    },
+    userId,
+  )
   return course
 }
 
@@ -82,7 +102,7 @@ const createFeedbackTargetFromCourseRealisation = async (
   return studySubGroupItems
 }
 
-const createTargetsFromEnrolment = async (data) => {
+const createTargetsFromEnrolment = async (data, userId) => {
   const studySubGroupIds = data.studySubGroups.map(
     (group) => group.studySubGroupId,
   )
@@ -98,6 +118,7 @@ const createTargetsFromEnrolment = async (data) => {
     data.assessmentItem,
     endDate,
     courseUnit,
+    userId,
   )
 
   const realisationItems = await createFeedbackTargetFromCourseRealisation(
@@ -127,7 +148,9 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
   })
   const idsToFind = (
     await Promise.all(
-      data.map(async (enrolment) => createTargetsFromEnrolment(enrolment)),
+      data.map(async (enrolment) =>
+        createTargetsFromEnrolment(enrolment, personId),
+      ),
     )
   )
     .flat()

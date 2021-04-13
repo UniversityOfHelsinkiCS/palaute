@@ -16,7 +16,6 @@ const getEnrolmentsByUser = async (req, res) => {
     startDateBefore,
     endDateAfter,
   })
-
   res.send(enrolments)
 }
 
