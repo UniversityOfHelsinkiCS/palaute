@@ -110,7 +110,10 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
     <ListItem className={classes.listItem}>
       <ListItemText
         primary={courseName}
-        secondary={`Feedback can be given until ${lightFormat(parseISO(course.closesAt), 'd.M.yyyy')} `}
+        secondary={`Feedback can be given until ${lightFormat(
+          parseISO(course.closesAt),
+          'd.M.yyyy',
+        )}`}
       />
       <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
       <Box mt={2}>
