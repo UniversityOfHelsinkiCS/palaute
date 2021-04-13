@@ -3,7 +3,7 @@ const { ApplicationError } = require('../util/customErrors')
 
 const { getResponsibleByPersonId } = require('../util/importerResponsible')
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
-const { FeedbackTarget } = require('../models')
+const { UserFeedbackTarget, FeedbackTarget } = require('../models')
 const { CourseUnit } = require('../models/feedbackTarget')
 
 const getResponsibleByUser = async (req, res) => {
@@ -32,9 +32,23 @@ const getEnrolmentsByUser = async (req, res) => {
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
 
-  const enrolments = await getEnrolmentByPersonId(id, {
+  // acually useless data
+  await getEnrolmentByPersonId(id, {
     startDateBefore,
     endDateAfter,
+  })
+
+  // acual megaquery
+
+  const enrolments = await UserFeedbackTarget.findAll({
+    where: {
+      userId: id,
+    },
+    include: {
+      model: FeedbackTarget,
+      as: 'feedbackTarget',
+      include: [CourseUnit],
+    },
   })
 
   res.send(enrolments)

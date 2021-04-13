@@ -13,14 +13,19 @@ module.exports = {
         type: STRING,
         allowNull: false,
       },
-      feedback_id: INTEGER,
+      feedback_id: {
+        type: INTEGER,
+        references: { model: 'feedbacks', key: 'id' },
+      },
       user_id: {
         type: STRING,
         allowNull: false,
+        references: { model: 'users', key: 'id' },
       },
       feedback_target_id: {
         type: INTEGER,
         allowNull: false,
+        references: { model: 'feedback_targets', key: 'id' },
       },
       created_at: {
         type: DATE,

@@ -132,7 +132,7 @@ const createTargetsFromEnrolment = async (data, userId) => {
 
 const getOneTarget = (id) =>
   FeedbackTarget.findByPk(Number(id), {
-    include: CourseUnit,
+    include: { model: CourseUnit },
   })
 
 const getEnrolmentByPersonId = async (personId, options = {}) => {
