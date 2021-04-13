@@ -8,7 +8,7 @@ const feedbacks = require('../controllers/feedbacksController')
 const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
 const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
-const questions = require('../controllers/questionsController')
+const survey = require('../controllers/surveyController')
 const feedbackTarget = require('../controllers/feedbackTargetController')
 
 const router = Router()
@@ -36,8 +36,8 @@ router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 
 router.get('/courses/:id/feedbacks', feedbacks.getFeedbackByCourseId)
-router.get('/courses/:id/questions', questions.getQuestionsByCourseId)
-router.put('/courses/:id/questions', questions.updateQuestionsByCourseId)
+router.get('/courses/:id/questions', survey.getSurveyByCourseId)
+router.put('/courses/:id/questions', survey.updateSurveyByCourseId)
 
 router.get(
   '/course-unit-realisations/feedback-enabled',

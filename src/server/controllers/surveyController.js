@@ -3,7 +3,7 @@ const { ApplicationError } = require('../util/customErrors')
 const { Survey } = require('../models')
 const defaultQuestions = require('../util/questions.json')
 
-const getQuestionsByCourseId = async (req, res) => {
+const getSurveyByCourseId = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
@@ -23,7 +23,7 @@ const getQuestionsByCourseId = async (req, res) => {
   res.send(questions)
 }
 
-const updateQuestionsByCourseId = async (req, res) => {
+const updateSurveyByCourseId = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
@@ -53,6 +53,6 @@ const updateQuestionsByCourseId = async (req, res) => {
 }
 
 module.exports = {
-  getQuestionsByCourseId,
-  updateQuestionsByCourseId,
+  getSurveyByCourseId,
+  updateSurveyByCourseId,
 }
