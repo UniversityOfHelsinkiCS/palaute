@@ -30,7 +30,7 @@ const makeCompareCourses = (coursesWithAnswer) => (a, b) => {
   if (coursesWithAnswer.has(b.id)) {
     return -1
   }
-  return a.endDate < b.endDate ? -1 : 1
+  return a.courseUnitId < b.courseUnitId ? -1 : 1
 }
 
 const UserFeedbacks = () => {

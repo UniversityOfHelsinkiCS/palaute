@@ -109,6 +109,11 @@ const createTargetsFromEnrolment = async (data) => {
   return realisationItems
 }
 
+const getOneTarget = (id) =>
+  FeedbackTarget.findByPk(Number(id), {
+    include: CourseUnit,
+  })
+
 const getEnrolmentByPersonId = async (personId, options = {}) => {
   const { startDateBefore, endDateAfter } = options
 
@@ -120,11 +125,22 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
   const { data } = await importerClient.get(`/palaute/enrolled/${personId}`, {
     params,
   })
-  return (
+  const idsToFind = (
     await Promise.all(
       data.map(async (enrolment) => createTargetsFromEnrolment(enrolment)),
     )
-  ).flat()
+  )
+    .flat()
+    .map((target) => target.id)
+  const targets = []
+
+  // eslint-disable-next-line
+  for (const id of idsToFind) {
+    // eslint-disable-next-line no-await-in-loop
+    targets.push(await getOneTarget(id))
+  }
+
+  return targets
 }
 
 module.exports = {

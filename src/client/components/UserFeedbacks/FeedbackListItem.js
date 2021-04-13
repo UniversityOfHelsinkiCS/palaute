@@ -103,13 +103,14 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
   const { i18n } = useTranslation()
 
   const courseName = getLanguageValue(course.name, i18n.language)
+  const courseUnitName = getLanguageValue(course.CourseUnit.name, i18n.language)
   const editPath = `/edit/${course.id}`
   const viewPath = `/view/${course.id}`
 
   return (
     <ListItem className={classes.listItem}>
       <ListItemText
-        primary={courseName}
+        primary={`${courseUnitName}: ${courseName}`}
         secondary={`Feedback can be given until ${lightFormat(
           parseISO(course.closesAt),
           'd.M.yyyy',
