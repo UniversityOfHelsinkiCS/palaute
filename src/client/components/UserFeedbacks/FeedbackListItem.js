@@ -102,8 +102,12 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
   const classes = useStyles()
   const { i18n } = useTranslation()
 
-  const courseName = getLanguageValue(course.name, i18n.language)
-  const courseUnitName = getLanguageValue(course.CourseUnit.name, i18n.language)
+  const { feedbackTarget } = course
+  const courseName = getLanguageValue(feedbackTarget.name, i18n.language)
+  const courseUnitName = getLanguageValue(
+    feedbackTarget.courseUnit.name,
+    i18n.language,
+  )
   const editPath = `/edit/${course.id}`
   const viewPath = `/view/${course.id}`
 
@@ -112,7 +116,7 @@ const FeedbackListItem = ({ course, answered, onDelete }) => {
       <ListItemText
         primary={`${courseUnitName}: ${courseName}`}
         secondary={`Feedback can be given until ${lightFormat(
-          parseISO(course.closesAt),
+          parseISO(feedbackTarget.closesAt),
           'd.M.yyyy',
         )}`}
       />
