@@ -2,7 +2,7 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { FeedbackTarget, CourseUnit } = require('../models')
+const { FeedbackTarget, CourseUnit, UserFeedbackTarget } = require('../models')
 const logger = require('./logger')
 // const { Question } = require('../models')
 
@@ -21,32 +21,59 @@ const createCourseUnit = async (data) => {
   })
 }
 
-const createFeedbackTargetFromAssessmentItem = async (data, endDate) => {
-  await createCourseUnit(data.courseUnit)
-  const [course] = await FeedbackTarget.upsert({
-    feedbackType: 'assessmentItem',
-    typeId: data.id,
-    courseUnitId: data.courseUnit.id,
-    name: data.name,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
+const createFeedbackTargetWithUserTargetTable = async (upsertData, userId) => {
+  const [feedbackTarget] = await FeedbackTarget.upsert(upsertData)
+  await UserFeedbackTarget.findOrCreate({
+    where: {
+      userId,
+      feedbackTargetId: Number(feedbackTarget.id),
+    },
+    defaults: {
+      accessStatus: 'TEACHER',
+      userId,
+      feedbackTargetId: Number(feedbackTarget.id),
+    },
   })
-  return course
+  return feedbackTarget
+}
+
+const createFeedbackTargetFromAssessmentItem = async (
+  data,
+  endDate,
+  userId,
+) => {
+  await createCourseUnit(data.courseUnit)
+  const target = await createFeedbackTargetWithUserTargetTable(
+    {
+      feedbackType: 'assessmentItem',
+      typeId: data.id,
+      courseUnitId: data.courseUnit.id,
+      name: data.name,
+      opensAt: formatDate(dateFns.subDays(endDate, 14)),
+      closesAt: formatDate(dateFns.addDays(endDate, 14)),
+    },
+    userId,
+  )
+  return target
 }
 
 const createFeedbackTargetFromStudyGroup = async (
   data,
   endDate,
   courseUnitId,
+  userId,
 ) => {
-  const [target] = await FeedbackTarget.upsert({
-    feedbackType: 'studySubGroup',
-    typeId: data.id,
-    courseUnitId,
-    name: data.name,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
-  })
+  const target = await createFeedbackTargetWithUserTargetTable(
+    {
+      feedbackType: 'studySubGroup',
+      typeId: data.id,
+      courseUnitId,
+      name: data.name,
+      opensAt: formatDate(dateFns.subDays(endDate, 14)),
+      closesAt: formatDate(dateFns.addDays(endDate, 14)),
+    },
+    userId,
+  )
   return target
 }
 
@@ -54,6 +81,7 @@ const createFeedbackTargetFromCourseRealisation = async (
   data,
   assessmentIdToItem,
   shouldCreateTarget,
+  userId,
 ) => {
   const endDate = dateFns.parse(
     data.activityPeriod.endDate,
@@ -66,6 +94,7 @@ const createFeedbackTargetFromCourseRealisation = async (
         return createFeedbackTargetFromAssessmentItem(
           assessmentIdToItem.get(id),
           endDate,
+          userId,
         )
       }
       await createCourseUnit(assessmentIdToItem.get(id).courseUnit)
@@ -84,21 +113,24 @@ const createFeedbackTargetFromCourseRealisation = async (
       data.studyGroupSets.map(async (studySet) => {
         const studySetItems = await Promise.all(
           studySet.studySubGroups.map(async (item) =>
-            createFeedbackTargetFromStudyGroup(item, endDate, ids[0]),
+            createFeedbackTargetFromStudyGroup(item, endDate, ids[0], userId),
           ),
         )
         return studySetItems
       }),
     )
   ).flat()
-  const [course] = await FeedbackTarget.upsert({
-    feedbackType: 'courseRealisation',
-    typeId: data.id,
-    courseUnitId: ids[0],
-    name: data.name,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
-  })
+  const course = await createFeedbackTargetWithUserTargetTable(
+    {
+      feedbackType: 'courseRealisation',
+      typeId: data.id,
+      courseUnitId: ids[0],
+      name: data.name,
+      opensAt: formatDate(dateFns.subDays(endDate, 14)),
+      closesAt: formatDate(dateFns.addDays(endDate, 14)),
+    },
+    userId,
+  )
   assessmentItems.push(course)
   assessmentItems.push(...studySubGroupItems)
   return assessmentItems.filter((item) => item.id)
@@ -163,6 +195,7 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
           realisation,
           assessmentIdToItem,
           shouldCreateTarget,
+          personId,
         ),
       ),
     )

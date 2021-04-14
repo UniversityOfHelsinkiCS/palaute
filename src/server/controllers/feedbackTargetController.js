@@ -19,9 +19,21 @@ const getResponsibleByUser = async (req, res) => {
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
 
-  const enrolments = await getResponsibleByPersonId(id, {
+  await getResponsibleByPersonId(id, {
     startDateBefore,
     endDateAfter,
+  })
+
+  const enrolments = await UserFeedbackTarget.findAll({
+    where: {
+      userId: id,
+      accessStatus: 'TEACHER',
+    },
+    include: {
+      model: FeedbackTarget,
+      as: 'feedbackTarget',
+      include: [{ model: CourseUnit, as: 'courseUnit' }],
+    },
   })
 
   res.send(enrolments)
