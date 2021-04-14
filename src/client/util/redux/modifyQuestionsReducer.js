@@ -1,4 +1,4 @@
-import { buildAction } from '@grp-toska/apina'
+import buildAction from './util'
 
 export const submitUpdates = (courseId, data) =>
   buildAction('questions', {
@@ -58,23 +58,6 @@ const returnChangedName = (questions, index, name, lang) => {
 
 export default (state = { data: {}, pending: true }, action) => {
   switch (action.type) {
-    case 'GET_QUESTIONS_APINA_ATTEMPT':
-      return {
-        ...state,
-        pending: true,
-      }
-    case 'GET_QUESTIONS_APINA_SUCCESS':
-      return {
-        ...state,
-        pending: false,
-        data: action.response.data,
-      }
-    case 'PUT_QUESTIONS_APINA_SUCCESS':
-      return {
-        ...state,
-        data: {},
-        pending: true,
-      }
     case 'TOGGLE_REQUIRED':
       return {
         ...state,

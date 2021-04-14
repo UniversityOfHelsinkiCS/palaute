@@ -1,4 +1,4 @@
-import { buildAction } from '@grp-toska/apina'
+import buildAction from './util'
 
 export const submitFormAction = (data, surveyId) =>
   buildAction('feedbacks', {
@@ -41,40 +41,6 @@ export default (state = { data: {}, pending: true }, action) => {
           ...state.data,
           [action.field]: action.value,
         },
-      }
-    case 'POST_FEEDBACKS_APINA_SUCCESS':
-      return {
-        ...state,
-        data: {},
-        found: null,
-      }
-    case 'PUT_FEEDBACKS_APINA_SUCCESS':
-      return {
-        ...state,
-        data: {},
-        feedbackId: null,
-        found: null,
-      }
-    case 'GET_PREVIOUS_FEEDBACK_APINA_ATTEMPT':
-      return {
-        ...state,
-        pending: true,
-      }
-    case 'GET_PREVIOUS_FEEDBACK_APINA_SUCCESS':
-      return {
-        ...state,
-        pending: false,
-        found: true,
-        feedbackId: action.response.id,
-        data: action.response.data,
-      }
-    // Fail is ok, that means there was no previous feedback
-    case 'GET_PREVIOUS_FEEDBACK_APINA_FAILURE':
-      return {
-        ...state,
-        pending: false,
-        found: false,
-        data: {},
       }
     case 'MODIFY_FORM':
       return {

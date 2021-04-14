@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,6 @@ import { red, green } from '@material-ui/core/colors'
 import { Edit, Clear, Check, Delete } from '@material-ui/icons'
 
 import {
-  getCourseQuestionsAction,
   toggleRequiredField,
   submitUpdates,
   changeTypeField,
@@ -53,11 +52,6 @@ const ModifyQuestions = () => {
     type: 'CHOICE',
     required: false,
   })
-
-  useEffect(() => {
-    dispatch(getCourseQuestionsAction(courseId))
-  }, [])
-
   const toggleRequired = (questionIndex) => {
     dispatch(toggleRequiredField(questionIndex))
   }
