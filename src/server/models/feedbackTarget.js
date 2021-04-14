@@ -38,6 +38,8 @@ FeedbackTarget.init(
   },
 )
 
-FeedbackTarget.CourseUnit = FeedbackTarget.belongsTo(CourseUnit)
+FeedbackTarget.CourseUnit = FeedbackTarget.belongsTo(CourseUnit, {
+  as: 'courseUnit',
+})
 
 module.exports = FeedbackTarget

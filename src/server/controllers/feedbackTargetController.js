@@ -3,8 +3,12 @@ const { ApplicationError } = require('../util/customErrors')
 
 const { getResponsibleByPersonId } = require('../util/importerResponsible')
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
-const { UserFeedbackTarget, FeedbackTarget } = require('../models')
-const { CourseUnit } = require('../models/feedbackTarget')
+const {
+  UserFeedbackTarget,
+  FeedbackTarget,
+  Feedback,
+  CourseUnit,
+} = require('../models')
 
 const getResponsibleByUser = async (req, res) => {
   const { user } = req
@@ -43,11 +47,12 @@ const getEnrolmentsByUser = async (req, res) => {
   const enrolments = await UserFeedbackTarget.findAll({
     where: {
       userId: id,
+      accessStatus: 'STUDENT',
     },
     include: {
       model: FeedbackTarget,
       as: 'feedbackTarget',
-      include: [CourseUnit],
+      include: [{ model: CourseUnit, as: 'courseUnit' }],
     },
   })
 
@@ -59,8 +64,18 @@ const getOneTarget = async (req, res) => {
 
   if (!user) throw new ApplicationError('Missing uid header', 403)
 
-  const target = await FeedbackTarget.findByPk(Number(req.params.id), {
-    include: CourseUnit,
+  const target = await UserFeedbackTarget.findByPk(Number(req.params.id), {
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        include: [{ model: CourseUnit, as: 'courseUnit' }],
+      },
+      {
+        model: Feedback,
+        as: 'feedback',
+      },
+    ],
   })
 
   if (!target) throw new ApplicationError('Not found', 404)
