@@ -1,9 +1,9 @@
 const { ApplicationError } = require('../util/customErrors')
 const logger = require('../util/logger')
+const { ADMINS } = require('../util/config')
 const { User } = require('../models')
 
-const isSuperAdmin = (username) =>
-  ['varisleo', 'kalleilv', 'jakousa', 'mluukkai'].includes(username)
+const isSuperAdmin = (username) => ADMINS.includes(username)
 
 const upsertUser = async ({
   uid,
