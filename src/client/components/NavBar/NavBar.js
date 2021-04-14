@@ -8,6 +8,7 @@ import FeedbacksIcon from '@material-ui/icons/Assignment'
 import TeacherSettingsIcon from '@material-ui/icons/Settings'
 import { useTeacherCourses } from '../../util/queries'
 
+import AdminNavButton from './AdminNavButton'
 import LogOutNavButton from './LogOutNavButton'
 import NavIconButton from './NavIconButton'
 import toskaLogo from '../../assets/toscalogo_white.svg'
@@ -61,6 +62,7 @@ const NavBar = () => {
               <TeacherSettingsIcon />
             </NavIconButton>
           )}
+          <AdminNavButton />
           <LogOutNavButton />
         </Toolbar>
       </AppBar>
