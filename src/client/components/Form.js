@@ -1,14 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import {
-  reSubmitFormAction,
-  submitFormAction,
-  getUserCourseFeedbackAction,
-} from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
 
 import { getLanguageValue } from '../util/languageUtils'
@@ -16,19 +11,27 @@ import { getLanguageValue } from '../util/languageUtils'
 import Question from './QuestionBase'
 
 import { useCourseData, useCourseQuestions } from '../util/queries'
+import apiClient from '../util/apiClient'
 
 const Form = () => {
   const dispatch = useDispatch()
   const targetId = useParams().id
   const history = useHistory()
-  const form = useSelector((state) => state.form)
+  const [form, setForm] = useState({ found: false, data: {} })
   const courseData = useCourseData(targetId)
   const questions = useCourseQuestions(targetId)
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    dispatch(getUserCourseFeedbackAction(targetId))
-  }, [])
+    if (!courseData.isLoading) {
+      if (courseData.data.feedback) {
+        setForm({
+          found: true,
+          data: courseData.data.feedback.data,
+        })
+      }
+    }
+  }, [courseData.isLoading])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -45,12 +48,24 @@ const Form = () => {
     })
     if (complete) {
       if (form.found) {
-        dispatch(reSubmitFormAction(answers, form.feedbackId))
+        apiClient.put(`/feedbacks/${targetId}`, answers)
       } else {
-        dispatch(submitFormAction(answers, targetId))
+        apiClient.post('/feedbacks', { answers, targetId })
       }
       history.push(`/`)
     }
+  }
+
+  const getQuestionAnswer = (questionId) => form.data[questionId]
+
+  const updateFormField = (questionId, newValue) => {
+    setForm({
+      ...form.data,
+      data: {
+        ...form.data,
+        [questionId]: newValue,
+      },
+    })
   }
 
   if (courseData.isLoading || form.pending || questions.isLoading) return null
@@ -62,7 +77,12 @@ const Form = () => {
       <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
       {questions.data &&
         questions.data.data.questions.map((question) => (
-          <Question question={question} key={question.id} />
+          <Question
+            question={question}
+            key={question.id}
+            answer={getQuestionAnswer(question.id)}
+            handleFormUpdate={updateFormField}
+          />
         ))}
       <Button type="submit" variant="contained" color="primary">
         {t('feedbackForm:submitButton')}

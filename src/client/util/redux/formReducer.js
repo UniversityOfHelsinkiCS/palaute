@@ -32,7 +32,7 @@ export const modifyForm = () => ({
   type: 'MODIFY_FORM',
 })
 
-export default (state = { data: {}, pending: true }, action) => {
+export default (state = { data: {}, pending: false }, action) => {
   switch (action.type) {
     case 'POST_FEEDBACKS_SUCCESS':
       return {
@@ -50,7 +50,7 @@ export default (state = { data: {}, pending: true }, action) => {
     case 'GET_PREVIOUS_FEEDBACK_ATTEMPT':
       return {
         ...state,
-        pending: true,
+        pending: false,
       }
     case 'GET_PREVIOUS_FEEDBACK_SUCCESS':
       return {

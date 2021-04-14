@@ -64,11 +64,14 @@ const LoginAsSelector = () => {
         <Card key={user.id}>
           <CardContent>
             <b>
-              {user.id} - {user.firstNames} {user.lastName} - {user.studentNumber}
+              {user.id} - {user.firstNames} {user.lastName} -{' '}
+              {user.studentNumber}
             </b>
           </CardContent>
           <CardActions>
-            <Button onClick={handleLoginAs(user)} variant="outlined">Log in as</Button>
+            <Button onClick={handleLoginAs(user)} variant="outlined">
+              Log in as
+            </Button>
           </CardActions>
         </Card>
       ))}

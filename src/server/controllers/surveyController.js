@@ -10,10 +10,10 @@ const getSurveyByCourseId = async (req, res) => {
 
   const [questions] = await Survey.findOrCreate({
     where: {
-      feedbackTargetId: req.params.id,
+      feedbackTargetId: Number(req.params.id),
     },
     defaults: {
-      feedbackTargetId: req.params.id,
+      feedbackTargetId: Number(req.params.id),
       data: defaultQuestions,
     },
   })

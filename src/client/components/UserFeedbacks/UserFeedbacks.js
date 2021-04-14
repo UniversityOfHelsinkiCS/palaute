@@ -82,7 +82,7 @@ const UserFeedbacks = () => {
             <Fragment key={course.id}>
               <FeedbackListItem
                 course={course}
-                answered={coursesWithAnswer.has(course.id)}
+                answered={course.feedbackId !== null}
                 onDelete={() => onDelete(course.id)}
               />
               <Divider component="li" />
