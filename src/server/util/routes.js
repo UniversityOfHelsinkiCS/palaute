@@ -10,6 +10,7 @@ const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const survey = require('../controllers/surveyController')
 const feedbackTarget = require('../controllers/feedbackTargetController')
+const adminController = require('../controllers/adminController')
 
 const router = Router()
 
@@ -62,6 +63,8 @@ router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()
 })
+
+router.use('/admin', adminController)
 
 router.use(Sentry.Handlers.errorHandler())
 

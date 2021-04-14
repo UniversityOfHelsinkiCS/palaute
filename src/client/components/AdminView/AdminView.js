@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import { ADMINS } from '../../util/common'
 import { useUserData } from '../../util/queries'
+import LoginAs from './LoginAsSelector'
 
 const AdminView = () => {
   const user = useUserData()
@@ -12,6 +13,7 @@ const AdminView = () => {
   return (
     <>
       <h1>Admin page</h1>
+      <LoginAs />
     </>
   )
 }

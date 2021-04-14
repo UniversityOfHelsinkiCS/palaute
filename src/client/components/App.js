@@ -9,6 +9,7 @@ import Footer from './Footer'
 import DevTools from './DevTools'
 import Router from './Router'
 import { useUserData } from '../util/queries'
+import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 
 export default () => {
   const { i18n } = useTranslation()
@@ -37,6 +38,7 @@ export default () => {
         <NavBar />
         <Router />
         <DevTools />
+        <AdminLoggedInAsBanner />
         <Footer />
       </Suspense>
     </>
