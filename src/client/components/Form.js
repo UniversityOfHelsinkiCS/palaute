@@ -55,7 +55,7 @@ const Form = () => {
 
   if (courseData.isLoading || form.pending || questions.isLoading) return null
 
-  const currentCourse = courseData.data
+  const currentCourse = courseData.data.feedbackTarget
 
   return (
     <form onSubmit={handleSubmit}>
