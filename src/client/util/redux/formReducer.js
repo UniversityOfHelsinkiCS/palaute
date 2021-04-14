@@ -34,6 +34,40 @@ export const modifyForm = () => ({
 
 export default (state = { data: {}, pending: true }, action) => {
   switch (action.type) {
+    case 'POST_FEEDBACKS_SUCCESS':
+      return {
+        ...state,
+        data: {},
+        found: null,
+      }
+    case 'PUT_FEEDBACKS_SUCCESS':
+      return {
+        ...state,
+        data: {},
+        feedbackId: null,
+        found: null,
+      }
+    case 'GET_PREVIOUS_FEEDBACK_ATTEMPT':
+      return {
+        ...state,
+        pending: true,
+      }
+    case 'GET_PREVIOUS_FEEDBACK_SUCCESS':
+      return {
+        ...state,
+        pending: false,
+        found: true,
+        feedbackId: action.response.id,
+        data: action.response.data,
+      }
+    // Fail is ok, that means there was no previous feedback
+    case 'GET_PREVIOUS_FEEDBACK_FAILURE':
+      return {
+        ...state,
+        pending: false,
+        found: false,
+        data: {},
+      }
     case 'UPDATE_FORM_FIELD':
       return {
         ...state,

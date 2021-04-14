@@ -58,6 +58,23 @@ const returnChangedName = (questions, index, name, lang) => {
 
 export default (state = { data: {}, pending: true }, action) => {
   switch (action.type) {
+    case 'GET_QUESTIONS_ATTEMPT':
+      return {
+        ...state,
+        pending: true,
+      }
+    case 'GET_QUESTIONS_SUCCESS':
+      return {
+        ...state,
+        pending: false,
+        data: action.response.data,
+      }
+    case 'PUT_QUESTIONS_SUCCESS':
+      return {
+        ...state,
+        data: {},
+        pending: true,
+      }
     case 'TOGGLE_REQUIRED':
       return {
         ...state,

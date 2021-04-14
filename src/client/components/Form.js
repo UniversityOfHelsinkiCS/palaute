@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { reSubmitFormAction, submitFormAction } from '../util/redux/formReducer'
+import {
+  reSubmitFormAction,
+  submitFormAction,
+  getUserCourseFeedbackAction,
+} from '../util/redux/formReducer'
 import { setError } from '../util/redux/errorReducer'
 
 import { getLanguageValue } from '../util/languageUtils'
@@ -21,6 +25,10 @@ const Form = () => {
   const courseData = useCourseData(targetId)
   const questions = useCourseQuestions(targetId)
   const { t, i18n } = useTranslation()
+
+  useEffect(() => {
+    dispatch(getUserCourseFeedbackAction(targetId))
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
