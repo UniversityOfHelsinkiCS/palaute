@@ -8,14 +8,14 @@ const getSurveyByCourseId = async (req, res) => {
 
   if (!user) throw new ApplicationError('Not found', 404)
 
-  const [questions, created] = await Survey.findOrCreate({
+  const [questions] = await Survey.findOrCreate({
     where: {
       feedbackTargetId: req.params.id,
     },
     defaults: {
       feedbackTargetId: req.params.id,
-      data: defaultQuestions
-    }
+      data: defaultQuestions,
+    },
   })
 
   if (!questions) throw new ApplicationError('Not found', 404)
@@ -41,9 +41,9 @@ const updateSurveyByCourseId = async (req, res) => {
       question.id
         ? question
         : {
-          ...question,
-          id: uuid(),
-        },
+            ...question,
+            id: uuid(),
+          },
     ),
   }
   questions.data = acualData
