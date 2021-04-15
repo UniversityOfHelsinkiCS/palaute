@@ -21,6 +21,10 @@ FeedbackTarget.init(
       type: STRING,
       allowNull: false,
     },
+    courseUnitRealisationId: {
+      type: STRING,
+      allowNull: false,
+    },
     name: {
       type: JSONB,
       allowNull: false,

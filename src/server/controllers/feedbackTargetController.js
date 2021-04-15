@@ -47,14 +47,10 @@ const getEnrolmentsByUser = async (req, res) => {
 
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
-
-  // acually useless data
   await getEnrolmentByPersonId(id, {
     startDateBefore,
     endDateAfter,
   })
-
-  // acual megaquery
 
   const enrolments = await UserFeedbackTarget.findAll({
     where: {

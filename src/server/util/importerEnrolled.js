@@ -13,8 +13,24 @@ const createCourseUnit = async (data) => {
   })
 }
 
-const createFeedbackTargetWithUserTargetTable = async (upsertData, userId) => {
-  const [feedbackTarget] = await FeedbackTarget.upsert(upsertData)
+const createFeedbackTargetWithUserTargetTable = async (
+  feedbackType,
+  typeId,
+  courseUnitRealisationId,
+  courseUnitId,
+  name,
+  endDate,
+  userId,
+) => {
+  const [feedbackTarget] = await FeedbackTarget.upsert({
+    feedbackType,
+    typeId,
+    courseUnitId,
+    courseUnitRealisationId,
+    name,
+    opensAt: formatDate(dateFns.subDays(endDate, 14)),
+    closesAt: formatDate(dateFns.addDays(endDate, 14)),
+  })
   await UserFeedbackTarget.findOrCreate({
     where: {
       userId,
@@ -29,42 +45,20 @@ const createFeedbackTargetWithUserTargetTable = async (upsertData, userId) => {
   return feedbackTarget
 }
 
-const createFeedbackTargetFromAssessmentItem = async (
-  data,
-  endDate,
-  courseUnit,
-  userId,
-) => {
-  await createCourseUnit(courseUnit)
-  const target = await createFeedbackTargetWithUserTargetTable(
-    {
-      feedbackType: 'assessmentItem',
-      typeId: data.id,
-      courseUnitId: courseUnit.id,
-      name: data.name,
-      opensAt: formatDate(dateFns.subDays(endDate, 14)),
-      closesAt: formatDate(dateFns.addDays(endDate, 14)),
-    },
-    userId,
-  )
-  return target
-}
-
 const createFeedbackTargetFromStudyGroup = async (
   data,
   endDate,
   courseUnitId,
+  realisationId,
   userId,
 ) => {
   const target = await createFeedbackTargetWithUserTargetTable(
-    {
-      feedbackType: 'studySubGroup',
-      typeId: data.id,
-      courseUnitId,
-      name: data.name,
-      opensAt: formatDate(dateFns.subDays(endDate, 14)),
-      closesAt: formatDate(dateFns.addDays(endDate, 14)),
-    },
+    'studySubGroup',
+    data.id,
+    realisationId,
+    courseUnitId,
+    data.name,
+    endDate,
     userId,
   )
   return target
@@ -81,38 +75,30 @@ const createFeedbackTargetFromCourseRealisation = async (
     'yyyy-MM-dd',
     new Date(),
   )
-  const studySubGroupItems = (
-    await Promise.all(
-      data.studyGroupSets.map(async (studySet) => {
-        const studySetItems = await Promise.all(
-          studySet.studySubGroups
-            .filter((group) => studySubGroupIds.includes(group.id))
-            .map(async (item) =>
-              createFeedbackTargetFromStudyGroup(
-                item,
-                endDate,
-                courseUnitId,
-                userId,
-              ),
-            ),
+  await data.studyGroupSets.reduce(async (prom, studySet) => {
+    await prom
+    await studySet.studySubGroups
+      .filter((group) => studySubGroupIds.includes(group.id))
+      .reduce(async (promise, item) => {
+        await promise
+        await createFeedbackTargetFromStudyGroup(
+          item,
+          endDate,
+          courseUnitId,
+          data.id,
+          userId,
         )
-        return studySetItems
-      }),
-    )
-  ).flat()
-  const target = await createFeedbackTargetWithUserTargetTable(
-    {
-      feedbackType: 'courseRealisation',
-      typeId: data.id,
-      courseUnitId,
-      name: data.name,
-      opensAt: formatDate(dateFns.subDays(endDate, 14)),
-      closesAt: formatDate(dateFns.addDays(endDate, 14)),
-    },
+      }, Promise.resolve())
+  }, Promise.resolve())
+  await createFeedbackTargetWithUserTargetTable(
+    'courseRealisation',
+    data.id,
+    data.id,
+    courseUnitId,
+    data.name,
+    endDate,
     userId,
   )
-  studySubGroupItems.push(target)
-  return studySubGroupItems
 }
 
 const createTargetsFromEnrolment = async (data, userId) => {
@@ -121,34 +107,17 @@ const createTargetsFromEnrolment = async (data, userId) => {
   )
 
   const { courseUnitId, courseUnitRealisation, courseUnit } = data
-  const endDate = dateFns.parse(
-    courseUnitRealisation.activityPeriod.endDate,
-    'yyyy-MM-dd',
-    new Date(),
-  )
-  await createCourseUnit(data.courseUnit)
-  const assessmentItem = await createFeedbackTargetFromAssessmentItem(
-    data.assessmentItem,
-    endDate,
-    courseUnit,
-    userId,
-  )
+  await createCourseUnit(courseUnit)
 
-  const realisationItems = await createFeedbackTargetFromCourseRealisation(
+  await createFeedbackTargetFromCourseRealisation(
     courseUnitRealisation,
     studySubGroupIds,
     courseUnitId,
     userId,
   )
-  realisationItems.push(assessmentItem)
-  return realisationItems
 }
 
-const getOneTarget = (id) =>
-  FeedbackTarget.findByPk(Number(id), {
-    include: { model: CourseUnit, as: 'courseUnit' },
-  })
-
+// this doesn't return anything, it is easier to do separate query for that
 const getEnrolmentByPersonId = async (personId, options = {}) => {
   const { startDateBefore, endDateAfter } = options
 
@@ -160,24 +129,11 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
   const { data } = await importerClient.get(`/palaute/enrolled/${personId}`, {
     params,
   })
-  const idsToFind = (
-    await Promise.all(
-      data.map(async (enrolment) =>
-        createTargetsFromEnrolment(enrolment, personId),
-      ),
-    )
-  )
-    .flat()
-    .map((target) => target.id)
-  const targets = []
 
-  // eslint-disable-next-line
-  for (const id of idsToFind) {
-    // eslint-disable-next-line no-await-in-loop
-    targets.push(await getOneTarget(id))
-  }
-
-  return targets
+  await data.reduce(async (promise, enrolment) => {
+    await promise
+    await createTargetsFromEnrolment(enrolment, personId)
+  }, Promise.resolve())
 }
 
 module.exports = {
