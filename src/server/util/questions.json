@@ -5,7 +5,7 @@
       "type": "CHOICE",
       "index": 1,
       "question": {
-        "fi": "Mielipide kurssista"
+        "fi": "Kurssin tavoitteet olivat minulle alusta saakka selvät (”tiesin, mitä minun tuli oppia”)"
       },
       "required": true
     },
@@ -14,25 +14,52 @@
       "type": "CHOICE",
       "index": 1,
       "question": {
-      "fi": "Kurssi oli kiinnostava"
+      "fi": "Kurssilla käytetty materiaali (esim. tehtävät, luentomateriaali, muu kirjallisuus) tuki oppimistavoitteiden saavuttamista"
       },
       "required": true
     },
     {
-      "id": "yleinen",
-      "type": "TEXT",
+      "id": "kysymys3",
+      "type": "CHOICE",
       "index": 2,
       "question": {
-        "fi": "Anna yleistä palautetta kurssista"
+        "fi": "Toiminta kurssilla (esim. aikataulutus, ohjaus, muu opetus) tuki oppimistavoitteiden saavuttamista"
       },
-      "required": false
+      "required": true
     },
     {
-      "id": "kehitys",
+      "id": "kysymys4",
+      "type": "CHOICE",
+      "index": 2,
+      "question": {
+        "fi": "Kurssin arviointi (esim. harjoitukset, työt, kokeet, niiden keskinäinen suhde) mittasi keskeisten oppimistavoitteiden saavuttamista"
+      },
+      "required": true
+    },
+    {
+      "id": "kysymys5",
+      "type": "CHOICE",
+      "index": 2,
+      "question": {
+        "fi": "Kurssi oli työläs"
+      },
+      "required": true
+    },
+    {
+      "id": "kysymys6",
+      "type": "CHOICE",
+      "index": 2,
+      "question": {
+        "fi": "Annan kurssille kokonaisuutena arvosanan"
+      },
+      "required": true
+    },
+    {
+      "id": "kysymys7",
       "type": "TEXT",
       "index": 2,
       "question": {
-        "fi": "Miten kehittäisit kurssia?"
+        "fi": "Kommentoi kurssin toimintaa, sisältöä, opettajien tai ohjaajien toimintaa; hyödyllisyyttä, mielekkyyttä, relevanssia, vaikeustasoa; kehitysehdotuksia, kritiikkiä, kiitoksia"
       },
       "required": false
     }
