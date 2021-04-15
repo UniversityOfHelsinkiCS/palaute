@@ -14,10 +14,6 @@ Feedback.init(
       type: STRING,
       allowNull: false,
     },
-    surveyId: {
-      type: STRING,
-      allowNull: false,
-    },
   },
   {
     underscored: true,

@@ -1,5 +1,5 @@
 const { ApplicationError } = require('../util/customErrors')
-const { Feedback } = require('../models')
+const { UserFeedbackTarget, Feedback } = require('../models')
 
 const getAll = async (req, res) => {
   const feedbacks = await Feedback.findAll()
@@ -7,13 +7,18 @@ const getAll = async (req, res) => {
 }
 
 const create = async (req, res) => {
+  const { answers, targetId } = req.body
   const newFeedback = await Feedback.create({
-    data: req.body.data,
+    data: answers,
     userId: req.user.id,
-    surveyId: req.body.surveyId,
   })
 
-  res.send(newFeedback)
+  const userFeedbackTarget = await UserFeedbackTarget.update(
+    { feedbackId: Number(newFeedback.id) },
+    { where: { id: Number(targetId) } },
+  )
+
+  res.send(userFeedbackTarget)
 }
 
 const getOne = async (req, res) => {
@@ -69,19 +74,28 @@ const getFeedbackByCourseId = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const feedback = await Feedback.findByPk(Number(req.params.id))
-  if (!feedback) throw new ApplicationError('Not found', 404)
-
-  feedback.data = req.body.data
+  const feedbackTarget = await UserFeedbackTarget.findByPk(
+    Number(req.params.id),
+  )
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  const { feedbackId } = feedbackTarget
+  const feedback = await Feedback.findByPk(Number(feedbackId))
+  feedback.data = req.body
   const updatedFeedback = await feedback.save()
   res.send(updatedFeedback)
 }
 
 const destroy = async (req, res) => {
-  const feedback = await Feedback.findByPk(Number(req.params.id))
-  if (!feedback) throw new ApplicationError('Not found', 404)
-
+  const feedbackTarget = await UserFeedbackTarget.findByPk(
+    Number(req.params.id),
+  )
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  const { feedbackId } = feedbackTarget
+  const feedback = await Feedback.findByPk(Number(feedbackId))
+  feedback.data = req.body.data
   await feedback.destroy()
+  feedbackTarget.feedbackId = null
+  await feedbackTarget.save()
 
   res.sendStatus(200)
 }

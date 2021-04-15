@@ -13,23 +13,15 @@ const upsertUser = async ({
   preferredlanguage,
   hypersonsisuid,
 }) => {
-  const [user, created] = await User.findOrCreate({
-    where: {
-      id: hypersonsisuid,
-    },
-    defaults: {
-      first_name: givenname,
-      last_name: sn,
-      email: mail,
-      language: preferredlanguage,
-      username: uid,
-    },
+  const [user] = await User.upsert({
+    id: hypersonsisuid,
+    first_name: givenname,
+    last_name: sn,
+    email: mail,
+    language: preferredlanguage,
+    username: uid,
   })
-  if (created) {
-    logger.info(`New user: ${user.last_name}, ${user.first_name}`, {
-      ...user.dataValues,
-    })
-  }
+
   return user
 }
 
@@ -43,7 +35,7 @@ const currentUserMiddleware = async (req, res, next) => {
   const loggedInAs = req.headers['x-admin-logged-in-as']
   if (!loggedInAs) return next()
 
-  req.user = await User.findOne({ where: { username: loggedInAs } })
+  req.user = await User.findOne({ where: { id: loggedInAs } })
   return next()
 }
 

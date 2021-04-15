@@ -13,6 +13,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'react/jsx-filename-extension': 'off',
     'eslintreact/jsx-props-no-spreading': 'off',
+    'no-unused-vars': 'warn',
     'react/prop-types': [
       1,
       {

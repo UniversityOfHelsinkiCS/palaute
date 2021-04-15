@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { updateFormField } from '../util/redux/formReducer'
 import { clearError } from '../util/redux/errorReducer'
 import { getLanguageValue } from '../util/languageUtils'
 
@@ -14,15 +13,14 @@ const mapTypeToComponent = {
   TEXT: TextAreaQuestion,
 }
 
-const Question = ({ question }) => {
+const Question = ({ question, answer, handleFormUpdate }) => {
   const dispatch = useDispatch()
-  const answer = useSelector((state) => state.form.data[question.id])
   const error = useSelector((state) => state.error[question.id])
   const { t, i18n } = useTranslation()
 
   const handleChange = (event) => {
     event.preventDefault()
-    dispatch(updateFormField(question.id, event.target.value))
+    handleFormUpdate(question.id, event.target.value)
     if (error) {
       dispatch(clearError(question.id))
     }
