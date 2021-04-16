@@ -1,11 +1,11 @@
 import groupBy from 'lodash/groupBy'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
-  if (!Array.isArray(courseRealisation.userFeedbackTargets)) {
+  if (!Array.isArray(courseRealisation.feedbackTargets)) {
     return false
   }
 
-  const missing = courseRealisation.userFeedbackTargets.find(
+  const missing = courseRealisation.feedbackTargets.find(
     ({ feedbackId }) => !feedbackId,
   )
 
@@ -39,30 +39,28 @@ export const getDeletePath = (userFeedbackTarget) => {
   return feedbackId ? `/feedbacks/${feedbackId}` : null
 }
 
-export const getCourseRealisationsWithUserFeedbackTargerts = (
-  userFeedbackTargets,
-) => {
-  if (!userFeedbackTargets) {
+export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
+  if (!feedbackTargets) {
     return []
   }
 
   const courseRealisationById = new Map()
 
-  userFeedbackTargets.forEach((target) => {
-    const { courseRealisation } = target.feedbackTarget
+  feedbackTargets.forEach((target) => {
+    const { courseRealisation } = target
 
     courseRealisationById.set(courseRealisation.id, courseRealisation)
   })
 
   const targetsByCourseRealisationId = groupBy(
-    userFeedbackTargets,
-    (target) => target.feedbackTarget.courseRealisation.id,
+    feedbackTargets,
+    (target) => target.courseRealisation.id,
   )
 
   return Object.entries(targetsByCourseRealisationId).map(
     ([courseRealisationId, targets]) => ({
       ...courseRealisationById.get(courseRealisationId),
-      userFeedbackTargets: targets,
+      feedbackTargets: targets,
     }),
   )
 }

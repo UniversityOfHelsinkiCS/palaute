@@ -7,14 +7,14 @@ import { getLanguageValue } from '../util/languageUtils'
 import Feedback from './FeedbackBase'
 
 import { useCourseFeedback, useCourseQuestions } from '../util/queries'
-import useUserFeedbackTarget from '../hooks/useUserFeedbackTarget'
 
 const FeedbackList = () => {
   const { id } = useParams()
 
   const { t, i18n } = useTranslation()
 
-  const { userFeedbackTarget } = useUserFeedbackTarget(id)
+  // TODO: fix
+  const userFeedbackTarget = undefined
   const feedbacks = useCourseFeedback(id)
   const questions = useCourseQuestions(id)
 

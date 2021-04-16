@@ -5,11 +5,9 @@ const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMidd
 const errorMiddleware = require('../middleware/errorMiddleware')
 const initializeSentry = require('./sentry')
 const feedbacks = require('../controllers/feedbacksController')
-const courseUnitRealisations = require('../controllers/courseUnitRealisationsController')
-const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const survey = require('../controllers/surveyController')
-const userFeedbackTargets = require('../controllers/userFeedbackTargetController')
+const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
 
 const router = Router()
@@ -40,30 +38,7 @@ router.get('/courses/:id/feedbacks', feedbacks.getFeedbackByCourseId)
 router.get('/courses/:id/questions', survey.getSurveyByCourseId)
 router.put('/courses/:id/questions', survey.updateSurveyByCourseId)
 
-router.get(
-  '/course-unit-realisations/feedback-enabled',
-  courseUnitRealisations.getWhereFeedbackEnabled,
-)
-
-router.get(
-  '/course-unit-realisations/responsible',
-  courseUnitRealisations.getWhereResponsible,
-)
-
-router.get(
-  '/user-feedback-targets/for-student',
-  userFeedbackTargets.getForStudent,
-)
-router.get(
-  '/user-feedback-targets/for-teacher',
-  userFeedbackTargets.getForStudent,
-)
-
-router.get('/user-feedback-targets/:id', userFeedbackTargets.getOneTarget)
-
-router.get('/assessment-items', assessmentItems.getAll)
-
-router.get('/course-unit-realisations/:id', courseUnitRealisations.getOne)
+router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 
 router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'

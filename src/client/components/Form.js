@@ -12,7 +12,6 @@ import Question from './QuestionBase'
 
 import { useCourseQuestions } from '../util/queries'
 import apiClient from '../util/apiClient'
-import useUserFeedbackTarget from '../hooks/useUserFeedbackTarget'
 
 const Form = () => {
   const dispatch = useDispatch()
@@ -20,7 +19,8 @@ const Form = () => {
   const history = useHistory()
   const [form, setForm] = useState({ found: false, data: {} })
 
-  const { userFeedbackTarget } = useUserFeedbackTarget(targetId)
+  // TODO: fix
+  const userFeedbackTarget = undefined
 
   const questions = useCourseQuestions(targetId)
   const { t, i18n } = useTranslation()

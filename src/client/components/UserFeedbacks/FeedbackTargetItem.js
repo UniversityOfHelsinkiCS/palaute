@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
@@ -28,16 +28,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NewFeedback = ({ editPath }) => {
+const CreateActions = ({ editPath }) => {
   const { t } = useTranslation()
   return (
-    <Button variant="contained" color="primary" component={Link} to={editPath}>
+    <Button variant="contained" color="primary" component={Link}>
       {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
 }
 
-const EditFeedback = ({ editPath, viewPath, onDelete }) => {
+const EditActions = ({ editPath, viewPath, onDelete }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -98,50 +98,42 @@ const NoFeedbackChip = () => (
   />
 )
 
-const FeedbackListItem = ({ courseRealisation }) => {
+const FeedbackTargetItem = ({ feedbackTarget }) => {
   const classes = useStyles()
   const { i18n } = useTranslation()
 
-  const userFeedbackTargetWithoutFeedback = useMemo(
-    () =>
-      courseRealisation.userFeedbackTargets.find(
-        ({ feedbackId }) => !feedbackId,
-      ),
-    [courseRealisation],
-  )
+  const { closesAt, name, feedbackId } = feedbackTarget
 
-  const firstFeedbackTarget =
-    courseRealisation.userFeedbackTargets[0].feedbackTarget
+  const closesAtInfo = `Feedback can be given until ${lightFormat(
+    parseISO(closesAt),
+    'd.M.yyyy',
+  )}`
 
-  const closesAtInfo = firstFeedbackTarget
-    ? `Feedback can be given until ${lightFormat(
-        parseISO(firstFeedbackTarget.closesAt),
-        'd.M.yyyy',
-      )}`
-    : null
+  const translatedName = getLanguageValue(name, i18n.language)
+  const hasFeedback = Boolean(feedbackId)
 
-  const courseRealisationName = getLanguageValue(
-    courseRealisation.name,
-    i18n.language,
-  )
-
-  const editPath = userFeedbackTargetWithoutFeedback
-    ? `/edit/${userFeedbackTargetWithoutFeedback.id}`
-    : null
+  // TODO: fix
+  const onDelete = () => {}
+  const editPath = ''
+  const viewPath = ''
 
   return (
     <ListItem className={classes.listItem}>
-      <ListItemText primary={courseRealisationName} secondary={closesAtInfo} />
-      <Box mt={1}>
-        {userFeedbackTargetWithoutFeedback ? (
-          <NoFeedbackChip />
+      <ListItemText primary={translatedName} secondary={closesAtInfo} />
+      <Box mt={1}>{hasFeedback ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
+      <Box mt={2}>
+        {hasFeedback ? (
+          <EditActions
+            editPath={editPath}
+            viewPath={viewPath}
+            onDelete={onDelete}
+          />
         ) : (
-          <FeedbackChip />
+          <CreateActions editPath={editPath} />
         )}
       </Box>
-      <Box mt={2}>{editPath && <NewFeedback editPath={editPath} />}</Box>
     </ListItem>
   )
 }
 
-export default FeedbackListItem
+export default FeedbackTargetItem

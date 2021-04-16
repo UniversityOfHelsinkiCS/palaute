@@ -1,22 +1,32 @@
 import React, { useMemo, Fragment } from 'react'
-import { Typography, List, Divider } from '@material-ui/core'
+import { Typography, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import FeedbackListItem from './FeedbackListItem'
-import useUserFeedbackTargetsForStudent from '../../hooks/useUserFeedbackTargetsForStudent'
+import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
+import CourseRealisationItem from './CourseRealisationItem'
 
 import {
-  getCourseRealisationsWithUserFeedbackTargerts,
+  getCourseRealisationsWithFeedbackTargets,
   sortCourseRealisations,
 } from './utils'
 
+const useStyles = makeStyles((theme) => ({
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+  courseRealisationItem: {
+    marginBottom: theme.spacing(2),
+  },
+}))
+
 const UserFeedbacks = () => {
+  const classes = useStyles()
   const { t } = useTranslation()
-  const { userFeedbackTargets } = useUserFeedbackTargetsForStudent()
+  const { feedbackTargets } = useFeedbackTargetsForStudent()
 
   const courseRealisations = useMemo(
-    () => getCourseRealisationsWithUserFeedbackTargerts(userFeedbackTargets),
-    [userFeedbackTargets],
+    () => getCourseRealisationsWithFeedbackTargets(feedbackTargets),
+    [feedbackTargets],
   )
 
   const sortedCourseRealations = useMemo(
@@ -24,21 +34,24 @@ const UserFeedbacks = () => {
     [courseRealisations],
   )
 
-  if (!userFeedbackTargets) {
+  if (!feedbackTargets) {
     return null
   }
 
   return (
     <div>
-      <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
-      <List>
-        {sortedCourseRealations.map((courseRealisation) => (
-          <Fragment key={courseRealisation.id}>
-            <FeedbackListItem courseRealisation={courseRealisation} />
-            <Divider component="li" />
-          </Fragment>
-        ))}
-      </List>
+      <Typography variant="h4" className={classes.heading}>
+        {t('userFeedbacks:mainHeading')}
+      </Typography>
+
+      {sortedCourseRealations.map((courseRealisation) => (
+        <Fragment key={courseRealisation.id}>
+          <CourseRealisationItem
+            className={classes.courseRealisationItem}
+            courseRealisation={courseRealisation}
+          />
+        </Fragment>
+      ))}
     </div>
   )
 }
