@@ -4,3 +4,4 @@ build
 stats.json
 *.log
 .env
+.DS_Store
