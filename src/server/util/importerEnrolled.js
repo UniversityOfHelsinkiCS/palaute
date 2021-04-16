@@ -2,7 +2,12 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { FeedbackTarget, CourseUnit, UserFeedbackTarget } = require('../models')
+const {
+  FeedbackTarget,
+  CourseUnit,
+  UserFeedbackTarget,
+  CourseRealisation,
+} = require('../models')
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
@@ -22,6 +27,14 @@ const createFeedbackTargetWithUserTargetTable = async (
   endDate,
   userId,
 ) => {
+  if (feedbackType === 'courseRealisation') {
+    await CourseRealisation.upsert({
+      id: courseUnitRealisationId,
+      endDate,
+      name,
+    })
+  }
+
   const [feedbackTarget] = await FeedbackTarget.upsert({
     feedbackType,
     typeId,
@@ -75,6 +88,15 @@ const createFeedbackTargetFromCourseRealisation = async (
     'yyyy-MM-dd',
     new Date(),
   )
+  await createFeedbackTargetWithUserTargetTable(
+    'courseRealisation',
+    data.id,
+    data.id,
+    courseUnitId,
+    data.name,
+    endDate,
+    userId,
+  )
   await data.studyGroupSets.reduce(async (prom, studySet) => {
     await prom
     await studySet.studySubGroups
@@ -90,15 +112,6 @@ const createFeedbackTargetFromCourseRealisation = async (
         )
       }, Promise.resolve())
   }, Promise.resolve())
-  await createFeedbackTargetWithUserTargetTable(
-    'courseRealisation',
-    data.id,
-    data.id,
-    courseUnitId,
-    data.name,
-    endDate,
-    userId,
-  )
 }
 
 const createTargetsFromEnrolment = async (data, userId) => {
