@@ -37,6 +37,9 @@ const getForStudent = async (req, res) => {
         { model: CourseUnit, as: 'courseUnit' },
         { model: CourseRealisation, as: 'courseRealisation' },
       ],
+      where: {
+        hidden: false,
+      },
     },
   })
 

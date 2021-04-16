@@ -53,12 +53,15 @@ const createFeedbackTargetWithUserTargetTable = async (
   const feedbackTargetName =
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
 
+  const hidden = !(feedbackType === 'courseRealisation')
+
   const [feedbackTarget] = await FeedbackTarget.upsert({
     feedbackType,
     typeId,
     courseUnitId,
     courseRealisationId,
     name: feedbackTargetName,
+    hidden,
     opensAt: formatDate(dateFns.subDays(endDate, 14)),
     closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
