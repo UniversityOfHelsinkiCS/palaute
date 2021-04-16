@@ -17,7 +17,7 @@ const courseRealisationSortFn = (a, b) => {
   const bIsMissingFeedback = courseRealisationIsMisisingFeedback(b)
 
   if (!aIsMissingFeedback && !bIsMissingFeedback) {
-    return a.endDate < b.courseRealisation.endDate ? -1 : 1
+    return a.endDate < b.endDate ? -1 : 1
   }
   if (!aIsMissingFeedback) {
     return 1
