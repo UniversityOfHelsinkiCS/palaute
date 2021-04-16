@@ -1,13 +1,6 @@
 import React, { Fragment } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Typography,
-  List,
-  Divider,
-  makeStyles,
-} from '@material-ui/core'
+import { Card, CardContent, Typography, List, Divider } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 

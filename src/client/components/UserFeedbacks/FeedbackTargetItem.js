@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const CreateActions = ({ editPath }) => {
   const { t } = useTranslation()
   return (
-    <Button variant="contained" color="primary" component={Link}>
+    <Button variant="contained" color="primary" to={editPath} component={Link}>
       {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
