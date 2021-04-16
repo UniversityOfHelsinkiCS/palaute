@@ -11,6 +11,21 @@ const {
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 
+const commonFeedbackName = {
+  fi: 'Yleinen palaute kurssista',
+  en: 'General feedback about the course',
+  sv: '[SWEDISH, TODO]',
+}
+
+const combineStudyGroupName = (firstPart, secondPart) => ({
+  fi:
+    firstPart.fi && secondPart.fi ? `${firstPart.fi}: ${secondPart.fi}` : null,
+  en:
+    firstPart.en && secondPart.en ? `${firstPart.en}: ${secondPart.en}` : null,
+  sv:
+    firstPart.sv && secondPart.sv ? `${firstPart.sv}: ${secondPart.sv}` : null,
+})
+
 const createCourseUnit = async (data) => {
   await CourseUnit.upsert({
     id: data.id,
@@ -35,12 +50,15 @@ const createFeedbackTargetWithUserTargetTable = async (
     })
   }
 
+  const feedbackTargetName =
+    feedbackType === 'courseRealisation' ? commonFeedbackName : name
+
   const [feedbackTarget] = await FeedbackTarget.upsert({
     feedbackType,
     typeId,
     courseUnitId,
     courseRealisationId,
-    name,
+    name: feedbackTargetName,
     opensAt: formatDate(dateFns.subDays(endDate, 14)),
     closesAt: formatDate(dateFns.addDays(endDate, 14)),
   })
@@ -64,13 +82,14 @@ const createFeedbackTargetFromStudyGroup = async (
   courseUnitId,
   realisationId,
   userId,
+  setName,
 ) => {
   const target = await createFeedbackTargetWithUserTargetTable(
     'studySubGroup',
     data.id,
     realisationId,
     courseUnitId,
-    data.name,
+    combineStudyGroupName(setName, data.name),
     endDate,
     userId,
   )
@@ -99,6 +118,7 @@ const createFeedbackTargetFromCourseRealisation = async (
   )
   await data.studyGroupSets.reduce(async (prom, studySet) => {
     await prom
+    const setName = studySet.name
     await studySet.studySubGroups
       .filter((group) => studySubGroupIds.includes(group.id))
       .reduce(async (promise, item) => {
@@ -109,6 +129,7 @@ const createFeedbackTargetFromCourseRealisation = async (
           courseUnitId,
           data.id,
           userId,
+          setName,
         )
       }, Promise.resolve())
   }, Promise.resolve())
