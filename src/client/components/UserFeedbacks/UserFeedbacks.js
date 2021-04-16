@@ -1,58 +1,48 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { Fragment } from 'react'
 import { Typography, List, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from 'react-query'
 
 import FeedbackListItem from './FeedbackListItem'
-import { useFeedbackEnabledCourses, useUserFeedback } from '../../util/queries'
+import useUserFeedbackTargetsForStudent from '../../hooks/useUserFeedbackTargetsForStudent'
 
 import apiClient from '../../util/apiClient'
 
-const makeCoursesWithAnswer = (answers) => {
-  const coursesWithAnswer = new Set()
-
-  if (answers) {
-    answers.forEach((answer) => {
-      coursesWithAnswer.add(answer.courseRealisationId)
-    })
+const feedbackTargetSortFn = (a, b) => {
+  if (
+    a.feedbackId &&
+    b.feedbackId &&
+    a.courseRealisation &&
+    b.courseRealisation
+  ) {
+    return a.feedbackTarget.courseRealisation.endDate <
+      b.feedbackTarget.courseRealisation.endDate
+      ? -1
+      : 1
   }
-
-  return coursesWithAnswer
-}
-
-const makeCompareCourses = (coursesWithAnswer) => (a, b) => {
-  if (coursesWithAnswer.has(a.id) && coursesWithAnswer.has(b.id)) {
-    return a.endDate < b.endDate ? -1 : 1
-  }
-  if (coursesWithAnswer.has(a.id)) {
+  if (a.feedbackId) {
     return 1
   }
-  if (coursesWithAnswer.has(b.id)) {
+  if (b.feedbackId) {
     return -1
   }
-  return a.courseUnitId < b.courseUnitId ? -1 : 1
+  return a.feedbackTarget.courseRealisation.id <
+    b.feedbackTarget.courseRealisation.id
+    ? -1
+    : 1
+}
+
+const makeDeletePath = (userFeedbackTarget) => {
+  const { feedbackId } = userFeedbackTarget
+
+  return feedbackId ? `/feedbacks/${feedbackId}` : null
 }
 
 const UserFeedbacks = () => {
   const { t } = useTranslation()
-  const courses = useFeedbackEnabledCourses()
-  const answers = useUserFeedback()
-  // test, will refactor to another file
+  const { userFeedbackTargets } = useUserFeedbackTargetsForStudent()
 
   const queryClient = useQueryClient()
-
-  const coursesWithAnswer = useMemo(() => makeCoursesWithAnswer(answers.data), [
-    answers.data,
-  ])
-
-  const makeDeletePath = (courseId) => {
-    if (!coursesWithAnswer.has(courseId)) return null
-    const { id } = answers.data.find(
-      (answer) => answer.courseRealisationId === courseId,
-    )
-
-    return `/feedbacks/${id}`
-  }
 
   const deleteMutation = useMutation('delete', {
     mutationFn: (courseId) => apiClient.delete(makeDeletePath(courseId)),
@@ -63,31 +53,29 @@ const UserFeedbacks = () => {
     },
   })
 
-  const onDelete = async (courseId) => {
-    await deleteMutation.mutate(courseId)
+  const onDelete = async (userFeedbackTarget) => {
+    await deleteMutation.mutate(userFeedbackTarget.feedbackId)
   }
 
-  const compareCourses = makeCompareCourses(coursesWithAnswer)
+  if (!userFeedbackTargets) {
+    return null
+  }
 
-  if (courses.isLoading || answers.isLoading) return null
-
-  if (courses.isSuccess) courses.data.sort(compareCourses)
+  userFeedbackTargets.sort(feedbackTargetSortFn)
 
   return (
     <div>
       <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
       <List>
-        {courses.isSuccess &&
-          courses.data.map((course) => (
-            <Fragment key={course.id}>
-              <FeedbackListItem
-                course={course}
-                answered={course.feedbackId !== null}
-                onDelete={() => onDelete(course.id)}
-              />
-              <Divider component="li" />
-            </Fragment>
-          ))}
+        {userFeedbackTargets.map((userFeedbackTarget) => (
+          <Fragment key={userFeedbackTarget.id}>
+            <FeedbackListItem
+              userFeedbackTarget={userFeedbackTarget}
+              onDelete={() => onDelete(userFeedbackTarget)}
+            />
+            <Divider component="li" />
+          </Fragment>
+        ))}
       </List>
     </div>
   )

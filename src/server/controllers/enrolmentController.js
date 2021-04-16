@@ -2,8 +2,7 @@ const dateFns = require('date-fns')
 const { ApplicationError } = require('../util/customErrors')
 
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
-const { UserFeedbackTarget, FeedbackTarget } = require('../models')
-const { CourseUnit } = require('../models/feedbackTarget')
+const { UserFeedbackTarget, FeedbackTarget, CourseUnit } = require('../models')
 
 const getEnrolmentsByUser = async (req, res) => {
   const { user } = req

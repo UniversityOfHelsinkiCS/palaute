@@ -98,25 +98,30 @@ const NoFeedbackChip = () => (
   />
 )
 
-const FeedbackListItem = ({ course, answered, onDelete }) => {
+const FeedbackListItem = ({ userFeedbackTarget, onDelete }) => {
   const classes = useStyles()
   const { i18n } = useTranslation()
+  const answered = Boolean(userFeedbackTarget.feedbackId)
 
-  const { feedbackTarget } = course
+  const { feedbackTarget, id } = userFeedbackTarget
+  const { closesAt } = feedbackTarget
+
   const courseName = getLanguageValue(feedbackTarget.name, i18n.language)
-  const courseUnitName = getLanguageValue(
-    feedbackTarget.courseUnit.name,
+
+  const courseRealisationName = getLanguageValue(
+    feedbackTarget.courseRealisation.name,
     i18n.language,
   )
-  const editPath = `/edit/${course.id}`
-  const viewPath = `/view/${course.id}`
+
+  const editPath = `/edit/${id}`
+  const viewPath = `/view/${id}`
 
   return (
     <ListItem className={classes.listItem}>
       <ListItemText
-        primary={`${courseUnitName}: ${courseName}`}
+        primary={`${courseRealisationName}: ${courseName}`}
         secondary={`Feedback can be given until ${lightFormat(
-          parseISO(feedbackTarget.closesAt),
+          parseISO(closesAt),
           'd.M.yyyy',
         )}`}
       />

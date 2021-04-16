@@ -3,14 +3,16 @@ const { ApplicationError } = require('../util/customErrors')
 
 const { getResponsibleByPersonId } = require('../util/importerResponsible')
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
+
 const {
   UserFeedbackTarget,
   FeedbackTarget,
   Feedback,
   CourseUnit,
+  CourseRealisation,
 } = require('../models')
 
-const getResponsibleByUser = async (req, res) => {
+const getForTeacher = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Missing uid header', 403)
@@ -39,34 +41,6 @@ const getResponsibleByUser = async (req, res) => {
   res.send(enrolments)
 }
 
-const getEnrolmentsByUser = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-  const { id } = user
-
-  const startDateBefore = dateFns.subDays(new Date(), 14)
-  const endDateAfter = dateFns.subDays(new Date(), 14)
-  await getEnrolmentByPersonId(id, {
-    startDateBefore,
-    endDateAfter,
-  })
-
-  const enrolments = await UserFeedbackTarget.findAll({
-    where: {
-      userId: id,
-      accessStatus: 'STUDENT',
-    },
-    include: {
-      model: FeedbackTarget,
-      as: 'feedbackTarget',
-      include: [{ model: CourseUnit, as: 'courseUnit' }],
-    },
-  })
-
-  res.send(enrolments)
-}
-
 const getOneTarget = async (req, res) => {
   const { user } = req
 
@@ -77,7 +51,7 @@ const getOneTarget = async (req, res) => {
       {
         model: FeedbackTarget,
         as: 'feedbackTarget',
-        include: [{ model: CourseUnit, as: 'courseUnit' }],
+        include: [{ model: CourseRealisation, as: 'courseRealisation' }],
       },
       {
         model: Feedback,
@@ -91,8 +65,38 @@ const getOneTarget = async (req, res) => {
   res.send(target)
 }
 
+const getForStudent = async (req, res) => {
+  const { user } = req
+
+  if (!user) throw new ApplicationError('Missing uid header', 403)
+
+  const { id } = user
+
+  const startDateBefore = dateFns.subDays(new Date(), 14)
+  const endDateAfter = dateFns.subDays(new Date(), 14)
+
+  await getEnrolmentByPersonId(id, {
+    startDateBefore,
+    endDateAfter,
+  })
+
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      userId: id,
+      accessStatus: 'STUDENT',
+    },
+    include: {
+      model: FeedbackTarget,
+      as: 'feedbackTarget',
+      include: [{ model: CourseRealisation, as: 'courseRealisation' }],
+    },
+  })
+
+  res.send(userFeedbackTargets)
+}
+
 module.exports = {
-  getResponsibleByUser,
-  getEnrolmentsByUser,
   getOneTarget,
+  getForStudent,
+  getForTeacher,
 }

@@ -8,6 +8,21 @@ const Survey = require('./survey')
 const CourseUnit = require('./courseUnit')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 
+FeedbackTarget.belongsTo(CourseUnit, {
+  as: 'courseUnit',
+})
+
+FeedbackTarget.belongsTo(CourseRealisation, {
+  foreignKey: 'courseUnitRealisationId',
+  as: 'courseRealisation',
+})
+
+UserFeedbackTarget.belongsTo(FeedbackTarget, { as: 'feedbackTarget' })
+
+UserFeedbackTarget.belongsTo(Feedback, {
+  as: 'feedback',
+})
+
 module.exports = {
   AssessmentItem,
   Feedback,

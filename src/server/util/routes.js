@@ -9,7 +9,7 @@ const courseUnitRealisations = require('../controllers/courseUnitRealisationsCon
 const assessmentItems = require('../controllers/assessmentItemsController')
 const users = require('../controllers/userController')
 const survey = require('../controllers/surveyController')
-const feedbackTarget = require('../controllers/feedbackTargetController')
+const userFeedbackTarget = require('../controllers/userFeedbackTargetController')
 const adminController = require('../controllers/adminController')
 
 const router = Router()
@@ -50,10 +50,16 @@ router.get(
   courseUnitRealisations.getWhereResponsible,
 )
 
-router.get('/enrolments', feedbackTarget.getEnrolmentsByUser)
-router.get('/responsible', feedbackTarget.getResponsibleByUser)
+router.get(
+  '/user-feedback-targets/for-student',
+  userFeedbackTarget.getForStudent,
+)
+router.get(
+  '/user-feedback-targets/for-teacher',
+  userFeedbackTarget.getForStudent,
+)
 
-router.get('/feedback-targets/:id', feedbackTarget.getOneTarget)
+router.get('/user-feedback-targets/:id', userFeedbackTarget.getOneTarget)
 
 router.get('/assessment-items', assessmentItems.getAll)
 
