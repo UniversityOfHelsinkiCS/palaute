@@ -21,7 +21,7 @@ const createCourseUnit = async (data) => {
 const createFeedbackTargetWithUserTargetTable = async (
   feedbackType,
   typeId,
-  courseUnitRealisationId,
+  courseRealisationId,
   courseUnitId,
   name,
   endDate,
@@ -29,7 +29,7 @@ const createFeedbackTargetWithUserTargetTable = async (
 ) => {
   if (feedbackType === 'courseRealisation') {
     await CourseRealisation.upsert({
-      id: courseUnitRealisationId,
+      id: courseRealisationId,
       endDate,
       name,
     })
@@ -39,7 +39,7 @@ const createFeedbackTargetWithUserTargetTable = async (
     feedbackType,
     typeId,
     courseUnitId,
-    courseUnitRealisationId,
+    courseRealisationId,
     name,
     opensAt: formatDate(dateFns.subDays(endDate, 14)),
     closesAt: formatDate(dateFns.addDays(endDate, 14)),

@@ -20,7 +20,7 @@ FeedbackTarget.init(
       type: STRING,
       allowNull: false,
     },
-    courseUnitRealisationId: {
+    courseRealisationId: {
       type: STRING,
       allowNull: false,
     },

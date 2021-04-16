@@ -13,7 +13,7 @@ FeedbackTarget.belongsTo(CourseUnit, {
 })
 
 FeedbackTarget.belongsTo(CourseRealisation, {
-  foreignKey: 'courseUnitRealisationId',
+  foreignKey: 'courseRealisationId',
   as: 'courseRealisation',
 })
 

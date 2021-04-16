@@ -1,5 +1,4 @@
 const { STRING } = require('sequelize')
-const { CourseRealisation } = require('../models')
 
 module.exports = {
   up: async (queryInterface) => {
@@ -9,7 +8,7 @@ module.exports = {
       {
         type: STRING,
         allowNull: false,
-        references: { model: CourseRealisation, key: 'id' },
+        references: { model: 'course_realisations', key: 'id' },
       },
     )
   },
