@@ -2,30 +2,6 @@ import { useQuery } from 'react-query'
 
 import apiClient from './apiClient'
 
-export const useFeedbackEnabledCourses = () => {
-  const queryKey = 'feedbackEnabledCourses'
-
-  const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get('/enrolments')
-
-    return data
-  })
-
-  return response
-}
-
-export const useCourseData = (targetId) => {
-  const queryKey = ['courseData', targetId]
-
-  const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(`/feedback-targets/${targetId}`)
-
-    return data
-  })
-
-  return response
-}
-
 export const useCourseFeedback = (courseId) => {
   const queryKey = ['courseFeedback', courseId]
 

@@ -1,78 +1,40 @@
-import React, { Fragment } from 'react'
+import React, { useMemo, Fragment } from 'react'
 import { Typography, List, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import { useMutation, useQueryClient } from 'react-query'
 
 import FeedbackListItem from './FeedbackListItem'
 import useUserFeedbackTargetsForStudent from '../../hooks/useUserFeedbackTargetsForStudent'
 
-import apiClient from '../../util/apiClient'
-
-const feedbackTargetSortFn = (a, b) => {
-  if (
-    a.feedbackId &&
-    b.feedbackId &&
-    a.courseRealisation &&
-    b.courseRealisation
-  ) {
-    return a.feedbackTarget.courseRealisation.endDate <
-      b.feedbackTarget.courseRealisation.endDate
-      ? -1
-      : 1
-  }
-  if (a.feedbackId) {
-    return 1
-  }
-  if (b.feedbackId) {
-    return -1
-  }
-  return a.feedbackTarget.courseRealisation.id <
-    b.feedbackTarget.courseRealisation.id
-    ? -1
-    : 1
-}
-
-const makeDeletePath = (userFeedbackTarget) => {
-  const { feedbackId } = userFeedbackTarget
-
-  return feedbackId ? `/feedbacks/${feedbackId}` : null
-}
+import {
+  getCourseRealisationsWithUserFeedbackTargerts,
+  sortCourseRealisations,
+} from './utils'
 
 const UserFeedbacks = () => {
   const { t } = useTranslation()
   const { userFeedbackTargets } = useUserFeedbackTargetsForStudent()
 
-  const queryClient = useQueryClient()
+  const courseRealisations = useMemo(
+    () => getCourseRealisationsWithUserFeedbackTargerts(userFeedbackTargets),
+    [userFeedbackTargets],
+  )
 
-  const deleteMutation = useMutation('delete', {
-    mutationFn: (courseId) => apiClient.delete(makeDeletePath(courseId)),
-    onSuccess: (_, courseId) => {
-      queryClient.setQueryData('userFeedback', (old) =>
-        old.filter((answer) => answer.courseRealisationId !== courseId),
-      )
-    },
-  })
-
-  const onDelete = async (userFeedbackTarget) => {
-    await deleteMutation.mutate(userFeedbackTarget.feedbackId)
-  }
+  const sortedCourseRealations = useMemo(
+    () => sortCourseRealisations(courseRealisations),
+    [courseRealisations],
+  )
 
   if (!userFeedbackTargets) {
     return null
   }
 
-  userFeedbackTargets.sort(feedbackTargetSortFn)
-
   return (
     <div>
       <Typography variant="h4">{t('userFeedbacks:mainHeading')}</Typography>
       <List>
-        {userFeedbackTargets.map((userFeedbackTarget) => (
-          <Fragment key={userFeedbackTarget.id}>
-            <FeedbackListItem
-              userFeedbackTarget={userFeedbackTarget}
-              onDelete={() => onDelete(userFeedbackTarget)}
-            />
+        {sortedCourseRealations.map((courseRealisation) => (
+          <Fragment key={courseRealisation.id}>
+            <FeedbackListItem courseRealisation={courseRealisation} />
             <Divider component="li" />
           </Fragment>
         ))}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
@@ -98,45 +98,45 @@ const NoFeedbackChip = () => (
   />
 )
 
-const FeedbackListItem = ({ userFeedbackTarget, onDelete }) => {
+const FeedbackListItem = ({ courseRealisation }) => {
   const classes = useStyles()
   const { i18n } = useTranslation()
-  const answered = Boolean(userFeedbackTarget.feedbackId)
 
-  const { feedbackTarget, id } = userFeedbackTarget
-  const { closesAt } = feedbackTarget
+  const userFeedbackTargetWithoutFeedback = useMemo(
+    () =>
+      courseRealisation.userFeedbackTargets.find(
+        ({ feedbackId }) => !feedbackId,
+      ),
+    [courseRealisation],
+  )
 
-  const courseName = getLanguageValue(feedbackTarget.name, i18n.language)
+  const closesAtInfo = userFeedbackTargetWithoutFeedback
+    ? `Feedback can be given until ${lightFormat(
+        parseISO(userFeedbackTargetWithoutFeedback.feedbackTarget.closesAt),
+        'd.M.yyyy',
+      )}`
+    : null
 
   const courseRealisationName = getLanguageValue(
-    feedbackTarget.courseRealisation.name,
+    courseRealisation.name,
     i18n.language,
   )
 
-  const editPath = `/edit/${id}`
-  const viewPath = `/view/${id}`
+  const editPath = userFeedbackTargetWithoutFeedback
+    ? `/edit/${userFeedbackTargetWithoutFeedback.id}`
+    : null
 
   return (
     <ListItem className={classes.listItem}>
-      <ListItemText
-        primary={`${courseRealisationName}: ${courseName}`}
-        secondary={`Feedback can be given until ${lightFormat(
-          parseISO(closesAt),
-          'd.M.yyyy',
-        )}`}
-      />
-      <Box mt={1}>{answered ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
-      <Box mt={2}>
-        {answered ? (
-          <EditFeedback
-            editPath={editPath}
-            viewPath={viewPath}
-            onDelete={onDelete}
-          />
+      <ListItemText primary={courseRealisationName} secondary={closesAtInfo} />
+      <Box mt={1}>
+        {!userFeedbackTargetWithoutFeedback ? (
+          <FeedbackChip />
         ) : (
-          <NewFeedback editPath={editPath} />
+          <NoFeedbackChip />
         )}
       </Box>
+      <Box mt={2}>{editPath && <NewFeedback editPath={editPath} />}</Box>
     </ListItem>
   )
 }

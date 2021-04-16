@@ -6,29 +6,26 @@ import { getLanguageValue } from '../util/languageUtils'
 
 import Feedback from './FeedbackBase'
 
-import {
-  useCourseFeedback,
-  useCourseQuestions,
-  useCourseData,
-} from '../util/queries'
+import { useCourseFeedback, useCourseQuestions } from '../util/queries'
+import useUserFeedbackTarget from '../hooks/useUserFeedbackTarget'
 
 const FeedbackList = () => {
-  const courseId = useParams().id
+  const { id } = useParams()
 
   const { t, i18n } = useTranslation()
 
-  const courseData = useCourseData(courseId)
-  const feedbacks = useCourseFeedback(courseId)
-  const questions = useCourseQuestions(courseId)
+  const { userFeedbackTarget } = useUserFeedbackTarget(id)
+  const feedbacks = useCourseFeedback(id)
+  const questions = useCourseQuestions(id)
 
-  if (courseData.isLoading || feedbacks.isLoading || questions.isLoading)
+  if (userFeedbackTarget || feedbacks.isLoading || questions.isLoading)
     return null
 
-  const currentCourse = courseData.data
+  const { feedbackTarget } = userFeedbackTarget
 
   return (
     <>
-      <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
+      <h1>{getLanguageValue(feedbackTarget.name, i18n.language)}</h1>
       <h2>{t('feedbackList:givenFeedbacks')}:</h2>
       {questions.data.data.questions.map((question) => (
         <Feedback

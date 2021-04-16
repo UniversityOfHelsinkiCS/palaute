@@ -10,28 +10,31 @@ import { getLanguageValue } from '../util/languageUtils'
 
 import Question from './QuestionBase'
 
-import { useCourseData, useCourseQuestions } from '../util/queries'
+import { useCourseQuestions } from '../util/queries'
 import apiClient from '../util/apiClient'
+import useUserFeedbackTarget from '../hooks/useUserFeedbackTarget'
 
 const Form = () => {
   const dispatch = useDispatch()
   const targetId = useParams().id
   const history = useHistory()
   const [form, setForm] = useState({ found: false, data: {} })
-  const courseData = useCourseData(targetId)
+
+  const { userFeedbackTarget } = useUserFeedbackTarget(targetId)
+
   const questions = useCourseQuestions(targetId)
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    if (!courseData.isLoading) {
-      if (courseData.data.feedback) {
+    if (userFeedbackTarget) {
+      if (userFeedbackTarget.feedback) {
         setForm({
           found: true,
-          data: courseData.data.feedback.data,
+          data: userFeedbackTarget.feedback.data,
         })
       }
     }
-  }, [courseData.isLoading])
+  }, [userFeedbackTarget])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -68,13 +71,13 @@ const Form = () => {
     })
   }
 
-  if (courseData.isLoading || form.pending || questions.isLoading) return null
+  if (!userFeedbackTarget || form.pending || questions.isLoading) return null
 
-  const currentCourse = courseData.data.feedbackTarget
+  const { feedbackTarget } = userFeedbackTarget
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>{getLanguageValue(currentCourse.name, i18n.language)}</h1>
+      <h1>{getLanguageValue(feedbackTarget.name, i18n.language)}</h1>
       {questions.data &&
         questions.data.data.questions.map((question) => (
           <Question
