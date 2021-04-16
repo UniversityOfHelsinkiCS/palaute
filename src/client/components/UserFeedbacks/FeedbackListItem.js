@@ -110,9 +110,12 @@ const FeedbackListItem = ({ courseRealisation }) => {
     [courseRealisation],
   )
 
-  const closesAtInfo = userFeedbackTargetWithoutFeedback
+  const firstFeedbackTarget =
+    courseRealisation.userFeedbackTargets[0].feedbackTarget
+
+  const closesAtInfo = firstFeedbackTarget
     ? `Feedback can be given until ${lightFormat(
-        parseISO(userFeedbackTargetWithoutFeedback.feedbackTarget.closesAt),
+        parseISO(firstFeedbackTarget.closesAt),
         'd.M.yyyy',
       )}`
     : null
@@ -130,10 +133,10 @@ const FeedbackListItem = ({ courseRealisation }) => {
     <ListItem className={classes.listItem}>
       <ListItemText primary={courseRealisationName} secondary={closesAtInfo} />
       <Box mt={1}>
-        {!userFeedbackTargetWithoutFeedback ? (
-          <FeedbackChip />
-        ) : (
+        {userFeedbackTargetWithoutFeedback ? (
           <NoFeedbackChip />
+        ) : (
+          <FeedbackChip />
         )}
       </Box>
       <Box mt={2}>{editPath && <NewFeedback editPath={editPath} />}</Box>
