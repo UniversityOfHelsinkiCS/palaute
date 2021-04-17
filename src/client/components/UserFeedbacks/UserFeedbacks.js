@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
+import Alert from '../Alert'
 
 import {
   getCourseRealisationsWithFeedbackTargets,
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const UserFeedbacks = () => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { feedbackTargets } = useFeedbackTargetsForStudent()
+  const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
 
   const courseRealisations = useMemo(
     () => getCourseRealisationsWithFeedbackTargets(feedbackTargets),
@@ -34,15 +35,17 @@ const UserFeedbacks = () => {
     [courseRealisations],
   )
 
-  if (!feedbackTargets) {
-    return null
-  }
+  const showNoFeedbackAlert = !isLoading && sortedCourseRealations.length === 0
 
   return (
     <div>
       <Typography variant="h4" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
+
+      {showNoFeedbackAlert && sortedCourseRealations.length === 0 && (
+        <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>
+      )}
 
       {sortedCourseRealations.map((courseRealisation) => (
         <Fragment key={courseRealisation.id}>

@@ -11,6 +11,7 @@ export default {
     yes: 'Yes',
     no: 'No',
     viewFeedbackSummary: 'View feedback summary',
+    noFeedback: 'There are no courses waiting for feedback. Come back later!',
   },
   feedbackForm: {
     submitButton: 'Submit feedback',
