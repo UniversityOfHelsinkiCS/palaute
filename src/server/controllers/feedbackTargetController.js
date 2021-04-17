@@ -2,6 +2,7 @@ const dateFns = require('date-fns')
 const { ApplicationError } = require('../util/customErrors')
 
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
+const { getResponsibleByPersonId } = require('../util/importerResponsible')
 
 const {
   UserFeedbackTarget,
@@ -54,6 +55,45 @@ const getForStudent = async (req, res) => {
   res.send(feedbackTargets)
 }
 
+const getForTeacher = async (req, res) => {
+  const { user } = req
+
+  if (!user) throw new ApplicationError('Missing uid header', 403)
+
+  const { id } = user
+
+  await getResponsibleByPersonId(id)
+
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      userId: id,
+      accessStatus: 'TEACHER',
+    },
+    include: {
+      model: FeedbackTarget,
+      as: 'feedbackTarget',
+      include: [
+        { model: CourseUnit, as: 'courseUnit' },
+        { model: CourseRealisation, as: 'courseRealisation' },
+      ],
+      where: {
+        hidden: false,
+      },
+    },
+  })
+
+  const feedbackTargets = userFeedbackTargets.map(
+    ({ feedbackTarget, feedbackId, accessStatus }) => ({
+      ...feedbackTarget.toJSON(),
+      feedbackId,
+      accessStatus,
+    }),
+  )
+
+  res.send(feedbackTargets)
+}
+
 module.exports = {
   getForStudent,
+  getForTeacher,
 }

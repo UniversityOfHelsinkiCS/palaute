@@ -3,81 +3,15 @@ const dateFns = require('date-fns')
 const importerClient = require('./importerClient')
 
 const {
-  FeedbackTarget,
-  CourseUnit,
-  UserFeedbackTarget,
-  CourseRealisation,
-} = require('../models')
+  makeCreateFeedbackTargetWithUserTargetTable,
+  createCourseUnit,
+  combineStudyGroupName,
+  formatDate,
+} = require('./importerCommon')
 
-const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
-
-const commonFeedbackName = {
-  fi: 'Yleinen palaute kurssista',
-  en: 'General feedback about the course',
-  sv: '[SWEDISH, TODO]',
-}
-
-const combineStudyGroupName = (firstPart, secondPart) => ({
-  fi:
-    firstPart.fi && secondPart.fi ? `${firstPart.fi}: ${secondPart.fi}` : null,
-  en:
-    firstPart.en && secondPart.en ? `${firstPart.en}: ${secondPart.en}` : null,
-  sv:
-    firstPart.sv && secondPart.sv ? `${firstPart.sv}: ${secondPart.sv}` : null,
-})
-
-const createCourseUnit = async (data) => {
-  await CourseUnit.upsert({
-    id: data.id,
-    name: data.name,
-  })
-}
-
-const createFeedbackTargetWithUserTargetTable = async (
-  feedbackType,
-  typeId,
-  courseRealisationId,
-  courseUnitId,
-  name,
-  endDate,
-  userId,
-) => {
-  if (feedbackType === 'courseRealisation') {
-    await CourseRealisation.upsert({
-      id: courseRealisationId,
-      endDate,
-      name,
-    })
-  }
-
-  const feedbackTargetName =
-    feedbackType === 'courseRealisation' ? commonFeedbackName : name
-
-  const hidden = !(feedbackType === 'courseRealisation')
-
-  const [feedbackTarget] = await FeedbackTarget.upsert({
-    feedbackType,
-    typeId,
-    courseUnitId,
-    courseRealisationId,
-    name: feedbackTargetName,
-    hidden,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
-  })
-  await UserFeedbackTarget.findOrCreate({
-    where: {
-      userId,
-      feedbackTargetId: Number(feedbackTarget.id),
-    },
-    defaults: {
-      accessStatus: 'STUDENT',
-      userId,
-      feedbackTargetId: Number(feedbackTarget.id),
-    },
-  })
-  return feedbackTarget
-}
+const createFeedbackTargetWithUserTargetTable = makeCreateFeedbackTargetWithUserTargetTable(
+  'STUDENT',
+)
 
 const createFeedbackTargetFromStudyGroup = async (
   data,
