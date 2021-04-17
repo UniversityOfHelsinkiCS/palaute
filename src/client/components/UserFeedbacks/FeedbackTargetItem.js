@@ -111,7 +111,7 @@ const FeedbackClosedChip = () => (
   <Chip
     variant="outlined"
     icon={<FeedbackClosedIcon />}
-    label="Feedback period has ended"
+    label="Feedback is closed"
   />
 )
 

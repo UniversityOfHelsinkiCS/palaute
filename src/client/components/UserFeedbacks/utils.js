@@ -13,26 +13,16 @@ export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   return Boolean(missing)
 }
 
-const courseRealisationSortFn = (a, b) => {
-  const aIsMissingFeedback = courseRealisationIsMisisingFeedback(a)
-  const bIsMissingFeedback = courseRealisationIsMisisingFeedback(b)
+const courseRealisationSortFn = (a, b) =>
+  parseISO(b.endDate) - parseISO(a.endDate)
 
-  if (!aIsMissingFeedback && !bIsMissingFeedback) {
-    return a.endDate < b.endDate ? -1 : 1
-  }
-  if (!aIsMissingFeedback) {
-    return 1
-  }
-  if (!bIsMissingFeedback) {
-    return -1
-  }
-  return a.id < b.id ? -1 : 1
+export const sortCourseRealisations = (courseRealisations) => {
+  const copy = courseRealisations ? [...courseRealisations] : []
+
+  copy.sort(courseRealisationSortFn)
+
+  return copy
 }
-
-export const sortCourseRealisations = (courseRealisations) =>
-  courseRealisations
-    ? [...courseRealisations].sort(courseRealisationSortFn)
-    : []
 
 export const getDeletePath = (userFeedbackTarget) => {
   const { feedbackId } = userFeedbackTarget
@@ -75,11 +65,17 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   }
 
   if (status === 'waitingForFeedback') {
-    return feedbackTargets.filter(({ feedbackId }) => !feedbackId)
+    return feedbackTargets.filter(
+      (feedbackTarget) =>
+        !feedbackTargetIsClosed(feedbackTarget) && !feedbackTarget.feedbackId,
+    )
   }
 
   if (status === 'feedbackGiven') {
-    return feedbackTargets.filter(({ feedbackId }) => feedbackId)
+    return feedbackTargets.filter(
+      (feedbackTarget) =>
+        !feedbackTargetIsClosed(feedbackTarget) && feedbackTarget.feedbackId,
+    )
   }
 
   if (status === 'feedbackClosed') {
