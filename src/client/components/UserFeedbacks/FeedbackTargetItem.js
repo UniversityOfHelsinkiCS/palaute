@@ -15,9 +15,11 @@ import {
 } from '@material-ui/core'
 
 import FeedbackGivenIcon from '@material-ui/icons/Check'
-import NoFeedbackGivenIcon from '@material-ui/icons/Edit'
+import NoFeedbackIcon from '@material-ui/icons/Edit'
+import FeedbackClosedIcon from '@material-ui/icons/Lock'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import { feedbackTargetIsClosed } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreateActions = ({ editPath }) => {
+const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
   return (
     <Button variant="contained" color="primary" to={editPath} component={Link}>
@@ -37,7 +39,7 @@ const CreateActions = ({ editPath }) => {
   )
 }
 
-const EditActions = ({ editPath, viewPath, onDelete }) => {
+const FeedbackGivenActions = ({ editPath, onDelete }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -74,14 +76,21 @@ const EditActions = ({ editPath, viewPath, onDelete }) => {
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
-      <Button color="primary" component={Link} to={viewPath}>
-        {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
     </>
   )
 }
 
-const FeedbackChip = () => (
+const FeedbackClosedActions = ({ viewPath }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Button color="primary" component={Link} to={viewPath}>
+      {t('userFeedbacks:viewFeedbackSummary')}
+    </Button>
+  )
+}
+
+const FeedbackGivenChip = () => (
   <Chip
     variant="outlined"
     icon={<FeedbackGivenIcon />}
@@ -93,8 +102,16 @@ const FeedbackChip = () => (
 const NoFeedbackChip = () => (
   <Chip
     variant="outlined"
-    icon={<NoFeedbackGivenIcon />}
+    icon={<NoFeedbackIcon />}
     label="Waiting for feedback"
+  />
+)
+
+const FeedbackClosedChip = () => (
+  <Chip
+    variant="outlined"
+    icon={<FeedbackClosedIcon />}
+    label="Feedback period has ended"
   />
 )
 
@@ -110,7 +127,8 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
   )}`
 
   const translatedName = getLanguageValue(name, i18n.language)
-  const hasFeedback = Boolean(feedbackId)
+  const feedbackGiven = Boolean(feedbackId)
+  const isClosed = feedbackTargetIsClosed(feedbackTarget)
 
   // TODO: fix
   const onDelete = () => {}
@@ -120,16 +138,18 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
   return (
     <ListItem className={classes.listItem}>
       <ListItemText primary={translatedName} secondary={closesAtInfo} />
-      <Box mt={1}>{hasFeedback ? <FeedbackChip /> : <NoFeedbackChip />}</Box>
+      <Box mt={1}>
+        {isClosed && <FeedbackClosedChip />}
+        {!isClosed && feedbackGiven && <FeedbackGivenChip />}
+        {!isClosed && !feedbackGiven && <NoFeedbackChip />}
+      </Box>
       <Box mt={2}>
-        {hasFeedback ? (
-          <EditActions
-            editPath={editPath}
-            viewPath={viewPath}
-            onDelete={onDelete}
-          />
-        ) : (
-          <CreateActions editPath={editPath} />
+        {isClosed && <FeedbackClosedActions viewPath={viewPath} />}
+        {!isClosed && feedbackGiven && (
+          <FeedbackGivenActions editPath={editPath} onDelete={onDelete} />
+        )}
+        {!isClosed && !feedbackGiven && (
+          <NoFeedbackActions editPath={editPath} />
         )}
       </Box>
     </ListItem>

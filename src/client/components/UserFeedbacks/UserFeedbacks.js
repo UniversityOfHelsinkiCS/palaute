@@ -1,12 +1,16 @@
 import React, { useMemo, Fragment } from 'react'
 import { Typography, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
+import qs from 'qs'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
 import Alert from '../Alert'
+import StatusTabs from './StatusTabs'
 
 import {
+  filterFeedbackTargetsByStatus,
   getCourseRealisationsWithFeedbackTargets,
   sortCourseRealisations,
 } from './utils'
@@ -18,16 +22,30 @@ const useStyles = makeStyles((theme) => ({
   courseRealisationItem: {
     marginBottom: theme.spacing(2),
   },
+  statusTabs: {
+    marginBottom: theme.spacing(2),
+  },
 }))
 
 const UserFeedbacks = () => {
   const classes = useStyles()
+  const location = useLocation()
+
+  const { status = 'waitingForFeedback' } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  })
+
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
 
+  const filteredFeedbackTargets = useMemo(
+    () => filterFeedbackTargetsByStatus(feedbackTargets, status),
+    [feedbackTargets, status],
+  )
+
   const courseRealisations = useMemo(
-    () => getCourseRealisationsWithFeedbackTargets(feedbackTargets),
-    [feedbackTargets],
+    () => getCourseRealisationsWithFeedbackTargets(filteredFeedbackTargets),
+    [filteredFeedbackTargets],
   )
 
   const sortedCourseRealations = useMemo(
@@ -42,6 +60,8 @@ const UserFeedbacks = () => {
       <Typography variant="h4" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
+
+      <StatusTabs className={classes.statusTabs} status={status} />
 
       {showNoFeedbackAlert && sortedCourseRealations.length === 0 && (
         <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>

@@ -1,4 +1,5 @@
 import groupBy from 'lodash/groupBy'
+import { parseISO } from 'date-fns'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -63,4 +64,27 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
       feedbackTargets: targets,
     }),
   )
+}
+
+export const feedbackTargetIsClosed = (feedbackTarget) =>
+  parseISO(feedbackTarget.closesAt) < new Date()
+
+export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
+  if (!feedbackTargets) {
+    return []
+  }
+
+  if (status === 'waitingForFeedback') {
+    return feedbackTargets.filter(({ feedbackId }) => !feedbackId)
+  }
+
+  if (status === 'feedbackGiven') {
+    return feedbackTargets.filter(({ feedbackId }) => feedbackId)
+  }
+
+  if (status === 'feedbackClosed') {
+    return feedbackTargets.filter(feedbackTargetIsClosed)
+  }
+
+  return feedbackTargets
 }
