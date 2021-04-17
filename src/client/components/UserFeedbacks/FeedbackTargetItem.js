@@ -115,16 +115,18 @@ const FeedbackClosedChip = () => (
   />
 )
 
+const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
+
 const FeedbackTargetItem = ({ feedbackTarget }) => {
   const classes = useStyles()
   const { i18n } = useTranslation()
 
-  const { closesAt, name, feedbackId } = feedbackTarget
+  const { closesAt, opensAt, name, feedbackId } = feedbackTarget
 
-  const closesAtInfo = `Feedback can be given until ${lightFormat(
-    parseISO(closesAt),
-    'd.M.yyyy',
-  )}`
+  const periodInfo =
+    new Date() < parseISO(opensAt)
+      ? `Feedback can be given since ${formatDate(parseISO(opensAt))}`
+      : `Feedback can be given until ${formatDate(parseISO(closesAt))}`
 
   const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedbackId)
@@ -137,7 +139,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
 
   return (
     <ListItem className={classes.listItem}>
-      <ListItemText primary={translatedName} secondary={closesAtInfo} />
+      <ListItemText primary={translatedName} secondary={periodInfo} />
       <Box mt={1}>
         {isClosed && <FeedbackClosedChip />}
         {!isClosed && feedbackGiven && <FeedbackGivenChip />}

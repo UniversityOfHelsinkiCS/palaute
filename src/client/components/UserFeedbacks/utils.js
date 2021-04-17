@@ -57,7 +57,8 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
 }
 
 export const feedbackTargetIsClosed = (feedbackTarget) =>
-  parseISO(feedbackTarget.closesAt) < new Date()
+  parseISO(feedbackTarget.closesAt) < new Date() ||
+  parseISO(feedbackTarget.opensAt) > new Date()
 
 export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (!feedbackTargets) {
