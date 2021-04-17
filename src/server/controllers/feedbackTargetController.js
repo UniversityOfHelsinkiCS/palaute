@@ -10,6 +10,7 @@ const {
   CourseUnit,
   CourseRealisation,
 } = require('../models')
+const { sequelize } = require('../util/dbConnection')
 
 const getForStudent = async (req, res) => {
   const { user } = req
@@ -34,6 +35,7 @@ const getForStudent = async (req, res) => {
     include: {
       model: FeedbackTarget,
       as: 'feedbackTarget',
+      required: true,
       include: [
         { model: CourseUnit, as: 'courseUnit' },
         { model: CourseRealisation, as: 'courseRealisation' },
@@ -72,6 +74,7 @@ const getForTeacher = async (req, res) => {
     include: {
       model: FeedbackTarget,
       as: 'feedbackTarget',
+      required: true,
       include: [
         { model: CourseUnit, as: 'courseUnit' },
         { model: CourseRealisation, as: 'courseRealisation' },
@@ -93,7 +96,63 @@ const getForTeacher = async (req, res) => {
   res.send(feedbackTargets)
 }
 
+const getCourseUnitsForTeacher = async (req, res) => {
+  const { user } = req
+
+  if (!user) throw new ApplicationError('Missing uid header', 403)
+
+  const { id } = user
+
+  await getResponsibleByPersonId(id)
+
+  const courseUnits = await sequelize.query(
+    `SELECT c.* FROM course_units c, feedback_targets f, user_feedback_targets u WHERE u.feedback_target_id = f.id AND f.course_unit_id = c.id AND u.user_id = '${id}' AND u.access_status = 'TEACHER'`,
+    { mapToModel: true, model: CourseUnit },
+  )
+
+  res.send(courseUnits)
+}
+
+const getTargetsByCourseUnit = async (req, res) => {
+  const { user } = req
+
+  if (!user) throw new ApplicationError('Missing uid header', 403)
+
+  const courseUnitId = req.params.id
+
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    include: {
+      model: FeedbackTarget,
+      as: 'feedbackTarget',
+      required: true,
+      include: [
+        {
+          model: CourseUnit,
+          as: 'courseUnit',
+          required: true,
+          where: {
+            id: courseUnitId,
+          },
+        },
+        { model: CourseRealisation, as: 'courseRealisation' },
+      ],
+    },
+  })
+  console.log(userFeedbackTargets)
+  const feedbackTargets = userFeedbackTargets.map(
+    ({ feedbackTarget, feedbackId, accessStatus }) => ({
+      ...feedbackTarget.toJSON(),
+      feedbackId,
+      accessStatus,
+    }),
+  )
+
+  res.send(feedbackTargets)
+}
+
 module.exports = {
   getForStudent,
   getForTeacher,
+  getCourseUnitsForTeacher,
+  getTargetsByCourseUnit,
 }

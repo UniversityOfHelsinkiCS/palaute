@@ -40,6 +40,14 @@ router.put('/courses/:id/questions', survey.updateSurveyByCourseId)
 
 router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
+router.get(
+  '/course-units/responsible',
+  feedbackTargets.getCourseUnitsForTeacher,
+)
+router.get(
+  '/course-units/:id/feedback-targets',
+  feedbackTargets.getTargetsByCourseUnit,
+)
 
 router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'
