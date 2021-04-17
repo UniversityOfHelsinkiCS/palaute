@@ -58,7 +58,12 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
 
   return (
     <>
-      <Button color="primary" component={Link} to={editPath}>
+      <Button
+        color="primary"
+        variant="contained"
+        component={Link}
+        to={editPath}
+      >
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
       <Button color="primary" onClick={handleOpen}>
@@ -80,11 +85,11 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
   )
 }
 
-const FeedbackClosedActions = ({ viewPath }) => {
+const FeedbackEndedActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button color="primary" component={Link} to={viewPath}>
+    <Button color="primary" variant="contained" component={Link} to={viewPath}>
       {t('userFeedbacks:viewFeedbackSummary')}
     </Button>
   )
@@ -122,6 +127,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { i18n } = useTranslation()
 
   const { closesAt, opensAt, name, feedbackId } = feedbackTarget
+  const isEnded = new Date() > parseISO(closesAt)
 
   const periodInfo =
     new Date() < parseISO(opensAt)
@@ -146,7 +152,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
         {!isClosed && !feedbackGiven && <NoFeedbackChip />}
       </Box>
       <Box mt={2}>
-        {isClosed && <FeedbackClosedActions viewPath={viewPath} />}
+        {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {!isClosed && feedbackGiven && (
           <FeedbackGivenActions editPath={editPath} onDelete={onDelete} />
         )}
