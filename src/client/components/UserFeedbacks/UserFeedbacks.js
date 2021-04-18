@@ -1,5 +1,5 @@
 import React, { useMemo, Fragment } from 'react'
-import { Typography, makeStyles } from '@material-ui/core'
+import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
   statusTabs: {
     marginBottom: theme.spacing(2),
+  },
+  progressContainer: {
+    padding: theme.spacing(4, 0),
+    display: 'flex',
+    justifyContent: 'center',
   },
 }))
 
@@ -62,6 +67,12 @@ const UserFeedbacks = () => {
       </Typography>
 
       <StatusTabs className={classes.statusTabs} status={status} />
+
+      {isLoading && (
+        <div className={classes.progressContainer}>
+          <CircularProgress />
+        </div>
+      )}
 
       {showNoFeedbackAlert && sortedCourseRealations.length === 0 && (
         <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>

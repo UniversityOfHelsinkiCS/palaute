@@ -25,13 +25,17 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+  },
+  actions: {
+    '& > *:not(last-child)': {
+      marginTop: theme.spacing(2),
+    },
   },
 }))
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
+
   return (
     <Button variant="contained" color="primary" to={editPath} component={Link}>
       {t('userFeedbacks:giveFeedbackButton')}
@@ -57,7 +61,7 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
   }
 
   return (
-    <>
+    <div>
       <Button
         color="primary"
         variant="contained"
@@ -81,7 +85,7 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
-    </>
+    </div>
   )
 }
 
@@ -95,44 +99,56 @@ const FeedbackEndedActions = ({ viewPath }) => {
   )
 }
 
-const FeedbackGivenChip = () => (
-  <Chip
-    variant="outlined"
-    icon={<FeedbackGivenIcon />}
-    label="Feedback has been given"
-    color="primary"
-  />
-)
+const FeedbackGivenChip = () => {
+  const { t } = useTranslation()
 
-const NoFeedbackChip = () => (
-  <Chip
-    variant="outlined"
-    icon={<NoFeedbackIcon />}
-    label="Waiting for feedback"
-  />
-)
+  return (
+    <Chip
+      variant="outlined"
+      icon={<FeedbackGivenIcon />}
+      label={t('userFeedbacks:feedbackGiven')}
+      color="primary"
+    />
+  )
+}
 
-const FeedbackClosedChip = () => (
-  <Chip
-    variant="outlined"
-    icon={<FeedbackClosedIcon />}
-    label="Feedback is closed"
-  />
-)
+const NoFeedbackChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<NoFeedbackIcon />}
+      label={t('userFeedbacks:waitingForFeedback')}
+    />
+  )
+}
+
+const FeedbackClosedChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<FeedbackClosedIcon />}
+      label={t('userFeedbacks:feedbackClosed')}
+    />
+  )
+}
 
 const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
-const FeedbackTargetItem = ({ feedbackTarget }) => {
+const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const { closesAt, opensAt, name, feedbackId } = feedbackTarget
   const isEnded = new Date() > parseISO(closesAt)
 
-  const periodInfo =
-    new Date() < parseISO(opensAt)
-      ? `Feedback can be given since ${formatDate(parseISO(opensAt))}`
-      : `Feedback can be given until ${formatDate(parseISO(closesAt))}`
+  const periodInfo = t('userFeedbacks:feedbackOpenPeriod', {
+    opensAt: formatDate(parseISO(opensAt)),
+    closesAt: formatDate(parseISO(closesAt)),
+  })
 
   const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedbackId)
@@ -144,14 +160,14 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
   const viewPath = ''
 
   return (
-    <ListItem className={classes.listItem}>
+    <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={translatedName} secondary={periodInfo} />
       <Box mt={1}>
         {isClosed && <FeedbackClosedChip />}
         {!isClosed && feedbackGiven && <FeedbackGivenChip />}
         {!isClosed && !feedbackGiven && <NoFeedbackChip />}
       </Box>
-      <Box mt={2}>
+      <div className={classes.actions}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {!isClosed && feedbackGiven && (
           <FeedbackGivenActions editPath={editPath} onDelete={onDelete} />
@@ -159,7 +175,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
         {!isClosed && !feedbackGiven && (
           <NoFeedbackActions editPath={editPath} />
         )}
-      </Box>
+      </div>
     </ListItem>
   )
 }

@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
-import { Card, CardContent, Typography, List, Divider } from '@material-ui/core'
+import { Card, CardContent, Typography, List } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 
@@ -21,10 +21,11 @@ const CourseRealisationItem = ({ courseRealisation, className }) => {
         </Typography>
         <List>
           {feedbackTargets.map((feedbackTarget, index) => (
-            <Fragment key={feedbackTarget.id}>
-              <FeedbackTargetItem feedbackTarget={feedbackTarget} />
-              {index < feedbackTargets.length - 1 && <Divider component="li" />}
-            </Fragment>
+            <FeedbackTargetItem
+              feedbackTarget={feedbackTarget}
+              divider={index < feedbackTargets.length - 1}
+              key={feedbackTarget.id}
+            />
           ))}
         </List>
       </CardContent>

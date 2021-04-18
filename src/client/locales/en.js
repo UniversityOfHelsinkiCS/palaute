@@ -12,6 +12,11 @@ export default {
     no: 'No',
     viewFeedbackSummary: 'View feedback summary',
     noFeedback: 'Nothing to see here. Come back later!',
+    feedbackClosed: 'Feedback is closed',
+    waitingForFeedback: 'Waiting for feedback',
+    feedbackGiven: 'Feedback has been given',
+    feedbackOpenPeriod:
+      'Feedback can be given between {{opensAt}} and {{closesAt}}',
   },
   feedbackForm: {
     submitButton: 'Submit feedback',
