@@ -51,17 +51,23 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
   const feedbackTargetName =
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
 
-  const hidden = feedbackType === 'courseRealisation' ? false : undefined
+  const hidden = !(feedbackType === 'courseRealisation')
 
-  const [feedbackTarget] = await FeedbackTarget.upsert({
-    feedbackType,
-    typeId,
-    courseUnitId,
-    courseRealisationId,
-    name: feedbackTargetName,
-    hidden,
-    opensAt: formatDate(dateFns.subDays(endDate, 14)),
-    closesAt: formatDate(dateFns.addDays(endDate, 14)),
+  const [feedbackTarget] = await FeedbackTarget.findOrCreate({
+    where: {
+      feedbackType,
+      typeId,
+    },
+    defaults: {
+      feedbackType,
+      typeId,
+      courseUnitId,
+      courseRealisationId,
+      name: feedbackTargetName,
+      hidden,
+      opensAt: formatDate(dateFns.subDays(endDate, 14)),
+      closesAt: formatDate(dateFns.addDays(endDate, 14)),
+    },
   })
   await UserFeedbackTarget.findOrCreate({
     where: {

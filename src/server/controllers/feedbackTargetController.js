@@ -9,8 +9,55 @@ const {
   FeedbackTarget,
   CourseUnit,
   CourseRealisation,
+  Feedback,
 } = require('../models')
 const { sequelize } = require('../util/dbConnection')
+
+const defaultQuestions = require('../util/questions.json')
+
+const getOne = async (req, res) => {
+  const { user } = req
+
+  if (!user) throw new ApplicationError('Missing uid header', 403)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      id: Number(req.params.id),
+    },
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        required: true,
+        include: [
+          { model: CourseUnit, as: 'courseUnit' },
+          { model: CourseRealisation, as: 'courseRealisation' },
+        ],
+        where: {
+          hidden: false,
+        },
+      },
+      { model: Feedback, as: 'feedback' },
+    ],
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+
+  const {
+    feedbackId,
+    accessStatus,
+    feedbackTarget,
+    feedback,
+  } = userFeedbackTarget
+  // TODO get acual questions
+  res.send({
+    ...feedbackTarget.toJSON(),
+    feedbackId,
+    feedback,
+    accessStatus,
+    questions: defaultQuestions,
+  })
+}
 
 const getForStudent = async (req, res) => {
   const { user } = req
@@ -138,7 +185,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       ],
     },
   })
-  console.log(userFeedbackTargets)
+
   const feedbackTargets = userFeedbackTargets.map(
     ({ feedbackTarget, feedbackId, accessStatus }) => ({
       ...feedbackTarget.toJSON(),
@@ -155,4 +202,5 @@ module.exports = {
   getForTeacher,
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
+  getOne,
 }

@@ -22,9 +22,9 @@ const Router = () => {
   return (
     <Container className={classes.container}>
       <Switch>
-        <Route path="/view/:id" component={FeedbackList} />
-        <Route path="/edit/:id" component={Form} />
-        <Route path="/modify/:id" component={ModifyQuestions} />
+        <Route path="/:id/view" component={FeedbackList} />
+        <Route path="/:id/edit" component={Form} />
+        <Route path="/:id/modify" component={ModifyQuestions} />
         <Route path="/list" component={TeacherView} />
         <Route path="/admin" component={AdminView} />
         <Route path="/" component={UserFeedbacks} />

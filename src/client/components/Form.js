@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
+import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
 import { setError } from '../util/redux/errorReducer'
@@ -10,37 +11,42 @@ import { getLanguageValue } from '../util/languageUtils'
 
 import Question from './QuestionBase'
 
-import { useCourseQuestions } from '../util/queries'
+import { useFeedbackTarget } from '../hooks/useFeedbackTargetsForStudent'
 import apiClient from '../util/apiClient'
 
 const Form = () => {
   const dispatch = useDispatch()
   const targetId = useParams().id
   const history = useHistory()
+  const queryClient = useQueryClient()
   const [form, setForm] = useState({ found: false, data: {} })
 
   // TODO: fix
-  const userFeedbackTarget = undefined
-
-  const questions = useCourseQuestions(targetId)
+  const feedbackTargetData = useFeedbackTarget(targetId)
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    if (userFeedbackTarget) {
-      if (userFeedbackTarget.feedback) {
+    if (!feedbackTargetData.isLoading) {
+      if (feedbackTargetData.feedbackTarget.feedback) {
         setForm({
           found: true,
-          data: userFeedbackTarget.feedback.data,
+          data: feedbackTargetData.feedbackTarget.feedback.data,
         })
       }
     }
-  }, [userFeedbackTarget])
+  }, [feedbackTargetData.isLoading])
+
+  if (feedbackTargetData.isLoading) return null
+
+  const { feedbackTarget } = feedbackTargetData
+
+  const { questions } = feedbackTarget.questions
 
   const handleSubmit = (event) => {
     event.preventDefault()
     const answers = form.data
     let complete = true
-    questions.data.data.questions.forEach((question) => {
+    questions.forEach((question) => {
       if (
         !question.required ||
         (answers[question.id] !== undefined && answers[question.id] !== '')
@@ -55,6 +61,8 @@ const Form = () => {
       } else {
         apiClient.post('/feedbacks', { answers, targetId })
       }
+      queryClient.removeQueries('feedbackTargetsForStudent')
+      queryClient.removeQueries('feedbackTarget')
       history.push(`/`)
     }
   }
@@ -71,15 +79,11 @@ const Form = () => {
     })
   }
 
-  if (!userFeedbackTarget || form.pending || questions.isLoading) return null
-
-  const { feedbackTarget } = userFeedbackTarget
-
   return (
     <form onSubmit={handleSubmit}>
       <h1>{getLanguageValue(feedbackTarget.name, i18n.language)}</h1>
-      {questions.data &&
-        questions.data.data.questions.map((question) => (
+      {questions &&
+        questions.map((question) => (
           <Question
             question={question}
             key={question.id}

@@ -18,8 +18,10 @@ import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackIcon from '@material-ui/icons/Edit'
 import FeedbackClosedIcon from '@material-ui/icons/Lock'
 
+import { useQueryClient } from 'react-query'
 import { getLanguageValue } from '../../util/languageUtils'
 import { feedbackTargetIsClosed } from './utils'
+import apiClient from '../../util/apiClient'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -142,7 +144,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
   const { i18n, t } = useTranslation()
 
-  const { closesAt, opensAt, name, feedbackId } = feedbackTarget
+  const queryClient = useQueryClient()
+
+  const { id, closesAt, opensAt, name, feedbackId } = feedbackTarget
   const isEnded = new Date() > parseISO(closesAt)
 
   const periodInfo = t('userFeedbacks:feedbackOpenPeriod', {
@@ -153,11 +157,14 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedbackId)
   const isClosed = feedbackTargetIsClosed(feedbackTarget)
-
-  // TODO: fix
-  const onDelete = () => {}
-  const editPath = ''
-  const viewPath = ''
+  // TODO: move to userfeedbacks
+  const onDelete = () => {
+    apiClient.delete(`/feedbacks/${feedbackId}`)
+    queryClient.removeQueries('feedbackTargetsForStudent')
+    queryClient.removeQueries('feedbackTarget')
+  }
+  const editPath = `${id}/edit`
+  const viewPath = `${id}/view`
 
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>

@@ -39,6 +39,7 @@ router.get('/courses/:id/questions', survey.getSurveyByCourseId)
 router.put('/courses/:id/questions', survey.updateSurveyByCourseId)
 
 router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
+router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
 router.get(
   '/course-units/responsible',

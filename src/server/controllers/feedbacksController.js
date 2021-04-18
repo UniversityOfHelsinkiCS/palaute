@@ -86,16 +86,17 @@ const update = async (req, res) => {
 }
 
 const destroy = async (req, res) => {
-  const feedbackTarget = await UserFeedbackTarget.findByPk(
-    Number(req.params.id),
-  )
+  const feedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackId: Number(req.params.id),
+    },
+  })
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
   const { feedbackId } = feedbackTarget
-  const feedback = await Feedback.findByPk(Number(feedbackId))
-  feedback.data = req.body.data
-  await feedback.destroy()
   feedbackTarget.feedbackId = null
   await feedbackTarget.save()
+  const feedback = await Feedback.findByPk(Number(feedbackId))
+  await feedback.destroy()
 
   res.sendStatus(200)
 }
