@@ -7,8 +7,10 @@ const initializeSentry = require('./sentry')
 const feedbacks = require('../controllers/feedbacksController')
 const users = require('../controllers/userController')
 const survey = require('../controllers/surveyController')
+const surveysV2 = require('../controllers/surveysController')
 const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
+const questions = require('../controllers/questionsController')
 
 const router = Router()
 
@@ -42,6 +44,15 @@ router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
+router.get('/feedback-targets/:id/surveys', feedbackTargets.getSurveys)
+
+router.put('/surveys/:id', surveysV2.update)
+router.post('/surveys/:id/questions', surveysV2.addQuestion)
+
+router.get('/questions', questions.getAll)
+router.get('/questions/:id', questions.getOne)
+router.put('/questions/:id', questions.update)
+router.delete('/questions/:id', questions.destroy)
 
 router.get(
   '/course-units/responsible',
