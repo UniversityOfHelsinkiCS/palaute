@@ -59,6 +59,19 @@ const getOne = async (req, res) => {
   })
 }
 
+const update = async (req, res) => {
+  const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id))
+
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  feedbackTarget.name = req.body.name
+  feedbackTarget.hidden = req.body.hidden
+
+  await feedbackTarget.save()
+
+  res.sendStatus(200)
+}
+
 const getForStudent = async (req, res) => {
   const { user } = req
 
@@ -204,4 +217,5 @@ module.exports = {
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
+  update,
 }
