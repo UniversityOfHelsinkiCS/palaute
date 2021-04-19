@@ -50,7 +50,7 @@ const createTargetsFromRealisation = async (data, personId) => {
         endDate,
         personId,
       )
-    })
+    }, Promise.resolve())
   }, Promise.resolve())
 }
 

@@ -115,7 +115,7 @@ const getForTeacher = async (req, res) => {
 
   const userFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
-      userId: id,
+      // userId: id,
       accessStatus: 'TEACHER',
     },
     include: {
@@ -126,9 +126,9 @@ const getForTeacher = async (req, res) => {
         { model: CourseUnit, as: 'courseUnit' },
         { model: CourseRealisation, as: 'courseRealisation' },
       ],
-      where: {
+      /* where: {
         hidden: false,
-      },
+      }, */
     },
   })
 
@@ -153,7 +153,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
   await getResponsibleByPersonId(id)
 
   const courseUnits = await sequelize.query(
-    `SELECT c.* FROM course_units c, feedback_targets f, user_feedback_targets u WHERE u.feedback_target_id = f.id AND f.course_unit_id = c.id AND u.user_id = '${id}' AND u.access_status = 'TEACHER'`,
+    `SELECT DISTINCT(c.*) FROM course_units c, feedback_targets f, user_feedback_targets u ` +
+      `WHERE u.feedback_target_id = f.id AND f.course_unit_id = c.id AND u.user_id = '${id}' AND u.access_status = 'TEACHER'`,
     { mapToModel: true, model: CourseUnit },
   )
 
