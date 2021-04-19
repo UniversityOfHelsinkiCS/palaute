@@ -37,6 +37,7 @@
     "highcharts": "^9.0.1",
     "highcharts-react-official": "^3.0.0",
     "i18next": "^20.1.0",
+    "immer": "^8.0.1",
     "lodash": "^4.17.19",
     "node-sass": "^5.0.0",
     "pg": "^8.5.1",
