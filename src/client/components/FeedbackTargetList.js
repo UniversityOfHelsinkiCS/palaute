@@ -2,6 +2,8 @@ import React from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
+import { format, parseISO } from 'date-fns'
+
 import {
   Card,
   CardContent,
@@ -50,7 +52,7 @@ const FeedbackTargetList = () => {
 }
 
 const FeedbackTarget = ({ feedbackTarget }) => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const classes = useStyles()
 
@@ -67,6 +69,12 @@ const FeedbackTarget = ({ feedbackTarget }) => {
             className={classes.targetName}
           >
             {getLanguageValue(feedbackTarget.name, i18n.language)}
+          </Typography>
+          <Typography variant="body2" component="p">
+            {`${t('feedbackTargets:feedbackOpen')}:
+            ${format(parseISO(feedbackTarget.opensAt), 'd.M.yyyy')}
+            -
+            ${format(parseISO(feedbackTarget.closesAt), 'd.M.yyyy')}`}
           </Typography>
         </CardContent>
       </Card>

@@ -11,9 +11,10 @@ const TeacherView = () => {
 
   return (
     <>
-      {courses.data.map((course) => (
-        <TeacherCourseListItem key={course.id} course={course} />
-      ))}
+      {courses.data &&
+        courses.data.map((course) => (
+          <TeacherCourseListItem key={course.id} course={course} />
+        ))}
     </>
   )
 }

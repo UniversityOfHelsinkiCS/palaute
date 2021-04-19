@@ -31,6 +31,7 @@ export default {
   },
   feedbackTargets: {
     title: 'Course unit feedback targets',
+    feedbackOpen: 'Feedback open',
   },
   teacherView: {
     modifyForm: 'Modify form',
