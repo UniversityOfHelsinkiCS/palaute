@@ -2,6 +2,7 @@ const Feedback = require('./feedback')
 const User = require('./user')
 const CourseRealisation = require('./courseRealisation')
 const FeedbackTarget = require('./feedbackTarget')
+const Question = require('./question')
 const Survey = require('./survey')
 const CourseUnit = require('./courseUnit')
 const UserFeedbackTarget = require('./userFeedbackTarget')
@@ -29,4 +30,5 @@ module.exports = {
   Survey,
   CourseUnit,
   UserFeedbackTarget,
+  Question,
 }
