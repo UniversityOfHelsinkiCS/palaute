@@ -29,6 +29,9 @@ export default {
     answers: 'Answers',
     average: 'Average',
   },
+  feedbackTargets: {
+    title: 'Course unit feedback targets',
+  },
   teacherView: {
     modifyForm: 'Modify form',
     viewFeedbackSummary: 'View feedback summary',
