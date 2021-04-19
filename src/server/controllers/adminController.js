@@ -17,15 +17,19 @@ const findUser = async (req, res) => {
     query: { user },
   } = req
 
-  const isStudentNumber = !Number.isNaN(Number(user))
+  const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
+  const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
   const isSisuId =
-    !isStudentNumber && !Number.isNaN(Number(user[user.length - 1]))
-  const isUsername = !isStudentNumber && !isSisuId
+    !isEmployeeNumber &&
+    !isStudentNumber &&
+    !Number.isNaN(Number(user[user.length - 1]))
+  const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
 
   const params = {}
 
   if (isStudentNumber) params.studentNumber = user
   if (isSisuId) params.id = user
+  if (isEmployeeNumber) params.employeeNumber = user
   if (isUsername) params.eduPersonPrincipalName = user
 
   const { data } = await importerClient.get(`/palaute/persons`, { params })
@@ -39,7 +43,9 @@ const findUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   // eslint-disable-next-line
-  const { body: { id, first_name, last_name, username } } = req
+  const {
+    body: { id, first_name, last_name, username },
+  } = req
 
   const [user] = await models.User.findOrCreate({
     where: {
