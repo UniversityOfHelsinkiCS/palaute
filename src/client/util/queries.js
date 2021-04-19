@@ -42,9 +42,7 @@ export const useTeacherCourses = () => {
   const queryKey = 'teacherCourses'
 
   const response = useQuery(queryKey, async () => {
-    const { data } = await apiClient.get(
-      '/course-unit-realisations/responsible',
-    )
+    const { data } = await apiClient.get('/course-units/responsible')
 
     return data
   })
