@@ -17,6 +17,10 @@ const TeacherCourseListItem = ({ course }) => {
     history.push(`/view/${course.id}`)
   }
 
+  const handleTargetButton = () => {
+    history.push(`/${course.id}/targets`)
+  }
+
   return (
     <Box maxWidth="md" border={2} borderRadius={10} m={2} padding={2}>
       <h4>{getLanguageValue(course.name, i18n.language)}</h4>
@@ -25,6 +29,9 @@ const TeacherCourseListItem = ({ course }) => {
       </Button>
       <Button variant="contained" color="primary" onClick={handleViewButton}>
         {t('teacherView:viewFeedbackSummary')}
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleTargetButton}>
+        {t('teacherView:viewFeedbackTargets')}
       </Button>
     </Box>
   )

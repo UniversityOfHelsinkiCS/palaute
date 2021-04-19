@@ -8,6 +8,7 @@ import Form from './Form'
 import AdminView from './AdminView'
 import TeacherView from './TeacherView'
 import ModifyQuestions from './ModifyQuestions'
+import FeedbackTargetList from './FeedbackTargetList'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,6 +27,7 @@ const Router = () => {
         <Route path="/:id/edit" component={Form} />
         <Route path="/:id/modify" component={ModifyQuestions} />
         <Route path="/list" component={TeacherView} />
+        <Route path="/:id/targets" component={FeedbackTargetList} />
         <Route path="/admin" component={AdminView} />
         <Route path="/" component={UserFeedbacks} />
       </Switch>

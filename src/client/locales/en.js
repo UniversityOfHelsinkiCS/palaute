@@ -32,6 +32,7 @@ export default {
   teacherView: {
     modifyForm: 'Modify form',
     viewFeedbackSummary: 'View feedback summary',
+    viewFeedbackTargets: 'View feedback targets',
   },
   modifyForm: {
     saveForm: 'Save',
