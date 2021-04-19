@@ -157,12 +157,12 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedbackId)
   const isClosed = feedbackTargetIsClosed(feedbackTarget)
-  // TODO: move to userfeedbacks
-  const onDelete = () => {
-    apiClient.delete(`/feedbacks/${feedbackId}`)
-    queryClient.removeQueries('feedbackTargetsForStudent')
-    queryClient.removeQueries('feedbackTarget')
+
+  const onDelete = async () => {
+    await apiClient.delete(`/feedbacks/${feedbackId}`)
+    queryClient.invalidateQueries('feedbackTargetsForStudent')
   }
+
   const editPath = `${id}/edit`
   const viewPath = `${id}/view`
 

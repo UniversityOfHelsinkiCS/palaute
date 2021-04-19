@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
-import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
 import { setError } from '../util/redux/errorReducer'
@@ -11,34 +10,31 @@ import { getLanguageValue } from '../util/languageUtils'
 
 import Question from './QuestionBase'
 
-import { useFeedbackTarget } from '../hooks/useFeedbackTargetsForStudent'
+import useFeedbackTarget from '../hooks/useFeedbackTarget'
 import apiClient from '../util/apiClient'
 
 const Form = () => {
   const dispatch = useDispatch()
   const targetId = useParams().id
   const history = useHistory()
-  const queryClient = useQueryClient()
   const [form, setForm] = useState({ found: false, data: {} })
 
-  // TODO: fix
-  const feedbackTargetData = useFeedbackTarget(targetId)
+  const { feedbackTarget, isLoading } = useFeedbackTarget(targetId, {
+    cacheTime: 0,
+  })
+
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    if (!feedbackTargetData.isLoading) {
-      if (feedbackTargetData.feedbackTarget.feedback) {
-        setForm({
-          found: true,
-          data: feedbackTargetData.feedbackTarget.feedback.data,
-        })
-      }
+    if (!isLoading && feedbackTarget.feedback) {
+      setForm({
+        found: true,
+        data: feedbackTarget.feedback.data,
+      })
     }
-  }, [feedbackTargetData.isLoading])
+  }, [feedbackTarget, isLoading])
 
-  if (feedbackTargetData.isLoading) return null
-
-  const { feedbackTarget } = feedbackTargetData
+  if (isLoading) return null
 
   const { questions } = feedbackTarget.questions
 
@@ -61,8 +57,7 @@ const Form = () => {
       } else {
         apiClient.post('/feedbacks', { answers, targetId })
       }
-      queryClient.removeQueries('feedbackTargetsForStudent')
-      queryClient.removeQueries('feedbackTarget')
+
       history.push(`/`)
     }
   }

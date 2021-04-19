@@ -15,7 +15,7 @@ const create = async (req, res) => {
 
   const userFeedbackTarget = await UserFeedbackTarget.update(
     { feedbackId: Number(newFeedback.id) },
-    { where: { id: Number(targetId) } },
+    { where: { feedbackTargetId: Number(targetId) } },
   )
 
   res.send(userFeedbackTarget)
