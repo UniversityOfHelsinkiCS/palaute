@@ -19,7 +19,7 @@ const AdminLoggedInAsBanner = () => {
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       open={open}
       message="You are logged in as someone else!"
       action={
