@@ -4,7 +4,7 @@
 
 const inProduction = process.env.NODE_ENV === 'production'
 
-const ADMINS = ['varisleo', 'kalleilv', 'jakousa', 'mluukkai']
+const ADMINS = ['varisleo', 'kalleilv', 'jakousa', 'mluukkai', 'ttiittanen']
 
 const basePath = process.env.PUBLIC_URL || ''
 
