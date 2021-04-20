@@ -20,6 +20,7 @@ import { getLanguageValue } from '../util/languageUtils'
 import FormikTextField from './FormikTextField'
 import FormikDatePicker from './FormikDatePicker'
 import FormikCheckbox from './FormikCheckbox'
+import apiClient from '../util/apiClient'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -64,16 +65,32 @@ const EditFeedbackTarget = () => {
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
+  const validateValues = (values) => {
+    let data
+    if (values.closesAt || values.opensAt) {
+      if (isAfter(parseISO(values.closesAt), parseISO(values.opensAt))) {
+        data = { ...data, closesAt: values.closesAt, opensAt: values.opensAt }
+      } else {
+        enqueueSnackbar('Feedback needs to open before it closes', {
+          variant: 'warning',
+        })
+        return false
+      }
+    }
+    if (values.name !== '') data = { ...data, name: values.name }
+
+    return { ...data, questions: values.questions, hidden: values.hidden }
+  }
+
   const handleSubmit = (values) => {
-    console.log(values)
-    if (isAfter(parseISO(values.closesAt), parseISO(values.opensAt))) {
-      enqueueSnackbar('Questions have been saved', { variant: 'success' })
-    } else {
-      enqueueSnackbar('Feedback needs to open before it closes', {
-        variant: 'warning',
-      })
+    const data = validateValues(values)
+
+    if (data) {
+      apiClient.put(`/feedback-targets/${feedbackTarget.id}`, data)
     }
   }
+
+  console.log(feedbackTarget)
 
   return (
     <>
@@ -85,7 +102,7 @@ const EditFeedbackTarget = () => {
         initialValues={{
           name: '',
           hidden: feedbackTarget.hidden,
-          questions: [],
+          questions: feedbackTarget.questions,
           opensAt: '',
           closesAt: '',
         }}
