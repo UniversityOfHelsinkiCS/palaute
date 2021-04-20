@@ -65,7 +65,7 @@ const ChoiceEditor = ({ name, language }) => {
       <Box mb={2}>
         <FormikTextField
           name={`${name}.data.label.${language}`}
-          llabel={t('questionEditor:label')}
+          label={t('questionEditor:label')}
           fullWidth
         />
       </Box>
