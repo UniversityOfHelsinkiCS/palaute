@@ -13,50 +13,50 @@ const {
 } = require('../models')
 const { sequelize } = require('../util/dbConnection')
 
-const defaultQuestions = require('../util/questions.json')
+const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
+  const convertSingle = async (feedbackTarget) => {
+    const responseReady = feedbackTarget.toJSON()
+    const relevantUserFeedbackTarget = responseReady.userFeedbackTargets[0] // Fix this
+    responseReady.accessStatus = relevantUserFeedbackTarget.accessStatus
+    responseReady.feedback = relevantUserFeedbackTarget.feedback
+    responseReady.surveys = await feedbackTarget.getSurveys()
+    delete responseReady.userFeedbackTargets
+
+    return responseReady
+  }
+
+  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
+
+  const responseReady = []
+
+  /* eslint-disable */
+  for (const feedbackTarget of feedbackTargets) {
+    responseReady.push(await convertSingle(feedbackTarget))
+  }
+  /* eslint-enable */
+
+  return responseReady
+}
 
 const getOne = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      feedbackTargetId: Number(req.params.id),
-    },
+  const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: [
       {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
         required: true,
-        include: [
-          { model: CourseUnit, as: 'courseUnit' },
-          { model: CourseRealisation, as: 'courseRealisation' },
-        ],
         where: {
-          hidden: false,
+          userId: req.user.id,
         },
+        include: { model: Feedback, as: 'feedback' },
       },
-      { model: Feedback, as: 'feedback' },
+      { model: CourseUnit, as: 'courseUnit' },
+      { model: CourseRealisation, as: 'courseRealisation' },
     ],
   })
 
-  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
-
-  const {
-    feedbackId,
-    accessStatus,
-    feedbackTarget,
-    feedback,
-  } = userFeedbackTarget
-  // TODO get acual questions
-  res.send({
-    ...feedbackTarget.toJSON(),
-    feedbackId,
-    feedback,
-    accessStatus,
-    questions: defaultQuestions,
-  })
+  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
+  res.send(responseReady)
 }
 
 const update = async (req, res) => {
@@ -75,87 +75,62 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-
-  const { id } = user
-
   const startDateBefore = dateFns.subDays(new Date(), 14)
   const endDateAfter = dateFns.subDays(new Date(), 14)
 
-  await getEnrolmentByPersonId(id, {
+  await getEnrolmentByPersonId(req.user.id, {
     startDateBefore,
     endDateAfter,
   })
 
-  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+  const feedbackTargets = await FeedbackTarget.findAll({
     where: {
-      userId: id,
-      accessStatus: 'STUDENT',
+      hidden: false,
     },
-    include: {
-      model: FeedbackTarget,
-      as: 'feedbackTarget',
-      required: true,
-      include: [
-        { model: CourseUnit, as: 'courseUnit' },
-        { model: CourseRealisation, as: 'courseRealisation' },
-      ],
-      where: {
-        hidden: false,
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        where: {
+          userId: req.user.id,
+          accessStatus: 'STUDENT',
+        },
+        include: { model: Feedback, as: 'feedback' },
       },
-    },
+      { model: CourseUnit, as: 'courseUnit' },
+      { model: CourseRealisation, as: 'courseRealisation' },
+    ],
   })
 
-  const feedbackTargets = userFeedbackTargets.map(
-    ({ feedbackTarget, feedbackId, accessStatus }) => ({
-      ...feedbackTarget.toJSON(),
-      feedbackId,
-      accessStatus,
-    }),
-  )
+  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
-  res.send(feedbackTargets)
+  res.send(responseReady)
 }
 
 const getForTeacher = async (req, res) => {
-  const { user } = req
+  await getResponsibleByPersonId(req.user.id)
 
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-
-  const { id } = user
-
-  await getResponsibleByPersonId(id)
-
-  const userFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      // userId: id,
-      accessStatus: 'TEACHER',
-    },
-    include: {
-      model: FeedbackTarget,
-      as: 'feedbackTarget',
-      required: true,
-      include: [
-        { model: CourseUnit, as: 'courseUnit' },
-        { model: CourseRealisation, as: 'courseRealisation' },
-      ],
-      /* where: {
-        hidden: false,
-      }, */
-    },
+  const feedbackTargets = await FeedbackTarget.findAll({
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        where: {
+          userId: req.user.id,
+          accessStatus: 'TEACHER',
+        },
+        include: { model: Feedback, as: 'feedback' },
+      },
+      { model: CourseUnit, as: 'courseUnit' },
+      { model: CourseRealisation, as: 'courseRealisation' },
+    ],
   })
 
-  const feedbackTargets = userFeedbackTargets.map(
-    ({ feedbackTarget, feedbackId, accessStatus }) => ({
-      ...feedbackTarget.toJSON(),
-      feedbackId,
-      accessStatus,
-    }),
-  )
+  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
-  res.send(feedbackTargets)
+  res.send(responseReady)
 }
 
 const getCourseUnitsForTeacher = async (req, res) => {
@@ -177,40 +152,33 @@ const getCourseUnitsForTeacher = async (req, res) => {
 }
 
 const getTargetsByCourseUnit = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-
   const courseUnitId = req.params.id
 
-  const userFeedbackTargets = await UserFeedbackTarget.findAll({
-    include: {
-      model: FeedbackTarget,
-      as: 'feedbackTarget',
-      required: true,
-      include: [
-        {
-          model: CourseUnit,
-          as: 'courseUnit',
-          required: true,
-          where: {
-            id: courseUnitId,
-          },
+  const feedbackTargets = await FeedbackTarget.findAll({
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        where: {
+          userId: req.user.id,
         },
-        { model: CourseRealisation, as: 'courseRealisation' },
-      ],
-    },
+        include: { model: Feedback, as: 'feedback' },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        where: {
+          id: courseUnitId,
+        },
+      },
+      { model: CourseRealisation, as: 'courseRealisation' },
+    ],
   })
 
-  const feedbackTargets = userFeedbackTargets.map(
-    ({ feedbackTarget, feedbackId, accessStatus }) => ({
-      ...feedbackTarget.toJSON(),
-      feedbackId,
-      accessStatus,
-    }),
-  )
+  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
-  res.send(feedbackTargets)
+  res.send(responseReady)
 }
 
 // Probably merge this with default response for feedbackTarget
