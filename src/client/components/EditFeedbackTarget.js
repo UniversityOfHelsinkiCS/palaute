@@ -1,5 +1,6 @@
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
+
 import {
   Typography,
   CircularProgress,
@@ -7,8 +8,10 @@ import {
   Button,
   Box,
 } from '@material-ui/core'
+
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
+import { useSnackbar } from 'notistack'
 
 import QuestionEditor from './QuestionEditor'
 import useFeedbackTarget from '../hooks/useFeedbackTarget'
@@ -29,6 +32,7 @@ const EditFeedbackTarget = () => {
   const { feedbackTargetId } = useParams()
   const { i18n } = useTranslation()
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(feedbackTargetId, {
     cacheTime: 0,
@@ -50,6 +54,8 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = (values) => {
     console.log(values)
+    // TODO: api request stuff
+    enqueueSnackbar('Questions have been saved')
   }
 
   return (
