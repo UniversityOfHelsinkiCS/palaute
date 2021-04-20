@@ -1,5 +1,4 @@
 import React from 'react'
-import { useField } from 'formik'
 import { Box } from '@material-ui/core'
 
 import LikertQuestion from './LikertQuestion'
@@ -16,31 +15,27 @@ const componentByType = {
   TEXT: Text,
 }
 
-const QuestionItem = ({ name, type }) => {
-  const QuestionComponent = componentByType[type]
+const QuestionItem = ({ question, name }) => {
+  const QuestionComponent = componentByType[question.type]
 
   return (
     <Box mb={2}>
-      <QuestionComponent name={name} />
+      <QuestionComponent question={question} name={name} />
     </Box>
   )
 }
 
-const FeedbackForm = ({ name = 'questions' }) => {
-  const [questionsField] = useField(name)
-  const { value: questions = [] } = questionsField
-
-  return (
-    <>
-      {questions.map((question, index) => (
-        <QuestionItem
-          name={`${name}.[${index}]`}
-          type={question.type}
-          key={question.id}
-        />
-      ))}
-    </>
-  )
-}
+const FeedbackForm = ({ questions = [], name = 'answers' }) => (
+  <>
+    {questions.map((question) => (
+      <QuestionItem
+        name={`${name}.${question.id}`}
+        type={question.type}
+        question={question}
+        key={question.id}
+      />
+    ))}
+  </>
+)
 
 export default FeedbackForm
