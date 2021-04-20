@@ -11,6 +11,7 @@ import {
 
 import { FieldArray, useField } from 'formik'
 import DeleteIcon from '@material-ui/icons/Delete'
+import { useTranslation } from 'react-i18next'
 
 import { createOption } from './utils'
 import FormikTextField from '../FormikTextField'
@@ -28,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const OptionItem = ({ name, language, onRemove }) => {
+  const { t } = useTranslation()
+
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
     const hasConfirmed = window.confirm(
-      'Are you sure you want to remove this option?',
+      t('questionEditor:removeOptionConfirmation'),
     )
 
     if (hasConfirmed) {
@@ -44,13 +47,13 @@ const OptionItem = ({ name, language, onRemove }) => {
       <Box flexGrow={1}>
         <FormikTextField
           name={`${name}.label.${language}`}
-          label="Option"
+          label={t('questionEditor:option')}
           fullWidth
         />
       </Box>
 
       <Box ml={2} flexGrow={0}>
-        <Tooltip title="Remove option">
+        <Tooltip title={t('questionEditor:removeOption')}>
           <IconButton onClick={handleRemove}>
             <DeleteIcon />
           </IconButton>
@@ -61,6 +64,7 @@ const OptionItem = ({ name, language, onRemove }) => {
 }
 
 const OptionEditor = ({ name, language }) => {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [optionsField] = useField(name)
   const { value: options = [] } = optionsField
@@ -71,7 +75,7 @@ const OptionEditor = ({ name, language }) => {
       render={(arrayHelpers) => (
         <>
           <Typography className={classes.title} variant="h6" component="h4">
-            Options
+            {t('questionEditor:options')}
           </Typography>
           <div className={classes.optionsContainer}>
             {options.map((option, index) => (
@@ -88,7 +92,7 @@ const OptionEditor = ({ name, language }) => {
             color="primary"
             onClick={() => arrayHelpers.push(createOption())}
           >
-            Add option
+            {t('questionEditor:addOption')}
           </Button>
         </>
       )}

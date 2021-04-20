@@ -66,6 +66,8 @@ const update = async (req, res) => {
 
   feedbackTarget.name = req.body.name
   feedbackTarget.hidden = req.body.hidden
+  feedbackTarget.opensAt = req.body.opensAt
+  feedbackTarget.closesAt = req.body.closesAt
 
   await feedbackTarget.save()
 
