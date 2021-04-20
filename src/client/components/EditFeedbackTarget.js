@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
-import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
+import {
+  Typography,
+  CircularProgress,
+  makeStyles,
+  Button,
+  Box,
+} from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import { Formik, Form } from 'formik'
 
 import QuestionEditor from './QuestionEditor'
 import useFeedbackTarget from '../hooks/useFeedbackTarget'
@@ -23,8 +30,6 @@ const EditFeedbackTarget = () => {
   const { i18n } = useTranslation()
   const classes = useStyles()
 
-  const [questions, setQuestions] = useState([])
-
   const { feedbackTarget, isLoading } = useFeedbackTarget(feedbackTargetId, {
     cacheTime: 0,
   })
@@ -43,12 +48,26 @@ const EditFeedbackTarget = () => {
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
+  const handleSubmit = (values) => {
+    console.log(values)
+  }
+
   return (
     <>
       <Typography variant="h4" component="h2" className={classes.heading}>
         {name}
       </Typography>
-      <QuestionEditor questions={questions} onChange={setQuestions} />
+
+      <Formik initialValues={{ questions: [] }} onSubmit={handleSubmit}>
+        <Form>
+          <QuestionEditor name="questions" />
+          <Box mt={2}>
+            <Button color="primary" variant="contained" type="submit">
+              Save questions
+            </Button>
+          </Box>
+        </Form>
+      </Formik>
     </>
   )
 }
