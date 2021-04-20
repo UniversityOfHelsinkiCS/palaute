@@ -64,7 +64,12 @@ const EditFeedbackTarget = () => {
         {name}
       </Typography>
 
-      <Formik initialValues={{ questions: [] }} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={{ questions: [] }}
+        onSubmit={handleSubmit}
+        validateOnChange={false}
+        validateOnBlur
+      >
         <Form>
           <QuestionEditor name="questions" />
           <Box mt={2}>
