@@ -1,68 +1,69 @@
-{
-  "questions": [
-    {
-      "id": "kysymys",
-      "type": "CHOICE",
-      "index": 1,
-      "question": {
-        "fi": "Kurssin tavoitteet olivat minulle alusta saakka selvät (”tiesin, mitä minun tuli oppia”)"
-      },
-      "required": true
+[
+  {
+    "id": 1,
+    "type": "LIKERT",
+    "data": {
+      "label": {
+        "fi": "Likert"
+      }
     },
-    {
-      "id": "kysymys2",
-      "type": "CHOICE",
-      "index": 1,
-      "question": {
-      "fi": "Kurssilla käytetty materiaali (esim. tehtävät, luentomateriaali, muu kirjallisuus) tuki oppimistavoitteiden saavuttamista"
-      },
-      "required": true
+    "required": true
+  },
+  {
+    "id": 2,
+    "type": "OPEN",
+    "data": {
+      "label": {
+        "fi": "Open"
+      }
     },
-    {
-      "id": "kysymys3",
-      "type": "CHOICE",
-      "index": 2,
-      "question": {
-        "fi": "Toiminta kurssilla (esim. aikataulutus, ohjaus, muu opetus) tuki oppimistavoitteiden saavuttamista"
-      },
-      "required": true
+    "required": true
+  },
+  {
+    "id": 3,
+    "type": "TEXT",
+    "index": 2,
+    "data": {
+      "content": {
+        "fi": "Text"
+      }
     },
-    {
-      "id": "kysymys4",
-      "type": "CHOICE",
-      "index": 2,
-      "question": {
-        "fi": "Kurssin arviointi (esim. harjoitukset, työt, kokeet, niiden keskinäinen suhde) mittasi keskeisten oppimistavoitteiden saavuttamista"
+    "required": true
+  },
+  {
+    "id": 4,
+    "type": "MULTIPLE_CHOICE",
+    "data": {
+      "label": {
+        "fi": "Multiple choice"
       },
-      "required": true
+      "options": [
+        {
+          "id": "a700283f-a9c8-411e-97e8-cc7fa4988726",
+          "label": {
+            "fi": "Option"
+          }
+        }
+      ]
     },
-    {
-      "id": "kysymys5",
-      "type": "CHOICE",
-      "index": 2,
-      "question": {
-        "fi": "Kurssi oli työläs"
+    "required": true
+  },
+  {
+    "id": 5,
+    "type": "SINGLE_CHOICE",
+    "data": {
+      "label": {
+        "fi": "Single choice"
       },
-      "required": true
+      "options": [
+        {
+          "id": "85345eb6-7477-4dc5-ab89-4989c9790526",
+          "label": {
+            "fi": "Option"
+          }
+        }
+      ]
     },
-    {
-      "id": "kysymys6",
-      "type": "CHOICE",
-      "index": 2,
-      "question": {
-        "fi": "Annan kurssille kokonaisuutena arvosanan"
-      },
-      "required": true
-    },
-    {
-      "id": "kysymys7",
-      "type": "TEXT",
-      "index": 2,
-      "question": {
-        "fi": "Kommentoi kurssin toimintaa, sisältöä, opettajien tai ohjaajien toimintaa; hyödyllisyyttä, mielekkyyttä, relevanssia, vaikeustasoa; kehitysehdotuksia, kritiikkiä, kiitoksia"
-      },
-      "required": false
-    }
-  ]
-}
-  
+    "required": true
+  }
+]

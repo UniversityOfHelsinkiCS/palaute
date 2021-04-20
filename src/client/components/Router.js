@@ -4,7 +4,7 @@ import { Container, makeStyles } from '@material-ui/core'
 
 import FeedbackList from './FeedbackList'
 import UserFeedbacks from './UserFeedbacks'
-import Form from './Form'
+import FeedbackView from './FeedbackView'
 import AdminView from './AdminView'
 import TeacherView from './TeacherView'
 import ModifyQuestions from './ModifyQuestions'
@@ -25,7 +25,7 @@ const Router = () => {
     <Container className={classes.container}>
       <Switch>
         <Route path="/:id/view" component={FeedbackList} />
-        <Route path="/:id/edit" component={Form} />
+        <Route path="/:feedbackTargetId/edit" component={FeedbackView} />
         <Route path="/:id/modify" component={ModifyQuestions} />
         <Route path="/list" component={TeacherView} />
         <Route path="/:id/targets" component={FeedbackTargetList} />
