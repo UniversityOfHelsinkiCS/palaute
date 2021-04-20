@@ -16,6 +16,9 @@ import { useSnackbar } from 'notistack'
 import QuestionEditor from './QuestionEditor'
 import useFeedbackTarget from '../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../util/languageUtils'
+import FormikTextField from './FormikTextField'
+import FormikDatePicker from './FormikDatePicker'
+import FormikCheckbox from './FormikCheckbox'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -25,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 500,
+  },
+  row: {
+    marginBottom: 10,
   },
 }))
 
@@ -65,12 +76,35 @@ const EditFeedbackTarget = () => {
       </Typography>
 
       <Formik
-        initialValues={{ questions: [] }}
+        initialValues={{
+          name: '',
+          hidden: feedbackTarget.hidden,
+          questions: [],
+          opensAt: '',
+          closesAt: '',
+        }}
         onSubmit={handleSubmit}
         validateOnChange={false}
         validateOnBlur
       >
         <Form>
+          <div className={classes.form}>
+            <Typography variant="h6" component="h4" className={classes.row}>
+              Edit feedback target
+            </Typography>
+            <FormikTextField name="name" placeholder="Feedback name" />
+            <FormikCheckbox name="hidden" label="Hidden" />
+            <FormikDatePicker
+              name="opensAt"
+              label="Opens at"
+              className={classes.row}
+            />
+            <FormikDatePicker
+              name="closesAt"
+              label="Closes at"
+              className={classes.row}
+            />
+          </div>
           <QuestionEditor name="questions" />
           <Box mt={2}>
             <Button color="primary" variant="contained" type="submit">
