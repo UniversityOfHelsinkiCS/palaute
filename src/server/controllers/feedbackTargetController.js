@@ -13,10 +13,20 @@ const {
 } = require('../models')
 const { sequelize } = require('../util/dbConnection')
 
+const mapStatusToValue = {
+  STUDENT: 1,
+  TEACHER: 2,
+}
+
 const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
     const responseReady = feedbackTarget.toJSON()
-    const relevantUserFeedbackTarget = responseReady.userFeedbackTargets[0] // Fix this
+    const sortedUserFeedbackTargets = responseReady.userFeedbackTargets.sort(
+      (a, b) =>
+        mapStatusToValue[b.accessStatus] - mapStatusToValue[a.accessStatus],
+      // this is intentionally b - a, because we want the max value first
+    )
+    const relevantUserFeedbackTarget = sortedUserFeedbackTargets[0]
     responseReady.accessStatus = relevantUserFeedbackTarget.accessStatus
     responseReady.feedback = relevantUserFeedbackTarget.feedback
     responseReady.surveys = await feedbackTarget.getSurveys()
