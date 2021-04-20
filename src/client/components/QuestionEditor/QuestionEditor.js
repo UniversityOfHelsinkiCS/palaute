@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Button, Menu, MenuItem, makeStyles } from '@material-ui/core'
 import { FieldArray, useField } from 'formik'
+import { useTranslation } from 'react-i18next'
 
 import QuestionCard from './QuestionCard'
 import LanguageTabs from './LanguageTabs'
@@ -16,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const TypeMenu = ({ anchorEl, open, onClose, onChooseType }) => {
+  const { t } = useTranslation()
+
   const handleChooseType = (type) => {
     onClose()
     onChooseType(type)
@@ -24,19 +27,19 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType }) => {
   return (
     <Menu anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
       <MenuItem onClick={() => handleChooseType('LIKERT')}>
-        Likert scale question
+        {t('questionEditor:likertQuestion')}
       </MenuItem>
       <MenuItem onClick={() => handleChooseType('OPEN')}>
-        Open question
+        {t('questionEditor:openQuestion')}
       </MenuItem>
       <MenuItem onClick={() => handleChooseType('SINGLE_CHOICE')}>
-        Single choice question
+        {t('questionEditor:singleChoiceQuestion')}
       </MenuItem>
       <MenuItem onClick={() => handleChooseType('MULTIPLE_CHOICE')}>
-        Multiple choice question
+        {t('questionEditor:multipleChoiceQuestion')}
       </MenuItem>
       <MenuItem onClick={() => handleChooseType('TEXT')}>
-        Textual content
+        {t('questionEditor:textualContent')}
       </MenuItem>
     </Menu>
   )
@@ -49,6 +52,7 @@ const QuestionEditor = ({ name = 'questions', initialLanguage = 'fi' }) => {
   const [language, setLanguage] = useState(initialLanguage)
   const [questionsField] = useField(name)
   const { value: questions = [] } = questionsField
+  const { t } = useTranslation()
 
   return (
     <>
@@ -66,8 +70,8 @@ const QuestionEditor = ({ name = 'questions', initialLanguage = 'fi' }) => {
                 key={index}
                 name={`${name}.${index}`}
                 onRemove={() => arrayHelpers.remove(index)}
-                onMoveUp={() => arrayHelpers.swap(index + 1, index)}
-                onMoveDown={() => arrayHelpers.swap(index - 1, index)}
+                onMoveUp={() => arrayHelpers.swap(index - 1, index)}
+                onMoveDown={() => arrayHelpers.swap(index + 1, index)}
                 moveUpDisabled={index === 0}
                 moveDownDisabled={index === questions.length - 1}
                 language={language}
@@ -86,7 +90,7 @@ const QuestionEditor = ({ name = 'questions', initialLanguage = 'fi' }) => {
               onClick={() => setMenuOpen(true)}
               ref={addButtonRef}
             >
-              Add question
+              {t('questionEditor:addQuestion')}
             </Button>
           </div>
         )}
