@@ -55,7 +55,7 @@ const EditFeedbackTarget = () => {
   const handleSubmit = (values) => {
     console.log(values)
     // TODO: api request stuff
-    enqueueSnackbar('Questions have been saved')
+    enqueueSnackbar('Questions have been saved', { variant: 'success' })
   }
 
   return (
