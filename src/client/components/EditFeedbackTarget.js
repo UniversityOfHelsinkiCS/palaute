@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
+import { parseISO, isAfter } from 'date-fns'
 
 import QuestionEditor from './QuestionEditor'
 import useFeedbackTarget from '../hooks/useFeedbackTarget'
@@ -65,8 +66,13 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = (values) => {
     console.log(values)
-    // TODO: api request stuff
-    enqueueSnackbar('Questions have been saved', { variant: 'success' })
+    if (isAfter(parseISO(values.closesAt), parseISO(values.opensAt))) {
+      enqueueSnackbar('Questions have been saved', { variant: 'success' })
+    } else {
+      enqueueSnackbar('Feedback needs to open before it closes', {
+        variant: 'warning',
+      })
+    }
   }
 
   return (
