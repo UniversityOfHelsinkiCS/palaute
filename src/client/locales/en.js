@@ -1,6 +1,10 @@
 export default {
   common: {
-    test: 'testing stuff',
+    languages: {
+      fi: 'Finnish',
+      sv: 'Swedish',
+      en: 'English',
+    },
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -49,5 +53,25 @@ export default {
     type: 'Type',
     multichoice: 'Multiple choice',
     textarea: 'Text field',
+  },
+  questionEditor: {
+    addQuestion: 'Add question',
+    likertQuestion: 'Likert question',
+    openQuestion: 'Open question',
+    singleChoiceQuestion: 'Single choice question',
+    multipleChoiceQuestion: 'Multiple choice question',
+    textualContent: 'Textual content',
+    moveUp: 'Move up',
+    moveDown: 'Move down',
+    removeQuestion: 'Remove question',
+    options: 'Options',
+    option: 'Option',
+    addOption: 'Add option',
+    removeOption: 'Remove option',
+    label: 'Label',
+    content: 'Content',
+    removeQuestionConfirmation:
+      'Are you sure you want to remove this question?',
+    removeOptionConfirmation: 'Are you sure you want to remove this option?',
   },
 }

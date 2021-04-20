@@ -2,12 +2,12 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-const useFeedbackTargets = (targetId, options) => {
-  const queryKey = ['feedbackTarget', targetId]
+const useFeedbackTargets = (courseUnitId, options) => {
+  const queryKey = ['feedbackTargets', courseUnitId]
 
   const queryFn = async () => {
     const { data } = await apiClient.get(
-      `/course-units/${targetId}/feedback-targets`,
+      `/course-units/${courseUnitId}/feedback-targets`,
     )
 
     return data

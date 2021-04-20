@@ -213,11 +213,20 @@ const getTargetsByCourseUnit = async (req, res) => {
   res.send(feedbackTargets)
 }
 
+// Probably merge this with default response for feedbackTarget
+const getSurveys = async (req, res) => {
+  const feedbackTarget = await FeedbackTarget.findByPk(req.params.id)
+
+  const surveys = await feedbackTarget.getSurveys()
+  res.send(surveys)
+}
+
 module.exports = {
   getForStudent,
   getForTeacher,
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
+  getSurveys,
   update,
 }

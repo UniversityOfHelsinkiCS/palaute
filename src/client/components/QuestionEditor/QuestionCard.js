@@ -3,91 +3,113 @@ import React from 'react'
 import {
   Card,
   CardContent,
-  TextField,
   IconButton,
   Grid,
   Typography,
   makeStyles,
+  Tooltip,
+  Box,
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
-import produce from 'immer'
+import { useField } from 'formik'
+import { useTranslation } from 'react-i18next'
+
+import OptionEditor from './OptionEditor'
+import FormikTextField from '../FormikTextField'
 
 const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(2),
   },
+  actionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'row',
+    },
+  },
 }))
 
-const BoundTextField = ({ name, question, language, onChange, ...props }) => {
-  const handleChange = (event) => {
-    onChange(
-      produce(question, (draft) => {
-        draft.data[name][language] = event.target.value
-      }),
-    )
-  }
-
-  const value = question.data[name][language] ?? ''
+const LikertEditor = ({ name, language }) => {
+  const { t } = useTranslation()
 
   return (
-    <TextField
-      value={value}
-      variant="outlined"
+    <FormikTextField
+      name={`${name}.data.label.${language}`}
+      label={t('questionEditor:label')}
       fullWidth
-      onChange={handleChange}
-      {...props}
     />
   )
 }
 
-const LabelTextField = ({ question, language, onChange }) => (
-  <BoundTextField
-    name="label"
-    label="Label"
-    question={question}
-    language={language}
-    onChange={onChange}
-  />
-)
+const OpenEditor = ({ name, language }) => {
+  const { t } = useTranslation()
 
-const LikertEditor = ({ question, onChange, language }) => (
-  <LabelTextField question={question} onChange={onChange} language={language} />
-)
+  return (
+    <FormikTextField
+      name={`${name}.data.label.${language}`}
+      label={t('questionEditor:label')}
+      fullWidth
+    />
+  )
+}
 
-const OpenEditor = ({ question, onChange, language }) => (
-  <LabelTextField question={question} onChange={onChange} language={language} />
-)
+const ChoiceEditor = ({ name, language }) => {
+  const { t } = useTranslation()
 
-const TextEditor = ({ question, onChange, language }) => (
-  <BoundTextField
-    name="content"
-    label="Content"
-    question={question}
-    onChange={onChange}
-    language={language}
-    multiline
-  />
-)
+  return (
+    <>
+      <Box mb={2}>
+        <FormikTextField
+          name={`${name}.data.label.${language}`}
+          llabel={t('questionEditor:label')}
+          fullWidth
+        />
+      </Box>
+      <OptionEditor name={`${name}.data.options`} language={language} />
+    </>
+  )
+}
+
+const TextEditor = ({ name, language }) => {
+  const { t } = useTranslation()
+
+  return (
+    <FormikTextField
+      name={`${name}.data.label.${language}`}
+      label={t('questionEditor:content')}
+      fullWidth
+      multiline
+    />
+  )
+}
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
   OPEN: OpenEditor,
   TEXT: TextEditor,
+  MULTIPLE_CHOICE: ChoiceEditor,
+  SINGLE_CHOICE: ChoiceEditor,
 }
 
-const titleByType = {
-  LIKERT: 'Likert question',
-  OPEN: 'Open question',
-  TEXT: 'Textual content',
+const getTitleByType = (type, t) => {
+  const mapping = {
+    LIKERT: t('questionEditor:likertQuestion'),
+    OPEN: t('questionEditor:openQuestion'),
+    TEXT: t('questionEditor:textualContent'),
+    MULTIPLE_CHOICE: t('questionEditor:multipleChoiceQuestion'),
+    SINGLE_CHOICE: t('questionEditor:singleChoiceQuestion'),
+  }
+
+  return mapping[type]
 }
 
 const QuestionCard = ({
-  question,
-  onChange,
-  onDelete,
+  name,
+  onRemove,
   language,
   onMoveUp,
   onMoveDown,
@@ -95,9 +117,23 @@ const QuestionCard = ({
   moveUpDisabled = false,
   moveDownDisabled = false,
 }) => {
+  const { t } = useTranslation()
   const classes = useStyles()
+  const [field] = useField(name)
+  const { value: question } = field
   const EditorComponent = editorComponentByType[question.type]
-  const title = titleByType[question.type]
+  const title = getTitleByType(question.type, t)
+
+  const handleRemove = () => {
+    // eslint-disable-next-line no-alert
+    const hasConfirmed = window.confirm(
+      t('questionEditor:removeQuestionConfirmation'),
+    )
+
+    if (hasConfirmed) {
+      onRemove()
+    }
+  }
 
   return (
     <Card className={className}>
@@ -107,28 +143,32 @@ const QuestionCard = ({
             <Typography variant="h6" component="h3" className={classes.title}>
               {title}
             </Typography>
-            <EditorComponent
-              question={question}
-              onChange={onChange}
-              language={language}
-            />
+            <EditorComponent name={name} language={language} />
           </Grid>
-          <Grid item>
-            <IconButton
-              disabled={moveUpDisabled}
-              onClick={() => onMoveUp(question)}
-            >
-              <UpIcon />
-            </IconButton>
-            <IconButton
-              disabled={moveDownDisabled}
-              onClick={() => onMoveDown(question)}
-            >
-              <DownIcon />
-            </IconButton>
-            <IconButton onClick={() => onDelete(question)}>
-              <DeleteIcon />
-            </IconButton>
+          <Grid className={classes.actionsContainer} item>
+            <Tooltip title={t('questionEditor:moveUp')}>
+              <div>
+                <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
+                  <UpIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
+
+            <Tooltip title={t('questionEditor:moveDown')}>
+              <div>
+                <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
+                  <DownIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
+
+            <Tooltip title={t('questionEditor:removeQuestion')}>
+              <div>
+                <IconButton onClick={handleRemove}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
           </Grid>
         </Grid>
       </CardContent>

@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
-import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
+
+import {
+  Typography,
+  CircularProgress,
+  makeStyles,
+  Button,
+  Box,
+} from '@material-ui/core'
+
 import { useTranslation } from 'react-i18next'
+import { Formik, Form } from 'formik'
+import { useSnackbar } from 'notistack'
 
 import QuestionEditor from './QuestionEditor'
 import useFeedbackTarget from '../hooks/useFeedbackTarget'
@@ -22,8 +32,7 @@ const EditFeedbackTarget = () => {
   const { feedbackTargetId } = useParams()
   const { i18n } = useTranslation()
   const classes = useStyles()
-
-  const [questions, setQuestions] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(feedbackTargetId, {
     cacheTime: 0,
@@ -43,12 +52,33 @@ const EditFeedbackTarget = () => {
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
+  const handleSubmit = (values) => {
+    console.log(values)
+    // TODO: api request stuff
+    enqueueSnackbar('Questions have been saved', { variant: 'success' })
+  }
+
   return (
     <>
       <Typography variant="h4" component="h2" className={classes.heading}>
         {name}
       </Typography>
-      <QuestionEditor questions={questions} onChange={setQuestions} />
+
+      <Formik
+        initialValues={{ questions: [] }}
+        onSubmit={handleSubmit}
+        validateOnChange={false}
+        validateOnBlur
+      >
+        <Form>
+          <QuestionEditor name="questions" />
+          <Box mt={2}>
+            <Button color="primary" variant="contained" type="submit">
+              Save questions
+            </Button>
+          </Box>
+        </Form>
+      </Formik>
     </>
   )
 }

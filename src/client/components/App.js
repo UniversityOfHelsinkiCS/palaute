@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/browser'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
 import { CssBaseline } from '@material-ui/core'
+import { SnackbarProvider } from 'notistack'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -35,11 +36,13 @@ export default () => {
     <>
       <CssBaseline />
       <Suspense fallback={null}>
-        <NavBar />
-        <Router />
-        <DevTools />
-        <AdminLoggedInAsBanner />
-        <Footer />
+        <SnackbarProvider maxSnack={3}>
+          <NavBar />
+          <Router />
+          <DevTools />
+          <AdminLoggedInAsBanner />
+          <Footer />
+        </SnackbarProvider>
       </Suspense>
     </>
   )

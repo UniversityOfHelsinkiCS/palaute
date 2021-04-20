@@ -26,5 +26,6 @@ module.exports = {
       'error',
       { props: true, ignorePropertyModificationsFor: ['draft'] },
     ],
+    'react/no-array-index-key': 'off',
   },
 }

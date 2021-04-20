@@ -1,7 +1,30 @@
 const { DATE, ENUM, STRING, Model, JSONB, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
+const Survey = require('./survey')
 
-class FeedbackTarget extends Model {}
+class FeedbackTarget extends Model {
+  async getSurveys() {
+    const [teacherSurvey] = await Survey.findOrCreate({
+      where: {
+        feedbackTargetId: this.id,
+      },
+      defaults: {
+        questionIds: [],
+        data: [],
+      },
+    })
+    // teacherSurvey.set('questions', await teacherSurvey.getQuestions())
+
+    const departmentSurvey = {} // await Survey.findOne()
+    const universitySurvey = {} // await Survey.findOne({})
+
+    return {
+      teacherSurvey,
+      departmentSurvey,
+      universitySurvey,
+    }
+  }
+}
 
 FeedbackTarget.init(
   {
