@@ -13,9 +13,10 @@ import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
-import FeedbackForm from './FeedbackForm'
-import useFeedbackTarget from '../hooks/useFeedbackTarget'
-import { getLanguageValue } from '../util/languageUtils'
+import FeedbackForm from '../FeedbackForm'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import { getLanguageValue } from '../../util/languageUtils'
+import { makeValidate, getInitialValuesFromFeedbackTarget } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -50,8 +51,6 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const questions = feedbackTarget.questions ?? []
-
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
   const handleSubmit = (values) => {
@@ -60,6 +59,11 @@ const FeedbackView = () => {
     enqueueSnackbar('Feedback has been given', { variant: 'success' })
   }
 
+  const { questions = [] } = feedbackTarget
+
+  const initialValues = getInitialValuesFromFeedbackTarget(feedbackTarget)
+  const validate = makeValidate(questions)
+
   return (
     <>
       <Typography variant="h4" component="h2" className={classes.heading}>
@@ -67,13 +71,12 @@ const FeedbackView = () => {
       </Typography>
 
       <Formik
-        initialValues={{ questions }}
+        initialValues={initialValues}
         onSubmit={handleSubmit}
-        validateOnChange={false}
-        validateOnBlur
+        validate={validate}
       >
         <Form>
-          <FeedbackForm name="questions" />
+          <FeedbackForm questions={questions} name="answers" />
           <Box mt={2}>
             <Button color="primary" variant="contained" type="submit">
               Give feedback

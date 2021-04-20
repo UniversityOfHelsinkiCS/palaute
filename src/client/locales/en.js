@@ -5,6 +5,9 @@ export default {
       sv: 'Swedish',
       en: 'English',
     },
+    validationErrors: {
+      required: 'This field is required',
+    },
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
