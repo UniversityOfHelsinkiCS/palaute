@@ -1,5 +1,4 @@
 import React from 'react'
-import { useField } from 'formik'
 import { Box } from '@material-ui/core'
 
 import LikertQuestion from './LikertQuestion'

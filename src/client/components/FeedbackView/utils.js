@@ -19,8 +19,6 @@ export const makeValidate = (questions) => (values) => {
     const answer = values.answers[question.id]
     const hasError = question.required && isEmpty(answer)
 
-    console.log(answer, hasError)
-
     if (hasError) {
       errors.answers[question.id] = 'validationErrors.required'
     }
