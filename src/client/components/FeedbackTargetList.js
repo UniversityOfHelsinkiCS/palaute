@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
@@ -16,6 +16,10 @@ import {
 import { getLanguageValue } from '../util/languageUtils'
 
 import useFeedbackTargets from '../hooks/useFeedbackTargets'
+import {
+  getCourseRealisationsWithFeedbackTargets,
+  sortCourseRealisations,
+} from './UserFeedbacks/utils'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -36,22 +40,32 @@ const FeedbackTargetList = () => {
 
   const feedbackTargets = !data.isLoading && data.feedbackTargets
 
+  const courseRealisations = useMemo(
+    () => getCourseRealisationsWithFeedbackTargets(feedbackTargets),
+    [feedbackTargets],
+  )
+
+  const sortedCourseRealations = useMemo(
+    () => sortCourseRealisations(courseRealisations),
+    [courseRealisations],
+  )
+
   return (
     <div>
       <Typography variant="h4" component="h3">
         {t('feedbackTargets:title')}
       </Typography>
       <List>
-        {feedbackTargets &&
-          feedbackTargets.map((target) => (
-            <FeedbackTarget key={target.id} feedbackTarget={target} />
+        {sortedCourseRealations.length > 0 &&
+          sortedCourseRealations.map((target) => (
+            <RealisationFeedbackTargets key={target.id} realisation={target} />
           ))}
       </List>
     </div>
   )
 }
 
-const FeedbackTarget = ({ feedbackTarget }) => {
+const RealisationFeedbackTargets = ({ realisation }) => {
   const { i18n, t } = useTranslation()
 
   const classes = useStyles()
@@ -61,21 +75,25 @@ const FeedbackTarget = ({ feedbackTarget }) => {
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h6" component="h4">
-            {getLanguageValue(feedbackTarget.courseUnit.name, i18n.language)}
+            {getLanguageValue(realisation.name, i18n.language)}
           </Typography>
-          <Typography
-            variant="body1"
-            component="p"
-            className={classes.targetName}
-          >
-            {getLanguageValue(feedbackTarget.name, i18n.language)}
-          </Typography>
-          <Typography variant="body2" component="p">
-            {`${t('feedbackTargets:feedbackOpen')}:
-            ${format(parseISO(feedbackTarget.opensAt), 'd.M.yyyy')}
+          {realisation.feedbackTargets.map((target) => (
+            <div>
+              <Typography
+                variant="body1"
+                component="p"
+                className={classes.targetName}
+              >
+                {getLanguageValue(target.name, i18n.language)}
+              </Typography>
+              <Typography variant="body2" component="p">
+                {`${t('feedbackTargets:feedbackOpen')}:
+            ${format(parseISO(target.opensAt), 'd.M.yyyy')}
             -
-            ${format(parseISO(feedbackTarget.closesAt), 'd.M.yyyy')}`}
-          </Typography>
+            ${format(parseISO(target.closesAt), 'd.M.yyyy')}`}
+              </Typography>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </ListItem>
