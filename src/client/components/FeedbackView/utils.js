@@ -44,6 +44,16 @@ const getInitialAnswerByType = (type) => {
   return ''
 }
 
+export const getQuestions = (feedbackTarget) => {
+  const { surveys } = feedbackTarget
+
+  return [
+    ...(surveys?.universitySurvey?.questions ?? []),
+    ...(surveys?.departmentSurvey?.questions ?? []),
+    ...(surveys?.teacherSurvey?.questions ?? []),
+  ]
+}
+
 const getInitialAnswerByFeedback = (feedback, question) => {
   const { id } = question
 
@@ -55,7 +65,9 @@ const getInitialAnswerByFeedback = (feedback, question) => {
 }
 
 export const getInitialValues = (feedbackTarget) => {
-  const answers = feedbackTarget.questions
+  const questions = getQuestions(feedbackTarget)
+
+  const answers = questions
     .filter((q) => q.type !== 'TEXT')
     .reduce(
       (acc, question) => ({

@@ -7,7 +7,7 @@ export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   }
 
   const missing = courseRealisation.feedbackTargets.find(
-    ({ feedbackId }) => !feedbackId,
+    ({ feedback }) => !feedback,
   )
 
   return Boolean(missing)
@@ -25,7 +25,7 @@ export const sortCourseRealisations = (courseRealisations) => {
 }
 
 export const getDeletePath = (userFeedbackTarget) => {
-  const { feedbackId } = userFeedbackTarget
+  const feedbackId = userFeedbackTarget?.feedback?.id
 
   return feedbackId ? `/feedbacks/${feedbackId}` : null
 }
@@ -68,14 +68,14 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (status === 'waitingForFeedback') {
     return feedbackTargets.filter(
       (feedbackTarget) =>
-        !feedbackTargetIsClosed(feedbackTarget) && !feedbackTarget.feedbackId,
+        !feedbackTargetIsClosed(feedbackTarget) && !feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackGiven') {
     return feedbackTargets.filter(
       (feedbackTarget) =>
-        !feedbackTargetIsClosed(feedbackTarget) && feedbackTarget.feedbackId,
+        !feedbackTargetIsClosed(feedbackTarget) && feedbackTarget.feedback,
     )
   }
 

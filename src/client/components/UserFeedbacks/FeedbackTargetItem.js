@@ -146,7 +146,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const queryClient = useQueryClient()
 
-  const { id, closesAt, opensAt, name, feedbackId } = feedbackTarget
+  const { id, closesAt, opensAt, name, feedback } = feedbackTarget
   const isEnded = new Date() > parseISO(closesAt)
 
   const periodInfo = t('userFeedbacks:feedbackOpenPeriod', {
@@ -155,11 +155,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   })
 
   const translatedName = getLanguageValue(name, i18n.language)
-  const feedbackGiven = Boolean(feedbackId)
+  const feedbackGiven = Boolean(feedback)
   const isClosed = feedbackTargetIsClosed(feedbackTarget)
 
   const onDelete = async () => {
-    await apiClient.delete(`/feedbacks/${feedbackId}`)
+    await apiClient.delete(`/feedbacks/${feedback.id}`)
     queryClient.invalidateQueries('feedbackTargetsForStudent')
   }
 

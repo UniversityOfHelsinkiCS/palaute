@@ -17,7 +17,12 @@ import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
 
-import { makeValidate, getInitialValues, saveValues } from './utils'
+import {
+  makeValidate,
+  getInitialValues,
+  saveValues,
+  getQuestions,
+} from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -65,7 +70,7 @@ const FeedbackView = () => {
     }
   }
 
-  const { questions = [] } = feedbackTarget
+  const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
 
