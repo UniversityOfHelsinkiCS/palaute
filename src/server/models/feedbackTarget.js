@@ -13,7 +13,7 @@ class FeedbackTarget extends Model {
         data: [],
       },
     })
-    // teacherSurvey.set('questions', await teacherSurvey.getQuestions())
+    teacherSurvey.set('questions', await teacherSurvey.getQuestions())
 
     const departmentSurvey = {} // await Survey.findOne()
     const universitySurvey = {} // await Survey.findOne({})

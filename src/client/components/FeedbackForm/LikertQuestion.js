@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   makeStyles,
+  FormHelperText,
 } from '@material-ui/core'
 
 import { useField } from 'formik'
@@ -24,43 +25,47 @@ const useStyles = makeStyles((theme) => ({
 
 const options = [...Array(5)].map((v, i) => i + 1)
 
-const LikertQuestion = ({ name }) => {
+const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
-  const [{ value: question }] = useField(name)
-  const [{ value: answer }, , helpers] = useField(`${name}.answer`)
-  const { i18n } = useTranslation()
+  const [{ value: answer }, meta, helpers] = useField(name)
+  const { t, i18n } = useTranslation()
   const label = getLanguageValue(question.data?.label, i18n.language) ?? ''
+
+  const showError = meta.error && meta.touched
 
   const value = answer ?? ''
 
   return (
-    <FormControl component="fieldset">
-      <Box mb={1}>
-        <Typography variant="h6" component="legend">
-          {label}
-        </Typography>
-      </Box>
-      <RadioGroup
-        aria-label={label}
-        value={value}
-        onChange={(event) => {
-          helpers.setValue(event.target.value)
-          helpers.setTouched()
-        }}
-        row
-      >
-        {options.map((option) => (
-          <FormControlLabel
-            labelPlacement="top"
-            value={option.toString()}
-            control={<Radio color="primary" />}
-            label={option.toString()}
-            key={option}
-            className={classes.label}
-          />
-        ))}
-      </RadioGroup>
-    </FormControl>
+    <>
+      <FormControl component="fieldset">
+        <Box mb={1}>
+          <Typography variant="h6" component="legend">
+            {label}
+          </Typography>
+        </Box>
+        <RadioGroup
+          aria-label={label}
+          value={value}
+          onChange={(event) => {
+            helpers.setValue(event.target.value)
+          }}
+          onBlur={() => helpers.setTouched(true)}
+          row
+        >
+          {options.map((option) => (
+            <FormControlLabel
+              labelPlacement="top"
+              value={option.toString()}
+              control={<Radio color="primary" />}
+              label={option.toString()}
+              key={option}
+              className={classes.label}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+      {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
+    </>
   )
 }
 

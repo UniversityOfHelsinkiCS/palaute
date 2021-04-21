@@ -17,6 +17,7 @@ FeedbackTarget.belongsTo(CourseRealisation, {
 })
 
 UserFeedbackTarget.belongsTo(FeedbackTarget, { as: 'feedbackTarget' })
+FeedbackTarget.hasMany(UserFeedbackTarget, { as: 'userFeedbackTargets' })
 
 UserFeedbackTarget.belongsTo(Feedback, {
   as: 'feedback',
