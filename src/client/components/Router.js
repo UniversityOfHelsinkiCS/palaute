@@ -8,7 +8,7 @@ import FeedbackView from './FeedbackView'
 import AdminView from './AdminView'
 import TeacherView from './TeacherView'
 import ModifyQuestions from './ModifyQuestions'
-import FeedbackTargetList from './FeedbackTargetList'
+import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
 import EditFeedbackTarget from './EditFeedbackTarget'
 
 const useStyles = makeStyles((theme) => ({
