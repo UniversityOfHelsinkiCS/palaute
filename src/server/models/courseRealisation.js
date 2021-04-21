@@ -15,6 +15,10 @@ CourseRealisation.init(
       type: DATE,
       allowNull: false,
     },
+    startDate: {
+      type: DATE,
+      allowNull: false,
+    },
     name: {
       type: JSONB,
       allowNull: false,

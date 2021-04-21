@@ -16,6 +16,7 @@ const createFeedbackTargetWithUserTargetTable = makeCreateFeedbackTargetWithUser
 const createFeedbackTargetFromStudyGroup = async (
   data,
   endDate,
+  startDate,
   courseUnitId,
   realisationId,
   userId,
@@ -28,6 +29,7 @@ const createFeedbackTargetFromStudyGroup = async (
     courseUnitId,
     combineStudyGroupName(setName, data.name),
     endDate,
+    startDate,
     userId,
   )
   return target
@@ -44,6 +46,11 @@ const createFeedbackTargetFromCourseRealisation = async (
     'yyyy-MM-dd',
     new Date(),
   )
+  const startDate = dateFns.parse(
+    data.activityPeriod.startDate,
+    'yyyy-MM-dd',
+    new Date(),
+  )
   await createFeedbackTargetWithUserTargetTable(
     'courseRealisation',
     data.id,
@@ -51,6 +58,7 @@ const createFeedbackTargetFromCourseRealisation = async (
     courseUnitId,
     data.name,
     endDate,
+    startDate,
     userId,
   )
   await data.studyGroupSets.reduce(async (prom, studySet) => {
@@ -63,6 +71,7 @@ const createFeedbackTargetFromCourseRealisation = async (
         await createFeedbackTargetFromStudyGroup(
           item,
           endDate,
+          startDate,
           courseUnitId,
           data.id,
           userId,

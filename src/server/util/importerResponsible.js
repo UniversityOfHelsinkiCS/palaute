@@ -25,6 +25,11 @@ const createTargetsFromRealisation = async (data, personId) => {
     'yyyy-MM-dd',
     new Date(),
   )
+  const startDate = dateFns.parse(
+    data.activityPeriod.startDate,
+    'yyyy-MM-dd',
+    new Date(),
+  )
 
   await createFeedbackTargetWithUserTargetTable(
     'courseRealisation',
@@ -33,6 +38,7 @@ const createTargetsFromRealisation = async (data, personId) => {
     courseUnitId,
     data.name,
     endDate,
+    startDate,
     personId,
   )
 
@@ -48,6 +54,7 @@ const createTargetsFromRealisation = async (data, personId) => {
         courseUnitId,
         combineStudyGroupName(setName, item.name),
         endDate,
+        startDate,
         personId,
       )
     }, Promise.resolve())

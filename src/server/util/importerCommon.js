@@ -38,12 +38,14 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
   courseUnitId,
   name,
   endDate,
+  startDate,
   userId,
 ) => {
   if (feedbackType === 'courseRealisation') {
     await CourseRealisation.upsert({
       id: courseRealisationId,
       endDate,
+      startDate,
       name,
     })
   }
