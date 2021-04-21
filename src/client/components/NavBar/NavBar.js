@@ -37,7 +37,9 @@ const Logo = () => {
   return (
     <div className={classes.container}>
       <Link to="/" className={classes.link}>
-        <Typography variant="h6">Palaute</Typography>
+        <Typography variant="h6" component="h1">
+          Palaute
+        </Typography>
         <img src={toskaLogo} alt="Toska" className={classes.image} />
       </Link>
     </div>

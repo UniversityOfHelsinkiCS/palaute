@@ -76,7 +76,7 @@ const FeedbackView = () => {
 
   return (
     <>
-      <Typography variant="h4" component="h2" className={classes.heading}>
+      <Typography variant="h4" component="h1" className={classes.heading}>
         {name}
       </Typography>
 

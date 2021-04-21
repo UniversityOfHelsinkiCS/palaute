@@ -62,7 +62,7 @@ const UserFeedbacks = () => {
 
   return (
     <div>
-      <Typography variant="h4" className={classes.heading}>
+      <Typography variant="h4" component="h1" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
 
