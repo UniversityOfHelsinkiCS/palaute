@@ -10,12 +10,41 @@ const {
   CourseUnit,
   CourseRealisation,
   Feedback,
+  Survey,
 } = require('../models')
 const { sequelize } = require('../util/dbConnection')
 
 const mapStatusToValue = {
   STUDENT: 1,
   TEACHER: 2,
+}
+
+// TODO refactor
+const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
+  const updatedQuestionIdsList = []
+
+  /* eslint-disable */
+  for (const question of questions) {
+    let updatedQuestion
+    if (question.id) {
+      const [_, updatedQuestions] = await Question.update(
+        {
+          ...question,
+        },
+        { where: { id: question.id }, returning: true },
+      )
+      updatedQuestion = updatedQuestions[0]
+    } else {
+      updatedQuestion = await Question.create({
+        ...question,
+      })
+    }
+
+    updatedQuestionIdsList.push(updatedQuestion.id)
+  }
+  /* eslint-enable */
+
+  return updatedQuestionIdsList
 }
 
 const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
@@ -83,6 +112,14 @@ const update = async (req, res) => {
   feedbackTarget.closesAt = closesAt
 
   if (questions && surveyId) {
+    const survey = await Survey.findByPk(Number(surveyId))
+    if (!survey) throw new ApplicationError('Not found', 404)
+
+    survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
+      questions,
+    )
+
+    await survey.save()
   }
 
   await feedbackTarget.save()
