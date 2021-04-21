@@ -80,7 +80,7 @@ const TextEditor = ({ name, language }) => {
   return (
     <FormikTextField
       name={`${name}.data.label.${language}`}
-      label={t('questionEditor:content')}
+      label={t('questionEditor:label')}
       fullWidth
       multiline
     />

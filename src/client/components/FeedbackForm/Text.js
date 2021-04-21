@@ -4,7 +4,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const Text = ({ question }) => {
   const { i18n } = useTranslation()
-  const content = getLanguageValue(question.data?.content, i18n.language) ?? ''
+  const content = getLanguageValue(question.data?.label, i18n.language) ?? ''
 
   return content
 }
