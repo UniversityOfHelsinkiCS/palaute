@@ -91,7 +91,6 @@ const EditFeedbackTarget = () => {
         }}
         onSubmit={handleSubmit}
         validateOnChange={false}
-        validateOnBlur
       >
         <Form>
           <div className={classes.form}>

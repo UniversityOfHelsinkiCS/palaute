@@ -22,6 +22,7 @@ const getOne = async (req, res) => {
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {
+      userId: user.id,
       feedbackTargetId: Number(req.params.id),
     },
     include: [

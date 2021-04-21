@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, useHistory, Redirect } from 'react-router-dom'
 
 import {
   Typography,
@@ -16,7 +16,12 @@ import { useSnackbar } from 'notistack'
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
-import { makeValidate, getInitialValuesFromFeedbackTarget } from './utils'
+
+import {
+  makeValidate,
+  getInitialValuesFromFeedbackTarget,
+  createFeedback,
+} from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -31,9 +36,10 @@ const useStyles = makeStyles((theme) => ({
 
 const FeedbackView = () => {
   const { feedbackTargetId } = useParams()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(feedbackTargetId, {
     cacheTime: 0,
@@ -53,14 +59,17 @@ const FeedbackView = () => {
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
-  const handleSubmit = (values) => {
-    console.log(values)
-    // TODO: api request stuff
-    enqueueSnackbar('Feedback has been given', { variant: 'success' })
+  const handleSubmit = async (values) => {
+    try {
+      await createFeedback(values, feedbackTarget)
+      history.push('/')
+      enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
+    } catch (e) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
   }
 
   const { questions = [] } = feedbackTarget
-
   const initialValues = getInitialValuesFromFeedbackTarget(feedbackTarget)
   const validate = makeValidate(questions)
 
@@ -74,15 +83,23 @@ const FeedbackView = () => {
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validate={validate}
+        validateOnChange={false}
       >
-        <Form>
-          <FeedbackForm questions={questions} name="answers" />
-          <Box mt={2}>
-            <Button color="primary" variant="contained" type="submit">
-              Give feedback
-            </Button>
-          </Box>
-        </Form>
+        {({ isSubmitting }) => (
+          <Form>
+            <FeedbackForm questions={questions} name="answers" />
+            <Box mt={2}>
+              <Button
+                disabled={isSubmitting}
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                {t('feedbackView:submitButton')}
+              </Button>
+            </Box>
+          </Form>
+        )}
       </Formik>
     </>
   )

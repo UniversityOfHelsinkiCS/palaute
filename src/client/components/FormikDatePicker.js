@@ -15,7 +15,7 @@ const FormikDatePicker = ({ name, helperText, label, ...props }) => {
       onChange={(event) => {
         helpers.setValue(event.target.value)
       }}
-      onBlur={() => helpers.setTouched()}
+      onBlur={() => helpers.setTouched(true)}
       helperText={showError ? meta.error : helperText}
       error={showError}
       InputLabelProps={{ shrink: true }}

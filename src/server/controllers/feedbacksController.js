@@ -7,18 +7,20 @@ const getAll = async (req, res) => {
 }
 
 const create = async (req, res) => {
-  const { answers, targetId } = req.body
+  const { data, feedbackTargetId } = req.body
+  const { id: userId } = req.user
+
   const newFeedback = await Feedback.create({
-    data: answers,
-    userId: req.user.id,
+    data,
+    userId,
   })
 
-  const userFeedbackTarget = await UserFeedbackTarget.update(
+  await UserFeedbackTarget.update(
     { feedbackId: Number(newFeedback.id) },
-    { where: { feedbackTargetId: Number(targetId) } },
+    { where: { userId, feedbackTargetId: Number(feedbackTargetId) } },
   )
 
-  res.send(userFeedbackTarget)
+  res.send(newFeedback)
 }
 
 const getOne = async (req, res) => {
@@ -74,14 +76,27 @@ const getFeedbackByCourseId = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const feedbackTarget = await UserFeedbackTarget.findByPk(
-    Number(req.params.id),
-  )
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-  const { feedbackId } = feedbackTarget
-  const feedback = await Feedback.findByPk(Number(feedbackId))
-  feedback.data = req.body
+  const { id } = req.params
+
+  const feedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackId: Number(id),
+    },
+  })
+
+  if (feedbackTarget?.userId !== req.user.id) {
+    throw new ApplicationError(
+      'User is not authorized to update the feedback',
+      403,
+    )
+  }
+
+  const feedback = await Feedback.findByPk(Number(id))
+
+  feedback.data = req.body.data
+
   const updatedFeedback = await feedback.save()
+
   res.send(updatedFeedback)
 }
 

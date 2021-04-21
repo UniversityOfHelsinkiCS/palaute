@@ -8,6 +8,7 @@ export default {
     validationErrors: {
       required: 'This field is required',
     },
+    unknownError: 'Something went wrong',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -25,9 +26,9 @@ export default {
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
   },
-  feedbackForm: {
-    submitButton: 'Submit feedback',
-    requiredErrorText: 'This field is required',
+  feedbackView: {
+    submitButton: 'Give feedback',
+    successAlert: 'Feedback has been given',
   },
   feedbackList: {
     givenFeedbacks: 'Feedback',
