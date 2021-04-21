@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
 import {
@@ -7,6 +7,8 @@ import {
   makeStyles,
   Button,
   Box,
+  Card,
+  CardContent,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -21,6 +23,7 @@ import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
 import useFeedbackTargetSurveys from '../../hooks/useFeedbackTargetSurveys'
 import { getInitialValues, validate, saveValues } from './utils'
+import LanguageTabs from '../LanguageTabs'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -30,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
+  },
+  languageTabs: {
+    marginBottom: theme.spacing(2),
   },
   form: {
     display: 'flex',
@@ -43,6 +49,8 @@ const EditFeedbackTarget = () => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+
+  const [language, setLanguage] = useState('fi')
 
   const {
     feedbackTarget,
@@ -75,7 +83,7 @@ const EditFeedbackTarget = () => {
   const handleSubmit = async (values) => {
     try {
       await saveValues(values, surveys)
-      enqueueSnackbar('Questions have been saved', { variant: 'success' })
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -89,6 +97,12 @@ const EditFeedbackTarget = () => {
         {name}
       </Typography>
 
+      <LanguageTabs
+        language={language}
+        onChange={(newLanguage) => setLanguage(newLanguage)}
+        className={classes.languageTabs}
+      />
+
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -96,29 +110,45 @@ const EditFeedbackTarget = () => {
         validateOnChange={false}
       >
         <Form>
-          <div className={classes.form}>
-            <Box mb={2}>
-              <FormikTextField
-                name="name"
-                label="Name"
-                placeholder="Feedback name"
-                fullWidth
-              />
-            </Box>
-            <Box mb={2}>
-              <FormikCheckbox name="hidden" label="Hidden" />
-            </Box>
-            <Box mb={2}>
-              <FormikDatePicker name="opensAt" label="Opens at" fullWidth />
-            </Box>
-            <Box mb={2}>
-              <FormikDatePicker name="closesAt" label="Closes at" fullWidth />
-            </Box>
-          </div>
-          <QuestionEditor name="questions" />
+          <Box mb={2}>
+            <Card>
+              <CardContent>
+                <div className={classes.form}>
+                  <Box mb={2}>
+                    <FormikTextField
+                      name={`name.${language}`}
+                      label={t('name')}
+                      fullWidth
+                    />
+                  </Box>
+
+                  <Box mb={2}>
+                    <FormikCheckbox name="hidden" label="Hidden" />
+                  </Box>
+
+                  <Box mb={2}>
+                    <FormikDatePicker
+                      name="opensAt"
+                      label={t('editFeedbackTarget:opensAt')}
+                      fullWidth
+                    />
+                  </Box>
+
+                  <FormikDatePicker
+                    name="closesAt"
+                    label={t('editFeedbackTarget:closesAt')}
+                    fullWidth
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </Box>
+
+          <QuestionEditor language={language} name="questions" />
+
           <Box mt={2}>
             <Button color="primary" variant="contained" type="submit">
-              Save questions
+              {t('save')}
             </Button>
           </Box>
         </Form>

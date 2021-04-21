@@ -9,6 +9,9 @@ export default {
       required: 'This field is required',
     },
     unknownError: 'Something went wrong',
+    save: 'Save',
+    saveSuccess: 'Information has been saved',
+    name: 'Name',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -46,18 +49,6 @@ export default {
     viewFeedbackSummary: 'View feedback summary',
     viewFeedbackTargets: 'View feedback targets',
   },
-  modifyForm: {
-    saveForm: 'Save',
-    return: 'Back',
-    addQuestion: 'Add question',
-    questionType: 'Question type',
-    required: 'Required',
-    add: 'Add',
-    questions: 'Questions',
-    type: 'Type',
-    multichoice: 'Multiple choice',
-    textarea: 'Text field',
-  },
   questionEditor: {
     addQuestion: 'Add question',
     likertQuestion: 'Likert question',
@@ -77,5 +68,10 @@ export default {
     removeQuestionConfirmation:
       'Are you sure you want to remove this question?',
     removeOptionConfirmation: 'Are you sure you want to remove this option?',
+  },
+  editFeedbackTarget: {
+    closesAt: 'Closes at',
+    opensAt: 'Opens at',
+    hidden: 'Hidden',
   },
 }

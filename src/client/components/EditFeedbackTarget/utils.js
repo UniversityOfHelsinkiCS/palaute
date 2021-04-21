@@ -1,14 +1,16 @@
 import { lightFormat } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
-const formatPickerDate = (date) => lightFormat(date, `yyyy-MM-dd'T'hh:mm`)
+const pickerDateFormat = `yyyy-MM-dd'T'hh:mm`
+
+const formatPickerDate = (date) => lightFormat(date, pickerDateFormat)
 
 export const getInitialValues = (feedbackTarget, surveys) => {
   const { hidden, closesAt, opensAt, name } = feedbackTarget
   const questions = surveys?.teacherSurvey?.questions ?? []
 
   return {
-    name: name.fi,
+    name,
     hidden: hidden ?? false,
     questions,
     opensAt: formatPickerDate(new Date(opensAt)),
@@ -18,10 +20,6 @@ export const getInitialValues = (feedbackTarget, surveys) => {
 
 export const validate = (values) => {
   const errors = {}
-
-  if (!values.name) {
-    errors.name = 'validationErrors.required'
-  }
 
   if (!values.closesAt) {
     errors.closesAt = 'validationErrors.required'
@@ -35,7 +33,11 @@ export const validate = (values) => {
 }
 
 export const saveValues = async (values, surveys) => {
-  const { questions } = values
+  const { questions, hidden, name } = values
+
+  const closesAt = values.closesAt ? new Date(values.closesAt) : null
+  const opensAt = values.opensAt ? new Date(values.opensAt) : null
+
   const { id: surveyId, data: surveyData } = surveys.teacherSurvey
 
   const payload = {
