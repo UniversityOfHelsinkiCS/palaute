@@ -41,13 +41,13 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
-    responseReady.push(await convertSingle(feedbackTarget))
+    if (feedbackTarget)
+      responseReady.push(await convertSingle(feedbackTarget))
   }
   /* eslint-enable */
 
   return responseReady
 }
-
 
 const getOne = async (req, res) => {
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
@@ -75,10 +75,15 @@ const update = async (req, res) => {
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  feedbackTarget.name = req.body.name
-  feedbackTarget.hidden = req.body.hidden
-  feedbackTarget.opensAt = req.body.opensAt
-  feedbackTarget.closesAt = req.body.closesAt
+  const { name, hidden, opensAt, closesAt, questions, surveyId } = req.body
+
+  feedbackTarget.name = name
+  feedbackTarget.hidden = hidden
+  feedbackTarget.opensAt = opensAt
+  feedbackTarget.closesAt = closesAt
+
+  if (questions && surveyId) {
+  }
 
   await feedbackTarget.save()
 
