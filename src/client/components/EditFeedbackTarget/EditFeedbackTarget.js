@@ -27,7 +27,7 @@ import LanguageTabs from '../LanguageTabs'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
