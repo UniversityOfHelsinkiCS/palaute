@@ -2,12 +2,10 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
 
-import FeedbackList from './FeedbackList'
 import UserFeedbacks from './UserFeedbacks'
 import FeedbackView from './FeedbackView'
 import AdminView from './AdminView'
 import TeacherView from './TeacherView'
-import ModifyQuestions from './ModifyQuestions'
 import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
 import EditFeedbackTarget from './EditFeedbackTarget'
 
@@ -24,9 +22,7 @@ const Router = () => {
   return (
     <Container className={classes.container}>
       <Switch>
-        <Route path="/:id/view" component={FeedbackList} />
         <Route path="/:feedbackTargetId/edit" component={FeedbackView} />
-        <Route path="/:id/modify" component={ModifyQuestions} />
         <Route path="/list" component={TeacherView} />
         <Route path="/:id/targets" component={FeedbackTargetList} />
         <Route
