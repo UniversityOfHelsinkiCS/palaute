@@ -34,7 +34,8 @@ export const validate = (values) => {
   return errors
 }
 
-export const saveQuestions = async (questions, surveys) => {
+export const saveValues = async (values, surveys) => {
+  const { questions } = values
   const { id: surveyId, data: surveyData } = surveys.teacherSurvey
 
   const payload = {

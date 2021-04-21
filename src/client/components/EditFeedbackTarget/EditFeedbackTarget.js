@@ -20,7 +20,7 @@ import FormikTextField from '../FormikTextField'
 import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
 import useFeedbackTargetSurveys from '../../hooks/useFeedbackTargetSurveys'
-import { getInitialValues, validate, saveQuestions } from './utils'
+import { getInitialValues, validate, saveValues } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -74,7 +74,7 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveQuestions(values.questions, surveys)
+      await saveValues(values, surveys)
       enqueueSnackbar('Questions have been saved', { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })

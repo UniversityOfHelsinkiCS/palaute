@@ -54,7 +54,7 @@ const getInitialAnswerByFeedback = (feedback, question) => {
   return questionAnswer?.data
 }
 
-export const getInitialValuesFromFeedbackTarget = (feedbackTarget) => {
+export const getInitialValues = (feedbackTarget) => {
   const answers = feedbackTarget.questions
     .filter((q) => q.type !== 'TEXT')
     .reduce(
@@ -70,7 +70,7 @@ export const getInitialValuesFromFeedbackTarget = (feedbackTarget) => {
   return { answers }
 }
 
-export const createFeedback = async (values, feedbackTarget) => {
+export const saveValues = async (values, feedbackTarget) => {
   const { answers } = values
 
   const feedbackData = Object.entries(answers).map(([questionId, data]) => ({

@@ -17,11 +17,7 @@ import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
 
-import {
-  makeValidate,
-  getInitialValuesFromFeedbackTarget,
-  createFeedback,
-} from './utils'
+import { makeValidate, getInitialValues, saveValues } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -61,7 +57,7 @@ const FeedbackView = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await createFeedback(values, feedbackTarget)
+      await saveValues(values, feedbackTarget)
       history.push('/')
       enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
     } catch (e) {
@@ -70,7 +66,7 @@ const FeedbackView = () => {
   }
 
   const { questions = [] } = feedbackTarget
-  const initialValues = getInitialValuesFromFeedbackTarget(feedbackTarget)
+  const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
 
   return (
