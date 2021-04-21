@@ -1,11 +1,12 @@
-const { DATE, NOW } = require('sequelize')
+const { DATE } = require('sequelize')
+const { sequelize } = require('../util/dbConnection')
 
 module.exports = {
   up: async (queryInterface) => {
     await queryInterface.addColumn('course_realisations', 'start_date', {
       type: DATE,
       allowNull: false,
-      defaultValue: NOW,
+      defaultValue: sequelize.fn('NOW'),
     })
   },
   down: async (queryInterface) => {
