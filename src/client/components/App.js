@@ -4,6 +4,7 @@ import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
 import { CssBaseline } from '@material-ui/core'
 import { SnackbarProvider } from 'notistack'
+import { ThemeProvider } from '@material-ui/core/styles'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -11,6 +12,7 @@ import DevTools from './DevTools'
 import Router from './Router'
 import { useUserData } from '../util/queries'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
+import theme from '../theme'
 
 export default () => {
   const { i18n } = useTranslation()
@@ -33,7 +35,7 @@ export default () => {
   if (user.isLoading) return null
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Suspense fallback={null}>
         <SnackbarProvider maxSnack={3}>
@@ -44,6 +46,6 @@ export default () => {
           <Footer />
         </SnackbarProvider>
       </Suspense>
-    </>
+    </ThemeProvider>
   )
 }
