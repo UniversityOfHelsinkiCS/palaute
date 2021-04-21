@@ -12,9 +12,10 @@ const FormikCheckbox = ({ name, helperText, label, ...props }) => {
       control={
         <Checkbox
           checked={field.value}
-          onChange={() => {
-            helpers.setValue(!field.value)
+          onChange={(event) => {
+            helpers.setValue(event.target.checked)
           }}
+          onBlur={() => helpers.setTouched(true)}
           error={showError}
           color="primary"
           {...props}

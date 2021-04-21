@@ -25,7 +25,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   heading: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
