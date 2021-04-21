@@ -48,6 +48,7 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   return responseReady
 }
 
+
 const getOne = async (req, res) => {
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: [

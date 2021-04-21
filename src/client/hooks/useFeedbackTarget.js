@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-const useFeedbackTarget = (targetId, options) => {
+const useFeedbackTarget = (targetId, options = {}) => {
   const queryKey = ['feedbackTarget', targetId]
 
   const queryFn = async () => {
@@ -11,7 +11,10 @@ const useFeedbackTarget = (targetId, options) => {
     return data
   }
 
-  const { data: feedbackTarget, ...rest } = useQuery(queryKey, queryFn, options)
+  const { data: feedbackTarget, ...rest } = useQuery(queryKey, queryFn, {
+    enabled: Boolean(targetId),
+    ...options,
+  })
 
   return { feedbackTarget, ...rest }
 }

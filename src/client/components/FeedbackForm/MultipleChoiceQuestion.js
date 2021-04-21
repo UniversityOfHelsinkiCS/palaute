@@ -50,6 +50,7 @@ const MultipleChoiceQuestion = ({ question, name }) => {
                 <Checkbox
                   checked={value.includes(option.id)}
                   onChange={handleChange}
+                  onBlur={() => helpers.setTouched(true)}
                   color="primary"
                   name={option.id}
                 />

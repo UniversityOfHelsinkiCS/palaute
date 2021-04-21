@@ -49,6 +49,7 @@ const LikertQuestion = ({ question, name }) => {
           onChange={(event) => {
             helpers.setValue(event.target.value)
           }}
+          onBlur={() => helpers.setTouched(true)}
           row
         >
           {options.map((option) => (

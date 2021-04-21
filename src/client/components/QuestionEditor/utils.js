@@ -41,6 +41,7 @@ export const createQuestion = (type) => {
   return {
     type,
     data,
+    required: true,
   }
 }
 
