@@ -11,6 +11,7 @@ const {
   CourseRealisation,
   Feedback,
   Survey,
+  Question,
 } = require('../models')
 const { sequelize } = require('../util/dbConnection')
 
@@ -70,8 +71,7 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
-    if (feedbackTarget)
-      responseReady.push(await convertSingle(feedbackTarget))
+    if (feedbackTarget) responseReady.push(await convertSingle(feedbackTarget))
   }
   /* eslint-enable */
 

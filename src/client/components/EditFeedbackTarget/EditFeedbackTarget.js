@@ -82,7 +82,7 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveValues(values, surveys)
+      await saveValues(values, surveys, feedbackTargetId)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })

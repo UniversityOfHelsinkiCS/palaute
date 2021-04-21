@@ -1,4 +1,4 @@
-import { lightFormat } from 'date-fns'
+import { isAfter, parseISO, lightFormat } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 const pickerDateFormat = `yyyy-MM-dd'T'hh:mm`
@@ -29,10 +29,14 @@ export const validate = (values) => {
     errors.opensAt = 'validationErrors.required'
   }
 
+  if (!isAfter(parseISO(values.closesAt), parseISO(values.opensAt))) {
+    errors.closesAt = 'Survey closing date is before opening date'
+  }
+
   return errors
 }
 
-export const saveValues = async (values, surveys) => {
+export const saveValues = async (values, surveys, id) => {
   const { questions, hidden, name } = values
 
   const closesAt = values.closesAt ? new Date(values.closesAt) : null
@@ -42,10 +46,15 @@ export const saveValues = async (values, surveys) => {
 
   const payload = {
     data: surveyData,
+    surveyId,
+    name,
+    hidden,
+    closesAt,
+    opensAt,
     questions,
   }
 
-  const { data } = await apiClient.put(`/surveys/${surveyId}`, payload)
+  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
 
   return data
 }
