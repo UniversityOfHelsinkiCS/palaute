@@ -13,6 +13,16 @@ const TeacherView = () => {
     a.validityPeriod.endDate < b.validityPeriod.endDate ? 1 : -1,
   )
 
+  const codes = new Set()
+
+  const uniqueCourses = []
+
+  courses.data.forEach((course) => {
+    if (codes.has(course.courseCode)) return
+    uniqueCourses.push(course)
+    codes.add(course.courseCode)
+  })
+
   return (
     <>
       {courses.data &&

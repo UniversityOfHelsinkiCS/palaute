@@ -14,7 +14,7 @@ import { useUserData } from '../util/queries'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
 import { inProduction } from '../../config'
-import { setHeaders, clearHeaders } from '../util/mockHeaders'
+import { setHeaders } from '../util/mockHeaders'
 
 export default () => {
   const { i18n } = useTranslation()
@@ -26,11 +26,9 @@ export default () => {
   const user = useUserData()
   useEffect(() => {
     if (!user.data) {
-      if (!inProduction) {
-        clearHeaders()
-        localStorage.removeItem('adminLoggedInAs')
-        setHeaders('varisleo')
-      }
+      if (inProduction || user.isLoading) return
+      localStorage.clear()
+      setHeaders('varisleo')
       return
     }
 
