@@ -34,15 +34,7 @@ const LoginAsSelector = () => {
     // eslint-disable-next-line
     if (!confirm(`This will log you in as ${user.firstNames} (${user.id}) and refresh the page.`)) return
 
-    const { id, firstNames, lastName, eduPersonPrincipalName } = user
-
-    // User needs to be created before they can be logged in as
-    await apiClient.post('/admin/users', {
-      id,
-      first_name: firstNames,
-      last_name: lastName,
-      username: eduPersonPrincipalName.split('@')[0],
-    })
+    const { id } = user
 
     localStorage.setItem('adminLoggedInAs', id)
     window.location.reload()

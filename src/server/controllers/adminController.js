@@ -3,7 +3,6 @@ const Router = require('express')
 const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
-const models = require('../models')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -41,32 +40,10 @@ const findUser = async (req, res) => {
   })
 }
 
-const createUser = async (req, res) => {
-  // eslint-disable-next-line
-  const {
-    body: { id, first_name, last_name, username },
-  } = req
-
-  const [user] = await models.User.findOrCreate({
-    where: {
-      id,
-    },
-    defaults: {
-      first_name,
-      last_name,
-      username,
-    },
-  })
-
-  res.send(user)
-}
-
 const router = Router()
 
 router.use(adminAccess)
 
 router.get('/users', findUser)
-
-router.post('/users', createUser)
 
 module.exports = router
