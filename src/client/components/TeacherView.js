@@ -23,12 +23,13 @@ const TeacherView = () => {
     codes.add(course.courseCode)
   })
 
+  uniqueCourses.sort((a, b) => (a.courseCode < b.courseCode ? -1 : 1))
+
   return (
     <>
-      {courses.data &&
-        courses.data.map((course) => (
-          <TeacherCourseListItem key={course.id} course={course} />
-        ))}
+      {uniqueCourses.map((course) => (
+        <TeacherCourseListItem key={course.id} course={course} />
+      ))}
     </>
   )
 }
