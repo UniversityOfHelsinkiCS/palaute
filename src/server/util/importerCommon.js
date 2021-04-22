@@ -28,6 +28,8 @@ const createCourseUnit = async (data) => {
   await CourseUnit.upsert({
     id: data.id,
     name: data.name,
+    courseCode: data.code,
+    validityPeriod: data.validityPeriod,
   })
 }
 

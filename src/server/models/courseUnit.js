@@ -10,6 +10,9 @@ CourseUnit.init(
       primaryKey: true,
       allowNull: false,
     },
+    courseCode: {
+      type: STRING,
+    },
     name: {
       type: JSONB,
       allowNull: false,
