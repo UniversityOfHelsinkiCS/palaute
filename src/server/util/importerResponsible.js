@@ -2,64 +2,13 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
+const { createCourseUnit } = require('./importerCommon')
+
 const {
-  makeCreateFeedbackTargetWithUserTargetTable,
-  createCourseUnit,
-  combineStudyGroupName,
-} = require('./importerCommon')
+  createFeedbackTargetFromCourseRealisation,
+} = require('./importerHelpers')
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
-
-const createFeedbackTargetWithUserTargetTable = makeCreateFeedbackTargetWithUserTargetTable(
-  'TEACHER',
-)
-
-const createTargetsFromRealisation = async (data, personId) => {
-  const courseUnit = data.courseUnits[0] // TODO, create one to many association
-
-  await createCourseUnit(courseUnit)
-  const { id: courseUnitId } = courseUnit
-
-  const endDate = dateFns.parse(
-    data.activityPeriod.endDate,
-    'yyyy-MM-dd',
-    new Date(),
-  )
-  const startDate = dateFns.parse(
-    data.activityPeriod.startDate,
-    'yyyy-MM-dd',
-    new Date(),
-  )
-
-  await createFeedbackTargetWithUserTargetTable(
-    'courseRealisation',
-    data.id,
-    data.id,
-    courseUnitId,
-    data.name,
-    endDate,
-    startDate,
-    personId,
-  )
-
-  await data.studyGroupSets.reduce(async (prom, studySet) => {
-    await prom
-    const setName = studySet.name
-    await studySet.studySubGroups.reduce(async (promise, item) => {
-      await promise
-      await createFeedbackTargetWithUserTargetTable(
-        'studySubGroup',
-        item.id,
-        data.id,
-        courseUnitId,
-        combineStudyGroupName(setName, item.name),
-        endDate,
-        startDate,
-        personId,
-      )
-    }, Promise.resolve())
-  }, Promise.resolve())
-}
 
 const getResponsibleByPersonId = async (personId, options = {}) => {
   const { startDateBefore, endDateAfter } = options
@@ -80,7 +29,13 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
 
   await courseUnitRealisations.reduce(async (promise, realisation) => {
     await promise
-    await createTargetsFromRealisation(realisation, personId)
+    const courseUnit = realisation.courseUnits[0] // TODO, wtf
+    await createCourseUnit(courseUnit)
+    await createFeedbackTargetFromCourseRealisation(
+      realisation,
+      personId,
+      courseUnit,
+    )
   }, Promise.resolve())
 }
 

@@ -1,99 +1,24 @@
-const dateFns = require('date-fns')
-
 const importerClient = require('./importerClient')
 
+const { createCourseUnit, formatDate } = require('./importerCommon')
+
 const {
-  makeCreateFeedbackTargetWithUserTargetTable,
-  createCourseUnit,
-  combineStudyGroupName,
-  formatDate,
-} = require('./importerCommon')
-
-const createFeedbackTargetWithUserTargetTable = makeCreateFeedbackTargetWithUserTargetTable(
-  'STUDENT',
-)
-
-const createFeedbackTargetFromStudyGroup = async (
-  data,
-  endDate,
-  startDate,
-  courseUnitId,
-  realisationId,
-  userId,
-  setName,
-) => {
-  const target = await createFeedbackTargetWithUserTargetTable(
-    'studySubGroup',
-    data.id,
-    realisationId,
-    courseUnitId,
-    combineStudyGroupName(setName, data.name),
-    endDate,
-    startDate,
-    userId,
-  )
-  return target
-}
-
-const createFeedbackTargetFromCourseRealisation = async (
-  data,
-  studySubGroupIds,
-  courseUnitId,
-  userId,
-) => {
-  const endDate = dateFns.parse(
-    data.activityPeriod.endDate,
-    'yyyy-MM-dd',
-    new Date(),
-  )
-  const startDate = dateFns.parse(
-    data.activityPeriod.startDate,
-    'yyyy-MM-dd',
-    new Date(),
-  )
-  await createFeedbackTargetWithUserTargetTable(
-    'courseRealisation',
-    data.id,
-    data.id,
-    courseUnitId,
-    data.name,
-    endDate,
-    startDate,
-    userId,
-  )
-  await data.studyGroupSets.reduce(async (prom, studySet) => {
-    await prom
-    const setName = studySet.name
-    await studySet.studySubGroups
-      .filter((group) => studySubGroupIds.includes(group.id))
-      .reduce(async (promise, item) => {
-        await promise
-        await createFeedbackTargetFromStudyGroup(
-          item,
-          endDate,
-          startDate,
-          courseUnitId,
-          data.id,
-          userId,
-          setName,
-        )
-      }, Promise.resolve())
-  }, Promise.resolve())
-}
+  createFeedbackTargetFromCourseRealisation,
+} = require('./importerHelpers')
 
 const createTargetsFromEnrolment = async (data, userId) => {
   const studySubGroupIds = data.studySubGroups.map(
     (group) => group.studySubGroupId,
   )
 
-  const { courseUnitId, courseUnitRealisation, courseUnit } = data
+  const { courseUnitRealisation, courseUnit } = data
   await createCourseUnit(courseUnit)
 
   await createFeedbackTargetFromCourseRealisation(
     courseUnitRealisation,
-    studySubGroupIds,
-    courseUnitId,
     userId,
+    courseUnit,
+    studySubGroupIds,
   )
 }
 
@@ -112,6 +37,7 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
 
   await data.reduce(async (promise, enrolment) => {
     await promise
+
     await createTargetsFromEnrolment(enrolment, personId)
   }, Promise.resolve())
 }
