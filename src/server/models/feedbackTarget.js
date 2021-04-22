@@ -10,13 +10,15 @@ class FeedbackTarget extends Model {
       },
       defaults: {
         questionIds: [],
-        data: [],
       },
     })
-    teacherSurvey.set('questions', await teacherSurvey.getQuestions())
+    await teacherSurvey.populateQuestions()
 
     const departmentSurvey = {} // await Survey.findOne()
-    const universitySurvey = {} // await Survey.findOne({})
+    const universitySurvey = await Survey.findOne({
+      where: { type: 'university' },
+    })
+    await universitySurvey.populateQuestions()
 
     return {
       teacherSurvey,

@@ -46,9 +46,8 @@ const update = async (req, res) => {
   const survey = await Survey.findByPk(Number(req.params.id))
   if (!survey) throw new ApplicationError('Not found', 404)
 
-  const { data, questions } = req.body
+  const { questions } = req.body
 
-  if (data) survey.data = data
   if (questions) {
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
@@ -56,7 +55,7 @@ const update = async (req, res) => {
   }
 
   const updatedSurvey = await survey.save()
-  updatedSurvey.questions = await updatedSurvey.getQuestions()
+  await updatedSurvey.populateQuestions()
 
   res.send(updatedSurvey)
 }
