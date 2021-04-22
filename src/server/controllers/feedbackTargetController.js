@@ -205,7 +205,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
 }
 
 const getTargetsByCourseUnit = async (req, res) => {
-  const courseUnitId = req.params.id
+  const courseCode = req.params.id
 
   const feedbackTargets = await FeedbackTarget.findAll({
     include: [
@@ -222,7 +222,7 @@ const getTargetsByCourseUnit = async (req, res) => {
         as: 'courseUnit',
         required: true,
         where: {
-          id: courseUnitId,
+          courseCode,
         },
       },
       { model: CourseRealisation, as: 'courseRealisation' },

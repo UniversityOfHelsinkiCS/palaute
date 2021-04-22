@@ -18,7 +18,7 @@ const TeacherCourseListItem = ({ course }) => {
   }
 
   const handleTargetButton = () => {
-    history.push(`/${course.id}/targets`)
+    history.push(`/${course.courseCode}/targets`)
   }
 
   return (
