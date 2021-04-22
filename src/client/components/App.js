@@ -13,6 +13,8 @@ import Router from './Router'
 import { useUserData } from '../util/queries'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
+import { inProduction } from '../../config'
+import { setHeaders, clearHeaders } from '../util/mockHeaders'
 
 export default () => {
   const { i18n } = useTranslation()
@@ -22,9 +24,15 @@ export default () => {
   }, [])
 
   const user = useUserData()
-
   useEffect(() => {
-    if (!user.data) return
+    if (!user.data) {
+      if (!inProduction) {
+        clearHeaders()
+        localStorage.removeItem('adminLoggedInAs')
+        setHeaders('varisleo')
+      }
+      return
+    }
 
     Sentry.setUser({ username: user.data.id })
     if (!user.data.language) return

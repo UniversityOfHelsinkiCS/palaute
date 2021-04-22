@@ -13,6 +13,9 @@ CourseUnit.init(
     courseCode: {
       type: STRING,
     },
+    validityPeriod: {
+      type: JSONB,
+    },
     name: {
       type: JSONB,
       allowNull: false,

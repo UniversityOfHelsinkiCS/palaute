@@ -30,12 +30,14 @@ const currentUserMiddleware = async (req, res, next) => {
   if (!username) throw new ApplicationError('Missing uid header', 403)
 
   req.user = await upsertUser(req.headers)
+
   if (!isSuperAdmin(username)) return next()
 
   const loggedInAs = req.headers['x-admin-logged-in-as']
   if (!loggedInAs) return next()
 
   req.user = await User.findOne({ where: { id: loggedInAs } })
+
   return next()
 }
 

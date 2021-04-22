@@ -9,6 +9,10 @@ const TeacherView = () => {
 
   if (!courses.data) return null
 
+  courses.data.sort((a, b) =>
+    a.validityPeriod.endDate < b.validityPeriod.endDate ? 1 : -1,
+  )
+
   return (
     <>
       {courses.data &&

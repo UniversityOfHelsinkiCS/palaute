@@ -24,6 +24,7 @@ const TeacherCourseListItem = ({ course }) => {
   return (
     <Box maxWidth="md" border={2} borderRadius={10} m={2} padding={2}>
       <h4>{getLanguageValue(course.name, i18n.language)}</h4>
+      <h5>{course.courseCode}</h5>
       <Button variant="contained" color="primary" onClick={handleEditButton}>
         {t('teacherView:modifyForm')}
       </Button>
