@@ -50,6 +50,8 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 
 const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
+    if (!feedbackTarget) return {}
+
     const responseReady = feedbackTarget.toJSON()
     const sortedUserFeedbackTargets = responseReady.userFeedbackTargets.sort(
       (a, b) =>
@@ -71,7 +73,7 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
-    if (feedbackTarget) responseReady.push(await convertSingle(feedbackTarget))
+    responseReady.push(await convertSingle(feedbackTarget))
   }
   /* eslint-enable */
 
@@ -94,6 +96,8 @@ const getOne = async (req, res) => {
       { model: CourseRealisation, as: 'courseRealisation' },
     ],
   })
+
+  if (!feedbackTarget) throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
   res.send(responseReady)
@@ -156,6 +160,8 @@ const getForStudent = async (req, res) => {
     ],
   })
 
+  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
+
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
   res.send(responseReady)
@@ -180,6 +186,8 @@ const getForTeacher = async (req, res) => {
       { model: CourseRealisation, as: 'courseRealisation' },
     ],
   })
+
+  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
@@ -229,12 +237,13 @@ const getTargetsByCourseUnit = async (req, res) => {
     ],
   })
 
+  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
+
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
   res.send(responseReady)
 }
 
-// Probably merge this with default response for feedbackTarget
 const getSurveys = async (req, res) => {
   const feedbackTarget = await FeedbackTarget.findByPk(req.params.id)
 

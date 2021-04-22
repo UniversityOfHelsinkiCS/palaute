@@ -1,4 +1,12 @@
-const { Op, Model, INTEGER, ARRAY, JSONB, VIRTUAL } = require('sequelize')
+const {
+  Op,
+  Model,
+  STRING,
+  INTEGER,
+  ARRAY,
+  ENUM,
+  VIRTUAL,
+} = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 const Question = require('./question')
 
@@ -14,21 +22,27 @@ class Survey extends Model {
 
     return questions
   }
+
+  async populateQuestions() {
+    this.set('questions', await this.getQuestions())
+  }
 }
 
 Survey.init(
   {
-    data: {
-      type: JSONB,
-      allowNull: false,
-    },
     questionIds: {
       type: ARRAY(INTEGER),
       allowNull: false,
     },
     feedbackTargetId: {
       type: INTEGER,
-      allowNull: false,
+    },
+    type: {
+      type: ENUM,
+      values: ['feedbackTarget', 'programme', 'university'],
+    },
+    typeId: {
+      type: STRING,
     },
     questions: {
       type: VIRTUAL,
