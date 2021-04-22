@@ -1,4 +1,8 @@
 export const getLanguageValue = (values, preferred) => {
+  if (!values) {
+    return null
+  }
+
   const possibleLangs = ['fi', 'en', 'sv']
 
   if (values[preferred]) return values[preferred]

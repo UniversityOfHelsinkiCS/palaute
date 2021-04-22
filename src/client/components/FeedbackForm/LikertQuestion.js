@@ -6,7 +6,6 @@ import {
   FormControlLabel,
   Radio,
   Typography,
-  Box,
   makeStyles,
   FormHelperText,
 } from '@material-ui/core'
@@ -17,19 +16,28 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 
 const useStyles = makeStyles((theme) => ({
+  optionLabel: {
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(0.5),
+  },
   label: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  description: {
+    marginBottom: theme.spacing(1),
   },
 }))
 
-const options = [...Array(5)].map((v, i) => i + 1)
+const options = [...Array(6)].map((v, i) => i)
 
 const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
   const [{ value: answer }, meta, helpers] = useField(name)
   const { t, i18n } = useTranslation()
   const label = getLanguageValue(question.data?.label, i18n.language) ?? ''
+
+  const description =
+    getLanguageValue(question.data?.description, i18n.language) ?? ''
 
   const showError = meta.error && meta.touched
 
@@ -38,11 +46,18 @@ const LikertQuestion = ({ question, name }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <Box mb={1}>
-          <Typography variant="h6" component="legend">
-            {label}
+        <Typography variant="h6" className={classes.label} component="legend">
+          {label}
+        </Typography>
+        {description && (
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            className={classes.description}
+          >
+            {description}
           </Typography>
-        </Box>
+        )}
         <RadioGroup
           aria-label={label}
           value={value}
@@ -59,7 +74,7 @@ const LikertQuestion = ({ question, name }) => {
               control={<Radio color="primary" />}
               label={option.toString()}
               key={option}
-              className={classes.label}
+              className={classes.optionLabel}
             />
           ))}
         </RadioGroup>

@@ -68,6 +68,7 @@ export default {
     removeQuestionConfirmation:
       'Are you sure you want to remove this question?',
     removeOptionConfirmation: 'Are you sure you want to remove this option?',
+    description: 'Description',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',

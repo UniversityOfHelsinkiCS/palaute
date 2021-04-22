@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Card, CardContent } from '@material-ui/core'
 
 import LikertQuestion from './LikertQuestion'
 import OpenQuestion from './OpenQuestion'
@@ -20,7 +20,11 @@ const QuestionItem = ({ question, name }) => {
 
   return (
     <Box mb={2}>
-      <QuestionComponent question={question} name={name} />
+      <Card>
+        <CardContent>
+          <QuestionComponent question={question} name={name} />
+        </CardContent>
+      </Card>
     </Box>
   )
 }

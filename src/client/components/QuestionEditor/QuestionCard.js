@@ -37,11 +37,21 @@ const LikertEditor = ({ name, language }) => {
   const { t } = useTranslation()
 
   return (
-    <FormikTextField
-      name={`${name}.data.label.${language}`}
-      label={t('questionEditor:label')}
-      fullWidth
-    />
+    <>
+      <Box mb={2}>
+        <FormikTextField
+          name={`${name}.data.label.${language}`}
+          label={t('questionEditor:label')}
+          fullWidth
+        />
+      </Box>
+
+      <FormikTextField
+        name={`${name}.data.description.${language}`}
+        label={t('questionEditor:description')}
+        fullWidth
+      />
+    </>
   )
 }
 
