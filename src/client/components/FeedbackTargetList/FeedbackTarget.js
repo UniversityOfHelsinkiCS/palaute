@@ -29,7 +29,6 @@ const FeedbackTarget = ({ target }) => {
 
     history.push(`/targets/${id}/edit`)
   }
-
   return (
     <div className={classes.target}>
       <Typography variant="body1" component="p" className={classes.targetName}>

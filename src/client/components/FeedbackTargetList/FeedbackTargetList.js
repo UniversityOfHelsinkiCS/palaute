@@ -25,7 +25,7 @@ const FeedbackTargetList = () => {
     [feedbackTargets],
   )
 
-  const sortedCourseRealations = useMemo(
+  const sortedCourseRealisations = useMemo(
     () => sortCourseRealisations(courseRealisations),
     [courseRealisations],
   )
@@ -36,8 +36,8 @@ const FeedbackTargetList = () => {
         {t('feedbackTargets:title')}
       </Typography>
       <List>
-        {sortedCourseRealations.length > 0 &&
-          sortedCourseRealations.map((target) => (
+        {sortedCourseRealisations.length > 0 &&
+          sortedCourseRealisations.map((target) => (
             <RealisationFeedbackTargets key={target.id} realisation={target} />
           ))}
       </List>

@@ -11,6 +11,7 @@ import {
 
 import FeedbackTarget from './FeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
+import { parseDate } from './util'
 
 const useStyles = makeStyles(() => ({
   listItem: {
@@ -33,6 +34,10 @@ const RealisationFeedbackTargets = ({ realisation }) => {
         <CardContent>
           <Typography variant="h6" component="h4">
             {getLanguageValue(realisation.name, i18n.language)}
+          </Typography>
+          <Typography variant="body2" component="p">
+            {parseDate(realisation.startDate)} -{' '}
+            {parseDate(realisation.endDate)}
           </Typography>
           {realisation.feedbackTargets.map((target) => (
             <FeedbackTarget key={target.id} target={target} />

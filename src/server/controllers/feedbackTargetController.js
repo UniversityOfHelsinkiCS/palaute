@@ -97,7 +97,8 @@ const getOne = async (req, res) => {
     ],
   })
 
-  if (!feedbackTarget) throw new ApplicationError('Not found or you do not have access', 404)
+  if (!feedbackTarget)
+    throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
   res.send(responseReady)
@@ -160,7 +161,8 @@ const getForStudent = async (req, res) => {
     ],
   })
 
-  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
+  if (!feedbackTargets)
+    throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
@@ -187,7 +189,8 @@ const getForTeacher = async (req, res) => {
     ],
   })
 
-  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
+  if (!feedbackTargets)
+    throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
@@ -237,7 +240,8 @@ const getTargetsByCourseUnit = async (req, res) => {
     ],
   })
 
-  if (!feedbackTargets) throw new ApplicationError('Not found or you do not have access', 404)
+  if (!feedbackTargets)
+    throw new ApplicationError('Not found or you do not have access', 404)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
