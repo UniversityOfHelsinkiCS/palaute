@@ -32,6 +32,7 @@ export default {
   feedbackView: {
     submitButton: 'Give feedback',
     successAlert: 'Feedback has been given',
+    requiredInfo: 'Fields marked with an asterisk (*) are required',
   },
   feedbackList: {
     givenFeedbacks: 'Feedback',

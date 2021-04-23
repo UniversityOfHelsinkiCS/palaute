@@ -22,6 +22,7 @@ const SingleChoiceQuestion = ({ question, name }) => {
 
   const value = answer ?? ''
   const options = question.data?.options ?? []
+  const { required } = question
   const showError = meta.error && meta.touched
 
   return (
@@ -30,6 +31,7 @@ const SingleChoiceQuestion = ({ question, name }) => {
         <Box mb={1}>
           <Typography variant="h6" component="legend">
             {label}
+            {required && ' *'}
           </Typography>
         </Box>
         <RadioGroup

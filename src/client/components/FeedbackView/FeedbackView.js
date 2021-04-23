@@ -18,6 +18,7 @@ import { useSnackbar } from 'notistack'
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
+import Alert from '../Alert'
 
 import {
   makeValidate,
@@ -92,6 +93,11 @@ const FeedbackView = () => {
           <Form>
             <Card>
               <CardContent>
+                <Box mb={2}>
+                  <Alert severity="info">
+                    {t('feedbackView:requiredInfo')}
+                  </Alert>
+                </Box>
                 <FeedbackForm questions={questions} name="answers" />
               </CardContent>
             </Card>

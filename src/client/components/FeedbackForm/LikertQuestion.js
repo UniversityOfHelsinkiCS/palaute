@@ -40,7 +40,7 @@ const LikertQuestion = ({ question, name }) => {
     getLanguageValue(question.data?.description, i18n.language) ?? ''
 
   const showError = meta.error && meta.touched
-
+  const { required } = question
   const value = answer ?? ''
 
   return (
@@ -48,6 +48,7 @@ const LikertQuestion = ({ question, name }) => {
       <FormControl component="fieldset">
         <Typography variant="h6" className={classes.label} component="legend">
           {label}
+          {required && ' *'}
         </Typography>
         {description && (
           <Typography
