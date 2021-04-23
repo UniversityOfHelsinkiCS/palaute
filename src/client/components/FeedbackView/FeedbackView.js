@@ -7,6 +7,8 @@ import {
   makeStyles,
   Button,
   Box,
+  Card,
+  CardContent,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -88,7 +90,12 @@ const FeedbackView = () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <FeedbackForm questions={questions} name="answers" />
+            <Card>
+              <CardContent>
+                <FeedbackForm questions={questions} name="answers" />
+              </CardContent>
+            </Card>
+
             <Box mt={2}>
               <Button
                 disabled={isSubmitting}

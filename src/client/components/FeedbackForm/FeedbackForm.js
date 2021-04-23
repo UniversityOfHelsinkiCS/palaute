@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Card, CardContent } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 import LikertQuestion from './LikertQuestion'
 import OpenQuestion from './OpenQuestion'
@@ -15,31 +15,40 @@ const componentByType = {
   TEXT: Text,
 }
 
-const QuestionItem = ({ question, name }) => {
+const useStyles = makeStyles((theme) => ({
+  questionItem: {
+    '&:not(:last-child)': {
+      marginBottom: theme.spacing(4),
+    },
+  },
+}))
+
+const QuestionItem = ({ question, name, className }) => {
   const QuestionComponent = componentByType[question.type]
 
   return (
-    <Box mb={2}>
-      <Card>
-        <CardContent>
-          <QuestionComponent question={question} name={name} />
-        </CardContent>
-      </Card>
-    </Box>
+    <div className={className}>
+      <QuestionComponent question={question} name={name} />
+    </div>
   )
 }
 
-const FeedbackForm = ({ questions = [], name = 'answers' }) => (
-  <>
-    {questions.map((question) => (
-      <QuestionItem
-        name={`${name}.${question.id.toString()}`}
-        type={question.type}
-        question={question}
-        key={question.id}
-      />
-    ))}
-  </>
-)
+const FeedbackForm = ({ questions = [], name = 'answers' }) => {
+  const classes = useStyles()
+
+  return (
+    <div>
+      {questions.map((question) => (
+        <QuestionItem
+          name={`${name}.${question.id.toString()}`}
+          type={question.type}
+          question={question}
+          className={classes.questionItem}
+          key={question.id}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default FeedbackForm
