@@ -60,6 +60,9 @@ router.get(
   feedbackTargets.getTargetsByCourseUnit,
 )
 
+// Note id means courseCode, not course unit id
+router.get('/course-units/:id/survey', surveys.getSurveyByCourseCode)
+
 router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'
   mluukkai()

@@ -60,7 +60,26 @@ const update = async (req, res) => {
   res.send(updatedSurvey)
 }
 
+const getSurveyByCourseCode = async (req, res) => {
+  const courseCode = req.params.id
+
+  const [survey] = await Survey.findOrCreate({
+    where: {
+      type: 'courseUnit',
+      typeId: courseCode,
+    },
+    defaults: {
+      questionIds: [],
+      type: 'courseUnit',
+      typeId: courseCode,
+    },
+  })
+
+  res.send(survey)
+}
+
 module.exports = {
   addQuestion,
   update,
+  getSurveyByCourseCode,
 }

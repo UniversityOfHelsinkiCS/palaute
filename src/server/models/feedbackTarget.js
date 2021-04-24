@@ -1,15 +1,28 @@
 const { DATE, ENUM, STRING, Model, JSONB, BOOLEAN } = require('sequelize')
+const CourseUnit = require('./courseUnit')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 
 class FeedbackTarget extends Model {
   async getSurveys() {
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
+    const [defaultSurvey] = await Survey.findOrCreate({
+      where: {
+        type: 'courseUnit',
+        typeId: courseUnit.courseCode,
+      },
+      defaults: {
+        questionIds: [],
+        type: 'courseUnit',
+        typeId: courseUnit.courseCode,
+      },
+    })
     const [teacherSurvey] = await Survey.findOrCreate({
       where: {
         feedbackTargetId: this.id,
       },
       defaults: {
-        questionIds: [],
+        questionIds: defaultSurvey.questionIds,
       },
     })
     await teacherSurvey.populateQuestions()

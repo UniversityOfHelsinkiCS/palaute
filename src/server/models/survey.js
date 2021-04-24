@@ -39,7 +39,7 @@ Survey.init(
     },
     type: {
       type: ENUM,
-      values: ['feedbackTarget', 'programme', 'university'],
+      values: ['feedbackTarget', 'courseUnit', 'programme', 'university'],
     },
     typeId: {
       type: STRING,
