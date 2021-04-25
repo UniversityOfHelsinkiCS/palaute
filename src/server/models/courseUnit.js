@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING } = require('sequelize')
+const { Model, JSONB, STRING, ARRAY } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class CourseUnit extends Model {}
@@ -19,6 +19,12 @@ CourseUnit.init(
     name: {
       type: JSONB,
       allowNull: false,
+    },
+    primaryOrganisationId: {
+      type: STRING,
+    },
+    organisationIds: {
+      type: ARRAY(STRING),
     },
   },
   {

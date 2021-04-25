@@ -25,11 +25,16 @@ const combineStudyGroupName = (firstPart, secondPart) => ({
 })
 
 const createCourseUnit = async (data) => {
+  const sortedOrganisationIds = data.organisations
+    .sort((a, b) => a.share - b.share)
+    .map((org) => org.organisationId)
   await CourseUnit.upsert({
     id: data.id,
     name: data.name,
     courseCode: data.code,
     validityPeriod: data.validityPeriod,
+    primaryOrganisationId: sortedOrganisationIds[0],
+    organisationIds: sortedOrganisationIds,
   })
 }
 
