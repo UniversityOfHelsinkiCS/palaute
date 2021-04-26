@@ -76,4 +76,8 @@ export default {
     opensAt: 'Opens at',
     hidden: 'Hidden',
   },
+  questionResults: {
+    answerCount: 'Vastausten määrä',
+    answerOption: 'Vastausvaihtoehto',
+  },
 }
