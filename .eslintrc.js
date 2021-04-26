@@ -14,6 +14,7 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'eslintreact/jsx-props-no-spreading': 'off',
     'no-unused-vars': 'warn',
+    'no-param-reassign': 'off',
     'react/prop-types': [
       1,
       {
@@ -22,10 +23,6 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
-    'no-param-reassign': [
-      'error',
-      { props: true, ignorePropertyModificationsFor: ['draft'] },
-    ],
     'react/no-array-index-key': 'off',
   },
 }

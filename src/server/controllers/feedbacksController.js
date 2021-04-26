@@ -18,64 +18,30 @@ const create = async (req, res) => {
   res.send(newFeedback)
 }
 
-const getOne = async (req, res) => {
+const getFeedbackForUser = async (req) => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
   if (!feedback) throw new ApplicationError('Not found', 404)
+
+  const feedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackId: feedback.id,
+      userId: req.user.id,
+    },
+  })
+
+  if (!feedbackTarget) throw new ApplicationError('Forbidden', 403)
+
+  return feedback
+}
+
+const getOne = async (req, res) => {
+  const feedback = await getFeedbackForUser(req)
 
   res.send(feedback)
 }
 
-const getFeedbackByUser = async (req, res) => {
-  const { user } = req
-  if (!user) throw new ApplicationError('Not found', 404)
-
-  const { id } = user
-
-  const feedbacks = await Feedback.findAll({
-    where: {
-      userId: id,
-    },
-  })
-  if (!feedbacks) throw new ApplicationError('Not found', 404)
-
-  res.send(feedbacks)
-}
-
-const getFeedbackByUserAndCourseId = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Not found', 404)
-
-  const { id } = user
-
-  const feedbacks = await Feedback.findOne({
-    where: {
-      userId: id,
-      surveyId: req.params.id,
-    },
-  })
-  if (!feedbacks) throw new ApplicationError('Not found', 404)
-
-  res.send(feedbacks)
-}
-
 const update = async (req, res) => {
-  const { id } = req.params
-
-  const feedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      feedbackId: Number(id),
-    },
-  })
-
-  if (feedbackTarget?.userId !== req.user.id) {
-    throw new ApplicationError(
-      'User is not authorized to update the feedback',
-      403,
-    )
-  }
-
-  const feedback = await Feedback.findByPk(Number(id))
+  const feedback = await getFeedbackForUser(req)
 
   feedback.data = req.body.data
 
@@ -85,24 +51,13 @@ const update = async (req, res) => {
 }
 
 const destroy = async (req, res) => {
-  const feedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      feedbackId: Number(req.params.id),
-    },
-  })
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-  const { feedbackId } = feedbackTarget
-  feedbackTarget.feedbackId = null
-  await feedbackTarget.save()
-  const feedback = await Feedback.findByPk(Number(feedbackId))
-  await feedback.destroy()
+  const feedback = await getFeedbackForUser(req)
 
+  await feedback.destroy()
   res.sendStatus(200)
 }
 
 module.exports = {
-  getFeedbackByUser,
-  getFeedbackByUserAndCourseId,
   getOne,
   create,
   update,

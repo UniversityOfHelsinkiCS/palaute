@@ -27,9 +27,6 @@ router.use(currentUserMiddleware)
 router.get('/login', users.getUser)
 router.get('/logout', users.logout)
 
-router.get('/users/feedbacks', feedbacks.getFeedbackByUser)
-router.get('/users/feedbacks/:id', feedbacks.getFeedbackByUserAndCourseId)
-
 router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
