@@ -49,6 +49,7 @@ export default {
     modifyForm: 'Modify form',
     viewFeedbackSummary: 'View feedback summary',
     viewFeedbackTargets: 'View feedback targets',
+    sortBy: 'Sort by',
   },
   questionEditor: {
     addQuestion: 'Add question',
@@ -75,5 +76,9 @@ export default {
     closesAt: 'Closes at',
     opensAt: 'Opens at',
     hidden: 'Hidden',
+  },
+  questionResults: {
+    answerCount: 'Vastausten määrä',
+    answerOption: 'Vastausvaihtoehto',
   },
 }
