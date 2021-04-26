@@ -68,12 +68,15 @@ const getSurveyByCourseCode = async (req, res) => {
       type: 'courseUnit',
       typeId: courseCode,
     },
+    include: 'courseUnit',
     defaults: {
       questionIds: [],
       type: 'courseUnit',
       typeId: courseCode,
     },
   })
+
+  await survey.populateQuestions()
 
   res.send(survey)
 }

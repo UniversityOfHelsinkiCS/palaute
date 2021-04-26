@@ -12,9 +12,9 @@ import {
 } from '../UserFeedbacks/utils'
 
 const FeedbackTargetList = () => {
-  const courseId = useParams().id
+  const { code } = useParams()
 
-  const data = useFeedbackTargets(courseId)
+  const data = useFeedbackTargets(code)
 
   const { t } = useTranslation()
 

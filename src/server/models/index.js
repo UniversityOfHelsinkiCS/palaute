@@ -23,6 +23,12 @@ UserFeedbackTarget.belongsTo(Feedback, {
   as: 'feedback',
 })
 
+Survey.belongsTo(CourseUnit, {
+  as: 'courseUnit',
+  foreignKey: 'typeId',
+  targetKey: 'courseCode',
+})
+
 module.exports = {
   Feedback,
   User,
