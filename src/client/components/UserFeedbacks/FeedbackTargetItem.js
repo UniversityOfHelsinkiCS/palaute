@@ -149,7 +149,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { id, closesAt, opensAt, name, feedback } = feedbackTarget
   const isEnded = new Date() > parseISO(closesAt)
 
-  const periodInfo = t('userFeedbacks:feedbackOpenPeriod', {
+  const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
     closesAt: formatDate(parseISO(closesAt)),
   })

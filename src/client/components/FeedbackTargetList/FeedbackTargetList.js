@@ -1,45 +1,74 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { Typography, List } from '@material-ui/core'
-
-import RealisationFeedbackTargets from './RealisationFeedbackTargets'
-import useFeedbackTargets from '../../hooks/useFeedbackTargets'
 import {
-  getCourseRealisationsWithFeedbackTargets,
-  sortCourseRealisations,
-} from '../UserFeedbacks/utils'
+  Typography,
+  List,
+  Box,
+  CircularProgress,
+  makeStyles,
+} from '@material-ui/core'
+
+import CourseRealisationItem from './CourseRealisationItem'
+
+import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
+import useCourseUnit from '../../hooks/useCourseUnit'
+import { getLanguageValue } from '../../util/languageUtils'
+import { getCourseRealisationsWithFeedbackTargets } from './utils'
+
+const useStyles = makeStyles((theme) => ({
+  courseRealisationItem: {
+    '&:not(:last-child)': {
+      marginBottom: theme.spacing(2),
+    },
+  },
+  title: {
+    marginBottom: theme.spacing(2),
+  },
+}))
 
 const FeedbackTargetList = () => {
+  const classes = useStyles()
   const { code } = useParams()
+  const { i18n } = useTranslation()
 
-  const data = useFeedbackTargets(code)
+  const {
+    feedbackTargets,
+    isLoading: feedbackTargetsIsLoading,
+  } = useCourseUnitFeedbackTargets(code)
 
-  const { t } = useTranslation()
+  const { courseUnit, courseUnitIsLoading } = useCourseUnit(code)
 
-  const feedbackTargets = !data.isLoading && data.feedbackTargets
+  const isLoading = feedbackTargetsIsLoading || courseUnitIsLoading
 
-  const courseRealisations = useMemo(
-    () => getCourseRealisationsWithFeedbackTargets(feedbackTargets),
-    [feedbackTargets],
-  )
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" my={4}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
-  const sortedCourseRealisations = useMemo(
-    () => sortCourseRealisations(courseRealisations),
-    [courseRealisations],
+  const name = getLanguageValue(courseUnit?.name, i18n.language)
+
+  const courseRealisations = getCourseRealisationsWithFeedbackTargets(
+    feedbackTargets,
   )
 
   return (
     <div>
-      <Typography variant="h4" component="h3">
-        {t('feedbackTargets:title')}
+      <Typography variant="h4" component="h1" className={classes.title}>
+        {name}
       </Typography>
       <List>
-        {sortedCourseRealisations.length > 0 &&
-          sortedCourseRealisations.map((target) => (
-            <RealisationFeedbackTargets key={target.id} realisation={target} />
-          ))}
+        {courseRealisations.map((courseRealisation) => (
+          <CourseRealisationItem
+            key={courseRealisation.id}
+            courseRealisation={courseRealisation}
+            className={classes.courseRealisationItem}
+          />
+        ))}
       </List>
     </div>
   )
