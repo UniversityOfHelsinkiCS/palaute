@@ -1,24 +1,17 @@
 const { Model, JSONB, STRING } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
-class CourseUnit extends Model {}
+class Organisation extends Model {}
 
-CourseUnit.init(
+Organisation.init(
   {
     id: {
       type: STRING,
       primaryKey: true,
       allowNull: false,
     },
-    courseCode: {
-      type: STRING,
-    },
-    validityPeriod: {
-      type: JSONB,
-    },
     name: {
       type: JSONB,
-      allowNull: false,
     },
   },
   {
@@ -27,4 +20,4 @@ CourseUnit.init(
   },
 )
 
-module.exports = CourseUnit
+module.exports = Organisation
