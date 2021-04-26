@@ -282,11 +282,13 @@ const getFeedbacks = async (req, res) => {
     include: 'feedback',
   })
 
-  const feedbacks = studentFeedbackTargets.map((t) => t.feedback)
+  const feedbacks = studentFeedbackTargets.map((t) =>
+    t.feedback.toPublicObject(),
+  )
 
   res.send({
     ...feedbackTarget.toJSON(),
-    feedbacks,
+    feedbacks: feedbacks.length < 6 ? [] : feedbacks,
   })
 }
 

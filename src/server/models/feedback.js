@@ -3,7 +3,15 @@ const { Model, JSONB } = require('sequelize')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 
-class Feedback extends Model {}
+class Feedback extends Model {
+  toPublicObject() {
+    return {
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      data: this.data,
+    }
+  }
+}
 
 Feedback.init(
   {
