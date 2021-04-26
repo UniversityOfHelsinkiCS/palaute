@@ -81,34 +81,60 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   return responseReady
 }
 
-const getOne = async (req, res) => {
+const getIncludes = (userId, accessStatus) => {
+  // where parameter cant have undefined values
+  const where = accessStatus ? { userId, accessStatus } : { userId }
+  return [
+    {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTargets',
+      required: true,
+      where,
+      include: { model: Feedback, as: 'feedback' },
+    },
+    { model: CourseUnit, as: 'courseUnit' },
+    { model: CourseRealisation, as: 'courseRealisation' },
+  ]
+}
+const getFeedbackTargetByIdForUser = async (req) => {
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        where: {
-          userId: req.user.id,
-        },
-        include: { model: Feedback, as: 'feedback' },
-      },
-      { model: CourseUnit, as: 'courseUnit' },
-      { model: CourseRealisation, as: 'courseRealisation' },
-    ],
+    include: getIncludes(req.user.id),
   })
 
   if (!feedbackTarget)
     throw new ApplicationError('Not found or you do not have access', 404)
+
+  if (
+    feedbackTarget.hidden &&
+    feedbackTarget.userFeedbackTarget.accessStatus === 'STUDENT'
+  ) {
+    throw new ApplicationError('Forbidden', 403)
+  }
+  return feedbackTarget
+}
+
+const getFeedbackTargetsForStudent = async (req) => {
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      hidden: false,
+    },
+    include: getIncludes(req.user.id, 'STUDENT'),
+  })
+  return feedbackTargets
+}
+
+const getOne = async (req, res) => {
+  const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
   res.send(responseReady)
 }
 
 const update = async (req, res) => {
-  const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id))
+  const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  if (feedbackTarget.userFeedbackTarget.accessStatus !== 'TEACHER')
+    throw new ApplicationError('Forbidden', 403)
 
   const { name, hidden, opensAt, closesAt, questions, surveyId } = req.body
 
@@ -118,9 +144,13 @@ const update = async (req, res) => {
   feedbackTarget.closesAt = closesAt
 
   if (questions && surveyId) {
-    const survey = await Survey.findByPk(Number(surveyId))
+    const survey = await Survey.findOne({
+      where: {
+        id: surveyId,
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
     if (!survey) throw new ApplicationError('Not found', 404)
-
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
@@ -142,56 +172,7 @@ const getForStudent = async (req, res) => {
     endDateAfter,
   })
 
-  const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      hidden: false,
-    },
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        where: {
-          userId: req.user.id,
-          accessStatus: 'STUDENT',
-        },
-        include: { model: Feedback, as: 'feedback' },
-      },
-      { model: CourseUnit, as: 'courseUnit' },
-      { model: CourseRealisation, as: 'courseRealisation' },
-    ],
-  })
-
-  if (!feedbackTargets)
-    throw new ApplicationError('Not found or you do not have access', 404)
-
-  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
-
-  res.send(responseReady)
-}
-
-const getForTeacher = async (req, res) => {
-  await getResponsibleByPersonId(req.user.id)
-
-  const feedbackTargets = await FeedbackTarget.findAll({
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        where: {
-          userId: req.user.id,
-          accessStatus: 'TEACHER',
-        },
-        include: { model: Feedback, as: 'feedback' },
-      },
-      { model: CourseUnit, as: 'courseUnit' },
-      { model: CourseRealisation, as: 'courseRealisation' },
-    ],
-  })
-
-  if (!feedbackTargets)
-    throw new ApplicationError('Not found or you do not have access', 404)
+  const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
@@ -199,11 +180,7 @@ const getForTeacher = async (req, res) => {
 }
 
 const getCourseUnitsForTeacher = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('Missing uid header', 403)
-
-  const { id } = user
+  const { id } = req.user
 
   await getResponsibleByPersonId(id)
 
@@ -224,8 +201,10 @@ const getTargetsByCourseUnit = async (req, res) => {
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
+        required: true,
         where: {
           userId: req.user.id,
+          accessStatus: 'TEACHER',
         },
         include: { model: Feedback, as: 'feedback' },
       },
@@ -249,55 +228,10 @@ const getTargetsByCourseUnit = async (req, res) => {
   res.send(responseReady)
 }
 
-const getFeedbacks = async (req, res) => {
-  const { user } = req
-  const { id: feedbackTargetId } = req.params
-
-  if (!user) {
-    throw new ApplicationError('Authorization is required', 401)
-  }
-
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: req.user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
-  })
-
-  // TODO: separate student & teacher access checks
-  if (!userFeedbackTarget) {
-    throw new ApplicationError('User is not authorized to view feedbacks', 403)
-  }
-
-  const { feedbackTarget } = userFeedbackTarget
-
-  await feedbackTarget.populateQuestions()
-
-  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      feedbackTargetId,
-      accessStatus: 'STUDENT',
-    },
-    include: 'feedback',
-  })
-
-  const feedbacks = studentFeedbackTargets.map((t) =>
-    t.feedback.toPublicObject(),
-  )
-
-  res.send({
-    ...feedbackTarget.toJSON(),
-    feedbacks: feedbacks.length < 6 ? [] : feedbacks,
-  })
-}
-
 module.exports = {
   getForStudent,
-  getForTeacher,
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
   update,
-  getFeedbacks,
 }

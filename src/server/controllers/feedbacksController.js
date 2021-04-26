@@ -11,7 +11,7 @@ const create = async (req, res) => {
   })
 
   await UserFeedbackTarget.update(
-    { feedbackId: Number(newFeedback.id) },
+    { feedbackId: newFeedback.id },
     { where: { userId, feedbackTargetId: Number(feedbackTargetId) } },
   )
 

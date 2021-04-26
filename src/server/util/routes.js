@@ -33,8 +33,8 @@ router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 
 router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
-router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
-router.get('/feedback-targets/with-feedbacks/:id', feedbackTargets.getFeedbacks)
+// unused ?
+// router.get('/feedback-targets/with-feedbacks/:id', feedbackTargets.getFeedbacks)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
 
@@ -58,11 +58,6 @@ router.get(
 
 router.get('/course-units/:code', courseUnits.getOne)
 router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
-
-router.get('/trigger-sentry', () => {
-  const mluukkai = 'isNotAFunction'
-  mluukkai()
-})
 
 router.use('/admin', adminController)
 
