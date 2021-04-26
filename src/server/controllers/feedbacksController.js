@@ -1,11 +1,6 @@
 const { ApplicationError } = require('../util/customErrors')
 const { UserFeedbackTarget, Feedback } = require('../models')
 
-const getAll = async (req, res) => {
-  const feedbacks = await Feedback.findAll()
-  res.send(feedbacks)
-}
-
 const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
   const { id: userId } = req.user
@@ -106,7 +101,6 @@ const destroy = async (req, res) => {
 }
 
 module.exports = {
-  getAll,
   getFeedbackByUser,
   getFeedbackByUserAndCourseId,
   getOne,

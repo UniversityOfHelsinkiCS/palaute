@@ -29,7 +29,6 @@ router.get('/logout', users.logout)
 router.get('/users/feedbacks', feedbacks.getFeedbackByUser)
 router.get('/users/feedbacks/:id', feedbacks.getFeedbackByUserAndCourseId)
 
-router.get('/feedbacks', feedbacks.getAll)
 router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
@@ -40,7 +39,6 @@ router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
 router.get('/feedback-targets/with-feedbacks/:id', feedbackTargets.getFeedbacks)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
-router.get('/feedback-targets/:id/surveys', feedbackTargets.getSurveys)
 
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
@@ -59,8 +57,7 @@ router.get(
   feedbackTargets.getTargetsByCourseUnit,
 )
 
-// Note id means courseCode, not course unit id
-router.get('/course-units/:id/survey', surveys.getSurveyByCourseCode)
+router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
 
 router.get('/trigger-sentry', () => {
   const mluukkai = 'isNotAFunction'

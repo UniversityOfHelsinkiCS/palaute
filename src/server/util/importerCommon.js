@@ -5,7 +5,6 @@ const {
   CourseUnit,
   UserFeedbackTarget,
   CourseRealisation,
-  Organisation,
   CourseUnitsOrganisation,
 } = require('../models')
 
@@ -39,12 +38,12 @@ const createCourseUnit = async (data) => {
   const primaryId = sortedOrganisationIds.shift()
   await CourseUnitsOrganisation.findOrCreate({
     where: {
-      type: 'DIRECT',
+      type: 'PRIMARY',
       courseUnitId: data.id,
       organisationId: primaryId,
     },
     defaults: {
-      type: 'DIRECT',
+      type: 'PRIMARY',
       courseUnitId: data.id,
       organisationId: primaryId,
     },

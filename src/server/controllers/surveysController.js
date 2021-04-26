@@ -61,7 +61,7 @@ const update = async (req, res) => {
 }
 
 const getSurveyByCourseCode = async (req, res) => {
-  const courseCode = req.params.id
+  const courseCode = req.params.code
 
   const [survey] = await Survey.findOrCreate({
     where: {

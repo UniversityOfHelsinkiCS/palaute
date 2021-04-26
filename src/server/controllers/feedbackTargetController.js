@@ -249,13 +249,6 @@ const getTargetsByCourseUnit = async (req, res) => {
   res.send(responseReady)
 }
 
-const getSurveys = async (req, res) => {
-  const feedbackTarget = await FeedbackTarget.findByPk(req.params.id)
-
-  const surveys = await feedbackTarget.getSurveys()
-  res.send(surveys)
-}
-
 const getFeedbacks = async (req, res) => {
   const { user } = req
   const { id: feedbackTargetId } = req.params
@@ -303,7 +296,6 @@ module.exports = {
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
-  getSurveys,
   update,
   getFeedbacks,
 }
