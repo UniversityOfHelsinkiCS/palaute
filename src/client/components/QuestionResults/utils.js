@@ -8,7 +8,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT']
 
-export const getLikertChartData = (question, language) => {
+export const getLikertChartConfig = (question, language) => {
   const labels = [...Array(6)].map((v, i) => i.toString())
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
@@ -16,18 +16,29 @@ export const getLikertChartData = (question, language) => {
   const data = labels.map((l) => countByLabel[l] ?? 0)
 
   return {
-    labels,
-    datasets: [
-      {
-        label: datasetLabel,
-        data,
-        backgroundColor: theme.palette.primary.main,
+    options: {
+      scales: {
+        y: {
+          ticks: {
+            precision: 0,
+          },
+        },
       },
-    ],
+    },
+    data: {
+      labels,
+      datasets: [
+        {
+          label: datasetLabel,
+          data,
+          backgroundColor: theme.palette.primary.main,
+        },
+      ],
+    },
   }
 }
 
-export const getMultipleChoiceChartData = (question, language) => {
+export const getMultipleChoiceChartConfig = (question, language) => {
   const arrayOptions = question.data?.options ?? []
 
   const labels = arrayOptions.map(({ label }) =>
@@ -40,18 +51,29 @@ export const getMultipleChoiceChartData = (question, language) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    labels,
-    datasets: [
-      {
-        label: datasetLabel,
-        data,
-        backgroundColor: theme.palette.primary.main,
+    options: {
+      scales: {
+        y: {
+          ticks: {
+            precision: 0,
+          },
+        },
       },
-    ],
+    },
+    data: {
+      labels,
+      datasets: [
+        {
+          label: datasetLabel,
+          data,
+          backgroundColor: theme.palette.primary.main,
+        },
+      ],
+    },
   }
 }
 
-export const getSingleChoiceChartData = (question, language) => {
+export const getSingleChoiceChartConfig = (question, language) => {
   const arrayOptions = question.data?.options ?? []
 
   const labels = arrayOptions.map(({ label }) =>
@@ -63,14 +85,25 @@ export const getSingleChoiceChartData = (question, language) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    labels,
-    datasets: [
-      {
-        label: datasetLabel,
-        data,
-        backgroundColor: theme.palette.primary.main,
+    options: {
+      scales: {
+        y: {
+          ticks: {
+            precision: 0,
+          },
+        },
       },
-    ],
+    },
+    data: {
+      labels,
+      datasets: [
+        {
+          label: datasetLabel,
+          data,
+          backgroundColor: theme.palette.primary.main,
+        },
+      ],
+    },
   }
 }
 
