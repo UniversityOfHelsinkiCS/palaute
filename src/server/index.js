@@ -4,6 +4,7 @@ const path = require('path')
 const express = require('express')
 const { PORT, inProduction } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
+const { createOrganisations } = require('./util/importerOrganisations')
 const logger = require('./util/logger')
 
 const app = express()
@@ -21,6 +22,7 @@ if (inProduction) {
 
 const start = async () => {
   await connectToDatabase()
+  await createOrganisations()
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
   })

@@ -36,12 +36,6 @@ const createCourseUnit = async (data) => {
     courseCode: data.code,
     validityPeriod: data.validityPeriod,
   })
-  await sortedOrganisationIds.reduce(async (promise, id) => {
-    await promise
-    await Organisation.upsert({
-      id,
-    })
-  }, Promise.resolve())
   const primaryId = sortedOrganisationIds.shift()
   await CourseUnitsOrganisation.findOrCreate({
     where: {

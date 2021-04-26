@@ -13,6 +13,9 @@ Organisation.init(
     name: {
       type: JSONB,
     },
+    code: {
+      type: STRING,
+    },
   },
   {
     underscored: true,
