@@ -12,6 +12,10 @@ export default {
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',
+    edit: 'Edit',
+    feedbackOpenPeriod:
+      'Feedback can be given between {{opensAt}} and {{closesAt}}',
+    results: 'Results',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -26,24 +30,11 @@ export default {
     feedbackClosed: 'Feedback is closed',
     waitingForFeedback: 'Waiting for feedback',
     feedbackGiven: 'Feedback has been given',
-    feedbackOpenPeriod:
-      'Feedback can be given between {{opensAt}} and {{closesAt}}',
   },
   feedbackView: {
     submitButton: 'Give feedback',
     successAlert: 'Feedback has been given',
     requiredInfo: 'Fields marked with an asterisk (*) are required',
-  },
-  feedbackList: {
-    givenFeedbacks: 'Feedback',
-    notEnoughFeedbacks: 'Not enough feedbacks to show',
-    amount: 'Amount',
-    answers: 'Answers',
-    average: 'Average',
-  },
-  feedbackTargets: {
-    title: 'Course unit feedback targets',
-    feedbackOpen: 'Feedback open',
   },
   teacherView: {
     modifyForm: 'Modify form',

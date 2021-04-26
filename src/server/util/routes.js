@@ -10,6 +10,7 @@ const surveys = require('../controllers/surveysController')
 const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
 const questions = require('../controllers/questionsController')
+const courseUnits = require('../controllers/courseUnitController')
 
 const router = Router()
 
@@ -52,11 +53,13 @@ router.get(
   '/course-units/responsible',
   feedbackTargets.getCourseUnitsForTeacher,
 )
+
 router.get(
   '/course-units/:id/feedback-targets',
   feedbackTargets.getTargetsByCourseUnit,
 )
 
+router.get('/course-units/:code', courseUnits.getOne)
 router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
 
 router.get('/trigger-sentry', () => {
