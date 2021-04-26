@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '@material-ui/core'
+import { Button, Typography, makeStyles } from '@material-ui/core'
 
 import { useTeacherCourses } from '../../util/queries'
 
 import TeacherCourseList from './TeacherCourseList'
 
+const useStyles = makeStyles(() => ({
+  rowComponent: {
+    margin: 5,
+  },
+}))
+
 const TeacherView = () => {
+  const { t } = useTranslation()
+
+  const classes = useStyles()
   const [sortedBy, useSortedBy] = useState({ sortBy: 'NAME', reversed: false })
 
   const courses = useTeacherCourses()
@@ -40,19 +50,32 @@ const TeacherView = () => {
 
   return (
     <>
+      <Typography
+        variant="span"
+        component="span"
+        className={classes.rowComponent}
+      >
+        {t('teacherView:sortBy')}
+      </Typography>
       <Button
         variant="contained"
         color="primary"
+        size="small"
+        className={classes.rowComponent}
         onClick={(e) => handleClick(e, 'NAME')}
       >
-        Name
+        {`Name ${sortedBy.sortBy === 'NAME' && sortedBy.reversed ? '⇩' : '⇧'}`}
       </Button>
       <Button
         variant="contained"
         color="primary"
+        size="small"
+        className={classes.rowComponent}
         onClick={(e) => handleClick(e, 'CODE')}
       >
-        Course code
+        {`Course code ${
+          sortedBy.sortBy === 'CODE' && sortedBy.reversed ? '⇩' : '⇧'
+        }`}
       </Button>
       <TeacherCourseList courses={uniqueCourses} sortedBy={sortedBy} />
     </>
