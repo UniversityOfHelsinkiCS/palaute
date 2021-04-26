@@ -6,6 +6,8 @@ const Question = require('./question')
 const Survey = require('./survey')
 const CourseUnit = require('./courseUnit')
 const UserFeedbackTarget = require('./userFeedbackTarget')
+const Organisation = require('./organisation')
+const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -38,4 +40,6 @@ module.exports = {
   CourseUnit,
   UserFeedbackTarget,
   Question,
+  Organisation,
+  CourseUnitsOrganisation,
 }

@@ -164,7 +164,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   }
 
   const editPath = `${id}/edit`
-  const viewPath = `${id}/view`
+  const viewPath = `/targets/${id}/results`
 
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>

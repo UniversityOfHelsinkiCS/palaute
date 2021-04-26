@@ -1,7 +1,15 @@
 const { STRING, INTEGER, Model } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
-class UserFeedbackTarget extends Model {}
+class UserFeedbackTarget extends Model {
+  hasTeacherAccess() {
+    return this.accessStatus === 'TEACHER'
+  }
+
+  hasStudentAccess() {
+    return this.accessStatus === 'STUDENT'
+  }
+}
 
 UserFeedbackTarget.init(
   {

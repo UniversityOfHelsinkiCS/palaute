@@ -5,6 +5,8 @@ const {
   CourseUnit,
   UserFeedbackTarget,
   CourseRealisation,
+  Organisation,
+  CourseUnitsOrganisation,
 } = require('../models')
 
 const commonFeedbackName = {
@@ -33,9 +35,41 @@ const createCourseUnit = async (data) => {
     name: data.name,
     courseCode: data.code,
     validityPeriod: data.validityPeriod,
-    primaryOrganisationId: sortedOrganisationIds[0],
-    organisationIds: sortedOrganisationIds,
   })
+  await sortedOrganisationIds.reduce(async (promise, id) => {
+    await promise
+    await Organisation.upsert({
+      id,
+    })
+  }, Promise.resolve())
+  const primaryId = sortedOrganisationIds.shift()
+  await CourseUnitsOrganisation.findOrCreate({
+    where: {
+      type: 'DIRECT',
+      courseUnitId: data.id,
+      organisationId: primaryId,
+    },
+    defaults: {
+      type: 'DIRECT',
+      courseUnitId: data.id,
+      organisationId: primaryId,
+    },
+  })
+  await sortedOrganisationIds.reduce(async (promise, id) => {
+    await promise
+    await CourseUnitsOrganisation.findOrCreate({
+      where: {
+        type: 'DIRECT',
+        courseUnitId: data.id,
+        organisationId: id,
+      },
+      defaults: {
+        type: 'DIRECT',
+        courseUnitId: data.id,
+        organisationId: id,
+      },
+    })
+  }, Promise.resolve())
 }
 
 const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
