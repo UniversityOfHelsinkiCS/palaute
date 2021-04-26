@@ -1,4 +1,13 @@
-const { DATE, ENUM, STRING, Model, JSONB, BOOLEAN } = require('sequelize')
+const {
+  DATE,
+  ENUM,
+  STRING,
+  Model,
+  JSONB,
+  BOOLEAN,
+  VIRTUAL,
+} = require('sequelize')
+
 const CourseUnit = require('./courseUnit')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
@@ -6,6 +15,7 @@ const Survey = require('./survey')
 class FeedbackTarget extends Model {
   async getSurveys() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
+
     const [defaultSurvey] = await Survey.findOrCreate({
       where: {
         type: 'courseUnit',
@@ -17,6 +27,7 @@ class FeedbackTarget extends Model {
         typeId: courseUnit.courseCode,
       },
     })
+
     const [teacherSurvey] = await Survey.findOrCreate({
       where: {
         feedbackTargetId: this.id,
@@ -25,12 +36,15 @@ class FeedbackTarget extends Model {
         questionIds: defaultSurvey.questionIds,
       },
     })
+
     await teacherSurvey.populateQuestions()
 
     const departmentSurvey = {} // await Survey.findOne()
+
     const universitySurvey = await Survey.findOne({
       where: { type: 'university' },
     })
+
     await universitySurvey.populateQuestions()
 
     return {
@@ -38,6 +52,38 @@ class FeedbackTarget extends Model {
       departmentSurvey,
       universitySurvey,
     }
+  }
+
+  isOpen() {
+    if (!this.opensAt || !this.closesAt) {
+      return true
+    }
+
+    const now = new Date()
+
+    return this.opensAt < now && this.closesAt > now
+  }
+
+  isEnded() {
+    if (!this.closesAt) {
+      return true
+    }
+
+    const now = new Date()
+
+    return now > this.closesAt
+  }
+
+  async populateQuestions() {
+    const surveys = await this.getSurveys()
+
+    const questions = [
+      ...(surveys.universitySurvey?.questions ?? []),
+      ...(surveys.departmentSurvey?.questions ?? []),
+      ...(surveys.teacherSurvey?.questions ?? []),
+    ]
+
+    this.set('questions', questions)
   }
 }
 
@@ -76,6 +122,9 @@ FeedbackTarget.init(
     },
     closesAt: {
       type: DATE,
+    },
+    questions: {
+      type: VIRTUAL,
     },
   },
   {

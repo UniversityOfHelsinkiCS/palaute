@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EditFeedbackTarget = () => {
-  const { feedbackTargetId } = useParams()
+  const { id } = useParams()
   const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
@@ -55,14 +55,14 @@ const EditFeedbackTarget = () => {
   const {
     feedbackTarget,
     isLoading: feedbackTargetIsLoading,
-  } = useFeedbackTarget(feedbackTargetId, {
+  } = useFeedbackTarget(id, {
     cacheTime: 0,
   })
 
-  const {
-    surveys,
-    isLoading: surveysIsLoading,
-  } = useFeedbackTargetSurveys(feedbackTargetId, { cacheTime: 0 })
+  const { surveys, isLoading: surveysIsLoading } = useFeedbackTargetSurveys(
+    id,
+    { cacheTime: 0 },
+  )
 
   const isLoading = feedbackTargetIsLoading || surveysIsLoading
 
@@ -82,7 +82,7 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveValues(values, surveys, feedbackTargetId)
+      await saveValues(values, surveys, id)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })

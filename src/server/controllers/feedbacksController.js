@@ -48,6 +48,7 @@ const getFeedbackByUser = async (req, res) => {
 
 const getFeedbackByUserAndCourseId = async (req, res) => {
   const { user } = req
+
   if (!user) throw new ApplicationError('Not found', 404)
 
   const { id } = user
@@ -58,18 +59,6 @@ const getFeedbackByUserAndCourseId = async (req, res) => {
       surveyId: req.params.id,
     },
   })
-  if (!feedbacks) throw new ApplicationError('Not found', 404)
-
-  res.send(feedbacks)
-}
-
-const getFeedbackByCourseId = async (req, res) => {
-  const feedbacks = await Feedback.findAll({
-    where: {
-      courseRealisationId: req.params.id,
-    },
-  })
-
   if (!feedbacks) throw new ApplicationError('Not found', 404)
 
   res.send(feedbacks)
@@ -119,7 +108,6 @@ const destroy = async (req, res) => {
 module.exports = {
   getAll,
   getFeedbackByUser,
-  getFeedbackByCourseId,
   getFeedbackByUserAndCourseId,
   getOne,
   create,

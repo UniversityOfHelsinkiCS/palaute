@@ -13,6 +13,7 @@ const {
   Survey,
   Question,
 } = require('../models')
+
 const { sequelize } = require('../util/dbConnection')
 
 const mapStatusToValue = {
@@ -255,6 +256,47 @@ const getSurveys = async (req, res) => {
   res.send(surveys)
 }
 
+const getFeedbacks = async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+
+  if (!user) {
+    throw new ApplicationError('Authorization is required', 401)
+  }
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: req.user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  // TODO: separate student & teacher access checks
+  if (!userFeedbackTarget) {
+    throw new ApplicationError('User is not authorized to view feedbacks', 403)
+  }
+
+  const { feedbackTarget } = userFeedbackTarget
+
+  await feedbackTarget.populateQuestions()
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+    include: 'feedback',
+  })
+
+  const feedbacks = studentFeedbackTargets.map((t) => t.feedback)
+
+  res.send({
+    ...feedbackTarget.toJSON(),
+    feedbacks,
+  })
+}
+
 module.exports = {
   getForStudent,
   getForTeacher,
@@ -263,4 +305,5 @@ module.exports = {
   getOne,
   getSurveys,
   update,
+  getFeedbacks,
 }

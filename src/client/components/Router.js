@@ -9,6 +9,7 @@ import TeacherView from './TeacherView'
 import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import EditCourseUnitSurvey from './EditCourseUnitSurvey'
+import FeedbackTargetResults from './FeedbackTargetResults'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,10 +27,8 @@ const Router = () => {
         <Route path="/:feedbackTargetId/edit" component={FeedbackView} />
         <Route path="/list" component={TeacherView} />
         <Route path="/courses/:code/targets" component={FeedbackTargetList} />
-        <Route
-          path="/targets/:feedbackTargetId/edit"
-          component={EditFeedbackTarget}
-        />
+        <Route path="/targets/:id/edit" component={EditFeedbackTarget} />
+        <Route path="/targets/:id/results" component={FeedbackTargetResults} />
         <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
         <Route path="/admin" component={AdminView} />
         <Route path="/" component={UserFeedbacks} />

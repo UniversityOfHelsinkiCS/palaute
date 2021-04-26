@@ -35,10 +35,9 @@ router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 
-router.get('/courses/:id/feedbacks', feedbacks.getFeedbackByCourseId)
-
 router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 router.get('/feedback-targets/for-teacher', feedbackTargets.getForTeacher)
+router.get('/feedback-targets/with-feedbacks/:id', feedbackTargets.getFeedbacks)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
 router.get('/feedback-targets/:id/surveys', feedbackTargets.getSurveys)
