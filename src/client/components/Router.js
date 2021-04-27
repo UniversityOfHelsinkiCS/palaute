@@ -24,12 +24,12 @@ const Router = () => {
   return (
     <Container className={classes.container}>
       <Switch>
-        <Route path="/:feedbackTargetId/edit" component={FeedbackView} />
-        <Route path="/list" component={TeacherView} />
+        <Route path="/courses" component={TeacherView} />
+        <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
         <Route path="/courses/:code/targets" component={FeedbackTargetList} />
         <Route path="/targets/:id/edit" component={EditFeedbackTarget} />
         <Route path="/targets/:id/results" component={FeedbackTargetResults} />
-        <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
+        <Route path="/targets/:id/feedback" component={FeedbackView} />
         <Route path="/admin" component={AdminView} />
         <Route path="/" component={UserFeedbacks} />
       </Switch>

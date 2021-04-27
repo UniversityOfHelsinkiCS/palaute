@@ -165,7 +165,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     queryClient.invalidateQueries('feedbackTargetsForStudent')
   }
 
-  const editPath = `${id}/edit`
+  const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
 
   return (

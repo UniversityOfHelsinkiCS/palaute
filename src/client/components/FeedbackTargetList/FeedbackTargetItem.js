@@ -60,7 +60,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
           component={Link}
           className={classes.action}
           color="primary"
-          to={`/${id}/edit`}
+          to={`/targets/${id}/feedback`}
         >
           {t('feedbackTargetList:showSurvey')}
         </Button>

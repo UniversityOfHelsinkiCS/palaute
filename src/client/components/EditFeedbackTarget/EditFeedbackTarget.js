@@ -145,7 +145,7 @@ const EditFeedbackTarget = () => {
               color="primary"
               type="submit"
               component={Link}
-              to={`/${id}/edit`}
+              to={`/targets/${id}/feedback`}
             >
               {t('show')}
             </Button>

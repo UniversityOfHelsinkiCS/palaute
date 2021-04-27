@@ -60,7 +60,7 @@ const NavBar = () => {
             <FeedbacksIcon />
           </NavIconButton>
           {hasCourses && (
-            <NavIconButton to="/list" tooltipTitle="My courses">
+            <NavIconButton to="/courses" tooltipTitle="My courses">
               <TeacherSettingsIcon />
             </NavIconButton>
           )}
