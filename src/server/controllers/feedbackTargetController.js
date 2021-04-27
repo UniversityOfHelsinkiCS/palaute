@@ -53,6 +53,8 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
     if (!feedbackTarget) return {}
 
+    await feedbackTarget.populateQuestions()
+
     const responseReady = feedbackTarget.toJSON()
     const sortedUserFeedbackTargets = responseReady.userFeedbackTargets.sort(
       (a, b) =>
@@ -228,10 +230,62 @@ const getTargetsByCourseUnit = async (req, res) => {
   res.send(responseReady)
 }
 
+const getFeedbacks = async (req, res) => {
+  const { user } = req
+  const feedbackTargetId = Number(req.params.id)
+
+  if (!user) {
+    throw new ApplicationError('Authorization is required', 401)
+  }
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: req.user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  if (!userFeedbackTarget) {
+    throw new ApplicationError('User is not authorized to view feedbacks', 403)
+  }
+
+  if (
+    userFeedbackTarget.hasStudentAccess() &&
+    !userFeedbackTarget.feedbackTarget.isEnded()
+  ) {
+    throw new ApplicationError(
+      'Feedback is only visible for students once the feedback period has ended',
+      403,
+    )
+  }
+
+  const { feedbackTarget } = userFeedbackTarget
+
+  await feedbackTarget.populateQuestions()
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+    include: 'feedback',
+  })
+
+  const feedbacks = studentFeedbackTargets.map((t) =>
+    t.feedback.toPublicObject(),
+  )
+
+  const publicFeedbacks = feedbacks.length < 6 ? [] : feedbacks
+
+  res.send(publicFeedbacks)
+}
+
 module.exports = {
   getForStudent,
   getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
   update,
+  getFeedbacks,
 }

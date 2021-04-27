@@ -67,7 +67,15 @@ const EditFeedbackTarget = () => {
     return <Redirect to="/" />
   }
 
-  const name = getLanguageValue(feedbackTarget.name, i18n.language)
+  const feedbackTargetName = getLanguageValue(
+    feedbackTarget.name,
+    i18n.language,
+  )
+
+  const courseUnitName = getLanguageValue(
+    feedbackTarget.courseUnit.name,
+    i18n.language,
+  )
 
   const handleSubmit = async (values) => {
     try {
@@ -83,8 +91,12 @@ const EditFeedbackTarget = () => {
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.heading}>
-        {name}
+        {feedbackTargetName}
       </Typography>
+
+      <Box mb={2}>
+        <Typography>{courseUnitName}</Typography>
+      </Box>
 
       <LanguageTabs
         language={language}

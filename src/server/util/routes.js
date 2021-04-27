@@ -33,10 +33,9 @@ router.put('/feedbacks/:id', feedbacks.update)
 router.delete('/feedbacks/:id', feedbacks.destroy)
 
 router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
-// unused ?
-// router.get('/feedback-targets/with-feedbacks/:id', feedbackTargets.getFeedbacks)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
+router.get('/feedback-targets/:id/feedbacks', feedbackTargets.getFeedbacks)
 
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
