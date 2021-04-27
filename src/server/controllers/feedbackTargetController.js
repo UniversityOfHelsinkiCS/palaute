@@ -108,7 +108,7 @@ const getFeedbackTargetByIdForUser = async (req) => {
 
   if (
     feedbackTarget.hidden &&
-    feedbackTarget.userFeedbackTarget.accessStatus === 'STUDENT'
+    !(feedbackTarget.userFeedbackTargets[0]?.accessStatus === 'TEACHER')
   ) {
     throw new ApplicationError('Forbidden', 403)
   }
