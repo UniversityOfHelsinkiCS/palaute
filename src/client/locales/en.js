@@ -79,4 +79,8 @@ export default {
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
   },
+  feedbackTargetResults: {
+    notEnoughFeedbacksInfo:
+      'Survey results will not be displayed because it does not have enough feedbacks',
+  },
 }
