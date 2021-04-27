@@ -40,13 +40,14 @@ export default {
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',
-    oldCourses: 'Vanhat kurssit',
+    oldCourses: 'Näytä vanhat kurssit',
     modifyForm: 'Muokkaa lomaketta',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     viewFeedbackTargets: 'Näytä palautteen kohteet',
     sortBy: 'Järjestä',
     courseName: 'Kurssin nimi',
     courseCode: 'Kurssikoodi',
+    mainHeading: 'Kurssini',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
@@ -81,5 +82,11 @@ export default {
     showFeedbacks: 'Näytä palautteet',
     showSurvey: 'Näytä kysely',
     editSurvey: 'Muokkaa kyselyä',
+    copyLink: 'Kopioi linkki palautteeseen',
+    copied: 'Linkki kopioitu leikepöydälle',
+  },
+  feedbackTargetResults: {
+    notEnoughFeedbacksInfo:
+      'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
   },
 }

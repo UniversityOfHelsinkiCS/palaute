@@ -128,6 +128,14 @@ const getFeedbackTargetsForStudent = async (req) => {
 }
 
 const getOne = async (req, res) => {
+  const startDateBefore = dateFns.subDays(new Date(), 14)
+  const endDateAfter = dateFns.subDays(new Date(), 14)
+
+  await getEnrolmentByPersonId(req.user.id, {
+    startDateBefore,
+    endDateAfter,
+  })
+
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)

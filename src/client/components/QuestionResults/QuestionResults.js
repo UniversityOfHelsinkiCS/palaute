@@ -6,6 +6,7 @@ import { getQuestionsWithFeedback } from './utils'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
+import OpenResults from './OpenResults'
 
 const useStyles = makeStyles((theme) => ({
   questionItem: {
@@ -19,6 +20,7 @@ const componentByType = {
   LIKERT: LikertResults,
   MULTIPLE_CHOICE: MultipleChoiceResults,
   SINGLE_CHOICE: SingleChoiceResults,
+  OPEN: OpenResults,
 }
 
 const QuestionItem = ({ question, className }) => {

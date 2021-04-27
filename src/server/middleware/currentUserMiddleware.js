@@ -50,8 +50,8 @@ const upsertUser = async ({
 }) => {
   const [user] = await User.upsert({
     id: hypersonsisuid,
-    first_name: givenname,
-    last_name: sn,
+    firstName: givenname,
+    lastName: sn,
     email: mail,
     language: preferredlanguage,
     username: uid,
