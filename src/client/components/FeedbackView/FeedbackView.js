@@ -41,13 +41,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const FeedbackView = () => {
-  const { feedbackTargetId } = useParams()
+  const { id } = useParams()
   const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
-  const { feedbackTarget, isLoading } = useFeedbackTarget(feedbackTargetId, {
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     cacheTime: 0,
   })
 
