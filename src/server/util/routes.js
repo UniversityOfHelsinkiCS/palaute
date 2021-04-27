@@ -1,5 +1,6 @@
 const Router = require('express')
 const Sentry = require('@sentry/node')
+const accessLogger = require('../middleware/accessLogger')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
 const errorMiddleware = require('../middleware/errorMiddleware')
@@ -22,6 +23,7 @@ router.use(Sentry.Handlers.tracingHandler())
 router.use(Router.json())
 
 router.use(shibbolethCharsetMiddleware)
+router.use(accessLogger)
 router.use(currentUserMiddleware)
 
 router.get('/login', users.getUser)

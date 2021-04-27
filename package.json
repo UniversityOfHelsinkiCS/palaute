@@ -1,7 +1,7 @@
 {
   "name": "palaute",
   "version": "1.0.0",
-  "description": "Boilerplate for toska projects",
+  "description": "Palaute (engl. feedback) is THE software for student feedback",
   "main": "index.js",
   "scripts": {
     "start": "docker-compose up",
@@ -41,6 +41,7 @@
     "i18next": "^20.1.0",
     "immer": "^8.0.1",
     "lodash": "^4.17.19",
+    "morgan": "^1.10.0",
     "node-sass": "^5.0.0",
     "notistack": "^1.0.6",
     "pg": "^8.5.1",
