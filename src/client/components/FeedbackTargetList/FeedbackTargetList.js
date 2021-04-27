@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router'
+import { useParams, Redirect } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -46,7 +46,11 @@ const FeedbackTargetList = () => {
     )
   }
 
-  const courseUnit = feedbackTargets[0]?.courseUnit
+  if (feedbackTargets.length === 0) {
+    return <Redirect to="/courses" />
+  }
+
+  const { courseUnit } = feedbackTargets[0]
 
   const name = getLanguageValue(courseUnit?.name, i18n.language)
 
