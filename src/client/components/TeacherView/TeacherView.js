@@ -1,83 +1,65 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
-import { Button, Typography, makeStyles } from '@material-ui/core'
+import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
 
 import { useTeacherCourses } from '../../util/queries'
 
 import TeacherCourseList from './TeacherCourseList'
+import { getRelevantCourses, getUniqueCourses } from './utils'
 
-const useStyles = makeStyles(() => ({
-  rowComponent: {
-    margin: 5,
+const useStyles = makeStyles((theme) => ({
+  progressContainer: {
+    padding: theme.spacing(4, 0),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  old: {
+    color: 'darkgray',
+    cursor: 'pointer',
+    marginTop: 10,
   },
 }))
 
 const TeacherView = () => {
-  const { t } = useTranslation()
-
-  const classes = useStyles()
-  const [sortedBy, useSortedBy] = useState({ sortBy: 'NAME', reversed: false })
-
+  const [visible, toggleVisible] = useState(false)
   const courses = useTeacherCourses()
+  const classes = useStyles()
 
-  if (!courses.data) return null
+  const uniqueCourses = getUniqueCourses(courses)
 
-  courses.data.sort((a, b) =>
-    a.validityPeriod.endDate < b.validityPeriod.endDate ? 1 : -1,
-  )
+  const relevantCourses = getRelevantCourses(uniqueCourses, true)
+  const oldCourses = getRelevantCourses(uniqueCourses, false)
 
-  const codes = new Set()
+  const handleClick = () => {
+    toggleVisible(!visible)
+  }
 
-  const uniqueCourses = []
-
-  courses.data.forEach((course) => {
-    if (codes.has(course.courseCode)) return
-    uniqueCourses.push(course)
-    codes.add(course.courseCode)
-  })
-
-  uniqueCourses.sort((a, b) => (a.courseCode < b.courseCode ? -1 : 1))
-
-  const handleClick = (e, sortBy) => {
-    e.preventDefault()
-    if (sortedBy.sortBy === sortBy) {
-      useSortedBy({ ...sortedBy, reversed: !sortedBy.reversed })
-    } else {
-      useSortedBy({ sortBy, reversed: false })
-    }
+  if (courses.isLoading) {
+    return (
+      <div className={classes.progressContainer}>
+        <CircularProgress />
+      </div>
+    )
   }
 
   return (
     <>
+      {relevantCourses && relevantCourses.length > 0 ? (
+        <TeacherCourseList courses={relevantCourses} />
+      ) : (
+        <Typography variant="h6" component="h6">
+          No courses active
+        </Typography>
+      )}
       <Typography
-        variant="span"
-        component="span"
-        className={classes.rowComponent}
+        variant="subtitle1"
+        component="p"
+        onClick={handleClick}
+        className={classes.old}
       >
-        {t('teacherView:sortBy')}
+        Old courses
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        className={classes.rowComponent}
-        onClick={(e) => handleClick(e, 'NAME')}
-      >
-        {`Name ${sortedBy.sortBy === 'NAME' && sortedBy.reversed ? '⇩' : '⇧'}`}
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        className={classes.rowComponent}
-        onClick={(e) => handleClick(e, 'CODE')}
-      >
-        {`Course code ${
-          sortedBy.sortBy === 'CODE' && sortedBy.reversed ? '⇩' : '⇧'
-        }`}
-      </Button>
-      <TeacherCourseList courses={uniqueCourses} sortedBy={sortedBy} />
+      {visible && <TeacherCourseList courses={oldCourses} />}
     </>
   )
 }
