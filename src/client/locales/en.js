@@ -16,6 +16,9 @@ export default {
     show: 'Show',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
+    firstName: 'First name',
+    lastName: 'Last name',
+    username: 'Username',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -89,7 +92,7 @@ export default {
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
-    studentsWithFeedbackHeading: 'List of students how have given feedback',
+    studentsWithFeedbackHeading: 'Students who have given feedback',
     notVisibleToStudentsInfo:
       'This information will not be visible to students',
     noStudentsWithFeedback: 'No one has given feedback yet',
