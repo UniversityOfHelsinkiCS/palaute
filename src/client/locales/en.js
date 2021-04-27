@@ -13,6 +13,7 @@ export default {
     saveSuccess: 'Information has been saved',
     name: 'Name',
     edit: 'Edit',
+    show: 'Show',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
   },

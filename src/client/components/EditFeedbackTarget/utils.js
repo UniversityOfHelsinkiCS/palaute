@@ -5,8 +5,8 @@ const pickerDateFormat = `yyyy-MM-dd'T'hh:mm`
 
 const formatPickerDate = (date) => lightFormat(date, pickerDateFormat)
 
-export const getInitialValues = (feedbackTarget, surveys) => {
-  const { hidden, closesAt, opensAt, name } = feedbackTarget
+export const getInitialValues = (feedbackTarget) => {
+  const { hidden, closesAt, opensAt, name, surveys } = feedbackTarget
   const questions = surveys?.teacherSurvey?.questions ?? []
 
   return {
@@ -36,16 +36,16 @@ export const validate = (values) => {
   return errors
 }
 
-export const saveValues = async (values, surveys, id) => {
+export const saveValues = async (values, feedbackTarget) => {
   const { questions, hidden, name } = values
 
   const closesAt = values.closesAt ? new Date(values.closesAt) : null
   const opensAt = values.opensAt ? new Date(values.opensAt) : null
 
-  const { id: surveyId, data: surveyData } = surveys.teacherSurvey
+  const { surveys, id } = feedbackTarget
+  const { id: surveyId } = surveys.teacherSurvey
 
   const payload = {
-    data: surveyData,
     surveyId,
     name,
     hidden,

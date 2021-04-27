@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, Redirect, Link } from 'react-router-dom'
 
 import {
   Typography,
@@ -21,7 +21,6 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FormikTextField from '../FormikTextField'
 import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
-import useFeedbackTargetSurveys from '../../hooks/useFeedbackTargetSurveys'
 import { getInitialValues, validate, saveValues } from './utils'
 import LanguageTabs from '../LanguageTabs'
 
@@ -52,19 +51,9 @@ const EditFeedbackTarget = () => {
 
   const [language, setLanguage] = useState('fi')
 
-  const {
-    feedbackTarget,
-    isLoading: feedbackTargetIsLoading,
-  } = useFeedbackTarget(id, {
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     cacheTime: 0,
   })
-
-  const { surveys, isLoading: surveysIsLoading } = useFeedbackTargetSurveys(
-    id,
-    { cacheTime: 0 },
-  )
-
-  const isLoading = feedbackTargetIsLoading || surveysIsLoading
 
   if (isLoading) {
     return (
@@ -82,14 +71,14 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveValues(values, surveys, id)
+      await saveValues(values, feedbackTarget)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
 
-  const initialValues = getInitialValues(feedbackTarget, surveys)
+  const initialValues = getInitialValues(feedbackTarget)
 
   return (
     <>
@@ -147,8 +136,18 @@ const EditFeedbackTarget = () => {
           <QuestionEditor language={language} name="questions" />
 
           <Box mt={2}>
-            <Button color="primary" variant="contained" type="submit">
-              {t('save')}
+            <Box mr={1} clone>
+              <Button color="primary" variant="contained" type="submit">
+                {t('save')}
+              </Button>
+            </Box>
+            <Button
+              color="primary"
+              type="submit"
+              component={Link}
+              to={`/${id}/edit`}
+            >
+              {t('show')}
             </Button>
           </Box>
         </Form>
