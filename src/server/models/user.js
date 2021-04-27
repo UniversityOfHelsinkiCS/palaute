@@ -14,10 +14,10 @@ User.init(
       type: STRING,
       allowNull: false,
     },
-    first_name: {
+    firstName: {
       type: STRING,
     },
-    last_name: {
+    lastName: {
       type: STRING,
     },
     email: {

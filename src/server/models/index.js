@@ -25,6 +25,10 @@ UserFeedbackTarget.belongsTo(Feedback, {
   as: 'feedback',
 })
 
+UserFeedbackTarget.belongsTo(User, {
+  as: 'user',
+})
+
 Survey.belongsTo(CourseUnit, {
   as: 'courseUnit',
   foreignKey: 'typeId',

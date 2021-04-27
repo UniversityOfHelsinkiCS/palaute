@@ -37,6 +37,11 @@ router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
 router.get('/feedback-targets/:id/feedbacks', feedbackTargets.getFeedbacks)
 
+router.get(
+  '/feedback-targets/:id/students-with-feedback',
+  feedbackTargets.getStudentsWithFeedback,
+)
+
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
 

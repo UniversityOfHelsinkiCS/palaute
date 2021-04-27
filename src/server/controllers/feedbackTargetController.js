@@ -12,6 +12,7 @@ const {
   Feedback,
   Survey,
   Question,
+  User,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -98,6 +99,7 @@ const getIncludes = (userId, accessStatus) => {
     { model: CourseRealisation, as: 'courseRealisation' },
   ]
 }
+
 const getFeedbackTargetByIdForUser = async (req) => {
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: getIncludes(req.user.id),
@@ -234,13 +236,9 @@ const getFeedbacks = async (req, res) => {
   const { user } = req
   const feedbackTargetId = Number(req.params.id)
 
-  if (!user) {
-    throw new ApplicationError('Authorization is required', 401)
-  }
-
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {
-      userId: req.user.id,
+      userId: user.id,
       feedbackTargetId,
     },
     include: 'feedbackTarget',
@@ -250,26 +248,25 @@ const getFeedbacks = async (req, res) => {
     throw new ApplicationError('User is not authorized to view feedbacks', 403)
   }
 
-  if (
-    userFeedbackTarget.hasStudentAccess() &&
-    !userFeedbackTarget.feedbackTarget.isEnded()
-  ) {
+  const { feedbackTarget } = userFeedbackTarget
+
+  if (!feedbackTarget.isEnded()) {
     throw new ApplicationError(
-      'Feedback is only visible for students once the feedback period has ended',
+      'Information is not available until the feedback period has ended',
       403,
     )
   }
-
-  const { feedbackTarget } = userFeedbackTarget
-
-  await feedbackTarget.populateQuestions()
 
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
       accessStatus: 'STUDENT',
     },
-    include: 'feedback',
+    include: {
+      model: Feedback,
+      required: true,
+      as: 'feedback',
+    },
   })
 
   const feedbacks = studentFeedbackTargets.map((t) =>
@@ -281,6 +278,57 @@ const getFeedbacks = async (req, res) => {
   res.send(publicFeedbacks)
 }
 
+const getStudentsWithFeedback = async (req, res) => {
+  const { user } = req
+  const feedbackTargetId = Number(req.params.id)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  if (!userFeedbackTarget?.hasTeacherAccess()) {
+    throw new ApplicationError(
+      'User is not authorized to view students with feedback',
+      403,
+    )
+  }
+
+  const { feedbackTarget } = userFeedbackTarget
+
+  if (!feedbackTarget.isEnded()) {
+    throw new ApplicationError(
+      'Information is not available until the feedback period has ended',
+      403,
+    )
+  }
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+    include: [
+      {
+        model: User,
+        as: 'user',
+      },
+      {
+        model: Feedback,
+        as: 'feedback',
+        required: true,
+      },
+    ],
+  })
+
+  const users = studentFeedbackTargets.map((target) => target.user)
+
+  res.send(users)
+}
+
 module.exports = {
   getForStudent,
   getCourseUnitsForTeacher,
@@ -288,4 +336,5 @@ module.exports = {
   getOne,
   update,
   getFeedbacks,
+  getStudentsWithFeedback,
 }

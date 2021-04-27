@@ -14,6 +14,7 @@ import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from '../QuestionResults'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
+import StudentList from './StudentList'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -50,7 +51,7 @@ const FeedbackTargetResults = () => {
     return <Redirect to="/" />
   }
 
-  const { questions } = feedbackTarget
+  const { questions, accessStatus } = feedbackTarget
 
   const feedbackTargetName = getLanguageValue(
     feedbackTarget.name,
@@ -70,6 +71,8 @@ const FeedbackTargetResults = () => {
     </Box>
   )
 
+  const isTeacher = accessStatus === 'TEACHER'
+
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.title}>
@@ -81,6 +84,12 @@ const FeedbackTargetResults = () => {
       </Box>
 
       {feedbacks.length === 0 && notEnoughFeedbacksAlert}
+
+      {isTeacher && (
+        <Box mb={2}>
+          <StudentList />
+        </Box>
+      )}
 
       <QuestionResults questions={questions} feedbacks={feedbacks} />
     </>

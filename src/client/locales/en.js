@@ -86,5 +86,9 @@ export default {
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
+    studentsWithFeedbackHeading: 'List of students how have given feedback',
+    notVisibleToStudentsInfo:
+      'This information will not be visible to students',
+    noStudentsWithFeedback: 'No one has given feedback yet',
   },
 }

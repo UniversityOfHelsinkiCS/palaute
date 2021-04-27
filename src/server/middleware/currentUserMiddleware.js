@@ -17,8 +17,8 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   const user = await User.findOne({ where: { id: loggedInAs } })
   if (user) {
     newHeaders.uid = user.username
-    newHeaders.givenname = user.first_name
-    newHeaders.sn = user.last_name
+    newHeaders.givenname = user.firstName
+    newHeaders.sn = user.lastName
     newHeaders.mail = user.email
     newHeaders.preferredlanguage = user.language
     newHeaders.hypersonsisuid = user.id
