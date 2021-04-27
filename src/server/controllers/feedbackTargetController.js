@@ -145,7 +145,7 @@ const getOne = async (req, res) => {
 const update = async (req, res) => {
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
-  if (feedbackTarget.userFeedbackTarget.accessStatus !== 'TEACHER')
+  if (feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
     throw new ApplicationError('Forbidden', 403)
 
   const { name, hidden, opensAt, closesAt, questions, surveyId } = req.body

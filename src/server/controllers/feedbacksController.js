@@ -5,9 +5,15 @@ const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
   const { id: userId } = req.user
 
-  const newFeedback = await Feedback.create({
-    data,
-    userId,
+  const [newFeedback] = await Feedback.findOrCreate({
+    where: {
+      data,
+      userId,
+    },
+    defaults: {
+      data,
+      userId,
+    },
   })
 
   await UserFeedbackTarget.update(
