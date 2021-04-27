@@ -12,6 +12,7 @@ import {
 
 import { getLanguageValue } from '../../util/languageUtils'
 import { formatDate } from './utils'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -36,21 +37,25 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     closesAt: formatDate(closesAt),
   })
 
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+
   const translatedName = getLanguageValue(name, i18n.language)
 
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={translatedName} secondary={periodInfo} />
       <Box mt={2} display="flex">
-        <Button
-          component={Link}
-          className={classes.action}
-          variant="contained"
-          color="primary"
-          to={`/targets/${id}/edit`}
-        >
-          {t('feedbackTargetList:editSurvey')}
-        </Button>
+        {!isOpen && (
+          <Button
+            component={Link}
+            className={classes.action}
+            variant="contained"
+            color="primary"
+            to={`/targets/${id}/edit`}
+          >
+            {t('feedbackTargetList:editSurvey')}
+          </Button>
+        )}
         <Button
           component={Link}
           className={classes.action}

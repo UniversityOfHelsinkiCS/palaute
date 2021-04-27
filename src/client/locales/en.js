@@ -15,7 +15,6 @@ export default {
     edit: 'Edit',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
-    results: 'Results',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -35,6 +34,8 @@ export default {
     submitButton: 'Give feedback',
     successAlert: 'Feedback has been given',
     requiredInfo: 'Fields marked with an asterisk (*) are required',
+    closedInfo:
+      'This feedback is currently closed. Feedback can be given between {{closesAt}} and {{opensAt}}',
   },
   teacherView: {
     modifyForm: 'Modify form',

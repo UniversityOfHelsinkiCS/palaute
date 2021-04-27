@@ -19,12 +19,14 @@ import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 import {
   makeValidate,
   getInitialValues,
   saveValues,
   getQuestions,
+  formatDate,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +64,11 @@ const FeedbackView = () => {
   }
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const questions = getQuestions(feedbackTarget)
+  const initialValues = getInitialValues(feedbackTarget)
+  const validate = makeValidate(questions)
+  const { opensAt, closesAt } = feedbackTarget
 
   const handleSubmit = async (values) => {
     try {
@@ -73,15 +80,24 @@ const FeedbackView = () => {
     }
   }
 
-  const questions = getQuestions(feedbackTarget)
-  const initialValues = getInitialValues(feedbackTarget)
-  const validate = makeValidate(questions)
+  const closedAlert = (
+    <Box mb={2}>
+      <Alert severity="warning">
+        {t('feedbackView:closedInfo', {
+          opensAt: formatDate(new Date(opensAt)),
+          closesAt: formatDate(new Date(closesAt)),
+        })}
+      </Alert>
+    </Box>
+  )
 
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.heading}>
         {name}
       </Typography>
+
+      {!isOpen && closedAlert}
 
       <Formik
         initialValues={initialValues}
@@ -104,7 +120,7 @@ const FeedbackView = () => {
 
             <Box mt={2}>
               <Button
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isOpen}
                 color="primary"
                 variant="contained"
                 type="submit"

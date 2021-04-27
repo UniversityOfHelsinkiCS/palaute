@@ -1,3 +1,5 @@
+import { lightFormat } from 'date-fns'
+
 import apiClient from '../../util/apiClient'
 
 const isEmpty = (value) => {
@@ -107,3 +109,5 @@ export const saveValues = async (values, feedbackTarget) => {
 
   return data
 }
+
+export const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
