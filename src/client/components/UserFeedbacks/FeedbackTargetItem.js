@@ -64,14 +64,16 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
 
   return (
     <div>
-      <Button
-        color="primary"
-        variant="contained"
-        component={Link}
-        to={editPath}
-      >
-        {t('userFeedbacks:modifyFeedbackButton')}
-      </Button>
+      <Box mr={1} clone>
+        <Button
+          color="primary"
+          variant="contained"
+          component={Link}
+          to={editPath}
+        >
+          {t('userFeedbacks:modifyFeedbackButton')}
+        </Button>
+      </Box>
       <Button color="primary" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>

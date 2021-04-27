@@ -72,4 +72,9 @@ export default {
     answerCount: 'Vastausten määrä',
     answerOption: 'Vastausvaihtoehto',
   },
+  feedbackTargetList: {
+    showFeedbacks: 'Show feedbacks',
+    showSurvey: 'Show survey',
+    editSurvey: 'Edit survey',
+  },
 }

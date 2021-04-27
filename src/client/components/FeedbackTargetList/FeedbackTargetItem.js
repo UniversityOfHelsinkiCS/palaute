@@ -14,7 +14,10 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { formatDate } from './utils'
 
 const useStyles = makeStyles((theme) => ({
-  listItem: {},
+  listItem: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
   action: {
     '&:not(last-child)': {
       marginRight: theme.spacing(1),
@@ -38,7 +41,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={translatedName} secondary={periodInfo} />
-      <Box pl={2} display="flex">
+      <Box mt={2} display="flex">
         <Button
           component={Link}
           className={classes.action}
@@ -46,7 +49,15 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
           color="primary"
           to={`/targets/${id}/edit`}
         >
-          {t('edit')}
+          {t('feedbackTargetList:editSurvey')}
+        </Button>
+        <Button
+          component={Link}
+          className={classes.action}
+          color="primary"
+          to={`/${id}/edit`}
+        >
+          {t('feedbackTargetList:showSurvey')}
         </Button>
         <Button
           component={Link}
@@ -54,7 +65,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
           color="primary"
           to={`/targets/${id}/results`}
         >
-          Results
+          {t('feedbackTargetList:showFeedbacks')}
         </Button>
       </Box>
     </ListItem>
