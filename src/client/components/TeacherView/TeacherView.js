@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
+
+import {
+  Typography,
+  CircularProgress,
+  makeStyles,
+  Box,
+  Button,
+} from '@material-ui/core'
 
 import { useTeacherCourses } from '../../util/queries'
 
@@ -8,6 +15,9 @@ import TeacherCourseList from './TeacherCourseList'
 import { getRelevantCourses, getUniqueCourses } from './utils'
 
 const useStyles = makeStyles((theme) => ({
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
   progressContainer: {
     padding: theme.spacing(4, 0),
     display: 'flex',
@@ -45,6 +55,9 @@ const TeacherView = () => {
 
   return (
     <>
+      <Typography variant="h4" component="h1" className={classes.heading}>
+        {t('teacherView:mainHeading')}
+      </Typography>
       {relevantCourses && relevantCourses.length > 0 ? (
         <TeacherCourseList courses={relevantCourses} />
       ) : (
@@ -52,14 +65,9 @@ const TeacherView = () => {
           {t('teacherView:noActiveCourses')}
         </Typography>
       )}
-      <Typography
-        variant="subtitle1"
-        component="p"
-        onClick={handleClick}
-        className={classes.old}
-      >
-        {t('teacherView:oldCourses')}
-      </Typography>
+      <Box mt={2} mb={2}>
+        <Button onClick={handleClick}>{t('teacherView:oldCourses')}</Button>
+      </Box>
       {visible && <TeacherCourseList courses={oldCourses} />}
     </>
   )

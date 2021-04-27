@@ -40,13 +40,14 @@ export default {
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',
-    oldCourses: 'Vanhat kurssit',
+    oldCourses: 'Näytä vanhat kurssit',
     modifyForm: 'Muokkaa lomaketta',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     viewFeedbackTargets: 'Näytä palautteen kohteet',
     sortBy: 'Järjestä',
     courseName: 'Kurssin nimi',
     courseCode: 'Kurssikoodi',
+    mainHeading: 'Kurssini',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
