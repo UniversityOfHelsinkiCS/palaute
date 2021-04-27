@@ -13,7 +13,6 @@ import {
 import CourseRealisationItem from './CourseRealisationItem'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
-import useCourseUnit from '../../hooks/useCourseUnit'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseRealisationsWithFeedbackTargets } from './utils'
 
@@ -37,10 +36,7 @@ const FeedbackTargetList = () => {
     feedbackTargets,
     isLoading: feedbackTargetsIsLoading,
   } = useCourseUnitFeedbackTargets(code)
-
-  const { courseUnit, courseUnitIsLoading } = useCourseUnit(code)
-
-  const isLoading = feedbackTargetsIsLoading || courseUnitIsLoading
+  const isLoading = feedbackTargetsIsLoading
 
   if (isLoading) {
     return (
@@ -49,6 +45,8 @@ const FeedbackTargetList = () => {
       </Box>
     )
   }
+
+  const courseUnit = feedbackTargets[0]?.courseUnit
 
   const name = getLanguageValue(courseUnit?.name, i18n.language)
 
