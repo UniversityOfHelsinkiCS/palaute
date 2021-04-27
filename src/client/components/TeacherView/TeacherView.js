@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
 
 import { useTeacherCourses } from '../../util/queries'
@@ -24,6 +24,7 @@ const TeacherView = () => {
   const [visible, toggleVisible] = useState(false)
   const courses = useTeacherCourses()
   const classes = useStyles()
+  const { t } = useTranslation()
 
   const uniqueCourses = getUniqueCourses(courses)
 
@@ -48,7 +49,7 @@ const TeacherView = () => {
         <TeacherCourseList courses={relevantCourses} />
       ) : (
         <Typography variant="h6" component="h6">
-          No courses active
+          {t('teacherView:noActiveCourses')}
         </Typography>
       )}
       <Typography
@@ -57,7 +58,7 @@ const TeacherView = () => {
         onClick={handleClick}
         className={classes.old}
       >
-        Old courses
+        {t('teacherView:oldCourses')}
       </Typography>
       {visible && <TeacherCourseList courses={oldCourses} />}
     </>

@@ -39,10 +39,14 @@ export default {
       'This feedback is currently closed. Feedback can be given between {{closesAt}} and {{opensAt}}',
   },
   teacherView: {
+    noActiveCourses: 'No courses active',
+    oldCourses: 'Old courses',
     modifyForm: 'Modify form',
     viewFeedbackSummary: 'View feedback summary',
     viewFeedbackTargets: 'View feedback targets',
     sortBy: 'Sort by',
+    courseName: 'Course name',
+    courseCode: 'Course code',
   },
   questionEditor: {
     addQuestion: 'Add question',
@@ -71,8 +75,8 @@ export default {
     hidden: 'Hidden',
   },
   questionResults: {
-    answerCount: 'Vastausten määrä',
-    answerOption: 'Vastausvaihtoehto',
+    answerCount: 'Answer count',
+    answerOption: 'Answer option',
   },
   feedbackTargetList: {
     showFeedbacks: 'Show feedbacks',
