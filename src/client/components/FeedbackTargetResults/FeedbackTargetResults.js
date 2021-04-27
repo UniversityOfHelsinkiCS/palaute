@@ -9,7 +9,8 @@ import {
   makeStyles,
 } from '@material-ui/core'
 
-import useFeedbackTargetWithFeedbacks from '../../hooks/useFeedbackTargetWithFeedbacks'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from '../QuestionResults'
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -23,7 +24,18 @@ const FeedbackTargetResults = () => {
   const { i18n } = useTranslation()
   const classes = useStyles()
   const { id } = useParams()
-  const { feedbackTarget, isLoading } = useFeedbackTargetWithFeedbacks(id)
+
+  const {
+    feedbackTarget,
+    isLoading: feedbackTargetIsLoading,
+  } = useFeedbackTarget(id)
+
+  const {
+    feedbacks,
+    isLoading: feedbacksIsLoading,
+  } = useFeedbackTargetFeedbacks(id)
+
+  const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
   if (isLoading) {
     return (
@@ -33,11 +45,11 @@ const FeedbackTargetResults = () => {
     )
   }
 
-  if (!feedbackTarget) {
+  if (!feedbackTarget || !feedbacks) {
     return <Redirect to="/" />
   }
 
-  const { questions, feedbacks } = feedbackTarget
+  const { questions } = feedbackTarget
 
   const name = getLanguageValue(feedbackTarget.name, i18n.language)
 
