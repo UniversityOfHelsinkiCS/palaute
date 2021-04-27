@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import {
   Table,
   TableBody,
@@ -18,6 +18,8 @@ const TeacherCourseList = ({ courses }) => {
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('name')
 
+  const { t } = useTranslation()
+
   const handleRequestSort = (e, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -33,14 +35,14 @@ const TeacherCourseList = ({ courses }) => {
           <TableRow>
             <TableHeadCell
               id="name"
-              name="Course name"
+              name={t('teacherView:courseName')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="courseCode"
-              name="Course code"
+              name={t('teacherView:courseCode')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
