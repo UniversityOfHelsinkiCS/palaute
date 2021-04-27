@@ -6,7 +6,7 @@ import theme from '../../theme'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
-const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT']
+const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 const getScalesConfig = (t) => ({
   y: {
