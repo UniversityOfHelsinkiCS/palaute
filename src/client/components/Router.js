@@ -24,7 +24,7 @@ const Router = () => {
   return (
     <Container className={classes.container}>
       <Switch>
-        <Route exact path="/courses" component={TeacherView} />
+        <Route path="/courses" exact component={TeacherView} />
         <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
         <Route path="/courses/:code/targets" component={FeedbackTargetList} />
         <Route path="/targets/:id/edit" component={EditFeedbackTarget} />
