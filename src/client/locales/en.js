@@ -82,6 +82,8 @@ export default {
     showFeedbacks: 'Show feedbacks',
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
+    copyLink: 'Copy link to feedback',
+    copied: 'Link copied to cliboard',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
 
 import {
   ListItemText,
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
   const { i18n, t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const { id, closesAt, opensAt, name } = feedbackTarget
 
@@ -42,6 +44,13 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
   const translatedName = getLanguageValue(name, i18n.language)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(
+      `${window.location.protocol}//${window.location.host}/targets/${id}/feedback`,
+    )
+    enqueueSnackbar(t('feedbackTargetList:copied'), { variant: 'info' })
+  }
 
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
@@ -76,6 +85,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
             {t('feedbackTargetList:showFeedbacks')}
           </Button>
         )}
+        <Button onClick={handleCopy} className={classes.copy}>
+          {t('feedbackTargetList:copyLink')}
+        </Button>
       </Box>
     </ListItem>
   )

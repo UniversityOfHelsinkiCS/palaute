@@ -81,5 +81,11 @@ export default {
     showFeedbacks: 'Näytä palautteet',
     showSurvey: 'Näytä kysely',
     editSurvey: 'Muokkaa kyselyä',
+    copyLink: 'Kopioi linkki palautteeseen',
+    copied: 'Linkki kopioitu leikepöydälle',
+  },
+  feedbackTargetResults: {
+    notEnoughFeedbacksInfo:
+      'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
   },
 }
