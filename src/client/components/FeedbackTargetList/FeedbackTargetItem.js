@@ -85,7 +85,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
             {t('feedbackTargetList:showFeedbacks')}
           </Button>
         )}
-        <Button onClick={handleCopy} className={classes.copy}>
+        <Button color="primary" onClick={handleCopy} className={classes.copy}>
           {t('feedbackTargetList:copyLink')}
         </Button>
       </Box>

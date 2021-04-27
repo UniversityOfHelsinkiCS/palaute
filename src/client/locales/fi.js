@@ -16,6 +16,9 @@ export default {
     show: 'Näytä',
     feedbackOpenPeriod:
       'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    username: 'Käyttäjätunnus',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',
@@ -88,5 +91,8 @@ export default {
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
+    studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
+    notVisibleToStudentsInfo: 'Tämä tieto ei näy opiskelijoille',
+    noStudentsWithFeedback: 'Kukaan ei ole antanut palautetta vielä',
   },
 }

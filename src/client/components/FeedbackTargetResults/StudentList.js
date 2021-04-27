@@ -2,15 +2,55 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Typography, Box, Card, CardContent } from '@material-ui/core'
+import {
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  Table,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableHead,
+  makeStyles,
+  TableContainer,
+} from '@material-ui/core'
 
 import Alert from '../Alert'
 import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
 
-const getStudentDisplayName = (student) => {
-  const { firstName, lastName, username } = student
+const useStudentTableStyles = makeStyles({
+  container: {
+    maxHeight: '500px',
+  },
+})
 
-  return firstName && lastName ? `${firstName} ${lastName}` : username
+const StudentTable = ({ students }) => {
+  const classes = useStudentTableStyles()
+  const { t } = useTranslation()
+
+  return (
+    <TableContainer className={classes.container}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell>{t('firstName')}</TableCell>
+            <TableCell>{t('lastName')}</TableCell>
+            <TableCell>{t('username')}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {students.map(({ id, firstName, lastName, username }) => (
+            <TableRow key={id}>
+              <TableCell>{firstName}</TableCell>
+              <TableCell>{lastName}</TableCell>
+              <TableCell>{username}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
 }
 
 const FeedbackTargetResults = () => {
@@ -35,7 +75,8 @@ const FeedbackTargetResults = () => {
           </Alert>
         </Box>
 
-        {hasStudents && students.map(getStudentDisplayName).join(', ')}
+        {hasStudents && <StudentTable students={students} />}
+
         {!hasStudents && (
           <Typography>
             {t('feedbackTargetResults:noStudentsWithFeedback')}
