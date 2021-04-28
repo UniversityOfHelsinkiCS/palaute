@@ -37,6 +37,9 @@ export const getUniqueCourses = (courseUnits) => {
   const { i18n } = useTranslation()
 
   if (!courseUnits) return null
+  courseUnits.sort((a, b) =>
+    a.validityPeriod.endDate < b.validityPeriod.endDate ? 1 : -1,
+  )
 
   const codes = new Set()
 
