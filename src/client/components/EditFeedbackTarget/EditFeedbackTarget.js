@@ -21,8 +21,15 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FormikTextField from '../FormikTextField'
 import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
-import { getInitialValues, validate, saveValues } from './utils'
 import LanguageTabs from '../LanguageTabs'
+import Alert from '../Alert'
+
+import {
+  getInitialValues,
+  validate,
+  saveValues,
+  getUpperLevelQuestions,
+} from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -76,6 +83,8 @@ const EditFeedbackTarget = () => {
     feedbackTarget.courseUnit.name,
     i18n.language,
   )
+
+  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget)
 
   const handleSubmit = async (values) => {
     try {
@@ -144,6 +153,16 @@ const EditFeedbackTarget = () => {
               </CardContent>
             </Card>
           </Box>
+
+          {upperLevelQuestions.length > 0 && (
+            <Box mb={2}>
+              <Alert severity="info">
+                {t('editFeedbackTarget:upperLevelQuestionsInfo', {
+                  count: upperLevelQuestions.length,
+                })}
+              </Alert>
+            </Box>
+          )}
 
           <QuestionEditor language={language} name="questions" />
 

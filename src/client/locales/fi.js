@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export default {
   common: {
     languages: {
@@ -76,6 +78,8 @@ export default {
     closesAt: 'Sulkeutuu',
     opensAt: 'Avautuu',
     hidden: 'Piilotettu',
+    upperLevelQuestionsInfo:
+      'Kyselyllä on jo {{count}} yliopisto- ja laitostason kysymystä, mutta voit halutessasi lisätä sille lisää kysmyksiä. "Näytä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

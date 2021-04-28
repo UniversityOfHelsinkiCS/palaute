@@ -36,6 +36,15 @@ export const validate = (values) => {
   return errors
 }
 
+export const getUpperLevelQuestions = (feedbackTarget) => {
+  const { universitySurvey, departmentSurvey } = feedbackTarget.surveys ?? {}
+
+  return [
+    ...(universitySurvey?.questions ?? []),
+    ...(departmentSurvey?.questions ?? []),
+  ]
+}
+
 export const saveValues = async (values, feedbackTarget) => {
   const { questions, hidden, name } = values
 
