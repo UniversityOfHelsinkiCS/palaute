@@ -23,6 +23,7 @@ import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
 import LanguageTabs from '../LanguageTabs'
 import Alert from '../Alert'
+import DirtyFormPrompt from '../DirtyFormPrompt'
 
 import {
   getInitialValues,
@@ -88,9 +89,13 @@ const EditFeedbackTarget = () => {
     (q) => q.type !== 'TEXT',
   )
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, actions) => {
     try {
       await saveValues(values, feedbackTarget)
+
+      // Necessary for the <DirtyFormPrompt  />
+      actions.resetForm({ values })
+
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -122,6 +127,7 @@ const EditFeedbackTarget = () => {
         validateOnChange={false}
       >
         <Form>
+          <DirtyFormPrompt />
           <Box mb={2}>
             <Card>
               <CardContent>

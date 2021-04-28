@@ -21,6 +21,8 @@ export default {
     firstName: 'Etunimi',
     lastName: 'Sukunimi',
     username: 'Käyttäjätunnus',
+    dirtyFormPrompt:
+      'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',

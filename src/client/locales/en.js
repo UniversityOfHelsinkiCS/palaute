@@ -21,6 +21,8 @@ export default {
     firstName: 'First name',
     lastName: 'Last name',
     username: 'Username',
+    dirtyFormPrompt:
+      'The page has unsaved changes. Are you sure want to leave the page?',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
