@@ -66,6 +66,7 @@ const questions = [
   [
     'LIKERT',
     { label: { fi: 'Opintojakso oli työläs', en: 'The course was laborious' } },
+    true,
   ],
   [
     'OPEN',
