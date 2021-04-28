@@ -27,7 +27,7 @@ const questions = [
     {
       label: {
         fi: 'Opintojakson oppimistavoitteet olivat selvät',
-        en: 'The objectives of the course were clear to me from the beginning',
+        en: 'The learning objectives were clear to me',
       },
     },
   ],
@@ -36,8 +36,7 @@ const questions = [
     {
       label: {
         fi: 'Opintojakson toteutus tuki oppimistani',
-        en:
-          'Activity at the course supported the achievement of learning goals',
+        en: 'The course activies supported my learning',
       },
     },
   ],
@@ -46,8 +45,7 @@ const questions = [
     {
       label: {
         fi: 'Opintojaksolla käytetyt materiaalit tukivat oppimistani',
-        en:
-          'The material used in the course supported the achievement of learning goals',
+        en: 'The material used in the course supported my learning',
       },
     },
   ],
@@ -57,7 +55,7 @@ const questions = [
       label: {
         fi: 'Opintojakson arviointi mittasi oppimistani',
         en:
-          'Assessment of the course measured the achievement of the core learning objectives',
+          'Course assessment measured the achievement of the learning objectives',
       },
     },
   ],
@@ -68,23 +66,25 @@ const questions = [
 ]
 
 const createHYQuestions = async () => {
-  const ids = await Promise.all(
-    questions.map(async (question) => {
-      const [questionsWithId] = await Question.findOrCreate({
-        where: {
-          type: question[0],
-          data: question[1],
-          required: true,
-        },
-        defaults: {
-          type: question[0],
-          data: question[1],
-          required: true,
-        },
-      })
-      return questionsWithId.id
-    }),
-  )
+  const ids = []
+
+  /* eslint-disable */
+  for (const question of questions) {
+    const [questionWithId] = await Question.findOrCreate({
+      where: {
+        type: question[0],
+        data: question[1],
+        required: true,
+      },
+      defaults: {
+        type: question[0],
+        data: question[1],
+        required: true,
+      },
+    })
+    ids.push(questionWithId.id)
+  }
+  /* eslint-enable */
 
   await Survey.update(
     {
