@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import FeedbacksIcon from '@material-ui/icons/Assignment'
 import TeacherSettingsIcon from '@material-ui/icons/Settings'
-import { useTeacherCourses } from '../../util/queries'
+import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 
 import AdminNavButton from './AdminNavButton'
 import LogOutNavButton from './LogOutNavButton'
@@ -47,9 +47,9 @@ const Logo = () => {
 }
 
 const NavBar = () => {
-  const { data: courses } = useTeacherCourses()
+  const { courseUnits } = useTeacherCourseUnits()
 
-  const hasCourses = Boolean(courses?.length)
+  const hasCourses = Boolean(courseUnits?.length)
 
   return (
     <>

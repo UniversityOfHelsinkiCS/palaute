@@ -10,7 +10,7 @@ import NavBar from './NavBar'
 import Footer from './Footer'
 import DevTools from './DevTools'
 import Router from './Router'
-import { useUserData } from '../util/queries'
+import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
 import { inProduction } from '../../config'
@@ -23,22 +23,23 @@ export default () => {
     initShibbolethPinger() // Remove this if not used behind shibboleth
   }, [])
 
-  const user = useUserData()
+  const { authorizedUser, isLoading } = useAuthorizedUser()
+
   useEffect(() => {
-    if (!user.data) {
-      if (inProduction || user.isLoading) return
+    if (!authorizedUser) {
+      if (inProduction || isLoading) return
       localStorage.clear()
       setHeaders('varisleo')
       return
     }
 
-    Sentry.setUser({ username: user.data.id })
-    if (!user.data.language) return
+    Sentry.setUser({ username: authorizedUser.id })
+    if (!authorizedUser.language) return
 
-    i18n.changeLanguage(user.data.language)
-  }, [user.data])
+    i18n.changeLanguage(authorizedUser.language)
+  }, [authorizedUser])
 
-  if (user.isLoading) return null
+  if (isLoading) return null
 
   return (
     <ThemeProvider theme={theme}>

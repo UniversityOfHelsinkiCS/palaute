@@ -6,7 +6,7 @@ const feedbackTargetIsOpen = (feedbackTarget) => {
   const { opensAt, closesAt } = feedbackTarget
   const now = new Date()
 
-  return new Date(opensAt) < now && new Date(closesAt) > now
+  return new Date(opensAt) <= now && new Date(closesAt) >= now
 }
 
 export default feedbackTargetIsOpen

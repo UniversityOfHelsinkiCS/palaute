@@ -1,5 +1,6 @@
 import groupBy from 'lodash/groupBy'
-import { parseISO } from 'date-fns'
+
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -14,7 +15,7 @@ export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
 }
 
 const courseRealisationSortFn = (a, b) =>
-  parseISO(b.endDate) - parseISO(a.endDate)
+  new Date(b.endDate) - new Date(a.endDate)
 
 export const sortCourseRealisations = (courseRealisations) => {
   const copy = courseRealisations ? [...courseRealisations] : []
@@ -56,10 +57,6 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
   )
 }
 
-export const feedbackTargetIsClosed = (feedbackTarget) =>
-  parseISO(feedbackTarget.closesAt) < new Date() ||
-  parseISO(feedbackTarget.opensAt) > new Date()
-
 export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (!feedbackTargets) {
     return []
@@ -68,19 +65,19 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (status === 'waitingForFeedback') {
     return feedbackTargets.filter(
       (feedbackTarget) =>
-        !feedbackTargetIsClosed(feedbackTarget) && !feedbackTarget.feedback,
+        feedbackTargetIsOpen(feedbackTarget) && !feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackGiven') {
     return feedbackTargets.filter(
       (feedbackTarget) =>
-        !feedbackTargetIsClosed(feedbackTarget) && feedbackTarget.feedback,
+        feedbackTargetIsOpen(feedbackTarget) && feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackClosed') {
-    return feedbackTargets.filter(feedbackTargetIsClosed)
+    return feedbackTargets.filter((target) => !feedbackTargetIsOpen(target))
   }
 
   return feedbackTargets

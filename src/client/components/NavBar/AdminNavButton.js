@@ -4,12 +4,12 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle'
 
 import NavIconButton from './NavIconButton'
 import { ADMINS } from '../../util/common'
-import { useUserData } from '../../util/queries'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const AdminNavButton = () => {
-  const user = useUserData()
+  const { authorizedUser } = useAuthorizedUser()
 
-  if (!ADMINS.includes(user?.data?.username)) return null
+  if (!ADMINS.includes(authorizedUser?.username)) return null
 
   return (
     <NavIconButton to="/admin" tooltipTitle="Admin">

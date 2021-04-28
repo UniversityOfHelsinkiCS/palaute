@@ -6,7 +6,7 @@ const feedbackTargetIsEnded = (feedbackTarget) => {
   const { closesAt } = feedbackTarget
   const now = new Date()
 
-  return now >= new Date(closesAt)
+  return now > new Date(closesAt)
 }
 
 export default feedbackTargetIsEnded

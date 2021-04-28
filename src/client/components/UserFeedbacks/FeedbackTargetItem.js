@@ -20,8 +20,9 @@ import FeedbackClosedIcon from '@material-ui/icons/Lock'
 
 import { useQueryClient } from 'react-query'
 import { getLanguageValue } from '../../util/languageUtils'
-import { feedbackTargetIsClosed } from './utils'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -149,7 +150,6 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const queryClient = useQueryClient()
 
   const { id, closesAt, opensAt, name, feedback } = feedbackTarget
-  const isEnded = new Date() > parseISO(closesAt)
 
   const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
@@ -158,7 +158,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedback)
-  const isClosed = feedbackTargetIsClosed(feedbackTarget)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
@@ -172,18 +173,16 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={translatedName} secondary={periodInfo} />
       <Box mt={1}>
-        {isClosed && <FeedbackClosedChip />}
-        {!isClosed && feedbackGiven && <FeedbackGivenChip />}
-        {!isClosed && !feedbackGiven && <NoFeedbackChip />}
+        {!isOpen && <FeedbackClosedChip />}
+        {isOpen && feedbackGiven && <FeedbackGivenChip />}
+        {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>
       <div className={classes.actions}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
-        {!isClosed && feedbackGiven && (
+        {isOpen && feedbackGiven && (
           <FeedbackGivenActions editPath={editPath} onDelete={onDelete} />
         )}
-        {!isClosed && !feedbackGiven && (
-          <NoFeedbackActions editPath={editPath} />
-        )}
+        {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
       </div>
     </ListItem>
   )

@@ -9,8 +9,7 @@ import {
   Button,
 } from '@material-ui/core'
 
-import { useTeacherCourses } from '../../util/queries'
-
+import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import TeacherCourseList from './TeacherCourseList'
 import { getRelevantCourses, getUniqueCourses } from './utils'
 
@@ -32,12 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 const TeacherView = () => {
   const [visible, toggleVisible] = useState(false)
-  const courses = useTeacherCourses()
+  const { courseUnits, isLoading } = useTeacherCourseUnits()
   const classes = useStyles()
   const { t } = useTranslation()
 
-  const uniqueCourses = getUniqueCourses(courses)
-
+  const uniqueCourses = getUniqueCourses(courseUnits)
   const relevantCourses = getRelevantCourses(uniqueCourses, true)
   const oldCourses = getRelevantCourses(uniqueCourses, false)
 
@@ -45,7 +43,7 @@ const TeacherView = () => {
     toggleVisible(!visible)
   }
 
-  if (courses.isLoading) {
+  if (isLoading) {
     return (
       <div className={classes.progressContainer}>
         <CircularProgress />

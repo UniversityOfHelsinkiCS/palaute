@@ -61,7 +61,7 @@ class FeedbackTarget extends Model {
 
     const now = new Date()
 
-    return this.opensAt < now && this.closesAt > now
+    return this.opensAt <= now && this.closesAt >= now
   }
 
   isEnded() {

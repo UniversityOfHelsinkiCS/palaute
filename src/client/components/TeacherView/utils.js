@@ -33,16 +33,16 @@ export const sortCourses = (courses, order, orderBy) => {
   return stabilizedCourses.map((course) => course[0])
 }
 
-export const getUniqueCourses = (courses) => {
+export const getUniqueCourses = (courseUnits) => {
   const { i18n } = useTranslation()
 
-  if (!courses.data) return null
+  if (!courseUnits) return null
 
   const codes = new Set()
 
   const uniqueCourses = []
 
-  courses.data.forEach((course) => {
+  courseUnits.forEach((course) => {
     if (codes.has(course.courseCode)) return
     uniqueCourses.push({ ...course, name: getLanguageValue(course.name, i18n) })
     codes.add(course.courseCode)

@@ -6,6 +6,7 @@ const { sequelize } = require('../util/dbConnection')
 class Feedback extends Model {
   toPublicObject() {
     return {
+      id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       data: this.data,

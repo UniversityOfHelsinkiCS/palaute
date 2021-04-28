@@ -2,13 +2,13 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { ADMINS } from '../../util/common'
-import { useUserData } from '../../util/queries'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import LoginAs from './LoginAsSelector'
 
 const AdminView = () => {
-  const user = useUserData()
+  const { authorizedUser } = useAuthorizedUser()
 
-  if (!ADMINS.includes(user?.data?.username)) return <Redirect to="/" />
+  if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
 
   return (
     <>
