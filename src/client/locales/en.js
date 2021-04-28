@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export default {
   common: {
     languages: {
@@ -77,7 +79,8 @@ export default {
     closesAt: 'Closes at',
     opensAt: 'Opens at',
     hidden: 'Hidden',
-    upperLevelQuestionsInfo: `Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show" button to see what the survey looks like with all the questions`,
+    upperLevelQuestionsInfo:
+      'Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show" button to see what the survey looks like with all the questions',
   },
   questionResults: {
     answerCount: 'Answer count',
