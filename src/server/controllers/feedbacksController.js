@@ -1,9 +1,16 @@
 const { ApplicationError } = require('../util/customErrors')
-const { UserFeedbackTarget, Feedback } = require('../models')
+const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../models')
 
 const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
   const { id: userId } = req.user
+
+  const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
+
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  if (!feedbackTarget.isOpen())
+    throw new ApplicationError('Feedback is not open', 403)
 
   const [newFeedback] = await Feedback.findOrCreate({
     where: {
@@ -48,6 +55,22 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
   const feedback = await getFeedbackForUser(req)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackId: feedback.id,
+      userId: req.user.id,
+    },
+  })
+
+  const feedbackTarget = await FeedbackTarget.findByPk(
+    userFeedbackTarget.feedbackTargetId,
+  )
+
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  if (!feedbackTarget.isOpen())
+    throw new ApplicationError('Feedback is not open', 403)
 
   feedback.data = req.body.data
 
