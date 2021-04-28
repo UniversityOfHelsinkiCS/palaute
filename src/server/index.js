@@ -30,6 +30,7 @@ const questions = [
         en: 'The learning objectives were clear to me',
       },
     },
+    true,
   ],
   [
     'LIKERT',
@@ -39,6 +40,7 @@ const questions = [
         en: 'The course activies supported my learning',
       },
     },
+    true,
   ],
   [
     'LIKERT',
@@ -48,6 +50,7 @@ const questions = [
         en: 'The material used in the course supported my learning',
       },
     },
+    true,
   ],
   [
     'LIKERT',
@@ -58,10 +61,23 @@ const questions = [
           'Course assessment measured the achievement of the learning objectives',
       },
     },
+    true,
   ],
   [
     'LIKERT',
     { label: { fi: 'Opintojakso oli työläs', en: 'The course was laborious' } },
+  ],
+  [
+    'OPEN',
+    {
+      label: {
+        fi:
+          'Kommentoi kurssin toimintaa, sisältöä, opettajien tai ohjaajien toimintaa; hyödyllisyyttä, mielekkyyttä, relevanssia, vaikeustasoa; kehitysehdotuksia, kritiikkiä, kiitoksia',
+        en:
+          'Comment on the activity, content, teacher or tutor activities of the course; usefulness, meaningfulness, relevance, difficulty level; development suggestions, criticism, thank you',
+      },
+    },
+    false,
   ],
 ]
 
@@ -74,12 +90,12 @@ const createHYQuestions = async () => {
       where: {
         type: question[0],
         data: question[1],
-        required: true,
+        required: question[2],
       },
       defaults: {
         type: question[0],
         data: question[1],
-        required: true,
+        required: question[2],
       },
     })
     ids.push(questionWithId.id)
