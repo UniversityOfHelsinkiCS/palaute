@@ -84,7 +84,9 @@ const EditFeedbackTarget = () => {
     i18n.language,
   )
 
-  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget)
+  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(
+    (q) => q.type !== 'TEXT',
+  )
 
   const handleSubmit = async (values) => {
     try {
