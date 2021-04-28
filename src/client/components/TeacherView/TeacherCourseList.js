@@ -15,7 +15,7 @@ import TeacherCourseListItem from './TeacherCourseListItem'
 import { sortCourses } from './utils'
 
 const TeacherCourseList = ({ courses }) => {
-  const [order, setOrder] = useState('asc')
+  const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('name')
 
   const { t } = useTranslation()
@@ -27,6 +27,8 @@ const TeacherCourseList = ({ courses }) => {
   }
 
   if (!courses) return null
+
+  sortCourses(courses, order, orderBy)
 
   return (
     <TableContainer component={Paper}>
