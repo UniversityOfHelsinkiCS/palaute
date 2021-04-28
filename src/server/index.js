@@ -72,10 +72,8 @@ const questions = [
     'OPEN',
     {
       label: {
-        fi:
-          'Kommentoi kurssin toimintaa, sisältöä, opettajien tai ohjaajien toimintaa; hyödyllisyyttä, mielekkyyttä, relevanssia, vaikeustasoa; kehitysehdotuksia, kritiikkiä, kiitoksia',
-        en:
-          'Comment on the activity, content, teacher or tutor activities of the course; usefulness, meaningfulness, relevance, difficulty level; development suggestions, criticism, thank you',
+        fi: 'Muita huomioita',
+        en: 'Other comments',
       },
     },
     false,

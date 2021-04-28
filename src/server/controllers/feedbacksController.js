@@ -12,6 +12,16 @@ const create = async (req, res) => {
   if (!feedbackTarget.isOpen())
     throw new ApplicationError('Feedback is not open', 403)
 
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId,
+      feedbackTargetId: feedbackTarget.id,
+      accessStatus: 'STUDENT',
+    },
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+
   const [newFeedback] = await Feedback.findOrCreate({
     where: {
       data,
@@ -23,10 +33,8 @@ const create = async (req, res) => {
     },
   })
 
-  await UserFeedbackTarget.update(
-    { feedbackId: newFeedback.id },
-    { where: { userId, feedbackTargetId: Number(feedbackTargetId) } },
-  )
+  userFeedbackTarget.feedbackId = newFeedback.id
+  await userFeedbackTarget.save()
 
   res.send(newFeedback)
 }
@@ -60,8 +68,11 @@ const update = async (req, res) => {
     where: {
       feedbackId: feedback.id,
       userId: req.user.id,
+      accessStatus: 'STUDENT',
     },
   })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
 
   const feedbackTarget = await FeedbackTarget.findByPk(
     userFeedbackTarget.feedbackTargetId,

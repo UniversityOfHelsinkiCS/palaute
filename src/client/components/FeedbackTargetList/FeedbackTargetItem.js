@@ -47,7 +47,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      `${window.location.protocol}//${window.location.host}/targets/${id}/feedback`,
+      `${window.location.protocol}//${window.location.host}/palaute/targets/${id}/feedback`,
     )
     enqueueSnackbar(t('feedbackTargetList:copied'), { variant: 'info' })
   }
