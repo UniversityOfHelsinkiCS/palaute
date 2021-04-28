@@ -97,4 +97,10 @@ export default {
       'This information will not be visible to students',
     noStudentsWithFeedback: 'No one has given feedback yet',
   },
+  navBar: {
+    myFeedbacks: 'My feedbacks',
+    myCourses: 'My courses',
+    logOut: 'Log out',
+    admin: 'Admin',
+  },
 }

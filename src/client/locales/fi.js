@@ -95,4 +95,10 @@ export default {
     notVisibleToStudentsInfo: 'Tämä tieto ei näy opiskelijoille',
     noStudentsWithFeedback: 'Kukaan ei ole antanut palautetta vielä',
   },
+  navBar: {
+    myFeedbacks: 'Palautteeni',
+    myCourses: 'Kurssini',
+    logOut: 'Kirjaudu ulos',
+    admin: 'Ylläpito',
+  },
 }

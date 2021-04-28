@@ -3,8 +3,9 @@ import React from 'react'
 import { AppBar, Typography, Toolbar, makeStyles } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
-import FeedbacksIcon from '@material-ui/icons/Assignment'
+import FeedbacksIcon from '@material-ui/icons/Feedback'
 import TeacherSettingsIcon from '@material-ui/icons/Settings'
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 
@@ -48,6 +49,7 @@ const Logo = () => {
 
 const NavBar = () => {
   const { courseUnits } = useTeacherCourseUnits()
+  const { t } = useTranslation()
 
   const hasCourses = Boolean(courseUnits?.length)
 
@@ -56,11 +58,11 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar>
           <Logo />
-          <NavIconButton to="/" tooltipTitle="My feedbacks">
+          <NavIconButton to="/" tooltipTitle={t('navBar:myFeedbacks')}>
             <FeedbacksIcon />
           </NavIconButton>
           {hasCourses && (
-            <NavIconButton to="/courses" tooltipTitle="My courses">
+            <NavIconButton to="/courses" tooltipTitle={t('navBar:myCourses')}>
               <TeacherSettingsIcon />
             </NavIconButton>
           )}

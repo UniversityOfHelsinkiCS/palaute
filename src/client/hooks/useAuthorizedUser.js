@@ -5,7 +5,7 @@ import apiClient from '../util/apiClient'
 const useAuthorizedUser = () => {
   const queryKey = 'userData'
 
-  const { user: authorizedUser, ...rest } = useQuery(queryKey, async () => {
+  const { data: authorizedUser, ...rest } = useQuery(queryKey, async () => {
     const { data } = await apiClient.get('/login')
 
     return data
