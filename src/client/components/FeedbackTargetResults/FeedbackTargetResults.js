@@ -52,11 +52,6 @@ const FeedbackTargetResults = () => {
 
   const { questions } = feedbackTarget
 
-  const feedbackTargetName = getLanguageValue(
-    feedbackTarget.name,
-    i18n.language,
-  )
-
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
@@ -73,12 +68,8 @@ const FeedbackTargetResults = () => {
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.title}>
-        {feedbackTargetName}
+        {courseUnitName}
       </Typography>
-
-      <Box mb={2}>
-        <Typography>{courseUnitName}</Typography>
-      </Box>
 
       {feedbacks.length === 0 && notEnoughFeedbacksAlert}
 

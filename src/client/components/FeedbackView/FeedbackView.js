@@ -63,11 +63,6 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const feedbackTargetName = getLanguageValue(
-    feedbackTarget.name,
-    i18n.language,
-  )
-
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
@@ -103,12 +98,8 @@ const FeedbackView = () => {
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.heading}>
-        {feedbackTargetName}
+        {courseUnitName}
       </Typography>
-
-      <Box mb={2}>
-        <Typography>{courseUnitName}</Typography>
-      </Box>
 
       {!isOpen && closedAlert}
 
