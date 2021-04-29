@@ -255,17 +255,21 @@ const getFeedbacks = async (req, res) => {
     include: 'feedbackTarget',
   })
 
-  if (!isAdmin && !userFeedbackTarget) {
-    throw new ApplicationError('User is not authorized to view feedbacks', 403)
-  }
+  if (!isAdmin) {
+    if (!userFeedbackTarget) {
+      throw new ApplicationError(
+        'User is not authorized to view feedbacks',
+        403,
+      )
+    }
+    const { feedbackTarget } = userFeedbackTarget
 
-  const { feedbackTarget } = userFeedbackTarget
-
-  if (!isAdmin && !feedbackTarget.isEnded()) {
-    throw new ApplicationError(
-      'Information is not available until the feedback period has ended',
-      403,
-    )
+    if (!feedbackTarget.isEnded()) {
+      throw new ApplicationError(
+        'Information is not available until the feedback period has ended',
+        403,
+      )
+    }
   }
 
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
