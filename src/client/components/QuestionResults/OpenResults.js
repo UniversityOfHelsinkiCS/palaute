@@ -34,6 +34,7 @@ const OpenResults = ({ question }) => {
           <ListItem
             divider={index < filteredFeedbacks.length - 1}
             disableGutters
+            key={index}
           >
             <ListItemText primary={feedback.data} />
           </ListItem>
