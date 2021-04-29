@@ -10,10 +10,10 @@ import {
 } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import QuestionResults from '../QuestionResults'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
+import StudentTable from './StudentTable'
+import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FeedbackTargetResults = () => {
+const StudentsWithFeedback = () => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { id } = useParams()
@@ -31,12 +31,9 @@ const FeedbackTargetResults = () => {
     isLoading: feedbackTargetIsLoading,
   } = useFeedbackTarget(id)
 
-  const {
-    feedbacks,
-    isLoading: feedbacksIsLoading,
-  } = useFeedbackTargetFeedbacks(id)
+  const { students, isLoading: studentsIsLoading } = useStudentsWithFeedback(id)
 
-  const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
+  const isLoading = feedbackTargetIsLoading || studentsIsLoading
 
   if (isLoading) {
     return (
@@ -46,11 +43,15 @@ const FeedbackTargetResults = () => {
     )
   }
 
-  if (!feedbackTarget || !feedbacks) {
+  if (!feedbackTarget || !students) {
     return <Redirect to="/" />
   }
 
-  const { questions } = feedbackTarget
+  const noFeedbackALert = (
+    <Box mb={2}>
+      <Alert severity="info">{t('studentsWithFeedback:noFeedbackInfo')}</Alert>
+    </Box>
+  )
 
   const feedbackTargetName = getLanguageValue(
     feedbackTarget.name,
@@ -60,14 +61,6 @@ const FeedbackTargetResults = () => {
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
-  )
-
-  const notEnoughFeedbacksAlert = (
-    <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
-      </Alert>
-    </Box>
   )
 
   return (
@@ -80,11 +73,11 @@ const FeedbackTargetResults = () => {
         <Typography>{courseUnitName}</Typography>
       </Box>
 
-      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
+      {students.length === 0 && noFeedbackALert}
 
-      <QuestionResults questions={questions} feedbacks={feedbacks} />
+      {students.length > 0 && <StudentTable students={students} />}
     </>
   )
 }
 
-export default FeedbackTargetResults
+export default StudentsWithFeedback

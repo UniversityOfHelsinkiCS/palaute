@@ -309,15 +309,6 @@ const getStudentsWithFeedback = async (req, res) => {
     )
   }
 
-  const { feedbackTarget } = userFeedbackTarget
-
-  if (!isAdmin && !feedbackTarget.isEnded()) {
-    throw new ApplicationError(
-      'Information is not available until the feedback period has ended',
-      403,
-    )
-  }
-
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
