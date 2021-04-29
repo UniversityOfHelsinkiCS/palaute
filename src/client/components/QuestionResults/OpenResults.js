@@ -1,12 +1,20 @@
 import React from 'react'
-import { List, ListItem, ListItemText } from '@material-ui/core'
+import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
+const useStyles = makeStyles({
+  list: {
+    maxHeight: '800px',
+    overflowY: 'scroll',
+  },
+})
+
 const OpenResults = ({ question }) => {
   const { i18n } = useTranslation()
+  const { classes } = useStyles()
 
   const label = getLanguageValue(question.data?.label, i18n.language)
 
@@ -21,7 +29,7 @@ const OpenResults = ({ question }) => {
 
   return (
     <ResultsContent title={label} description={description}>
-      <List>
+      <List className={classes.list}>
         {filteredFeedbacks.map((feedback, index) => (
           <ListItem
             divider={index < filteredFeedbacks.length - 1}
