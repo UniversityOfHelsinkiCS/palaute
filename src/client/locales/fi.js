@@ -95,6 +95,7 @@ export default {
     copyLink: 'Kopioi linkki palautteeseen',
     copied: 'Linkki kopioitu leikepöydälle',
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
+    studentFeedbacks: 'palautetta annettu',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
