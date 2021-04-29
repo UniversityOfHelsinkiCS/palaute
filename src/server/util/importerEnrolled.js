@@ -12,6 +12,7 @@ const createTargetsFromEnrolment = async (data, userId) => {
   )
 
   const { courseUnitRealisation, courseUnit } = data
+  if (!courseUnit || !courseUnitRealisation) return
   await createCourseUnit(courseUnit)
 
   await createFeedbackTargetFromCourseRealisation(

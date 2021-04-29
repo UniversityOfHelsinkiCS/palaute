@@ -29,6 +29,7 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
 
   await courseUnitRealisations.reduce(async (promise, realisation) => {
     await promise
+    if (realisation.courseUnits.length === 0) return
     const courseUnit = realisation.courseUnits[0] // TODO, wtf
     await createCourseUnit(courseUnit)
     await createFeedbackTargetFromCourseRealisation(
