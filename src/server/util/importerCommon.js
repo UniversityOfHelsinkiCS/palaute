@@ -101,8 +101,8 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
       courseRealisationId,
       name: feedbackTargetName,
       hidden,
-      opensAt: formatDate(dateFns.addYears(endDate, 1)),
-      closesAt: formatDate(dateFns.addYears(endDate, 1)),
+      opensAt: formatDate(dateFns.subYears(endDate, 2)),
+      closesAt: formatDate(dateFns.subYears(endDate, 2)),
     },
   })
   await UserFeedbackTarget.findOrCreate({

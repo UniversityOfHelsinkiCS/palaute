@@ -61,24 +61,28 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (!feedbackTargets) {
     return []
   }
-
+  const acualFeedbackTargets = feedbackTargets.filter(
+    (target) => new Date(2020, 11, 0) < new Date(target.opensAt),
+  )
   if (status === 'waitingForFeedback') {
-    return feedbackTargets.filter(
+    return acualFeedbackTargets.filter(
       (feedbackTarget) =>
         feedbackTargetIsOpen(feedbackTarget) && !feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackGiven') {
-    return feedbackTargets.filter(
+    return acualFeedbackTargets.filter(
       (feedbackTarget) =>
         feedbackTargetIsOpen(feedbackTarget) && feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackClosed') {
-    return feedbackTargets.filter((target) => !feedbackTargetIsOpen(target))
+    return acualFeedbackTargets.filter(
+      (target) => !feedbackTargetIsOpen(target),
+    )
   }
 
-  return feedbackTargets
+  return acualFeedbackTargets
 }
