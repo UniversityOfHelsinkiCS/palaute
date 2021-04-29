@@ -63,10 +63,9 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const courseUnitName = getLanguageValue(
-    feedbackTarget.courseUnit.name,
-    i18n.language,
-  )
+  const { courseUnit, accessStatus } = feedbackTarget
+  const isTeacher = accessStatus === 'TEACHER'
+  const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const questions = getQuestions(feedbackTarget)
@@ -109,31 +108,35 @@ const FeedbackView = () => {
         validate={validate}
         validateOnChange={false}
       >
-        {({ isSubmitting }) => (
-          <Form>
-            <Card>
-              <CardContent>
-                <Box mb={2}>
-                  <Alert severity="info">
-                    {t('feedbackView:requiredInfo')}
-                  </Alert>
-                </Box>
-                <FeedbackForm questions={questions} name="answers" />
-              </CardContent>
-            </Card>
+        {({ isSubmitting }) => {
+          const disabled = isSubmitting || !isOpen || isTeacher
 
-            <Box mt={2}>
-              <Button
-                disabled={isSubmitting || !isOpen}
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
-                {t('feedbackView:submitButton')}
-              </Button>
-            </Box>
-          </Form>
-        )}
+          return (
+            <Form>
+              <Card>
+                <CardContent>
+                  <Box mb={2}>
+                    <Alert severity="info">
+                      {t('feedbackView:requiredInfo')}
+                    </Alert>
+                  </Box>
+                  <FeedbackForm questions={questions} name="answers" />
+                </CardContent>
+              </Card>
+
+              <Box mt={2}>
+                <Button
+                  disabled={disabled}
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  {t('feedbackView:submitButton')}
+                </Button>
+              </Box>
+            </Form>
+          )
+        }}
       </Formik>
     </>
   )
