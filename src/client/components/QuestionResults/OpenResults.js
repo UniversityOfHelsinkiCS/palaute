@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, ListItem } from '@material-ui/core'
+import { List, ListItem, ListItemText } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -22,12 +22,13 @@ const OpenResults = ({ question }) => {
   return (
     <ResultsContent title={label} description={description}>
       <List>
-        {filteredFeedbacks.map(({ data }, index) => (
+        {filteredFeedbacks.map((feedback, index) => (
           <ListItem
-            primary={data}
             divider={index < filteredFeedbacks.length - 1}
             disableGutters
-          />
+          >
+            <ListItemText primary={feedback.data} />
+          </ListItem>
         ))}
       </List>
     </ResultsContent>
