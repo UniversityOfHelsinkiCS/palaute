@@ -8,13 +8,14 @@ import {
   TableBody,
   TableHead,
   TableContainer,
+  Paper,
 } from '@material-ui/core'
 
 const StudentTable = ({ students }) => {
   const { t } = useTranslation()
 
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
