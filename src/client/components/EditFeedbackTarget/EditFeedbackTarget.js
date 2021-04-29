@@ -75,11 +75,6 @@ const EditFeedbackTarget = () => {
     return <Redirect to="/" />
   }
 
-  const feedbackTargetName = getLanguageValue(
-    feedbackTarget.name,
-    i18n.language,
-  )
-
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
@@ -93,7 +88,7 @@ const EditFeedbackTarget = () => {
     try {
       await saveValues(values, feedbackTarget)
 
-      // Necessary for the <DirtyFormPrompt  />
+      // Necessary for the <DirtyFormPrompt />
       actions.resetForm({ values })
 
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
@@ -107,12 +102,8 @@ const EditFeedbackTarget = () => {
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.heading}>
-        {feedbackTargetName}
+        {courseUnitName}
       </Typography>
-
-      <Box mb={2}>
-        <Typography>{courseUnitName}</Typography>
-      </Box>
 
       <LanguageTabs
         language={language}

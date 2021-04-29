@@ -23,6 +23,7 @@ export default {
     username: 'Käyttäjätunnus',
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
+    actions: 'Toiminnot',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',
@@ -93,18 +94,20 @@ export default {
     editSurvey: 'Muokkaa kyselyä',
     copyLink: 'Kopioi linkki palautteeseen',
     copied: 'Linkki kopioitu leikepöydälle',
+    showStudentsWithFeedback: 'Näyttä palautetta antaneet opiskelijat',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
-    notVisibleToStudentsInfo: 'Tämä tieto ei näy opiskelijoille',
-    noStudentsWithFeedback: 'Kukaan ei ole antanut palautetta vielä',
   },
   navBar: {
     myFeedbacks: 'Palautteeni',
     myCourses: 'Kurssini',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',
+  },
+  studentsWithFeedback: {
+    noFeedbackInfo: 'Kukaan ei ole antanut palautetta vielä',
   },
 }

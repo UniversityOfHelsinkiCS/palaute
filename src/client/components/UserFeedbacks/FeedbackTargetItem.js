@@ -19,7 +19,6 @@ import NoFeedbackIcon from '@material-ui/icons/Edit'
 import FeedbackClosedIcon from '@material-ui/icons/Lock'
 
 import { useQueryClient } from 'react-query'
-import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -145,18 +144,17 @@ const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
-  const { i18n, t } = useTranslation()
+  const { t } = useTranslation()
 
   const queryClient = useQueryClient()
 
-  const { id, closesAt, opensAt, name, feedback } = feedbackTarget
+  const { id, closesAt, opensAt, feedback } = feedbackTarget
 
   const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
     closesAt: formatDate(parseISO(closesAt)),
   })
 
-  const translatedName = getLanguageValue(name, i18n.language)
   const feedbackGiven = Boolean(feedback)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -171,7 +169,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
-      <ListItemText primary={translatedName} secondary={periodInfo} />
+      <ListItemText primary={periodInfo} />
       <Box mt={1}>
         {!isOpen && <FeedbackClosedChip />}
         {isOpen && feedbackGiven && <FeedbackGivenChip />}

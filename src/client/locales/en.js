@@ -23,6 +23,7 @@ export default {
     username: 'Username',
     dirtyFormPrompt:
       'The page has unsaved changes. Are you sure want to leave the page?',
+    actions: 'Actions',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -94,19 +95,20 @@ export default {
     editSurvey: 'Edit survey',
     copyLink: 'Copy link to feedback',
     copied: 'Link copied to cliboard',
+    showStudentsWithFeedback: 'Show students who have given feedback',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
     studentsWithFeedbackHeading: 'Students who have given feedback',
-    notVisibleToStudentsInfo:
-      'This information will not be visible to students',
-    noStudentsWithFeedback: 'No one has given feedback yet',
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
     myCourses: 'My courses',
     logOut: 'Log out',
     admin: 'Admin',
+  },
+  studentsWithFeedback: {
+    noFeedbackInfo: 'No one has given feedback yet',
   },
 }
