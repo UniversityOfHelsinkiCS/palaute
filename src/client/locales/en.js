@@ -96,6 +96,7 @@ export default {
     copyLink: 'Copy link to feedback',
     copied: 'Link copied to cliboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
+    studentFeedbacks: 'feedbacks given',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:

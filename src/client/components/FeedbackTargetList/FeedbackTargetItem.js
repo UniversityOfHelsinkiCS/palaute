@@ -18,6 +18,7 @@ import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { formatDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
 
 const useStyles = makeStyles((theme) => ({
   listItem: {},
@@ -113,9 +114,18 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     closesAt: formatDate(closesAt),
   })
 
+  const { students, isLoading: studentsIsLoading } = useStudentsWithFeedback(
+    feedbackTarget.id,
+  )
+
+  const amountOfFeedbacksGiven =
+    !studentsIsLoading &&
+    `${students.length} ${t('feedbackTargetList:studentFeedbacks')}`
+
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
+      {!studentsIsLoading && <ListItemText primary={amountOfFeedbacksGiven} />}
       <Box ml={2} display="flex">
         <ActionsButton feedbackTarget={feedbackTarget} />
       </Box>
