@@ -15,7 +15,6 @@ import {
 
 import MoreHoriz from '@material-ui/icons/MoreHoriz'
 
-import { getLanguageValue } from '../../util/languageUtils'
 import { formatDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -105,20 +104,18 @@ const ActionsButton = ({ feedbackTarget }) => {
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
-  const { i18n, t } = useTranslation()
+  const { t } = useTranslation()
 
-  const { closesAt, opensAt, name } = feedbackTarget
+  const { closesAt, opensAt } = feedbackTarget
 
   const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(opensAt),
     closesAt: formatDate(closesAt),
   })
 
-  const translatedName = getLanguageValue(name, i18n.language)
-
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
-      <ListItemText primary={translatedName} secondary={periodInfo} />
+      <ListItemText primary={periodInfo} />
       <Box ml={2} display="flex">
         <ActionsButton feedbackTarget={feedbackTarget} />
       </Box>
