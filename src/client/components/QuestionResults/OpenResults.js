@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 const OpenResults = ({ question }) => {
   const { i18n } = useTranslation()
-  const { classes } = useStyles()
+  const classes = useStyles()
 
   const label = getLanguageValue(question.data?.label, i18n.language)
 
