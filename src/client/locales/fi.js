@@ -94,7 +94,7 @@ export default {
     editSurvey: 'Muokkaa kyselyä',
     copyLink: 'Kopioi linkki palautteeseen',
     copied: 'Linkki kopioitu leikepöydälle',
-    showStudentsWithFeedback: 'Näyttä palautetta antaneet opiskelijat',
+    showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
