@@ -24,6 +24,7 @@ export default {
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',
+    close: 'Sulje',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',
@@ -43,9 +44,13 @@ export default {
     submitButton: 'Lähetä palaute',
     successAlert: 'Palaute on annettu',
     feedbackInfo:
-      'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia',
+      'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
+    feedbackInfoLink: 'Lue lisää, miten tietojasi käytetään',
     closedInfo:
       'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
+    privacyInfoTitle: 'Miten tietojani käytetään?',
+    privacyInfoContent:
+      'Kirjautumistietoja käytetään muun muassa siihen, että opiskelijalle näytetään oikeat palautteet, osataan lähettää muistusviestit, ja opettaja voi katsoa ketkä ovat lähettäneet palautetta (ja sen perusteella antaa esimerkiksi kurssipisteitä), mutta opettaja ei voi yhdistää palautetta opiskelijaan. Opettaja näkee reaaliaikaisen listan palautteen antaneista, mutta palautteet näkyvät vasta palautteenantamisajan jälkeen. Jos kurssille annettaan viisi tai vähemmän palautetta, ei niitä näytetä ollenkaan.',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',

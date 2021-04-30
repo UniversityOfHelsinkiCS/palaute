@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, useHistory, Redirect } from 'react-router-dom'
 
 import {
@@ -9,6 +9,7 @@ import {
   Box,
   Card,
   CardContent,
+  Link,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -20,6 +21,7 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import PrivacyDialog from './PrivacyDialog'
 
 import {
   makeValidate,
@@ -32,6 +34,10 @@ import {
 const useStyles = makeStyles((theme) => ({
   heading: {
     marginBottom: theme.spacing(2),
+  },
+  feedbackInfoLink: {
+    fontWeight: theme.typography.fontWeightMedium,
+    textDecoration: 'underline',
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
@@ -46,6 +52,7 @@ const FeedbackView = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
+  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     cacheTime: 0,
@@ -94,8 +101,22 @@ const FeedbackView = () => {
     </Box>
   )
 
+  const handleClosePrivacyDialog = () => {
+    setPrivacyDialogOpen(false)
+  }
+
+  const handleOpenPrivacyDialog = (event) => {
+    event.preventDefault()
+    setPrivacyDialogOpen(true)
+  }
+
   return (
     <>
+      <PrivacyDialog
+        open={privacyDialogOpen}
+        onClose={handleClosePrivacyDialog}
+      />
+
       <Typography variant="h4" component="h1" className={classes.heading}>
         {courseUnitName}
       </Typography>
@@ -117,7 +138,15 @@ const FeedbackView = () => {
                 <CardContent>
                   <Box mb={2}>
                     <Alert severity="info">
-                      {t('feedbackView:feedbackInfo')}
+                      {t('feedbackView:feedbackInfo')}{' '}
+                      <Link
+                        color="inherit"
+                        href="#feedback-privacy-dialog-title"
+                        className={classes.feedbackInfoLink}
+                        onClick={handleOpenPrivacyDialog}
+                      >
+                        {t('feedbackView:feedbackInfoLink')}
+                      </Link>
                     </Alert>
                   </Box>
                   <FeedbackForm questions={questions} name="answers" />

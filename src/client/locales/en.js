@@ -24,6 +24,7 @@ export default {
     dirtyFormPrompt:
       'The page has unsaved changes. Are you sure want to leave the page?',
     actions: 'Actions',
+    close: 'Close',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',
@@ -46,6 +47,9 @@ export default {
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
     closedInfo:
       'This feedback is currently closed. Feedback can be given between {{closesAt}} and {{opensAt}}',
+    privacyInfoTitle: 'How is my user information being used?',
+    privacyInfoContent:
+      'The user information is being used, for example, to show the student the correct feedback surveys, to send reminder messages, and to show the teacher which students have sent feedback (which information can be used for example in grading). Teachers will not be able to know which student has given certain feedback. The teacher can see a list of students who have given feedback once the feedback has been opened, but the feedback is only visible once the feedback is closed. If a course has five or fewer feedbacks, the feedback will not be visible at all',
   },
   teacherView: {
     noActiveCourses: 'No courses active',
