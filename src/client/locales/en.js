@@ -45,9 +45,10 @@ export default {
     successAlert: 'Feedback has been given',
     feedbackInfo:
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
+    feedbackInfoLink: 'Read more, how your information is being used',
     closedInfo:
       'This feedback is currently closed. Feedback can be given between {{closesAt}} and {{opensAt}}',
-    privacyInfoTitle: 'How is my user information being used?',
+    privacyInfoTitle: 'How is my information being used?',
     privacyInfoContent:
       'The user information is being used, for example, to show the student the correct feedback surveys, to send reminder messages, and to show the teacher which students have sent feedback (which information can be used for example in grading). Teachers will not be able to know which student has given certain feedback. The teacher can see a list of students who have given feedback once the feedback has been opened, but the feedback is only visible once the feedback is closed. If a course has five or fewer feedbacks, the feedback will not be visible at all',
   },
