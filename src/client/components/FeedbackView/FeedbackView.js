@@ -117,7 +117,7 @@ const FeedbackView = () => {
                 <CardContent>
                   <Box mb={2}>
                     <Alert severity="info">
-                      {t('feedbackView:requiredInfo')}
+                      {t('feedbackView:feedbackInfo')}
                     </Alert>
                   </Box>
                   <FeedbackForm questions={questions} name="answers" />

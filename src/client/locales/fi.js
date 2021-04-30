@@ -42,7 +42,8 @@ export default {
   feedbackView: {
     submitButton: 'Lähetä palaute',
     successAlert: 'Palaute on annettu',
-    requiredInfo: 'Tähdellä (*) merkityt kentät ovat pakolliset',
+    feedbackInfo:
+      'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia',
     closedInfo:
       'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
   },

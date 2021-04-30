@@ -42,7 +42,8 @@ export default {
   feedbackView: {
     submitButton: 'Give feedback',
     successAlert: 'Feedback has been given',
-    requiredInfo: 'Fields marked with an asterisk (*) are required',
+    feedbackInfo:
+      'This feedback is anonymous. Fields marked with an asterisk (*) are required',
     closedInfo:
       'This feedback is currently closed. Feedback can be given between {{closesAt}} and {{opensAt}}',
   },
