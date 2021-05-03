@@ -49,10 +49,16 @@ const getInitialAnswerByType = (type) => {
 export const getQuestions = (feedbackTarget) => {
   const { surveys } = feedbackTarget
 
+  const uniOpenQuestions =
+    surveys?.universitySurvey?.questions.filter((q) => q.type === 'OPEN') ?? []
+  const filteredUniQuestions =
+    surveys?.universitySurvey?.questions.filter((q) => q.type !== 'OPEN') ?? []
+
   return [
-    ...(surveys?.universitySurvey?.questions ?? []),
+    ...filteredUniQuestions,
     ...(surveys?.departmentSurvey?.questions ?? []),
     ...(surveys?.teacherSurvey?.questions ?? []),
+    ...uniOpenQuestions,
   ]
 }
 
