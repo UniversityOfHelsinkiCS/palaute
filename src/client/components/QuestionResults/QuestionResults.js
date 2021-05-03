@@ -9,10 +9,15 @@ import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+  },
   questionItem: {
-    '&:not(:last-child)': {
-      marginBottom: theme.spacing(2),
-    },
+    marginBottom: theme.spacing(2),
+    minWidth: '49%',
+    maxWidth: '49%',
   },
 }))
 
@@ -44,7 +49,7 @@ const QuestionResults = ({ questions, feedbacks }) => {
   )
 
   return (
-    <div>
+    <div className={classes.container}>
       {questionsWithFeedbacks.map((q) => (
         <QuestionItem
           key={q.id}

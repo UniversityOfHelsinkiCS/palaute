@@ -78,7 +78,7 @@ export default {
     option: 'Vaihtoehto',
     addOption: 'Lisää vaihtoehto',
     removeOption: 'Poista vaihtoehto',
-    label: 'Tunniste',
+    label: 'Kysymys',
     content: 'Sisältö',
     removeQuestionConfirmation: 'Haluatko varmasti poistaa tämän kysymyksen?',
     removeOptionConfirmation: 'Haluatko varmasti poistaa tämän vaihtoehdon?',

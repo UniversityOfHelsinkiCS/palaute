@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   chart: {
-    maxWidth: '900px',
     margin: '0px auto',
   },
 }))
