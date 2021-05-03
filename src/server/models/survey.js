@@ -25,8 +25,7 @@ class Survey extends Model {
     for (let i = 0; i < this.questionIds.length; ++i) {
       questionIdOrder[this.questionIds[i]] = i
     }
-
-    questions.sort((a, b) => questionIdOrder[a] - questionIdOrder[b])
+    questions.sort((a, b) => questionIdOrder[a.id] - questionIdOrder[b.id])
     return questions
   }
 
