@@ -83,6 +83,7 @@ export default {
     removeQuestionConfirmation: 'Haluatko varmasti poistaa tämän kysymyksen?',
     removeOptionConfirmation: 'Haluatko varmasti poistaa tämän vaihtoehdon?',
     description: 'Kuvaus',
+    done: 'Valmis',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',

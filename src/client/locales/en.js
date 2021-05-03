@@ -78,12 +78,13 @@ export default {
     option: 'Option',
     addOption: 'Add option',
     removeOption: 'Remove option',
-    label: 'Label',
+    label: 'Question',
     content: 'Content',
     removeQuestionConfirmation:
       'Are you sure you want to remove this question?',
     removeOptionConfirmation: 'Are you sure you want to remove this option?',
     description: 'Description',
+    done: 'Done',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',

@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
+const TEMP_ID = Symbol('tempId')
+
 const createTranslationObject = () => ({
   fi: '',
   sv: '',
@@ -35,10 +37,13 @@ const createQuestionData = (type) => {
   }
 }
 
+export const getQuestionId = (question) => question.id ?? question[TEMP_ID]
+
 export const createQuestion = (type) => {
   const data = createQuestionData(type)
 
   return {
+    [TEMP_ID]: uuidv4(),
     type,
     data,
     required: true,

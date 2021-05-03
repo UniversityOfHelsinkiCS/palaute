@@ -4,11 +4,12 @@ import {
   Card,
   CardContent,
   IconButton,
-  Grid,
-  Typography,
   makeStyles,
   Tooltip,
   Box,
+  Chip,
+  Divider,
+  Button,
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -17,85 +18,29 @@ import DownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
-import OptionEditor from './OptionEditor'
-import FormikTextField from '../FormikTextField'
+import LikertEditor from './LikertEditor'
+import LikertPreview from './LikertPreview'
+import OpenEditor from './OpenEditor'
+import OpenPreview from './OpenPreview'
+import ChoiceEditor from './ChoiceEditor'
+import SingleChoicePreview from './SingleChoicePreview'
+import MultipleChoicePreview from './MultipleChoicePreview'
+import TextEditor from './TextEditor'
+import TextPreview from './TextPreview'
 
 const useStyles = makeStyles((theme) => ({
-  title: {
+  typeChip: {
     marginBottom: theme.spacing(2),
   },
   actionsContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    [theme.breakpoints.down('xs')]: {
-      flexDirection: 'row',
-    },
+    justifyContent: 'flex-end',
+  },
+  actionsDivider: {
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
   },
 }))
-
-const LikertEditor = ({ name, language }) => {
-  const { t } = useTranslation()
-
-  return (
-    <>
-      <Box mb={2}>
-        <FormikTextField
-          name={`${name}.data.label.${language}`}
-          label={t('questionEditor:label')}
-          fullWidth
-        />
-      </Box>
-
-      <FormikTextField
-        name={`${name}.data.description.${language}`}
-        label={t('questionEditor:description')}
-        fullWidth
-      />
-    </>
-  )
-}
-
-const OpenEditor = ({ name, language }) => {
-  const { t } = useTranslation()
-
-  return (
-    <FormikTextField
-      name={`${name}.data.label.${language}`}
-      label={t('questionEditor:label')}
-      fullWidth
-    />
-  )
-}
-
-const ChoiceEditor = ({ name, language }) => {
-  const { t } = useTranslation()
-
-  return (
-    <>
-      <Box mb={2}>
-        <FormikTextField
-          name={`${name}.data.label.${language}`}
-          label={t('questionEditor:label')}
-          fullWidth
-        />
-      </Box>
-      <OptionEditor name={`${name}.data.options`} language={language} />
-    </>
-  )
-}
-
-const TextEditor = ({ name, language }) => {
-  const { t } = useTranslation()
-
-  return (
-    <FormikTextField
-      name={`${name}.data.content.${language}`}
-      label={t('questionEditor:label')}
-      fullWidth
-      multiline
-    />
-  )
-}
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -103,6 +48,14 @@ const editorComponentByType = {
   TEXT: TextEditor,
   MULTIPLE_CHOICE: ChoiceEditor,
   SINGLE_CHOICE: ChoiceEditor,
+}
+
+const previewComponentByType = {
+  LIKERT: LikertPreview,
+  OPEN: OpenPreview,
+  TEXT: TextPreview,
+  MULTIPLE_CHOICE: MultipleChoicePreview,
+  SINGLE_CHOICE: SingleChoicePreview,
 }
 
 const getTitleByType = (type, t) => {
@@ -124,6 +77,9 @@ const QuestionCard = ({
   onMoveUp,
   onMoveDown,
   className,
+  isEditing = false,
+  onStartEditing,
+  onStopEditing,
   moveUpDisabled = false,
   moveDownDisabled = false,
 }) => {
@@ -131,7 +87,10 @@ const QuestionCard = ({
   const classes = useStyles()
   const [field] = useField(name)
   const { value: question } = field
+
   const EditorComponent = editorComponentByType[question.type]
+  const PreviewComponent = previewComponentByType[question.type]
+
   const title = getTitleByType(question.type, t)
 
   const handleRemove = () => {
@@ -148,39 +107,55 @@ const QuestionCard = ({
   return (
     <Card className={className}>
       <CardContent>
-        <Grid spacing={2} container>
-          <Grid xs={12} sm item>
-            <Typography variant="h6" component="h3" className={classes.title}>
-              {title}
-            </Typography>
+        <Box display="flex" justifyContent="space-between">
+          <Chip label={title} variant="outlined" className={classes.typeChip} />
+          <div>
+            {isEditing ? (
+              <Button color="primary" onClick={onStopEditing}>
+                {t('questionEditor:done')}
+              </Button>
+            ) : (
+              <Button color="primary" onClick={onStartEditing}>
+                {t('edit')}
+              </Button>
+            )}
+          </div>
+        </Box>
+
+        {isEditing ? (
+          <>
             <EditorComponent name={name} language={language} />
-          </Grid>
-          <Grid className={classes.actionsContainer} item>
-            <Tooltip title={t('questionEditor:moveUp')}>
-              <div>
-                <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
-                  <UpIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
+            <Divider className={classes.actionsDivider} />
 
-            <Tooltip title={t('questionEditor:moveDown')}>
-              <div>
-                <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
-                  <DownIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
+            <div className={classes.actionsContainer}>
+              <Tooltip title={t('questionEditor:moveUp')}>
+                <div>
+                  <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
+                    <UpIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
 
-            <Tooltip title={t('questionEditor:removeQuestion')}>
-              <div>
-                <IconButton onClick={handleRemove}>
-                  <DeleteIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </Grid>
-        </Grid>
+              <Tooltip title={t('questionEditor:moveDown')}>
+                <div>
+                  <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
+                    <DownIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
+
+              <Tooltip title={t('questionEditor:removeQuestion')}>
+                <div>
+                  <IconButton onClick={handleRemove}>
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
+            </div>
+          </>
+        ) : (
+          <PreviewComponent question={question} language={language} />
+        )}
       </CardContent>
     </Card>
   )

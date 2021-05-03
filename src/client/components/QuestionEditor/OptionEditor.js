@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import { FieldArray, useField } from 'formik'
-import DeleteIcon from '@material-ui/icons/Delete'
+import CloseIcon from '@material-ui/icons/Close'
 import { useTranslation } from 'react-i18next'
 
 import { createOption } from './utils'
@@ -55,7 +55,7 @@ const OptionItem = ({ name, language, onRemove }) => {
       <Box ml={2} flexGrow={0}>
         <Tooltip title={t('questionEditor:removeOption')}>
           <IconButton onClick={handleRemove}>
-            <DeleteIcon />
+            <CloseIcon />
           </IconButton>
         </Tooltip>
       </Box>

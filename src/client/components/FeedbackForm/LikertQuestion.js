@@ -51,13 +51,7 @@ const LikertQuestion = ({ question, name }) => {
           {required && ' *'}
         </Typography>
         {description && (
-          <Typography
-            color="textSecondary"
-            variant="body2"
-            className={classes.description}
-          >
-            {description}
-          </Typography>
+          <Typography className={classes.description}>{description}</Typography>
         )}
         <RadioGroup
           aria-label={label}

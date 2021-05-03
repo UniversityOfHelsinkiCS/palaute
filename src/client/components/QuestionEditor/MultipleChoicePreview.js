@@ -1,0 +1,28 @@
+import React from 'react'
+import { FormGroup, FormControlLabel, Checkbox } from '@material-ui/core'
+
+import { getLanguageValue } from '../../util/languageUtils'
+import PreviewBase from './PreviewBase'
+
+const MultipleChoicePreview = ({ question, language }) => {
+  const label = getLanguageValue(question.data?.label, language)
+
+  const options = question.data?.options ?? []
+
+  return (
+    <PreviewBase label={label}>
+      <FormGroup>
+        {options.map((option) => (
+          <FormControlLabel
+            value={option.id}
+            control={<Checkbox color="primary" name={option.id} />}
+            label={getLanguageValue(option.label, language)}
+            key={option.id}
+          />
+        ))}
+      </FormGroup>
+    </PreviewBase>
+  )
+}
+
+export default MultipleChoicePreview

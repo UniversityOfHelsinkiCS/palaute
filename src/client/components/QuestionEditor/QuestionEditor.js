@@ -4,7 +4,7 @@ import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import QuestionCard from './QuestionCard'
-import { createQuestion } from './utils'
+import { createQuestion, getQuestionId } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   questionCard: {
@@ -48,6 +48,7 @@ const QuestionEditor = ({ name = 'questions', language = 'fi' }) => {
   const [questionsField] = useField(name)
   const { value: questions = [] } = questionsField
   const { t } = useTranslation()
+  const [editingQuestionId, setEditingQuestionId] = useState()
 
   return (
     <FieldArray
@@ -65,6 +66,11 @@ const QuestionEditor = ({ name = 'questions', language = 'fi' }) => {
               moveDownDisabled={index === questions.length - 1}
               language={language}
               className={classes.questionCard}
+              isEditing={editingQuestionId === getQuestionId(question)}
+              onStopEditing={() => setEditingQuestionId(null)}
+              onStartEditing={() =>
+                setEditingQuestionId(getQuestionId(question))
+              }
             />
           ))}
 
@@ -72,7 +78,11 @@ const QuestionEditor = ({ name = 'questions', language = 'fi' }) => {
             open={menuOpen}
             anchorEl={addButtonRef.current}
             onClose={() => setMenuOpen(false)}
-            onChooseType={(type) => arrayHelpers.push(createQuestion(type))}
+            onChooseType={(type) => {
+              const newQuestion = createQuestion(type)
+              arrayHelpers.push(newQuestion)
+              setEditingQuestionId(getQuestionId(newQuestion))
+            }}
           />
           <Button
             color="primary"
