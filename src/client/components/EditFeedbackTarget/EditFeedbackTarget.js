@@ -124,7 +124,7 @@ const EditFeedbackTarget = () => {
               <Card>
                 <CardContent>
                   <div className={classes.form}>
-                    <Box mb={2}>
+                    <Box hidden mb={2}>
                       <FormikTextField
                         name={`name.${language}`}
                         label={t('name')}
@@ -133,7 +133,7 @@ const EditFeedbackTarget = () => {
                     </Box>
 
                     <Box mb={2}>
-                      <FormikCheckbox name="hidden" label="Hidden" />
+                      <FormikCheckbox name="hidden" label={t('editFeedbackTarget:hidden')} />
                     </Box>
 
                     <Box mb={2}>
