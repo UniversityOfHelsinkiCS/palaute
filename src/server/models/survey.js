@@ -20,6 +20,13 @@ class Survey extends Model {
       },
     })
 
+    const questionIdOrder = {}
+
+    for (let i = 0; i < this.questionIds.length; ++i) {
+      questionIdOrder[this.questionIds[i]] = i
+    }
+
+    questions.sort((a, b) => questionIdOrder[a] - questionIdOrder[b])
     return questions
   }
 
