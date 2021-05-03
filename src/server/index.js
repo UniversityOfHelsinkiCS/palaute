@@ -80,6 +80,7 @@ const questions = [
   ],
 ]
 
+// eslint-disable-next-line
 const createHYQuestions = async () => {
   const ids = []
 
@@ -112,7 +113,7 @@ const createHYQuestions = async () => {
 const start = async () => {
   await connectToDatabase()
   await createOrganisations()
-  await createHYQuestions()
+  // await createHYQuestions()
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
   })

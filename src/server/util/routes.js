@@ -44,6 +44,7 @@ router.get(
 
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
+router.get('/surveys/university', surveys.getUniversitySurvey)
 
 /*
 router.get('/questions', questions.getAll)

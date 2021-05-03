@@ -81,8 +81,23 @@ const getSurveyByCourseCode = async (req, res) => {
   res.send(survey)
 }
 
+const getUniversitySurvey = async (req, res) => {
+  const survey = await Survey.findOne({
+    where: {
+      type: 'university',
+    },
+  })
+
+  if (!survey) throw new ApplicationError('Not found', 404)
+
+  await survey.populateQuestions()
+
+  res.send(survey)
+}
+
 module.exports = {
   addQuestion,
   update,
   getSurveyByCourseCode,
+  getUniversitySurvey,
 }
