@@ -1,9 +1,12 @@
-import { isAfter, parseISO, lightFormat } from 'date-fns'
+import { isAfter, parseISO, lightFormat, set } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
-const pickerDateFormat = `yyyy-MM-dd'T'hh:mm`
+const pickerDateFormat = `yyy-MM-dd`
 
 const formatPickerDate = (date) => lightFormat(date, pickerDateFormat)
+
+const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
+const setOpensAt = (date) => set(date, { hours: 0, minutes: 0, seconds: 0 })
 
 export const getInitialValues = (feedbackTarget) => {
   const { hidden, closesAt, opensAt, name, surveys } = feedbackTarget
@@ -48,8 +51,10 @@ export const getUpperLevelQuestions = (feedbackTarget) => {
 export const saveValues = async (values, feedbackTarget) => {
   const { questions, hidden, name } = values
 
-  const closesAt = values.closesAt ? new Date(values.closesAt) : null
-  const opensAt = values.opensAt ? new Date(values.opensAt) : null
+  const closesAt = values.closesAt
+    ? setClosesAt(new Date(values.closesAt))
+    : null
+  const opensAt = values.opensAt ? setOpensAt(new Date(values.opensAt)) : null
 
   const { surveys, id } = feedbackTarget
   const { id: surveyId } = surveys.teacherSurvey

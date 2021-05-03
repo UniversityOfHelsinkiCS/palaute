@@ -12,7 +12,7 @@ const FormikDatePicker = ({ name, helperText, label, ...props }) => {
 
   return (
     <TextField
-      type="datetime-local"
+      type="date"
       label={label}
       value={field.value ?? ''}
       onChange={(event) => {
