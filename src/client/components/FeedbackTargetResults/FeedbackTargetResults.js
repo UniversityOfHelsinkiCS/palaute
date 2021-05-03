@@ -11,6 +11,7 @@ import {
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
+import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
@@ -72,7 +73,9 @@ const FeedbackTargetResults = () => {
       </Typography>
 
       {feedbacks.length === 0 && notEnoughFeedbacksAlert}
-
+      {feedbacks.length > 5 && (
+        <FeedbackSummary questions={questions} feedbacks={feedbacks} />
+      )}
       <QuestionResults questions={questions} feedbacks={feedbacks} />
     </>
   )
