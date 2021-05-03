@@ -26,6 +26,9 @@ User.init(
     language: {
       type: STRING,
     },
+    studentNumber: {
+      type: STRING,
+    },
   },
   {
     underscored: true,

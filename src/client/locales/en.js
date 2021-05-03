@@ -21,6 +21,7 @@ export default {
     firstName: 'First name',
     lastName: 'Last name',
     username: 'Username',
+    studentNumber: 'Student number',
     dirtyFormPrompt:
       'The page has unsaved changes. Are you sure want to leave the page?',
     actions: 'Actions',

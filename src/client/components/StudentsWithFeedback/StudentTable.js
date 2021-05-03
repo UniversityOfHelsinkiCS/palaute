@@ -21,15 +21,15 @@ const StudentTable = ({ students }) => {
           <TableRow>
             <TableCell>{t('firstName')}</TableCell>
             <TableCell>{t('lastName')}</TableCell>
-            <TableCell>{t('username')}</TableCell>
+            <TableCell>{t('studentNumber')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {students.map(({ id, firstName, lastName, username }) => (
+          {students.map(({ id, firstName, lastName, studentNumber }) => (
             <TableRow key={id}>
               <TableCell>{firstName}</TableCell>
               <TableCell>{lastName}</TableCell>
-              <TableCell>{username}</TableCell>
+              <TableCell>{studentNumber}</TableCell>
             </TableRow>
           ))}
         </TableBody>
