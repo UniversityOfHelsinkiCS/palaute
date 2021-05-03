@@ -117,70 +117,75 @@ const EditFeedbackTarget = () => {
         validate={validate}
         validateOnChange={false}
       >
-        <Form>
-          <DirtyFormPrompt />
-          <Box mb={2}>
-            <Card>
-              <CardContent>
-                <div className={classes.form}>
-                  <Box mb={2}>
-                    <FormikTextField
-                      name={`name.${language}`}
-                      label={t('name')}
-                      fullWidth
-                    />
-                  </Box>
-
-                  <Box mb={2}>
-                    <FormikCheckbox name="hidden" label="Hidden" />
-                  </Box>
-
-                  <Box mb={2}>
-                    <FormikDatePicker
-                      name="opensAt"
-                      label={t('editFeedbackTarget:opensAt')}
-                      fullWidth
-                    />
-                  </Box>
-
-                  <FormikDatePicker
-                    name="closesAt"
-                    label={t('editFeedbackTarget:closesAt')}
-                    fullWidth
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </Box>
-
-          {upperLevelQuestions.length > 0 && (
+        {({ handleSubmit }) => (
+          <Form>
+            <DirtyFormPrompt />
             <Box mb={2}>
-              <Alert severity="info">
-                {t('editFeedbackTarget:upperLevelQuestionsInfo', {
-                  count: upperLevelQuestions.length,
-                })}
-              </Alert>
+              <Card>
+                <CardContent>
+                  <div className={classes.form}>
+                    <Box mb={2}>
+                      <FormikTextField
+                        name={`name.${language}`}
+                        label={t('name')}
+                        fullWidth
+                      />
+                    </Box>
+
+                    <Box mb={2}>
+                      <FormikCheckbox name="hidden" label="Hidden" />
+                    </Box>
+
+                    <Box mb={2}>
+                      <FormikDatePicker
+                        name="opensAt"
+                        label={t('editFeedbackTarget:opensAt')}
+                        fullWidth
+                      />
+                    </Box>
+
+                    <FormikDatePicker
+                      name="closesAt"
+                      label={t('editFeedbackTarget:closesAt')}
+                      fullWidth
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </Box>
-          )}
 
-          <QuestionEditor language={language} name="questions" />
+            {upperLevelQuestions.length > 0 && (
+              <Box mb={2}>
+                <Alert severity="info">
+                  {t('editFeedbackTarget:upperLevelQuestionsInfo', {
+                    count: upperLevelQuestions.length,
+                  })}
+                </Alert>
+              </Box>
+            )}
 
-          <Box mt={2}>
-            <Box mr={1} clone>
-              <Button color="primary" variant="contained" type="submit">
-                {t('save')}
+            <QuestionEditor language={language} name="questions" />
+
+            <Box mt={2}>
+              <Box mr={1} clone>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleSubmit}
+                >
+                  {t('save')}
+                </Button>
+              </Box>
+              <Button
+                color="primary"
+                component={Link}
+                to={`/targets/${id}/feedback`}
+              >
+                {t('show')}
               </Button>
             </Box>
-            <Button
-              color="primary"
-              type="submit"
-              component={Link}
-              to={`/targets/${id}/feedback`}
-            >
-              {t('show')}
-            </Button>
-          </Box>
-        </Form>
+          </Form>
+        )}
       </Formik>
     </>
   )
