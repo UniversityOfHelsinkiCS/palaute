@@ -4,8 +4,6 @@ const { ApplicationError } = require('../util/customErrors')
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
 const { getResponsibleByPersonId } = require('../util/importerResponsible')
 
-const { ADMINS } = require('../../config')
-
 const {
   UserFeedbackTarget,
   FeedbackTarget,
