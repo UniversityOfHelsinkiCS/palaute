@@ -16,8 +16,6 @@ USER_DATA_FILE_PATH=$PROJECT_ROOT/scripts/my_username
 
 username=""
 
-/home/toska_user/most_recent_backup_store
-
 retry () {
     for i in {1..60}
     do
