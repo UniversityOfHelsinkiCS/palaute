@@ -67,10 +67,10 @@ export default {
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
-    likertQuestion: 'Likert kysymys',
+    likertQuestion: 'Likert-kysymys',
     openQuestion: 'Avoin kysymys',
-    singleChoiceQuestion: 'Yhden vaihtoehdon kysymys',
-    multipleChoiceQuestion: 'Monen vaihtoehdon kysymys',
+    singleChoiceQuestion: 'Monivalinta - valitse yksi',
+    multipleChoiceQuestion: 'Monivalinta - valitse monta',
     textualContent: 'Tekstuaalinen sisältö',
     moveUp: 'Siirrä ylös',
     moveDown: 'Siirrä alas',

@@ -1,5 +1,5 @@
 import { orderBy, groupBy } from 'lodash'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, isAfter } from 'date-fns'
 
 export const formatDate = (date) => format(parseISO(date), 'd.M.yyyy')
 
@@ -28,5 +28,9 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
     }),
   )
 
-  return orderBy(courseRealisations, ['startDate'], ['desc'])
+  const filteredCourseRealisations = courseRealisations.filter((c) =>
+    isAfter(parseISO(c.endDate), new Date(2021, 4, 1)),
+  )
+
+  return orderBy(filteredCourseRealisations, ['startDate'], ['desc'])
 }
