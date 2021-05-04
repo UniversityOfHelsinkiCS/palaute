@@ -98,6 +98,13 @@ export default {
     answerCount: 'Answer count',
     answerOption: 'Answer option',
   },
+  feedbackSummary: {
+    question: 'Question',
+    average: 'Average',
+    standardDeviation: 'Standard Deviation',
+    median: 'Median',
+    answers: 'Answers',
+  },
   feedbackTargetList: {
     showFeedbacks: 'Show feedbacks',
     showSurvey: 'Show survey',

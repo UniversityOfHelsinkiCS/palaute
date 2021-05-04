@@ -134,3 +134,42 @@ export const getQuestionsWithFeedback = (questions, feedbacks) => {
       feedbacks: feedbackDataByQuestionId[q.id] ?? [],
     }))
 }
+
+const feedbacksNoZero = (feedbacks) =>
+  feedbacks.filter((feedback) => parseInt(feedback.data, 10) > 0)
+
+export const countAverage = (feedbacks) => {
+  const filteredFeedbacks = feedbacksNoZero(feedbacks)
+  const sum = filteredFeedbacks.reduce((a, b) => a + parseInt(b.data, 10), 0)
+  return (sum / filteredFeedbacks.length).toFixed(2)
+}
+
+export const countStandardDeviation = (feedbacks) => {
+  const filteredFeedbacks = feedbacksNoZero(feedbacks)
+  const n = filteredFeedbacks.length
+  const avg = countAverage(filteredFeedbacks)
+
+  if (filteredFeedbacks.length === 0) return 0
+
+  return Math.sqrt(
+    filteredFeedbacks
+      .map((f) => (parseInt(f.data, 10) - avg) ** 2)
+      .reduce((a, b) => a + b) / n,
+  )
+}
+
+export const countMedian = (feedbacks) => {
+  const filteredFeedbacks = feedbacksNoZero(feedbacks)
+  if (filteredFeedbacks.length === 0) return 0
+
+  filteredFeedbacks.sort((a, b) => a.data - b.data)
+
+  const half = Math.floor(filteredFeedbacks.length / 2)
+
+  if (filteredFeedbacks.length % 2) return filteredFeedbacks[half]
+
+  return (
+    parseInt(filteredFeedbacks[half - 1], 10) +
+    parseInt(filteredFeedbacks[half], 10) / 2.0
+  )
+}

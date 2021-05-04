@@ -133,7 +133,10 @@ const EditFeedbackTarget = () => {
                     </Box>
 
                     <Box mb={2}>
-                      <FormikCheckbox name="hidden" label={t('editFeedbackTarget:hidden')} />
+                      <FormikCheckbox
+                        name="hidden"
+                        label={t('editFeedbackTarget:hidden')}
+                      />
                     </Box>
 
                     <Box mb={2}>

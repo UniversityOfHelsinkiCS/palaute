@@ -97,6 +97,13 @@ export default {
     answerCount: 'Vastausten määrä',
     answerOption: 'Vastausvaihtoehto',
   },
+  feedbackSummary: {
+    question: 'Kysymys',
+    average: 'Keskiarvo',
+    standardDeviation: 'Keskihajonta',
+    median: 'Mediaani',
+    answers: 'Vastanneita',
+  },
   feedbackTargetList: {
     showFeedbacks: 'Näytä palautteet',
     showSurvey: 'Näytä kysely',
