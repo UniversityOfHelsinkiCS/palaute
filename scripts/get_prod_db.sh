@@ -59,4 +59,4 @@ docker-compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME
 retry docker-compose -f $DOCKER_COMPOSE exec $SERVICE_NAME pg_isready --dbname=$DB
 
 echo "Populating $DB"
-docker-compose -f $DOCKER_COMPOSE exec -T $SERVICE_NAME /bin/bash -c 'gunzip | psql -U postgres' < ${BACKUPS}${SERVER_FILE_NAME}
+docker-compose -f $DOCKER_COMPOSE exec -T $SERVICE_NAME /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${SERVER_FILE_NAME}
