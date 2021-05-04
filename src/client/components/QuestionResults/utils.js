@@ -155,7 +155,7 @@ export const countStandardDeviation = (feedbacks) => {
     filteredFeedbacks
       .map((f) => (parseInt(f.data, 10) - avg) ** 2)
       .reduce((a, b) => a + b) / n,
-  )
+  ).toFixed(2)
 }
 
 export const countMedian = (feedbacks) => {
@@ -169,7 +169,8 @@ export const countMedian = (feedbacks) => {
   if (filteredFeedbacks.length % 2) return filteredFeedbacks[half].data
 
   return (
-    parseInt(filteredFeedbacks[half - 1].data, 10) +
-    parseInt(filteredFeedbacks[half].data, 10) / 2.0
+    (parseInt(filteredFeedbacks[half - 1].data, 10) +
+      parseInt(filteredFeedbacks[half].data, 10)) /
+    2.0
   )
 }
