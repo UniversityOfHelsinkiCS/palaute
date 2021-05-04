@@ -43,6 +43,9 @@ get_username() {
   username=$(cat $USER_DATA_FILE_PATH | head -n 1)
 }
 
+echo "Creating backups folder"
+mkdir -p ${BACKUPS}
+
 echo "Fetching a new dump"
 get_username
 scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
