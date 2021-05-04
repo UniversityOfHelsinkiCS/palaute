@@ -29,9 +29,6 @@ import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 
 const useStyles = makeStyles((theme) => ({
-  typeChip: {
-    marginBottom: theme.spacing(2),
-  },
   actionsContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -107,8 +104,8 @@ const QuestionCard = ({
   return (
     <Card className={className}>
       <CardContent>
-        <Box display="flex" justifyContent="space-between">
-          <Chip label={title} variant="outlined" className={classes.typeChip} />
+        <Box display="flex" justifyContent="space-between" mb={2}>
+          <Chip label={title} variant="outlined" />
           <div>
             {isEditing ? (
               <Button color="primary" onClick={onStopEditing}>

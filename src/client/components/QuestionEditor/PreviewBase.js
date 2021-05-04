@@ -20,7 +20,7 @@ const PreviewBase = ({ label, description, children, required = false }) => {
   return (
     <>
       <Typography variant="h6" component="h2" className={classes.label}>
-        {label ?? t('questionEditor:label')}
+        {label || t('questionEditor:label')}
         {required && ' *'}
       </Typography>
       {description && (
