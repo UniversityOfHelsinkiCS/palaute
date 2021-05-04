@@ -31,7 +31,7 @@ const Footer = () => {
             <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
           </div>
 
-          <Link href='https://toska.dev'>
+          <Link href="https://toska.dev">
             <img
               src={images.toska_color}
               className={classes.logo}

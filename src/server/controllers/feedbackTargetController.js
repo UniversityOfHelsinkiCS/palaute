@@ -86,6 +86,34 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   return responseReady
 }
 
+const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
+  const convertSingle = async (feedbackTarget) => {
+    if (!feedbackTarget) return {}
+
+    await feedbackTarget.populateQuestions()
+
+    const responseReady = feedbackTarget.toJSON()
+    responseReady.accessStatus = 'TEACHER'
+    responseReady.feedback = null
+    responseReady.surveys = await feedbackTarget.getSurveys()
+    delete responseReady.userFeedbackTargets
+
+    return responseReady
+  }
+
+  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
+
+  const responseReady = []
+
+  /* eslint-disable */
+  for (const feedbackTarget of feedbackTargets) {
+    responseReady.push(await convertSingle(feedbackTarget))
+  }
+  /* eslint-enable */
+
+  return responseReady
+}
+
 const getIncludes = (userId, accessStatus) => {
   // where parameter cant have undefined values
   const where = accessStatus ? { userId, accessStatus } : { userId }
@@ -103,14 +131,16 @@ const getIncludes = (userId, accessStatus) => {
 }
 
 const getFeedbackTargetByIdForUser = async (req) => {
+  const { isAdmin } = req
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: getIncludes(req.user.id),
   })
 
-  if (!feedbackTarget)
+  if (!isAdmin && !feedbackTarget)
     throw new ApplicationError('Not found or you do not have access', 404)
 
   if (
+    !isAdmin &&
     feedbackTarget.hidden &&
     !(feedbackTarget.userFeedbackTargets[0]?.accessStatus === 'TEACHER')
   ) {
@@ -139,6 +169,23 @@ const getOne = async (req, res) => {
   })
 
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
+  if (!feedbackTarget) {
+    // admin way
+    const adminFeedbackTarget = await FeedbackTarget.findByPk(
+      Number(req.params.id),
+      {
+        include: [
+          { model: CourseUnit, as: 'courseUnit' },
+          { model: CourseRealisation, as: 'courseRealisation' },
+        ],
+      },
+    )
+    const responseReady = await convertFeedbackTargetForAdmin(
+      adminFeedbackTarget,
+    )
+    res.send(responseReady)
+    return
+  }
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
   res.send(responseReady)
@@ -243,9 +290,8 @@ const getTargetsByCourseUnit = async (req, res) => {
 }
 
 const getFeedbacks = async (req, res) => {
-  const { user } = req
+  const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
-  const isAdmin = ADMINS.includes(user.username)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {
@@ -294,9 +340,8 @@ const getFeedbacks = async (req, res) => {
 }
 
 const getStudentsWithFeedback = async (req, res) => {
-  const { user } = req
+  const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
-  const isAdmin = ADMINS.includes(user.username)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {

@@ -14,7 +14,6 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   if (!loggedInAs) return headers
 
   const newHeaders = { ...headers }
-
   const user = await User.findOne({ where: { id: loggedInAs } })
   if (user) {
     newHeaders.uid = user.username
@@ -82,7 +81,7 @@ const currentUserMiddleware = async (req, res, next) => {
   req.headers = await fetchUserDataFromLoginAsForHeaders(req.headers)
 
   req.user = await upsertUser(req.headers)
-
+  req.isAdmin = ADMINS.includes(req.user.username)
   if (req.user.id === 'hy-hlo-49478503') {
     const feedbackTarget = await FeedbackTarget.findOne({
       where: {
