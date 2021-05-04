@@ -166,7 +166,7 @@ export const countMedian = (feedbacks) => {
 
   const half = Math.floor(filteredFeedbacks.length / 2)
 
-  if (filteredFeedbacks.length % 2) return filteredFeedbacks[half]
+  if (filteredFeedbacks.length % 2) return filteredFeedbacks[half].data
 
   return (
     parseInt(filteredFeedbacks[half - 1].data, 10) +
