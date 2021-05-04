@@ -5,3 +5,5 @@ stats.json
 *.log
 .env
 .DS_Store
+backups
+scripts/my_username

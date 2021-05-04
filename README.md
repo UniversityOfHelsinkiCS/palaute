@@ -18,6 +18,14 @@ To start the project in development mode use this command. It will start everyth
 $ npm run start
 ```
 
+## Want to debug or dev against the production database?
+
+Run the get_prod_db.sh from scripts
+
+```bash
+./scripts/get_prod_db.sh
+```
+
 ## Stuck? ##
 
 If stuck reset everything and start from a clean slate:
