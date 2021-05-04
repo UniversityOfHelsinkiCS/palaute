@@ -17,11 +17,11 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const useStyles = makeStyles((theme) => ({
   optionLabel: {
-    marginLeft: theme.spacing(0.5),
-    marginRight: theme.spacing(0.5),
+    marginLeft: theme.spacing(0.2),
+    marginRight: theme.spacing(0.2),
   },
   dontKnowLabel: {
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(1),
     marginRight: theme.spacing(0.5),
   },
   label: {
