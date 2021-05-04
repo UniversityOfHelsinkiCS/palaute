@@ -57,7 +57,7 @@ docker-compose -f $DOCKER_COMPOSE down -v
 echo "Starting postgres in the background"
 docker-compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME
 
-retry docker-compose -f $DOCKER_COMPOSE exec $SERVICE_NAME pg_isready
+retry docker-compose -f $DOCKER_COMPOSE exec $SERVICE_NAME pg_isready --dbname=$DB_NAME
 
 echo "Populating"
 docker exec -i $CONTAINER /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${SERVER_FILE_NAME}
