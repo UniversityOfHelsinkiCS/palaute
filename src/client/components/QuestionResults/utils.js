@@ -27,18 +27,20 @@ const getScalesConfig = (t) => ({
 })
 
 export const getLikertChartConfig = (question, language, t) => {
-  const labels = [...Array(6)].map((v, i) => i.toString())
+  const labels = [1, 2, 3, 4, 5, 0]
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
   const datasetLabel = getLanguageValue(question.data?.label, language)
   const data = labels.map((l) => countByLabel[l] ?? 0)
+
+  const dontKnowOption = t('feedbackView:dontKnowOption')
 
   return {
     options: {
       scales: getScalesConfig(t),
     },
     data: {
-      labels,
+      labels: ['1', '2', '3', '4', '5', dontKnowOption],
       datasets: [
         {
           label: datasetLabel,

@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(0.5),
   },
+  dontKnowLabel: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(0.5),
+  },
   label: {
     marginBottom: theme.spacing(1),
   },
@@ -28,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const options = [...Array(6)].map((v, i) => i)
+const options = [1, 2, 3, 4, 5, 0]
 
 const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
@@ -42,6 +46,12 @@ const LikertQuestion = ({ question, name }) => {
   const showError = meta.error && meta.touched
   const { required } = question
   const value = answer ?? ''
+
+  const parseOption = (option) => {
+    if (option !== 0) return option.toString()
+
+    return t('feedbackView:dontKnowOption')
+  }
 
   return (
     <>
@@ -67,9 +77,11 @@ const LikertQuestion = ({ question, name }) => {
               labelPlacement="top"
               value={option.toString()}
               control={<Radio color="primary" />}
-              label={option.toString()}
+              label={parseOption(option)}
               key={option}
-              className={classes.optionLabel}
+              className={
+                option !== 0 ? classes.optionLabel : classes.dontKnowLabel
+              }
             />
           ))}
         </RadioGroup>

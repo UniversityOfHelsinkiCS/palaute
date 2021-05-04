@@ -6,6 +6,7 @@ import {
   Radio,
   makeStyles,
 } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'
@@ -15,15 +16,26 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(0.5),
   },
+  dontKnowLabel: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(0.5),
+  },
 }))
 
-const options = [...Array(6)].map((v, i) => i)
+const options = [1, 2, 3, 4, 5, 0]
 
 const LikertPreview = ({ question, language }) => {
   const classes = useStyles()
   const label = getLanguageValue(question.data?.label, language)
   const description = getLanguageValue(question.data?.description, language)
   const required = question.required ?? false
+  const { t } = useTranslation()
+
+  const parseOption = (option) => {
+    if (option !== 0) return option.toString()
+
+    return t('feedbackView:dontKnowOption')
+  }
 
   return (
     <PreviewBase label={label} description={description} required={required}>
@@ -33,9 +45,11 @@ const LikertPreview = ({ question, language }) => {
             labelPlacement="top"
             value={option.toString()}
             control={<Radio color="primary" />}
-            label={option.toString()}
+            label={parseOption(option)}
             key={option}
-            className={classes.optionLabel}
+            className={
+              option !== 0 ? classes.optionLabel : classes.dontKnowLabel
+            }
           />
         ))}
       </RadioGroup>
