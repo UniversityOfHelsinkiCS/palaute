@@ -18,6 +18,15 @@ const ChoiceEditor = ({ name, language }) => {
           fullWidth
         />
       </Box>
+
+      <Box mb={2}>
+        <FormikTextField
+          name={`${name}.data.description.${language}`}
+          label={t('questionEditor:description')}
+          fullWidth
+        />
+      </Box>
+
       <OptionEditor name={`${name}.data.options`} language={language} />
     </>
   )

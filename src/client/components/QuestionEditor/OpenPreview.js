@@ -6,9 +6,10 @@ import TextField from '../TextField'
 
 const OpenPreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)
+  const description = getLanguageValue(question.data?.description, language)
 
   return (
-    <PreviewBase label={label}>
+    <PreviewBase label={label} description={description}>
       <TextField multiline fullWidth />
     </PreviewBase>
   )

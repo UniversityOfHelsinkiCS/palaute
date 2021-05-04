@@ -6,11 +6,11 @@ import PreviewBase from './PreviewBase'
 
 const MultipleChoicePreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)
-
+  const description = getLanguageValue(question.data?.description, language)
   const options = question.data?.options ?? []
 
   return (
-    <PreviewBase label={label}>
+    <PreviewBase label={label} description={description}>
       <FormGroup>
         {options.map((option) => (
           <FormControlLabel

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../FormikTextField'
 
-const LikertEditor = ({ name, language, onBlur }) => {
+const LikertEditor = ({ name, language }) => {
   const { t } = useTranslation()
 
   return (
@@ -13,7 +13,6 @@ const LikertEditor = ({ name, language, onBlur }) => {
         <FormikTextField
           name={`${name}.data.label.${language}`}
           label={t('questionEditor:label')}
-          onBlur={onBlur}
           fullWidth
         />
       </Box>
@@ -21,7 +20,6 @@ const LikertEditor = ({ name, language, onBlur }) => {
       <FormikTextField
         name={`${name}.data.description.${language}`}
         label={t('questionEditor:description')}
-        onBlur={onBlur}
         fullWidth
       />
     </>
