@@ -27,6 +27,7 @@ import SingleChoicePreview from './SingleChoicePreview'
 import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
+import FormikSwitch from '../FormikSwitch'
 
 const useStyles = makeStyles((theme) => ({
   actionsContainer: {
@@ -67,6 +68,57 @@ const getTitleByType = (type, t) => {
   return mapping[type]
 }
 
+const EditActions = ({
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+  moveUpDisabled,
+  moveDownDisabled,
+  name,
+}) => {
+  const { t } = useTranslation()
+
+  const handleRemove = () => {
+    // eslint-disable-next-line no-alert
+    const hasConfirmed = window.confirm(
+      t('questionEditor:removeQuestionConfirmation'),
+    )
+
+    if (hasConfirmed) {
+      onRemove()
+    }
+  }
+
+  return (
+    <>
+      <FormikSwitch label={t('required')} name={`${name}.required`} />
+      <Tooltip title={t('questionEditor:moveUp')}>
+        <div>
+          <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
+            <UpIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+
+      <Tooltip title={t('questionEditor:moveDown')}>
+        <div>
+          <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
+            <DownIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+
+      <Tooltip title={t('questionEditor:removeQuestion')}>
+        <div>
+          <IconButton onClick={handleRemove}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+    </>
+  )
+}
+
 const QuestionCard = ({
   name,
   onRemove,
@@ -89,17 +141,6 @@ const QuestionCard = ({
   const PreviewComponent = previewComponentByType[question.type]
 
   const title = getTitleByType(question.type, t)
-
-  const handleRemove = () => {
-    // eslint-disable-next-line no-alert
-    const hasConfirmed = window.confirm(
-      t('questionEditor:removeQuestionConfirmation'),
-    )
-
-    if (hasConfirmed) {
-      onRemove()
-    }
-  }
 
   return (
     <Card className={className}>
@@ -125,29 +166,14 @@ const QuestionCard = ({
             <Divider className={classes.actionsDivider} />
 
             <div className={classes.actionsContainer}>
-              <Tooltip title={t('questionEditor:moveUp')}>
-                <div>
-                  <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
-                    <UpIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-
-              <Tooltip title={t('questionEditor:moveDown')}>
-                <div>
-                  <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
-                    <DownIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-
-              <Tooltip title={t('questionEditor:removeQuestion')}>
-                <div>
-                  <IconButton onClick={handleRemove}>
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
+              <EditActions
+                onMoveUp={onMoveUp}
+                onMoveDown={onMoveDown}
+                onRemove={onRemove}
+                moveUpDisabled={moveUpDisabled}
+                moveDownDisabled={moveDownDisabled}
+                name={name}
+              />
             </div>
           </>
         ) : (

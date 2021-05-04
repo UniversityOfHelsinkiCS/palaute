@@ -26,6 +26,7 @@ export default {
       'The page has unsaved changes. Are you sure want to leave the page?',
     actions: 'Actions',
     close: 'Close',
+    required: 'Required',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',

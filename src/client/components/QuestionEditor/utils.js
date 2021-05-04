@@ -46,7 +46,7 @@ export const createQuestion = (type) => {
     [TEMP_ID]: uuidv4(),
     type,
     data,
-    required: true,
+    required: false,
   }
 }
 

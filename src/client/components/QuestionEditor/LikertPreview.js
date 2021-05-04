@@ -21,13 +21,12 @@ const options = [...Array(6)].map((v, i) => i)
 
 const LikertPreview = ({ question, language }) => {
   const classes = useStyles()
-
   const label = getLanguageValue(question.data?.label, language)
-
   const description = getLanguageValue(question.data?.description, language)
+  const required = question.required ?? false
 
   return (
-    <PreviewBase label={label} description={description}>
+    <PreviewBase label={label} description={description} required={required}>
       <RadioGroup row>
         {options.map((option) => (
           <FormControlLabel

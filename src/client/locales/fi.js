@@ -26,6 +26,7 @@ export default {
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',
     close: 'Sulje',
+    required: 'Pakollinen',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',
