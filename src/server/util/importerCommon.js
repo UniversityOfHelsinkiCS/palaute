@@ -126,6 +126,7 @@ const deleteOldUserFeedbackTargets = async (
   courseRealisationIds,
   status,
 ) => {
+  courseRealisationIds.push('placeHolderIdNotInUse')
   await sequelize.query(
     'DELETE FROM user_feedback_targets U USING feedback_targets F WHERE U.user_id = :userId AND U.access_status = :status AND U.feedback_target_id = F.id AND F.course_realisation_id NOT IN (:ids)',
     {
