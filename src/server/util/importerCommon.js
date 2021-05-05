@@ -8,6 +8,8 @@ const {
   CourseUnitsOrganisation,
 } = require('../models')
 
+const { sequelize } = require('./dbConnection')
+
 const commonFeedbackName = {
   fi: 'Yleinen palaute kurssista',
   en: 'General feedback about the course',
@@ -119,9 +121,23 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
   return feedbackTarget
 }
 
+const deleteOldUserFeedbackTargets = async (
+  userId,
+  courseRealisationIds,
+  status,
+) => {
+  await sequelize.query(
+    'DELETE FROM user_feedback_targets U USING feedback_targets F WHERE U.user_id = :userId AND U.access_status = :status AND U.feedback_target_id = F.id AND F.course_realisation_id NOT IN (:ids)',
+    {
+      replacements: { ids: courseRealisationIds, userId, status },
+    },
+  )
+}
+
 module.exports = {
   createCourseUnit,
   makeCreateFeedbackTargetWithUserTargetTable,
   combineStudyGroupName,
   formatDate,
+  deleteOldUserFeedbackTargets,
 }

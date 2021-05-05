@@ -5,6 +5,7 @@ import { ADMINS } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import LoginAs from './LoginAsSelector'
 import EditUniversitySurvey from './EditUniversitySurvey'
+import ShowActiveFeedbackTargets from './ShowActiveFeedbackTargets'
 
 const AdminView = () => {
   const { authorizedUser } = useAuthorizedUser()
@@ -15,6 +16,7 @@ const AdminView = () => {
     <>
       <h1>Admin page</h1>
       <LoginAs />
+      <ShowActiveFeedbackTargets />
       <EditUniversitySurvey />
     </>
   )

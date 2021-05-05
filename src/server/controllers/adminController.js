@@ -1,8 +1,10 @@
 const Router = require('express')
 
+const { Op } = require('sequelize')
 const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
+const { FeedbackTarget, CourseRealisation } = require('../models')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -40,10 +42,27 @@ const findUser = async (req, res) => {
   })
 }
 
+const getFeedbackTargets = async (req, res) => {
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      opensAt: {
+        [Op.gte]: new Date(2020, 10, 10),
+      },
+    },
+    include: {
+      model: CourseRealisation,
+      as: 'courseRealisation',
+    },
+  })
+
+  res.send(feedbackTargets)
+}
+
 const router = Router()
 
 router.use(adminAccess)
 
 router.get('/users', findUser)
+router.get('/feedback-targets', getFeedbackTargets)
 
 module.exports = router

@@ -2,7 +2,10 @@ const dateFns = require('date-fns')
 
 const importerClient = require('./importerClient')
 
-const { createCourseUnit } = require('./importerCommon')
+const {
+  createCourseUnit,
+  deleteOldUserFeedbackTargets,
+} = require('./importerCommon')
 
 const {
   createFeedbackTargetFromCourseRealisation,
@@ -26,10 +29,11 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
   )
 
   const { courseUnitRealisations } = data
-
+  const courseRealisationIds = []
   await courseUnitRealisations.reduce(async (promise, realisation) => {
     await promise
     if (realisation.courseUnits.length === 0) return
+    courseRealisationIds.push(realisation.id)
     const courseUnit = realisation.courseUnits[0] // TODO, wtf
     await createCourseUnit(courseUnit)
     await createFeedbackTargetFromCourseRealisation(
@@ -38,6 +42,10 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
       courseUnit,
     )
   }, Promise.resolve())
+
+  // delete unused userFeedbackTargets
+  // at the moment it is enough to delete the userFeedbacktarget and leave ghost feedbackTargets
+  await deleteOldUserFeedbackTargets(personId, courseRealisationIds, 'TEACHER')
 }
 
 module.exports = {
