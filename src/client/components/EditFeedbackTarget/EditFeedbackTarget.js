@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useParams, Redirect, Link } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 
 import {
   Typography,
   CircularProgress,
   makeStyles,
-  Button,
+  Divider,
   Box,
   Card,
   CardContent,
@@ -21,9 +21,9 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FormikTextField from '../FormikTextField'
 import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'
-import LanguageTabs from '../LanguageTabs'
 import Alert from '../Alert'
 import DirtyFormPrompt from '../DirtyFormPrompt'
+import Toolbar from './Toolbar'
 
 import {
   getInitialValues,
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     maxWidth: 500,
+  },
+  toolbarDivider: {
+    margin: theme.spacing(2, 0),
   },
 }))
 
@@ -104,12 +107,6 @@ const EditFeedbackTarget = () => {
       <Typography variant="h4" component="h1" className={classes.heading}>
         {courseUnitName}
       </Typography>
-
-      <LanguageTabs
-        language={language}
-        onChange={(newLanguage) => setLanguage(newLanguage)}
-        className={classes.languageTabs}
-      />
 
       <Formik
         initialValues={initialValues}
@@ -169,24 +166,14 @@ const EditFeedbackTarget = () => {
 
             <QuestionEditor language={language} name="questions" />
 
-            <Box mt={2}>
-              <Box mr={1} clone>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleSubmit}
-                >
-                  {t('save')}
-                </Button>
-              </Box>
-              <Button
-                color="primary"
-                component={Link}
-                to={`/targets/${id}/feedback`}
-              >
-                {t('show')}
-              </Button>
-            </Box>
+            <Divider className={classes.toolbarDivider} />
+
+            <Toolbar
+              onSave={handleSubmit}
+              previewLink={`/targets/${id}/feedback`}
+              language={language}
+              onLanguageChange={(newLanguage) => setLanguage(newLanguage)}
+            />
           </Form>
         )}
       </Formik>

@@ -94,6 +94,8 @@ export default {
     hidden: 'Hidden',
     upperLevelQuestionsInfo:
       'Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show" button to see what the survey looks like with all the questions',
+    showPreview: 'Show survey preview',
+    translationLanguage: 'Translation language',
   },
   questionResults: {
     answerCount: 'Answer count',

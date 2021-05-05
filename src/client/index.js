@@ -1,8 +1,9 @@
+import 'intersection-observer'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import './assets/custom.scss'
 
 import { basePath } from './util/common'
 import App from './components/App'

@@ -93,6 +93,8 @@ export default {
     hidden: 'Piilotettu',
     upperLevelQuestionsInfo:
       'Kyselyllä on jo {{count}} yliopisto- ja laitostason kysymystä, mutta voit halutessasi lisätä sille lisää kysmyksiä. "Näytä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
+    showPreview: 'Esikatsele kyselyä',
+    translationLanguage: 'Käännösten kieli',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
