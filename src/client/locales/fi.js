@@ -68,7 +68,7 @@ export default {
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
-    likertQuestion: 'Likert-kysymys',
+    likertQuestion: 'Arvoasteikko',
     openQuestion: 'Avoin kysymys',
     singleChoiceQuestion: 'Monivalinta - valitse yksi',
     multipleChoiceQuestion: 'Monivalinta - valitse monta',
@@ -109,7 +109,7 @@ export default {
     showFeedbacks: 'Näytä palautteet',
     showSurvey: 'Näytä kysely',
     editSurvey: 'Muokkaa kyselyä',
-    copyLink: 'Kopioi linkki palautteeseen',
+    copyLink: 'Kopioi vastauslinkki',
     copied: 'Linkki kopioitu leikepöydälle',
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: 'palautetta annettu',

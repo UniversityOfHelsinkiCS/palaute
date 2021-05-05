@@ -68,7 +68,7 @@ export default {
   },
   questionEditor: {
     addQuestion: 'Add question',
-    likertQuestion: 'Likert question',
+    likertQuestion: 'Scale of values',
     openQuestion: 'Open question',
     singleChoiceQuestion: 'Single choice question',
     multipleChoiceQuestion: 'Multiple choice question',
@@ -110,7 +110,7 @@ export default {
     showFeedbacks: 'Show feedbacks',
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
-    copyLink: 'Copy link to feedback',
+    copyLink: 'Copy answer form link',
     copied: 'Link copied to cliboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
