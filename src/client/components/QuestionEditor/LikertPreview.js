@@ -34,7 +34,7 @@ const LikertPreview = ({ question, language }) => {
   const parseOption = (option) => {
     if (option !== 0) return option.toString()
 
-    return t('feedbackView:dontKnowOption')
+    return language === 'fi' ? 'eos' : 'N/A'
   }
 
   return (
