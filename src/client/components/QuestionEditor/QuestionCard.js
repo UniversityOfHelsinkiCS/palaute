@@ -28,6 +28,7 @@ import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 import FormikSwitch from '../FormikSwitch'
+import Alert from '../Alert'
 
 const useStyles = makeStyles((theme) => ({
   actionsContainer: {
@@ -142,11 +143,16 @@ const QuestionCard = ({
 
   const title = getTitleByType(question.type, t)
 
+  const languageInfo = t('questionEditor:languageInfo', {
+    language: t(`languages.${language}`),
+  })
+
   return (
     <Card className={className}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />
+
           <div>
             {isEditing ? (
               <Button color="primary" onClick={onStopEditing}>
@@ -162,7 +168,12 @@ const QuestionCard = ({
 
         {isEditing ? (
           <>
+            <Box mb={3}>
+              <Alert severity="info">{languageInfo}</Alert>
+            </Box>
+
             <EditorComponent name={name} language={language} />
+
             <Divider className={classes.actionsDivider} />
 
             <div className={classes.actionsContainer}>

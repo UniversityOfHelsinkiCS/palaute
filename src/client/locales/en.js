@@ -87,6 +87,10 @@ export default {
     removeOptionConfirmation: 'Are you sure you want to remove this option?',
     description: 'Description',
     done: 'Done',
+    languageInfo:
+      'Your are currently editing the "{{language}}" translation of this question',
+    descriptionHelper:
+      'Optional description that provides additional information about the question',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',

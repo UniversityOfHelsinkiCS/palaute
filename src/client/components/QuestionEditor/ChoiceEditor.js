@@ -23,6 +23,7 @@ const ChoiceEditor = ({ name, language }) => {
         <FormikTextField
           name={`${name}.data.description.${language}`}
           label={t('questionEditor:description')}
+          helperText={t('questionEditor:descriptionHelper')}
           fullWidth
         />
       </Box>

@@ -86,6 +86,8 @@ export default {
     removeOptionConfirmation: 'Haluatko varmasti poistaa tämän vaihtoehdon?',
     description: 'Kuvaus',
     done: 'Valmis',
+    languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
+    descriptionHelper: 'Vapaaehtoinen kuvausteksti, joka tarkentaa kysymystä',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
