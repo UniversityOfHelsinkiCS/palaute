@@ -144,11 +144,13 @@ const EditFeedbackTarget = () => {
                       />
                     </Box>
 
-                    <FormikDatePicker
-                      name="closesAt"
-                      label={t('editFeedbackTarget:closesAt')}
-                      fullWidth
-                    />
+                    <Box mb={2}>
+                      <FormikDatePicker
+                        name="closesAt"
+                        label={t('editFeedbackTarget:closesAt')}
+                        fullWidth
+                      />
+                    </Box>
                   </div>
                 </CardContent>
               </Card>

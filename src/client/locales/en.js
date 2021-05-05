@@ -9,6 +9,7 @@ export default {
     },
     validationErrors: {
       required: 'This field is required',
+      wrongDate: 'Survey closing date is before opening date',
     },
     unknownError: 'Something went wrong',
     save: 'Save',

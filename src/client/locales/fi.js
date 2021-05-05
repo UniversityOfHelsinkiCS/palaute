@@ -9,6 +9,7 @@ export default {
     },
     validationErrors: {
       required: 'Tämä kenttä vaaditaan',
+      wrongDate: 'Kysely sulkeutuu ennen sen avautumista',
     },
     unknownError: 'Jotain meni pieleen',
     save: 'Tallenna',

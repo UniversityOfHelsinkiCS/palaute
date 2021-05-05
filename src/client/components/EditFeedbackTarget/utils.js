@@ -1,9 +1,5 @@
-import { isAfter, parseISO, lightFormat, set } from 'date-fns'
+import { isAfter, set } from 'date-fns'
 import apiClient from '../../util/apiClient'
-
-const pickerDateFormat = `yyy-MM-dd`
-
-const formatPickerDate = (date) => lightFormat(date, pickerDateFormat)
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
 const setOpensAt = (date) => set(date, { hours: 0, minutes: 0, seconds: 0 })
@@ -16,8 +12,8 @@ export const getInitialValues = (feedbackTarget) => {
     name,
     hidden: hidden ?? false,
     questions,
-    opensAt: formatPickerDate(new Date(opensAt)),
-    closesAt: formatPickerDate(new Date(closesAt)),
+    opensAt: new Date(opensAt),
+    closesAt: new Date(closesAt),
   }
 }
 
@@ -32,8 +28,8 @@ export const validate = (values) => {
     errors.opensAt = 'validationErrors.required'
   }
 
-  if (!isAfter(parseISO(values.closesAt), parseISO(values.opensAt))) {
-    errors.closesAt = 'Survey closing date is before opening date'
+  if (!isAfter(values.closesAt, values.opensAt)) {
+    errors.closesAt = 'validationErrors.wrongDate'
   }
 
   return errors
