@@ -6,7 +6,6 @@ import {
   Radio,
   makeStyles,
 } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'
@@ -29,7 +28,6 @@ const LikertPreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)
   const description = getLanguageValue(question.data?.description, language)
   const required = question.required ?? false
-  const { t } = useTranslation()
 
   const parseOption = (option) => {
     if (option !== 0) return option.toString()
