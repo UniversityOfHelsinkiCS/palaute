@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 
 import TeacherCourseListItem from './TeacherCourseListItem'
-import { sortCourses } from './utils'
+import { sortTable } from '../../util/tableUtils'
 
 const TeacherCourseList = ({ courses }) => {
   const [order, setOrder] = useState('desc')
@@ -28,7 +28,7 @@ const TeacherCourseList = ({ courses }) => {
 
   if (!courses) return null
 
-  sortCourses(courses, order, orderBy)
+  sortTable(courses, order, orderBy)
 
   return (
     <TableContainer component={Paper}>
@@ -52,7 +52,7 @@ const TeacherCourseList = ({ courses }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortCourses(courses, order, orderBy).map((course) => (
+          {sortTable(courses, order, orderBy).map((course) => (
             <TeacherCourseListItem course={course} key={course.id} />
           ))}
         </TableBody>
