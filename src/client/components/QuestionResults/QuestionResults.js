@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '49%',
     maxWidth: '49%',
   },
+  openQuestionItem: {
+    marginBottom: theme.spacing(2),
+  },
 }))
 
 const componentByType = {
@@ -48,16 +51,32 @@ const QuestionResults = ({ questions, feedbacks }) => {
     [questions, feedbacks],
   )
 
+  const openQuestions = questionsWithFeedbacks.filter((q) => q.type === 'OPEN')
+  const filteredQuestions = questionsWithFeedbacks.filter(
+    (q) => q.type !== 'OPEN',
+  )
+
   return (
-    <div className={classes.container}>
-      {questionsWithFeedbacks.map((q) => (
-        <QuestionItem
-          key={q.id}
-          question={q}
-          className={classes.questionItem}
-        />
-      ))}
-    </div>
+    <>
+      <div>
+        {openQuestions.map((q) => (
+          <QuestionItem
+            key={q.id}
+            question={q}
+            className={classes.openQuestionItem}
+          />
+        ))}
+      </div>
+      <div className={classes.container}>
+        {filteredQuestions.map((q) => (
+          <QuestionItem
+            key={q.id}
+            question={q}
+            className={classes.questionItem}
+          />
+        ))}
+      </div>
+    </>
   )
 }
 
