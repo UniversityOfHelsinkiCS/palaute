@@ -1,6 +1,10 @@
 const importerClient = require('./importerClient')
 
-const { createCourseUnit, formatDate } = require('./importerCommon')
+const {
+  createCourseUnit,
+  formatDate,
+  deleteOldUserFeedbackTargets,
+} = require('./importerCommon')
 
 const {
   createFeedbackTargetFromCourseRealisation,
@@ -36,11 +40,15 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
     params,
   })
 
+  const courseRealisationIds = []
+
   await data.reduce(async (promise, enrolment) => {
     await promise
-
+    courseRealisationIds.push(enrolment.courseUnitRealisationId)
     await createTargetsFromEnrolment(enrolment, personId)
   }, Promise.resolve())
+
+  await deleteOldUserFeedbackTargets(personId, courseRealisationIds, 'STUDENT')
 }
 
 module.exports = {
