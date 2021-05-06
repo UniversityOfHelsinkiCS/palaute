@@ -1,6 +1,6 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import { Container, makeStyles } from '@material-ui/core'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import { Container, makeStyles, Box, CircularProgress } from '@material-ui/core'
 
 import UserFeedbacks from './UserFeedbacks'
 import FeedbackView from './FeedbackView'
@@ -11,6 +11,7 @@ import EditFeedbackTarget from './EditFeedbackTarget'
 import EditCourseUnitSurvey from './EditCourseUnitSurvey'
 import FeedbackTargetResults from './FeedbackTargetResults'
 import StudentsWithFeedback from './StudentsWithFeedback'
+import useAuthorizedUser from '../hooks/useAuthorizedUser'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,12 +20,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const Home = () => {
+  const { authorizedUser, loading } = useAuthorizedUser()
+
+  if (loading) {
+    return (
+      <Box my={4}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (authorizedUser?.isTeacher) {
+    return <Redirect to="/courses" />
+  }
+
+  return <Redirect to="/feedbacks" />
+}
+
 const Router = () => {
   const classes = useStyles()
 
   return (
     <Container className={classes.container}>
       <Switch>
+        <Route path="/" component={Home} exact />
+        <Route path="/feedbacks" component={UserFeedbacks} exact />
         <Route path="/courses" exact component={TeacherView} />
         <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
         <Route path="/courses/:code/targets" component={FeedbackTargetList} />
@@ -36,7 +57,6 @@ const Router = () => {
           component={StudentsWithFeedback}
         />
         <Route path="/admin" component={AdminView} />
-        <Route path="/" component={UserFeedbacks} />
       </Switch>
     </Container>
   )

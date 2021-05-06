@@ -1,17 +1,9 @@
 import React from 'react'
-
 import { AppBar, Typography, Toolbar, makeStyles } from '@material-ui/core'
-
 import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-
-import FeedbacksIcon from '@material-ui/icons/Feedback'
-import TeacherSettingsIcon from '@material-ui/icons/Settings'
-import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 
 import AdminNavButton from './AdminNavButton'
 import LogOutNavButton from './LogOutNavButton'
-import NavIconButton from './NavIconButton'
 import toskaLogo from '../../assets/toscalogo_white.svg'
 
 const useLogoStyles = makeStyles((theme) => ({
@@ -47,31 +39,14 @@ const Logo = () => {
   )
 }
 
-const NavBar = () => {
-  const { courseUnits } = useTeacherCourseUnits()
-  const { t } = useTranslation()
-
-  const hasCourses = Boolean(courseUnits?.length)
-
-  return (
-    <>
-      <AppBar position="static">
-        <Toolbar>
-          <Logo />
-          <NavIconButton to="/" tooltipTitle={t('navBar:myFeedbacks')}>
-            <FeedbacksIcon />
-          </NavIconButton>
-          {hasCourses && (
-            <NavIconButton to="/courses" tooltipTitle={t('navBar:myCourses')}>
-              <TeacherSettingsIcon />
-            </NavIconButton>
-          )}
-          <AdminNavButton />
-          <LogOutNavButton />
-        </Toolbar>
-      </AppBar>
-    </>
-  )
-}
+const NavBar = () => (
+  <AppBar position="static">
+    <Toolbar>
+      <Logo />
+      <AdminNavButton />
+      <LogOutNavButton />
+    </Toolbar>
+  </AppBar>
+)
 
 export default NavBar
