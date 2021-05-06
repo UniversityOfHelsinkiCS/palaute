@@ -1,10 +1,35 @@
-import React from 'react'
-import { AppBar, Typography, Toolbar, makeStyles } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
 
-import AdminNavButton from './AdminNavButton'
-import LogOutNavButton from './LogOutNavButton'
+import {
+  AppBar,
+  Typography,
+  Toolbar,
+  makeStyles,
+  Button,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  IconButton,
+} from '@material-ui/core'
+
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
+import MenuIcon from '@material-ui/icons/Menu'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+
+import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import toskaLogo from '../../assets/toscalogo_white.svg'
+import { handleLogout, isAdmin } from './utils'
+
+const useStyles = makeStyles({
+  toolbar: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+})
 
 const useLogoStyles = makeStyles((theme) => ({
   container: {
@@ -39,14 +64,97 @@ const Logo = () => {
   )
 }
 
-const NavBar = () => (
-  <AppBar position="static">
-    <Toolbar>
-      <Logo />
-      <AdminNavButton />
-      <LogOutNavButton />
-    </Toolbar>
-  </AppBar>
-)
+const NavBar = () => {
+  const classes = useStyles()
+  const { feedbackTargets } = useFeedbackTargetsForStudent()
+  const { authorizedUser } = useAuthorizedUser()
+  const { t } = useTranslation()
+  const menuButtonRef = useRef()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const isMobile = useMediaQuery('(max-width:400px)')
+
+  const isStudent = Boolean(feedbackTargets?.length)
+  const isTeacher = Boolean(authorizedUser?.isTeacher)
+  const isAdminUser = isAdmin(authorizedUser)
+
+  const handleCloseMenu = () => {
+    setMenuOpen(false)
+  }
+
+  const handleOpenMenu = () => {
+    setMenuOpen(true)
+  }
+
+  const links = [
+    isStudent &&
+      isTeacher && {
+        label: t('navBar:myFeedbacks'),
+        to: '/feedbacks',
+      },
+    isAdminUser && {
+      label: t('navBar:admin'),
+      to: '/admin',
+    },
+  ].filter(Boolean)
+
+  const fullName = [authorizedUser?.firstName, authorizedUser?.lastName]
+    .filter(Boolean)
+    .join(' ')
+
+  const menuLabel = fullName ?? t('navBar:nameFallback')
+
+  const menuButtonProps = {
+    onClick: handleOpenMenu,
+    ref: menuButtonRef,
+    'aria-controls': 'navBarMenu',
+    'aria-haspopup': 'true',
+  }
+
+  const menu = (
+    <Menu
+      id="navBarMenu"
+      anchorEl={menuButtonRef.current}
+      keepMounted
+      open={menuOpen}
+      onClose={handleCloseMenu}
+    >
+      {links.map(({ label, to }) => (
+        <MenuItem component={Link} to={to} onClick={handleCloseMenu}>
+          {label}
+        </MenuItem>
+      ))}
+      <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+    </Menu>
+  )
+
+  const desktopMenuButton = (
+    <Button
+      color="inherit"
+      endIcon={<KeyboardArrowDownIcon />}
+      {...menuButtonProps}
+    >
+      {menuLabel}
+    </Button>
+  )
+
+  const mobileMenuButton = (
+    <IconButton color="inherit" aria-label={menuLabel} {...menuButtonProps}>
+      <MenuIcon />
+    </IconButton>
+  )
+
+  return (
+    <>
+      {menu}
+      <AppBar position="static">
+        <Toolbar className={classes.toolbar}>
+          <Logo />
+
+          {isMobile ? mobileMenuButton : desktopMenuButton}
+        </Toolbar>
+      </AppBar>
+    </>
+  )
+}
 
 export default NavBar
