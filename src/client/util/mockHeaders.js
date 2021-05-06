@@ -19,6 +19,7 @@ export const possibleUsers = [
     sn: 'fuksi',
     preferredLanguage: 'fi',
     hyPersonSisuId: 'hy-hlo-135680147',
+    employeeNumber: '9431559',
   },
   {
     uid: 'jakousa',

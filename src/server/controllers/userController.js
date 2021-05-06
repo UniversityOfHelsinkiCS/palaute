@@ -4,8 +4,11 @@ const getUser = async (req, res) => {
   const { user } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
-
-  res.send(user)
+  const isTeacher = req.headers?.employeenumber !== null
+  res.send({
+    ...user.dataValues,
+    isTeacher,
+  })
 }
 
 const logout = async (req, res) => {
