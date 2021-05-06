@@ -1,6 +1,5 @@
 const { ApplicationError } = require('../util/customErrors')
 const { Survey, Question } = require('../models')
-const { sequelize } = require('../util/dbConnection')
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   const updatedQuestionIdsList = []
