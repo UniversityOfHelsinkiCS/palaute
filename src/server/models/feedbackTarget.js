@@ -126,6 +126,9 @@ FeedbackTarget.init(
     questions: {
       type: VIRTUAL,
     },
+    feedbackResponse: {
+      type: STRING,
+    },
   },
   {
     underscored: true,
