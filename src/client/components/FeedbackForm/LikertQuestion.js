@@ -5,7 +5,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography,
   makeStyles,
   FormHelperText,
 } from '@material-ui/core'
@@ -14,6 +13,8 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import useLanguage from '../../hooks/useLanguage'
+import QuestionBase from './QuestionBase'
 
 const useStyles = makeStyles((theme) => ({
   optionLabel: {
@@ -24,12 +25,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(0.5),
   },
-  label: {
-    marginBottom: theme.spacing(1),
-  },
-  description: {
-    marginBottom: theme.spacing(1),
-  },
 }))
 
 const options = [1, 2, 3, 4, 5, 0]
@@ -37,11 +32,12 @@ const options = [1, 2, 3, 4, 5, 0]
 const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { t, i18n } = useTranslation()
-  const label = getLanguageValue(question.data?.label, i18n.language) ?? ''
+  const { t } = useTranslation()
+  const language = useLanguage()
+  const label = getLanguageValue(question.data?.label, language) ?? ''
 
   const description =
-    getLanguageValue(question.data?.description, i18n.language) ?? ''
+    getLanguageValue(question.data?.description, language) ?? ''
 
   const showError = meta.error && meta.touched
   const { required } = question
@@ -56,35 +52,35 @@ const LikertQuestion = ({ question, name }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <Typography variant="h6" className={classes.label} component="legend">
-          {label}
-          {required && ' *'}
-        </Typography>
-        {description && (
-          <Typography className={classes.description}>{description}</Typography>
-        )}
-        <RadioGroup
-          aria-label={label}
-          value={value}
-          onChange={(event) => {
-            helpers.setValue(event.target.value)
-          }}
-          onBlur={() => helpers.setTouched(true)}
-          row
+        <QuestionBase
+          label={label}
+          required={required}
+          description={description}
+          labelProps={{ component: 'legend' }}
         >
-          {options.map((option) => (
-            <FormControlLabel
-              labelPlacement="top"
-              value={option.toString()}
-              control={<Radio color="primary" />}
-              label={parseOption(option)}
-              key={option}
-              className={
-                option !== 0 ? classes.optionLabel : classes.dontKnowLabel
-              }
-            />
-          ))}
-        </RadioGroup>
+          <RadioGroup
+            aria-label={label}
+            value={value}
+            onChange={(event) => {
+              helpers.setValue(event.target.value)
+            }}
+            onBlur={() => helpers.setTouched(true)}
+            row
+          >
+            {options.map((option) => (
+              <FormControlLabel
+                labelPlacement="top"
+                value={option.toString()}
+                control={<Radio color="primary" />}
+                label={parseOption(option)}
+                key={option}
+                className={
+                  option !== 0 ? classes.optionLabel : classes.dontKnowLabel
+                }
+              />
+            ))}
+          </RadioGroup>
+        </QuestionBase>
       </FormControl>
       {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
     </>

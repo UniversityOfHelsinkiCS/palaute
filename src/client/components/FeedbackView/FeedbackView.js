@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { useParams, useHistory, Redirect } from 'react-router-dom'
+
+import { useParams, useHistory, Redirect, useLocation } from 'react-router-dom'
 
 import {
   Typography,
@@ -15,6 +16,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
+import qs from 'qs'
 
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -22,6 +24,8 @@ import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
+import LanguageContext from '../../contexts/LanguageContext'
+import Toolbar from './Toolbar'
 
 import {
   makeValidate,
@@ -48,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
 
 const FeedbackView = () => {
   const { id } = useParams()
+  const location = useLocation()
+
+  const { language: languageParam } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  })
+
   const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
@@ -110,6 +120,12 @@ const FeedbackView = () => {
     setPrivacyDialogOpen(true)
   }
 
+  const handleLanguageChange = (language) => {
+    history.push({ search: `?language=${language}` })
+  }
+
+  const previewLanguage = languageParam ?? i18n.language
+
   return (
     <>
       <PrivacyDialog
@@ -149,24 +165,37 @@ const FeedbackView = () => {
                       </Link>
                     </Alert>
                   </Box>
-                  <FeedbackForm questions={questions} name="answers" />
+                  <LanguageContext.Provider value={previewLanguage}>
+                    <FeedbackForm questions={questions} name="answers" />
+                  </LanguageContext.Provider>
                 </CardContent>
               </Card>
 
-              <Box mt={2}>
-                <Button
-                  disabled={disabled}
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                >
-                  {t('feedbackView:submitButton')}
-                </Button>
-              </Box>
+              {!isTeacher && (
+                <Box mt={2}>
+                  <Button
+                    disabled={disabled}
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                  >
+                    {t('feedbackView:submitButton')}
+                  </Button>
+                </Box>
+              )}
             </Form>
           )
         }}
       </Formik>
+      {isTeacher && (
+        <Box mt={2}>
+          <Toolbar
+            editLink={`/targets/${feedbackTarget.id}/edit`}
+            language={previewLanguage}
+            onLanguageChange={handleLanguageChange}
+          />
+        </Box>
+      )}
     </>
   )
 }

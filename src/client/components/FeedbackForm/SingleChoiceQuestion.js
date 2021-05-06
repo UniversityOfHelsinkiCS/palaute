@@ -5,8 +5,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography,
-  Box,
   FormHelperText,
 } from '@material-ui/core'
 
@@ -14,11 +12,18 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import useLanguage from '../../hooks/useLanguage'
+import QuestionBase from './QuestionBase'
 
 const SingleChoiceQuestion = ({ question, name }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { t, i18n } = useTranslation()
-  const label = getLanguageValue(question.data?.label, i18n.language) ?? ''
+  const { t } = useTranslation()
+  const language = useLanguage()
+
+  const label = getLanguageValue(question.data?.label, language) ?? ''
+
+  const description =
+    getLanguageValue(question.data?.description, language) ?? ''
 
   const value = answer ?? ''
   const options = question.data?.options ?? []
@@ -28,29 +33,30 @@ const SingleChoiceQuestion = ({ question, name }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <Box mb={1}>
-          <Typography variant="h6" component="legend">
-            {label}
-            {required && ' *'}
-          </Typography>
-        </Box>
-        <RadioGroup
-          aria-label={label}
-          value={value}
-          onChange={(event) => {
-            helpers.setValue(event.target.value)
-          }}
-          onBlur={() => helpers.setTouched(true)}
+        <QuestionBase
+          label={label}
+          required={required}
+          description={description}
+          labelProps={{ component: 'legend' }}
         >
-          {options.map((option) => (
-            <FormControlLabel
-              value={option.id}
-              control={<Radio color="primary" />}
-              label={getLanguageValue(option.label, i18n.language)}
-              key={option.id}
-            />
-          ))}
-        </RadioGroup>
+          <RadioGroup
+            aria-label={label}
+            value={value}
+            onChange={(event) => {
+              helpers.setValue(event.target.value)
+            }}
+            onBlur={() => helpers.setTouched(true)}
+          >
+            {options.map((option) => (
+              <FormControlLabel
+                value={option.id}
+                control={<Radio color="primary" />}
+                label={getLanguageValue(option.label, language)}
+                key={option.id}
+              />
+            ))}
+          </RadioGroup>
+        </QuestionBase>
       </FormControl>
       {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
     </>

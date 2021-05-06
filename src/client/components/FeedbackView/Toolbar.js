@@ -6,43 +6,34 @@ import { useTranslation } from 'react-i18next'
 import FixedContainer from '../FixedContainer'
 import LanguageSelect from '../LanguageSelect'
 
-const useStyles = makeStyles((theme) => ({
-  saveButton: {
-    marginRight: theme.spacing(1),
-  },
+const useStyles = makeStyles({
   container: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-}))
+})
 
-const Toolbar = ({ onSave, previewLink, language, onLanguageChange }) => {
+const Toolbar = ({ editLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
   const classes = useStyles()
 
   return (
     <FixedContainer>
       <div className={classes.container}>
-        <div>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={onSave}
-            className={classes.saveButton}
-          >
-            {t('save')}
-          </Button>
-
-          <Button color="primary" component={Link} to={previewLink}>
-            {t('editFeedbackTarget:showPreview')}
-          </Button>
-        </div>
+        <Button
+          color="primary"
+          variant="contained"
+          component={Link}
+          to={editLink}
+        >
+          {t('feedbackView:editSurvey')}
+        </Button>
 
         <LanguageSelect
           value={language}
           onChange={onLanguageChange}
-          label={t('editFeedbackTarget:translationLanguage')}
+          label={t('feedbackView:translationLanguage')}
         />
       </div>
     </FixedContainer>

@@ -55,6 +55,8 @@ export default {
     privacyInfoContent:
       'Kirjautumistietoja käytetään muun muassa siihen, että opiskelijalle näytetään oikeat palautteet, osataan lähettää muistusviestit, ja opettaja voi katsoa ketkä ovat lähettäneet palautetta (ja sen perusteella antaa esimerkiksi kurssipisteitä), mutta opettaja ei voi yhdistää palautetta opiskelijaan. Opettaja näkee reaaliaikaisen listan palautteen antaneista, mutta palautteet näkyvät vasta palautteenantamisajan jälkeen. Jos kurssille annettaan viisi tai vähemmän palautetta, ei niitä näytetä ollenkaan.',
     dontKnowOption: 'eos',
+    editSurvey: 'Muokkaa kyselyä',
+    translationLanguage: 'Käännösten kieli',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',

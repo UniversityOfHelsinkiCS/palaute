@@ -1,26 +1,28 @@
 import React from 'react'
-import { Typography, Box } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../FormikTextField'
 import { getLanguageValue } from '../../util/languageUtils'
+import useLanguage from '../../hooks/useLanguage'
+import QuestionBase from './QuestionBase'
 
 const OpenQuestion = ({ question, name }) => {
-  const { i18n } = useTranslation()
-  const label = getLanguageValue(question.data?.label, i18n.language) ?? ''
+  const language = useLanguage()
+  const label = getLanguageValue(question.data?.label, language) ?? ''
   const { required } = question
   const labelId = `${question.id}-label`
 
+  const description =
+    getLanguageValue(question.data?.description, language) ?? ''
+
   return (
-    <>
-      <Box mb={1}>
-        <Typography variant="h6" component="label" htmlFor={labelId}>
-          {label}
-          {required && ' *'}
-        </Typography>
-      </Box>
+    <QuestionBase
+      label={label}
+      required={required}
+      description={description}
+      labelProps={{ component: 'label', htmlFor: labelId }}
+    >
       <FormikTextField name={name} id={labelId} fullWidth multiline />
-    </>
+    </QuestionBase>
   )
 }
 
