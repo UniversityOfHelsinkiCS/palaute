@@ -104,7 +104,7 @@ export default {
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'Please note that the form cannot be edited after the feedback form opens',
+      'WARNING! The form data cannot be edited after the feedback form opens',
   },
   questionResults: {
     answerCount: 'Answer count',

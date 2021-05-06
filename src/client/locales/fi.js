@@ -101,7 +101,7 @@ export default {
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
-      'Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
+      'HUOM! Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
