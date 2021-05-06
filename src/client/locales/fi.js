@@ -131,6 +131,7 @@ export default {
     myCourses: 'Kurssini',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',
+    nameFallback: 'Valikko',
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Kukaan ei ole antanut palautetta vielä',

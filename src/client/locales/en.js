@@ -134,6 +134,7 @@ export default {
     myCourses: 'My courses',
     logOut: 'Log out',
     admin: 'Admin',
+    nameFallback: 'Menu',
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'No one has given feedback yet',
