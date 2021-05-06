@@ -8,9 +8,15 @@ export const getUniqueCourses = (courseUnits) => {
   const { i18n } = useTranslation()
 
   if (!courseUnits) return null
-  courseUnits.sort((a, b) =>
-    a.validityPeriod.endDate < b.validityPeriod.endDate ? 1 : -1,
-  )
+  courseUnits.sort((a, b) => {
+    const Adate = a.validityPeriod.endDate
+      ? a.validityPeriod.endDate
+      : a.validityPeriod.startDate
+    const Bdate = b.validityPeriod.endDate
+      ? b.validityPeriod.endDate
+      : b.validityPeriod.startDate
+    return Adate < Bdate ? 1 : -1
+  })
 
   const codes = new Set()
 
@@ -31,10 +37,13 @@ export const getRelevantCourses = (courses, relevant) => {
   const comparisonDate = new Date(2021, 1, 1, 0, 0, 0, 0)
 
   const filteredCourses = courses.filter((course) => {
+    const date = course.validityPeriod.endDate
+      ? course.validityPeriod.endDate
+      : course.validityPeriod.startDate
     if (!relevant) {
-      return !isAfter(parseISO(course.validityPeriod.endDate), comparisonDate)
+      return !isAfter(parseISO(date), comparisonDate)
     }
-    return isAfter(parseISO(course.validityPeriod.endDate), comparisonDate)
+    return isAfter(parseISO(date), comparisonDate)
   })
 
   return filteredCourses
