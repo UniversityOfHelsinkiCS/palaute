@@ -37,15 +37,21 @@ const ShowActiveFeedbackTargets = () => {
     )
   }
 
+  feedbackTargets.sort((a, b) =>
+    a.courseUnit.courseCode < b.courseUnit.courseCode ? -1 : 1,
+  )
+
   return (
     <>
       <h2>Feedbacks that are configured</h2>
       {feedbackTargets.map((target) => (
         <div key={target.id}>
+          <b>{target.courseUnit.courseCode}</b>
+          {'\t'}
           <Link to={`/targets/${target.id}/results`}>
-            {target.courseRealisation.name.fi}, {formatDate(target.opensAt)} -{' '}
-            {formatDate(target.closesAt)}
+            {target.courseRealisation.name.fi}
           </Link>
+          , {formatDate(target.opensAt)} - {formatDate(target.closesAt)}
         </div>
       ))}
     </>

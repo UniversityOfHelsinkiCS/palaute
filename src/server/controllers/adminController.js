@@ -4,7 +4,7 @@ const { Op } = require('sequelize')
 const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
-const { FeedbackTarget, CourseRealisation } = require('../models')
+const { FeedbackTarget, CourseRealisation, CourseUnit } = require('../models')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -49,10 +49,16 @@ const getFeedbackTargets = async (req, res) => {
         [Op.gte]: new Date(2020, 10, 10),
       },
     },
-    include: {
-      model: CourseRealisation,
-      as: 'courseRealisation',
-    },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+      },
+    ],
   })
 
   res.send(feedbackTargets)
