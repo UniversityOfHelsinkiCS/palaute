@@ -101,7 +101,7 @@ const NavBar = () => {
     .filter(Boolean)
     .join(' ')
 
-  const menuLabel = fullName ?? t('navBar:nameFallback')
+  const menuLabel = fullName || t('navBar:nameFallback')
 
   const menuButtonProps = {
     onClick: handleOpenMenu,
