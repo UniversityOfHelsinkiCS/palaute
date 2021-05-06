@@ -100,9 +100,11 @@ export default {
     opensAt: 'Opens at',
     hidden: 'Hidden',
     upperLevelQuestionsInfo:
-      'Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show" button to see what the survey looks like with all the questions',
+      'Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions',
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
+    warningAboutOpeningCourse:
+      'Please note that the form cannot be edited after the feedback form opens',
   },
   questionResults: {
     answerCount: 'Answer count',

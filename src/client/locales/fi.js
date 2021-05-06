@@ -97,9 +97,11 @@ export default {
     opensAt: 'Avautuu',
     hidden: 'Piilotettu',
     upperLevelQuestionsInfo:
-      'Kyselyllä on jo {{count}} yliopisto- ja laitostason kysymystä, mutta voit halutessasi lisätä sille lisää kysmyksiä. "Näytä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
+      'Kyselyllä on jo {{count}} yliopisto- ja laitostason kysymystä, mutta voit halutessasi lisätä sille lisää kysmyksiä. "Esikatsele kyselyä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
+    warningAboutOpeningCourse:
+      'Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

@@ -135,7 +135,9 @@ const EditFeedbackTarget = () => {
                         label={t('editFeedbackTarget:hidden')}
                       />
                     </Box>
-
+                    <Alert severity="warning">
+                      {t('editFeedbackTarget:warningAboutOpeningCourse')}
+                    </Alert>
                     <Box mb={2}>
                       <FormikDatePicker
                         name="opensAt"
