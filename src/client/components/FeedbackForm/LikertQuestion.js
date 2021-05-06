@@ -32,8 +32,11 @@ const options = [1, 2, 3, 4, 5, 0]
 const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const language = useLanguage()
+
+  const t = i18n.getFixedT(language)
+
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
   const description =
