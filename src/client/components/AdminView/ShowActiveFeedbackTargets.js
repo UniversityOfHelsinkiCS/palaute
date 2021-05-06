@@ -43,7 +43,7 @@ const ShowActiveFeedbackTargets = () => {
 
   return (
     <>
-      <h2>Feedbacks that are configured</h2>
+      <h2>Feedbacks that are configured ({feedbackTargets.length} courses)</h2>
       {feedbackTargets.map((target) => (
         <div key={target.id}>
           <b>{target.courseUnit.courseCode}</b>
