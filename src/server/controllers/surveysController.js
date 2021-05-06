@@ -1,5 +1,6 @@
 const { ApplicationError } = require('../util/customErrors')
 const { Survey, Question } = require('../models')
+const { sequelize } = require('../util/dbConnection')
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   const updatedQuestionIdsList = []
@@ -43,9 +44,11 @@ const addQuestion = async (req, res) => {
 }
 
 const update = async (req, res) => {
+  const { isAdmin } = req
   const survey = await Survey.findByPk(Number(req.params.id))
   if (!survey) throw new ApplicationError('Not found', 404)
-
+  if (survey.type === 'university' && !isAdmin)
+    throw new ApplicationError('Forbidden', 403)
   const { questions } = req.body
 
   if (questions) {
