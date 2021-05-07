@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Home = () => {
-  const { authorizedUser, loading } = useAuthorizedUser()
+  const { authorizedUser, isLoading } = useAuthorizedUser()
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Box my={4}>
         <CircularProgress />
