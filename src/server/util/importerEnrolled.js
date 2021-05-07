@@ -8,6 +8,7 @@ const {
 
 const {
   createFeedbackTargetFromCourseRealisation,
+  validRealisation,
 } = require('./importerHelpers')
 
 const createTargetsFromEnrolment = async (data, userId) => {
@@ -44,6 +45,7 @@ const getEnrolmentByPersonId = async (personId, options = {}) => {
 
   await data.reduce(async (promise, enrolment) => {
     await promise
+    if (!validRealisation(enrolment.courseUnitRealisation)) return
     courseRealisationIds.push(enrolment.courseUnitRealisationId)
     await createTargetsFromEnrolment(enrolment, personId)
   }, Promise.resolve())

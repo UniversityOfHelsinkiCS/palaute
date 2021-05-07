@@ -6,6 +6,8 @@ const {
   JSONB,
   BOOLEAN,
   VIRTUAL,
+  ARRAY,
+  INTEGER,
 } = require('sequelize')
 
 const CourseUnit = require('./courseUnit')
@@ -125,6 +127,11 @@ FeedbackTarget.init(
     },
     questions: {
       type: VIRTUAL,
+    },
+    publicQuestionIds: {
+      type: ARRAY(INTEGER),
+      allowNull: false,
+      defaultValue: [],
     },
     feedbackResponse: {
       type: STRING,

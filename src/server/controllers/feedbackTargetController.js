@@ -195,12 +195,22 @@ const update = async (req, res) => {
   if (feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
     throw new ApplicationError('Forbidden', 403)
 
-  const { name, hidden, opensAt, closesAt, questions, surveyId } = req.body
+  const {
+    name,
+    hidden,
+    opensAt,
+    closesAt,
+    questions,
+    surveyId,
+    publicQuestionIds,
+  } = req.body
 
   feedbackTarget.name = name
   feedbackTarget.hidden = hidden
   feedbackTarget.opensAt = opensAt
   feedbackTarget.closesAt = closesAt
+
+  if (publicQuestionIds) feedbackTarget.publicQuestionIds = publicQuestionIds
 
   if (questions && surveyId) {
     const survey = await Survey.findOne({

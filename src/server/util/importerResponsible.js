@@ -9,6 +9,7 @@ const {
 
 const {
   createFeedbackTargetFromCourseRealisation,
+  validRealisation,
 } = require('./importerHelpers')
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
@@ -33,9 +34,10 @@ const getResponsibleByPersonId = async (personId, options = {}) => {
   await courseUnitRealisations.reduce(async (promise, realisation) => {
     await promise
     if (realisation.courseUnits.length === 0) return
-    courseRealisationIds.push(realisation.id)
     const courseUnit = realisation.courseUnits[0] // TODO, wtf
     await createCourseUnit(courseUnit)
+    if (!validRealisation(realisation)) return
+    courseRealisationIds.push(realisation.id)
     await createFeedbackTargetFromCourseRealisation(
       realisation,
       personId,

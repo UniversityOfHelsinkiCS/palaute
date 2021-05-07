@@ -5,6 +5,18 @@ const {
   combineStudyGroupName,
 } = require('./importerCommon')
 
+const validRealisationTypes = [
+  'urn:code:course-unit-realisation-type:teaching-participation-lab',
+  'urn:code:course-unit-realisation-type:teaching-participation-online',
+  'urn:code:course-unit-realisation-type:teaching-participation-field-course',
+  'urn:code:course-unit-realisation-type:teaching-participation-project',
+  'urn:code:course-unit-realisation-type:teaching-participation-lectures',
+  'urn:code:course-unit-realisation-type:teaching-participation-small-group',
+]
+
+const validRealisation = (realisation) =>
+  validRealisationTypes.includes(realisation.courseUnitRealisationTypeUrn)
+
 const createFeedbackTargetFromCourseRealisation = async (
   realisation,
   userId,
@@ -72,4 +84,5 @@ const createFeedbackTargetFromCourseRealisation = async (
 
 module.exports = {
   createFeedbackTargetFromCourseRealisation,
+  validRealisation,
 }
