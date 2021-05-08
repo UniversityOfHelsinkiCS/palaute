@@ -2,8 +2,6 @@ const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
 const { User } = require('../models')
-const { FeedbackTarget } = require('../models')
-const { UserFeedbackTarget } = require('../models')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
@@ -23,6 +21,7 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
     newHeaders.preferredlanguage = user.language
     newHeaders.hypersonsisuid = user.id
     newHeaders.schacpersonaluniquecode = user.studentNumber
+    newHeaders.mockedBy = headers.uid
     return newHeaders
   }
 
@@ -43,7 +42,7 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   newHeaders.schacpersonaluniquecode = studentNumber
   const [username] = eduPersonPrincipalName.split('@')[0]
   newHeaders.uid = username
-
+  newHeaders.mockedBy = headers.uid
   return newHeaders
 }
 
@@ -55,6 +54,7 @@ const upsertUser = async ({
   preferredlanguage,
   hypersonsisuid,
   schacpersonaluniquecode,
+  mockedBy,
 }) => {
   const items = schacpersonaluniquecode
     ? schacpersonaluniquecode.split(':')
@@ -70,7 +70,7 @@ const upsertUser = async ({
     username: uid,
     studentNumber,
   })
-
+  user.dataValues.mockedBy = mockedBy
   return user
 }
 
@@ -81,29 +81,7 @@ const currentUserMiddleware = async (req, res, next) => {
   req.headers = await fetchUserDataFromLoginAsForHeaders(req.headers)
 
   req.user = await upsertUser(req.headers)
-  req.isAdmin = ADMINS.includes(req.user.username)
-  if (req.user.id === 'hy-hlo-49478503') {
-    const feedbackTarget = await FeedbackTarget.findOne({
-      where: {
-        feedbackType: 'courseRealisation',
-        typeId: 'hy-opt-cur-2021-9699b5a5-0570-467e-86e3-9a0f96035342',
-      },
-    })
-
-    if (!feedbackTarget) return next()
-
-    await UserFeedbackTarget.findOrCreate({
-      where: {
-        userId: req.user.id,
-        feedbackTargetId: feedbackTarget.id,
-      },
-      defaults: {
-        accessStatus: 'TEACHER',
-        userId: req.user.id,
-        feedbackTargetId: feedbackTarget.id,
-      },
-    })
-  }
+  req.isAdmin = isSuperAdmin(req.user.username)
   return next()
 }
 
