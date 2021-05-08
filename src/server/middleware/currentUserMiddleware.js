@@ -21,7 +21,6 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
     newHeaders.preferredlanguage = user.language
     newHeaders.hypersonsisuid = user.id
     newHeaders.schacpersonaluniquecode = user.studentNumber
-    newHeaders.mockedBy = headers.uid
     return newHeaders
   }
 
@@ -42,7 +41,6 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   newHeaders.schacpersonaluniquecode = studentNumber
   const [username] = eduPersonPrincipalName.split('@')[0]
   newHeaders.uid = username
-  newHeaders.mockedBy = headers.uid
   return newHeaders
 }
 
@@ -54,7 +52,6 @@ const upsertUser = async ({
   preferredlanguage,
   hypersonsisuid,
   schacpersonaluniquecode,
-  mockedBy,
 }) => {
   const items = schacpersonaluniquecode
     ? schacpersonaluniquecode.split(':')
@@ -70,7 +67,6 @@ const upsertUser = async ({
     username: uid,
     studentNumber,
   })
-  user.dataValues.mockedBy = mockedBy
   return user
 }
 

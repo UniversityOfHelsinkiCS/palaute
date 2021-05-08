@@ -16,11 +16,7 @@ const router = Router()
 
 initializeSentry(router)
 
-router.use(
-  Sentry.Handlers.requestHandler({
-    user: ['id', 'username', 'email', 'mockedBy'],
-  }),
-)
+router.use(Sentry.Handlers.requestHandler())
 router.use(Sentry.Handlers.tracingHandler())
 
 router.use(Router.json())
