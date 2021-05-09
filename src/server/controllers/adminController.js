@@ -48,6 +48,7 @@ const getFeedbackTargets = async (req, res) => {
       opensAt: {
         [Op.gte]: new Date(2020, 10, 10),
       },
+      feedbackType: 'courseRealisation',
     },
     include: [
       {
