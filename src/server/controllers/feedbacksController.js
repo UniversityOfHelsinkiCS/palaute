@@ -21,16 +21,15 @@ const create = async (req, res) => {
   })
 
   if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+  if (userFeedbackTarget.feedbackId)
+    throw new ApplicationError(
+      'Attempt to create new feedback where one already exists. Use PUT to update the old',
+      400,
+    )
 
-  const [newFeedback] = await Feedback.findOrCreate({
-    where: {
-      data,
-      userId,
-    },
-    defaults: {
-      data,
-      userId,
-    },
+  const newFeedback = await Feedback.create({
+    data,
+    userId,
   })
 
   userFeedbackTarget.feedbackId = newFeedback.id
