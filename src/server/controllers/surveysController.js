@@ -49,7 +49,6 @@ const update = async (req, res) => {
   if (survey.type === 'university' && !isAdmin)
     throw new ApplicationError('Forbidden', 403)
   const { questions } = req.body
-
   if (questions) {
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
