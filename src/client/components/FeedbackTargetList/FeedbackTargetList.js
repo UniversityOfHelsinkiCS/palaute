@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const FeedbackTargetList = () => {
   const classes = useStyles()
   const { code } = useParams()
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const {
     feedbackTargets,
@@ -57,6 +57,19 @@ const FeedbackTargetList = () => {
   const courseRealisations = getCourseRealisationsWithFeedbackTargets(
     feedbackTargets,
   )
+
+  if (courseRealisations.length === 0) {
+    return (
+      <div>
+        <Typography variant="h4" component="h1" className={classes.title}>
+          {name}
+        </Typography>
+        <Typography variant="subtitle1">
+          {t('feedbackTargetList:noCourseRealisations')}
+        </Typography>
+      </div>
+    )
+  }
 
   return (
     <div>

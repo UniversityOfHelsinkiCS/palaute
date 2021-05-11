@@ -128,6 +128,7 @@ export default {
     copied: 'Link copied to cliboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
+    noCourseRealisations: `This course doesn't have any relevant course realisations`,
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:

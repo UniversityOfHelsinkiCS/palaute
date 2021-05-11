@@ -126,6 +126,8 @@ export default {
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: 'palautetta annettu',
     giveFeedbackResponse: 'Anna vastapalaute',
+    noCourseRealisations:
+      'Tällä kurssilla ei ole yhtään relevanttia kurssirealisaatiota',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
