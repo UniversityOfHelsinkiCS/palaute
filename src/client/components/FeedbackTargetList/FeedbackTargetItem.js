@@ -82,12 +82,12 @@ const ActionsButton = ({ feedbackTarget }) => {
         <MenuItem component={Link} to={`/targets/${id}/feedback`}>
           {t('feedbackTargetList:showSurvey')}
         </MenuItem>
-        {isEnded && (
+        {isStarted && (
           <MenuItem component={Link} to={`/targets/${id}/results`}>
             {t('feedbackTargetList:showFeedbacks')}
           </MenuItem>
         )}
-        {isStarted && (
+        {isEnded && (
           <MenuItem
             component={Link}
             to={`/targets/${id}/students-with-feedback`}

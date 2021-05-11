@@ -348,7 +348,13 @@ const getFeedbacks = async (req, res) => {
     }
     const { feedbackTarget } = userFeedbackTarget
 
-    if (!feedbackTarget.isEnded()) {
+    if (
+      !(
+        feedbackTarget.isEnded() ||
+        (feedbackTarget.isOpen() &&
+          userFeedbackTarget.accessStatus === 'TEACHER')
+      )
+    ) {
       throw new ApplicationError(
         'Information is not available until the feedback period has ended',
         403,
@@ -395,7 +401,12 @@ const getStudentsWithFeedback = async (req, res) => {
     include: 'feedbackTarget',
   })
 
-  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
+  const { feedbackTarget } = userFeedbackTarget
+
+  if (
+    !isAdmin &&
+    (!userFeedbackTarget?.hasTeacherAccess() || !feedbackTarget.isEnded())
+  ) {
     throw new ApplicationError(
       'User is not authorized to view students with feedback',
       403,
