@@ -13,10 +13,13 @@ const getUserList = async (limit, offset) => {
 
 const updateUsers = async () => {
   logger.info('Starting to update users')
-  const limit = 5000
+  const limit = 3000
   let offset = 0
+  let sum = 0
+  let count = 0
   // eslint-disable-next-line no-constant-condition
   while (true) {
+    const start = new Date()
     const users = await getUserList(limit, offset)
     if (users.length === 0) break
 
@@ -35,8 +38,16 @@ const updateUsers = async () => {
         studentNumber,
       })
     }, Promise.resolve())
-    logger.info(`Updated ${users.length} users, offset ${offset}`)
+    const timePerUser = (new Date() - start) / users.length
+    count++
+    sum += timePerUser
+    logger.info(
+      `Updated ${
+        users.length
+      } users, offset ${offset} time per user ${timePerUser.toFixed(4)}ms`,
+    )
     offset += limit
+    logger.info(`average ${(sum / count).toFixed(4)}ms`)
   }
 }
 
