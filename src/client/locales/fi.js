@@ -102,6 +102,9 @@ export default {
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
       'HUOM! Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
+    opensAtIsNow:
+      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata',
+    checkbox: 'Ymmärrän',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

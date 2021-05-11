@@ -105,6 +105,9 @@ export default {
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
       'WARNING! The form data cannot be edited after the feedback form opens',
+    opensAtIsNow:
+      'The survey is set to open immediately! When the survey is open it cannot be edited anymore',
+    checkbox: 'I understand',
   },
   questionResults: {
     answerCount: 'Answer count',
