@@ -401,12 +401,7 @@ const getStudentsWithFeedback = async (req, res) => {
     include: 'feedbackTarget',
   })
 
-  const { feedbackTarget } = userFeedbackTarget
-
-  if (
-    !isAdmin &&
-    (!userFeedbackTarget?.hasTeacherAccess() || !feedbackTarget.isEnded())
-  ) {
+  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
     throw new ApplicationError(
       'User is not authorized to view students with feedback',
       403,
