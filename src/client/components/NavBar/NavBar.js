@@ -45,7 +45,7 @@ const useLogoStyles = makeStyles((theme) => ({
   image: {
     width: '2.5rem',
     height: 'auto',
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
 }))
 
@@ -55,10 +55,10 @@ const Logo = () => {
   return (
     <div className={classes.container}>
       <Link to="/" className={classes.link}>
+        <img src={hyLogo} alt="HY" className={classes.image} />
         <Typography variant="h6" component="h1">
           Palaute
         </Typography>
-        <img src={hyLogo} alt="HY" className={classes.image} />
       </Link>
     </div>
   )
