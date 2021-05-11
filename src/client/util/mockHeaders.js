@@ -36,6 +36,7 @@ export const possibleUsers = [
     sn: 'Keski-Hynnilä',
     preferredLanguage: 'en',
     hyPersonSisuId: 'hy-hlo-114841198',
+    employeeNumber: '9383560',
   },
 ]
 

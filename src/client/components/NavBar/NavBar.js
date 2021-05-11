@@ -86,6 +86,10 @@ const NavBar = () => {
   }
 
   const links = [
+    isTeacher && {
+      label: t('navBar:myCourses'),
+      to: '/courses',
+    },
     isStudent &&
       isTeacher && {
         label: t('navBar:myFeedbacks'),
@@ -118,8 +122,13 @@ const NavBar = () => {
       open={menuOpen}
       onClose={handleCloseMenu}
     >
-      {links.map(({ label, to }) => (
-        <MenuItem component={Link} to={to} onClick={handleCloseMenu}>
+      {links.map(({ label, to }, index) => (
+        <MenuItem
+          key={index}
+          component={Link}
+          to={to}
+          onClick={handleCloseMenu}
+        >
           {label}
         </MenuItem>
       ))}
