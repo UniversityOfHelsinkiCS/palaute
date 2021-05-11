@@ -2,7 +2,6 @@ import React, { useEffect, Suspense } from 'react'
 import * as Sentry from '@sentry/browser'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
-import { CssBaseline } from '@material-ui/core'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider } from '@material-ui/core/styles'
 
@@ -15,6 +14,7 @@ import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
 import { inProduction } from '../../config'
 import { setHeaders } from '../util/mockHeaders'
+import CssBaseline from './CssBaseline'
 
 export default () => {
   const { i18n } = useTranslation()

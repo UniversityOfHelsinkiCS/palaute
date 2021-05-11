@@ -133,6 +133,11 @@ export default {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
     studentsWithFeedbackHeading: 'Students who have given feedback',
+    responseHeading: "Teacher's feedback response",
+    giveResponse: 'Give feedback response',
+    editResponse: 'Edit feedback response',
+    noResponseInfo:
+      "The course's teacher has not given a feedback response yet",
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
@@ -143,5 +148,10 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'No one has given feedback yet',
+  },
+  feedbackResponse: {
+    responseLabel: 'Feedback response',
+    responseInfo: 'This field supports <2>Markdown</2> content',
+    previewLabel: 'Preview',
   },
 }

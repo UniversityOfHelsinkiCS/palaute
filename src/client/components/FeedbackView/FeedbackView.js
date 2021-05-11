@@ -10,7 +10,6 @@ import {
   Box,
   Card,
   CardContent,
-  Link,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -26,6 +25,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
 import LanguageContext from '../../contexts/LanguageContext'
 import Toolbar from './Toolbar'
+import AlertLink from '../AlertLink'
 
 import {
   makeValidate,
@@ -38,10 +38,6 @@ import {
 const useStyles = makeStyles((theme) => ({
   heading: {
     marginBottom: theme.spacing(2),
-  },
-  feedbackInfoLink: {
-    fontWeight: theme.typography.fontWeightMedium,
-    textDecoration: 'underline',
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
@@ -155,14 +151,12 @@ const FeedbackView = () => {
                   <Box mb={2}>
                     <Alert severity="info">
                       {t('feedbackView:feedbackInfo')}{' '}
-                      <Link
-                        color="inherit"
+                      <AlertLink
                         href="#feedback-privacy-dialog-title"
-                        className={classes.feedbackInfoLink}
                         onClick={handleOpenPrivacyDialog}
                       >
                         {t('feedbackView:feedbackInfoLink')}
-                      </Link>
+                      </AlertLink>
                     </Alert>
                   </Box>
                   <LanguageContext.Provider value={previewLanguage}>

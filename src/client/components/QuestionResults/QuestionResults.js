@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { Card, CardContent, makeStyles } from '@material-ui/core'
+import { Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 
 import { getQuestionsWithFeedback } from './utils'
 import LikertResults from './LikertResults'
@@ -9,16 +9,6 @@ import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    flexWrap: 'wrap',
-  },
-  questionItem: {
-    marginBottom: theme.spacing(2),
-    minWidth: '49%',
-    maxWidth: '49%',
-  },
   openQuestionItem: {
     marginBottom: theme.spacing(2),
   },
@@ -67,15 +57,14 @@ const QuestionResults = ({ questions, feedbacks }) => {
           />
         ))}
       </div>
-      <div className={classes.container}>
+
+      <Grid spacing={2} container>
         {filteredQuestions.map((q) => (
-          <QuestionItem
-            key={q.id}
-            question={q}
-            className={classes.questionItem}
-          />
+          <Grid key={q.id} xs={12} sm={12} md={6} item>
+            <QuestionItem question={q} />
+          </Grid>
         ))}
-      </div>
+      </Grid>
     </>
   )
 }

@@ -12,6 +12,7 @@ import EditCourseUnitSurvey from './EditCourseUnitSurvey'
 import FeedbackTargetResults from './FeedbackTargetResults'
 import StudentsWithFeedback from './StudentsWithFeedback'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
+import FeedbackResponse from './FeedbackResponse'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -55,6 +56,10 @@ const Router = () => {
         <Route
           path="/targets/:id/students-with-feedback"
           component={StudentsWithFeedback}
+        />
+        <Route
+          path="/targets/:id/feedback-response"
+          component={FeedbackResponse}
         />
         <Route path="/admin" component={AdminView} />
       </Switch>

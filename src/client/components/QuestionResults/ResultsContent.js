@@ -22,9 +22,7 @@ const ResultsContent = ({ chart, title, children, description }) => {
         {title}
       </Typography>
       {description && (
-        <Typography color="textSecondary" className={classes.description}>
-          {description}
-        </Typography>
+        <Typography className={classes.description}>{description}</Typography>
       )}
       {chart && <div className={classes.chart}>{chart}</div>}
       {children}

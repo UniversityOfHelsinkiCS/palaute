@@ -125,11 +125,16 @@ export default {
     copied: 'Linkki kopioitu leikepöydälle',
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: 'palautetta annettu',
+    giveFeedbackResponse: 'Anna vastapalaute',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
+    responseHeading: 'Opettajan vastapalaute',
+    giveResponse: 'Anna vastapalaute',
+    editResponse: 'Muokkaa vastapalautetta',
+    noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
   },
   navBar: {
     myFeedbacks: 'Palautteeni',
@@ -140,5 +145,10 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Kukaan ei ole antanut palautetta vielä',
+  },
+  feedbackResponse: {
+    responseLabel: 'Vastapalaute',
+    responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
+    previewLabel: 'Esikatselu',
   },
 }
