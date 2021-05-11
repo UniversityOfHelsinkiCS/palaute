@@ -20,7 +20,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import toskaLogo from '../../assets/toscalogo_white.svg'
+import hyLogo from '../../assets/hy_logo.svg'
 import { handleLogout, isAdmin } from './utils'
 
 const useStyles = makeStyles({
@@ -58,7 +58,7 @@ const Logo = () => {
         <Typography variant="h6" component="h1">
           Palaute
         </Typography>
-        <img src={toskaLogo} alt="Toska" className={classes.image} />
+        <img src={hyLogo} alt="HY" className={classes.image} />
       </Link>
     </div>
   )

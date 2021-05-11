@@ -2,10 +2,7 @@ import React from 'react'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
 
 import DateFnsUtils from '@date-io/date-fns'
 
@@ -17,8 +14,7 @@ const FormikDatePicker = ({ name, label, ...props }) => {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker
-        variant="inline"
+      <DatePicker
         format="dd/MMM/yyyy"
         margin="normal"
         id={name}
