@@ -30,7 +30,6 @@ export const getLikertChartConfig = (question, language, t) => {
   const labels = [1, 2, 3, 4, 5, 0]
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
-  const datasetLabel = getLanguageValue(question.data?.label, language)
   const data = labels.map((l) => countByLabel[l] ?? 0)
 
   const dontKnowOption = t('feedbackView:dontKnowOption')
@@ -38,12 +37,16 @@ export const getLikertChartConfig = (question, language, t) => {
   return {
     options: {
       scales: getScalesConfig(t),
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
     },
     data: {
       labels: ['1', '2', '3', '4', '5', dontKnowOption],
       datasets: [
         {
-          label: datasetLabel,
           data,
           backgroundColor: theme.palette.primary.main,
         },
@@ -59,7 +62,6 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
     getLanguageValue(label, language),
   )
 
-  const datasetLabel = getLanguageValue(question.data?.label, language)
   const flatFeedbacks = flatMap(question.feedbacks, ({ data }) => data ?? [])
   const countByOptionId = countBy(flatFeedbacks, (option) => option)
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
@@ -67,12 +69,16 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
   return {
     options: {
       scales: getScalesConfig(t),
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
     },
     data: {
       labels,
       datasets: [
         {
-          label: datasetLabel,
           data,
           backgroundColor: theme.palette.primary.main,
         },
@@ -88,19 +94,22 @@ export const getSingleChoiceChartConfig = (question, language, t) => {
     getLanguageValue(label, language),
   )
 
-  const datasetLabel = getLanguageValue(question.data?.label, language)
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
     options: {
       scales: getScalesConfig(t),
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
     },
     data: {
       labels,
       datasets: [
         {
-          label: datasetLabel,
           data,
           backgroundColor: theme.palette.primary.main,
         },
