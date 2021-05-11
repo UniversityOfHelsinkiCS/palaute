@@ -44,6 +44,8 @@ export const getUpperLevelQuestions = (feedbackTarget) => {
   ]
 }
 
+export const checkDate = (opensAt) => isAfter(opensAt, new Date())
+
 export const saveValues = async (values, feedbackTarget) => {
   const { questions, hidden, name } = values
 

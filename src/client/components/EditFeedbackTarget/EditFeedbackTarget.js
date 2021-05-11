@@ -9,7 +9,10 @@ import {
   Box,
   Card,
   CardContent,
+  Checkbox,
+  FormControlLabel,
 } from '@material-ui/core'
+import { AlertTitle } from '@material-ui/lab'
 
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -30,6 +33,7 @@ import {
   validate,
   saveValues,
   getUpperLevelQuestions,
+  checkDate,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +65,8 @@ const EditFeedbackTarget = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [language, setLanguage] = useState('fi')
+  const [showWarning, setShowWarning] = useState(false)
+  const [checkbox, setCheckbox] = useState(false)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     cacheTime: 0,
@@ -89,16 +95,21 @@ const EditFeedbackTarget = () => {
 
   const handleSubmit = async (values, actions) => {
     try {
-      await saveValues(values, feedbackTarget)
+      if (!checkDate(values.opensAt) && !checkbox) {
+        setShowWarning(true)
+      } else {
+        await saveValues(values, feedbackTarget)
+        // Necessary for the <DirtyFormPrompt />
+        actions.resetForm({ values })
 
-      // Necessary for the <DirtyFormPrompt />
-      actions.resetForm({ values })
-
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      }
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
+
+  const handleWarning = () => setCheckbox(!checkbox)
 
   const initialValues = getInitialValues(feedbackTarget)
 
@@ -171,7 +182,21 @@ const EditFeedbackTarget = () => {
             <QuestionEditor language={language} name="questions" />
 
             <Divider className={classes.toolbarDivider} />
-
+            {showWarning && (
+              <Box mb={2}>
+                <Alert severity="warning">
+                  <AlertTitle>
+                    {t('editFeedbackTarget:opensAtIsNow')}
+                  </AlertTitle>
+                  <FormControlLabel
+                    control={
+                      <Checkbox value={checkbox} onChange={handleWarning} />
+                    }
+                    label={t('editFeedbackTarget:checkbox')}
+                  />
+                </Alert>
+              </Box>
+            )}
             <Toolbar
               onSave={handleSubmit}
               previewLink={`/targets/${id}/feedback`}
