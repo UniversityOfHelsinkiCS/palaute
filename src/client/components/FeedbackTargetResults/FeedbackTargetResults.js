@@ -52,7 +52,7 @@ const FeedbackTargetResults = () => {
     return <Redirect to="/" />
   }
 
-  const { questions } = feedbackTarget
+  const { questions, publicQuestionIds } = feedbackTarget
 
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
@@ -73,17 +73,27 @@ const FeedbackTargetResults = () => {
         {courseUnitName}
       </Typography>
 
-      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
-
       <Box mb={2}>
         <FeedbackResponse feedbackTarget={feedbackTarget} />
       </Box>
 
-      {feedbacks.length > 5 && (
-        <FeedbackSummary questions={questions} feedbacks={feedbacks} />
+      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
+
+      {feedbacks.length !== 0 && (
+        <FeedbackSummary
+          publicQuestions={publicQuestionIds}
+          questions={questions}
+          feedbacks={feedbacks}
+        />
       )}
 
-      <QuestionResults questions={questions} feedbacks={feedbacks} />
+      {feedbacks.length !== 0 && (
+        <QuestionResults
+          publicQuestions={publicQuestionIds}
+          questions={questions}
+          feedbacks={feedbacks}
+        />
+      )}
     </>
   )
 }

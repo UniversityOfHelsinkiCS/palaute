@@ -299,25 +299,11 @@ const getTargetsByCourseUnit = async (req, res) => {
 
 const filterFeedbacks = async (feedbacks, feedbackTarget, accessStatus) => {
   await feedbackTarget.populateQuestions()
-  const questionIds = feedbackTarget.questions.map((q) => q.id)
+  if (feedbacks.length <= 5) return []
   const { publicQuestionIds } = feedbackTarget
-  const questionAnswerCount = new Map()
-  questionIds.forEach((id) => {
-    questionAnswerCount.set(id, 0)
-  })
-  feedbacks.forEach((feedback) => {
-    feedback.data.forEach((question) => {
-      if (question.data)
-        questionAnswerCount.set(
-          question.questionId,
-          questionAnswerCount.get(question.questionId) + 1,
-        )
-    })
-  })
   const filteredFeedbacks = feedbacks.map((feedback) => ({
     ...feedback,
     data: feedback.data.filter((question) => {
-      if (questionAnswerCount.get(question.questionId) <= 5) return false
       if (accessStatus === 'STUDENT')
         return publicQuestionIds.includes(question.questionId)
       return true

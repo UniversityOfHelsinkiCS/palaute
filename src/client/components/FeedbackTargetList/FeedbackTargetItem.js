@@ -74,7 +74,7 @@ const ActionsButton = ({ feedbackTarget }) => {
         open={open}
         onClose={handleClose}
       >
-        {!isOpen && (
+        {!isOpen && !isEnded && (
           <MenuItem component={Link} to={`/targets/${id}/edit`}>
             {t('feedbackTargetList:editSurvey')}
           </MenuItem>

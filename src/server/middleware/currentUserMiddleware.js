@@ -39,7 +39,7 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   newHeaders.givenname = firstNames
   newHeaders.sn = lastName
   newHeaders.schacpersonaluniquecode = studentNumber
-  const [username] = eduPersonPrincipalName.split('@')[0]
+  const username = eduPersonPrincipalName.split('@')[0]
   newHeaders.uid = username
   return newHeaders
 }
