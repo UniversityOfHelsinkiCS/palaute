@@ -28,6 +28,7 @@ export default {
     actions: 'Toiminnot',
     close: 'Sulje',
     required: 'Pakollinen',
+    copy: 'Kopioi',
   },
   userFeedbacks: {
     mainHeading: 'Palautteeni',

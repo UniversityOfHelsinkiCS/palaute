@@ -159,13 +159,19 @@ const NavBar = () => {
   const languageSelector = (
     <div>
       {i18n.language !== 'fi' && (
-        <Button color="inherit" onClick={() => changeLanguage('fi')}>Suomi</Button>
+        <Button color="inherit" onClick={() => changeLanguage('fi')}>
+          Suomi
+        </Button>
       )}
       {i18n.language !== 'en' && (
-        <Button color="inherit" onClick={() => changeLanguage('en')}>English</Button>
+        <Button color="inherit" onClick={() => changeLanguage('en')}>
+          English
+        </Button>
       )}
       {i18n.language !== 'sv' && (
-        <Button color="inherit" onClick={() => changeLanguage('sv')}>Svenska</Button>
+        <Button color="inherit" onClick={() => changeLanguage('sv')}>
+          Svenska
+        </Button>
       )}
     </div>
   )
