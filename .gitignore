@@ -7,3 +7,4 @@ stats.json
 .DS_Store
 backups
 scripts/my_username
+.vscode

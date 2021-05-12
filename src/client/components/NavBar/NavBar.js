@@ -45,7 +45,7 @@ const useLogoStyles = makeStyles((theme) => ({
   image: {
     width: '2.5rem',
     height: 'auto',
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
 }))
 
@@ -55,10 +55,10 @@ const Logo = () => {
   return (
     <div className={classes.container}>
       <Link to="/" className={classes.link}>
+        <img src={hyLogo} alt="HY" className={classes.image} />
         <Typography variant="h6" component="h1">
           Palaute
         </Typography>
-        <img src={hyLogo} alt="HY" className={classes.image} />
       </Link>
     </div>
   )
@@ -68,7 +68,7 @@ const NavBar = () => {
   const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width:400px)')
@@ -152,13 +152,37 @@ const NavBar = () => {
     </IconButton>
   )
 
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang)
+  }
+
+  const languageSelector = (
+    <div>
+      {i18n.language !== 'fi' && (
+        <Button color="inherit" onClick={() => changeLanguage('fi')}>
+          Suomi
+        </Button>
+      )}
+      {i18n.language !== 'en' && (
+        <Button color="inherit" onClick={() => changeLanguage('en')}>
+          English
+        </Button>
+      )}
+      {i18n.language !== 'sv' && (
+        <Button color="inherit" onClick={() => changeLanguage('sv')}>
+          Svenska
+        </Button>
+      )}
+    </div>
+  )
+
   return (
     <>
       {menu}
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <Logo />
-
+          {languageSelector}
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
       </AppBar>

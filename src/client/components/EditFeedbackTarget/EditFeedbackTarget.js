@@ -60,11 +60,12 @@ const useStyles = makeStyles((theme) => ({
 
 const EditFeedbackTarget = () => {
   const { id } = useParams()
-  const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
 
   const [language, setLanguage] = useState('fi')
+
+  const { t, i18n } = useTranslation('fi')
   const [showWarning, setShowWarning] = useState(false)
   const [checkbox, setCheckbox] = useState(false)
 

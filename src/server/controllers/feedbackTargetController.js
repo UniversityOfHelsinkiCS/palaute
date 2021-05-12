@@ -1,4 +1,6 @@
 const dateFns = require('date-fns')
+const _ = require('lodash')
+
 const { ApplicationError } = require('../util/customErrors')
 
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
@@ -195,22 +197,17 @@ const update = async (req, res) => {
   if (feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
     throw new ApplicationError('Forbidden', 403)
 
-  const {
-    name,
-    hidden,
-    opensAt,
-    closesAt,
-    questions,
-    surveyId,
-    publicQuestionIds,
-  } = req.body
+  const updates = _.pick(req.body, [
+    'name',
+    'hidden',
+    'opensAt',
+    'closesAt',
+    'publicQuestionIds',
+  ])
 
-  feedbackTarget.name = name
-  feedbackTarget.hidden = hidden
-  feedbackTarget.opensAt = opensAt
-  feedbackTarget.closesAt = closesAt
+  const { questions, surveyId } = req.body
 
-  if (publicQuestionIds) feedbackTarget.publicQuestionIds = publicQuestionIds
+  Object.assign(feedbackTarget, updates)
 
   if (questions && surveyId) {
     const survey = await Survey.findOne({
@@ -299,25 +296,11 @@ const getTargetsByCourseUnit = async (req, res) => {
 
 const filterFeedbacks = async (feedbacks, feedbackTarget, accessStatus) => {
   await feedbackTarget.populateQuestions()
-  const questionIds = feedbackTarget.questions.map((q) => q.id)
+  if (feedbacks.length <= 5) return []
   const { publicQuestionIds } = feedbackTarget
-  const questionAnswerCount = new Map()
-  questionIds.forEach((id) => {
-    questionAnswerCount.set(id, 0)
-  })
-  feedbacks.forEach((feedback) => {
-    feedback.data.forEach((question) => {
-      if (question.data)
-        questionAnswerCount.set(
-          question.questionId,
-          questionAnswerCount.get(question.questionId) + 1,
-        )
-    })
-  })
   const filteredFeedbacks = feedbacks.map((feedback) => ({
     ...feedback,
     data: feedback.data.filter((question) => {
-      if (questionAnswerCount.get(question.questionId) <= 5) return false
       if (accessStatus === 'STUDENT')
         return publicQuestionIds.includes(question.questionId)
       return true
@@ -401,12 +384,7 @@ const getStudentsWithFeedback = async (req, res) => {
     include: 'feedbackTarget',
   })
 
-  const { feedbackTarget } = userFeedbackTarget
-
-  if (
-    !isAdmin &&
-    (!userFeedbackTarget?.hasTeacherAccess() || !feedbackTarget.isEnded())
-  ) {
+  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
     throw new ApplicationError(
       'User is not authorized to view students with feedback',
       403,

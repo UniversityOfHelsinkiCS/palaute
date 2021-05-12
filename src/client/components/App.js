@@ -45,7 +45,7 @@ export default () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Suspense fallback={null}>
-        <SnackbarProvider maxSnack={3}>
+        <SnackbarProvider maxSnack={3} preventDuplicate>
           <NavBar />
           <Router />
           <DevTools />

@@ -28,7 +28,6 @@ export default {
     actions: 'Actions',
     close: 'Close',
     required: 'Required',
-    copy: 'Copy',
   },
   userFeedbacks: {
     mainHeading: 'My feedbacks',

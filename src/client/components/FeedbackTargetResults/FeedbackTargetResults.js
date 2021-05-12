@@ -52,12 +52,14 @@ const FeedbackTargetResults = () => {
     return <Redirect to="/" />
   }
 
-  const { questions } = feedbackTarget
+  const { questions, publicQuestionIds, accessStatus } = feedbackTarget
 
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
   )
+
+  const isTeacher = accessStatus === 'TEACHER'
 
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
@@ -73,17 +75,31 @@ const FeedbackTargetResults = () => {
         {courseUnitName}
       </Typography>
 
-      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
-
       <Box mb={2}>
         <FeedbackResponse feedbackTarget={feedbackTarget} />
       </Box>
 
-      {feedbacks.length > 5 && (
-        <FeedbackSummary questions={questions} feedbacks={feedbacks} />
+      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
+
+      {feedbacks.length !== 0 && (
+        <FeedbackSummary
+          publicQuestionIds={publicQuestionIds ?? []}
+          questions={questions}
+          feedbacks={feedbacks}
+          isTeacher={isTeacher}
+        />
       )}
 
-      <QuestionResults questions={questions} feedbacks={feedbacks} />
+      {feedbacks.length !== 0 && (
+        <QuestionResults
+          publicQuestionIds={publicQuestionIds ?? []}
+          showPublicInfo={isTeacher}
+          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/public-questions`}
+          questions={questions}
+          feedbacks={feedbacks}
+          isTeacher={isTeacher}
+        />
+      )}
     </>
   )
 }
