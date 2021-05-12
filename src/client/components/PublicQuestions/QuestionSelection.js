@@ -81,7 +81,9 @@ const QuestionSelection = ({ feedbackTarget }) => {
         id: feedbackTarget.id,
         publicQuestionIds: updatedQuestionIds,
       })
+
       setPublicQuestionIds(updatedQuestionIds)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
