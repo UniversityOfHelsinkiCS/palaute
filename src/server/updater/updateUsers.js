@@ -15,11 +15,10 @@ const updateUsers = async () => {
   logger.info('Starting to update users')
   const limit = 3000
   let offset = 0
-  let sum = 0
   let count = 0
+  const start = new Date()
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const start = new Date()
     const users = await getUserList(limit, offset)
     if (users.length === 0) break
 
@@ -38,17 +37,14 @@ const updateUsers = async () => {
         studentNumber,
       })
     }, Promise.resolve())
-    const timePerUser = (new Date() - start) / users.length
-    count++
-    sum += timePerUser
-    logger.info(
-      `Updated ${
-        users.length
-      } users, offset ${offset} time per user ${timePerUser.toFixed(4)}ms`,
-    )
+    count += users.length
     offset += limit
-    logger.info(`average ${(sum / count).toFixed(4)}ms`)
   }
+  logger.info(
+    `Updated ${count} users at ${((new Date() - start) / count).toFixed(
+      4,
+    )}ms/user, total time ${(new Date() - start) / 1000}s`,
+  )
 }
 
 module.exports = updateUsers
