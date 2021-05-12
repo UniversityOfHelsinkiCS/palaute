@@ -1,29 +1,11 @@
-/* eslint-disable no-loop-func */
-/* eslint-disable no-await-in-loop */
-const logger = require('../util/logger')
 const { User } = require('../models')
-const importerClient = require('../util/importerClient')
+const logger = require('../util/logger')
+const mangleData = require('./updateLooper')
 
-const getUserList = async (limit, offset) => {
-  const { data } = await importerClient.get('/palaute/updater/persons', {
-    params: { limit, offset },
-  })
-  return data
-}
-
-const updateUsers = async () => {
-  logger.info('Starting to update users')
-  const limit = 3000
-  let offset = 0
-  let count = 0
-  const start = new Date()
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const users = await getUserList(limit, offset)
-    if (users.length === 0) break
-
-    await users.reduce(async (promise, user) => {
-      await promise
+const userHandler = async (users) => {
+  await users.reduce(async (promise, user) => {
+    await promise
+    try {
       if (!user.id || !user.studentNumber || !user.eduPersonPrincipalName)
         return
       const firstName = user.firstNames.split(' ')[0]
@@ -36,15 +18,14 @@ const updateUsers = async () => {
         lastName,
         studentNumber,
       })
-    }, Promise.resolve())
-    count += users.length
-    offset += limit
-  }
-  logger.info(
-    `Updated ${count} users at ${((new Date() - start) / count).toFixed(
-      4,
-    )}ms/user, total time ${(new Date() - start) / 1000}s`,
-  )
+    } catch (err) {
+      logger.info('ERR', err, 'User', user)
+    }
+  }, Promise.resolve())
+}
+
+const updateUsers = async () => {
+  await mangleData('persons', 3000, userHandler)
 }
 
 module.exports = updateUsers

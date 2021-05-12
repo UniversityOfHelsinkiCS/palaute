@@ -1,25 +1,24 @@
-const logger = require('../util/logger')
 const { Organisation } = require('../models')
-const importerClient = require('../util/importerClient')
+const logger = require('../util/logger')
+const mangleData = require('./updateLooper')
 
-const updateOrganisations = async () => {
-  logger.info('Starting to update organisations')
-  const { data } = await importerClient.get(`/palaute/organisations`)
-  const start = new Date()
+const organisationHandler = async (data) => {
   await data.reduce(async (promise, organisation) => {
     await promise
-    await Organisation.upsert({
-      id: organisation.id,
-      name: organisation.name,
-      code: organisation.code,
-    })
+    try {
+      await Organisation.upsert({
+        id: organisation.id,
+        name: organisation.name,
+        code: organisation.code,
+      })
+    } catch (err) {
+      logger.info('ERR', err, 'Organisation', organisation)
+    }
   }, Promise.resolve())
-  logger.info(
-    `Updated ${data.length} organisations at ${(
-      (new Date() - start) /
-      data.length
-    ).toFixed(4)}ms/org, total time ${(new Date() - start) / 1000}s`,
-  )
+}
+
+const updateOrganisations = async () => {
+  await mangleData('organisations', 3000, organisationHandler)
 }
 
 module.exports = updateOrganisations
