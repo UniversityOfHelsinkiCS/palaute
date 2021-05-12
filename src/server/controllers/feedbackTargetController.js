@@ -1,4 +1,6 @@
 const dateFns = require('date-fns')
+const _ = require('lodash')
+
 const { ApplicationError } = require('../util/customErrors')
 
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
@@ -195,22 +197,17 @@ const update = async (req, res) => {
   if (feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
     throw new ApplicationError('Forbidden', 403)
 
-  const {
-    name,
-    hidden,
-    opensAt,
-    closesAt,
-    questions,
-    surveyId,
-    publicQuestionIds,
-  } = req.body
+  const updates = _.pick(req.body, [
+    'name',
+    'hidden',
+    'opensAt',
+    'closesAt',
+    'publicQuestionIds',
+  ])
 
-  feedbackTarget.name = name
-  feedbackTarget.hidden = hidden
-  feedbackTarget.opensAt = opensAt
-  feedbackTarget.closesAt = closesAt
+  const { questions, surveyId } = req.body
 
-  if (publicQuestionIds) feedbackTarget.publicQuestionIds = publicQuestionIds
+  Object.assign(feedbackTarget, updates)
 
   if (questions && surveyId) {
     const survey = await Survey.findOne({

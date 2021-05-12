@@ -112,6 +112,10 @@ export default {
   questionResults: {
     answerCount: 'Answer count',
     answerOption: 'Answer option',
+    publicInfo:
+      'The results from this questions are visible to students. <2>Select public questions</2>',
+    notPublicInfo:
+      'The results from this questions are not visible to students. <2>Select public questions</2>',
   },
   feedbackSummary: {
     question: 'Question',
@@ -128,7 +132,9 @@ export default {
     copied: 'Link copied to cliboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
+    giveFeedbackResponse: 'Give feedback response',
     noCourseRealisations: `This course doesn't have any relevant course realisations`,
+    selectPublicQuestions: 'Select public questions',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
@@ -154,5 +160,9 @@ export default {
     responseLabel: 'Feedback response',
     responseInfo: 'This field supports <2>Markdown</2> content',
     previewLabel: 'Preview',
+  },
+  publicQuestions: {
+    publicInfo:
+      'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended',
   },
 }

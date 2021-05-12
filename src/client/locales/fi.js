@@ -109,6 +109,10 @@ export default {
   questionResults: {
     answerCount: 'Vastausten määrä',
     answerOption: 'Vastausvaihtoehto',
+    publicInfo:
+      'Tämän kysymyksen tulokset ovat julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
+    notPublicInfo:
+      'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
   },
   feedbackSummary: {
     question: 'Kysymys',
@@ -128,6 +132,7 @@ export default {
     giveFeedbackResponse: 'Anna vastapalaute',
     noCourseRealisations:
       'Tällä kurssilla ei ole yhtään relevanttia kurssirealisaatiota',
+    selectPublicQuestions: 'Valitse julkiset kysymykset',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
@@ -152,5 +157,9 @@ export default {
     responseLabel: 'Vastapalaute',
     responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
     previewLabel: 'Esikatselu',
+  },
+  publicQuestions: {
+    publicInfo:
+      'Julkisiin kysymyksiin liittyvä palaute julkaisteen opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
   },
 }

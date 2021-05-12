@@ -82,6 +82,9 @@ const ActionsButton = ({ feedbackTarget }) => {
         <MenuItem component={Link} to={`/targets/${id}/feedback`}>
           {t('feedbackTargetList:showSurvey')}
         </MenuItem>
+        <MenuItem component={Link} to={`/targets/${id}/public-questions`}>
+          {t('feedbackTargetList:selectPublicQuestions')}
+        </MenuItem>
         {isStarted && (
           <MenuItem component={Link} to={`/targets/${id}/results`}>
             {t('feedbackTargetList:showFeedbacks')}

@@ -27,13 +27,13 @@ const useStyles = makeStyles({
   },
 })
 
-const FeedbackSummary = ({ questions, feedbacks }) => {
+const FeedbackSummary = ({ publicQuestionIds, questions, feedbacks }) => {
   const classes = useStyles()
   const { i18n, t } = useTranslation()
 
   const questionsWithFeedbacks = useMemo(
-    () => getQuestionsWithFeedback(questions, feedbacks),
-    [questions, feedbacks],
+    () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
+    [questions, feedbacks, publicQuestionIds],
   )
 
   return (
