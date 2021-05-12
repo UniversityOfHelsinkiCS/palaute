@@ -114,6 +114,7 @@ const FeedbackResponse = () => {
                 <FormikTextField
                   label={t('feedbackResponse:responseLabel')}
                   name="feedbackResponse"
+                  rows={10}
                   fullWidth
                   multiline
                 />
