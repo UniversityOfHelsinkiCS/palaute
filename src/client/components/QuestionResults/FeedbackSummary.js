@@ -11,7 +11,9 @@ import {
   makeStyles,
   TableBody,
 } from '@material-ui/core'
+
 import { getLanguageValue } from '../../util/languageUtils'
+
 import {
   getQuestionsWithFeedback,
   countAverage,
@@ -27,13 +29,23 @@ const useStyles = makeStyles({
   },
 })
 
-const FeedbackSummary = ({ publicQuestionIds, questions, feedbacks }) => {
+const FeedbackSummary = ({
+  publicQuestionIds,
+  questions,
+  feedbacks,
+  isTeacher,
+}) => {
   const classes = useStyles()
   const { i18n, t } = useTranslation()
 
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
     [questions, feedbacks, publicQuestionIds],
+  )
+
+  const summaryQuestions = questionsWithFeedbacks.filter(
+    (q) =>
+      q.type === 'LIKERT' && (isTeacher || publicQuestionIds.includes(q.id)),
   )
 
   return (
@@ -49,22 +61,19 @@ const FeedbackSummary = ({ publicQuestionIds, questions, feedbacks }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {questionsWithFeedbacks.map(
-            (question) =>
-              question.type === 'LIKERT' && (
-                <TableRow key={question.id}>
-                  <TableCell>
-                    {getLanguageValue(question.data.label, i18n.language)}
-                  </TableCell>
-                  <TableCell>{countAverage(question.feedbacks)}</TableCell>
-                  <TableCell>
-                    {countStandardDeviation(question.feedbacks)}
-                  </TableCell>
-                  <TableCell>{countMedian(question.feedbacks)}</TableCell>
-                  <TableCell>{question.feedbacks.length}</TableCell>
-                </TableRow>
-              ),
-          )}
+          {summaryQuestions.map((question) => (
+            <TableRow key={question.id}>
+              <TableCell>
+                {getLanguageValue(question.data.label, i18n.language)}
+              </TableCell>
+              <TableCell>{countAverage(question.feedbacks)}</TableCell>
+              <TableCell>
+                {countStandardDeviation(question.feedbacks)}
+              </TableCell>
+              <TableCell>{countMedian(question.feedbacks)}</TableCell>
+              <TableCell>{question.feedbacks.length}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

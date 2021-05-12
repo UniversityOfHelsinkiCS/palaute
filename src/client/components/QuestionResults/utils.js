@@ -151,6 +151,11 @@ const feedbacksNoZero = (feedbacks) =>
 
 export const countAverage = (feedbacks) => {
   const filteredFeedbacks = feedbacksNoZero(feedbacks)
+
+  if (filteredFeedbacks.length === 0) {
+    return 0
+  }
+
   const sum = filteredFeedbacks.reduce((a, b) => a + parseInt(b.data, 10), 0)
   return (sum / filteredFeedbacks.length).toFixed(2)
 }

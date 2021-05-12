@@ -86,6 +86,7 @@ const FeedbackTargetResults = () => {
           publicQuestionIds={publicQuestionIds ?? []}
           questions={questions}
           feedbacks={feedbacks}
+          isTeacher={isTeacher}
         />
       )}
 
