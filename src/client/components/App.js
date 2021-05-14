@@ -26,7 +26,11 @@ export default () => {
   useEffect(() => {
     if (!authorizedUser) return
 
-    Sentry.setUser({ username: authorizedUser.id })
+    Sentry.setUser({
+      id: authorizedUser.id,
+      email: authorizedUser.email,
+      username: authorizedUser.username,
+    })
     if (!authorizedUser.language) return
 
     i18n.changeLanguage(authorizedUser.language)
