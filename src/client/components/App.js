@@ -12,8 +12,6 @@ import Router from './Router'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
-import { inProduction } from '../../config'
-import { setHeaders } from '../util/mockHeaders'
 import CssBaseline from './CssBaseline'
 
 export default () => {
@@ -26,12 +24,7 @@ export default () => {
   const { authorizedUser, isLoading } = useAuthorizedUser()
 
   useEffect(() => {
-    if (!authorizedUser) {
-      if (inProduction || isLoading) return
-      localStorage.clear()
-      setHeaders('varisleo')
-      return
-    }
+    if (!authorizedUser) return
 
     Sentry.setUser({ username: authorizedUser.id })
     if (!authorizedUser.language) return

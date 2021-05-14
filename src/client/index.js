@@ -5,7 +5,8 @@ import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import { basePath } from './util/common'
+import { inProduction, basePath } from './util/common'
+import { getHeaders, setHeaders } from './util/mockHeaders'
 import App from './components/App'
 import ErrorBoundary from './components/ErrorBoundary'
 import initializeSentry from './util/sentry'
@@ -21,6 +22,17 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+const ensureDevUser = () => {
+  if (inProduction) return
+  const headers = getHeaders()
+  if (headers.uid) return
+
+  localStorage.clear()
+  setHeaders('varisleo')
+}
+
+ensureDevUser()
 
 render(
   <BrowserRouter basename={basePath}>
