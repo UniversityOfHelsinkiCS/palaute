@@ -20,10 +20,10 @@ const mangleData = async (url, limit, handler) => {
   while (true) {
     const data = await getData(limit, offset, url)
     if (data.length === 0) break
-
     handler(data)
     count += data.length
     offset += limit
+    logger.info(count, offset)
   }
   logger.info(
     `Updated ${count} items at ${((new Date() - start) / count).toFixed(

@@ -6,11 +6,13 @@ const userHandler = async (users) => {
   await users.reduce(async (promise, user) => {
     await promise
     try {
-      if (!user.id || !user.studentNumber || !user.eduPersonPrincipalName)
-        return
-      const firstName = user.firstNames.split(' ')[0]
+      if (!user.id) return
+      const firstName = user.firstNames ? user.firstNames.split(' ')[0] : null
       const { lastName, id, studentNumber } = user
-      const username = user.eduPersonPrincipalName.split('@')[0]
+      const username = user.eduPersonPrincipalName
+        ? user.eduPersonPrincipalName.split('@')[0]
+        : user.id
+
       await User.upsert({
         id,
         username,
@@ -19,7 +21,7 @@ const userHandler = async (users) => {
         studentNumber,
       })
     } catch (err) {
-      logger.info('ERR', err, 'User', user)
+      logger.info('ERR', err, user)
     }
   }, Promise.resolve())
 }
