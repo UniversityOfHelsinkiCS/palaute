@@ -356,11 +356,9 @@ const getFeedbacks = async (req, res) => {
       as: 'feedback',
     },
   })
-
   const feedbacks = studentFeedbackTargets.map((t) =>
     t.feedback.toPublicObject(),
   )
-
   const publicFeedbacks = isAdmin
     ? feedbacks
     : await filterFeedbacks(
