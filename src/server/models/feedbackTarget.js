@@ -8,6 +8,7 @@ const {
   VIRTUAL,
   ARRAY,
   INTEGER,
+  TEXT,
 } = require('sequelize')
 
 const CourseUnit = require('./courseUnit')
@@ -134,7 +135,7 @@ FeedbackTarget.init(
       defaultValue: [],
     },
     feedbackResponse: {
-      type: STRING,
+      type: TEXT,
     },
   },
   {
