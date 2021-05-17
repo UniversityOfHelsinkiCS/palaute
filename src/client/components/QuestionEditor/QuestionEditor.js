@@ -12,8 +12,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const TypeMenu = ({ anchorEl, open, onClose, onChooseType }) => {
-  const { t } = useTranslation()
+const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   const handleChooseType = (type) => {
     onClose()
@@ -47,7 +48,8 @@ const QuestionEditor = ({ name = 'questions', language = 'fi' }) => {
   const addButtonRef = useRef()
   const [questionsField] = useField(name)
   const { value: questions = [] } = questionsField
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
   const [editingQuestionId, setEditingQuestionId] = useState()
 
   return (
@@ -84,6 +86,7 @@ const QuestionEditor = ({ name = 'questions', language = 'fi' }) => {
               arrayHelpers.push(newQuestion)
               setEditingQuestionId(getQuestionId(newQuestion))
             }}
+            language={language}
           />
           <Button
             color="primary"

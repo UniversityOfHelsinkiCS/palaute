@@ -7,7 +7,8 @@ import OptionEditor from './OptionEditor'
 import FormikTextField from '../FormikTextField'
 
 const ChoiceEditor = ({ name, language }) => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   return (
     <>

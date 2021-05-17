@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import FormikTextField from '../FormikTextField'
 
 const LikertEditor = ({ name, language }) => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   return (
     <>

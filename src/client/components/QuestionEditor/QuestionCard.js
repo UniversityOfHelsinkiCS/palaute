@@ -76,8 +76,10 @@ const EditActions = ({
   moveUpDisabled,
   moveDownDisabled,
   name,
+  language,
 }) => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
@@ -134,7 +136,8 @@ const QuestionCard = ({
   moveUpDisabled = false,
   moveDownDisabled = false,
 }) => {
-  const { t } = useTranslation()
+  const { i18n, t: fixedT } = useTranslation()
+  const t = i18n.getFixedT(language)
   const classes = useStyles()
   const [field] = useField(name)
   const { value: question } = field
@@ -144,8 +147,8 @@ const QuestionCard = ({
 
   const title = getTitleByType(question.type, t)
 
-  const languageInfo = t('questionEditor:languageInfo', {
-    language: t(`languages.${language}`),
+  const languageInfo = fixedT('questionEditor:languageInfo', {
+    language: fixedT(`languages.${language}`),
   })
 
   return (
@@ -189,6 +192,7 @@ const QuestionCard = ({
                 moveUpDisabled={moveUpDisabled}
                 moveDownDisabled={moveDownDisabled}
                 name={name}
+                language={language}
               />
             </div>
           </>

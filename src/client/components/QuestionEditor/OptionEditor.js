@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const OptionItem = ({ name, language, onRemove }) => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
@@ -64,7 +65,8 @@ const OptionItem = ({ name, language, onRemove }) => {
 }
 
 const OptionEditor = ({ name, language }) => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
   const classes = useStyles()
   const [optionsField] = useField(name)
   const { value: options = [] } = optionsField

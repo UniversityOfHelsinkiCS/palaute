@@ -64,10 +64,11 @@ const EditFeedbackTarget = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [language, setLanguage] = useState('fi')
-
-  const { t, i18n } = useTranslation('fi')
   const [showWarning, setShowWarning] = useState(false)
   const [checkbox, setCheckbox] = useState(false)
+
+  const { i18n } = useTranslation()
+  const t = i18n.getFixedT(language)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     cacheTime: 0,
