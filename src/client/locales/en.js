@@ -114,9 +114,9 @@ export default {
     answerCount: 'Answer count',
     answerOption: 'Answer option',
     publicInfo:
-      'The results from this questions are visible to students. <2>Select public questions</2>',
+      'The results from these questions are visible to students. <2>Select public questions</2>',
     notPublicInfo:
-      'The results from this questions are not visible to students. <2>Select public questions</2>',
+      'The results from these questions are not visible to students. <2>Select public questions</2>',
   },
   feedbackSummary: {
     question: 'Question',
