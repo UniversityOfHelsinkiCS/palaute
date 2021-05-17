@@ -12,13 +12,12 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import useLanguage from '../../hooks/useLanguage'
 import QuestionBase from './QuestionBase'
 
 const MultipleChoiceQuestion = ({ question, name }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { t } = useTranslation()
-  const language = useLanguage()
+  const { i18n, t } = useTranslation()
+  const { language } = i18n
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 

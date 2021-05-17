@@ -54,8 +54,8 @@ const FeedbackTargetResults = () => {
 
   const { questions, publicQuestionIds, accessStatus } = feedbackTarget
 
-  const courseUnitName = getLanguageValue(
-    feedbackTarget.courseUnit.name,
+  const courseName = getLanguageValue(
+    feedbackTarget.courseRealisation.name,
     i18n.language,
   )
 
@@ -72,7 +72,7 @@ const FeedbackTargetResults = () => {
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.title}>
-        {courseUnitName}
+        {courseName}
       </Typography>
 
       <Box mb={2}>
