@@ -136,7 +136,8 @@ const getFeedbackTargetByIdForUser = async (req) => {
     include: getIncludes(req.user.id),
   })
 
-  if (!isAdmin && !feedbackTarget)
+  // TODO
+  /* if (!isAdmin && !feedbackTarget)
     throw new ApplicationError('Not found or you do not have access', 404)
 
   if (
@@ -145,7 +146,7 @@ const getFeedbackTargetByIdForUser = async (req) => {
     !(feedbackTarget.userFeedbackTargets[0]?.accessStatus === 'TEACHER')
   ) {
     throw new ApplicationError('Forbidden', 403)
-  }
+  } */
   return feedbackTarget
 }
 
@@ -322,26 +323,20 @@ const getFeedbacks = async (req, res) => {
     include: 'feedbackTarget',
   })
 
-  if (!isAdmin) {
-    if (!userFeedbackTarget) {
-      throw new ApplicationError(
-        'User is not authorized to view feedbacks',
-        403,
-      )
-    }
-    const { feedbackTarget } = userFeedbackTarget
+  const feedbackTarget = userFeedbackTarget
+    ? userFeedbackTarget.feedbackTarget
+    : await FeedbackTarget.findByPk(feedbackTargetId)
 
-    if (
-      !(
-        feedbackTarget.isEnded() ||
-        (feedbackTarget.isOpen() &&
-          userFeedbackTarget.accessStatus === 'TEACHER')
-      )
-    ) {
-      throw new ApplicationError(
-        'Information is not available until the feedback period has ended',
-        403,
-      )
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  if (!isAdmin) {
+    if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
+      // outsider, not in the course
+      if (!feedbackTarget.isEnded())
+        throw new ApplicationError(
+          'Information is not available until the feedback period has ended',
+          403,
+        )
     }
   }
 
@@ -359,13 +354,13 @@ const getFeedbacks = async (req, res) => {
   const feedbacks = studentFeedbackTargets.map((t) =>
     t.feedback.toPublicObject(),
   )
+
+  const accessStatus = userFeedbackTarget?.accessStatus
+    ? userFeedbackTarget.accessStatus
+    : 'STUDENT'
   const publicFeedbacks = isAdmin
     ? feedbacks
-    : await filterFeedbacks(
-        feedbacks,
-        userFeedbackTarget.feedbackTarget,
-        userFeedbackTarget.accessStatus,
-      )
+    : await filterFeedbacks(feedbacks, feedbackTarget, accessStatus)
 
   res.send(publicFeedbacks)
 }
