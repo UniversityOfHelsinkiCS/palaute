@@ -104,8 +104,9 @@ export default {
     warningAboutOpeningCourse:
       'HUOM! Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
     opensAtIsNow:
-      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata',
+      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
+    noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

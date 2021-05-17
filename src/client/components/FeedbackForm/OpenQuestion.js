@@ -1,12 +1,13 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../FormikTextField'
 import { getLanguageValue } from '../../util/languageUtils'
-import useLanguage from '../../hooks/useLanguage'
 import QuestionBase from './QuestionBase'
 
 const OpenQuestion = ({ question, name }) => {
-  const language = useLanguage()
+  const { i18n } = useTranslation()
+  const { language } = i18n
   const label = getLanguageValue(question.data?.label, language) ?? ''
   const { required } = question
   const labelId = `${question.id}-label`
