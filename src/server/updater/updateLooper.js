@@ -18,7 +18,14 @@ const mangleData = async (url, limit, handler) => {
   const start = new Date()
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const data = await getData(limit, offset, url)
+    let data = null
+    try {
+      data = await getData(limit, offset, url)
+    } catch (e) {
+      logger.error(e)
+    }
+    // eslint-disable-next-line no-continue
+    if (data === null) continue
     if (data.length === 0) break
     handler(data)
     count += data.length

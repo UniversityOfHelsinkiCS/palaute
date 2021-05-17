@@ -131,7 +131,6 @@ const getIncludes = (userId, accessStatus) => {
 }
 
 const getFeedbackTargetByIdForUser = async (req) => {
-  const { isAdmin } = req
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: getIncludes(req.user.id),
   })
