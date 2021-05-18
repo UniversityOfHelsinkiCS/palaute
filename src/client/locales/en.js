@@ -132,6 +132,7 @@ export default {
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
     copyLink: 'Copy answer form link',
+    copyResponseLink: 'Copy link to response',
     copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
@@ -147,8 +148,7 @@ export default {
     responseHeading: "Teacher's counter feedback",
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
-    noResponseInfo:
-      "The course's teacher has not given counter feedback yet",
+    noResponseInfo: "The course's teacher has not given counter feedback yet",
   },
   navBar: {
     myFeedbacks: 'My feedbacks',

@@ -49,9 +49,9 @@ const ActionsButton = ({ feedbackTarget }) => {
     setOpen(true)
   }
 
-  const handleCopy = () => {
+  const handleCopy = (target) => {
     navigator.clipboard.writeText(
-      `${window.location.protocol}//${window.location.host}/palaute/targets/${id}/feedback`,
+      `${window.location.protocol}//${window.location.host}/palaute/targets/${id}/${target}`,
     )
 
     enqueueSnackbar(t('feedbackTargetList:copied'), { variant: 'info' })
@@ -102,9 +102,16 @@ const ActionsButton = ({ feedbackTarget }) => {
               : t('feedbackTargetList:giveFeedbackResponse')}
           </MenuItem>
         )}
-        <MenuItem color="primary" onClick={handleCopy}>
-          {t('feedbackTargetList:copyLink')}
-        </MenuItem>
+        {!isEnded && (
+          <MenuItem color="primary" onClick={() => handleCopy('feedback')}>
+            {t('feedbackTargetList:copyLink')}
+          </MenuItem>
+        )}
+        {isEnded && (
+          <MenuItem color="primary" onClick={() => handleCopy('results')}>
+            {t('feedbackTargetList:copyResponseLink')}
+          </MenuItem>
+        )}
       </Menu>
     </>
   )
