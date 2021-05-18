@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
@@ -54,6 +54,7 @@ const FeedbackResponse = () => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, { cacheTime: 0 })
+  const [currentResponse, setCurrentResponse] = useState('')
 
   if (isLoading) {
     return (
@@ -77,10 +78,18 @@ const FeedbackResponse = () => {
   const handleSubmit = async (values) => {
     try {
       await saveValues(values, feedbackTarget.id)
+      setCurrentResponse(values.feedbackResponse)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
+  }
+
+  const checkDisabled = (isSubmitting, values) => {
+    if (isSubmitting) return true
+    if (values.feedbackResponse === feedbackTarget.feedbackResponse) return true
+    if (values.feedbackResponse === currentResponse) return true
+    return false
   }
 
   return (
@@ -110,7 +119,7 @@ const FeedbackResponse = () => {
             onSubmit={handleSubmit}
             validateOnChange={false}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, values }) => (
               <Form>
                 <FormikTextField
                   label={t('feedbackResponse:responseLabel')}
@@ -121,7 +130,7 @@ const FeedbackResponse = () => {
                 />
                 <Box my={2}>
                   <Button
-                    disabled={isSubmitting}
+                    disabled={checkDisabled(isSubmitting, values)}
                     type="submit"
                     variant="contained"
                     color="primary"
