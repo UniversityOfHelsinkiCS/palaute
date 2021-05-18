@@ -22,6 +22,7 @@ import AlertLink from '../AlertLink'
 import Alert from '../Alert'
 import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
+import PublicQuestions from '../PublicQuestions'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -89,7 +90,7 @@ const FeedbackResponse = () => {
           {courseUnitName}
         </Typography>
       </Box>
-
+      <PublicQuestions />
       <Card>
         <CardContent>
           <Box mb={2}>

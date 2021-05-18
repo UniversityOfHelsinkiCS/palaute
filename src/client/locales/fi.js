@@ -164,6 +164,6 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Julkisiin kysymyksiin liittyvä palaute julkaisteen opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
+      'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
   },
 }
