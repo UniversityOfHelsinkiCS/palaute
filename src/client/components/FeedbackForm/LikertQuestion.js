@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import QuestionBase from './QuestionBase'
+import { getDontKnowOption } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   optionLabel: {
@@ -46,7 +47,7 @@ const LikertQuestion = ({ question, name }) => {
   const parseOption = (option) => {
     if (option !== 0) return option.toString()
 
-    return t('feedbackView:dontKnowOption')
+    return getDontKnowOption(question.data.label, language)
   }
 
   return (
