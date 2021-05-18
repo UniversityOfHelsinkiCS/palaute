@@ -33,8 +33,6 @@ const LikertPreview = ({ question, language }) => {
     if (option !== 0) return option.toString()
 
     if (language === 'fi') return 'eos'
-    if (language === 'se') return 'Ingen uppgift'
-
     return 'N/A'
   }
 

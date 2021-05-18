@@ -132,6 +132,7 @@ export default {
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
     copyLink: 'Copy answer form link',
+    copyResponseLink: 'Copy link to response',
     copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
