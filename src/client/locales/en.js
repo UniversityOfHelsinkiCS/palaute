@@ -116,9 +116,9 @@ export default {
     answerCount: 'Answer count',
     answerOption: 'Answer option',
     publicInfo:
-      'The results from this questions are visible to students. <2>Select public questions</2>',
+      'The results from these questions are visible to students. <2>Select public questions</2>',
     notPublicInfo:
-      'The results from this questions are not visible to students. <2>Select public questions</2>',
+      'The results from these questions are not visible to students. <2>Select public questions</2>',
   },
   feedbackSummary: {
     question: 'Question',
@@ -132,11 +132,12 @@ export default {
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
     copyLink: 'Copy answer form link',
-    copied: 'Link copied to cliboard',
+    copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
-    giveFeedbackResponse: 'Give feedback response',
-    editFeedbackResponse: 'Edit feedback response',
+    giveFeedbackResponse: 'Give counter feedback',
+    noCourseRealisations: 'This course is not currently implemented',
+    editFeedbackResponse: 'Edit counter feedback',
     noCourseRealisations: `This course doesn't have any relevant course realisations`,
     selectPublicQuestions: 'Select public questions',
   },
@@ -144,11 +145,11 @@ export default {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
     studentsWithFeedbackHeading: 'Students who have given feedback',
-    responseHeading: "Teacher's feedback response",
-    giveResponse: 'Give feedback response',
-    editResponse: 'Edit feedback response',
+    responseHeading: "Teacher's counter feedback",
+    giveResponse: 'Give counter feedback',
+    editResponse: 'Edit counter feedback',
     noResponseInfo:
-      "The course's teacher has not given a feedback response yet",
+      "The course's teacher has not given counter feedback yet",
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
@@ -161,7 +162,7 @@ export default {
     noFeedbackInfo: 'No one has given feedback yet',
   },
   feedbackResponse: {
-    responseLabel: 'Feedback response',
+    responseLabel: 'Counter feedback',
     responseInfo: 'This field supports <2>Markdown</2> content',
     previewLabel: 'Preview',
   },
