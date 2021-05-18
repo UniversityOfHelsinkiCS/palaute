@@ -95,7 +95,7 @@ const ActionsButton = ({ feedbackTarget }) => {
             {t('feedbackTargetList:showStudentsWithFeedback')}
           </MenuItem>
         )}
-        {isStarted && (
+        {isStarted && isEnded && (
           <MenuItem component={Link} to={`/targets/${id}/feedback-response`}>
             {t('feedbackTargetList:giveFeedbackResponse')}
           </MenuItem>
