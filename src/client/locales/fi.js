@@ -58,6 +58,8 @@ export default {
     dontKnowOption: 'eos',
     editSurvey: 'Muokkaa kyselyä',
     translationLanguage: 'Kyselyn esikatselun kieli',
+    cannotSubmitText:
+      'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',

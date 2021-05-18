@@ -58,6 +58,8 @@ export default {
     dontKnowOption: 'N/A',
     editSurvey: 'Edit survey',
     translationLanguage: 'Survey preview language',
+    cannotSubmitText:
+      'You cannot submit because you are not enrolled in this course',
   },
   teacherView: {
     noActiveCourses: 'No courses active',
