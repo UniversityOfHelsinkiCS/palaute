@@ -160,7 +160,7 @@ const getFeedbackTargetsForStudent = async (req) => {
 }
 
 const getOne = async (req, res) => {
-  const startDateBefore = dateFns.subDays(new Date(), 14)
+  const startDateBefore = new Date()
   const endDateAfter = dateFns.subDays(new Date(), 180)
 
   await getEnrolmentByPersonId(req.user.id, {
@@ -231,7 +231,7 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  const startDateBefore = dateFns.subDays(new Date(), 14)
+  const startDateBefore = new Date()
   const endDateAfter = dateFns.subDays(new Date(), 180)
 
   await getEnrolmentByPersonId(req.user.id, {
