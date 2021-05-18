@@ -9,6 +9,20 @@ const useStyles = makeStyles({
   list: {
     maxHeight: '800px',
     overflowY: 'scroll',
+    '&::-webkit-scrollbar': {
+      width: 10,
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 5px grey',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#107eab',
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: '#0e6e95',
+    },
   },
 })
 

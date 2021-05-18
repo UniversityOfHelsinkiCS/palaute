@@ -13,8 +13,8 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import useLanguage from '../../hooks/useLanguage'
 import QuestionBase from './QuestionBase'
+import { getDontKnowOption } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   optionLabel: {
@@ -32,10 +32,8 @@ const options = [1, 2, 3, 4, 5, 0]
 const LikertQuestion = ({ question, name }) => {
   const classes = useStyles()
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { i18n } = useTranslation()
-  const language = useLanguage()
-
-  const t = i18n.getFixedT(language)
+  const { i18n, t } = useTranslation()
+  const { language } = i18n
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
@@ -49,7 +47,7 @@ const LikertQuestion = ({ question, name }) => {
   const parseOption = (option) => {
     if (option !== 0) return option.toString()
 
-    return t('feedbackView:dontKnowOption')
+    return getDontKnowOption(question.data.label, language)
   }
 
   return (

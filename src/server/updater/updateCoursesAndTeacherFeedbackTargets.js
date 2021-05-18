@@ -14,14 +14,14 @@ const courseRealisationHandler = async (course) => {
   if (!courseUnit) return
   await createCourseUnit(courseUnit)
   if (!validRealisation(course)) return
-
-  await personIds.forEach(async (personId) => {
+  await personIds.reduce(async (promise, personId) => {
+    await promise
     await createFeedbackTargetFromCourseRealisation(
       course,
       personId,
       courseUnit,
     )
-  })
+  }, Promise.resolve())
 }
 
 const coursesHandler = async (courses) => {
@@ -38,7 +38,7 @@ const coursesHandler = async (courses) => {
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   await mangleData(
     'course_unit_realisations_with_course_units',
-    1000,
+    2000,
     coursesHandler,
   )
 }

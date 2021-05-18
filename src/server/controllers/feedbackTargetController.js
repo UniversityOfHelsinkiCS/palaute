@@ -86,14 +86,14 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   return responseReady
 }
 
-const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
+const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
     if (!feedbackTarget) return {}
 
     await feedbackTarget.populateQuestions()
 
     const responseReady = feedbackTarget.toJSON()
-    responseReady.accessStatus = 'TEACHER'
+    responseReady.accessStatus = isAdmin ? 'TEACHER' : 'NONE'
     responseReady.feedback = null
     responseReady.surveys = await feedbackTarget.getSurveys()
     delete responseReady.userFeedbackTargets
@@ -131,7 +131,6 @@ const getIncludes = (userId, accessStatus) => {
 }
 
 const getFeedbackTargetByIdForUser = async (req) => {
-  const { isAdmin } = req
   const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
     include: getIncludes(req.user.id),
   })
@@ -161,8 +160,9 @@ const getFeedbackTargetsForStudent = async (req) => {
 }
 
 const getOne = async (req, res) => {
-  const startDateBefore = dateFns.subDays(new Date(), 14)
-  const endDateAfter = dateFns.subDays(new Date(), 14)
+  // DO NOT TOUCH THIS
+  const startDateBefore = new Date()
+  const endDateAfter = dateFns.subDays(new Date(), 180)
 
   await getEnrolmentByPersonId(req.user.id, {
     startDateBefore,
@@ -183,6 +183,7 @@ const getOne = async (req, res) => {
     )
     const responseReady = await convertFeedbackTargetForAdmin(
       adminFeedbackTarget,
+      req.isAdmin,
     )
     res.send(responseReady)
     return
@@ -231,8 +232,9 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  const startDateBefore = dateFns.subDays(new Date(), 14)
-  const endDateAfter = dateFns.subDays(new Date(), 14)
+  // DO NOT TOUCH THIS
+  const startDateBefore = new Date()
+  const endDateAfter = dateFns.subDays(new Date(), 180)
 
   await getEnrolmentByPersonId(req.user.id, {
     startDateBefore,

@@ -58,6 +58,8 @@ export default {
     dontKnowOption: 'eos',
     editSurvey: 'Muokkaa kyselyä',
     translationLanguage: 'Kyselyn esikatselun kieli',
+    cannotSubmitText:
+      'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',
@@ -104,8 +106,9 @@ export default {
     warningAboutOpeningCourse:
       'HUOM! Kyselyn tietoja ei voi muokata kyselyn aukeamisen jälkeen',
     opensAtIsNow:
-      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata',
+      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
+    noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
@@ -131,6 +134,7 @@ export default {
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: 'palautetta annettu',
     giveFeedbackResponse: 'Anna vastapalaute',
+    editFeedbackResponse: 'Muokkaa vastapalautetta',
     noCourseRealisations:
       'Tällä kurssilla ei ole yhtään relevanttia kurssirealisaatiota',
     selectPublicQuestions: 'Valitse julkiset kysymykset',
@@ -161,6 +165,6 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Julkisiin kysymyksiin liittyvä palaute julkaisteen opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
+      'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
   },
 }

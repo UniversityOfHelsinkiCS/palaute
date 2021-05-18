@@ -33,7 +33,8 @@ const start = async () => {
     ? '30 1 * * *' // Every night at 01:30 in production
     : '*/10 * * * *' // Every 10 minutes in development
 
-  schedule(cronTime, run)
+  // Too long, dont run
+  // schedule(cronTime, run)
 
   return logger.info('Running updater according to cron', { cron: cronTime })
 }

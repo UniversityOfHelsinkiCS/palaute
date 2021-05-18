@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import apiClient from '../../util/apiClient'
 
 const TEMP_ID = Symbol('tempId')
 
@@ -54,3 +55,19 @@ export const createOption = () => ({
   id: uuidv4(),
   label: createTranslationObject(),
 })
+
+export const saveQuestion = async (values, feedbackTarget) => {
+  const { questions } = values
+
+  const { surveys, id } = feedbackTarget
+  const { id: surveyId } = surveys.teacherSurvey
+
+  const payload = {
+    surveyId,
+    questions,
+  }
+
+  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
+
+  return data
+}

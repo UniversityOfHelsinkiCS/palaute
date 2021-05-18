@@ -58,6 +58,8 @@ export default {
     dontKnowOption: 'N/A',
     editSurvey: 'Edit survey',
     translationLanguage: 'Survey preview language',
+    cannotSubmitText:
+      'You cannot submit because you are not enrolled in this course',
   },
   teacherView: {
     noActiveCourses: 'No courses active',
@@ -105,10 +107,10 @@ export default {
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'WARNING! The form data cannot be edited after the feedback form opens',
+      'WARNING! The survey cannot be edited after the feedback form opens',
     opensAtIsNow:
-      'The survey is set to open immediately! When the survey is open it cannot be edited anymore',
-    checkbox: 'I understand',
+      'The survey is set to open immediately! When the survey is open it cannot be edited anymore. Are you sure you want to save the survey?',
+    noUnsavedChanges: 'You do not have unsaved changes to submit',
   },
   questionResults: {
     answerCount: 'Answer count',
@@ -135,6 +137,8 @@ export default {
     studentFeedbacks: 'feedbacks given',
     giveFeedbackResponse: 'Give counter feedback',
     noCourseRealisations: 'This course is not currently implemented',
+    editFeedbackResponse: 'Edit counter feedback',
+    noCourseRealisations: `This course doesn't have any relevant course realisations`,
     selectPublicQuestions: 'Select public questions',
   },
   feedbackTargetResults: {

@@ -1,14 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@material-ui/core'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import Markdown from '../Markdown'
 
 const Text = ({ question }) => {
   const { i18n } = useTranslation()
   const content = getLanguageValue(question.data?.content, i18n.language) ?? ''
 
-  return <Typography>{content}</Typography>
+  return <Markdown>{content}</Markdown>
 }
 
 export default Text

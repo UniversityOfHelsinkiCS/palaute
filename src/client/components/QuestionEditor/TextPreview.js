@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { Typography } from '@material-ui/core'
 import { getLanguageValue } from '../../util/languageUtils'
+import Markdown from '../Markdown'
 
 const TextPreview = ({ question, language }) => {
   const content = getLanguageValue(question.data?.content, language)
 
-  return <Typography>{content}</Typography>
+  return <Markdown>{content}</Markdown>
 }
 
 export default TextPreview

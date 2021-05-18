@@ -133,6 +133,7 @@ export default {
     showStudentsWithFeedback: 'Visa studerandena som har givit respons',
     studentFeedbacks: 'responser givna',
     giveFeedbackResponse: 'Ge svar på responsen',
+    editFeedbackResponse: 'Edit feedback response',
     noCourseRealisations: 'Kursen arrangeras inte för tillfället',
     selectPublicQuestions: 'Välj offentligtgjorda frågor',
   },

@@ -1,4 +1,4 @@
-import { isAfter, set } from 'date-fns'
+import { isAfter, set, isBefore } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
@@ -44,7 +44,8 @@ export const getUpperLevelQuestions = (feedbackTarget) => {
   ]
 }
 
-export const checkDate = (opensAt) => isAfter(opensAt, new Date())
+export const requiresSaveConfirmation = (values) =>
+  values.opensAt && isBefore(values.opensAt, new Date())
 
 export const saveValues = async (values, feedbackTarget) => {
   const { questions, hidden, name } = values

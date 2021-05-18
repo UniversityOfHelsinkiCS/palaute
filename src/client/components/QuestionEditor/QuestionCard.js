@@ -136,7 +136,7 @@ const QuestionCard = ({
   moveUpDisabled = false,
   moveDownDisabled = false,
 }) => {
-  const { i18n, t: fixedT } = useTranslation()
+  const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
   const classes = useStyles()
   const [field] = useField(name)
@@ -147,8 +147,8 @@ const QuestionCard = ({
 
   const title = getTitleByType(question.type, t)
 
-  const languageInfo = fixedT('questionEditor:languageInfo', {
-    language: fixedT(`languages.${language}`),
+  const languageInfo = t('questionEditor:languageInfo', {
+    language: t(`languages.${language}`),
   })
 
   return (

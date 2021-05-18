@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useParams, useHistory, Redirect, useLocation } from 'react-router-dom'
+import { useParams, useHistory, Redirect } from 'react-router-dom'
 
 import {
   Typography,
@@ -15,7 +15,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import qs from 'qs'
 
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -23,7 +22,6 @@ import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
-import LanguageContext from '../../contexts/LanguageContext'
 import Toolbar from './Toolbar'
 import AlertLink from '../AlertLink'
 
@@ -48,13 +46,8 @@ const useStyles = makeStyles((theme) => ({
 
 const FeedbackView = () => {
   const { id } = useParams()
-  const location = useLocation()
-
-  const { language: languageParam } = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  })
-
   const { t, i18n } = useTranslation()
+  const { language } = i18n
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
@@ -78,6 +71,7 @@ const FeedbackView = () => {
 
   const { courseUnit, accessStatus } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
+  const isOutsider = accessStatus === 'NONE'
   const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -117,10 +111,8 @@ const FeedbackView = () => {
   }
 
   const handleLanguageChange = (language) => {
-    history.push({ search: `?language=${language}` })
+    i18n.changeLanguage(language)
   }
-
-  const previewLanguage = languageParam ?? i18n.language
 
   return (
     <>
@@ -142,7 +134,7 @@ const FeedbackView = () => {
         validateOnChange={false}
       >
         {({ isSubmitting }) => {
-          const disabled = isSubmitting || !isOpen || isTeacher
+          const disabled = isSubmitting || !isOpen || isTeacher || isOutsider
 
           return (
             <Form>
@@ -159,9 +151,8 @@ const FeedbackView = () => {
                       </AlertLink>
                     </Alert>
                   </Box>
-                  <LanguageContext.Provider value={previewLanguage}>
-                    <FeedbackForm questions={questions} name="answers" />
-                  </LanguageContext.Provider>
+
+                  <FeedbackForm questions={questions} name="answers" />
                 </CardContent>
               </Card>
 
@@ -175,6 +166,7 @@ const FeedbackView = () => {
                   >
                     {t('feedbackView:submitButton')}
                   </Button>
+                  {isOutsider && ` ${t('feedbackView:cannotSubmitText')}`}
                 </Box>
               )}
             </Form>
@@ -185,7 +177,7 @@ const FeedbackView = () => {
         <Box mt={2}>
           <Toolbar
             editLink={`/targets/${feedbackTarget.id}/edit`}
-            language={previewLanguage}
+            language={language}
             onLanguageChange={handleLanguageChange}
           />
         </Box>

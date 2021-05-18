@@ -82,9 +82,6 @@ const ActionsButton = ({ feedbackTarget }) => {
         <MenuItem component={Link} to={`/targets/${id}/feedback`}>
           {t('feedbackTargetList:showSurvey')}
         </MenuItem>
-        <MenuItem component={Link} to={`/targets/${id}/public-questions`}>
-          {t('feedbackTargetList:selectPublicQuestions')}
-        </MenuItem>
         {isStarted && (
           <MenuItem component={Link} to={`/targets/${id}/results`}>
             {t('feedbackTargetList:showFeedbacks')}
@@ -98,9 +95,11 @@ const ActionsButton = ({ feedbackTarget }) => {
             {t('feedbackTargetList:showStudentsWithFeedback')}
           </MenuItem>
         )}
-        {isStarted && (
+        {isStarted && isEnded && (
           <MenuItem component={Link} to={`/targets/${id}/feedback-response`}>
-            {t('feedbackTargetList:giveFeedbackResponse')}
+            {feedbackTarget.feedbackResponse
+              ? t('feedbackTargetList:editFeedbackResponse')
+              : t('feedbackTargetList:giveFeedbackResponse')}
           </MenuItem>
         )}
         <MenuItem color="primary" onClick={handleCopy}>
