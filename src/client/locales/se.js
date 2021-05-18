@@ -8,7 +8,7 @@ export default {
       en: 'Engelska',
     },
     validationErrors: {
-      required: 'Fältet krävs.',
+      required: 'Fältet krävs',
       wrongDate: 'Förfrågans slutdatum är före startdatumet',
     },
     unknownError: 'Något gick fel',
@@ -37,7 +37,7 @@ export default {
     clearConfirmationQuestion: 'Är du säker på att du vill tömma denna respons?',
     yes: 'Ja',
     no: 'Nej',
-    viewFeedbackSummary: 'Visa sammanfattning av reponsen',
+    viewFeedbackSummary: 'Visa sammanfattning av responsen',
     noFeedback: 'Ingenting här. Kom tillbaka senare!',
     feedbackClosed: 'Responsen är stängd',
     waitingForFeedback: 'Väntar på respons',
@@ -48,15 +48,15 @@ export default {
     successAlert: 'Responsen är given',
     feedbackInfo:
       'Denna respons är anonym. Fälten märkta med en asterisk (*) krävs',
-    feedbackInfoLink: 'Läs mera om hur din information används',
+    feedbackInfoLink: 'Läs mera om hur informationen används',
     closedInfo:
-      'Denna repons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
-    privacyInfoTitle: 'Hur används min information?',
+      'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
+    privacyInfoTitle: 'Hur används mina uppgifter?',
     privacyInfoContent:
-      'Användaruppgifterna anvädns till exempel för att visa studeranden den rätta responsförfrågan, för att skicka påminnelsemeddelanden och för att visa läraren vilka studeranden har skickat repons (denna information kan användas till exempel vid bedömning). Läraren kan inte veta vem av studerandena har givit viss repons. Läraren kan se en lista på studeranden som har givit respons efter att reponsen har öppnats, men ser responsen först efter att responsen har stängts. Om en kurs har fått fem eller mindre gånger respons, syns inte responsen alls',
+      'Användaruppgifterna används till exempel för att visa studeranden den rätta förfrågan för respons, för att skicka påminnelsemeddelanden och för att visa läraren vilka studeranden har skickat respons (denna information kan användas till exempel vid bedömning). Läraren kan inte veta vem av studerandena har givit viss repons. Läraren kan se en lista på studeranden som har givit respons efter att reponsen har öppnats, men ser responsen först efter att responsen har stängts. Om antalet responser en kurs har fått är fem eller mindre, syns inte responsen alls',
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
-    translationLanguage: 'Språk på förfrågans förhandsvisning',
+    translationLanguage: 'Språket på förfrågans förhandsvisning',
   },
   teacherView: {
     noActiveCourses: 'Inga aktiva kurser',
@@ -100,11 +100,11 @@ export default {
     opensAt: 'Öppnas',
     hidden: 'Gömd',
     upperLevelQuestionsInfo:
-      'Förfrågan har reda {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
+      'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
     showPreview: 'Visa förfrågans förhandsvisning',
     translationLanguage: 'Språkversion',
     warningAboutOpeningCourse:
-      'VARNING! Formulärets information kan inte ändras efter att föfrågan har startat',
+      'VARNING! Formulärets information kan inte ändras efter att föfrågan har öppnats',
     opensAtIsNow:
       'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
     checkbox: 'Jag förstår',
@@ -133,7 +133,7 @@ export default {
     showStudentsWithFeedback: 'Visa studerandena som har givit respons',
     studentFeedbacks: 'responser givna',
     giveFeedbackResponse: 'Ge svar på responsen',
-    noCourseRealisations: `This course doesn't have any relevant course realisations`,
+    noCourseRealisations: 'Kursen arrangeras inte för tillfället',
     selectPublicQuestions: 'Välj offentligtgjorda frågor',
   },
   feedbackTargetResults: {
@@ -163,6 +163,6 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended',
+      'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2> efter att responstiden har tagit slut',
   },
 }
