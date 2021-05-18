@@ -4,7 +4,7 @@ import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import QuestionCard from './QuestionCard'
-import { createQuestion, getQuestionId } from './utils'
+import { createQuestion, getQuestionId, saveQuestion } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   questionCard: {
@@ -45,7 +45,8 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 const QuestionEditor = ({
   name = 'questions',
   language = 'fi',
-  handleSubmit,
+  values,
+  feedbackTarget,
 }) => {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -56,9 +57,9 @@ const QuestionEditor = ({
   const t = i18n.getFixedT(language)
   const [editingQuestionId, setEditingQuestionId] = useState()
 
-  const handleStopEditing = () => {
+  const handleStopEditing = async () => {
     setEditingQuestionId(null)
-    handleSubmit()
+    await saveQuestion(values, feedbackTarget)
   }
 
   return (
