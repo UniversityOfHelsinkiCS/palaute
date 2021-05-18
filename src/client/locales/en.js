@@ -138,7 +138,6 @@ export default {
     giveFeedbackResponse: 'Give counter feedback',
     noCourseRealisations: 'This course is not currently implemented',
     editFeedbackResponse: 'Edit counter feedback',
-    noCourseRealisations: `This course doesn't have any relevant course realisations`,
     selectPublicQuestions: 'Select public questions',
   },
   feedbackTargetResults: {

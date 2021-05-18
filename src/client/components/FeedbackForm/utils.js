@@ -1,4 +1,4 @@
-const dontKnow = { en: 'N/A', sv: '', fi: 'eos' }
+const dontKnow = { en: 'N/A', sv: 'Ingen uppgift', fi: 'eos' }
 
 export const getDontKnowOption = (values, preferred) => {
   if (!values) {

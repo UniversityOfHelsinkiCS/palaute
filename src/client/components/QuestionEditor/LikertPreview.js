@@ -32,7 +32,10 @@ const LikertPreview = ({ question, language }) => {
   const parseOption = (option) => {
     if (option !== 0) return option.toString()
 
-    return language === 'fi' ? 'eos' : 'N/A'
+    if (language === 'fi') return 'eos'
+    if (language === 'se') return 'Ingen uppgift'
+
+    return 'N/A'
   }
 
   return (
