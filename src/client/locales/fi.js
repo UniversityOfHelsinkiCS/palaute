@@ -134,6 +134,7 @@ export default {
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: 'palautetta annettu',
     giveFeedbackResponse: 'Anna vastapalaute',
+    editFeedbackResponse: 'Muokkaa vastapalautetta',
     noCourseRealisations:
       'Tällä kurssilla ei ole yhtään relevanttia kurssirealisaatiota',
     selectPublicQuestions: 'Valitse julkiset kysymykset',

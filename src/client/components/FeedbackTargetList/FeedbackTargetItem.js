@@ -97,7 +97,9 @@ const ActionsButton = ({ feedbackTarget }) => {
         )}
         {isStarted && isEnded && (
           <MenuItem component={Link} to={`/targets/${id}/feedback-response`}>
-            {t('feedbackTargetList:giveFeedbackResponse')}
+            {feedbackTarget.feedbackResponse
+              ? t('feedbackTargetList:editFeedbackResponse')
+              : t('feedbackTargetList:giveFeedbackResponse')}
           </MenuItem>
         )}
         <MenuItem color="primary" onClick={handleCopy}>

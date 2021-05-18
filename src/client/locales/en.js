@@ -136,6 +136,7 @@ export default {
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
     giveFeedbackResponse: 'Give feedback response',
+    editFeedbackResponse: 'Edit feedback response',
     noCourseRealisations: `This course doesn't have any relevant course realisations`,
     selectPublicQuestions: 'Select public questions',
   },
