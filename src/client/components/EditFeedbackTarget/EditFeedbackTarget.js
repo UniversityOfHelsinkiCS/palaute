@@ -175,7 +175,11 @@ const EditFeedbackTarget = () => {
               </Box>
             )}
 
-            <QuestionEditor language={language} name="questions" />
+            <QuestionEditor
+              language={language}
+              name="questions"
+              handleSubmit={handleSubmit}
+            />
 
             <Divider className={classes.toolbarDivider} />
 
