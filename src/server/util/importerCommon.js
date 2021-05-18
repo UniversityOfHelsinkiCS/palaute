@@ -13,7 +13,7 @@ const { sequelize } = require('./dbConnection')
 const commonFeedbackName = {
   fi: 'Yleinen palaute kurssista',
   en: 'General feedback about the course',
-  sv: '[SWEDISH, TODO]',
+  sv: 'Allmän respons om kursen',
 }
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
