@@ -133,19 +133,19 @@ export default {
     copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: 'feedbacks given',
-    giveFeedbackResponse: 'Give feedback response',
-    noCourseRealisations: `This course doesn't have any relevant course realisations`,
+    giveFeedbackResponse: 'Give counter feedback',
+    noCourseRealisations: 'This course is not currently implemented',
     selectPublicQuestions: 'Select public questions',
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Survey results will not be displayed because it does not have enough feedbacks',
     studentsWithFeedbackHeading: 'Students who have given feedback',
-    responseHeading: "Teacher's feedback response",
-    giveResponse: 'Give feedback response',
-    editResponse: 'Edit feedback response',
+    responseHeading: "Teacher's counter feedback",
+    giveResponse: 'Give counter feedback',
+    editResponse: 'Edit counter feedback',
     noResponseInfo:
-      "The course's teacher has not given a feedback response yet",
+      "The course's teacher has not given counter feedback yet",
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
@@ -158,7 +158,7 @@ export default {
     noFeedbackInfo: 'No one has given feedback yet',
   },
   feedbackResponse: {
-    responseLabel: 'Feedback response',
+    responseLabel: 'Counter feedback',
     responseInfo: 'This field supports <2>Markdown</2> content',
     previewLabel: 'Preview',
   },
