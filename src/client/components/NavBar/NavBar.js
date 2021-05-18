@@ -169,7 +169,7 @@ const NavBar = () => {
         </Button>
       )}
       {i18n.language !== 'sv' && (
-        <Button color="inherit" onClick={() => changeLanguage('sv')}>
+        <Button color="inherit" onClick={() => changeLanguage('se')}>
           Svenska
         </Button>
       )}

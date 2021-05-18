@@ -65,29 +65,29 @@ const createCourseUnit = async ({
       organisationId: primaryId,
     },
   })
-  await sortedOrganisationIds.reduce(async (promise, id) => {
+  await sortedOrganisationIds.reduce(async (promise, organisationId) => {
     await promise
     await CourseUnitsOrganisation.findOrCreate({
       where: {
         type: 'DIRECT',
         courseUnitId: id,
-        organisationId: id,
+        organisationId,
       },
       defaults: {
         type: 'DIRECT',
         courseUnitId: id,
-        organisationId: id,
+        organisationId,
       },
     })
   }, Promise.resolve())
 }
 
-const createCourseRealisation = async ({ id, name, endDate, startDate }) => {
+const createCourseRealisation = async ({ id, name, activityPeriod }) => {
   await CourseRealisation.upsert({
     id,
     name,
-    endDate,
-    startDate,
+    endDate: activityPeriod.endDate,
+    startDate: activityPeriod.startDate,
   })
 }
 
@@ -97,11 +97,12 @@ const createFeedbackTarget = async (
   courseUnitId,
   courseRealisationId,
   name,
-  endDate,
+  endDateString,
 ) => {
   const hidden = feedbackType !== 'courseRealisation'
   const feedbackTargetName =
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
+  const endDate = dateFns.parse(endDateString, 'yyyy-MM-dd', new Date())
   const opensAt = formatDate(dateFns.subYears(endDate, 2))
   const closesAt = formatDate(dateFns.subYears(endDate, 2))
   const [feedbackTarget] = await FeedbackTarget.findOrCreate({

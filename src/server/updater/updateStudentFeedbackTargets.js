@@ -23,7 +23,7 @@ const createEnrolmentTargets = async (enrolment) => {
     },
   })
 
-  /* await enrolment.studySubGroups.reduce(async (promise, subGroup) => {
+  await enrolment.studySubGroups.reduce(async (promise, subGroup) => {
     await promise
     const subGroupFeedbackTarget = await FeedbackTarget.findOne({
       where: {
@@ -31,6 +31,7 @@ const createEnrolmentTargets = async (enrolment) => {
         typeId: subGroup.studySubGroupId,
       },
     })
+    if (!subGroupFeedbackTarget) return
     await UserFeedbackTarget.findOrCreate({
       where: {
         userId,
@@ -42,7 +43,7 @@ const createEnrolmentTargets = async (enrolment) => {
         feedbackTargetId: subGroupFeedbackTarget.id,
       },
     })
-  }, Promise.resolve()) */
+  }, Promise.resolve())
 }
 
 const enrolmentHandler = async (enrolments) => {

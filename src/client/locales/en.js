@@ -147,8 +147,7 @@ export default {
     responseHeading: "Teacher's counter feedback",
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
-    noResponseInfo:
-      "The course's teacher has not given counter feedback yet",
+    noResponseInfo: "The course's teacher has not given counter feedback yet",
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
