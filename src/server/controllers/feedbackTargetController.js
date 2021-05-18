@@ -86,14 +86,14 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   return responseReady
 }
 
-const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
+const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
     if (!feedbackTarget) return {}
 
     await feedbackTarget.populateQuestions()
 
     const responseReady = feedbackTarget.toJSON()
-    responseReady.accessStatus = 'TEACHER'
+    responseReady.accessStatus = isAdmin ? 'TEACHER' : 'NONE'
     responseReady.feedback = null
     responseReady.surveys = await feedbackTarget.getSurveys()
     delete responseReady.userFeedbackTargets
@@ -182,6 +182,7 @@ const getOne = async (req, res) => {
     )
     const responseReady = await convertFeedbackTargetForAdmin(
       adminFeedbackTarget,
+      req.isAdmin,
     )
     res.send(responseReady)
     return

@@ -71,6 +71,7 @@ const FeedbackView = () => {
 
   const { courseUnit, accessStatus } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
+  const isOutsider = accessStatus === 'NONE'
   const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -133,7 +134,7 @@ const FeedbackView = () => {
         validateOnChange={false}
       >
         {({ isSubmitting }) => {
-          const disabled = isSubmitting || !isOpen || isTeacher
+          const disabled = isSubmitting || !isOpen || isTeacher || isOutsider
 
           return (
             <Form>
@@ -165,6 +166,7 @@ const FeedbackView = () => {
                   >
                     {t('feedbackView:submitButton')}
                   </Button>
+                  {isOutsider && ` ${t('feedbackView:cannotSubmitText')}`}
                 </Box>
               )}
             </Form>
