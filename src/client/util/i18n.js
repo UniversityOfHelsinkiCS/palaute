@@ -3,12 +3,14 @@ import { initReactI18next } from 'react-i18next'
 
 import en from '../locales/en'
 import fi from '../locales/fi'
+import sv from '../locales/sv'
 
 const initializeI18n = () =>
   i18n.use(initReactI18next).init({
     resources: {
       en,
       fi,
+      sv,
     },
     lng: 'en',
     fallbackLng: 'en',
