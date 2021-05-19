@@ -10,6 +10,7 @@ const users = require('../controllers/userController')
 const surveys = require('../controllers/surveysController')
 const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
+const courseUnitSummary = require('../controllers/courseUnitSummaryController')
 // const questions = require('../controllers/questionsController')
 
 const router = Router()
@@ -68,6 +69,13 @@ router.get(
 )
 
 router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
+
+router.get('/course-unit-summaries', courseUnitSummary.getCourseUnitSummaries)
+
+router.get(
+  '/course-unit-summaries/:courseUnitId',
+  courseUnitSummary.getCourseRealisationSummaries,
+)
 
 router.use('/admin', adminController)
 
