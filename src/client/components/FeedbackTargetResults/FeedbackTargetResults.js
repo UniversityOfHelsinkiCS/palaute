@@ -78,7 +78,7 @@ const FeedbackTargetResults = () => {
         <Typography variant="h4" component="h1">
           {courseName}
         </Typography>
-        {feedbacks.length === 0 && (
+        {feedbacks.length !== 0 && (
           <ExportCsvLink
             questions={feedbackTarget.questions}
             feedbacks={feedbacks}
