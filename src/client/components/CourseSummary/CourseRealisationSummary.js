@@ -24,11 +24,14 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
   return (
     <>
       <DividerRow />
-      {courseRealisations.map(({ id, startDate, results }, i) => (
+      {courseRealisations.map(({ id, startDate, endDate, results }, i) => (
         <Fragment key={id}>
           <ResultsRow
             key={id}
-            label={lightFormat(new Date(startDate), 'd.M.yyyy')}
+            label={`${lightFormat(
+              new Date(startDate),
+              'd.M.yyyy',
+            )} - ${lightFormat(new Date(endDate), 'd.M.yyyy')}`}
             results={results}
             questions={questions}
             level={1}
