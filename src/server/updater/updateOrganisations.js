@@ -3,7 +3,6 @@ const mangleData = require('./updateLooper')
 
 const organisationHandler = async (organisation) => {
   const { id, name, code } = organisation
-  if (!id) return
   await Organisation.upsert({
     id,
     name,

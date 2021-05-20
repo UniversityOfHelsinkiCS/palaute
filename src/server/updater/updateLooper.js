@@ -1,7 +1,6 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 const logger = require('../util/logger')
-
 const importerClient = require('../util/importerClient')
 
 const getData = async (limit, offset, url) => {
@@ -27,7 +26,6 @@ const mangleData = async (url, limit, handler) => {
     // eslint-disable-next-line no-continue
     if (data === null) continue
     if (data.length === 0) break
-    await handler(data)
     await data.reduce(async (promise, item) => {
       await promise
       try {
@@ -38,6 +36,7 @@ const mangleData = async (url, limit, handler) => {
     }, Promise.resolve())
     count += data.length
     offset += limit
+
     logger.info(count, offset)
   }
   logger.info(

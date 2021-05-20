@@ -7,6 +7,7 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
 } = require('../models')
+const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
 const validRealisationTypes = [
@@ -133,7 +134,6 @@ const courseRealisationHandler = async (course) => {
     !validRealisationTypes.includes(course.courseUnitRealisationTypeUrn)
   )
     return
-
   await createCourseUnit(courseUnit)
   await createCourseRealisation(course)
   const feedbackTargetIds = []
