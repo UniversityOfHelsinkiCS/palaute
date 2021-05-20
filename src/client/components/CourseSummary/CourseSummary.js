@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   Typography,
+  TableContainer,
   makeStyles,
 } from '@material-ui/core'
 
@@ -16,9 +17,11 @@ import { useTranslation } from 'react-i18next'
 
 import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
 import { getLanguageValue } from '../../util/languageUtils'
-import ResultItem from './ResultItem'
+import ResultsRow from './ResultsRow'
 import QuestionHeading from './QuestionHeading'
 import Filters from './Filters'
+import CourseRealisationSummary from './CourseRealisationSummary'
+import DividerRow from './DividerRow'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -27,26 +30,7 @@ const useStyles = makeStyles((theme) => ({
   filters: {
     padding: theme.spacing(2),
   },
-  spacer: {
-    display: 'block',
-    height: theme.spacing(1),
-  },
-  resultCell: {
-    padding: theme.spacing(1),
-  },
-  courseNameCell: {
-    width: '400px',
-    padding: theme.spacing(2),
-  },
 }))
-
-const getQuestionLabel = (questions, questionId, language) => {
-  const question = questions.find((q) => q.id === questionId)
-
-  const label = getLanguageValue(question?.data?.label, language)
-
-  return label
-}
 
 const getSummaryQueryOptions = ({ year }) => {
   const from = startOfYear(setYear(new Date(), year))
@@ -91,44 +75,39 @@ const CourseSummary = () => {
       </Box>
       <Card>
         <CardContent>
-          <table className={classes.table}>
-            <thead>
-              <tr>
-                <th className={classes.filters}>
-                  <Filters year={year} onYearChange={setYear} />
-                </th>
-                {questions.map(({ id, data }) => (
-                  <QuestionHeading key={id}>
-                    {getLanguageValue(data?.label, i18n.language)}
-                  </QuestionHeading>
+          <TableContainer>
+            <table className={classes.table}>
+              <thead>
+                <tr>
+                  <th className={classes.filters}>
+                    <Filters year={year} onYearChange={setYear} />
+                  </th>
+                  <th> </th>
+                  {questions.map(({ id, data }) => (
+                    <QuestionHeading key={id}>
+                      {getLanguageValue(data?.label, i18n.language)}
+                    </QuestionHeading>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {courseUnits.map(({ id, name, results }) => (
+                  <Fragment key={id}>
+                    <ResultsRow
+                      key={id}
+                      label={getLanguageValue(name, i18n.language)}
+                      results={results}
+                      questions={questions}
+                      accordionEnabled
+                    >
+                      <CourseRealisationSummary courseUnitId={id} />
+                    </ResultsRow>
+                    <DividerRow />
+                  </Fragment>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {courseUnits.map(({ id, name, results }) => (
-                <Fragment key={id}>
-                  <tr key={id}>
-                    <td className={classes.courseNameCell}>
-                      {getLanguageValue(name, i18n.language)}
-                    </td>
-                    {results.map(({ questionId, mean }) => (
-                      <ResultItem
-                        key={questionId}
-                        mean={mean}
-                        questionLabel={getQuestionLabel(
-                          questions,
-                          questionId,
-                          i18n.language,
-                        )}
-                        className={classes.resultCell}
-                      />
-                    ))}
-                  </tr>
-                  <tr className={classes.spacer} />
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </TableContainer>
         </CardContent>
       </Card>
     </>
