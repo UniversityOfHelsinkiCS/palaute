@@ -148,6 +148,7 @@ export default {
     giveResponse: 'Anna vastapalaute',
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
+    exportCsv: 'Lataa CSV',
   },
   navBar: {
     myFeedbacks: 'Palautteeni',
@@ -167,5 +168,10 @@ export default {
   publicQuestions: {
     publicInfo:
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
+  },
+  courseSummary: {
+    heading: 'Kurssipalautteiden yhteenveto',
+    noResults: 'Ei palautteita',
+    yearLabel: 'Vuosi',
   },
 }

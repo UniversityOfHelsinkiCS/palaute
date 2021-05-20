@@ -149,6 +149,7 @@ export default {
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given counter feedback yet",
+    exportCsv: 'Export as csv',
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
@@ -168,5 +169,9 @@ export default {
   publicQuestions: {
     publicInfo:
       'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended',
+  },
+  courseSummary: {
+    heading: 'Summary of course feedback',
+    noResults: 'No feedbacks',
   },
 }

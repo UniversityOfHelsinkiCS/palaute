@@ -16,9 +16,12 @@ import QuestionResults from '../QuestionResults'
 import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
+import { ExportCsvLink } from './utils'
 
 const useStyles = makeStyles((theme) => ({
-  title: {
+  topRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
   },
 }))
@@ -71,9 +74,17 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
-      <Typography variant="h4" component="h1" className={classes.title}>
-        {courseName}
-      </Typography>
+      <Box mb={1} className={classes.topRow}>
+        <Typography variant="h4" component="h1">
+          {courseName}
+        </Typography>
+        {feedbacks.length === 0 && (
+          <ExportCsvLink
+            questions={feedbackTarget.questions}
+            feedbacks={feedbacks}
+          />
+        )}
+      </Box>
 
       <Box mb={2}>
         <FeedbackResponse feedbackTarget={feedbackTarget} />
