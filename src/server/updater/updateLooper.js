@@ -27,7 +27,15 @@ const mangleData = async (url, limit, handler) => {
     // eslint-disable-next-line no-continue
     if (data === null) continue
     if (data.length === 0) break
-    handler(data)
+    await handler(data)
+    await data.reduce(async (promise, item) => {
+      await promise
+      try {
+        await handler(item)
+      } catch (error) {
+        logger.error('ERR', { error, item })
+      }
+    }, Promise.resolve())
     count += data.length
     offset += limit
     logger.info(count, offset)

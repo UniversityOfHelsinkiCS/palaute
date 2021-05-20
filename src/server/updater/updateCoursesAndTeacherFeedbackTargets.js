@@ -7,7 +7,6 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
 } = require('../models')
-const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
 const validRealisationTypes = [
@@ -103,8 +102,8 @@ const createFeedbackTarget = async (
   const feedbackTargetName =
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
   const endDate = dateFns.parse(endDateString, 'yyyy-MM-dd', new Date())
-  const opensAt = formatDate(dateFns.subYears(endDate, 2))
-  const closesAt = formatDate(dateFns.subYears(endDate, 2))
+  const opensAt = formatDate(new Date(2019, 0, 1))
+  const closesAt = formatDate(new Date(2019, 0, 1))
   const [feedbackTarget] = await FeedbackTarget.findOrCreate({
     where: {
       feedbackType,
@@ -185,7 +184,7 @@ const courseRealisationHandler = async (course) => {
   }, Promise.resolve())
 }
 
-const coursesHandler = async (courses) => {
+/* const coursesHandler = async (courses) => {
   await courses.reduce(async (promise, course) => {
     await promise
     try {
@@ -194,13 +193,13 @@ const coursesHandler = async (courses) => {
       logger.info('ERR', err, course)
     }
   }, Promise.resolve())
-}
+} */
 
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   await mangleData(
     'course_unit_realisations_with_course_units',
     2000,
-    coursesHandler,
+    courseRealisationHandler,
   )
 }
 
