@@ -98,10 +98,10 @@ export const saveValues = async (values, feedbackTarget) => {
     data,
   }))
 
-  const { id: feedbackTargetId, feedbackId } = feedbackTarget
+  const { id: feedbackTargetId, feedback } = feedbackTarget
 
-  if (feedbackId) {
-    const { data } = await apiClient.put(`/feedbacks/${feedbackId}`, {
+  if (feedback) {
+    const { data } = await apiClient.put(`/feedbacks/${feedback.id}`, {
       data: feedbackData,
     })
 
