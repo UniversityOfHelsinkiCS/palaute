@@ -149,6 +149,7 @@ export default {
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given counter feedback yet",
+    exportCsv: 'Export as csv',
   },
   navBar: {
     myFeedbacks: 'My feedbacks',

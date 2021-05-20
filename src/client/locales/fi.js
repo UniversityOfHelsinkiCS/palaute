@@ -148,6 +148,7 @@ export default {
     giveResponse: 'Anna vastapalaute',
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
+    exportCsv: 'Lataa CSV',
   },
   navBar: {
     myFeedbacks: 'Palautteeni',

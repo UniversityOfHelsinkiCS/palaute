@@ -144,6 +144,7 @@ export default {
     giveResponse: 'Ge svar på responsen',
     editResponse: 'Redigera svaret på responsen',
     noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
+    exportCsv: 'Exportera som csv',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
