@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import {
   Box,
@@ -9,6 +9,8 @@ import {
   makeStyles,
 } from '@material-ui/core'
 
+import { setYear, startOfYear, endOfYear } from 'date-fns'
+
 import { Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -16,10 +18,14 @@ import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultItem from './ResultItem'
 import QuestionHeading from './QuestionHeading'
+import Filters from './Filters'
 
 const useStyles = makeStyles((theme) => ({
   table: {
     borderSpacing: '2px',
+  },
+  filters: {
+    padding: theme.spacing(2),
   },
   spacer: {
     display: 'block',
@@ -29,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   courseNameCell: {
-    maxWidth: '400px',
+    width: '400px',
     padding: theme.spacing(2),
   },
 }))
@@ -42,10 +48,25 @@ const getQuestionLabel = (questions, questionId, language) => {
   return label
 }
 
+const getSummaryQueryOptions = ({ year }) => {
+  const from = startOfYear(setYear(new Date(), year))
+  const to = endOfYear(setYear(new Date(), year))
+
+  return {
+    from,
+    to,
+    keepPreviousData: true,
+  }
+}
+
 const CourseSummary = () => {
+  const [year, setYear] = useState(new Date().getFullYear())
   const classes = useStyles()
   const { t, i18n } = useTranslation()
-  const { courseUnitSummaries, isLoading } = useCourseUnitSummaries()
+
+  const { courseUnitSummaries, isLoading } = useCourseUnitSummaries(
+    getSummaryQueryOptions({ year }),
+  )
 
   if (isLoading) {
     return (
@@ -73,7 +94,9 @@ const CourseSummary = () => {
           <table className={classes.table}>
             <thead>
               <tr>
-                <th> </th>
+                <th className={classes.filters}>
+                  <Filters year={year} onYearChange={setYear} />
+                </th>
                 {questions.map(({ id, data }) => (
                   <QuestionHeading key={id}>
                     {getLanguageValue(data?.label, i18n.language)}

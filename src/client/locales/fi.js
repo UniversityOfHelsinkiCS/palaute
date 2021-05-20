@@ -169,7 +169,8 @@ export default {
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
   },
   courseSummary: {
-    heading: 'Kurssien palauteyhteenveto',
+    heading: 'Kurssipalautteiden yhteenveto',
     noResults: 'Ei palautteita',
+    yearLabel: 'Vuosi',
   },
 }

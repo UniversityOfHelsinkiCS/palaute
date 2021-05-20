@@ -170,7 +170,7 @@ export default {
       'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended',
   },
   courseSummary: {
-    heading: 'Course feedback summary',
+    heading: 'Summary of course feedback',
     noResults: 'No feedbacks',
   },
 }
