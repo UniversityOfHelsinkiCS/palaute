@@ -17,8 +17,7 @@ export default {
     name: 'Namn',
     edit: 'Redigera',
     show: 'Visa',
-    feedbackOpenPeriod:
-      'Respons kan ges mellan {{opensAt}} och {{closesAt}}',
+    feedbackOpenPeriod: 'Respons kan ges mellan {{opensAt}} och {{closesAt}}',
     firstName: 'Förnamn',
     lastName: 'Efternamn',
     username: 'Användarnamn',
@@ -34,7 +33,8 @@ export default {
     giveFeedbackButton: 'Ge respons',
     modifyFeedbackButton: 'Redigera responsen',
     clearFeedbackButton: 'Töm responsen',
-    clearConfirmationQuestion: 'Är du säker på att du vill tömma denna respons?',
+    clearConfirmationQuestion:
+      'Är du säker på att du vill tömma denna respons?',
     yes: 'Ja',
     no: 'Nej',
     viewFeedbackSummary: 'Visa sammanfattning av responsen',
@@ -85,8 +85,7 @@ export default {
     removeOption: 'Radera alternativ',
     label: 'Fråga',
     content: 'Innehåll',
-    removeQuestionConfirmation:
-      'Är du säker, att du vill radera frågan?',
+    removeQuestionConfirmation: 'Är du säker, att du vill radera frågan?',
     removeOptionConfirmation: 'Är du säker, att du vill radera alternativet?',
     description: 'Beskrivning',
     done: 'Färdigt',
@@ -144,8 +143,7 @@ export default {
     responseHeading: 'Lärarens svar på responsen',
     giveResponse: 'Ge svar på responsen',
     editResponse: 'Redigera svaret på responsen',
-    noResponseInfo:
-      "Kursens lärare har inte ännu svarat på responsen",
+    noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
   },
   navBar: {
     myFeedbacks: 'Mina responser',

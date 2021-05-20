@@ -168,4 +168,8 @@ export default {
     publicInfo:
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
   },
+  courseSummary: {
+    heading: 'Kurssien palauteyhteenveto',
+    noResults: 'Ei palautteita',
+  },
 }

@@ -21,6 +21,34 @@ const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   return dateFns.isValid(new Date(maybeDate)) ? new Date(maybeDate) : fallback
 }
 
+const getAccessibleCourseUnitIds = async (user) => {
+  // TODO: get actual accessible ids
+  const userId = 'hy-hlo-1441871'
+
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      userId,
+      accessStatus: 'TEACHER',
+    },
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        include: [
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+          },
+        ],
+      },
+    ],
+  })
+
+  return userFeedbackTargets
+    .map((target) => target.feedbackTarget?.courseUnit?.id)
+    .filter(Boolean)
+}
+
 const getSummaryQuestions = async () => {
   const universitySurvey = await Survey.findOne({
     where: { type: 'university' },
@@ -59,11 +87,14 @@ const getResults = (feedbackTargets, questions) => {
 
     const feedbackValues = questionFeedbackData
       .map(({ data }) => parseInt(data, 10))
-      .filter((value) => !Number.isNaN(value))
+      .filter((value) => !Number.isNaN(value) && value !== 0)
+
+    const mean =
+      feedbackValues.length > 0 ? _.round(_.mean(feedbackValues), 2) : null
 
     return {
       questionId,
-      mean: feedbackValues.length > 0 ? _.mean(feedbackValues) : null,
+      mean,
     }
   })
 
@@ -144,10 +175,16 @@ const getSummaryOptions = (query) => {
 }
 
 const getCourseUnitSummaries = async (req, res) => {
-  const { isAdmin } = req
+  const { isAdmin, user } = req
 
   // TODO: access control stuff
   if (!isAdmin) {
+    throw new ApplicationError('Forbidden', 403)
+  }
+
+  const accessibleCourseUnitIds = await getAccessibleCourseUnitIds(user)
+
+  if (_.isEmpty(accessibleCourseUnitIds)) {
     throw new ApplicationError('Forbidden', 403)
   }
 
@@ -162,6 +199,31 @@ const getCourseUnitSummaries = async (req, res) => {
       {
         model: CourseUnit,
         as: 'courseUnit',
+        required: true,
+        where: {
+          id: {
+            [Op.in]: accessibleCourseUnitIds,
+          },
+        },
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          [Op.and]: [
+            {
+              startDate: {
+                [Op.gte]: from,
+              },
+            },
+            {
+              startDate: {
+                [Op.lte]: to,
+              },
+            },
+          ],
+        },
       },
       {
         model: UserFeedbackTarget,
@@ -175,20 +237,6 @@ const getCourseUnitSummaries = async (req, res) => {
             model: Feedback,
             as: 'feedback',
             required: false,
-            where: {
-              [Op.and]: [
-                {
-                  createdAt: {
-                    [Op.gte]: from,
-                  },
-                },
-                {
-                  createdAt: {
-                    [Op.lte]: to,
-                  },
-                },
-              ],
-            },
           },
         ],
       },
@@ -250,9 +298,15 @@ const getCourseRealisationSummaries = async (req, res) => {
     summaryQuestions,
   )
 
+  const sortedCourseRealisations = _.orderBy(
+    courseRealisations,
+    ['startDate'],
+    ['desc'],
+  )
+
   res.send({
     questions: summaryQuestions,
-    courseRealisations,
+    courseRealisations: sortedCourseRealisations,
   })
 }
 
