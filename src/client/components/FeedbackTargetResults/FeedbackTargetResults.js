@@ -80,7 +80,7 @@ const FeedbackTargetResults = () => {
         </Typography>
         {feedbacks.length !== 0 && (
           <ExportCsvLink
-            questions={feedbackTarget.questions}
+            feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
           />
         )}
