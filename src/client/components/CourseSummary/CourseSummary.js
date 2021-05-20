@@ -7,12 +7,13 @@ import {
   CardContent,
   Typography,
   TableContainer,
+  Link,
   makeStyles,
 } from '@material-ui/core'
 
 import { setYear, startOfYear, endOfYear } from 'date-fns'
-
-import { Redirect } from 'react-router-dom'
+import { orderBy } from 'lodash'
+import { Redirect, Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
@@ -66,6 +67,8 @@ const CourseSummary = () => {
 
   const { questions, courseUnits } = courseUnitSummaries
 
+  const sortedCourseUnits = orderBy(courseUnits, ['courseCode'])
+
   return (
     <>
       <Box mb={2}>
@@ -91,11 +94,18 @@ const CourseSummary = () => {
                 </tr>
               </thead>
               <tbody>
-                {courseUnits.map(({ id, name, results }) => (
+                {sortedCourseUnits.map(({ id, name, courseCode, results }) => (
                   <Fragment key={id}>
                     <ResultsRow
                       key={id}
-                      label={getLanguageValue(name, i18n.language)}
+                      label={
+                        <Link
+                          component={RouterLink}
+                          to={`/courses/${courseCode}/targets`}
+                        >
+                          {getLanguageValue(name, i18n.language)} ({courseCode})
+                        </Link>
+                      }
                       results={results}
                       questions={questions}
                       accordionEnabled

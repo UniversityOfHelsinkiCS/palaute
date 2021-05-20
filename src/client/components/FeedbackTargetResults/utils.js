@@ -50,18 +50,25 @@ const getData = (questions, feedbacks, language) => {
   return data
 }
 
-export const ExportCsvLink = ({ questions, feedbacks }) => {
+export const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const classes = useStyles()
 
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
-  const headers = getHeaders(questions, language)
-  const data = getData(questions, feedbacks, language)
+  const headers = getHeaders(feedbackTarget.questions, language)
+  const data = getData(feedbackTarget.questions, feedbacks, language)
+
+  const filename = `${feedbackTarget.courseUnit.courseCode}_${feedbackTarget.courseUnit.validityPeriod.startDate}.csv`
 
   return (
     <Button variant="contained" color="primary">
-      <CSVLink data={data} headers={headers} className={classes.link}>
+      <CSVLink
+        data={data}
+        headers={headers}
+        className={classes.link}
+        filename={filename}
+      >
         {t('feedbackTargetResults:exportCsv')}
       </CSVLink>
     </Button>
