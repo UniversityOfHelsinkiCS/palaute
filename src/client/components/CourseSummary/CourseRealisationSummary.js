@@ -56,6 +56,7 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
             label={getLabel(courseRealisation)}
             results={courseRealisation.results}
             questions={questions}
+            feedbackCount={courseRealisation.feedbackCount}
             feedbackResponseGiven={Boolean(
               courseRealisation.feedbackTarget?.feedbackResponse,
             )}
