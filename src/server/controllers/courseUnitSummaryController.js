@@ -110,7 +110,7 @@ const getCourseUnitsWithResults = (feedbackTargets, questions) => {
 
   const feedbackTargetsByCourseUnitId = _.groupBy(
     feedbackTargets,
-    ({ courseUnitId }) => courseUnitId ?? '_',
+    ({ courseUnitId }) => courseUnitId,
   )
 
   const courseUnits = Object.entries(feedbackTargetsByCourseUnitId)
@@ -131,33 +131,41 @@ const getCourseUnitsWithResults = (feedbackTargets, questions) => {
 
 const getCourseRealisationsWithResults = (feedbackTargets, questions) => {
   const courseRealisationById = new Map()
+  const feedbackTargetByCourseRealisationId = new Map()
 
   feedbackTargets.forEach((target) => {
-    courseRealisationById.set(
-      target.courseRealisationId,
-      target.courseRealisation,
-    )
+    const { courseRealisationId, courseRealisation } = target
+
+    courseRealisationById.set(courseRealisationId, courseRealisation)
+
+    feedbackTargetByCourseRealisationId.set(courseRealisationId, target)
   })
 
   const feedbackTargetsByCourseRealisationId = _.groupBy(
     feedbackTargets,
-    ({ courseRealisationId }) => courseRealisationId ?? '_',
+    ({ courseRealisationId }) => courseRealisationId,
   )
 
   const courseRealisations = Object.entries(
     feedbackTargetsByCourseRealisationId,
-  )
-    .map(([courseRealisationId, targets]) => {
-      const courseRealisation = courseRealisationById.get(courseRealisationId)
+  ).map(([courseRealisationId, targets]) => {
+    const courseRealisation = courseRealisationById
+      .get(courseRealisationId)
+      .toJSON()
 
-      return courseRealisation
-        ? {
-            ...courseRealisation.toJSON(),
-            results: getResults(targets, questions),
-          }
-        : null
-    })
-    .filter(Boolean)
+    const feedbackTarget = _.pick(
+      feedbackTargetByCourseRealisationId.get(courseRealisationId).toJSON(),
+      ['id', 'name', 'closesAt', 'opensAt'],
+    )
+
+    const results = getResults(targets, questions)
+
+    return {
+      ...courseRealisation,
+      feedbackTarget,
+      results,
+    }
+  })
 
   return courseRealisations
 }
@@ -165,8 +173,8 @@ const getCourseRealisationsWithResults = (feedbackTargets, questions) => {
 const getSummaryOptions = (query) => {
   const { from, to } = query
 
-  const defaultFrom = dateFns.subYears(new Date(), 1)
-  const defaultTo = new Date()
+  const defaultFrom = dateFns.startOfYear(new Date())
+  const defaultTo = dateFns.endOfYear(new Date())
 
   return {
     from: getDateOrDefault(from, defaultFrom),

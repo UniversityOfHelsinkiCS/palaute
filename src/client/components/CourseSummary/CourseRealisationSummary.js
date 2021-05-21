@@ -1,9 +1,28 @@
 import React, { Fragment } from 'react'
 import { lightFormat } from 'date-fns'
+import { CircularProgress, Box, Link } from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
 
 import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
+
+const getLabel = (courseRealisation) => {
+  const { startDate, endDate, feedbackTarget } = courseRealisation
+
+  const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
+  const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
+
+  const label = `${formattedStartDate} - ${formattedEndDate}`
+
+  return feedbackTarget ? (
+    <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`}>
+      {label}
+    </Link>
+  ) : (
+    label
+  )
+}
 
 const CourseRealisationSummary = ({ courseUnitId }) => {
   const {
@@ -12,7 +31,13 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
   } = useCourseRealisationSummaries(courseUnitId)
 
   if (isLoading) {
-    return null
+    return (
+      <tr>
+        <Box component="td" p={2}>
+          <CircularProgress />
+        </Box>
+      </tr>
+    )
   }
 
   if (!courseRealisationSummaries) {
@@ -24,15 +49,12 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
   return (
     <>
       <DividerRow />
-      {courseRealisations.map(({ id, startDate, endDate, results }, i) => (
-        <Fragment key={id}>
+      {courseRealisations.map((courseRealisation, i) => (
+        <Fragment key={courseRealisation.id}>
           <ResultsRow
-            key={id}
-            label={`${lightFormat(
-              new Date(startDate),
-              'd.M.yyyy',
-            )} - ${lightFormat(new Date(endDate), 'd.M.yyyy')}`}
-            results={results}
+            key={courseRealisation.id}
+            label={getLabel(courseRealisation)}
+            results={courseRealisation.results}
             questions={questions}
             level={1}
           />

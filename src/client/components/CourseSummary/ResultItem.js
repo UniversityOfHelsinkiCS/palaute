@@ -35,8 +35,8 @@ const ResultItem = ({
     classNameProp,
     classes.item,
     mean === null && classes.empty,
-    mean && mean < 2 && classes.bad,
-    mean && mean >= 2 && mean < 4 && classes.neutral,
+    mean && mean <= 2 && classes.bad,
+    mean && mean > 2 && mean < 4 && classes.neutral,
     mean && mean >= 4 && classes.good,
   )
 
