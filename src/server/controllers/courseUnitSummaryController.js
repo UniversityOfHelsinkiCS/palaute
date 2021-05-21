@@ -13,6 +13,11 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 
+const MATLU_CODE_PREFIXES = _.flatMap(
+  ['TKT', 'MAT', 'FYS', 'DATA', 'BSC'],
+  (code) => [code, `AY${code}`],
+)
+
 const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   if (!maybeDate) {
     return fallback
@@ -21,32 +26,19 @@ const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   return dateFns.isValid(new Date(maybeDate)) ? new Date(maybeDate) : fallback
 }
 
-const getAccessibleCourseUnitIds = async (user) => {
+const getAccessibleCourseUnitIds = async () => {
   // TODO: get actual accessible ids
-  const userId = 'hy-hlo-1441871'
+  const courseCodeRegexp = `^(${MATLU_CODE_PREFIXES.join('|')})`
 
-  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+  const courseUnits = await CourseUnit.findAll({
     where: {
-      userId,
-      accessStatus: 'TEACHER',
-    },
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-        include: [
-          {
-            model: CourseUnit,
-            as: 'courseUnit',
-          },
-        ],
+      courseCode: {
+        [Op.iRegexp]: courseCodeRegexp,
       },
-    ],
+    },
   })
 
-  return userFeedbackTargets
-    .map((target) => target.feedbackTarget?.courseUnit?.id)
-    .filter(Boolean)
+  return courseUnits.map((c) => c.id)
 }
 
 const getSummaryQuestions = async () => {
@@ -236,7 +228,7 @@ const getCourseUnitSummaries = async (req, res) => {
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
-        required: false,
+        required: true,
         where: {
           accessStatus: 'STUDENT',
         },
@@ -244,7 +236,7 @@ const getCourseUnitSummaries = async (req, res) => {
           {
             model: Feedback,
             as: 'feedback',
-            required: false,
+            required: true,
           },
         ],
       },
@@ -286,7 +278,7 @@ const getCourseRealisationSummaries = async (req, res) => {
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
-        required: false,
+        required: true,
         where: {
           accessStatus: 'STUDENT',
         },
@@ -294,7 +286,7 @@ const getCourseRealisationSummaries = async (req, res) => {
           {
             model: Feedback,
             as: 'feedback',
-            required: false,
+            required: true,
           },
         ],
       },

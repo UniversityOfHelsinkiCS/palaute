@@ -173,5 +173,8 @@ export default {
   courseSummary: {
     heading: 'Summary of course feedback',
     noResults: 'No feedbacks',
+    yearLabel: 'Year',
+    noCourses:
+      "There are no courses with feedback matching the provided filters and your user's access rights",
   },
 }

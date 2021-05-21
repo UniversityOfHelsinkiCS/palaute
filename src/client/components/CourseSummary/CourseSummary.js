@@ -23,6 +23,7 @@ import QuestionHeading from './QuestionHeading'
 import Filters from './Filters'
 import CourseRealisationSummary from './CourseRealisationSummary'
 import DividerRow from './DividerRow'
+import Alert from '../Alert'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   filters: {
     padding: theme.spacing(2),
+    width: '450px',
   },
 }))
 
@@ -44,10 +46,62 @@ const getSummaryQueryOptions = ({ year }) => {
   }
 }
 
-const CourseSummary = () => {
-  const [year, setYear] = useState(new Date().getFullYear())
-  const classes = useStyles()
+const CourseTable = ({ courseUnits, questions, year, onYearChange }) => {
   const { t, i18n } = useTranslation()
+  const classes = useStyles()
+
+  return (
+    <>
+      <TableContainer>
+        <table className={classes.table}>
+          <thead>
+            <tr>
+              <th className={classes.filters}>
+                <Filters year={year} onYearChange={onYearChange} />
+              </th>
+              <th> </th>
+              {questions.map(({ id, data }) => (
+                <QuestionHeading key={id}>
+                  {getLanguageValue(data?.label, i18n.language)}
+                </QuestionHeading>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {courseUnits.map(({ id, name, courseCode, results }) => (
+              <Fragment key={id}>
+                <ResultsRow
+                  key={id}
+                  label={
+                    <Link
+                      component={RouterLink}
+                      to={`/courses/${courseCode}/targets`}
+                    >
+                      {getLanguageValue(name, i18n.language)} ({courseCode})
+                    </Link>
+                  }
+                  results={results}
+                  questions={questions}
+                  accordionEnabled
+                >
+                  <CourseRealisationSummary courseUnitId={id} />
+                </ResultsRow>
+                <DividerRow />
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+      </TableContainer>
+      {courseUnits.length === 0 && (
+        <Alert severity="info">{t('courseSummary:noCourses')}</Alert>
+      )}
+    </>
+  )
+}
+
+const CourseSummary = () => {
+  const { t } = useTranslation()
+  const [year, setYear] = useState(new Date().getFullYear())
 
   const { courseUnitSummaries, isLoading } = useCourseUnitSummaries(
     getSummaryQueryOptions({ year }),
@@ -78,46 +132,12 @@ const CourseSummary = () => {
       </Box>
       <Card>
         <CardContent>
-          <TableContainer>
-            <table className={classes.table}>
-              <thead>
-                <tr>
-                  <th className={classes.filters}>
-                    <Filters year={year} onYearChange={setYear} />
-                  </th>
-                  <th> </th>
-                  {questions.map(({ id, data }) => (
-                    <QuestionHeading key={id}>
-                      {getLanguageValue(data?.label, i18n.language)}
-                    </QuestionHeading>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {sortedCourseUnits.map(({ id, name, courseCode, results }) => (
-                  <Fragment key={id}>
-                    <ResultsRow
-                      key={id}
-                      label={
-                        <Link
-                          component={RouterLink}
-                          to={`/courses/${courseCode}/targets`}
-                        >
-                          {getLanguageValue(name, i18n.language)} ({courseCode})
-                        </Link>
-                      }
-                      results={results}
-                      questions={questions}
-                      accordionEnabled
-                    >
-                      <CourseRealisationSummary courseUnitId={id} />
-                    </ResultsRow>
-                    <DividerRow />
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
-          </TableContainer>
+          <CourseTable
+            courseUnits={sortedCourseUnits}
+            questions={questions}
+            year={year}
+            onYearChange={setYear}
+          />
         </CardContent>
       </Card>
     </>

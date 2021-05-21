@@ -173,5 +173,7 @@ export default {
     heading: 'Kurssipalautteiden yhteenveto',
     noResults: 'Ei palautteita',
     yearLabel: 'Vuosi',
+    noCourses:
+      'Palautetta saaneita kursseja, jotka vastaavat rajaimia ja käyttäjäsi käyttöoikeuksia ei löytynyt',
   },
 }
