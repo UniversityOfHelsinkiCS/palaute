@@ -102,6 +102,7 @@ const createFeedbackTarget = async (
   const hidden = feedbackType !== 'courseRealisation'
   const feedbackTargetName =
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
+  // eslint-disable-next-line no-unused-vars
   const endDate = dateFns.parse(endDateString, 'yyyy-MM-dd', new Date())
   const opensAt = formatDate(new Date(2019, 0, 1))
   const closesAt = formatDate(new Date(2019, 0, 1))
@@ -133,7 +134,7 @@ const courseRealisationHandler = async (course) => {
     !courseUnit ||
     !validRealisationTypes.includes(course.courseUnitRealisationTypeUrn)
   )
-    return
+    return []
   await createCourseUnit(courseUnit)
   await createCourseRealisation(course)
   const feedbackTargetIds = []
@@ -165,41 +166,44 @@ const courseRealisationHandler = async (course) => {
     }, Promise.resolve())
   }, Promise.resolve())
 
-  await feedbackTargetIds.reduce(async (promise, feedbackTargetId) => {
-    await promise
-    await personIds.reduce(async (p, userId) => {
-      await p
-      await UserFeedbackTarget.findOrCreate({
-        where: {
-          userId,
-          feedbackTargetId,
-        },
-        defaults: {
-          userId,
-          feedbackTargetId,
-          accessStatus: 'TEACHER',
-        },
+  const userFeedbackTargets = []
+
+  feedbackTargetIds.forEach((feedbackTargetId) => {
+    personIds.forEach((userId) => {
+      userFeedbackTargets.push({
+        feedbackTargetId,
+        userId,
+        accessStatus: 'TEACHER',
       })
-    }, Promise.resolve())
-  }, Promise.resolve())
+    })
+  })
+
+  return userFeedbackTargets
 }
 
-/* const coursesHandler = async (courses) => {
+const coursesHandler = async (courses) => {
+  let userFeedbackTargets = []
   await courses.reduce(async (promise, course) => {
     await promise
     try {
-      await courseRealisationHandler(course)
+      userFeedbackTargets = userFeedbackTargets.concat(
+        await courseRealisationHandler(course),
+      )
     } catch (err) {
-      logger.info('ERR', err, course)
+      logger.info('ERR', { err, course })
     }
   }, Promise.resolve())
-} */
+
+  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+    ignoreDuplicates: true,
+  })
+}
 
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   await mangleData(
     'course_unit_realisations_with_course_units',
-    2000,
-    courseRealisationHandler,
+    500,
+    coursesHandler,
   )
 }
 
