@@ -90,7 +90,10 @@ const getResults = (feedbackTargets, questions) => {
     }
   })
 
-  return results
+  return {
+    results,
+    feedbackCount: feedbacks.length,
+  }
 }
 
 const getCourseUnitsWithResults = (feedbackTargets, questions) => {
@@ -105,18 +108,18 @@ const getCourseUnitsWithResults = (feedbackTargets, questions) => {
     ({ courseUnitId }) => courseUnitId,
   )
 
-  const courseUnits = Object.entries(feedbackTargetsByCourseUnitId)
-    .map(([courseUnitId, targets]) => {
-      const courseUnit = courseUnitById.get(courseUnitId)
+  const courseUnits = Object.entries(feedbackTargetsByCourseUnitId).map(
+    ([courseUnitId, targets]) => {
+      const courseUnit = courseUnitById.get(courseUnitId).toJSON()
+      const { results, feedbackCount } = getResults(targets, questions)
 
-      return courseUnit
-        ? {
-            ...courseUnit.toJSON(),
-            results: getResults(targets, questions),
-          }
-        : null
-    })
-    .filter(Boolean)
+      return {
+        ...courseUnit,
+        results,
+        feedbackCount,
+      }
+    },
+  )
 
   return courseUnits
 }
@@ -147,15 +150,16 @@ const getCourseRealisationsWithResults = (feedbackTargets, questions) => {
 
     const feedbackTarget = _.pick(
       feedbackTargetByCourseRealisationId.get(courseRealisationId).toJSON(),
-      ['id', 'name', 'closesAt', 'opensAt'],
+      ['id', 'name', 'closesAt', 'opensAt', 'feedbackResponse'],
     )
 
-    const results = getResults(targets, questions)
+    const { results, feedbackCount } = getResults(targets, questions)
 
     return {
       ...courseRealisation,
       feedbackTarget,
       results,
+      feedbackCount,
     }
   })
 

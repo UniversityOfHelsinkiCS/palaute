@@ -175,5 +175,9 @@ export default {
     yearLabel: 'Vuosi',
     noCourses:
       'Palautetta saaneita kursseja, jotka vastaavat rajaimia ja käyttäjäsi käyttöoikeuksia ei löytynyt',
+    feedbackResponse: 'Vastapalaute annettu',
+    feedbackCount: 'Palautteiden määrä',
+    feedbackResponseGiven: 'Vastapalaute on annettu',
+    feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
   },
 }

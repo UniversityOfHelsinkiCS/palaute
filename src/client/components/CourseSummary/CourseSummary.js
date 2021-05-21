@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
-import QuestionHeading from './QuestionHeading'
+import VerticalHeading from './VerticalHeading'
 import Filters from './Filters'
 import CourseRealisationSummary from './CourseRealisationSummary'
 import DividerRow from './DividerRow'
@@ -61,34 +61,43 @@ const CourseTable = ({ courseUnits, questions, year, onYearChange }) => {
               </th>
               <th> </th>
               {questions.map(({ id, data }) => (
-                <QuestionHeading key={id}>
+                <VerticalHeading key={id}>
                   {getLanguageValue(data?.label, i18n.language)}
-                </QuestionHeading>
+                </VerticalHeading>
               ))}
+              <VerticalHeading>
+                {t('courseSummary:feedbackCount')}
+              </VerticalHeading>
+              <VerticalHeading>
+                {t('courseSummary:feedbackResponse')}
+              </VerticalHeading>
             </tr>
           </thead>
           <tbody>
-            {courseUnits.map(({ id, name, courseCode, results }) => (
-              <Fragment key={id}>
-                <ResultsRow
-                  key={id}
-                  label={
-                    <Link
-                      component={RouterLink}
-                      to={`/courses/${courseCode}/targets`}
-                    >
-                      {getLanguageValue(name, i18n.language)} ({courseCode})
-                    </Link>
-                  }
-                  results={results}
-                  questions={questions}
-                  accordionEnabled
-                >
-                  <CourseRealisationSummary courseUnitId={id} />
-                </ResultsRow>
-                <DividerRow />
-              </Fragment>
-            ))}
+            {courseUnits.map(
+              ({ id, name, courseCode, results, feedbackCount }) => (
+                <Fragment key={id}>
+                  <ResultsRow
+                    key={id}
+                    label={
+                      <Link
+                        component={RouterLink}
+                        to={`/courses/${courseCode}/targets`}
+                      >
+                        {getLanguageValue(name, i18n.language)} ({courseCode})
+                      </Link>
+                    }
+                    results={results}
+                    questions={questions}
+                    feedbackCount={feedbackCount}
+                    accordionEnabled
+                  >
+                    <CourseRealisationSummary courseUnitId={id} />
+                  </ResultsRow>
+                  <DividerRow />
+                </Fragment>
+              ),
+            )}
           </tbody>
         </table>
       </TableContainer>

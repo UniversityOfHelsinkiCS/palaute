@@ -1,9 +1,11 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 
-import { Typography, IconButton, makeStyles } from '@material-ui/core'
+import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
+import DoneIcon from '@material-ui/icons/Done'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +15,7 @@ import ResultItem from './ResultItem'
 const useStyles = makeStyles((theme) => ({
   resultCell: {
     padding: theme.spacing(1),
+    textAlign: 'center',
   },
   labelCell: ({ level }) => ({
     width: '450px',
@@ -35,10 +38,12 @@ const ResultsRow = ({
   questions,
   children,
   level = 0,
+  feedbackCount,
+  feedbackResponseGiven,
   accordionEnabled = false,
   ...props
 }) => {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const classes = useStyles({ level })
 
   const [accordionOpen, setAccordionOpen] = useState(false)
@@ -46,6 +51,18 @@ const ResultsRow = ({
   const handleToggleAccordion = () => {
     setAccordionOpen((previousOpen) => !previousOpen)
   }
+
+  const feedbackResponseGivenContent = (
+    <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
+      <DoneIcon />
+    </Tooltip>
+  )
+
+  const feedbackResponseNotGivenContent = (
+    <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
+      <ClearIcon />
+    </Tooltip>
+  )
 
   return (
     <>
@@ -74,6 +91,11 @@ const ResultsRow = ({
             className={classes.resultCell}
           />
         ))}
+        <td className={classes.resultCell}>{feedbackCount}</td>
+        <td className={classes.resultCell}>
+          {feedbackResponseGiven === true && feedbackResponseGivenContent}
+          {feedbackResponseGiven === false && feedbackResponseNotGivenContent}
+        </td>
       </tr>
       {accordionEnabled && accordionOpen && children}
     </>

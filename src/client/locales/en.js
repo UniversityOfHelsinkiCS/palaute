@@ -176,5 +176,9 @@ export default {
     yearLabel: 'Year',
     noCourses:
       "There are no courses with feedback matching the provided filters and your user's access rights",
+    feedbackResponse: 'Feedback response given',
+    feedbackCount: 'Feedback count',
+    feedbackResponseGiven: 'Feedback response has been given',
+    feedbackResponseNotGiven: 'Feedback response has not been given',
   },
 }

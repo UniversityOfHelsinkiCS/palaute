@@ -56,6 +56,9 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
             label={getLabel(courseRealisation)}
             results={courseRealisation.results}
             questions={questions}
+            feedbackResponseGiven={Boolean(
+              courseRealisation.feedbackTarget?.feedbackResponse,
+            )}
             level={1}
           />
           {i < courseRealisations.length - 1 && <DividerRow />}
