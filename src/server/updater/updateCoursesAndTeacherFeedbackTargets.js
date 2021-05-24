@@ -7,7 +7,6 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
 } = require('../models')
-const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
 const validRealisationTypes = [
@@ -36,170 +35,144 @@ const combineStudyGroupName = (firstPart, secondPart) => ({
     firstPart.sv && secondPart.sv ? `${firstPart.sv}: ${secondPart.sv}` : null,
 })
 
-const createCourseUnit = async ({
-  id,
-  name,
-  code,
-  validityPeriod,
-  organisations,
-}) => {
-  const sortedOrganisationIds = organisations
-    .sort((a, b) => a.share - b.share)
-    .map((org) => org.organisationId)
-  await CourseUnit.upsert({
-    id,
-    name,
-    courseCode: code,
-    validityPeriod,
-  })
-  const primaryId = sortedOrganisationIds.shift()
-  await CourseUnitsOrganisation.findOrCreate({
-    where: {
-      type: 'PRIMARY',
-      courseUnitId: id,
-      organisationId: primaryId,
-    },
-    defaults: {
-      type: 'PRIMARY',
-      courseUnitId: id,
-      organisationId: primaryId,
-    },
-  })
-  await sortedOrganisationIds.reduce(async (promise, organisationId) => {
-    await promise
-    await CourseUnitsOrganisation.findOrCreate({
-      where: {
-        type: 'DIRECT',
-        courseUnitId: id,
-        organisationId,
-      },
-      defaults: {
-        type: 'DIRECT',
-        courseUnitId: id,
-        organisationId,
-      },
+const createCourseUnits = async (courseUnits) => {
+  const ids = new Set()
+  const filteredCourseUnits = courseUnits
+    .filter((cu) => {
+      if (ids.has(cu.id)) return false
+
+      ids.add(cu.id)
+      return true
     })
-  }, Promise.resolve())
-}
+    .map(({ id, name, code, validityPeriod }) => ({
+      id,
+      name,
+      courseCode: code,
+      validityPeriod,
+    }))
 
-const createCourseRealisation = async ({ id, name, activityPeriod }) => {
-  await CourseRealisation.upsert({
-    id,
-    name,
-    endDate: activityPeriod.endDate,
-    startDate: activityPeriod.startDate,
+  await CourseUnit.bulkCreate(filteredCourseUnits, {
+    updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
   })
-}
 
-const createFeedbackTarget = async (
-  feedbackType,
-  typeId,
-  courseUnitId,
-  courseRealisationId,
-  name,
-  endDateString,
-) => {
-  const hidden = feedbackType !== 'courseRealisation'
-  const feedbackTargetName =
-    feedbackType === 'courseRealisation' ? commonFeedbackName : name
-  const endDate = dateFns.parse(endDateString, 'yyyy-MM-dd', new Date())
-  const opensAt = formatDate(new Date(2019, 0, 1))
-  const closesAt = formatDate(new Date(2019, 0, 1))
-  const [feedbackTarget] = await FeedbackTarget.findOrCreate({
-    where: {
-      feedbackType,
-      typeId,
-    },
-    defaults: {
-      feedbackType,
-      typeId,
-      courseUnitId,
-      courseRealisationId,
-      name: feedbackTargetName,
-      hidden,
-      opensAt,
-      closesAt,
-    },
-  })
-  return feedbackTarget.id
-}
-
-const courseRealisationHandler = async (course) => {
-  const courseUnit = course.courseUnits[0] // TODO fix
-  const personIds = course.responsibilityInfos
-    .filter((data) => data.personId)
-    .map((data) => data.personId)
-  if (
-    !courseUnit ||
-    !validRealisationTypes.includes(course.courseUnitRealisationTypeUrn)
-  )
-    return
-  await createCourseUnit(courseUnit)
-  await createCourseRealisation(course)
-  const feedbackTargetIds = []
-  feedbackTargetIds.push(
-    await createFeedbackTarget(
-      'courseRealisation',
-      course.id,
-      courseUnit.id,
-      course.id,
-      course.name,
-      course.activityPeriod.endDate,
+  // Leo fix constraint
+  const courseUnitsOrganisations = [].concat(
+    ...courseUnits.map(({ id: courseUnitId, organisations }) =>
+      organisations
+        .sort((a, b) => b.share - a.share)
+        .map(({ organisationId }, index) => ({
+          type: index === 0 ? 'PRIMARY' : 'DIRECT',
+          courseUnitId,
+          organisationId,
+        })),
     ),
   )
 
-  await course.studyGroupSets.reduce(async (promise, set) => {
-    await promise
-    await set.studySubGroups.reduce(async (p, group) => {
-      await p
-      feedbackTargetIds.push(
-        await createFeedbackTarget(
-          'studySubGroup',
-          group.id,
-          courseUnit.id,
-          course.id,
-          combineStudyGroupName(set.name, group.name),
-          course.activityPeriod.endDate,
-        ),
-      )
-    }, Promise.resolve())
-  }, Promise.resolve())
-
-  await feedbackTargetIds.reduce(async (promise, feedbackTargetId) => {
-    await promise
-    await personIds.reduce(async (p, userId) => {
-      await p
-      await UserFeedbackTarget.findOrCreate({
-        where: {
-          userId,
-          feedbackTargetId,
-        },
-        defaults: {
-          userId,
-          feedbackTargetId,
-          accessStatus: 'TEACHER',
-        },
-      })
-    }, Promise.resolve())
-  }, Promise.resolve())
+  await CourseUnitsOrganisation.bulkCreate(courseUnitsOrganisations, {
+    ignoreDuplicates: true,
+  })
 }
 
-/* const coursesHandler = async (courses) => {
-  await courses.reduce(async (promise, course) => {
-    await promise
-    try {
-      await courseRealisationHandler(course)
-    } catch (err) {
-      logger.info('ERR', err, course)
-    }
-  }, Promise.resolve())
-} */
+const createCourseRealisations = async (courseRealisations) => {
+  await CourseRealisation.bulkCreate(
+    courseRealisations.map(({ id, name, activityPeriod }) => ({
+      id,
+      name,
+      endDate: activityPeriod.endDate,
+      startDate: activityPeriod.startDate,
+    })),
+    { updateOnDuplicate: ['name', 'endDate', 'startDate'] },
+  )
+}
+
+const createFeedbackTargets = async (courses) => {
+  const opensAt = formatDate(new Date(2019, 0, 1))
+  const closesAt = formatDate(new Date(2019, 0, 1))
+
+  const courseIdToPersonIds = {}
+
+  const feedbackTargets = [].concat(
+    ...courses.map((course) => {
+      courseIdToPersonIds[course.id] = course.responsibilityInfos
+        .filter(({ personId }) => personId)
+        .map(({ personId }) => personId)
+
+      const courseUnit = course.courseUnits[0] // TODO fix
+      const targets = [
+        {
+          feedbackType: 'courseRealisation',
+          typeId: course.id,
+          courseUnitId: courseUnit.id,
+          courseRealisationId: course.id,
+          name: commonFeedbackName,
+          hidden: false,
+          opensAt,
+          closesAt,
+        },
+      ]
+      course.studyGroupSets.forEach((studyGroupSet) =>
+        studyGroupSet.studySubGroups.forEach((subGroup) => {
+          targets.push({
+            feedbackType: 'studySubGroup',
+            typeId: subGroup.id,
+            courseUnitId: courseUnit.id,
+            courseRealisationId: course.id,
+            name: combineStudyGroupName(studyGroupSet.name, subGroup.name),
+            hidden: true,
+            opensAt,
+            closesAt,
+          })
+        }),
+      )
+      return targets
+    }),
+  )
+
+  const feedbackTargetsWithIds = await FeedbackTarget.bulkCreate(
+    feedbackTargets,
+    {
+      updateOnDuplicate: ['feedbackType', 'typeId'],
+      returning: ['id'],
+    },
+  )
+
+  const userFeedbackTargets = [].concat(
+    ...feedbackTargetsWithIds.map(
+      ({ id: feedbackTargetId, courseRealisationId }) =>
+        courseIdToPersonIds[courseRealisationId].map((userId) => ({
+          feedbackTargetId,
+          userId,
+          accessStatus: 'TEACHER',
+        })),
+    ),
+  )
+
+  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+    ignoreDuplicates: true, // TODO: is this broken?
+  })
+}
+
+const coursesHandler = async (courses) => {
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.courseUnits.length &&
+      validRealisationTypes.includes(course.courseUnitRealisationTypeUrn),
+  )
+
+  await createCourseUnits(
+    filteredCourses.map((course) => course.courseUnits[0]),
+  ) // TODO: fix
+
+  await createCourseRealisations(filteredCourses)
+
+  await createFeedbackTargets(filteredCourses)
+}
 
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   await mangleData(
     'course_unit_realisations_with_course_units',
-    2000,
-    courseRealisationHandler,
+    1000,
+    coursesHandler,
   )
 }
 

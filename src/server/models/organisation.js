@@ -16,6 +16,9 @@ Organisation.init(
     code: {
       type: STRING,
     },
+    parentId: {
+      type: STRING,
+    },
   },
   {
     underscored: true,
