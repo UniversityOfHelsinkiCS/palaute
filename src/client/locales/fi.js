@@ -168,6 +168,10 @@ export default {
   publicQuestions: {
     publicInfo:
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä',
+    selectVisibility: 'Valitse käyttäjät jotka näkevät julkiset kysymykset',
+    none: 'Ei kukaan',
+    enrolled: 'Kurssin opiskelijat',
+    everyone: 'Kaikki käyttäjät',
   },
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',

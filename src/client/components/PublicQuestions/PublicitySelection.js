@@ -44,11 +44,11 @@ const PublicitySelection = ({ visibility, setVisibility }) => {
   return (
     <FormControl>
       <Select value={visibility} onChange={handleChange}>
-        <MenuItem value="NONE">Nobody</MenuItem>
-        <MenuItem value="ENROLLED">Enrolled</MenuItem>
-        <MenuItem value="ALL">Everyone</MenuItem>
+        <MenuItem value="NONE">{t('publicQuestions:none')}</MenuItem>
+        <MenuItem value="ENROLLED">{t('publicQuestions:enrolled')}</MenuItem>
+        <MenuItem value="ALL">{t('publicQuestions:everyone')}</MenuItem>
       </Select>
-      <FormHelperText>Select visibility of questions</FormHelperText>
+      <FormHelperText>{t('publicQuestions:selectVisibility')}</FormHelperText>
     </FormControl>
   )
 }

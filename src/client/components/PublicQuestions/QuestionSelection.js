@@ -98,7 +98,7 @@ const QuestionSelection = ({ feedbackTarget, visibility }) => {
           key={q.id}
           checked={publicQuestionIds.includes(q.id)}
           onChange={makeOnToggle(q.id, publicQuestionIds, setPublicQuestionIds)}
-          disabled={mutation.isLoading}
+          disabled={visibility === 'NONE' || mutation.isLoading}
         />
       ))}
     </List>

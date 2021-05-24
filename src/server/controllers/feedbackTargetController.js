@@ -333,8 +333,16 @@ const getFeedbacks = async (req, res) => {
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
   if (!isAdmin) {
+    if (feedbackTarget.feedbackVisibility === 'NONE') {
+      res.send([])
+    }
+
     if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
       // outsider, not in the course
+      if (feedbackTarget.feedbackVisibility !== 'ALL') {
+        res.send([])
+      }
+
       if (!feedbackTarget.isEnded())
         throw new ApplicationError(
           'Information is not available until the feedback period has ended',
