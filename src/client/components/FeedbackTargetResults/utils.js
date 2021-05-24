@@ -3,6 +3,7 @@ import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
 import { Button, makeStyles } from '@material-ui/core'
 import * as _ from 'lodash'
+import Papa from 'papaparse'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -59,12 +60,14 @@ export const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const headers = getHeaders(feedbackTarget.questions, language)
   const data = getData(feedbackTarget.questions, feedbacks, language)
 
+  const parsedData = Papa.unparse(data)
+
   const filename = `${feedbackTarget.courseUnit.courseCode}_${feedbackTarget.courseUnit.validityPeriod.startDate}.csv`
 
   return (
     <Button variant="contained" color="primary">
       <CSVLink
-        data={data}
+        data={parsedData}
         headers={headers}
         className={classes.link}
         filename={filename}
