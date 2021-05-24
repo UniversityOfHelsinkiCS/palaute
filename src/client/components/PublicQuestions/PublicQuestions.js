@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Card, CardContent, Box, CircularProgress } from '@material-ui/core'
 
@@ -9,10 +9,19 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
+import PublicitySelection from './PublicitySelection'
 
 const PublicQuestions = () => {
+  const [visibility, setVisibility] = useState('NONE')
+
   const { id } = useParams()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, { cacheTime: 0 })
+
+  useEffect(() => {
+    if (!isLoading) {
+      setVisibility(feedbackTarget.feedbackVisibility)
+    }
+  }, [])
 
   if (isLoading) {
     return (
@@ -42,7 +51,14 @@ const PublicQuestions = () => {
               </Trans>
             </Alert>
           </Box>
-          <QuestionSelection feedbackTarget={feedbackTarget} />
+          <PublicitySelection
+            visibility={visibility}
+            setVisibility={setVisibility}
+          />
+          <QuestionSelection
+            feedbackTarget={feedbackTarget}
+            visibility={visibility}
+          />
         </CardContent>
       </Card>
     </>

@@ -137,6 +137,10 @@ FeedbackTarget.init(
     feedbackResponse: {
       type: TEXT,
     },
+    feedbackVisibility: {
+      type: TEXT,
+      defaultValue: 'ENROLLED',
+    },
   },
   {
     underscored: true,

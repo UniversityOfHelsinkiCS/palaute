@@ -205,6 +205,7 @@ const update = async (req, res) => {
     'opensAt',
     'closesAt',
     'publicQuestionIds',
+    'feedbackVisibility',
   ])
 
   const { questions, surveyId } = req.body

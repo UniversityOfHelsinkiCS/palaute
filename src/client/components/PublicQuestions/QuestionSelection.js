@@ -56,7 +56,7 @@ const QuestionItem = ({ id, label, checked, onChange, disabled }) => {
   )
 }
 
-const QuestionSelection = ({ feedbackTarget }) => {
+const QuestionSelection = ({ feedbackTarget, visibility }) => {
   const { t } = useTranslation()
   const mutation = useMutation(updatePublicQuestionIds)
   const { enqueueSnackbar } = useSnackbar()
