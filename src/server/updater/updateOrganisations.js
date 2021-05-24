@@ -1,10 +1,9 @@
 const { Organisation } = require('../models')
-const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
 const organisationsHandler = async (organisations) => {
   await Organisation.bulkCreate(organisations, {
-    updateOnDuplicate: ['name', 'code'],
+    updateOnDuplicate: ['name', 'code', 'parentId'],
   })
 }
 

@@ -39,19 +39,41 @@ const enrolmentsHandler = async (enrolments) => {
   const userFeedbackTargets = []
   await enrolments.reduce(async (promise, enrolment) => {
     await promise
-    try {
-      userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
-    } catch (err) {
-      logger.info('ERR', { err, enrolment })
-    }
+    userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
   }, Promise.resolve())
-  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
-    ignoreDuplicates: true,
-  })
+  try {
+    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+      ignoreDuplicates: true,
+    })
+  } catch (err) {
+    logger.error('ERR', err)
+    logger.info('RUNNING TARGETS ONE BY ONE')
+    userFeedbackTargets.reduce(
+      async (promise, { userId, feedbackTargetId, accessStatus }) => {
+        await promise
+        try {
+          await UserFeedbackTarget.findOrCreate({
+            where: {
+              userId,
+              feedbackTargetId,
+            },
+            defaults: {
+              userId,
+              feedbackTargetId,
+              accessStatus,
+            },
+          })
+        } catch (err) {
+          logger.error('ERR', err)
+        }
+      },
+      Promise.resolve(),
+    )
+  }
 }
 
 const updateStudentFeedbackTargets = async () => {
-  await mangleData('enrolments', 500, enrolmentsHandler)
+  await mangleData('enrolments', 3000, enrolmentsHandler)
 }
 
 module.exports = updateStudentFeedbackTargets

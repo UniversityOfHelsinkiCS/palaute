@@ -27,15 +27,6 @@ const mangleData = async (url, limit, handler) => {
     if (data === null) continue
     if (data.length === 0) break
     await handler(data)
-    /* await data.reduce(async (promise, item) => {
-      await promise
-      try {
-        await handler(item)
-      } catch (error) {
-        logger.error('ERR', error)
-        logger.error('ERR', { error, item })
-      }
-    }, Promise.resolve()) */
     count += data.length
     offset += limit
 

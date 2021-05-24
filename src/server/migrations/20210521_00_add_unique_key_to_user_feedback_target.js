@@ -7,6 +7,6 @@ module.exports = {
     })
   },
   down: async (queryInterface) => {
-    await queryInterface.removeConstraint('user_feedback_target')
+    await queryInterface.removeConstraint('user_feedback_targets')
   },
 }
