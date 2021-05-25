@@ -31,6 +31,7 @@ import {
   saveValues,
   getQuestions,
   formatDate,
+  checkIsFeedbackOpen,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -82,9 +83,15 @@ const FeedbackView = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveValues(values, feedbackTarget)
-      history.push('/')
-      enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
+      if (checkIsFeedbackOpen(closesAt)) {
+        enqueueSnackbar(t('feedbackView:feedbackClosedError'), {
+          variant: 'error',
+        })
+      } else {
+        await saveValues(values, feedbackTarget)
+        history.push('/')
+        enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
+      }
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }

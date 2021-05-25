@@ -60,6 +60,7 @@ export default {
     translationLanguage: 'Kyselyn esikatselun kieli',
     cannotSubmitText:
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
+    feedbackClosedError: 'Palautteenanto on loppunut',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',

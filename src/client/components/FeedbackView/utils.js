@@ -1,4 +1,4 @@
-import { lightFormat } from 'date-fns'
+import { parseISO, lightFormat } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 
@@ -117,3 +117,5 @@ export const saveValues = async (values, feedbackTarget) => {
 }
 
 export const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
+
+export const checkIsFeedbackOpen = (date) => new Date() > parseISO(date)
