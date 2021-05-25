@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     paddingLeft: theme.spacing(2 + level * 2),
   }),
+  doneIcon: {
+    color: 'green',
+  },
+  clearIcon: {
+    color: 'red',
+  },
 }))
 
 const getQuestionLabel = (questions, questionId, language) => {
@@ -54,13 +60,13 @@ const ResultsRow = ({
 
   const feedbackResponseGivenContent = (
     <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
-      <DoneIcon />
+      <DoneIcon className={classes.doneIcon} />
     </Tooltip>
   )
 
   const feedbackResponseNotGivenContent = (
     <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
-      <ClearIcon />
+      <ClearIcon className={classes.clearIcon} />
     </Tooltip>
   )
 

@@ -121,12 +121,15 @@ const getCourseUnitsWithResults = (feedbackTargets, questions) => {
   const courseUnits = Object.entries(feedbackTargetsByCourseUnitId).map(
     ([courseUnitId, targets]) => {
       const courseUnit = courseUnitById.get(courseUnitId).toJSON()
+      const feedbackResponse =
+        feedbackTargetsByCourseUnitId[courseUnitId][0].feedbackResponse
       const { results, feedbackCount } = getResults(targets, questions)
 
       return {
         ...courseUnit,
         results,
         feedbackCount,
+        feedbackResponse,
       }
     },
   )
