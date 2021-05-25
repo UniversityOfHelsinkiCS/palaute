@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, makeStyles } from '@material-ui/core'
 import * as _ from 'lodash'
 import Papa from 'papaparse'
+import { format, parseISO } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -11,6 +12,9 @@ const useStyles = makeStyles(() => ({
   link: {
     textDecoration: 'none',
     color: 'white',
+  },
+  button: {
+    maxHeight: 45,
   },
 }))
 
@@ -67,10 +71,17 @@ export const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const filename = `${feedbackTarget.courseUnit.courseCode}_${feedbackTarget.courseUnit.validityPeriod.startDate}.csv`
 
   return (
-    <Button variant="contained" color="primary">
+    <Button variant="contained" color="primary" className={classes.button}>
       <CSVLink data={parsedData} className={classes.link} filename={filename}>
         {t('feedbackTargetResults:exportCsv')}
       </CSVLink>
     </Button>
   )
+}
+
+export const formatCourseDate = (courseRealisation) => {
+  const startDate = format(parseISO(courseRealisation.startDate), 'dd.MM.yyyy')
+  const endDate = format(parseISO(courseRealisation.endDate), 'dd.MM.yyyy')
+
+  return `${startDate} - ${endDate}`
 }
