@@ -1,5 +1,6 @@
 const dateFns = require('date-fns')
 const _ = require('lodash')
+const { Op } = require('sequelize')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -293,9 +294,44 @@ const getTargetsByCourseUnit = async (req, res) => {
   if (!feedbackTargets)
     throw new ApplicationError('Not found or you do not have access', 404)
 
-  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
+  const formattedFeedbackTargets = await asyncFeedbackTargetsToJSON(
+    feedbackTargets,
+  )
 
-  res.send(responseReady)
+  const feedbackTargetIds = formattedFeedbackTargets.map(({ id }) => id)
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+      accessStatus: 'STUDENT',
+      feedbackId: {
+        [Op.ne]: null,
+      },
+    },
+    group: ['feedbackTargetId'],
+    attributes: [
+      'feedbackTargetId',
+      [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount'],
+    ],
+  })
+
+  const feedbackCountByFeedbackTargetId = _.zipObject(
+    studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
+    studentFeedbackTargets.map((target) =>
+      parseInt(target.get('feedbackCount'), 10),
+    ),
+  )
+
+  const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
+    (target) => ({
+      ...target,
+      feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
+    }),
+  )
+
+  res.send(feedbackTargetsWithFeedbackCounts)
 }
 
 const filterFeedbacks = async (feedbacks, feedbackTarget, accessStatus) => {
