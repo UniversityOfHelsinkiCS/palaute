@@ -58,20 +58,17 @@ export const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const { language } = i18n
 
   const headers = getHeaders(feedbackTarget.questions, language)
-  const data = getData(feedbackTarget.questions, feedbacks, language)
+  const questions = getData(feedbackTarget.questions, feedbacks, language)
 
-  const parsedData = Papa.unparse(data)
+  const data = [headers, ...questions]
+
+  const parsedData = Papa.unparse(data, { delimiter: ';' })
 
   const filename = `${feedbackTarget.courseUnit.courseCode}_${feedbackTarget.courseUnit.validityPeriod.startDate}.csv`
 
   return (
     <Button variant="contained" color="primary">
-      <CSVLink
-        data={parsedData}
-        headers={headers}
-        className={classes.link}
-        filename={filename}
-      >
+      <CSVLink data={parsedData} className={classes.link} filename={filename}>
         {t('feedbackTargetResults:exportCsv')}
       </CSVLink>
     </Button>
