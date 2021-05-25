@@ -60,7 +60,7 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
             feedbackResponseGiven={Boolean(
               courseRealisation.feedbackTarget?.feedbackResponse,
             )}
-            level={1}
+            level={2}
           />
           {i < courseRealisations.length - 1 && <DividerRow />}
         </Fragment>

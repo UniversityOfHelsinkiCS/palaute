@@ -7,13 +7,11 @@ import {
   CardContent,
   Typography,
   TableContainer,
-  Link,
   makeStyles,
 } from '@material-ui/core'
 
 import { setYear, startOfYear, endOfYear } from 'date-fns'
-import { orderBy } from 'lodash'
-import { Redirect, Link as RouterLink } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
@@ -21,7 +19,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import VerticalHeading from './VerticalHeading'
 import Filters from './Filters'
-import CourseRealisationSummary from './CourseRealisationSummary'
+import CourseUnitSummary from './CourseUnitSummary'
 import DividerRow from './DividerRow'
 import Alert from '../Alert'
 
@@ -46,7 +44,7 @@ const getSummaryQueryOptions = ({ year }) => {
   }
 }
 
-const CourseTable = ({ courseUnits, questions, year, onYearChange }) => {
+const CourseTable = ({ programmes, questions, year, onYearChange }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
@@ -74,25 +72,20 @@ const CourseTable = ({ courseUnits, questions, year, onYearChange }) => {
             </tr>
           </thead>
           <tbody>
-            {courseUnits.map(
-              ({ id, name, courseCode, results, feedbackCount }) => (
-                <Fragment key={id}>
+            {programmes.map(
+              ({ programmeCode, results, feedbackCount, courseUnits }) => (
+                <Fragment key={programmeCode}>
                   <ResultsRow
-                    key={id}
-                    label={
-                      <Link
-                        component={RouterLink}
-                        to={`/courses/${courseCode}/targets`}
-                      >
-                        {getLanguageValue(name, i18n.language)} ({courseCode})
-                      </Link>
-                    }
+                    label={programmeCode}
                     results={results}
                     questions={questions}
                     feedbackCount={feedbackCount}
                     accordionEnabled
                   >
-                    <CourseRealisationSummary courseUnitId={id} />
+                    <CourseUnitSummary
+                      courseUnits={courseUnits}
+                      questions={questions}
+                    />
                   </ResultsRow>
                   <DividerRow />
                 </Fragment>
@@ -101,7 +94,7 @@ const CourseTable = ({ courseUnits, questions, year, onYearChange }) => {
           </tbody>
         </table>
       </TableContainer>
-      {courseUnits.length === 0 && (
+      {programmes.length === 0 && (
         <Alert severity="info">{t('courseSummary:noCourses')}</Alert>
       )}
     </>
@@ -128,9 +121,7 @@ const CourseSummary = () => {
     return <Redirect to="/" />
   }
 
-  const { questions, courseUnits } = courseUnitSummaries
-
-  const sortedCourseUnits = orderBy(courseUnits, ['courseCode'])
+  const { questions, programmes } = courseUnitSummaries
 
   return (
     <>
@@ -142,7 +133,7 @@ const CourseSummary = () => {
       <Card>
         <CardContent>
           <CourseTable
-            courseUnits={sortedCourseUnits}
+            programmes={programmes}
             questions={questions}
             year={year}
             onYearChange={setYear}

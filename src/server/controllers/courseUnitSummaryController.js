@@ -18,6 +18,16 @@ const MATLU_CODE_PREFIXES = _.flatMap(
   (code) => [code, `AY${code}`],
 )
 
+const parseProgrammeCode = (courseCode) => {
+  if (!courseCode) {
+    return null
+  }
+
+  const [, programmePart] = courseCode.match(/^([a-z]+)[0-9]+/i)
+
+  return programmePart ? programmePart.replace(/^AY/, '') : null
+}
+
 const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   if (!maybeDate) {
     return fallback
@@ -166,6 +176,33 @@ const getCourseRealisationsWithResults = (feedbackTargets, questions) => {
   return courseRealisations
 }
 
+const getProgrammesWithResults = (feedbackTargets, questions) => {
+  const feedbackTargetsByProgrammeCode = _.groupBy(
+    feedbackTargets,
+    ({ courseUnit }) => parseProgrammeCode(courseUnit?.courseCode),
+  )
+
+  const programmes = Object.entries(feedbackTargetsByProgrammeCode).map(
+    ([programmeCode, targets]) => {
+      const { results, feedbackCount } = getResults(targets, questions)
+
+      const courseUnits = _.orderBy(
+        getCourseUnitsWithResults(targets, questions),
+        ['courseCode'],
+      )
+
+      return {
+        programmeCode,
+        results,
+        feedbackCount,
+        courseUnits,
+      }
+    },
+  )
+
+  return _.orderBy(programmes, ['programmeCode'])
+}
+
 const getSummaryOptions = (query) => {
   const { from, to } = query
 
@@ -247,14 +284,11 @@ const getCourseUnitSummaries = async (req, res) => {
     ],
   })
 
-  const courseUnits = getCourseUnitsWithResults(
-    feedbackTargets,
-    summaryQuestions,
-  )
+  const programmes = getProgrammesWithResults(feedbackTargets, summaryQuestions)
 
   res.send({
     questions: summaryQuestions,
-    courseUnits,
+    programmes,
   })
 }
 
