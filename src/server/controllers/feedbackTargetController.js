@@ -195,8 +195,9 @@ const getOne = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const feedbackTarget = await getFeedbackTargetByIdForUser(req)
-
+  const feedbackTarget = req.isAdmin
+    ? await FeedbackTarget.findByPk(Number(req.params.id))
+    : await getFeedbackTargetByIdForUser(req)
   if (
     !req.isAdmin &&
     feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
