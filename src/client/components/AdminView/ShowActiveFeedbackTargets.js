@@ -20,6 +20,11 @@ const useStyles = makeStyles((theme) => ({
   languageTabs: {
     marginBottom: theme.spacing(2),
   },
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0px 20px',
+  },
 }))
 
 const formatDate = (date) => lightFormat(new Date(date), 'd.M.yyyy')
@@ -45,13 +50,18 @@ const ShowActiveFeedbackTargets = () => {
     <>
       <h2>Feedbacks that are configured ({feedbackTargets.length} courses)</h2>
       {feedbackTargets.map((target) => (
-        <div key={target.id}>
-          <b>{target.courseUnit.courseCode}</b>
-          {'\t'}
-          <Link to={`/targets/${target.id}/results`}>
-            {target.courseRealisation.name.fi}
-          </Link>
-          , {formatDate(target.opensAt)} - {formatDate(target.closesAt)}
+        <div key={target.id} className={classes.row}>
+          <div>
+            <b>{target.courseUnit.courseCode}</b>
+            {'\t'}
+            <Link to={`/targets/${target.id}/results`}>
+              {target.courseRealisation.name.fi}
+            </Link>
+            , {formatDate(target.opensAt)} - {formatDate(target.closesAt)}
+          </div>
+          <div>
+            <b>{target.feedbackCount}</b> feedbacks given
+          </div>
         </div>
       ))}
     </>

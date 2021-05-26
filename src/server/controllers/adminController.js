@@ -1,10 +1,20 @@
 const Router = require('express')
 
 const { Op } = require('sequelize')
+const _ = require('lodash')
+
 const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
-const { FeedbackTarget, CourseRealisation, CourseUnit } = require('../models')
+
+const {
+  FeedbackTarget,
+  CourseRealisation,
+  CourseUnit,
+  UserFeedbackTarget,
+} = require('../models')
+
+const { sequelize } = require('../util/dbConnection')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -42,6 +52,24 @@ const findUser = async (req, res) => {
   })
 }
 
+const formatFeedbackTargets = async (feedbackTargets) => {
+  const convertSingle = async (feedbackTarget) => {
+    return await feedbackTarget.toPublicObject()
+  }
+
+  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
+
+  const responseReady = []
+
+  for (const feedbackTarget of feedbackTargets) {
+    if (feedbackTarget) {
+      responseReady.push(await convertSingle(feedbackTarget))
+    }
+  }
+
+  return responseReady
+}
+
 const getFeedbackTargets = async (req, res) => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -62,7 +90,40 @@ const getFeedbackTargets = async (req, res) => {
     ],
   })
 
-  res.send(feedbackTargets)
+  const feedbackTargetIds = feedbackTargets.map(({ id }) => id)
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+      accessStatus: 'STUDENT',
+      feedbackId: {
+        [Op.ne]: null,
+      },
+    },
+    group: ['feedbackTargetId'],
+    attributes: [
+      'feedbackTargetId',
+      [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount'],
+    ],
+  })
+
+  const feedbackCountByFeedbackTargetId = _.zipObject(
+    studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
+    studentFeedbackTargets.map((target) =>
+      parseInt(target.get('feedbackCount'), 10),
+    ),
+  )
+
+  const formattedFeedbackTargets = await formatFeedbackTargets(feedbackTargets)
+
+  const feedbackTargetsWithCount = formattedFeedbackTargets.map((target) => ({
+    ...target,
+    feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
+  }))
+
+  res.send(feedbackTargetsWithCount)
 }
 
 const router = Router()
