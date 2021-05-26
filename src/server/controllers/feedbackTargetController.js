@@ -60,6 +60,7 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
     await feedbackTarget.populateQuestions()
 
     const responseReady = feedbackTarget.toJSON()
+
     const sortedUserFeedbackTargets = responseReady.userFeedbackTargets.sort(
       (a, b) =>
         mapStatusToValue[b.accessStatus] - mapStatusToValue[a.accessStatus],
@@ -93,10 +94,13 @@ const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
 
     await feedbackTarget.populateQuestions()
 
-    const responseReady = feedbackTarget.toJSON()
-    responseReady.accessStatus = isAdmin ? 'TEACHER' : 'NONE'
-    responseReady.feedback = null
-    responseReady.surveys = await feedbackTarget.getSurveys()
+    const responseReady = {
+      ...feedbackTarget.toJSON(),
+      accessStatus: isAdmin ? 'TEACHER' : 'NONE',
+      feedback: null,
+      surveys: await feedbackTarget.getSurveys(),
+    }
+
     delete responseReady.userFeedbackTargets
 
     return responseReady
@@ -171,6 +175,7 @@ const getOne = async (req, res) => {
   })
 
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
+
   if (!feedbackTarget) {
     // admin way
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
@@ -336,8 +341,11 @@ const getTargetsByCourseUnit = async (req, res) => {
 
 const filterFeedbacks = async (feedbacks, feedbackTarget, accessStatus) => {
   await feedbackTarget.populateQuestions()
+
   if (feedbacks.length <= 5) return []
+
   const { publicQuestionIds } = feedbackTarget
+
   const filteredFeedbacks = feedbacks.map((feedback) => ({
     ...feedback,
     data: feedback.data.filter((question) => {
@@ -398,6 +406,7 @@ const getFeedbacks = async (req, res) => {
       as: 'feedback',
     },
   })
+
   const feedbacks = studentFeedbackTargets.map((t) =>
     t.feedback.toPublicObject(),
   )
@@ -405,6 +414,7 @@ const getFeedbacks = async (req, res) => {
   const accessStatus = userFeedbackTarget?.accessStatus
     ? userFeedbackTarget.accessStatus
     : 'STUDENT'
+
   const publicFeedbacks = isAdmin
     ? feedbacks
     : await filterFeedbacks(feedbacks, feedbackTarget, accessStatus)

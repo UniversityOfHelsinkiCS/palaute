@@ -11,9 +11,25 @@ const {
   TEXT,
 } = require('sequelize')
 
+const _ = require('lodash')
+
 const CourseUnit = require('./courseUnit')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
+
+const getGloballyPublicQuestionIds = async () => {
+  const universitySurvey = await Survey.findOne({
+    where: { type: 'university' },
+  })
+
+  await universitySurvey.populateQuestions()
+
+  const numericQuestionIds = universitySurvey.questions
+    .filter(({ type }) => type === 'LIKERT')
+    .map(({ id }) => id)
+
+  return numericQuestionIds
+}
 
 class FeedbackTarget extends Model {
   async getSurveys() {
@@ -75,6 +91,31 @@ class FeedbackTarget extends Model {
     const now = new Date()
 
     return now > this.closesAt
+  }
+
+  async getPublicQuestionIds() {
+    const targetPublicQuestionIds = this.publicQuestionIds ?? []
+
+    const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
+
+    const publicQuestionIds = _.uniq([
+      ...targetPublicQuestionIds,
+      ...globallyPublicQuestionIds,
+    ])
+
+    return publicQuestionIds
+  }
+
+  async getPublicityConfigurableQuestionIds() {
+    await this.populateQuestions()
+
+    const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
+
+    const questionIds = this.questions.filter(
+      ({ id }) => !globallyPublicQuestionIds.includes(id),
+    )
+
+    return questionIds
   }
 
   async populateQuestions() {
