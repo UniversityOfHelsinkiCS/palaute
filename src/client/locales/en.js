@@ -169,7 +169,7 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended',
+      'Feedback related to public questions is visible to students on the <2>feedback page</2> once the feedback period has ended. Note that feedback related to university level Likert scale questions is always visible for students once the feedback period has ended',
     selectVisibility: 'Select who can see the public questions',
     none: 'Nobody',
     enrolled: 'Enrolled students',
