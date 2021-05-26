@@ -11,19 +11,19 @@ const useStyles = makeStyles({
     backgroundColor: '#f5f5f5',
   },
   bad: {
-    backgroundColor: '#eb4841',
+    backgroundColor: '#ea736b',
   },
   poor: {
-    backgroundColor: '#f38947',
+    backgroundColor: '#eebb84',
   },
   ok: {
-    backgroundColor: '#fec84a',
+    backgroundColor: '#f4eb91',
   },
   good: {
-    backgroundColor: '#a6c44c',
+    backgroundColor: '#a4ce83',
   },
   excellent: {
-    backgroundColor: '#4dc04e',
+    backgroundColor: '#7abc84',
   },
 })
 
