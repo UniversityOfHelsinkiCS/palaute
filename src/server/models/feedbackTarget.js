@@ -139,11 +139,13 @@ class FeedbackTarget extends Model {
 
     if (publicFeedbacks.length <= 5) return []
 
+    const publicQuestionIds = await this.getPublicQuestionIds()
+
     const filteredFeedbacks = publicFeedbacks.map((feedback) => ({
       ...feedback,
       data: feedback.data.filter((question) => {
         if (accessStatus === 'STUDENT')
-          return this.publicQuestionIds.includes(question.questionId)
+          return publicQuestionIds.includes(question.questionId)
         return true
       }),
     }))
