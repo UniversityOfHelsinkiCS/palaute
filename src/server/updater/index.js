@@ -28,8 +28,7 @@ const start = async () => {
     return logger.info('Not starting palaute updater in production')
   } */
   logger.info('Setup cron job')
-  updateUsers()
-  updateOrganisations()
+  updateCoursesAndTeacherFeedbackTargets()
   const cronTime = inProduction
     ? '30 1 * * *' // Every night at 01:30 in production
     : '*/30 * * * *' // Every 30 minutes in development
