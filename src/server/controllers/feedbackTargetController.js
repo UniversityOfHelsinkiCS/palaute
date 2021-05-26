@@ -197,7 +197,10 @@ const getOne = async (req, res) => {
 const update = async (req, res) => {
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
-  if (feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
+  if (
+    !req.isAdmin &&
+    feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
+  )
     throw new ApplicationError('Forbidden', 403)
 
   const updates = _.pick(req.body, [
