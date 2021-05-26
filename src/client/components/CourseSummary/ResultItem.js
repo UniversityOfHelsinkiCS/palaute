@@ -11,13 +11,19 @@ const useStyles = makeStyles({
     backgroundColor: '#f5f5f5',
   },
   bad: {
-    backgroundColor: '#f08683',
+    backgroundColor: '#eb4841',
   },
-  neutral: {
-    backgroundColor: '#fffeba',
+  poor: {
+    backgroundColor: '#f38947',
+  },
+  ok: {
+    backgroundColor: '#fec84a',
   },
   good: {
-    backgroundColor: '#b2fba7',
+    backgroundColor: '#a6c44c',
+  },
+  excellent: {
+    backgroundColor: '#4dc04e',
   },
 })
 
@@ -35,9 +41,11 @@ const ResultItem = ({
     classNameProp,
     classes.item,
     mean === null && classes.empty,
-    mean && mean <= 2 && classes.bad,
-    mean && mean > 2 && mean < 4 && classes.neutral,
-    mean && mean >= 4 && classes.good,
+    mean && mean < 2 && classes.bad,
+    mean && mean >= 2 && mean < 2.5 && classes.poor,
+    mean && mean >= 2.5 && mean < 3.5 && classes.ok,
+    mean && mean >= 3.5 && mean < 4.5 && classes.good,
+    mean && mean >= 4.5 && classes.excellent,
   )
 
   const tooltipTitle = `${questionLabel}: ${

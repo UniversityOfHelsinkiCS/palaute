@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2 + level * 2),
   }),
   doneIcon: {
-    color: 'green',
+    color: '#4dc04e',
   },
   clearIcon: {
-    color: 'red',
+    color: '#eb4841',
   },
 }))
 
