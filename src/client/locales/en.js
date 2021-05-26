@@ -138,7 +138,7 @@ export default {
     showStudentsWithFeedback: 'Show students who have given feedback',
     studentFeedbacks: '{{count}} feedbacks given',
     giveFeedbackResponse: 'Give counter feedback',
-    noCourseRealisations: 'This course is not currently implemented',
+    noCourseRealisations: 'This course has no relevant course instances',
     editFeedbackResponse: 'Edit counter feedback',
     selectPublicQuestions: 'Select public questions',
   },

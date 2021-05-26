@@ -138,7 +138,7 @@ export default {
     giveFeedbackResponse: 'Anna vastapalaute',
     editFeedbackResponse: 'Muokkaa vastapalautetta',
     noCourseRealisations:
-      'Tällä kurssilla ei ole yhtään relevanttia kurssirealisaatiota',
+      'Tällä kurssilla ei ole yhtään relevanttia kurssitoteutusta',
     selectPublicQuestions: 'Valitse julkiset kysymykset',
   },
   feedbackTargetResults: {
