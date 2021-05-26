@@ -55,24 +55,22 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 
 const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
-    if (!feedbackTarget) return {}
+    const publicTarget = await feedbackTarget.toPublicObject()
 
-    await feedbackTarget.populateQuestions()
-
-    const responseReady = feedbackTarget.toJSON()
-
-    const sortedUserFeedbackTargets = responseReady.userFeedbackTargets.sort(
+    const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
         mapStatusToValue[b.accessStatus] - mapStatusToValue[a.accessStatus],
       // this is intentionally b - a, because we want the max value first
     )
-    const relevantUserFeedbackTarget = sortedUserFeedbackTargets[0]
-    responseReady.accessStatus = relevantUserFeedbackTarget.accessStatus
-    responseReady.feedback = relevantUserFeedbackTarget.feedback
-    responseReady.surveys = await feedbackTarget.getSurveys()
-    delete responseReady.userFeedbackTargets
 
-    return responseReady
+    const relevantUserFeedbackTarget = sortedUserFeedbackTargets[0]
+    const { accessStatus, feedback } = relevantUserFeedbackTarget
+
+    return {
+      ...publicTarget,
+      accessStatus,
+      feedback,
+    }
   }
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
@@ -81,7 +79,9 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
-    responseReady.push(await convertSingle(feedbackTarget))
+    if (feedbackTarget) {
+      responseReady.push(await convertSingle(feedbackTarget))
+    }
   }
   /* eslint-enable */
 
@@ -90,20 +90,13 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
-    if (!feedbackTarget) return {}
+    const publicTarget = await feedbackTarget.toPublicObject()
 
-    await feedbackTarget.populateQuestions()
-
-    const responseReady = {
-      ...feedbackTarget.toJSON(),
+    return {
+      ...publicTarget,
       accessStatus: isAdmin ? 'TEACHER' : 'NONE',
       feedback: null,
-      surveys: await feedbackTarget.getSurveys(),
     }
-
-    delete responseReady.userFeedbackTargets
-
-    return responseReady
   }
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
@@ -112,7 +105,9 @@ const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
 
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
-    responseReady.push(await convertSingle(feedbackTarget))
+    if (feedbackTarget) {
+      responseReady.push(await convertSingle(feedbackTarget))
+    }
   }
   /* eslint-enable */
 
@@ -339,25 +334,6 @@ const getTargetsByCourseUnit = async (req, res) => {
   res.send(feedbackTargetsWithFeedbackCounts)
 }
 
-const filterFeedbacks = async (feedbacks, feedbackTarget, accessStatus) => {
-  await feedbackTarget.populateQuestions()
-
-  if (feedbacks.length <= 5) return []
-
-  const { publicQuestionIds } = feedbackTarget
-
-  const filteredFeedbacks = feedbacks.map((feedback) => ({
-    ...feedback,
-    data: feedback.data.filter((question) => {
-      if (accessStatus === 'STUDENT')
-        return publicQuestionIds.includes(question.questionId)
-      return true
-    }),
-  }))
-
-  return filteredFeedbacks
-}
-
 const getFeedbacks = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
@@ -407,17 +383,16 @@ const getFeedbacks = async (req, res) => {
     },
   })
 
-  const feedbacks = studentFeedbackTargets.map((t) =>
-    t.feedback.toPublicObject(),
-  )
+  const feedbacks = studentFeedbackTargets.map((t) => t.feedback)
 
   const accessStatus = userFeedbackTarget?.accessStatus
     ? userFeedbackTarget.accessStatus
     : 'STUDENT'
 
-  const publicFeedbacks = isAdmin
-    ? feedbacks
-    : await filterFeedbacks(feedbacks, feedbackTarget, accessStatus)
+  const publicFeedbacks = await feedbackTarget.getPublicFeedbacks(feedbacks, {
+    accessStatus,
+    isAdmin,
+  })
 
   res.send(publicFeedbacks)
 }

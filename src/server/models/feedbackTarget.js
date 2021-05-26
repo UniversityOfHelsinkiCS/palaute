@@ -111,9 +111,9 @@ class FeedbackTarget extends Model {
 
     const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
 
-    const questionIds = this.questions.filter(
-      ({ id }) => !globallyPublicQuestionIds.includes(id),
-    )
+    const questionIds = this.questions
+      .filter(({ id }) => !globallyPublicQuestionIds.includes(id))
+      .map(({ id }) => id)
 
     return questionIds
   }
@@ -128,6 +128,51 @@ class FeedbackTarget extends Model {
     ]
 
     this.set('questions', questions)
+  }
+
+  async getPublicFeedbacks(feedbacks, { accessStatus, isAdmin } = {}) {
+    const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
+
+    if (isAdmin) {
+      return publicFeedbacks
+    }
+
+    if (publicFeedbacks.length <= 5) return []
+
+    const filteredFeedbacks = publicFeedbacks.map((feedback) => ({
+      ...feedback,
+      data: feedback.data.filter((question) => {
+        if (accessStatus === 'STUDENT')
+          return this.publicQuestionIds.includes(question.questionId)
+        return true
+      }),
+    }))
+
+    return filteredFeedbacks
+  }
+
+  async toPublicObject() {
+    const [
+      surveys,
+      publicQuestionIds,
+      publicityConfigurableQuestionIds,
+    ] = await Promise.all([
+      this.getSurveys(),
+      this.getPublicQuestionIds(),
+      this.getPublicityConfigurableQuestionIds(),
+      this.populateQuestions(),
+    ])
+
+    const feedbackTarget = {
+      ...this.toJSON(),
+      surveys,
+      publicQuestionIds,
+      publicityConfigurableQuestionIds,
+    }
+
+    delete feedbackTarget.userFeedbackTargets
+
+    return feedbackTarget
   }
 }
 

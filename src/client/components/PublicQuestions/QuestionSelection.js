@@ -18,11 +18,15 @@ import apiClient from '../../util/apiClient'
 const getQuestionItems = (feedbackTarget) => {
   const questions = feedbackTarget.questions ?? []
 
+  const publicityConfigurableQuestionIds =
+    feedbackTarget.publicityConfigurableQuestionIds ?? []
+
   return questions
     .filter((q) => q.type !== 'TEXT')
     .map((q) => ({
       id: q.id,
       label: q.data?.label,
+      disabled: !publicityConfigurableQuestionIds.includes(q.id),
     }))
 }
 
@@ -98,7 +102,7 @@ const QuestionSelection = ({ feedbackTarget, visibility }) => {
           key={q.id}
           checked={publicQuestionIds.includes(q.id)}
           onChange={makeOnToggle(q.id, publicQuestionIds, setPublicQuestionIds)}
-          disabled={visibility === 'NONE' || mutation.isLoading}
+          disabled={q.disabled || visibility === 'NONE' || mutation.isLoading}
         />
       ))}
     </List>
