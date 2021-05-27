@@ -40,6 +40,10 @@ const getDateOrDefault = (maybeDate, fallback = new Date()) => {
 }
 
 const getAccessibleCourseUnitIds = async (user) => {
+  const organisationAccess = await user.getOrganisationAccess()
+
+  console.log(organisationAccess)
+
   // TODO: get actual accessible ids
   const courseCodeRegexp = `^(${MATLU_CODE_PREFIXES.join('|')})`
 

@@ -5,6 +5,16 @@ const { sequelize } = require('../util/dbConnection')
 const lomakeClient = require('../util/lomakeClient')
 const Organisation = require('./organisation')
 
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
+}
+
 class User extends Model {
   async getOrganisationAccess() {
     const { data: access } = await lomakeClient.get(
@@ -13,21 +23,30 @@ class User extends Model {
 
     const organisationCodes = _.isObject(access) ? Object.keys(access) : []
 
-    if (organisationCodes.length === 0) {
+    const normalizedOrganisationCodes = organisationCodes.map(
+      normalizeOrganisationCode,
+    )
+
+    const codeByNormalizedCode = _.zipObject(
+      normalizedOrganisationCodes,
+      organisationCodes,
+    )
+
+    if (normalizedOrganisationCodes.length === 0) {
       return []
     }
 
     const organisations = await Organisation.findAll({
       where: {
         code: {
-          [Op.in]: organisationCodes,
+          [Op.in]: normalizedOrganisationCodes,
         },
       },
     })
 
     return organisations.map((organisation) => ({
       organisation,
-      access: access[organisation.code],
+      access: access[codeByNormalizedCode[organisation.code]],
     }))
   }
 }
