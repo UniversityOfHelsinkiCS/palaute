@@ -1,7 +1,36 @@
-const { Model, STRING } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { Model, STRING, Op } = require('sequelize')
+const _ = require('lodash')
 
-class User extends Model {}
+const { sequelize } = require('../util/dbConnection')
+const lomakeClient = require('../util/lomakeClient')
+const Organisation = require('./organisation')
+
+class User extends Model {
+  async getOrganisationAccess() {
+    const { data: access } = await lomakeClient.get(
+      `/organizations/${this.username}`,
+    )
+
+    const organisationCodes = _.isObject(access) ? Object.keys(access) : []
+
+    if (organisationCodes.length === 0) {
+      return []
+    }
+
+    const organisations = await Organisation.findAll({
+      where: {
+        code: {
+          [Op.in]: organisationCodes,
+        },
+      },
+    })
+
+    return organisations.map((organisation) => ({
+      organisation,
+      access: access[organisation.code],
+    }))
+  }
+}
 
 User.init(
   {

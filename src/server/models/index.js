@@ -35,6 +35,16 @@ Survey.belongsTo(CourseUnit, {
   targetKey: 'courseCode',
 })
 
+CourseUnit.belongsToMany(Organisation, {
+  through: CourseUnitsOrganisation,
+  as: 'organisations',
+})
+
+Organisation.belongsToMany(CourseUnit, {
+  through: CourseUnitsOrganisation,
+  as: 'courseUnits',
+})
+
 module.exports = {
   Feedback,
   User,
