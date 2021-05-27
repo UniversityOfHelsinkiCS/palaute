@@ -9,6 +9,7 @@ const {
 } = require('../models')
 
 const { sequelize } = require('./dbConnection')
+const logger = require('./logger')
 
 const commonFeedbackName = {
   fi: 'Yleinen palaute kurssista',
@@ -90,8 +91,35 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
     feedbackType === 'courseRealisation' ? commonFeedbackName : name
 
   const hidden = !(feedbackType === 'courseRealisation')
-
-  const [feedbackTarget] = await FeedbackTarget.findOrCreate({
+  let feedbackTarget = await FeedbackTarget.findOne({
+    where: {
+      feedbackType,
+      typeId,
+    },
+  })
+  if (!feedbackTarget) {
+    logger.error('FEEDBACK TARGET MISSING', {
+      feedbackType,
+      typeId,
+      courseRealisationId,
+      courseUnitId,
+      name,
+      endDate,
+      startDate,
+      userId,
+    })
+    feedbackTarget = await FeedbackTarget.create({
+      feedbackType,
+      typeId,
+      courseUnitId,
+      courseRealisationId,
+      name: feedbackTargetName,
+      hidden,
+      opensAt: formatDate(dateFns.subYears(endDate, 2)),
+      closesAt: formatDate(dateFns.subYears(endDate, 2)),
+    })
+  }
+  /* const [feedbackTarget] = await FeedbackTarget.findOrCreate({
     where: {
       feedbackType,
       typeId,
@@ -106,8 +134,8 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
       opensAt: formatDate(dateFns.subYears(endDate, 2)),
       closesAt: formatDate(dateFns.subYears(endDate, 2)),
     },
-  })
-  await UserFeedbackTarget.findOrCreate({
+  }) */
+  /* await UserFeedbackTarget.findOrCreate({
     where: {
       userId,
       feedbackTargetId: Number(feedbackTarget.id),
@@ -117,7 +145,30 @@ const makeCreateFeedbackTargetWithUserTargetTable = (accessStatus) => async (
       userId,
       feedbackTargetId: Number(feedbackTarget.id),
     },
+  }) */
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId,
+      feedbackTargetId: feedbackTarget.id,
+    },
   })
+  if (!userFeedbackTarget) {
+    logger.error('USER FEEDBACK TARGET MISSING', {
+      feedbackTarget,
+      typeId,
+      courseRealisationId,
+      courseUnitId,
+      name,
+      endDate,
+      startDate,
+      userId,
+    })
+    await UserFeedbackTarget.create({
+      userId,
+      feedbackTargetId: feedbackTarget.id,
+      accessStatus,
+    })
+  }
   return feedbackTarget
 }
 

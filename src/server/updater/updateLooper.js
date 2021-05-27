@@ -30,7 +30,7 @@ const mangleData = async (url, limit, handler) => {
     count += data.length
     offset += limit
 
-    logger.info(count, offset)
+    logger.info('Currently updated', { count })
   }
   logger.info(
     `Updated ${count} items at ${((new Date() - start) / count).toFixed(
