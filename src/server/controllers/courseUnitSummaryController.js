@@ -13,10 +13,13 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 
-const MATLU_CODE_PREFIXES = _.flatMap(
-  ['TKT', 'MAT', 'FYS', 'DATA', 'BSC'],
-  (code) => [code, `AY${code}`],
-)
+const MATLU_CODE_PREFIXES = [
+  'TKT',
+  'MAT',
+  'FYS',
+  'DATA',
+  'BSC',
+].flatMap((code) => [code, `AY${code}`])
 
 const parseProgrammeCode = (courseCode) => {
   if (!courseCode) {
@@ -68,8 +71,7 @@ const getSummaryQuestions = async () => {
 const getResults = (feedbackTargets, questions) => {
   const questionIds = questions.map((q) => q.id)
 
-  const userFeedbackTargets = _.flatMap(
-    feedbackTargets,
+  const userFeedbackTargets = feedbackTargets.flatMap(
     (target) => target.userFeedbackTargets ?? [],
   )
 
@@ -77,7 +79,7 @@ const getResults = (feedbackTargets, questions) => {
     .map(({ feedback }) => feedback)
     .filter(Boolean)
 
-  const feedbackData = _.flatMap(feedbacks, ({ data }) => data ?? [])
+  const feedbackData = feedbacks.flatMap(({ data }) => data ?? [])
 
   const feedbackDataByQuestionId = _.groupBy(
     feedbackData,
