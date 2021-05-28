@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-const useCourseRealisationFeedbackTargets = (code, options = {}) => {
+const useCourseUnitFeedbackTargets = (code, options = {}) => {
   const queryKey = ['courseUnitFeedbackTargets', code]
 
   const queryFn = async () => {
@@ -21,4 +21,4 @@ const useCourseRealisationFeedbackTargets = (code, options = {}) => {
   return { feedbackTargets, ...rest }
 }
 
-export default useCourseRealisationFeedbackTargets
+export default useCourseUnitFeedbackTargets
