@@ -13,6 +13,7 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
 
   const newHeaders = { ...headers }
   const user = await User.findOne({ where: { id: loggedInAs } })
+
   const { data } = await importerClient.get(`/palaute/persons`, {
     params: { id: loggedInAs },
   })

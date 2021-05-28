@@ -1,5 +1,11 @@
 const getOrganisations = async (req, res) => {
-  const { user } = req
+  const { user, headers } = req
+
+  const isEmployee = Boolean(headers?.employeenumber)
+
+  if (!isEmployee) {
+    return res.send([])
+  }
 
   const organisationAccess = await user.getOrganisationAccess()
 
@@ -8,7 +14,7 @@ const getOrganisations = async (req, res) => {
     access,
   }))
 
-  res.send(organisations)
+  return res.send(organisations)
 }
 
 module.exports = {

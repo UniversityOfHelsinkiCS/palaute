@@ -8,6 +8,7 @@ export const possibleUsers = [
     sn: 'Luukkainen',
     preferredLanguage: 'fi',
     hyPersonSisuId: 'hy-hlo-1441871',
+    employeeNumber: '9021313',
   },
   {
     uid: 'varisleo',
