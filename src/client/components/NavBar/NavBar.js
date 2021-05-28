@@ -22,6 +22,7 @@ import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStude
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import hyLogo from '../../assets/hy_logo.svg'
 import { handleLogout, isAdmin } from './utils'
+import useOrganisations from '../../hooks/useOrganisations'
 
 const useStyles = makeStyles({
   toolbar: {
@@ -68,6 +69,7 @@ const NavBar = () => {
   const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
+  const { organisations } = useOrganisations()
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -76,6 +78,10 @@ const NavBar = () => {
   const isStudent = Boolean(feedbackTargets?.length)
   const isTeacher = Boolean(authorizedUser?.isTeacher)
   const isAdminUser = isAdmin(authorizedUser)
+
+  const hasSomeOrganisationAccess = (organisations ?? []).some((o) =>
+    Boolean(o.access),
+  )
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -95,6 +101,10 @@ const NavBar = () => {
         label: t('navBar:myFeedbacks'),
         to: '/feedbacks',
       },
+    hasSomeOrganisationAccess && {
+      label: t('navBar:courseSummary'),
+      to: '/course-summary',
+    },
     isAdminUser && {
       label: t('navBar:admin'),
       to: '/admin',

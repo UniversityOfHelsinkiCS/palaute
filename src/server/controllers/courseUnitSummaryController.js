@@ -39,11 +39,7 @@ const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   return dateFns.isValid(new Date(maybeDate)) ? new Date(maybeDate) : fallback
 }
 
-const getAccessibleCourseUnitIds = async (user) => {
-  const organisationAccess = await user.getOrganisationAccess()
-
-  console.log(organisationAccess)
-
+const getAccessibleCourseUnitIds = async () => {
   // TODO: get actual accessible ids
   const courseCodeRegexp = `^(${MATLU_CODE_PREFIXES.join('|')})`
 

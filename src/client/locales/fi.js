@@ -156,6 +156,7 @@ export default {
     myCourses: 'Kurssini',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',
+    courseSummary: 'Kurssiyhteenveto',
     nameFallback: 'Valikko',
   },
   studentsWithFeedback: {

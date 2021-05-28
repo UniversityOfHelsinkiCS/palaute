@@ -157,6 +157,7 @@ export default {
     myCourses: 'My courses',
     logOut: 'Log out',
     admin: 'Admin',
+    courseSummary: 'Course summary',
     nameFallback: 'Menu',
   },
   studentsWithFeedback: {

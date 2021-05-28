@@ -11,7 +11,7 @@ const surveys = require('../controllers/surveysController')
 const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
 const courseUnitSummary = require('../controllers/courseUnitSummaryController')
-// const questions = require('../controllers/questionsController')
+const organisation = require('../controllers/organisationController')
 
 const router = Router()
 
@@ -51,13 +51,6 @@ router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
 router.get('/surveys/university', surveys.getUniversitySurvey)
 
-/*
-router.get('/questions', questions.getAll)
-router.get('/questions/:id', questions.getOne)
-router.put('/questions/:id', questions.update)
-router.delete('/questions/:id', questions.destroy)
-These paths are not used anywhere at the moment
-*/
 router.get(
   '/course-units/responsible',
   feedbackTargets.getCourseUnitsForTeacher,
@@ -76,6 +69,8 @@ router.get(
   '/course-unit-summaries/:courseUnitId',
   courseUnitSummary.getCourseRealisationSummaries,
 )
+
+router.get('/organisations', organisation.getOrganisations)
 
 router.use('/admin', adminController)
 
