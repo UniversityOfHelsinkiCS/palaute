@@ -9,6 +9,7 @@ const {
   Survey,
   UserFeedbackTarget,
   Feedback,
+  Organisation,
 } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
@@ -227,14 +228,16 @@ const getSummaryOptions = (query) => {
 const getCourseUnitSummaries = async (req, res) => {
   const { isAdmin, user } = req
 
-  // TODO: access control stuff
   if (!isAdmin) {
     throw new ApplicationError('Forbidden', 403)
   }
 
+  // TODO: user for access control
+  const organisationAccess = await user.getOrganisationAccess()
+
   const accessibleCourseUnitIds = await getAccessibleCourseUnitIds(user)
 
-  if (_.isEmpty(accessibleCourseUnitIds)) {
+  if (accessibleCourseUnitIds.length === 0) {
     throw new ApplicationError('Forbidden', 403)
   }
 
@@ -302,10 +305,19 @@ const getCourseUnitSummaries = async (req, res) => {
 }
 
 const getCourseRealisationSummaries = async (req, res) => {
-  const { isAdmin } = req
+  const { isAdmin, user } = req
 
-  // TODO: access control stuff
   if (!isAdmin) {
+    throw new ApplicationError('Forbidden', 403)
+  }
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const organisationIds = organisationAccess.map(
+    ({ organisation }) => organisation.id,
+  )
+
+  if (organisationIds.length === 0) {
     throw new ApplicationError('Forbidden', 403)
   }
 
@@ -321,6 +333,11 @@ const getCourseRealisationSummaries = async (req, res) => {
       {
         model: CourseRealisation,
         as: 'courseRealisation',
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        include: [{ model: Organisation, as: 'organisations' }],
       },
       {
         model: UserFeedbackTarget,
@@ -339,6 +356,15 @@ const getCourseRealisationSummaries = async (req, res) => {
       },
     ],
   })
+
+  const courseUnitOrganisationIds = (
+    feedbackTargets[0]?.courseUnit?.organisations ?? []
+  ).map(({ id }) => id)
+
+  // TODO: use this for access control
+  const hasCourseUnitAccess = courseUnitOrganisationIds.some((id) =>
+    organisationIds.includes(id),
+  )
 
   const courseRealisations = getCourseRealisationsWithResults(
     feedbackTargets,
