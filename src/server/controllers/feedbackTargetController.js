@@ -305,8 +305,8 @@ const getTargetsByCourseUnit = async (req, res) => {
   if (!feedbackTargets)
     throw new ApplicationError('Not found or you do not have access', 404)
 
-  const formattedFeedbackTargets = await asyncFeedbackTargetsToJSON(
-    feedbackTargets,
+  const formattedFeedbackTargets = feedbackTargets.map(
+    (target) => target.dataValues,
   )
 
   const feedbackTargetIds = formattedFeedbackTargets.map(({ id }) => id)
@@ -334,14 +334,12 @@ const getTargetsByCourseUnit = async (req, res) => {
       parseInt(target.get('feedbackCount'), 10),
     ),
   )
-
   const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
     (target) => ({
       ...target,
       feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
     }),
   )
-
   res.send(feedbackTargetsWithFeedbackCounts)
 }
 
@@ -405,7 +403,7 @@ const getFeedbacks = async (req, res) => {
     isAdmin,
   })
 
-  res.send(publicFeedbacks)
+  return res.send(publicFeedbacks)
 }
 
 const getStudentsWithFeedback = async (req, res) => {
