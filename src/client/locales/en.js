@@ -187,4 +187,10 @@ export default {
     feedbackResponseGiven: 'Feedback response has been given',
     feedbackResponseNotGiven: 'Feedback response has not been given',
   },
+  organisationView: {
+    organisations: 'Organisations',
+    noOrganisations: 'This user is not a part of any organisations',
+    organisationName: 'Name',
+    organisationCode: 'Organisation code',
+  },
 }

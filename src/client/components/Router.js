@@ -15,6 +15,7 @@ import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import FeedbackResponse from './FeedbackResponse'
 import PublicQuestions from './PublicQuestions'
 import CourseSummary from './CourseSummary'
+import OrganisationView from './OrganisationView'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -68,6 +69,7 @@ const Router = () => {
           component={PublicQuestions}
         />
         <Route path="/course-summary" component={CourseSummary} />
+        <Route path="/organisations" component={OrganisationView} />
         <Route path="/admin" component={AdminView} />
       </Switch>
     </Container>

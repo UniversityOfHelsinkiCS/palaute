@@ -186,4 +186,10 @@ export default {
     feedbackResponseGiven: 'Vastapalaute on annettu',
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
   },
+  organisationView: {
+    organisations: 'Organisaatiot',
+    noOrganisation: 'Tämä käyttäjä ei ole minkään organisaation jäsen',
+    organisationName: 'Nimi',
+    organisationCode: 'Organisaation koodi',
+  },
 }
