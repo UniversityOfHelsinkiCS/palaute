@@ -16,6 +16,7 @@ const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-project',
   'urn:code:course-unit-realisation-type:teaching-participation-lectures',
   'urn:code:course-unit-realisation-type:teaching-participation-small-group',
+  'urn:code:course-unit-realisation-type:teaching-participation-seminar',
 ]
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
