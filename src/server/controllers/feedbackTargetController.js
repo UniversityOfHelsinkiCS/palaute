@@ -1,6 +1,7 @@
 const dateFns = require('date-fns')
 const _ = require('lodash')
 const { Op } = require('sequelize')
+const { useOldImporter } = require('../util/config')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -164,10 +165,12 @@ const getOne = async (req, res) => {
   const startDateBefore = new Date()
   const endDateAfter = dateFns.subDays(new Date(), 180)
 
-  await getEnrolmentByPersonId(req.user.id, {
-    startDateBefore,
-    endDateAfter,
-  })
+  if (useOldImporter) {
+    await getEnrolmentByPersonId(req.user.id, {
+      startDateBefore,
+      endDateAfter,
+    })
+  }
 
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
@@ -242,10 +245,12 @@ const getForStudent = async (req, res) => {
   const startDateBefore = new Date()
   const endDateAfter = dateFns.subDays(new Date(), 180)
 
-  await getEnrolmentByPersonId(req.user.id, {
-    startDateBefore,
-    endDateAfter,
-  })
+  if (useOldImporter) {
+    await getEnrolmentByPersonId(req.user.id, {
+      startDateBefore,
+      endDateAfter,
+    })
+  }
 
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
@@ -257,7 +262,9 @@ const getForStudent = async (req, res) => {
 const getCourseUnitsForTeacher = async (req, res) => {
   const { id } = req.user
 
-  await getResponsibleByPersonId(id)
+  if (useOldImporter) {
+    await getResponsibleByPersonId(id)
+  }
 
   const courseUnits = await sequelize.query(
     `SELECT DISTINCT(c.*) FROM course_units c, feedback_targets f, user_feedback_targets u ` +
