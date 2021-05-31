@@ -365,13 +365,13 @@ const getFeedbacks = async (req, res) => {
 
   if (!isAdmin) {
     if (feedbackTarget.feedbackVisibility === 'NONE') {
-      res.send([])
+      return res.send([])
     }
 
     if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
       // outsider, not in the course
       if (feedbackTarget.feedbackVisibility !== 'ALL') {
-        res.send([])
+        return res.send([])
       }
 
       if (!feedbackTarget.isEnded())
