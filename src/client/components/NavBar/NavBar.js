@@ -79,6 +79,7 @@ const NavBar = () => {
   const isTeacher = Boolean(authorizedUser?.isTeacher)
   const isAdminUser = isAdmin(authorizedUser)
 
+  // eslint-disable-next-line
   const hasSomeOrganisationAccess = (organisations ?? []).some((o) =>
     Boolean(o.access),
   )
@@ -101,10 +102,11 @@ const NavBar = () => {
         label: t('navBar:myFeedbacks'),
         to: '/feedbacks',
       },
-    hasSomeOrganisationAccess && {
+    // eslint-disable-next-line
+    /* hasSomeOrganisationAccess && {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
-    },
+    }, */
     isAdminUser && {
       label: t('navBar:admin'),
       to: '/admin',
