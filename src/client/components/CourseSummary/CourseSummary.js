@@ -44,7 +44,7 @@ const getSummaryQueryOptions = ({ year }) => {
   }
 }
 
-const CourseTable = ({ programmes, questions, year, onYearChange }) => {
+const CourseTable = ({ organisations, questions, year, onYearChange }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
@@ -72,11 +72,15 @@ const CourseTable = ({ programmes, questions, year, onYearChange }) => {
             </tr>
           </thead>
           <tbody>
-            {programmes.map(
-              ({ programmeCode, results, feedbackCount, courseUnits }) => (
-                <Fragment key={programmeCode}>
+            {organisations.map(
+              ({ code, id, name, results, feedbackCount, courseUnits }) => (
+                <Fragment key={id}>
                   <ResultsRow
-                    label={programmeCode}
+                    label={
+                      <>
+                        {getLanguageValue(name, i18n.language)} ({code})
+                      </>
+                    }
                     results={results}
                     questions={questions}
                     feedbackCount={feedbackCount}
@@ -94,7 +98,7 @@ const CourseTable = ({ programmes, questions, year, onYearChange }) => {
           </tbody>
         </table>
       </TableContainer>
-      {programmes.length === 0 && (
+      {organisations.length === 0 && (
         <Alert severity="info">{t('courseSummary:noCourses')}</Alert>
       )}
     </>
@@ -121,7 +125,7 @@ const CourseSummary = () => {
     return <Redirect to="/" />
   }
 
-  const { questions, programmes } = courseUnitSummaries
+  const { questions, organisations } = courseUnitSummaries
 
   return (
     <>
@@ -133,7 +137,7 @@ const CourseSummary = () => {
       <Card>
         <CardContent>
           <CourseTable
-            programmes={programmes}
+            organisations={organisations}
             questions={questions}
             year={year}
             onYearChange={setYear}

@@ -14,45 +14,12 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 
-const MATLU_CODE_PREFIXES = [
-  'TKT',
-  'MAT',
-  'FYS',
-  'DATA',
-  'BSC',
-].flatMap((code) => [code, `AY${code}`])
-
-const parseProgrammeCode = (courseCode) => {
-  if (!courseCode) {
-    return null
-  }
-
-  const [, programmePart] = courseCode.match(/^([a-z]+)[0-9]+/i)
-
-  return programmePart ? programmePart.replace(/^AY/, '') : null
-}
-
 const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   if (!maybeDate) {
     return fallback
   }
 
   return dateFns.isValid(new Date(maybeDate)) ? new Date(maybeDate) : fallback
-}
-
-const getAccessibleCourseUnitIds = async () => {
-  // TODO: get actual accessible ids
-  const courseCodeRegexp = `^(${MATLU_CODE_PREFIXES.join('|')})`
-
-  const courseUnits = await CourseUnit.findAll({
-    where: {
-      courseCode: {
-        [Op.iRegexp]: courseCodeRegexp,
-      },
-    },
-  })
-
-  return courseUnits.map((c) => c.id)
 }
 
 const getSummaryQuestions = async () => {
@@ -186,31 +153,48 @@ const getCourseRealisationsWithResults = (feedbackTargets, questions) => {
   return courseRealisations
 }
 
-const getProgrammesWithResults = (feedbackTargets, questions) => {
-  const feedbackTargetsByProgrammeCode = _.groupBy(
-    feedbackTargets,
-    ({ courseUnit }) => parseProgrammeCode(courseUnit?.courseCode),
-  )
+const getOrganisationsWithResults = (feedbackTargets, questions) => {
+  const organisationById = new Map()
+  const feedbackTargetsByOrganisationId = new Map()
 
-  const programmes = Object.entries(feedbackTargetsByProgrammeCode).map(
-    ([programmeCode, targets]) => {
-      const { results, feedbackCount } = getResults(targets, questions)
+  feedbackTargets.forEach((target) => {
+    const { courseUnit } = target
+    const { organisations } = courseUnit
 
-      const courseUnits = _.orderBy(
-        getCourseUnitsWithResults(targets, questions),
-        ['courseCode'],
-      )
+    organisations.forEach((organisation) => {
+      const targets = feedbackTargetsByOrganisationId.get(organisation.id) ?? []
 
-      return {
-        programmeCode,
-        results,
-        feedbackCount,
-        courseUnits,
-      }
-    },
-  )
+      organisationById.set(organisation.id, organisation)
 
-  return _.orderBy(programmes, ['programmeCode'])
+      feedbackTargetsByOrganisationId.set(organisation.id, [...targets, target])
+    })
+  })
+
+  const organisations = Array.from(
+    feedbackTargetsByOrganisationId.entries(),
+  ).map(([organisationId, targets]) => {
+    const { results, feedbackCount } = getResults(targets, questions)
+
+    const courseUnits = _.orderBy(
+      getCourseUnitsWithResults(targets, questions),
+      ['courseCode'],
+    )
+
+    const organisation = _.pick(organisationById.get(organisationId).toJSON(), [
+      'name',
+      'id',
+      'code',
+    ])
+
+    return {
+      ...organisation,
+      results,
+      feedbackCount,
+      courseUnits,
+    }
+  })
+
+  return _.orderBy(organisations, ['code'])
 }
 
 const getSummaryOptions = (query) => {
@@ -226,18 +210,15 @@ const getSummaryOptions = (query) => {
 }
 
 const getCourseUnitSummaries = async (req, res) => {
-  const { isAdmin, user } = req
+  const { user } = req
 
-  if (!isAdmin) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
-  // TODO: user for access control
   const organisationAccess = await user.getOrganisationAccess()
 
-  const accessibleCourseUnitIds = await getAccessibleCourseUnitIds(user)
+  const organisationIds = organisationAccess.map(
+    ({ organisation }) => organisation.id,
+  )
 
-  if (accessibleCourseUnitIds.length === 0) {
+  if (organisationIds.length === 0) {
     throw new ApplicationError('Forbidden', 403)
   }
 
@@ -253,11 +234,18 @@ const getCourseUnitSummaries = async (req, res) => {
         model: CourseUnit,
         as: 'courseUnit',
         required: true,
-        where: {
-          id: {
-            [Op.in]: accessibleCourseUnitIds,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            required: true,
+            where: {
+              id: {
+                [Op.in]: organisationIds,
+              },
+            },
           },
-        },
+        ],
       },
       {
         model: CourseRealisation,
@@ -296,20 +284,19 @@ const getCourseUnitSummaries = async (req, res) => {
     ],
   })
 
-  const programmes = getProgrammesWithResults(feedbackTargets, summaryQuestions)
+  const organisations = getOrganisationsWithResults(
+    feedbackTargets,
+    summaryQuestions,
+  )
 
   res.send({
     questions: summaryQuestions,
-    programmes,
+    organisations,
   })
 }
 
 const getCourseRealisationSummaries = async (req, res) => {
-  const { isAdmin, user } = req
-
-  if (!isAdmin) {
-    throw new ApplicationError('Forbidden', 403)
-  }
+  const { user } = req
 
   const organisationAccess = await user.getOrganisationAccess()
 
@@ -361,10 +348,13 @@ const getCourseRealisationSummaries = async (req, res) => {
     feedbackTargets[0]?.courseUnit?.organisations ?? []
   ).map(({ id }) => id)
 
-  // TODO: use this for access control
   const hasCourseUnitAccess = courseUnitOrganisationIds.some((id) =>
     organisationIds.includes(id),
   )
+
+  if (!hasCourseUnitAccess) {
+    throw new ApplicationError(403, 'Forbidden')
+  }
 
   const courseRealisations = getCourseRealisationsWithResults(
     feedbackTargets,
