@@ -50,7 +50,7 @@ router.get(
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
 router.get('/surveys/university', surveys.getUniversitySurvey)
-router.get('/surveys/programme', surveys.getProgrammeSurvey)
+router.get('/surveys/programme/:surveyCode', surveys.getProgrammeSurvey)
 
 router.get(
   '/course-units/responsible',

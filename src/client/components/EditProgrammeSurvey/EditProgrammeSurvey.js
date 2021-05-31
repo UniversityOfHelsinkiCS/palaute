@@ -1,31 +1,24 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import {
+  makeStyles,
   Typography,
   CircularProgress,
-  makeStyles,
-  Button,
   Box,
+  Button,
 } from '@material-ui/core'
-
-import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
 import QuestionEditor from '../QuestionEditor'
-import useUniversitySurvey from '../../hooks/useUniversitySurvey'
-import {
-  getInitialValues,
-  validate,
-  saveValues,
-} from '../EditCourseUnitSurvey/utils'
+import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
 import LanguageTabs from '../LanguageTabs'
-import { getLanguageValue } from '../../util/languageUtils'
+
+import { getInitialValues, validate, saveValues } from './utils'
 
 const useStyles = makeStyles((theme) => ({
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
   progressContainer: {
     padding: theme.spacing(4, 0),
     display: 'flex',
@@ -36,14 +29,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EditUniversitySurvey = () => {
-  const { t, i18n } = useTranslation()
+const EditProgrammeSurvey = () => {
+  const { t } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+  const { surveyCode } = useParams()
 
   const [language, setLanguage] = useState('fi')
 
-  const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()
+  const { survey, isLoading: surveyIsLoading } = useProgrammeSurvey(surveyCode)
+
+  const surveyId = survey && survey.id
+
   const isLoading = surveyIsLoading
 
   if (isLoading) {
@@ -56,7 +53,7 @@ const EditUniversitySurvey = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await saveValues(values, survey)
+      await saveValues(values, surveyId)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -64,18 +61,14 @@ const EditUniversitySurvey = () => {
   }
 
   const initialValues = getInitialValues(survey)
-  const name = getLanguageValue(survey?.courseUnit?.name, i18n.language)
 
   return (
     <>
-      <Typography variant="h4" component="h1" className={classes.heading}>
-        {name}
-      </Typography>
-
+      {!survey && <Typography>This programme has no survey yet</Typography>}
       <LanguageTabs
         language={language}
         onChange={(newLanguage) => setLanguage(newLanguage)}
-        className={classes.languageTabs}
+        className={classes.LanguageTabs}
       />
 
       <Formik
@@ -84,18 +77,25 @@ const EditUniversitySurvey = () => {
         validate={validate}
         validateOnChange={false}
       >
-        <Form>
-          <QuestionEditor language={language} name="questions" highLevel />
+        {({ values }) => (
+          <Form>
+            <QuestionEditor
+              language={language}
+              name="questions"
+              values={values}
+              highLevel
+            />
 
-          <Box mt={2}>
-            <Button color="primary" variant="contained" type="submit">
-              {t('save')}
-            </Button>
-          </Box>
-        </Form>
+            <Box mt={2}>
+              <Button color="primary" variant="contained" type="submit">
+                {t('save')}
+              </Button>
+            </Box>
+          </Form>
+        )}
       </Formik>
     </>
   )
 }
 
-export default EditUniversitySurvey
+export default EditProgrammeSurvey

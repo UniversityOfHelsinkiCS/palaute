@@ -16,6 +16,7 @@ import FeedbackResponse from './FeedbackResponse'
 import PublicQuestions from './PublicQuestions'
 import CourseSummary from './CourseSummary'
 import OrganisationView from './OrganisationView'
+import EditProgrammeSurvey from './EditProgrammeSurvey'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -70,6 +71,10 @@ const Router = () => {
         />
         <Route path="/course-summary" component={CourseSummary} />
         <Route path="/organisations" component={OrganisationView} />
+        <Route
+          path="/programme-survey/:surveyCode"
+          component={EditProgrammeSurvey}
+        />
         <Route path="/admin" component={AdminView} />
       </Switch>
     </Container>

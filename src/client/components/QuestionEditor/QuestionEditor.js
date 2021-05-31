@@ -47,6 +47,7 @@ const QuestionEditor = ({
   language = 'fi',
   values,
   feedbackTarget,
+  highLevel,
 }) => {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -59,7 +60,7 @@ const QuestionEditor = ({
 
   const handleStopEditing = async () => {
     setEditingQuestionId(null)
-    await saveQuestion(values, feedbackTarget)
+    if (!highLevel) await saveQuestion(values, feedbackTarget)
   }
 
   return (

@@ -97,13 +97,19 @@ const getUniversitySurvey = async (req, res) => {
 }
 
 const getProgrammeSurvey = async (req, res) => {
-  const survey = await Survey.findOne({
+  const surveyCode = req.params.surveyCode
+
+  const [survey] = await Survey.findOrCreate({
     where: {
       type: 'programme',
+      typeId: surveyCode,
+    },
+    defaults: {
+      questionIds: [],
+      type: 'programme',
+      typeId: surveyCode,
     },
   })
-
-  if (!survey) throw new ApplicationError('Not found', 404)
 
   await survey.populateQuestions()
 

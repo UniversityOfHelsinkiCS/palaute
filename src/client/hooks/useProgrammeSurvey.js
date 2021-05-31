@@ -2,11 +2,11 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-const useProgrammeSurvey = () => {
-  const queryKey = ['programmeSurvey']
+const useProgrammeSurvey = (surveyCode) => {
+  const queryKey = ['programmeSurvey', surveyCode]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/surveys/programme`)
+    const { data } = await apiClient.get(`/surveys/programme/${surveyCode}`)
 
     return data
   }
