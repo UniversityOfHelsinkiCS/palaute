@@ -14,6 +14,38 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 
+const getAccessibleCourseCodes = async (organisationAccess) => {
+  const organisationIds = organisationAccess.map(
+    ({ organisation }) => organisation.id,
+  )
+
+  const organisations = await Organisation.findAll({
+    where: {
+      id: {
+        [Op.in]: organisationIds,
+      },
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnits',
+        attributes: ['courseCode'],
+        required: true,
+      },
+    ],
+    attributes: ['id'],
+  })
+
+  const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
+
+  const courseCodes = courseUnits.flatMap(({ courseCode }) => [
+    courseCode,
+    `AY${courseCode}`, // hack for open university courses
+  ])
+
+  return _.uniq(courseCodes)
+}
+
 const getDateOrDefault = (maybeDate, fallback = new Date()) => {
   if (!maybeDate) {
     return fallback
@@ -223,7 +255,11 @@ const getCourseUnitSummaries = async (req, res) => {
   }
 
   const { from, to } = getSummaryOptions(req.query)
-  const summaryQuestions = await getSummaryQuestions()
+
+  const [summaryQuestions, courseCodes] = await Promise.all([
+    getSummaryQuestions(),
+    getAccessibleCourseCodes(organisationAccess),
+  ])
 
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -234,16 +270,16 @@ const getCourseUnitSummaries = async (req, res) => {
         model: CourseUnit,
         as: 'courseUnit',
         required: true,
+        where: {
+          courseCode: {
+            [Op.in]: courseCodes,
+          },
+        },
         include: [
           {
             model: Organisation,
             as: 'organisations',
             required: true,
-            where: {
-              id: {
-                [Op.in]: organisationIds,
-              },
-            },
           },
         ],
       },
@@ -309,7 +345,11 @@ const getCourseRealisationSummaries = async (req, res) => {
   }
 
   const { courseUnitId } = req.params
-  const summaryQuestions = await getSummaryQuestions()
+
+  const [summaryQuestions, courseCodes] = await Promise.all([
+    getSummaryQuestions(),
+    getAccessibleCourseCodes(organisationAccess),
+  ])
 
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -344,12 +384,8 @@ const getCourseRealisationSummaries = async (req, res) => {
     ],
   })
 
-  const courseUnitOrganisationIds = (
-    feedbackTargets[0]?.courseUnit?.organisations ?? []
-  ).map(({ id }) => id)
-
-  const hasCourseUnitAccess = courseUnitOrganisationIds.some((id) =>
-    organisationIds.includes(id),
+  const hasCourseUnitAccess = courseCodes.includes(
+    feedbackTargets[0]?.courseUnit?.courseCode,
   )
 
   if (!hasCourseUnitAccess) {
