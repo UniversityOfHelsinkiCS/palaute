@@ -1,5 +1,6 @@
 const { ApplicationError } = require('../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../models')
+const { validateFeedback } = require('../util/feedbackValidator')
 
 const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
@@ -26,6 +27,9 @@ const create = async (req, res) => {
       'Attempt to create new feedback where one already exists. Use PUT to update the old',
       400,
     )
+
+  if (!(await validateFeedback(data, feedbackTarget)))
+    throw new ApplicationError('Form data not valid', 400)
 
   const newFeedback = await Feedback.create({
     data,
@@ -81,6 +85,9 @@ const update = async (req, res) => {
 
   if (!feedbackTarget.isOpen())
     throw new ApplicationError('Feedback is not open', 403)
+
+  if (!(await validateFeedback(req.body.data, feedbackTarget)))
+    throw new ApplicationError('Form data not valid', 400)
 
   feedback.data = req.body.data
 
