@@ -135,7 +135,7 @@ const checkUserWriteAccess = async (survey, user) => {
     ({ organisation }) => organisation.code === survey.typeId,
   )
 
-  return organisation.access.write ? true : false
+  return organisation.access?.write ? true : false
 }
 
 module.exports = {
