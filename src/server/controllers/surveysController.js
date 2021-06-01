@@ -43,11 +43,15 @@ const addQuestion = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const { isAdmin } = req
+  const { isAdmin, user } = req
   const survey = await Survey.findByPk(Number(req.params.id))
   if (!survey) throw new ApplicationError('Not found', 404)
   if (survey.type === 'university' && !isAdmin)
     throw new ApplicationError('Forbidden', 403)
+  if (survey.type === 'programme') {
+    const writeAccess = await checkUserWriteAccess(survey, user)
+    if (!writeAccess) throw new ApplicationError('Forbidden', 403)
+  }
   const { questions } = req.body
   if (questions) {
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
@@ -122,6 +126,15 @@ const getProgrammeSurvey = async (req, res) => {
   const response = { ...survey.toJSON(), organisation }
 
   res.send(response)
+}
+
+const checkUserWriteAccess = async (survey, user) => {
+  const organisationAccess = await user.getOrganisationAccess()
+  const writeAccess =
+    organisationAccess.length > 0 &&
+    !!organisationAccess.find((org) => org.code === survey.code).access.write
+
+  return writeAccess
 }
 
 module.exports = {
