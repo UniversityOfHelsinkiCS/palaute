@@ -58,7 +58,7 @@ const Logo = () => {
       <Link to="/" className={classes.link}>
         <img src={hyLogo} alt="HY" className={classes.image} />
         <Typography variant="h6" component="h1">
-          Palaute
+          Norppa
         </Typography>
       </Link>
     </div>
