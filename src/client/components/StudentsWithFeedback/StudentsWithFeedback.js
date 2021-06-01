@@ -14,6 +14,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
+import { getCoursePeriod } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -53,24 +54,23 @@ const StudentsWithFeedback = () => {
     </Box>
   )
 
-  const feedbackTargetName = getLanguageValue(
-    feedbackTarget.name,
-    i18n.language,
-  )
-
   const courseUnitName = getLanguageValue(
     feedbackTarget.courseUnit.name,
     i18n.language,
   )
 
+  const coursePeriod =
+    feedbackTarget && getCoursePeriod(feedbackTarget.courseRealisation)
+
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.title}>
-        {feedbackTargetName}
+        {t('studentsWithFeedback:studentsList')}
       </Typography>
 
       <Box mb={2}>
         <Typography>{courseUnitName}</Typography>
+        <Typography variant="body2">{coursePeriod}</Typography>
       </Box>
 
       {students.length === 0 && noFeedbackALert}

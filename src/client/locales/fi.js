@@ -40,9 +40,9 @@ export default {
     no: 'Ei',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     noFeedback: 'Ei vielä nähtävää täällä. Tule takaisin myöhemmin!',
-    feedbackClosed: 'Palaute on suljettu',
-    waitingForFeedback: 'Odottaa palautetta',
-    feedbackGiven: 'Palaute on annettu',
+    feedbackClosed: 'Suljetut',
+    waitingForFeedback: 'Odottavat',
+    feedbackGiven: 'Annetut',
   },
   feedbackView: {
     submitButton: 'Lähetä palaute',
@@ -71,7 +71,7 @@ export default {
     sortBy: 'Järjestä',
     courseName: 'Kurssin nimi',
     courseCode: 'Kurssikoodi',
-    mainHeading: 'Kurssini',
+    mainHeading: 'Opettamani kurssit',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
@@ -153,7 +153,7 @@ export default {
   },
   navBar: {
     myFeedbacks: 'Palautteeni',
-    myCourses: 'Kurssini',
+    myCourses: 'Opettamani kurssit',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',
     courseSummary: 'Kurssiyhteenveto',
@@ -161,6 +161,7 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Kukaan ei ole antanut palautetta vielä',
+    studentsList: 'Palautteen antaneet opiskelijat',
   },
   feedbackResponse: {
     responseLabel: 'Vastapalaute',

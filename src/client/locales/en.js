@@ -40,9 +40,9 @@ export default {
     no: 'No',
     viewFeedbackSummary: 'View feedback summary',
     noFeedback: 'Nothing to see here. Come back later!',
-    feedbackClosed: 'Feedback is closed',
-    waitingForFeedback: 'Waiting for feedback',
-    feedbackGiven: 'Feedback has been given',
+    feedbackClosed: 'Closed',
+    waitingForFeedback: 'Waiting',
+    feedbackGiven: 'Given',
   },
   feedbackView: {
     submitButton: 'Give feedback',
@@ -71,7 +71,7 @@ export default {
     sortBy: 'Sort by',
     courseName: 'Course name',
     courseCode: 'Course code',
-    mainHeading: 'My courses',
+    mainHeading: 'The courses I teach',
   },
   questionEditor: {
     addQuestion: 'Add question',
@@ -154,7 +154,7 @@ export default {
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
-    myCourses: 'My courses',
+    myCourses: 'The courses I teach',
     logOut: 'Log out',
     admin: 'Admin',
     courseSummary: 'Course summary',
@@ -162,6 +162,7 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'No one has given feedback yet',
+    studentsList: 'Students who have given feedback',
   },
   feedbackResponse: {
     responseLabel: 'Counter feedback',
