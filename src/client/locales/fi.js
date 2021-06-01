@@ -192,4 +192,8 @@ export default {
     organisationName: 'Nimi',
     organisationCode: 'Organisaation koodi',
   },
+  editProgrammeSurvey: {
+    noWriteAccess:
+      'Sinulla ei ole oikeuksia muokata tämän koulutusohjelman kyselyä',
+  },
 }

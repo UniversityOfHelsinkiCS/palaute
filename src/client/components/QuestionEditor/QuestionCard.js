@@ -135,6 +135,7 @@ const QuestionCard = ({
   onStopEditing,
   moveUpDisabled = false,
   moveDownDisabled = false,
+  highLevelWriteAccess,
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
@@ -156,22 +157,24 @@ const QuestionCard = ({
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />
-          <div>
-            {isEditing ? (
-              <Button color="primary" onClick={onStopEditing}>
-                {t('questionEditor:done')}
-              </Button>
-            ) : (
-              <>
-                <Button color="primary" onClick={onCopy}>
-                  {t('copy')}
+          {highLevelWriteAccess && (
+            <div>
+              {isEditing ? (
+                <Button color="primary" onClick={onStopEditing}>
+                  {t('questionEditor:done')}
                 </Button>
-                <Button color="primary" onClick={onStartEditing}>
-                  {t('edit')}
-                </Button>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <Button color="primary" onClick={onCopy}>
+                    {t('copy')}
+                  </Button>
+                  <Button color="primary" onClick={onStartEditing}>
+                    {t('edit')}
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </Box>
 
         {isEditing ? (

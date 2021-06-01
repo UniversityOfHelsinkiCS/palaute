@@ -48,6 +48,7 @@ const QuestionEditor = ({
   values,
   feedbackTarget,
   highLevel,
+  writeAccess,
 }) => {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -62,6 +63,8 @@ const QuestionEditor = ({
     setEditingQuestionId(null)
     if (!highLevel) await saveQuestion(values, feedbackTarget)
   }
+
+  const highLevelWriteAccess = highLevel ? writeAccess : true
 
   return (
     <FieldArray
@@ -85,6 +88,7 @@ const QuestionEditor = ({
               onStartEditing={() =>
                 setEditingQuestionId(getQuestionId(question))
               }
+              highLevelWriteAccess={highLevelWriteAccess}
             />
           ))}
 
@@ -99,13 +103,15 @@ const QuestionEditor = ({
             }}
             language={language}
           />
-          <Button
-            color="primary"
-            onClick={() => setMenuOpen(true)}
-            ref={addButtonRef}
-          >
-            {t('questionEditor:addQuestion')}
-          </Button>
+          {highLevelWriteAccess && (
+            <Button
+              color="primary"
+              onClick={() => setMenuOpen(true)}
+              ref={addButtonRef}
+            >
+              {t('questionEditor:addQuestion')}
+            </Button>
+          )}
         </div>
       )}
     />

@@ -13,12 +13,19 @@ import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
 import QuestionEditor from '../QuestionEditor'
-import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
 import LanguageTabs from '../LanguageTabs'
+import Alert from '../Alert'
+
+import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
+import userOrganisations from '../../hooks/useOrganisations'
 
 import { getInitialValues, validate, saveValues } from './utils'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const useStyles = makeStyles((theme) => ({
+  programmeName: {
+    marginBottom: theme.spacing(2),
+  },
   progressContainer: {
     padding: theme.spacing(4, 0),
     display: 'flex',
@@ -30,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EditProgrammeSurvey = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { surveyCode } = useParams()
@@ -38,6 +45,7 @@ const EditProgrammeSurvey = () => {
   const [language, setLanguage] = useState('fi')
 
   const { survey, isLoading: surveyIsLoading } = useProgrammeSurvey(surveyCode)
+  const { organisations } = userOrganisations()
 
   const surveyId = survey && survey.id
 
@@ -62,9 +70,25 @@ const EditProgrammeSurvey = () => {
 
   const initialValues = getInitialValues(survey)
 
+  const programmeName = getLanguageValue(
+    survey.organisation.name,
+    i18n.language,
+  )
+
+  const writeAccess =
+    organisations &&
+    organisations.length > 0 &&
+    !!organisations.find((org) => org.code === surveyCode).access.write
+
   return (
     <>
+      <Typography variant="h4" component="h4" className={classes.programmeName}>
+        {programmeName}
+      </Typography>
       {!survey && <Typography>This programme has no survey yet</Typography>}
+      {!writeAccess && (
+        <Alert severity="info">{t('editProgrammeSurvey:noWriteAccess')}</Alert>
+      )}
       <LanguageTabs
         language={language}
         onChange={(newLanguage) => setLanguage(newLanguage)}
@@ -84,13 +108,16 @@ const EditProgrammeSurvey = () => {
               name="questions"
               values={values}
               highLevel
+              writeAccess={writeAccess}
             />
 
-            <Box mt={2}>
-              <Button color="primary" variant="contained" type="submit">
-                {t('save')}
-              </Button>
-            </Box>
+            {writeAccess && (
+              <Box mt={2}>
+                <Button color="primary" variant="contained" type="submit">
+                  {t('save')}
+                </Button>
+              </Box>
+            )}
           </Form>
         )}
       </Formik>

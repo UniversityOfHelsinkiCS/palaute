@@ -193,4 +193,7 @@ export default {
     organisationName: 'Name',
     organisationCode: 'Organisation code',
   },
+  editProgrammeSurvey: {
+    noWriteAccess: `You don't have the rights to edit the programme survey`,
+  },
 }

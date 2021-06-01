@@ -1,5 +1,5 @@
 const { ApplicationError } = require('../util/customErrors')
-const { Survey, Question } = require('../models')
+const { Survey, Question, Organisation } = require('../models')
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   const updatedQuestionIdsList = []
@@ -111,9 +111,17 @@ const getProgrammeSurvey = async (req, res) => {
     },
   })
 
+  const organisation = await Organisation.findOne({
+    where: {
+      code: surveyCode,
+    },
+  })
+
   await survey.populateQuestions()
 
-  res.send(survey)
+  const response = { ...survey.toJSON(), organisation }
+
+  res.send(response)
 }
 
 module.exports = {
