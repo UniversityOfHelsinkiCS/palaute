@@ -137,7 +137,7 @@ class FeedbackTarget extends Model {
       return publicFeedbacks
     }
 
-    if (publicFeedbacks.length <= 5) return []
+    if (publicFeedbacks.length < 5) return []
 
     const publicQuestionIds = await this.getPublicQuestionIds()
 
