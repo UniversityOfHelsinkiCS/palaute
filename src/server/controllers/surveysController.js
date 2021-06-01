@@ -130,11 +130,12 @@ const getProgrammeSurvey = async (req, res) => {
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
-  const writeAccess =
-    organisationAccess.length > 0 &&
-    !!organisationAccess.find((org) => org.code === survey.code).access.write
 
-  return writeAccess
+  const organisation = organisationAccess.find(
+    ({ organisation }) => organisation.code === survey.typeId,
+  )
+
+  return organisation.access.write ? true : false
 }
 
 module.exports = {
