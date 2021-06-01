@@ -31,7 +31,7 @@ export default {
     copy: 'Kopioi',
   },
   userFeedbacks: {
-    mainHeading: 'Palautteeni',
+    mainHeading: 'Kurssipalautteeni',
     giveFeedbackButton: 'Anna palautetta',
     modifyFeedbackButton: 'Muokkaa palautetta',
     clearFeedbackButton: 'Tyhjennä palaute',
@@ -152,7 +152,7 @@ export default {
     exportCsv: 'Lataa CSV',
   },
   navBar: {
-    myFeedbacks: 'Palautteeni',
+    myFeedbacks: 'Kurssipalautteeni',
     myCourses: 'Opettamani kurssit',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',

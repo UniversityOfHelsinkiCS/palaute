@@ -96,11 +96,10 @@ const NavBar = () => {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
-    isStudent &&
-      isTeacher && {
-        label: t('navBar:myFeedbacks'),
-        to: '/feedbacks',
-      },
+    isStudent && {
+      label: t('navBar:myFeedbacks'),
+      to: '/feedbacks',
+    },
     hasSomeOrganisationAccess && {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
