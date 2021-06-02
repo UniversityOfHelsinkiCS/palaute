@@ -23,6 +23,7 @@ import Alert from '../Alert'
 import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
 import PublicQuestions from '../PublicQuestions'
+import { getCoursePeriod } from './utils'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -92,11 +93,17 @@ const FeedbackResponse = () => {
     return false
   }
 
+  const coursePeriod =
+    feedbackTarget && getCoursePeriod(feedbackTarget.courseRealisation)
+
   return (
     <>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {courseUnitName}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {coursePeriod}
         </Typography>
       </Box>
       <PublicQuestions />
