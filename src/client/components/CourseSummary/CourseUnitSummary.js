@@ -16,7 +16,14 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
       <DividerRow />
       {courseUnits.map(
         (
-          { courseCode, name, results, feedbackCount, feedbackResponse, id },
+          {
+            courseCode,
+            name,
+            results,
+            feedbackCount,
+            feedbackResponseGiven,
+            id,
+          },
           i,
         ) => (
           <Fragment key={id}>
@@ -33,7 +40,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
               results={results}
               questions={questions}
               feedbackCount={feedbackCount}
-              feedbackResponseGiven={Boolean(feedbackResponse)}
+              feedbackResponseGiven={Boolean(feedbackResponseGiven)}
               accordionEnabled
             >
               <CourseRealisationSummary courseUnitId={id} />

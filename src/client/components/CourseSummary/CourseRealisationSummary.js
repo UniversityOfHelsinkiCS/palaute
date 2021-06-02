@@ -8,15 +8,15 @@ import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 
 const getLabel = (courseRealisation) => {
-  const { startDate, endDate, feedbackTarget } = courseRealisation
+  const { startDate, endDate, feedbackTargetId } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
 
   const label = `${formattedStartDate} - ${formattedEndDate}`
 
-  return feedbackTarget ? (
-    <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`}>
+  return feedbackTargetId ? (
+    <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`}>
       {label}
     </Link>
   ) : (
@@ -58,7 +58,7 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
             questions={questions}
             feedbackCount={courseRealisation.feedbackCount}
             feedbackResponseGiven={Boolean(
-              courseRealisation.feedbackTarget?.feedbackResponse,
+              courseRealisation.feedbackResponseGiven,
             )}
             level={2}
           />
