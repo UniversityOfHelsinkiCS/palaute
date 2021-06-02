@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 
 import {
   Box,
@@ -10,41 +10,24 @@ import {
   makeStyles,
 } from '@material-ui/core'
 
-import { setYear, startOfYear, endOfYear } from 'date-fns'
 import { Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import useCourseUnitSummaries from '../../hooks/useCourseUnitSummaries'
+import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import VerticalHeading from './VerticalHeading'
-import Filters from './Filters'
 import CourseUnitSummary from './CourseUnitSummary'
 import DividerRow from './DividerRow'
 import Alert from '../Alert'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   table: {
     borderSpacing: '2px',
   },
-  filters: {
-    padding: theme.spacing(2),
-    width: '450px',
-  },
-}))
+})
 
-const getSummaryQueryOptions = ({ year }) => {
-  const from = startOfYear(setYear(new Date(), year))
-  const to = endOfYear(setYear(new Date(), year))
-
-  return {
-    from,
-    to,
-    keepPreviousData: true,
-  }
-}
-
-const CourseTable = ({ organisations, questions, year, onYearChange }) => {
+const CourseTable = ({ organisations, questions }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
@@ -54,9 +37,7 @@ const CourseTable = ({ organisations, questions, year, onYearChange }) => {
         <table className={classes.table}>
           <thead>
             <tr>
-              <th className={classes.filters}>
-                <Filters year={year} onYearChange={onYearChange} />
-              </th>
+              <th> </th>
               <th> </th>
               {questions.map(({ id, data }) => (
                 <VerticalHeading key={id}>
@@ -107,11 +88,8 @@ const CourseTable = ({ organisations, questions, year, onYearChange }) => {
 
 const CourseSummary = () => {
   const { t } = useTranslation()
-  const [year, setYear] = useState(new Date().getFullYear())
 
-  const { courseUnitSummaries, isLoading } = useCourseUnitSummaries(
-    getSummaryQueryOptions({ year }),
-  )
+  const { organisationSummaries, isLoading } = useOrganisationSummaries()
 
   if (isLoading) {
     return (
@@ -121,11 +99,11 @@ const CourseSummary = () => {
     )
   }
 
-  if (!courseUnitSummaries) {
+  if (!organisationSummaries) {
     return <Redirect to="/" />
   }
 
-  const { questions, organisations } = courseUnitSummaries
+  const { questions, organisations } = organisationSummaries
 
   return (
     <>
@@ -136,12 +114,7 @@ const CourseSummary = () => {
       </Box>
       <Card>
         <CardContent>
-          <CourseTable
-            organisations={organisations}
-            questions={questions}
-            year={year}
-            onYearChange={setYear}
-          />
+          <CourseTable organisations={organisations} questions={questions} />
         </CardContent>
       </Card>
     </>

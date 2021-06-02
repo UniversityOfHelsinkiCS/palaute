@@ -10,7 +10,7 @@ const users = require('../controllers/userController')
 const surveys = require('../controllers/surveysController')
 const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
-const courseUnitSummary = require('../controllers/courseUnitSummaryController')
+const courseSummary = require('../controllers/courseSummaryController')
 const organisation = require('../controllers/organisationController')
 
 const router = Router()
@@ -37,6 +37,7 @@ router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
 router.get('/feedback-targets/:id/feedbacks', feedbackTargets.getFeedbacks)
+
 router.put(
   '/feedback-targets/:id/reply',
   feedbackTargets.updateFeedbackResponse,
@@ -64,11 +65,11 @@ router.get(
 
 router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
 
-router.get('/course-unit-summaries', courseUnitSummary.getCourseUnitSummaries)
+router.get('/course-summaries/organisations', courseSummary.getByOrganisations)
 
 router.get(
-  '/course-unit-summaries/:courseUnitId',
-  courseUnitSummary.getCourseRealisationSummaries,
+  '/course-summaries/course-units/:courseUnitId',
+  courseSummary.getByCourseUnit,
 )
 
 router.get('/organisations', organisation.getOrganisations)

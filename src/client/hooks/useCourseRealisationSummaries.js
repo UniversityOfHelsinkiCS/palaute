@@ -9,7 +9,7 @@ const useCourseRealisationSummaries = (courseUnitId, options = {}) => {
 
   const queryFn = async () => {
     const { data } = await apiClient.get(
-      `/course-unit-summaries/${courseUnitId}`,
+      `/course-summaries/course-units/${courseUnitId}`,
     )
 
     return data
