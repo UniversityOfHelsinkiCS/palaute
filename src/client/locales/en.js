@@ -189,6 +189,7 @@ export default {
     feedbackCount: 'Feedback count',
     feedbackResponseGiven: 'Feedback response has been given',
     feedbackResponseNotGiven: 'Feedback response has not been given',
+    feedbackStillOpen: 'Feedback for this course is still ongoing',
   },
   organisationView: {
     organisations: 'Organisations',

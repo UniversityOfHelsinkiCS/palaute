@@ -188,6 +188,7 @@ export default {
     feedbackCount: 'Palautteiden määrä',
     feedbackResponseGiven: 'Vastapalaute on annettu',
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
+    feedbackStillOpen: 'Kurssin palautejakso on vielä käynnissä',
   },
   organisationView: {
     organisations: 'Organisaatiot',

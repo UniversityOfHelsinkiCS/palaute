@@ -6,7 +6,7 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
-
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
   clearIcon: {
     color: '#eb4841',
+  },
+  accessTime: {
+    color: '#f5a223',
   },
 }))
 
@@ -67,6 +70,12 @@ const ResultsRow = ({
   const feedbackResponseNotGivenContent = (
     <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
       <ClearIcon className={classes.clearIcon} />
+    </Tooltip>
+  )
+
+  const feedbackStillOpenContent = (
+    <Tooltip title={t('courseSummary:feedbackStillOpen')}>
+      <AccessTimeIcon className={classes.accessTime} />
     </Tooltip>
   )
 
