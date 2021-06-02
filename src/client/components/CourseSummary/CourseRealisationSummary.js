@@ -7,6 +7,8 @@ import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSumma
 import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 
+import { getFeedbackResponseGiven } from './utils'
+
 const getLabel = (courseRealisation) => {
   const { startDate, endDate, feedbackTargetId } = courseRealisation
 
@@ -49,22 +51,27 @@ const CourseRealisationSummary = ({ courseUnitId }) => {
   return (
     <>
       <DividerRow />
-      {courseRealisations.map((courseRealisation, i) => (
-        <Fragment key={courseRealisation.id}>
-          <ResultsRow
-            key={courseRealisation.id}
-            label={getLabel(courseRealisation)}
-            results={courseRealisation.results}
-            questions={questions}
-            feedbackCount={courseRealisation.feedbackCount}
-            feedbackResponseGiven={Boolean(
-              courseRealisation.feedbackResponseGiven,
-            )}
-            level={2}
-          />
-          {i < courseRealisations.length - 1 && <DividerRow />}
-        </Fragment>
-      ))}
+      {courseRealisations.map((courseRealisation, i) => {
+        const feedbackResponseGiven = getFeedbackResponseGiven(
+          courseRealisation.feedbackResponseGiven,
+          courseRealisation.closesAt,
+        )
+
+        return (
+          <Fragment key={courseRealisation.id}>
+            <ResultsRow
+              key={courseRealisation.id}
+              label={getLabel(courseRealisation)}
+              results={courseRealisation.results}
+              questions={questions}
+              feedbackCount={courseRealisation.feedbackCount}
+              feedbackResponseGiven={feedbackResponseGiven}
+              level={2}
+            />
+            {i < courseRealisations.length - 1 && <DividerRow />}
+          </Fragment>
+        )
+      })}
     </>
   )
 }

@@ -1,10 +1,7 @@
 import { isBefore, parseISO } from 'date-fns'
 
-export const getFeedbackResponseGiven = (courseRealisation) => {
-  if (!courseRealisation.feedbackTarget) return 'NONE'
+export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
+  if (isBefore(Date.now(), parseISO(closesAt))) return 'OPEN'
 
-  if (isBefore(Date.now(), parseISO(courseRealisation.feedbackTarget.closesAt)))
-    return 'OPEN'
-
-  return courseRealisation.feedbackTarget.feedbackResponse ? 'GIVEN' : 'NONE'
+  return feedbackResponseGiven ? 'GIVEN' : 'NONE'
 }

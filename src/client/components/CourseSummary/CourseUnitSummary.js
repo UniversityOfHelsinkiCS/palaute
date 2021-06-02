@@ -7,6 +7,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import CourseRealisationSummary from './CourseRealisationSummary'
 import DividerRow from './DividerRow'
+import { getFeedbackResponseGiven } from './utils'
 
 const CourseUnitSummary = ({ courseUnits, questions }) => {
   const { i18n } = useTranslation()
@@ -21,33 +22,40 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             name,
             results,
             feedbackCount,
-            feedbackResponseGiven,
             id,
+            feedbackResponseGiven,
+            closesAt,
           },
           i,
-        ) => (
-          <Fragment key={id}>
-            <ResultsRow
-              label={
-                <Link
-                  component={RouterLink}
-                  to={`/courses/${courseCode}/targets`}
-                >
-                  {getLanguageValue(name, i18n.language)} ({courseCode})
-                </Link>
-              }
-              level={1}
-              results={results}
-              questions={questions}
-              feedbackCount={feedbackCount}
-              feedbackResponseGiven={Boolean(feedbackResponseGiven)}
-              accordionEnabled
-            >
-              <CourseRealisationSummary courseUnitId={id} />
-            </ResultsRow>
-            {i < courseUnits.length - 1 && <DividerRow />}
-          </Fragment>
-        ),
+        ) => {
+          const feedbackResponseStatus = getFeedbackResponseGiven(
+            feedbackResponseGiven,
+            closesAt,
+          )
+          return (
+            <Fragment key={id}>
+              <ResultsRow
+                label={
+                  <Link
+                    component={RouterLink}
+                    to={`/courses/${courseCode}/targets`}
+                  >
+                    {getLanguageValue(name, i18n.language)} ({courseCode})
+                  </Link>
+                }
+                level={1}
+                results={results}
+                questions={questions}
+                feedbackCount={feedbackCount}
+                feedbackResponseGiven={feedbackResponseStatus}
+                accordionEnabled
+              >
+                <CourseRealisationSummary courseUnitId={id} />
+              </ResultsRow>
+              {i < courseUnits.length - 1 && <DividerRow />}
+            </Fragment>
+          )
+        },
       )}
     </>
   )

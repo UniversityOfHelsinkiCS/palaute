@@ -46,6 +46,7 @@ FROM
       organisation_id,
       organisation_name,
       organisation_code,
+      closes_at,
       rank() OVER (
         PARTITION BY course_realisation_id
         ORDER BY
@@ -61,6 +62,7 @@ FROM
           course_realisations.name AS course_realisation_name,
           course_realisations.start_date AS course_realisation_start_date,
           course_realisations.end_date AS course_realisation_end_date,
+          feedback_targets.closes_at AS closes_at,
           course_units.id AS course_unit_id,
           course_units.course_code AS course_code,
           course_units.name AS course_unit_name,
@@ -110,6 +112,7 @@ FROM
       course_code,
       feedback_id,
       feedback_target_id,
+      closes_at,
       rank() OVER (
         PARTITION BY course_realisation_id
         ORDER BY
@@ -129,6 +132,7 @@ FROM
           course_units.id AS course_unit_id,
           course_units.course_code AS course_code,
           course_units.name AS course_unit_name,
+          feedback_targets.closes_at AS closes_at,
           CASE 
             WHEN feedback_targets.feedback_response IS NOT NULL AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
             ELSE FALSE
@@ -191,6 +195,7 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
       const {
         course_unit_name: name,
         course_code: courseCode,
+        closes_at: closesAt,
       } = courseUnitRows[0]
 
       const { previous = [], current = [] } = _.groupBy(courseUnitRows, (row) =>
@@ -215,6 +220,7 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
         feedbackCount,
         previousFeedbackCount,
         feedbackResponseGiven,
+        closesAt,
       }
     },
   )
@@ -269,7 +275,7 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
     (row) => row.course_realisation_id,
   )
 
-  const coruseRealisations = Object.entries(rowsByCourseRealisationId).map(
+  const courseRealisations = Object.entries(rowsByCourseRealisationId).map(
     ([courseRealisationId, courseRealisationRows]) => {
       const {
         course_realisation_name: name,
@@ -278,6 +284,7 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
         feedback_response_given: feedbackResponseGiven,
         course_code: courseCode,
         feedback_target_id: feedbackTargetId,
+        closes_at: closesAt,
       } = courseRealisationRows[0]
 
       const { results, feedbackCount } = getResults(
@@ -295,11 +302,12 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
         feedbackCount,
         feedbackResponseGiven,
         feedbackTargetId,
+        closesAt,
       }
     },
   )
 
-  return _.orderBy(coruseRealisations, ['startDate'], ['desc'])
+  return _.orderBy(courseRealisations, ['startDate'], ['desc'])
 }
 
 const getCourseRealisationSummaries = async ({ courseUnitId, questionIds }) => {

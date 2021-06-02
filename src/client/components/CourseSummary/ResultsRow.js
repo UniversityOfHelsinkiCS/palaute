@@ -108,8 +108,9 @@ const ResultsRow = ({
         ))}
         <td className={classes.resultCell}>{feedbackCount}</td>
         <td className={classes.resultCell}>
-          {feedbackResponseGiven === true && feedbackResponseGivenContent}
-          {feedbackResponseGiven === false && feedbackResponseNotGivenContent}
+          {feedbackResponseGiven === 'GIVEN' && feedbackResponseGivenContent}
+          {feedbackResponseGiven === 'NONE' && feedbackResponseNotGivenContent}
+          {feedbackResponseGiven === 'OPEN' && feedbackStillOpenContent}
         </td>
       </tr>
       {accordionEnabled && accordionOpen && children}
