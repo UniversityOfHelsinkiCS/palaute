@@ -120,7 +120,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
-  const { closesAt, opensAt, feedbackCount } = feedbackTarget
+  const { closesAt, opensAt, feedbackCount, enrolledCount } = feedbackTarget
 
   const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(opensAt),
@@ -133,6 +133,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <ListItemText
         primary={t('feedbackTargetList:studentFeedbacks', {
           count: feedbackCount,
+          totalCount: enrolledCount,
         })}
       />
       <Box ml={2} display="flex">

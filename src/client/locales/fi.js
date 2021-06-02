@@ -136,7 +136,7 @@ export default {
     copyResponseLink: 'Kopioi palautelinkki',
     copied: 'Linkki kopioitu leikepöydälle',
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
-    studentFeedbacks: '{{count}} palautetta annettu',
+    studentFeedbacks: '{{count}}/{{totalCount}} palautetta annettu',
     giveFeedbackResponse: 'Anna vastapalaute',
     editFeedbackResponse: 'Muokkaa vastapalautetta',
     noCourseRealisations:

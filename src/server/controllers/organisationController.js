@@ -1,9 +1,9 @@
 const getOrganisations = async (req, res) => {
-  const { user, headers } = req
+  const { user, headers, isAdmin } = req
 
   const isEmployee = Boolean(headers?.employeenumber)
 
-  if (!isEmployee) {
+  if (!isAdmin && !isEmployee) {
     return res.send([])
   }
 

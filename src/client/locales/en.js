@@ -138,7 +138,7 @@ export default {
     copyResponseLink: 'Copy link to response',
     copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
-    studentFeedbacks: '{{count}} feedbacks given',
+    studentFeedbacks: '{{count}}/{{totalCount}} feedbacks given',
     giveFeedbackResponse: 'Give counter feedback',
     noCourseRealisations: 'This course has no relevant course instances',
     editFeedbackResponse: 'Edit counter feedback',

@@ -130,7 +130,7 @@ export default {
     copyLink: 'Kopiera svar via länk',
     copied: 'Länk kopierat till urklippet',
     showStudentsWithFeedback: 'Visa studerandena som har givit respons',
-    studentFeedbacks: '{{count}} responser givna',
+    studentFeedbacks: '{{count}}/{{totalCount}} responser givna',
     giveFeedbackResponse: 'Ge svar på responsen',
     editFeedbackResponse: 'Redigera svar på responsen',
     noCourseRealisations: 'Kursen arrangeras inte för tillfället',

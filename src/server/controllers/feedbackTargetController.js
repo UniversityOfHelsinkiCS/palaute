@@ -325,19 +325,37 @@ const getTargetsByCourseUnit = async (req, res) => {
     attributes: [
       'feedbackTargetId',
       [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount'],
+      [
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM user_feedback_targets WHERE feedback_target_id = "UserFeedbackTarget".feedback_target_id)',
+        ),
+        'enrolledCount',
+      ],
+      [
+        sequelize.literal(
+          '(SELECT feedback_response FROM feedback_targets WHERE id = "UserFeedbackTarget".feedback_target_id)',
+        ),
+        'feedbackResponse',
+      ],
     ],
   })
-
   const feedbackCountByFeedbackTargetId = _.zipObject(
     studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
-    studentFeedbackTargets.map((target) =>
-      parseInt(target.get('feedbackCount'), 10),
-    ),
+    studentFeedbackTargets.map((target) => ({
+      feedbackCount: parseInt(target.get('feedbackCount'), 10),
+      enrolledCount: parseInt(target.get('enrolledCount'), 10),
+      responseGiven: target.get('feedbackResponse') !== '',
+    })),
   )
   const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
     (target) => ({
       ...target,
-      feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
+      feedbackCount:
+        feedbackCountByFeedbackTargetId[target.id]?.feedbackCount ?? 0,
+      enrolledCount:
+        feedbackCountByFeedbackTargetId[target.id]?.enrolledCount ?? 0,
+      responseGiven:
+        feedbackCountByFeedbackTargetId[target.id]?.responseGiven ?? false,
     }),
   )
   res.send(feedbackTargetsWithFeedbackCounts)
