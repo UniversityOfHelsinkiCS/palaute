@@ -15,8 +15,8 @@ import TeacherCourseListItem from './TeacherCourseListItem'
 import { sortTable } from '../../util/tableUtils'
 
 const TeacherCourseList = ({ courses }) => {
-  const [order, setOrder] = useState('desc')
-  const [orderBy, setOrderBy] = useState('name')
+  const [order, setOrder] = useState('asc')
+  const [orderBy, setOrderBy] = useState('startDate')
 
   const { t } = useTranslation()
 
