@@ -4,6 +4,7 @@ const _ = require('lodash')
 const { sequelize } = require('../util/dbConnection')
 const lomakeClient = require('../util/lomakeClient')
 const Organisation = require('./organisation')
+const { ADMINS } = require('../../config')
 
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
@@ -17,6 +18,13 @@ const normalizeOrganisationCode = (r) => {
 
 class User extends Model {
   async getOrganisationAccess() {
+    if (ADMINS.includes(this.username)) {
+      const allOrganisations = await Organisation.findAll({})
+      return allOrganisations.map((organisation) => ({
+        organisation,
+        access: { read: true, write: true },
+      }))
+    }
     const { data: access } = await lomakeClient.get(
       `/organizations/${this.username}`,
     )
@@ -43,7 +51,6 @@ class User extends Model {
         },
       },
     })
-
     return organisations.map((organisation) => ({
       organisation,
       access: access[codeByNormalizedCode[organisation.code]],
