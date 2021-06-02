@@ -344,7 +344,7 @@ const getTargetsByCourseUnit = async (req, res) => {
     studentFeedbackTargets.map((target) => ({
       feedbackCount: parseInt(target.get('feedbackCount'), 10),
       enrolledCount: parseInt(target.get('enrolledCount'), 10),
-      responseGiven: target.get('feedbackResponse') !== '',
+      responseGiven: !!target.get('feedbackResponse'),
     })),
   )
   const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
