@@ -71,6 +71,8 @@ export default {
     sortBy: 'Järjestä',
     courseName: 'Kurssin nimi',
     courseCode: 'Kurssikoodi',
+    startDate: 'Alku pvm.',
+    endDate: 'Loppu pvm.',
     mainHeading: 'Opettamani kurssit',
   },
   questionEditor: {

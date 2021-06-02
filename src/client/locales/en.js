@@ -71,6 +71,8 @@ export default {
     sortBy: 'Sort by',
     courseName: 'Course name',
     courseCode: 'Course code',
+    startDate: 'Start date',
+    endDate: 'End date',
     mainHeading: 'The courses I teach',
   },
   questionEditor: {

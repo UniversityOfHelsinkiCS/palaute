@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { isAfter, parseISO } from 'date-fns'
+import { isAfter, parseISO, format } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -47,4 +47,21 @@ export const getRelevantCourses = (courses, relevant) => {
   })
 
   return filteredCourses
+}
+
+export const formatValidityPeriod = (validityPeriod) => {
+  const parsedStartDate = parseISO(validityPeriod.startDate)
+  const parsedEndDate = parseISO(validityPeriod.endDate)
+
+  if (Number.isNaN(parsedEndDate.getTime())) {
+    return {
+      startDate: format(parsedStartDate, 'dd.MM.yyyy'),
+      endDate: format(parsedStartDate, 'dd.MM.yyyy'),
+    }
+  }
+
+  return {
+    startDate: format(parsedStartDate, 'dd.MM.yyyy'),
+    endDate: format(parsedEndDate, 'dd.MM.yyyy'),
+  }
 }

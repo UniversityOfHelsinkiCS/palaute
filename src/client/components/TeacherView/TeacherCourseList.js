@@ -49,6 +49,20 @@ const TeacherCourseList = ({ courses }) => {
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
+            <TableHeadCell
+              id="startDate"
+              name={t('teacherView:startDate')}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
+            <TableHeadCell
+              id="endDate"
+              name={t('teacherView:endDate')}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
           </TableRow>
         </TableHead>
         <TableBody>
