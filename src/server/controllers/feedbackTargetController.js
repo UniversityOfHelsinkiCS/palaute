@@ -17,6 +17,7 @@ const {
   Survey,
   Question,
   User,
+  CourseUnitsOrganisation,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -379,14 +380,35 @@ const getFeedbacks = async (req, res) => {
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
+  const courseUnitsOrganisation = await CourseUnitsOrganisation.findOne({
+    where: {
+      courseUnitId: feedbackTarget.courseUnitId,
+    },
+  })
+
+  const userInfo = await User.findByPk(user.id)
+  const userOrganisations = await userInfo.getOrganisationAccess()
+
+  const userHasOrganisationAccess = Boolean(
+    userOrganisations.find(
+      (org) => org.organisation.id === courseUnitsOrganisation.organisationId,
+    ),
+  )
+
   if (!isAdmin) {
-    if (feedbackTarget.feedbackVisibility === 'NONE') {
+    if (
+      feedbackTarget.feedbackVisibility === 'NONE' &&
+      !userHasOrganisationAccess
+    ) {
       return res.send([])
     }
 
     if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
       // outsider, not in the course
-      if (feedbackTarget.feedbackVisibility !== 'ALL') {
+      if (
+        feedbackTarget.feedbackVisibility !== 'ALL' &&
+        !userHasOrganisationAccess
+      ) {
         return res.send([])
       }
 
