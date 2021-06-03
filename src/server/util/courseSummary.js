@@ -227,12 +227,12 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
 
       const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
 
-      const { results, feedbackCount, studentCount } = getResults(
-        courseUnitRows,
-        questionIds,
-      )
+      const {
+        results: currentResults,
+        feeedbackCount: currentFeedbackCount,
+        studentCount: currentStudentCount,
+      } = getResults(current, questionIds)
 
-      const { results: currentResults } = getResults(current, questionIds)
       const { results: previousResults } = getResults(previous, questionIds)
 
       // Results from current realisation vs. results from the previous realisations
@@ -251,10 +251,10 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
         id: courseUnitId,
         name,
         courseCode,
-        results,
+        results: currentResults,
         resultsDifference,
-        feedbackCount,
-        studentCount,
+        feedbackCount: currentFeedbackCount,
+        studentCount: currentStudentCount,
         feedbackResponseGiven,
         closesAt,
       }
