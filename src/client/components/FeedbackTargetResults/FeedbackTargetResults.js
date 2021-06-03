@@ -86,7 +86,7 @@ const FeedbackTargetResults = () => {
             {courseDate}
           </Typography>
         </div>
-        {feedbacks.length === 0 && isTeacher && (
+        {feedbacks.length !== 0 && isTeacher && (
           <ExportCsvLink
             feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
