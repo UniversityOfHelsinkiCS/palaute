@@ -26,7 +26,7 @@ const run = async () => {
 const start = async () => {
   logger.info('Setup cron job')
   const cronTime = inProduction
-    ? '30 1 * * *' // Every night at 01:30 in production
+    ? '30 5 * * *' // Every night at 05:30 in production
     : '*/30 * * * *' // Every 30 minutes in development
   schedule(cronTime, run)
 
