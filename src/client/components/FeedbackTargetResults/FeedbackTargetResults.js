@@ -113,7 +113,7 @@ const FeedbackTargetResults = () => {
         <QuestionResults
           publicQuestionIds={publicQuestionIds ?? []}
           showPublicInfo={isTeacher}
-          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/public-questions`}
+          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/feedback-response`}
           questions={questions}
           feedbacks={feedbacks}
           isTeacher={isTeacher}

@@ -133,7 +133,7 @@ export default {
     showSurvey: 'Näytä kysely',
     editSurvey: 'Muokkaa kyselyä',
     copyLink: 'Kopioi vastauslinkki',
-    copyResponseLink: 'Kopioi palautelinkki',
+    copyResponseLink: 'Kopioi linkki vastapalautteeseen',
     copied: 'Linkki kopioitu leikepöydälle',
     showStudentsWithFeedback: 'Näytä palautetta antaneet opiskelijat',
     studentFeedbacks: '{{count}}/{{totalCount}} palautetta annettu',

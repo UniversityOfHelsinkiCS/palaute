@@ -13,7 +13,6 @@ import FeedbackTargetResults from './FeedbackTargetResults'
 import StudentsWithFeedback from './StudentsWithFeedback'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import FeedbackResponse from './FeedbackResponse'
-import PublicQuestions from './PublicQuestions'
 import CourseSummary from './CourseSummary'
 import OrganisationView from './OrganisationView'
 import EditProgrammeSurvey from './EditProgrammeSurvey'
@@ -64,10 +63,6 @@ const Router = () => {
         <Route
           path="/targets/:id/feedback-response"
           component={FeedbackResponse}
-        />
-        <Route
-          path="/targets/:id/public-questions"
-          component={PublicQuestions}
         />
         <Route path="/course-summary" component={CourseSummary} />
         <Route path="/organisations" component={OrganisationView} />
