@@ -2,7 +2,7 @@ const _ = require('lodash')
 
 const { sequelize } = require('./dbConnection')
 
-const FEEDBACKS_QUERY = `
+const QUESTION_AVERAGES_QUERY = `
 SELECT
   feedback_target_id,
   question_id,
@@ -49,7 +49,26 @@ GROUP BY
   question_id
 `
 
+const COUNTS_QUERY = `
+SELECT
+  feedback_target_id,
+  COUNT(*) AS student_count,
+  COUNT(feedback_id) AS feedback_count
+FROM
+  user_feedback_targets
+WHERE
+  user_feedback_targets.access_status = 'STUDENT'
+GROUP BY
+  feedback_target_id
+`
+
 const ORGANISATION_SUMMARY_QUERY = `
+WITH question_averages AS (
+  ${QUESTION_AVERAGES_QUERY}
+), feedback_counts AS (
+  ${COUNTS_QUERY}
+)
+
 SELECT
   *
 FROM
@@ -81,35 +100,29 @@ FROM
         ORDER BY
           course_realisations.start_date DESC
       ) AS course_realisation_index
-    FROM
-      (${FEEDBACKS_QUERY}) feedbacks_5
-      INNER JOIN feedback_targets ON feedbacks_5.feedback_target_id = feedback_targets.id
+    FROM question_averages
+      INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
       INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
       INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
       INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
       INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
-      INNER JOIN (
-        SELECT
-          feedback_target_id,
-          COUNT(*) AS student_count,
-          COUNT(feedback_id) AS feedback_count
-        FROM
-          user_feedback_targets
-        WHERE
-          user_feedback_targets.access_status = 'STUDENT'
-        GROUP BY
-          feedback_target_id
-      ) feedbacks_6 ON feedbacks_6.feedback_target_id = feedback_targets.id
+      INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
     WHERE
       feedback_targets.feedback_type = 'courseRealisation'
       AND course_units.course_code IN (:courseCodes)
       AND course_realisations.start_date < NOW()
-  ) feedbacks_7
+  ) feedbacks
 WHERE
   course_realisation_index <= 4;
 `
 
 const COURSE_REALISATION_SUMMARY_QUERY = `
+WITH question_averages AS (
+  ${QUESTION_AVERAGES_QUERY}
+), feedback_counts AS (
+  ${COUNTS_QUERY}
+)
+
 SELECT
   *
 FROM
@@ -136,23 +149,11 @@ FROM
         ORDER BY
           course_realisations.start_date DESC
       ) AS course_realisation_index
-    FROM
-      (${FEEDBACKS_QUERY}) feedbacks_5
-      INNER JOIN feedback_targets ON feedbacks_5.feedback_target_id = feedback_targets.id
+    FROM question_averages
+      INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
       INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
       INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-      INNER JOIN (
-        SELECT
-          feedback_target_id,
-          COUNT(*) AS student_count,
-          COUNT(feedback_id) AS feedback_count
-        FROM
-          user_feedback_targets
-        WHERE
-          user_feedback_targets.access_status = 'STUDENT'
-        GROUP BY
-          feedback_target_id
-      ) feedbacks_6 ON feedbacks_6.feedback_target_id = feedback_targets.id
+      INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
     WHERE
       feedback_targets.feedback_type = 'courseRealisation'
       AND course_unit_id = :courseUnitId
