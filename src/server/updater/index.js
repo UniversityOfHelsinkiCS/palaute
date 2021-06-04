@@ -24,6 +24,9 @@ const run = async () => {
 }
 
 const start = async () => {
+  if (!inProduction) {
+    return
+  }
   logger.info('Setup cron job')
   const cronTime = inProduction
     ? '30 5 * * *' // Every night at 05:30 in production
