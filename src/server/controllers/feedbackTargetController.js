@@ -328,7 +328,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount'],
       [
         sequelize.literal(
-          '(SELECT COUNT(*) FROM user_feedback_targets WHERE feedback_target_id = "UserFeedbackTarget".feedback_target_id)',
+          `(SELECT COUNT(*) FROM user_feedback_targets WHERE feedback_target_id = "UserFeedbackTarget".feedback_target_id AND access_status = 'STUDENT')`,
         ),
         'enrolledCount',
       ],
