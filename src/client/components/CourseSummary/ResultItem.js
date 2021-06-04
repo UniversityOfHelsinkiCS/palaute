@@ -1,11 +1,23 @@
 import React from 'react'
 import { Tooltip, makeStyles } from '@material-ui/core'
+import PlusIcon from '@material-ui/icons/Add'
+import MinusIcon from '@material-ui/icons/Remove'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
   item: {
     textAlign: 'center',
+  },
+  content: {
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    whiteSpace: 'nowrap',
+    lineHeight: 2,
+  },
+  indicator: {
+    marginRight: '4px',
   },
   empty: {
     backgroundColor: '#f5f5f5',
@@ -27,8 +39,21 @@ const useStyles = makeStyles({
   },
 })
 
+const getDifferenceIndicator = ({ meanDifference, className }) => {
+  if (meanDifference <= -1) {
+    return <MinusIcon fontSize="small" className={className} />
+  }
+
+  if (meanDifference >= 1) {
+    return <PlusIcon fontSize="small" className={className} />
+  }
+
+  return null
+}
+
 const ResultItem = ({
   mean,
+  meanDifference,
   questionLabel,
   className: classNameProp,
   component: Component = 'td',
@@ -52,10 +77,18 @@ const ResultItem = ({
     mean === null ? t('courseSummary:noResults') : mean
   }`
 
+  const differenceIndicator = getDifferenceIndicator({
+    meanDifference,
+    className: classes.indicator,
+  })
+
   return (
     <Tooltip title={tooltipTitle}>
       <Component className={className} {...props}>
-        {mean}
+        <div className={classes.content}>
+          {differenceIndicator}
+          <span>{mean}</span>
+        </div>
       </Component>
     </Tooltip>
   )

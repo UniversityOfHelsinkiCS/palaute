@@ -21,6 +21,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             courseCode,
             name,
             results,
+            resultsDifference,
             feedbackCount,
             id,
             feedbackResponseGiven,
@@ -32,6 +33,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             feedbackResponseGiven,
             closesAt,
           )
+
           return (
             <Fragment key={id}>
               <ResultsRow
@@ -45,6 +47,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 }
                 level={1}
                 results={results}
+                resultsDifference={resultsDifference}
                 questions={questions}
                 feedbackCount={feedbackCount}
                 feedbackResponseGiven={feedbackResponseStatus}

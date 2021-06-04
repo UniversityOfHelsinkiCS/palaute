@@ -41,9 +41,22 @@ const getQuestionLabel = (questions, questionId, language) => {
   return label
 }
 
+const getQuestionMeanDifference = (questionId, resultsDifference) => {
+  if (!Array.isArray(resultsDifference)) {
+    return 0
+  }
+
+  const questionItem = resultsDifference.find(
+    (item) => item.questionId === questionId,
+  )
+
+  return questionItem?.mean ?? 0
+}
+
 const ResultsRow = ({
   label,
   results,
+  resultsDifference,
   questions,
   children,
   level = 0,
@@ -98,6 +111,10 @@ const ResultsRow = ({
           <ResultItem
             key={questionId}
             mean={mean}
+            meanDifference={getQuestionMeanDifference(
+              questionId,
+              resultsDifference,
+            )}
             questionLabel={getQuestionLabel(
               questions,
               questionId,
