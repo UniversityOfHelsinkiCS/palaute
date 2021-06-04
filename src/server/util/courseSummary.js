@@ -1,5 +1,7 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 
+const { CourseUnit, Organisation } = require('../models')
 const { sequelize } = require('./dbConnection')
 
 const QUESTION_AVERAGES_QUERY = `
@@ -69,51 +71,42 @@ WITH question_averages AS (
   ${COUNTS_QUERY}
 )
 
+
 SELECT
-  *
-FROM
-  (
-    SELECT
-      question_id,
-      question_avg,
-      feedback_count,
-      student_count,
-      feedback_targets.id AS feedback_target_id,
-      feedback_targets.closes_at AS closes_at,
-      course_realisations.id AS course_realisation_id,
-      course_realisations.name AS course_realisation_name,
-      course_realisations.start_date AS course_realisation_start_date,
-      course_realisations.end_date AS course_realisation_end_date,
-      course_units.course_code AS course_code,
-      course_units.name AS course_unit_name,
-      course_units.id AS course_unit_id,
-      organisations.id AS organisation_id,
-      organisations.name AS organisation_name,
-      organisations.code AS organisation_code,
-      CASE
-        WHEN feedback_targets.feedback_response IS NOT NULL
-        AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
-        ELSE FALSE
-      END AS feedback_response_given,
-      rank() OVER (
-        PARTITION BY course_units.id
-        ORDER BY
-          course_realisations.start_date DESC
-      ) AS course_realisation_index
-    FROM question_averages
-      INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
-      INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-      INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-      INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
-      INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
-      INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
-    WHERE
-      feedback_targets.feedback_type = 'courseRealisation'
-      AND course_units.course_code IN (:courseCodes)
-      AND course_realisations.start_date < NOW()
-  ) feedbacks
+  question_id,
+  question_avg,
+  feedback_count,
+  student_count,
+  feedback_targets.id AS feedback_target_id,
+  feedback_targets.closes_at AS closes_at,
+  course_realisations.id AS course_realisation_id,
+  course_realisations.name AS course_realisation_name,
+  course_realisations.start_date AS course_realisation_start_date,
+  course_realisations.end_date AS course_realisation_end_date,
+  course_units.course_code AS course_code,
+  course_units.name AS course_unit_name,
+  course_units.id AS course_unit_id,
+  organisations.id AS organisation_id,
+  organisations.name AS organisation_name,
+  organisations.code AS organisation_code,
+  CASE
+    WHEN feedback_targets.feedback_response IS NOT NULL
+    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+    ELSE FALSE
+  END AS feedback_response_given
+FROM question_averages
+  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
+  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+  INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
+  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
-  course_realisation_index <= 4;
+  feedback_targets.feedback_type = 'courseRealisation'
+  AND course_units.course_code IN (:courseCodes)
+  AND course_realisations.start_date < NOW()
+  AND course_realisations.start_date > NOW() - interval '72 months';
+
 `
 
 const COURSE_REALISATION_SUMMARY_QUERY = `
@@ -123,44 +116,34 @@ WITH question_averages AS (
   ${COUNTS_QUERY}
 )
 
+
 SELECT
-  *
-FROM
-  (
-    SELECT
-      question_id,
-      question_avg,
-      feedback_count,
-      student_count,
-      feedback_targets.id AS feedback_target_id,
-      feedback_targets.closes_at AS closes_at,
-      course_realisations.id AS course_realisation_id,
-      course_realisations.name AS course_realisation_name,
-      course_realisations.start_date AS course_realisation_start_date,
-      course_realisations.end_date AS course_realisation_end_date,
-      course_units.course_code AS course_code,
-      CASE
-        WHEN feedback_targets.feedback_response IS NOT NULL
-        AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
-        ELSE FALSE
-      END AS feedback_response_given,
-      rank() OVER (
-        PARTITION BY course_units.id
-        ORDER BY
-          course_realisations.start_date DESC
-      ) AS course_realisation_index
-    FROM question_averages
-      INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
-      INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-      INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-      INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
-    WHERE
-      feedback_targets.feedback_type = 'courseRealisation'
-      AND course_unit_id = :courseUnitId
-      AND course_realisations.start_date < NOW()
-  ) feedbacks_7
+  question_id,
+  question_avg,
+  feedback_count,
+  student_count,
+  feedback_targets.id AS feedback_target_id,
+  feedback_targets.closes_at AS closes_at,
+  course_realisations.id AS course_realisation_id,
+  course_realisations.name AS course_realisation_name,
+  course_realisations.start_date AS course_realisation_start_date,
+  course_realisations.end_date AS course_realisation_end_date,
+  course_units.course_code AS course_code,
+  CASE
+    WHEN feedback_targets.feedback_response IS NOT NULL
+    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+    ELSE FALSE
+  END AS feedback_response_given
+FROM question_averages
+  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
+  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
-  course_realisation_index <= 20;
+  feedback_targets.feedback_type = 'courseRealisation'
+  AND course_unit_id = :courseUnitId
+  AND course_realisations.start_date < NOW()
+  AND course_realisations.start_date > NOW() - interval '36 months';
 `
 
 const getFeedbackMean = (rows) =>
@@ -171,20 +154,21 @@ const getFeedbackMean = (rows) =>
       )
     : null
 
-const getFeedbackCount = (rows) => {
+const getCounts = (rows) => {
   const uniqueFeedbackTargets = _.uniqBy(rows, (row) => row.feedback_target_id)
 
-  return _.sumBy(uniqueFeedbackTargets, (row) =>
+  const feedbackCount = _.sumBy(uniqueFeedbackTargets, (row) =>
     parseInt(row.feedback_count, 10),
   )
-}
 
-const getStudentCount = (rows) => {
-  const uniqueFeedbackTargets = _.uniqBy(rows, (row) => row.feedback_target_id)
-
-  return _.sumBy(uniqueFeedbackTargets, (row) =>
+  const studentCount = _.sumBy(uniqueFeedbackTargets, (row) =>
     parseInt(row.student_count, 10),
   )
+
+  return {
+    feedbackCount,
+    studentCount,
+  }
 }
 
 const getResults = (rows, questionIds) => {
@@ -200,14 +184,62 @@ const getResults = (rows, questionIds) => {
     }
   })
 
-  const feedbackCount = getFeedbackCount(rows)
-  const studentCount = getStudentCount(rows)
+  return results
+}
 
-  return {
-    results,
-    feedbackCount,
-    studentCount,
-  }
+const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
+
+const mapOpenUniOrganisations = async (rows) => {
+  const openUniCodes = _.uniq(
+    rows
+      .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
+      .map((row) => row.course_code),
+  )
+
+  const baseCodes = _.uniq(openUniCodes.map((code) => code.replace(/^AY/, '')))
+
+  const courseUnits = await CourseUnit.findAll({
+    where: {
+      courseCode: {
+        [Op.in]: baseCodes,
+      },
+    },
+    include: [
+      {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'name', 'code'],
+      },
+    ],
+    attributes: ['courseCode'],
+  })
+
+  const mapping = {}
+
+  openUniCodes.forEach((code) => {
+    const baseCode = code.replace(/^AY/, '')
+
+    const courseUnit = courseUnits.find((c) => c.courseCode === baseCode)
+    const organisation = courseUnit?.organisations[0]
+
+    if (organisation) {
+      mapping[code] = organisation
+    }
+  })
+
+  return rows.map((row) => {
+    const mappedOrganisation = mapping[row.course_code]
+
+    return row.organisation_id === OPEN_UNI_ORGANISATION_ID &&
+      mappedOrganisation
+      ? {
+          ...row,
+          organisation_id: mappedOrganisation.id,
+          organisation_name: mappedOrganisation.name,
+          organisation_code: mappedOrganisation.code,
+        }
+      : row
+  })
 }
 
 const getCourseUnitsWithResults = (rows, questionIds) => {
@@ -221,21 +253,23 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
         closes_at: closesAt,
       } = courseUnitRows[0]
 
-      const { previous = [], current = [] } = _.groupBy(courseUnitRows, (row) =>
-        row.course_realisation_index === '1' ? 'current' : 'previous',
+      const latestRow = _.maxBy(
+        courseUnitRows,
+        (row) => new Date(row.course_realisation_start_date),
+      )
+
+      const { current = [], previous = [] } = _.groupBy(courseUnitRows, (row) =>
+        row.course_realisation_id === latestRow.course_realisation_id
+          ? 'current'
+          : 'previous',
       )
 
       const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
 
-      const {
-        results: currentResults,
-        feeedbackCount: currentFeedbackCount,
-        studentCount: currentStudentCount,
-      } = getResults(current, questionIds)
+      const currentResults = getResults(current, questionIds)
+      const previousResults = getResults(previous, questionIds)
+      const { feedbackCount, studentCount } = getCounts(current)
 
-      const { results: previousResults } = getResults(previous, questionIds)
-
-      // Results from current realisation vs. results from the previous realisations
       const resultsDifference = currentResults.map(
         ({ questionId, value }, index) => {
           const { value: comparedValue } = previousResults[index]
@@ -253,8 +287,8 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
         courseCode,
         results: currentResults,
         resultsDifference,
-        feedbackCount: currentFeedbackCount,
-        studentCount: currentStudentCount,
+        feedbackCount,
+        studentCount,
         feedbackResponseGiven,
         closesAt,
       }
@@ -279,10 +313,33 @@ const getOrganisationsWithResults = (rows, questionIds) => {
         questionIds,
       )
 
-      const { results, studentCount, feedbackCount } = getResults(
-        organisationRows,
-        questionIds,
+      const feedbackCount = _.sumBy(
+        courseUnits,
+        ({ feedbackCount }) => feedbackCount,
       )
+
+      const studentCount = _.sumBy(
+        courseUnits,
+        ({ studentCount }) => studentCount,
+      )
+
+      const allResults = courseUnits.flatMap(({ results }) => results)
+
+      const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
+        questionId.toString(),
+      )
+
+      const results = questionIds.map((questionId) => {
+        const questionMeans = (resultsByQuestionId[questionId.toString()] ?? [])
+          .map(({ mean }) => mean)
+          .filter(Boolean)
+
+        return {
+          questionId,
+          mean:
+            questionMeans.length > 0 ? _.round(_.mean(questionMeans), 2) : null,
+        }
+      })
 
       return {
         id: organisationId,
@@ -317,10 +374,9 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
         closes_at: closesAt,
       } = courseRealisationRows[0]
 
-      const { results, feedbackCount, studentCount } = getResults(
-        courseRealisationRows,
-        questionIds,
-      )
+      const results = getResults(courseRealisationRows, questionIds)
+
+      const { feedbackCount, studentCount } = getCounts(courseRealisationRows)
 
       return {
         courseCode,
@@ -350,7 +406,9 @@ const getOrganisationSummaries = async ({ questionIds, courseCodes }) => {
     type: sequelize.QueryTypes.SELECT,
   })
 
-  return getOrganisationsWithResults(rows, questionIds)
+  const normalizedRows = await mapOpenUniOrganisations(rows)
+
+  return getOrganisationsWithResults(normalizedRows, questionIds)
 }
 
 const getCourseRealisationSummaries = async ({ courseUnitId, questionIds }) => {
