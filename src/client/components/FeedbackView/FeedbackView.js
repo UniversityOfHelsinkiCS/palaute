@@ -33,6 +33,7 @@ import {
   formatDate,
   checkIsFeedbackOpen,
 } from './utils'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -73,6 +74,7 @@ const FeedbackView = () => {
   const { courseUnit, accessStatus } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -120,7 +122,6 @@ const FeedbackView = () => {
   const handleLanguageChange = (language) => {
     i18n.changeLanguage(language)
   }
-
   return (
     <>
       <PrivacyDialog
@@ -180,7 +181,7 @@ const FeedbackView = () => {
           )
         }}
       </Formik>
-      {isTeacher && (
+      {isTeacher && !isOpen && !isEnded && (
         <Box mt={2}>
           <Toolbar
             editLink={`/targets/${feedbackTarget.id}/edit`}
