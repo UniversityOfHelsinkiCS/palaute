@@ -20,10 +20,12 @@ class User extends Model {
   async getOrganisationAccess() {
     if (ADMINS.includes(this.username)) {
       const allOrganisations = await Organisation.findAll({})
-      return allOrganisations.map((organisation) => ({
-        organisation,
-        access: { read: true, write: true },
-      }))
+      return allOrganisations
+        .filter((org) => org.code.includes('-'))
+        .map((organisation) => ({
+          organisation,
+          access: { read: true, write: true },
+        }))
     }
     const { data: access } = await lomakeClient.get(
       `/organizations/${this.username}`,
