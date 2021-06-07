@@ -65,7 +65,7 @@ const CourseTable = ({ organisations, questions }) => {
                     results={results}
                     questions={questions}
                     feedbackCount={feedbackCount}
-                    accordionEnabled
+                    accordionEnabled={courseUnits.length > 0}
                   >
                     <CourseUnitSummary
                       courseUnits={courseUnits}

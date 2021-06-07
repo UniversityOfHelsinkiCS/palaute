@@ -79,6 +79,7 @@ const getByOrganisations = async (req, res) => {
   const organisations = await getOrganisationSummaries({
     questionIds,
     courseCodes,
+    organisationAccess,
   })
 
   res.send({

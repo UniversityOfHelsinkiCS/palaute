@@ -87,7 +87,7 @@ const ResultItem = ({
       <Component className={className} {...props}>
         <div className={classes.content}>
           {differenceIndicator}
-          <span>{mean}</span>
+          <span>{mean ?? 0}</span>
         </div>
       </Component>
     </Tooltip>

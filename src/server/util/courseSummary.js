@@ -397,7 +397,44 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
   return _.orderBy(courseRealisations, ['startDate'], ['desc'])
 }
 
-const getOrganisationSummaries = async ({ questionIds, courseCodes }) => {
+const withMissingOrganisations = (
+  organisations,
+  organisationAccess,
+  questionIds,
+) => {
+  const accessibleOrganisations = organisationAccess.map(
+    ({ organisation }) => organisation,
+  )
+
+  const missingOrganisations = accessibleOrganisations.filter(
+    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
+  )
+
+  const allOrganisations = [
+    ...organisations,
+    ...missingOrganisations.map((org) => ({
+      id: org.id,
+      name: org.name,
+      code: org.code,
+      courseUnits: [],
+      results: questionIds.map((questionId) => ({ questionId, mean: null })),
+      feedbackCount: 0,
+      studentCount: 0,
+    })),
+  ]
+
+  return _.orderBy(
+    allOrganisations,
+    [(org) => (org.courseUnits.length > 0 ? 1 : 0), 'code'],
+    ['desc', 'asc'],
+  )
+}
+
+const getOrganisationSummaries = async ({
+  questionIds,
+  courseCodes,
+  organisationAccess,
+}) => {
   const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
     replacements: {
       questionIds: questionIds.map((id) => id.toString()),
@@ -408,7 +445,11 @@ const getOrganisationSummaries = async ({ questionIds, courseCodes }) => {
 
   const normalizedRows = await mapOpenUniOrganisations(rows)
 
-  return getOrganisationsWithResults(normalizedRows, questionIds)
+  return withMissingOrganisations(
+    getOrganisationsWithResults(normalizedRows, questionIds),
+    organisationAccess,
+    questionIds,
+  )
 }
 
 const getCourseRealisationSummaries = async ({ courseUnitId, questionIds }) => {
