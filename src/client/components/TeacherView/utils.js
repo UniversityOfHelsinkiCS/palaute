@@ -9,12 +9,12 @@ export const getUniqueCourses = (courseUnits) => {
 
   if (!courseUnits) return null
   courseUnits.sort((a, b) => {
-    const Adate = a.validityPeriod.endDate
-      ? a.validityPeriod.endDate
-      : a.validityPeriod.startDate
-    const Bdate = b.validityPeriod.endDate
-      ? b.validityPeriod.endDate
-      : b.validityPeriod.startDate
+    const Adate = a.activityPeriod.endDate
+      ? a.activityPeriod.endDate
+      : a.activityPeriod.startDate
+    const Bdate = b.activityPeriod.endDate
+      ? b.activityPeriod.endDate
+      : b.activityPeriod.startDate
     return Adate < Bdate ? 1 : -1
   })
 
@@ -37,9 +37,9 @@ export const getRelevantCourses = (courses, relevant) => {
   const comparisonDate = new Date(2021, 1, 1, 0, 0, 0, 0)
 
   const filteredCourses = courses.filter((course) => {
-    const date = course.validityPeriod.endDate
-      ? course.validityPeriod.endDate
-      : course.validityPeriod.startDate
+    const date = course.activityPeriod.endDate
+      ? course.activityPeriod.endDate
+      : course.activityPeriod.startDate
     if (!relevant) {
       return !isAfter(parseISO(date), comparisonDate)
     }
@@ -49,9 +49,9 @@ export const getRelevantCourses = (courses, relevant) => {
   return filteredCourses
 }
 
-export const formatValidityPeriod = (validityPeriod) => {
-  const parsedStartDate = parseISO(validityPeriod.startDate)
-  const parsedEndDate = parseISO(validityPeriod.endDate)
+export const formatValidityPeriod = (activityPeriod) => {
+  const parsedStartDate = parseISO(activityPeriod.startDate)
+  const parsedEndDate = parseISO(activityPeriod.endDate)
 
   if (Number.isNaN(parsedEndDate.getTime())) {
     return {

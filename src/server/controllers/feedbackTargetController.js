@@ -8,6 +8,8 @@ const { ApplicationError } = require('../util/customErrors')
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
 const { getResponsibleByPersonId } = require('../util/importerResponsible')
 
+const { getCourseUnitsForTeacherQuery } = require('../util/feedbackTargets')
+
 const {
   UserFeedbackTarget,
   FeedbackTarget,
@@ -267,11 +269,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     await getResponsibleByPersonId(id)
   }
 
-  const courseUnits = await sequelize.query(
-    `SELECT DISTINCT(c.*) FROM course_units c, feedback_targets f, user_feedback_targets u ` +
-      `WHERE u.feedback_target_id = f.id AND f.course_unit_id = c.id AND u.user_id = '${id}' AND u.access_status = 'TEACHER'`,
-    { mapToModel: true, model: CourseUnit },
-  )
+  const courseUnits = await getCourseUnitsForTeacherQuery(id)
 
   res.send(courseUnits)
 }

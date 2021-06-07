@@ -73,6 +73,7 @@ export default {
     courseCode: 'Kurssikoodi',
     startDate: 'Alku pvm.',
     endDate: 'Loppu pvm.',
+    feedbackResponseGiven: 'Vastapalute annettu',
     mainHeading: 'Opettamani kurssit',
   },
   questionEditor: {

@@ -63,6 +63,13 @@ const TeacherCourseList = ({ courses }) => {
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
+            <TableHeadCell
+              id="feedbackResponseGiven"
+              name={t('teacherView:feedbackResponseGiven')}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
           </TableRow>
         </TableHead>
         <TableBody>

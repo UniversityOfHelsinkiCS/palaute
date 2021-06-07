@@ -1,7 +1,7 @@
 const descendingComparator = (a, b, orderBy) => {
   if (orderBy === 'startDate' || orderBy === 'endDate') {
-    const aDates = a.validityPeriod
-    const bDates = b.validityPeriod
+    const aDates = a.activityPeriod
+    const bDates = b.activityPeriod
 
     if (aDates[orderBy] < bDates[orderBy]) {
       return -1

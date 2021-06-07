@@ -73,6 +73,7 @@ export default {
     courseCode: 'Course code',
     startDate: 'Start date',
     endDate: 'End date',
+    feedbackResponseGiven: 'Counter feedback given',
     mainHeading: 'The courses I teach',
   },
   questionEditor: {
