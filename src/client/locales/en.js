@@ -61,6 +61,8 @@ export default {
     cannotSubmitText:
       'You cannot submit because you are not enrolled in this course',
     feedbackClosedError: 'Feedback is closed',
+    endedInfo:
+      'The feedback period has ended. <2>Take a look at the feedbacks</2>',
   },
   teacherView: {
     noActiveCourses: 'No courses active',

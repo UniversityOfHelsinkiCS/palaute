@@ -61,6 +61,7 @@ export default {
     cannotSubmitText:
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
     feedbackClosedError: 'Palautteenanto on loppunut',
+    endedInfo: 'Palautteenanto on päättynyt. <2>Katso palautteita</2>',
   },
   teacherView: {
     noActiveCourses: 'Ei aktiivisia kursseja',

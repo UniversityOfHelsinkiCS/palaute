@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useParams, useHistory, Redirect } from 'react-router-dom'
+import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
 import {
   Typography,
@@ -12,7 +12,7 @@ import {
   CardContent,
 } from '@material-ui/core'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
@@ -33,6 +33,7 @@ import {
   formatDate,
   checkIsFeedbackOpen,
 } from './utils'
+
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const useStyles = makeStyles((theme) => ({
@@ -110,6 +111,22 @@ const FeedbackView = () => {
     </Box>
   )
 
+  const endedAlert = (
+    <Box mb={2}>
+      <Alert severity="info">
+        <Trans i18nKey="feedbackView:endedInfo">
+          The feedback period has ended.{' '}
+          <AlertLink
+            component={Link}
+            to={`/targets/${feedbackTarget.id}/results`}
+          >
+            Take a look at the feedbacks
+          </AlertLink>
+        </Trans>
+      </Alert>
+    </Box>
+  )
+
   const handleClosePrivacyDialog = () => {
     setPrivacyDialogOpen(false)
   }
@@ -133,7 +150,9 @@ const FeedbackView = () => {
         {courseUnitName}
       </Typography>
 
-      {!isOpen && closedAlert}
+      {!isOpen && !isEnded && closedAlert}
+
+      {isEnded && endedAlert}
 
       <Formik
         initialValues={initialValues}
