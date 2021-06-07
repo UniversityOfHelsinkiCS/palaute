@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  chipContainer: {
+    '& > *:not(:last-child)': {
+      marginRight: theme.spacing(1),
+    },
+  },
   actionsDivider: {
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
@@ -152,12 +157,23 @@ const QuestionCard = ({
     language: t(`languages.${language}`),
   })
 
+  const questionIsEditable = question.editable ?? true
+
   return (
     <Card className={className}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
-          <Chip label={title} variant="outlined" />
-          {editable && (
+          <div className={classes.chipContainer}>
+            <Chip label={title} variant="outlined" />
+            {question.chip && (
+              <Chip
+                label={t(question.chip)}
+                variant="outlined"
+                color="primary"
+              />
+            )}
+          </div>
+          {editable && questionIsEditable && (
             <div>
               {isEditing ? (
                 <Button color="primary" onClick={onStopEditing}>

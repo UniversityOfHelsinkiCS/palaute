@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-start',
   },
   actions: {
-    '& > *:not(last-child)': {
+    '& > *:not(:last-child)': {
       marginTop: theme.spacing(2),
     },
   },

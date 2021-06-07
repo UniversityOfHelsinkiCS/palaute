@@ -1,6 +1,16 @@
 const { ApplicationError } = require('../util/customErrors')
 const { Survey, Question, Organisation } = require('../models')
 
+const checkUserWriteAccess = async (survey, user) => {
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const organisation = organisationAccess.find(
+    ({ organisation }) => organisation.code === survey.typeId,
+  )
+
+  return organisation?.access?.write ?? false
+}
+
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   const updatedQuestionIdsList = []
 
@@ -101,7 +111,7 @@ const getUniversitySurvey = async (req, res) => {
 }
 
 const getProgrammeSurvey = async (req, res) => {
-  const surveyCode = req.params.surveyCode
+  const { surveyCode } = req.params
 
   const [survey] = await Survey.findOrCreate({
     where: {
@@ -126,16 +136,6 @@ const getProgrammeSurvey = async (req, res) => {
   const response = { ...survey.toJSON(), organisation }
 
   res.send(response)
-}
-
-const checkUserWriteAccess = async (survey, user) => {
-  const organisationAccess = await user.getOrganisationAccess()
-
-  const organisation = organisationAccess.find(
-    ({ organisation }) => organisation.code === survey.typeId,
-  )
-
-  return organisation?.access?.write ? true : false
 }
 
 module.exports = {

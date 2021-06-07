@@ -6,7 +6,23 @@ const setOpensAt = (date) => set(date, { hours: 0, minutes: 0, seconds: 0 })
 
 export const getInitialValues = (feedbackTarget) => {
   const { hidden, closesAt, opensAt, name, surveys } = feedbackTarget
-  const questions = surveys?.teacherSurvey?.questions ?? []
+
+  const questions = [
+    ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
+      ...question,
+      editable: false,
+      chip: 'editFeedbackTarget:universityQuestion',
+    })),
+    ...(surveys.programmeSurvey?.questions ?? []).map((question) => ({
+      ...question,
+      editable: false,
+      chip: 'editFeedbackTarget:programmeQuestion',
+    })),
+    ...(surveys.teacherSurvey?.questions ?? []).map((question) => ({
+      ...question,
+      editable: true,
+    })),
+  ]
 
   return {
     name,
@@ -36,11 +52,11 @@ export const validate = (values) => {
 }
 
 export const getUpperLevelQuestions = (feedbackTarget) => {
-  const { universitySurvey, departmentSurvey } = feedbackTarget.surveys ?? {}
+  const { universitySurvey, programmeSurvey } = feedbackTarget.surveys ?? {}
 
   return [
     ...(universitySurvey?.questions ?? []),
-    ...(departmentSurvey?.questions ?? []),
+    ...(programmeSurvey?.questions ?? []),
   ]
 }
 
@@ -59,9 +75,11 @@ export const saveValues = async (values, feedbackTarget) => {
   const { surveys, id } = feedbackTarget
   const { id: surveyId } = surveys.teacherSurvey
 
+  const editableQuestions = questions.filter(({ editable }) => editable)
+
   const payload = {
     surveyId,
-    questions,
+    questions: editableQuestions,
     name,
     hidden,
     closesAt,

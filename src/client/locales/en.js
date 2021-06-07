@@ -106,7 +106,7 @@ export default {
     opensAt: 'Opens at',
     hidden: 'Hidden',
     upperLevelQuestionsInfo:
-      'Survey already has {{count}} university and department level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions',
+      'Survey already has {{count}} university and programme level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions',
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
@@ -114,6 +114,8 @@ export default {
     opensAtIsNow:
       'The survey is set to open immediately! When the survey is open it cannot be edited anymore. Are you sure you want to save the survey?',
     noUnsavedChanges: 'You do not have unsaved changes to submit',
+    universityQuestion: 'University level question',
+    programmeQuestion: 'Programme level question',
   },
   questionResults: {
     answerCount: 'Answer count',

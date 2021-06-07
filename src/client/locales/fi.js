@@ -103,7 +103,7 @@ export default {
     opensAt: 'Avautuu',
     hidden: 'Piilotettu',
     upperLevelQuestionsInfo:
-      'Kyselyllä on jo {{count}} yliopisto- ja laitostason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
+      'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen',
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
@@ -112,6 +112,8 @@ export default {
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
     noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
+    universityQuestion: 'Yliopistotason kysymys',
+    programmeQuestion: 'Koulutusohjelmatason kysymys',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

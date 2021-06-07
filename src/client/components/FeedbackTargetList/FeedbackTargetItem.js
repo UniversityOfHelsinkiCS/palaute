@@ -22,7 +22,7 @@ import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 const useStyles = makeStyles((theme) => ({
   listItem: {},
   action: {
-    '&:not(last-child)': {
+    '&:not(:last-child)': {
       marginRight: theme.spacing(1),
     },
   },

@@ -14,6 +14,7 @@ const {
 const _ = require('lodash')
 
 const CourseUnit = require('./courseUnit')
+const Organisation = require('./organisation')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 
@@ -33,7 +34,11 @@ const getGloballyPublicQuestionIds = async () => {
 
 class FeedbackTarget extends Model {
   async getSurveys() {
-    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
+      include: [{ model: Organisation, as: 'organisations' }],
+    })
+
+    const organisation = courseUnit.organisations[0]
 
     const [defaultSurvey] = await Survey.findOrCreate({
       where: {
@@ -56,19 +61,26 @@ class FeedbackTarget extends Model {
       },
     })
 
-    await teacherSurvey.populateQuestions()
+    const [universitySurvey, programmeSurvey] = await Promise.all([
+      Survey.findOne({
+        where: { type: 'university' },
+      }),
+      organisation
+        ? Survey.findOne({
+            where: { type: 'programme', typeId: organisation.code },
+          })
+        : null,
+    ])
 
-    const departmentSurvey = {} // await Survey.findOne()
-
-    const universitySurvey = await Survey.findOne({
-      where: { type: 'university' },
-    })
-
-    await universitySurvey.populateQuestions()
+    await Promise.all([
+      teacherSurvey.populateQuestions(),
+      universitySurvey.populateQuestions(),
+      programmeSurvey?.populateQuestions(),
+    ])
 
     return {
       teacherSurvey,
-      departmentSurvey,
+      programmeSurvey,
       universitySurvey,
     }
   }
@@ -123,7 +135,7 @@ class FeedbackTarget extends Model {
 
     const questions = [
       ...(surveys.universitySurvey?.questions ?? []),
-      ...(surveys.departmentSurvey?.questions ?? []),
+      ...(surveys.programmeSurvey?.questions ?? []),
       ...(surveys.teacherSurvey?.questions ?? []),
     ]
 

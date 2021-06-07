@@ -56,7 +56,7 @@ export const getQuestions = (feedbackTarget) => {
 
   return [
     ...filteredUniQuestions,
-    ...(surveys?.departmentSurvey?.questions ?? []),
+    ...(surveys?.programmeSurvey?.questions ?? []),
     ...(surveys?.teacherSurvey?.questions ?? []),
     ...uniOpenQuestions,
   ]
