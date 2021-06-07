@@ -204,5 +204,7 @@ export default {
   },
   editProgrammeSurvey: {
     noWriteAccess: `You don't have the rights to edit the programme survey`,
+    upperLevelQuestionsInfo: `Survey already has {{count}} university level questions, but you can add additional questions.`,
+    bigBoss: 'Programme survey can be edited by programme personel',
   },
 }

@@ -203,5 +203,9 @@ export default {
   editProgrammeSurvey: {
     noWriteAccess:
       'Sinulla ei ole oikeuksia muokata tämän koulutusohjelman kyselyä',
+    upperLevelQuestionsInfo:
+      'Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
+    bigBoss:
+      'Koulutusohjelman kysymyksiä voi muokata koulutusohjelman henkilökunta.',
   },
 }

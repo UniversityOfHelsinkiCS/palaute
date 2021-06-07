@@ -125,6 +125,12 @@ const getProgrammeSurvey = async (req, res) => {
     },
   })
 
+  const universitySurvey = await Survey.findOne({
+    where: {
+      type: 'university',
+    },
+  })
+
   const organisation = await Organisation.findOne({
     where: {
       code: surveyCode,
@@ -133,7 +139,9 @@ const getProgrammeSurvey = async (req, res) => {
 
   await survey.populateQuestions()
 
-  const response = { ...survey.toJSON(), organisation }
+  await universitySurvey.populateQuestions()
+
+  const response = { ...survey.toJSON(), universitySurvey, organisation }
 
   res.send(response)
 }

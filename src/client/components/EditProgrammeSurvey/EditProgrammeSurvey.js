@@ -51,6 +51,9 @@ const EditProgrammeSurvey = () => {
 
   const isLoading = surveyIsLoading
 
+  const upperLevelQuestions =
+    survey && survey.universitySurvey.questions.filter((q) => q.type !== 'TEXT')
+
   if (isLoading) {
     return (
       <div className={classes.progressContainer}>
@@ -59,9 +62,11 @@ const EditProgrammeSurvey = () => {
     )
   }
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, actions) => {
     try {
       await saveValues(values, surveyId)
+      actions.resetForm({ values })
+
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -86,6 +91,18 @@ const EditProgrammeSurvey = () => {
         {programmeName}
       </Typography>
 
+      <Typography variant="body1" component="p" className={classes.programmeName}>
+        {t('editProgrammeSurvey:bigBoss')}
+      </Typography>
+
+      <Box mb={2}>
+        <Alert severity="info">
+          {t('editProgrammeSurvey:upperLevelQuestionsInfo', {
+            count: upperLevelQuestions.length,
+          })}
+        </Alert>
+      </Box>
+
       <Box mb={2}>
         <LanguageTabs
           language={language}
@@ -106,7 +123,7 @@ const EditProgrammeSurvey = () => {
         validate={validate}
         validateOnChange={false}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, dirty }) => (
           <Form>
             <QuestionEditor
               language={language}
@@ -117,7 +134,12 @@ const EditProgrammeSurvey = () => {
 
             {writeAccess && (
               <Box mt={2}>
-                <Button color="primary" variant="contained" type="submit">
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  disabled={!dirty}
+                >
                   {t('save')}
                 </Button>
               </Box>
