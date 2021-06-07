@@ -91,7 +91,11 @@ const EditProgrammeSurvey = () => {
         {programmeName}
       </Typography>
 
-      <Typography variant="body1" component="p" className={classes.programmeName}>
+      <Typography
+        variant="body1"
+        component="p"
+        className={classes.programmeName}
+      >
         {t('editProgrammeSurvey:bigBoss')}
       </Typography>
 
