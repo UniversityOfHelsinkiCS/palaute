@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { isFunction } from 'lodash'
 
 import QuestionCard from './QuestionCard'
-import { createQuestion, getQuestionId } from './utils'
+import { createQuestion, getQuestionId, copyQuestion } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   questionCard: {
@@ -78,7 +78,7 @@ const QuestionEditor = ({
               onRemove={() => arrayHelpers.remove(index)}
               onMoveUp={() => arrayHelpers.swap(index - 1, index)}
               onMoveDown={() => arrayHelpers.swap(index + 1, index)}
-              onCopy={() => arrayHelpers.push(question)}
+              onCopy={() => arrayHelpers.push(copyQuestion(question))}
               moveUpDisabled={index === 0}
               moveDownDisabled={index === questions.length - 1}
               language={language}

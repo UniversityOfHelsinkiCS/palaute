@@ -51,6 +51,15 @@ export const createQuestion = (type) => {
   }
 }
 
+export const copyQuestion = (question) => {
+  const { id, ...rest } = question
+
+  return {
+    ...rest,
+    [TEMP_ID]: uuidv4(),
+  }
+}
+
 export const createOption = () => ({
   id: uuidv4(),
   label: createTranslationObject(),
