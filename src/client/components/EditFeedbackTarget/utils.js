@@ -53,6 +53,7 @@ export const saveValues = async (values, feedbackTarget) => {
   const closesAt = values.closesAt
     ? setClosesAt(new Date(values.closesAt))
     : null
+
   const opensAt = values.opensAt ? setOpensAt(new Date(values.opensAt)) : null
 
   const { surveys, id } = feedbackTarget
@@ -60,11 +61,11 @@ export const saveValues = async (values, feedbackTarget) => {
 
   const payload = {
     surveyId,
+    questions,
     name,
     hidden,
     closesAt,
     opensAt,
-    questions,
   }
 
   const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)

@@ -85,15 +85,20 @@ const EditProgrammeSurvey = () => {
       <Typography variant="h4" component="h4" className={classes.programmeName}>
         {programmeName}
       </Typography>
+
+      <Box mb={2}>
+        <LanguageTabs
+          language={language}
+          onChange={(newLanguage) => setLanguage(newLanguage)}
+          className={classes.LanguageTabs}
+        />
+      </Box>
+
       {!survey && <Typography>This programme has no survey yet</Typography>}
+
       {!writeAccess && (
         <Alert severity="info">{t('editProgrammeSurvey:noWriteAccess')}</Alert>
       )}
-      <LanguageTabs
-        language={language}
-        onChange={(newLanguage) => setLanguage(newLanguage)}
-        className={classes.LanguageTabs}
-      />
 
       <Formik
         initialValues={initialValues}
@@ -101,14 +106,13 @@ const EditProgrammeSurvey = () => {
         validate={validate}
         validateOnChange={false}
       >
-        {({ values }) => (
+        {({ handleSubmit }) => (
           <Form>
             <QuestionEditor
               language={language}
               name="questions"
-              values={values}
-              highLevel
-              writeAccess={writeAccess}
+              onStopEditing={handleSubmit}
+              editable={writeAccess}
             />
 
             {writeAccess && (

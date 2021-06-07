@@ -2,9 +2,10 @@ import React, { useState, useRef } from 'react'
 import { Button, Menu, MenuItem, makeStyles } from '@material-ui/core'
 import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { isFunction } from 'lodash'
 
 import QuestionCard from './QuestionCard'
-import { createQuestion, getQuestionId, saveQuestion } from './utils'
+import { createQuestion, getQuestionId } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   questionCard: {
@@ -45,10 +46,8 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 const QuestionEditor = ({
   name = 'questions',
   language = 'fi',
-  values,
-  feedbackTarget,
-  highLevel,
-  writeAccess,
+  onStopEditing,
+  editable = true,
 }) => {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -61,10 +60,11 @@ const QuestionEditor = ({
 
   const handleStopEditing = async () => {
     setEditingQuestionId(null)
-    if (!highLevel) await saveQuestion(values, feedbackTarget)
-  }
 
-  const highLevelWriteAccess = highLevel ? writeAccess : true
+    if (isFunction(onStopEditing)) {
+      onStopEditing()
+    }
+  }
 
   return (
     <FieldArray
@@ -88,7 +88,7 @@ const QuestionEditor = ({
               onStartEditing={() =>
                 setEditingQuestionId(getQuestionId(question))
               }
-              highLevelWriteAccess={highLevelWriteAccess}
+              editable={editable}
             />
           ))}
 
@@ -103,7 +103,7 @@ const QuestionEditor = ({
             }}
             language={language}
           />
-          {highLevelWriteAccess && (
+          {editable && (
             <Button
               color="primary"
               onClick={() => setMenuOpen(true)}

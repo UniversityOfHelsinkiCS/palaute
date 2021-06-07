@@ -135,7 +135,7 @@ const QuestionCard = ({
   onStopEditing,
   moveUpDisabled = false,
   moveDownDisabled = false,
-  highLevelWriteAccess,
+  editable,
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
@@ -157,7 +157,7 @@ const QuestionCard = ({
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />
-          {highLevelWriteAccess && (
+          {editable && (
             <div>
               {isEditing ? (
                 <Button color="primary" onClick={onStopEditing}>

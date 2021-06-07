@@ -121,7 +121,7 @@ const EditFeedbackTarget = () => {
         validate={validate}
         validateOnChange={false}
       >
-        {({ handleSubmit, dirty, values }) => (
+        {({ handleSubmit, dirty }) => (
           <Form>
             <DirtyFormPrompt />
             <Box mb={2}>
@@ -178,8 +178,7 @@ const EditFeedbackTarget = () => {
             <QuestionEditor
               language={language}
               name="questions"
-              values={values}
-              feedbackTarget={feedbackTarget}
+              onStopEditing={handleSubmit}
             />
 
             <Divider className={classes.toolbarDivider} />
