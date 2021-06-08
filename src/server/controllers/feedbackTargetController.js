@@ -368,7 +368,7 @@ const getFeedbacks = async (req, res) => {
 
   const courseUnit = await CourseUnit.findOne({
     where: {
-      courseUnitId: feedbackTarget.courseUnitId,
+      id: feedbackTarget.courseUnitId,
     },
   })
 
