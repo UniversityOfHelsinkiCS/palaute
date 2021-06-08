@@ -19,7 +19,6 @@ const {
   Survey,
   Question,
   User,
-  CourseUnitsOrganisation,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
