@@ -58,6 +58,22 @@ class User extends Model {
       access: access[codeByNormalizedCode[organisation.code]],
     }))
   }
+
+  async hasAccessByOrganisation(courseCode) {
+    const organisations = await this.getOrganisationAccess()
+    if (!organisations.length) return false
+    const courseOrganisations = await sequelize.query(
+      'SELECT O.* FROM organisations O, course_units C, course_units_organisations J ' +
+        'WHERE C.id = J.course_unit_id AND C.course_code = :courseCode AND J.organisation_id = O.id AND O.id IN (:ids) LIMIT 1',
+      {
+        replacements: {
+          courseCode,
+          ids: organisations.map((o) => o.organisation.id),
+        },
+      },
+    )
+    return !!courseOrganisations.length
+  }
 }
 
 User.init(
