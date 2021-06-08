@@ -376,9 +376,20 @@ const getFeedbacks = async (req, res) => {
     courseUnit.courseCode,
   )
 
-  if (!isAdmin) {
-    if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
+  // Teacher can feedback any time
+  if (
+    !isAdmin &&
+    !(userFeedbackTarget && userFeedbackTarget.accessStatus === 'TEACHER')
+  ) {
+    // For students and outsiders it is visible only after the period
+    if (!feedbackTarget.isEnded())
+      throw new ApplicationError(
+        'Information is not available until the feedback period has ended',
+        403,
+      )
+    if (!userFeedbackTarget) {
       // outsider, not in the course
+      // should be shown only if feedback is public to all and user isn't admin
       if (
         feedbackTarget.feedbackVisibility !== 'ALL' &&
         !userHasOrganisationAccess
@@ -388,12 +399,6 @@ const getFeedbacks = async (req, res) => {
           feedbackVisible: false,
         })
       }
-
-      if (!feedbackTarget.isEnded())
-        throw new ApplicationError(
-          'Information is not available until the feedback period has ended',
-          403,
-        )
     }
   }
 
