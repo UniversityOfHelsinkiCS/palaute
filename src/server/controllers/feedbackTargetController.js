@@ -376,9 +376,12 @@ const getFeedbacks = async (req, res) => {
     courseUnit.courseCode,
   )
 
-  // Teacher can feedback any time
+  // Teacher can see feedback any time
+  // Admin can see feedback any time
+  // Hallinto people can see feedback any time
   if (
     !isAdmin &&
+    !userHasOrganisationAccess &&
     !(userFeedbackTarget && userFeedbackTarget.accessStatus === 'TEACHER')
   ) {
     // For students and outsiders it is visible only after the period
@@ -389,11 +392,8 @@ const getFeedbacks = async (req, res) => {
       )
     if (!userFeedbackTarget) {
       // outsider, not in the course
-      // should be shown only if feedback is public to all and user isn't admin
-      if (
-        feedbackTarget.feedbackVisibility !== 'ALL' &&
-        !userHasOrganisationAccess
-      ) {
+      // should only be shown if feedback is public to all
+      if (feedbackTarget.feedbackVisibility !== 'ALL') {
         return res.send({
           feedbacks: [],
           feedbackVisible: false,
@@ -426,48 +426,6 @@ const getFeedbacks = async (req, res) => {
   })
 
   return res.send({ feedbacks: publicFeedbacks, feedbackVisible: true })
-}
-
-const getStudentsWithFeedback = async (req, res) => {
-  const { user, isAdmin } = req
-  const feedbackTargetId = Number(req.params.id)
-
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
-  })
-
-  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
-    throw new ApplicationError(
-      'User is not authorized to view students with feedback',
-      403,
-    )
-  }
-
-  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      feedbackTargetId,
-      accessStatus: 'STUDENT',
-    },
-    include: [
-      {
-        model: User,
-        as: 'user',
-      },
-      {
-        model: Feedback,
-        as: 'feedback',
-        required: true,
-      },
-    ],
-  })
-
-  const users = studentFeedbackTargets.map((target) => target.user)
-
-  res.send(users)
 }
 
 const updateFeedbackResponse = async (req, res) => {
