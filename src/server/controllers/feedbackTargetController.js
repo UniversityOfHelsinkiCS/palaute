@@ -378,19 +378,14 @@ const getFeedbacks = async (req, res) => {
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  const courseUnitsOrganisation = await CourseUnitsOrganisation.findOne({
+  const courseUnit = await CourseUnit.findOne({
     where: {
       courseUnitId: feedbackTarget.courseUnitId,
     },
   })
 
-  const userInfo = await User.findByPk(user.id)
-  const userOrganisations = await userInfo.getOrganisationAccess()
-
-  const userHasOrganisationAccess = Boolean(
-    userOrganisations.find(
-      (org) => org.organisation.id === courseUnitsOrganisation.organisationId,
-    ),
+  const userHasOrganisationAccess = await user.hasAccessByOrganisation(
+    courseUnit.courseCode,
   )
 
   if (!isAdmin) {
