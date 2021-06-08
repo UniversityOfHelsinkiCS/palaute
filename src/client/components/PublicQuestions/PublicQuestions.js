@@ -12,7 +12,7 @@ import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
 
 const PublicQuestions = () => {
-  const [visibility, setVisibility] = useState('NONE')
+  const [visibility, setVisibility] = useState('ALL')
 
   const { id } = useParams()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, { cacheTime: 0 })

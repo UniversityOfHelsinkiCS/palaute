@@ -394,13 +394,6 @@ const getFeedbacks = async (req, res) => {
   )
 
   if (!isAdmin) {
-    if (
-      feedbackTarget.feedbackVisibility === 'NONE' &&
-      !userHasOrganisationAccess
-    ) {
-      return res.send([])
-    }
-
     if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
       // outsider, not in the course
       if (
