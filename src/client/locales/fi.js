@@ -150,6 +150,8 @@ export default {
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
+    onlyForEnrolledInfo:
+      'Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin opiskelijoille',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
     responseHeading: 'Opettajan vastapalaute',
     giveResponse: 'Anna vastapalaute',

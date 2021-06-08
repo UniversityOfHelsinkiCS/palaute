@@ -37,7 +37,7 @@ const FeedbackTargetResults = () => {
   } = useFeedbackTarget(id)
 
   const {
-    feedbacks,
+    feedbackTargetData,
     isLoading: feedbacksIsLoading,
   } = useFeedbackTargetFeedbacks(id)
 
@@ -51,9 +51,11 @@ const FeedbackTargetResults = () => {
     )
   }
 
-  if (!feedbackTarget || !feedbacks) {
+  if (!feedbackTarget || !feedbackTargetData) {
     return <Redirect to="/" />
   }
+
+  const { feedbacks, feedbackVisible } = feedbackTargetData
 
   const { questions, publicQuestionIds, accessStatus } = feedbackTarget
 
@@ -71,6 +73,14 @@ const FeedbackTargetResults = () => {
     <Box mb={2}>
       <Alert severity="warning">
         {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
+      </Alert>
+    </Box>
+  )
+
+  const onlyForEnrolledAlert = (
+    <Box mb={2}>
+      <Alert severity="warning">
+        {t('feedbackTargetResults:onlyForEnrolledInfo')}
       </Alert>
     </Box>
   )
@@ -98,7 +108,9 @@ const FeedbackTargetResults = () => {
         <FeedbackResponse feedbackTarget={feedbackTarget} />
       </Box>
 
-      {feedbacks.length === 0 && notEnoughFeedbacksAlert}
+      {feedbacks.length === 0 && feedbackVisible && notEnoughFeedbacksAlert}
+
+      {feedbacks.length === 0 && !feedbackVisible && onlyForEnrolledAlert}
 
       {feedbacks.length !== 0 && (
         <FeedbackSummary

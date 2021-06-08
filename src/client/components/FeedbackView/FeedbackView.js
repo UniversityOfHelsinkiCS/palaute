@@ -92,7 +92,7 @@ const FeedbackView = () => {
         })
       } else {
         await saveValues(values, feedbackTarget)
-        history.push('/')
+        history.push(`/targets/${id}/results`)
         enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
       }
     } catch (e) {

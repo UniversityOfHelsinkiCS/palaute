@@ -407,7 +407,10 @@ const getFeedbacks = async (req, res) => {
         feedbackTarget.feedbackVisibility !== 'ALL' &&
         !userHasOrganisationAccess
       ) {
-        return res.send([])
+        return res.send({
+          feedbacks: [],
+          feedbackVisible: false,
+        })
       }
 
       if (!feedbackTarget.isEnded())
@@ -441,7 +444,7 @@ const getFeedbacks = async (req, res) => {
     isAdmin,
   })
 
-  return res.send(publicFeedbacks)
+  return res.send({ feedbacks: publicFeedbacks, feedbackVisible: true })
 }
 
 const getStudentsWithFeedback = async (req, res) => {

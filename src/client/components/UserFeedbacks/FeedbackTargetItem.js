@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  feedbackChip: {
+    marginBottom: theme.spacing(1),
+  },
 }))
 
 const NoFeedbackActions = ({ editPath }) => {
@@ -45,7 +48,7 @@ const NoFeedbackActions = ({ editPath }) => {
   )
 }
 
-const FeedbackGivenActions = ({ editPath, onDelete }) => {
+const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -74,6 +77,14 @@ const FeedbackGivenActions = ({ editPath, onDelete }) => {
           {t('userFeedbacks:modifyFeedbackButton')}
         </Button>
       </Box>
+      <Button
+        color="primary"
+        variant="contained"
+        component={Link}
+        to={viewPath}
+      >
+        {t('userFeedbacks:viewFeedbackSummary')}
+      </Button>
       <Button color="primary" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>
@@ -170,7 +181,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
-      <Box mt={1}>
+      <Box mt={1} className={classes.feedbackChip}>
         {!isOpen && <FeedbackClosedChip />}
         {isOpen && feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
@@ -178,7 +189,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <div className={classes.actions}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {isOpen && feedbackGiven && (
-          <FeedbackGivenActions editPath={editPath} onDelete={onDelete} />
+          <FeedbackGivenActions
+            editPath={editPath}
+            onDelete={onDelete}
+            viewPath={viewPath}
+          />
         )}
         {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
       </div>
