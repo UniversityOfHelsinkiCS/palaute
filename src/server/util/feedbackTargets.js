@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { format } = require('date-fns')
 
 const { sequelize } = require('./dbConnection')
 
@@ -15,7 +16,7 @@ GROUP BY
   feedback_target_id
 `
 
-const COURSE_UNITS_FOR_TEACHER_QUERY = `
+const OLD_COURSE_UNITS_FOR_TEACHER_QUERY = `
 WITH feedback_counts AS (
   ${COUNTS_QUERY}
 )
@@ -53,13 +54,56 @@ FROM
       feedback_targets.feedback_type = 'courseRealisation'
       AND user_feedback_targets.access_status = 'TEACHER'
       AND user_feedback_targets.user_id = (:userId)
+      AND course_realisations.start_date < (:relevantDate)
+  ) feedbacks
+`
+
+const RELEVANT_COURSE_UNITS_FOR_TEACHER_QUERY = `
+WITH feedback_counts AS (
+  ${COUNTS_QUERY}
+)
+
+SELECT
+  *
+FROM
+  (
+    SELECT
+      feedback_count,
+      student_count,
+      course_units.id AS course_unit_id,
+      course_units.name AS course_unit_name,
+      course_units.validity_period AS validity_period,
+      course_units.course_code AS course_code,
+      feedback_targets.feedback_response AS feedback_response,
+      feedback_targets.closes_at AS closes_at,
+      feedback_targets.opens_at AS opens_at,
+      feedback_targets.id AS feedback_target_id,
+      user_feedback_targets.id AS user_feedback_targets_id,
+      user_feedback_targets.user_id AS user_feedback_targets_user_id,
+      course_realisations.start_date AS start_date,
+      course_realisations.end_date AS end_date,
+      CASE
+        WHEN feedback_targets.feedback_response IS NOT NULL
+        AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+        ELSE FALSE
+      END AS feedback_response_given
+    FROM feedback_counts
+      INNER JOIN feedback_targets ON feedback_counts.feedback_target_id = feedback_targets.id
+      INNER JOIN user_feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
+      INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+      INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+    WHERE
+      feedback_targets.feedback_type = 'courseRealisation'
+      AND user_feedback_targets.access_status = 'TEACHER'
+      AND user_feedback_targets.user_id = (:userId)
+      AND course_realisations.start_date >= (:relevantDate)
   ) feedbacks
 `
 
 const parseCourseUnitsForTeacher = (rows) => {
-  const couresUnitsById = _.groupBy(rows, (row) => row.course_unit_id)
+  const courseUnitsById = _.groupBy(rows, (row) => row.course_unit_id)
 
-  const courseUnits = Object.entries(couresUnitsById).map(
+  const courseUnits = Object.entries(courseUnitsById).map(
     ([courseUnitId, courseUnitRow]) => {
       const {
         feedback_count: feedbackCount,
@@ -99,14 +143,31 @@ const parseCourseUnitsForTeacher = (rows) => {
 }
 
 const getCourseUnitsForTeacherQuery = async (id) => {
-  const rows = await sequelize.query(COURSE_UNITS_FOR_TEACHER_QUERY, {
+  const relevantDate = format(
+    new Date().setMonth(new Date().getMonth() - 6),
+    'yyyy-MM-dd',
+  )
+
+  const rows = await sequelize.query(RELEVANT_COURSE_UNITS_FOR_TEACHER_QUERY, {
     replacements: {
       userId: id,
+      relevantDate,
     },
     type: sequelize.QueryTypes.SELECT,
   })
 
-  return parseCourseUnitsForTeacher(rows)
+  const nonRelevantRows = await sequelize.query(
+    OLD_COURSE_UNITS_FOR_TEACHER_QUERY,
+    {
+      replacements: {
+        userId: id,
+        relevantDate,
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  return parseCourseUnitsForTeacher([...rows, ...nonRelevantRows])
 }
 
 module.exports = {

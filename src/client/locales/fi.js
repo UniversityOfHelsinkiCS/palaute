@@ -192,6 +192,7 @@ export default {
     feedbackResponseGiven: 'Vastapalaute on annettu',
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
     feedbackStillOpen: 'Kurssin palautejakso on vielä käynnissä',
+    courseOngoing: 'Kurssi on vielä käynnissä',
     editProgrammeSurvey: 'Muokkaa koulutusohjelman kyselyä',
     courseRealisation: 'Kurssitoteutus',
   },

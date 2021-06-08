@@ -194,6 +194,7 @@ export default {
     feedbackResponseGiven: 'Feedback response has been given',
     feedbackResponseNotGiven: 'Feedback response has not been given',
     feedbackStillOpen: 'Feedback for this course is still ongoing',
+    courseOngoing: 'The course is still ongoing',
     editProgrammeSurvey: "Edit programme's survey",
     courseRealisation: 'Course realisation',
   },

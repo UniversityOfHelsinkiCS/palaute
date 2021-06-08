@@ -12,6 +12,7 @@ import {
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 
 import { formatValidityPeriod } from './utils'
 
@@ -25,6 +26,9 @@ const useStyles = makeStyles(() => ({
   accessTime: {
     color: '#f5a223',
   },
+  hourglassIcon: {
+    color: '#5c5cf5',
+  },
 }))
 
 const TeacherCourseListItem = ({ course }) => {
@@ -35,6 +39,14 @@ const TeacherCourseListItem = ({ course }) => {
   const { t } = useTranslation()
 
   const feedbackResponseGivenContent = (course) => {
+    if (parseISO(course.activityPeriod.endDate) > new Date()) {
+      return (
+        <Tooltip title={t('courseSummary:courseOngoing')}>
+          <HourglassEmptyIcon className={classes.hourglassIcon} />
+        </Tooltip>
+      )
+    }
+
     if (!course.feedbackResponseGiven) {
       if (
         new Date() > parseISO(course.closesAt) &&
