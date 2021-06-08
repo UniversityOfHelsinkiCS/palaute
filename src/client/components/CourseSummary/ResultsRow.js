@@ -63,6 +63,8 @@ const ResultsRow = ({
   feedbackCount,
   feedbackResponseGiven,
   accordionEnabled = false,
+  accordionCellEnabled = true,
+  cellsAfter = null,
   ...props
 }) => {
   const { t, i18n } = useTranslation()
@@ -98,15 +100,17 @@ const ResultsRow = ({
         <td className={classes.labelCell}>
           <Typography>{label}</Typography>
         </td>
-        <td>
-          {accordionEnabled ? (
-            <IconButton onClick={handleToggleAccordion}>
-              {accordionOpen ? <UpIcon /> : <DownIcon />}
-            </IconButton>
-          ) : (
-            ' '
-          )}
-        </td>
+        {accordionCellEnabled && (
+          <td>
+            {accordionEnabled ? (
+              <IconButton onClick={handleToggleAccordion}>
+                {accordionOpen ? <UpIcon /> : <DownIcon />}
+              </IconButton>
+            ) : (
+              ' '
+            )}
+          </td>
+        )}
         {results.map(({ questionId, mean }) => (
           <ResultItem
             key={questionId}
@@ -129,6 +133,7 @@ const ResultsRow = ({
           {feedbackResponseGiven === 'NONE' && feedbackResponseNotGivenContent}
           {feedbackResponseGiven === 'OPEN' && feedbackStillOpenContent}
         </td>
+        {cellsAfter}
       </tr>
       {accordionEnabled && accordionOpen && children}
     </>

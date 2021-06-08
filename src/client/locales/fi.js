@@ -187,14 +187,13 @@ export default {
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',
     noResults: 'Ei palautteita',
-    yearLabel: 'Vuosi',
-    noCourses:
-      'Palautetta saaneita kursseja, jotka vastaavat rajaimia ja käyttäjäsi käyttöoikeuksia ei löytynyt',
     feedbackResponse: 'Viimeisimmän kurssin vastapalaute annettu',
     feedbackCount: 'Palautteiden määrä',
     feedbackResponseGiven: 'Vastapalaute on annettu',
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
     feedbackStillOpen: 'Kurssin palautejakso on vielä käynnissä',
+    editProgrammeSurvey: 'Muokkaa koulutusohjelman kyselyä',
+    courseRealisation: 'Kurssitoteutus',
   },
   organisationView: {
     organisations: 'Organisaatiot',

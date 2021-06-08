@@ -103,10 +103,15 @@ const getByCourseUnit = async (req, res) => {
 
   const { courseUnitId } = req.params
 
-  const [summaryQuestions, courseCodes] = await Promise.all([
+  const [summaryQuestions, courseCodes, courseUnit] = await Promise.all([
     getSummaryQuestions(),
     getAccessibleCourseCodes(organisationAccess),
+    CourseUnit.findByPk(courseUnitId),
   ])
+
+  if (!courseUnit) {
+    throw new ApplicationError('Course unit is not found', 404)
+  }
 
   const questionIds = summaryQuestions.map(({ id }) => id)
 
@@ -126,6 +131,7 @@ const getByCourseUnit = async (req, res) => {
   res.send({
     questions: summaryQuestions,
     courseRealisations,
+    courseUnit,
   })
 }
 

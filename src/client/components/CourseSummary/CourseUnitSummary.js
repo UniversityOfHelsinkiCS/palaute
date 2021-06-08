@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
-import CourseRealisationSummary from './CourseRealisationSummary'
 import DividerRow from './DividerRow'
 import { getFeedbackResponseGiven } from './utils'
 
@@ -38,10 +37,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             <Fragment key={id}>
               <ResultsRow
                 label={
-                  <Link
-                    component={RouterLink}
-                    to={`/courses/${courseCode}/targets`}
-                  >
+                  <Link component={RouterLink} to={`/course-summary/${id}`}>
                     {getLanguageValue(name, i18n.language)} ({courseCode})
                   </Link>
                 }
@@ -51,10 +47,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 questions={questions}
                 feedbackCount={feedbackCount}
                 feedbackResponseGiven={feedbackResponseStatus}
-                accordionEnabled
-              >
-                <CourseRealisationSummary courseUnitId={id} />
-              </ResultsRow>
+              />
               {i < courseUnits.length - 1 && <DividerRow />}
             </Fragment>
           )

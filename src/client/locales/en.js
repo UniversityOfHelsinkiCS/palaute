@@ -189,14 +189,13 @@ export default {
   courseSummary: {
     heading: 'Summary of course feedback',
     noResults: 'No feedbacks',
-    yearLabel: 'Year',
-    noCourses:
-      "There are no courses with feedback matching the provided filters and your user's access rights",
     feedbackResponse: 'Latest course feedback response given',
     feedbackCount: 'Feedback count',
     feedbackResponseGiven: 'Feedback response has been given',
     feedbackResponseNotGiven: 'Feedback response has not been given',
     feedbackStillOpen: 'Feedback for this course is still ongoing',
+    editProgrammeSurvey: "Edit programme's survey",
+    courseRealisation: 'Course realisation',
   },
   organisationView: {
     organisations: 'Organisations',
