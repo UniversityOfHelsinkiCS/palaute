@@ -428,6 +428,48 @@ const getFeedbacks = async (req, res) => {
   return res.send({ feedbacks: publicFeedbacks, feedbackVisible: true })
 }
 
+const getStudentsWithFeedback = async (req, res) => {
+  const { user, isAdmin } = req
+  const feedbackTargetId = Number(req.params.id)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
+    throw new ApplicationError(
+      'User is not authorized to view students with feedback',
+      403,
+    )
+  }
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+    include: [
+      {
+        model: User,
+        as: 'user',
+      },
+      {
+        model: Feedback,
+        as: 'feedback',
+        required: true,
+      },
+    ],
+  })
+
+  const users = studentFeedbackTargets.map((target) => target.user)
+
+  res.send(users)
+}
+
 const updateFeedbackResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   const { user, isAdmin } = req
