@@ -139,17 +139,6 @@ const getFeedbackTargetByIdForUser = async (req) => {
     include: getIncludes(req.user.id),
   })
 
-  // TODO
-  /* if (!isAdmin && !feedbackTarget)
-    throw new ApplicationError('Not found or you do not have access', 404)
-
-  if (
-    !isAdmin &&
-    feedbackTarget.hidden &&
-    !(feedbackTarget.userFeedbackTargets[0]?.accessStatus === 'TEACHER')
-  ) {
-    throw new ApplicationError('Forbidden', 403)
-  } */
   return feedbackTarget
 }
 
