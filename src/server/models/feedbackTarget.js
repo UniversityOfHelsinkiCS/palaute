@@ -1,4 +1,5 @@
 const {
+  Op,
   DATE,
   ENUM,
   STRING,
@@ -40,44 +41,34 @@ class FeedbackTarget extends Model {
 
     const organisation = courseUnit.organisations[0]
 
-    const feedbackTargets = await FeedbackTarget.findAll({
+    const previousFeedbackTarget = await FeedbackTarget.findOne({
       where: {
-        courseUnitId: courseUnit.id,
+        courseUnitId: this.courseUnitId,
+        feedbackType: this.feedbackType,
+        closesAt: {
+          [Op.lt]: this.closesAt,
+        },
       },
+      order: [['closesAt', 'DESC']],
+      limit: 1,
     })
 
-    const mostRecentCourse = feedbackTargets.reduce((a, b) =>
-      a.opensAt > b.opensAt ? a : b,
-    )
-
-    const filteredQuestionIds = mostRecentCourse.publicQuestionIds.filter(
-      (q) => q > 11,
-    )
-
-    const [defaultSurvey] = await Survey.findOrCreate({
-      where: {
-        type: 'courseUnit',
-        typeId: courseUnit.courseCode,
-      },
-      defaults: {
-        questionIds: [],
-        type: 'courseUnit',
-        typeId: courseUnit.courseCode,
-      },
-    })
+    const previousSurvey = previousFeedbackTarget
+      ? await Survey.findOne({
+          where: {
+            feedbackTargetId: previousFeedbackTarget.id,
+          },
+        })
+      : null
 
     const [teacherSurvey] = await Survey.findOrCreate({
       where: {
         feedbackTargetId: this.id,
       },
       defaults: {
-        questionIds: defaultSurvey.questionIds,
+        questionIds: previousSurvey?.questionIds ?? [],
       },
     })
-
-    teacherSurvey.questionIds = teacherSurvey.questionIds.length === 0
-      ? filteredQuestionIds
-      : teacherSurvey.questionIds
 
     const [universitySurvey, programmeSurvey] = await Promise.all([
       Survey.findOne({
