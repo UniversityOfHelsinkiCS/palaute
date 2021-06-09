@@ -40,6 +40,20 @@ class FeedbackTarget extends Model {
 
     const organisation = courseUnit.organisations[0]
 
+    const feedbackTargets = await FeedbackTarget.findAll({
+      where: {
+        courseUnitId: courseUnit.id,
+      },
+    })
+
+    const mostRecentCourse = feedbackTargets.reduce((a, b) =>
+      a.opensAt > b.opensAt ? a : b,
+    )
+
+    const filteredQuestionIds = mostRecentCourse.publicQuestionIds.filter(
+      (q) => q > 11,
+    )
+
     const [defaultSurvey] = await Survey.findOrCreate({
       where: {
         type: 'courseUnit',
@@ -60,6 +74,10 @@ class FeedbackTarget extends Model {
         questionIds: defaultSurvey.questionIds,
       },
     })
+
+    teacherSurvey.questionIds = teacherSurvey.questionIds.length === 0
+      ? filteredQuestionIds
+      : teacherSurvey.questionIds
 
     const [universitySurvey, programmeSurvey] = await Promise.all([
       Survey.findOne({
