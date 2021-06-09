@@ -108,8 +108,6 @@ const EditFeedbackTarget = () => {
     }
   }
 
-  console.log(feedbackTarget)
-
   const initialValues = getInitialValues(feedbackTarget)
 
   const coursePeriod =
