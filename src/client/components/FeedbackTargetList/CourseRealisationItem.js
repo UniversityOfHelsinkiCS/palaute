@@ -11,7 +11,6 @@ import { formatDate } from './utils'
 const CourseRealisationItem = ({
   courseRealisation,
   className,
-  studentListVisible,
 }) => {
   const { i18n } = useTranslation()
   const { feedbackTargets, name, startDate, endDate } = courseRealisation
@@ -41,7 +40,6 @@ const CourseRealisationItem = ({
               feedbackTarget={feedbackTarget}
               divider={index < filteredFeedbackTargets.length - 1}
               key={feedbackTarget.id}
-              studentListVisible={studentListVisible}
             />
           ))}
         </List>

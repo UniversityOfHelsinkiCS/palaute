@@ -11,9 +11,12 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
   const courseRealisationById = new Map()
 
   feedbackTargets.forEach((target) => {
-    const { courseRealisation } = target
+    const { courseRealisation, studentListVisible } = target
 
-    courseRealisationById.set(courseRealisation.id, courseRealisation)
+    courseRealisationById.set(courseRealisation.id, {
+      ...courseRealisation,
+      studentListVisible,
+    })
   })
 
   const targetsByCourseRealisationId = groupBy(

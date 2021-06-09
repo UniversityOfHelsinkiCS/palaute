@@ -28,13 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ActionsButton = ({ feedbackTarget, studentListVisible }) => {
+const ActionsButton = ({ feedbackTarget }) => {
   const buttonRef = useRef()
   const [open, setOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
 
-  const { id, opensAt } = feedbackTarget
+  const { id, opensAt, studentListVisible } = feedbackTarget
   const now = new Date()
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -116,11 +116,7 @@ const ActionsButton = ({ feedbackTarget, studentListVisible }) => {
   )
 }
 
-const FeedbackTargetItem = ({
-  feedbackTarget,
-  divider,
-  studentListVisible,
-}) => {
+const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -141,10 +137,7 @@ const FeedbackTargetItem = ({
         })}
       />
       <Box ml={2} display="flex">
-        <ActionsButton
-          feedbackTarget={feedbackTarget}
-          studentListVisible={studentListVisible}
-        />
+        <ActionsButton feedbackTarget={feedbackTarget} />
       </Box>
     </ListItem>
   )

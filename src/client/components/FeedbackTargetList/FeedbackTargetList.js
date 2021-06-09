@@ -81,7 +81,6 @@ const FeedbackTargetList = () => {
           <CourseRealisationItem
             key={courseRealisation.id}
             courseRealisation={courseRealisation}
-            studentListVisible={feedbackTargets.studentListVisible}
             className={classes.courseRealisationItem}
           />
         ))}
