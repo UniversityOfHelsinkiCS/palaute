@@ -162,6 +162,8 @@ const getStudentListVisibility = async (courseUnitId) => {
     },
   )
 
+  if (!organisationRows[0].length) return false
+
   const { student_list_visible: studentListVisible } = organisationRows[0][0]
 
   return studentListVisible ?? false

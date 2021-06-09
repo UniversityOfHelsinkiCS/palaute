@@ -8,10 +8,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetItem from './FeedbackTargetItem'
 import { formatDate } from './utils'
 
-const CourseRealisationItem = ({
-  courseRealisation,
-  className,
-}) => {
+const CourseRealisationItem = ({ courseRealisation, className }) => {
   const { i18n } = useTranslation()
   const { feedbackTargets, name, startDate, endDate } = courseRealisation
 
