@@ -14,11 +14,7 @@ import { useSnackbar } from 'notistack'
 
 import QuestionEditor from '../QuestionEditor'
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
-import {
-  getInitialValues,
-  validate,
-  saveValues,
-} from '../EditCourseUnitSurvey/utils'
+import { getInitialValues, validate, saveValues } from './utils'
 import LanguageTabs from '../LanguageTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 

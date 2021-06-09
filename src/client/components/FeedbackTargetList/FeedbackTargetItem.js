@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ActionsButton = ({ feedbackTarget }) => {
+const ActionsButton = ({ feedbackTarget, studentListVisible }) => {
   const buttonRef = useRef()
   const [open, setOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
@@ -86,7 +86,7 @@ const ActionsButton = ({ feedbackTarget }) => {
             {t('feedbackTargetList:showFeedbacks')}
           </MenuItem>
         )}
-        {isEnded && (
+        {isEnded && studentListVisible && (
           <MenuItem
             component={Link}
             to={`/targets/${id}/students-with-feedback`}
@@ -116,7 +116,11 @@ const ActionsButton = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
+const FeedbackTargetItem = ({
+  feedbackTarget,
+  divider,
+  studentListVisible,
+}) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -137,7 +141,10 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
         })}
       />
       <Box ml={2} display="flex">
-        <ActionsButton feedbackTarget={feedbackTarget} />
+        <ActionsButton
+          feedbackTarget={feedbackTarget}
+          studentListVisible={studentListVisible}
+        />
       </Box>
     </ListItem>
   )

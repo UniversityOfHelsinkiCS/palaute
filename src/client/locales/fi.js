@@ -168,7 +168,8 @@ export default {
     nameFallback: 'Valikko',
   },
   studentsWithFeedback: {
-    noFeedbackInfo: 'Kukaan ei ole antanut palautetta vielä',
+    noFeedbackInfo:
+      'Kukaan ei ole antanut palautetta vielä tai koulutusohjelman palautetta antaneita opiskelijoita ei näytetä',
     studentsList: 'Palautteen antaneet opiskelijat',
   },
   feedbackResponse: {
@@ -208,6 +209,8 @@ export default {
     upperLevelQuestionsInfo:
       'Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
     bigBoss:
-      'Koulutusohjelman kysymyksiä voi muokata koulutusohjelman henkilökunta.',
+      'Koulutusohjelman kysymyksiä ja asetuksia voi muokata koulutusohjelman henkilökunta.',
+    studentListVisible: 'Opiskelijoiden lista näkyvissä',
+    programmeSettings: 'Koulutusohjelman asetukset',
   },
 }

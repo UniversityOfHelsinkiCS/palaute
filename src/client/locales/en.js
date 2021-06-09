@@ -170,7 +170,8 @@ export default {
     nameFallback: 'Menu',
   },
   studentsWithFeedback: {
-    noFeedbackInfo: 'No one has given feedback yet',
+    noFeedbackInfo:
+      'No one has given feedback yet or the programme does not show students who have given feedback',
     studentsList: 'Students who have given feedback',
   },
   feedbackResponse: {
@@ -207,6 +208,9 @@ export default {
   editProgrammeSurvey: {
     noWriteAccess: `You don't have the rights to edit the programme survey`,
     upperLevelQuestionsInfo: `Survey already has {{count}} university level questions, but you can add additional questions.`,
-    bigBoss: 'Programme survey can be edited by programme personel',
+    bigBoss:
+      'Programme survey and settings can be edited by programme personel',
+    studentListVisible: 'Student list visible',
+    programmeSettings: 'Programme settings',
   },
 }

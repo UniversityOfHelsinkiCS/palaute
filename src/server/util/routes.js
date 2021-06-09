@@ -73,6 +73,7 @@ router.get(
 )
 
 router.get('/organisations', organisation.getOrganisations)
+router.put('/organisations/:code', organisation.updateOrganisation)
 
 router.use('/admin', adminController)
 
