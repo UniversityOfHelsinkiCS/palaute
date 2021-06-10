@@ -16,8 +16,10 @@ const _ = require('lodash')
 
 const CourseUnit = require('./courseUnit')
 const Organisation = require('./organisation')
+const CourseRealisation = require('./courseRealisation')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
+const Question = require('./question')
 
 const getGloballyPublicQuestionIds = async () => {
   const universitySurvey = await Survey.findOne({
@@ -33,6 +35,32 @@ const getGloballyPublicQuestionIds = async () => {
   return numericQuestionIds
 }
 
+const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
+  const previousQuestions = await Question.findAll({
+    where: {
+      id: previousSurvey.questionIds,
+    },
+  })
+
+  const clonedQuestionIds = await Promise.all(
+    previousQuestions.map(async (q) => {
+      const clonedQuestion = await Question.create({
+        type: q.type,
+        required: q.required,
+        data: q.data,
+      })
+      return clonedQuestion.id
+    }),
+  )
+
+  const teacherSurvey = await Survey.create({
+    feedbackTargetId,
+    questionIds: clonedQuestionIds,
+  })
+
+  return teacherSurvey
+}
+
 class FeedbackTarget extends Model {
   async getSurveys() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
@@ -41,15 +69,33 @@ class FeedbackTarget extends Model {
 
     const organisation = courseUnit.organisations[0]
 
-    const previousFeedbackTarget = await FeedbackTarget.findOne({
+    const courseRealisation = await CourseRealisation.findByPk(
+      this.courseRealisationId,
+    )
+
+    const [previousFeedbackTarget] = await FeedbackTarget.findAll({
       where: {
         courseUnitId: this.courseUnitId,
         feedbackType: this.feedbackType,
-        closesAt: {
-          [Op.lt]: this.closesAt,
-        },
       },
-      order: [['closesAt', 'DESC']],
+      include: [
+        {
+          model: CourseRealisation,
+          as: 'courseRealisation',
+          where: {
+            startDate: {
+              [Op.lt]: courseRealisation.startDate,
+            },
+          },
+        },
+      ],
+      order: [
+        [
+          { model: CourseRealisation, as: 'courseRealisation' },
+          'startDate',
+          'DESC',
+        ],
+      ],
       limit: 1,
     })
 
@@ -61,14 +107,15 @@ class FeedbackTarget extends Model {
         })
       : null
 
-    const [teacherSurvey] = await Survey.findOrCreate({
+    const existingTeacherSurvey = await Survey.findOne({
       where: {
         feedbackTargetId: this.id,
       },
-      defaults: {
-        questionIds: previousSurvey?.questionIds ?? [],
-      },
     })
+
+    const teacherSurvey = existingTeacherSurvey
+      ? existingTeacherSurvey
+      : await createTeacherSurvey(this.id, previousSurvey)
 
     const [universitySurvey, programmeSurvey] = await Promise.all([
       Survey.findOne({
