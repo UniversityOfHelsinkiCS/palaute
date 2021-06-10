@@ -42,16 +42,16 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
     },
   })
 
-  const clonedQuestionIds = await Promise.all(
-    previousQuestions.map(async (q) => {
-      const clonedQuestion = await Question.create({
-        type: q.type,
-        required: q.required,
-        data: q.data,
-      })
-      return clonedQuestion.id
-    }),
+  const clonedQuestions = await Question.bulkCreate(
+    previousQuestions.map(({ type, required, data }) => ({
+      type,
+      required,
+      data,
+    })),
+    { returning: true },
   )
+
+  const clonedQuestionIds = clonedQuestions.map((q) => q.id)
 
   const teacherSurvey = await Survey.create({
     feedbackTargetId,
