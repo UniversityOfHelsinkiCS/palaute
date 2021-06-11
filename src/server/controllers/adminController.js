@@ -6,6 +6,7 @@ const _ = require('lodash')
 const { ApplicationError } = require('../util/customErrors')
 const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
+const { run } = require('../updater/index')
 
 const {
   FeedbackTarget,
@@ -21,6 +22,10 @@ const adminAccess = (req, _, next) => {
   if (!ADMINS.includes(username)) throw new ApplicationError('Forbidden', 403)
 
   return next()
+}
+
+const runUpdater = async () => {
+  run()
 }
 
 const findUser = async (req, res) => {
@@ -53,19 +58,20 @@ const findUser = async (req, res) => {
 }
 
 const formatFeedbackTargets = async (feedbackTargets) => {
-  const convertSingle = async (feedbackTarget) => {
-    return await feedbackTarget.toPublicObject()
-  }
+  const convertSingle = async (feedbackTarget) =>
+    feedbackTarget.toPublicObject()
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
 
   const responseReady = []
 
+  /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
       responseReady.push(await convertSingle(feedbackTarget))
     }
   }
+  /* eslint-enable */
 
   return responseReady
 }
@@ -132,5 +138,6 @@ router.use(adminAccess)
 
 router.get('/users', findUser)
 router.get('/feedback-targets', getFeedbackTargets)
+router.post('/run-updater', runUpdater)
 
 module.exports = router
