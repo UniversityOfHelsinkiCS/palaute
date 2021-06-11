@@ -12,6 +12,7 @@ import {
   ListItemIcon,
   IconButton,
   Link,
+  Chip,
 } from '@material-ui/core'
 
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -19,6 +20,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { formatDate } from './utils'
+import FeedbackResponseChip from './FeedbackResponseChip'
 
 const SettingsButton = ({ feedbackTarget }) => {
   const buttonRef = useRef()
@@ -104,6 +106,25 @@ const SettingsButton = ({ feedbackTarget }) => {
   )
 }
 
+const getChip = (feedbackTarget) => {
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const { feedbackResponse } = feedbackTarget
+  const feedbackResponseGiven = Boolean(feedbackResponse)
+
+  if (isEnded) {
+    return (
+      <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+    )
+  }
+
+  if (isOpen) {
+    return <Chip label="Palaute käynnissä" variant="outlined" size="small" />
+  }
+
+  return null
+}
+
 const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
@@ -115,6 +136,8 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
     </Link>
   )
 
+  const chip = getChip(feedbackTarget)
+
   return (
     <ListItem divider>
       <ListItemIcon>
@@ -123,12 +146,15 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
       <ListItemText
         primary={periodInfo}
         secondary={
-          <Typography variant="body2" color="textSecondary">
-            {t('feedbackTargetList:studentFeedbacks', {
-              count: feedbackCount,
-              totalCount: enrolledCount,
-            })}
-          </Typography>
+          <div>
+            <Typography variant="body2" color="textSecondary" component="span">
+              {t('feedbackTargetList:studentFeedbacks', {
+                count: feedbackCount,
+                totalCount: enrolledCount,
+              })}
+            </Typography>{' '}
+            {chip}
+          </div>
         }
       />
     </ListItem>
