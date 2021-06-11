@@ -33,7 +33,7 @@ const start = async () => {
     : '*/30 * * * *' // Every 30 minutes in development
   schedule(cronTime, run)
 
-  return logger.info('Running updater according to cron', { cron: cronTime })
+  logger.info('Running updater according to cron', { cron: cronTime })
 }
 
 module.exports = {

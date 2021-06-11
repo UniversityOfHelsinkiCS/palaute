@@ -53,16 +53,17 @@ const findUser = async (req, res) => {
 }
 
 const formatFeedbackTargets = async (feedbackTargets) => {
-  const convertSingle = async (feedbackTarget) => {
-    return await feedbackTarget.toPublicObject()
-  }
+  const convertSingle = async (feedbackTarget) =>
+    feedbackTarget.toPublicObject()
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
 
   const responseReady = []
 
+  // eslint-disable-next-line
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
+      // eslint-disable-next-line
       responseReady.push(await convertSingle(feedbackTarget))
     }
   }

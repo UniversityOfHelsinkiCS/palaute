@@ -51,6 +51,8 @@ const connectToDatabase = async (attempt = 0) => {
     await sleep(5000)
     return connectToDatabase(attempt + 1)
   }
+
+  return null
 }
 
 module.exports = { connectToDatabase, sequelize }

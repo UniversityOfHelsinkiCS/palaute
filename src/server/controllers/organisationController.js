@@ -1,4 +1,5 @@
 const { Organisation } = require('../models')
+const { ApplicationError } = require('../util/customErrors')
 
 const getOrganisations = async (req, res) => {
   const { user, headers, isAdmin } = req
