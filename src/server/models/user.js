@@ -72,6 +72,7 @@ class User extends Model {
         },
       },
     )
+
     return !!courseOrganisations.length
   }
 }
