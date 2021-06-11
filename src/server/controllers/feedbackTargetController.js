@@ -307,7 +307,7 @@ const getTargetsByCourseUnit = async (req, res) => {
     ],
   })
 
-  if (!feedbackTargets)
+  if (feedbackTargets.length === 0)
     throw new ApplicationError('Not found or you do not have access', 404)
 
   const studentListVisible = await getStudentListVisibility(
@@ -348,6 +348,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       ],
     ],
   })
+
   const feedbackCountByFeedbackTargetId = _.zipObject(
     studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
     studentFeedbackTargets.map((target) => ({
@@ -356,6 +357,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       responseGiven: !!target.get('feedbackResponse'),
     })),
   )
+
   const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
     (target) => ({
       ...target,
@@ -368,6 +370,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       studentListVisible,
     }),
   )
+
   res.send(feedbackTargetsWithFeedbackCounts)
 }
 
