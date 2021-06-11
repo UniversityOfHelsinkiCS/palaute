@@ -21,6 +21,7 @@ import userOrganisations from '../../hooks/useOrganisations'
 
 import { getInitialValues, validate, saveValues } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
+import ProgrammeSettings from './ProgrammeSettings'
 
 const useStyles = makeStyles((theme) => ({
   programmeName: {
@@ -80,10 +81,12 @@ const EditProgrammeSurvey = () => {
     i18n.language,
   )
 
-  const writeAccess =
+  const organisation =
     organisations &&
     organisations.length > 0 &&
-    !!organisations.find((org) => org.code === surveyCode).access.write
+    organisations.find((org) => org.code === surveyCode)
+
+  const writeAccess = organisation && !!organisation.access.write
 
   return (
     <>
@@ -98,6 +101,10 @@ const EditProgrammeSurvey = () => {
       >
         {t('editProgrammeSurvey:bigBoss')}
       </Typography>
+
+      {organisation && writeAccess && (
+        <ProgrammeSettings programme={organisation} />
+      )}
 
       <Box mb={2}>
         <Alert severity="info">

@@ -65,9 +65,10 @@ const formatFeedbackTargets = async (feedbackTargets) => {
 
   const responseReady = []
 
-  /* eslint-disable */
+  // eslint-disable-next-line
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
+      // eslint-disable-next-line
       responseReady.push(await convertSingle(feedbackTarget))
     }
   }

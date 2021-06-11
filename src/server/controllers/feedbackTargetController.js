@@ -151,6 +151,24 @@ const getFeedbackTargetsForStudent = async (req) => {
   return feedbackTargets
 }
 
+const getStudentListVisibility = async (courseUnitId) => {
+  const organisationRows = await sequelize.query(
+    'SELECT O.* from organisations O, course_units_organisations C ' +
+      ' WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id LIMIT 1',
+    {
+      replacements: {
+        cuId: courseUnitId,
+      },
+    },
+  )
+
+  if (!organisationRows[0].length) return false
+
+  const { student_list_visible: studentListVisible } = organisationRows[0][0]
+
+  return studentListVisible ?? false
+}
+
 const getOne = async (req, res) => {
   // DO NOT TOUCH THIS
   const startDateBefore = new Date()
@@ -289,8 +307,12 @@ const getTargetsByCourseUnit = async (req, res) => {
     ],
   })
 
-  if (!feedbackTargets)
+  if (feedbackTargets.length === 0)
     throw new ApplicationError('Not found or you do not have access', 404)
+
+  const studentListVisible = await getStudentListVisibility(
+    feedbackTargets[0].courseUnitId,
+  )
 
   const formattedFeedbackTargets = feedbackTargets.map(
     (target) => target.dataValues,
@@ -326,6 +348,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       ],
     ],
   })
+
   const feedbackCountByFeedbackTargetId = _.zipObject(
     studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
     studentFeedbackTargets.map((target) => ({
@@ -334,6 +357,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       responseGiven: !!target.get('feedbackResponse'),
     })),
   )
+
   const feedbackTargetsWithFeedbackCounts = formattedFeedbackTargets.map(
     (target) => ({
       ...target,
@@ -343,8 +367,10 @@ const getTargetsByCourseUnit = async (req, res) => {
         feedbackCountByFeedbackTargetId[target.id]?.enrolledCount ?? 0,
       responseGiven:
         feedbackCountByFeedbackTargetId[target.id]?.responseGiven ?? false,
+      studentListVisible,
     }),
   )
+
   res.send(feedbackTargetsWithFeedbackCounts)
 }
 
@@ -368,7 +394,7 @@ const getFeedbacks = async (req, res) => {
 
   const courseUnit = await CourseUnit.findOne({
     where: {
-      courseUnitId: feedbackTarget.courseUnitId,
+      id: feedbackTarget.courseUnitId,
     },
   })
 
@@ -376,24 +402,29 @@ const getFeedbacks = async (req, res) => {
     courseUnit.courseCode,
   )
 
-  if (!isAdmin) {
-    if (!userFeedbackTarget || userFeedbackTarget.accessStatus === 'STUDENT') {
+  // Teacher can see feedback any time
+  // Admin can see feedback any time
+  // Hallinto people can see feedback any time
+  if (
+    !isAdmin &&
+    !userHasOrganisationAccess &&
+    !(userFeedbackTarget && userFeedbackTarget.accessStatus === 'TEACHER')
+  ) {
+    // For students and outsiders it is visible only after the period
+    if (!feedbackTarget.isEnded())
+      throw new ApplicationError(
+        'Information is not available until the feedback period has ended',
+        403,
+      )
+    if (!userFeedbackTarget) {
       // outsider, not in the course
-      if (
-        feedbackTarget.feedbackVisibility !== 'ALL' &&
-        !userHasOrganisationAccess
-      ) {
+      // should only be shown if feedback is public to all
+      if (feedbackTarget.feedbackVisibility !== 'ALL') {
         return res.send({
           feedbacks: [],
           feedbackVisible: false,
         })
       }
-
-      if (!feedbackTarget.isEnded())
-        throw new ApplicationError(
-          'Information is not available until the feedback period has ended',
-          403,
-        )
     }
   }
 
@@ -441,6 +472,12 @@ const getStudentsWithFeedback = async (req, res) => {
       403,
     )
   }
+
+  const studentListVisible = await getStudentListVisibility(
+    userFeedbackTarget.feedbackTarget.courseUnitId,
+  )
+
+  if (!studentListVisible) res.send([])
 
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {

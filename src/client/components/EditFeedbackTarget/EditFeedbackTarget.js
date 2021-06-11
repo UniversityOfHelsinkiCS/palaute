@@ -31,11 +31,12 @@ import {
   saveValues,
   getUpperLevelQuestions,
   requiresSaveConfirmation,
+  getCoursePeriod,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
@@ -109,10 +110,16 @@ const EditFeedbackTarget = () => {
 
   const initialValues = getInitialValues(feedbackTarget)
 
+  const coursePeriod =
+    feedbackTarget && getCoursePeriod(feedbackTarget.courseRealisation)
+
   return (
     <>
       <Typography variant="h4" component="h1" className={classes.heading}>
         {courseUnitName}
+      </Typography>
+      <Typography variant="body1" component="p" className={classes.heading}>
+        {coursePeriod}
       </Typography>
 
       <Formik

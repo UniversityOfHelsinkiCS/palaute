@@ -1,8 +1,15 @@
-import { isAfter, set, isBefore } from 'date-fns'
+import { isAfter, set, isBefore, parseISO, format } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
 const setOpensAt = (date) => set(date, { hours: 0, minutes: 0, seconds: 0 })
+
+export const getCoursePeriod = (courseRealisation) => {
+  const startDate = format(parseISO(courseRealisation.startDate), 'dd.MM.yyyy')
+  const endDate = format(parseISO(courseRealisation.endDate), 'dd.MM.yyyy')
+
+  return `${startDate} - ${endDate}`
+}
 
 export const getInitialValues = (feedbackTarget) => {
   const { hidden, closesAt, opensAt, name, surveys } = feedbackTarget

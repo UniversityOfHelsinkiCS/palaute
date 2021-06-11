@@ -49,8 +49,8 @@ echo "Fetching a new dump"
 get_username
 scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
 
-echo "Removing database and related volume"
-docker-compose -f $DOCKER_COMPOSE down -v
+#echo "Removing database and related volume"
+#docker-compose -f $DOCKER_COMPOSE down -v
 
 echo "Starting postgres in the background"
 docker-compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME

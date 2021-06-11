@@ -12,6 +12,7 @@ const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
 const courseSummary = require('../controllers/courseSummaryController')
 const organisation = require('../controllers/organisationController')
+const courseUnit = require('../controllers/courseUnitController')
 
 const router = Router()
 
@@ -58,6 +59,8 @@ router.get(
   feedbackTargets.getCourseUnitsForTeacher,
 )
 
+router.get('/v2/course-units/responsible', courseUnit.getCourseUnitsForTeacher)
+
 router.get(
   '/course-units/:id/feedback-targets',
   feedbackTargets.getTargetsByCourseUnit,
@@ -73,6 +76,7 @@ router.get(
 )
 
 router.get('/organisations', organisation.getOrganisations)
+router.put('/organisations/:code', organisation.updateOrganisation)
 
 router.use('/admin', adminController)
 

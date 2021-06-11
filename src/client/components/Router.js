@@ -8,7 +8,6 @@ import AdminView from './AdminView'
 import TeacherView from './TeacherView/TeacherView'
 import FeedbackTargetList from './FeedbackTargetList'
 import EditFeedbackTarget from './EditFeedbackTarget'
-import EditCourseUnitSurvey from './EditCourseUnitSurvey'
 import FeedbackTargetResults from './FeedbackTargetResults'
 import StudentsWithFeedback from './StudentsWithFeedback'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
@@ -16,6 +15,7 @@ import FeedbackResponse from './FeedbackResponse'
 import CourseSummary from './CourseSummary'
 import OrganisationView from './OrganisationView'
 import EditProgrammeSurvey from './EditProgrammeSurvey'
+import TeacherViewV2 from './TeacherViewV2'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,7 +51,7 @@ const Router = () => {
         <Route path="/" component={Home} exact />
         <Route path="/feedbacks" component={UserFeedbacks} exact />
         <Route path="/courses" exact component={TeacherView} />
-        <Route path="/courses/:code/edit" component={EditCourseUnitSurvey} />
+        <Route path="/coursesV2" exact component={TeacherViewV2} />
         <Route path="/courses/:code/targets" component={FeedbackTargetList} />
         <Route path="/targets/:id/edit" component={EditFeedbackTarget} />
         <Route path="/targets/:id/results" component={FeedbackTargetResults} />

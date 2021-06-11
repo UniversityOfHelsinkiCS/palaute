@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING } = require('sequelize')
+const { Model, JSONB, STRING, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class Organisation extends Model {}
@@ -18,6 +18,10 @@ Organisation.init(
     },
     parentId: {
       type: STRING,
+    },
+    studentListVisible: {
+      type: BOOLEAN,
+      allowNull: false,
     },
   },
   {

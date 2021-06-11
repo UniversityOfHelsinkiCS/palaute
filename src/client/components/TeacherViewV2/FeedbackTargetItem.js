@@ -1,34 +1,28 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import {
   ListItemText,
   ListItem,
-  Box,
-  makeStyles,
-  Button,
+  Typography,
   Menu,
   MenuItem,
+  ListItemIcon,
+  IconButton,
+  Link,
+  Chip,
 } from '@material-ui/core'
 
-import MoreHoriz from '@material-ui/icons/MoreHoriz'
+import SettingsIcon from '@material-ui/icons/Settings'
 
-import { formatDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import { formatDate } from './utils'
+import FeedbackResponseChip from './FeedbackResponseChip'
 
-const useStyles = makeStyles((theme) => ({
-  listItem: {},
-  action: {
-    '&:not(:last-child)': {
-      marginRight: theme.spacing(1),
-    },
-  },
-}))
-
-const ActionsButton = ({ feedbackTarget }) => {
+const SettingsButton = ({ feedbackTarget }) => {
   const buttonRef = useRef()
   const [open, setOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
@@ -59,14 +53,10 @@ const ActionsButton = ({ feedbackTarget }) => {
 
   return (
     <>
-      <Button
-        color="primary"
-        startIcon={<MoreHoriz />}
-        onClick={handleOpen}
-        ref={buttonRef}
-      >
-        {t('actions')}
-      </Button>
+      <IconButton onClick={handleOpen} ref={buttonRef}>
+        <SettingsIcon />
+      </IconButton>
+
       <Menu
         anchorEl={buttonRef.current}
         keepMounted
@@ -74,28 +64,28 @@ const ActionsButton = ({ feedbackTarget }) => {
         onClose={handleClose}
       >
         {!isOpen && !isEnded && (
-          <MenuItem component={Link} to={`/targets/${id}/edit`}>
+          <MenuItem component={RouterLink} to={`/targets/${id}/edit`}>
             {t('feedbackTargetList:editSurvey')}
           </MenuItem>
         )}
-        <MenuItem component={Link} to={`/targets/${id}/feedback`}>
-          {t('feedbackTargetList:showSurvey')}
-        </MenuItem>
         {isStarted && (
-          <MenuItem component={Link} to={`/targets/${id}/results`}>
+          <MenuItem component={RouterLink} to={`/targets/${id}/results`}>
             {t('feedbackTargetList:showFeedbacks')}
           </MenuItem>
         )}
         {isEnded && studentListVisible && (
           <MenuItem
-            component={Link}
+            component={RouterLink}
             to={`/targets/${id}/students-with-feedback`}
           >
             {t('feedbackTargetList:showStudentsWithFeedback')}
           </MenuItem>
         )}
         {isStarted && isEnded && (
-          <MenuItem component={Link} to={`/targets/${id}/feedback-response`}>
+          <MenuItem
+            component={RouterLink}
+            to={`/targets/${id}/feedback-response`}
+          >
             {feedbackTarget.feedbackResponse
               ? t('feedbackTargetList:editFeedbackResponse')
               : t('feedbackTargetList:giveFeedbackResponse')}
@@ -116,29 +106,57 @@ const ActionsButton = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
-  const classes = useStyles()
+const getChip = (feedbackTarget) => {
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const { feedbackResponse } = feedbackTarget
+  const feedbackResponseGiven = Boolean(feedbackResponse)
+
+  if (isEnded) {
+    return (
+      <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+    )
+  }
+
+  if (isOpen) {
+    return <Chip label="Palaute käynnissä" variant="outlined" size="small" />
+  }
+
+  return null
+}
+
+const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { closesAt, opensAt, feedbackCount, enrolledCount } = feedbackTarget
+  const { closesAt, opensAt, id, feedbackCount, enrolledCount } = feedbackTarget
 
-  const periodInfo = t('feedbackOpenPeriod', {
-    opensAt: formatDate(opensAt),
-    closesAt: formatDate(closesAt),
-  })
+  const periodInfo = (
+    <Link component={RouterLink} to={`/targets/${id}/feedback`}>
+      {formatDate(opensAt)} - {formatDate(closesAt)}
+    </Link>
+  )
+
+  const chip = getChip(feedbackTarget)
 
   return (
-    <ListItem className={classes.listItem} divider={divider} disableGutters>
-      <ListItemText primary={periodInfo} />
+    <ListItem divider>
+      <ListItemIcon>
+        <SettingsButton feedbackTarget={feedbackTarget} />
+      </ListItemIcon>
       <ListItemText
-        primary={t('feedbackTargetList:studentFeedbacks', {
-          count: feedbackCount,
-          totalCount: enrolledCount,
-        })}
+        primary={periodInfo}
+        secondary={
+          <div>
+            <Typography variant="body2" color="textSecondary" component="span">
+              {t('feedbackTargetList:studentFeedbacks', {
+                count: feedbackCount,
+                totalCount: enrolledCount,
+              })}
+            </Typography>{' '}
+            {chip}
+          </div>
+        }
       />
-      <Box ml={2} display="flex">
-        <ActionsButton feedbackTarget={feedbackTarget} />
-      </Box>
     </ListItem>
   )
 }
