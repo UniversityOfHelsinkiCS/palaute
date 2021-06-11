@@ -29,7 +29,6 @@ const FeedbackResponseChip = ({ feedbackResponseGiven, className }) => {
     <Chip
       label={label}
       className={classNames}
-      color="success"
       variant="outlined"
       size="small"
     />
