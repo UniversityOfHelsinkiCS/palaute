@@ -13,9 +13,11 @@ const {
   CourseRealisation,
   CourseUnit,
   UserFeedbackTarget,
+  User,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
+const logger = require('../util/logger')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -25,6 +27,7 @@ const adminAccess = (req, _, next) => {
 }
 
 const runUpdater = async () => {
+  logger.info('Running updater on demand')
   run()
 }
 
@@ -32,7 +35,31 @@ const findUser = async (req, res) => {
   const {
     query: { user },
   } = req
-
+  if (user.split(' ').length === 2) {
+    const firstName = user.split(' ')[0]
+    const lastName = user.split(' ')[1]
+    const persons = await User.findAll({
+      where: {
+        firstName: {
+          [Op.iLike]: `%${firstName}%`,
+        },
+        lastName: {
+          [Op.iLike]: `%${lastName}%`,
+        },
+      },
+      limit: 100,
+    })
+    return res.send({
+      params: {
+        firstName,
+        lastName,
+      },
+      persons: persons.map((person) => ({
+        ...person.dataValues,
+        firstNames: person.firstName,
+      })),
+    })
+  }
   const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
   const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
   const isSisuId =
@@ -51,7 +78,7 @@ const findUser = async (req, res) => {
   const { data } = await importerClient.get(`/palaute/persons`, { params })
   const { persons } = data
 
-  res.send({
+  return res.send({
     params,
     persons,
   })

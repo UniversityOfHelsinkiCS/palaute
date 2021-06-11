@@ -50,7 +50,11 @@ const LoginAsSelector = () => {
       />
       <p>
         Searched for:{' '}
-        {Object.entries(lastQuery).map(([key, value]) => `${key}: ${value}`)}
+        {Object.entries(lastQuery).map(([key, value]) => (
+          <p>
+            {key}: {value}
+          </p>
+        ))}
       </p>
       {potentialUsers.map((user) => (
         <Card key={user.id}>
