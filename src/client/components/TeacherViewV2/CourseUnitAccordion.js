@@ -69,7 +69,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
         </div>
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
-        <FeedbackTargetList courseCode={courseCode} />
+        <FeedbackTargetList courseCode={courseCode} group={group} />
       </AccordionDetails>
     </Accordion>
   )

@@ -2,12 +2,18 @@ import React, { useMemo } from 'react'
 import { Box, CircularProgress, List, Typography } from '@material-ui/core'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
-import { getRelevantFeedbackTargets } from './utils'
+
+import {
+  getRelevantFeedbackTargets,
+  getFeedbackTargetQueryOptions,
+} from './utils'
+
 import FeedbackTargetItem from './FeedbackTargetItem'
 
-const FeedbackTargetList = ({ courseCode }) => {
+const FeedbackTargetList = ({ courseCode, group }) => {
   const { feedbackTargets, isLoading } = useCourseUnitFeedbackTargets(
     courseCode,
+    getFeedbackTargetQueryOptions(group),
   )
 
   const targets = useMemo(

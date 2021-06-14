@@ -283,6 +283,38 @@ const getCourseUnitsForTeacher = async (req, res) => {
 const getTargetsByCourseUnit = async (req, res) => {
   const courseCode = req.params.id
 
+  const {
+    courseRealisationStartDateAfter,
+    courseRealisationStartDateBefore,
+    courseRealisationEndDateAfter,
+    courseRealisationEndDateBefore,
+  } = req.query
+
+  const courseRealisationPeriodWhere = {
+    [Op.and]: [
+      courseRealisationStartDateAfter && {
+        startDate: {
+          [Op.gt]: new Date(courseRealisationStartDateAfter),
+        },
+      },
+      courseRealisationStartDateBefore && {
+        startDate: {
+          [Op.lt]: new Date(courseRealisationStartDateBefore),
+        },
+      },
+      courseRealisationEndDateAfter && {
+        endDate: {
+          [Op.gt]: new Date(courseRealisationEndDateAfter),
+        },
+      },
+      courseRealisationEndDateBefore && {
+        endDate: {
+          [Op.lt]: new Date(courseRealisationEndDateBefore),
+        },
+      },
+    ].filter(Boolean),
+  }
+
   const feedbackTargets = await FeedbackTarget.findAll({
     include: [
       {
@@ -293,7 +325,10 @@ const getTargetsByCourseUnit = async (req, res) => {
           userId: req.user.id,
           accessStatus: 'TEACHER',
         },
-        include: { model: Feedback, as: 'feedback' },
+        include: {
+          model: Feedback,
+          as: 'feedback',
+        },
       },
       {
         model: CourseUnit,
@@ -303,7 +338,11 @@ const getTargetsByCourseUnit = async (req, res) => {
           courseCode,
         },
       },
-      { model: CourseRealisation, as: 'courseRealisation' },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        where: { ...courseRealisationPeriodWhere },
+      },
     ],
   })
 

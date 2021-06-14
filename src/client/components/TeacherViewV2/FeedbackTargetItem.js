@@ -128,11 +128,13 @@ const getChip = (feedbackTarget) => {
 const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { closesAt, opensAt, id, feedbackCount, enrolledCount } = feedbackTarget
+  const { id, feedbackCount, enrolledCount, courseRealisation } = feedbackTarget
+
+  const { startDate, endDate } = courseRealisation
 
   const periodInfo = (
     <Link component={RouterLink} to={`/targets/${id}/feedback`}>
-      {formatDate(opensAt)} - {formatDate(closesAt)}
+      {formatDate(startDate)} - {formatDate(endDate)}
     </Link>
   )
 
@@ -146,7 +148,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
       <ListItemText
         primary={periodInfo}
         secondary={
-          <div>
+          <>
             <Typography variant="body2" color="textSecondary" component="span">
               {t('feedbackTargetList:studentFeedbacks', {
                 count: feedbackCount,
@@ -154,7 +156,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
               })}
             </Typography>{' '}
             {chip}
-          </div>
+          </>
         }
       />
     </ListItem>
