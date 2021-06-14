@@ -15,7 +15,7 @@ const AdminView = () => {
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
 
   const runUpdater = async () => {
-    await apiClient.post('/admin/run-updater')
+    await apiClient.post('/admin/run-updater', {})
   }
 
   return (

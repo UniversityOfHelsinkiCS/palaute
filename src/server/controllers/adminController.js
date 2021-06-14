@@ -26,9 +26,10 @@ const adminAccess = (req, _, next) => {
   return next()
 }
 
-const runUpdater = async () => {
+const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
   run()
+  res.send({})
 }
 
 const findUser = async (req, res) => {

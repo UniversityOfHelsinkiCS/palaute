@@ -119,26 +119,22 @@ class FeedbackTarget extends Model {
       },
     })
 
-    const teacherSurvey = existingTeacherSurvey
-      ? existingTeacherSurvey
-      : await createTeacherSurvey(this.id, previousSurvey)
+    const teacherSurvey =
+      existingTeacherSurvey ||
+      (await createTeacherSurvey(this.id, previousSurvey))
 
-    const [universitySurvey, programmeSurvey] = await Promise.all([
-      Survey.findOne({
-        where: { type: 'university' },
-      }),
-      organisation
-        ? Survey.findOne({
-            where: { type: 'programme', typeId: organisation.code },
-          })
-        : null,
-    ])
+    const universitySurvey = await Survey.findOne({
+      where: { type: 'university' },
+    })
+    const programmeSurvey = organisation
+      ? await Survey.findOne({
+          where: { type: 'programme', typeId: organisation.code },
+        })
+      : null
 
-    await Promise.all([
-      teacherSurvey.populateQuestions(),
-      universitySurvey.populateQuestions(),
-      programmeSurvey?.populateQuestions(),
-    ])
+    await teacherSurvey.populateQuestions()
+    await universitySurvey.populateQuestions()
+    await programmeSurvey?.populateQuestions()
 
     return {
       teacherSurvey,
@@ -180,8 +176,8 @@ class FeedbackTarget extends Model {
     return publicQuestionIds
   }
 
-  async getPublicityConfigurableQuestionIds() {
-    await this.populateQuestions()
+  async getPublicityConfigurableQuestionIds(surveys) {
+    this.populateQuestions(surveys)
 
     const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
 
@@ -192,9 +188,7 @@ class FeedbackTarget extends Model {
     return questionIds
   }
 
-  async populateQuestions() {
-    const surveys = await this.getSurveys()
-
+  populateQuestions(surveys) {
     const questions = [
       ...(surveys.universitySurvey?.questions ?? []),
       ...(surveys.programmeSurvey?.questions ?? []),
@@ -228,15 +222,11 @@ class FeedbackTarget extends Model {
   }
 
   async toPublicObject() {
-    const [
+    const surveys = await this.getSurveys()
+    const publicQuestionIds = await this.getPublicQuestionIds()
+    const publicityConfigurableQuestionIds = await this.getPublicityConfigurableQuestionIds(
       surveys,
-      publicQuestionIds,
-      publicityConfigurableQuestionIds,
-    ] = await Promise.all([
-      this.getSurveys(),
-      this.getPublicQuestionIds(),
-      this.getPublicityConfigurableQuestionIds(),
-    ])
+    )
 
     const feedbackTarget = {
       ...this.toJSON(),

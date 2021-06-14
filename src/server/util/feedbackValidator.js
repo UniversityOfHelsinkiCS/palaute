@@ -39,7 +39,8 @@ const mapTypeToValidator = {
 
 const validateFeedback = async (data, feedbackTarget) => {
   try {
-    await feedbackTarget.populateQuestions()
+    const surveys = await feedbackTarget.getSurveys()
+    feedbackTarget.populateQuestions(surveys)
     const idToQuestion = {}
     feedbackTarget.questions.forEach((q) => {
       idToQuestion[q.id] = q
