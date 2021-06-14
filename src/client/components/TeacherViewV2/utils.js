@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash'
-import { lightFormat, isAfter, startOfDay } from 'date-fns'
+import { lightFormat, isAfter, startOfDay, subYears } from 'date-fns'
 
 export const getGroupedCourseUnits = (courseUnits) => {
   const ongoing = courseUnits.filter(
@@ -50,9 +50,7 @@ export const getRelevantCourseRealisation = (courseUnit, group) => {
 
 export const getRelevantFeedbackTargets = (feedbackTargets) => {
   const courseRealisationTargets = feedbackTargets.filter(
-    ({ feedbackType, courseRealisation }) =>
-      feedbackType === 'courseRealisation' &&
-      isAfter(new Date(courseRealisation.endDate), new Date(2021, 4, 1)),
+    ({ feedbackType }) => feedbackType === 'courseRealisation',
   )
 
   return orderBy(
@@ -76,6 +74,7 @@ export const getFeedbackTargetQueryOptions = (group) => {
     case 'ENDED':
       return {
         courseRealisationEndDateBefore: startOfDay(new Date()),
+        courseRealisationEndDateAfter: startOfDay(new Date(2021, 4, 1)),
       }
     default:
       return {}

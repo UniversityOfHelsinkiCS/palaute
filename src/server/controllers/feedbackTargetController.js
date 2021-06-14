@@ -341,13 +341,15 @@ const getTargetsByCourseUnit = async (req, res) => {
       {
         model: CourseRealisation,
         as: 'courseRealisation',
+        required: true,
         where: { ...courseRealisationPeriodWhere },
       },
     ],
   })
 
-  if (feedbackTargets.length === 0)
-    throw new ApplicationError('Not found or you do not have access', 404)
+  if (feedbackTargets.length === 0) {
+    return res.send([])
+  }
 
   const studentListVisible = await getStudentListVisibility(
     feedbackTargets[0].courseUnitId,
@@ -410,7 +412,7 @@ const getTargetsByCourseUnit = async (req, res) => {
     }),
   )
 
-  res.send(feedbackTargetsWithFeedbackCounts)
+  return res.send(feedbackTargetsWithFeedbackCounts)
 }
 
 const getFeedbacks = async (req, res) => {
