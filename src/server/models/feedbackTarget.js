@@ -35,7 +35,9 @@ const getGloballyPublicQuestionIds = async () => {
   return numericQuestionIds
 }
 
-const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
+const getClonedQuestionIds = async (previousSurvey) => {
+  if (!previousSurvey) return []
+
   const previousQuestions = await Question.findAll({
     where: {
       id: previousSurvey.questionIds,
@@ -51,7 +53,11 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
     { returning: true },
   )
 
-  const clonedQuestionIds = clonedQuestions.map((q) => q.id)
+  return clonedQuestions.map((q) => q.id)
+}
+
+const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
+  const clonedQuestionIds = await getClonedQuestionIds(previousSurvey)
 
   const teacherSurvey = await Survey.create({
     feedbackTargetId,
