@@ -101,12 +101,12 @@ const getByCourseUnit = async (req, res) => {
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const { courseUnitId } = req.params
+  const { code } = req.params
 
   const [summaryQuestions, courseCodes, courseUnit] = await Promise.all([
     getSummaryQuestions(),
     getAccessibleCourseCodes(organisationAccess),
-    CourseUnit.findByPk(courseUnitId),
+    CourseUnit.findOne({ where: { courseCode: code } }),
   ])
 
   if (!courseUnit) {
@@ -116,7 +116,7 @@ const getByCourseUnit = async (req, res) => {
   const questionIds = summaryQuestions.map(({ id }) => id)
 
   const courseRealisations = await getCourseRealisationSummaries({
-    courseUnitId,
+    courseCode: code,
     questionIds,
   })
 

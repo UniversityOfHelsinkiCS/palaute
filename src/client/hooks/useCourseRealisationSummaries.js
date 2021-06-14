@@ -4,12 +4,12 @@ import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 900000
 
-const useCourseRealisationSummaries = (courseUnitId, options = {}) => {
-  const queryKey = ['courseRealisationSummaries', courseUnitId]
+const useCourseRealisationSummaries = (courseCode, options = {}) => {
+  const queryKey = ['courseRealisationSummaries', courseCode]
 
   const queryFn = async () => {
     const { data } = await apiClient.get(
-      `/course-summaries/course-units/${courseUnitId}`,
+      `/course-summaries/course-units/${courseCode}`,
     )
 
     return data
@@ -21,7 +21,7 @@ const useCourseRealisationSummaries = (courseUnitId, options = {}) => {
     {
       cacheTime: defaultCacheTime,
       staleTime: defaultCacheTime,
-      enabled: Boolean(courseUnitId),
+      enabled: Boolean(courseCode),
       ...options,
     },
   )

@@ -22,7 +22,6 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             results,
             resultsDifference,
             feedbackCount,
-            id,
             feedbackResponseGiven,
             closesAt,
           },
@@ -34,10 +33,13 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
           )
 
           return (
-            <Fragment key={id}>
+            <Fragment key={courseCode}>
               <ResultsRow
                 label={
-                  <Link component={RouterLink} to={`/course-summary/${id}`}>
+                  <Link
+                    component={RouterLink}
+                    to={`/course-summary/${courseCode}`}
+                  >
                     {getLanguageValue(name, i18n.language)} ({courseCode})
                   </Link>
                 }

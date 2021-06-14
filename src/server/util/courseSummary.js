@@ -21,31 +21,23 @@ FROM
       INNER JOIN (
         SELECT
           id,
-          question_id,
-          cast(question_data AS INTEGER) int_question_data
+          question_feedback::jsonb->>'questionId' AS question_id,
+          cast(question_feedback::jsonb->>'data' AS INTEGER) int_question_data
         FROM
           (
             SELECT
               id,
-              question_feedback :: jsonb ->> 'questionId' AS question_id,
-              question_feedback :: jsonb ->> 'data' AS question_data
+              user_id,
+              jsonb_array_elements_text(data) AS question_feedback
             FROM
-              (
-                SELECT
-                  id,
-                  user_id,
-                  jsonb_array_elements_text(data) AS question_feedback
-                FROM
-                  feedbacks
-              ) feedbacks_1
-          ) feedbacks_2
-        WHERE
-          question_data IN ('1', '2', '3', '4', '5')
-      ) feedbacks_3 ON user_feedback_targets.feedback_id = feedbacks_3.id
+              feedbacks
+          ) feedbacks_1
+        WHERE question_feedback::json->>'data' IN ('1', '2', '3', '4', '5')
+      ) feedbacks_2 ON user_feedback_targets.feedback_id = feedbacks_2.id
     WHERE
       user_feedback_targets.access_status = 'STUDENT'
-      AND feedbacks_3.question_id IN (:questionIds)
-  ) as feedbacks_4
+      AND feedbacks_2.question_id IN (:questionIds)
+  ) as feedbacks_3
 GROUP BY
   feedback_target_id,
   question_id
@@ -141,7 +133,7 @@ FROM question_averages
   INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
   feedback_targets.feedback_type = 'courseRealisation'
-  AND course_unit_id = :courseUnitId
+  AND course_units.course_code = :courseCode
   AND course_realisations.start_date < NOW()
   AND course_realisations.start_date > NOW() - interval '36 months';
 `
@@ -243,15 +235,11 @@ const mapOpenUniOrganisations = async (rows) => {
 }
 
 const getCourseUnitsWithResults = (rows, questionIds) => {
-  const rowsByCourseUnitId = _.groupBy(rows, (row) => row.course_unit_id)
+  const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
 
-  const courseUnits = Object.entries(rowsByCourseUnitId).map(
-    ([courseUnitId, courseUnitRows]) => {
-      const {
-        course_unit_name: name,
-        course_code: courseCode,
-        closes_at: closesAt,
-      } = courseUnitRows[0]
+  const courseUnits = Object.entries(rowsByCourseCode).map(
+    ([courseCode, courseUnitRows]) => {
+      const { course_unit_name: name, closes_at: closesAt } = courseUnitRows[0]
 
       const latestRow = _.maxBy(
         courseUnitRows,
@@ -282,7 +270,6 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
       )
 
       return {
-        id: courseUnitId,
         name,
         courseCode,
         results: currentResults,
@@ -452,11 +439,11 @@ const getOrganisationSummaries = async ({
   )
 }
 
-const getCourseRealisationSummaries = async ({ courseUnitId, questionIds }) => {
+const getCourseRealisationSummaries = async ({ courseCode, questionIds }) => {
   const rows = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
     replacements: {
       questionIds: questionIds.map((id) => id.toString()),
-      courseUnitId,
+      courseCode,
     },
     type: sequelize.QueryTypes.SELECT,
   })

@@ -10,7 +10,7 @@ const CourseSummary = () => (
       <OrganisationSummary />
     </Route>
 
-    <Route path="/course-summary/:courseUnitId" exact>
+    <Route path="/course-summary/:code" exact>
       <CourseRealisationSummary />
     </Route>
   </Switch>

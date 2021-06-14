@@ -71,7 +71,7 @@ router.get('/course-units/:code/survey', surveys.getSurveyByCourseCode)
 router.get('/course-summaries/organisations', courseSummary.getByOrganisations)
 
 router.get(
-  '/course-summaries/course-units/:courseUnitId',
+  '/course-summaries/course-units/:code',
   courseSummary.getByCourseUnit,
 )
 

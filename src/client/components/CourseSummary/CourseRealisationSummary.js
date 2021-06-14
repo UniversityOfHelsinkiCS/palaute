@@ -106,13 +106,13 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
 }
 
 const CourseRealisationSummary = () => {
-  const { courseUnitId } = useParams()
+  const { code } = useParams()
   const { i18n } = useTranslation()
 
   const {
     courseRealisationSummaries,
     isLoading,
-  } = useCourseRealisationSummaries(courseUnitId)
+  } = useCourseRealisationSummaries(code)
 
   if (isLoading) {
     return (

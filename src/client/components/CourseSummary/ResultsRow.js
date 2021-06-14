@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2 + level * 2),
   }),
   doneIcon: {
-    color: '#4dc04e',
+    color: theme.palette.success.main,
   },
   clearIcon: {
-    color: '#eb4841',
+    color: theme.palette.error.main,
   },
   accessTime: {
-    color: '#f5a223',
+    color: theme.palette.warning.main,
   },
 }))
 
