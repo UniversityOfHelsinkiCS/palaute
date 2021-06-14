@@ -230,7 +230,6 @@ class FeedbackTarget extends Model {
       this.getSurveys(),
       this.getPublicQuestionIds(),
       this.getPublicityConfigurableQuestionIds(),
-      this.populateQuestions(),
     ])
 
     const feedbackTarget = {
