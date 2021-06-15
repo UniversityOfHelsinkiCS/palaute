@@ -153,7 +153,7 @@ export default {
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',
-    myCourses: 'Opettamani kurssit',
+    myCourses: 'Opetukseni',
     logOut: 'Kirjaudu ulos',
     admin: 'Ylläpito',
     courseSummary: 'Kurssiyhteenveto',

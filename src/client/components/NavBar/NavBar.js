@@ -28,20 +28,31 @@ const useStyles = makeStyles({
   toolbar: {
     display: 'flex',
     width: '100%',
-    justifyContent: 'space-between',
-  },
-})
-
-const useLogoStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexGrow: 1,
   },
   link: {
     display: 'inline-flex',
     alignItems: 'center',
     color: 'inherit',
     textDecoration: 'none',
+    marginRight: 20,
+  },
+  linkContainer: {
+    display: 'flex',
+    flexGrow: 1,
+    alignItems: 'center',
+  },
+})
+
+const useLogoStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+  },
+  link: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    color: 'inherit',
+    textDecoration: 'none',
+    marginRight: 30,
   },
   image: {
     width: '2.5rem',
@@ -91,6 +102,35 @@ const NavBar = () => {
     setMenuOpen(true)
   }
 
+  const fullName = [authorizedUser?.firstName, authorizedUser?.lastName]
+    .filter(Boolean)
+    .join(' ')
+
+  const menuLabel = fullName || t('navBar:nameFallback')
+
+  const menuButtonProps = {
+    onClick: handleOpenMenu,
+    ref: menuButtonRef,
+    'aria-controls': 'navBarMenu',
+    'aria-haspopup': 'true',
+  }
+
+  const desktopMenuButton = (
+    <Button
+      color="inherit"
+      endIcon={<KeyboardArrowDownIcon />}
+      {...menuButtonProps}
+    >
+      {menuLabel}
+    </Button>
+  )
+
+  const mobileMenuButton = (
+    <IconButton color="inherit" aria-label={menuLabel} {...menuButtonProps}>
+      <MenuIcon />
+    </IconButton>
+  )
+
   const links = [
     isTeacher && {
       label: t('navBar:myCourses'),
@@ -110,18 +150,41 @@ const NavBar = () => {
     },
   ].filter(Boolean)
 
-  const fullName = [authorizedUser?.firstName, authorizedUser?.lastName]
-    .filter(Boolean)
-    .join(' ')
+  const navBarLinks = (
+    <div className={classes.linkContainer}>
+      {links.map(({ label, to }, index) => (
+        <Link key={index} className={classes.link} to={to}>
+          {label}
+        </Link>
+      ))}
+    </div>
+  )
 
-  const menuLabel = fullName || t('navBar:nameFallback')
+  const mobileMenuLinks = links.map(({ label, to }, index) => (
+    <MenuItem key={index} component={Link} to={to}>
+      {label}
+    </MenuItem>
+  ))
 
-  const menuButtonProps = {
-    onClick: handleOpenMenu,
-    ref: menuButtonRef,
-    'aria-controls': 'navBarMenu',
-    'aria-haspopup': 'true',
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang)
+    handleCloseMenu()
   }
+
+  const languageOptions = [
+    i18n.language !== 'fi' && {
+      label: 'Suomi',
+      lang: 'fi',
+    },
+    i18n.language !== 'en' && {
+      label: 'English',
+      lang: 'en',
+    },
+    i18n.language !== 'sv' && {
+      label: 'Svenska',
+      lang: 'sv',
+    },
+  ].filter(Boolean)
 
   const menu = (
     <Menu
@@ -131,58 +194,18 @@ const NavBar = () => {
       open={menuOpen}
       onClose={handleCloseMenu}
     >
-      {links.map(({ label, to }, index) => (
+      {languageOptions.map(({ label, lang }, index) => (
         <MenuItem
           key={index}
           component={Link}
-          to={to}
-          onClick={handleCloseMenu}
+          onClick={() => changeLanguage(lang)}
         >
           {label}
         </MenuItem>
       ))}
+      {isMobile && mobileMenuLinks}
       <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
     </Menu>
-  )
-
-  const desktopMenuButton = (
-    <Button
-      color="inherit"
-      endIcon={<KeyboardArrowDownIcon />}
-      {...menuButtonProps}
-    >
-      {menuLabel}
-    </Button>
-  )
-
-  const mobileMenuButton = (
-    <IconButton color="inherit" aria-label={menuLabel} {...menuButtonProps}>
-      <MenuIcon />
-    </IconButton>
-  )
-
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang)
-  }
-
-  const languageSelector = (
-    <div>
-      {i18n.language !== 'fi' && (
-        <Button color="inherit" onClick={() => changeLanguage('fi')}>
-          Suomi
-        </Button>
-      )}
-      {i18n.language !== 'en' && (
-        <Button color="inherit" onClick={() => changeLanguage('en')}>
-          English
-        </Button>
-      )}
-      {i18n.language !== 'sv' && (
-        <Button color="inherit" onClick={() => changeLanguage('sv')}>
-          Svenska
-        </Button>
-      )}
-    </div>
   )
 
   return (
@@ -191,7 +214,7 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <Logo />
-          {languageSelector}
+          {!isMobile && navBarLinks}
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
       </AppBar>
