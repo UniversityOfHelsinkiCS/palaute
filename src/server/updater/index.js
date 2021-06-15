@@ -25,7 +25,7 @@ const run = async () => {
 
 const start = async () => {
   if (!inProduction) {
-    return logger.info('Not running updater in dev')
+    return logger.info('Not running updater outside production')
   }
   logger.info('Setup cron job')
   const cronTime = inProduction

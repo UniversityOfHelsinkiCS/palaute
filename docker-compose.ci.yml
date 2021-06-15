@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  app:
+    build: .
+    command: ['npm','run', 'start:test']
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+      - NODE_ENV=test
+
+  db:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  cypress:
+    image: cypress/browsers:node14.7.0-chrome84
+    command: ['npx', 'cypress', 'run']
+    volumes:
+      - ./cypress:/cypress
+      - ./cypress.json:/cypress.json
+    depends_on: 
+      - app
+      - db
