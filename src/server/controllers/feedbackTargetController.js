@@ -6,9 +6,6 @@ const { useOldImporter } = require('../util/config')
 const { ApplicationError } = require('../util/customErrors')
 
 const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
-const { getResponsibleByPersonId } = require('../util/importerResponsible')
-
-const { getCourseUnitsForTeacherQuery } = require('../util/feedbackTargets')
 
 const {
   UserFeedbackTarget,
@@ -266,18 +263,6 @@ const getForStudent = async (req, res) => {
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
 
   res.send(responseReady)
-}
-
-const getCourseUnitsForTeacher = async (req, res) => {
-  const { id } = req.user
-
-  if (useOldImporter) {
-    await getResponsibleByPersonId(id)
-  }
-
-  const courseUnits = await getCourseUnitsForTeacherQuery(id)
-
-  res.send(courseUnits)
 }
 
 const getTargetsByCourseUnit = async (req, res) => {
@@ -561,7 +546,6 @@ const updateFeedbackResponse = async (req, res) => {
 
 module.exports = {
   getForStudent,
-  getCourseUnitsForTeacher,
   getTargetsByCourseUnit,
   getOne,
   update,

@@ -47,7 +47,7 @@ const SettingsButton = ({ feedbackTarget }) => {
       `${window.location.protocol}//${window.location.host}/palaute/targets/${id}/${target}`,
     )
 
-    enqueueSnackbar(t('feedbackTargetList:copied'), { variant: 'info' })
+    enqueueSnackbar(t('teacherView:copied'), { variant: 'info' })
     handleClose()
   }
 
@@ -65,12 +65,12 @@ const SettingsButton = ({ feedbackTarget }) => {
       >
         {!isOpen && !isEnded && (
           <MenuItem component={RouterLink} to={`/targets/${id}/edit`}>
-            {t('feedbackTargetList:editSurvey')}
+            {t('teacherView:editSurvey')}
           </MenuItem>
         )}
         {isStarted && (
           <MenuItem component={RouterLink} to={`/targets/${id}/results`}>
-            {t('feedbackTargetList:showFeedbacks')}
+            {t('teacherView:showFeedbacks')}
           </MenuItem>
         )}
         {isEnded && studentListVisible && (
@@ -78,7 +78,7 @@ const SettingsButton = ({ feedbackTarget }) => {
             component={RouterLink}
             to={`/targets/${id}/students-with-feedback`}
           >
-            {t('feedbackTargetList:showStudentsWithFeedback')}
+            {t('teacherView:showStudentsWithFeedback')}
           </MenuItem>
         )}
         {isStarted && isEnded && (
@@ -87,18 +87,18 @@ const SettingsButton = ({ feedbackTarget }) => {
             to={`/targets/${id}/feedback-response`}
           >
             {feedbackTarget.feedbackResponse
-              ? t('feedbackTargetList:editFeedbackResponse')
-              : t('feedbackTargetList:giveFeedbackResponse')}
+              ? t('teacherView:editFeedbackResponse')
+              : t('teacherView:giveFeedbackResponse')}
           </MenuItem>
         )}
         {!isEnded && (
           <MenuItem color="primary" onClick={() => handleCopy('feedback')}>
-            {t('feedbackTargetList:copyLink')}
+            {t('teacherView:copyLink')}
           </MenuItem>
         )}
         {isEnded && (
           <MenuItem color="primary" onClick={() => handleCopy('results')}>
-            {t('feedbackTargetList:copyResponseLink')}
+            {t('teacherView:copyResponseLink')}
           </MenuItem>
         )}
       </Menu>
@@ -106,7 +106,7 @@ const SettingsButton = ({ feedbackTarget }) => {
   )
 }
 
-const getChip = (feedbackTarget) => {
+const getChip = (feedbackTarget, t) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const { feedbackResponse } = feedbackTarget
@@ -119,7 +119,13 @@ const getChip = (feedbackTarget) => {
   }
 
   if (isOpen) {
-    return <Chip label="Palaute käynnissä" variant="outlined" size="small" />
+    return (
+      <Chip
+        label={t('teacherView:feedbackOpen')}
+        variant="outlined"
+        size="small"
+      />
+    )
   }
 
   return null
@@ -138,7 +144,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
     </Link>
   )
 
-  const chip = getChip(feedbackTarget)
+  const chip = getChip(feedbackTarget, t)
 
   return (
     <ListItem divider>
@@ -150,7 +156,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
         secondary={
           <>
             <Typography variant="body2" color="textSecondary" component="span">
-              {t('feedbackTargetList:studentFeedbacks', {
+              {t('teacherView:feedbackCount', {
                 count: feedbackCount,
                 totalCount: enrolledCount,
               })}

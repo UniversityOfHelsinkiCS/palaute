@@ -54,12 +54,7 @@ router.post('/surveys/:id/questions', surveys.addQuestion)
 router.get('/surveys/university', surveys.getUniversitySurvey)
 router.get('/surveys/programme/:surveyCode', surveys.getProgrammeSurvey)
 
-router.get(
-  '/course-units/responsible',
-  feedbackTargets.getCourseUnitsForTeacher,
-)
-
-router.get('/v2/course-units/responsible', courseUnit.getCourseUnitsForTeacher)
+router.get('/course-units/responsible', courseUnit.getCourseUnitsForTeacher)
 
 router.get(
   '/course-units/:id/feedback-targets',

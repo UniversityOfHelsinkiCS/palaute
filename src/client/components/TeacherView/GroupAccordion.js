@@ -9,6 +9,8 @@ import {
   Box,
 } from '@material-ui/core'
 
+import { useTranslation } from 'react-i18next'
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import CourseUnitItem from './CourseUnitAccordion'
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const GroupAccordion = ({ title, courseUnits, icon, group }) => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <Accordion defaultExpanded>
@@ -42,7 +45,7 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
         {courseUnits.length === 0 && (
           <Box p={2}>
             <Typography color="textSecondary" align="center">
-              Ei kursseja
+              {t('teacherView:noCourses')}
             </Typography>
           </Box>
         )}

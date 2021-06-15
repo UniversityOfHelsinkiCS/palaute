@@ -4,8 +4,8 @@ import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 900000
 
-const useTeacherCourses = (options = {}) => {
-  const queryKey = 'teacherCourses'
+const useTeacherCourseUnits = (options = {}) => {
+  const queryKey = 'teacherCourseUnits'
 
   const queryFn = async () => {
     const { data } = await apiClient.get('/course-units/responsible')
@@ -22,4 +22,4 @@ const useTeacherCourses = (options = {}) => {
   return { courseUnits, ...rest }
 }
 
-export default useTeacherCourses
+export default useTeacherCourseUnits

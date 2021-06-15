@@ -1,67 +1,82 @@
-import { useTranslation } from 'react-i18next'
+import { orderBy } from 'lodash'
+import { lightFormat, startOfHour } from 'date-fns'
 
-import { isAfter, parseISO, format } from 'date-fns'
+export const getGroupedCourseUnits = (courseUnits) => {
+  const ongoing = courseUnits.filter(
+    ({ ongoingCourseRealisation }) => ongoingCourseRealisation,
+  )
 
-import { getLanguageValue } from '../../util/languageUtils'
+  const upcoming = courseUnits.filter(
+    ({ upcomingCourseRealisation }) => upcomingCourseRealisation,
+  )
 
-export const getUniqueCourses = (courseUnits) => {
-  const { i18n } = useTranslation()
-
-  if (!courseUnits) return null
-  courseUnits.sort((a, b) => {
-    const Adate = a.validityPeriod.endDate
-      ? a.validityPeriod.endDate
-      : a.validityPeriod.startDate
-    const Bdate = b.validityPeriod.endDate
-      ? b.validityPeriod.endDate
-      : b.validityPeriod.startDate
-    return Adate < Bdate ? 1 : -1
-  })
-
-  const codes = new Set()
-
-  const uniqueCourses = []
-
-  courseUnits.forEach((course) => {
-    if (codes.has(course.courseCode)) return
-    uniqueCourses.push({ ...course, name: getLanguageValue(course.name, i18n) })
-    codes.add(course.courseCode)
-  })
-
-  return uniqueCourses
-}
-
-export const getRelevantCourses = (courses, relevant) => {
-  if (!courses) return null
-
-  const comparisonDate = new Date(2021, 1, 1, 0, 0, 0, 0)
-
-  const filteredCourses = courses.filter((course) => {
-    const date = course.validityPeriod.endDate
-      ? course.validityPeriod.endDate
-      : course.validityPeriod.startDate
-    if (!relevant) {
-      return !isAfter(parseISO(date), comparisonDate)
-    }
-    return isAfter(parseISO(date), comparisonDate)
-  })
-
-  return filteredCourses
-}
-
-export const formatValidityPeriod = (activityPeriod) => {
-  const parsedStartDate = parseISO(activityPeriod.startDate)
-  const parsedEndDate = parseISO(activityPeriod.endDate)
-
-  if (Number.isNaN(parsedEndDate.getTime())) {
-    return {
-      startDate: format(parsedStartDate, 'dd.MM.yyyy'),
-      endDate: format(parsedStartDate, 'dd.MM.yyyy'),
-    }
-  }
+  const ended = courseUnits.filter(
+    ({ endedCourseRealisation }) => endedCourseRealisation,
+  )
 
   return {
-    startDate: format(parsedStartDate, 'dd.MM.yyyy'),
-    endDate: format(parsedEndDate, 'dd.MM.yyyy'),
+    ongoing: orderBy(
+      ongoing,
+      [({ ongoingCourseRealisation }) => ongoingCourseRealisation.startDate],
+      ['desc'],
+    ),
+    upcoming: orderBy(
+      upcoming,
+      [({ upcomingCourseRealisation }) => upcomingCourseRealisation.startDate],
+      ['asc'],
+    ),
+    ended: orderBy(
+      ended,
+      [({ endedCourseRealisation }) => endedCourseRealisation.startDate],
+      ['desc'],
+    ),
+  }
+}
+
+export const formatDate = (date) => lightFormat(new Date(date), 'dd.MM.yyyy')
+
+export const getRelevantCourseRealisation = (courseUnit, group) => {
+  switch (group) {
+    case 'ONGOING':
+      return courseUnit.ongoingCourseRealisation
+    case 'UPCOMING':
+      return courseUnit.upcomingCourseRealisation
+    case 'ENDED':
+      return courseUnit.endedCourseRealisation
+    default:
+      return null
+  }
+}
+
+export const getRelevantFeedbackTargets = (feedbackTargets) => {
+  const courseRealisationTargets = feedbackTargets.filter(
+    ({ feedbackType }) => feedbackType === 'courseRealisation',
+  )
+
+  return orderBy(
+    courseRealisationTargets,
+    [({ courseRealisation }) => courseRealisation.startDate],
+    ['desc'],
+  )
+}
+
+export const getFeedbackTargetQueryOptions = (group) => {
+  switch (group) {
+    case 'ONGOING':
+      return {
+        courseRealisationStartDateBefore: startOfHour(new Date()),
+        courseRealisationEndDateAfter: startOfHour(new Date()),
+      }
+    case 'UPCOMING':
+      return {
+        courseRealisationStartDateAfter: startOfHour(new Date()),
+      }
+    case 'ENDED':
+      return {
+        courseRealisationEndDateBefore: startOfHour(new Date()),
+        courseRealisationEndDateAfter: startOfHour(new Date(2021, 4, 1)),
+      }
+    default:
+      return {}
   }
 }

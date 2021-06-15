@@ -1,6 +1,7 @@
 import React from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
   given: {
@@ -15,10 +16,11 @@ const useStyles = makeStyles((theme) => ({
 
 const FeedbackResponseChip = ({ feedbackResponseGiven, className }) => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   const label = feedbackResponseGiven
-    ? 'Vastapalaute annettu'
-    : 'Vastapalaute puuttuu'
+    ? t('teacherView:feedbackResponseGiven')
+    : t('teacherView:feedbackResponseMissing')
 
   const classNames = cn(
     className,

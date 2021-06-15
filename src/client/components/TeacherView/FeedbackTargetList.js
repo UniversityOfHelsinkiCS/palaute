@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { Box, CircularProgress, List, Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 
@@ -11,6 +12,8 @@ import {
 import FeedbackTargetItem from './FeedbackTargetItem'
 
 const FeedbackTargetList = ({ courseCode, group }) => {
+  const { t } = useTranslation()
+
   const { feedbackTargets, isLoading } = useCourseUnitFeedbackTargets(
     courseCode,
     getFeedbackTargetQueryOptions(group),
@@ -33,7 +36,7 @@ const FeedbackTargetList = ({ courseCode, group }) => {
     return (
       <Box p={2}>
         <Typography color="textSecondary" align="center">
-          Ei toteutuksia
+          {t('teacherView:noCourseRealisations')}
         </Typography>
       </Box>
     )
