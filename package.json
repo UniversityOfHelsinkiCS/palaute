@@ -12,7 +12,7 @@
     "start:prod": "NODE_ENV=production node ./src/server/index.js",
     "start:dev": "NODE_ENV=development concurrently \"nodemon -L ./src/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-scripts start\" ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:e2e": "cypress open",
+    "test:e2e": "cypress run",
     "format": "prettier --write 'src/**/*.js'",
     "lint": "eslint 'src/**/*.js'"
   },
@@ -34,7 +34,6 @@
     "chart.js": "^3.2.0",
     "classnames": "^2.3.1",
     "cron": "^1.8.2",
-    "cypress": "^7.5.0",
     "date-fns": "^2.19.0",
     "dotenv": "^8.2.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -77,6 +76,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "concurrently": "^6.0.0",
+    "cypress": "^7.5.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.20.0",
