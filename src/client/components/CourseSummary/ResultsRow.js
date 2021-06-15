@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   accessTime: {
     color: theme.palette.warning.main,
   },
+  lastChildRow: {
+    borderBottom: '2px solid #cccccc',
+  },
 }))
 
 const getQuestionLabel = (questions, questionId, language) => {
@@ -65,6 +68,7 @@ const ResultsRow = ({
   accordionEnabled = false,
   accordionCellEnabled = true,
   cellsAfter = null,
+  lastChild = null,
   ...props
 }) => {
   const { t, i18n } = useTranslation()
@@ -97,7 +101,11 @@ const ResultsRow = ({
   return (
     <>
       <tr {...props}>
-        <td className={classes.labelCell}>
+        <td
+          className={
+            (classes.labelCell, lastChild ? classes.lastChildRow : undefined)
+          }
+        >
           <Typography>{label}</Typography>
         </td>
         {accordionCellEnabled && (
