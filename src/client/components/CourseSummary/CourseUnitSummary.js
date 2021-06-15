@@ -49,6 +49,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 questions={questions}
                 feedbackCount={feedbackCount}
                 feedbackResponseGiven={feedbackResponseStatus}
+                lastChild={i === courseUnits.length - 1}
               />
               {i < courseUnits.length - 1 && <DividerRow />}
             </Fragment>
