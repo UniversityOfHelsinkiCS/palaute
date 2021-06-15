@@ -14,6 +14,7 @@ import {
   IconButton,
   Link,
   Chip,
+  Tooltip,
 } from '@material-ui/core'
 
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -135,14 +136,28 @@ const getChip = (feedbackTarget, t) => {
 const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { id, feedbackCount, enrolledCount, courseRealisation } = feedbackTarget
+  const {
+    id,
+    feedbackCount,
+    enrolledCount,
+    courseRealisation,
+    opensAt,
+    closesAt,
+  } = feedbackTarget
 
   const { startDate, endDate } = courseRealisation
 
   const periodInfo = (
-    <Link component={RouterLink} to={`/targets/${id}/feedback`}>
-      {formatDate(startDate)} - {formatDate(endDate)}
-    </Link>
+    <Tooltip
+      title={t('teacherView:surveyOpen', {
+        closesAt: formatDate(closesAt),
+        opensAt: formatDate(opensAt),
+      })}
+    >
+      <Link component={RouterLink} to={`/targets/${id}/feedback`}>
+        {formatDate(startDate)} - {formatDate(endDate)}
+      </Link>
+    </Tooltip>
   )
 
   const chip = getChip(feedbackTarget, t)

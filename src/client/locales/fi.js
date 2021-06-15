@@ -84,6 +84,7 @@ export default {
     upcomingCourses: 'Tulevat kurssit',
     endedCourses: 'Päättyneet kurssit',
     feedbackNotStarted: 'Palautejakso ei ole vielä alkanut',
+    surveyOpen: 'Palautteenantoaika: {{opensAt}}-{{closesAt}}',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',

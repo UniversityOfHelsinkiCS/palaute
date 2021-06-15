@@ -85,6 +85,7 @@ export default {
     upcomingCourses: 'Upcoming courses',
     endedCourses: 'Ended courses',
     feedbackNotStarted: 'Feedback has not started',
+    surveyOpen: 'Feedback period: {{opensAt}}-{{closesAt}}',
   },
   questionEditor: {
     addQuestion: 'Add question',

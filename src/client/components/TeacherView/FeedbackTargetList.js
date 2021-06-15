@@ -43,11 +43,13 @@ const FeedbackTargetList = ({ courseCode, group }) => {
   }
 
   return (
-    <List>
-      {targets.map((target) => (
-        <FeedbackTargetItem key={target.id} feedbackTarget={target} />
-      ))}
-    </List>
+    <>
+      <List>
+        {targets.map((target) => (
+          <FeedbackTargetItem key={target.id} feedbackTarget={target} />
+        ))}
+      </List>
+    </>
   )
 }
 

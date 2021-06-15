@@ -195,11 +195,7 @@ const NavBar = () => {
       onClose={handleCloseMenu}
     >
       {languageOptions.map(({ label, lang }, index) => (
-        <MenuItem
-          key={index}
-          component={Button}
-          onClick={() => changeLanguage(lang)}
-        >
+        <MenuItem key={index} onClick={() => changeLanguage(lang)}>
           {label}
         </MenuItem>
       ))}
