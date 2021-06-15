@@ -83,6 +83,7 @@ export default {
     ongoingCourses: 'Käynnissä olevat kurssit',
     upcomingCourses: 'Tulevat kurssit',
     endedCourses: 'Päättyneet kurssit',
+    feedbackNotStarted: 'Palautejakso ei ole vielä alkanut',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',

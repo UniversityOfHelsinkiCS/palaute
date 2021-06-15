@@ -84,6 +84,7 @@ export default {
     ongoingCourses: 'Ongoing courses',
     upcomingCourses: 'Upcoming courses',
     endedCourses: 'Ended courses',
+    feedbackNotStarted: 'Feedback has not started',
   },
   questionEditor: {
     addQuestion: 'Add question',

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import { parseISO } from 'date-fns'
 
 import {
   ListItemText,
@@ -152,14 +153,17 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
         <SettingsButton feedbackTarget={feedbackTarget} />
       </ListItemIcon>
       <ListItemText
-        primary={periodInfo}
+        disableTypography
+        primary={<Typography>{periodInfo}</Typography>}
         secondary={
           <>
             <Typography variant="body2" color="textSecondary" component="span">
-              {t('teacherView:feedbackCount', {
-                count: feedbackCount,
-                totalCount: enrolledCount,
-              })}
+              {parseISO(feedbackTarget.opensAt) < new Date()
+                ? t('teacherView:feedbackCount', {
+                    count: feedbackCount,
+                    totalCount: enrolledCount,
+                  })
+                : t('teacherView:feedbackNotStarted')}
             </Typography>{' '}
             {chip}
           </>
