@@ -197,7 +197,7 @@ const NavBar = () => {
       {languageOptions.map(({ label, lang }, index) => (
         <MenuItem
           key={index}
-          component={Link}
+          component={Button}
           onClick={() => changeLanguage(lang)}
         >
           {label}
