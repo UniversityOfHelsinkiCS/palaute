@@ -370,6 +370,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       'feedbackType',
       'courseRealisation',
       'courseUnit',
+      'feedbackResponse',
     ]),
     feedbackCount: parseInt(target.get('feedbackCount'), 10),
     enrolledCount: parseInt(target.get('enrolledCount'), 10),
