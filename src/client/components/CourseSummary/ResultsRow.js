@@ -8,6 +8,7 @@ import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultItem from './ResultItem'
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.warning.main,
   },
   lastChildRow: {
-    borderBottom: '2px solid #cccccc',
+    borderBottom: `2px solid ${theme.palette.divider}`,
   },
 }))
 
@@ -68,7 +69,7 @@ const ResultsRow = ({
   accordionEnabled = false,
   accordionCellEnabled = true,
   cellsAfter = null,
-  lastChild = null,
+  lastChild = false,
   ...props
 }) => {
   const { t, i18n } = useTranslation()
@@ -102,9 +103,7 @@ const ResultsRow = ({
     <>
       <tr {...props}>
         <td
-          className={
-            (classes.labelCell, lastChild ? classes.lastChildRow : undefined)
-          }
+          className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
         >
           <Typography>{label}</Typography>
         </td>
