@@ -32,7 +32,7 @@ Cypress.Commands.add('loginAsTeacher', () => {
       givenName: 'Matti',
       mail: 'grp-toska+mockadmin@helsinki.fi',
       sn: 'Luukkainen',
-      preferredLanguage: 'fi',
+      preferredLanguage: 'en',
       hyPersonSisuId: 'hy-hlo-1441871',
       employeeNumber: '9021313',
     }),
@@ -53,9 +53,9 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
       givenname: 'Tommi',
       sn: 'Testaaja',
       mail: 'Tommi.testaaja@toska.fi',
-      preferredlanguage: 'fi',
+      preferredlanguage: 'en',
       hyPersonSisuId: 'hy-hlo-51367956',
-      employeeNumber: '123445678'
+      employeeNumber: '123445678',
     }),
   )
 
