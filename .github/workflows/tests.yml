@@ -18,4 +18,4 @@ jobs:
           tags: palaute_dev
 
       - name: Start production version of the image with 
-        run: docker-compose -f docker-compose.ci.yml up -d
+        run: docker-compose -f docker-compose.ci.yml --profile cypress up -d
