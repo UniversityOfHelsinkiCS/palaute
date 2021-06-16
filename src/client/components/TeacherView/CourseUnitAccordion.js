@@ -5,7 +5,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Divider,
   makeStyles,
 } from '@material-ui/core'
 
@@ -69,7 +68,6 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           {feedbackResponseChip}
         </div>
       </AccordionSummary>
-      <Divider />
       <AccordionDetails className={classes.details}>
         <FeedbackTargetList courseCode={courseCode} group={group} />
       </AccordionDetails>
