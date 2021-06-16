@@ -155,6 +155,8 @@ export default {
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given counter feedback yet",
     exportCsv: 'Export as csv',
+    thankYouMessage:
+      'Thank you for the feedback, here is a summary of the feedbacks so far.',
   },
   navBar: {
     myFeedbacks: 'My feedbacks',

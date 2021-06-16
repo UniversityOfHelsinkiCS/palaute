@@ -152,6 +152,8 @@ export default {
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     exportCsv: 'Lataa CSV',
+    thankYouMessage:
+      'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',
