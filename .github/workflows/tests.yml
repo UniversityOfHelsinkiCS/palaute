@@ -25,3 +25,9 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           browser: chrome
+
+      - name: Upload video
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          path: /home/runner/work/palaute/palaute/cypress/videos/*
