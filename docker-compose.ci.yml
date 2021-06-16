@@ -18,18 +18,7 @@ services:
       - 8000:8000
 
   db:
-    image: postgres:13.2
+    image: registry.toska.cs.helsinki.fi/palaute_test_db
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: palaute_test_db
-
-  cypress:
-    image: cypress/browsers:node14.7.0-chrome84
-    profiles: ["cypress"]
-    command: ['npx', 'cypress', 'run']
-    volumes:
-      - ./cypress:/cypress
-      - ./cypress.json:/cypress.json
-    depends_on: 
-      - app
-      - db
