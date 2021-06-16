@@ -18,6 +18,7 @@ services:
 
   cypress:
     image: cypress/browsers:node14.7.0-chrome84
+    profiles: ["cypress"]
     command: ['npx', 'cypress', 'run']
     volumes:
       - ./cypress:/cypress
