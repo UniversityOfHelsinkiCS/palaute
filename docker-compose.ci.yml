@@ -10,11 +10,14 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DATABASE=postgres
       - NODE_ENV=test
+    ports:
+      - 3000:3000
 
   db:
     image: postgres:13.2
     environment:
       - POSTGRES_PASSWORD=postgres
+    container_name: palaute_test_db
 
   cypress:
     image: cypress/browsers:node14.7.0-chrome84
