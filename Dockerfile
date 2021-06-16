@@ -8,6 +8,9 @@ ENV REACT_APP_GIT_SHA=$GIT_SHA
 ARG BASE_PATH
 ENV PUBLIC_URL=$BASE_PATH
 
+ARG E2E
+ENV REACT_APP_E2E=$E2E
+
 # Setup
 COPY package* ./
 RUN npm ci --only=production

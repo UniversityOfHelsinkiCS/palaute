@@ -1,7 +1,7 @@
 {
   "name": "palaute",
   "version": "1.0.0",
-  "description": "Palaute (engl. feedback) is THE software for student feedback",
+  "description": "Norppa is THE software for student feedback",
   "main": "index.js",
   "scripts": {
     "start": "docker-compose up",

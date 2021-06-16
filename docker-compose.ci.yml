@@ -2,7 +2,10 @@ version: '3.5'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        - E2E=true
     command: ['npm','run', 'start:test']
     environment:
       - POSTGRES_HOST=db
@@ -12,6 +15,7 @@ services:
       - NODE_ENV=test
     ports:
       - 3000:3000
+      - 8000:8000
 
   db:
     image: postgres:13.2

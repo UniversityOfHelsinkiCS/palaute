@@ -4,6 +4,8 @@
 
 const inProduction = process.env.NODE_ENV === 'production'
 
+const inE2EMode = process.env.REACT_APP_E2E === 'true'
+
 const ADMINS = [
   'varisleo',
   'kalleilv',
@@ -20,6 +22,7 @@ const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 module.exports = {
   inProduction,
+  inE2EMode,
   basePath,
   GIT_SHA,
   ADMINS,

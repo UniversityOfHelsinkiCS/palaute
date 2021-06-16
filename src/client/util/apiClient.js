@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { getHeaders } from './mockHeaders'
-import { basePath, inProduction } from './common'
+import { basePath, inProduction, inE2EMode } from './common'
 
 const apiClient = axios.create({ baseURL: `${basePath}/api` })
 
 apiClient.interceptors.request.use((config) => {
-  const defaultHeaders = !inProduction ? getHeaders() : {}
+  const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
   const headers = { ...defaultHeaders }
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id
