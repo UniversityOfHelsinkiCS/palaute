@@ -55,7 +55,11 @@ const useLanguageMenuStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
   },
-  active: {
+  item: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  activeItem: {
     color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightMedium,
   },
@@ -71,7 +75,7 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
       {languages.map((l) => (
         <MenuItem
           key={l}
-          className={cn(language === l && classes.active)}
+          className={cn(classes.item, language === l && classes.activeItem)}
           onClick={() => onLanguageChange(l)}
         >
           {l.toUpperCase()}
