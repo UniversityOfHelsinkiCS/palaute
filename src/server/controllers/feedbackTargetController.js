@@ -373,7 +373,7 @@ const getTargetsByCourseUnit = async (req, res) => {
     ]),
     feedbackCount: parseInt(target.get('feedbackCount'), 10),
     enrolledCount: parseInt(target.get('enrolledCount'), 10),
-    responseGiven: !!target.get('feedbackResponse'),
+    feedbackResponseGiven: !!target.get('feedbackResponse'),
     studentListVisible,
   }))
 
