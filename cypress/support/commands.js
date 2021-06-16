@@ -23,3 +23,41 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('loginAsTeacher', () => {
+  localStorage.setItem(
+    'fakeUser',
+    JSON.stringify({
+      uid: 'mluukkai',
+      givenName: 'Matti',
+      mail: 'grp-toska+mockadmin@helsinki.fi',
+      sn: 'Luukkainen',
+      preferredLanguage: 'fi',
+      hyPersonSisuId: 'hy-hlo-1441871',
+      employeeNumber: '9021313',
+    }),
+  )
+
+  cy.visit('localhost:8000')
+})
+
+Cypress.Commands.add('logout', () => {
+  localStorage.clear()
+})
+
+Cypress.Commands.add('loginAsSecondaryTeacher', () => {
+  localStorage.setItem(
+    'fakeUser',
+    JSON.stringify({
+      uid: 'testiman',
+      givenname: 'Tommi',
+      sn: 'Testaaja',
+      mail: 'Tommi.testaaja@toska.fi',
+      preferredlanguage: 'fi',
+      hyPersonSisuId: 'hy-hlo-51367956',
+      employeeNumber: '123445678'
+    }),
+  )
+
+  cy.visit('localhost:8000')
+})
