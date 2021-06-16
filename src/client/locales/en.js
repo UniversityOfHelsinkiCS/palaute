@@ -158,7 +158,7 @@ export default {
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
-    myCourses: 'The courses I teach',
+    myCourses: 'My teaching',
     logOut: 'Log out',
     admin: 'Admin',
     courseSummary: 'Course summary',
