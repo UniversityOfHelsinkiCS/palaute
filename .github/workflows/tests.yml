@@ -1,9 +1,9 @@
-name: Test
+name: E2E Tests
 
 on:
   push:
     branches:
-      - tests
+      - master
 
 jobs:
   cypress:
