@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import { parseISO } from 'date-fns'
 
 import {
   ListItemText,
@@ -13,6 +14,7 @@ import {
   IconButton,
   Link,
   Chip,
+  Tooltip,
 } from '@material-ui/core'
 
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -134,14 +136,28 @@ const getChip = (feedbackTarget, t) => {
 const FeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { id, feedbackCount, enrolledCount, courseRealisation } = feedbackTarget
+  const {
+    id,
+    feedbackCount,
+    enrolledCount,
+    courseRealisation,
+    opensAt,
+    closesAt,
+  } = feedbackTarget
 
   const { startDate, endDate } = courseRealisation
 
   const periodInfo = (
-    <Link component={RouterLink} to={`/targets/${id}/feedback`}>
-      {formatDate(startDate)} - {formatDate(endDate)}
-    </Link>
+    <Tooltip
+      title={t('teacherView:surveyOpen', {
+        closesAt: formatDate(closesAt),
+        opensAt: formatDate(opensAt),
+      })}
+    >
+      <Link component={RouterLink} to={`/targets/${id}/feedback`}>
+        {formatDate(startDate)} - {formatDate(endDate)}
+      </Link>
+    </Tooltip>
   )
 
   const chip = getChip(feedbackTarget, t)
@@ -152,14 +168,17 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
         <SettingsButton feedbackTarget={feedbackTarget} />
       </ListItemIcon>
       <ListItemText
-        primary={periodInfo}
+        disableTypography
+        primary={<Typography>{periodInfo}</Typography>}
         secondary={
           <>
             <Typography variant="body2" color="textSecondary" component="span">
-              {t('teacherView:feedbackCount', {
-                count: feedbackCount,
-                totalCount: enrolledCount,
-              })}
+              {parseISO(feedbackTarget.opensAt) < new Date()
+                ? t('teacherView:feedbackCount', {
+                    count: feedbackCount,
+                    totalCount: enrolledCount,
+                  })
+                : t('teacherView:feedbackNotStarted')}
             </Typography>{' '}
             {chip}
           </>

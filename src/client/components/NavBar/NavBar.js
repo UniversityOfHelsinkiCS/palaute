@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, forwardRef } from 'react'
 
 import {
   AppBar,
-  Typography,
   Toolbar,
   makeStyles,
   Button,
@@ -10,21 +9,23 @@ import {
   MenuItem,
   useMediaQuery,
   IconButton,
+  Divider,
 } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 
 import MenuIcon from '@material-ui/icons/Menu'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import hyLogo from '../../assets/hy_logo.svg'
+import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
 import useOrganisations from '../../hooks/useOrganisations'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
     width: '100%',
@@ -35,46 +36,54 @@ const useStyles = makeStyles({
     color: 'inherit',
     textDecoration: 'none',
     marginRight: 20,
+    fontWeight: theme.typography.fontWeightMedium,
   },
   linkContainer: {
     display: 'flex',
     flexGrow: 1,
     alignItems: 'center',
   },
-})
-
-const useLogoStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
+  mobileMenuButton: {
+    marginLeft: 'auto',
   },
-  link: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    color: 'inherit',
-    textDecoration: 'none',
-    marginRight: 30,
-  },
-  image: {
-    width: '2.5rem',
-    height: 'auto',
-    marginRight: theme.spacing(1),
+  languageMenuDivider: {
+    margin: theme.spacing(1, 0),
   },
 }))
 
-const Logo = () => {
-  const classes = useLogoStyles()
+const useLanguageMenuStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+  },
+  item: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  activeItem: {
+    color: theme.palette.primary.main,
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+}))
+
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
+  const classes = useLanguageMenuStyles()
+
+  const languages = ['fi', 'sv', 'en']
 
   return (
-    <div className={classes.container}>
-      <Link to="/" className={classes.link}>
-        <img src={hyLogo} alt="HY" className={classes.image} />
-        <Typography variant="h6" component="h1">
-          Norppa
-        </Typography>
-      </Link>
+    <div className={classes.container} ref={ref}>
+      {languages.map((l) => (
+        <MenuItem
+          key={l}
+          className={cn(classes.item, language === l && classes.activeItem)}
+          onClick={() => onLanguageChange(l)}
+        >
+          {l.toUpperCase()}
+        </MenuItem>
+      ))}
     </div>
   )
-}
+})
 
 const NavBar = () => {
   const classes = useStyles()
@@ -84,7 +93,7 @@ const NavBar = () => {
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width:400px)')
+  const isMobile = useMediaQuery('(max-width:500px)')
 
   const isStudent = Boolean(feedbackTargets?.length)
   const isTeacher = Boolean(authorizedUser?.isTeacher)
@@ -126,7 +135,12 @@ const NavBar = () => {
   )
 
   const mobileMenuButton = (
-    <IconButton color="inherit" aria-label={menuLabel} {...menuButtonProps}>
+    <IconButton
+      color="inherit"
+      className={classes.mobileMenuButton}
+      aria-label={menuLabel}
+      {...menuButtonProps}
+    >
       <MenuIcon />
     </IconButton>
   )
@@ -171,21 +185,6 @@ const NavBar = () => {
     handleCloseMenu()
   }
 
-  const languageOptions = [
-    i18n.language !== 'fi' && {
-      label: 'Suomi',
-      lang: 'fi',
-    },
-    i18n.language !== 'en' && {
-      label: 'English',
-      lang: 'en',
-    },
-    i18n.language !== 'sv' && {
-      label: 'Svenska',
-      lang: 'sv',
-    },
-  ].filter(Boolean)
-
   const menu = (
     <Menu
       id="navBarMenu"
@@ -194,15 +193,11 @@ const NavBar = () => {
       open={menuOpen}
       onClose={handleCloseMenu}
     >
-      {languageOptions.map(({ label, lang }, index) => (
-        <MenuItem
-          key={index}
-          component={Button}
-          onClick={() => changeLanguage(lang)}
-        >
-          {label}
-        </MenuItem>
-      ))}
+      <LanguageMenu
+        language={i18n.language}
+        onLanguageChange={changeLanguage}
+      />
+      <Divider component="li" className={classes.languageMenuDivider} />
       {isMobile && mobileMenuLinks}
       <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
     </Menu>

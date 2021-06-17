@@ -13,7 +13,6 @@ const ADMINS = [
   'mluukkai',
   'keolli',
   'ttiittan',
-  'kurhila',
 ]
 
 const basePath = process.env.PUBLIC_URL || ''

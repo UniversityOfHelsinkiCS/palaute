@@ -84,6 +84,8 @@ export default {
     ongoingCourses: 'Ongoing courses',
     upcomingCourses: 'Upcoming courses',
     endedCourses: 'Ended courses',
+    feedbackNotStarted: 'Feedback has not started',
+    surveyOpen: 'Feedback period: {{opensAt}}-{{closesAt}}',
   },
   questionEditor: {
     addQuestion: 'Add question',
@@ -153,10 +155,12 @@ export default {
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given counter feedback yet",
     exportCsv: 'Export as csv',
+    thankYouMessage:
+      'Thank you for the feedback, here is a summary of the feedbacks so far.',
   },
   navBar: {
     myFeedbacks: 'My feedbacks',
-    myCourses: 'The courses I teach',
+    myCourses: 'My teaching',
     logOut: 'Log out',
     admin: 'Admin',
     courseSummary: 'Course summary',

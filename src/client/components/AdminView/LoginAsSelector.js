@@ -48,14 +48,14 @@ const LoginAsSelector = () => {
         variant="outlined"
         onChange={handleChange}
       />
-      <p>
+      <div style={{ paddingTop: 10 }}>
         Searched for:{' '}
-        {Object.entries(lastQuery).map(([key, value]) => (
-          <p>
+        {Object.entries(lastQuery).map(([key, value], index) => (
+          <p key={index}>
             {key}: {value}
           </p>
         ))}
-      </p>
+      </div>
       {potentialUsers.map((user) => (
         <Card key={user.id}>
           <CardContent>

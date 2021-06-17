@@ -83,6 +83,8 @@ export default {
     ongoingCourses: 'Käynnissä olevat kurssit',
     upcomingCourses: 'Tulevat kurssit',
     endedCourses: 'Päättyneet kurssit',
+    feedbackNotStarted: 'Palautejakso ei ole vielä alkanut',
+    surveyOpen: 'Palautteenantoaika: {{opensAt}}-{{closesAt}}',
   },
   questionEditor: {
     addQuestion: 'Lisää kysymys',
@@ -150,6 +152,8 @@ export default {
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     exportCsv: 'Lataa CSV',
+    thankYouMessage:
+      'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

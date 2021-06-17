@@ -17,6 +17,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
 import { ExportCsvLink, formatCourseDate } from './utils'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const useStyles = makeStyles((theme) => ({
   topRow: {
@@ -68,6 +69,7 @@ const FeedbackTargetResults = () => {
     feedbackTarget && formatCourseDate(feedbackTarget.courseRealisation)
 
   const isTeacher = accessStatus === 'TEACHER'
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
@@ -104,9 +106,17 @@ const FeedbackTargetResults = () => {
         )}
       </Box>
 
-      <Box mb={2}>
-        <FeedbackResponse feedbackTarget={feedbackTarget} />
-      </Box>
+      {!isOpen && (
+        <Box mb={2}>
+          <FeedbackResponse feedbackTarget={feedbackTarget} />
+        </Box>
+      )}
+
+      {isOpen && (
+        <Box mb={2}>
+          <Typography>{t('feedbackTargetResults:thankYouMessage')}</Typography>
+        </Box>
+      )}
 
       {feedbacks.length === 0 && feedbackVisible && notEnoughFeedbacksAlert}
 
