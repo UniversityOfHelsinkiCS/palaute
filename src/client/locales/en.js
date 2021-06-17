@@ -210,4 +210,7 @@ export default {
     studentListVisible: 'Student list visible',
     programmeSettings: 'Programme settings',
   },
+  footer: {
+    contactSupport: 'Contact support',
+  },
 }

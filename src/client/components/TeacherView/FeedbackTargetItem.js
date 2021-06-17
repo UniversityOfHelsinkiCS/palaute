@@ -133,7 +133,7 @@ const getChip = (feedbackTarget, t) => {
   return null
 }
 
-const FeedbackTargetItem = ({ feedbackTarget }) => {
+const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const { t } = useTranslation()
 
   const {
@@ -163,7 +163,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
   const chip = getChip(feedbackTarget, t)
 
   return (
-    <ListItem divider>
+    <ListItem divider={divider}>
       <ListItemIcon>
         <SettingsButton feedbackTarget={feedbackTarget} />
       </ListItemIcon>

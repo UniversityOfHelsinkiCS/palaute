@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import {
   Accordion,
@@ -7,13 +7,14 @@ import {
   Typography,
   makeStyles,
   Box,
+  Divider,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import CourseUnitItem from './CourseUnitAccordion'
+import CourseUnitAccordion from './CourseUnitAccordion'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -49,12 +50,11 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
             </Typography>
           </Box>
         )}
-        {courseUnits.map((courseUnit) => (
-          <CourseUnitItem
-            key={courseUnit.courseCode}
-            courseUnit={courseUnit}
-            group={group}
-          />
+        {courseUnits.map((courseUnit, i) => (
+          <Fragment key={courseUnit.courseCode}>
+            <CourseUnitAccordion courseUnit={courseUnit} group={group} />
+            {i < courseUnits.length - 1 && <Divider />}
+          </Fragment>
         ))}
       </AccordionDetails>
     </Accordion>

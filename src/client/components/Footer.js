@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Divider, Container, makeStyles, Link } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import { images } from '../util/common'
 
@@ -15,6 +16,7 @@ const supportEmail = 'grp-toska@helsinki.fi'
 
 const Footer = () => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -27,7 +29,7 @@ const Footer = () => {
           alignItems="center"
         >
           <div>
-            Contact support:{' '}
+            {t('footer:contactSupport')}:{' '}
             <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
           </div>
 

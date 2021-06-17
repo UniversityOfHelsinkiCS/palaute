@@ -209,4 +209,7 @@ export default {
     studentListVisible: 'Opiskelijoiden lista näkyvissä',
     programmeSettings: 'Koulutusohjelman asetukset',
   },
+  footer: {
+    contactSupport: 'Ota yhteyttä tukeen',
+  },
 }

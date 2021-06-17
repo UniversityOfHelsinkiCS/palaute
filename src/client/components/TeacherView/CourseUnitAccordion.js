@@ -19,6 +19,10 @@ import FeedbackResponseChip from './FeedbackResponseChip'
 const useStyles = makeStyles({
   accordion: {
     boxShadow: 'none',
+    margin: '0px !important',
+    '&:before': {
+      display: 'none',
+    },
   },
   details: {
     display: 'block',
