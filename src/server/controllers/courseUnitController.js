@@ -25,12 +25,14 @@ const getCourseUnitsForTeacher = async (req, res) => {
     WHERE
       user_feedback_targets.user_id = :userId AND
       user_feedback_targets.access_status = 'TEACHER' AND
-      course_realisations.end_date < NOW()
+      course_realisations.end_date < NOW() AND
+      course_realisations.end_date > :courseRealisationEndDateAfter
     ORDER BY course_units.course_code, course_realisations.start_date DESC;
   `,
     {
       replacements: {
         userId: user.id,
+        courseRealisationEndDateAfter: new Date(2021, 4, 1),
       },
       type: sequelize.QueryTypes.SELECT,
     },
