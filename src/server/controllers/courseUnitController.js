@@ -32,7 +32,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     {
       replacements: {
         userId: user.id,
-        courseRealisationEndDateAfter: new Date(2021, 4, 1),
+        courseRealisationEndDateAfter: new Date(2021, 3, 1),
       },
       type: sequelize.QueryTypes.SELECT,
     },

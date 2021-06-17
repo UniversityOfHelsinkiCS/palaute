@@ -74,7 +74,7 @@ export const getFeedbackTargetQueryOptions = (group) => {
     case 'ENDED':
       return {
         courseRealisationEndDateBefore: startOfHour(new Date()),
-        courseRealisationEndDateAfter: startOfHour(new Date(2021, 4, 1)),
+        courseRealisationEndDateAfter: startOfHour(new Date(2021, 3, 1)),
       }
     default:
       return {}
