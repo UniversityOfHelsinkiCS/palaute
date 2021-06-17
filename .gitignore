@@ -8,3 +8,6 @@ stats.json
 backups
 scripts/my_username
 .vscode
+*.mp4
+cypress/screenshots
+cypress/videos

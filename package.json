@@ -1,7 +1,7 @@
 {
   "name": "palaute",
   "version": "1.0.0",
-  "description": "Palaute (engl. feedback) is THE software for student feedback",
+  "description": "Norppa is THE software for student feedback",
   "main": "index.js",
   "scripts": {
     "start": "docker-compose up",
@@ -10,8 +10,11 @@
     "build": "react-scripts build",
     "start:front": "react-scripts start",
     "start:prod": "NODE_ENV=production node ./src/server/index.js",
+    "start:test": "NODE_ENV=test node ./src/server/index.js",
     "start:dev": "NODE_ENV=development concurrently \"nodemon -L ./src/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-scripts start\" ",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:e2e": "cypress run",
+    "test:cypress": "cypress open",
     "format": "prettier --write 'src/**/*.js'",
     "lint": "eslint 'src/**/*.js'"
   },
@@ -75,6 +78,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "concurrently": "^6.0.0",
+    "cypress": "^7.5.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.20.0",

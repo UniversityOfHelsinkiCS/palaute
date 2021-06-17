@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - tests
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to toska docker registry
+        uses: docker/login-action@v1
+        with:
+          registry: registry.toska.cs.helsinki.fi
+          username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
+          password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
+
+      - name: Prepare test data and start the application
+        run: docker-compose -f docker-compose.ci.yml up -d
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
+
+      - name: Upload video
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          path: /home/runner/work/palaute/palaute/cypress/videos/*
