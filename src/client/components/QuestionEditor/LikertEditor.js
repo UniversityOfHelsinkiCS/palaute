@@ -12,6 +12,7 @@ const LikertEditor = ({ name, language }) => {
     <>
       <Box mb={2}>
         <FormikTextField
+          id={`likert-question-${name}`}
           name={`${name}.data.label.${language}`}
           label={t('questionEditor:label')}
           fullWidth
@@ -19,6 +20,7 @@ const LikertEditor = ({ name, language }) => {
       </Box>
 
       <FormikTextField
+        id={`likert-description-${name}`}
         name={`${name}.data.description.${language}`}
         label={t('questionEditor:description')}
         helperText={t('questionEditor:descriptionHelper')}

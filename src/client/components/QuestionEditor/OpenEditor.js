@@ -12,6 +12,7 @@ const OpenEditor = ({ name, language }) => {
     <>
       <Box mb={2}>
         <FormikTextField
+          id={`open-question-${name}`}
           name={`${name}.data.label.${language}`}
           label={t('questionEditor:label')}
           fullWidth
@@ -19,6 +20,7 @@ const OpenEditor = ({ name, language }) => {
       </Box>
 
       <FormikTextField
+        id={`open-description-${name}`}
         name={`${name}.data.description.${language}`}
         label={t('questionEditor:description')}
         helperText={t('questionEditor:descriptionHelper')}

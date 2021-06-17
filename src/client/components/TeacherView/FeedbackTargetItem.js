@@ -55,7 +55,7 @@ const SettingsButton = ({ feedbackTarget }) => {
 
   return (
     <>
-      <IconButton onClick={handleOpen} ref={buttonRef}>
+      <IconButton id={`settings-icon-${id}`} onClick={handleOpen} ref={buttonRef}>
         <SettingsIcon />
       </IconButton>
 

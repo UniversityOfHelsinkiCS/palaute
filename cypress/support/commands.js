@@ -41,10 +41,6 @@ Cypress.Commands.add('loginAsTeacher', () => {
   cy.visit('localhost:8000')
 })
 
-Cypress.Commands.add('logout', () => {
-  localStorage.clear()
-})
-
 Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   localStorage.setItem(
     'fakeUser',
@@ -59,5 +55,20 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
     }),
   )
 
+  cy.visit('localhost:8000')
+})
+
+Cypress.Commands.add('loginAsStudent', () => {
+  localStorage.setItem(
+    'fakeUser',
+    JSON.stringify({
+      uid: 'oppilasolli',
+      givenname: 'Olli',
+      sn: 'Oppilas',
+      mail: 'opiskelija@toska.fi',
+      preferredLanguage: ' en',
+      hyPersonSisuId: 'hy-hlo-1508596',
+    }),
+  )
   cy.visit('localhost:8000')
 })
