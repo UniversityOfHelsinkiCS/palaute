@@ -41,7 +41,11 @@ const SettingsButton = ({ code }) => {
 
   return (
     <Tooltip title={t('courseSummary:editProgrammeSurvey')}>
-      <IconButton component={Link} to={`/programme-survey/${code}`}>
+      <IconButton
+        id={`settings-button-${code}`}
+        component={Link}
+        to={`/programme-survey/${code}`}
+      >
         <SettingsIcon />
       </IconButton>
     </Tooltip>

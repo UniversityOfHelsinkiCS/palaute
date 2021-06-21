@@ -18,6 +18,24 @@ const teacher = {
   employeeNumber: '123445678',
 }
 
+const student = {
+  uid: 'oppilasolli',
+  givenname: 'Olli',
+  sn: 'Oppilas',
+  mail: 'opiskelija@toska.fi',
+  preferredLanguage: ' en',
+  hyPersonSisuId: 'hy-hlo-115054920',
+}
+
+const studyCoordinator = {
+  uid: 'keolli',
+  givenname: 'Daniel',
+  sn: 'Dekaani',
+  mail: 'dekaani@toska.fi',
+  preferredLanguage: 'en',
+  hyPersonSisuId: 'hy-hlo-1501077',
+}
+
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(adminUser))
 
@@ -31,17 +49,12 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
 })
 
 Cypress.Commands.add('loginAsStudent', () => {
-  localStorage.setItem(
-    'fakeUser',
-    JSON.stringify({
-      uid: 'oppilasolli',
-      givenname: 'Olli',
-      sn: 'Oppilas',
-      mail: 'opiskelija@toska.fi',
-      preferredLanguage: ' en',
-      hyPersonSisuId: 'hy-hlo-115054920',
-    }),
-  )
+  localStorage.setItem('fakeUser', JSON.stringify(student))
+  cy.visit('localhost:8000')
+})
+
+Cypress.Commands.add('loginAsStudyCoordinator', () => {
+  localStorage.setItem('fakeUser', JSON.stringify(studyCoordinator))
   cy.visit('localhost:8000')
 })
 
