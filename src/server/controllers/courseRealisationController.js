@@ -1,6 +1,6 @@
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 
-const getFeedbackTargetByCourseRealisation = async (req, res) => {
+const getFeedbackTargetsByCourseRealisation = async (req, res) => {
   const { user, isAdmin } = req
   const { id } = req.params
 
@@ -36,5 +36,5 @@ const getFeedbackTargetByCourseRealisation = async (req, res) => {
 }
 
 module.exports = {
-  getFeedbackTargetByCourseRealisation,
+  getFeedbackTargetsByCourseRealisation,
 }

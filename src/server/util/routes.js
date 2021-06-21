@@ -76,7 +76,7 @@ router.put('/organisations/:code', organisation.updateOrganisation)
 
 router.get(
   '/course-realisations/:id/feedback-targets',
-  courseRealisation.getFeedbackTargetByCourseRealisation,
+  courseRealisation.getFeedbackTargetsByCourseRealisation,
 )
 
 router.use('/admin', adminController)
