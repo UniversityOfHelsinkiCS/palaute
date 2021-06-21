@@ -23,15 +23,15 @@ describe('Teacher view', function () {
   it('If teacher has ongoing courses their surveys can be edited', function () {
     cy.loginAsSecondaryTeacher()
     cy.contains('Ongoing courses (2)')
-    cy.get('div').contains('TKT21029 Functional Programming I').click()
-    cy.contains('0/7 feedbacks given')
+    cy.get('div').contains('TKT21024 Programming Challenges I').click()
+    cy.contains('0/2 feedbacks given')
     cy.get('button[id^=settings-icon]').click()
     cy.contains('Edit survey').click()
-    cy.contains('Functional Programming I')
+    cy.contains('Programming Challenges I')
     cy.contains('Add question')
   })
   it('Teacher can add questions to a survey', function () {
-    cy.visit('localhost:8000/targets/163/edit')
+    cy.visit('localhost:8000/targets/165/edit')
     cy.contains('Add question').click()
     cy.contains('Scale of values').click()
     cy.get('input[id^=likert-question-questions]').type('Test question')
@@ -44,17 +44,8 @@ describe('Teacher view', function () {
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('button[id^=settings-icon]').click()
     cy.contains('Show feedbacks').click()
-    cy.contains(`Teacher's counter feedback`)
     cy.contains(
       'Survey results will not be displayed because it does not have enough feedbacks',
     )
-  })
-  it('Teacher can give counter feedback', function () {
-    cy.loginAsSecondaryTeacher()
-    cy.visit('localhost:8000/targets/163/results')
-    cy.contains('Give counter feedback').click()
-    cy.get('button[type=submit]').should('be.disabled')
-    cy.get('textarea').type('Test feedback for testing purposes')
-    cy.get('button[type=submit]').not('disabled')
   })
 })
