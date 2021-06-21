@@ -33,11 +33,10 @@ describe('Teacher view', function () {
   it('Teacher can add questions to a survey', function () {
     cy.visit('localhost:8000/targets/165/edit')
     cy.contains('Add question').click()
-    cy.contains('Scale of values').click()
+    cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-questions]').type('Test question')
     cy.get('input[id^=likert-description-questions]').type('Test description')
     cy.get('button').contains('Done').click()
-    cy.contains('Copy')
   })
   it('Teacher can view survey results', function () {
     cy.loginAsSecondaryTeacher()
