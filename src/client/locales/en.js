@@ -213,4 +213,7 @@ export default {
   footer: {
     contactSupport: 'Contact support',
   },
+  courseRealisationFeedback: {
+    noFeedbackTarget: 'This course does not have a feedback available to you',
+  },
 }

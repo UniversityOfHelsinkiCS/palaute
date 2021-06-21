@@ -212,4 +212,8 @@ export default {
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',
   },
+  courseRealisationFeedback: {
+    noFeedbackTarget:
+      'Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta',
+  },
 }

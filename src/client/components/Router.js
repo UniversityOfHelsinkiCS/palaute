@@ -14,6 +14,7 @@ import CourseSummary from './CourseSummary'
 import OrganisationView from './OrganisationView'
 import EditProgrammeSurvey from './EditProgrammeSurvey'
 import TeacherView from './TeacherView'
+import CourseRealisationFeedback from './CourseRealisationFeedback'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -66,6 +67,7 @@ const Router = () => {
           path="/programme-survey/:surveyCode"
           component={EditProgrammeSurvey}
         />
+        <Route path="/cur/:id" component={CourseRealisationFeedback} />
         <Route path="/admin" component={AdminView} />
       </Switch>
     </Container>
