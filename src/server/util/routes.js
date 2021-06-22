@@ -1,5 +1,6 @@
 const Router = require('express')
 const Sentry = require('@sentry/node')
+const { inE2EMode } = require('./config')
 const accessLogger = require('../middleware/accessLogger')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
@@ -14,6 +15,7 @@ const courseSummary = require('../controllers/courseSummaryController')
 const organisation = require('../controllers/organisationController')
 const courseUnit = require('../controllers/courseUnitController')
 const courseRealisation = require('../controllers/courseRealisationController')
+const testingController = require('../controllers/testingController')
 
 const router = Router()
 
@@ -80,6 +82,12 @@ router.get(
 )
 
 router.use('/admin', adminController)
+
+inE2EMode &&
+  router.put(
+    '/test/courseRealisation/:feedbackTargetId',
+    testingController.updateCourseRealisation,
+  )
 
 router.use(Sentry.Handlers.errorHandler())
 

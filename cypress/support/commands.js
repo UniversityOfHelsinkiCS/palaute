@@ -36,6 +36,19 @@ const studyCoordinator = {
   hyPersonSisuId: 'hy-hlo-1501077',
 }
 
+Cypress.Commands.add('setUpTeacherview', () => {
+  const date = new Date()
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/courseRealisation/97',
+    headers: adminUser,
+    body: {
+      startDate: new Date().setMonth(date.getMonth() - 2),
+      endDate: new Date().setMonth(date.getMonth() - 1),
+    },
+  })
+})
+
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(adminUser))
 

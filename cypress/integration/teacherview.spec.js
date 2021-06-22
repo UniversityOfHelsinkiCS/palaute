@@ -1,18 +1,34 @@
+import { format } from 'date-fns'
+
+const getDates = () => {
+  const date = new Date()
+
+  const startDate = format(
+    new Date().setMonth(date.getMonth() - 2),
+    'dd.MM.yyyy',
+  )
+  const endDate = format(new Date().setMonth(date.getMonth() - 1), 'dd.MM.yyyy')
+
+  return { startDate, endDate }
+}
+
 describe('Teacher view', function () {
   beforeEach(function () {
     cy.loginAsTeacher()
   })
   it('A logged in teacher can view its courses', function () {
+    cy.setUpTeacherview()
     cy.contains('My teaching')
     cy.contains('Ongoing courses (0)')
     cy.contains('Upcoming courses (0)')
-    cy.contains('Ended courses (1)')
+    cy.contains('Ended courses')
   })
   it('A logged in teacher can view its ended courses', function () {
     cy.contains('My teaching')
     cy.contains('TKT20002 Software Development Methods')
     cy.get('div').contains('TKT20002 Software Development Methods').click()
-    cy.contains('16.03.2021 - 08.05.2021')
+    const { startDate, endDate } = getDates()
+    cy.contains(`${startDate} - ${endDate}`)
   })
   it('If feedback response has not been given teacher is notified', function () {
     cy.get('p')
