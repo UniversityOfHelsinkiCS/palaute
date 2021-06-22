@@ -10,6 +10,7 @@ import {
   Card,
   makeStyles,
   TableBody,
+  useMediaQuery,
 } from '@material-ui/core'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -37,6 +38,7 @@ const FeedbackSummary = ({
 }) => {
   const classes = useStyles()
   const { i18n, t } = useTranslation()
+  const isMobile = useMediaQuery('(max-width:500px)')
 
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
@@ -49,14 +51,16 @@ const FeedbackSummary = ({
   )
 
   return (
-    <TableContainer component={Card} className={classes.container}>
+    <TableContainer component={Card} className={!isMobile && classes.container}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>{t('feedbackSummary:question')}</TableCell>
             <TableCell>{t('feedbackSummary:average')}</TableCell>
-            <TableCell>{t('feedbackSummary:standardDeviation')}</TableCell>
-            <TableCell>{t('feedbackSummary:median')}</TableCell>
+            {!isMobile && (
+              <TableCell>{t('feedbackSummary:standardDeviation')}</TableCell>
+            )}
+            {!isMobile && <TableCell>{t('feedbackSummary:median')}</TableCell>}
             <TableCell>{t('feedbackSummary:answers')}</TableCell>
           </TableRow>
         </TableHead>
@@ -67,10 +71,14 @@ const FeedbackSummary = ({
                 {getLanguageValue(question.data.label, i18n.language)}
               </TableCell>
               <TableCell>{countAverage(question.feedbacks)}</TableCell>
-              <TableCell>
-                {countStandardDeviation(question.feedbacks)}
-              </TableCell>
-              <TableCell>{countMedian(question.feedbacks)}</TableCell>
+              {!isMobile && (
+                <TableCell>
+                  {countStandardDeviation(question.feedbacks)}
+                </TableCell>
+              )}
+              {!isMobile && (
+                <TableCell>{countMedian(question.feedbacks)}</TableCell>
+              )}
               <TableCell>{question.feedbacks.length}</TableCell>
             </TableRow>
           ))}
