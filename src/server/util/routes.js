@@ -83,11 +83,7 @@ router.get(
 
 router.use('/admin', adminController)
 
-inE2EMode &&
-  router.put(
-    '/test/courseRealisation/:feedbackTargetId',
-    testingController.updateCourseRealisation,
-  )
+inE2EMode && router.use('/test', testingController)
 
 router.use(Sentry.Handlers.errorHandler())
 

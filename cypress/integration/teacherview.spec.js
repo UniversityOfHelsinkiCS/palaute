@@ -17,7 +17,7 @@ describe('Teacher view', function () {
     cy.loginAsTeacher()
   })
   it('A logged in teacher can view its courses', function () {
-    cy.setUpTeacherview()
+    cy.setUpAdminTeacherView()
     cy.contains('My teaching')
     cy.contains('Ongoing courses (0)')
     cy.contains('Upcoming courses (0)')
@@ -38,7 +38,8 @@ describe('Teacher view', function () {
   })
   it('If teacher has ongoing courses their surveys can be edited', function () {
     cy.loginAsSecondaryTeacher()
-    cy.contains('Ongoing courses (2)')
+    cy.setUpSecondaryTeacherView()
+    cy.contains('Ongoing courses')
     cy.get('div').contains('TKT21024 Programming Challenges I').click()
     cy.contains('0/2 feedbacks given')
     cy.get('button[id^=settings-icon]').click()

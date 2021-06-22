@@ -36,7 +36,7 @@ const studyCoordinator = {
   hyPersonSisuId: 'hy-hlo-1501077',
 }
 
-Cypress.Commands.add('setUpTeacherview', () => {
+Cypress.Commands.add('setUpAdminTeacherView', () => {
   const date = new Date()
   cy.request({
     method: 'PUT',
@@ -46,6 +46,21 @@ Cypress.Commands.add('setUpTeacherview', () => {
       startDate: new Date().setMonth(date.getMonth() - 2),
       endDate: new Date().setMonth(date.getMonth() - 1),
     },
+  })
+})
+
+Cypress.Commands.add('setUpSecondaryTeacherView', () => {
+  const date = new Date()
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/courseRealisations',
+    headers: adminUser,
+    body: {
+      feedbackTargetIds: [163, 165],
+      startDate: new Date().setDate(date.getDate() - 14),
+      endDate: new Date().setDate(date.getDate() + 14),
+
+    }
   })
 })
 
