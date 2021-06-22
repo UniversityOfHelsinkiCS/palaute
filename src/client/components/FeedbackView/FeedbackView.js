@@ -47,6 +47,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const FormContainer = ({
+  onSubmit,
+  initialValues,
+  onOpenPrivacyDialog,
+  validate,
+  questions,
+  disabled: disabledProp,
+  showCannotSubmitText = false,
+  showSubmitButton = true,
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validate={validate}
+      validateOnChange={false}
+    >
+      {({ isSubmitting }) => {
+        const disabled = isSubmitting || disabledProp
+
+        return (
+          <Form>
+            <Card>
+              <CardContent>
+                <Box mb={2}>
+                  <Alert severity="info">
+                    {t('feedbackView:feedbackInfo')}{' '}
+                    <AlertLink
+                      href="#feedback-privacy-dialog-title"
+                      onClick={onOpenPrivacyDialog}
+                    >
+                      {t('feedbackView:feedbackInfoLink')}
+                    </AlertLink>
+                  </Alert>
+                </Box>
+
+                <FeedbackForm questions={questions} name="answers" />
+              </CardContent>
+            </Card>
+
+            {showSubmitButton && (
+              <Box mt={2}>
+                <Button
+                  disabled={disabled}
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  {t('feedbackView:submitButton')}
+                </Button>
+                {showCannotSubmitText && (
+                  <Box mt={1}>
+                    <Typography color="textSecondary">
+                      {t('feedbackView:cannotSubmitText')}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            )}
+          </Form>
+        )
+      }}
+    </Formik>
+  )
+}
+
 const FeedbackView = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
@@ -77,8 +145,10 @@ const FeedbackView = () => {
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
-
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const showForm = isTeacher || isOpen || isEnded
+  const formIsDisabled = !isOpen || isTeacher || isOutsider
+  const showToolbar = isTeacher && !isOpen && !isEnded
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
@@ -139,6 +209,7 @@ const FeedbackView = () => {
   const handleLanguageChange = (language) => {
     i18n.changeLanguage(language)
   }
+
   return (
     <>
       <PrivacyDialog
@@ -154,53 +225,20 @@ const FeedbackView = () => {
 
       {isEnded && endedAlert}
 
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validate={validate}
-        validateOnChange={false}
-      >
-        {({ isSubmitting }) => {
-          const disabled = isSubmitting || !isOpen || isTeacher || isOutsider
+      {showForm && (
+        <FormContainer
+          initialValues={initialValues}
+          validate={validate}
+          onSubmit={handleSubmit}
+          disabled={formIsDisabled}
+          showSubmitButton={!isTeacher}
+          questions={questions}
+          showCannotSubmitText={isOutsider}
+          onOpenPrivacyDialog={handleOpenPrivacyDialog}
+        />
+      )}
 
-          return (
-            <Form>
-              <Card>
-                <CardContent>
-                  <Box mb={2}>
-                    <Alert severity="info">
-                      {t('feedbackView:feedbackInfo')}{' '}
-                      <AlertLink
-                        href="#feedback-privacy-dialog-title"
-                        onClick={handleOpenPrivacyDialog}
-                      >
-                        {t('feedbackView:feedbackInfoLink')}
-                      </AlertLink>
-                    </Alert>
-                  </Box>
-
-                  <FeedbackForm questions={questions} name="answers" />
-                </CardContent>
-              </Card>
-
-              {!isTeacher && (
-                <Box mt={2}>
-                  <Button
-                    disabled={disabled}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    {t('feedbackView:submitButton')}
-                  </Button>
-                  {isOutsider && ` ${t('feedbackView:cannotSubmitText')}`}
-                </Box>
-              )}
-            </Form>
-          )
-        }}
-      </Formik>
-      {isTeacher && !isOpen && !isEnded && (
+      {showToolbar && (
         <Box mt={2}>
           <Toolbar
             editLink={`/targets/${feedbackTarget.id}/edit`}
