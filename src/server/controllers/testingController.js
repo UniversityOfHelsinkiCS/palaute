@@ -30,6 +30,13 @@ const updateCourseRealisation = async (req, res) => {
 
   await courseRealisation.save()
 
+  Object.assign(feedbackTarget, {
+    opensAt: updates.startDate,
+    closesAt: updates.endDate,
+  })
+
+  await feedbackTarget.save()
+
   res.sendStatus(200)
 }
 

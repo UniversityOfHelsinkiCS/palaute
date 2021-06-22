@@ -71,7 +71,7 @@ const FeedbackTargetResults = () => {
   const isTeacher = accessStatus === 'TEACHER'
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  const feedbackHasStarted = feedbackTarget.opensAt > new Date()
+  const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
