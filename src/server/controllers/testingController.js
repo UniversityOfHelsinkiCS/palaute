@@ -10,7 +10,7 @@ const updateCourseRealisation = async (req, res) => {
 
   if (!user) throw new ApplicationError('No user found', 404)
 
-  const feedbackTargetId = req.params.feedbackTargetId
+  const { feedbackTargetId } = req.params
 
   const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
 
