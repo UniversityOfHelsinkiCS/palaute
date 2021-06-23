@@ -6,6 +6,12 @@ on:
       - master
 
 jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Run eslint'
+        run: 'npm run lint'
   cypress:
     runs-on: ubuntu-latest
     steps:
