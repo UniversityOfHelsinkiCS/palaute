@@ -6,7 +6,9 @@ const {
   FeedbackTarget,
   CourseRealisation,
   CourseUnit,
+  Organisation,
 } = require('../models')
+
 const { sequelize } = require('../util/dbConnection')
 
 const getCourseUnitsForTeacher = async (req, res) => {
@@ -22,11 +24,14 @@ const getCourseUnitsForTeacher = async (req, res) => {
     INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
     INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
     INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+    INNER JOIN course_units_organisations ON course_units_organisations.course_unit_id = course_units.id
+    INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
     WHERE
       user_feedback_targets.user_id = :userId AND
       user_feedback_targets.access_status = 'TEACHER' AND
       course_realisations.end_date < NOW() AND
-      course_realisations.end_date > :courseRealisationEndDateAfter
+      course_realisations.end_date > :courseRealisationEndDateAfter AND
+      NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
     ORDER BY course_units.course_code, course_realisations.start_date DESC;
   `,
     {
@@ -103,13 +108,28 @@ const getCourseUnitsForTeacher = async (req, res) => {
             as: 'courseUnit',
             required: true,
             attributes: ['id', 'name', 'courseCode'],
+            include: [
+              {
+                model: Organisation,
+                as: 'organisations',
+                required: true,
+                attributes: ['disabledCourseCodes'],
+              },
+            ],
           },
         ],
       },
     ],
   })
 
-  const targets = userTargets.map(({ feedbackTarget }) => feedbackTarget)
+  const targets = userTargets
+    .map(({ feedbackTarget }) => feedbackTarget)
+    .filter(
+      ({ courseUnit }) =>
+        !courseUnit.organisations.some(({ disabledCourseCodes }) =>
+          disabledCourseCodes.includes(courseUnit.courseCode),
+        ),
+    )
 
   const courseUnitByCourseCode = targets.reduce(
     (acc, { courseUnit }) => ({

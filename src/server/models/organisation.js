@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, BOOLEAN } = require('sequelize')
+const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class Organisation extends Model {
@@ -6,7 +6,7 @@ class Organisation extends Model {
     const courseUnitRows = await sequelize.query(
       `
     SELECT DISTINCT ON (course_units.course_code)
-      course_units.course_code AS course_code,
+      course_units.course_code AS course_code
     FROM course_units
     INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
     WHERE
@@ -45,6 +45,10 @@ Organisation.init(
     },
     studentListVisible: {
       type: BOOLEAN,
+      allowNull: false,
+    },
+    disabledCourseCodes: {
+      type: ARRAY(TEXT),
       allowNull: false,
     },
   },

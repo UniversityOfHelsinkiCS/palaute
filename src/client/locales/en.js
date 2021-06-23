@@ -63,6 +63,7 @@ export default {
     feedbackClosedError: 'Feedback is closed',
     endedInfo:
       'The feedback period has ended. <2>Take a look at the feedbacks</2>',
+    feedbackDisabled: 'This feedback is disabled',
   },
   teacherView: {
     mainHeading: 'My teaching',
@@ -220,7 +221,7 @@ export default {
     surveyInfo:
       "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
     studentListVisible:
-      "Show course's teacher the list of students who have given feedback",
+      "Show course's teacher students who have given feedback",
     courseSettingsInfo: 'Feedback is only collected from activated courses',
     generalTab: 'General settings',
     coursesTab: 'Activated courses',

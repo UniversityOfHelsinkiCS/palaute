@@ -19,22 +19,31 @@ import { useSnackbar } from 'notistack'
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import Alert from '../Alert'
+import apiClient from '../../util/apiClient'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
   (courseUnits ?? []).map(({ courseCode, name }) => ({
-    id: courseCode,
-    label: name,
+    courseCode,
+    name,
     checked: !disabledCourseCodes.includes(courseCode),
   }))
 
-const updateDisabledCourseCodes = async ({ code, disabledCourseCodes }) => ({
-  disabledCourseCodes,
-})
+const updateDisabledCourseCodes = async ({ code, disabledCourseCodes }) => {
+  const { data } = await apiClient.put(`/organisations/${code}`, {
+    disabledCourseCodes,
+  })
 
-const CourseUnitItem = ({ id, label, disabled, checked, onChange }) => {
+  return data
+}
+
+const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
   const { i18n } = useTranslation()
-  const labelId = `courseUnitItem-${id}`
-  const translatedLabel = getLanguageValue(label, i18n.language)
+  const labelId = `courseUnitItem-${courseCode}`
+
+  const translatedLabel = `${getLanguageValue(
+    name,
+    i18n.language,
+  )} (${courseCode})`
 
   return (
     <ListItem onClick={onChange} disabled={disabled} dense button>
@@ -104,13 +113,13 @@ const CourseSettings = ({ organisation }) => {
         </Box>
 
         <List>
-          {courseUnitItems.map(({ id, label, checked }) => (
+          {courseUnitItems.map(({ courseCode, name, checked }) => (
             <CourseUnitItem
-              label={label}
-              id={id}
-              key={id}
+              name={name}
+              courseCode={courseCode}
+              key={courseCode}
               checked={checked}
-              onChange={makeOnToggle(id)}
+              onChange={makeOnToggle(courseCode)}
               disabled={mutation.isLoading}
             />
           ))}

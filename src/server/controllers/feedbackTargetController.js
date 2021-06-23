@@ -16,6 +16,7 @@ const {
   Survey,
   Question,
   User,
+  Organisation,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -125,7 +126,18 @@ const getIncludes = (userId, accessStatus) => {
       where,
       include: { model: Feedback, as: 'feedback' },
     },
-    { model: CourseUnit, as: 'courseUnit' },
+    {
+      model: CourseUnit,
+      as: 'courseUnit',
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          through: { attributes: [] },
+          required: true,
+        },
+      ],
+    },
     { model: CourseRealisation, as: 'courseRealisation' },
   ]
 }
@@ -145,6 +157,7 @@ const getFeedbackTargetsForStudent = async (req) => {
     },
     include: getIncludes(req.user.id, 'STUDENT'),
   })
+
   return feedbackTargets
 }
 
@@ -200,6 +213,7 @@ const getOne = async (req, res) => {
   }
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
+
   res.send(responseReady)
 }
 
@@ -207,6 +221,7 @@ const update = async (req, res) => {
   const feedbackTarget = req.isAdmin
     ? await FeedbackTarget.findByPk(Number(req.params.id))
     : await getFeedbackTargetByIdForUser(req)
+
   if (
     !req.isAdmin &&
     feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
@@ -260,7 +275,16 @@ const getForStudent = async (req, res) => {
 
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
-  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTargets)
+  const filteredFeedbackTargets = feedbackTargets.filter(
+    ({ courseUnit }) =>
+      !courseUnit.organisations.some(({ disabledCourseCodes }) =>
+        disabledCourseCodes.includes(courseUnit.courseCode),
+      ),
+  )
+
+  const responseReady = await asyncFeedbackTargetsToJSON(
+    filteredFeedbackTargets,
+  )
 
   res.send(responseReady)
 }

@@ -119,3 +119,12 @@ export const saveValues = async (values, feedbackTarget) => {
 export const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
 export const checkIsFeedbackOpen = (date) => new Date() > parseISO(date)
+
+export const feedbackTargetIsDisabled = (feedbackTarget) => {
+  const { courseUnit } = feedbackTarget
+  const organisations = courseUnit?.organisations ?? []
+
+  return organisations.some(({ disabledCourseCodes }) =>
+    disabledCourseCodes.includes(courseUnit.courseCode),
+  )
+}

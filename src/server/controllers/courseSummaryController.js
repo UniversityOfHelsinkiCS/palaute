@@ -29,15 +29,23 @@ const getAccessibleCourseCodes = async (organisationAccess) => {
         required: true,
       },
     ],
-    attributes: ['id'],
+    attributes: ['id', 'disabledCourseCodes'],
   })
 
   const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
 
-  const courseCodes = courseUnits.flatMap(({ courseCode }) => [
-    courseCode,
-    `AY${courseCode}`, // hack for open university courses
-  ])
+  const disabledCourseCodes = organisations.flatMap(
+    ({ disabledCourseCodes }) => disabledCourseCodes,
+  )
+
+  const courseCodes = courseUnits.flatMap(({ courseCode }) =>
+    disabledCourseCodes.includes(courseCode)
+      ? []
+      : [
+          courseCode,
+          `AY${courseCode}`, // hack for open university courses
+        ],
+  )
 
   return _.uniq(courseCodes)
 }

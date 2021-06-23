@@ -32,6 +32,7 @@ import {
   getQuestions,
   formatDate,
   checkIsFeedbackOpen,
+  feedbackTargetIsDisabled,
 } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -140,7 +141,7 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const { courseUnit, accessStatus } = feedbackTarget
+  const { courseUnit, accessStatus, opensAt, closesAt } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -152,7 +153,15 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
-  const { opensAt, closesAt } = feedbackTarget
+  const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
+
+  if (isDisabled && !isTeacher) {
+    enqueueSnackbar(t('feedbackView:feedbackDisabled'), {
+      variant: 'error',
+    })
+
+    return <Redirect to="/" />
+  }
 
   const handleSubmit = async (values) => {
     try {

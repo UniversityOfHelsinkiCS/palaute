@@ -1,7 +1,19 @@
 const _ = require('lodash')
 
-const { Organisation } = require('../models')
 const { ApplicationError } = require('../util/customErrors')
+
+const getUpdatedDisabledCourseCodes = async (
+  updatedDisabledCourseCodes,
+  organisation,
+) => {
+  const organisationCourseCodes = await organisation.getCourseCodes()
+
+  return _.uniq(
+    updatedDisabledCourseCodes.filter((c) =>
+      organisationCourseCodes.includes(c),
+    ),
+  )
+}
 
 const getOrganisations = async (req, res) => {
   const { user, headers, isAdmin } = req
@@ -23,26 +35,41 @@ const getOrganisations = async (req, res) => {
 }
 
 const updateOrganisation = async (req, res) => {
-  const { user } = req
+  const { user, body } = req
   const { code } = req.params
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const relevantOrganisationAccess = organisationAccess.find(
-    ({ organisation }) => organisation.code === code,
-  )
+  const { access, organisation } =
+    organisationAccess.find(({ organisation }) => organisation.code === code) ??
+    {}
 
-  const hasWriteAccess = Boolean(relevantOrganisationAccess?.access?.write)
+  const hasWriteAccess = Boolean(access?.write)
+  const hasAdminAccess = Boolean(access?.admin)
 
-  if (!hasWriteAccess) throw new ApplicationError(403, 'Forbidden')
+  if (!hasWriteAccess)
+    throw new ApplicationError(
+      403,
+      'User does not have write access for organisation',
+    )
 
-  const organisation = await Organisation.findOne({
-    where: {
-      code,
-    },
-  })
+  const updates = _.pick(body, ['studentListVisible', 'disabledCourseCodes'])
 
-  Object.assign(organisation, _.pick(req.body, ['studentListVisible']))
+  if (updates.disabledCourseCodes && !hasAdminAccess) {
+    throw new ApplicationError(
+      403,
+      'Disabled course codes can only be updated by organisation admins',
+    )
+  }
+
+  if (updates.disabledCourseCodes) {
+    updates.disabledCourseCodes = await getUpdatedDisabledCourseCodes(
+      updates.disabledCourseCodes,
+      organisation,
+    )
+  }
+
+  Object.assign(organisation, updates)
 
   const updatedOrganisation = await organisation.save()
 

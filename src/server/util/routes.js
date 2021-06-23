@@ -75,13 +75,12 @@ router.get(
 
 router.get('/organisations', organisation.getOrganisations)
 router.put('/organisations/:code', organisation.updateOrganisation)
+router.get('/organisations/:code', organisation.getOrganisationByCode)
 
 router.get(
   '/organisations/:code/course-units',
   courseUnit.getCourseUnitsByOrganisation,
 )
-
-router.get('/organisations/:code', organisation.getOrganisationByCode)
 
 router.get(
   '/course-realisations/:id/feedback-targets',
@@ -90,7 +89,9 @@ router.get(
 
 router.use('/admin', adminController)
 
-inE2EMode && router.use('/test', testingController)
+if (inE2EMode) {
+  router.use('/test', testingController)
+}
 
 router.use(Sentry.Handlers.errorHandler())
 

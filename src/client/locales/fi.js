@@ -62,6 +62,7 @@ export default {
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
     feedbackClosedError: 'Palautteenanto on loppunut',
     endedInfo: 'Palautteenanto on päättynyt. <2>Katso palautteita</2>',
+    feedbackDisabled: 'Tämä palaute ei ole käytössä',
   },
   teacherView: {
     mainHeading: 'Opetukseni',
@@ -78,7 +79,7 @@ export default {
     noCourseRealisations: 'Ei kurssitoteutuksia',
     noCourses: 'Ei kursseja',
     feedbackResponseGiven: 'Palautekooste annettu',
-    feedbackResponseMissing: 'palautekooste puuttuu',
+    feedbackResponseMissing: 'Palautekooste puuttuu',
     feedbackOpen: 'Palaute käynnissä',
     ongoingCourses: 'Käynnissä olevat kurssit',
     upcomingCourses: 'Tulevat kurssit',
@@ -220,7 +221,7 @@ export default {
     surveyInfo:
       'Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
     studentListVisible:
-      'Näytä palautetta antaneiden opiskelijoiden lista kurssin opettajalle',
+      'Näytä palautetta antaneet opiskelijat kurssin opettajalle',
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
     generalTab: 'Yleiset asetukset',
     coursesTab: 'Aktivoidut kurssit',

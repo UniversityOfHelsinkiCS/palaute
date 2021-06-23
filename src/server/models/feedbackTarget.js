@@ -237,6 +237,28 @@ class FeedbackTarget extends Model {
 
     return feedbackTarget
   }
+
+  async isDisabled() {
+    const courseUnit = await this.getCourseUnit({
+      include: [{ model: Organisation, as: 'organisations', required: true }],
+    })
+
+    const { organisations } = courseUnit
+
+    return organisations.some(({ disabledCourseCodes }) =>
+      disabledCourseCodes.includes(courseUnit.courseCode),
+    )
+  }
+
+  async feedbackCanBeGiven() {
+    if (!this.isOpen() || this.hidden) {
+      return false
+    }
+
+    const disabled = await this.isDisabled()
+
+    return !disabled
+  }
 }
 
 FeedbackTarget.init(

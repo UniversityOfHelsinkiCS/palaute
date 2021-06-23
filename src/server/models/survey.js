@@ -7,6 +7,7 @@ const {
   ENUM,
   VIRTUAL,
 } = require('sequelize')
+
 const { sequelize } = require('../util/dbConnection')
 const Question = require('./question')
 
