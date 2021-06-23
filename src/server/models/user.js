@@ -24,7 +24,7 @@ class User extends Model {
         .filter((org) => org.code.includes('-'))
         .map((organisation) => ({
           organisation,
-          access: { read: true, write: true },
+          access: { read: true, write: true, admin: true },
         }))
     }
     const { data: access } = await lomakeClient.get(
