@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const { Organisation } = require('../models')
 const { ApplicationError } = require('../util/customErrors')
 
@@ -22,29 +24,55 @@ const getOrganisations = async (req, res) => {
 
 const updateOrganisation = async (req, res) => {
   const { user } = req
-  const { studentListVisibility } = req.body
-  const organisationCode = req.params.code
+  const { code } = req.params
 
-  const organisationAccess = await user.hasAccessByOrganisation(
-    organisationCode,
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const relevantOrganisationAccess = organisationAccess.find(
+    ({ organisation }) => organisation.code === code,
   )
 
-  if (!organisationAccess) throw new ApplicationError(403, 'Forbidden')
+  const hasWriteAccess = Boolean(relevantOrganisationAccess?.access?.write)
+
+  if (!hasWriteAccess) throw new ApplicationError(403, 'Forbidden')
 
   const organisation = await Organisation.findOne({
     where: {
-      code: organisationCode,
+      code,
     },
   })
 
-  organisation.studentListVisible = !studentListVisibility
+  Object.assign(organisation, _.pick(req.body, ['studentListVisible']))
 
   const updatedOrganisation = await organisation.save()
 
   res.send(updatedOrganisation)
 }
 
+const getOrganisationByCode = async (req, res) => {
+  const { user } = req
+  const { code } = req.params
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const organisation = organisationAccess
+    .map(({ organisation, access }) => ({
+      ...organisation.toJSON(),
+      access,
+    }))
+    .find((org) => org.code === code)
+
+  if (!organisation) {
+    throw new ApplicationError(
+      `Organisation by code ${code} is not found or it is not accessible`,
+    )
+  }
+
+  res.send(organisation)
+}
+
 module.exports = {
   getOrganisations,
   updateOrganisation,
+  getOrganisationByCode,
 }

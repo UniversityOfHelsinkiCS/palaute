@@ -1,6 +1,9 @@
 import apiClient from '../../util/apiClient'
 
-export const getInitialValues = (survey) => {
+export const getUpperLevelQuestions = (survey) =>
+  (survey?.universitySurvey?.questions ?? []).filter((q) => q.type !== 'TEXT')
+
+export const getSurveyInitialValues = (survey) => {
   const questions = [
     ...(survey.universitySurvey?.questions ?? []).map((question) => ({
       ...question,
@@ -17,13 +20,7 @@ export const getInitialValues = (survey) => {
   }
 }
 
-export const validate = () => {
-  const errors = {}
-
-  return errors
-}
-
-export const saveValues = async (values, surveyId) => {
+export const saveSurveyValues = async (values, surveyId) => {
   const { questions } = values
   const editableQuestions = questions.filter(({ editable }) => editable)
 

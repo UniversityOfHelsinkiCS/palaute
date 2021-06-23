@@ -187,6 +187,40 @@ const getCourseUnitsForTeacher = async (req, res) => {
   res.send(courseUnits)
 }
 
+const getCourseUnitsByOrganisation = async (req, res) => {
+  const { code } = req.params
+
+  const courseUnitRows = await sequelize.query(
+    `
+    SELECT DISTINCT ON (course_units.course_code)
+      course_units.id AS course_unit_id,
+      course_units.course_code AS course_code,
+      course_units.name AS course_unit_name
+    FROM course_units
+    INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+    INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
+    WHERE
+      organisations.code = :organisationCode
+    ORDER BY course_units.course_code, course_units.validity_period->>'startDate' DESC NULLS LAST;
+  `,
+    {
+      replacements: {
+        organisationCode: code,
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  const courseUnits = courseUnitRows.map((row) => ({
+    name: row.course_unit_name,
+    id: row.course_unit_id,
+    courseCode: row.course_code,
+  }))
+
+  res.send(courseUnits)
+}
+
 module.exports = {
   getCourseUnitsForTeacher,
+  getCourseUnitsByOrganisation,
 }

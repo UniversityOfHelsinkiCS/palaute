@@ -108,6 +108,8 @@ export default {
     done: 'Valmis',
     languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
     descriptionHelper: 'Vapaaehtoinen kuvausteksti, joka tarkentaa kysymystä',
+    universityQuestion: 'Yliopistotason kysymys',
+    programmeQuestion: 'Koulutusohjelmatason kysymys',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
@@ -123,8 +125,6 @@ export default {
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
     noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
-    universityQuestion: 'Yliopistotason kysymys',
-    programmeQuestion: 'Koulutusohjelmatason kysymys',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
@@ -190,7 +190,7 @@ export default {
     feedbackResponseNotGiven: 'Palautekoostetta ei ole annettu',
     feedbackStillOpen: 'Kurssin palautejakso on vielä käynnissä',
     courseOngoing: 'Kurssi on vielä käynnissä',
-    editProgrammeSurvey: 'Muokkaa koulutusohjelman kyselyä',
+    editProgrammeSettings: 'Muokkaa koulutusohjelman asetuksia',
     courseRealisation: 'Kurssitoteutus',
   },
   organisationView: {
@@ -215,5 +215,15 @@ export default {
   courseRealisationFeedback: {
     noFeedbackTarget:
       'Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta',
+  },
+  organisationSettings: {
+    surveyInfo:
+      'Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
+    studentListVisible:
+      'Näytä palautetta antaneiden opiskelijoiden lista kurssin opettajalle',
+    courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
+    generalTab: 'Yleiset asetukset',
+    coursesTab: 'Aktivoidut kurssit',
+    surveyTab: 'Koulutusohjelman kysely',
   },
 }

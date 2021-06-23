@@ -40,11 +40,11 @@ const SettingsButton = ({ code }) => {
   const { t } = useTranslation()
 
   return (
-    <Tooltip title={t('courseSummary:editProgrammeSurvey')}>
+    <Tooltip title={t('courseSummary:editProgrammeSettings')}>
       <IconButton
         id={`settings-button-${code}`}
         component={Link}
-        to={`/programme-survey/${code}`}
+        to={`/organisations/${code}/settings`}
       >
         <SettingsIcon />
       </IconButton>

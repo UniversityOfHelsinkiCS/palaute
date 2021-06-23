@@ -77,6 +77,13 @@ router.get('/organisations', organisation.getOrganisations)
 router.put('/organisations/:code', organisation.updateOrganisation)
 
 router.get(
+  '/organisations/:code/course-units',
+  courseUnit.getCourseUnitsByOrganisation,
+)
+
+router.get('/organisations/:code', organisation.getOrganisationByCode)
+
+router.get(
   '/course-realisations/:id/feedback-targets',
   courseRealisation.getFeedbackTargetsByCourseRealisation,
 )

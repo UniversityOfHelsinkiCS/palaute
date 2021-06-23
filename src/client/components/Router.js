@@ -11,10 +11,10 @@ import StudentsWithFeedback from './StudentsWithFeedback'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import FeedbackResponse from './FeedbackResponse'
 import CourseSummary from './CourseSummary'
-import OrganisationView from './OrganisationView'
 import EditProgrammeSurvey from './EditProgrammeSurvey'
 import TeacherView from './TeacherView'
 import CourseRealisationFeedback from './CourseRealisationFeedback'
+import OrganisationSettings from './OrganisationSettings'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,8 +61,11 @@ const Router = () => {
           path="/targets/:id/feedback-response"
           component={FeedbackResponse}
         />
+        <Route
+          path="/organisations/:code/settings"
+          component={OrganisationSettings}
+        />
         <Route path="/course-summary" component={CourseSummary} />
-        <Route path="/organisations" component={OrganisationView} />
         <Route
           path="/programme-survey/:surveyCode"
           component={EditProgrammeSurvey}

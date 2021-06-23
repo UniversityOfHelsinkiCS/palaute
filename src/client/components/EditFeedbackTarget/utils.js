@@ -18,12 +18,12 @@ export const getInitialValues = (feedbackTarget) => {
     ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
       ...question,
       editable: false,
-      chip: 'editFeedbackTarget:universityQuestion',
+      chip: 'questionEditor:universityQuestion',
     })),
     ...(surveys.programmeSurvey?.questions ?? []).map((question) => ({
       ...question,
       editable: false,
-      chip: 'editFeedbackTarget:programmeQuestion',
+      chip: 'questionEditor:programmeQuestion',
     })),
     ...(surveys.teacherSurvey?.questions ?? []).map((question) => ({
       ...question,

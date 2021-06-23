@@ -112,6 +112,8 @@ export default {
       'Your are currently editing the "{{language}}" translation of this question',
     descriptionHelper:
       'Optional description that provides additional information about the question',
+    universityQuestion: 'University level question',
+    programmeQuestion: 'Programme level question',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',
@@ -126,8 +128,6 @@ export default {
     opensAtIsNow:
       'The survey is set to open immediately! When the survey is open it cannot be edited anymore. Are you sure you want to save the survey?',
     noUnsavedChanges: 'You do not have unsaved changes to submit',
-    universityQuestion: 'University level question',
-    programmeQuestion: 'Programme level question',
   },
   questionResults: {
     answerCount: 'Answer count',
@@ -193,7 +193,7 @@ export default {
     feedbackResponseNotGiven: 'Feedback response has not been given',
     feedbackStillOpen: 'Feedback for this course is still ongoing',
     courseOngoing: 'The course is still ongoing',
-    editProgrammeSurvey: "Edit programme's survey",
+    editProgrammeSettings: "Edit programme's settings",
     courseRealisation: 'Course realisation',
   },
   organisationView: {
@@ -215,5 +215,15 @@ export default {
   },
   courseRealisationFeedback: {
     noFeedbackTarget: 'This course does not have a feedback available to you',
+  },
+  organisationSettings: {
+    surveyInfo:
+      "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    studentListVisible:
+      "Show course's teacher the list of students who have given feedback",
+    courseSettingsInfo: 'Feedback is only collected from activated courses',
+    generalTab: 'General settings',
+    coursesTab: 'Activated courses',
+    surveyTab: 'Programme survey',
   },
 }
