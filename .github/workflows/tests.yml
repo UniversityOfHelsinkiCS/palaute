@@ -6,12 +6,6 @@ on:
       - master
 
 jobs:
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: 'Run eslint'
-        run: 'npm run lint'
   cypress:
     runs-on: ubuntu-latest
     steps:
@@ -37,3 +31,11 @@ jobs:
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build project for eslint
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
