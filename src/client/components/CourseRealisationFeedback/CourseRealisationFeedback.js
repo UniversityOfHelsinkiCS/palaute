@@ -25,9 +25,8 @@ const CourseRealisationFeedback = () => {
     )
   }
 
-  const courseRealisationFeedbackTarget = getCourseRealisationFeedbackTarget(
-    feedbackTargets,
-  )
+  const courseRealisationFeedbackTarget =
+    getCourseRealisationFeedbackTarget(feedbackTargets)
 
   if (!courseRealisationFeedbackTarget) {
     enqueueSnackbar(t('courseRealisationFeedback:noFeedbackTarget'), {

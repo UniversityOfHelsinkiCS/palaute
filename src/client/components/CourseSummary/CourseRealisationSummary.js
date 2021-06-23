@@ -109,10 +109,8 @@ const CourseRealisationSummary = () => {
   const { code } = useParams()
   const { i18n } = useTranslation()
 
-  const {
-    courseRealisationSummaries,
-    isLoading,
-  } = useCourseRealisationSummaries(code)
+  const { courseRealisationSummaries, isLoading } =
+    useCourseRealisationSummaries(code)
 
   if (isLoading) {
     return (
@@ -126,11 +124,8 @@ const CourseRealisationSummary = () => {
     return <Redirect to="/" />
   }
 
-  const {
-    questions,
-    courseRealisations,
-    courseUnit,
-  } = courseRealisationSummaries
+  const { questions, courseRealisations, courseUnit } =
+    courseRealisationSummaries
 
   return (
     <>

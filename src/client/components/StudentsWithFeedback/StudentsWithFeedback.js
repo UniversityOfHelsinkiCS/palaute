@@ -27,10 +27,8 @@ const StudentsWithFeedback = () => {
   const classes = useStyles()
   const { id } = useParams()
 
-  const {
-    feedbackTarget,
-    isLoading: feedbackTargetIsLoading,
-  } = useFeedbackTarget(id)
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
+    useFeedbackTarget(id)
 
   const { students, isLoading: studentsIsLoading } = useStudentsWithFeedback(id)
 

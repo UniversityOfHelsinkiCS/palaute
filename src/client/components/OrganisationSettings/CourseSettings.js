@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { useSnackbar } from 'notistack'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -64,10 +64,16 @@ const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
 
 const CourseSettings = ({ organisation }) => {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { code } = organisation
-  const mutation = useMutation(updateDisabledCourseCodes)
   const { enqueueSnackbar } = useSnackbar()
   const { courseUnits, isLoading } = useOrganisationCourseUnits(code)
+
+  const mutation = useMutation(updateDisabledCourseCodes, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['organisation', code])
+    },
+  })
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(
     organisation.disabledCourseCodes ?? [],

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Card, CardContent, Switch, FormControlLabel } from '@material-ui/core'
-import { useMutation } from 'react-query'
+
+import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'
@@ -16,12 +17,17 @@ const saveGeneralSettings = async ({ code, studentListVisible }) => {
 const GeneralSettings = ({ organisation }) => {
   const { code } = organisation
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
 
   const [studentListVisible, setStudentListVisible] = useState(
     organisation?.studentListVisible ?? false,
   )
 
-  const mutation = useMutation(saveGeneralSettings)
+  const mutation = useMutation(saveGeneralSettings, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['organisation', code])
+    },
+  })
 
   const handleStudentListVisibleChange = async (event) => {
     const updatedOrganisation = await mutation.mutateAsync({

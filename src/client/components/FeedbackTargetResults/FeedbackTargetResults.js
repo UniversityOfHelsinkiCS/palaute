@@ -32,15 +32,11 @@ const FeedbackTargetResults = () => {
   const classes = useStyles()
   const { id } = useParams()
 
-  const {
-    feedbackTarget,
-    isLoading: feedbackTargetIsLoading,
-  } = useFeedbackTarget(id)
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
+    useFeedbackTarget(id)
 
-  const {
-    feedbackTargetData,
-    isLoading: feedbacksIsLoading,
-  } = useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData, isLoading: feedbacksIsLoading } =
+    useFeedbackTargetFeedbacks(id)
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 

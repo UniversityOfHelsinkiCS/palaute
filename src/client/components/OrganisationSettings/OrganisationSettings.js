@@ -23,7 +23,7 @@ const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
-  const { organisation, isLoading } = useOrganisation(code)
+  const { organisation, isLoading } = useOrganisation(code, { cacheTime: 0 })
 
   if (isLoading) {
     return (

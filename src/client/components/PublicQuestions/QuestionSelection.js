@@ -69,9 +69,10 @@ const QuestionSelection = ({ feedbackTarget, visibility }) => {
     feedbackTarget.publicQuestionIds ?? [],
   )
 
-  const questionItems = useMemo(() => getQuestionItems(feedbackTarget), [
-    feedbackTarget,
-  ])
+  const questionItems = useMemo(
+    () => getQuestionItems(feedbackTarget),
+    [feedbackTarget],
+  )
 
   const makeOnToggle = (id) => async () => {
     const checked = publicQuestionIds.includes(id)
