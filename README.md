@@ -1,5 +1,12 @@
 # Palaute
 
+App running at [https://study.cs.helsinki.fi/palaute](https://study.cs.helsinki.fi/palaute)
+
+## Issues with Palaute
+
+Send an issue if you find mistakes, problems or something to improve in Palaute.
+Feel free to create a pull request.
+
 ## Environment configuration
 
 Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add correct values for the variables based on the documentation.
@@ -34,10 +41,11 @@ If stuck reset everything and start from a clean slate:
 $ npm run reset
 ```
 
-## Issues with Palaute
+## Documentation
 
-Send an issue if you find mistakes, problems or something to improve in Palaute.
-Feel free to create a pull request.
+[Database schema](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/database_schema.png)
+
+[Testing document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/testingdocument.md)
 
 ## Maintainers and Contribution
 
