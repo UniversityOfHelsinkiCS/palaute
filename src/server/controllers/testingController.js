@@ -49,6 +49,7 @@ const updateManyCourseRealisations = async (req, res) => {
 
   const updates = _.pick(req.body, ['startDate', 'endDate'])
 
+  /* eslint-disable */
   for (const id of feedbackTargetIds) {
     const feedbackTarget = await FeedbackTarget.findByPk(Number(id))
 
@@ -66,6 +67,7 @@ const updateManyCourseRealisations = async (req, res) => {
 
     await courseRealisation.save()
   }
+  /* eslint-enable */
 
   res.send(200)
 }

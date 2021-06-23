@@ -23,6 +23,7 @@ const run = async () => {
   await updateStudentFeedbackTargets()
 }
 
+/* eslint-disable */
 const start = async () => {
   if (!inProduction) {
     return logger.info('Not running updater outside production')
@@ -35,6 +36,7 @@ const start = async () => {
 
   logger.info('Running updater according to cron', { cron: cronTime })
 }
+/* eslint-enable */
 
 module.exports = {
   start,
