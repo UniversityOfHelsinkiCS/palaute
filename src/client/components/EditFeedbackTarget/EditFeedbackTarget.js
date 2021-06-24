@@ -64,7 +64,7 @@ const EditFeedbackTarget = () => {
   const { language } = i18n
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    cacheTime: 0,
+    skipCache: true,
   })
 
   if (isLoading) {

@@ -126,7 +126,7 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    cacheTime: 0,
+    skipCache: true,
   })
 
   if (isLoading) {

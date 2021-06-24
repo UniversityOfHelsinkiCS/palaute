@@ -1,8 +1,7 @@
-import { useQuery } from 'react-query'
-
 import apiClient from '../util/apiClient'
+import useQuery from './useQuery'
 
-const useUniversitySurvey = () => {
+const useUniversitySurvey = (options = {}) => {
   const queryKey = ['universitySurvey']
 
   const queryFn = async () => {
@@ -12,7 +11,8 @@ const useUniversitySurvey = () => {
   }
 
   const { data: survey, ...rest } = useQuery(queryKey, queryFn, {
-    cacheTime: 0,
+    skipCache: true,
+    ...options,
   })
 
   return { survey, ...rest }

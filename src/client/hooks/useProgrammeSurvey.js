@@ -1,18 +1,18 @@
-import { useQuery } from 'react-query'
-
 import apiClient from '../util/apiClient'
+import useQuery from './useQuery'
 
-const useProgrammeSurvey = (surveyCode) => {
-  const queryKey = ['programmeSurvey', surveyCode]
+const useProgrammeSurvey = (organisationCode, options = {}) => {
+  const queryKey = ['programmeSurvey', organisationCode]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/surveys/programme/${surveyCode}`)
+    const { data } = await apiClient.get(`/surveys/programme/${organisationCode}`)
 
     return data
   }
 
   const { data: survey, ...rest } = useQuery(queryKey, queryFn, {
-    cacheTime: 0,
+    skipCache: true,
+    ...options,
   })
 
   return { survey, ...rest }

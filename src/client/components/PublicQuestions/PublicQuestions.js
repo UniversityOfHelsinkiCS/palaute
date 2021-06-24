@@ -15,7 +15,10 @@ const PublicQuestions = () => {
   const [visibility, setVisibility] = useState('ALL')
 
   const { id } = useParams()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, { cacheTime: 0 })
+
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
+    skipCache: true,
+  })
 
   useEffect(() => {
     if (!isLoading) {

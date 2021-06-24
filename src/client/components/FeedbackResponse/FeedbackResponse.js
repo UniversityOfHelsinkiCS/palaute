@@ -54,7 +54,11 @@ const FeedbackResponse = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, { cacheTime: 0 })
+
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
+    skipCache: true,
+  })
+
   const [currentResponse, setCurrentResponse] = useState('')
 
   if (isLoading) {
