@@ -91,6 +91,7 @@ const getOrganisationByCode = async (req, res) => {
 
   if (!organisation) {
     throw new ApplicationError(
+      404,
       `Organisation by code ${code} is not found or it is not accessible`,
     )
   }
