@@ -5,6 +5,7 @@ import { CircularProgress, Box, Button } from '@material-ui/core'
 
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
+import { useParams } from 'react-router-dom'
 
 import QuestionEditor from '../QuestionEditor'
 import LanguageTabs from '../LanguageTabs'
@@ -18,10 +19,10 @@ import {
   getUpperLevelQuestions,
 } from './utils'
 
-const EditSurvey = ({ organisation }) => {
+const EditSurvey = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { code } = organisation
+  const { code } = useParams()
 
   const [language, setLanguage] = useState('fi')
 

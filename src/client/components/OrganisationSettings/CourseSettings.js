@@ -13,13 +13,15 @@ import {
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
+import { useParams } from 'react-router-dom'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
+import useOrganisation from '../../hooks/useOrganisation'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
   (courseUnits ?? []).map(({ courseCode, name }) => ({
@@ -28,7 +30,7 @@ const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
     checked: !disabledCourseCodes.includes(courseCode),
   }))
 
-const updateDisabledCourseCodes = async ({ code, disabledCourseCodes }) => {
+const saveDisabledCourseCodes = async ({ code, disabledCourseCodes }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     disabledCourseCodes,
   })
@@ -62,30 +64,15 @@ const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
   )
 }
 
-const CourseSettings = ({ organisation }) => {
+const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
-  const { courseUnits, isLoading } = useOrganisationCourseUnits(code)
-
-  const mutation = useMutation(updateDisabledCourseCodes, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['organisation', code])
-    },
-  })
+  const mutation = useMutation(saveDisabledCourseCodes)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(
     organisation.disabledCourseCodes ?? [],
   )
-
-  if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
-  }
 
   const courseUnitItems = getCourseUnitItems(courseUnits, disabledCourseCodes)
 
@@ -132,6 +119,37 @@ const CourseSettings = ({ organisation }) => {
         </List>
       </CardContent>
     </Card>
+  )
+}
+
+const CourseSettings = () => {
+  const { t } = useTranslation()
+  const { code } = useParams()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { courseUnits, isLoading: courseUnitsIsLoading } =
+    useOrganisationCourseUnits(code)
+
+  const { organisation, isLoading: organisationIsLoading } = useOrganisation(
+    code,
+    { skipCache: true },
+  )
+
+  const isLoading = courseUnitsIsLoading || organisationIsLoading
+
+  if (isLoading) {
+    return (
+      <Box my={4} display="flex" justifyContent="center">
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  return (
+    <CourseSettingsContainer
+      organisation={organisation}
+      courseUnits={courseUnits}
+    />
   )
 }
 

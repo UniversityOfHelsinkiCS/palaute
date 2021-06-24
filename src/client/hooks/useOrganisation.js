@@ -1,6 +1,5 @@
-import { useQuery } from 'react-query'
-
 import apiClient from '../util/apiClient'
+import useQuery from './useQuery'
 
 const useOrganisation = (code, options = {}) => {
   const queryKey = ['organisation', code]

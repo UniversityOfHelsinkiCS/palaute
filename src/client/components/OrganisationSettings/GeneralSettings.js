@@ -1,10 +1,20 @@
 import React, { useState } from 'react'
-import { Card, CardContent, Switch, FormControlLabel } from '@material-ui/core'
 
-import { useMutation, useQueryClient } from 'react-query'
+import {
+  Card,
+  CardContent,
+  Switch,
+  FormControlLabel,
+  Box,
+  CircularProgress,
+} from '@material-ui/core'
+
+import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router-dom'
 
 import apiClient from '../../util/apiClient'
+import useOrganisation from '../../hooks/useOrganisation'
 
 const saveGeneralSettings = async ({ code, studentListVisible }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -14,20 +24,15 @@ const saveGeneralSettings = async ({ code, studentListVisible }) => {
   return data
 }
 
-const GeneralSettings = ({ organisation }) => {
-  const { code } = organisation
+const GeneralSettingsContainer = ({ organisation }) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const { code } = organisation
 
   const [studentListVisible, setStudentListVisible] = useState(
     organisation?.studentListVisible ?? false,
   )
 
-  const mutation = useMutation(saveGeneralSettings, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['organisation', code])
-    },
-  })
+  const mutation = useMutation(saveGeneralSettings)
 
   const handleStudentListVisibleChange = async (event) => {
     const updatedOrganisation = await mutation.mutateAsync({
@@ -55,6 +60,22 @@ const GeneralSettings = ({ organisation }) => {
       </CardContent>
     </Card>
   )
+}
+
+const GeneralSettings = () => {
+  const { code } = useParams()
+
+  const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
+
+  if (isLoading) {
+    return (
+      <Box my={4} display="flex" justifyContent="center">
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  return <GeneralSettingsContainer organisation={organisation} />
 }
 
 export default GeneralSettings

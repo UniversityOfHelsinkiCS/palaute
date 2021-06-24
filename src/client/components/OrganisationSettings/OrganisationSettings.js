@@ -23,7 +23,7 @@ const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
-  const { organisation, isLoading } = useOrganisation(code, { cacheTime: 0 })
+  const { organisation, isLoading } = useOrganisation(code)
 
   if (isLoading) {
     return (
@@ -76,15 +76,15 @@ const OrganisationSettings = () => {
 
       <Switch>
         <Route path={`${path}/general`}>
-          <GeneralSettings organisation={organisation} />
+          <GeneralSettings />
         </Route>
 
         <Route path={`${path}/courses`}>
-          <CourseSettings organisation={organisation} />
+          <CourseSettings />
         </Route>
 
         <Route path={`${path}/survey`}>
-          <EditSurvey organisation={organisation} />
+          <EditSurvey />
         </Route>
 
         <Redirect to={`${path}/general`} />
