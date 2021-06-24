@@ -188,6 +188,10 @@ const mapOpenUniOrganisations = async (rows) => {
       .map((row) => row.course_code),
   )
 
+  if (openUniCodes.length === 0) {
+    return rows
+  }
+
   const baseCodes = _.uniq(openUniCodes.map((code) => code.replace(/^AY/, '')))
 
   const courseUnits = await CourseUnit.findAll({
@@ -290,10 +294,8 @@ const getOrganisationsWithResults = (rows, questionIds) => {
 
   const organisations = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
-      const {
-        organisation_name: name,
-        organisation_code: code,
-      } = organisationRows[0]
+      const { organisation_name: name, organisation_code: code } =
+        organisationRows[0]
 
       const courseUnits = getCourseUnitsWithResults(
         organisationRows,
@@ -422,13 +424,16 @@ const getOrganisationSummaries = async ({
   courseCodes,
   organisationAccess,
 }) => {
-  const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
-    replacements: {
-      questionIds: questionIds.map((id) => id.toString()),
-      courseCodes,
-    },
-    type: sequelize.QueryTypes.SELECT,
-  })
+  const rows =
+    courseCodes.length > 0
+      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
+          replacements: {
+            questionIds: questionIds.map((id) => id.toString()),
+            courseCodes,
+          },
+          type: sequelize.QueryTypes.SELECT,
+        })
+      : []
 
   const normalizedRows = await mapOpenUniOrganisations(rows)
 
