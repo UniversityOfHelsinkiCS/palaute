@@ -28,6 +28,7 @@ UserFeedbackTarget.belongsTo(Feedback, {
 UserFeedbackTarget.belongsTo(User, {
   as: 'user',
 })
+User.hasMany(UserFeedbackTarget, { as: 'userFeedbackTargets' })
 
 Survey.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -44,6 +45,21 @@ Organisation.belongsToMany(CourseUnit, {
   through: CourseUnitsOrganisation,
   as: 'courseUnits',
 })
+
+User.prototype.feedbackTargetsHasTeacherAccessTo = function () {
+  return FeedbackTarget.findAll({
+    include: {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTargets',
+      where: {
+        userId: this.id,
+        accessStatus: 'TEACHER'
+      },
+      required: true
+    }
+  })
+}
+
 
 module.exports = {
   Feedback,

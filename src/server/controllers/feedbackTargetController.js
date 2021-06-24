@@ -549,6 +549,17 @@ const updateFeedbackResponse = async (req, res) => {
   res.sendStatus(200)
 }
 
+const emailStudentsAboutResponse = async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+  const feedbackTargetsUserIsTeacherTo = await req.user.feedbackTargetsHasTeacherAccessTo()
+  const relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(target => target.id === feedbackTargetId)
+  if (!relevantFeedbackTarget) throw new ApplicationError(`No feedback target found with id ${feedbackTargetId} for user`, 404)
+
+  const emailsSentTo = await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents()
+
+  res.send(emailsSentTo)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -557,4 +568,5 @@ module.exports = {
   getFeedbacks,
   getStudentsWithFeedback,
   updateFeedbackResponse,
+  emailStudentsAboutResponse,
 }

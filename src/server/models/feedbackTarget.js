@@ -17,9 +17,13 @@ const _ = require('lodash')
 const CourseUnit = require('./courseUnit')
 const Organisation = require('./organisation')
 const CourseRealisation = require('./courseRealisation')
+const User = require('./user')
+const Feedback = require('./feedback')
+const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 const Question = require('./question')
+const { sendNotificationAboutFeedbackSummaryToStudents } = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
   const universitySurvey = await Survey.findOne({
@@ -163,6 +167,38 @@ class FeedbackTarget extends Model {
     return now > this.closesAt
   }
 
+  async getStudentsWhoHaveGivenFeedback() {
+    return User.findAll({
+      include: {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            where: {
+              id: this.id,
+            },
+            required: true,
+          },
+          {
+            model: Feedback,
+            as: 'feedback',
+            required: true,
+          },
+        ],
+      },
+    })
+  }
+
+  async sendFeedbackSummaryReminderToStudents() {
+    const students = await this.getStudentsWhoHaveGivenFeedback()
+    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/feedback`
+    const formattedStudents = students.filter(student => student.email).map(student => ({ email: student.email, language: student.language || 'en' }))
+    return sendNotificationAboutFeedbackSummaryToStudents(url, formattedStudents)
+  }
+
   async getPublicQuestionIds() {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
@@ -222,9 +258,8 @@ class FeedbackTarget extends Model {
   async toPublicObject() {
     const surveys = await this.getSurveys()
     const publicQuestionIds = await this.getPublicQuestionIds()
-    const publicityConfigurableQuestionIds = await this.getPublicityConfigurableQuestionIds(
-      surveys,
-    )
+    const publicityConfigurableQuestionIds =
+      await this.getPublicityConfigurableQuestionIds(surveys)
 
     const feedbackTarget = {
       ...this.toJSON(),
