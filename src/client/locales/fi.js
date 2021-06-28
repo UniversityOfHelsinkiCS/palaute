@@ -173,6 +173,7 @@ export default {
     responseLabel: 'Palautekooste',
     responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
     previewLabel: 'Esikatselu',
+    sendEmail: 'Ilmoita opiskelijoille palauteyhteenvedosta sähköpostitse',
   },
   publicQuestions: {
     publicInfo:

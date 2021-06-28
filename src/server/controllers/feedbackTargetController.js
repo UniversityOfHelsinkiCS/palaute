@@ -525,6 +525,20 @@ const updateFeedbackResponse = async (req, res) => {
   res.sendStatus(200)
 }
 
+const emailStudentsAboutResponse = async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+  const feedbackTargetsUserIsTeacherTo = await req.user.feedbackTargetsHasTeacherAccessTo()
+  const relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(target => target.id === feedbackTargetId)
+  if (!relevantFeedbackTarget) throw new ApplicationError(`No feedback target found with id ${feedbackTargetId} for user`, 404)
+  if (relevantFeedbackTarget.feedbackResponseEmailSent) throw new ApplicationError('Email has already been sent', 400) // or 409 ?
+
+  relevantFeedbackTarget.feedbackResponseEmailSent = true
+  const emailsSentTo = await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents()
+  await relevantFeedbackTarget.save()
+
+  res.send(emailsSentTo)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -533,4 +547,5 @@ module.exports = {
   getFeedbacks,
   getStudentsWithFeedback,
   updateFeedbackResponse,
+  emailStudentsAboutResponse,
 }

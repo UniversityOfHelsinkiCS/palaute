@@ -47,6 +47,8 @@ router.put(
   feedbackTargets.updateFeedbackResponse,
 )
 
+router.put('/feedback-targets/:id/notify-students', feedbackTargets.emailStudentsAboutResponse)
+
 router.get(
   '/feedback-targets/:id/students-with-feedback',
   feedbackTargets.getStudentsWithFeedback,
