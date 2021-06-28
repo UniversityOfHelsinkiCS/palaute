@@ -151,7 +151,7 @@ const FeedbackResponse = () => {
                   </Button>
                   {'  '}
                   <ResponseEmailButton 
-                    disabled={!checkFeedbackIsSaved(false, values) || console.log(values, feedbackTarget) || feedbackTarget.feedbackResponseEmailSent} 
+                    disabled={!checkFeedbackIsSaved(false, values) || feedbackTarget.feedbackResponseEmailSent} 
                     feedbackTargetId={feedbackTarget.id}
                   />
                 </Box>
