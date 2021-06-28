@@ -6,7 +6,16 @@ on:
       - master
 
 jobs:
-  cypress:
+  eslint:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: Build project for eslint
+      run: npm install
+    - name: Run eslint
+      run: npm run lint
+
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,11 +40,6 @@ jobs:
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build project for eslint
-        run: npm install
-      - name: Run eslint
-        run: npm run lint
+
+      - name: Run Jest tests
+        run: docker exec palaute_app_test

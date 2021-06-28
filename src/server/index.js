@@ -23,9 +23,13 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await startUpdater()
-  app.listen(PORT, () => {
-    logger.info(`Started on port ${PORT}`)
-  })
+  if (!inE2EMode) {
+    app.listen(PORT, () => {
+      logger.info(`Started on port ${PORT}`)
+    })
+  }
 }
 
 start()
+
+module.exports = app
