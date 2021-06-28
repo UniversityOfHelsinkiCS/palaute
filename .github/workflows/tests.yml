@@ -7,13 +7,13 @@ on:
 
 jobs:
   eslint:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - name: Build project for eslint
-      run: npm install
-    - name: Run eslint
-      run: npm run lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build project for eslint
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
 
   tests:
     runs-on: ubuntu-latest
