@@ -11,6 +11,9 @@ ENV PUBLIC_URL=$BASE_PATH
 ARG E2E
 ENV REACT_APP_E2E=$E2E
 
+ARG JEST
+ENV REACT_APP_JEST=$JEST
+
 # Setup
 COPY package* ./
 RUN npm ci --only=production
