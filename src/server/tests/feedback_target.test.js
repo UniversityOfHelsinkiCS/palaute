@@ -1,3 +1,4 @@
+/* eslint-disable */
 const request = require('supertest')
 const app = require('../index')
 
@@ -20,10 +21,6 @@ test('Fetching a feedback target as logged in user', async (done) => {
 
   expect(response.body.typeId).toBe('hy-CUR-137933885')
   expect(response.body.courseUnit.courseCode).toBe('TKT20002')
-
-  console.log(response.status)
-
-  console.log('Changes to code for github actions :slightly_smiling_face:')
 
   done()
 })

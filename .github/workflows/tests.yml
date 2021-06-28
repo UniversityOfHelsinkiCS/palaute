@@ -8,15 +8,6 @@ on:
 
 
 jobs:
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build project for eslint
-        run: npm install
-      - name: Run eslint
-        run: npm run lint
-
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -45,3 +36,11 @@ jobs:
 
       - name: Run Jest tests
         run: docker exec palaute_app_test npm run test
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build project for eslint
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
