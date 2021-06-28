@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - 'jest**'
+
 
 jobs:
   eslint:
@@ -42,4 +44,4 @@ jobs:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
 
       - name: Run Jest tests
-        run: docker exec palaute_app_test
+        run: docker exec palaute_app_test npm run test
