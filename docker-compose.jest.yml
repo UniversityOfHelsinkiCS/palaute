@@ -6,6 +6,7 @@ services:
       context: .
       args:
         - JEST=true
+        - E2E=true
     command: ['npm','run', 'start:test']
     environment:
       - POSTGRES_HOST=db
