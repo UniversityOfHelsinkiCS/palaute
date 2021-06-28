@@ -1,5 +1,4 @@
 const { ApplicationError } = require('../util/customErrors')
-const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
 const { User } = require('../models')
 
@@ -14,36 +13,14 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   const newHeaders = { ...headers }
   const user = await User.findOne({ where: { id: loggedInAs } })
 
-  const { data } = await importerClient.get(`/palaute/persons`, {
-    params: { id: loggedInAs },
-  })
-
-  newHeaders.employeenumber = data.persons[0].employeeNumber
-  if (user) {
-    newHeaders.uid = user.username
-    newHeaders.givenname = user.firstName
-    newHeaders.sn = user.lastName
-    newHeaders.mail = user.email
-    newHeaders.preferredlanguage = user.language
-    newHeaders.hypersonsisuid = user.id
-    newHeaders.schacpersonaluniquecode = user.studentNumber
-    return newHeaders
-  }
-
-  const {
-    id,
-    firstNames,
-    lastName,
-    eduPersonPrincipalName,
-    studentNumber,
-  } = data.persons[0]
-
-  newHeaders.hypersonsisuid = id
-  newHeaders.givenname = firstNames
-  newHeaders.sn = lastName
-  newHeaders.schacpersonaluniquecode = studentNumber
-  const username = eduPersonPrincipalName.split('@')[0]
-  newHeaders.uid = username
+  newHeaders.employeeNumber = user.employeeNumber
+  newHeaders.uid = user.username
+  newHeaders.givenname = user.firstName
+  newHeaders.sn = user.lastName
+  newHeaders.mail = user.email
+  newHeaders.preferredlanguage = user.language
+  newHeaders.hypersonsisuid = user.id
+  newHeaders.schacpersonaluniquecode = user.studentNumber
   return newHeaders
 }
 

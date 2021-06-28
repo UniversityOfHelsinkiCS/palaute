@@ -4,7 +4,6 @@ const { Op } = require('sequelize')
 const _ = require('lodash')
 
 const { ApplicationError } = require('../util/customErrors')
-const importerClient = require('../util/importerClient')
 const { ADMINS } = require('../util/config')
 const { run } = require('../updater/index')
 
@@ -70,18 +69,40 @@ const findUser = async (req, res) => {
   const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
 
   const params = {}
+  const where = {}
+  if (isStudentNumber) {
+    where.studentNumber = {
+      [Op.iLike]: `%${user}%`,
+    }
+    params.studentNumber = user
+  } else if (isSisuId) {
+    where.id = {
+      [Op.iLike]: `%${user}%`,
+    }
+    params.id = user
+  } else if (isEmployeeNumber) {
+    where.employeeNumber = {
+      [Op.iLike]: `%${user}%`,
+    }
+    params.employeeNumber = user
+  } else if (isUsername) {
+    where.username = {
+      [Op.iLike]: `%${user}%`,
+    }
+    params.username = user
+  }
 
-  if (isStudentNumber) params.studentNumber = user
-  if (isSisuId) params.id = user
-  if (isEmployeeNumber) params.employeeNumber = user
-  if (isUsername) params.eduPersonPrincipalName = user
-
-  const { data } = await importerClient.get(`/palaute/persons`, { params })
-  const { persons } = data
+  const persons = await User.findAll({
+    where,
+    limit: 100,
+  })
 
   return res.send({
     params,
-    persons,
+    persons: persons.map((person) => ({
+      ...person.dataValues,
+      firstNames: person.firstName,
+    })),
   })
 }
 

@@ -123,17 +123,17 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
 }
 
 const CourseSettings = () => {
-  const { t } = useTranslation()
   const { code } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
 
-  const { courseUnits, isLoading: courseUnitsIsLoading } =
-    useOrganisationCourseUnits(code)
+  const {
+    courseUnits,
+    isLoading: courseUnitsIsLoading,
+  } = useOrganisationCourseUnits(code)
 
-  const { organisation, isLoading: organisationIsLoading } = useOrganisation(
-    code,
-    { skipCache: true },
-  )
+  const {
+    organisation,
+    isLoading: organisationIsLoading,
+  } = useOrganisation(code, { skipCache: true })
 
   const isLoading = courseUnitsIsLoading || organisationIsLoading
 

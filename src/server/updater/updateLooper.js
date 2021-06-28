@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 const logger = require('../util/logger')
-const importerClient = require('../util/importerClient')
+const importerClient = require('./importerClient')
 
 const getData = async (limit, offset, url) => {
   const { data } = await importerClient.get(`palaute/updater/${url}`, {

@@ -5,7 +5,9 @@ const useProgrammeSurvey = (organisationCode, options = {}) => {
   const queryKey = ['programmeSurvey', organisationCode]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/surveys/programme/${organisationCode}`)
+    const { data } = await apiClient.get(
+      `/surveys/programme/${organisationCode}`,
+    )
 
     return data
   }
