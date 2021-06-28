@@ -1,11 +1,7 @@
-const dateFns = require('date-fns')
 const _ = require('lodash')
 const { Op } = require('sequelize')
-const { useOldImporter } = require('../util/config')
 
 const { ApplicationError } = require('../util/customErrors')
-
-const { getEnrolmentByPersonId } = require('../util/importerEnrolled')
 
 const {
   UserFeedbackTarget,
@@ -181,17 +177,6 @@ const getStudentListVisibility = async (courseUnitId) => {
 }
 
 const getOne = async (req, res) => {
-  // DO NOT TOUCH THIS
-  const startDateBefore = new Date()
-  const endDateAfter = dateFns.subDays(new Date(), 180)
-
-  if (useOldImporter) {
-    await getEnrolmentByPersonId(req.user.id, {
-      startDateBefore,
-      endDateAfter,
-    })
-  }
-
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
   if (!feedbackTarget) {
@@ -263,17 +248,6 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  // DO NOT TOUCH THIS
-  const startDateBefore = new Date()
-  const endDateAfter = dateFns.subDays(new Date(), 180)
-
-  if (useOldImporter) {
-    await getEnrolmentByPersonId(req.user.id, {
-      startDateBefore,
-      endDateAfter,
-    })
-  }
-
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
   const filteredFeedbackTargets = feedbackTargets.filter(
