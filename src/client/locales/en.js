@@ -176,6 +176,7 @@ export default {
     responseLabel: 'Feedback summary',
     responseInfo: 'This field supports <2>Markdown</2> content',
     previewLabel: 'Preview',
+    sendEmail: 'Send email notification to students',
   },
   publicQuestions: {
     publicInfo:

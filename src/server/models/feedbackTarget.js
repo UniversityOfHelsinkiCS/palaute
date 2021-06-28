@@ -194,7 +194,7 @@ class FeedbackTarget extends Model {
 
   async sendFeedbackSummaryReminderToStudents() {
     const students = await this.getStudentsWhoHaveGivenFeedback()
-    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/feedback`
+    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/results`
     const formattedStudents = students.filter(student => student.email).map(student => ({ email: student.email, language: student.language || 'en' }))
     return sendNotificationAboutFeedbackSummaryToStudents(url, formattedStudents)
   }
@@ -342,6 +342,9 @@ FeedbackTarget.init(
     },
     feedbackResponse: {
       type: TEXT,
+    },
+    feedbackResponseEmailSent: {
+      type: BOOLEAN,
     },
     feedbackVisibility: {
       type: TEXT,

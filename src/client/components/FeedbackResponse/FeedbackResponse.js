@@ -23,6 +23,7 @@ import Alert from '../Alert'
 import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
 import PublicQuestions from '../PublicQuestions'
+import ResponseEmailButton from './ResponseEmailButton'
 import { getCoursePeriod } from './utils'
 
 const getInitialValues = (feedbackTarget) => ({
@@ -90,7 +91,7 @@ const FeedbackResponse = () => {
     }
   }
 
-  const checkDisabled = (isSubmitting, values) => {
+  const checkFeedbackIsSaved = (isSubmitting, values) => {
     if (isSubmitting) return true
     if (values.feedbackResponse === feedbackTarget.feedbackResponse) return true
     if (values.feedbackResponse === currentResponse) return true
@@ -141,13 +142,18 @@ const FeedbackResponse = () => {
                 />
                 <Box my={2}>
                   <Button
-                    disabled={checkDisabled(isSubmitting, values)}
+                    disabled={checkFeedbackIsSaved(isSubmitting, values)}
                     type="submit"
                     variant="contained"
                     color="primary"
                   >
                     {t('save')}
                   </Button>
+                  {'  '}
+                  <ResponseEmailButton 
+                    disabled={!checkFeedbackIsSaved(false, values) || console.log(values, feedbackTarget) || feedbackTarget.feedbackResponseEmailSent} 
+                    feedbackTargetId={feedbackTarget.id}
+                  />
                 </Box>
                 <Box my={2}>
                   <Divider />
