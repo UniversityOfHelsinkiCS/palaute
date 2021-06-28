@@ -15,6 +15,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetList from './FeedbackTargetList'
 import { getRelevantCourseRealisation, formatDate } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const useStyles = makeStyles({
   accordion: {
@@ -36,10 +37,11 @@ const getDateRange = (courseRealisation) => {
   return `${formatDate(startDate)} - ${formatDate(endDate)} `
 }
 
-const getFeedbackResponseChip = (courseRealisation, group) => {
-  const { feedbackResponseGiven } = courseRealisation
+const getFeedbackResponseChip = (courseRealisation) => {
+  const { feedbackResponseGiven, feedbackTarget } = courseRealisation
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
-  const showChip = group === 'ENDED' || feedbackResponseGiven
+  const showChip = isEnded || feedbackResponseGiven
 
   if (!showChip) {
     return null
@@ -54,7 +56,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
-  const feedbackResponseChip = getFeedbackResponseChip(courseRealisation, group)
+  const feedbackResponseChip = getFeedbackResponseChip(courseRealisation)
 
   return (
     <Accordion

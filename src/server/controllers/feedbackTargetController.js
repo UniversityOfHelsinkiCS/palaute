@@ -129,6 +129,7 @@ const getIncludes = (userId, accessStatus) => {
     {
       model: CourseUnit,
       as: 'courseUnit',
+      required: true,
       include: [
         {
           model: Organisation,
@@ -275,8 +276,9 @@ const getForStudent = async (req, res) => {
 
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
-  const filteredFeedbackTargets = feedbackTargets.filter((target) => target.courseUnit).filter(
+  const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
+      courseUnit &&
       !courseUnit.organisations.some(({ disabledCourseCodes }) =>
         disabledCourseCodes.includes(courseUnit.courseCode),
       ),

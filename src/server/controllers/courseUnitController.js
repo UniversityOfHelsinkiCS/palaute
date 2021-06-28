@@ -60,6 +60,9 @@ const getCourseUnitsForTeacher = async (req, res) => {
         required: true,
         attributes: [
           'id',
+          'name',
+          'opensAt',
+          'closesAt',
           [
             sequelize.literal(`
           CASE
@@ -144,6 +147,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
     ({ courseUnit }) => courseUnit.courseCode,
   )
 
+  const targetFields = ['id', 'name', 'opensAt', 'closesAt']
+
   const courseUnits = Object.entries(targetsByCourseCode).map(
     ([courseCode, targets]) => {
       const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), [
@@ -178,6 +183,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ? {
             ...ongoingTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: ongoingTarget.get('feedbackResponseGiven'),
+            feedbackTarget: _.pick(ongoingTarget, targetFields),
           }
         : null
 
@@ -185,6 +191,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ? {
             ...upcomingTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: upcomingTarget.get('feedbackResponseGiven'),
+            feedbackTarget: _.pick(upcomingTarget, targetFields),
           }
         : null
 
@@ -192,6 +199,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ? {
             ...endedTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: endedTarget.get('feedbackResponseGiven'),
+            feedbackTarget: _.pick(endedTarget, targetFields),
           }
         : null
 
