@@ -23,9 +23,3 @@ test('Feedback target can be updated by the teacher', async () => {
     .set(users.admin)
     .expect(200)
 })
-
-test('Fetching a feedback target without logging in errors', async () => {
-  const res = await request(app).get('/api/feedback-targets/97').expect(403)
-
-  expect(res.body.error).toBe('Missing uid header')
-})
