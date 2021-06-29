@@ -18,15 +18,22 @@ const AdminView = () => {
     await apiClient.post('/admin/run-updater', {})
   }
 
+  const resetTestCourse = async () => {
+    await apiClient.post('/admin/reset-course', {})
+  }
+
   return (
     <>
       <h1>Admin page</h1>
       <LoginAs />
+      <ShowActiveFeedbackTargets />
+      <EditUniversitySurvey />
       <Button variant="contained" color="primary" onClick={runUpdater}>
         Run updater
       </Button>
-      <ShowActiveFeedbackTargets />
-      <EditUniversitySurvey />
+      <Button variant="contained" color="primary" onClick={resetTestCourse}>
+        Reset test course
+      </Button>
     </>
   )
 }
