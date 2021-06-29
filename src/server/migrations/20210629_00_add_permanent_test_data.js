@@ -1,13 +1,18 @@
 // This file contains all the data that will not be changed when resetting course data.
 // This includes the test organisation, course_units_organisations, course unit and course unit realisation.
-const { Organisation, CourseUnit, CourseUnitsOrganisation, CourseRealisation } = require('../models')
+const {
+  Organisation,
+  CourseUnit,
+  CourseUnitsOrganisation,
+  CourseRealisation,
+} = require('../models')
 
 module.exports = {
   up: async (queryInterface) => {
     await Organisation.findOrCreate({
       where: {
         id: 'hy-org-test-1',
-      }, 
+      },
       defaults: {
         id: 'hy-org-test-1',
         name: {
@@ -56,29 +61,29 @@ module.exports = {
         },
         endDate: '2021-08-01',
         startDate: '2021-06-01',
-      }
+      },
     })
   },
   down: async (queryInterface) => {
     await CourseRealisation.destroy({
       where: {
         id: 'hy-cur-test',
-      }
+      },
     })
     await CourseUnitsOrganisation.destroy({
       where: {
         courseUnitId: 'hy-cu-test',
-      }
+      },
     })
     await Organisation.destroy({
       where: {
         id: 'hy-org-test-1',
-      }
+      },
     })
     await CourseUnit.destroy({
       where: {
         id: 'hy-cu-test',
-      }
+      },
     })
   },
 }

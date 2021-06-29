@@ -125,15 +125,13 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
 const CourseSettings = () => {
   const { code } = useParams()
 
-  const {
-    courseUnits,
-    isLoading: courseUnitsIsLoading,
-  } = useOrganisationCourseUnits(code)
+  const { courseUnits, isLoading: courseUnitsIsLoading } =
+    useOrganisationCourseUnits(code)
 
-  const {
-    organisation,
-    isLoading: organisationIsLoading,
-  } = useOrganisation(code, { skipCache: true })
+  const { organisation, isLoading: organisationIsLoading } = useOrganisation(
+    code,
+    { skipCache: true },
+  )
 
   const isLoading = courseUnitsIsLoading || organisationIsLoading
 

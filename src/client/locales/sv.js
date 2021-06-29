@@ -148,7 +148,7 @@ export default {
     responseLabel: 'Svar på response',
     responseInfo: 'Fält stöder innehåll med <2>Markdown</2>',
     previewLabel: 'Förhandsvisa',
-//  sendEmail: '',
+    //  sendEmail: '',
   },
   publicQuestions: {
     publicInfo:

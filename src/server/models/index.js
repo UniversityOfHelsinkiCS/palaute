@@ -53,13 +53,12 @@ User.prototype.feedbackTargetsHasTeacherAccessTo = function () {
       as: 'userFeedbackTargets',
       where: {
         userId: this.id,
-        accessStatus: 'TEACHER'
+        accessStatus: 'TEACHER',
       },
-      required: true
-    }
+      required: true,
+    },
   })
 }
-
 
 module.exports = {
   Feedback,

@@ -187,13 +187,13 @@ const resetTestCourse = async (_, res) => {
   const feedbackTarget = await FeedbackTarget.findOne({
     where: {
       courseUnitId: 'hy-cu-test',
-    }
+    },
   })
   if (feedbackTarget) {
     const userFeedbackTargets = await UserFeedbackTarget.findAll({
       where: {
-        feedbackTargetId: feedbackTarget.id
-      }
+        feedbackTargetId: feedbackTarget.id,
+      },
     })
     await userFeedbackTargets.reduce(async (p, uft) => {
       await p
@@ -201,20 +201,20 @@ const resetTestCourse = async (_, res) => {
         await Feedback.destroy({
           where: {
             id: uft.feedbackId,
-          }
+          },
         })
       }
     }, Promise.resolve())
     await UserFeedbackTarget.destroy({
       where: {
-        feedbackTargetId: feedbackTarget.id
-      }
+        feedbackTargetId: feedbackTarget.id,
+      },
     })
   }
   await FeedbackTarget.destroy({
     where: {
       courseUnitId: 'hy-cu-test',
-    }
+    },
   })
   await FeedbackTarget.create({
     feedbackType: 'courseRealisation',
@@ -231,7 +231,7 @@ const resetTestCourse = async (_, res) => {
   const newTarget = await FeedbackTarget.findOne({
     where: {
       courseUnitId: 'hy-cu-test',
-    }
+    },
   })
   await UserFeedbackTarget.create({
     feedbackTargetId: newTarget.id,

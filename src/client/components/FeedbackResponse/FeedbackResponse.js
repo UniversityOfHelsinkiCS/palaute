@@ -150,8 +150,11 @@ const FeedbackResponse = () => {
                     {t('save')}
                   </Button>
                   {'  '}
-                  <ResponseEmailButton 
-                    disabled={!checkFeedbackIsSaved(false, values) || feedbackTarget.feedbackResponseEmailSent} 
+                  <ResponseEmailButton
+                    disabled={
+                      !checkFeedbackIsSaved(false, values) ||
+                      feedbackTarget.feedbackResponseEmailSent
+                    }
                     feedbackTargetId={feedbackTarget.id}
                   />
                 </Box>

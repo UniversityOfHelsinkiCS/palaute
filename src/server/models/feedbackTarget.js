@@ -23,7 +23,9 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 const Question = require('./question')
-const { sendNotificationAboutFeedbackSummaryToStudents } = require('../util/pate')
+const {
+  sendNotificationAboutFeedbackSummaryToStudents,
+} = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
   const universitySurvey = await Survey.findOne({
@@ -195,8 +197,16 @@ class FeedbackTarget extends Model {
   async sendFeedbackSummaryReminderToStudents() {
     const students = await this.getStudentsWhoHaveGivenFeedback()
     const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/results`
-    const formattedStudents = students.filter(student => student.email).map(student => ({ email: student.email, language: student.language || 'en' }))
-    return sendNotificationAboutFeedbackSummaryToStudents(url, formattedStudents)
+    const formattedStudents = students
+      .filter((student) => student.email)
+      .map((student) => ({
+        email: student.email,
+        language: student.language || 'en',
+      }))
+    return sendNotificationAboutFeedbackSummaryToStudents(
+      url,
+      formattedStudents,
+    )
   }
 
   async getPublicQuestionIds() {

@@ -32,10 +32,8 @@ const FeedbackTargetList = () => {
   const { code } = useParams()
   const { i18n, t } = useTranslation()
 
-  const {
-    feedbackTargets,
-    isLoading: feedbackTargetsIsLoading,
-  } = useCourseUnitFeedbackTargets(code)
+  const { feedbackTargets, isLoading: feedbackTargetsIsLoading } =
+    useCourseUnitFeedbackTargets(code)
   const isLoading = feedbackTargetsIsLoading
 
   if (isLoading) {
@@ -54,9 +52,8 @@ const FeedbackTargetList = () => {
 
   const name = getLanguageValue(courseUnit?.name, i18n.language)
 
-  const courseRealisations = getCourseRealisationsWithFeedbackTargets(
-    feedbackTargets,
-  )
+  const courseRealisations =
+    getCourseRealisationsWithFeedbackTargets(feedbackTargets)
 
   if (courseRealisations.length === 0) {
     return (
