@@ -17,14 +17,12 @@ import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../FormikTextField'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import { getLanguageValue } from '../../util/languageUtils'
 import AlertLink from '../AlertLink'
 import Alert from '../Alert'
 import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
 import PublicQuestions from '../PublicQuestions'
 import ResponseEmailButton from './ResponseEmailButton'
-import { getCoursePeriod } from './utils'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -74,10 +72,6 @@ const FeedbackResponse = () => {
     return <Redirect to="/" />
   }
 
-  const courseUnitName = getLanguageValue(
-    feedbackTarget.courseUnit?.name,
-    i18n.language,
-  )
 
   const initialValues = getInitialValues(feedbackTarget)
 
@@ -98,19 +92,8 @@ const FeedbackResponse = () => {
     return false
   }
 
-  const coursePeriod =
-    feedbackTarget && getCoursePeriod(feedbackTarget.courseRealisation)
-
   return (
     <>
-      <Box mb={2}>
-        <Typography variant="h4" component="h1">
-          {courseUnitName}
-        </Typography>
-        <Typography variant="body2" component="p">
-          {coursePeriod}
-        </Typography>
-      </Box>
       <PublicQuestions />
       <Card>
         <CardContent>

@@ -31,7 +31,6 @@ import {
   saveValues,
   getUpperLevelQuestions,
   requiresSaveConfirmation,
-  getCoursePeriod,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -79,11 +78,6 @@ const EditFeedbackTarget = () => {
     return <Redirect to="/" />
   }
 
-  const courseUnitName = getLanguageValue(
-    feedbackTarget.courseUnit.name,
-    i18n.language,
-  )
-
   const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(
     (q) => q.type !== 'TEXT',
   )
@@ -110,18 +104,8 @@ const EditFeedbackTarget = () => {
 
   const initialValues = getInitialValues(feedbackTarget)
 
-  const coursePeriod =
-    feedbackTarget && getCoursePeriod(feedbackTarget.courseRealisation)
-
   return (
     <>
-      <Typography variant="h4" component="h1" className={classes.heading}>
-        {courseUnitName}
-      </Typography>
-      <Typography variant="body1" component="p" className={classes.heading}>
-        {coursePeriod}
-      </Typography>
-
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}

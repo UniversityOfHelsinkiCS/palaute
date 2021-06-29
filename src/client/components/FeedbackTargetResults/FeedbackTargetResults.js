@@ -2,12 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Typography,
-  Box,
-  CircularProgress,
-  makeStyles,
-} from '@material-ui/core'
+import { Typography, Box, CircularProgress } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -19,17 +14,8 @@ import FeedbackResponse from './FeedbackResponse'
 import { ExportCsvLink, formatCourseDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
-const useStyles = makeStyles((theme) => ({
-  topRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing(2),
-  },
-}))
-
 const FeedbackTargetResults = () => {
   const { t, i18n } = useTranslation()
-  const classes = useStyles()
   const { id } = useParams()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
@@ -56,14 +42,6 @@ const FeedbackTargetResults = () => {
 
   const { questions, publicQuestionIds, accessStatus } = feedbackTarget
 
-  const courseName = getLanguageValue(
-    feedbackTarget.courseRealisation.name,
-    i18n.language,
-  )
-
-  const courseDate =
-    feedbackTarget && formatCourseDate(feedbackTarget.courseRealisation)
-
   const isTeacher = accessStatus === 'TEACHER'
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
@@ -87,15 +65,7 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
-      <Box mb={1} className={classes.topRow}>
-        <div>
-          <Typography variant="h4" component="h1">
-            {courseName}
-          </Typography>
-          <Typography variant="body1" component="p">
-            {courseDate}
-          </Typography>
-        </div>
+      <Box mb={2} display="flex" justifyContent="flex-end">
         {feedbacks.length !== 0 && isTeacher && (
           <ExportCsvLink
             feedbackTarget={feedbackTarget}

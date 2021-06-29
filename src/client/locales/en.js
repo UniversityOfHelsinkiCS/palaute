@@ -63,7 +63,6 @@ export default {
     feedbackClosedError: 'Feedback is closed',
     endedInfo:
       'The feedback period has ended. <2>Take a look at the feedbacks</2>',
-    feedbackDisabled: 'This feedback is disabled',
   },
   teacherView: {
     mainHeading: 'My teaching',
@@ -227,5 +226,13 @@ export default {
     generalTab: 'General settings',
     coursesTab: 'Activated courses',
     surveyTab: 'Programme survey',
+  },
+  feedbackTargetView: {
+    feedbackDisabled: 'This feedback is disabled',
+    surveyTab: 'Feedback survey',
+    feedbacksTab: 'Feedbacks',
+    feedbackResponseTab: 'Feedback summary',
+    editSurveyTab: 'Edit survey',
+    studentsWithFeedbackTab: 'Respondents',
   },
 }

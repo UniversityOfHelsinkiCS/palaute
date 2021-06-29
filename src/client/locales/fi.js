@@ -62,7 +62,6 @@ export default {
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
     feedbackClosedError: 'Palautteenanto on loppunut',
     endedInfo: 'Palautteenanto on päättynyt. <2>Katso palautteita</2>',
-    feedbackDisabled: 'Tämä palaute ei ole käytössä',
   },
   teacherView: {
     mainHeading: 'Opetukseni',
@@ -227,5 +226,15 @@ export default {
     generalTab: 'Yleiset asetukset',
     coursesTab: 'Aktivoidut kurssit',
     surveyTab: 'Koulutusohjelman kysely',
+  },
+  feedbackTargetView: {
+    feedbackDisabled: 'Tämä palaute ei ole käytössä',
+    surveyTab: 'Palautekysely',
+    feedbacksTab: 'Palautteet',
+    feedbackResponseTab: 'Palautekooste',
+    editSurveyTab: 'Muokkaa kyselyä',
+    studentsWithFeedbackTab: 'Palautteenantajat',
+    linkCopied: 'Linkki palautteeseen on kopioitu leikepyödälle',
+    copyLink: 'Kopioi linkki',
   },
 }

@@ -141,11 +141,10 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const { courseUnit, accessStatus, opensAt, closesAt } = feedbackTarget
+  const { accessStatus, opensAt, closesAt } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const courseUnitName = getLanguageValue(courseUnit.name, i18n.language)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const showForm = isTeacher || isOpen || isEnded
   const formIsDisabled = !isOpen || isTeacher || isOutsider
@@ -225,10 +224,6 @@ const FeedbackView = () => {
         open={privacyDialogOpen}
         onClose={handleClosePrivacyDialog}
       />
-
-      <Typography variant="h4" component="h1" className={classes.heading}>
-        {courseUnitName}
-      </Typography>
 
       {!isOpen && !isEnded && closedAlert}
 

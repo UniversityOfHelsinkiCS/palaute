@@ -179,6 +179,10 @@ const getStudentListVisibility = async (courseUnitId) => {
 const getOne = async (req, res) => {
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
+  const studentListVisible = feedbackTarget?.courseUnit
+    ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
+    : false
+
   if (!feedbackTarget) {
     // admin way
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
@@ -194,13 +198,15 @@ const getOne = async (req, res) => {
       adminFeedbackTarget,
       req.isAdmin,
     )
-    res.send(responseReady)
+
+    res.send({ ...responseReady, studentListVisible })
+
     return
   }
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
 
-  res.send(responseReady)
+  res.send({ ...responseReady, studentListVisible })
 }
 
 const update = async (req, res) => {
