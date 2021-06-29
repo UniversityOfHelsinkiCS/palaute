@@ -4,15 +4,15 @@ const { inProduction } = require('../../config')
 const logger = require('./logger')
 
 const template = {
-  "from": "Norppa"
+  from: 'Norppa',
 }
 
 const settings = {
-  "hideToska": false,
-  "disableToska": true,
-  "color": "#107eab",
-  "header": "Norppa",
-  "dryrun": inProduction ? false : true
+  hideToska: false,
+  disableToska: true,
+  color: '#107eab',
+  header: 'Norppa',
+  dryrun: !inProduction,
 }
 
 const pateClient = axios.create({
@@ -33,7 +33,10 @@ const sendEmail = async (options = {}) => {
   return data
 }
 
-const sendNotificationAboutFeedbackSummaryToStudents = (urlToSeeFeedbackSummary, students) => {
+const sendNotificationAboutFeedbackSummaryToStudents = (
+  urlToSeeFeedbackSummary,
+  students,
+) => {
   const translations = {
     text: {
       en: `Feedback summary was given by teacher, read it here: ${urlToSeeFeedbackSummary}`,
@@ -43,22 +46,24 @@ const sendNotificationAboutFeedbackSummaryToStudents = (urlToSeeFeedbackSummary,
     subject: {
       en: 'A new feedback summary from your teacher',
       fi: 'Uusi palauteyhteenveto opettajaltasi',
-      sv: ''
-    }
+      sv: '',
+    },
   }
-  const emails = students.map(student => {
-    return {
+  const emails = students.map((student) => {
+    const email = {
       to: student.email,
-      subject: translations.subject[student.language] || translations.subject.en,
-      text: translations.text[student.language] || translations.text.en
+      subject:
+        translations.subject[student.language] || translations.subject.en,
+      text: translations.text[student.language] || translations.text.en,
     }
+    return email
   })
   const options = {
     template: {
       ...template,
     },
-    emails: emails,
-    settings: { ...settings }
+    emails,
+    settings: { ...settings },
   }
 
   sendEmail(options)
@@ -67,5 +72,5 @@ const sendNotificationAboutFeedbackSummaryToStudents = (urlToSeeFeedbackSummary,
 }
 
 module.exports = {
-  sendNotificationAboutFeedbackSummaryToStudents
+  sendNotificationAboutFeedbackSummaryToStudents,
 }
