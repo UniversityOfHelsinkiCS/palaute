@@ -2,7 +2,7 @@ require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
 const express = require('express')
-const { PORT, inProduction, inE2EMode } = require('./util/config')
+const { PORT, inProduction, inE2EMode, runningJest } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { start: startUpdater } = require('./updater')
 const logger = require('./util/logger')
@@ -23,9 +23,13 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await startUpdater()
-  app.listen(PORT, () => {
-    logger.info(`Started on port ${PORT}`)
-  })
+  if (!runningJest) {
+    app.listen(PORT, () => {
+      logger.info(`Started on port ${PORT}`)
+    })
+  }
 }
 
 start()
+
+module.exports = app
