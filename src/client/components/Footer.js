@@ -1,7 +1,6 @@
+import { Box, Container, Divider, Link, makeStyles } from '@material-ui/core'
 import React from 'react'
-import { Box, Divider, Container, makeStyles, Link } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-
 import { images } from '../util/common'
 
 const useStyles = makeStyles((theme) => ({

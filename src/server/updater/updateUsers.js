@@ -12,7 +12,13 @@ const usersHandler = async (users) => {
 
   // By default updates all fields on duplicate id
   await User.bulkCreate(filteredUsers, {
-    updateOnDuplicate: ['firstName', 'username', 'lastName', 'studentNumber'],
+    updateOnDuplicate: [
+      'firstName',
+      'username',
+      'lastName',
+      'studentNumber',
+      'employeeNumber',
+    ],
   })
 }
 

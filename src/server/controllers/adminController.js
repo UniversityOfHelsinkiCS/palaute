@@ -73,17 +73,17 @@ const findUser = async (req, res) => {
   const where = {}
   if (isStudentNumber) {
     where.studentNumber = {
-      [Op.iLike]: `%${user}%`,
+      [Op.iLike]: `${user}%`,
     }
     params.studentNumber = user
   } else if (isSisuId) {
     where.id = {
-      [Op.iLike]: `%${user}%`,
+      [Op.iLike]: `${user}%`,
     }
     params.id = user
   } else if (isEmployeeNumber) {
     where.employeeNumber = {
-      [Op.iLike]: `%${user}%`,
+      [Op.iLike]: `${user}%`,
     }
     params.employeeNumber = user
   } else if (isUsername) {

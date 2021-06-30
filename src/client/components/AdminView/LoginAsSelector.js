@@ -31,8 +31,8 @@ const LoginAsSelector = () => {
   }, 400)
 
   const handleLoginAs = (user) => async () => {
-    // eslint-disable-next-line
     if (
+      // eslint-disable-next-line no-alert
       !window.confirm(
         `This will log you in as ${user.firstNames} (${user.id}) and refresh the page.`,
       )

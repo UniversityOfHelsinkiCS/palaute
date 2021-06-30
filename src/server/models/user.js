@@ -100,6 +100,9 @@ User.init(
     email: {
       type: STRING,
     },
+    employeeNumber: {
+      type: STRING,
+    },
     language: {
       type: STRING,
     },

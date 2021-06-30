@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import { Button, Container } from '@material-ui/core'
 import * as Sentry from '@sentry/browser'
-import { Container, Button } from '@material-ui/core'
+import React, { Component } from 'react'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {

@@ -13,6 +13,7 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   const newHeaders = { ...headers }
   const user = await User.findOne({ where: { id: loggedInAs } })
 
+  if (!user) return headers
   newHeaders.employeeNumber = user.employeeNumber
   newHeaders.uid = user.username
   newHeaders.givenname = user.firstName
@@ -50,7 +51,7 @@ const upsertUser = async ({
   return user
 }
 
-const currentUserMiddleware = async (req, res, next) => {
+const currentUserMiddleware = async (req, _, next) => {
   const { uid: username } = req.headers
   if (!username) throw new ApplicationError('Missing uid header', 403)
 

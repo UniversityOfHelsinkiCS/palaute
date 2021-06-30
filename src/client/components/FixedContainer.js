@@ -1,5 +1,5 @@
+import { Container, makeStyles, Paper } from '@material-ui/core'
 import React from 'react'
-import { makeStyles, Paper, Container } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
 
 const useStyles = makeStyles((theme) => ({
