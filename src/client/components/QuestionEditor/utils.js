@@ -64,3 +64,23 @@ export const createOption = () => ({
   id: uuidv4(),
   label: createTranslationObject(),
 })
+
+export const questionCanMoveUp = (questions, index) => {
+  if (index === 0) {
+    return false
+  }
+
+  const previousQuestion = questions[index - 1]
+
+  return previousQuestion?.editable ?? true
+}
+
+export const questionCanMoveDown = (questions, index) => {
+  if (index === questions.length - 1) {
+    return false
+  }
+
+  const nextQuestion = questions[index + 1]
+
+  return nextQuestion?.editable ?? true
+}
