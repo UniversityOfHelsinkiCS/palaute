@@ -1,5 +1,6 @@
-describe('Common tests', function () {
-  it('User can change language', function () {
+describe('Common tests', () => {
+  it('User can change language', () => {
+    cy.enableCourses()
     cy.loginAsStudent()
     cy.contains('My feedbacks')
     cy.contains('Olli Oppilas').click()

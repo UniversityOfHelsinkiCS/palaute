@@ -2,7 +2,7 @@ const Router = require('express')
 
 const _ = require('lodash')
 
-const { FeedbackTarget, CourseRealisation } = require('../models')
+const { FeedbackTarget, CourseRealisation, Organisation } = require('../models')
 const { ApplicationError } = require('../util/customErrors')
 
 const updateCourseRealisation = async (req, res) => {
@@ -72,9 +72,20 @@ const updateManyCourseRealisations = async (req, res) => {
   res.send(200)
 }
 
+const enableAllCourses = async (_, res) => {
+  await Organisation.update(
+    {
+      disabledCourseCodes: [],
+    },
+    { where: {} },
+  )
+  res.send(200)
+}
+
 const router = Router()
 
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
+router.put('/enableCourses', enableAllCourses)
 
 module.exports = router

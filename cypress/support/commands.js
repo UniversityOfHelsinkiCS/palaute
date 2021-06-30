@@ -59,8 +59,7 @@ Cypress.Commands.add('setUpSecondaryTeacherView', () => {
       feedbackTargetIds: [163, 165],
       startDate: new Date().setDate(date.getDate() - 14),
       endDate: new Date().setDate(date.getDate() + 14),
-
-    }
+    },
   })
 })
 
@@ -96,5 +95,14 @@ Cypress.Commands.add('setFeedbackActive', () => {
       opensAt: new Date().setDate(date.getDate() - 14),
       closesAt: new Date().setDate(date.getDate() + 14),
     },
+  })
+})
+
+Cypress.Commands.add('enableCourses', () => {
+  cy.visit('localhost:8000')
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/enableCourses',
+    headers: adminUser,
   })
 })
