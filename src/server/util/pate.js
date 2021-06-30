@@ -2,6 +2,7 @@ const axios = require('axios')
 
 const { inProduction } = require('../../config')
 const logger = require('./logger')
+const { getFeedbackTargetsForEmail } = require('./feedbackTarget')
 
 const template = {
   from: 'Norppa',
@@ -34,22 +35,22 @@ const sendEmail = async (options = {}) => {
 }
 
 const sendNotificationAboutSurveyOpeningToStudents = () => {
-  const feedbackTargets = []
+  const feedbackTargets = getFeedbackTargetsForEmail()
 
-  for (feedbackTarget of feedbackTargets) {
-    const translations = {
-      text: {
-        en: `The feedback survey for the course ${courseName} has opened. Please give your feedback here: ${courseUrl}`,
-        fi: `Palautteen antaminen kurssille ${courseName} on alkanut. Anna ystävällisesti palautetta täällä: ${courseUrl}`,
-        sv: ``,
-      },
-      subject: {
-        en: `Course feedback has opened`,
-        fi: `Kurssipalaute on avautunut`,
-        sv: ``,
-      },
-    }
-  }
+  // for (feedbackTarget of feedbackTargets) {
+  //   const translations = {
+  //     text: {
+  //       en: `The feedback survey for the course ${courseName} has opened. Please give your feedback here: ${courseUrl}`,
+  //       fi: `Palautteen antaminen kurssille ${courseName} on alkanut. Anna ystävällisesti palautetta täällä: ${courseUrl}`,
+  //       sv: ``,
+  //     },
+  //     subject: {
+  //       en: `Course feedback has opened`,
+  //       fi: `Kurssipalaute on avautunut`,
+  //       sv: ``,
+  //     },
+  //   }
+  // }
 }
 
 const sendNotificationAboutFeedbackSummaryToStudents = (
@@ -91,5 +92,6 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
 }
 
 module.exports = {
+  sendNotificationAboutSurveyOpeningToStudents,
   sendNotificationAboutFeedbackSummaryToStudents,
 }
