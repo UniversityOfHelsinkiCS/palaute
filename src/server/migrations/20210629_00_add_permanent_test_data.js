@@ -8,7 +8,7 @@ const {
 } = require('../models')
 
 module.exports = {
-  up: async (queryInterface) => {
+  up: async () => {
     await Organisation.findOrCreate({
       where: {
         id: 'hy-org-test-1',
@@ -64,7 +64,7 @@ module.exports = {
       },
     })
   },
-  down: async (queryInterface) => {
+  down: async () => {
     await CourseRealisation.destroy({
       where: {
         id: 'hy-cur-test',
