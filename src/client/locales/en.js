@@ -229,10 +229,12 @@ export default {
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',
-    surveyTab: 'Feedback survey',
+    surveyTab: 'Survey',
     feedbacksTab: 'Feedbacks',
     feedbackResponseTab: 'Feedback summary',
     editSurveyTab: 'Edit survey',
     studentsWithFeedbackTab: 'Respondents',
+    linkCopied: 'A link to the feedback has been copied to clipboard',
+    copyLink: 'Copy link',
   },
 }

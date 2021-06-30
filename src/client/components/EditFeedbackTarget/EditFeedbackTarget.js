@@ -2,7 +2,6 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
 import {
-  Typography,
   CircularProgress,
   makeStyles,
   Divider,
@@ -17,7 +16,6 @@ import { useSnackbar } from 'notistack'
 
 import QuestionEditor from '../QuestionEditor'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import { getLanguageValue } from '../../util/languageUtils'
 import FormikTextField from '../FormikTextField'
 import FormikDatePicker from '../FormikDatePicker'
 import FormikCheckbox from '../FormikCheckbox'

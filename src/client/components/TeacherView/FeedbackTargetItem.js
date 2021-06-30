@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useSnackbar } from 'notistack'
 import { parseISO } from 'date-fns'
 
 import {

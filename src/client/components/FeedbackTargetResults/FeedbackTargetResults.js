@@ -8,14 +8,13 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
-import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
-import { ExportCsvLink, formatCourseDate } from './utils'
+import { ExportCsvLink } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackTargetResults = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { id } = useParams()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =

@@ -51,7 +51,7 @@ const MarkdownPreview = () => {
 
 const FeedbackResponse = () => {
   const { id } = useParams()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
@@ -71,7 +71,6 @@ const FeedbackResponse = () => {
   if (!feedbackTarget) {
     return <Redirect to="/" />
   }
-
 
   const initialValues = getInitialValues(feedbackTarget)
 

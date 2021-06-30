@@ -1,4 +1,4 @@
-import { isAfter, set, isBefore, parseISO, format } from 'date-fns'
+import { isAfter, set, isBefore } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })

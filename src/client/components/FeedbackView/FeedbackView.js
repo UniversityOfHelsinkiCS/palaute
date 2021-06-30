@@ -18,7 +18,6 @@ import { useSnackbar } from 'notistack'
 
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'

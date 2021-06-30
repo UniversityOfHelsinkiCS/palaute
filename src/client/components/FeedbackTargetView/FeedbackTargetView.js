@@ -16,6 +16,7 @@ import {
   Tab,
   Button,
 } from '@material-ui/core'
+
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
@@ -28,9 +29,9 @@ import FeedbackResponse from '../FeedbackResponse'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
-import { getCoursePeriod, feedbackTargetIsDisabled, copyLink } from './utils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { getCoursePeriod, feedbackTargetIsDisabled, copyLink } from './utils'
 
 const FeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
@@ -65,6 +66,7 @@ const FeedbackTargetView = () => {
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
+
   const showEditSurveyTab = isTeacher && !isOpen && !isEnded
   const showFeedbackResponseTab = isTeacher && isEnded
   const showStudentsWithFeedbackTab = isTeacher && studentListVisible && isEnded

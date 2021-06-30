@@ -229,12 +229,12 @@ export default {
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
-    surveyTab: 'Palautekysely',
+    surveyTab: 'Kysely',
     feedbacksTab: 'Palautteet',
     feedbackResponseTab: 'Palautekooste',
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',
-    linkCopied: 'Linkki palautteeseen on kopioitu leikepyödälle',
+    linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
     copyLink: 'Kopioi linkki',
   },
 }
