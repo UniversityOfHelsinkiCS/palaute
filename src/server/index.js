@@ -5,6 +5,7 @@ const express = require('express')
 const { PORT, inProduction, inE2EMode, runningJest } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { start: startUpdater } = require('./updater')
+const { start: startPateCron } = require('./util/pateCron')
 const logger = require('./util/logger')
 
 const app = express()
@@ -23,6 +24,9 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await startUpdater()
+  if (inProduction) {
+    await startPateCron()
+  }
   if (!runningJest) {
     app.listen(PORT, () => {
       logger.info(`Started on port ${PORT}`)

@@ -33,6 +33,25 @@ const sendEmail = async (options = {}) => {
   return data
 }
 
+const sendNotificationAboutSurveyOpeningToStudents = () => {
+  const feedbackTargets = []
+
+  for (feedbackTarget of feedbackTargets) {
+    const translations = {
+      text: {
+        en: `The feedback survey for the course ${courseName} has opened. Please give your feedback here: ${courseUrl}`,
+        fi: `Palautteen antaminen kurssille ${courseName} on alkanut. Anna ystävällisesti palautetta täällä: ${courseUrl}`,
+        sv: ``,
+      },
+      subject: {
+        en: `Course feedback has opened`,
+        fi: `Kurssipalaute on avautunut`,
+        sv: ``,
+      },
+    }
+  }
+}
+
 const sendNotificationAboutFeedbackSummaryToStudents = (
   urlToSeeFeedbackSummary,
   students,
