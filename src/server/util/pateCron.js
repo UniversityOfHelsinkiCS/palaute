@@ -23,7 +23,7 @@ const start = async () => {
 
     const cronTime = '15 11 * * *' // Daily at 11:15
 
-    schedule(cronTime, runPate)
+    schedule(cronTime, run)
 }
 
 module.exports = {
