@@ -14,19 +14,18 @@ const run = async () => {
   logger.info('Running pate cron')
 }
 
-
 const start = async () => {
-    if (!inProduction) {
-        return logger.info('Not running Pate if not in production')
-    }
-    logger.info('Setup pate cron')
+  if (!inProduction) {
+    return logger.info('Not running Pate if not in production')
+  }
+  logger.info('Setup pate cron')
 
-    const cronTime = '15 11 * * *' // Daily at 11:15
+  const cronTime = '15 11 * * *' // Daily at 11:15
 
-    schedule(cronTime, run)
+  schedule(cronTime, run)
 }
 
 module.exports = {
-    start,
-    run
+  start,
+  run,
 }
