@@ -54,7 +54,7 @@ export default {
       'This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}',
     privacyInfoTitle: 'How is my information being used?',
     privacyInfoContent:
-      'The user information is being used, for example, to show the student the correct feedback surveys, to send reminder messages, and to show the teacher which students have sent feedback (which information can be used for example in grading). Teachers will not be able to know which student has given certain feedback. The teacher can see a list of students who have given feedback once the feedback has been opened, but the feedback is only visible once the feedback is closed. If a course has five or fewer feedbacks, the feedback will not be visible at all',
+      'The user information is used to show correct feedback surveys by using enrolment information. Teacher cannot see which student has given a certain feedback.',
     dontKnowOption: 'N/A',
     editSurvey: 'Edit survey',
     translationLanguage: 'Survey preview language',
