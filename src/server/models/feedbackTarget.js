@@ -356,6 +356,9 @@ FeedbackTarget.init(
     feedbackResponseEmailSent: {
       type: BOOLEAN,
     },
+    feedbackOpenNotificationEmailSent: {
+      type: BOOLEAN,
+    },
     feedbackVisibility: {
       type: TEXT,
       defaultValue: 'ENROLLED',
