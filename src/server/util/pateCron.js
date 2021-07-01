@@ -14,7 +14,6 @@ const run = async () => {
   logger.info('Running pate cron')
 }
 
-/* eslint-disable */
 const start = async () => {
   if (!inProduction) {
     return logger.info('Not running Pate if not in production')
@@ -25,7 +24,6 @@ const start = async () => {
 
   return schedule(cronTime, run)
 }
-/* eslint-enable */
 
 module.exports = {
   start,
