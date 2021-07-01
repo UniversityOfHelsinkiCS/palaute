@@ -16,16 +16,12 @@
     "test:e2e": "cypress run",
     "test:cypress": "cypress open",
     "format": "prettier --write 'src/**/*.js'",
-    "lint": "eslint 'src/**/*.js'"
+    "lint": "eslint 'src/**/*.js'",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
     "*.{js,json,css,md}": "prettier --write"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "engines": {
     "node": ">=14.7"
