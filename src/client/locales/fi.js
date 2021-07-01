@@ -54,7 +54,7 @@ export default {
       'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
     privacyInfoTitle: 'Miten tietojani käytetään?',
     privacyInfoContent:
-      'Kirjautumistietoja käytetään muun muassa siihen, että opiskelijalle näytetään oikeat palautteet, osataan lähettää muistusviestit, ja opettaja voi katsoa ketkä ovat lähettäneet palautetta (ja sen perusteella antaa esimerkiksi kurssipisteitä), mutta opettaja ei voi yhdistää palautetta opiskelijaan. Opettaja näkee reaaliaikaisen listan palautteen antaneista, mutta palautteet näkyvät vasta palautteenantamisajan jälkeen. Jos kurssille annettaan viisi tai vähemmän palautetta, ei niitä näytetä ollenkaan.',
+      'Kirjautumistietoja käytetään siihen, että opiskelijalle näytetään oikeat palautteet ilmoittautumisten perusteella. Opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin.',
     dontKnowOption: 'eos',
     editSurvey: 'Muokkaa kyselyä',
     translationLanguage: 'Kyselyn esikatselun kieli',
