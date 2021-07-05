@@ -1,5 +1,6 @@
 const dateFns = require('date-fns')
 
+const { Op } = require('sequelize')
 const {
   CourseUnit,
   CourseUnitsOrganisation,
@@ -7,6 +8,8 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
 } = require('../models')
+// eslint-disable-next-line no-unused-vars
+const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
 const validRealisationTypes = [
@@ -36,12 +39,30 @@ const combineStudyGroupName = (firstPart, secondPart) => ({
     firstPart.sv && secondPart.sv ? `${firstPart.sv}: ${secondPart.sv}` : null,
 })
 
+// eslint-disable-next-line no-unused-vars
+const findMatchingCourseUnit = async (course) => {
+  const nonOpenCourse = await CourseUnit.findOne({
+    where: {
+      courseCode: course.code.substring(2),
+    },
+  })
+  if (nonOpenCourse) return nonOpenCourse
+  const charCode = course.code.substring(2, course.code.match('[0-9.]+').index)
+  const sameOrg = await CourseUnit.findOne({
+    where: {
+      courseCode: {
+        [Op.iLike]: `${charCode}%`,
+      },
+    },
+  })
+  return sameOrg
+}
+
 const createCourseUnits = async (courseUnits) => {
   const ids = new Set()
   const filteredCourseUnits = courseUnits
     .filter((cu) => {
       if (ids.has(cu.id)) return false
-
       ids.add(cu.id)
       return true
     })
@@ -57,20 +78,61 @@ const createCourseUnits = async (courseUnits) => {
   })
 
   const courseUnitsOrganisations = [].concat(
-    ...courseUnits.filter(({ code }) => !code.startsWith('AY')).map(({ id: courseUnitId, organisations }) =>
-      organisations
-        .sort((a, b) => b.share - a.share)
-        .map(({ organisationId }, index) => ({
-          type: index === 0 ? 'PRIMARY' : 'DIRECT',
-          courseUnitId,
-          organisationId,
-        })),
-    ),
+    ...courseUnits
+      .filter(({ code }) => !code.startsWith('AY'))
+      .map(({ id: courseUnitId, organisations }) =>
+        organisations
+          .sort((a, b) => b.share - a.share)
+          .map(({ organisationId }, index) => ({
+            type: index === 0 ? 'PRIMARY' : 'DIRECT',
+            courseUnitId,
+            organisationId,
+          })),
+      ),
   )
 
   await CourseUnitsOrganisation.bulkCreate(courseUnitsOrganisations, {
     ignoreDuplicates: true,
   })
+
+  /* const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
+  const openCourseUnitsOrganisations = []
+  await openUniCourses.reduce(async (p, course) => {
+    await p
+    // try to find organisation for open uni course.
+    // 1st option find by course code without AY part.
+    // 2nd option find by course code without text part.
+    // 3rd option if not found then course is probably open uni course.
+    const nonOpenCourse = await findMatchingCourseUnit(course)
+    if (nonOpenCourse) {
+      const orgId = await CourseUnitsOrganisation.findOne({
+        where: {
+          courseUnitId: nonOpenCourse.id,
+          type: 'PRIMARY',
+        },
+      })
+      if (!orgId) {
+        console.log(nonOpenCourse, orgId)
+      }
+      openCourseUnitsOrganisations.push({
+        type: 'PRIMARY',
+        courseUnitId: course.id,
+        organisationId: orgId.organisationId,
+      })
+    } else {
+      // Acual open course?
+      logger.info('Open course', { course })
+      openCourseUnitsOrganisations.push({
+        type: 'PRIMARY',
+        courseUnitId: course.id,
+        organisationId: course.organisations[0].id,
+      })
+    }
+  }, Promise.resolve())
+
+  await CourseUnitsOrganisation.bulkCreate(openCourseUnitsOrganisations, {
+    ignoreDuplicates: true,
+  }) */
 }
 
 const createCourseRealisations = async (courseRealisations) => {
