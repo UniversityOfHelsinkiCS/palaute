@@ -56,9 +56,8 @@ const createCourseUnits = async (courseUnits) => {
     updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
   })
 
-  // Leo fix constraint
   const courseUnitsOrganisations = [].concat(
-    ...courseUnits.map(({ id: courseUnitId, organisations }) =>
+    ...courseUnits.filter(({ code }) => !code.startsWith('AY')).map(({ id: courseUnitId, organisations }) =>
       organisations
         .sort((a, b) => b.share - a.share)
         .map(({ organisationId }, index) => ({
