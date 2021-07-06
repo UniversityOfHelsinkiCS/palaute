@@ -41,27 +41,40 @@ const combineStudyGroupName = (firstPart, secondPart) => ({
 
 // eslint-disable-next-line no-unused-vars
 const findMatchingCourseUnit = async (course) => {
-  const nonOpenCourse = await CourseUnit.findOne({
-    where: {
-      courseCode: course.code.substring(2),
-    },
-  })
-  if (nonOpenCourse) return nonOpenCourse
-  const charCode = course.code.substring(2, course.code.match('[0-9.]+').index)
-  const sameOrg = await CourseUnit.findOne({
-    where: {
-      courseCode: {
-        [Op.iLike]: `${charCode}%`,
+  try {
+    const nonOpenCourse = await CourseUnit.findOne({
+      where: {
+        courseCode: course.code.substring(2),
       },
-    },
-  })
-  return sameOrg
+    })
+    if (nonOpenCourse) return nonOpenCourse
+    const regex = course.code.match('[0-9.]+')
+    if (!regex) {
+      logger.info("CODE WITH NO MATCH", { code: course.code })
+      return null
+    }
+    const charCode = course.code.substring(2, regex.index)
+    const sameOrg = await CourseUnit.findOne({
+      where: {
+        courseCode: {
+          [Op.iLike]: `${charCode}%`,
+        },
+      },
+    })
+    return sameOrg
+  } catch(_) {
+    console.log("ERR", course)
+    return null
+  }  
 }
 
 const createCourseUnits = async (courseUnits) => {
   const ids = new Set()
   const filteredCourseUnits = courseUnits
     .filter((cu) => {
+      if (cu.id === 'hy-CU-121540720-2020-08-01') {
+        console.log(cu)
+      }
       if (ids.has(cu.id)) return false
       ids.add(cu.id)
       return true
@@ -95,7 +108,7 @@ const createCourseUnits = async (courseUnits) => {
     ignoreDuplicates: true,
   })
 
-  /* const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
+  const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
   const openCourseUnitsOrganisations = []
   await openUniCourses.reduce(async (p, course) => {
     await p
@@ -112,27 +125,33 @@ const createCourseUnits = async (courseUnits) => {
         },
       })
       if (!orgId) {
-        console.log(nonOpenCourse, orgId)
+        logger.info('OLD COURSE UNIT', { oldCourseUnit: nonOpenCourse })
+        openCourseUnitsOrganisations.push({
+          type: 'PRIMARY',
+          courseUnitId: course.id,
+          organisationId: course.organisations[0].organisationId,
+        })
+      } else {
+        openCourseUnitsOrganisations.push({
+          type: 'PRIMARY',
+          courseUnitId: course.id,
+          organisationId: orgId.organisationId,
+        })
       }
-      openCourseUnitsOrganisations.push({
-        type: 'PRIMARY',
-        courseUnitId: course.id,
-        organisationId: orgId.organisationId,
-      })
     } else {
       // Acual open course?
       logger.info('Open course', { course })
       openCourseUnitsOrganisations.push({
         type: 'PRIMARY',
         courseUnitId: course.id,
-        organisationId: course.organisations[0].id,
+        organisationId: course.organisations[0].organisationId,
       })
     }
   }, Promise.resolve())
 
   await CourseUnitsOrganisation.bulkCreate(openCourseUnitsOrganisations, {
     ignoreDuplicates: true,
-  }) */
+  })
 }
 
 const createCourseRealisations = async (courseRealisations) => {
@@ -221,16 +240,43 @@ const coursesHandler = async (courses) => {
       validRealisationTypes.includes(course.courseUnitRealisationTypeUrn),
   )
 
-  await createCourseUnits(
-    filteredCourses.map((course) => course.courseUnits[0]),
-  ) // TODO: fix
+  /*await createCourseUnits(
+    [].concat(...filteredCourses.map((course) => course.courseUnits)),
+  )*/
 
   await createCourseRealisations(filteredCourses)
 
   await createFeedbackTargets(filteredCourses)
 }
 
+const courseUnitHandler = async (courseRealisations) => {
+  await createCourseUnits(
+    [].concat(...courseRealisations.map((course) => course.courseUnits)).filter(({ code }) => !code.startsWith('AY')),
+  )
+}
+
+const openCourseUnitHandler = async (courseRealisations) => {
+  await createCourseUnits(
+    [].concat(...courseRealisations.map((course) => course.courseUnits)).filter(({ code }) => code.startsWith('AY')),
+  )
+}
+
 const updateCoursesAndTeacherFeedbackTargets = async () => {
+  // This will become absolute mayhem because of open uni.
+  // What we have to do
+  // 1. Go through all non-open course_units
+  // 2. Go through all open course_units
+  // 3. Go through all course_units and only then create realisations.
+  await mangleData(
+    'course_unit_realisations_with_course_units',
+    1000,
+    courseUnitHandler,
+  )
+  await mangleData(
+    'course_unit_realisations_with_course_units',
+    1000,
+    openCourseUnitHandler,
+  )
   await mangleData(
     'course_unit_realisations_with_course_units',
     1000,
