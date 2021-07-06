@@ -50,7 +50,7 @@ const findMatchingCourseUnit = async (course) => {
     if (nonOpenCourse) return nonOpenCourse
     const regex = course.code.match('[0-9.]+')
     if (!regex) {
-      logger.info("CODE WITH NO MATCH", { code: course.code })
+      logger.info('CODE WITH NO MATCH', { code: course.code })
       return null
     }
     const charCode = course.code.substring(2, regex.index)
@@ -62,19 +62,16 @@ const findMatchingCourseUnit = async (course) => {
       },
     })
     return sameOrg
-  } catch(_) {
-    console.log("ERR", course)
+  } catch (_) {
+    logger.info('ERR', course)
     return null
-  }  
+  }
 }
 
 const createCourseUnits = async (courseUnits) => {
   const ids = new Set()
   const filteredCourseUnits = courseUnits
     .filter((cu) => {
-      if (cu.id === 'hy-CU-121540720-2020-08-01') {
-        console.log(cu)
-      }
       if (ids.has(cu.id)) return false
       ids.add(cu.id)
       return true
@@ -240,10 +237,6 @@ const coursesHandler = async (courses) => {
       validRealisationTypes.includes(course.courseUnitRealisationTypeUrn),
   )
 
-  /*await createCourseUnits(
-    [].concat(...filteredCourses.map((course) => course.courseUnits)),
-  )*/
-
   await createCourseRealisations(filteredCourses)
 
   await createFeedbackTargets(filteredCourses)
@@ -251,13 +244,17 @@ const coursesHandler = async (courses) => {
 
 const courseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
-    [].concat(...courseRealisations.map((course) => course.courseUnits)).filter(({ code }) => !code.startsWith('AY')),
+    []
+      .concat(...courseRealisations.map((course) => course.courseUnits))
+      .filter(({ code }) => !code.startsWith('AY')),
   )
 }
 
 const openCourseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
-    [].concat(...courseRealisations.map((course) => course.courseUnits)).filter(({ code }) => code.startsWith('AY')),
+    []
+      .concat(...courseRealisations.map((course) => course.courseUnits))
+      .filter(({ code }) => code.startsWith('AY')),
   )
 }
 
