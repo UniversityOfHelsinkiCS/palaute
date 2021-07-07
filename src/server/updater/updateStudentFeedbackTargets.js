@@ -46,7 +46,6 @@ const enrolmentsHandler = async (enrolments) => {
       ignoreDuplicates: true,
     })
   } catch (err) {
-    logger.error('ERR', { err })
     logger.info('RUNNING TARGETS ONE BY ONE')
     userFeedbackTargets.reduce(
       async (promise, { userId, feedbackTargetId, accessStatus }) => {
@@ -63,8 +62,8 @@ const enrolmentsHandler = async (enrolments) => {
               accessStatus,
             },
           })
-        } catch (err) {
-          logger.error('ERR', { err })
+        } catch (_) {
+          logger.error('ERR', {})
         }
       },
       Promise.resolve(),
