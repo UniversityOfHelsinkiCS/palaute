@@ -261,6 +261,8 @@ const openCourseUnitHandler = async (courseRealisations) => {
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   // This will become absolute mayhem because of open uni.
   // What we have to do
+  // All non-open courses have to mangled first, because some open course could
+  // have the non-open version after the current batch.
   // 1. Go through all non-open course_units
   // 2. Go through all open course_units
   // 3. Go through all course_units and only then create realisations.
