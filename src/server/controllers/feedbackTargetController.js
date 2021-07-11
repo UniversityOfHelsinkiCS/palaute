@@ -16,6 +16,7 @@ const {
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
+const logger = require('../util/logger')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -161,13 +162,18 @@ const getFeedbackTargetsForStudent = async (req) => {
 const getStudentListVisibility = async (courseUnitId) => {
   const organisationRows = await sequelize.query(
     'SELECT O.* from organisations O, course_units_organisations C ' +
-      ' WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id LIMIT 1',
+      " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
     {
       replacements: {
         cuId: courseUnitId,
       },
     },
   )
+
+  if (organisationRows.length === 0) {
+    logger.error('NO PRIMARY ORGANISATION FOR COURSE', { courseUnitId })
+    return false
+  }
 
   if (!organisationRows[0].length) return false
 
