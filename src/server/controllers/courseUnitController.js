@@ -31,6 +31,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       user_feedback_targets.access_status = 'TEACHER' AND
       course_realisations.end_date < NOW() AND
       course_realisations.end_date > :courseRealisationEndDateAfter AND
+      course_units_organisations.type = 'PRIMARY' AND
       NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
     ORDER BY course_units.course_code, course_realisations.start_date DESC;
   `,
@@ -228,7 +229,7 @@ const getCourseUnitsByOrganisation = async (req, res) => {
     INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
     INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
     WHERE
-      organisations.code = :organisationCode
+      organisations.code = :organisationCode AND course_units_organisations.type = 'PRIMARY'
     ORDER BY course_units.course_code, course_units.validity_period->>'startDate' DESC NULLS LAST;
   `,
     {
