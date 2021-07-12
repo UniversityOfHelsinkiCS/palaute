@@ -26,6 +26,7 @@ const run = async () => {
 /* eslint-disable */
 const start = async () => {
   if (!inProduction) {
+    await updateCoursesAndTeacherFeedbackTargets()
     return logger.info('Not running updater outside production')
   }
   logger.info('Setup cron job')

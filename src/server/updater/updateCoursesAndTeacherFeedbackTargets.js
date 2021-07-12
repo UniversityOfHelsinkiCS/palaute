@@ -246,7 +246,7 @@ const courseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
     []
       .concat(...courseRealisations.map((course) => course.courseUnits))
-      .filter(({ code }) => !code.startsWith('AY')),
+      .filter(({ code }) => !code.startsWith('AY') && !code.match("^[0-9]+$")),
   )
 }
 
@@ -254,7 +254,7 @@ const openCourseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
     []
       .concat(...courseRealisations.map((course) => course.courseUnits))
-      .filter(({ code }) => code.startsWith('AY')),
+      .filter(({ code }) => code.startsWith('AY') && !code.match("^AY[0-9]+$")),
   )
 }
 
@@ -266,6 +266,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   // 1. Go through all non-open course_units
   // 2. Go through all open course_units
   // 3. Go through all course_units and only then create realisations.
+  // For each batch we ignore courses where code matches "[0-9]+" or "AY[0-9]+".
   await mangleData(
     'course_unit_realisations_with_course_units',
     1000,
