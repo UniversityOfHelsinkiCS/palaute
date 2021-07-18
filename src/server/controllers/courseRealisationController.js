@@ -35,6 +35,25 @@ const getFeedbackTargetsByCourseRealisation = async (req, res) => {
   return res.send(targets)
 }
 
+const feedbackTargetByCourseRealisation = async (req, res) => {
+  const courseId = req.params.id
+
+  const feedbackTarget = await FeedbackTarget.findOne({
+    where: {
+      courseRealisationId: courseId,
+      type: 'courseRealisation',
+      hidden: false,
+    },
+  })
+
+  if (!feedbackTarget) {
+    res.send(404)
+  }
+
+  res.redirect(301, `/targets/${feedbackTarget.id}/feedback`)
+}
+
 module.exports = {
   getFeedbackTargetsByCourseRealisation,
+  feedbackTargetByCourseRealisation,
 }

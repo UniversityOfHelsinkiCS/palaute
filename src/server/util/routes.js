@@ -98,6 +98,10 @@ if (inE2EMode) {
   router.use('/test', testingController)
 }
 
+// Link from courses-page
+
+router.use('/cur/:id', courseRealisation.feedbackTargetByCourseRealisation)
+
 router.use(Sentry.Handlers.errorHandler())
 
 router.use(errorMiddleware)
