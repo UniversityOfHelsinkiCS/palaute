@@ -30,6 +30,7 @@ const getHeaders = (questions, language) => {
 }
 
 const getData = (questions, feedbacks, language) => {
+  console.log(questions)
   const options = _.flatMap(questions, (q) =>
     ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)
       ? q.data?.options ?? []
@@ -39,7 +40,7 @@ const getData = (questions, feedbacks, language) => {
   const optionById = _.keyBy(options, ({ id }) => id)
 
   const data = feedbacks.map((f) => {
-    const feedback = f.data.map((d) => {
+    const feedback = f.data.filter((d) => questions.find((q) => q.id === d.questionId)).map((d) => {
       const q = questions.find((q) => q.id === d.questionId)
 
       if (['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)) {
