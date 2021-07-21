@@ -1,6 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -67,20 +68,19 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (status === 'waitingForFeedback') {
     return acualFeedbackTargets.filter(
       (feedbackTarget) =>
-        feedbackTargetIsOpen(feedbackTarget) && !feedbackTarget.feedback,
+        !feedbackTargetIsEnded(feedbackTarget) && !feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackGiven') {
     return acualFeedbackTargets.filter(
-      (feedbackTarget) =>
-        feedbackTargetIsOpen(feedbackTarget) && feedbackTarget.feedback,
+      (feedbackTarget) => feedbackTarget.feedback,
     )
   }
 
   if (status === 'feedbackClosed') {
-    return acualFeedbackTargets.filter(
-      (target) => !feedbackTargetIsOpen(target),
+    return acualFeedbackTargets.filter((target) =>
+      feedbackTargetIsEnded(target),
     )
   }
 

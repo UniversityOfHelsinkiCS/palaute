@@ -40,7 +40,7 @@ export default {
     no: 'Ei',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     noFeedback: 'Ei vielä nähtävää täällä. Tule takaisin myöhemmin!',
-    feedbackClosed: 'Suljetut',
+    feedbackClosed: 'Päättyneet',
     waitingForFeedback: 'Odottavat',
     feedbackGiven: 'Annetut',
   },
