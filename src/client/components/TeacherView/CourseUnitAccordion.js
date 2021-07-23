@@ -68,9 +68,6 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           <Typography>
             {courseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="span">
-            {getDateRange(courseRealisation)}
-          </Typography>
           {feedbackResponseChip}
         </div>
       </AccordionSummary>
