@@ -2,7 +2,6 @@ const axios = require('axios')
 
 const { inProduction } = require('../../config')
 const logger = require('./logger')
-const { getFeedbackTargetsForEmail } = require('./feedbackTarget')
 
 const template = {
   from: 'Norppa',
@@ -34,23 +33,45 @@ const sendEmail = async (options = {}) => {
   return data
 }
 
-const sendNotificationAboutSurveyOpeningToStudents = () => {
-  const feedbackTargets = getFeedbackTargetsForEmail()
+const sendNotificationAboutSurveyOpeningToStudents = (
+  urlToGiveFeedbackTo,
+  students,
+  courseName,
+) => {
+  const translations = {
+    text: {
+      en: `The feedback survey for the course ${courseName.en} has opened. Please give your feedback here: ${urlToGiveFeedbackTo}`,
+      fi: `Palautteen antaminen kurssille ${courseName.fi} on alkanut. Anna ystävällisesti palautetta täällä: ${urlToGiveFeedbackTo}`,
+      sv: ``,
+    },
+    subject: {
+      en: `Course feedback has opened`,
+      fi: `Kurssipalaute on avautunut`,
+      sv: ``,
+    },
+  }
 
-  // for (feedbackTarget of feedbackTargets) {
-  //   const translations = {
-  //     text: {
-  //       en: `The feedback survey for the course ${courseName} has opened. Please give your feedback here: ${courseUrl}`,
-  //       fi: `Palautteen antaminen kurssille ${courseName} on alkanut. Anna ystävällisesti palautetta täällä: ${courseUrl}`,
-  //       sv: ``,
-  //     },
-  //     subject: {
-  //       en: `Course feedback has opened`,
-  //       fi: `Kurssipalaute on avautunut`,
-  //       sv: ``,
-  //     },
-  //   }
-  // }
+  const emails = students.map((student) => {
+    const email = {
+      to: student.email,
+      subject:
+        translations.subject[student.language] || translations.subject.en,
+      text: translations.text[student.language] || translations.text.en,
+    }
+    return email
+  })
+
+  const options = {
+    template: {
+      ...template,
+    },
+    emails,
+    settings: { ...settings },
+  }
+
+  sendEmail(options)
+
+  return options
 }
 
 const sendNotificationAboutFeedbackSummaryToStudents = (

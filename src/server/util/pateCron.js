@@ -1,6 +1,7 @@
 const { CronJob } = require('cron')
 const { inProduction } = require('../../config')
 const logger = require('./logger')
+const sendEmailAboutSurveyOpeningToStudents = require('./emailSender')
 
 const schedule = (cronTime, func) =>
   new CronJob({
@@ -12,6 +13,7 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running pate cron')
+  await sendEmailAboutSurveyOpeningToStudents()
 }
 
 const start = async () => {

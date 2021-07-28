@@ -25,6 +25,7 @@ const Survey = require('./survey')
 const Question = require('./question')
 const {
   sendNotificationAboutFeedbackSummaryToStudents,
+  sendNotificationAboutSurveyOpeningToStudents,
 } = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
@@ -194,6 +195,26 @@ class FeedbackTarget extends Model {
     })
   }
 
+  async getStudentsForFeedbackTarget() {
+    return User.findAll({
+      include: {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            where: {
+              id: this.id,
+            },
+            required: true,
+          },
+        ],
+      },
+    })
+  }
+
   async sendFeedbackSummaryReminderToStudents() {
     const students = await this.getStudentsWhoHaveGivenFeedback()
     const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/results`
@@ -206,6 +227,24 @@ class FeedbackTarget extends Model {
     return sendNotificationAboutFeedbackSummaryToStudents(
       url,
       formattedStudents,
+    )
+  }
+
+  async sendFeedbackOpenEmailToStudents() {
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
+    const students = await this.getStudentsForFeedbackTarget()
+    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/feedback`
+    const formattedStudents = students
+      .filter((student) => student.email)
+      .map((student) => ({
+        email: student.email,
+        language: student.language || 'en',
+      }))
+
+    return sendNotificationAboutSurveyOpeningToStudents(
+      url,
+      formattedStudents,
+      courseUnit.name,
     )
   }
 
