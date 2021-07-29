@@ -5,7 +5,7 @@ const express = require('express')
 const { PORT, inProduction, inE2EMode, runningJest } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { start: startUpdater } = require('./updater')
-const { start: startPateCron } = require('./util/pateCron')
+// const { start: startPateCron } = require('./util/pateCron')
 const logger = require('./util/logger')
 
 const app = express()
@@ -25,7 +25,8 @@ const start = async () => {
   await connectToDatabase()
   await startUpdater()
   if (inProduction) {
-    await startPateCron()
+    logger.info('This is where pate cron would start')
+    // await startPateCron()
   }
   if (!runningJest) {
     app.listen(PORT, () => {

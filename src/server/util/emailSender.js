@@ -1,27 +1,23 @@
-// const { Op } = require('sequelize')
+const { Op } = require('sequelize')
 
 const { FeedbackTarget } = require('../models')
 
 const getFeedbackTargetsForEmail = async () => {
-  // const date = new Date()
+  const date = new Date()
 
-  // const feedbackTargets = await FeedbackTarget.findAll({
-  //   where: {
-  //     opensAt: {
-  //       [Op.lt]: new Date().setDate(date.getDate() - 1),
-  //     },
-  //     closesAt: {
-  //       [Op.gt]: new Date().setDate(date.getDate() + 1),
-  //     },
-  //     feedbackOpenNotificationEmailSent: {
-  //       [Op.is]: false,
-  //     },
-  //   },
-  // })
-
-  const feedbackTarget = await FeedbackTarget.findByPk(8184977)
-
-  const feedbackTargets = [feedbackTarget]
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      opensAt: {
+        [Op.lt]: new Date().setDate(date.getDate() - 1),
+      },
+      closesAt: {
+        [Op.gt]: new Date().setDate(date.getDate() + 1),
+      },
+      feedbackOpenNotificationEmailSent: {
+        [Op.is]: false,
+      },
+    },
+  })
 
   const filteredFeedbackTargets = feedbackTargets.filter(
     (feedbackTarget) => feedbackTarget.feedbackType === 'courseRealisation',

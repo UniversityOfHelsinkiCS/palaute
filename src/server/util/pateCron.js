@@ -21,7 +21,7 @@ const start = async () => {
     return logger.info('Not running Pate if not in production')
   }
   logger.info('Setup pate cron')
-  const cronTime = '15 12 * * *' // Daily at 11:15
+  const cronTime = '15 11 * * *' // Daily at 11:15
 
   return schedule(cronTime, run)
 }

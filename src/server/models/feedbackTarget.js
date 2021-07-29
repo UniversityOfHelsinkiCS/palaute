@@ -217,7 +217,7 @@ class FeedbackTarget extends Model {
 
   async sendFeedbackSummaryReminderToStudents() {
     const students = await this.getStudentsWhoHaveGivenFeedback()
-    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/results`
+    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/results`
     const formattedStudents = students
       .filter((student) => student.email)
       .map((student) => ({
@@ -233,7 +233,7 @@ class FeedbackTarget extends Model {
   async sendFeedbackOpenEmailToStudents() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsForFeedbackTarget()
-    const url = `https://palaute.cs.helsinki.fi/targets/${this.id}/feedback`
+    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/feedback`
     const formattedStudents = students
       .filter((student) => student.email)
       .map((student) => ({
