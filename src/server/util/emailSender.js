@@ -34,8 +34,8 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
   for (feedbackTarget of feedbackTargets) {
     if (!feedbackTarget.feedbackOpenNotificationEmailSent) {
       feedbackTarget.feedbackOpenNotificationEmailSent = true
-      await feedbackTarget.sendFeedbackOpenEmailToStudents()
       await feedbackTarget.save()
+      await feedbackTarget.sendFeedbackOpenEmailToStudents()
     }
   }
 
