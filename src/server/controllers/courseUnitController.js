@@ -151,7 +151,13 @@ const getCourseUnitsForTeacher = async (req, res) => {
   const targetFields = ['id', 'name', 'opensAt', 'closesAt']
 
   const courseUnits = Object.entries(targetsByCourseCode).map(
-    ([courseCode, targets]) => {
+    ([courseCode, unfilteredTargets]) => {
+      const targets = unfilteredTargets.filter(
+        // filter out courses starting before 1.9.2021
+        // Month starts from 0, i.e 8 is acually 9th month.
+        (target) => target.courseRealisation.startDate >= new Date(2021, 8, 1),
+      )
+
       const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), [
         'courseCode',
         'name',
