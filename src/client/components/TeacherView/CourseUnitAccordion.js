@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetList from './FeedbackTargetList'
-import { getRelevantCourseRealisation, formatDate } from './utils'
+import { getRelevantCourseRealisation } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
@@ -30,12 +30,6 @@ const useStyles = makeStyles({
     padding: 0,
   },
 })
-
-const getDateRange = (courseRealisation) => {
-  const { startDate, endDate } = courseRealisation
-
-  return `${formatDate(startDate)} - ${formatDate(endDate)} `
-}
 
 const getFeedbackResponseChip = (courseRealisation) => {
   const { feedbackResponseGiven, feedbackTarget } = courseRealisation

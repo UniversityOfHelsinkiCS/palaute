@@ -1,6 +1,5 @@
 import groupBy from 'lodash/groupBy'
 
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
