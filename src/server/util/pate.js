@@ -112,7 +112,48 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
   return options
 }
 
+const sendEmailReminderAboutSurveyOpeningToTeachers = (
+  urlToEditSurvey,
+  teachers,
+) => {
+  const translations = {
+    text: {
+      en: `The survey for a course you are teaching is opening in a week. Edit it here: ${urlToEditSurvey}`,
+      fi: `Opettamasi kurssin palautekysely avautuu viikon sisällä. Voit muokata sitä täällä: ${urlToEditSurvey}`,
+      sv: '',
+    },
+    subject: {
+      en: `Feedback for a course you're teaching is about to start`,
+      fi: `Palautejakso opettamallesi kurssille on alkamassa`,
+      sv: '',
+    },
+  }
+
+  const emails = teachers.map((teacher) => {
+    const email = {
+      to: teacher.email,
+      subject:
+        translations.subject[teacher.language] || translations.subject.en,
+      text: translations.text[teacher.language] || translations.subject.en,
+    }
+    return email
+  })
+
+  const options = {
+    template: {
+      ...template,
+    },
+    emails,
+    settings: { ...settings },
+  }
+
+  sendEmail(options)
+
+  return options
+}
+
 module.exports = {
   sendNotificationAboutSurveyOpeningToStudents,
   sendNotificationAboutFeedbackSummaryToStudents,
+  sendEmailReminderAboutSurveyOpeningToTeachers,
 }

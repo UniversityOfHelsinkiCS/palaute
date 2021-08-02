@@ -26,6 +26,7 @@ const Question = require('./question')
 const {
   sendNotificationAboutFeedbackSummaryToStudents,
   sendNotificationAboutSurveyOpeningToStudents,
+  sendEmailReminderAboutSurveyOpeningToTeachers,
 } = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
@@ -215,6 +216,29 @@ class FeedbackTarget extends Model {
     })
   }
 
+  async getTeachersForFeedbackTarget() {
+    return User.findAll({
+      include: {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            where: {
+              id: this.id,
+            },
+            required: true,
+          },
+        ],
+        where: {
+          accessStatus: 'TEACHER',
+        },
+      },
+    })
+  }
+
   async sendFeedbackSummaryReminderToStudents() {
     const students = await this.getStudentsWhoHaveGivenFeedback()
     const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/results`
@@ -246,6 +270,13 @@ class FeedbackTarget extends Model {
       formattedStudents,
       courseUnit.name,
     )
+  }
+
+  async sendFeedbackOpeningReminderEmailToTeachers() {
+    const teachers = await this.getTeachersForFeedbackTarget()
+    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/edit`
+
+    return sendEmailReminderAboutSurveyOpeningToTeachers(url, teachers)
   }
 
   async getPublicQuestionIds() {
@@ -396,6 +427,9 @@ FeedbackTarget.init(
       type: BOOLEAN,
     },
     feedbackOpenNotificationEmailSent: {
+      type: BOOLEAN,
+    },
+    feedbackOpeningReminderEmailSent: {
       type: BOOLEAN,
     },
     feedbackVisibility: {

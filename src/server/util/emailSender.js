@@ -26,6 +26,28 @@ const getFeedbackTargetsForEmail = async () => {
   return filteredFeedbackTargets
 }
 
+const getFeedbackTargetsForReminderEmail = async () => {
+  const date = new Date()
+
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      opensAt: {
+        [Op.lt]: new Date().setDate(date.getDate() + 7),
+        [Op.gt]: new Date(),
+      },
+      feedbackOpeningReminderEmailSent: {
+        [Op.is]: false,
+      },
+    },
+  })
+
+  const filteredFeedbackTargets = feedbackTargets.filter(
+    (feedbackTarget) => feedbackTarget.feedbackType === 'courseRealisation',
+  )
+
+  return filteredFeedbackTargets
+}
+
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getFeedbackTargetsForEmail()
 
@@ -39,7 +61,23 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     }
   }
 
+}
+
+const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
+  const feedbackTargets = await getFeedbackTargetsForReminderEmail()
+
+  for (feedbackTarget of feedbackTargets) {
+    if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
+      feedbackTarget.feedbackOpeningReminderEmailSent = true
+      await feedbackTarget.save()
+      await feedbackTarget.sendFeedbackOpeningReminderEmailToTeachers()
+    }
+  }
+
   /* eslint-enable */
 }
 
-module.exports = { sendEmailAboutSurveyOpeningToStudents }
+module.exports = {
+  sendEmailAboutSurveyOpeningToStudents,
+  sendEmailReminderAboutSurveyOpeningToTeachers,
+}
