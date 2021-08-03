@@ -240,6 +240,7 @@ class FeedbackTarget extends Model {
   }
 
   async sendFeedbackSummaryReminderToStudents() {
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsWhoHaveGivenFeedback()
     const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/results`
     const formattedStudents = students
@@ -251,6 +252,7 @@ class FeedbackTarget extends Model {
     return sendNotificationAboutFeedbackSummaryToStudents(
       url,
       formattedStudents,
+      courseUnit.name,
     )
   }
 
@@ -273,10 +275,15 @@ class FeedbackTarget extends Model {
   }
 
   async sendFeedbackOpeningReminderEmailToTeachers() {
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const teachers = await this.getTeachersForFeedbackTarget()
     const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/edit`
 
-    return sendEmailReminderAboutSurveyOpeningToTeachers(url, teachers)
+    return sendEmailReminderAboutSurveyOpeningToTeachers(
+      url,
+      teachers,
+      courseUnit.name,
+    )
   }
 
   async getPublicQuestionIds() {

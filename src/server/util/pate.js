@@ -77,11 +77,12 @@ const sendNotificationAboutSurveyOpeningToStudents = (
 const sendNotificationAboutFeedbackSummaryToStudents = (
   urlToSeeFeedbackSummary,
   students,
+  courseName,
 ) => {
   const translations = {
     text: {
-      en: `Feedback summary was given by teacher, read it here: ${urlToSeeFeedbackSummary}`,
-      fi: `Palauteyhteenveto on annettu opettajan toimesta, lue se täältä: ${urlToSeeFeedbackSummary}`,
+      en: `Feedback summary for the course ${courseName.en} was given by teacher, read it here: ${urlToSeeFeedbackSummary}`,
+      fi: `Palauteyhteenveto kurssille ${courseName.fi} on annettu opettajan toimesta, lue se täältä: ${urlToSeeFeedbackSummary}`,
       sv: '',
     },
     subject: {
@@ -115,11 +116,12 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
 const sendEmailReminderAboutSurveyOpeningToTeachers = (
   urlToEditSurvey,
   teachers,
+  courseName,
 ) => {
   const translations = {
     text: {
-      en: `The survey for a course you are teaching is opening in a week. Edit it here: ${urlToEditSurvey}`,
-      fi: `Opettamasi kurssin palautekysely avautuu viikon sisällä. Voit muokata sitä täällä: ${urlToEditSurvey}`,
+      en: `Feedback survey for the course ${courseName.en} you are teaching is opening in a week. Edit it here: ${urlToEditSurvey}`,
+      fi: `Opettamasi kurssin ${courseName.fi} palautekysely avautuu viikon sisällä. Voit muokata sitä täällä: ${urlToEditSurvey}`,
       sv: '',
     },
     subject: {
