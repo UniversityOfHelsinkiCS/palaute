@@ -246,7 +246,7 @@ const courseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
     []
       .concat(...courseRealisations.map((course) => course.courseUnits))
-      .filter(({ code }) => !code.startsWith('AY') && !code.match("^[0-9]+$")),
+      .filter(({ code }) => !code.startsWith('AY') && !code.match('^[0-9]+$')),
   )
 }
 
@@ -254,7 +254,7 @@ const openCourseUnitHandler = async (courseRealisations) => {
   await createCourseUnits(
     []
       .concat(...courseRealisations.map((course) => course.courseUnits))
-      .filter(({ code }) => code.startsWith('AY') && !code.match("^AY[0-9]+$")),
+      .filter(({ code }) => code.startsWith('AY') && !code.match('^AY[0-9]+$')),
   )
 }
 

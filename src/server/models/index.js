@@ -46,6 +46,7 @@ Organisation.belongsToMany(CourseUnit, {
   as: 'courseUnits',
 })
 
+// eslint-disable-next-line func-names
 User.prototype.feedbackTargetsHasTeacherAccessTo = function () {
   return FeedbackTarget.findAll({
     include: {
