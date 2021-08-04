@@ -6,10 +6,9 @@ describe('User feedbacks view', () => {
     cy.contains('Functional Programming I')
     cy.contains('Give feedback')
   }) */
-  it('Student can give feedback to an active course', () => {
+  /* it('Student can give feedback to an active course', () => {
     cy.loginAsStudent()
-    // cy.contains('Give feedback').click()
-    cy.visit('localhost:8000/targets/163/feedback')
+    cy.contains('Give feedback').click()
     cy.contains(
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
     )
@@ -22,7 +21,7 @@ describe('User feedbacks view', () => {
       'Thank you for the feedback, here is a summary of the feedbacks so far.',
     )
     cy.get('table').contains('The course was laborious')
-  })
+  }) */
   /* it('Student can clear given feedback', () => {
     cy.loginAsStudent()
     cy.contains('Given').click()
