@@ -7,8 +7,8 @@ describe('User feedbacks view', () => {
     cy.contains('Give feedback')
   }) */
   it('Student can give feedback to an active course', () => {
-    /* cy.loginAsStudent()
-    cy.contains('Give feedback').click() */
+    cy.loginAsStudent()
+    // cy.contains('Give feedback').click()
     cy.visit('localhost:8000/targets/163/feedback')
     cy.contains(
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',

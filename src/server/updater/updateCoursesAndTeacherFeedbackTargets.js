@@ -137,7 +137,6 @@ const createCourseUnits = async (courseUnits) => {
       }
     } else {
       // Acual open course?
-      logger.info('Open course', { course })
       openCourseUnitsOrganisations.push({
         type: 'PRIMARY',
         courseUnitId: course.id,
@@ -164,9 +163,6 @@ const createCourseRealisations = async (courseRealisations) => {
 }
 
 const createFeedbackTargets = async (courses) => {
-  const opensAt = formatDate(new Date(2019, 0, 1))
-  const closesAt = formatDate(new Date(2019, 0, 1))
-
   const courseIdToPersonIds = {}
 
   const feedbackTargets = [].concat(
@@ -176,6 +172,11 @@ const createFeedbackTargets = async (courses) => {
         .map(({ personId }) => personId)
 
       const courseUnit = course.courseUnits[0] // TODO fix
+      const courseEndDate = new Date(course.activityPeriod.endDate)
+
+      const opensAt = formatDate(dateFns.subDays(courseEndDate, 14))
+      const closesAt = formatDate(dateFns.addDays(courseEndDate, 14))
+
       const targets = [
         {
           feedbackType: 'courseRealisation',
