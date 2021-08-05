@@ -35,6 +35,7 @@ import {
   getUpperLevelQuestions,
   requiresSaveConfirmation,
   openCourseImmediately,
+  parseDate,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -117,8 +118,7 @@ const EditFeedbackTarget = () => {
     if (result) {
       try {
         await openCourseImmediately(feedbackTarget)
-
-        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        window.location.reload()
       } catch (e) {
         enqueueSnackbar(t('unknownError'), { variant: 'error' })
       }
@@ -141,7 +141,7 @@ const EditFeedbackTarget = () => {
             <Box mb={2}>
               <Card>
                 <CardContent>
-                  {isAdminUser && (
+                  {isAdminUser ? (
                     <div className={classes.form}>
                       <Box hidden mb={2}>
                         <FormikTextField
@@ -173,6 +173,17 @@ const EditFeedbackTarget = () => {
                           label={t('editFeedbackTarget:closesAt')}
                           fullWidth
                         />
+                      </Box>
+                    </div>
+                  ) : (
+                    <div className={classes.form}>
+                      <Box mb={2}>
+                        {`${t('editFeedbackTarget:opensAt')} ${parseDate(
+                          feedbackTarget.opensAt,
+                        )} - 
+                        ${t('editFeedbackTarget:closesAt')} ${parseDate(
+                          feedbackTarget.closesAt,
+                        )}`}
                       </Box>
                     </div>
                   )}

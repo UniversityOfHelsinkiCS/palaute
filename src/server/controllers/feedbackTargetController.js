@@ -578,6 +578,13 @@ const openFeedbackImmediately = async (req, res) => {
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
+  if (req.body.opensAt <= feedbackTarget.closesAt) {
+    throw new ApplicationError(
+      'Survey can not open after its closing date',
+      400,
+    )
+  }
+
   feedbackTarget.opensAt = req.body.opensAt
   await feedbackTarget.save()
 
