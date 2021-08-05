@@ -73,7 +73,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
   const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
 
   const tooltipTitle = `${questionLabel}: ${
-    mean === null ? t('courseSummary:noResults') : mean
+    mean || t('courseSummary:noResults')
   }`
 
   const differenceIndicator = getDifferenceIndicator({
