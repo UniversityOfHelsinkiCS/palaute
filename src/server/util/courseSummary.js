@@ -8,21 +8,22 @@ const QUESTION_AVERAGES_QUERY = `
 SELECT
   feedback_target_id,
   question_id,
-  avg(int_question_data) AS question_avg
+  question_data,
+  COUNT(question_data) AS question_data_count
 FROM
   (
     SELECT
       feedback_id,
       feedback_target_id,
       question_id,
-      int_question_data
+      question_data
     FROM
       user_feedback_targets
       INNER JOIN (
         SELECT
           id,
           question_feedback::jsonb->>'questionId' AS question_id,
-          cast(question_feedback::jsonb->>'data' AS INTEGER) int_question_data
+          question_feedback::jsonb->>'data' AS question_data
         FROM
           (
             SELECT
@@ -32,15 +33,16 @@ FROM
             FROM
               feedbacks
           ) feedbacks_1
-        WHERE question_feedback::json->>'data' IN ('1', '2', '3', '4', '5')
       ) feedbacks_2 ON user_feedback_targets.feedback_id = feedbacks_2.id
     WHERE
       user_feedback_targets.access_status = 'STUDENT'
       AND feedbacks_2.question_id IN (:questionIds)
+      AND feedbacks_2.question_data IN (:validDataValues)
   ) as feedbacks_3
 GROUP BY
   feedback_target_id,
-  question_id
+  question_id,
+  question_data
 `
 
 const COUNTS_QUERY = `
@@ -66,7 +68,8 @@ WITH question_averages AS (
 
 SELECT
   question_id,
-  question_avg,
+  question_data,
+  question_data_count,
   feedback_count,
   student_count,
   feedback_targets.id AS feedback_target_id,
@@ -108,10 +111,10 @@ WITH question_averages AS (
   ${COUNTS_QUERY}
 )
 
-
 SELECT
   question_id,
-  question_avg,
+  question_data,
+  question_data_count,
   feedback_count,
   student_count,
   feedback_targets.id AS feedback_target_id,
@@ -138,13 +141,71 @@ WHERE
   AND course_realisations.start_date > NOW() - interval '36 months';
 `
 
-const getFeedbackMean = (rows) =>
-  rows.length > 0
-    ? _.round(
-        _.meanBy(rows, (row) => parseFloat(row.question_avg)),
-        2,
-      )
-    : null
+const getFeedbackDistribution = (rows) => {
+  const grouped = _.groupBy(rows, (row) => row.question_data)
+
+  return _.mapValues(grouped, (rows) =>
+    _.sumBy(rows, (row) => parseInt(row.question_data_count, 10)),
+  )
+}
+
+const getLikertMean = (distribution) => {
+  const entries = Object.entries(
+    _.pick(distribution, ['1', '2', '3', '4', '5']),
+  )
+
+  if (entries.length === 0) {
+    return 0
+  }
+
+  const totalCount = _.sumBy(entries, ([, count]) => parseInt(count, 10))
+
+  const sum = _.sumBy(
+    entries,
+    ([value, count]) => parseInt(value, 10) * parseInt(count, 10),
+  )
+
+  return _.round(sum / totalCount, 2)
+}
+
+const getSingleChoiceMean = (distribution, question) => {
+  const options = question.data?.options ?? []
+  const optionIds = options.map(({ id }) => id)
+
+  const entries = Object.entries(_.pick(distribution, optionIds))
+
+  if (entries.length === 0) {
+    return 0
+  }
+
+  const indexByOptionId = optionIds.reduce(
+    (acc, id, index) => ({
+      ...acc,
+      [id]: index + 1,
+    }),
+    {},
+  )
+
+  const totalCount = _.sumBy(entries, ([, count]) => parseInt(count, 10))
+
+  const sum = _.sumBy(
+    entries,
+    ([value, count]) => indexByOptionId[value] * parseInt(count, 10),
+  )
+
+  return _.round(sum / totalCount, 2)
+}
+
+const getMean = (distribution, question) => {
+  switch (question.type) {
+    case 'LIKERT':
+      return getLikertMean(distribution)
+    case 'SINGLE_CHOICE':
+      return getSingleChoiceMean(distribution, question)
+    default:
+      return 0
+  }
+}
 
 const getCounts = (rows) => {
   const uniqueFeedbackTargets = _.uniqBy(rows, (row) => row.feedback_target_id)
@@ -163,16 +224,38 @@ const getCounts = (rows) => {
   }
 }
 
-const getResults = (rows, questionIds) => {
+// TODO: remove this function when tested with actual data
+// eslint-disable-next-line
+const generateWorkloadQuestionResults = (question) => {
+  const options = question.data?.options ?? []
+  const optionIds = options.map(({ id }) => id)
+
+  const distribution = optionIds.reduce(
+    (acc, id) => ({
+      ...acc,
+      [id]: _.random(1, 20),
+    }),
+    {},
+  )
+
+  return {
+    questionId: question.id,
+    mean: getMean(distribution, question),
+    distribution,
+  }
+}
+
+const getResults = (rows, questions) => {
   const rowsByQuestionId = _.groupBy(rows, (row) => row.question_id.toString())
 
-  const results = questionIds.map((questionId) => {
-    const questionRows = rowsByQuestionId[questionId.toString()] ?? []
-    const mean = getFeedbackMean(questionRows)
+  const results = questions.map((question) => {
+    const questionRows = rowsByQuestionId[question.id.toString()] ?? []
+    const distribution = getFeedbackDistribution(questionRows)
 
     return {
-      questionId,
-      mean,
+      questionId: question.id,
+      mean: getMean(distribution, question),
+      distribution,
     }
   })
 
@@ -223,7 +306,7 @@ const mapOpenUniOrganisations = async (rows) => {
     }
   })
 
-  return rows.map((row) => {
+  const mappedRows = rows.map((row) => {
     const mappedOrganisation = mapping[row.course_code]
 
     return row.organisation_id === OPEN_UNI_ORGANISATION_ID &&
@@ -236,9 +319,18 @@ const mapOpenUniOrganisations = async (rows) => {
         }
       : row
   })
+
+  return _.uniqBy(mappedRows, (row) =>
+    JSON.stringify([
+      row.question_id,
+      row.question_data,
+      row.feedback_target_id,
+      row.organisation_code,
+    ]),
+  )
 }
 
-const getCourseUnitsWithResults = (rows, questionIds) => {
+const getCourseUnitsWithResults = (rows, questions) => {
   const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
 
   const courseUnits = Object.entries(rowsByCourseCode).map(
@@ -258,26 +350,27 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
 
       const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
 
-      const currentResults = getResults(current, questionIds)
-      const previousResults = getResults(previous, questionIds)
+      const currentResults = getResults(current, questions)
+      const previousResults = getResults(previous, questions)
       const { feedbackCount, studentCount } = getCounts(current)
 
-      const resultsDifference = currentResults.map(
-        ({ questionId, value }, index) => {
-          const { value: comparedValue } = previousResults[index]
+      const results = currentResults.map((r) => {
+        const previousQuestionResults = previousResults.find(
+          (pr) => r.questionId === pr.questionId,
+        )
 
-          return {
-            questionId,
-            mean: comparedValue ? _.round(value - comparedValue, 2) : null,
-          }
-        },
-      )
+        return {
+          ...r,
+          previous: previousQuestionResults?.mean
+            ? previousQuestionResults
+            : null,
+        }
+      })
 
       return {
         name,
         courseCode,
-        results: currentResults,
-        resultsDifference,
+        results,
         feedbackCount,
         studentCount,
         feedbackResponseGiven,
@@ -289,7 +382,7 @@ const getCourseUnitsWithResults = (rows, questionIds) => {
   return _.orderBy(courseUnits, ['courseCode'])
 }
 
-const getOrganisationsWithResults = (rows, questionIds) => {
+const getOrganisationsWithResults = (rows, questions) => {
   const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
 
   const organisations = Object.entries(rowsByOrganisationId).map(
@@ -297,10 +390,7 @@ const getOrganisationsWithResults = (rows, questionIds) => {
       const { organisation_name: name, organisation_code: code } =
         organisationRows[0]
 
-      const courseUnits = getCourseUnitsWithResults(
-        organisationRows,
-        questionIds,
-      )
+      const courseUnits = getCourseUnitsWithResults(organisationRows, questions)
 
       const feedbackCount = _.sumBy(
         courseUnits,
@@ -318,15 +408,24 @@ const getOrganisationsWithResults = (rows, questionIds) => {
         questionId.toString(),
       )
 
-      const results = questionIds.map((questionId) => {
-        const questionMeans = (resultsByQuestionId[questionId.toString()] ?? [])
+      const results = questions.map(({ id: questionId }) => {
+        const questionResults = resultsByQuestionId[questionId.toString()] ?? []
+
+        const questionMeans = questionResults
           .map(({ mean }) => mean)
           .filter(Boolean)
+
+        const distribution = questionResults.reduce(
+          (acc, curr) =>
+            _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
+          {},
+        )
 
         return {
           questionId,
           mean:
-            questionMeans.length > 0 ? _.round(_.mean(questionMeans), 2) : null,
+            questionMeans.length > 0 ? _.round(_.mean(questionMeans), 2) : 0,
+          distribution,
         }
       })
 
@@ -345,7 +444,7 @@ const getOrganisationsWithResults = (rows, questionIds) => {
   return _.orderBy(organisations, ['code'])
 }
 
-const getCourseRealisationsWithResults = (rows, questionIds) => {
+const getCourseRealisationsWithResults = (rows, questions) => {
   const rowsByCourseRealisationId = _.groupBy(
     rows,
     (row) => row.course_realisation_id,
@@ -363,7 +462,7 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
         closes_at: closesAt,
       } = courseRealisationRows[0]
 
-      const results = getResults(courseRealisationRows, questionIds)
+      const results = getResults(courseRealisationRows, questions)
 
       const { feedbackCount, studentCount } = getCounts(courseRealisationRows)
 
@@ -389,7 +488,7 @@ const getCourseRealisationsWithResults = (rows, questionIds) => {
 const withMissingOrganisations = (
   organisations,
   organisationAccess,
-  questionIds,
+  questions,
 ) => {
   const accessibleOrganisations = organisationAccess.map(
     ({ organisation }) => organisation,
@@ -406,7 +505,11 @@ const withMissingOrganisations = (
       name: org.name,
       code: org.code,
       courseUnits: [],
-      results: questionIds.map((questionId) => ({ questionId, mean: null })),
+      results: questions.map(({ id: questionId }) => ({
+        questionId,
+        mean: 0,
+        distribution: {},
+      })),
       feedbackCount: 0,
       studentCount: 0,
     })),
@@ -419,17 +522,32 @@ const withMissingOrganisations = (
   )
 }
 
+const getValidDataValues = (questions) => {
+  const singleChoiceValues = questions
+    .filter((q) => q.type === 'SINGLE_CHOICE')
+    .flatMap((q) => q.data?.options ?? [])
+    .map((o) => o.id)
+    .filter(Boolean)
+
+  const likertValues = ['0', '1', '2', '3', '4', '5']
+
+  return [...singleChoiceValues, ...likertValues]
+}
+
 const getOrganisationSummaries = async ({
-  questionIds,
+  questions,
   courseCodes,
   organisationAccess,
 }) => {
+  const validDataValues = getValidDataValues(questions)
+
   const rows =
     courseCodes.length > 0
       ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
           replacements: {
-            questionIds: questionIds.map((id) => id.toString()),
+            questionIds: questions.map(({ id }) => id.toString()),
             courseCodes,
+            validDataValues,
           },
           type: sequelize.QueryTypes.SELECT,
         })
@@ -438,22 +556,25 @@ const getOrganisationSummaries = async ({
   const normalizedRows = await mapOpenUniOrganisations(rows)
 
   return withMissingOrganisations(
-    getOrganisationsWithResults(normalizedRows, questionIds),
+    getOrganisationsWithResults(normalizedRows, questions),
     organisationAccess,
-    questionIds,
+    questions,
   )
 }
 
-const getCourseRealisationSummaries = async ({ courseCode, questionIds }) => {
+const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
+  const validDataValues = getValidDataValues(questions)
+
   const rows = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
     replacements: {
-      questionIds: questionIds.map((id) => id.toString()),
+      questionIds: questions.map(({ id }) => id.toString()),
       courseCode,
+      validDataValues,
     },
     type: sequelize.QueryTypes.SELECT,
   })
 
-  return getCourseRealisationsWithResults(rows, questionIds)
+  return getCourseRealisationsWithResults(rows, questions)
 }
 
 module.exports = {
