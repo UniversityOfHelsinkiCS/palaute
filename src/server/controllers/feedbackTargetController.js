@@ -560,6 +560,30 @@ const emailStudentsAboutResponse = async (req, res) => {
   res.send(emailsSentTo)
 }
 
+const openFeedbackImmediately = async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+
+  const { user, isAdmin } = req
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
+    throw new ApplicationError('User is not authorized to respond', 403)
+  }
+
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+
+  feedbackTarget.opensAt = req.body.opensAt
+  await feedbackTarget.save()
+
+  res.sendStatus(200)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -569,4 +593,5 @@ module.exports = {
   getStudentsWithFeedback,
   updateFeedbackResponse,
   emailStudentsAboutResponse,
+  openFeedbackImmediately,
 }

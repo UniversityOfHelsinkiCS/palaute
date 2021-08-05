@@ -91,3 +91,19 @@ export const saveValues = async (values, feedbackTarget) => {
 
   return data
 }
+
+export const openCourseImmediately = async (feedbackTarget) => {
+  const { id } = feedbackTarget
+  const opensAt = new Date()
+
+  const payload = {
+    opensAt,
+  }
+
+  const { data } = await apiClient.put(
+    `/feedback-targets/${id}/open-immediately`,
+    payload,
+  )
+
+  return data
+}

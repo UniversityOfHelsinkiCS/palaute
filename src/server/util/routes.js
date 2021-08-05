@@ -57,6 +57,11 @@ router.get(
   feedbackTargets.getStudentsWithFeedback,
 )
 
+router.put(
+  '/feedback-targets/:id/open-immediately',
+  feedbackTargets.openFeedbackImmediately,
+)
+
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
 router.get('/surveys/university', surveys.getUniversitySurvey)
