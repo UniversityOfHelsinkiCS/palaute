@@ -48,8 +48,9 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
   const classes = useStyles()
 
-  const { name, courseCode } = courseUnit
+  const { courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
+  const { name } = courseRealisation
   const feedbackResponseChip = getFeedbackResponseChip(courseRealisation)
 
   return (
