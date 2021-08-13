@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const { INCLUDE_COURSES } = require('../../config')
 
 const {
   UserFeedbackTarget,
@@ -149,13 +150,14 @@ const getCourseUnitsForTeacher = async (req, res) => {
   )
 
   const targetFields = ['id', 'name', 'opensAt', 'closesAt']
-
   const courseUnits = Object.entries(targetsByCourseCode).map(
     ([courseCode, unfilteredTargets]) => {
       const targets = unfilteredTargets.filter(
         // filter out courses starting before 1.9.2021
         // Month starts from 0, i.e 8 is acually 9th month.
-        (target) => target.courseRealisation.startDate >= new Date(2021, 8, 1),
+        (target) =>
+          target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
+          INCLUDE_COURSES.includes(target.courseRealisation.id),
       )
 
       const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), [

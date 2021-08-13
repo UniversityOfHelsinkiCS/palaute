@@ -1,6 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import { INCLUDE_COURSES } from '../../../config'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -67,7 +68,8 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
       (target) =>
         // filter out courses starting before 1.9.2021
         // Month starts from 0, i.e 8 is acually 9th month.
-        new Date(2021, 8, 1) <= new Date(target.courseRealisation.startDate),
+        new Date(2021, 8, 1) <= new Date(target.courseRealisation.startDate) ||
+        INCLUDE_COURSES.includes(target.courseRealisation.id),
     )
   if (status === 'waitingForFeedback') {
     return acualFeedbackTargets.filter(
