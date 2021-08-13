@@ -125,6 +125,9 @@ export default {
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
     noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
+    openImmediately: 'Aloita palautejakso heti',
+    openImmediatelyConfirm:
+      'Palautejakson alettua kyselyä ei voi enää muokata, haluatko varmasti aloittaa palautejakson?',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

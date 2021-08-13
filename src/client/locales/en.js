@@ -128,6 +128,9 @@ export default {
     opensAtIsNow:
       'The survey is set to open immediately! When the survey is open it cannot be edited anymore. Are you sure you want to save the survey?',
     noUnsavedChanges: 'You do not have unsaved changes to submit',
+    openImmediately: 'Open feedback now',
+    openImmediatelyConfirm:
+      'When feedback is open the survey can no longer be edited, do you still want to open the feedback?',
   },
   questionResults: {
     answerCount: 'Answer count',

@@ -8,11 +8,13 @@ import {
   Box,
   Card,
   CardContent,
+  Button,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
+import { parseISO } from 'date-fns'
 
 import QuestionEditor from '../QuestionEditor'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -23,12 +25,17 @@ import Alert from '../Alert'
 import DirtyFormPrompt from '../DirtyFormPrompt'
 import Toolbar from './Toolbar'
 
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { isAdmin } from '../NavBar/utils'
+
 import {
   getInitialValues,
   validate,
   saveValues,
   getUpperLevelQuestions,
   requiresSaveConfirmation,
+  openCourseImmediately,
+  parseDate,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +66,9 @@ const EditFeedbackTarget = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
   const { language } = i18n
+
+  const { authorizedUser } = useAuthorizedUser()
+  const isAdminUser = isAdmin(authorizedUser)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
@@ -100,6 +110,21 @@ const EditFeedbackTarget = () => {
     }
   }
 
+  const handleOpenClick = async () => {
+    // eslint-disable-next-line no-alert
+    const result = window.confirm(
+      t('editFeedbackTarget:openImmediatelyConfirm'),
+    )
+    if (result) {
+      try {
+        await openCourseImmediately(feedbackTarget)
+        window.location.reload()
+      } catch (e) {
+        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      }
+    }
+  }
+
   const initialValues = getInitialValues(feedbackTarget)
 
   return (
@@ -116,40 +141,60 @@ const EditFeedbackTarget = () => {
             <Box mb={2}>
               <Card>
                 <CardContent>
-                  <div className={classes.form}>
-                    <Box hidden mb={2}>
-                      <FormikTextField
-                        name={`name.${language}`}
-                        label={t('name')}
-                        fullWidth
-                      />
-                    </Box>
+                  {isAdminUser ? (
+                    <div className={classes.form}>
+                      <Box hidden mb={2}>
+                        <FormikTextField
+                          name={`name.${language}`}
+                          label={t('name')}
+                          fullWidth
+                        />
+                      </Box>
 
-                    <Box mb={2}>
-                      <FormikCheckbox
-                        name="hidden"
-                        label={t('editFeedbackTarget:hidden')}
-                      />
-                    </Box>
-                    <Alert severity="warning">
-                      {t('editFeedbackTarget:warningAboutOpeningCourse')}
-                    </Alert>
-                    <Box mb={2}>
-                      <FormikDatePicker
-                        name="opensAt"
-                        label={t('editFeedbackTarget:opensAt')}
-                        fullWidth
-                      />
-                    </Box>
-
-                    <Box mb={2}>
-                      <FormikDatePicker
-                        name="closesAt"
-                        label={t('editFeedbackTarget:closesAt')}
-                        fullWidth
-                      />
-                    </Box>
-                  </div>
+                      <Box mb={2}>
+                        <FormikCheckbox
+                          name="hidden"
+                          label={t('editFeedbackTarget:hidden')}
+                        />
+                      </Box>
+                      <Alert severity="warning">
+                        {t('editFeedbackTarget:warningAboutOpeningCourse')}
+                      </Alert>
+                      <Box mb={2}>
+                        <FormikDatePicker
+                          name="opensAt"
+                          label={t('editFeedbackTarget:opensAt')}
+                          fullWidth
+                        />
+                      </Box>
+                      <Box mb={2}>
+                        <FormikDatePicker
+                          name="closesAt"
+                          label={t('editFeedbackTarget:closesAt')}
+                          fullWidth
+                        />
+                      </Box>
+                    </div>
+                  ) : (
+                    <div className={classes.form}>
+                      <Box mb={2}>
+                        {`${t('editFeedbackTarget:opensAt')} ${parseDate(
+                          feedbackTarget.opensAt,
+                        )} - 
+                        ${t('editFeedbackTarget:closesAt')} ${parseDate(
+                          feedbackTarget.closesAt,
+                        )}`}
+                      </Box>
+                    </div>
+                  )}
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={parseISO(feedbackTarget.opensAt) < new Date()}
+                    onClick={handleOpenClick}
+                  >
+                    {t('editFeedbackTarget:openImmediately')}
+                  </Button>
                 </CardContent>
               </Card>
             </Box>

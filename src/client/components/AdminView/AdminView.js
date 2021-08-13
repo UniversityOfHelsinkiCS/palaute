@@ -7,7 +7,6 @@ import apiClient from '../../util/apiClient'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import LoginAs from './LoginAsSelector'
 import EditUniversitySurvey from './EditUniversitySurvey'
-import ShowActiveFeedbackTargets from './ShowActiveFeedbackTargets'
 
 const AdminView = () => {
   const { authorizedUser } = useAuthorizedUser()
@@ -26,7 +25,6 @@ const AdminView = () => {
     <>
       <h1>Admin page</h1>
       <LoginAs />
-      <ShowActiveFeedbackTargets />
       <EditUniversitySurvey />
       <Button variant="contained" color="primary" onClick={runUpdater}>
         Run updater

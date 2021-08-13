@@ -15,6 +15,8 @@ import {
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { formatDate } from './utils'
+import { getLanguageValue } from '../../util/languageUtils'
+
 import FeedbackResponseChip from './FeedbackResponseChip'
 
 const getChip = (feedbackTarget, t) => {
@@ -43,7 +45,7 @@ const getChip = (feedbackTarget, t) => {
 }
 
 const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const {
     id,
@@ -54,7 +56,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
     closesAt,
   } = feedbackTarget
 
-  const { startDate, endDate } = courseRealisation
+  const { name, startDate, endDate } = courseRealisation
 
   const periodInfo = (
     <Tooltip
@@ -63,9 +65,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
         opensAt: formatDate(opensAt),
       })}
     >
-      <Link component={RouterLink} to={`/targets/${id}`}>
+      <Typography>
         {formatDate(startDate)} - {formatDate(endDate)}
-      </Link>
+      </Typography>
     </Tooltip>
   )
 
@@ -75,7 +77,14 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
     <ListItem divider={divider}>
       <ListItemText
         disableTypography
-        primary={<Typography>{periodInfo}</Typography>}
+        primary={
+          <>
+            <Link component={RouterLink} to={`/targets/${id}`}>
+              {getLanguageValue(name, i18n.language)}{' '}
+            </Link>
+            <Typography>{periodInfo}</Typography>
+          </>
+        }
         secondary={
           <>
             <Typography variant="body2" color="textSecondary" component="span">

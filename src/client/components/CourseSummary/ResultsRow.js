@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
 
@@ -10,7 +11,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import { getLanguageValue } from '../../util/languageUtils'
 import ResultItem from './ResultItem'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,30 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const getQuestionLabel = (questions, questionId, language) => {
-  const question = questions.find((q) => q.id === questionId)
-
-  const label = getLanguageValue(question?.data?.label, language)
-
-  return label
-}
-
-const getQuestionMeanDifference = (questionId, resultsDifference) => {
-  if (!Array.isArray(resultsDifference)) {
-    return 0
-  }
-
-  const questionItem = resultsDifference.find(
-    (item) => item.questionId === questionId,
-  )
-
-  return questionItem?.mean ?? 0
-}
+const getQuestion = (questions, questionId) =>
+  questions.find((q) => q.id === questionId)
 
 const ResultsRow = ({
+  id,
   label,
   results,
-  resultsDifference,
   questions,
   children,
   level = 0,
@@ -70,16 +53,30 @@ const ResultsRow = ({
   accordionCellEnabled = true,
   cellsAfter = null,
   lastChild = false,
+  openAccordions,
+  updateOpenAccordions,
   ...props
 }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const classes = useStyles({ level })
+  const history = useHistory()
 
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   const handleToggleAccordion = () => {
     setAccordionOpen((previousOpen) => !previousOpen)
+    updateOpenAccordions(id)
   }
+
+  const handleRender = () => {
+    if (history.location.state && history.location.state.includes(id)) {
+      setAccordionOpen(true)
+    }
+  }
+
+  useEffect(() => {
+    handleRender()
+  }, [])
 
   const feedbackResponseGivenContent = (
     <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
@@ -118,19 +115,13 @@ const ResultsRow = ({
             )}
           </td>
         )}
-        {results.map(({ questionId, mean }) => (
+        {results.map(({ questionId, mean, distribution, previous }) => (
           <ResultItem
             key={questionId}
+            question={getQuestion(questions, questionId)}
             mean={mean}
-            meanDifference={getQuestionMeanDifference(
-              questionId,
-              resultsDifference,
-            )}
-            questionLabel={getQuestionLabel(
-              questions,
-              questionId,
-              i18n.language,
-            )}
+            distribution={distribution}
+            previous={previous}
             className={classes.resultCell}
           />
         ))}

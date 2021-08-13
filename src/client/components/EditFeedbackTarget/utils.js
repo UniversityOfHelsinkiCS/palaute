@@ -1,4 +1,4 @@
-import { isAfter, set, isBefore } from 'date-fns'
+import { isAfter, set, isBefore, parseISO, format } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
@@ -91,3 +91,21 @@ export const saveValues = async (values, feedbackTarget) => {
 
   return data
 }
+
+export const openCourseImmediately = async (feedbackTarget) => {
+  const { id } = feedbackTarget
+  const opensAt = new Date()
+
+  const payload = {
+    opensAt,
+  }
+
+  const { data } = await apiClient.put(
+    `/feedback-targets/${id}/open-immediately`,
+    payload,
+  )
+
+  return data
+}
+
+export const parseDate = (date) => format(parseISO(date), 'dd.MM.yyyy')

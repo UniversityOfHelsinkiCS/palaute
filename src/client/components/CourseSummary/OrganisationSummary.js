@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   makeStyles,
 } from '@material-ui/core'
 
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/Settings'
 
@@ -60,6 +60,21 @@ const OrganisationTable = ({
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
+  const history = useHistory()
+  const [openAccordions, setOpenAccordions] = useState(
+    history.location.state ? history.location.state : [],
+  )
+
+  const updateOpenAccordions = async (id) => {
+    if (openAccordions.includes(id)) {
+      setOpenAccordions(openAccordions.filter((a) => a !== id))
+      history.replace({ state: openAccordions.filter((a) => a !== id) })
+    } else {
+      setOpenAccordions(openAccordions.concat(id))
+      history.replace({ state: openAccordions.concat(id) })
+    }
+  }
+
   return (
     <TableContainer>
       <table className={classes.table}>
@@ -86,6 +101,7 @@ const OrganisationTable = ({
             ({ code, id, name, results, feedbackCount, courseUnits }) => (
               <Fragment key={id}>
                 <ResultsRow
+                  id={id}
                   label={
                     <>
                       {getLanguageValue(name, i18n.language)} ({code})
@@ -102,6 +118,8 @@ const OrganisationTable = ({
                       )}
                     </td>
                   }
+                  openAccordions={openAccordions}
+                  updateOpenAccordions={updateOpenAccordions}
                 >
                   <CourseUnitSummary
                     courseUnits={courseUnits}

@@ -10,6 +10,8 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 
+const WORKLOAD_QUESTION_ID = 1042
+
 const getAccessibleCourseCodes = async (organisationAccess) => {
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,
@@ -54,9 +56,13 @@ const getSummaryQuestions = async () => {
 
   const { questions = [] } = universitySurvey
 
+  // TODO: include workload question when tested with actual data
   const summaryQuestions = questions.filter((q) => q.type === 'LIKERT')
 
-  return summaryQuestions
+  return summaryQuestions.map((question) => ({
+    ...question.toJSON(),
+    secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
+  }))
 }
 
 const getByOrganisations = async (req, res) => {
@@ -72,21 +78,19 @@ const getByOrganisations = async (req, res) => {
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const [summaryQuestions, courseCodes] = await Promise.all([
+  const [questions, courseCodes] = await Promise.all([
     getSummaryQuestions(),
     getAccessibleCourseCodes(organisationAccess),
   ])
 
-  const questionIds = summaryQuestions.map(({ id }) => id)
-
   const organisations = await getOrganisationSummaries({
-    questionIds,
+    questions,
     courseCodes,
     organisationAccess,
   })
 
   res.send({
-    questions: summaryQuestions,
+    questions,
     organisations,
   })
 }
@@ -106,7 +110,7 @@ const getByCourseUnit = async (req, res) => {
 
   const { code } = req.params
 
-  const [summaryQuestions, courseCodes, courseUnit] = await Promise.all([
+  const [questions, courseCodes, courseUnit] = await Promise.all([
     getSummaryQuestions(),
     getAccessibleCourseCodes(organisationAccess),
     CourseUnit.findOne({ where: { courseCode: code } }),
@@ -116,11 +120,9 @@ const getByCourseUnit = async (req, res) => {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
-  const questionIds = summaryQuestions.map(({ id }) => id)
-
   const courseRealisations = await getCourseRealisationSummaries({
     courseCode: code,
-    questionIds,
+    questions,
   })
 
   const hasCourseUnitAccess = courseCodes.includes(
@@ -132,7 +134,7 @@ const getByCourseUnit = async (req, res) => {
   }
 
   res.send({
-    questions: summaryQuestions,
+    questions,
     courseRealisations,
     courseUnit,
   })
