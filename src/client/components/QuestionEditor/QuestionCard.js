@@ -36,11 +36,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
-  chipContainer: {
-    '& > *:not(:last-child)': {
-      marginRight: theme.spacing(1),
-    },
-  },
   actionsDivider: {
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2),
@@ -192,16 +187,16 @@ const QuestionCard = ({
     <Card className={className}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
-          <div className={classes.chipContainer}>
-            <Chip label={title} variant="outlined" />
-            {question.chip && (
+          <Chip label={title} variant="outlined" />
+          {question.chip && (
+            <Tooltip className={classes.tooltip} arrow title={t('questionEditor:uneditableTooltip')}>
               <Chip
                 label={t(question.chip)}
                 variant="outlined"
                 color="primary"
               />
-            )}
-          </div>
+            </Tooltip>
+          )}
           {editable && questionIsEditable && (
             <div>
               {isEditing ? (

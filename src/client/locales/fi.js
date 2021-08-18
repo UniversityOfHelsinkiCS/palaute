@@ -87,11 +87,11 @@ export default {
     surveyOpen: 'Palautteenantoaika: {{opensAt}}-{{closesAt}}',
   },
   questionEditor: {
-    addQuestion: 'Lisää kysymys',
-    likertQuestion: 'Arvoasteikko',
+    addQuestion: 'Lisää osio tai kysymys',
+    likertQuestion: 'Arvoasteikkokysymys',
     openQuestion: 'Avoin kysymys',
-    singleChoiceQuestion: 'Monivalinta - valitse yksi',
-    multipleChoiceQuestion: 'Monivalinta - valitse monta',
+    singleChoiceQuestion: 'Monivalintakysymys - valitse yksi',
+    multipleChoiceQuestion: 'Monivalintakysymys - valitse monta',
     textualContent: 'Tekstuaalinen sisältö',
     moveUp: 'Siirrä ylös',
     moveDown: 'Siirrä alas',
@@ -108,8 +108,9 @@ export default {
     done: 'Valmis',
     languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
     descriptionHelper: 'Vapaaehtoinen kuvausteksti, joka tarkentaa kysymystä',
-    universityQuestion: 'Yliopistotason kysymys',
-    programmeQuestion: 'Koulutusohjelmatason kysymys',
+    universityQuestion: 'Yliopistotaso',
+    programmeQuestion: 'Koulutusohjelmataso',
+    uneditableTooltip: 'Tämä on esimääritelty ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa'
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
