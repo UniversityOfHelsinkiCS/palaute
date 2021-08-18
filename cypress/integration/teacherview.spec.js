@@ -75,8 +75,12 @@ describe('Teacher view', () => {
     cy.visit('localhost:8000/targets/165/edit')
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
-    cy.get('input[id^=likert-question-questions]').type('Test question')
-    cy.get('input[id^=likert-description-questions]').type('Test description')
+    cy.get('input[id^=likert-question-en-questions]').type('Test question')
+
+    cy.get('input[id^=likert-description-en-questions]').type(
+      'Test description',
+    )
+
     cy.get('button').contains('Done').click()
   })
   it('Teacher can view survey results', () => {

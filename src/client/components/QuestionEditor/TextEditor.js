@@ -25,7 +25,7 @@ const TextEditor = ({ name, language }) => {
         </Alert>
       </Box>
       <FormikTextField
-        id="textual-context-text"
+        id={`textual-context-text-${language}-${name}`}
         name={`${name}.data.content.${language}`}
         label={t('questionEditor:content')}
         fullWidth

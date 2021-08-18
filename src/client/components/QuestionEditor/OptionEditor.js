@@ -82,7 +82,7 @@ const OptionEditor = ({ name, language }) => {
           <div className={classes.optionsContainer}>
             {options.map((option, index) => (
               <OptionItem
-                id={`option-${index}`}
+                id={`option-${language}-${index}-${name}`}
                 key={option.id}
                 name={`${name}.${index}`}
                 language={language}
