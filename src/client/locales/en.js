@@ -112,8 +112,9 @@ export default {
       'Your are currently editing the "{{language}}" translation of this question',
     descriptionHelper:
       'Optional description that provides additional information about the question',
-    universityQuestion: 'University level question',
-    programmeQuestion: 'Programme level question',
+    universityQuestion: 'University level',
+    programmeQuestion: 'Programme level',
+    uneditableTooltip: 'This is predefined and automatically added to the survey and it can not be edited or removed'
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',

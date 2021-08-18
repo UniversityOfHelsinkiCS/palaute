@@ -111,6 +111,7 @@ export default {
       'Frivillig beskrivning som förser frågan med tilläggsinformation',
     universityQuestion: '',
     programmeQuestion: '',
+    uneditableTooltip: '',
   },
   editFeedbackTarget: {
     closesAt: 'Stängs',
