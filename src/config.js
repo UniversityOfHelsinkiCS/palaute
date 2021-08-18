@@ -19,7 +19,7 @@ const ADMINS = [
 ]
 
 // These courses bypass the starting after 1.9 filter
-const INCLUDE_COURSES = ['hy-opt-cur-2122-329bfeb5-2c56-450f-b3f5-ff9dbcca8932']
+const INCLUDE_COURSES = ['hy-opt-cur-2122-329bfeb5-2c56-450f-b3f5-ff9dbcca8932', 'hy-CUR-142630573']
 
 const basePath = process.env.PUBLIC_URL || ''
 
