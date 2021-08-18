@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -13,7 +13,6 @@ import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
 import QuestionEditor from '../QuestionEditor'
-import LanguageTabs from '../LanguageTabs'
 import Alert from '../Alert'
 
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
@@ -42,8 +41,7 @@ const EditProgrammeSurvey = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { surveyCode } = useParams()
-
-  const [language, setLanguage] = useState('fi')
+  const { language } = i18n
 
   const { survey, isLoading: surveyIsLoading } = useProgrammeSurvey(surveyCode)
   const { organisations } = userOrganisations()
@@ -112,14 +110,6 @@ const EditProgrammeSurvey = () => {
             count: upperLevelQuestions.length,
           })}
         </Alert>
-      </Box>
-
-      <Box mb={2}>
-        <LanguageTabs
-          language={language}
-          onChange={(newLanguage) => setLanguage(newLanguage)}
-          className={classes.LanguageTabs}
-        />
       </Box>
 
       {!survey && <Typography>This programme has no survey yet</Typography>}

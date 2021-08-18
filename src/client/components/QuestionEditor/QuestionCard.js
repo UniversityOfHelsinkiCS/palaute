@@ -10,6 +10,8 @@ import {
   Chip,
   Divider,
   Button,
+  Grid,
+  Typography,
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -28,7 +30,6 @@ import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 import FormikSwitch from '../FormikSwitch'
-import Alert from '../Alert'
 
 const useStyles = makeStyles((theme) => ({
   actionsContainer: {
@@ -127,6 +128,38 @@ const EditActions = ({
   )
 }
 
+const EditorContainer = ({ component: Component, ...props }) => (
+  <Grid spacing={4} container>
+    <Grid md={4} sm={12} xs={12} item>
+      <Box mb={2}>
+        <Typography variant="h6" as="h2">
+          FI
+        </Typography>
+      </Box>
+
+      <Component {...props} language="fi" />
+    </Grid>
+    <Grid md={4} sm={12} xs={12} item>
+      <Box mb={2}>
+        <Typography variant="h6" as="h2">
+          SV
+        </Typography>
+      </Box>
+
+      <Component {...props} language="sv" />
+    </Grid>
+    <Grid md={4} sm={12} xs={12} item>
+      <Box mb={2}>
+        <Typography variant="h6" as="h2">
+          EN
+        </Typography>
+      </Box>
+
+      <Component {...props} language="en" />
+    </Grid>
+  </Grid>
+)
+
 const QuestionCard = ({
   name,
   onRemove,
@@ -152,10 +185,6 @@ const QuestionCard = ({
   const PreviewComponent = previewComponentByType[question.type]
 
   const title = getTitleByType(question.type, t)
-
-  const languageInfo = t('questionEditor:languageInfo', {
-    language: t(`languages.${language}`),
-  })
 
   const questionIsEditable = question.editable ?? true
 
@@ -195,11 +224,7 @@ const QuestionCard = ({
 
         {isEditing ? (
           <>
-            <Box mb={3}>
-              <Alert severity="info">{languageInfo}</Alert>
-            </Box>
-
-            <EditorComponent name={name} language={language} />
+            <EditorContainer component={EditorComponent} name={name} />
 
             <Divider className={classes.actionsDivider} />
 

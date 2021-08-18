@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   Typography,
@@ -15,7 +15,6 @@ import { useSnackbar } from 'notistack'
 import QuestionEditor from '../QuestionEditor'
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
 import { getInitialValues, validate, saveValues } from './utils'
-import LanguageTabs from '../LanguageTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,17 +26,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  languageTabs: {
-    marginBottom: theme.spacing(2),
-  },
 }))
 
 const EditUniversitySurvey = () => {
   const { t, i18n } = useTranslation()
+  const { language } = i18n
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
-
-  const [language, setLanguage] = useState('fi')
 
   const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()
   const isLoading = surveyIsLoading
@@ -67,12 +62,6 @@ const EditUniversitySurvey = () => {
       <Typography variant="h4" component="h1" className={classes.heading}>
         {name}
       </Typography>
-
-      <LanguageTabs
-        language={language}
-        onChange={(newLanguage) => setLanguage(newLanguage)}
-        className={classes.languageTabs}
-      />
 
       <Formik
         initialValues={initialValues}

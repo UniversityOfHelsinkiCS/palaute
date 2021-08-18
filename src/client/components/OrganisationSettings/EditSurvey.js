@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CircularProgress, Box, Button } from '@material-ui/core'
@@ -8,7 +8,6 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
 import QuestionEditor from '../QuestionEditor'
-import LanguageTabs from '../LanguageTabs'
 import Alert from '../Alert'
 
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
@@ -20,11 +19,10 @@ import {
 } from './utils'
 
 const EditSurvey = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { code } = useParams()
-
-  const [language, setLanguage] = useState('fi')
+  const { language } = i18n
 
   const { survey, isLoading } = useProgrammeSurvey(code)
 
@@ -61,13 +59,6 @@ const EditSurvey = () => {
             count: upperLevelQuestions.length,
           })}
         </Alert>
-      </Box>
-
-      <Box mb={2}>
-        <LanguageTabs
-          language={language}
-          onChange={(newLanguage) => setLanguage(newLanguage)}
-        />
       </Box>
 
       <Formik
