@@ -110,7 +110,8 @@ export default {
     descriptionHelper: 'Vapaaehtoinen kuvausteksti, joka tarkentaa kysymystä',
     universityQuestion: 'Yliopistotaso',
     programmeQuestion: 'Koulutusohjelmataso',
-    uneditableTooltip: 'Tämä on esimääritelty ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa'
+    uneditableTooltip:
+      'Tämä on esimääritelty ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
