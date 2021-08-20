@@ -60,8 +60,8 @@ export default {
     translationLanguage: 'Kyselyn esikatselun kieli',
     cannotSubmitText:
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
-    feedbackClosedError: 'Palautteenanto on loppunut',
-    endedInfo: 'Palautteenanto on päättynyt. <2>Katso palautteita</2>',
+    feedbackClosedError: 'Palautteenanto on sulkeutunut',
+    endedInfo: 'Palautteenanto on sulkeutunut. <2>Katso palautteita</2>',
   },
   teacherView: {
     mainHeading: 'Opetukseni',
@@ -111,7 +111,7 @@ export default {
     universityQuestion: 'Yliopistotaso',
     programmeQuestion: 'Koulutusohjelmataso',
     uneditableTooltip:
-      'Tämä on esimääritelty ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa',
+      'Tämä on määritetty etukäteen ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
@@ -126,10 +126,10 @@ export default {
     opensAtIsNow:
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
-    noUnsavedChanges: 'Sinulla ei ole tallentamattomia muutoksia',
-    openImmediately: 'Aloita palautejakso heti',
+    noUnsavedChanges: 'Ei tallentamattomia muutoksia',
+    openImmediately: 'Avaa palautteenanto heti',
     openImmediatelyConfirm:
-      'Palautejakson alettua kyselyä ei voi enää muokata, haluatko varmasti aloittaa palautejakson?',
+      'Palautteenannon avauduttua kyselyä ei voi enää muokata, haluatko varmasti avata palautteenannon?',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
@@ -150,7 +150,7 @@ export default {
     notEnoughFeedbacksInfo:
       'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
     onlyForEnrolledInfo:
-      'Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin opiskelijoille',
+      'Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
     responseHeading: 'Opettajan vastapalaute',
     giveResponse: 'Anna vastapalaute',
