@@ -114,7 +114,8 @@ export default {
       'Optional description that provides additional information about the question',
     universityQuestion: 'University level',
     programmeQuestion: 'Programme level',
-    uneditableTooltip: 'This is predefined and automatically added to the survey and it can not be edited or removed'
+    uneditableTooltip:
+      'This is predefined and automatically added to the survey and it can not be edited or removed',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',

@@ -189,7 +189,11 @@ const QuestionCard = ({
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />
           {question.chip && (
-            <Tooltip className={classes.tooltip} arrow title={t('questionEditor:uneditableTooltip')}>
+            <Tooltip
+              className={classes.tooltip}
+              arrow
+              title={t('questionEditor:uneditableTooltip')}
+            >
               <Chip
                 label={t(question.chip)}
                 variant="outlined"
