@@ -174,7 +174,7 @@ const createFeedbackTargets = async (courses) => {
       const courseUnit = course.courseUnits[0] // TODO fix
       const courseEndDate = new Date(course.activityPeriod.endDate)
 
-      const opensAt = formatDate(dateFns.subDays(courseEndDate, 14))
+      const opensAt = formatDate(courseEndDate)
       const closesAt = formatDate(dateFns.addDays(courseEndDate, 14))
 
       const targets = [
