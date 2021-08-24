@@ -74,12 +74,7 @@ const enrolmentsHandler = async (enrolments) => {
 
 const updateStudentFeedbackTargets = async () => {
   // Delete all old enrolments once a week sunday-monday night.
-  if (new Date().getDay() === 2) {
-    logger.info('Deleting old enrolments', {})
-    await sequelize.query(
-      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL`,
-    )
-  }
+  // Delete only enrollments, not teacher relations
 
   await mangleData('enrolments', 3000, enrolmentsHandler)
 }
