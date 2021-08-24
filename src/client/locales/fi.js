@@ -46,6 +46,7 @@ export default {
   },
   feedbackView: {
     submitButton: 'Lähetä palaute',
+    editButton: 'Muokkaa palautetta',
     successAlert: 'Palaute on annettu',
     feedbackInfo:
       'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
@@ -241,5 +242,6 @@ export default {
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
     copyLink: 'Kopioi linkki',
+    editFeedbackTab: 'Muokkaa palautetta',
   },
 }

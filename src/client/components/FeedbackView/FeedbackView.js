@@ -56,6 +56,7 @@ const FormContainer = ({
   disabled: disabledProp,
   showCannotSubmitText = false,
   showSubmitButton = true,
+  isEdit = false,
 }) => {
   const { t } = useTranslation()
 
@@ -97,7 +98,9 @@ const FormContainer = ({
                   variant="contained"
                   type="submit"
                 >
-                  {t('feedbackView:submitButton')}
+                  {isEdit
+                    ? t('feedbackView:editButton')
+                    : t('feedbackView:submitButton')}
                 </Button>
                 {showCannotSubmitText && (
                   <Box mt={1}>
@@ -140,7 +143,7 @@ const FeedbackView = () => {
     return <Redirect to="/" />
   }
 
-  const { accessStatus, opensAt, closesAt } = feedbackTarget
+  const { accessStatus, opensAt, closesAt, feedback } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -238,6 +241,7 @@ const FeedbackView = () => {
           questions={questions}
           showCannotSubmitText={isOutsider}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
+          isEdit={Boolean(feedback)}
         />
       )}
 

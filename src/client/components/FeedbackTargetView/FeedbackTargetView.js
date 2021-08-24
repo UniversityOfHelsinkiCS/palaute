@@ -127,7 +127,11 @@ const FeedbackTargetView = () => {
           scrollButtons="auto"
         >
           <Tab
-            label={t('feedbackTargetView:surveyTab')}
+            label={
+              feedback
+                ? t('feedbackTargetView:editFeedbackTab')
+                : t('feedbackTargetView:surveyTab')
+            }
             component={Link}
             to={`${url}/feedback`}
           />

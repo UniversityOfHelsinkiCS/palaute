@@ -46,6 +46,7 @@ export default {
   },
   feedbackView: {
     submitButton: 'Give feedback',
+    editButton: 'Edit feedback',
     successAlert: 'Feedback has been given',
     feedbackInfo:
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
@@ -241,5 +242,6 @@ export default {
     studentsWithFeedbackTab: 'Respondents',
     linkCopied: 'A link to the feedback has been copied to clipboard',
     copyLink: 'Copy link',
+    editFeedbackTab: 'Edit feedback',
   },
 }
