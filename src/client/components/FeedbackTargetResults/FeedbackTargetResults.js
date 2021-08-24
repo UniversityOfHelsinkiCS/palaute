@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Typography, Box, CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
