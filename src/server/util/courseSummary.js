@@ -224,27 +224,6 @@ const getCounts = (rows) => {
   }
 }
 
-// TODO: remove this function when tested with actual data
-// eslint-disable-next-line
-const generateWorkloadQuestionResults = (question) => {
-  const options = question.data?.options ?? []
-  const optionIds = options.map(({ id }) => id)
-
-  const distribution = optionIds.reduce(
-    (acc, id) => ({
-      ...acc,
-      [id]: _.random(1, 20),
-    }),
-    {},
-  )
-
-  return {
-    questionId: question.id,
-    mean: getMean(distribution, question),
-    distribution,
-  }
-}
-
 const getResults = (rows, questions) => {
   const rowsByQuestionId = _.groupBy(rows, (row) => row.question_id.toString())
 

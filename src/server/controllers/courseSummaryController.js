@@ -56,8 +56,9 @@ const getSummaryQuestions = async () => {
 
   const { questions = [] } = universitySurvey
 
-  // TODO: include workload question when tested with actual data
-  const summaryQuestions = questions.filter((q) => q.type === 'LIKERT')
+  const summaryQuestions = questions.filter(
+    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
+  )
 
   return summaryQuestions.map((question) => ({
     ...question.toJSON(),
