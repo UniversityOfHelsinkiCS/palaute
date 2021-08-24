@@ -22,6 +22,8 @@ const ADMINS = [
 const INCLUDE_COURSES = [
   'hy-opt-cur-2122-329bfeb5-2c56-450f-b3f5-ff9dbcca8932',
   'hy-CUR-142630573',
+  'hy-CUR-135891626', // Avoin ohtu
+  'hy-opt-cur-2021-28bce92e-aa01-4be8-832a-ca9df39bbd39', // Ohte
 ]
 
 const basePath = process.env.PUBLIC_URL || ''
