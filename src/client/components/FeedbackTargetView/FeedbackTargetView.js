@@ -128,7 +128,7 @@ const FeedbackTargetView = () => {
         >
           <Tab
             label={
-              feedback
+              feedback && isOpen
                 ? t('feedbackTargetView:editFeedbackTab')
                 : t('feedbackTargetView:surveyTab')
             }

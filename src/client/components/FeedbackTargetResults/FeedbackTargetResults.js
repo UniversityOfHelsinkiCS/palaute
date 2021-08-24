@@ -39,7 +39,8 @@ const FeedbackTargetResults = () => {
 
   const { feedbacks, feedbackVisible } = feedbackTargetData
 
-  const { questions, publicQuestionIds, accessStatus } = feedbackTarget
+  const { questions, publicQuestionIds, accessStatus, feedback } =
+    feedbackTarget
 
   const isTeacher = accessStatus === 'TEACHER'
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -79,9 +80,11 @@ const FeedbackTargetResults = () => {
         </Box>
       )}
 
-      {isOpen && (
+      {isOpen && feedback && (
         <Box mb={2}>
-          <Typography>{t('feedbackTargetResults:thankYouMessage')}</Typography>
+          <Alert severity="info">
+            {t('feedbackTargetResults:thankYouMessage')}
+          </Alert>
         </Box>
       )}
 
