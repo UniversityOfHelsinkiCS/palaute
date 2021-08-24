@@ -20,6 +20,13 @@ export const getCoursePeriod = (courseRealisation) => {
   return `${startDate} - ${endDate}`
 }
 
+export const getFeedbackPeriod = (feedbackTarget) => {
+  const opensAt = format(parseISO(feedbackTarget.opensAt), 'dd.MM.yyyy')
+  const closesAt = format(parseISO(feedbackTarget.closesAt), 'dd.MM.yyyy')
+
+  return `${opensAt} - ${closesAt}`
+}
+
 export const copyLink = (feedbackTarget) => {
   const { host } = window.location
 

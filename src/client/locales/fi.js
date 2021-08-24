@@ -243,5 +243,7 @@ export default {
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
     copyLink: 'Kopioi linkki',
     editFeedbackTab: 'Muokkaa palautetta',
+    coursePeriod: 'Kurssi käynnissä',
+    feedbackPeriod: 'Palaute käynnissä',
   },
 }

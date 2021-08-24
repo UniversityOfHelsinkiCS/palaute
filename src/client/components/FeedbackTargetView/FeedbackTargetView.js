@@ -31,7 +31,12 @@ import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import { getCoursePeriod, feedbackTargetIsDisabled, copyLink } from './utils'
+import {
+  getCoursePeriod,
+  feedbackTargetIsDisabled,
+  copyLink,
+  getFeedbackPeriod,
+} from './utils'
 
 const FeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
@@ -86,6 +91,8 @@ const FeedbackTargetView = () => {
 
   const coursePeriod = getCoursePeriod(courseRealisation)
 
+  const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
+
   const courseRealisationName = getLanguageValue(
     courseRealisation?.name,
     i18n.language,
@@ -101,7 +108,11 @@ const FeedbackTargetView = () => {
             </Typography>
 
             <Typography color="textSecondary" variant="body2">
-              {coursePeriod}
+              {`${t('feedbackTargetView:coursePeriod')}: ${coursePeriod}`}
+            </Typography>
+
+            <Typography color="textSecondary" variant="body2">
+              {`${t('feedbackTargetView:feedbackPeriod')}: ${feedbackPeriod}`}
             </Typography>
           </Box>
 

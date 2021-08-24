@@ -231,5 +231,7 @@ export default {
     studentsWithFeedbackTab: 'De som gett respons',
     linkCopied: 'Länken till responsen har kopierats till urklippet',
     copyLink: 'Kopiera länken',
+    coursePeriod: '',
+    feedbackPeriod: '',
   },
 }
