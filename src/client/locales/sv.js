@@ -58,7 +58,8 @@ export default {
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
     translationLanguage: 'Språket på förfrågans förhandsvisning',
-    cannotSubmitText: 'Du kan inte skicka respons eftersom du inte är anmäld till kursen.',
+    cannotSubmitText:
+      'Du kan inte skicka respons eftersom du inte är anmäld till kursen.',
     feedbackClosedError: 'Responsen är stängd',
     endedInfo: 'Responsen är stängd. <2>Se på responserna</2>',
   },
@@ -111,7 +112,8 @@ export default {
       'Frivillig beskrivning som förser frågan med tilläggsinformation',
     universityQuestion: 'Universitetsnivå',
     programmeQuestion: 'Utbildningsprogramsnivå',
-    uneditableTooltip: 'Detta är definierat på förhand och läggs till automatiskt i förfrågan och kan inte redigeras eller raderas',
+    uneditableTooltip:
+      'Detta är definierat på förhand och läggs till automatiskt i förfrågan och kan inte redigeras eller raderas',
   },
   editFeedbackTarget: {
     closesAt: 'Stängs',
@@ -128,7 +130,8 @@ export default {
     checkbox: 'Jag förstår',
     noUnsavedChanges: 'Inga osparade ändringar',
     openImmediately: 'Öppna reponsen genast',
-    openImmediatelyConfirm: 'När responsen har öppnats kan förfrågan inte längre redigeras. Är du säker på att du vill öppna repsonsen?',
+    openImmediatelyConfirm:
+      'När responsen har öppnats kan förfrågan inte längre redigeras. Är du säker på att du vill öppna repsonsen?',
   },
   questionResults: {
     answerCount: 'Antalet svar',
@@ -148,14 +151,16 @@ export default {
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
       'Förfrågans resultat visas inte på grund av för få responser',
-    onlyForEnrolledInfo: 'Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare',
+    onlyForEnrolledInfo:
+      'Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare',
     studentsWithFeedbackHeading: 'Studeranden som givit respons',
     responseHeading: 'Lärarens svar på responsen',
     giveResponse: 'Ge svar på responsen',
     editResponse: 'Redigera svaret på responsen',
     noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
     exportCsv: 'Exportera som csv',
-    thankYouMessage: 'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
+    thankYouMessage:
+      'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
@@ -202,9 +207,12 @@ export default {
     organisationCode: 'Organisationens kod',
   },
   editProgrammeSurvey: {
-    noWriteAccess: 'Du har inte rättigheter att redigera förfrågan för detta utbildningsprogram',
-    upperLevelQuestionsInfo: 'Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
-    bigBoss: 'Frågor och inställningar för utbildningsprogrammet kan redigeras av personal i utbildningsprogrammet.',
+    noWriteAccess:
+      'Du har inte rättigheter att redigera förfrågan för detta utbildningsprogram',
+    upperLevelQuestionsInfo:
+      'Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
+    bigBoss:
+      'Frågor och inställningar för utbildningsprogrammet kan redigeras av personal i utbildningsprogrammet.',
     studentListVisible: 'Lista på studerande visas',
     programmeSettings: 'Inställningar för utbildningsprogrammet',
   },
@@ -212,11 +220,14 @@ export default {
     contactSupport: 'Kontakta stödet',
   },
   courseRealisationFeedback: {
-    noFeedbackTarget: 'Det finns ingen respons tillgänglig för dig på denna kurs',
+    noFeedbackTarget:
+      'Det finns ingen respons tillgänglig för dig på denna kurs',
   },
   organisationSettings: {
-    surveyInfo: 'Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
-    studentListVisible: 'Visa studerandena som har gett repons till kursens lärare',
+    surveyInfo:
+      'Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
+    studentListVisible:
+      'Visa studerandena som har gett repons till kursens lärare',
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
     generalTab: 'Allmänna inställningar',
     coursesTab: 'Aktiverade kurser',
