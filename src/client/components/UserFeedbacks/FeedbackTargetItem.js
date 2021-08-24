@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
+import cn from 'classnames'
 
 import {
   Box,
@@ -23,28 +24,37 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   listItem: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-  actions: {
-    '& > *:not(:last-child)': {
-      marginTop: theme.spacing(2),
-    },
-  },
-  feedbackChip: {
-    marginBottom: theme.spacing(1),
+})
+
+const useActionButtonStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(0.5),
   },
 }))
+
+const ActionButton = ({ className, ...props }) => {
+  const classes = useActionButtonStyles()
+
+  return <Button className={cn(className, classes.button)} {...props} />
+}
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button variant="contained" color="primary" to={editPath} component={Link}>
+    <ActionButton
+      variant="contained"
+      color="primary"
+      to={editPath}
+      component={Link}
+    >
       {t('userFeedbacks:giveFeedbackButton')}
-    </Button>
+    </ActionButton>
   )
 }
 
@@ -66,28 +76,27 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
   }
 
   return (
-    <div>
-      <Box mr={1} clone>
-        <Button
-          color="primary"
-          variant="contained"
-          component={Link}
-          to={editPath}
-        >
-          {t('userFeedbacks:modifyFeedbackButton')}
-        </Button>
-      </Box>
-      <Button
+    <>
+      <ActionButton
+        color="primary"
+        variant="contained"
+        component={Link}
+        to={editPath}
+      >
+        {t('userFeedbacks:modifyFeedbackButton')}
+      </ActionButton>
+
+      <ActionButton
         color="primary"
         variant="contained"
         component={Link}
         to={viewPath}
       >
         {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
-      <Button color="primary" onClick={handleOpen}>
+      </ActionButton>
+      <ActionButton color="primary" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
-      </Button>
+      </ActionButton>
       {/* this is for confirming the clear (according to materialui docs) */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
@@ -100,7 +109,7 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
-    </div>
+    </>
   )
 }
 
@@ -108,9 +117,14 @@ const FeedbackEndedActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button color="primary" variant="contained" component={Link} to={viewPath}>
+    <ActionButton
+      color="primary"
+      variant="contained"
+      component={Link}
+      to={viewPath}
+    >
       {t('userFeedbacks:viewFeedbackSummary')}
-    </Button>
+    </ActionButton>
   )
 }
 
@@ -181,12 +195,14 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   return (
     <ListItem className={classes.listItem} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
-      <Box mt={1} className={classes.feedbackChip}>
+
+      <Box mt={1} mb={1}>
         {!isOpen && <FeedbackClosedChip />}
         {isOpen && feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>
-      <div className={classes.actions}>
+
+      <Box m={-0.5}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {isOpen && feedbackGiven && (
           <FeedbackGivenActions
@@ -196,7 +212,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
           />
         )}
         {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
-      </div>
+      </Box>
     </ListItem>
   )
 }

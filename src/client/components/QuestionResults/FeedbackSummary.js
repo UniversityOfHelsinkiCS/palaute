@@ -8,7 +8,6 @@ import {
   TableCell,
   TableHead,
   Card,
-  makeStyles,
   TableBody,
   useMediaQuery,
 } from '@material-ui/core'
@@ -22,21 +21,12 @@ import {
   countMedian,
 } from './utils'
 
-const useStyles = makeStyles({
-  container: {
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-})
-
 const FeedbackSummary = ({
   publicQuestionIds,
   questions,
   feedbacks,
   isTeacher,
 }) => {
-  const classes = useStyles()
   const { i18n, t } = useTranslation()
   const isMobile = useMediaQuery('(max-width:500px)')
 
@@ -51,7 +41,7 @@ const FeedbackSummary = ({
   )
 
   return (
-    <TableContainer component={Card} className={!isMobile && classes.container}>
+    <TableContainer component={Card}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

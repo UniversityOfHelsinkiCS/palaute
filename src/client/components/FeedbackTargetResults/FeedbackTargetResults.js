@@ -93,12 +93,14 @@ const FeedbackTargetResults = () => {
       {feedbacks.length === 0 && !feedbackVisible && onlyForEnrolledAlert}
 
       {feedbacks.length !== 0 && (
-        <FeedbackSummary
-          publicQuestionIds={publicQuestionIds ?? []}
-          questions={questions}
-          feedbacks={feedbacks}
-          isTeacher={isTeacher}
-        />
+        <Box mb={2}>
+          <FeedbackSummary
+            publicQuestionIds={publicQuestionIds ?? []}
+            questions={questions}
+            feedbacks={feedbacks}
+            isTeacher={isTeacher}
+          />
+        </Box>
       )}
 
       {feedbacks.length !== 0 && (

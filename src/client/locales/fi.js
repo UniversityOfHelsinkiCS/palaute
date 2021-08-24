@@ -33,9 +33,9 @@ export default {
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',
     giveFeedbackButton: 'Anna palautetta',
-    modifyFeedbackButton: 'Muokkaa palautetta',
-    clearFeedbackButton: 'Tyhjennä palaute',
-    clearConfirmationQuestion: 'Haluatko varmasti tyhjentää tämän palautteen?',
+    modifyFeedbackButton: 'Muokkaa palautettani',
+    clearFeedbackButton: 'Poista palautteeni',
+    clearConfirmationQuestion: 'Haluatko varmasti poistaa antamasi palautteen?',
     yes: 'Kyllä',
     no: 'Ei',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',

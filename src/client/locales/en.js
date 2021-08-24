@@ -33,9 +33,9 @@ export default {
   userFeedbacks: {
     mainHeading: 'My feedbacks',
     giveFeedbackButton: 'Give feedback',
-    modifyFeedbackButton: 'Modify feedback',
-    clearFeedbackButton: 'Clear feedback',
-    clearConfirmationQuestion: 'Are you sure you want to clear this feedback?',
+    modifyFeedbackButton: 'Edit my feedback',
+    clearFeedbackButton: 'Remove my feedback',
+    clearConfirmationQuestion: 'Are you sure you want to remove your feedback?',
     yes: 'Yes',
     no: 'No',
     viewFeedbackSummary: 'View feedback summary',
