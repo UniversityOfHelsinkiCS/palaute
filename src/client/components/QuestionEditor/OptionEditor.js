@@ -69,7 +69,7 @@ const OptionItem = ({ name, index, language, onRemove }) => {
 }
 
 const OptionEditor = ({ name, language }) => {
-  const { i18n } = useTranslation()
+  const { i18n, t: systemLanguage } = useTranslation()
   const t = i18n.getFixedT(language)
   const classes = useStyles()
   const [optionsField] = useField(name)
@@ -96,12 +96,14 @@ const OptionEditor = ({ name, language }) => {
             ))}
           </div>
 
-          <Button
-            color="primary"
-            onClick={() => arrayHelpers.push(createOption())}
-          >
-            {t('questionEditor:addOption')}
-          </Button>
+          {language === 'fi' && (
+            <Button
+              color="primary"
+              onClick={() => arrayHelpers.push(createOption())}
+            >
+              {systemLanguage('questionEditor:addOption')}
+            </Button>
+          )}
         </>
       )}
     />

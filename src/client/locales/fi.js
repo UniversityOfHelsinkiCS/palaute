@@ -108,7 +108,8 @@ export default {
     description: 'Kuvaus',
     done: 'Valmis',
     languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
-    descriptionHelper: 'Vapaaehtoinen kuvaileva teksti, joka tarkentaa kysymystä',
+    descriptionHelper:
+      'Vapaaehtoinen kuvaileva teksti, joka tarkentaa kysymystä',
     universityQuestion: 'Yliopistotaso',
     programmeQuestion: 'Koulutusohjelmataso',
     uneditableTooltip:
