@@ -85,7 +85,9 @@ const QuestionEditor = ({
               onRemove={() => arrayHelpers.remove(index)}
               onMoveUp={() => arrayHelpers.swap(index - 1, index)}
               onMoveDown={() => arrayHelpers.swap(index + 1, index)}
-              onCopy={() => arrayHelpers.push(copyQuestion(question))}
+              onCopy={() =>
+                arrayHelpers.insert(index + 1, copyQuestion(question))
+              }
               moveUpDisabled={!questionCanMoveUp(questions, index)}
               moveDownDisabled={!questionCanMoveDown(questions, index)}
               language={language}

@@ -68,7 +68,8 @@ const EditFeedbackTarget = () => {
   const { language } = i18n
 
   const { authorizedUser } = useAuthorizedUser()
-  const isAdminUser = isAdmin(authorizedUser)
+  // TODO: const isAdminUser = isAdmin(authorizedUser)
+  const isAdminUser = false
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,

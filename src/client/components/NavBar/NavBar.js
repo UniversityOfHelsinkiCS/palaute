@@ -97,7 +97,8 @@ const NavBar = () => {
 
   const isStudent = Boolean(feedbackTargets?.length)
   const isTeacher = Boolean(authorizedUser?.isTeacher)
-  const isAdminUser = isAdmin(authorizedUser)
+  // TODO: const isAdminUser = isAdmin(authorizedUser)
+  const isAdminUser = false
 
   const hasSomeOrganisationAccess = (organisations ?? []).some((o) =>
     Boolean(o.access),

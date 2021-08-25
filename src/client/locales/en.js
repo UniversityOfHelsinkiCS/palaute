@@ -117,6 +117,7 @@ export default {
     programmeQuestion: 'Programme level',
     uneditableTooltip:
       'This is predefined and automatically added to the survey and it can not be edited or removed',
+    duplicate: 'Duplicate',
   },
   editFeedbackTarget: {
     closesAt: 'Closes at',
@@ -241,7 +242,7 @@ export default {
     editSurveyTab: 'Edit survey',
     studentsWithFeedbackTab: 'Respondents',
     linkCopied: 'A link to the feedback has been copied to clipboard',
-    copyLink: 'Copy link',
+    copyLink: 'Copy link to feedback',
     editFeedbackTab: 'Edit feedback',
     coursePeriod: 'Course ongoing',
     feedbackPeriod: 'Feedback open',

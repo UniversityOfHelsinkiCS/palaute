@@ -113,6 +113,7 @@ export default {
     programmeQuestion: 'Koulutusohjelmataso',
     uneditableTooltip:
       'Tämä on määritetty etukäteen ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa',
+    duplicate: 'Duplikoi',
   },
   editFeedbackTarget: {
     closesAt: 'Sulkeutuu',
@@ -241,7 +242,7 @@ export default {
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
-    copyLink: 'Kopioi linkki',
+    copyLink: 'Kopioi linkki palautteeseen',
     editFeedbackTab: 'Muokkaa palautetta',
     coursePeriod: 'Kurssi käynnissä',
     feedbackPeriod: 'Palaute käynnissä',
