@@ -47,7 +47,7 @@ export default {
   feedbackView: {
     submitButton: 'Lähetä palaute',
     editButton: 'Muokkaa palautetta',
-    successAlert: 'Palaute on annettu',
+    successAlert: 'Palaute on annettu. Kiitos palautteestasi!',
     feedbackInfo:
       'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
     feedbackInfoLink: 'Lue lisää, miten tietojasi käytetään',

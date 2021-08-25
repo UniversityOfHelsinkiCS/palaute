@@ -47,7 +47,7 @@ export default {
   feedbackView: {
     submitButton: 'Give feedback',
     editButton: 'Edit feedback',
-    successAlert: 'Feedback has been given',
+    successAlert: 'Feedback has been given. Thank you for your feedback!',
     feedbackInfo:
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
     feedbackInfoLink: 'Read more, how your information is being used',

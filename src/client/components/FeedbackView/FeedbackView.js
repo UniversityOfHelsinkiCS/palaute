@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, forwardRef } from 'react'
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
@@ -46,6 +46,55 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
 }))
+
+const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
+  alert: {
+    fontSize: '1.1rem',
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  icon: {
+    animation: '$tada 2500ms',
+    animationDelay: '500ms',
+  },
+  '@keyframes tada': {
+    from: {
+      transform: 'scale3d(1, 1, 1)',
+    },
+
+    '10%, 20%': {
+      transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg)',
+    },
+
+    '30%, 50%, 70%, 90%': {
+      transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)',
+    },
+
+    '40%, 60%, 80%': {
+      transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)',
+    },
+    to: {
+      transform: 'scale3d(1, 1, 1)',
+    },
+  },
+}))
+
+const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => {
+  const classes = useFeedbackGivenSnackbarStyles()
+
+  return (
+    <Alert
+      variant="filled"
+      severity="success"
+      className={classes.alert}
+      ref={ref}
+      elevation={6}
+      icon={<span className={classes.icon}>🎉</span>}
+      {...props}
+    >
+      {children}
+    </Alert>
+  )
+})
 
 const FormContainer = ({
   onSubmit,
@@ -172,8 +221,16 @@ const FeedbackView = () => {
         })
       } else {
         await saveValues(values, feedbackTarget)
+
         history.push(`/targets/${id}/results`)
-        enqueueSnackbar(t('feedbackView:successAlert'), { variant: 'success' })
+
+        enqueueSnackbar(t('feedbackView:successAlert'), {
+          variant: 'success',
+          autoHideDuration: 6000,
+          content: (key, message) => (
+            <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
+          ),
+        })
       }
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
