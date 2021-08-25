@@ -1,0 +1,80 @@
+name: Production release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to toska docker registry
+        uses: docker/login-action@v1
+        with:
+          registry: registry.toska.cs.helsinki.fi
+          username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
+          password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
+
+      - name: Prepare test data and start the application
+        run: docker-compose -f docker-compose.ci.yml up -d
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
+
+      - name: Upload video
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          path: /home/runner/work/palaute/palaute/cypress/videos/*
+
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to toska docker registry
+        uses: docker/login-action@v1
+        with:
+          registry: registry.toska.cs.helsinki.fi
+          username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
+          password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
+
+      - name: Prepare test data and start the application
+        run: docker-compose -f docker-compose.jest.yml up -d
+
+      - name: Run Jest tests
+        run: docker exec palaute_app_test npm run test
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build project for eslint
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
+
+  dockerhub-release:
+    runs-on: ubuntu-latest
+    needs: [cypress, jest, eslint]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: toska/palaute:production
+          build-args: |
+            BASE_PATH=/
+            GIT_SHA=${{ github.sha }}
