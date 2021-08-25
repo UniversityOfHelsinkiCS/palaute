@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../FormikTextField'
 
-const LikertEditor = ({ name, language }) => {
+const LanguageLikertEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -29,5 +29,21 @@ const LikertEditor = ({ name, language }) => {
     </>
   )
 }
+
+const LikertEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
+  <Grid spacing={4} container>
+    {languages.map((language) => (
+      <Grid md={4} sm={12} xs={12} item>
+        <Box mb={2}>
+          <Typography variant="h6" as="h2">
+            {language.toUpperCase()}
+          </Typography>
+        </Box>
+
+        <LanguageLikertEditor name={name} language={language} />
+      </Grid>
+    ))}
+  </Grid>
+)
 
 export default LikertEditor

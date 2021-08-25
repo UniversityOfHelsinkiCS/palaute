@@ -10,8 +10,6 @@ import {
   Chip,
   Divider,
   Button,
-  Grid,
-  Typography,
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -123,38 +121,6 @@ const EditActions = ({
   )
 }
 
-const EditorContainer = ({ component: Component, ...props }) => (
-  <Grid spacing={4} container>
-    <Grid md={4} sm={12} xs={12} item>
-      <Box mb={2}>
-        <Typography variant="h6" as="h2">
-          FI
-        </Typography>
-      </Box>
-
-      <Component {...props} language="fi" />
-    </Grid>
-    <Grid md={4} sm={12} xs={12} item>
-      <Box mb={2}>
-        <Typography variant="h6" as="h2">
-          SV
-        </Typography>
-      </Box>
-
-      <Component {...props} language="sv" />
-    </Grid>
-    <Grid md={4} sm={12} xs={12} item>
-      <Box mb={2}>
-        <Typography variant="h6" as="h2">
-          EN
-        </Typography>
-      </Box>
-
-      <Component {...props} language="en" />
-    </Grid>
-  </Grid>
-)
-
 const QuestionCard = ({
   name,
   onRemove,
@@ -223,7 +189,7 @@ const QuestionCard = ({
 
         {isEditing ? (
           <>
-            <EditorContainer component={EditorComponent} name={name} />
+            <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
 
             <Divider className={classes.actionsDivider} />
 

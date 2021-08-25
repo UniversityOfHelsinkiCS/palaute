@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
 import React from 'react'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -7,7 +7,7 @@ import FormikTextField from '../FormikTextField'
 import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 
-const TextEditor = ({ name, language }) => {
+const LanguageTextEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -34,5 +34,21 @@ const TextEditor = ({ name, language }) => {
     </>
   )
 }
+
+const TextEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
+  <Grid spacing={4} container>
+    {languages.map((language) => (
+      <Grid md={4} sm={12} xs={12} item>
+        <Box mb={2}>
+          <Typography variant="h6" as="h2">
+            {language.toUpperCase()}
+          </Typography>
+        </Box>
+
+        <LanguageTextEditor name={name} language={language} />
+      </Grid>
+    ))}
+  </Grid>
+)
 
 export default TextEditor

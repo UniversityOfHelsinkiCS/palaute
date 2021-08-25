@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OptionItem = ({ name, language, onRemove }) => {
+const OptionItem = ({ name, index, language, onRemove }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -48,7 +48,11 @@ const OptionItem = ({ name, language, onRemove }) => {
       <Box flexGrow={1}>
         <FormikTextField
           name={`${name}.label.${language}`}
-          label={t('questionEditor:option')}
+          label={
+            <>
+              {t('questionEditor:option')} {index + 1}
+            </>
+          }
           fullWidth
         />
       </Box>
@@ -83,6 +87,7 @@ const OptionEditor = ({ name, language }) => {
             {options.map((option, index) => (
               <OptionItem
                 id={`option-${language}-${index}-${name}`}
+                index={index}
                 key={option.id}
                 name={`${name}.${index}`}
                 language={language}
