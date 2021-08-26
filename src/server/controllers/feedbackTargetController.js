@@ -573,7 +573,7 @@ const openFeedbackImmediately = async (req, res) => {
   })
 
   if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
-    throw new ApplicationError('User is not authorized to respond', 403)
+    throw new ApplicationError('User is not authorized', 403)
   }
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
@@ -591,6 +591,35 @@ const openFeedbackImmediately = async (req, res) => {
   res.sendStatus(200)
 }
 
+const closeFeedbackImmediately = async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+
+  const { user, isAdmin } = req
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
+    throw new ApplicationError('User is not authorized', 403)
+  }
+
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+
+  if (req.body.closesAt < feedbackTarget.opensAt) {
+    throw new ApplicationError('Invalid date for feedback closing', 400)
+  }
+
+  feedbackTarget.closesAt = req.body.closesAt
+  await feedbackTarget.save()
+
+  res.sendStatus(200)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -601,4 +630,5 @@ module.exports = {
   updateFeedbackResponse,
   emailStudentsAboutResponse,
   openFeedbackImmediately,
+  closeFeedbackImmediately,
 }

@@ -162,6 +162,10 @@ export default {
     exportCsv: 'Lataa CSV',
     thankYouMessage:
       'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
+    closeImmediately: 'Lopeta palautejakso heti',
+    closeImmediatelyConfirm:
+      'Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?',
+    closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

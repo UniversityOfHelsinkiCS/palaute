@@ -2,7 +2,10 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress, Button } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
+
+import { differenceInDays, format } from 'date-fns'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -10,12 +13,13 @@ import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
-import { ExportCsvLink } from './utils'
+import { ExportCsvLink, closeCourseImmediately } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackTargetResults = () => {
   const { t } = useTranslation()
   const { id } = useParams()
+  const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
@@ -47,6 +51,35 @@ const FeedbackTargetResults = () => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
+  const handleCloseClick = async () => {
+    const currentDate = new Date()
+    const difference = differenceInDays(
+      currentDate,
+      new Date(feedbackTarget.opensAt),
+    )
+
+    // eslint-disable-next-line no-alert
+    const result = window.confirm(
+      difference > 1
+        ? t('feedbackTargetResults:closeImmediatelyConfirm')
+        : t('feedbackTargetResults:closeImmediatelyTomorrowConfirm', {
+            date: format(
+              currentDate.setDate(currentDate.getDate() + 1),
+              'dd.MM.yyyy',
+            ),
+          }),
+    )
+
+    if (result) {
+      try {
+        await closeCourseImmediately(feedbackTarget, difference)
+        window.location.reload()
+      } catch (e) {
+        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      }
+    }
+  }
+
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
       <Alert severity="warning">
@@ -66,6 +99,14 @@ const FeedbackTargetResults = () => {
   return (
     <>
       <Box mb={2} display="flex" justifyContent="flex-end">
+        <Button
+          variant="contained"
+          color="secondary"
+          disabled={!isOpen}
+          onClick={handleCloseClick}
+        >
+          {t('feedbackTargetResults:closeImmediately')}
+        </Button>
         {feedbacks.length !== 0 && isTeacher && (
           <ExportCsvLink
             feedbackTarget={feedbackTarget}

@@ -164,6 +164,9 @@ export default {
     exportCsv: 'Export as csv',
     thankYouMessage:
       'Thank you for the feedback, here is a summary of the feedbacks so far.',
+    closeImmediately: 'Close feedback immediately',
+    closeImmediatelyConfirm: `Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
+    closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
   },
   navBar: {
     myFeedbacks: 'My feedbacks',

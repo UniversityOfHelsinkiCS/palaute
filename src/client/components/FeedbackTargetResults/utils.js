@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { Button, makeStyles } from '@material-ui/core'
 import * as _ from 'lodash'
 import Papa from 'papaparse'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, set } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import apiClient from '../../util/apiClient'
 
 const useStyles = makeStyles(() => ({
   link: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     maxHeight: 45,
+    marginLeft: 10,
   },
 }))
 
@@ -86,4 +88,28 @@ export const formatCourseDate = (courseRealisation) => {
   const endDate = format(parseISO(courseRealisation.endDate), 'dd.MM.yyyy')
 
   return `${startDate} - ${endDate}`
+}
+
+export const closeCourseImmediately = async (feedbackTarget, difference) => {
+  const currentDate = new Date()
+  const { id } = feedbackTarget
+  const closesAt =
+    difference > 1
+      ? currentDate
+      : set(currentDate, {
+          date: currentDate.getDate() + 1,
+          hours: 23,
+          minutes: 59,
+        })
+
+  const payload = {
+    closesAt,
+  }
+
+  const { data } = await apiClient.put(
+    `/feedback-targets/${id}/close-immediately`,
+    payload,
+  )
+
+  return data
 }
