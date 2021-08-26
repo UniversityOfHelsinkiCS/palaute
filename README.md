@@ -1,6 +1,8 @@
 # Palaute
 
-App running at [https://study.cs.helsinki.fi/palaute](https://study.cs.helsinki.fi/palaute)
+Production in <https://coursefeedback.helsinki.fi>
+
+Staging in <https://study.cs.helsinki.fi/norppastaging>
 
 ## Issues with Palaute
 
