@@ -71,22 +71,14 @@ const getByOrganisations = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const organisationIds = organisationAccess.map(
-    ({ organisation }) => organisation.id,
-  )
-
-  if (organisationIds.length === 0) {
+  if (organisationAccess.length === 0) {
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const [questions, courseCodes] = await Promise.all([
-    getSummaryQuestions(),
-    getAccessibleCourseCodes(organisationAccess),
-  ])
+  const questions = await getSummaryQuestions()
 
   const organisations = await getOrganisationSummaries({
     questions,
-    courseCodes,
     organisationAccess,
   })
 

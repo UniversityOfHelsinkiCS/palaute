@@ -1,7 +1,5 @@
 const _ = require('lodash')
-const { Op } = require('sequelize')
 
-const { CourseUnit, Organisation } = require('../models')
 const { sequelize } = require('./dbConnection')
 
 const QUESTION_AVERAGES_QUERY = `
@@ -98,7 +96,8 @@ FROM question_averages
   INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
   feedback_targets.feedback_type = 'courseRealisation'
-  AND course_units.course_code IN (:courseCodes)
+  AND organisations.id IN (:organisationIds)
+  AND course_units.course_code NOT IN (:disabledCourseCodes)
   AND course_realisations.start_date < NOW()
   AND course_realisations.start_date > NOW() - interval '72 months';
 
@@ -239,74 +238,6 @@ const getResults = (rows, questions) => {
   })
 
   return results
-}
-
-const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
-
-const mapOpenUniOrganisations = async (rows) => {
-  const openUniCodes = _.uniq(
-    rows
-      .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
-      .map((row) => row.course_code),
-  )
-
-  if (openUniCodes.length === 0) {
-    return rows
-  }
-
-  const baseCodes = _.uniq(openUniCodes.map((code) => code.replace(/^AY/, '')))
-
-  const courseUnits = await CourseUnit.findAll({
-    where: {
-      courseCode: {
-        [Op.in]: baseCodes,
-      },
-    },
-    include: [
-      {
-        model: Organisation,
-        as: 'organisations',
-        attributes: ['id', 'name', 'code'],
-      },
-    ],
-    attributes: ['courseCode'],
-  })
-
-  const mapping = {}
-
-  openUniCodes.forEach((code) => {
-    const baseCode = code.replace(/^AY/, '')
-
-    const courseUnit = courseUnits.find((c) => c.courseCode === baseCode)
-    const organisation = courseUnit?.organisations[0]
-
-    if (organisation) {
-      mapping[code] = organisation
-    }
-  })
-
-  const mappedRows = rows.map((row) => {
-    const mappedOrganisation = mapping[row.course_code]
-
-    return row.organisation_id === OPEN_UNI_ORGANISATION_ID &&
-      mappedOrganisation
-      ? {
-          ...row,
-          organisation_id: mappedOrganisation.id,
-          organisation_name: mappedOrganisation.name,
-          organisation_code: mappedOrganisation.code,
-        }
-      : row
-  })
-
-  return _.uniqBy(mappedRows, (row) =>
-    JSON.stringify([
-      row.question_id,
-      row.question_data,
-      row.feedback_target_id,
-      row.organisation_code,
-    ]),
-  )
 }
 
 const getCourseUnitsWithResults = (rows, questions) => {
@@ -513,29 +444,38 @@ const getValidDataValues = (questions) => {
   return [...singleChoiceValues, ...likertValues]
 }
 
-const getOrganisationSummaries = async ({
-  questions,
-  courseCodes,
-  organisationAccess,
-}) => {
+const getOrganisationSummaries = async ({ questions, organisationAccess }) => {
   const validDataValues = getValidDataValues(questions)
+  const questionIds = questions.map(({ id }) => id.toString())
+
+  const organisations = organisationAccess.map(
+    ({ organisation }) => organisation,
+  )
+
+  const organisationIds = organisations.map(({ id }) => id)
+
+  const disabledCourseCodes = organisations.flatMap(
+    ({ disabledCourseCodes }) => disabledCourseCodes ?? [],
+  )
 
   const rows =
-    courseCodes.length > 0
+    organisationIds.length > 0
       ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
           replacements: {
-            questionIds: questions.map(({ id }) => id.toString()),
-            courseCodes,
+            questionIds,
+            organisationIds,
             validDataValues,
+            disabledCourseCodes: [
+              ...disabledCourseCodes,
+              'NON_EXISTING_PLACEHOLDER_CODE', // in case of empty array
+            ],
           },
           type: sequelize.QueryTypes.SELECT,
         })
       : []
 
-  const normalizedRows = await mapOpenUniOrganisations(rows)
-
   return withMissingOrganisations(
-    getOrganisationsWithResults(normalizedRows, questions),
+    getOrganisationsWithResults(rows, questions),
     organisationAccess,
     questions,
   )
