@@ -38,7 +38,7 @@ describe('Teacher view', () => {
       .contains('Counter feedback missing')
     cy.get('div').contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
-    cy.contains('Feedbacks').click()
+    cy.contains('Feedback').click()
     cy.contains('Give counter feedback').click()
     cy.get('textarea').type('Feedback response for students to see')
     cy.contains('Save').click()
@@ -49,7 +49,7 @@ describe('Teacher view', () => {
   /* it('A teacher can edit feedback response once given', () => {
     cy.contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
-    cy.contains('Feedbacks').click()
+    cy.contains('Feedback').click()
     cy.contains('Edit counter feedback').click()
     cy.get('textarea').clear()
     cy.get('textarea').type('Edited feedback response for students to see')
@@ -57,7 +57,7 @@ describe('Teacher view', () => {
     cy.contains('Norppa').click()
     cy.contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
-    cy.contains('Feedbacks').click()
+    cy.contains('Feedback').click()
     cy.contains('Edited feedback response for students to see')
   }) */
   /* it('If teacher has ongoing courses their surveys can be edited', () => {
@@ -65,7 +65,7 @@ describe('Teacher view', () => {
     cy.setUpSecondaryTeacherView()
     cy.contains('Ongoing courses')
     cy.get('div').contains('TKT21024 Programming Challenges I').click()
-    cy.contains('0/2 feedbacks given')
+    cy.contains('0/2 feedback given')
     cy.get('a[href*="/targets/165"]').click()
     cy.contains('Edit survey').click()
     cy.contains('Programming Challenges I')
@@ -88,9 +88,9 @@ describe('Teacher view', () => {
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('a[href*="/targets/163"]').click() */
     cy.visit('localhost:8000/targets/163/results')
-    cy.contains('Feedbacks').click()
+    cy.contains('Feedback').click()
     cy.contains(
-      'Survey results will not be displayed because it does not have enough feedbacks',
+      'Survey results will not be displayed because it does not have enough feedback',
     )
   })
 })
