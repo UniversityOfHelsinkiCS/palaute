@@ -28,11 +28,7 @@ export const getFeedbackPeriod = (feedbackTarget) => {
 }
 
 export const copyLink = (feedbackTarget) => {
-  const { host } = window.location
+  const { origin } = window.location
 
-  const basePath = host.includes('localhost') ? host : `${host}/palaute`
-
-  navigator.clipboard.writeText(
-    `${window.location.protocol}//${basePath}/targets/${feedbackTarget.id}`,
-  )
+  navigator.clipboard.writeText(`${origin}/targets/${feedbackTarget.id}`)
 }
