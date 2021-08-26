@@ -23,7 +23,7 @@ jobs:
           push: true
           tags: toska/palaute:latest
           build-args: |
-            BASE_PATH=/palaute
+            BASE_PATH=/norppastaging
             GIT_SHA=${{ github.sha }}
 
   sentry-release:
