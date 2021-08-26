@@ -2,7 +2,7 @@ describe('Common tests', () => {
   it('User can change language', () => {
     cy.enableCourses()
     cy.loginAsStudent()
-    cy.contains('My feedbacks')
+    cy.contains('My feedback')
     cy.contains('Olli Oppilas').click()
     cy.contains('SV').click()
     cy.contains('Mina responser')
