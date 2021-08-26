@@ -210,6 +210,12 @@ const EditFeedbackTarget = () => {
               </Box>
             )}
 
+            <QuestionEditor
+              language={language}
+              name="questions"
+              onStopEditing={handleSubmit}
+            />
+
             <Divider className={classes.toolbarDivider} />
 
             <Toolbar
@@ -217,7 +223,6 @@ const EditFeedbackTarget = () => {
               previewLink={`/targets/${id}/feedback`}
               language={language}
               onLanguageChange={(newLanguage) => {
-                console.log(newLanguage)
                 i18n.changeLanguage(newLanguage)
               }}
               formIsDirty={dirty}
