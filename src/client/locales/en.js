@@ -31,7 +31,7 @@ export default {
     copy: 'Copy',
   },
   userFeedbacks: {
-    mainHeading: 'My feedbacks',
+    mainHeading: 'My feedback',
     giveFeedbackButton: 'Give feedback',
     modifyFeedbackButton: 'Edit my feedback',
     clearFeedbackButton: 'Remove my feedback',
@@ -63,18 +63,18 @@ export default {
       'You cannot submit because you are not enrolled in this course',
     feedbackClosedError: 'Feedback is closed',
     endedInfo:
-      'The feedback period has ended. <2>Take a look at the feedbacks</2>',
+      'The feedback period has ended. <2>Take a look at the feedback</2>',
   },
   teacherView: {
     mainHeading: 'My teaching',
-    showFeedbacks: 'Show feedbacks',
+    showFeedbacks: 'Show feedback',
     showSurvey: 'Show survey',
     editSurvey: 'Edit survey',
     copyLink: 'Copy answer form link',
     copyResponseLink: 'Copy link to counter feedback',
     copied: 'Link copied to clipboard',
     showStudentsWithFeedback: 'Show students who have given feedback',
-    feedbackCount: '{{count}}/{{totalCount}} feedbacks given',
+    feedbackCount: '{{count}}/{{totalCount}} feedback given',
     giveFeedbackResponse: 'Give counter feedback',
     noCourseRealisations: 'No course realisations',
     noCourses: 'No courses',
@@ -153,7 +153,7 @@ export default {
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
-      'Survey results will not be displayed because it does not have enough feedbacks',
+      'Survey results will not be displayed because it does not have enough feedback',
     onlyForEnrolledInfo:
       'Survey results will not be displayed because the teacher has set feedback visible only for enrolled students',
     studentsWithFeedbackHeading: 'Students who have given feedback',
@@ -163,13 +163,13 @@ export default {
     noResponseInfo: "The course's teacher has not given a counter feedback yet",
     exportCsv: 'Export as csv',
     thankYouMessage:
-      'Thank you for the feedback, here is a summary of the feedbacks so far.',
+      'Thank you for the feedback, here is a summary of the feedback so far.',
     closeImmediately: 'Close feedback immediately',
     closeImmediatelyConfirm: `Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
   },
   navBar: {
-    myFeedbacks: 'My feedbacks',
+    myFeedbacks: 'My feedback',
     myCourses: 'My teaching',
     logOut: 'Log out',
     admin: 'Admin',
@@ -197,7 +197,7 @@ export default {
   },
   courseSummary: {
     heading: 'Summary of course feedback',
-    noResults: 'No feedbacks',
+    noResults: 'No feedback',
     feedbackResponse: 'Latest course feedback response given',
     feedbackCount: 'Feedback count',
     feedbackResponseGiven: 'Feedback response has been given',
@@ -240,7 +240,7 @@ export default {
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',
     surveyTab: 'Survey',
-    feedbacksTab: 'Feedbacks',
+    feedbacksTab: 'Feedback',
     feedbackResponseTab: 'Counter feedback',
     editSurveyTab: 'Edit survey',
     studentsWithFeedbackTab: 'Respondents',
