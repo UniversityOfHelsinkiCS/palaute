@@ -467,7 +467,7 @@ const getOrganisationSummaries = async ({ questions, organisationAccess }) => {
             validDataValues,
             disabledCourseCodes: [
               ...disabledCourseCodes,
-              'NON_EXISTING_PLACEHOLDER_CODE', // in case of empty array
+              '_', // in case of empty array
             ],
           },
           type: sequelize.QueryTypes.SELECT,

@@ -17,6 +17,10 @@ const getAccessibleCourseCodes = async (organisationAccess) => {
     ({ organisation }) => organisation.id,
   )
 
+  if (organisationIds.length === 0) {
+    return []
+  }
+
   const organisations = await Organisation.findAll({
     where: {
       id: {
