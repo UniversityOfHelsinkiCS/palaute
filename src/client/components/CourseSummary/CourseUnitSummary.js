@@ -20,7 +20,6 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             courseCode,
             name,
             results,
-            resultsDifference,
             feedbackCount,
             feedbackResponseGiven,
             closesAt,
@@ -45,7 +44,6 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 }
                 level={1}
                 results={results}
-                resultsDifference={resultsDifference}
                 questions={questions}
                 feedbackCount={feedbackCount}
                 feedbackResponseGiven={feedbackResponseStatus}
