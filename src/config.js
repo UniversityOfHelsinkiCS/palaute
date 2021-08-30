@@ -19,6 +19,7 @@ const ADMINS = [
 
 // These courses bypass the starting after 1.9 filter
 const INCLUDE_COURSES = [
+  'hy-opt-cur-2122-9f78b627-6261-4eb9-91c4-426066b56cef', // MED-200
   'hy-opt-cur-2122-329bfeb5-2c56-450f-b3f5-ff9dbcca8932',
   'hy-CUR-142630573',
   'hy-CUR-135891626', // Avoin ohtu
