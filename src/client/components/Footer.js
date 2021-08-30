@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const supportEmail = 'grp-toska@helsinki.fi'
+const supportEmail = 'coursefeedback@helsinki.fi'
 
 const Footer = () => {
   const classes = useStyles()
