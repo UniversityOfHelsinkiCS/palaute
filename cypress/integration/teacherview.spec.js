@@ -24,14 +24,14 @@ describe('Teacher view', () => {
     cy.contains('Upcoming courses (0)')
     cy.contains('Ended courses')
   })
-  /* it('A logged in teacher can view its ended courses', () => {
+  it('A logged in teacher can view its ended courses', () => {
     cy.contains('My teaching')
     cy.contains('TKT20002 Software Development Methods')
     cy.get('div').contains('TKT20002 Software Development Methods').click()
     const { startDate, endDate } = getDates()
     cy.contains(`${startDate} - ${endDate}`)
-  }) */
-  /* it('A logged in teacher can give feedback response for an ended course', () => {
+  })
+  it('A logged in teacher can give feedback response for an ended course', () => {
     cy.get('p')
       .contains('TKT20002 Software Development Methods')
       .parent()
@@ -45,8 +45,8 @@ describe('Teacher view', () => {
     cy.contains('Norppa').click()
     cy.contains('TKT20002 Software Development Methods').click()
     cy.contains('Counter feedback given')
-  }) */
-  /* it('A teacher can edit feedback response once given', () => {
+  })
+  it('A teacher can edit feedback response once given', () => {
     cy.contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
     cy.contains('Feedback').click()
@@ -59,8 +59,8 @@ describe('Teacher view', () => {
     cy.get('a[href*="/targets/97"]').click()
     cy.contains('Feedback').click()
     cy.contains('Edited feedback response for students to see')
-  }) */
-  /* it('If teacher has ongoing courses their surveys can be edited', () => {
+  })
+  it('If teacher has ongoing courses their surveys can be edited', () => {
     cy.loginAsSecondaryTeacher()
     cy.setUpSecondaryTeacherView()
     cy.contains('Ongoing courses')
@@ -70,7 +70,7 @@ describe('Teacher view', () => {
     cy.contains('Edit survey').click()
     cy.contains('Programming Challenges I')
     cy.contains('Add question')
-  }) */
+  })
   it('Teacher can add questions to a survey', () => {
     cy.visit('localhost:8000/targets/165/edit')
     cy.contains('Add question').click()
@@ -84,9 +84,9 @@ describe('Teacher view', () => {
     cy.get('button').contains('Done').click()
   })
   it('Teacher can view survey results', () => {
-    /* cy.loginAsSecondaryTeacher()
+    cy.loginAsSecondaryTeacher()
     cy.get('div').contains('TKT21029 Functional Programming I').click()
-    cy.get('a[href*="/targets/163"]').click() */
+    cy.get('a[href*="/targets/163"]').click()
     cy.visit('localhost:8000/targets/163/results')
     cy.contains('Feedback').click()
     cy.contains(
