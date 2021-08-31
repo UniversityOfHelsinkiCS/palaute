@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Button, Menu, MenuItem, makeStyles } from '@material-ui/core'
+import { Button, Menu, MenuItem, makeStyles, Box } from '@material-ui/core'
 import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { isFunction } from 'lodash'
@@ -55,6 +55,7 @@ const QuestionEditor = ({
   language = 'fi',
   onStopEditing,
   editable = true,
+  actions,
 }) => {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -112,15 +113,20 @@ const QuestionEditor = ({
             }}
             language={language}
           />
-          {editable && (
-            <Button
-              color="primary"
-              onClick={() => setMenuOpen(true)}
-              ref={addButtonRef}
-            >
-              {t('questionEditor:addQuestion')}
-            </Button>
-          )}
+
+          <Box display="flex">
+            {editable && (
+              <Button
+                color="primary"
+                onClick={() => setMenuOpen(true)}
+                ref={addButtonRef}
+              >
+                {t('questionEditor:addQuestion')}
+              </Button>
+            )}
+
+            {actions && <Box ml={editable ? 1 : 0}>{actions}</Box>}
+          </Box>
         </div>
       )}
     />

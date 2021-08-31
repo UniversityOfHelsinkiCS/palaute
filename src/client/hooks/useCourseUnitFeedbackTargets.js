@@ -8,6 +8,8 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     courseRealisationStartDateBefore,
     courseRealisationEndDateAfter,
     courseRealisationEndDateBefore,
+    feedbackType,
+    includeSurveys,
   } = options
 
   const queryKey = [
@@ -37,6 +39,10 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     ...(courseRealisationEndDateBefore && {
       courseRealisationEndDateBefore:
         courseRealisationEndDateBefore.toISOString(),
+    }),
+    ...(feedbackType && { feedbackType }),
+    ...(includeSurveys && {
+      includeSurveys: includeSurveys ? 'true' : 'false',
     }),
   }
 

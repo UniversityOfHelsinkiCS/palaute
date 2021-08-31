@@ -135,6 +135,17 @@ export default {
     openImmediately: 'Open feedback now',
     openImmediatelyConfirm:
       'When feedback is open the survey can no longer be edited, do you still want to open the feedback?',
+    copyFromCourseDialogTitle: 'Copy questions from a course',
+    copySuccessSnackbar: 'The questions have been copied into the survey',
+    copyQuestionsButton: 'Copy questions',
+    copyFromCourseButton: 'Copy questions from a course',
+    copyFromCourseInfoAlert:
+      'You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions',
+    copyFromCourseChooseCourse: 'Choose a course to see its realisations',
+    copyFromCourseNoQuestions:
+      'None of the realisations on the course have any questions',
+    copyFromCourseQuestionCount: '{{count}} questions',
+    copyFromCourseSearchLabel: 'Course',
   },
   questionResults: {
     answerCount: 'Answer count',

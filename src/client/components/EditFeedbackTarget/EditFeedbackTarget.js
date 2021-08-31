@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
 import {
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
-import { Formik, Form } from 'formik'
+import { Formik, Form, useField } from 'formik'
 import { useSnackbar } from 'notistack'
 import { parseISO } from 'date-fns'
 
@@ -24,9 +24,10 @@ import FormikCheckbox from '../FormikCheckbox'
 import Alert from '../Alert'
 import DirtyFormPrompt from '../DirtyFormPrompt'
 import Toolbar from './Toolbar'
+import CopyFromCourseDialog from './CopyFromCourseDialog'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { isAdmin } from '../NavBar/utils'
+import isAdmin from '../../util/isAdmin'
 
 import {
   getInitialValues,
@@ -36,6 +37,7 @@ import {
   requiresSaveConfirmation,
   openCourseImmediately,
   parseDate,
+  copyQuestionsFromFeedbackTarget,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +61,44 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
   },
 }))
+
+const QuestionEditorActions = () => {
+  const { t } = useTranslation()
+  const [, meta, helpers] = useField('questions')
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleCloseDialog = () => setDialogOpen(false)
+
+  const handleOpenDialog = () => setDialogOpen(true)
+
+  const handleCopy = (feedbackTarget) => {
+    handleCloseDialog()
+
+    helpers.setValue([
+      ...meta.value,
+      ...copyQuestionsFromFeedbackTarget(feedbackTarget),
+    ])
+
+    enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
+      variant: 'info',
+    })
+  }
+
+  return (
+    <>
+      <CopyFromCourseDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        onCopy={handleCopy}
+      />
+
+      <Button color="primary" onClick={handleOpenDialog}>
+        {t('editFeedbackTarget:copyFromCourseButton')}
+      </Button>
+    </>
+  )
+}
 
 const EditFeedbackTarget = () => {
   const { id } = useParams()
@@ -213,6 +253,7 @@ const EditFeedbackTarget = () => {
               language={language}
               name="questions"
               onStopEditing={handleSubmit}
+              actions={<QuestionEditorActions />}
             />
 
             <Divider className={classes.toolbarDivider} />
