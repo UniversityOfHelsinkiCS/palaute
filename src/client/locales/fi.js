@@ -133,6 +133,17 @@ export default {
     openImmediately: 'Avaa palautteenanto heti',
     openImmediatelyConfirm:
       'Palautteenannon avauduttua kyselyä ei voi enää muokata, haluatko varmasti avata palautteenannon?',
+    copyFromCourseDialogTitle: 'Kopioi kysymyksiä kurssilta',
+    copySuccessSnackbar: 'Kysymykset on kopioitu kyselyyn',
+    copyQuestionsButton: 'Kopioi kysymykset',
+    copyFromCourseButton: 'Kopioi kysymyksiä kurssilta',
+    copyFromCourseInfoAlert:
+      'Voit kopioida kysymyksiä opettamiltasi kursseilta. Valitse ensin kurssi ja sen jälkeen toteutus, jonka kysymykset haluat kopioida',
+    copyFromCourseChooseCourse: 'Valitse kurssi nähdäksesi sen toteutukset',
+    copyFromCourseNoQuestions:
+      'Millään kurssin toteutuksella ei ole omia kysymyksiä',
+    copyFromCourseQuestionCount: '{{count}} kysymystä',
+    copyFromCourseSearchLabel: 'Kurssi',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

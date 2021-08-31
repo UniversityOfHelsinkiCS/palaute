@@ -134,6 +134,7 @@ class FeedbackTarget extends Model {
     const universitySurvey = await Survey.findOne({
       where: { type: 'university' },
     })
+
     const programmeSurvey = organisation
       ? await Survey.findOne({
           where: { type: 'programme', typeId: organisation.code },
@@ -321,6 +322,14 @@ class FeedbackTarget extends Model {
     this.set('questions', questions)
   }
 
+  async populateSurveys() {
+    const surveys = await this.getSurveys()
+
+    this.populateQuestions(surveys)
+
+    this.set('surveys', surveys)
+  }
+
   async getPublicFeedbacks(feedbacks, { accessStatus, isAdmin } = {}) {
     const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
 
@@ -442,6 +451,9 @@ FeedbackTarget.init(
     feedbackVisibility: {
       type: TEXT,
       defaultValue: 'ENROLLED',
+    },
+    surveys: {
+      type: VIRTUAL,
     },
   },
   {

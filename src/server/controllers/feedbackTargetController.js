@@ -285,9 +285,11 @@ const getTargetsByCourseUnit = async (req, res) => {
     courseRealisationStartDateBefore,
     courseRealisationEndDateAfter,
     courseRealisationEndDateBefore,
+    feedbackType,
+    includeSurveys,
   } = req.query
 
-  const courseRealisationPeriodWhere = {
+  const courseRealisationWhere = {
     [Op.and]: [
       courseRealisationStartDateAfter && {
         startDate: {
@@ -312,12 +314,29 @@ const getTargetsByCourseUnit = async (req, res) => {
     ].filter(Boolean),
   }
 
+  const targetWhere = {
+    [Op.and]: [
+      feedbackType && {
+        feedbackType,
+      },
+    ].filter(Boolean),
+  }
+
   const feedbackTargets = await FeedbackTarget.findAll({
+    where: targetWhere,
+    order: [
+      [
+        { model: CourseRealisation, as: 'courseRealisation' },
+        'startDate',
+        'DESC',
+      ],
+    ],
     attributes: [
       'id',
       'name',
       'feedbackResponse',
       'courseUnitId',
+      'courseRealisationId',
       'feedbackType',
       'opensAt',
       'closesAt',
@@ -360,7 +379,7 @@ const getTargetsByCourseUnit = async (req, res) => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-        where: { ...courseRealisationPeriodWhere },
+        where: { ...courseRealisationWhere },
       },
     ],
   })
@@ -373,6 +392,14 @@ const getTargetsByCourseUnit = async (req, res) => {
     feedbackTargets[0].courseUnitId,
   )
 
+  if (includeSurveys === 'true') {
+    // eslint-disable-next-line
+    for (const target of feedbackTargets) {
+      // eslint-disable-next-line no-await-in-loop
+      await target.populateSurveys()
+    }
+  }
+
   const formattedFeedbackTargets = feedbackTargets.map((target) => ({
     ..._.pick(target.toJSON(), [
       'id',
@@ -383,6 +410,8 @@ const getTargetsByCourseUnit = async (req, res) => {
       'courseRealisation',
       'courseUnit',
       'feedbackResponse',
+      'questions',
+      'surveys',
     ]),
     feedbackCount: parseInt(target.get('feedbackCount'), 10),
     enrolledCount: parseInt(target.get('enrolledCount'), 10),

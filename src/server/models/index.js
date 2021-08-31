@@ -28,6 +28,7 @@ UserFeedbackTarget.belongsTo(Feedback, {
 UserFeedbackTarget.belongsTo(User, {
   as: 'user',
 })
+
 User.hasMany(UserFeedbackTarget, { as: 'userFeedbackTargets' })
 
 Survey.belongsTo(CourseUnit, {

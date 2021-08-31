@@ -1,5 +1,7 @@
 import { isAfter, set, isBefore, parseISO, format } from 'date-fns'
+
 import apiClient from '../../util/apiClient'
+import { copyQuestion } from '../QuestionEditor/utils'
 
 const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
 
@@ -109,3 +111,12 @@ export const openCourseImmediately = async (feedbackTarget) => {
 }
 
 export const parseDate = (date) => format(parseISO(date), 'dd.MM.yyyy')
+
+export const copyQuestionsFromFeedbackTarget = (feedbackTarget) => {
+  const questions = feedbackTarget.surveys?.teacherSurvey?.questions ?? []
+
+  return questions.map((q) => ({
+    ...copyQuestion(q),
+    editable: true,
+  }))
+}
