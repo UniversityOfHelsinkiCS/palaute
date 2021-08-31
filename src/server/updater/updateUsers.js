@@ -4,6 +4,7 @@ const mangleData = require('./updateLooper')
 const usersHandler = async (users) => {
   const filteredUsers = users.map((user) => ({
     ...user,
+    email: user.primaryEmail,
     firstName: user.firstNames ? user.firstNames.split(' ')[0] : null,
     username: user.eduPersonPrincipalName
       ? user.eduPersonPrincipalName.split('@')[0]
@@ -18,6 +19,7 @@ const usersHandler = async (users) => {
       'lastName',
       'studentNumber',
       'employeeNumber',
+      'email',
     ],
   })
 }
