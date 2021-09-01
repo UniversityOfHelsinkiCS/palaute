@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory, Redirect } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 import {
   CircularProgress,
@@ -121,6 +122,7 @@ const EditFeedbackTarget = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
+  const queryClient = useQueryClient()
   const { language } = i18n
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
@@ -147,7 +149,7 @@ const EditFeedbackTarget = () => {
     try {
       await openFeedbackImmediately(feedbackTarget)
       history.replace(`/targets/${id}`)
-      window.location.reload()
+      queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -161,8 +163,9 @@ const EditFeedbackTarget = () => {
 
       if (opensAtIsImmediately(values)) {
         history.replace(`/targets/${id}`)
-        window.location.reload()
       }
+
+      queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
