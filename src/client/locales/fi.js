@@ -130,9 +130,7 @@ export default {
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
     noUnsavedChanges: 'Ei tallentamattomia muutoksia',
-    openImmediately: 'Avaa palautteenanto heti',
-    openImmediatelyConfirm:
-      'Palautteenannon avauduttua kyselyä ei voi enää muokata, haluatko varmasti avata palautteenannon?',
+    openImmediately: 'Avaa palaute heti',
     copyFromCourseDialogTitle: 'Kopioi kysymyksiä kurssilta',
     copySuccessSnackbar: 'Kysymykset on kopioitu kyselyyn',
     copyQuestionsButton: 'Kopioi kysymykset',
@@ -146,9 +144,9 @@ export default {
     copyFromCourseSearchLabel: 'Kurssi',
     openFeedbackImmediatelyDialogTitle: 'Varoitus!',
     openFeedbackImmediatelyDialogContent:
-      'Olet avaamassa kurssin palautteenantoa. Huomioithan, että kun kurssin palautteenanto on auki, et voi enää muokata sen kyselyä tai aukiolopäivämääriä.',
+      'Olet avaamassa kurssin palautetta. Huomioithan, että kurssin palautteen auettua et voi enää muokata sen kyselyä tai aukiolopäivämääriä.',
     openFeedbackImmediatelyDialogCancel: 'Peruuta',
-    openFeedbackImmediatelyDialogConfirm: 'Avaa palautteenanto',
+    openFeedbackImmediatelyDialogConfirm: 'Avaa palaute',
     opensAtInPastError: 'Aloituspäiväämärä ei voi olla menneisyydessä',
     closesAtBeforeOpensAtError:
       'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',
@@ -183,7 +181,7 @@ export default {
     exportCsv: 'Lataa CSV',
     thankYouMessage:
       'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
-    closeImmediately: 'Lopeta palautejakso heti',
+    closeImmediately: 'Sulje palaute heti',
     closeImmediatelyConfirm:
       'Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?',
     closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
