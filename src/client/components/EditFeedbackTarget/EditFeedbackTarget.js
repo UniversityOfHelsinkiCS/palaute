@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useParams, useHistory, Redirect } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 import {
   CircularProgress,
@@ -12,32 +13,25 @@ import {
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
-import { Formik, Form, useField } from 'formik'
+import { Formik, useField, useFormikContext } from 'formik'
 import { useSnackbar } from 'notistack'
-import { parseISO } from 'date-fns'
 
 import QuestionEditor from '../QuestionEditor'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import FormikTextField from '../FormikTextField'
-import FormikDatePicker from '../FormikDatePicker'
-import FormikCheckbox from '../FormikCheckbox'
 import Alert from '../Alert'
-import DirtyFormPrompt from '../DirtyFormPrompt'
 import Toolbar from './Toolbar'
 import CopyFromCourseDialog from './CopyFromCourseDialog'
-
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import isAdmin from '../../util/isAdmin'
+import FeedbackPeriodForm from './FeedbackPeriodForm'
 
 import {
-  getInitialValues,
-  validate,
-  saveValues,
   getUpperLevelQuestions,
-  requiresSaveConfirmation,
-  openCourseImmediately,
-  parseDate,
+  openFeedbackImmediately,
+  opensAtIsImmediately,
   copyQuestionsFromFeedbackTarget,
+  getFeedbackPeriodInitialValues,
+  getQuestionsInitialValues,
+  saveQuestionsValues,
+  saveFeedbackPeriodValues,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,20 +43,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  languageTabs: {
-    marginBottom: theme.spacing(2),
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: 500,
-  },
   toolbarDivider: {
     margin: theme.spacing(2, 0),
   },
 }))
 
-const QuestionEditorActions = () => {
+const QuestionEditorActions = ({ onCopy = () => {} }) => {
   const { t } = useTranslation()
   const [, meta, helpers] = useField('questions')
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -83,6 +69,8 @@ const QuestionEditorActions = () => {
     enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
       variant: 'info',
     })
+
+    onCopy()
   }
 
   return (
@@ -100,15 +88,42 @@ const QuestionEditorActions = () => {
   )
 }
 
+const QuestionEditorContainer = ({ onSave, language }) => {
+  const [savePending, setSavePending] = useState(false)
+  const { values } = useFormikContext()
+
+  // bit of hack to make sure that we have latest values before saving
+  useEffect(() => {
+    if (savePending) {
+      onSave(values)
+      setSavePending(false)
+    }
+  }, [values, savePending])
+
+  const handleSave = async () => {
+    setSavePending(true)
+  }
+
+  return (
+    <QuestionEditor
+      language={language}
+      name="questions"
+      onStopEditing={handleSave}
+      onRemoveQuestion={handleSave}
+      onCopyQuestion={handleSave}
+      actions={<QuestionEditorActions onCopy={handleSave} />}
+    />
+  )
+}
+
 const EditFeedbackTarget = () => {
   const { id } = useParams()
+  const history = useHistory()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
+  const queryClient = useQueryClient()
   const { language } = i18n
-
-  const { authorizedUser } = useAuthorizedUser()
-  const isAdminUser = isAdmin(authorizedUser)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
@@ -130,19 +145,35 @@ const EditFeedbackTarget = () => {
     (q) => q.type !== 'TEXT',
   )
 
-  const handleSubmit = async (values, actions) => {
+  const handleOpenFeedbackImmediately = async () => {
     try {
-      if (
-        requiresSaveConfirmation(values) &&
-        // eslint-disable-next-line no-alert
-        !window.confirm(t('editFeedbackTarget:opensAtIsNow'))
-      ) {
-        return
+      await openFeedbackImmediately(feedbackTarget)
+      history.replace(`/targets/${id}`)
+      queryClient.refetchQueries(['feedbackTarget', id])
+    } catch (e) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
+  const handleSubmitFeedbackPeriod = async (values) => {
+    try {
+      await saveFeedbackPeriodValues(values, feedbackTarget)
+
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+
+      if (opensAtIsImmediately(values)) {
+        history.replace(`/targets/${id}`)
       }
 
-      await saveValues(values, feedbackTarget)
-      // Necessary for the <DirtyFormPrompt />
-      actions.resetForm({ values })
+      queryClient.refetchQueries(['feedbackTarget', id])
+    } catch (e) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
+  const handleSaveQuestions = async (values) => {
+    try {
+      await saveQuestionsValues(values, feedbackTarget)
 
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
@@ -150,126 +181,54 @@ const EditFeedbackTarget = () => {
     }
   }
 
-  const handleOpenClick = async () => {
-    // eslint-disable-next-line no-alert
-    const result = window.confirm(
-      t('editFeedbackTarget:openImmediatelyConfirm'),
-    )
-    if (result) {
-      try {
-        await openCourseImmediately(feedbackTarget)
-        window.location.reload()
-      } catch (e) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
-      }
-    }
-  }
+  const questionsInitialValues = getQuestionsInitialValues(feedbackTarget)
 
-  const initialValues = getInitialValues(feedbackTarget)
+  const feedbackPeriodInitialValues =
+    getFeedbackPeriodInitialValues(feedbackTarget)
 
   return (
     <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validate={validate}
-        validateOnChange={false}
-      >
-        {({ handleSubmit, dirty }) => (
-          <Form>
-            <DirtyFormPrompt />
-            <Box mb={2}>
-              <Card>
-                <CardContent>
-                  {isAdminUser ? (
-                    <div className={classes.form}>
-                      <Box hidden mb={2}>
-                        <FormikTextField
-                          name={`name.${language}`}
-                          label={t('name')}
-                          fullWidth
-                        />
-                      </Box>
-
-                      <Box mb={2}>
-                        <FormikCheckbox
-                          name="hidden"
-                          label={t('editFeedbackTarget:hidden')}
-                        />
-                      </Box>
-                      <Alert severity="warning">
-                        {t('editFeedbackTarget:warningAboutOpeningCourse')}
-                      </Alert>
-                      <Box mb={2}>
-                        <FormikDatePicker
-                          name="opensAt"
-                          label={t('editFeedbackTarget:opensAt')}
-                          fullWidth
-                        />
-                      </Box>
-                      <Box mb={2}>
-                        <FormikDatePicker
-                          name="closesAt"
-                          label={t('editFeedbackTarget:closesAt')}
-                          fullWidth
-                        />
-                      </Box>
-                    </div>
-                  ) : (
-                    <div className={classes.form}>
-                      <Box mb={2}>
-                        {`${t('editFeedbackTarget:opensAt')} ${parseDate(
-                          feedbackTarget.opensAt,
-                        )} - 
-                        ${t('editFeedbackTarget:closesAt')} ${parseDate(
-                          feedbackTarget.closesAt,
-                        )}`}
-                      </Box>
-                    </div>
-                  )}
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    disabled={parseISO(feedbackTarget.opensAt) < new Date()}
-                    onClick={handleOpenClick}
-                  >
-                    {t('editFeedbackTarget:openImmediately')}
-                  </Button>
-                </CardContent>
-              </Card>
-            </Box>
-
-            {upperLevelQuestions.length > 0 && (
-              <Box mb={2}>
-                <Alert severity="info">
-                  {t('editFeedbackTarget:upperLevelQuestionsInfo', {
-                    count: upperLevelQuestions.length,
-                  })}
-                </Alert>
-              </Box>
-            )}
-
-            <QuestionEditor
-              language={language}
-              name="questions"
-              onStopEditing={handleSubmit}
-              actions={<QuestionEditorActions />}
+      <Box mb={2}>
+        <Card>
+          <CardContent>
+            <FeedbackPeriodForm
+              onSubmit={handleSubmitFeedbackPeriod}
+              initialValues={feedbackPeriodInitialValues}
+              onOpenImmediately={handleOpenFeedbackImmediately}
             />
+          </CardContent>
+        </Card>
+      </Box>
 
-            <Divider className={classes.toolbarDivider} />
+      {upperLevelQuestions.length > 0 && (
+        <Box mb={2}>
+          <Alert severity="info">
+            {t('editFeedbackTarget:upperLevelQuestionsInfo', {
+              count: upperLevelQuestions.length,
+            })}
+          </Alert>
+        </Box>
+      )}
 
-            <Toolbar
-              onSave={handleSubmit}
-              previewLink={`/targets/${id}/feedback`}
-              language={language}
-              onLanguageChange={(newLanguage) => {
-                i18n.changeLanguage(newLanguage)
-              }}
-              formIsDirty={dirty}
-            />
-          </Form>
+      <Formik initialValues={questionsInitialValues} validateOnChange={false}>
+        {() => (
+          <QuestionEditorContainer
+            onSave={handleSaveQuestions}
+            language={language}
+          />
         )}
       </Formik>
+
+      <Divider className={classes.toolbarDivider} />
+
+      <Toolbar
+        onSave={() => {}}
+        previewLink={`/targets/${id}/feedback`}
+        language={language}
+        onLanguageChange={(newLanguage) => {
+          i18n.changeLanguage(newLanguage)
+        }}
+      />
     </>
   )
 }

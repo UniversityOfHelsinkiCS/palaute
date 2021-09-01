@@ -4,6 +4,8 @@ import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider } from '@material-ui/core/styles'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -14,7 +16,7 @@ import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
 import CssBaseline from './CssBaseline'
 
-export default () => {
+const App = () => {
   const { i18n } = useTranslation()
 
   useEffect(() => {
@@ -42,17 +44,21 @@ export default () => {
   if (isLoading) return null
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Suspense fallback={null}>
-        <SnackbarProvider maxSnack={3} preventDuplicate>
-          <NavBar />
-          <Router />
-          <DevTools />
-          <AdminLoggedInAsBanner />
-          <Footer />
-        </SnackbarProvider>
-      </Suspense>
-    </ThemeProvider>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Suspense fallback={null}>
+          <SnackbarProvider maxSnack={3} preventDuplicate>
+            <NavBar />
+            <Router />
+            <DevTools />
+            <AdminLoggedInAsBanner />
+            <Footer />
+          </SnackbarProvider>
+        </Suspense>
+      </ThemeProvider>
+    </MuiPickersUtilsProvider>
   )
 }
+
+export default App

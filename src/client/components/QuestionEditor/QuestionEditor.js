@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react'
 import { Button, Menu, MenuItem, makeStyles, Box } from '@material-ui/core'
 import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { isFunction } from 'lodash'
 
 import QuestionCard from './QuestionCard'
 
@@ -53,7 +52,9 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 const QuestionEditor = ({
   name = 'questions',
   language = 'fi',
-  onStopEditing,
+  onStopEditing = () => {},
+  onRemoveQuestion = () => {},
+  onCopyQuestion = () => {},
   editable = true,
   actions,
 }) => {
@@ -69,9 +70,7 @@ const QuestionEditor = ({
   const handleStopEditing = async () => {
     setEditingQuestionId(null)
 
-    if (isFunction(onStopEditing)) {
-      onStopEditing()
-    }
+    onStopEditing()
   }
 
   return (
@@ -81,14 +80,18 @@ const QuestionEditor = ({
         <div>
           {questions.map((question, index) => (
             <QuestionCard
-              key={index}
+              key={getQuestionId(question)}
               name={`${name}.${index}`}
-              onRemove={() => arrayHelpers.remove(index)}
+              onRemove={() => {
+                arrayHelpers.remove(index)
+                onRemoveQuestion(question)
+              }}
               onMoveUp={() => arrayHelpers.swap(index - 1, index)}
               onMoveDown={() => arrayHelpers.swap(index + 1, index)}
-              onCopy={() =>
+              onCopy={() => {
                 arrayHelpers.insert(index + 1, copyQuestion(question))
-              }
+                onCopyQuestion(question)
+              }}
               moveUpDisabled={!questionCanMoveUp(questions, index)}
               moveDownDisabled={!questionCanMoveDown(questions, index)}
               language={language}
