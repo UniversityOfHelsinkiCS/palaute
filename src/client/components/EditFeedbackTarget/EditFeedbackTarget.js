@@ -89,7 +89,7 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
 }
 
 const QuestionEditorContainer = ({ onSave, language }) => {
-  const [savePending, setSavePending] = useState()
+  const [savePending, setSavePending] = useState(false)
   const { values } = useFormikContext()
 
   // bit of hack to make sure that we have latest values before saving
@@ -210,7 +210,7 @@ const EditFeedbackTarget = () => {
         </Box>
       )}
 
-      <Formik initialValues={questionsInitialValues}>
+      <Formik initialValues={questionsInitialValues} validateOnChange={false}>
         {() => (
           <QuestionEditorContainer
             onSave={handleSaveQuestions}
