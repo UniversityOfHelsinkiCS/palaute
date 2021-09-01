@@ -210,8 +210,6 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <Logo />
-          {inProduction && <p>in production</p>}
-          {inStaging && <p>in staging</p>}
           {!isMobile && navBarLinks}
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
