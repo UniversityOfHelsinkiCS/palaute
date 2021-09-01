@@ -4,7 +4,7 @@ const { User } = require('../models')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
-const createTestUser = () => {
+const createTestUser = async () => {
   const testUser = await User.create({
     id: 'abc1234',
     username: 'ohj_tosk',
