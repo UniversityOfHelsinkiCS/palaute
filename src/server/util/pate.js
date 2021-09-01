@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const { inProduction } = require('../../config')
+const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
 
 const template = {
@@ -23,7 +23,7 @@ const pateClient = axios.create({
 })
 
 const sendEmail = async (options = {}) => {
-  if (!inProduction) {
+  if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
     return null
   }

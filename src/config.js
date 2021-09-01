@@ -4,6 +4,8 @@
 
 const inProduction = process.env.NODE_ENV === 'production'
 
+const inStaging = process.env.REACT_APP_STAGING === 'true'
+
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
 const runningJest = process.env.REACT_APP_JEST === 'true'
@@ -34,6 +36,7 @@ const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 module.exports = {
   inProduction,
   inE2EMode,
+  inStaging,
   runningJest,
   basePath,
   GIT_SHA,

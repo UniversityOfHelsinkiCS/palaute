@@ -1,5 +1,5 @@
 const { CronJob } = require('cron')
-const { inProduction } = require('../../config')
+const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
 const {
   sendEmailAboutSurveyOpeningToStudents,
@@ -21,7 +21,7 @@ const run = async () => {
 }
 
 const start = async () => {
-  if (!inProduction) {
+  if (!inProduction || inStaging) {
     return logger.info('Not running Pate if not in production')
   }
   logger.info('Setup pate cron')

@@ -14,6 +14,9 @@ ENV REACT_APP_E2E=$E2E
 ARG JEST
 ENV REACT_APP_JEST=$JEST
 
+ARG STAGING
+ENV REAT_APP_STAGING=$STAGING
+
 # Setup
 COPY package* ./
 RUN npm ci --only=production

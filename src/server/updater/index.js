@@ -1,5 +1,5 @@
 const { CronJob } = require('cron')
-const { inProduction } = require('../util/config')
+const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
 const updateUsers = require('./updateUsers')
 const updateOrganisations = require('./updateOrganisations')
@@ -25,7 +25,7 @@ const run = async () => {
 
 /* eslint-disable */
 const start = async () => {
-  if (!inProduction) {
+  if (!inProduction || inStaging) {
     return logger.info('Not running updater outside production')
   }
   logger.info('Setup cron job')

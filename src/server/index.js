@@ -2,7 +2,13 @@ require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
 const express = require('express')
-const { PORT, inProduction, inE2EMode, runningJest } = require('./util/config')
+const {
+  PORT,
+  inProduction,
+  inE2EMode,
+  runningJest,
+  inStaging,
+} = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { start: startUpdater } = require('./updater')
 // const { start: startPateCron } = require('./util/pateCron')
@@ -24,7 +30,8 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await startUpdater()
-  if (inProduction) {
+
+  if (!inStaging && inProduction) {
     logger.info('This is where pate cron would start')
     // await startPateCron()
   }
