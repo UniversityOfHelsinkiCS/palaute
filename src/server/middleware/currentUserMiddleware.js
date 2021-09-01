@@ -4,34 +4,21 @@ const { User } = require('../models')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
-const fetchUserDataFromLoginAsForHeaders = async (headers) => {
-  if (!isSuperAdmin(headers.uid)) return headers
+const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
+  if (!isSuperAdmin(actualUser)) return
 
-  const loggedInAs = headers['x-admin-logged-in-as']
-  if (!loggedInAs) return headers
+  const user = await User.findOne({ where: { id: loggedInAsUser } })
 
-  const newHeaders = { ...headers }
-  const user = await User.findOne({ where: { id: loggedInAs } })
-
-  if (!user) return headers
-  newHeaders.preferredlanguage = user.language
-  newHeaders.hypersonsisuid = user.id
-  return newHeaders
+  return user
 }
 
-const upsertUser = async ({ preferredlanguage, hypersonsisuid }) => {
+const getUser = async (username) => {
   const user = await User.findOne({
     where: {
-      id: hypersonsisuid,
+      username,
     },
   })
   if (!user) throw new ApplicationError('User not found', 404)
-
-  if (user.language !== preferredlanguage) {
-    user.language = preferredlanguage
-
-    await user.save()
-  }
 
   return user
 }
@@ -40,10 +27,15 @@ const currentUserMiddleware = async (req, _, next) => {
   const { uid: username } = req.headers
   if (!username) throw new ApplicationError('Missing uid header', 403)
 
-  req.headers = await fetchUserDataFromLoginAsForHeaders(req.headers)
+  req.user = await getUser(username)
 
-  req.user = await upsertUser(req.headers)
+  if (req.headers['x-admin-logged-in-as']) {
+    const loggedInAsUser = await getLoggedInAsUser(username, req.headers['x-admin-logged-in-as'])
+    if (loggedInAsUser) req.user = loggedInAsUser
+  }
+
   req.isAdmin = isSuperAdmin(req.user.username)
+
   return next()
 }
 
