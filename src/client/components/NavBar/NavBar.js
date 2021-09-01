@@ -24,6 +24,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
 import useOrganisations from '../../hooks/useOrganisations'
+import { inProduction, inStaging } from '../../../config'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -209,6 +210,8 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <Logo />
+          {inProduction && <p>in production</p>}
+          {inStaging && <p>in staging</p>}
           {!isMobile && navBarLinks}
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
