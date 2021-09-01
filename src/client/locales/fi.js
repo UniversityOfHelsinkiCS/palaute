@@ -125,7 +125,7 @@ export default {
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
-      'HUOM! Kyselyn tietoja ei voi muokata kyselyn avautumisen jälkeen',
+      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
     opensAtIsNow:
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
@@ -144,6 +144,16 @@ export default {
       'Millään kurssin toteutuksella ei ole omia kysymyksiä',
     copyFromCourseQuestionCount: '{{count}} kysymystä',
     copyFromCourseSearchLabel: 'Kurssi',
+    openFeedbackImmediatelyDialogTitle: 'Varoitus!',
+    openFeedbackImmediatelyDialogContent:
+      'Olet avaamassa kurssin palautteenantoa heti. Huomioithan, että kun kurssin palautteenanto on auki, et voi enää muokata sen kyselyä tai aukiolopäivämääriä.',
+    openFeedbackImmediatelyDialogCancel: 'Peruuta',
+    openFeedbackImmediatelyDialogConfirm: 'Avaa palautteenanto heti',
+    opensAtInPastError: 'Aloituspäiväämärä ei voi olla menneisyydessä',
+    closesAtBeforeOpensAtError:
+      'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',
+    tooShortFeedbackPeriodError:
+      'Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',

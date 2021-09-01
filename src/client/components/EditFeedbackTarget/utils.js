@@ -1,14 +1,85 @@
-import { isAfter, set, isBefore, parseISO, format } from 'date-fns'
+import { isAfter, differenceInDays, startOfDay, endOfDay } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 import { copyQuestion } from '../QuestionEditor/utils'
 
-const setClosesAt = (date) => set(date, { hours: 23, minutes: 59, seconds: 59 })
+export const getUpperLevelQuestions = (feedbackTarget) => {
+  const { universitySurvey, programmeSurvey } = feedbackTarget.surveys ?? {}
 
-const setOpensAt = (date) => set(date, { hours: 0, minutes: 0, seconds: 0 })
+  return [
+    ...(universitySurvey?.questions ?? []),
+    ...(programmeSurvey?.questions ?? []),
+  ]
+}
 
-export const getInitialValues = (feedbackTarget) => {
-  const { hidden, closesAt, opensAt, name, surveys } = feedbackTarget
+export const openFeedbackImmediately = async (feedbackTarget) => {
+  const { id } = feedbackTarget
+  const opensAt = new Date()
+
+  const payload = {
+    opensAt,
+  }
+
+  const { data } = await apiClient.put(
+    `/feedback-targets/${id}/open-immediately`,
+    payload,
+  )
+
+  return data
+}
+
+export const validateFeedbackPeriod = (values) => {
+  const { closesAt, opensAt } = values
+
+  const errors = {}
+
+  if (!closesAt) {
+    errors.closesAt = 'validationErrors.required'
+  }
+
+  if (!opensAt) {
+    errors.opensAt = 'validationErrors.required'
+  }
+
+  if (startOfDay(opensAt) < startOfDay(new Date())) {
+    errors.opensAt = 'editFeedbackTarget:opensAtInPastError'
+  }
+
+  if (!isAfter(closesAt, opensAt)) {
+    errors.closesAt = 'editFeedbackTarget:closesAtBeforeOpensAtError'
+  }
+
+  if (
+    opensAt &&
+    closesAt &&
+    Math.abs(differenceInDays(opensAt, closesAt)) < 1
+  ) {
+    errors.closesAt = 'editFeedbackTarget:tooShortFeedbackPeriodError'
+  }
+
+  return errors
+}
+
+export const opensAtIsImmediately = (values) => {
+  const { opensAt } = values
+
+  return startOfDay(opensAt).getTime() === startOfDay(new Date()).getTime()
+}
+
+export const requiresSubmitConfirmation = (values) =>
+  opensAtIsImmediately(values)
+
+export const getFeedbackPeriodInitialValues = (feedbackTarget) => {
+  const { closesAt, opensAt } = feedbackTarget
+
+  return {
+    opensAt: new Date(opensAt),
+    closesAt: new Date(closesAt),
+  }
+}
+
+export const getQuestionsInitialValues = (feedbackTarget) => {
+  const { surveys } = feedbackTarget
 
   const questions = [
     ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
@@ -28,63 +99,19 @@ export const getInitialValues = (feedbackTarget) => {
   ]
 
   return {
-    name,
-    hidden: hidden ?? false,
     questions,
-    opensAt: new Date(opensAt),
-    closesAt: new Date(closesAt),
   }
 }
 
-export const validate = (values) => {
-  const errors = {}
-
-  if (!values.closesAt) {
-    errors.closesAt = 'validationErrors.required'
-  }
-
-  if (!values.opensAt) {
-    errors.opensAt = 'validationErrors.required'
-  }
-
-  if (!isAfter(values.closesAt, values.opensAt)) {
-    errors.closesAt = 'validationErrors.wrongDate'
-  }
-
-  return errors
-}
-
-export const getUpperLevelQuestions = (feedbackTarget) => {
-  const { universitySurvey, programmeSurvey } = feedbackTarget.surveys ?? {}
-
-  return [
-    ...(universitySurvey?.questions ?? []),
-    ...(programmeSurvey?.questions ?? []),
-  ]
-}
-
-export const requiresSaveConfirmation = (values) =>
-  values.opensAt && isBefore(values.opensAt, new Date())
-
-export const saveValues = async (values, feedbackTarget) => {
-  const { questions, hidden, name } = values
-
-  const closesAt = values.closesAt
-    ? setClosesAt(new Date(values.closesAt))
-    : null
-
-  const opensAt = values.opensAt ? setOpensAt(new Date(values.opensAt)) : null
+export const saveFeedbackPeriodValues = async (values, feedbackTarget) => {
+  const closesAt = values.closesAt ? endOfDay(new Date(values.closesAt)) : null
+  const opensAt = values.opensAt ? startOfDay(new Date(values.opensAt)) : null
 
   const { surveys, id } = feedbackTarget
   const { id: surveyId } = surveys.teacherSurvey
 
-  const editableQuestions = questions.filter(({ editable }) => editable)
-
   const payload = {
     surveyId,
-    questions: editableQuestions,
-    name,
-    hidden,
     closesAt,
     opensAt,
   }
@@ -94,23 +121,22 @@ export const saveValues = async (values, feedbackTarget) => {
   return data
 }
 
-export const openCourseImmediately = async (feedbackTarget) => {
-  const { id } = feedbackTarget
-  const opensAt = new Date()
+export const saveQuestionsValues = async (values, feedbackTarget) => {
+  const { questions } = values
+  const { surveys, id } = feedbackTarget
+  const { id: surveyId } = surveys.teacherSurvey
+
+  const editableQuestions = questions.filter(({ editable }) => editable)
 
   const payload = {
-    opensAt,
+    surveyId,
+    questions: editableQuestions,
   }
 
-  const { data } = await apiClient.put(
-    `/feedback-targets/${id}/open-immediately`,
-    payload,
-  )
+  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
 
   return data
 }
-
-export const parseDate = (date) => format(parseISO(date), 'dd.MM.yyyy')
 
 export const copyQuestionsFromFeedbackTarget = (feedbackTarget) => {
   const questions = feedbackTarget.surveys?.teacherSurvey?.questions ?? []
