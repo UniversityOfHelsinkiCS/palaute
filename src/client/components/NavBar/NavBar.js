@@ -24,7 +24,6 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
 import useOrganisations from '../../hooks/useOrganisations'
-import { inProduction, inStaging } from '../../../config'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
