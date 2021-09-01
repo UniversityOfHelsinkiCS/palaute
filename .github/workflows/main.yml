@@ -25,6 +25,7 @@ jobs:
           build-args: |
             BASE_PATH=/norppastaging
             GIT_SHA=${{ github.sha }}
+            STAGING=true
 
   sentry-release:
     runs-on: ubuntu-latest
