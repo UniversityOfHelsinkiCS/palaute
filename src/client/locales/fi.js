@@ -146,9 +146,9 @@ export default {
     copyFromCourseSearchLabel: 'Kurssi',
     openFeedbackImmediatelyDialogTitle: 'Varoitus!',
     openFeedbackImmediatelyDialogContent:
-      'Olet avaamassa kurssin palautteenantoa heti. Huomioithan, että kun kurssin palautteenanto on auki, et voi enää muokata sen kyselyä tai aukiolopäivämääriä.',
+      'Olet avaamassa kurssin palautteenantoa. Huomioithan, että kun kurssin palautteenanto on auki, et voi enää muokata sen kyselyä tai aukiolopäivämääriä.',
     openFeedbackImmediatelyDialogCancel: 'Peruuta',
-    openFeedbackImmediatelyDialogConfirm: 'Avaa palautteenanto heti',
+    openFeedbackImmediatelyDialogConfirm: 'Avaa palautteenanto',
     opensAtInPastError: 'Aloituspäiväämärä ei voi olla menneisyydessä',
     closesAtBeforeOpensAtError:
       'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',

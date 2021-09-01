@@ -146,6 +146,14 @@ export default {
       'None of the realisations on the course have any questions',
     copyFromCourseQuestionCount: '{{count}} questions',
     copyFromCourseSearchLabel: 'Course',
+    openFeedbackImmediatelyDialogTitle: 'Warning!',
+    openFeedbackImmediatelyDialogContent:
+      "You are about to open the course's feedback. Note that once the course's feedback is open you won't be able to edit its survey or the feedback period dates.",
+    openFeedbackImmediatelyDialogCancel: 'Cancel',
+    openFeedbackImmediatelyDialogConfirm: 'Open feedback',
+    opensAtInPastError: "Opening date can't be in the past",
+    closesAtBeforeOpensAtError: 'Closing date has to be after the opening date',
+    tooShortFeedbackPeriodError: 'The feedback must open at least for a day',
   },
   questionResults: {
     answerCount: 'Answer count',
