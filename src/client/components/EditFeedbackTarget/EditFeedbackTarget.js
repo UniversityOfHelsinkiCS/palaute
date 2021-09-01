@@ -211,10 +211,12 @@ const EditFeedbackTarget = () => {
       )}
 
       <Formik initialValues={questionsInitialValues}>
-        <QuestionEditorContainer
-          onSave={handleSaveQuestions}
-          language={language}
-        />
+        {() => (
+          <QuestionEditorContainer
+            onSave={handleSaveQuestions}
+            language={language}
+          />
+        )}
       </Formik>
 
       <Divider className={classes.toolbarDivider} />

@@ -80,7 +80,7 @@ const QuestionEditor = ({
         <div>
           {questions.map((question, index) => (
             <QuestionCard
-              key={index}
+              key={getQuestionId(question)}
               name={`${name}.${index}`}
               onRemove={() => {
                 arrayHelpers.remove(index)

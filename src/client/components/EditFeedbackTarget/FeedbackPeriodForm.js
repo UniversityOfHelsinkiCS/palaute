@@ -59,40 +59,42 @@ const FeedbackPeriodForm = ({
         validate={validateFeedbackPeriod}
         validateOnChange={false}
       >
-        <Form>
-          <Alert severity="warning">
-            {t('editFeedbackTarget:warningAboutOpeningCourse')}
-          </Alert>
-          <Box mb={1}>
-            <FormikDatePicker
-              name="opensAt"
-              label={t('editFeedbackTarget:opensAt')}
-              fullWidth
-              disablePast
-            />
-          </Box>
-          <Box mb={2}>
-            <FormikDatePicker
-              name="closesAt"
-              label={t('editFeedbackTarget:closesAt')}
-              fullWidth
-              disablePast
-            />
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Button variant="contained" color="primary" type="submit">
-              {t('save')}
-            </Button>
+        {() => (
+          <Form>
+            <Alert severity="warning">
+              {t('editFeedbackTarget:warningAboutOpeningCourse')}
+            </Alert>
+            <Box mb={1}>
+              <FormikDatePicker
+                name="opensAt"
+                label={t('editFeedbackTarget:opensAt')}
+                fullWidth
+                disablePast
+              />
+            </Box>
+            <Box mb={2}>
+              <FormikDatePicker
+                name="closesAt"
+                label={t('editFeedbackTarget:closesAt')}
+                fullWidth
+                disablePast
+              />
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Button variant="contained" color="primary" type="submit">
+                {t('save')}
+              </Button>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleOpenWarningDialog}
-            >
-              {t('editFeedbackTarget:openImmediately')}
-            </Button>
-          </Box>
-        </Form>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleOpenWarningDialog}
+              >
+                {t('editFeedbackTarget:openImmediately')}
+              </Button>
+            </Box>
+          </Form>
+        )}
       </Formik>
     </>
   )
