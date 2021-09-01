@@ -125,7 +125,7 @@ export default {
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
-      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
+      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
     opensAtIsNow:
       'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
     checkbox: 'Ymmärrän',
