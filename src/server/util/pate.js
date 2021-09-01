@@ -12,7 +12,7 @@ const settings = {
   disableToska: true,
   color: '#107eab',
   header: 'Norppa',
-  dryrun: !inProduction,
+  dryrun: !inProduction || inStaging,
 }
 
 const pateClient = axios.create({
