@@ -19,7 +19,7 @@ const createTestUser = async () => {
 }
 
 const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
-  if (!isSuperAdmin(actualUser)) return
+  if (!isSuperAdmin(actualUser)) return undefined
 
   const user = await User.findOne({ where: { id: loggedInAsUser } })
 
