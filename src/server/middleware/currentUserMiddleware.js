@@ -4,6 +4,20 @@ const { User } = require('../models')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
+const createTestUser = () => {
+  const testUser = await User.create({
+    id: 'abc1234',
+    username: 'ohj_tosk',
+    email: 'grp-toska@helsinki.fi',
+    studentNumber: '092345321',
+    employeeNumber: '99999a9',
+    firstName: 'Gert',
+    lastName: 'Adamson',
+  })
+
+  return testUser
+}
+
 const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
   if (!isSuperAdmin(actualUser)) return
 
@@ -18,6 +32,7 @@ const getUser = async (username) => {
       username,
     },
   })
+  if (!user && username === 'ohj_tosk') return createTestUser()
   if (!user) throw new ApplicationError('User not found', 404)
 
   return user
@@ -30,7 +45,10 @@ const currentUserMiddleware = async (req, _, next) => {
   req.user = await getUser(username)
 
   if (req.headers['x-admin-logged-in-as']) {
-    const loggedInAsUser = await getLoggedInAsUser(username, req.headers['x-admin-logged-in-as'])
+    const loggedInAsUser = await getLoggedInAsUser(
+      username,
+      req.headers['x-admin-logged-in-as'],
+    )
     if (loggedInAsUser) req.user = loggedInAsUser
   }
 
