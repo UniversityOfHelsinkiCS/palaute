@@ -14,40 +14,25 @@ const fetchUserDataFromLoginAsForHeaders = async (headers) => {
   const user = await User.findOne({ where: { id: loggedInAs } })
 
   if (!user) return headers
-  newHeaders.employeeNumber = user.employeeNumber
-  newHeaders.uid = user.username
-  newHeaders.givenname = user.firstName
-  newHeaders.sn = user.lastName
-  newHeaders.mail = user.email
   newHeaders.preferredlanguage = user.language
   newHeaders.hypersonsisuid = user.id
-  newHeaders.schacpersonaluniquecode = user.studentNumber
   return newHeaders
 }
 
-const upsertUser = async ({
-  uid,
-  givenname,
-  sn,
-  mail,
-  preferredlanguage,
-  hypersonsisuid,
-  schacpersonaluniquecode,
-}) => {
-  const items = schacpersonaluniquecode
-    ? schacpersonaluniquecode.split(':')
-    : null
-
-  const studentNumber = items ? items[items.length - 1] : null
-  const [user] = await User.upsert({
-    id: hypersonsisuid,
-    firstName: givenname,
-    lastName: sn,
-    email: mail,
-    language: preferredlanguage,
-    username: uid,
-    studentNumber,
+const upsertUser = async ({ preferredlanguage, hypersonsisuid }) => {
+  const user = await User.findOne({
+    where: {
+      id: hypersonsisuid,
+    },
   })
+  if (!user) throw new ApplicationError('User not found', 404)
+
+  if (user.language !== preferredlanguage) {
+    user.language = preferredlanguage
+
+    await user.save()
+  }
+
   return user
 }
 

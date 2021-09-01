@@ -5,7 +5,8 @@ const getUser = async (req, res) => {
 
   if (!user) throw new ApplicationError('Not found', 404)
 
-  const isTeacher = !!req.headers?.employeenumber
+  const isTeacher = !!user.employeeNumber
+
   res.send({
     ...user.dataValues,
     isTeacher,
