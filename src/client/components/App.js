@@ -4,8 +4,6 @@ import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider } from '@material-ui/core/styles'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -15,6 +13,7 @@ import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import AdminLoggedInAsBanner from './AdminView/AdminLoggedInAsBanner'
 import theme from '../theme'
 import CssBaseline from './CssBaseline'
+import PickerUtilsProvider from './PickerUtilsProvider'
 
 const App = () => {
   const { i18n } = useTranslation()
@@ -44,7 +43,7 @@ const App = () => {
   if (isLoading) return null
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <PickerUtilsProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Suspense fallback={null}>
@@ -57,7 +56,7 @@ const App = () => {
           </SnackbarProvider>
         </Suspense>
       </ThemeProvider>
-    </MuiPickersUtilsProvider>
+    </PickerUtilsProvider>
   )
 }
 
