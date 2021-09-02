@@ -40,9 +40,9 @@ export default {
     no: 'Nej',
     viewFeedbackSummary: 'Visa sammanfattning av responsen',
     noFeedback: 'Ingenting här. Kom tillbaka senare!',
-    feedbackClosed: 'Responsen är stängd',
-    waitingForFeedback: 'Väntar på respons',
-    feedbackGiven: 'Responsen är given',
+    feedbackClosedTab: 'Responsen är stängd',
+    waitingForFeedbackTab: 'Väntar på respons',
+    feedbackGivenTab: 'Responsen är given',
   },
   feedbackView: {
     submitButton: 'Ge respons',

@@ -97,7 +97,7 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       <ActionButton color="primary" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </ActionButton>
-      {/* this is for confirming the clear (according to materialui docs) */}
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           {t('userFeedbacks:clearConfirmationQuestion')}
@@ -135,7 +135,7 @@ const FeedbackGivenChip = () => {
     <Chip
       variant="outlined"
       icon={<FeedbackGivenIcon />}
-      label={t('userFeedbacks:feedbackGiven')}
+      label={t('userFeedbacks:feedbackGivenChip')}
       color="primary"
     />
   )
@@ -148,19 +148,31 @@ const NoFeedbackChip = () => {
     <Chip
       variant="outlined"
       icon={<NoFeedbackIcon />}
-      label={t('userFeedbacks:waitingForFeedback')}
+      label={t('userFeedbacks:waitingForFeedbackChip')}
     />
   )
 }
 
-const FeedbackClosedChip = () => {
+const FeedbackEndedChip = () => {
   const { t } = useTranslation()
 
   return (
     <Chip
       variant="outlined"
       icon={<FeedbackClosedIcon />}
-      label={t('userFeedbacks:feedbackClosed')}
+      label={t('userFeedbacks:feedbackEndedChip')}
+    />
+  )
+}
+
+const FeedbackNotStartedChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<FeedbackClosedIcon />}
+      label={t('userFeedbacks:feedbackNotStartedChip')}
     />
   )
 }
@@ -183,6 +195,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const feedbackGiven = Boolean(feedback)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const notStarted = !isOpen && !isEnded
 
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
@@ -197,7 +210,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <ListItemText primary={periodInfo} />
 
       <Box mt={1} mb={1}>
-        {!isOpen && <FeedbackClosedChip />}
+        {isEnded && <FeedbackEndedChip />}
+        {notStarted && <FeedbackNotStartedChip />}
         {isOpen && feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>

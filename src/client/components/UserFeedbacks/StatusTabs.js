@@ -24,15 +24,15 @@ const StatusTabs = ({ status, ...props }) => {
       {...props}
     >
       <StatusTab
-        label={t('userFeedbacks:waitingForFeedback')}
+        label={t('userFeedbacks:waitingForFeedbackTab')}
         status="waitingForFeedback"
       />
       <StatusTab
-        label={t('userFeedbacks:feedbackGiven')}
+        label={t('userFeedbacks:feedbackGivenTab')}
         status="feedbackGiven"
       />
       <StatusTab
-        label={t('userFeedbacks:feedbackClosed')}
+        label={t('userFeedbacks:feedbackClosedTab')}
         status="feedbackClosed"
       />
     </Tabs>
