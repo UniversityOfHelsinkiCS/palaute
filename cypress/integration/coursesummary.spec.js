@@ -15,7 +15,7 @@ describe('Course summary view', () => {
     cy.contains('Programme survey').click()
 
     cy.contains('Add question').click()
-    cy.contains('Single choice question').click()
+    cy.get('li').contains('Single choice question').click()
 
     cy.get('input[id^=choice-question-en-questions]').type(
       'Test question programme level',

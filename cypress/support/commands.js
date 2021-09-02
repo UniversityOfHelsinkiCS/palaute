@@ -36,33 +36,6 @@ const studyCoordinator = {
   hyPersonSisuId: 'hy-hlo-1501077',
 }
 
-Cypress.Commands.add('setUpAdminTeacherView', () => {
-  const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisation/97',
-    headers: adminUser,
-    body: {
-      startDate: new Date().setMonth(date.getMonth() - 2),
-      endDate: new Date().setMonth(date.getMonth() - 1),
-    },
-  })
-})
-
-Cypress.Commands.add('setUpSecondaryTeacherView', () => {
-  const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisations',
-    headers: adminUser,
-    body: {
-      feedbackTargetIds: [163, 165],
-      startDate: new Date().setDate(date.getDate() - 14),
-      endDate: new Date().setDate(date.getDate() + 14),
-    },
-  })
-})
-
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(adminUser))
 
@@ -85,6 +58,50 @@ Cypress.Commands.add('loginAsStudyCoordinator', () => {
   cy.visit('localhost:8000')
 })
 
+Cypress.Commands.add('setUpAdminTeacherView', () => {
+  const date = new Date()
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/courseRealisation/97',
+    headers: adminUser,
+    body: {
+      startDate: new Date().setDate(date.getDate() - 1),
+      endDate: new Date().setHours(date.getHours() - 10),
+    },
+  })
+
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/user/hy-hlo-1441871',
+    headers: adminUser,
+    body: {
+      employeeNumber: '123456789',
+    },
+  })
+})
+
+Cypress.Commands.add('setUpSecondaryTeacherView', () => {
+  const date = new Date()
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/courseRealisations',
+    headers: adminUser,
+    body: {
+      feedbackTargetIds: [163, 165],
+      startDate: new Date().setHours(date.getHours() - 10),
+      endDate: new Date().setDate(date.getDate() + 14),
+    },
+  })
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/user/hy-hlo-51367956',
+    headers: adminUser,
+    body: {
+      employeeNumber: '987654321',
+    },
+  })
+})
+
 Cypress.Commands.add('setFeedbackActive', () => {
   const date = new Date()
   cy.request({
@@ -104,5 +121,16 @@ Cypress.Commands.add('enableCourses', () => {
     method: 'PUT',
     url: '/api/test/enableCourses',
     headers: adminUser,
+  })
+})
+
+Cypress.Commands.add('enableTestUsers', () => {
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/user/hy-hlo-1501077',
+    headers: adminUser,
+    body: {
+      username: 'keolli',
+    },
   })
 })

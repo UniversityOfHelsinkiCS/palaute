@@ -2,7 +2,13 @@ const Router = require('express')
 
 const _ = require('lodash')
 
-const { FeedbackTarget, CourseRealisation, Organisation } = require('../models')
+const {
+  FeedbackTarget,
+  CourseRealisation,
+  Organisation,
+  User,
+} = require('../models')
+
 const { ApplicationError } = require('../util/customErrors')
 
 const updateCourseRealisation = async (req, res) => {
@@ -82,10 +88,27 @@ const enableAllCourses = async (_, res) => {
   res.send(200)
 }
 
+const updateUser = async (req, res) => {
+  const { userId } = req.params
+
+  const user = await User.findByPk(userId)
+
+  if (!user) throw new ApplicationError('User not found', 404)
+
+  const updates = _.pick(req.body, ['employeeNumber', 'studentNumber', 'username'])
+
+  Object.assign(user, updates)
+
+  await user.save()
+
+  res.send(200)
+}
+
 const router = Router()
 
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
 router.put('/enableCourses', enableAllCourses)
+router.put('/user/:userId', updateUser)
 
 module.exports = router

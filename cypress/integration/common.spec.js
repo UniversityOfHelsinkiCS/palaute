@@ -1,6 +1,9 @@
 describe('Common tests', () => {
   it('User can change language', () => {
     cy.enableCourses()
+    cy.enableTestUsers()
+    cy.setUpAdminTeacherView()
+    cy.setUpSecondaryTeacherView()
     cy.loginAsStudent()
     cy.contains('My feedback')
     cy.contains('Olli Oppilas').click()
