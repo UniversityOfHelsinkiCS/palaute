@@ -130,15 +130,12 @@ export default {
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
       'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
-    opensAtIsNow:
-      'Kysely on asetettu avautumaan heti! Kyselyn ollessa auki sitä ei voi enää muokata. Haluatko varmasti tallentaa kyselyn?',
-    checkbox: 'Ymmärrän',
     noUnsavedChanges: 'Ei tallentamattomia muutoksia',
     openImmediately: 'Avaa palaute heti',
-    copyFromCourseDialogTitle: 'Kopioi kysymyksiä kurssilta',
+    copyFromCourseDialogTitle: 'Kopioi kysymykset toiselta kurssilta',
     copySuccessSnackbar: 'Kysymykset on kopioitu kyselyyn',
     copyQuestionsButton: 'Kopioi kysymykset',
-    copyFromCourseButton: 'Kopioi kysymyksiä kurssilta',
+    copyFromCourseButton: 'Kopioi kysymykset toiselta kurssilta',
     copyFromCourseInfoAlert:
       'Voit kopioida kysymyksiä opettamiltasi kursseilta. Valitse ensin kurssi ja sen jälkeen toteutus, jonka kysymykset haluat kopioida',
     copyFromCourseChooseCourse: 'Valitse kurssi nähdäksesi sen toteutukset',

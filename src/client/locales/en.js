@@ -132,17 +132,15 @@ export default {
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'WARNING! The survey cannot be edited after the feedback form opens',
-    opensAtIsNow:
-      'The survey is set to open immediately! When the survey is open it cannot be edited anymore. Are you sure you want to save the survey?',
-    noUnsavedChanges: 'You do not have unsaved changes to submit',
+      'NB! The survey cannot be edited after the feedback opens. The feedback must be open at least for a day',
+    noUnsavedChanges: 'No unsaved changes',
     openImmediately: 'Open feedback now',
     openImmediatelyConfirm:
       'When feedback is open the survey can no longer be edited, do you still want to open the feedback?',
-    copyFromCourseDialogTitle: 'Copy questions from a course',
+    copyFromCourseDialogTitle: 'Copy questions from another course',
     copySuccessSnackbar: 'The questions have been copied into the survey',
     copyQuestionsButton: 'Copy questions',
-    copyFromCourseButton: 'Copy questions from a course',
+    copyFromCourseButton: 'Copy questions from another course',
     copyFromCourseInfoAlert:
       'You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions',
     copyFromCourseChooseCourse: 'Choose a course to see its realisations',

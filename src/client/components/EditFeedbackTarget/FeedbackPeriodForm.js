@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, Tooltip } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 
@@ -15,7 +15,7 @@ const FeedbackPeriodForm = ({
 }) => {
   const { t } = useTranslation()
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
-  const submitValuesRef = useRef()
+  const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
 
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
@@ -24,10 +24,14 @@ const FeedbackPeriodForm = ({
 
   const handleConfirmWarning = () => {
     const { current: warningOrigin } = warningOriginRef
-    const { current: submitValues } = submitValuesRef
+    const { current: submitPayload } = submitPayloadRef
 
     if (warningOrigin === 'formSubmit') {
-      onSubmit(submitValues)
+      onSubmit(...submitPayload)
+
+      const [values, actions] = submitPayload
+
+      actions.resetForm({ values })
     } else {
       onOpenImmediately()
     }
@@ -35,14 +39,15 @@ const FeedbackPeriodForm = ({
     handleCloseWarningDialog()
   }
 
-  const handleSubmit = (values) => {
-    submitValuesRef.current = values
+  const handleSubmit = (values, actions) => {
+    submitPayloadRef.current = [values, actions]
     warningOriginRef.current = 'formSubmit'
 
     if (requiresSubmitConfirmation(values)) {
       handleOpenWarningDialog()
     } else {
-      onSubmit(values)
+      onSubmit(values, actions)
+      actions.resetForm({ values })
     }
   }
 
@@ -59,7 +64,7 @@ const FeedbackPeriodForm = ({
         validate={validateFeedbackPeriod}
         validateOnChange={false}
       >
-        {() => (
+        {({ dirty }) => (
           <Form>
             <Alert severity="warning">
               {t('editFeedbackTarget:warningAboutOpeningCourse')}
@@ -81,9 +86,20 @@ const FeedbackPeriodForm = ({
               />
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Button variant="contained" color="primary" type="submit">
-                {t('save')}
-              </Button>
+              <Tooltip
+                title={dirty ? '' : t('editFeedbackTarget:noUnsavedChanges')}
+              >
+                <span>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={!dirty}
+                  >
+                    {t('save')}
+                  </Button>
+                </span>
+              </Tooltip>
 
               <Button
                 variant="contained"
