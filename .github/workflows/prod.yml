@@ -60,7 +60,7 @@ jobs:
 
   dockerhub-release:
     runs-on: ubuntu-latest
-    needs: [cypress, jest, eslint]
+    needs: [cypress, eslint]
     steps:
       - uses: actions/checkout@v2
 
