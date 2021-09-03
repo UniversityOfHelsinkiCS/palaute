@@ -51,6 +51,12 @@ const FeedbackPeriodForm = ({
     }
   }
 
+  const handleOpenImmediatelyClick = () => {
+    warningOriginRef.current = 'openImmediately'
+
+    handleOpenWarningDialog()
+  }
+
   return (
     <>
       <OpenFeedbackImmediatelyDialog
@@ -104,7 +110,7 @@ const FeedbackPeriodForm = ({
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={handleOpenWarningDialog}
+                onClick={handleOpenImmediatelyClick}
               >
                 {t('editFeedbackTarget:openImmediately')}
               </Button>
