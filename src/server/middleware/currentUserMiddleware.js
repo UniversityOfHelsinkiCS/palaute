@@ -33,7 +33,7 @@ const getUser = async (username) => {
     },
   })
   if (!user && username === 'ohj_tosk') return createTestUser()
-  if (!user) throw new ApplicationError('User not found', 404)
+  if (!user) throw new ApplicationError(`User with username ${username} not found`, 404)
 
   return user
 }
