@@ -51,8 +51,8 @@ const sendNotificationAboutSurveyOpeningToStudents = (
       sv: ``,
     },
     subject: {
-      en: `Course feedback has opened`,
-      fi: `Kurssipalaute on avautunut`,
+      en: `Course feedback for course ${courseName.en} has opened`,
+      fi: `Kurssin ${courseName.fi} kurssipalaute on avautunut`,
       sv: ``,
     },
   }
@@ -93,8 +93,8 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
       sv: '',
     },
     subject: {
-      en: 'A new feedback summary from your teacher',
-      fi: 'Uusi palauteyhteenveto opettajaltasi',
+      en: `A new counter feedback from your teacher to course ${courseName.en}`,
+      fi: `Uusi vastapalaute opettajaltasi kurssilla ${courseName.fi}`,
       sv: '',
     },
   }
@@ -134,8 +134,8 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = (
       sv: '',
     },
     subject: {
-      en: `Feedback for a course you're teaching is about to start`,
-      fi: `Palautejakso opettamallesi kurssille on alkamassa`,
+      en: `Feedback for the course ${courseName.en} is about to start`,
+      fi: `Palautejakso opettamallesi kurssille ${courseName.fi} on alkamassa`,
       sv: '',
     },
   }
