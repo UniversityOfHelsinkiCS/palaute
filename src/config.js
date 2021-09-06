@@ -27,6 +27,7 @@ const INCLUDE_COURSES = [
   'hy-CUR-135891626', // Avoin ohtu
   'hy-opt-cur-2021-28bce92e-aa01-4be8-832a-ca9df39bbd39', // Ohte
   'hy-CUR-142676412', // Tsoha loppukesä
+  'hy-opt-cur-2122-4de68e21-0a84-4888-b7b6-754179c2832f' // MED-31
 ]
 
 const basePath = process.env.PUBLIC_URL || ''
