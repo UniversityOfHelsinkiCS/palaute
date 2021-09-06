@@ -1,50 +1,108 @@
 const { Op } = require('sequelize')
-
-const { FeedbackTarget } = require('../models')
+const { addDays, subDays } = require('date-fns')
+const {
+  FeedbackTarget,
+  CourseRealisation,
+  CourseUnit,
+  Organisation,
+} = require('../models')
 
 const getFeedbackTargetsForEmail = async () => {
-  const date = new Date()
-
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.lt]: new Date().setDate(date.getDate() - 1),
-        [Op.gt]: new Date('September 1, 2021 00:00:00'),
+        [Op.gt]: subDays(new Date(), 1),
+        [Op.lt]: addDays(new Date(), 1),
       },
       closesAt: {
-        [Op.gt]: new Date().setDate(date.getDate() + 1),
+        [Op.gt]: new Date(),
       },
-      feedbackOpenNotificationEmailSent: {
-        [Op.is]: false,
-      },
+      feedbackOpenNotificationEmailSent: false,
+      hidden: false,
+      feedbackType: 'courseRealisation',
     },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          startDate: { [Op.gt]: new Date('September 1, 2021 00:00:00') },
+        },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        attributes: ['courseCode'],
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            required: true,
+            attributes: ['disabledCourseCodes'],
+          },
+        ],
+      },
+    ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter(
-    (feedbackTarget) => feedbackTarget.feedbackType === 'courseRealisation',
-  )
+  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
+    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
+      (org) => org.disabledCourseCodes,
+    )
+
+    if (!target.isOpen()) return false
+
+    return !disabledCourseCodes.includes(target.courseUnit.courseCode)
+  })
 
   return filteredFeedbackTargets
 }
 
 const getFeedbackTargetsForReminderEmail = async () => {
-  const date = new Date()
-
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.lt]: new Date().setDate(date.getDate() + 7),
-        [Op.gt]: new Date(),
+        [Op.lt]: addDays(new Date(), 7),
+        [Op.gt]: addDays(new Date(), 6),
       },
-      feedbackOpeningReminderEmailSent: {
-        [Op.is]: false,
-      },
+      feedbackOpeningReminderEmailSent: false,
+      hidden: false,
+      feedbackType: 'courseRealisation',
     },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          startDate: { [Op.gt]: new Date('September 1, 2021 00:00:00') },
+        },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        attributes: ['courseCode'],
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            required: true,
+            attributes: ['disabledCourseCodes'],
+          },
+        ],
+      },
+    ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter(
-    (feedbackTarget) => feedbackTarget.feedbackType === 'courseRealisation',
-  )
+  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
+    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
+      (org) => org.disabledCourseCodes,
+    )
+    return !disabledCourseCodes.includes(target.courseUnit.courseCode)
+  })
 
   return filteredFeedbackTargets
 }
