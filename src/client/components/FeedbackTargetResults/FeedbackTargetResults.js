@@ -99,14 +99,16 @@ const FeedbackTargetResults = () => {
   return (
     <>
       <Box mb={2} display="flex" justifyContent="flex-end">
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={!isOpen}
-          onClick={handleCloseClick}
-        >
-          {t('feedbackTargetResults:closeImmediately')}
-        </Button>
+        {isTeacher && (
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={!isOpen}
+            onClick={handleCloseClick}
+          >
+            {t('feedbackTargetResults:closeImmediately')}
+          </Button>
+        )}
         {feedbacks.length !== 0 && isTeacher && (
           <ExportCsvLink
             feedbackTarget={feedbackTarget}
