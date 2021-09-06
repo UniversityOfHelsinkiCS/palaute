@@ -40,7 +40,10 @@ const sendNotificationAboutSurveyOpeningToStudents = (
 ) => {
   const translations = {
     text: {
-      en: `The feedback survey for the course ${courseName.en} has opened. Please give your feedback here: ${urlToGiveFeedbackTo}`,
+      en: `Dear student, the course feedback form for the course ${courseName.en} is now open.
+      Please provide feedback on the course so that we can improve teaching and University operations.
+      Once you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long
+      as the form remains open. You can give feedback here: ${urlToGiveFeedbackTo}`,
       fi: `Hyvä opiskelija! Kurssin ${courseName.fi} kurssipalautelomake on nyt auki! 
       Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
       Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.
@@ -84,7 +87,8 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
 ) => {
   const translations = {
     text: {
-      en: `Feedback summary for the course ${courseName.en} was given by teacher, read it here: ${urlToSeeFeedbackSummary}`,
+      en: `Dear student, The teacher of the course ${courseName.en} has responded to the course feedback
+      recieved from students. You can read the teacher's feedback here: ${urlToSeeFeedbackSummary}`,
       fi: `Hyvä opiskelija! Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. Voit käydä lukemassa palautteen täältä: ${urlToSeeFeedbackSummary}`,
       sv: '',
     },
@@ -123,7 +127,9 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = (
 ) => {
   const translations = {
     text: {
-      en: `Feedback survey for the course ${courseName.en} you are teaching is opening in a week. Edit it here: ${urlToEditSurvey}`,
+      en: `Dear teacher of the course ${courseName.en}
+      The course feedback form will open in a week and will remain open for four weeks. Please add your
+      own questions, if any, before the above date. You can add your questions here: ${urlToEditSurvey} . Thank you!`,
       fi: `Hyvä kurssin ${courseName.fi} opettaja! Kurssipalautelomake aukeaa viikon päästä ja on auki neljä viikkoa. Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä täällä: ${urlToEditSurvey}. Kiitos!`,
       sv: '',
     },

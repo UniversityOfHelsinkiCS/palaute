@@ -32,6 +32,8 @@ const start = async () => {
   await startUpdater()
 
   if (!inStaging && inProduction) {
+    // DO NOT OPEN THE PATE CRON BEFORE THERE ARE SWEDISH TRANSLATIONS AND THE EMAILS ARE ONLY SENT TO THE COURSES
+    // THAT THEY ARE SUPPOSED TO :rtsd:
     // await startPateCron()
   }
   if (!runningJest) {
