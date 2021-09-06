@@ -41,7 +41,10 @@ const sendNotificationAboutSurveyOpeningToStudents = (
   const translations = {
     text: {
       en: `The feedback survey for the course ${courseName.en} has opened. Please give your feedback here: ${urlToGiveFeedbackTo}`,
-      fi: `Palautteen antaminen kurssille ${courseName.fi} on alkanut. Anna ystävällisesti palautetta täällä: ${urlToGiveFeedbackTo}`,
+      fi: `Hyvä opiskelija! Kurssin ${courseName.fi} kurssipalautelomake on nyt auki! 
+      Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
+      Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.
+      Palautetta voit antaa täällä: ${urlToGiveFeedbackTo}`,
       sv: ``,
     },
     subject: {
@@ -82,7 +85,7 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
   const translations = {
     text: {
       en: `Feedback summary for the course ${courseName.en} was given by teacher, read it here: ${urlToSeeFeedbackSummary}`,
-      fi: `Palauteyhteenveto kurssille ${courseName.fi} on annettu opettajan toimesta, lue se täältä: ${urlToSeeFeedbackSummary}`,
+      fi: `Hyvä opiskelija! Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. Voit käydä lukemassa palautteen täältä: ${urlToSeeFeedbackSummary}`,
       sv: '',
     },
     subject: {
@@ -121,7 +124,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = (
   const translations = {
     text: {
       en: `Feedback survey for the course ${courseName.en} you are teaching is opening in a week. Edit it here: ${urlToEditSurvey}`,
-      fi: `Opettamasi kurssin ${courseName.fi} palautekysely avautuu viikon sisällä. Voit muokata sitä täällä: ${urlToEditSurvey}`,
+      fi: `Hyvä kurssin ${courseName.fi} opettaja! Kurssipalautelomake aukeaa viikon päästä ja on auki neljä viikkoa. Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä täällä: ${urlToEditSurvey}. Kiitos!`,
       sv: '',
     },
     subject: {

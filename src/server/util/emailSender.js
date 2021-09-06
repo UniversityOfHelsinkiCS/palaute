@@ -9,6 +9,7 @@ const getFeedbackTargetsForEmail = async () => {
     where: {
       opensAt: {
         [Op.lt]: new Date().setDate(date.getDate() - 1),
+        [Op.gt]: new Date('September 1, 2021 00:00:00'),
       },
       closesAt: {
         [Op.gt]: new Date().setDate(date.getDate() + 1),
@@ -60,7 +61,6 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
       await feedbackTarget.sendFeedbackOpenEmailToStudents()
     }
   }
-
 }
 
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
