@@ -243,7 +243,7 @@ class FeedbackTarget extends Model {
   async sendFeedbackSummaryReminderToStudents() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsWhoHaveGivenFeedback()
-    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/results`
+    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/results`
     const formattedStudents = students
       .filter((student) => student.email)
       .map((student) => ({
@@ -260,7 +260,7 @@ class FeedbackTarget extends Model {
   async sendFeedbackOpenEmailToStudents() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsForFeedbackTarget()
-    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/feedback`
+    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/feedback`
     const formattedStudents = students
       .filter((student) => student.email)
       .map((student) => ({
@@ -278,7 +278,7 @@ class FeedbackTarget extends Model {
   async sendFeedbackOpeningReminderEmailToTeachers() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const teachers = await this.getTeachersForFeedbackTarget()
-    const url = `https://study.cs.helsinki.fi/palaute/targets/${this.id}/edit`
+    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/edit`
 
     return sendEmailReminderAboutSurveyOpeningToTeachers(
       url,
