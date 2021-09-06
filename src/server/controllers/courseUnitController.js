@@ -157,7 +157,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         // Month starts from 0, i.e 8 is acually 9th month.
         (target) =>
           target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
-          INCLUDE_COURSES.includes(target.courseRealisation.id),
+          INCLUDE_COURSES.has(target.courseRealisation.id),
       )
 
       const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), [

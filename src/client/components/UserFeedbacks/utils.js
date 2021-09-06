@@ -69,7 +69,7 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
         // filter out courses starting before 1.9.2021
         // Month starts from 0, i.e 8 is acually 9th month.
         new Date(2021, 8, 1) <= new Date(target.courseRealisation.startDate) ||
-        INCLUDE_COURSES.includes(target.courseRealisation.id),
+        INCLUDE_COURSES.has(target.courseRealisation.id),
     )
   if (status === 'waitingForFeedback') {
     return acualFeedbackTargets.filter(
