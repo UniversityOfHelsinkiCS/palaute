@@ -124,6 +124,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsForReminderEmail()
 
+
   for (feedbackTarget of feedbackTargets) {
     if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
       feedbackTarget.feedbackOpeningReminderEmailSent = true

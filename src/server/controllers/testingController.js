@@ -95,7 +95,11 @@ const updateUser = async (req, res) => {
 
   if (!user) throw new ApplicationError('User not found', 404)
 
-  const updates = _.pick(req.body, ['employeeNumber', 'studentNumber', 'username'])
+  const updates = _.pick(req.body, [
+    'employeeNumber',
+    'studentNumber',
+    'username',
+  ])
 
   Object.assign(user, updates)
 

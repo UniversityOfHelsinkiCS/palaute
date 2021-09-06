@@ -40,14 +40,14 @@ const sendNotificationAboutSurveyOpeningToStudents = (
 ) => {
   const translations = {
     text: {
-      en: `Dear student, the course feedback form for the course ${courseName.en} is now open.
+      en: `Dear student, the course feedback form for the course ${courseName.en} is now open.\n
       Please provide feedback on the course so that we can improve teaching and University operations.
       Once you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long
-      as the form remains open. You can give feedback here: ${urlToGiveFeedbackTo}`,
-      fi: `Hyvä opiskelija! Kurssin ${courseName.fi} kurssipalautelomake on nyt auki! 
+      as the form remains open. You can give feedback here: <a href=${urlToGiveFeedbackTo}>${urlToGiveFeedbackTo}</a>`,
+      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} kurssipalautelomake on nyt auki! 
       Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
       Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.
-      Palautetta voit antaa täällä: ${urlToGiveFeedbackTo}`,
+      Palautetta voit antaa täällä: <a href=${urlToGiveFeedbackTo}>${urlToGiveFeedbackTo}</a>`,
       sv: ``,
     },
     subject: {
@@ -87,9 +87,10 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
 ) => {
   const translations = {
     text: {
-      en: `Dear student, The teacher of the course ${courseName.en} has responded to the course feedback
-      recieved from students. You can read the teacher's feedback here: ${urlToSeeFeedbackSummary}`,
-      fi: `Hyvä opiskelija! Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. Voit käydä lukemassa palautteen täältä: ${urlToSeeFeedbackSummary}`,
+      en: `Dear student!\n The teacher of the course ${courseName.en} has responded to the course feedback
+      recieved from students. You can read the teacher's feedback here: <a href=${urlToSeeFeedbackSummary}>${urlToSeeFeedbackSummary}</a>`,
+      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. 
+      Voit käydä lukemassa palautteen täältä: <a href=${urlToSeeFeedbackSummary}>${urlToSeeFeedbackSummary}</a>`,
       sv: '',
     },
     subject: {
@@ -127,10 +128,11 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = (
 ) => {
   const translations = {
     text: {
-      en: `Dear teacher of the course ${courseName.en}
+      en: `Dear teacher of the course ${courseName.en}!\n
       The course feedback form will open in a week and will remain open for four weeks. Please add your
-      own questions, if any, before the above date. You can add your questions here: ${urlToEditSurvey} . Thank you!`,
-      fi: `Hyvä kurssin ${courseName.fi} opettaja! Kurssipalautelomake aukeaa viikon päästä ja on auki neljä viikkoa. Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä täällä: ${urlToEditSurvey}. Kiitos!`,
+      own questions, if any, before the above date. You can add your questions here: <a href=${urlToEditSurvey}>${urlToEditSurvey}</a> . Thank you!`,
+      fi: `Hyvä kurssin ${courseName.fi} opettaja!\n Kurssipalautelomake aukeaa viikon päästä ja on auki neljä viikkoa. Lisääthän mahdolliset omat kysymyksesi ennen sitä. 
+      Kysymyksiä voit lisätä täällä: <a href=${urlToEditSurvey}>${urlToEditSurvey}</a>. Kiitos!`,
       sv: '',
     },
     subject: {
