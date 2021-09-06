@@ -11,7 +11,7 @@ const {
 } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { start: startUpdater } = require('./updater')
-const { start: startPateCron } = require('./util/pateCron')
+// const { start: startPateCron } = require('./util/pateCron')
 const logger = require('./util/logger')
 
 const app = express()
@@ -32,7 +32,7 @@ const start = async () => {
   await startUpdater()
 
   if (!inStaging && inProduction) {
-    await startPateCron()
+    // await startPateCron()
   }
   if (!runningJest) {
     app.listen(PORT, () => {
