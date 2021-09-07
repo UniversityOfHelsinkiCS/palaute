@@ -15,6 +15,7 @@ PL 68 (Pietari Kalmin katu 5)
 ## Rekisteriasioista vastaava henkilö
 
 - FIX, mluukkai / tttriple knows who
+
 Matti Luukkainen, mluukkai@cs.helsinki.fi
 
 ## Henkilötietojen käsittelyn tarkoitus
@@ -46,9 +47,9 @@ Annettu palaute saadaan palautekyselyn vastaajalta.
 
 ## Henkilötietojen tallentaminen, säilyttäminen, suojaaminen ja käsittely
 
-Kurssipalaute näkyy opetustapahtumaan merkityille henkilöille, joille on opintotietojärjestelmässä merkitty rooli "vastuuopettaja", sekä kurssin opintotietojärjestelmässä merkityn vastuuorganisaation vastuuhenkilöille. Lisäksi palautetta voivat käsitellä ne henkilöt, joiden työtehtäviin se on määritelty kuuluvaksi.
+Kurssipalaute näkyy opetustapahtumaan merkityille henkilöille, jotka on opintotietojärjestelmässä merkitty kurssin vastuuhenkilöiksi, sekä kurssin opintotietojärjestelmässä merkityn vastuuorganisaation vastuuhenkilöille. Lisäksi palautetta voivat käsitellä ne henkilöt, joiden työtehtäviin se on määritelty kuuluvaksi.
 
-Vastuuorganisaatio pystyy määrittelemään mikäli vastanneiden opiskelijoiden opiskelijanumerot näkyvät vastuuopettajalle vastausten jälkeen. Opiskelijanumerot ovat saatavilla palautteista erikseen, järjestämättömässä listassa. Mikäli opiskelijanumerot ovat määritelty näkyväksi, alle viiden opiskelijan antama tekstimuotoinen palaute on saatavilla vain järjestelmän ylläpitäjille.
+Kurssin vastuuorganisaation vastuuhenkilö pystyy määrittelemään mikäli vastanneiden opiskelijoiden opiskelijanumerot näkyvät kurssin vastuuhenkilöille vastausten jälkeen. Opiskelijanumerot ovat saatavilla palautteista erikseen, järjestämättömässä listassa. Mikäli opiskelijanumerot ovat määritelty näkyväksi, alle viiden opiskelijan antama tekstimuotoinen palaute on saatavilla vain järjestelmän ylläpitäjille.
 
 Henkilötiedot on suojattu asiattomalta pääsyltä ja käsittelemiseltä. Tiedot säilytetään Suomessa. Henkilötietojen käsittelyssä on huomioitu EU:n tietosuoja-asetuksen vaatimukset. Tietosisällöstä tallennetaan varmuuskopioita. Rekisterinpitäjä tallentaa ehyttä ja luotettavaa tietoa, esimerkiksi varmuuskopioiden kautta varmennettuna.
 
