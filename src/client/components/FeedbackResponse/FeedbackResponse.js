@@ -23,6 +23,7 @@ import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
 import PublicQuestions from '../PublicQuestions'
 import ResponseEmailButton from './ResponseEmailButton'
+import InstructionAccordion from './InstructionAccordion'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -96,6 +97,7 @@ const FeedbackResponse = () => {
       <PublicQuestions />
       <Card>
         <CardContent>
+          <InstructionAccordion />
           <Box mb={2}>
             <Alert severity="info">
               <Trans i18nKey="feedbackResponse:responseInfo">

@@ -204,7 +204,11 @@ export default {
     responseLabel: 'Vastapalaute',
     responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
     previewLabel: 'Esikatselu',
-    sendEmail: 'Ilmoita opiskelijoille palauteyhteenvedosta sähköpostitse',
+    sendEmail: 'Ilmoita opiskelijoille vastapalautteesta sähköpostitse',
+    instructionTitle: 'Ohjeita vastapalautteen kirjoittamiseen',
+    responseInstruction:
+      'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille. Palautteen antamisesta lisätietoa: ',
+    onlyInFinnishAndSwedish: '',
   },
   publicQuestions: {
     publicInfo:
