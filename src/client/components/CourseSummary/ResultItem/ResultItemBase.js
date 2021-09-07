@@ -5,6 +5,7 @@ import cn from 'classnames'
 const useStyles = makeStyles({
   item: {
     textAlign: 'center',
+    position: 'relative',
   },
   missing: {
     backgroundColor: '#f5f5f5',
