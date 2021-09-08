@@ -162,6 +162,7 @@ const INCLUDE_COURSES = new Set([
   'hy-CUR-137328142',
   'hy-CUR-142429495',
   'hy-CUR-141270870',
+  'hy-CUR-142374536',
 ])
 
 const basePath = process.env.PUBLIC_URL || ''
