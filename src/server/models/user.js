@@ -16,12 +16,22 @@ const normalizeOrganisationCode = (r) => {
   return providercode
 }
 
+const RELEVANT_ORGANISATION_CODES = [
+  'H906', // Kielikeskus
+]
+
+const organisationIsRelevant = (organisation) => {
+  const { code } = organisation
+
+  return code.includes('-') || RELEVANT_ORGANISATION_CODES.includes(code)
+}
+
 class User extends Model {
   async getOrganisationAccess() {
     if (ADMINS.includes(this.username)) {
       const allOrganisations = await Organisation.findAll({})
       return allOrganisations
-        .filter((org) => org.code.includes('-'))
+        .filter(organisationIsRelevant)
         .map((organisation) => ({
           organisation,
           access: { read: true, write: true, admin: true },
