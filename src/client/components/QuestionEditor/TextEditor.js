@@ -40,7 +40,7 @@ const TextEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
     {languages.map((language) => (
       <Grid md={4} sm={12} xs={12} item key={language}>
         <Box mb={2}>
-          <Typography variant="h6" as="h2">
+          <Typography variant="h6" component="h2">
             {language.toUpperCase()}
           </Typography>
         </Box>

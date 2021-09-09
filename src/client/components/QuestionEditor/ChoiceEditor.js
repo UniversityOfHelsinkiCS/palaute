@@ -53,7 +53,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
           {languages.map((language) => (
             <Grid md={4} sm={12} xs={12} item key={language}>
               <Box mb={2}>
-                <Typography variant="h6" as="h2">
+                <Typography variant="h6" component="h2">
                   {language.toUpperCase()}
                 </Typography>
               </Box>
@@ -72,7 +72,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
 
               return (
                 <Grid xs={4} item key={language}>
-                  <Typography variant="h6" component="h4">
+                  <Typography variant="h6" component="h3">
                     {languageT('questionEditor:options')}
                   </Typography>
                 </Grid>
