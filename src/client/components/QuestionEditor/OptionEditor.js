@@ -3,10 +3,10 @@ import React from 'react'
 import {
   Button,
   makeStyles,
-  Typography,
   IconButton,
   Tooltip,
   Box,
+  Grid,
 } from '@material-ui/core'
 
 import { FieldArray, useField } from 'formik'
@@ -17,10 +17,6 @@ import { createOption } from './utils'
 import FormikTextField from '../FormikTextField'
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    marginBottom: theme.spacing(2),
-    fontSize: '1rem',
-  },
   optionsContainer: {
     '& > *': {
       marginBottom: theme.spacing(2),
@@ -28,9 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OptionItem = ({ name, index, language, onRemove }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+const OptionItem = ({ name, index, languages, onRemove }) => {
+  const { t, i18n } = useTranslation()
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
@@ -46,15 +41,25 @@ const OptionItem = ({ name, index, language, onRemove }) => {
   return (
     <Box display="flex">
       <Box flexGrow={1}>
-        <FormikTextField
-          name={`${name}.label.${language}`}
-          label={
-            <>
-              {t('questionEditor:option')} {index + 1}
-            </>
-          }
-          fullWidth
-        />
+        <Grid spacing={4} container>
+          {languages.map((language) => {
+            const languageT = i18n.getFixedT(language)
+
+            return (
+              <Grid md={4} sm={12} xs={12} item key={language}>
+                <FormikTextField
+                  name={`${name}.label.${language}`}
+                  label={
+                    <>
+                      {languageT('questionEditor:option')} {index + 1}
+                    </>
+                  }
+                  fullWidth
+                />
+              </Grid>
+            )
+          })}
+        </Grid>
       </Box>
 
       <Box ml={2} flexGrow={0}>
@@ -68,9 +73,8 @@ const OptionItem = ({ name, index, language, onRemove }) => {
   )
 }
 
-const OptionEditor = ({ name, language }) => {
-  const { i18n, t: systemLanguage } = useTranslation()
-  const t = i18n.getFixedT(language)
+const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [optionsField] = useField(name)
   const { value: options = [] } = optionsField
@@ -80,30 +84,24 @@ const OptionEditor = ({ name, language }) => {
       name={name}
       render={(arrayHelpers) => (
         <>
-          <Typography className={classes.title} variant="h6" component="h4">
-            {t('questionEditor:options')}
-          </Typography>
           <div className={classes.optionsContainer}>
             {options.map((option, index) => (
               <OptionItem
-                id={`option-${language}-${index}-${name}`}
                 index={index}
                 key={option.id}
                 name={`${name}.${index}`}
-                language={language}
+                languages={languages}
                 onRemove={() => arrayHelpers.remove(index)}
               />
             ))}
           </div>
 
-          {language === 'fi' && (
-            <Button
-              color="primary"
-              onClick={() => arrayHelpers.push(createOption())}
-            >
-              {systemLanguage('questionEditor:addOption')}
-            </Button>
-          )}
+          <Button
+            color="primary"
+            onClick={() => arrayHelpers.push(createOption())}
+          >
+            {t('questionEditor:addOption')}
+          </Button>
         </>
       )}
     />

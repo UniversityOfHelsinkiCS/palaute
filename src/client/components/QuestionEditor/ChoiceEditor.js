@@ -1,12 +1,20 @@
 import React from 'react'
 
-import { Box, Grid, Typography } from '@material-ui/core'
+import { makeStyles, Box, Grid, Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import OptionEditor from './OptionEditor'
 import FormikTextField from '../FormikTextField'
 
-const LanguageChoiceEditor = ({ name, language }) => {
+const useStyles = makeStyles((theme) => ({
+  container: {
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100% - 64px)',
+    },
+  },
+}))
+
+const InfoEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -30,26 +38,53 @@ const LanguageChoiceEditor = ({ name, language }) => {
           fullWidth
         />
       </Box>
-
-      <OptionEditor name={`${name}.data.options`} language={language} />
     </>
   )
 }
 
-const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
-  <Grid spacing={4} container>
-    {languages.map((language) => (
-      <Grid md={4} sm={12} xs={12} item key={language}>
-        <Box mb={2}>
-          <Typography variant="h6" as="h2">
-            {language.toUpperCase()}
-          </Typography>
-        </Box>
+const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+  const classes = useStyles()
+  const { i18n } = useTranslation()
 
-        <LanguageChoiceEditor name={name} language={language} />
-      </Grid>
-    ))}
-  </Grid>
-)
+  return (
+    <>
+      <div className={classes.container}>
+        <Grid spacing={4} container>
+          {languages.map((language) => (
+            <Grid md={4} sm={12} xs={12} item key={language}>
+              <Box mb={2}>
+                <Typography variant="h6" as="h2">
+                  {language.toUpperCase()}
+                </Typography>
+              </Box>
+
+              <InfoEditor name={name} language={language} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+
+      <div className={classes.container}>
+        <Box mb={2}>
+          <Grid spacing={4} container>
+            {languages.map((language) => {
+              const languageT = i18n.getFixedT(language)
+
+              return (
+                <Grid xs={4} item key={language}>
+                  <Typography variant="h6" component="h4">
+                    {languageT('questionEditor:options')}
+                  </Typography>
+                </Grid>
+              )
+            })}
+          </Grid>
+        </Box>
+      </div>
+
+      <OptionEditor name={`${name}.data.options`} languages={languages} />
+    </>
+  )
+}
 
 export default ChoiceEditor
