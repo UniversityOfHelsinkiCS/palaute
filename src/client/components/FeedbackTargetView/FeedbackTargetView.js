@@ -108,11 +108,8 @@ const FeedbackTargetView = () => {
             </Typography>
 
             <Typography color="textSecondary" variant="body2">
-              {`${t('feedbackTargetView:coursePeriod')}: ${coursePeriod}`}
-            </Typography>
-
-            <Typography color="textSecondary" variant="body2">
-              {`${t('feedbackTargetView:feedbackPeriod')}: ${feedbackPeriod}`}
+              {t('feedbackTargetView:coursePeriod')}: {coursePeriod} ·{' '}
+              {t('feedbackTargetView:feedbackPeriod')}: {feedbackPeriod}
             </Typography>
           </Box>
 

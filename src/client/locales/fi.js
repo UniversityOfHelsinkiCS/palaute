@@ -179,7 +179,7 @@ export default {
     giveResponse: 'Anna vastapalaute',
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
-    exportCsv: 'Lataa CSV',
+    exportCsv: 'Lataa palaute CSV-tiedostona',
     thankYouMessage:
       'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
     closeImmediately: 'Sulje palaute heti',
