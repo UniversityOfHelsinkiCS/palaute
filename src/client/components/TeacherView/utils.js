@@ -2,15 +2,17 @@ import { orderBy } from 'lodash'
 import { lightFormat, startOfHour } from 'date-fns'
 
 export const getGroupedCourseUnits = (courseUnits) => {
-  const ongoing = courseUnits.filter(
+  const normalizedCourseUnits = courseUnits ?? []
+
+  const ongoing = normalizedCourseUnits.filter(
     ({ ongoingCourseRealisation }) => ongoingCourseRealisation,
   )
 
-  const upcoming = courseUnits.filter(
+  const upcoming = normalizedCourseUnits.filter(
     ({ upcomingCourseRealisation }) => upcomingCourseRealisation,
   )
 
-  const ended = courseUnits.filter(
+  const ended = normalizedCourseUnits.filter(
     ({ endedCourseRealisation }) => endedCourseRealisation,
   )
 
