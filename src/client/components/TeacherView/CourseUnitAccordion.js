@@ -16,6 +16,8 @@ import FeedbackTargetList from './FeedbackTargetList'
 import { getRelevantCourseRealisation } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import FeedbackOpenChip from './FeedbackOpenChip'
 
 const useStyles = makeStyles({
   accordion: {
@@ -31,17 +33,22 @@ const useStyles = makeStyles({
   },
 })
 
-const getFeedbackResponseChip = (courseRealisation) => {
+const getChip = (courseRealisation) => {
   const { feedbackResponseGiven, feedbackTarget } = courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  const showChip = isEnded || feedbackResponseGiven
-
-  if (!showChip) {
-    return null
+  if (isEnded || feedbackResponseGiven) {
+    return (
+      <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+    )
   }
 
-  return <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+  if (isOpen) {
+    return <FeedbackOpenChip />
+  }
+
+  return null
 }
 
 const CourseUnitAccordion = ({ courseUnit, group }) => {
@@ -50,7 +57,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
-  const feedbackResponseChip = getFeedbackResponseChip(courseRealisation)
+  const chip = getChip(courseRealisation)
 
   return (
     <Accordion
@@ -62,7 +69,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           <Typography>
             {courseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
-          {feedbackResponseChip}
+          {chip}
         </div>
       </AccordionSummary>
       <AccordionDetails className={classes.details}>

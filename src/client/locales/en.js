@@ -270,7 +270,7 @@ export default {
     editSurveyTab: 'Edit survey',
     studentsWithFeedbackTab: 'Respondents',
     linkCopied: 'A link to the feedback has been copied to clipboard',
-    copyLink: 'Copy link to feedback',
+    copyLink: "Copy student's feedback link",
     editFeedbackTab: 'Edit feedback',
     coursePeriod: 'Course ongoing',
     feedbackPeriod: 'Feedback open',

@@ -8,7 +8,6 @@ import {
   ListItem,
   Typography,
   Link,
-  Chip,
   Tooltip,
 } from '@material-ui/core'
 
@@ -18,8 +17,9 @@ import { formatDate } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
+import FeedbackOpenChip from './FeedbackOpenChip'
 
-const getChip = (feedbackTarget, t) => {
+const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const { feedbackResponse } = feedbackTarget
@@ -32,13 +32,7 @@ const getChip = (feedbackTarget, t) => {
   }
 
   if (isOpen) {
-    return (
-      <Chip
-        label={t('teacherView:feedbackOpen')}
-        variant="outlined"
-        size="small"
-      />
-    )
+    return <FeedbackOpenChip />
   }
 
   return null
@@ -71,7 +65,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
     </Tooltip>
   )
 
-  const chip = getChip(feedbackTarget, t)
+  const chip = getChip(feedbackTarget)
 
   return (
     <ListItem divider={divider}>

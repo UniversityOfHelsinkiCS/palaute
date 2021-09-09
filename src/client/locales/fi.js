@@ -271,7 +271,7 @@ export default {
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
-    copyLink: 'Kopioi linkki palautteeseen',
+    copyLink: 'Kopioi opiskelijan vastauslinkki',
     editFeedbackTab: 'Muokkaa palautetta',
     coursePeriod: 'Kurssi käynnissä',
     feedbackPeriod: 'Palaute käynnissä',
