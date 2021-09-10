@@ -31,6 +31,7 @@ import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+
 import {
   getCoursePeriod,
   feedbackTargetIsDisabled,

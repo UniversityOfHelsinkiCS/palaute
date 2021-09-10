@@ -197,7 +197,7 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo:
-      'Kukaan ei ole antanut palautetta vielä tai koulutusohjelman palautetta antaneita opiskelijoita ei näytetä',
+      'Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa',
     studentsList: 'Palautteen antaneet opiskelijat',
   },
   feedbackResponse: {
@@ -257,7 +257,7 @@ export default {
     surveyInfo:
       'Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
     studentListVisible:
-      'Näytä palautetta antaneet opiskelijat kurssin opettajalle',
+      'Näytä palautetta antaneet opiskelijat kurssin opettajalle, jos palautetta antaneita opiskelijoita on vähintään viisi',
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
     generalTab: 'Yleiset asetukset',
     coursesTab: 'Aktivoidut kurssit',

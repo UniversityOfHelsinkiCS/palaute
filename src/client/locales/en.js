@@ -199,7 +199,7 @@ export default {
   },
   studentsWithFeedback: {
     noFeedbackInfo:
-      'No one has given feedback yet or the programme does not show students who have given feedback',
+      "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
     studentsList: 'Students who have given feedback',
   },
   feedbackResponse: {
@@ -256,7 +256,7 @@ export default {
     surveyInfo:
       "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
     studentListVisible:
-      "Show course's teacher students who have given feedback",
+      "Show course's teacher students who have given feedback if at least five students have given feeedback",
     courseSettingsInfo: 'Feedback is only collected from activated courses',
     generalTab: 'General settings',
     coursesTab: 'Activated courses',

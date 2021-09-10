@@ -519,7 +519,9 @@ const getStudentsWithFeedback = async (req, res) => {
     userFeedbackTarget.feedbackTarget.courseUnitId,
   )
 
-  if (!studentListVisible) res.send([])
+  if (!studentListVisible) {
+    return res.send([])
+  }
 
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
@@ -539,9 +541,13 @@ const getStudentsWithFeedback = async (req, res) => {
     ],
   })
 
+  if (studentFeedbackTargets.length < 5) {
+    return res.send([])
+  }
+
   const users = studentFeedbackTargets.map((target) => target.user)
 
-  res.send(users)
+  return res.send(users)
 }
 
 const updateFeedbackResponse = async (req, res) => {
