@@ -42,6 +42,7 @@ const getUser = async (username) => {
 
 const currentUserMiddleware = async (req, _, next) => {
   const { uid: username } = req.headers
+
   if (!username) throw new ApplicationError('Missing uid header', 403)
 
   req.user = await getUser(username)
@@ -53,6 +54,8 @@ const currentUserMiddleware = async (req, _, next) => {
     )
     if (loggedInAsUser) req.user = loggedInAsUser
   }
+
+  req.user.set('iamGroups', req.iamGroups ?? [])
 
   req.isAdmin = isSuperAdmin(req.user.username)
 

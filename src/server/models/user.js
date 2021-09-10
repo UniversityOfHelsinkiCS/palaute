@@ -1,4 +1,4 @@
-const { Model, STRING, Op } = require('sequelize')
+const { Model, STRING, Op, VIRTUAL } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
@@ -20,11 +20,26 @@ const RELEVANT_ORGANISATION_CODES = [
   'H906', // Kielikeskus
 ]
 
+const ORGANISATION_ACCESS_BY_IAM_GROUP = {}
+
 const organisationIsRelevant = (organisation) => {
   const { code } = organisation
 
   return code.includes('-') || RELEVANT_ORGANISATION_CODES.includes(code)
 }
+
+const getOrganisationAccessFromLomake = async (username) => {
+  const { data: access } = await lomakeClient.get(`/organizations/${username}`)
+
+  return _.isObject(access) ? access : {}
+}
+
+const getOrganisationAccessFromIamGroups = (iamGroups) =>
+  (iamGroups ?? []).reduce(
+    (access, group) =>
+      _.merge(access, ORGANISATION_ACCESS_BY_IAM_GROUP[group] ?? {}),
+    {},
+  )
 
 class User extends Model {
   async getOrganisationAccess() {
@@ -37,11 +52,12 @@ class User extends Model {
           access: { read: true, write: true, admin: true },
         }))
     }
-    const { data: access } = await lomakeClient.get(
-      `/organizations/${this.username}`,
-    )
 
-    const organisationCodes = _.isObject(access) ? Object.keys(access) : []
+    const lomakeAccess = await getOrganisationAccessFromLomake(this.username)
+    const iamGroupAccess = getOrganisationAccessFromIamGroups(this.iamGroups)
+    const access = _.merge({}, lomakeAccess, iamGroupAccess)
+
+    const organisationCodes = Object.keys(access)
 
     const normalizedOrganisationCodes = organisationCodes.map(
       normalizeOrganisationCode,
@@ -63,6 +79,7 @@ class User extends Model {
         },
       },
     })
+
     return organisations.map((organisation) => ({
       organisation,
       access: access[codeByNormalizedCode[organisation.code]],
@@ -87,6 +104,10 @@ class User extends Model {
     )
 
     return !!courseOrganisations.length
+  }
+
+  toJSON() {
+    return _.omit(this.get(), ['iamGroups'])
   }
 }
 
@@ -118,6 +139,10 @@ User.init(
     },
     studentNumber: {
       type: STRING,
+    },
+    iamGroups: {
+      type: VIRTUAL,
+      defaultValue: [],
     },
   },
   {

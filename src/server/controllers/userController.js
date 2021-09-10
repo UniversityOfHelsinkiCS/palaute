@@ -1,15 +1,16 @@
 const { ApplicationError } = require('../util/customErrors')
 
 const getUser = async (req, res) => {
-  const { user } = req
+  const { user, iamGroups } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
 
   const isTeacher = !!user.employeeNumber
 
   res.send({
-    ...user.dataValues,
+    ...user.toJSON(),
     isTeacher,
+    iamGroups: iamGroups ?? [],
   })
 }
 
