@@ -23,7 +23,7 @@ const pateClient = axios.create({
   },
 })
 
-const sendEmail = async (options = {}) => {
+const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
     return null
@@ -34,51 +34,16 @@ const sendEmail = async (options = {}) => {
   return data
 }
 
-const sendNotificationAboutSurveyOpeningToStudents = (
-  urlToGiveFeedbackTo,
-  students,
-  courseName,
-) => {
-  const translations = {
-    text: {
-      en: `Dear student, the course feedback form for the course ${courseName.en} is now open.\n
-      Please provide feedback on the course so that we can improve teaching and University operations.
-      Once you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long
-      as the form remains open. You can give feedback here: <a href=${urlToGiveFeedbackTo}>${urlToGiveFeedbackTo}</a>`,
-      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} kurssipalautelomake on nyt auki! 
-      Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
-      Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.
-      Palautetta voit antaa täällä: <a href=${urlToGiveFeedbackTo}>${urlToGiveFeedbackTo}</a>`,
-      sv: ``,
-    },
-    subject: {
-      en: `Course feedback for course ${courseName.en} has opened`,
-      fi: `Kurssin ${courseName.fi} kurssipalaute on avautunut`,
-      sv: ``,
-    },
-  }
-
-  const emails = students.map((student) => {
-    const email = {
-      to: student.email,
-      subject:
-        translations.subject[student.language] || translations.subject.en,
-      text: translations.text[student.language] || translations.text.en,
-    }
-    return email
-  })
-
+const sendEmail = async (listOfEmails) => {
   const options = {
     template: {
       ...template,
     },
-    emails,
+    emails: listOfEmails,
     settings: { ...settings },
   }
 
-  sendEmail(options)
-
-  return options
+  sendToPate(options)
 }
 
 const sendNotificationAboutFeedbackSummaryToStudents = (
@@ -89,9 +54,9 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
   const translations = {
     text: {
       en: `Dear student!\n The teacher of the course ${courseName.en} has responded to the course feedback
-      recieved from students. You can read the teacher's feedback here: <a href=${urlToSeeFeedbackSummary}>${urlToSeeFeedbackSummary}</a>`,
+      recieved from students. You can read the teacher's feedback here: <a href=${urlToSeeFeedbackSummary}>${courseName.en}</a>`,
       fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. 
-      Voit käydä lukemassa palautteen täältä: <a href=${urlToSeeFeedbackSummary}>${urlToSeeFeedbackSummary}</a>`,
+      Voit käydä lukemassa palautteen täältä: <a href=${urlToSeeFeedbackSummary}>${courseName.fi}</a>`,
       sv: '',
     },
     subject: {
@@ -122,48 +87,64 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
   return options
 }
 
-const sendEmailReminderAboutSurveyOpeningToTeachers = (
-  urlToEditSurvey,
-  teachers,
-  courseName,
+const emailReminderAboutSurveyOpeningToTeachers = (
+  emailAddress,
+  teacherFeedbackTargets,
 ) => {
+  const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
+  const { language } = teacherFeedbackTargets[0]
+  const courseName = teacherFeedbackTargets[0].name[language]
+
+  let courseNamesAndUrls = ''
+
+  /* eslint-disable */
+
+  for (feedbackTarget of teacherFeedbackTargets) {
+    const { id, name, opensAt } = feedbackTarget
+    const humanDate = format(new Date(opensAt), 'dd.MM.yyyy')
+    const openFrom = {
+      en: `Opens at ${humanDate}`,
+      fi: `Palautejakso alkaa ${humanDate}`,
+      sv: `Opens at ${humanDate}`,
+    }
+
+    courseNamesAndUrls =
+      courseNamesAndUrls +
+      `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+      ${name[language]}
+      </a> (${openFrom[language]}) <br/>`
+  }
+
   const translations = {
     text: {
-      en: `Dear teacher of the course ${courseName.en}!\n
-      The course feedback form will open in a week and will remain open for four weeks. Please add your
-      own questions, if any, before the above date. You can add your questions here: <a href=${urlToEditSurvey}>${urlToEditSurvey}</a> . Thank you!`,
-      fi: `Hyvä kurssin ${courseName.fi} opettaja!\n Kurssipalautelomake aukeaa viikon päästä ja on auki neljä viikkoa. Lisääthän mahdolliset omat kysymyksesi ennen sitä. 
-      Kysymyksiä voit lisätä täällä: <a href=${urlToEditSurvey}>${urlToEditSurvey}</a>. Kiitos!`,
+      en: `Dear teacher! <br/>
+      The course feedback form for the following courses will open in a week and will remain open for four weeks: <br/>
+      ${courseNamesAndUrls}
+      Please add your own questions, if any, before the above date. You can add the questions by going through the link. Thank you!`,
+      fi: `Hyvä opettaja! <br/> 
+      Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä ja on auki neljä viikkoa: <br/>
+      ${courseNamesAndUrls}
+      Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä linkkien kautta. Kiitos!`,
       sv: '',
     },
     subject: {
-      en: `Feedback for the course ${courseName.en} is about to start`,
-      fi: `Palautejakso opettamallesi kurssille ${courseName.fi} on alkamassa`,
+      en: hasMultipleFeedbackTargets
+        ? `The feedback for your courses are about to start`
+        : `Feedback for the course ${courseName.en} is about to start`,
+      fi: hasMultipleFeedbackTargets
+        ? `Palautejakso opettamillesi kursseille on alkamassa`
+        : `Palautejakso opettamallesi kurssille ${courseName.fi} on alkamassa`,
       sv: '',
     },
   }
 
-  const emails = teachers.map((teacher) => {
-    const email = {
-      to: teacher.email,
-      subject:
-        translations.subject[teacher.language] || translations.subject.en,
-      text: translations.text[teacher.language] || translations.subject.en,
-    }
-    return email
-  })
-
-  const options = {
-    template: {
-      ...template,
-    },
-    emails,
-    settings: { ...settings },
+  const email = {
+    to: emailAddress,
+    subject: translations.subject[language] || translations.subject.en,
+    text: translations.text[language] || translations.text.en,
   }
 
-  sendEmail(options)
-
-  return options
+  return email
 }
 
 const notificationAboutSurveyOpeningToStudents = (
@@ -189,7 +170,7 @@ const notificationAboutSurveyOpeningToStudents = (
 
     courseNamesAndUrls =
       courseNamesAndUrls +
-      `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+      `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/feedback`}>
       ${name[language]}
       </a> (${openUntil[language]}) <br/>`
   }
@@ -230,8 +211,8 @@ const notificationAboutSurveyOpeningToStudents = (
 }
 
 module.exports = {
-  sendNotificationAboutSurveyOpeningToStudents,
   sendNotificationAboutFeedbackSummaryToStudents,
-  sendEmailReminderAboutSurveyOpeningToTeachers,
+  emailReminderAboutSurveyOpeningToTeachers,
   notificationAboutSurveyOpeningToStudents,
+  sendEmail,
 }

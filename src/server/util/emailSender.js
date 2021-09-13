@@ -8,7 +8,11 @@ const {
   User,
 } = require('../models')
 
-const { notificationAboutSurveyOpeningToStudents } = require('./pate')
+const {
+  notificationAboutSurveyOpeningToStudents,
+  emailReminderAboutSurveyOpeningToTeachers,
+  sendEmail,
+} = require('./pate')
 
 const courseRealisationIds = [
   'hy-CUR-142374536',
@@ -64,6 +68,7 @@ const getFeedbackTargetsForSpecialCase = async () => {
       },
       hidden: false,
       feedbackType: 'courseRealisation',
+      feedbackOpenNotificationEmailSent: false,
     },
     include: [
       {
@@ -110,7 +115,7 @@ const getFeedbackTargetsForSpecialCase = async () => {
   return filteredFeedbackTargets
 }
 
-const getFeedbackTargetsForEmail = async () => {
+const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
@@ -151,7 +156,12 @@ const getFeedbackTargetsForEmail = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['email'],
+        attributes: ['email', 'language'],
+        through: {
+          where: {
+            accessStatus: 'STUDENT',
+          },
+        },
       },
     ],
   })
@@ -169,7 +179,7 @@ const getFeedbackTargetsForEmail = async () => {
   return filteredFeedbackTargets
 }
 
-const getFeedbackTargetsForReminderEmail = async () => {
+const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
@@ -203,6 +213,17 @@ const getFeedbackTargetsForReminderEmail = async () => {
           },
         ],
       },
+      {
+        model: User,
+        as: 'users',
+        required: true,
+        attributes: ['email', 'language'],
+        through: {
+          where: {
+            accessStatus: 'TEACHER',
+          },
+        },
+      },
     ],
   })
 
@@ -229,6 +250,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
             {
               id: feedbackTarget.id,
               name: feedbackTarget.courseUnit.name,
+              opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,
             },
@@ -237,6 +259,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
             {
               id: feedbackTarget.id,
               name: feedbackTarget.courseUnit.name,
+              opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,
             },
@@ -249,7 +272,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
 }
 
 const sendEmailAboutSurveyOpeningToStudents = async () => {
-  const feedbackTargets = await getFeedbackTargetsForEmail()
+  const feedbackTargets = await getOpenFeedbackTargetsForStudents()
 
   /* eslint-disable */
 
@@ -257,25 +280,48 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     feedbackTargets,
   )
 
-  //for (feedbackTarget of feedbackTargets) {
-  //if (!feedbackTarget.feedbackOpenNotificationEmailSent) {
-  //  feedbackTarget.feedbackOpenNotificationEmailSent = true
-  //  await feedbackTarget.save()
-  //  await feedbackTarget.sendFeedbackOpenEmailToStudents()
-  //}
-  // }
+  const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
+    (student) =>
+      notificationAboutSurveyOpeningToStudents(
+        student,
+        studentsWithFeedbackTargets[student],
+      ),
+  )
+  const ids = feedbackTargets.map((target) => target.id)
+
+  console.log(ids)
+//  FeedbackTarget.update(
+//    {
+//      feedbackOpenNotificationEmailSent: true,
+//    },
+//    {
+//      where: {
+//        id: {
+//          [Op.in]: ids,
+//        },
+//      },
+//    },
+//  )
+//
+//  sendEmail(emailsToBeSent)
+
+  return emailsToBeSent
 }
 
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
-  const feedbackTargets = await getFeedbackTargetsForReminderEmail()
+  const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  for (feedbackTarget of feedbackTargets) {
-    if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
-      feedbackTarget.feedbackOpeningReminderEmailSent = true
-      await feedbackTarget.save()
-      await feedbackTarget.sendFeedbackOpeningReminderEmailToTeachers()
-    }
-  }
+  const teachersWithFeedbackTargets = await aggregateFeedbackTargets(
+    feedbackTargets,
+  )
+
+  const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
+    (teacher) =>
+      emailReminderAboutSurveyOpeningToTeachers(
+        teacher,
+        teachersWithFeedbackTargets[teacher],
+      ),
+  )
 
   /* eslint-enable */
 }
@@ -294,6 +340,23 @@ const sendEmailForSpecialCase = async () => {
         studentsWithFeedbackTargets[student],
       ),
   )
+
+  const ids = feedbackTargets.map((target) => target.id)
+
+  FeedbackTarget.update(
+    {
+      feedbackOpenNotificationEmailSent: true,
+    },
+    {
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+    },
+  )
+
+  sendEmail(emailsToBeSent)
 
   return emailsToBeSent
 }
@@ -315,6 +378,8 @@ const returnEmailsToBeSentToday = async () => {
 
   return emailsToBeSent
 }
+
+sendEmailForSpecialCase()
 
 module.exports = {
   sendEmailAboutSurveyOpeningToStudents,
