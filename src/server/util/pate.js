@@ -1,5 +1,6 @@
 const axios = require('axios')
 const { format } = require('date-fns')
+const { chunk } = require('lodash')
 
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
@@ -13,6 +14,7 @@ const settings = {
   disableToska: true,
   color: '#107eab',
   header: 'Norppa',
+  headerFontColor: 'white',
   dryrun: !inProduction || inStaging,
 }
 
@@ -29,10 +31,22 @@ const sendToPate = async (options = {}) => {
     return null
   }
 
-  const { data } = await pateClient.post('/', options)
+  /* eslint-disable */
 
-  return data
+  const chunkedEmails = chunk(options.emails, 200)
+  const chunkedOptions = chunkedEmails.map((emails) => ({
+    emails,
+    settings: options.settings,
+    template: options.template,
+  }))
+
+  for (chunkedOption of chunkedOptions) {
+    await pateClient.post('/', chunkedOption)
+  }
+  return options
 }
+
+/* eslint-enable */
 
 const sendEmail = async (listOfEmails) => {
   const options = {
