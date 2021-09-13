@@ -33,7 +33,9 @@ const sendToPate = async (options = {}) => {
 
   /* eslint-disable */
 
-  const chunkedEmails = chunk(options.emails, 200)
+  logger.info(`sending email to: ${options.emails.length}`)
+
+  const chunkedEmails = chunk(options.emails, 50)
   const chunkedOptions = chunkedEmails.map((emails) => ({
     emails,
     settings: options.settings,

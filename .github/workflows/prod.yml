@@ -31,23 +31,6 @@ jobs:
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
 
-  #jest:
-  # runs-on: ubuntu-latest
-  #  steps:
-  #    - uses: actions/checkout@v2
-  #
-  #    - name: Login to toska docker registry
-  #      uses: docker/login-action@v1
-  #      with:
-  #        registry: registry.toska.cs.helsinki.fi
-  #        username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
-  #        password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
-  #
-  #    - name: Prepare test data and start the application
-  #      run: docker-compose -f docker-compose.jest.yml up -d
-  #
-  #    - name: Run Jest tests
-  #      run: docker exec palaute_app_test npm run test
 
   eslint:
     runs-on: ubuntu-latest
@@ -60,7 +43,7 @@ jobs:
 
   dockerhub-release:
     runs-on: ubuntu-latest
-    needs: [cypress, eslint]
+    #needs: [cypress, eslint]
     steps:
       - uses: actions/checkout@v2
 

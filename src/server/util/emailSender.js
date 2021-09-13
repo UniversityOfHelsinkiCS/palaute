@@ -289,7 +289,6 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
   )
   const ids = feedbackTargets.map((target) => target.id)
 
-  console.log(ids)
 //  FeedbackTarget.update(
 //    {
 //      feedbackOpenNotificationEmailSent: true,
