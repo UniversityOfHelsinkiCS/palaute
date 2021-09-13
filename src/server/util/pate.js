@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { format } = require('date-fns')
 
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
@@ -165,8 +166,69 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = (
   return options
 }
 
+const notificationAboutSurveyOpeningToStudents = (
+  emailAddress,
+  studentFeedbackTargets,
+) => {
+  const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
+  const language = studentFeedbackTargets[0].language
+  const courseName = studentFeedbackTargets[0].name[language]
+
+  let courseNamesAndUrls = ''
+
+  for (feedbackTarget of studentFeedbackTargets) {
+    const { id, name, closesAt } = feedbackTarget
+    const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
+    const openUntil = {
+      en: `Open until ${humanDate}`,
+      fi: `Avoinna ${humanDate} asti`,
+      sv: `Open until ${humanDate}`,
+    }
+
+    courseNamesAndUrls =
+      courseNamesAndUrls +
+      `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+      ${name[language]}
+      </a> (${openUntil[language]}) <br/>`
+  }
+
+  const translations = {
+    text: {
+      en: `Dear student, <br/>
+      Course feedback for the following courses are now open: <br/>
+      ${courseNamesAndUrls}
+      Please provide feedback on the course so that we can improve teaching and University operations.
+      Once you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long
+      as the form remains open.`,
+      fi: `Hyvä opiskelija!<br/> Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>
+      ${courseNamesAndUrls}
+      Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
+      Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.`,
+      sv: ``,
+    },
+    subject: {
+      en: hasMultipleFeedbackTargets
+        ? `Course feedback has opened`
+        : `Course feedback for course ${courseName} has opened`,
+      fi: hasMultipleFeedbackTargets
+        ? `Kurssipalaute on avautunut`
+        : `Kurssin ${courseName} kurssipalaute on avautunut`,
+      sv: ``,
+    },
+  }
+
+  const email = {
+    to: emailAddress,
+    subject: translations.subject[language] || translations.subject.en,
+    text: translations.text[language] || translations.text.en,
+  }
+
+  return email
+}
+
 module.exports = {
   sendNotificationAboutSurveyOpeningToStudents,
   sendNotificationAboutFeedbackSummaryToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
+  notificationAboutSurveyOpeningToStudents,
 }

@@ -19,6 +19,8 @@ const {
 const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 
+const { returnEmailsToBeSentToday } = require('../util/emailSender')
+
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
 
@@ -247,6 +249,11 @@ const resetTestCourse = async (_, res) => {
   res.send({})
 }
 
+const findEmailsForToday = async (_, res) => {
+  const emails = await returnEmailsToBeSentToday()
+  res.send(emails)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -255,5 +262,6 @@ router.get('/users', findUser)
 router.get('/feedback-targets', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.post('/reset-course', resetTestCourse)
+router.get('/emails', findEmailsForToday)
 
 module.exports = router

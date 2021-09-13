@@ -7,6 +7,7 @@ import apiClient from '../../util/apiClient'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import LoginAs from './LoginAsSelector'
 import EditUniversitySurvey from './EditUniversitySurvey'
+import EmailAccordion from './EmailAccordion'
 
 const AdminView = () => {
   const { authorizedUser } = useAuthorizedUser()
@@ -32,6 +33,7 @@ const AdminView = () => {
       <Button variant="contained" color="primary" onClick={resetTestCourse}>
         Reset test course
       </Button>
+      <EmailAccordion />
     </>
   )
 }

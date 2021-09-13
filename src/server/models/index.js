@@ -62,6 +62,18 @@ User.prototype.feedbackTargetsHasTeacherAccessTo = function () {
   })
 }
 
+FeedbackTarget.belongsToMany(User, {
+  through: UserFeedbackTarget,
+  as: 'users',
+  foreignKey: 'feedback_target_id',
+})
+
+User.belongsToMany(FeedbackTarget, {
+  through: UserFeedbackTarget,
+  as: 'feedback_targets',
+  foreignKey: 'user_id',
+})
+
 module.exports = {
   Feedback,
   User,
