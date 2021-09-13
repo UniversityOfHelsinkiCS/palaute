@@ -16,8 +16,6 @@ const logger = require('./util/logger')
 
 const app = express()
 
-require('./util/emailSender')
-
 app.use('/api', (req, res, next) => require('./util/routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))
 
