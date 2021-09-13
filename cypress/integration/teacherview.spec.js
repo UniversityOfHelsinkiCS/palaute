@@ -31,9 +31,10 @@ describe('Teacher view', () => {
     cy.contains(`${startDate} - ${endDate}`)
   })
   it('A logged in teacher can give feedback response for an ended course', () => {
-    cy.get('div')
-      .contains('TKT20002 Software Development Methods')
-      .should('contain', 'Counter feedback missing')
+    cy.contains(
+      '[data-cy=courseUnitItem]',
+      'TKT20002 Software Development Methods',
+    ).should('contain', 'Counter feedback missing')
 
     cy.get('div').contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()

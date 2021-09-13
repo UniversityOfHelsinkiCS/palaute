@@ -63,6 +63,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
     <Accordion
       className={classes.accordion}
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
+      data-cy="courseUnitItem"
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <div>
