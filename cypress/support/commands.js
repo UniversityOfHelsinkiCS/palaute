@@ -6,6 +6,7 @@ const adminUser = {
   preferredLanguage: 'en',
   hyPersonSisuId: 'hy-hlo-1441871',
   employeeNumber: '9021313',
+  hygroupcn: ['hy-employees'],
 }
 
 const teacher = {
@@ -16,6 +17,7 @@ const teacher = {
   preferredlanguage: 'en',
   hyPersonSisuId: 'hy-hlo-51367956',
   employeeNumber: '123445678',
+  hygroupcn: ['hy-employees'],
 }
 
 const student = {
@@ -34,6 +36,7 @@ const studyCoordinator = {
   mail: 'dekaani@toska.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'hy-hlo-1501077',
+  hygroupcn: ['hy-employees'],
 }
 
 Cypress.Commands.add('loginAsTeacher', () => {

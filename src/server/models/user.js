@@ -4,7 +4,7 @@ const _ = require('lodash')
 const { sequelize } = require('../util/dbConnection')
 const lomakeClient = require('../util/lomakeClient')
 const Organisation = require('./organisation')
-const { ADMINS } = require('../../config')
+const { ADMINS, inProduction } = require('../util/config')
 
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
@@ -41,12 +41,16 @@ const getOrganisationAccessFromIamGroups = (iamGroups) =>
     {},
   )
 
+const canHaveOrganisationAccess = (user) => {
+  if (!inProduction) {
+    return true
+  }
+
+  return Boolean(user.iamGroups?.includes('hy-employees'))
+}
+
 class User extends Model {
   async getOrganisationAccess() {
-    if (!this.employeeNumber) {
-      return []
-    }
-
     if (ADMINS.includes(this.username)) {
       const allOrganisations = await Organisation.findAll({})
       return allOrganisations
@@ -55,6 +59,10 @@ class User extends Model {
           organisation,
           access: { read: true, write: true, admin: true },
         }))
+    }
+
+    if (!canHaveOrganisationAccess(this)) {
+      return []
     }
 
     const lomakeAccess = await getOrganisationAccessFromLomake(this.username)
