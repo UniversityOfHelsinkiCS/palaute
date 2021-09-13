@@ -171,10 +171,12 @@ const notificationAboutSurveyOpeningToStudents = (
   studentFeedbackTargets,
 ) => {
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
-  const language = studentFeedbackTargets[0].language
+  const { language } = studentFeedbackTargets[0]
   const courseName = studentFeedbackTargets[0].name[language]
 
   let courseNamesAndUrls = ''
+
+  /* eslint-disable */
 
   for (feedbackTarget of studentFeedbackTargets) {
     const { id, name, closesAt } = feedbackTarget
@@ -216,6 +218,7 @@ const notificationAboutSurveyOpeningToStudents = (
       sv: ``,
     },
   }
+  /* eslint-enable */
 
   const email = {
     to: emailAddress,

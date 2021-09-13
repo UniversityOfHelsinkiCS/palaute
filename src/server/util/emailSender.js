@@ -218,6 +218,7 @@ const getFeedbackTargetsForReminderEmail = async () => {
 
 const aggregateFeedbackTargets = async (feedbackTargets) => {
   // Leo if you are reading this you are allowed to refactor :)
+  /* eslint-disable */
 
   let emails = {}
   for (feedbackTarget of feedbackTargets) {
@@ -242,6 +243,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
           ])
     }
   }
+  /* eslint-enable */
 
   return emails
 }
@@ -286,12 +288,11 @@ const sendEmailForSpecialCase = async () => {
   )
 
   const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
-    (student) => {
-      return notificationAboutSurveyOpeningToStudents(
+    (student) =>
+      notificationAboutSurveyOpeningToStudents(
         student,
         studentsWithFeedbackTargets[student],
-      )
-    },
+      ),
   )
 
   return emailsToBeSent
@@ -305,12 +306,11 @@ const returnEmailsToBeSentToday = async () => {
   )
 
   const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
-    (student) => {
-      return notificationAboutSurveyOpeningToStudents(
+    (student) =>
+      notificationAboutSurveyOpeningToStudents(
         student,
         studentsWithFeedbackTargets[student],
-      )
-    },
+      ),
   )
 
   return emailsToBeSent
