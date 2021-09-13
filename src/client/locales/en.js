@@ -248,6 +248,7 @@ export default {
   },
   footer: {
     contactSupport: 'Contact support',
+    wikiLink: 'User instructions',
   },
   courseRealisationFeedback: {
     noFeedbackTarget: 'This course does not have a feedback available to you',
