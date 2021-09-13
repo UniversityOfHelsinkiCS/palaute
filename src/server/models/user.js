@@ -43,6 +43,10 @@ const getOrganisationAccessFromIamGroups = (iamGroups) =>
 
 class User extends Model {
   async getOrganisationAccess() {
+    if (!this.employeeNumber) {
+      return []
+    }
+
     if (ADMINS.includes(this.username)) {
       const allOrganisations = await Organisation.findAll({})
       return allOrganisations
