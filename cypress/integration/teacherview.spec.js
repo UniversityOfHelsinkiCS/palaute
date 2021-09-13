@@ -4,11 +4,11 @@ import { format } from 'date-fns'
 const getDates = () => {
   const date = new Date()
 
-  const startDate = format(
-    new Date().setDate(date.getDate() - 1),
+  const startDate = format(new Date().setDate(date.getDate() - 1), 'dd.MM.yyyy')
+  const endDate = format(
+    new Date().setHours(date.getHours() - 10),
     'dd.MM.yyyy',
   )
-  const endDate = format(new Date().setHours(date.getHours() - 10), 'dd.MM.yyyy')
 
   return { startDate, endDate }
 }
@@ -31,10 +31,10 @@ describe('Teacher view', () => {
     cy.contains(`${startDate} - ${endDate}`)
   })
   it('A logged in teacher can give feedback response for an ended course', () => {
-    cy.get('p')
+    cy.get('div')
       .contains('TKT20002 Software Development Methods')
-      .parent()
-      .contains('Counter feedback missing')
+      .should('contain', 'Counter feedback missing')
+
     cy.get('div').contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
     cy.contains('Feedback').click()
