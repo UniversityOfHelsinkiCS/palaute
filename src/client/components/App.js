@@ -52,7 +52,7 @@ const App = () => {
             <Router />
             <DevTools />
             <AdminLoggedInAsBanner />
-            <Footer />
+            <Footer user={authorizedUser} />
           </SnackbarProvider>
         </Suspense>
       </ThemeProvider>
