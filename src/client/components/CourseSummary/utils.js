@@ -7,13 +7,7 @@ const courseCodeMatches = (courseCode, keyword) => {
 
   const normalizedCourseCode = courseCode.toLowerCase()
 
-  if (keyword.includes('-')) {
-    return normalizedCourseCode.includes(keyword)
-  }
-
-  const [first, second] = normalizedCourseCode.split('-')
-
-  return second ? second.includes(keyword) : first.includes(keyword)
+  return normalizedCourseCode.includes(keyword)
 }
 
 export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
