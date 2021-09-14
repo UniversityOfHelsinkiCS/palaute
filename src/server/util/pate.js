@@ -146,10 +146,10 @@ const emailReminderAboutSurveyOpeningToTeachers = (
     subject: {
       en: hasMultipleFeedbackTargets
         ? `The feedback for your courses are about to start`
-        : `Feedback for the course ${courseName.en} is about to start`,
+        : `Feedback for the course ${courseName} is about to start`,
       fi: hasMultipleFeedbackTargets
         ? `Palautejakso opettamillesi kursseille on alkamassa`
-        : `Palautejakso opettamallesi kurssille ${courseName.fi} on alkamassa`,
+        : `Palautejakso opettamallesi kurssille ${courseName} on alkamassa`,
       sv: '',
     },
   }
