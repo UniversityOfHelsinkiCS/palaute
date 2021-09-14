@@ -1,4 +1,5 @@
 import 'intersection-observer'
+import './util/resizeObserverPolyfill'
 
 import React from 'react'
 import { render } from 'react-dom'
