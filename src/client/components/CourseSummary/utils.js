@@ -26,7 +26,7 @@ export const filterByCourseCode = (organisations, keyword) => {
   const organisationsWithFilteredCourseUnits = organisations.map(
     ({ courseUnits, ...org }) => ({
       courseUnits: (courseUnits ?? []).filter(({ courseCode }) =>
-        courseCodeMatches(courseCode, keyword),
+        courseCodeMatches(courseCode, normalizedKeyword),
       ),
       ...org,
     }),
