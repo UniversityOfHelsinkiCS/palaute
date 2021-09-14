@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
 
 import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
 
@@ -51,32 +50,20 @@ const ResultsRow = ({
   feedbackResponseGiven,
   accordionEnabled = false,
   accordionCellEnabled = true,
+  accordionInitialOpen = false,
+  onToggleAccordion = () => {},
   cellsAfter = null,
   lastChild = false,
-  openAccordions,
-  updateOpenAccordions,
   ...props
 }) => {
   const { t } = useTranslation()
   const classes = useStyles({ level })
-  const history = useHistory()
-
-  const [accordionOpen, setAccordionOpen] = useState(false)
+  const [accordionOpen, setAccordionOpen] = useState(accordionInitialOpen)
 
   const handleToggleAccordion = () => {
     setAccordionOpen((previousOpen) => !previousOpen)
-    updateOpenAccordions(id)
+    onToggleAccordion()
   }
-
-  const handleRender = () => {
-    if (history.location.state && history.location.state.includes(id)) {
-      setAccordionOpen(true)
-    }
-  }
-
-  useEffect(() => {
-    handleRender()
-  }, [])
 
   const feedbackResponseGivenContent = (
     <Tooltip title={t('courseSummary:feedbackResponseGiven')}>

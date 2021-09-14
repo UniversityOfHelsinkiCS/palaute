@@ -5,7 +5,8 @@ import { useInView } from 'react-intersection-observer'
 const useStyles = makeStyles((theme) => ({
   floatingWrapper: {
     position: 'fixed',
-    bottom: '0px',
+    bottom: (props) => (props.placement === 'bottom' ? '0px' : 'auto'),
+    top: (props) => (props.placement === 'top' ? '0px' : 'auto'),
     width: '100%',
     left: '0px',
     padding: theme.spacing(2, 0),
@@ -13,8 +14,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FixedContainer = ({ children, intersectionObserverOptions = {} }) => {
-  const classes = useStyles()
+const FixedContainer = ({
+  children,
+  placement = 'bottom',
+  intersectionObserverOptions = {},
+}) => {
+  const classes = useStyles({ placement })
 
   const { ref, inView } = useInView({
     threshold: 0,

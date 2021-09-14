@@ -231,6 +231,8 @@ export default {
     courseOngoing: 'The course is still ongoing',
     editProgrammeSettings: "Edit programme's settings",
     courseRealisation: 'Course realisation',
+    searchLabel: 'Search courses',
+    searchPlaceholder: 'Search courses by course code',
   },
   organisationView: {
     organisations: 'Organisations',

@@ -229,6 +229,8 @@ export default {
     courseOngoing: 'Kurssi on vielä käynnissä',
     editProgrammeSettings: 'Muokkaa koulutusohjelman asetuksia',
     courseRealisation: 'Kurssitoteutus',
+    searchLabel: 'Hae kursseja',
+    searchPlaceholder: 'Hae kursseja kurssikoodilla',
   },
   organisationView: {
     organisations: 'Organisaatiot',

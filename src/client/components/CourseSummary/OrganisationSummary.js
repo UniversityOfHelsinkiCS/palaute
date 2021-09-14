@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useMemo } from 'react'
 
 import {
   Box,
@@ -10,11 +10,14 @@ import {
   IconButton,
   Tooltip,
   makeStyles,
+  TextField,
+  InputAdornment,
 } from '@material-ui/core'
 
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/Settings'
+import SearchIcon from '@material-ui/icons/Search'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
 import useOrganisations from '../../hooks/useOrganisations'
@@ -23,18 +26,18 @@ import ResultsRow from './ResultsRow'
 import VerticalHeading from './VerticalHeading'
 import CourseUnitSummary from './CourseUnitSummary'
 import DividerRow from './DividerRow'
+import { filterByCourseCode, hasWriteAccess } from './utils'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     borderSpacing: '2px',
   },
-})
-
-const hasWriteAccess = (organisationId, organisationAccess) =>
-  Boolean(
-    (organisationAccess ?? []).find(({ id }) => id === organisationId)?.access
-      .write,
-  )
+  searchCell: {
+    verticalAlign: 'bottom',
+    width: '450px',
+    padding: theme.spacing(2),
+  },
+}))
 
 const SettingsButton = ({ code }) => {
   const { t } = useTranslation()
@@ -56,31 +59,36 @@ const OrganisationTable = ({
   organisations,
   questions,
   organisationAccess,
+  initialOpenAccordions = [],
+  onToggleAccordion = () => {},
+  keyword = '',
+  onKeywordChange = () => {},
 }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
-
-  const history = useHistory()
-  const [openAccordions, setOpenAccordions] = useState(
-    history.location.state ? history.location.state : [],
-  )
-
-  const updateOpenAccordions = async (id) => {
-    if (openAccordions.includes(id)) {
-      setOpenAccordions(openAccordions.filter((a) => a !== id))
-      history.replace({ state: openAccordions.filter((a) => a !== id) })
-    } else {
-      setOpenAccordions(openAccordions.concat(id))
-      history.replace({ state: openAccordions.concat(id) })
-    }
-  }
 
   return (
     <TableContainer>
       <table className={classes.table}>
         <thead>
           <tr>
-            <th> </th>
+            <th className={classes.searchCell}>
+              <TextField
+                value={keyword}
+                onChange={(event) => onKeywordChange(event.target.value)}
+                variant="outlined"
+                placeholder={t('courseSummary:searchPlaceholder')}
+                label={t('courseSummary:searchLabel')}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                fullWidth
+              />
+            </th>
             <th> </th>
             {questions.map(({ id, data }) => (
               <VerticalHeading key={id}>
@@ -111,6 +119,8 @@ const OrganisationTable = ({
                   questions={questions}
                   feedbackCount={feedbackCount}
                   accordionEnabled={courseUnits.length > 0}
+                  accordionInitialOpen={initialOpenAccordions.includes(id)}
+                  onToggleAccordion={() => onToggleAccordion(id)}
                   cellsAfter={
                     <td>
                       {hasWriteAccess(id, organisationAccess) && (
@@ -118,8 +128,6 @@ const OrganisationTable = ({
                       )}
                     </td>
                   }
-                  openAccordions={openAccordions}
-                  updateOpenAccordions={updateOpenAccordions}
                 >
                   <CourseUnitSummary
                     courseUnits={courseUnits}
@@ -138,8 +146,43 @@ const OrganisationTable = ({
 
 const OrganisationSummary = () => {
   const { t } = useTranslation()
+  const history = useHistory()
+
+  const historyState = history.location.state ?? {}
+
+  const [keyword, setKeyword] = useState(historyState.searchKeyword ?? '')
   const { organisations: organisationAccess } = useOrganisations()
   const { organisationSummaries, isLoading } = useOrganisationSummaries()
+
+  const openAccordions = historyState.openAccordions ?? []
+
+  const handleToggleAccordion = (id) => {
+    let nextOpenAccordions = openAccordions
+
+    if (openAccordions.includes(id)) {
+      nextOpenAccordions = openAccordions.filter((a) => a !== id)
+    } else {
+      nextOpenAccordions = openAccordions.concat(id)
+    }
+
+    history.replace({
+      state: { ...historyState, openAccordions: nextOpenAccordions },
+    })
+  }
+
+  const handleKeywordChange = (nextKeyword) => {
+    setKeyword(nextKeyword)
+
+    history.replace({
+      state: { ...historyState, searchKeyword: nextKeyword },
+    })
+  }
+
+  const filteredOrganisations = useMemo(
+    () =>
+      filterByCourseCode(organisationSummaries?.organisations ?? [], keyword),
+    [organisationSummaries?.organisations, keyword],
+  )
 
   if (isLoading) {
     return (
@@ -153,7 +196,7 @@ const OrganisationSummary = () => {
     return <Redirect to="/" />
   }
 
-  const { questions, organisations } = organisationSummaries
+  const { questions } = organisationSummaries
 
   return (
     <>
@@ -165,9 +208,13 @@ const OrganisationSummary = () => {
       <Card>
         <CardContent>
           <OrganisationTable
-            organisations={organisations}
+            organisations={filteredOrganisations}
             questions={questions}
             organisationAccess={organisationAccess}
+            initialOpenAccordions={openAccordions}
+            onToggleAccordion={handleToggleAccordion}
+            keyword={keyword}
+            onKeywordChange={handleKeywordChange}
           />
         </CardContent>
       </Card>
