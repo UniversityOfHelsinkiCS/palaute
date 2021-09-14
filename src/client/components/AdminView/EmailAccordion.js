@@ -10,16 +10,24 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  makeStyles,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import useEmailsToBeSent from '../../hooks/useEmailsToBeSent'
 
+const useStyles = makeStyles(() => ({
+  accordion: {
+    marginTop: 10,
+  },
+}))
+
 const EmailAccordion = () => {
   const [emails, getTheEmails] = useEmailsToBeSent()
+  const classes = useStyles()
 
   return (
-    <Box mb={2}>
+    <Box mb={2} className={classes.accordion}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -33,9 +41,9 @@ const EmailAccordion = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>to</TableCell>
-                <TableCell>subject</TableCell>
-                <TableCell>text</TableCell>
+                <TableCell>Email sent to</TableCell>
+                <TableCell>Email subject</TableCell>
+                <TableCell>Email text</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
