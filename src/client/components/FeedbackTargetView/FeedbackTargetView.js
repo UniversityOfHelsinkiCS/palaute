@@ -15,6 +15,7 @@ import {
   Typography,
   Tab,
   Button,
+  Grid,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -107,11 +108,32 @@ const FeedbackTargetView = () => {
             <Typography variant="h4" component="h1" gutterBottom>
               {courseRealisationName}
             </Typography>
-
-            <Typography color="textSecondary" variant="body2">
-              {t('feedbackTargetView:coursePeriod')}: {coursePeriod} ·{' '}
-              {t('feedbackTargetView:feedbackPeriod')}: {feedbackPeriod}
-            </Typography>
+            <Grid container spacing={1}>
+              <Grid container item xs={12}>
+                <Grid item xs={2}>
+                  <Typography color="textSecondary" variant="body2">
+                    {t('feedbackTargetView:coursePeriod')}:
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography color="textSecondary" variant="body2">
+                    {coursePeriod}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container item xs={12}>
+                <Grid item xs={2}>
+                  <Typography color="textSecondary" variant="body2">
+                    {t('feedbackTargetView:feedbackPeriod')}:
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography color="textSecondary" variant="body2">
+                    {feedbackPeriod}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
           </Box>
 
           {isTeacher && (
