@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     gridColumnStart: 1,
     gridRowStart: 1,
   },
-
   coursePeriodDates: {
     gridColumnStart: 2,
     gridRowStart: 1,
@@ -76,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
     gridColumnStart: 1,
     gridRowStart: 2,
   },
-
   feedbackPeriodDates: {
     gridColumnStart: 2,
     gridRowStart: 2,
