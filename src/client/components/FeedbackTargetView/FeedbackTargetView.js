@@ -15,7 +15,7 @@ import {
   Typography,
   Tab,
   Button,
-  Grid,
+  makeStyles,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -40,12 +40,56 @@ import {
   getFeedbackPeriod,
 } from './utils'
 
+const useStyles = makeStyles((theme) => ({
+  datesContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'auto 1fr',
+  },
+  headingContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+    },
+  },
+  copyLinkButtonContainer: {
+    paddingLeft: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: 0,
+      paddingTop: theme.spacing(1),
+    },
+  },
+  coursePeriodLabel: {
+    paddingRight: theme.spacing(1),
+    gridColumnStart: 1,
+    gridRowStart: 1,
+  },
+
+  coursePeriodDates: {
+    gridColumnStart: 2,
+    gridRowStart: 1,
+  },
+  feedbackPeriodLabel: {
+    paddingRight: theme.spacing(1),
+    gridColumnStart: 1,
+    gridRowStart: 2,
+  },
+
+  feedbackPeriodDates: {
+    gridColumnStart: 2,
+    gridRowStart: 2,
+  },
+}))
+
 const FeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id)
+  const classes = useStyles()
 
   if (isLoading) {
     return (
@@ -103,41 +147,13 @@ const FeedbackTargetView = () => {
   return (
     <>
       <Box mb={2}>
-        <Box display="flex">
-          <Box flexGrow={1}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              {courseRealisationName}
-            </Typography>
-            <Grid container spacing={1}>
-              <Grid container item xs={12}>
-                <Grid item xs={2}>
-                  <Typography color="textSecondary" variant="body2">
-                    {t('feedbackTargetView:coursePeriod')}:
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography color="textSecondary" variant="body2">
-                    {coursePeriod}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container item xs={12}>
-                <Grid item xs={2}>
-                  <Typography color="textSecondary" variant="body2">
-                    {t('feedbackTargetView:feedbackPeriod')}:
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography color="textSecondary" variant="body2">
-                    {feedbackPeriod}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Box>
+        <div className={classes.headingContainer}>
+          <Typography variant="h4" component="h1">
+            {courseRealisationName}
+          </Typography>
 
           {isTeacher && (
-            <Box flexGrow={0} pl={2}>
+            <div className={classes.copyLinkButtonContainer}>
               <Button
                 startIcon={<CopyIcon />}
                 color="primary"
@@ -145,9 +161,45 @@ const FeedbackTargetView = () => {
               >
                 {t('feedbackTargetView:copyLink')}
               </Button>
-            </Box>
+            </div>
           )}
-        </Box>
+        </div>
+
+        <dl className={classes.datesContainer}>
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            component="dt"
+            className={classes.coursePeriodLabel}
+          >
+            {t('feedbackTargetView:coursePeriod')}:
+          </Typography>
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            component="dd"
+            className={classes.coursePeriodDates}
+          >
+            {coursePeriod}
+          </Typography>
+
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            component="dt"
+            className={classes.feedbackPeriodLabel}
+          >
+            {t('feedbackTargetView:feedbackPeriod')}:
+          </Typography>
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            component="dd"
+            className={classes.feedbackPeriodDates}
+          >
+            {feedbackPeriod}
+          </Typography>
+        </dl>
       </Box>
 
       <Box mb={2}>
