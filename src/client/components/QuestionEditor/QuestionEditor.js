@@ -86,8 +86,14 @@ const QuestionEditor = ({
                 arrayHelpers.remove(index)
                 onRemoveQuestion(question)
               }}
-              onMoveUp={() => arrayHelpers.swap(index - 1, index)}
-              onMoveDown={() => arrayHelpers.swap(index + 1, index)}
+              onMoveUp={() => {
+                arrayHelpers.swap(index - 1, index)
+                onStopEditing()
+              }}
+              onMoveDown={() => {
+                arrayHelpers.swap(index + 1, index)
+                onStopEditing()
+              }}
               onCopy={() => {
                 arrayHelpers.insert(index + 1, copyQuestion(question))
                 onCopyQuestion(question)

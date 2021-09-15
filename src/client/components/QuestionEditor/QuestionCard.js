@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   IconButton,
-  makeStyles,
   Tooltip,
   Box,
   Chip,
@@ -13,8 +12,6 @@ import {
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
-import UpIcon from '@material-ui/icons/KeyboardArrowUp'
-import DownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -28,17 +25,7 @@ import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 import FormikSwitch from '../FormikSwitch'
-
-const useStyles = makeStyles((theme) => ({
-  actionsContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  actionsDivider: {
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
-  },
-}))
+import OrderButtons from './OrderButtons'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -68,6 +55,15 @@ const getTitleByType = (type, t) => {
   return mapping[type]
 }
 
+const ActionsContainer = ({ children }) => (
+  <div>
+    <Divider />
+    <Box mt={2} display="flex" justifyContent="flex-end">
+      {children}
+    </Box>
+  </div>
+)
+
 const EditActions = ({
   onMoveUp,
   onMoveDown,
@@ -75,10 +71,8 @@ const EditActions = ({
   moveUpDisabled,
   moveDownDisabled,
   name,
-  language,
 }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t } = useTranslation()
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
@@ -94,21 +88,13 @@ const EditActions = ({
   return (
     <>
       <FormikSwitch label={t('required')} name={`${name}.required`} />
-      <Tooltip title={t('questionEditor:moveUp')}>
-        <div>
-          <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
-            <UpIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
 
-      <Tooltip title={t('questionEditor:moveDown')}>
-        <div>
-          <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
-            <DownIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
+      <OrderButtons
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+        moveUpDisabled={moveUpDisabled}
+        moveDownDisabled={moveDownDisabled}
+      />
 
       <Tooltip title={t('questionEditor:removeQuestion')}>
         <div>
@@ -138,7 +124,6 @@ const QuestionCard = ({
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
-  const classes = useStyles()
   const [field] = useField(name)
   const { value: question } = field
 
@@ -148,6 +133,14 @@ const QuestionCard = ({
   const title = getTitleByType(question.type, t)
 
   const questionIsEditable = question.editable ?? true
+  const canEdit = questionIsEditable && editable
+
+  const orderButtonsProps = {
+    onMoveUp,
+    onMoveDown,
+    moveUpDisabled,
+    moveDownDisabled,
+  }
 
   return (
     <Card className={className}>
@@ -155,11 +148,7 @@ const QuestionCard = ({
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />
           {question.chip && (
-            <Tooltip
-              className={classes.tooltip}
-              arrow
-              title={t('questionEditor:uneditableTooltip')}
-            >
+            <Tooltip title={t('questionEditor:uneditableTooltip')}>
               <Chip
                 label={t(question.chip)}
                 variant="outlined"
@@ -167,7 +156,7 @@ const QuestionCard = ({
               />
             </Tooltip>
           )}
-          {editable && questionIsEditable && (
+          {canEdit && (
             <div>
               {isEditing ? (
                 <Button color="primary" onClick={onStopEditing}>
@@ -189,24 +178,30 @@ const QuestionCard = ({
 
         {isEditing ? (
           <>
-            <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
+            <Box mb={2}>
+              <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
+            </Box>
 
-            <Divider className={classes.actionsDivider} />
-
-            <div className={classes.actionsContainer}>
+            <ActionsContainer>
               <EditActions
-                onMoveUp={onMoveUp}
-                onMoveDown={onMoveDown}
+                {...orderButtonsProps}
                 onRemove={onRemove}
-                moveUpDisabled={moveUpDisabled}
-                moveDownDisabled={moveDownDisabled}
                 name={name}
-                language={language}
               />
-            </div>
+            </ActionsContainer>
           </>
         ) : (
-          <PreviewComponent question={question} language={language} />
+          <>
+            <Box mb={canEdit ? 2 : 0}>
+              <PreviewComponent question={question} language={language} />
+            </Box>
+
+            {canEdit && (
+              <ActionsContainer>
+                <OrderButtons {...orderButtonsProps} />
+              </ActionsContainer>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
