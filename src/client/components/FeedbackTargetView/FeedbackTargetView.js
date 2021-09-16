@@ -16,11 +16,13 @@ import {
   Tab,
   Button,
   makeStyles,
+  Link as MuiLink,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
+import ExternalLinkIcon from '@material-ui/icons/Launch'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
@@ -38,12 +40,14 @@ import {
   feedbackTargetIsDisabled,
   copyLink,
   getFeedbackPeriod,
+  getCoursePageUrl,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
+    margin: '0px',
     '& dt': {
       paddingRight: theme.spacing(1),
       gridColumn: 1,
@@ -67,6 +71,14 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: 0,
       paddingTop: theme.spacing(1),
     },
+  },
+  coursePageLink: {
+    display: 'inline-block',
+    marginTop: theme.spacing(1),
+  },
+  coursePageIcon: {
+    marginLeft: theme.spacing(0.5),
+    fontSize: '1em',
   },
 }))
 
@@ -123,8 +135,8 @@ const FeedbackTargetView = () => {
   }
 
   const coursePeriod = getCoursePeriod(courseRealisation)
-
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
+  const coursePageUrl = getCoursePageUrl(feedbackTarget)
 
   const courseRealisationName = getLanguageValue(
     courseRealisation?.name,
@@ -169,6 +181,16 @@ const FeedbackTargetView = () => {
             {feedbackPeriod}
           </Typography>
         </dl>
+
+        <MuiLink
+          href={coursePageUrl}
+          target="_blank"
+          rel="noopener"
+          className={classes.coursePageLink}
+        >
+          {t('feedbackTargetView:coursePage')}
+          <ExternalLinkIcon className={classes.coursePageIcon} />
+        </MuiLink>
       </Box>
 
       <Box mb={2}>

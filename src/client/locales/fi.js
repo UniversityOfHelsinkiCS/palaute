@@ -278,5 +278,6 @@ export default {
     editFeedbackTab: 'Muokkaa palautetta',
     coursePeriod: 'Kurssi käynnissä',
     feedbackPeriod: 'Palaute käynnissä',
+    coursePage: 'Kurssisivu',
   },
 }

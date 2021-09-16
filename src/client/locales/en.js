@@ -277,5 +277,6 @@ export default {
     editFeedbackTab: 'Edit feedback',
     coursePeriod: 'Course ongoing',
     feedbackPeriod: 'Feedback open',
+    coursePage: 'Course page',
   },
 }
