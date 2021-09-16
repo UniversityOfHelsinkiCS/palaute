@@ -89,7 +89,7 @@ const ResultsRow = ({
         <td
           className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
         >
-          <Typography>{label}</Typography>
+          <Typography component="div">{label}</Typography>
         </td>
         {accordionCellEnabled && (
           <td>

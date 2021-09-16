@@ -230,6 +230,7 @@ export default {
     courseRealisation: 'Kurssitoteutus',
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
+    responsibleTeachers: 'Vastuuopettajat',
   },
   organisationView: {
     organisations: 'Organisaatiot',

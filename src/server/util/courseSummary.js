@@ -1,6 +1,8 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 
 const { sequelize } = require('./dbConnection')
+const { FeedbackTarget, UserFeedbackTarget, User } = require('../models')
 
 const QUESTION_AVERAGES_QUERY = `
 SELECT
@@ -493,7 +495,54 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
     type: sequelize.QueryTypes.SELECT,
   })
 
-  return getCourseRealisationsWithResults(rows, questions)
+  const courseRealisationsWithResults = getCourseRealisationsWithResults(
+    rows,
+    questions,
+  )
+
+  if (courseRealisationsWithResults.length === 0) {
+    return []
+  }
+
+  const feedbackTargetIds = courseRealisationsWithResults.map(
+    ({ feedbackTargetId }) => feedbackTargetId,
+  )
+
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      id: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        where: { accessStatus: 'TEACHER' },
+        required: true,
+        include: [{ model: User, as: 'user', required: true }],
+      },
+    ],
+  })
+
+  const courseRealisationsWithTeachers = courseRealisationsWithResults.map(
+    ({ feedbackTargetId, ...courseRealisation }) => {
+      const feedbackTarget = feedbackTargets.find(
+        ({ id }) => id === feedbackTargetId,
+      )
+
+      const teachers =
+        feedbackTarget?.userFeedbackTargets.map(({ user }) => user) ?? []
+
+      return {
+        teachers,
+        feedbackTargetId,
+        ...courseRealisation,
+      }
+    },
+  )
+
+  return courseRealisationsWithTeachers
 }
 
 module.exports = {

@@ -232,6 +232,7 @@ export default {
     courseRealisation: 'Course realisation',
     searchLabel: 'Filter courses',
     searchPlaceholder: 'Filter courses by course code',
+    responsibleTeachers: 'Responsible teachers',
   },
   organisationView: {
     organisations: 'Organisations',

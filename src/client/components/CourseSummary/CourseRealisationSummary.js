@@ -35,20 +35,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const getLabel = (courseRealisation) => {
-  const { startDate, endDate, feedbackTargetId } = courseRealisation
+const getLabel = (courseRealisation, t) => {
+  const { startDate, endDate, feedbackTargetId, teachers } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
 
   const label = `${formattedStartDate} - ${formattedEndDate}`
 
-  return feedbackTargetId ? (
+  const link = feedbackTargetId ? (
     <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`}>
       {label}
     </Link>
   ) : (
     label
+  )
+
+  const teachersString = teachers
+    .map(({ firstName, lastName }) =>
+      [firstName, lastName].filter(Boolean).join(' '),
+    )
+    .filter(Boolean)
+    .join(', ')
+
+  return (
+    <>
+      {link}
+      {teachersString && (
+        <Typography color="textSecondary" variant="body2">
+          {t('courseSummary:responsibleTeachers')}: {teachersString}
+        </Typography>
+      )}
+    </>
   )
 }
 
@@ -88,7 +106,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
               <Fragment key={courseRealisation.id}>
                 <ResultsRow
                   key={courseRealisation.id}
-                  label={getLabel(courseRealisation)}
+                  label={getLabel(courseRealisation, t)}
                   results={courseRealisation.results}
                   questions={questions}
                   feedbackCount={courseRealisation.feedbackCount}
