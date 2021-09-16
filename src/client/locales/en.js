@@ -209,8 +209,7 @@ export default {
     sendEmail: 'Send email notification about counter feedback to students',
     instructionTitle: 'Instructions for counter feedback',
     responseInstruction:
-      'Having reviewed the course feedback from students, the teacher may give a summarising response to the feedback. This feedback on feedback can be freely formulated and will be sent simultaneously to all the students on the course. For further information on the provision of feedback, see: ',
-    onlyInFinnishAndSwedish: ' (Only in Finnish and Swedish)',
+      'Having reviewed the course feedback from students, the teacher may give a summarising response to the feedback. This feedback on feedback can be freely formulated and will be sent simultaneously to all the students on the course.',
   },
   publicQuestions: {
     publicInfo:

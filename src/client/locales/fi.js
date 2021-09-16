@@ -207,8 +207,7 @@ export default {
     sendEmail: 'Ilmoita opiskelijoille vastapalautteesta sähköpostitse',
     instructionTitle: 'Ohjeita vastapalautteen kirjoittamiseen',
     responseInstruction:
-      'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille. Palautteen antamisesta lisätietoa: ',
-    onlyInFinnishAndSwedish: '',
+      'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille.',
   },
   publicQuestions: {
     publicInfo:

@@ -37,13 +37,7 @@ const InstructionAccordion = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            {t('feedbackResponse:responseInstruction')}
-            <Link href="https://blogs.helsinki.fi/kielijelppi/palautteen-antaminen/">
-              https://blogs.helsinki.fi/kielijelppi/palautteen-antaminen/
-            </Link>
-            {t('feedbackResponse:onlyInFinnishAndSwedish')}
-          </Typography>
+          <Typography>{t('feedbackResponse:responseInstruction')}</Typography>
         </AccordionDetails>
       </Accordion>
     </Box>

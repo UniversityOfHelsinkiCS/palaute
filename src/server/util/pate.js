@@ -73,12 +73,14 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
       recieved from students. You can read the teacher's feedback here: <a href=${urlToSeeFeedbackSummary}>${courseName.en}</a>`,
       fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. 
       Voit käydä lukemassa palautteen täältä: <a href=${urlToSeeFeedbackSummary}>${courseName.fi}</a>`,
-      sv: '',
+      sv: `Bästa studerande!\n
+      Läraren på kursen ${courseName.sv} har svarat på responsen som kursens studerande har gett.
+      Du kan läsa svaret här: <a href=${urlToSeeFeedbackSummary}>${courseName.sv}</a>`,
     },
     subject: {
       en: `A new counter feedback from your teacher to course ${courseName.en}`,
       fi: `Uusi vastapalaute opettajaltasi kurssilla ${courseName.fi}`,
-      sv: '',
+      sv: `Din lärare har gett ett nytt svar till kursresponsen på kursen ${courseName.sv}`,
     },
   }
   const emails = students.map((student) => {
@@ -141,7 +143,10 @@ const emailReminderAboutSurveyOpeningToTeachers = (
       Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä ja on auki neljä viikkoa: <br/>
       ${courseNamesAndUrls}
       Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä linkkien kautta. Kiitos!`,
-      sv: '',
+      sv: `Bästa lärare! <br/>
+      Kursresponsblanketten för följande kurser öppnas om en vecka och är öppna fyra veckor: <br/>
+      ${courseNamesAndUrls}
+      Du kan lägga till egna frågor innan det. Frågor kan läggas till genom länkarna. Tack!`,
     },
     subject: {
       en: hasMultipleFeedbackTargets
@@ -150,7 +155,9 @@ const emailReminderAboutSurveyOpeningToTeachers = (
       fi: hasMultipleFeedbackTargets
         ? `Palautejakso opettamillesi kursseille on alkamassa`
         : `Palautejakso opettamallesi kurssille ${courseName} on alkamassa`,
-      sv: '',
+      sv: hasMultipleFeedbackTargets
+        ? `Perioden för kursrespons börjar på dina kurser`
+        : `Tidsperioden för kursrespons på kursen ${courseName} börjar`,
     },
   }
 
@@ -201,9 +208,13 @@ const notificationAboutSurveyOpeningToStudents = (
       as the form remains open.`,
       fi: `Hyvä opiskelija!<br/> Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>
       ${courseNamesAndUrls}
-      Käythän vastaamassa kurssipalautteeseen, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
+      Käythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
       Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.`,
-      sv: ``,
+      sv: `Bästa studerande! <br/>
+      Kursresponsblanketten för följande kurser är nu öppna: <br/>
+      ${courseNamesAndUrls}
+      Ge gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.
+      Efter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen.`,
     },
     subject: {
       en: hasMultipleFeedbackTargets
@@ -212,7 +223,9 @@ const notificationAboutSurveyOpeningToStudents = (
       fi: hasMultipleFeedbackTargets
         ? `Kurssipalaute on avautunut`
         : `Kurssin ${courseName} kurssipalaute on avautunut`,
-      sv: ``,
+      sv: hasMultipleFeedbackTargets
+        ? `Kursresponsen har öppnats`
+        : `Kursresponsen för kursen ${courseName} har öppnats`,
     },
   }
   /* eslint-enable */
