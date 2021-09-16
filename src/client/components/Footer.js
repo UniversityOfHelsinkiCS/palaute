@@ -47,7 +47,7 @@ const Footer = ({ user }) => {
             )}
           </div>
 
-          <Link href="https://toska.dev">
+          <Link href="https://toska.dev" target="_blank" rel="noopener">
             <img
               src={images.toska_color}
               className={classes.logo}
