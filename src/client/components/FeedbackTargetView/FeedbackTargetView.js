@@ -44,6 +44,13 @@ const useStyles = makeStyles((theme) => ({
   datesContainer: {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
+    '& dt': {
+      paddingRight: theme.spacing(1),
+      gridColumn: 1,
+    },
+    '& dd': {
+      gridColumn: 2,
+    },
   },
   headingContainer: {
     display: 'flex',
@@ -60,24 +67,6 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: 0,
       paddingTop: theme.spacing(1),
     },
-  },
-  coursePeriodLabel: {
-    paddingRight: theme.spacing(1),
-    gridColumnStart: 1,
-    gridRowStart: 1,
-  },
-  coursePeriodDates: {
-    gridColumnStart: 2,
-    gridRowStart: 1,
-  },
-  feedbackPeriodLabel: {
-    paddingRight: theme.spacing(1),
-    gridColumnStart: 1,
-    gridRowStart: 2,
-  },
-  feedbackPeriodDates: {
-    gridColumnStart: 2,
-    gridRowStart: 2,
   },
 }))
 
@@ -164,37 +153,19 @@ const FeedbackTargetView = () => {
         </div>
 
         <dl className={classes.datesContainer}>
-          <Typography
-            color="textSecondary"
-            variant="body2"
-            component="dt"
-            className={classes.coursePeriodLabel}
-          >
+          <Typography color="textSecondary" variant="body2" component="dt">
             {t('feedbackTargetView:coursePeriod')}:
           </Typography>
-          <Typography
-            color="textSecondary"
-            variant="body2"
-            component="dd"
-            className={classes.coursePeriodDates}
-          >
+
+          <Typography color="textSecondary" variant="body2" component="dd">
             {coursePeriod}
           </Typography>
 
-          <Typography
-            color="textSecondary"
-            variant="body2"
-            component="dt"
-            className={classes.feedbackPeriodLabel}
-          >
+          <Typography color="textSecondary" variant="body2" component="dt">
             {t('feedbackTargetView:feedbackPeriod')}:
           </Typography>
-          <Typography
-            color="textSecondary"
-            variant="body2"
-            component="dd"
-            className={classes.feedbackPeriodDates}
-          >
+
+          <Typography color="textSecondary" variant="body2" component="dd">
             {feedbackPeriod}
           </Typography>
         </dl>
