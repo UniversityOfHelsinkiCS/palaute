@@ -95,7 +95,7 @@ const getSummaryQuestions = async () => {
   }))
 }
 
-const getAccessibilityInfo = async (req, res) => {
+const getAccessInfo = async (req, res) => {
   const { user } = req
 
   const [organisationAccess, accessibleCourseRealisationIds] =
@@ -191,5 +191,5 @@ const getByCourseUnit = async (req, res) => {
 module.exports = {
   getByOrganisations,
   getByCourseUnit,
-  getAccessibilityInfo,
+  getAccessInfo,
 }

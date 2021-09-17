@@ -90,7 +90,7 @@ router.get(
   courseSummary.getByCourseUnit,
 )
 
-router.get('/course-summaries/accessible', courseSummary.getAccessibilityInfo)
+router.get('/course-summaries/access', courseSummary.getAccessInfo)
 
 router.get('/organisations', organisation.getOrganisations)
 router.put('/organisations/:code', organisation.updateOrganisation)

@@ -23,7 +23,7 @@ import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStude
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
-import useCourseSummaryAccessibilityInfo from '../../hooks/useCourseSummaryAccessibilityInfo'
+import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -89,7 +89,7 @@ const NavBar = () => {
   const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
-  const { accessibilityInfo } = useCourseSummaryAccessibilityInfo()
+  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo()
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -98,7 +98,7 @@ const NavBar = () => {
   const isStudent = Boolean(feedbackTargets?.length)
   const isTeacher = Boolean(authorizedUser?.isTeacher)
   const isAdminUser = isAdmin(authorizedUser)
-  const courseSummaryIsAccessible = accessibilityInfo?.accessible ?? false
+  const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
