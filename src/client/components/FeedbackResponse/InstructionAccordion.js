@@ -1,14 +1,15 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Link,
   Box,
   Typography,
   makeStyles,
 } from '@material-ui/core'
+
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const useStyles = makeStyles(() => ({

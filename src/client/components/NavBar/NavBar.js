@@ -23,7 +23,7 @@ import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStude
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
-import useOrganisations from '../../hooks/useOrganisations'
+import useCourseSummaryAccessibilityInfo from '../../hooks/useCourseSummaryAccessibilityInfo'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -89,7 +89,7 @@ const NavBar = () => {
   const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
-  const { organisations } = useOrganisations()
+  const { accessibilityInfo } = useCourseSummaryAccessibilityInfo()
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -98,10 +98,7 @@ const NavBar = () => {
   const isStudent = Boolean(feedbackTargets?.length)
   const isTeacher = Boolean(authorizedUser?.isTeacher)
   const isAdminUser = isAdmin(authorizedUser)
-
-  const hasSomeOrganisationAccess = (organisations ?? []).some((o) =>
-    Boolean(o.access),
-  )
+  const courseSummaryIsAccessible = accessibilityInfo?.accessible ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -154,7 +151,7 @@ const NavBar = () => {
       label: t('navBar:myFeedbacks'),
       to: '/feedbacks',
     },
-    hasSomeOrganisationAccess && {
+    courseSummaryIsAccessible && {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },

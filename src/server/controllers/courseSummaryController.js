@@ -9,8 +9,33 @@ const {
 } = require('../util/courseSummary')
 
 const { ApplicationError } = require('../util/customErrors')
+const { sequelize } = require('../util/dbConnection')
 
 const WORKLOAD_QUESTION_ID = 1042
+
+const getAccessibleCourseRealisationIds = async (user) => {
+  const rows = await sequelize.query(
+    `
+    SELECT DISTINCT ON (course_realisations.id) course_realisations.id
+    FROM user_feedback_targets
+    INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
+    INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+    WHERE user_feedback_targets.user_id = :userId
+    AND user_feedback_targets.access_status = 'TEACHER'
+    AND feedback_targets.feedback_type = 'courseRealisation'
+    AND course_realisations.start_date < NOW()
+    AND course_realisations.start_date > NOW() - interval '48 months';
+  `,
+    {
+      replacements: {
+        userId: user.id,
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  return rows.map((row) => row.id)
+}
 
 const getAccessibleCourseCodes = async (organisationAccess) => {
   const organisationIds = organisationAccess.map(
@@ -70,20 +95,44 @@ const getSummaryQuestions = async () => {
   }))
 }
 
+const getAccessibilityInfo = async (req, res) => {
+  const { user } = req
+
+  const [organisationAccess, accessibleCourseRealisationIds] =
+    await Promise.all([
+      user.getOrganisationAccess(),
+      getAccessibleCourseRealisationIds(user),
+    ])
+
+  const accessible =
+    organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
+
+  res.send({
+    accessible,
+  })
+}
+
 const getByOrganisations = async (req, res) => {
   const { user } = req
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const [organisationAccess, accessibleCourseRealisationIds, questions] =
+    await Promise.all([
+      user.getOrganisationAccess(),
+      getAccessibleCourseRealisationIds(user),
+      getSummaryQuestions(),
+    ])
 
-  if (organisationAccess.length === 0) {
+  if (
+    organisationAccess.length === 0 &&
+    accessibleCourseRealisationIds.length === 0
+  ) {
     throw new ApplicationError('Forbidden', 403)
   }
-
-  const questions = await getSummaryQuestions()
 
   const organisations = await getOrganisationSummaries({
     questions,
     organisationAccess,
+    accessibleCourseRealisationIds,
   })
 
   res.send({
@@ -97,17 +146,9 @@ const getByCourseUnit = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const organisationIds = organisationAccess.map(
-    ({ organisation }) => organisation.id,
-  )
-
-  if (organisationIds.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
   const { code } = req.params
 
-  const [questions, courseCodes, courseUnit] = await Promise.all([
+  const [questions, accessibleCourseCodes, courseUnit] = await Promise.all([
     getSummaryQuestions(),
     getAccessibleCourseCodes(organisationAccess),
     CourseUnit.findOne({ where: { courseCode: code } }),
@@ -122,17 +163,27 @@ const getByCourseUnit = async (req, res) => {
     questions,
   })
 
-  const hasCourseUnitAccess = courseCodes.includes(
+  const hasCourseUnitAccess = accessibleCourseCodes.includes(
     courseRealisations[0]?.courseCode,
   )
 
-  if (!hasCourseUnitAccess) {
+  const hasSomeCourseRealisationAccess = courseRealisations.some(
+    ({ teachers }) => Boolean(teachers.find((t) => t.id === user.id)),
+  )
+
+  if (!hasCourseUnitAccess && !hasSomeCourseRealisationAccess) {
     throw new ApplicationError(403, 'Forbidden')
   }
 
+  const filteredCourseRealisations = hasCourseUnitAccess
+    ? courseRealisations
+    : courseRealisations.filter(({ teachers }) =>
+        Boolean(teachers.find((t) => t.id === user.id)),
+      )
+
   res.send({
     questions,
-    courseRealisations,
+    courseRealisations: filteredCourseRealisations,
     courseUnit,
   })
 }
@@ -140,4 +191,5 @@ const getByCourseUnit = async (req, res) => {
 module.exports = {
   getByOrganisations,
   getByCourseUnit,
+  getAccessibilityInfo,
 }

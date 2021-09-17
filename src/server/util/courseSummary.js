@@ -98,11 +98,10 @@ FROM question_averages
   INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
   feedback_targets.feedback_type = 'courseRealisation'
-  AND organisations.id IN (:organisationIds)
+  AND (organisations.id IN (:organisationIds) OR course_realisations.id IN (:accessibleCourseRealisationIds))
   AND course_units.course_code NOT IN (:disabledCourseCodes)
   AND course_realisations.start_date < NOW()
-  AND course_realisations.start_date > NOW() - interval '72 months';
-
+  AND course_realisations.start_date > NOW() - interval '48 months';
 `
 
 const COURSE_REALISATION_SUMMARY_QUERY = `
@@ -139,7 +138,7 @@ WHERE
   feedback_targets.feedback_type = 'courseRealisation'
   AND course_units.course_code = :courseCode
   AND course_realisations.start_date < NOW()
-  AND course_realisations.start_date > NOW() - interval '36 months';
+  AND course_realisations.start_date > NOW() - interval '72 months';
 `
 
 const getFeedbackDistribution = (rows) => {
@@ -446,7 +445,11 @@ const getValidDataValues = (questions) => {
   return [...singleChoiceValues, ...likertValues]
 }
 
-const getOrganisationSummaries = async ({ questions, organisationAccess }) => {
+const getOrganisationSummaries = async ({
+  questions,
+  organisationAccess,
+  accessibleCourseRealisationIds,
+}) => {
   const validDataValues = getValidDataValues(questions)
   const questionIds = questions.map(({ id }) => id.toString())
 
@@ -461,15 +464,19 @@ const getOrganisationSummaries = async ({ questions, organisationAccess }) => {
   )
 
   const rows =
-    organisationIds.length > 0
+    organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
       ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
           replacements: {
             questionIds,
-            organisationIds,
-            validDataValues,
-            disabledCourseCodes: [
-              ...disabledCourseCodes,
+            organisationIds: [
+              ...organisationIds,
               '_', // in case of empty array
+            ],
+            validDataValues,
+            disabledCourseCodes: [...disabledCourseCodes, '_'],
+            accessibleCourseRealisationIds: [
+              ...accessibleCourseRealisationIds,
+              '_',
             ],
           },
           type: sequelize.QueryTypes.SELECT,
