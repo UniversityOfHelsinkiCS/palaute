@@ -215,20 +215,24 @@ const createFeedbackTargets = async (courses) => {
     },
   )
 
-  const userFeedbackTargets = [].concat(
-    ...feedbackTargetsWithIds.map(
-      ({ id: feedbackTargetId, courseRealisationId }) =>
-        courseIdToPersonIds[courseRealisationId].map((userId) => ({
-          feedbackTargetId,
-          userId,
-          accessStatus: 'TEACHER',
-        })),
-    ),
-  )
+  const userFeedbackTargets = []
+    .concat(
+      ...feedbackTargetsWithIds.map(
+        ({ id: feedbackTargetId, courseRealisationId }) =>
+          courseIdToPersonIds[courseRealisationId].map((userId) => ({
+            feedbackTargetId,
+            userId,
+            accessStatus: 'TEACHER',
+          })),
+      ),
+    )
+    .filter(({ userId, feedbackTargetId }) => userId && feedbackTargetId)
 
-  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
-    ignoreDuplicates: true, // TODO: is this broken?
-  })
+  if (userFeedbackTargets.length > 0) {
+    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+      ignoreDuplicates: true,
+    })
+  }
 }
 
 const coursesHandler = async (courses) => {
