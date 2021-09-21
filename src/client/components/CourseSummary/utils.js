@@ -42,3 +42,17 @@ export const hasWriteAccess = (organisationId, organisationAccess) =>
     (organisationAccess ?? []).find(({ id }) => id === organisationId)?.access
       .write,
   )
+
+export const getInitialOpenAccordions = (organisations, history) => {
+  const historyOpenAccordions = history.location.state?.openAccordions
+
+  if (historyOpenAccordions) {
+    return historyOpenAccordions
+  }
+
+  if (organisations.length < 3) {
+    return organisations.map(({ id }) => id)
+  }
+
+  return []
+}

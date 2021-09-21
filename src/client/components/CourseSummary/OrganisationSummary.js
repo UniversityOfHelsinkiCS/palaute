@@ -26,7 +26,12 @@ import ResultsRow from './ResultsRow'
 import VerticalHeading from './VerticalHeading'
 import CourseUnitSummary from './CourseUnitSummary'
 import DividerRow from './DividerRow'
-import { filterByCourseCode, hasWriteAccess } from './utils'
+
+import {
+  filterByCourseCode,
+  hasWriteAccess,
+  getInitialOpenAccordions,
+} from './utils'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -154,7 +159,27 @@ const OrganisationSummary = () => {
   const { organisations: organisationAccess } = useOrganisations()
   const { organisationSummaries, isLoading } = useOrganisationSummaries()
 
-  const openAccordions = historyState.openAccordions ?? []
+  const filteredOrganisations = useMemo(
+    () =>
+      filterByCourseCode(organisationSummaries?.organisations ?? [], keyword),
+    [organisationSummaries?.organisations, keyword],
+  )
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" my={4}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (!organisationSummaries) {
+    return <Redirect to="/" />
+  }
+
+  const { questions, organisations } = organisationSummaries
+
+  const openAccordions = getInitialOpenAccordions(organisations, history)
 
   const handleToggleAccordion = (id) => {
     let nextOpenAccordions = openAccordions
@@ -177,26 +202,6 @@ const OrganisationSummary = () => {
       state: { ...historyState, searchKeyword: nextKeyword },
     })
   }
-
-  const filteredOrganisations = useMemo(
-    () =>
-      filterByCourseCode(organisationSummaries?.organisations ?? [], keyword),
-    [organisationSummaries?.organisations, keyword],
-  )
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
-      </Box>
-    )
-  }
-
-  if (!organisationSummaries) {
-    return <Redirect to="/" />
-  }
-
-  const { questions } = organisationSummaries
 
   return (
     <>
