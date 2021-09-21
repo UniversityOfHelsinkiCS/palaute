@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.warning.main,
   },
   lastChildRow: {
-    borderBottom: `2px solid ${theme.palette.divider}`,
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
 }))
 

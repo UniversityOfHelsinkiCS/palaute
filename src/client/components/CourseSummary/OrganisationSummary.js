@@ -10,14 +10,13 @@ import {
   IconButton,
   Tooltip,
   makeStyles,
-  TextField,
-  InputAdornment,
+  Divider,
+  LinearProgress,
 } from '@material-ui/core'
 
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/Settings'
-import SearchIcon from '@material-ui/icons/Search'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
 import useOrganisations from '../../hooks/useOrganisations'
@@ -26,6 +25,7 @@ import ResultsRow from './ResultsRow'
 import VerticalHeading from './VerticalHeading'
 import CourseUnitSummary from './CourseUnitSummary'
 import DividerRow from './DividerRow'
+import Filters from './Filters'
 
 import {
   filterByCourseCode,
@@ -37,10 +37,13 @@ const useStyles = makeStyles((theme) => ({
   table: {
     borderSpacing: '2px',
   },
-  searchCell: {
+  filtersCell: {
     verticalAlign: 'bottom',
     width: '450px',
     padding: theme.spacing(2),
+  },
+  progressCell: {
+    padding: theme.spacing(1, 2),
   },
 }))
 
@@ -66,8 +69,8 @@ const OrganisationTable = ({
   organisationAccess,
   initialOpenAccordions = [],
   onToggleAccordion = () => {},
-  keyword = '',
-  onKeywordChange = () => {},
+  filters,
+  loading = false,
 }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
@@ -77,23 +80,7 @@ const OrganisationTable = ({
       <table className={classes.table}>
         <thead>
           <tr>
-            <th className={classes.searchCell}>
-              <TextField
-                value={keyword}
-                onChange={(event) => onKeywordChange(event.target.value)}
-                variant="outlined"
-                placeholder={t('courseSummary:searchPlaceholder')}
-                label={t('courseSummary:searchLabel')}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                fullWidth
-              />
-            </th>
+            <th className={classes.filtersCell}>{filters}</th>
             <th> </th>
             {questions.map(({ id, data }) => (
               <VerticalHeading key={id}>
@@ -110,6 +97,13 @@ const OrganisationTable = ({
           </tr>
         </thead>
         <tbody>
+          {loading && (
+            <tr>
+              <td colSpan={99} className={classes.progressCell}>
+                <LinearProgress />
+              </td>
+            </tr>
+          )}
           {organisations.map(
             ({ code, id, name, results, feedbackCount, courseUnits }) => (
               <Fragment key={id}>
@@ -155,9 +149,25 @@ const OrganisationSummary = () => {
 
   const historyState = history.location.state ?? {}
 
-  const [keyword, setKeyword] = useState(historyState.searchKeyword ?? '')
+  const replaceHistoryState = (update) => {
+    history.replace({
+      state: { ...historyState, ...update },
+    })
+  }
+
+  const [keyword, setKeyword] = useState(historyState.keyword ?? '')
+
+  const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useState(
+    historyState.includeOpenUniCourseUnits ?? true,
+  )
+
   const { organisations: organisationAccess } = useOrganisations()
-  const { organisationSummaries, isLoading } = useOrganisationSummaries()
+
+  const { organisationSummaries, isLoading, isFetching } =
+    useOrganisationSummaries({
+      includeOpenUniCourseUnits,
+      keepPreviousData: true,
+    })
 
   const filteredOrganisations = useMemo(
     () =>
@@ -190,16 +200,21 @@ const OrganisationSummary = () => {
       nextOpenAccordions = openAccordions.concat(id)
     }
 
-    history.replace({
-      state: { ...historyState, openAccordions: nextOpenAccordions },
-    })
+    replaceHistoryState({ openAccordions: nextOpenAccordions })
   }
 
   const handleKeywordChange = (nextKeyword) => {
     setKeyword(nextKeyword)
+    replaceHistoryState({ keyword: nextKeyword })
+  }
 
-    history.replace({
-      state: { ...historyState, searchKeyword: nextKeyword },
+  const handleIncludeOpenUniCourseUnitsChange = (
+    nextIncludeOpenUniCourseUnits,
+  ) => {
+    setIncludeOpenUniCourseUnits(nextIncludeOpenUniCourseUnits)
+
+    replaceHistoryState({
+      includeOpenUniCourseUnits: nextIncludeOpenUniCourseUnits,
     })
   }
 
@@ -218,8 +233,22 @@ const OrganisationSummary = () => {
             organisationAccess={organisationAccess}
             initialOpenAccordions={openAccordions}
             onToggleAccordion={handleToggleAccordion}
-            keyword={keyword}
-            onKeywordChange={handleKeywordChange}
+            loading={isFetching}
+            filters={
+              <>
+                <Box mb={2}>
+                  <Filters
+                    keyword={keyword}
+                    onKeywordChange={handleKeywordChange}
+                    includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+                    onIncludeOpenUniCourseUnitsChange={
+                      handleIncludeOpenUniCourseUnitsChange
+                    }
+                  />
+                </Box>
+                <Divider />
+              </>
+            }
           />
         </CardContent>
       </Card>

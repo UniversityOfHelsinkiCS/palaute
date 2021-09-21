@@ -231,6 +231,7 @@ export default {
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',
+    includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
   },
   organisationView: {
     organisations: 'Organisaatiot',

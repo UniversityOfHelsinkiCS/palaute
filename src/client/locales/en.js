@@ -233,6 +233,7 @@ export default {
     searchLabel: 'Filter courses',
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',
+    includeOpenUniCourses: 'Include open university courses',
   },
   organisationView: {
     organisations: 'Organisations',

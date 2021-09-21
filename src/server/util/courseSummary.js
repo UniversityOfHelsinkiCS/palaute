@@ -4,6 +4,8 @@ const { Op } = require('sequelize')
 const { sequelize } = require('./dbConnection')
 const { FeedbackTarget, UserFeedbackTarget, User } = require('../models')
 
+const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
+
 const QUESTION_AVERAGES_QUERY = `
 SELECT
   feedback_target_id,
@@ -64,7 +66,6 @@ WITH question_averages AS (
 ), feedback_counts AS (
   ${COUNTS_QUERY}
 )
-
 
 SELECT
   question_id,
@@ -445,10 +446,31 @@ const getValidDataValues = (questions) => {
   return [...singleChoiceValues, ...likertValues]
 }
 
+const omitOpenUniRows = async (rows) => {
+  const openUniRows = await sequelize.query(
+    `
+    SELECT course_units.course_code FROM course_units_organisations
+    INNER JOIN course_units ON course_units_organisations.course_unit_id = course_units.id
+    WHERE course_units_organisations.organisation_id = :openUniOrganisationId;
+  `,
+    {
+      replacements: {
+        openUniOrganisationId: OPEN_UNI_ORGANISATION_ID,
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  const openUniCourseCodes = openUniRows.map((row) => row.course_code)
+
+  return rows.filter((row) => !openUniCourseCodes.includes(row.course_code))
+}
+
 const getOrganisationSummaries = async ({
   questions,
   organisationAccess,
   accessibleCourseRealisationIds,
+  includeOpenUniCourseUnits = true,
 }) => {
   const validDataValues = getValidDataValues(questions)
   const questionIds = questions.map(({ id }) => id.toString())
@@ -483,11 +505,17 @@ const getOrganisationSummaries = async ({
         })
       : []
 
-  return withMissingOrganisations(
-    getOrganisationsWithResults(rows, questions),
+  const normalizedRows = !includeOpenUniCourseUnits
+    ? await omitOpenUniRows(rows)
+    : rows
+
+  const organisationsWithMissing = withMissingOrganisations(
+    getOrganisationsWithResults(normalizedRows, questions),
     organisationAccess,
     questions,
   )
+
+  return organisationsWithMissing
 }
 
 const getCourseRealisationSummaries = async ({ courseCode, questions }) => {

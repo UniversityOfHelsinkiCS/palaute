@@ -1,61 +1,64 @@
 import React from 'react'
 
 import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  TextField,
+  InputAdornment,
+  Box,
+  FormControlLabel,
+  Switch,
   makeStyles,
 } from '@material-ui/core'
+
+import SearchIcon from '@material-ui/icons/Search'
 
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
-  select: {
+  container: {
     textAlign: 'left',
   },
 })
 
-const options = [...Array(5)].map((v, i) => {
-  const value = (new Date().getFullYear() - i).toString()
-
-  return {
-    value,
-    label: value,
-  }
-})
-
-const Filters = ({ year, onYearChange, className }) => {
-  const classes = useStyles()
+const Filters = ({
+  keyword,
+  onKeywordChange,
+  includeOpenUniCourseUnits,
+  onIncludeOpenUniCourseUnitsChange,
+}) => {
   const { t } = useTranslation()
-
-  const labelId = 'courseSummaryYear'
-  const label = t('courseSummary:yearLabel')
-
-  const value = year ? year.toString() : null
-
-  const handleChange = (event) => {
-    onYearChange(parseInt(event.target.value, 10))
-  }
+  const classes = useStyles()
 
   return (
-    <div className={className}>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id={labelId}>{label}</InputLabel>
-        <Select
-          labelId={labelId}
-          onChange={handleChange}
-          value={value}
-          label={label}
-          className={classes.select}
-        >
-          {options.map(({ value, label }) => (
-            <MenuItem value={value} key={value}>
-              {label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <div className={classes.container}>
+      <Box mb={2}>
+        <TextField
+          value={keyword}
+          onChange={(event) => onKeywordChange(event.target.value)}
+          variant="outlined"
+          placeholder={t('courseSummary:searchPlaceholder')}
+          label={t('courseSummary:searchLabel')}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          fullWidth
+        />
+      </Box>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={includeOpenUniCourseUnits}
+            onChange={(event) => {
+              onIncludeOpenUniCourseUnitsChange(event.target.checked)
+            }}
+            color="primary"
+          />
+        }
+        label={t('courseSummary:includeOpenUniCourses')}
+      />
     </div>
   )
 }

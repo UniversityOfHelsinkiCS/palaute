@@ -114,6 +114,7 @@ const getAccessInfo = async (req, res) => {
 
 const getByOrganisations = async (req, res) => {
   const { user } = req
+  const { includeOpenUniCourseUnits } = req.query
 
   const [organisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
@@ -133,6 +134,7 @@ const getByOrganisations = async (req, res) => {
     questions,
     organisationAccess,
     accessibleCourseRealisationIds,
+    includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
   })
 
   res.send({

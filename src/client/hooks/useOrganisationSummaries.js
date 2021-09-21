@@ -5,11 +5,19 @@ import apiClient from '../util/apiClient'
 const defaultCacheTime = 900000
 
 const useOrganisationSummaries = (options = {}) => {
-  const { from, to, ...queryOptions } = options
-  const queryKey = ['organisationSummaries']
+  const { includeOpenUniCourseUnits = true, ...queryOptions } = options
+
+  const params = {
+    includeOpenUniCourseUnits:
+      includeOpenUniCourseUnits === true ? 'true' : 'false',
+  }
+
+  const queryKey = ['organisationSummaries', params]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/course-summaries/organisations')
+    const { data } = await apiClient.get('/course-summaries/organisations', {
+      params,
+    })
 
     return data
   }
