@@ -14,6 +14,8 @@ const {
   sendEmail,
 } = require('./pate')
 
+const { ApplicationError } = require('./customErrors')
+
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -136,6 +138,51 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   return filteredFeedbackTargets
 }
 
+const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
+  const feedbackTarget = await FeedbackTarget.findAll({
+    where: {
+      id: feedbackTargetId,
+      hidden: false,
+      feedbackOpenNotificationEmailSent: false,
+      feedbackType: 'courseRealisation',
+    },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        attributes: ['courseCode', 'name'],
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            required: true,
+            attributes: ['disabledCourseCodes'],
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'users',
+        required: true,
+        attributes: ['email', 'language'],
+        through: {
+          where: {
+            accessStatus: 'STUDENT',
+          },
+        },
+      },
+    ],
+  })
+
+  return feedbackTarget
+}
+
 const aggregateFeedbackTargets = async (feedbackTargets) => {
   // Leo if you are reading this you are allowed to refactor :)
   /* eslint-disable */
@@ -163,6 +210,26 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               language: user.language,
             },
           ])
+    }
+  }
+  /* eslint-enable */
+
+  return emails
+}
+
+const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
+  const singleFbt = feedbackTarget[0]
+  /* eslint-disable */
+  let emails = {}
+
+  for (user of singleFbt.users) {
+    if (!user.email) continue
+    emails[user.email] = {
+      id: singleFbt.id,
+      name: singleFbt.courseUnit.name,
+      opensAt: singleFbt.opensAt,
+      closesAt: singleFbt.closesAt,
+      language: user.language,
     }
   }
   /* eslint-enable */
@@ -274,8 +341,47 @@ const returnEmailsToBeSentToday = async () => {
   return { students: studentEmailsToBeSent, teachers: teacherEmailsToBeSent }
 }
 
+const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
+  const feedbackTarget = await getFeedbackTargetOpeningImmediately(
+    feedbackTargetId,
+  )
+
+  if (!feedbackTarget.length)
+    throw new ApplicationError(
+      'Students already recieved a feedback open notification',
+      400,
+    )
+
+  const studentsWithFeedbackTarget = await createEmailsForSingleFeedbackTarget(
+    feedbackTarget,
+  )
+
+  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(
+    (student) =>
+      notificationAboutSurveyOpeningToStudents(student, [
+        studentsWithFeedbackTarget[student],
+      ]),
+  )
+
+  FeedbackTarget.update(
+    {
+      feedbackOpeningReminderEmailSent: true,
+    },
+    {
+      where: {
+        id: feedbackTargetId,
+      },
+    },
+  )
+
+  sendEmail(studentEmailsToBeSent)
+
+  return studentEmailsToBeSent
+}
+
 module.exports = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
+  sendEmailToStudentsWhenOpeningImmediately,
   returnEmailsToBeSentToday,
 }

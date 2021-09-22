@@ -6,12 +6,17 @@ import { Formik, Form } from 'formik'
 import FormikDatePicker from '../FormikDatePicker'
 import Alert from '../Alert'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
-import { validateFeedbackPeriod, requiresSubmitConfirmation } from './utils'
+import {
+  validateFeedbackPeriod,
+  requiresSubmitConfirmation,
+  feedbackTargetIsOpenOrClosed,
+} from './utils'
 
 const FeedbackPeriodForm = ({
   onSubmit = () => {},
   onOpenImmediately = () => {},
   initialValues,
+  feedbackTarget,
 }) => {
   const { t } = useTranslation()
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
@@ -106,14 +111,15 @@ const FeedbackPeriodForm = ({
                   </Button>
                 </span>
               </Tooltip>
-
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleOpenImmediatelyClick}
-              >
-                {t('editFeedbackTarget:openImmediately')}
-              </Button>
+              {!feedbackTargetIsOpenOrClosed(feedbackTarget) && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleOpenImmediatelyClick}
+                >
+                  {t('editFeedbackTarget:openImmediately')}
+                </Button>
+              )}
             </Box>
           </Form>
         )}

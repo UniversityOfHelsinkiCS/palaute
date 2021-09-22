@@ -17,6 +17,9 @@ const {
 
 const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
+const {
+  sendEmailToStudentsWhenOpeningImmediately,
+} = require('../util/emailSender')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -619,6 +622,8 @@ const openFeedbackImmediately = async (req, res) => {
       400,
     )
   }
+
+  sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
 
   feedbackTarget.opensAt = req.body.opensAt
   await feedbackTarget.save()

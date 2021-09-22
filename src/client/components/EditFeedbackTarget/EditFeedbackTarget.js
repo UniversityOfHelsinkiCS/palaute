@@ -195,6 +195,7 @@ const EditFeedbackTarget = () => {
               onSubmit={handleSubmitFeedbackPeriod}
               initialValues={feedbackPeriodInitialValues}
               onOpenImmediately={handleOpenFeedbackImmediately}
+              feedbackTarget={feedbackTarget}
             />
           </CardContent>
         </Card>

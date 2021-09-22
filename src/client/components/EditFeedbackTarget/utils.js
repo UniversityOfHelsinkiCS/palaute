@@ -1,6 +1,7 @@
 import { isAfter, differenceInDays, startOfDay, endOfDay } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { copyQuestion } from '../QuestionEditor/utils'
 
 export const getUpperLevelQuestions = (feedbackTarget) => {
@@ -145,4 +146,10 @@ export const copyQuestionsFromFeedbackTarget = (feedbackTarget) => {
     ...copyQuestion(q),
     editable: true,
   }))
+}
+
+export const feedbackTargetIsOpenOrClosed = (feedbackTarget) => {
+  const closesAt = new Date(feedbackTarget.closesAt)
+
+  return new Date() > closesAt || feedbackTargetIsOpen(feedbackTarget)
 }
