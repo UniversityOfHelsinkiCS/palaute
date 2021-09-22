@@ -13,7 +13,7 @@ const usersHandler = async (users) => {
 
   const filteredUsers = users.map((user) => ({
     ...user,
-    email: user.primaryEmail,
+    email: user.primaryEmail ? user.primaryEmail : user.secondaryEmail,
     language: parsePreferredLanguageUrnToLanguage(user.preferredLanguageUrn),
     firstName: user.firstNames ? user.firstNames.split(' ')[0] : null,
     username: user.eduPersonPrincipalName
