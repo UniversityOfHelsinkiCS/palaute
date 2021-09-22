@@ -1,6 +1,8 @@
 const dateFns = require('date-fns')
 
 const { Op } = require('sequelize')
+const _ = require('lodash')
+
 const {
   CourseUnit,
   CourseUnitsOrganisation,
@@ -8,7 +10,7 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
 } = require('../models')
-// eslint-disable-next-line no-unused-vars
+
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 
@@ -220,16 +222,20 @@ const createFeedbackTargets = async (courses) => {
       ...feedbackTargetsWithIds.map(
         ({ id: feedbackTargetId, courseRealisationId }) =>
           courseIdToPersonIds[courseRealisationId].map((userId) => ({
-            feedbackTargetId,
-            userId,
+            feedback_target_id: feedbackTargetId,
+            user_id: userId,
             accessStatus: 'TEACHER',
           })),
       ),
     )
-    .filter(({ userId, feedbackTargetId }) => userId && feedbackTargetId)
+    .filter((target) => target.user_id && target.feedback_target_id)
 
-  if (userFeedbackTargets.length > 0) {
-    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+  const userFeedbackTargetChunks = _.chunk(userFeedbackTargets, 1000)
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const chunk of userFeedbackTargetChunks) {
+    // eslint-disable-next-line no-await-in-loop
+    await UserFeedbackTarget.bulkCreate(chunk, {
       ignoreDuplicates: true,
     })
   }

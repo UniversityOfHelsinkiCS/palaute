@@ -1,4 +1,6 @@
 const { Op } = require('sequelize')
+const _ = require('lodash')
+
 const { sequelize } = require('../util/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
@@ -36,6 +38,26 @@ const createEnrolmentTargets = async (enrolment) => {
   return subGroupTargets
 }
 
+const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
+  const normalizedUserFeedbackTargets = userFeedbackTargets
+    .map(({ userId, feedbackTargetId, accessStatus }) => ({
+      user_id: userId,
+      feedback_target_id: feedbackTargetId,
+      accessStatus,
+    }))
+    .filter((target) => target.user_id && target.feedback_target_id)
+
+  const userFeedbackTargetChunks = _.chunk(normalizedUserFeedbackTargets, 1000)
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const chunk of userFeedbackTargetChunks) {
+    // eslint-disable-next-line no-await-in-loop
+    await UserFeedbackTarget.bulkCreate(chunk, {
+      ignoreDuplicates: true,
+    })
+  }
+}
+
 const enrolmentsHandler = async (enrolments) => {
   const userFeedbackTargets = []
   await enrolments.reduce(async (promise, enrolment) => {
@@ -43,9 +65,7 @@ const enrolmentsHandler = async (enrolments) => {
     userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
   }, Promise.resolve())
   try {
-    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
-      ignoreDuplicates: true,
-    })
+    await bulkCreateUserFeedbackTargets(userFeedbackTargets)
   } catch (err) {
     logger.info('RUNNING TARGETS ONE BY ONE')
     userFeedbackTargets.reduce(
@@ -58,8 +78,8 @@ const enrolmentsHandler = async (enrolments) => {
               feedbackTargetId,
             },
             defaults: {
-              userId,
-              feedbackTargetId,
+              user_id: userId,
+              feedback_target_id: feedbackTargetId,
               accessStatus,
             },
           })
