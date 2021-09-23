@@ -449,7 +449,7 @@ const getValidDataValues = (questions) => {
 const omitOpenUniRows = async (rows) => {
   const openUniRows = await sequelize.query(
     `
-    SELECT course_units.course_code FROM course_units_organisations
+    SELECT DISTINCT ON (course_units.course_code) course_units.course_code FROM course_units_organisations
     INNER JOIN course_units ON course_units_organisations.course_unit_id = course_units.id
     WHERE course_units_organisations.organisation_id = :openUniOrganisationId;
   `,
