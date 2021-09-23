@@ -9,6 +9,7 @@ const {
   CourseRealisation,
   FeedbackTarget,
   UserFeedbackTarget,
+  Feedback,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -241,16 +242,95 @@ const createFeedbackTargets = async (courses) => {
   }
 }
 
+const deleteCancelledCourses = async (cancelledCourseIds) => {
+  const cancelledFeedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      courseRealisationId: {
+        [Op.in]: cancelledCourseIds,
+      },
+    },
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        attributes: ['id'],
+        include: [
+          {
+            model: Feedback,
+            as: 'feedback',
+          },
+        ],
+      },
+    ],
+  })
+
+  const cancelledWithNoFeedback = cancelledFeedbackTargets.filter(
+    (feedbackTarget) => {
+      if (feedbackTarget.userFeedbackTargets.length === 0) {
+        return false
+      }
+      return !!feedbackTarget.userFeedbackTargets.find(
+        (userFbT) => userFbT.feedback !== null,
+      )
+    },
+  )
+
+  const [feedbackTargetIds, courseRealisationIds, userFeedbackTargetIds] =
+    cancelledWithNoFeedback.reduce(
+      (arr, value) => {
+        arr[0].push(value.feedbackTargetId)
+        arr[1].push(value.courseRealisationId)
+        const userFbTIds = value.userFeedbackTargets.map((uFbT) => uFbT.id)
+        arr[2].push(userFbTIds)
+        return arr
+      },
+      [[], [], []],
+    )
+
+  await FeedbackTarget.destroy({
+    where: {
+      id: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+  })
+
+  await CourseRealisation.destroy({
+    where: {
+      id: {
+        [Op.in]: courseRealisationIds,
+      },
+    },
+  })
+
+  await UserFeedbackTarget.destroy({
+    where: {
+      id: {
+        [Op.in]: userFeedbackTargetIds,
+      },
+    },
+  })
+}
+
 const coursesHandler = async (courses) => {
   const filteredCourses = courses.filter(
     (course) =>
       course.courseUnits.length &&
-      validRealisationTypes.includes(course.courseUnitRealisationTypeUrn),
+      validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
+      course.flowState !== 'CANCELLED',
   )
+
+  const cancelledCourses = courses.filter(
+    (course) => course.flowState === 'CANCELLED',
+  )
+
+  const cancelledCourseIds = cancelledCourses.map((course) => course.id)
 
   await createCourseRealisations(filteredCourses)
 
   await createFeedbackTargets(filteredCourses)
+
+  await deleteCancelledCourses(cancelledCourseIds)
 }
 
 const courseUnitHandler = async (courseRealisations) => {
