@@ -243,7 +243,7 @@ const createFeedbackTargets = async (courses) => {
 }
 
 const deleteCancelledCourses = async (cancelledCourseIds) => {
-  const cancelledFeedbackTargets = await FeedbackTarget.findAll({
+  const cancelledWithFeedbacks = await FeedbackTarget.findAll({
     where: {
       courseRealisationId: {
         [Op.in]: cancelledCourseIds,
@@ -254,29 +254,39 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         attributes: ['id'],
-        include: [
-          {
-            model: Feedback,
-            as: 'feedback',
+        required: true,
+        where: {
+          feedbackId: {
+            [Op.not]: null,
           },
-        ],
+        },
       },
     ],
   })
 
-  const cancelledWithNoFeedback = cancelledFeedbackTargets.filter(
-    (feedbackTarget) => {
-      if (feedbackTarget.userFeedbackTargets.length === 0) {
-        return false
-      }
-      return !!feedbackTarget.userFeedbackTargets.find(
-        (userFbT) => userFbT.feedback !== null,
-      )
+  const cancelledWithFeedbacksIds = cancelledWithFeedbacks.map((fbt) => fbt.id)
+
+  const cancelledWithoutFeedbacks = await FeedbackTarget.findAll({
+    where: {
+      courseRealisationId: {
+        [Op.in]: cancelledCourseIds,
+      },
+      feedbackTargetId: {
+        [Op.notIn]: cancelledWithFeedbacksIds,
+      },
     },
-  )
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        attributes: ['id'],
+        required: true,
+      },
+    ],
+  })
 
   const [feedbackTargetIds, courseRealisationIds, userFeedbackTargetIds] =
-    cancelledWithNoFeedback.reduce(
+    cancelledWithoutFeedbacks.reduce(
       (arr, value) => {
         arr[0].push(value.feedbackTargetId)
         arr[1].push(value.courseRealisationId)
