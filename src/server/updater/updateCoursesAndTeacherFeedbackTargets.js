@@ -1,7 +1,6 @@
 const dateFns = require('date-fns')
 
 const { Op } = require('sequelize')
-const _ = require('lodash')
 
 const {
   CourseUnit,
@@ -230,15 +229,9 @@ const createFeedbackTargets = async (courses) => {
     )
     .filter((target) => target.user_id && target.feedback_target_id)
 
-  const userFeedbackTargetChunks = _.chunk(userFeedbackTargets, 1000)
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const chunk of userFeedbackTargetChunks) {
-    // eslint-disable-next-line no-await-in-loop
-    await UserFeedbackTarget.bulkCreate(chunk, {
-      ignoreDuplicates: true,
-    })
-  }
+  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+    ignoreDuplicates: true,
+  })
 }
 
 const coursesHandler = async (courses) => {

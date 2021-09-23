@@ -52,6 +52,7 @@ const EmailAccordion = () => {
                   <TableCell>{email.to}</TableCell>
                   <TableCell>{email.subject}</TableCell>
                   <TableCell>
+                    {/* eslint-disable-next-line react/no-danger */}
                     <div dangerouslySetInnerHTML={{ __html: email.text }} />
                   </TableCell>
                 </TableRow>

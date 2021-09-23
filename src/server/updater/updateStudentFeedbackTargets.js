@@ -1,5 +1,4 @@
 const { Op } = require('sequelize')
-const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
@@ -47,15 +46,9 @@ const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
     }))
     .filter((target) => target.user_id && target.feedback_target_id)
 
-  const userFeedbackTargetChunks = _.chunk(normalizedUserFeedbackTargets, 1000)
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const chunk of userFeedbackTargetChunks) {
-    // eslint-disable-next-line no-await-in-loop
-    await UserFeedbackTarget.bulkCreate(chunk, {
-      ignoreDuplicates: true,
-    })
-  }
+  await UserFeedbackTarget.bulkCreate(normalizedUserFeedbackTargets, {
+    ignoreDuplicates: true,
+  })
 }
 
 const enrolmentsHandler = async (enrolments) => {
