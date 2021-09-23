@@ -9,7 +9,7 @@ const {
   CourseRealisation,
   FeedbackTarget,
   UserFeedbackTarget,
-  Feedback,
+  Survey,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -264,7 +264,7 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
     ],
   })
 
-  const cancelledWithFeedbacksIds = cancelledWithFeedbacks.map((fbt) => fbt.id)
+  const cancelledWithFeedbacksIds = cancelledWithFeedbacks.map(({ id }) => id)
 
   const cancelledWithoutFeedbacks = await FeedbackTarget.findAll({
     where: {
@@ -275,29 +275,36 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
         [Op.notIn]: cancelledWithFeedbacksIds,
       },
     },
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        attributes: ['id'],
-        required: true,
-      },
-    ],
   })
 
-  const [feedbackTargetIds, courseRealisationIds, userFeedbackTargetIds] =
-    cancelledWithoutFeedbacks.reduce(
-      (arr, value) => {
-        arr[0].push(value.feedbackTargetId)
-        arr[1].push(value.courseRealisationId)
-        const userFbTIds = value.userFeedbackTargets.map((uFbT) => uFbT.id)
-        arr[2].push(userFbTIds)
-        return arr
-      },
-      [[], [], []],
-    )
+  const feedbackTargetIds = cancelledWithoutFeedbacks.map(({ id }) => id)
+  const courseRealisationIds = _.uniq(
+    cancelledWithoutFeedbacks.map(
+      ({ courseRealisationId }) => courseRealisationId,
+    ),
+  )
 
-  await FeedbackTarget.destroy({
+  const destroyedUserFeedbackTargets = await UserFeedbackTarget.destroy({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+  })
+
+  logger.info(`Destroyed ${destroyedUserFeedbackTargets} userFeedbackTargets`)
+
+  const destroyedSurveys = await Survey.destroy({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+  })
+
+  logger.info(`Destroyed ${destroyedSurveys} surveys`)
+
+  const destroyedFeedbackTargets = await FeedbackTarget.destroy({
     where: {
       id: {
         [Op.in]: feedbackTargetIds,
@@ -305,21 +312,16 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
     },
   })
 
-  await CourseRealisation.destroy({
+  logger.info(`Destroyed ${destroyedFeedbackTargets} feedbackTargets`)
+
+  const destroyedCourseRealisations = await CourseRealisation.destroy({
     where: {
       id: {
         [Op.in]: courseRealisationIds,
       },
     },
   })
-
-  await UserFeedbackTarget.destroy({
-    where: {
-      id: {
-        [Op.in]: userFeedbackTargetIds,
-      },
-    },
-  })
+  logger.info(`Destroyed ${destroyedCourseRealisations} courseRealisations`)
 }
 
 const coursesHandler = async (courses) => {
@@ -340,7 +342,9 @@ const coursesHandler = async (courses) => {
 
   await createFeedbackTargets(filteredCourses)
 
-  await deleteCancelledCourses(cancelledCourseIds)
+  if (cancelledCourseIds.length > 0) {
+    await deleteCancelledCourses(cancelledCourseIds)
+  }
 }
 
 const courseUnitHandler = async (courseRealisations) => {
