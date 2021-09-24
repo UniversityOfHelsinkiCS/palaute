@@ -9,6 +9,10 @@ const { ADMINS, inProduction } = require('../util/config')
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
 const normalizeOrganisationCode = (r) => {
+  if (!r.includes('_')) {
+    return r
+  }
+
   const [left, right] = r.split('_')
   const prefix = [...left].filter(isNumber).join('')
   const suffix = `${left[0]}${right}`
@@ -20,7 +24,16 @@ const RELEVANT_ORGANISATION_CODES = [
   'H906', // Kielikeskus
 ]
 
-const ORGANISATION_ACCESS_BY_IAM_GROUP = {}
+const ORGANISATION_ACCESS_BY_IAM_GROUP = {
+  'grp-kielikeskus-esihenkilot': {
+    // Kielikeskus
+    H906: {
+      read: true,
+      write: true,
+      admin: true,
+    },
+  },
+}
 
 const organisationIsRelevant = (organisation) => {
   const { code } = organisation
