@@ -2,6 +2,8 @@ const dateFns = require('date-fns')
 
 const { Op } = require('sequelize')
 
+const _ = require('lodash')
+
 const {
   CourseUnit,
   CourseUnitsOrganisation,
