@@ -177,7 +177,9 @@ const notificationAboutSurveyOpeningToStudents = (
   studentFeedbackTargets,
 ) => {
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
-  const { language } = studentFeedbackTargets[0]
+  const language = studentFeedbackTargets[0].language
+    ? studentFeedbackTargets[0].language
+    : 'en'
   const courseName = studentFeedbackTargets[0].name[language]
 
   let courseNamesAndUrls = ''
