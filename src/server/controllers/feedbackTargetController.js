@@ -240,7 +240,7 @@ const update = async (req, res) => {
 
   const { questions, surveyId } = req.body
 
-  if (_.intersection(Object.keys(updates), ['opensAt', 'closesAt'])) {
+  if (updates.opensAt || updates.closesAt) {
     feedbackTarget.feedbackDatesEditedByTeacher = true
   }
 
