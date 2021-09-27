@@ -110,7 +110,9 @@ const emailReminderAboutSurveyOpeningToTeachers = (
   teacherFeedbackTargets,
 ) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
-  const { language } = teacherFeedbackTargets[0]
+  const language = teacherFeedbackTargets[0].language
+    ? teacherFeedbackTargets[0].language
+    : 'en'
   const courseName = teacherFeedbackTargets[0].name[language]
 
   let courseNamesAndUrls = ''
