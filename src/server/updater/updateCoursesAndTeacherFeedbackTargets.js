@@ -211,12 +211,39 @@ const createFeedbackTargets = async (courses) => {
     }),
   )
 
-  const feedbackTargetsWithIds = await FeedbackTarget.bulkCreate(
-    feedbackTargets,
+  const feedbackTargetsWithEditedDatesIds = await FeedbackTarget.findAll({
+    where: {
+      feedbackDatesEditedByTeacher: true,
+    },
+    attributes: ['typeId'],
+  })
+
+  const feedbackTargetsWithEditedDatesTypeIds =
+    feedbackTargetsWithEditedDatesIds.map((fbt) => fbt.typeId)
+
+  const [feedbackTargetsWithEditedDates, feedbackTargetsWithoutEditedDates] =
+    _.partition(feedbackTargets, (fbt) =>
+      feedbackTargetsWithEditedDatesTypeIds.includes(fbt.typeId),
+    )
+
+  const feedbackTargetsWithEditedWithIds = await FeedbackTarget.bulkCreate(
+    feedbackTargetsWithEditedDates,
     {
       updateOnDuplicate: ['feedbackType', 'typeId'],
       returning: ['id'],
     },
+  )
+
+  const feedbackTargetsWithoutEditedWithIds = await FeedbackTarget.bulkCreate(
+    feedbackTargetsWithoutEditedDates,
+    {
+      updateOnDuplicate: ['feedbackType', 'typeId', 'opensAt', 'closesAt'],
+      returning: ['id'],
+    },
+  )
+
+  const feedbackTargetsWithIds = feedbackTargetsWithEditedWithIds.concat(
+    feedbackTargetsWithoutEditedWithIds,
   )
 
   const userFeedbackTargets = []

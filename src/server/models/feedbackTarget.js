@@ -452,6 +452,9 @@ FeedbackTarget.init(
       type: TEXT,
       defaultValue: 'ENROLLED',
     },
+    feedbackDatesEditedByTeacher: {
+      type: BOOLEAN,
+    },
     surveys: {
       type: VIRTUAL,
     },

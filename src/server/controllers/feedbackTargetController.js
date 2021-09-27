@@ -240,6 +240,10 @@ const update = async (req, res) => {
 
   const { questions, surveyId } = req.body
 
+  if (_.intersection(Object.keys(updates), ['opensAt', 'closesAt'])) {
+    feedbackTarget.feedbackDatesEditedByTeacher = true
+  }
+
   Object.assign(feedbackTarget, updates)
 
   if (questions && surveyId) {
@@ -626,6 +630,7 @@ const openFeedbackImmediately = async (req, res) => {
   sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
 
   feedbackTarget.opensAt = req.body.opensAt
+  feedbackTarget.feedbackDatesEditedByTeacher = true
   await feedbackTarget.save()
 
   res.sendStatus(200)
@@ -655,6 +660,7 @@ const closeFeedbackImmediately = async (req, res) => {
   }
 
   feedbackTarget.closesAt = req.body.closesAt
+  feedbackTarget.feedbackDatesEditedByTeacher = true
   await feedbackTarget.save()
 
   res.sendStatus(200)
