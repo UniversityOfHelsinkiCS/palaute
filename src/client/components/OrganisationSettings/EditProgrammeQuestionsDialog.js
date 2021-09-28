@@ -25,7 +25,7 @@ const EditProgrammeQuestionsDialog = ({ open = false, onClose, onConfirm }) => {
         <Button color="primary" onClick={onClose}>
           {t('organisationSettings:editProgrammeQuestionsDialogCancel')}
         </Button>
-        <Button color="primary" onClick={onConfirm}>
+        <Button color="primary" onClick={onConfirm} data-cy="submit">
           {t('organisationSettings:editProgrammeQuestionsDialogConfirm')}
         </Button>
       </DialogActions>

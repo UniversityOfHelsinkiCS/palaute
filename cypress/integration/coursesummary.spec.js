@@ -27,6 +27,10 @@ describe('Course summary view', () => {
 
     cy.contains('Done').click()
 
+    cy.contains('Save').click()
+
+    cy.contains('[data-cy=submit]').click()
+
     cy.visit('localhost:8000/targets/165/feedback')
 
     cy.contains('Test question programme level')
