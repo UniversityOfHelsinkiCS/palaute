@@ -31,6 +31,7 @@ const INCLUDE_COURSES = new Set([
   'hy-opt-cur-2122-4de68e21-0a84-4888-b7b6-754179c2832f', // MED-31
   'hy-CUR-137486438', // Functional programming I
   'hy-CUR-137486330', // Ohjelmointihaasteita
+  'hy-opt-cur-2122-b00d8962-2fef-4452-ac0e-8d4e98113c16', // ELL-101,
   'otm-734c4e41-1e8e-427e-9719-e429a7d67326', // Mail mayhem
   'hy-opt-cur-2122-620d7b5e-9e79-4e06-8536-0abb89dcd9cc',
   'hy-CUR-143272788',
