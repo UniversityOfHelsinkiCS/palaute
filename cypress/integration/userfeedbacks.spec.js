@@ -17,9 +17,7 @@ describe('User feedbacks view', () => {
     })
     cy.get('textarea[id=19-label]').type('Other comments and such')
     cy.get('div').contains('Give feedback').click()
-    cy.contains(
-      'Feedback has been given. Thank you for your feedback!',
-    )
+    cy.contains('Feedback has been given. Thank you for your feedback!')
     cy.get('table').contains('The course was laborious')
   })
   it('Student can clear given feedback', () => {
@@ -27,7 +25,7 @@ describe('User feedbacks view', () => {
     cy.contains('Given').click()
     cy.contains('Remove my feedback').click()
     cy.contains('Yes').click()
-    cy.contains('Waiting').click()
+    cy.contains('Awaiting').click()
     cy.contains('Functional Programming I')
   })
 })

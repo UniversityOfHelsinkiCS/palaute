@@ -24,12 +24,12 @@ describe('Course summary view', () => {
     cy.get('input[id^=choice-description-en-questions]').type(
       'Test description programme level',
     )
-
     cy.contains('Done').click()
-
     cy.contains('Save').click()
 
-    cy.contains('[data-cy=submit]').click()
+    cy.wait(1000)
+
+    cy.contains('[data-cy=programmeQuestionsDialogConfirm]', 'Edit').click()
 
     cy.visit('localhost:8000/targets/165/feedback')
 
