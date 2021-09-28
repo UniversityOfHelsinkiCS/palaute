@@ -221,6 +221,7 @@ export default {
   },
   footer: {
     contactSupport: 'Kontakta stödet',
+    wikiLink: 'Användarinstruktioner',
   },
   courseRealisationFeedback: {
     noFeedbackTarget:

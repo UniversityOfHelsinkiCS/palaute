@@ -135,20 +135,32 @@ const emailReminderAboutSurveyOpeningToTeachers = (
       </a> (${openFrom[language]}) <br/>`
   }
 
+  const instructionsAndSupport = {
+    en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    User instructions: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a>`,
+    fi: `Ota yhteyttä tukeen: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    Käyttöohje: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a>`,
+    sv: `Kontakta stödet: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    Användarinstruktioner: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a>`,
+  }
+
   const translations = {
     text: {
       en: `Dear teacher! <br/>
       The course feedback form for the following courses will open in a week and will remain open for four weeks: <br/>
       ${courseNamesAndUrls}
-      Please add your own questions, if any, before the above date. You can add the questions by going through the link. Thank you!`,
+      Please add your own questions, if any, before the above date. You can add the questions by going through the link. Thank you! <br/>
+      ${instructionsAndSupport.en}`,
       fi: `Hyvä opettaja! <br/> 
       Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä ja on auki neljä viikkoa: <br/>
       ${courseNamesAndUrls}
-      Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä linkkien kautta. Kiitos!`,
+      Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä linkkien kautta. Kiitos!  <br/>
+      ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
       Kursresponsblanketten för följande kurser öppnas om en vecka och är öppna fyra veckor: <br/>
       ${courseNamesAndUrls}
-      Du kan lägga till egna frågor innan det. Frågor kan läggas till genom länkarna. Tack!`,
+      Du kan lägga till egna frågor innan det. Frågor kan läggas till genom länkarna. Tack! <br/>
+      ${instructionsAndSupport.sv}`,
     },
     subject: {
       en: hasMultipleFeedbackTargets
