@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CircularProgress, Box, Button } from '@material-ui/core'
@@ -17,6 +17,7 @@ import {
   saveSurveyValues,
   getUpperLevelQuestions,
 } from './utils'
+import EditProgrammeQuestionsDialog from './EditProgrammeQuestionsDialog'
 
 const EditSurvey = () => {
   const { t, i18n } = useTranslation()
@@ -30,6 +31,10 @@ const EditSurvey = () => {
 
   const upperLevelQuestions = getUpperLevelQuestions(survey)
 
+  const [warningDialogOpen, setWarningDialogOpen] = useState(false)
+  const handleCloseWarningDialog = () => setWarningDialogOpen(false)
+  const handleOpenWarningDialog = () => setWarningDialogOpen(true)
+
   if (isLoading) {
     return (
       <Box my={4} display="flex" justifyContent="center">
@@ -42,8 +47,8 @@ const EditSurvey = () => {
     try {
       await saveSurveyValues(values, surveyId)
       actions.resetForm({ values })
-
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      setWarningDialogOpen(false)
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -60,7 +65,6 @@ const EditSurvey = () => {
           })}
         </Alert>
       </Box>
-
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -68,18 +72,18 @@ const EditSurvey = () => {
       >
         {({ handleSubmit, dirty }) => (
           <Form>
-            <QuestionEditor
-              language={language}
-              name="questions"
-              onStopEditing={handleSubmit}
-            />
-
+            <QuestionEditor language={language} name="questions" />
             <Box mt={2}>
+              <EditProgrammeQuestionsDialog
+                open={warningDialogOpen}
+                onClose={handleCloseWarningDialog}
+                onConfirm={handleSubmit}
+              />
               <Button
                 color="primary"
                 variant="contained"
-                type="submit"
                 disabled={!dirty}
+                onClick={handleOpenWarningDialog}
               >
                 {t('save')}
               </Button>
