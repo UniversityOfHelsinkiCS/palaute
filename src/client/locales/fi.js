@@ -41,7 +41,7 @@ export default {
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     noFeedback: 'Täällä ei ole vielä yhtään kurssia tai kurssipalautetta',
     feedbackClosedTab: 'Päättyneet',
-    waitingForFeedbackTab: 'Odottavat',
+    waitingForFeedbackTab: 'Odottaa',
     feedbackGivenTab: 'Annetut',
     feedbackGivenChip: 'Palaute on annettu',
     waitingForFeedbackChip: 'Palaute puuttuu',

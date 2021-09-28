@@ -41,7 +41,7 @@ export default {
     viewFeedbackSummary: 'View feedback summary',
     noFeedback: 'There are no courses or course feedbacks here yet',
     feedbackClosedTab: 'Closed',
-    waitingForFeedbackTab: 'Waiting',
+    waitingForFeedbackTab: 'Awaiting',
     feedbackGivenTab: 'Given',
     feedbackGivenChip: 'Feedback is given',
     waitingForFeedbackChip: 'Feedback is missing',

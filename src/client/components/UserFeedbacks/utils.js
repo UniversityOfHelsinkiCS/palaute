@@ -1,6 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { INCLUDE_COURSES } from '../../../config'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
@@ -74,7 +75,7 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
   if (status === 'waitingForFeedback') {
     return acualFeedbackTargets.filter(
       (feedbackTarget) =>
-        !feedbackTargetIsEnded(feedbackTarget) && !feedbackTarget.feedback,
+        feedbackTargetIsOpen(feedbackTarget) && !feedbackTarget.feedback,
     )
   }
 
