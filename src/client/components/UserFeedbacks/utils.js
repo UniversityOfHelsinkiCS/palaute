@@ -67,9 +67,10 @@ export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
     .filter((target) => new Date(2020, 11, 0) < new Date(target.opensAt))
     .filter(
       (target) =>
-        // filter out courses starting before 1.9.2021
-        // Month starts from 0, i.e 8 is acually 9th month.
-        new Date(2021, 8, 1) <= new Date(target.courseRealisation.startDate) ||
+        new Date(target.courseRealisation.startDate) >= new Date(2021, 8, 1) ||
+        (new Date(target.courseRealisation.startDate) >=
+          new Date(2021, 7, 15) &&
+          new Date(target.courseRealisation.endDate) >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.has(target.courseRealisation.id),
     )
   if (status === 'waitingForFeedback') {

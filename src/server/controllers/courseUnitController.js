@@ -153,10 +153,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
   const courseUnits = Object.entries(targetsByCourseCode).map(
     ([courseCode, unfilteredTargets]) => {
       const targets = unfilteredTargets.filter(
-        // filter out courses starting before 1.9.2021
-        // Month starts from 0, i.e 8 is acually 9th month.
         (target) =>
           target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
+          (target.courseRealisation.startDate >= new Date(2021, 7, 15) &&
+            target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
           INCLUDE_COURSES.has(target.courseRealisation.id),
       )
 
