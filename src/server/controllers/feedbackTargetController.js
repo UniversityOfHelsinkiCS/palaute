@@ -347,18 +347,6 @@ const getTargetsByCourseUnit = async (req, res) => {
       'feedbackType',
       'opensAt',
       'closesAt',
-      [
-        sequelize.literal(
-          `(SELECT COUNT(*) FROM user_feedback_targets WHERE feedback_target_id = "FeedbackTarget".id AND access_status = 'STUDENT' AND feedback_id IS NOT NULL)`,
-        ),
-        'feedbackCount',
-      ],
-      [
-        sequelize.literal(
-          `(SELECT COUNT(*) FROM user_feedback_targets WHERE feedback_target_id = "FeedbackTarget".id AND access_status = 'STUDENT')`,
-        ),
-        'enrolledCount',
-      ],
     ],
     include: [
       {
@@ -368,10 +356,6 @@ const getTargetsByCourseUnit = async (req, res) => {
         where: {
           userId: req.user.id,
           accessStatus: 'TEACHER',
-        },
-        include: {
-          model: Feedback,
-          as: 'feedback',
         },
       },
       {
@@ -395,6 +379,21 @@ const getTargetsByCourseUnit = async (req, res) => {
     return res.send([])
   }
 
+  const counts = await sequelize.query(
+    `
+    SELECT feedback_target_id, COUNT(*) AS enrolled_count, COUNT(feedback_id) AS feedback_count
+    FROM user_feedback_targets
+    WHERE feedback_target_id IN (:feedbackTargetIds) AND access_status = 'STUDENT'
+    GROUP BY (feedback_target_id)
+  `,
+    {
+      replacements: {
+        feedbackTargetIds: feedbackTargets.map(({ id }) => id),
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
   const studentListVisible = await getStudentListVisibility(
     feedbackTargets[0].courseUnitId,
   )
@@ -407,24 +406,30 @@ const getTargetsByCourseUnit = async (req, res) => {
     }
   }
 
-  const formattedFeedbackTargets = feedbackTargets.map((target) => ({
-    ..._.pick(target.toJSON(), [
-      'id',
-      'name',
-      'opensAt',
-      'closesAt',
-      'feedbackType',
-      'courseRealisation',
-      'courseUnit',
-      'feedbackResponse',
-      'questions',
-      'surveys',
-    ]),
-    feedbackCount: parseInt(target.get('feedbackCount'), 10),
-    enrolledCount: parseInt(target.get('enrolledCount'), 10),
-    feedbackResponseGiven: !!target.get('feedbackResponse'),
-    studentListVisible,
-  }))
+  const formattedFeedbackTargets = feedbackTargets.map((target) => {
+    const targetCounts = counts.find(
+      (row) => parseInt(row.feedback_target_id, 10) === target.id,
+    )
+
+    return {
+      ..._.pick(target.toJSON(), [
+        'id',
+        'name',
+        'opensAt',
+        'closesAt',
+        'feedbackType',
+        'courseRealisation',
+        'courseUnit',
+        'feedbackResponse',
+        'questions',
+        'surveys',
+      ]),
+      feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
+      enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
+      feedbackResponseGiven: !!target.get('feedbackResponse'),
+      studentListVisible,
+    }
+  })
 
   return res.send(formattedFeedbackTargets)
 }
