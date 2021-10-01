@@ -10,9 +10,10 @@ import {
   useMediaQuery,
   IconButton,
   Divider,
+  ButtonBase,
 } from '@material-ui/core'
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
@@ -35,8 +36,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     color: 'inherit',
     textDecoration: 'none',
-    marginRight: 20,
+    marginRight: 8,
     fontWeight: theme.typography.fontWeightMedium,
+    padding: '6px 12px',
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    transition: 'background-color 0.25s',
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    },
+  },
+  activeLink: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
   linkContainer: {
     display: 'flex',
@@ -86,6 +97,7 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
 })
 
 const NavBar = () => {
+  const { pathname } = useLocation()
   const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
@@ -159,14 +171,25 @@ const NavBar = () => {
       label: t('navBar:admin'),
       to: '/admin',
     },
-  ].filter(Boolean)
+  ]
+    .filter(Boolean)
+    .map((link) => ({
+      ...link,
+      active: matchPath(pathname, { path: link.to }),
+    }))
 
   const navBarLinks = (
     <div className={classes.linkContainer}>
-      {links.map(({ label, to }, index) => (
-        <Link key={index} className={classes.link} to={to}>
+      {links.map(({ label, to, active }, index) => (
+        <ButtonBase
+          component={Link}
+          key={index}
+          className={cn(classes.link, active && classes.activeLink)}
+          to={to}
+          focusRipple
+        >
           {label}
-        </Link>
+        </ButtonBase>
       ))}
     </div>
   )
