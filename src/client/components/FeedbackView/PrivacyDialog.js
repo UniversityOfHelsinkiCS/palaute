@@ -22,11 +22,11 @@ const PrivacyDialog = ({ open, onClose }) => {
       aria-describedby="feedback-privacy-dialog-description"
     >
       <DialogTitle id="feedback-privacy-dialog-title">
-        {t('feedbackView:privacyInfoTitle')}
+        {t('feedbackView:feedbackInfoTitle')}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="feedback-privacy-dialog-description">
-          {t('feedbackView:privacyInfoContent')}
+          {t('feedbackView:feedbackInfoContent')}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

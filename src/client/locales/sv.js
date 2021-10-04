@@ -49,7 +49,7 @@ export default {
     successAlert: 'Responsen är given',
     feedbackInfo:
       'Denna respons är anonym. Fälten märkta med en asterisk (*) krävs',
-    feedbackInfoLink: 'Läs mera om hur informationen används',
+    privacyInfoLink: 'Läs mera om hur informationen används',
     closedInfo:
       'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
     privacyInfoTitle: 'Hur används mina uppgifter?',
