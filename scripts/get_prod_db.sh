@@ -4,7 +4,7 @@ CONTAINER=palaute_db
 SERVICE_NAME=db
 DB_NAME=postgres
 
-SERVER=toska
+SERVER=toska.cs.helsinki.fi
 SERVER_FILE_NAME=palaute.sql.gz
 SERVER_FILE="/home/toska_user/most_recent_backup_store/${SERVER_FILE_NAME}"
 
