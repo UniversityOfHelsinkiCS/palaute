@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Link,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -27,6 +28,10 @@ const PrivacyDialog = ({ open, onClose }) => {
       <DialogContent>
         <DialogContentText id="feedback-privacy-dialog-description">
           {t('feedbackView:feedbackInfoContent')}
+          <br />
+          <Link href="https://wiki.helsinki.fi/display/CF/Data+protection+notice">
+            {t('feedbackView:dataProtectionNotice')}
+          </Link>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
