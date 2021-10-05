@@ -54,16 +54,14 @@ export default {
     successAlert: 'Feedback has been given. Thank you for your feedback!',
     feedbackInfo:
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
-    feedbackInfoLink: 'Read more, how your answers are being used',
-    privacyInfoLink: 'Read more, how your information is being used',
+    feedbackInfoLink:
+      'Read more, how your information and answers are being used',
     closedInfo:
       'This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}',
     feedbackInfoTitle: 'How are my answers used?',
     feedbackInfoContent:
-      'The answers to the feedback are used for the improvement of courses and teaching. Your answers for the feedback may be shown to other students. The answers are always processed and shown anonymously.',
-    privacyInfoTitle: 'How is my information being used?',
-    privacyInfoContent:
-      'The user information is used to show correct feedback surveys by using enrolment information. Teacher cannot see which student has given a certain feedback.',
+      'The answers to the feedback are used for the improvement of courses and teaching. Your answers for the feedback may be shown to other students. The answers are always processed and shown anonymously, the teacher cannot see which student has given a certain feedback.\n The user information is used to show correct feedback surveys by using enrolment information.',
+    dataProtectionNotice: 'Data protection notice',
     dontKnowOption: 'N/A',
     editSurvey: 'Edit survey',
     translationLanguage: 'Survey preview language',

@@ -49,12 +49,10 @@ export default {
     successAlert: 'Responsen är given',
     feedbackInfo:
       'Denna respons är anonym. Fälten märkta med en asterisk (*) krävs',
-    privacyInfoLink: 'Läs mera om hur informationen används',
+    feedbackInfoLink: 'Läs mera om hur informationen och svar används',
     closedInfo:
       'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
-    privacyInfoTitle: 'Hur används mina uppgifter?',
-    privacyInfoContent:
-      'Användaruppgifterna används för att visa studeranden den rätta förfrågan för respons. Läraren kan inte veta vem av studerandena har givit viss repons.',
+    dataProtectionNotice: 'Dataskyddsbeskrivning',
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
     translationLanguage: 'Språket på förfrågans förhandsvisning',

@@ -54,16 +54,13 @@ export default {
     successAlert: 'Palaute on annettu. Kiitos palautteestasi!',
     feedbackInfo:
       'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
-    feedbackInfoLink: 'Lue lisää, miten vastauksiasi käytetään',
-    privacyInfoLink: 'Lue lisää, miten tietojasi käytetään',
+    feedbackInfoLink: 'Lue lisää, miten vastauksiasi ja tietojasi käytetään',
     closedInfo:
       'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
-    feedbackInfoTitle: 'Miten vastauksiani käytetään?',
+    feedbackInfoTitle: 'Miten vastauksiani ja tietojani käytetään?',
     feedbackInfoContent:
-      'Vastauksia kurssipalautteeseen käytetään kurssien sisällön ja opetuksen kehittämiseen. Vastauksia kurssipalautteen kysymyksiin saatetaan näyttää muille kurssin opiskelijoille. Vastauksia käsitellään ja ne näytetään aina anonyymisti.',
-    privacyInfoTitle: 'Miten tietojani käytetään?',
-    privacyInfoContent:
-      'Kirjautumistietoja käytetään siihen, että opiskelijalle näytetään oikeat palautteet ilmoittautumisten perusteella. Opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin.',
+      'Vastauksia kurssipalautteeseen käytetään kurssien sisällön ja opetuksen kehittämiseen. Vastauksia kurssipalautteen kysymyksiin saatetaan näyttää muille kurssin opiskelijoille. Vastauksia käsitellään ja ne näytetään aina anonyymisti, opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin. \n Kirjautumistietoja käytetään siihen, että opiskelijalla näytetään oikeat palautteet.',
+    dataProtectionNotice: 'Tietosuojaseloste',
     dontKnowOption: 'eos',
     editSurvey: 'Muokkaa kyselyä',
     translationLanguage: 'Kyselyn esikatselun kieli',
