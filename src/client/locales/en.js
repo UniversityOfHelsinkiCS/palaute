@@ -237,14 +237,6 @@ export default {
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',
   },
-  editProgrammeSurvey: {
-    noWriteAccess: `You don't have the rights to edit the programme survey`,
-    upperLevelQuestionsInfo: `Survey already has {{count}} university level questions, but you can add additional questions.`,
-    bigBoss:
-      'Programme survey and settings can be edited by programme personel',
-    studentListVisible: 'Student list visible',
-    programmeSettings: 'Programme settings',
-  },
   footer: {
     contactSupport: 'Contact support',
     wikiLink: 'User instructions',

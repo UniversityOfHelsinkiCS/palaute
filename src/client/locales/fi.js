@@ -234,16 +234,6 @@ export default {
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
   },
-  editProgrammeSurvey: {
-    noWriteAccess:
-      'Sinulla ei ole oikeuksia muokata tämän koulutusohjelman kyselyä',
-    upperLevelQuestionsInfo:
-      'Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
-    bigBoss:
-      'Koulutusohjelman kysymyksiä ja asetuksia voi muokata koulutusohjelman henkilökunta.',
-    studentListVisible: 'Opiskelijoiden lista näkyvissä',
-    programmeSettings: 'Koulutusohjelman asetukset',
-  },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',
     wikiLink: 'Käyttöohje',

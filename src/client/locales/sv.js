@@ -201,16 +201,6 @@ export default {
     editProgrammeSettings: 'Redigera inställningar för utbildningsprogrammet',
     courseRealisation: 'Kursinstans',
   },
-  editProgrammeSurvey: {
-    noWriteAccess:
-      'Du har inte rättigheter att redigera förfrågan för detta utbildningsprogram',
-    upperLevelQuestionsInfo:
-      'Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
-    bigBoss:
-      'Frågor och inställningar för utbildningsprogrammet kan redigeras av personal i utbildningsprogrammet.',
-    studentListVisible: 'Lista på studerande visas',
-    programmeSettings: 'Inställningar för utbildningsprogrammet',
-  },
   footer: {
     contactSupport: 'Kontakta stödet',
     wikiLink: 'Användarinstruktioner',
