@@ -8,8 +8,6 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-const runningJest = process.env.REACT_APP_JEST === 'true'
-
 const ADMINS = [
   'varisleo',
   'kalleilv',
@@ -214,7 +212,6 @@ module.exports = {
   inProduction,
   inE2EMode,
   inStaging,
-  runningJest,
   basePath,
   GIT_SHA,
   ADMINS,
