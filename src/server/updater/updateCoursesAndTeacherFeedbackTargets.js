@@ -1,7 +1,5 @@
 const dateFns = require('date-fns')
-
 const { Op } = require('sequelize')
-
 const _ = require('lodash')
 
 const {
@@ -154,13 +152,21 @@ const createCourseUnits = async (courseUnits) => {
   })
 }
 
+const getCourseRealisationPeriod = (activityPeriod) => {
+  const { startDate, endDate } = activityPeriod
+
+  return {
+    startDate,
+    endDate: endDate ? formatDate(dateFns.subDays(new Date(endDate), 1)) : null,
+  }
+}
+
 const createCourseRealisations = async (courseRealisations) => {
   await CourseRealisation.bulkCreate(
     courseRealisations.map(({ id, name, activityPeriod }) => ({
       id,
       name,
-      endDate: activityPeriod.endDate,
-      startDate: activityPeriod.startDate,
+      ...getCourseRealisationPeriod(activityPeriod),
     })),
     { updateOnDuplicate: ['name', 'endDate', 'startDate'] },
   )
