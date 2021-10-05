@@ -120,19 +120,27 @@ const emailReminderAboutSurveyOpeningToTeachers = (
   /* eslint-disable */
 
   for (feedbackTarget of teacherFeedbackTargets) {
-    const { id, name, opensAt } = feedbackTarget
-    const humanDate = format(new Date(opensAt), 'dd.MM.yyyy')
+    const { id, name, opensAt, closesAt } = feedbackTarget
+    const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
+    const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
+
     const openFrom = {
-      en: `Opens at ${humanDate}`,
-      fi: `Palautejakso alkaa ${humanDate}`,
-      sv: `Opens at ${humanDate}`,
+      en: `Open from ${humanOpensAtDate} `,
+      fi: `Palautejakso auki ${humanOpensAtDate}`,
+      sv: `Öppnas ${humanOpensAtDate} och `,
+    }
+
+    const closesOn = {
+      en: `to ${humanClosesAtDate}`,
+      fi: `- ${humanClosesAtDate}`,
+      sv: `stängs ${humanClosesAtDate}`,
     }
 
     courseNamesAndUrls =
       courseNamesAndUrls +
       `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
       ${name[language]}
-      </a> (${openFrom[language]}) <br/>`
+      </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
 
   const instructionsAndSupport = {
@@ -147,19 +155,19 @@ const emailReminderAboutSurveyOpeningToTeachers = (
   const translations = {
     text: {
       en: `Dear teacher! <br/>
-      The course feedback form for the following courses will open in a week and will remain open for four weeks: <br/>
+      The course feedback form for the following courses will open in a week: <br/>
       ${courseNamesAndUrls}
-      Please add your own questions, if any, before the above date. You can add the questions by going through the link. Thank you! <br/>
+      Please add your own questions, if any, before the above date. You can add the questions by clicking the course name. Thank you! <br/>
       ${instructionsAndSupport.en}`,
       fi: `Hyvä opettaja! <br/> 
-      Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä ja on auki neljä viikkoa: <br/>
+      Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>
       ${courseNamesAndUrls}
-      Lisääthän mahdolliset omat kysymyksesi ennen sitä. Kysymyksiä voit lisätä linkkien kautta. Kiitos!  <br/>
+      Lisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Kysymyksiä voit lisätä klikkaamalla kurssin nimeä. Kiitos!  <br/>
       ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
-      Kursresponsblanketten för följande kurser öppnas om en vecka och är öppna fyra veckor: <br/>
+      Kursresponsblanketten för följande kurser öppnas om en vecka: <br/>
       ${courseNamesAndUrls}
-      Du kan lägga till egna frågor innan det. Frågor kan läggas till genom länkarna. Tack! <br/>
+      Du kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>
       ${instructionsAndSupport.sv}`,
     },
     subject: {
