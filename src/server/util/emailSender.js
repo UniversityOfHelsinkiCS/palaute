@@ -36,7 +36,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
         as: 'courseRealisation',
         required: true,
         where: {
-          startDate: { [Op.gt]: new Date('September 1, 2021 00:00:00') },
+          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
         },
       },
       {
@@ -97,7 +97,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         as: 'courseRealisation',
         required: true,
         where: {
-          startDate: { [Op.gt]: new Date('September 1, 2021 00:00:00') },
+          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
         },
       },
       {
