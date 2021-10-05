@@ -54,7 +54,7 @@ export default {
       'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
     privacyInfoTitle: 'Hur används mina uppgifter?',
     privacyInfoContent:
-      'Användaruppgifterna används till exempel för att visa studeranden den rätta förfrågan för respons, för att skicka påminnelsemeddelanden och för att visa läraren vilka studeranden har skickat respons (denna information kan användas till exempel vid bedömning). Läraren kan inte veta vem av studerandena har givit viss repons. Läraren kan se en lista på studeranden som har givit respons efter att reponsen har öppnats, men ser responsen först efter att responsen har stängts. Om antalet responser en kurs har fått är fem eller mindre, syns inte responsen alls',
+      'Användaruppgifterna används för att visa studeranden den rätta förfrågan för respons. Läraren kan inte veta vem av studerandena har givit viss repons.',
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
     translationLanguage: 'Språket på förfrågans förhandsvisning',
