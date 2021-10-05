@@ -234,12 +234,6 @@ export default {
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
   },
-  organisationView: {
-    organisations: 'Organisaatiot',
-    noOrganisation: 'Tämä käyttäjä ei ole minkään organisaation jäsen',
-    organisationName: 'Nimi',
-    organisationCode: 'Organisaation koodi',
-  },
   editProgrammeSurvey: {
     noWriteAccess:
       'Sinulla ei ole oikeuksia muokata tämän koulutusohjelman kyselyä',

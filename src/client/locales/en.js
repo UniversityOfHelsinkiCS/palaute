@@ -237,12 +237,6 @@ export default {
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',
   },
-  organisationView: {
-    organisations: 'Organisations',
-    noOrganisations: 'This user is not a part of any organisations',
-    organisationName: 'Name',
-    organisationCode: 'Organisation code',
-  },
   editProgrammeSurvey: {
     noWriteAccess: `You don't have the rights to edit the programme survey`,
     upperLevelQuestionsInfo: `Survey already has {{count}} university level questions, but you can add additional questions.`,

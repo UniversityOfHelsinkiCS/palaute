@@ -201,12 +201,6 @@ export default {
     editProgrammeSettings: 'Redigera inställningar för utbildningsprogrammet',
     courseRealisation: 'Kursinstans',
   },
-  organisationView: {
-    organisations: 'Organisationer',
-    noOrganisations: 'Denna användare är inte medlem i någon organisation',
-    organisationName: 'Namn',
-    organisationCode: 'Organisationens kod',
-  },
   editProgrammeSurvey: {
     noWriteAccess:
       'Du har inte rättigheter att redigera förfrågan för detta utbildningsprogram',
