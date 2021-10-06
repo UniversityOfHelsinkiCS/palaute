@@ -212,7 +212,7 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2> palautejakson päätyttyä. Huomaa, että yliopistotason Likert-asteikon kysymyksiin liittyvä palaute julkaistaan aina opiskelijoille palautejakson päätyttyä',
+      'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2>. Huomaa, että yliopistotason Likert-asteikon kysymyksiin liittyvä palaute julkaistaan aina opiskelijoille',
     selectVisibility: 'Valitse käyttäjät jotka näkevät julkiset kysymykset',
     none: 'Vain koulutusohjelman henkilöstö',
     enrolled: 'Kurssin opiskelijat',

@@ -183,7 +183,7 @@ export default {
   },
   publicQuestions: {
     publicInfo:
-      'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2> efter att responstiden har tagit slut',
+      'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2>',
     selectVisibility: 'Välj användare som ser de offentliga frågorna',
     none: 'Endast personal på utbildningsprogrammet',
     enrolled: 'Studerande på kursen',
