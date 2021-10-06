@@ -37,7 +37,7 @@ const getGloballyPublicQuestionIds = async () => {
   await universitySurvey.populateQuestions()
 
   const numericQuestionIds = universitySurvey.questions
-    .filter(({ type, id }) => type === 'LIKERT' || id === 1042)
+    .filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
     .map(({ id }) => id)
 
   return numericQuestionIds
