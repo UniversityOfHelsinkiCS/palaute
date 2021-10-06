@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
   given: {
-    borderColor: theme.palette.success.light,
-    color: theme.palette.success.main,
+    borderColor: theme.palette.success.dark,
+    color: theme.palette.success.dark,
   },
   notGiven: {
     borderColor: theme.palette.error.light,

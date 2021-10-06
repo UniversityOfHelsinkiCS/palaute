@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: '80px',
     height: 'auto',
   },
+  link: {
+    color: '#1077a1',
+  },
 }))
 
 const supportEmail = 'coursefeedback@helsinki.fi'
@@ -38,11 +41,16 @@ const Footer = ({ user }) => {
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
+              <Link href={`mailto:${supportEmail}`} className={classes.link}>
+                {supportEmail}
+              </Link>
             </Typography>
             {user && user.isTeacher && (
               <Typography>
-                {t('footer:wikiLink')}: <Link href={wikiLink}>{wikiLink}</Link>
+                {t('footer:wikiLink')}:{' '}
+                <Link href={wikiLink} className={classes.link}>
+                  {wikiLink}
+                </Link>
               </Typography>
             )}
           </div>
