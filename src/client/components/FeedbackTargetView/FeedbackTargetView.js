@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
   coursePageLink: {
     display: 'inline-block',
     marginTop: theme.spacing(1),
-    color: '#1077a1',
   },
   coursePageIcon: {
     marginLeft: theme.spacing(0.5),

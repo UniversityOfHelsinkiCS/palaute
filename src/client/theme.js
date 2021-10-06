@@ -5,7 +5,7 @@ import { inStaging } from '../config'
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: !inStaging ? '#107eab' : '#77dcbb',
+      main: !inStaging ? '#1077A1' : '#77dcbb',
     },
   },
 })
