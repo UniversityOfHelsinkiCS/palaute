@@ -128,7 +128,13 @@ class User extends Model {
       },
     )
 
-    return !!courseOrganisations.length
+    if (courseOrganisations.length > 0) {
+      const adminStatus = organisations.find(
+        (org) => org.id === courseOrganisations[0].organisationId,
+      )
+      return adminStatus.access
+    }
+    return false
   }
 
   async getResponsibleCourseCodes() {

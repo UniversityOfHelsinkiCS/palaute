@@ -330,10 +330,15 @@ class FeedbackTarget extends Model {
     this.set('surveys', surveys)
   }
 
-  async getPublicFeedbacks(feedbacks, { accessStatus, isAdmin } = {}) {
+  async getPublicFeedbacks(
+    feedbacks,
+    { accessStatus, isAdmin, userOrganisationAccess } = {},
+  ) {
     const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
 
-    if (isAdmin) {
+    const organisationAdmin = userOrganisationAccess.admin
+
+    if (isAdmin || organisationAdmin) {
       return publicFeedbacks
     }
 

@@ -47,12 +47,17 @@ const FeedbackTargetResults = () => {
     return <Redirect to="/" />
   }
 
-  const { feedbacks, feedbackVisible } = feedbackTargetData
+  const { feedbacks, feedbackVisible, userOrganisationAccess } =
+    feedbackTargetData
 
   const { questions, publicQuestionIds, accessStatus, feedback } =
     feedbackTarget
 
-  const isTeacher = accessStatus === 'TEACHER'
+  const userOrganisationAdmin = userOrganisationAccess
+    ? userOrganisationAccess.admin
+    : false
+
+  const isTeacher = accessStatus === 'TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
@@ -157,7 +162,6 @@ const FeedbackTargetResults = () => {
       {feedbacks.length !== 0 && (
         <QuestionResults
           publicQuestionIds={publicQuestionIds ?? []}
-          showPublicInfo={isTeacher}
           selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/feedback-response`}
           questions={questions}
           feedbacks={feedbacks}

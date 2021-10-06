@@ -458,9 +458,11 @@ const getFeedbacks = async (req, res) => {
     },
   })
 
-  const userHasOrganisationAccess = await user.hasAccessByOrganisation(
+  const userOrganisationAccess = await user.hasAccessByOrganisation(
     courseUnit.courseCode,
   )
+
+  const userHasOrganisationAccess = !!userOrganisationAccess
 
   // Teacher can see feedback any time
   // Admin can see feedback any time
@@ -503,9 +505,14 @@ const getFeedbacks = async (req, res) => {
   const publicFeedbacks = await feedbackTarget.getPublicFeedbacks(feedbacks, {
     accessStatus,
     isAdmin,
+    userOrganisationAccess,
   })
 
-  return res.send({ feedbacks: publicFeedbacks, feedbackVisible: true })
+  return res.send({
+    feedbacks: publicFeedbacks,
+    feedbackVisible: true,
+    userOrganisationAccess,
+  })
 }
 
 const getStudentsWithFeedback = async (req, res) => {
