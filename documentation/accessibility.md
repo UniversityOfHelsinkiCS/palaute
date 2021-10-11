@@ -11,7 +11,8 @@ The accessibility of the software as of this day (11.10.2021) is good ([WCAG 2.1
 We used two tools to analyse the accessibility of the software:
 
 - [WAVE Evaluation Tool](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh)
-   - _WAVE errors align with WCAG 2.1 failures. The WAVE interface facilitates human evaluation of many other aspects of accessibility and Web Content Accessibility Guidelines and Section 508 compliance._ 
+
+  - _WAVE errors align with WCAG 2.1 failures. The WAVE interface facilitates human evaluation of many other aspects of accessibility and Web Content Accessibility Guidelines and Section 508 compliance._
 
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 
@@ -24,6 +25,9 @@ If you are not satisfied with the answer or do not receive an answer within two 
 Regional State Administrative Agency for Southern Finland
 
 Accessibility supervision unit
+
 www.saavutettavuusvaatimukset.fi
+
 saavutettavuus(at)avi.fi
+
 phone +358 29501 6000 (switchboard)
