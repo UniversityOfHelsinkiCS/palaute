@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+
 import { images } from '../util/common'
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 const supportEmail = 'coursefeedback@helsinki.fi'
 const wikiLink = 'https://wiki.helsinki.fi/display/CF'
+const accessibilityDocument =
+  'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md'
 
 const Footer = ({ user }) => {
   const classes = useStyles()
@@ -40,9 +44,14 @@ const Footer = ({ user }) => {
               {t('footer:contactSupport')}:{' '}
               <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
             </Typography>
+            <Link href={accessibilityDocument} target="_blank" rel="noopener">
+              {t('footer:accessibilityDocument')} <OpenInNewIcon />
+            </Link>
             {user && user.isTeacher && (
               <Typography>
-                {t('footer:wikiLink')}: <Link href={wikiLink}>{wikiLink}</Link>
+                <Link href={wikiLink} target="_blank" rel="noopener">
+                  {t('footer:wikiLink')} <OpenInNewIcon />
+                </Link>
               </Typography>
             )}
           </div>

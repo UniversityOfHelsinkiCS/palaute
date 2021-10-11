@@ -237,6 +237,7 @@ export default {
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',
     wikiLink: 'Käyttöohje',
+    accessibilityDocument: 'Saavutettavuusseloste',
   },
   courseRealisationFeedback: {
     noFeedbackTarget:

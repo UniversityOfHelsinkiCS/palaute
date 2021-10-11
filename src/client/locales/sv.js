@@ -204,6 +204,7 @@ export default {
   footer: {
     contactSupport: 'Kontakta stödet',
     wikiLink: 'Användarinstruktioner',
+    accessibilityDocument: 'Tillgänglighetsutlåtande',
   },
   courseRealisationFeedback: {
     noFeedbackTarget:

@@ -240,6 +240,7 @@ export default {
   footer: {
     contactSupport: 'Contact support',
     wikiLink: 'User instructions',
+    accessibilityDocument: 'Accessibility document',
   },
   courseRealisationFeedback: {
     noFeedbackTarget: 'This course does not have a feedback available to you',
