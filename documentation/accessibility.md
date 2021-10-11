@@ -4,13 +4,14 @@ This accessibility document is about the accessibility of [coursefeedback.helsin
 
 #### Accessibility status
 
-The accessibility of the software as of this day (11.10.2021) is good. The results provided by the tools used were promising and those few minor issues that came up were fixed as a result. The tools didn't bring up any larger issues in accessibility. This might be a direct result from using [Material UI](https://mui.com/) as our UI library. Using Material UI helps us take accessibility into account from the ground up.
+The accessibility of the software as of this day (11.10.2021) is good ([WCAG 2.1](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) level A to AA). The results provided by the tools used were promising and those few minor issues that came up were fixed as a result. The tools didn't bring up any larger issues in accessibility. This might be a direct result from using [Material UI](https://mui.com/) as our UI library. Using Material UI helps us take accessibility into account from the ground up.
 
 #### Accessibility tools used
 
 We used two tools to analyse the accessibility of the software:
 
 - [WAVE Evaluation Tool](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh)
+   - _WAVE errors align with WCAG 2.1 failures. The WAVE interface facilitates human evaluation of many other aspects of accessibility and Web Content Accessibility Guidelines and Section 508 compliance._ 
 
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 
