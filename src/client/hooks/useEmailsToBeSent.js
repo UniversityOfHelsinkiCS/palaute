@@ -19,7 +19,7 @@ const useEmailsToBeSent = () => {
 
   const { data: emails } = useQuery(queryKey, queryFn, { enabled })
 
-  return [emails || [], getTheEmails]
+  return [emails || { emails: [] }, getTheEmails]
 }
 
 export default useEmailsToBeSent

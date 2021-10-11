@@ -252,7 +252,11 @@ const resetTestCourse = async (_, res) => {
 const findEmailsForToday = async (_, res) => {
   const { students, teachers } = await returnEmailsToBeSentToday()
   const emails = students.concat(teachers)
-  res.send(emails)
+  res.send({
+    emails,
+    studentEmails: students.length,
+    teacherEmails: teachers.length,
+  })
 }
 
 const router = Router()

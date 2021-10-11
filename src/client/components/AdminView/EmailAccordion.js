@@ -20,11 +20,25 @@ const useStyles = makeStyles(() => ({
   accordion: {
     marginTop: 10,
   },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  emailCounts: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  count: {
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
 }))
 
 const EmailAccordion = () => {
-  const [emails, getTheEmails] = useEmailsToBeSent()
+  const [emailData, getTheEmails] = useEmailsToBeSent()
   const classes = useStyles()
+
+  const { emails, studentEmails, teacherEmails } = emailData
 
   return (
     <Box mb={2} className={classes.accordion}>
@@ -37,7 +51,15 @@ const EmailAccordion = () => {
         >
           <Typography>Emails that will be sent today</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails className={classes.details}>
+          <div className={classes.emailCounts}>
+            <Typography className={classes.count}>
+              Student emails: {studentEmails}
+            </Typography>
+            <Typography className={classes.count}>
+              Teacher emails: {teacherEmails}
+            </Typography>
+          </div>
           <Table>
             <TableHead>
               <TableRow>
