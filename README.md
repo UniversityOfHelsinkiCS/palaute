@@ -35,7 +35,7 @@ Run the get_prod_db.sh from scripts
 ./scripts/get_prod_db.sh
 ```
 
-## Stuck? ##
+## Stuck?
 
 If stuck reset everything and start from a clean slate:
 
@@ -48,6 +48,10 @@ $ npm run reset
 [Database schema](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/database_schema.png)
 
 [Testing document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/testingdocument.md)
+
+[Visibility document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/visibility.md)
+
+[Accessibility document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md)
 
 ## Maintainers and Contribution
 
