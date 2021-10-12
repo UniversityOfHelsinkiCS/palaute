@@ -24,6 +24,8 @@ const supportEmail = 'coursefeedback@helsinki.fi'
 const wikiLink = 'https://wiki.helsinki.fi/display/CF'
 const accessibilityDocument =
   'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md'
+const dataProtectionNotice =
+  'https://wiki.helsinki.fi/display/CF/Data+protection+notice'
 
 const Footer = ({ user }) => {
   const classes = useStyles()
@@ -47,6 +49,11 @@ const Footer = ({ user }) => {
             <Link href={accessibilityDocument} target="_blank" rel="noopener">
               {t('footer:accessibilityDocument')} <OpenInNewIcon />
             </Link>
+            <Typography>
+              <Link href={dataProtectionNotice} target="_blank" rel="noopener">
+                {t('feedbackView:dataProtectionNotice')} <OpenInNewIcon />
+              </Link>
+            </Typography>
             {user && user.isTeacher && (
               <Typography>
                 <Link href={wikiLink} target="_blank" rel="noopener">
