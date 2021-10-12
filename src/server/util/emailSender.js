@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
-const { addDays, subDays } = require('date-fns')
+const { addDays, subDays, format } = require('date-fns')
+const _ = require('lodash')
 const {
   FeedbackTarget,
   CourseRealisation,
@@ -15,6 +16,7 @@ const {
 } = require('./pate')
 
 const { ApplicationError } = require('./customErrors')
+const { sequelize } = require('./dbConnection')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -183,6 +185,46 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
   return feedbackTarget
 }
 
+const getTeacherEmailCounts = async () => {
+  const teacherEmailCounts = await sequelize.query(
+    `SELECT f.opens_at, count(DISTINCT u.id) FROM feedback_targets f
+        INNER JOIN user_feedback_targets u on u.feedback_target_id = f.id
+        INNER JOIN course_realisations c on c.id = f.course_realisation_id
+        WHERE f.opens_at > :opensAtLow and f.opens_at < :opensAtHigh 
+          AND u.access_status = 'TEACHER' 
+          AND f.feedback_type = 'courseRealisation'
+          AND f.feedback_opening_reminder_email_sent = false
+          AND f.hidden = false
+          AND c.start_date > '2021-8-1 00:00:00+00'
+        GROUP BY f.opens_at`,
+    {
+      replacements: {
+        opensAtLow: addDays(new Date(), 6),
+        opensAtHigh: addDays(new Date(), 14),
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  const groupedEmailCounts = _.groupBy(teacherEmailCounts, (obj) =>
+    format(subDays(obj.opens_at, 7), 'dd.MM.yyyy'),
+  )
+
+  const finalEmailCounts = Object.keys(groupedEmailCounts).map((key) =>
+    groupedEmailCounts[key].length > 1
+      ? {
+          date: key,
+          count: groupedEmailCounts[key].reduce(
+            (sum, obj) => sum + parseInt(obj.count, 10),
+            0,
+          ),
+        }
+      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) },
+  )
+
+  return finalEmailCounts
+}
+
 const aggregateFeedbackTargets = async (feedbackTargets) => {
   // Leo if you are reading this you are allowed to refactor :)
   /* eslint-disable */
@@ -314,6 +356,8 @@ const returnEmailsToBeSentToday = async () => {
   const teacherFeedbackTargets =
     await getFeedbackTargetsAboutToOpenForTeachers()
 
+  const teacherEmailCountFor7Days = await getTeacherEmailCounts()
+
   const studentsWithFeedbackTargets = await aggregateFeedbackTargets(
     studentFeedbackTargets,
   )
@@ -338,7 +382,11 @@ const returnEmailsToBeSentToday = async () => {
       ),
   )
 
-  return { students: studentEmailsToBeSent, teachers: teacherEmailsToBeSent }
+  return {
+    students: studentEmailsToBeSent,
+    teachers: teacherEmailsToBeSent,
+    emailCounts: teacherEmailCountFor7Days,
+  }
 }
 
 const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
