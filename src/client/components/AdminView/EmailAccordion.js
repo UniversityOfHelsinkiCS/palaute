@@ -73,7 +73,7 @@ const EmailAccordion = () => {
           <div className={classes.emailCounts}>
             <div className={classes.container}>
               <Typography>
-                Approximate teacher emails this week (~ +25%)
+                Approximate teacher emails this week (~ +5-10%)
               </Typography>
               {teacherEmailCounts.map((row) => (
                 <Typography>
@@ -83,7 +83,7 @@ const EmailAccordion = () => {
             </div>
             <div className={classes.container}>
               <Typography>
-                Approximate student emails this week (~ +25%)
+                Approximate student emails this week (~ +5-10%)
               </Typography>
               {studentEmailCounts.map((row) => (
                 <Typography>
