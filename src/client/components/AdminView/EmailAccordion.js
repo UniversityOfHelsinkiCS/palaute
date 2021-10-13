@@ -34,6 +34,7 @@ const useStyles = makeStyles(() => ({
   },
   container: {
     marginTop: 10,
+    marginRight: 20,
   },
 }))
 
@@ -41,7 +42,13 @@ const EmailAccordion = () => {
   const [emailData, getTheEmails] = useEmailsToBeSent()
   const classes = useStyles()
 
-  const { emails, studentEmails, teacherEmails, emailCounts } = emailData
+  const {
+    emails,
+    studentEmails,
+    teacherEmails,
+    teacherEmailCounts,
+    studentEmailCounts,
+  } = emailData
 
   return (
     <Box mb={2} className={classes.accordion}>
@@ -63,15 +70,27 @@ const EmailAccordion = () => {
               Teacher emails TODAY: {teacherEmails}
             </Typography>
           </div>
-          <div className={classes.container}>
-            <Typography>
-              Approximate teacher emails this week (~ +25%)
-            </Typography>
-            {emailCounts.map((row) => (
+          <div className={classes.emailCounts}>
+            <div className={classes.container}>
               <Typography>
-                {row.date}: {row.count}
+                Approximate teacher emails this week (~ +25%)
               </Typography>
-            ))}
+              {teacherEmailCounts.map((row) => (
+                <Typography>
+                  {row.date}: {row.count}
+                </Typography>
+              ))}
+            </div>
+            <div className={classes.container}>
+              <Typography>
+                Approximate student emails this week (~ +25%)
+              </Typography>
+              {studentEmailCounts.map((row) => (
+                <Typography>
+                  {row.date}: {row.count}
+                </Typography>
+              ))}
+            </div>
           </div>
           <Table>
             <TableHead>

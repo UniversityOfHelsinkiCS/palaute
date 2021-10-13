@@ -250,13 +250,16 @@ const resetTestCourse = async (_, res) => {
 }
 
 const findEmailsForToday = async (_, res) => {
-  const { students, teachers, emailCounts } = await returnEmailsToBeSentToday()
+  const { students, teachers, teacherEmailCounts, studentEmailCounts } =
+    await returnEmailsToBeSentToday()
+
   const emails = students.concat(teachers)
   res.send({
     emails,
     studentEmails: students.length,
     teacherEmails: teachers.length,
-    emailCounts,
+    teacherEmailCounts,
+    studentEmailCounts,
   })
 }
 
