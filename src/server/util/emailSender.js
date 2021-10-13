@@ -59,7 +59,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['email', 'language'],
+        attributes: ['id', 'username', 'email', 'language'],
         through: {
           where: {
             accessStatus: 'STUDENT',
@@ -282,6 +282,8 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,
+              noAdUser: user.username === user.id,
+              userId: user.id,
             },
           ]))
         : (emails[user.email] = [
@@ -291,6 +293,8 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,
+              noAdUser: user.username === user.id,
+              userId: user.id,
             },
           ])
     }
@@ -336,7 +340,8 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
         studentsWithFeedbackTargets[student],
       ),
   )
-  const ids = feedbackTargets.map((target) => target.id)
+
+  const ids = [] //feedbackTargets.map((target) => target.id)
 
   FeedbackTarget.update(
     {
@@ -351,7 +356,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent)
+  // sendEmail(emailsToBeSent)
 
   return emailsToBeSent
 }

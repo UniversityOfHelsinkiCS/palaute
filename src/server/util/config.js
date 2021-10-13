@@ -18,7 +18,7 @@ const DB_CONFIG = {
 
 const PORT = process.env.PORT || 8000
 
-const { IMPORTER_API_TOKEN } = process.env
+const { IMPORTER_API_TOKEN, JWT_KEY } = process.env
 
 const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi'
 
@@ -30,5 +30,6 @@ module.exports = {
   PORT,
   IMPORTER_API_TOKEN,
   IMPORTER_API_URL,
+  JWT_KEY,
   useOldImporter,
 }
