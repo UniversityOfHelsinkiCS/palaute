@@ -13,6 +13,23 @@ const { sequelize } = require('../util/dbConnection')
 
 const WORKLOAD_QUESTION_ID = 1042
 
+const INCLUDED_ORGANISATIONS_BY_USER_ID = {
+  // Jussi Merenmies
+  'hy-hlo-1548120': ['300-M001'],
+}
+
+const filterOrganisationAccess = (organisationAccess, user) => {
+  const includedOrganisationCodes = INCLUDED_ORGANISATIONS_BY_USER_ID[user.id]
+
+  if (!includedOrganisationCodes) {
+    return organisationAccess
+  }
+
+  return organisationAccess.filter(({ organisation }) =>
+    includedOrganisationCodes.includes(organisation.code),
+  )
+}
+
 const getAccessibleCourseRealisationIds = async (user) => {
   const rows = await sequelize.query(
     `
@@ -132,7 +149,7 @@ const getByOrganisations = async (req, res) => {
 
   const organisations = await getOrganisationSummaries({
     questions,
-    organisationAccess,
+    organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
   })

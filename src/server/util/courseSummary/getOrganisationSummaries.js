@@ -1,0 +1,285 @@
+const _ = require('lodash')
+
+const { sequelize } = require('../dbConnection')
+
+const {
+  QUESTION_AVERAGES_QUERY,
+  COUNTS_QUERY,
+  getValidDataValues,
+  getResults,
+  getCounts,
+} = require('./utils')
+
+const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
+
+const ORGANISATION_SUMMARY_QUERY = `
+WITH question_averages AS (
+  ${QUESTION_AVERAGES_QUERY}
+), feedback_counts AS (
+  ${COUNTS_QUERY}
+)
+
+SELECT
+  question_id,
+  question_data,
+  question_data_count,
+  feedback_count,
+  student_count,
+  feedback_targets.id AS feedback_target_id,
+  feedback_targets.closes_at AS closes_at,
+  course_realisations.id AS course_realisation_id,
+  course_realisations.name AS course_realisation_name,
+  course_realisations.start_date AS course_realisation_start_date,
+  course_realisations.end_date AS course_realisation_end_date,
+  course_units.course_code AS course_code,
+  course_units.name AS course_unit_name,
+  course_units.id AS course_unit_id,
+  organisations.id AS organisation_id,
+  organisations.name AS organisation_name,
+  organisations.code AS organisation_code,
+  CASE
+    WHEN feedback_targets.feedback_response IS NOT NULL
+    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+    ELSE FALSE
+  END AS feedback_response_given
+FROM question_averages
+  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
+  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+  INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
+  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
+WHERE
+  feedback_targets.feedback_type = 'courseRealisation'
+  AND (organisations.id IN (:organisationIds) OR course_realisations.id IN (:accessibleCourseRealisationIds))
+  AND course_units.course_code NOT IN (:disabledCourseCodes)
+  AND course_realisations.start_date < NOW()
+  AND course_realisations.start_date > NOW() - interval '48 months';
+`
+
+const getCourseUnitsWithResults = (rows, questions) => {
+  const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
+
+  const courseUnits = Object.entries(rowsByCourseCode).map(
+    ([courseCode, courseUnitRows]) => {
+      const { course_unit_name: name, closes_at: closesAt } = courseUnitRows[0]
+
+      const latestRow = _.maxBy(
+        courseUnitRows,
+        (row) => new Date(row.course_realisation_start_date),
+      )
+
+      const { current = [], previous = [] } = _.groupBy(courseUnitRows, (row) =>
+        row.course_realisation_id === latestRow.course_realisation_id
+          ? 'current'
+          : 'previous',
+      )
+
+      const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
+
+      const currentResults = getResults(current, questions)
+      const previousResults = getResults(previous, questions)
+      const { feedbackCount, studentCount } = getCounts(current)
+
+      const results = currentResults.map((r) => {
+        const previousQuestionResults = previousResults.find(
+          (pr) => r.questionId === pr.questionId,
+        )
+
+        return {
+          ...r,
+          previous: previousQuestionResults?.mean
+            ? previousQuestionResults
+            : null,
+        }
+      })
+
+      return {
+        name,
+        courseCode,
+        results,
+        feedbackCount,
+        studentCount,
+        feedbackResponseGiven,
+        closesAt,
+      }
+    },
+  )
+
+  return _.orderBy(courseUnits, ['courseCode'])
+}
+
+const getOrganisationsWithResults = (rows, questions) => {
+  const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
+
+  const organisations = Object.entries(rowsByOrganisationId).map(
+    ([organisationId, organisationRows]) => {
+      const { organisation_name: name, organisation_code: code } =
+        organisationRows[0]
+
+      const courseUnits = getCourseUnitsWithResults(organisationRows, questions)
+
+      const feedbackCount = _.sumBy(
+        courseUnits,
+        ({ feedbackCount }) => feedbackCount,
+      )
+
+      const studentCount = _.sumBy(
+        courseUnits,
+        ({ studentCount }) => studentCount,
+      )
+
+      const allResults = courseUnits.flatMap(({ results }) => results)
+
+      const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
+        questionId.toString(),
+      )
+
+      const results = questions.map(({ id: questionId }) => {
+        const questionResults = resultsByQuestionId[questionId.toString()] ?? []
+
+        const questionMeans = questionResults
+          .map(({ mean }) => mean)
+          .filter(Boolean)
+
+        const distribution = questionResults.reduce(
+          (acc, curr) =>
+            _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
+          {},
+        )
+
+        return {
+          questionId,
+          mean:
+            questionMeans.length > 0 ? _.round(_.mean(questionMeans), 2) : 0,
+          distribution,
+        }
+      })
+
+      return {
+        id: organisationId,
+        name,
+        code,
+        results,
+        feedbackCount,
+        studentCount,
+        courseUnits,
+      }
+    },
+  )
+
+  return _.orderBy(organisations, ['code'])
+}
+
+const withMissingOrganisations = (
+  organisations,
+  organisationAccess,
+  questions,
+) => {
+  const accessibleOrganisations = organisationAccess.map(
+    ({ organisation }) => organisation,
+  )
+
+  const missingOrganisations = accessibleOrganisations.filter(
+    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
+  )
+
+  const allOrganisations = [
+    ...organisations,
+    ...missingOrganisations.map((org) => ({
+      id: org.id,
+      name: org.name,
+      code: org.code,
+      courseUnits: [],
+      results: questions.map(({ id: questionId }) => ({
+        questionId,
+        mean: 0,
+        distribution: {},
+      })),
+      feedbackCount: 0,
+      studentCount: 0,
+    })),
+  ]
+
+  return _.orderBy(
+    allOrganisations,
+    [(org) => (org.courseUnits.length > 0 ? 1 : 0), 'code'],
+    ['desc', 'asc'],
+  )
+}
+
+const omitOpenUniRows = async (rows) => {
+  const openUniRows = await sequelize.query(
+    `
+    SELECT DISTINCT ON (course_units.course_code) course_units.course_code FROM course_units_organisations
+    INNER JOIN course_units ON course_units_organisations.course_unit_id = course_units.id
+    WHERE course_units_organisations.organisation_id = :openUniOrganisationId;
+  `,
+    {
+      replacements: {
+        openUniOrganisationId: OPEN_UNI_ORGANISATION_ID,
+      },
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  const openUniCourseCodes = openUniRows.map((row) => row.course_code)
+
+  return rows.filter((row) => !openUniCourseCodes.includes(row.course_code))
+}
+
+const getOrganisationSummaries = async ({
+  questions,
+  organisationAccess,
+  accessibleCourseRealisationIds,
+  includeOpenUniCourseUnits = true,
+}) => {
+  const validDataValues = getValidDataValues(questions)
+  const questionIds = questions.map(({ id }) => id.toString())
+
+  const organisations = organisationAccess.map(
+    ({ organisation }) => organisation,
+  )
+
+  const organisationIds = organisations.map(({ id }) => id)
+
+  const disabledCourseCodes = organisations.flatMap(
+    ({ disabledCourseCodes }) => disabledCourseCodes ?? [],
+  )
+
+  const rows =
+    organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
+      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
+          replacements: {
+            questionIds,
+            organisationIds: [
+              ...organisationIds,
+              '_', // in case of empty array
+            ],
+            validDataValues,
+            disabledCourseCodes: [...disabledCourseCodes, '_'],
+            accessibleCourseRealisationIds: [
+              ...accessibleCourseRealisationIds,
+              '_',
+            ],
+          },
+          type: sequelize.QueryTypes.SELECT,
+        })
+      : []
+
+  const normalizedRows = !includeOpenUniCourseUnits
+    ? await omitOpenUniRows(rows)
+    : rows
+
+  const organisationsWithMissing = withMissingOrganisations(
+    getOrganisationsWithResults(normalizedRows, questions),
+    organisationAccess,
+    questions,
+  )
+
+  return organisationsWithMissing
+}
+
+module.exports = {
+  getOrganisationSummaries,
+}
