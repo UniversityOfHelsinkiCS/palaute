@@ -8,6 +8,8 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
+const WORKLOAD_QUESTION_ID = 1042
+
 const getScalesConfig = (t) => ({
   y: {
     title: {
@@ -90,9 +92,13 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
 export const getSingleChoiceChartConfig = (question, language, t) => {
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) =>
+  let labels = arrayOptions.map(({ label }) =>
     getLanguageValue(label, language),
   )
+
+  if (question.id === WORKLOAD_QUESTION_ID) {
+    labels = labels.reverse()
+  }
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)

@@ -16,13 +16,11 @@ import {
   Tab,
   Button,
   makeStyles,
-  Link as MuiLink,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
-import ExternalLinkIcon from '@material-ui/icons/Launch'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
@@ -34,6 +32,7 @@ import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import ExternalLink from '../ExternalLink'
 
 import {
   getCoursePeriod,
@@ -75,10 +74,6 @@ const useStyles = makeStyles((theme) => ({
   coursePageLink: {
     display: 'inline-block',
     marginTop: theme.spacing(1),
-  },
-  coursePageIcon: {
-    marginLeft: theme.spacing(0.5),
-    fontSize: '1em',
   },
 }))
 
@@ -182,15 +177,9 @@ const FeedbackTargetView = () => {
           </Typography>
         </dl>
 
-        <MuiLink
-          href={coursePageUrl}
-          target="_blank"
-          rel="noopener"
-          className={classes.coursePageLink}
-        >
+        <ExternalLink href={coursePageUrl} className={classes.coursePageLink}>
           {t('feedbackTargetView:coursePage')}
-          <ExternalLinkIcon className={classes.coursePageIcon} />
-        </MuiLink>
+        </ExternalLink>
       </Box>
 
       <Box mb={2}>

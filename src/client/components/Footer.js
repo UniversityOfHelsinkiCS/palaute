@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {
   Box,
   Container,
@@ -6,9 +8,10 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core'
-import React from 'react'
+
 import { useTranslation } from 'react-i18next'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+
+import ExternalLink from './ExternalLink'
 
 import { images } from '../util/common'
 
@@ -46,19 +49,19 @@ const Footer = ({ user }) => {
               {t('footer:contactSupport')}:{' '}
               <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
             </Typography>
-            <Link href={accessibilityDocument} target="_blank" rel="noopener">
-              {t('footer:accessibilityDocument')} <OpenInNewIcon />
-            </Link>
+            <ExternalLink href={accessibilityDocument}>
+              {t('footer:accessibilityDocument')}
+            </ExternalLink>
             <Typography>
-              <Link href={dataProtectionNotice} target="_blank" rel="noopener">
-                {t('feedbackView:dataProtectionNotice')} <OpenInNewIcon />
-              </Link>
+              <ExternalLink href={dataProtectionNotice}>
+                {t('feedbackView:dataProtectionNotice')}
+              </ExternalLink>
             </Typography>
             {user && user.isTeacher && (
               <Typography>
-                <Link href={wikiLink} target="_blank" rel="noopener">
-                  {t('footer:wikiLink')} <OpenInNewIcon />
-                </Link>
+                <ExternalLink href={wikiLink}>
+                  {t('footer:wikiLink')}
+                </ExternalLink>
               </Typography>
             )}
           </div>
