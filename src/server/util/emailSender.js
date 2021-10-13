@@ -201,7 +201,7 @@ const getTeacherEmailCounts = async () => {
     {
       replacements: {
         opensAtLow: addDays(new Date(), 6),
-        opensAtHigh: addDays(new Date(), 13),
+        opensAtHigh: addDays(new Date(), 35),
       },
       type: sequelize.QueryTypes.SELECT,
     },
@@ -242,7 +242,7 @@ const getStudentEmailCounts = async () => {
     {
       replacements: {
         opensAtLow: subDays(new Date(), 1),
-        opensAtHigh: addDays(new Date(), 6),
+        opensAtHigh: addDays(new Date(), 28),
       },
       type: sequelize.QueryTypes.SELECT,
     },
