@@ -96,12 +96,14 @@ export const getSingleChoiceChartConfig = (question, language, t) => {
     getLanguageValue(label, language),
   )
 
+  const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
+
+  let data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
+
   if (question.id === WORKLOAD_QUESTION_ID) {
     labels = labels.reverse()
+    data = data.reverse()
   }
-
-  const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
-  const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
     options: {
