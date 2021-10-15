@@ -33,6 +33,14 @@ const ORGANISATION_ACCESS_BY_IAM_GROUP = {
       admin: true,
     },
   },
+  'grp-avoin-johto': {
+    // Avoin yliopisto
+    H930: {
+      read: true,
+      write: false,
+      admin: false,
+    },
+  },
 }
 
 const organisationIsRelevant = (organisation) => {
