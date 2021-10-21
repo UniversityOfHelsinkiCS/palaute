@@ -8,8 +8,6 @@ const { start: startUpdater } = require('./updater')
 const { start: startPateCron } = require('./util/pateCron')
 const logger = require('./util/logger')
 
-// const { sendEmailAboutSurveyOpeningToStudents } = require('./util/emailSender')
-
 const app = express()
 
 app.use('/api', (req, res, next) => require('./util/routes')(req, res, next)) // eslint-disable-line
@@ -34,8 +32,6 @@ const start = async () => {
     logger.info(`Started on port ${PORT}`)
   })
 }
-
-// sendEmailAboutSurveyOpeningToStudents()
 
 start()
 

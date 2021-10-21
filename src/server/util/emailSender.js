@@ -341,7 +341,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
       ),
   )
 
-  const ids = [] //feedbackTargets.map((target) => target.id)
+  const ids = feedbackTargets.map((target) => target.id)
 
   FeedbackTarget.update(
     {
@@ -356,7 +356,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     },
   )
 
-  // sendEmail(emailsToBeSent)
+  sendEmail(emailsToBeSent)
 
   return emailsToBeSent
 }
