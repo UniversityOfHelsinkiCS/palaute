@@ -6,6 +6,7 @@ const {
   UserFeedbackTarget,
   FeedbackTarget,
   CourseUnit,
+  Feedback,
 } = require('../models')
 const { JWT_KEY } = require('../util/config')
 const { ApplicationError } = require('../util/customErrors')
@@ -37,6 +38,8 @@ const getCourses = async (req, res) => {
     },
   })
 
+  if (!user) res.send([])
+
   const courses = await UserFeedbackTarget.findAll({
     where: {
       userId: user.id,
@@ -45,13 +48,19 @@ const getCourses = async (req, res) => {
       {
         model: FeedbackTarget,
         as: 'feedbackTarget',
+        required: true,
         where: {
           feedbackType: 'courseRealisation',
         },
         include: {
           model: CourseUnit,
+          requred: true,
           as: 'courseUnit',
         },
+      },
+      {
+        model: Feedback,
+        as: 'feedback',
       },
     ],
   })

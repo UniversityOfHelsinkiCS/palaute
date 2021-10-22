@@ -31,6 +31,9 @@ router.use(Router.json())
 router.use(shibbolethCharsetMiddleware)
 router.use(accessLogger)
 router.use(iamGroupsMiddleware)
+
+router.use('/noad', noAdUserController)
+
 router.use(currentUserMiddleware)
 
 router.get('/login', users.getUser)
@@ -108,8 +111,6 @@ router.get(
 )
 
 router.use('/admin', adminController)
-
-router.use('/noad', noAdUserController)
 
 if (inE2EMode) {
   router.use('/test', testingController)
