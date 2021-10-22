@@ -1,7 +1,7 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useNoadUser = (options = {}) => {
+const useNoadCourses = (options = {}) => {
   const queryKey = 'noadUser'
 
   const queryFn = async () => {
@@ -17,4 +17,4 @@ const useNoadUser = (options = {}) => {
   return { courses, ...rest }
 }
 
-export default useNoadUser
+export default useNoadCourses

@@ -62,7 +62,7 @@ const Logo = () => {
 
   return (
     <div className={classes.container}>
-      <Link to="/noad" className={classes.logoLink}>
+      <Link to="/noad/courses" className={classes.logoLink}>
         <img src={hyLogo} alt="HY" className={classes.image} />
         <Typography variant="h6" component="h1">
           Norppa

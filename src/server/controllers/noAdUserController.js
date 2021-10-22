@@ -7,6 +7,7 @@ const {
   FeedbackTarget,
   CourseUnit,
   Feedback,
+  CourseRealisation,
 } = require('../models')
 const { JWT_KEY } = require('../util/config')
 const { ApplicationError } = require('../util/customErrors')
@@ -52,11 +53,18 @@ const getCourses = async (req, res) => {
         where: {
           feedbackType: 'courseRealisation',
         },
-        include: {
-          model: CourseUnit,
-          requred: true,
-          as: 'courseUnit',
-        },
+        include: [
+          {
+            model: CourseUnit,
+            requred: true,
+            as: 'courseUnit',
+          },
+          {
+            model: CourseRealisation,
+            required: true,
+            as: 'courseRealisation',
+          },
+        ],
       },
       {
         model: Feedback,
@@ -65,11 +73,12 @@ const getCourses = async (req, res) => {
     ],
   })
 
-  //  const filteredCourses = courses.filter((course) => {
-  //    course.feedbackTarget.isOpen()
-  //  })
+  const filteredCourses = courses.filter((course) => {
+    const { feedbackTarget } = course
+    return feedbackTarget.isOpen()
+  })
 
-  res.send(courses)
+  res.send(filteredCourses)
 }
 
 const router = Router()
