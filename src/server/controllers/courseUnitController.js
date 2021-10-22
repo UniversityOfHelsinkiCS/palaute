@@ -165,14 +165,22 @@ const getCourseUnitsForTeacher = async (req, res) => {
         'name',
       ])
 
-      const ongoingTarget = _.maxBy(
-        targets.filter(
-          ({ courseRealisation }) =>
-            courseRealisation.startDate <= new Date() &&
-            courseRealisation.endDate >= new Date(),
-        ),
-        ({ courseRealisation }) => courseRealisation.startDate,
+      const ongoingTargets = targets.filter(
+        ({ courseRealisation }) =>
+          courseRealisation.startDate <= new Date() &&
+          courseRealisation.endDate >= new Date(),
       )
+
+      const feedbackOpenOngoingTarget = ongoingTargets.find((target) =>
+        target.isOpen(),
+      )
+
+      const ongoingTarget =
+        feedbackOpenOngoingTarget ??
+        _.maxBy(
+          ongoingTargets,
+          ({ courseRealisation }) => courseRealisation.startDate,
+        )
 
       const upcomingTarget = _.minBy(
         targets.filter(
