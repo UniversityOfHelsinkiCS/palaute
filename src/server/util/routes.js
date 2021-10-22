@@ -17,6 +17,7 @@ const organisation = require('../controllers/organisationController')
 const courseUnit = require('../controllers/courseUnitController')
 const courseRealisation = require('../controllers/courseRealisationController')
 const testingController = require('../controllers/testingController')
+const noAdUserController = require('../controllers/noAdUserController')
 
 const router = Router()
 
@@ -107,6 +108,8 @@ router.get(
 )
 
 router.use('/admin', adminController)
+
+router.use('/noad', noAdUserController)
 
 if (inE2EMode) {
   router.use('/test', testingController)

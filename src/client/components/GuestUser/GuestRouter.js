@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { Container, makeStyles } from '@material-ui/core'
+import { Box, CircularProgress, Container, makeStyles } from '@material-ui/core'
+import useNoadUser from '../../hooks/useNoadUser'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,8 +19,25 @@ const ParseToken = () => {
   return <Redirect to="/noad" />
 }
 
-const Home = <div>hello world</div>
+const Home = () => {
+  const { courses, isLoading } = useNoadUser()
 
+  if (isLoading) {
+    return (
+      <Box my={4}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  return (
+    <div>
+      {courses.map((course) => (
+        <div>{course.feedbackTarget.courseUnit.name.en}</div>
+      ))}
+    </div>
+  )
+}
 const GuestRouter = () => {
   const classes = useStyles()
 
