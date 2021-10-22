@@ -12,7 +12,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import useNoadCourses from '../../hooks/useNoadCourses'
-import FeedbackTargetItem from '../UserFeedbacks/FeedbackTargetItem'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 
 const useStyles = makeStyles((theme) => ({
