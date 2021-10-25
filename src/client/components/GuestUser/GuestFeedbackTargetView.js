@@ -24,6 +24,7 @@ import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import useGuestFeedbackTarget from '../../hooks/useGuestFeedbackTarget'
 import GuestFeedbackView from './GuestFeedbackView'
+import GuestFeedbackTargetResults from './GuestFeedbackTargetResults'
 
 import ExternalLink from '../ExternalLink'
 
@@ -159,6 +160,10 @@ const GuestFeedbackTargetView = () => {
       </Box>
       <Switch>
         <Route path={`${path}/feedback`} component={GuestFeedbackView} />
+        <Route
+          path={`${path}/results`}
+          component={GuestFeedbackTargetResults}
+        />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

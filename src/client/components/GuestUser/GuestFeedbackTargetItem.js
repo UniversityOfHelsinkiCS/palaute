@@ -160,7 +160,6 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
     queryClient.invalidateQueries('feedbackTargetsForStudent')
   }
 
-  // IMPLEMENT THESE
   const editPath = `/noad/targets/${id}/feedback`
   const viewPath = `/noad/targets/${id}/results`
 

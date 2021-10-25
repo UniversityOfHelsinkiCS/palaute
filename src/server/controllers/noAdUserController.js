@@ -80,6 +80,8 @@ const getCourses = async (req, res) => {
     return feedbackTarget.isOpen()
   })
 
+  console.log(filteredCourses)
+
   res.send(filteredCourses)
 }
 
@@ -177,7 +179,97 @@ const getFeedbackTarget = async (req, res) => {
 
   const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
 
+  console.log(responseReady)
+
   res.send({ ...responseReady })
+}
+
+const getFeedbacks = async (req, res) => {
+  const { token } = req.headers
+  const username = jwt.decode(token, JWT_KEY)
+
+  const user = await User.findOne({
+    where: {
+      username,
+    },
+  })
+
+  const feedbackTargetId = Number(req.params.id)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+    },
+    include: 'feedbackTarget',
+  })
+
+  const feedbackTarget = userFeedbackTarget
+    ? userFeedbackTarget.feedbackTarget
+    : await FeedbackTarget.findByPk(feedbackTargetId)
+
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  const courseUnit = await CourseUnit.findOne({
+    where: {
+      id: feedbackTarget.courseUnitId,
+    },
+  })
+
+  const userOrganisationAccess = await user.hasAccessByOrganisation(
+    courseUnit.courseCode,
+  )
+
+  const userHasOrganisationAccess = !!userOrganisationAccess
+
+  // Teacher can see feedback any time
+  // Admin can see feedback any time
+  // Hallinto people can see feedback any time
+  if (
+    !userHasOrganisationAccess &&
+    !(userFeedbackTarget && userFeedbackTarget.accessStatus === 'TEACHER')
+  ) {
+    if (!userFeedbackTarget) {
+      // outsider, not in the course
+      // should only be shown if feedback is public to all
+      if (feedbackTarget.feedbackVisibility !== 'ALL') {
+        return res.send({
+          feedbacks: [],
+          feedbackVisible: false,
+        })
+      }
+    }
+  }
+
+  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+    include: {
+      model: Feedback,
+      required: true,
+      as: 'feedback',
+    },
+  })
+
+  const feedbacks = studentFeedbackTargets.map((t) => t.feedback)
+
+  const accessStatus = userFeedbackTarget?.accessStatus
+    ? userFeedbackTarget.accessStatus
+    : 'STUDENT'
+
+  const publicFeedbacks = await feedbackTarget.getPublicFeedbacks(feedbacks, {
+    accessStatus,
+    isAdmin: false,
+    userOrganisationAccess,
+  })
+
+  return res.send({
+    feedbacks: publicFeedbacks,
+    feedbackVisible: true,
+    userOrganisationAccess,
+  })
 }
 
 const getFeedbackForUser = async (req, user) => {
@@ -287,13 +379,31 @@ const updateFeedback = async (req, res) => {
   res.send(updatedFeedback)
 }
 
+const deleteFeedback = async (req, res) => {
+  const { token } = req.headers
+  const username = jwt.decode(token, JWT_KEY)
+
+  const user = await User.findOne({
+    where: {
+      username,
+    },
+  })
+
+  const feedback = await getFeedbackForUser(req, user)
+
+  await feedback.destroy()
+  res.sendStatus(200)
+}
+
 const router = Router()
 
 router.use(noAdAccess)
 
 router.get('/courses', getCourses)
 router.get('/feedback-targets/:id', getFeedbackTarget)
+router.get('/feedback-targets/:id/feedbacks', getFeedbacks)
 router.post('/feedbacks', createFeedback)
 router.put('/feedbacks/:id', updateFeedback)
+router.delete('/feedbacks/:id', deleteFeedback)
 
 module.exports = router
