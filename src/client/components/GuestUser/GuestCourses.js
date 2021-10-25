@@ -23,11 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
   progressContainer: {
     padding: theme.spacing(4, 0),
-    display: 'flex',
+    display: 'table',
     justifyContent: 'center',
   },
   courseRealisationItem: {
     marginBottom: theme.spacing(2),
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }))
 
@@ -38,27 +42,32 @@ const GuestCourses = () => {
 
   if (isLoading) {
     return (
-      <Box my={4}>
+      <Box my={4} className={classes.container}>
         <CircularProgress className={classes.progressContainer} />
       </Box>
     )
   }
 
-  if (!isLoading && !feedbackTargets.length) {
+  if (!isLoading && !feedbackTargets) {
     return (
-      <Container>
-        <Typography>
-          You dont have any courses that have feedback open
-        </Typography>
-      </Container>
+      <Box my={4} className={classes.container}>
+        <Typography>{t('noadUser:noUser')}</Typography>
+      </Box>
     )
   }
+
+  const NoOpenFeedbacks = () => (
+    <Box my={4} className={classes.container}>
+      <Typography>{t('noadUser:noFeedback')}</Typography>
+    </Box>
+  )
 
   return (
     <Container>
       <Typography variant="h4" component="h1" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
+      {!feedbackTargets.length && <NoOpenFeedbacks />}
       {feedbackTargets.map((feedbackTarget) => {
         const { courseUnit } = feedbackTarget
         const translatedName = getLanguageValue(courseUnit.name, i18n.language)
