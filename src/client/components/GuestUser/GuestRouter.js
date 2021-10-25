@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
 
 import GuestCourses from './GuestCourses'
+import GuestFeedbackTargetView from './GuestFeedbackTargetView'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,6 +32,7 @@ const GuestRouter = () => {
         </Route>
         <Route path="/noad/token" component={ParseToken} />
         <Route path="/noad/courses" component={GuestCourses} />
+        <Route path="/noad/targets/:id" component={GuestFeedbackTargetView} />
       </Switch>
     </Container>
   )
