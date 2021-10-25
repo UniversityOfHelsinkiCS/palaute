@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - no_ad_support
 
 jobs:
   dockerhub-release:
