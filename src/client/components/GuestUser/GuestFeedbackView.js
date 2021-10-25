@@ -204,7 +204,7 @@ const GuestFeedbackView = () => {
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
-          autoHideDuration: 6000,
+          autoHideDuration: 5999,
           content: (key, message) => (
             <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
           ),
