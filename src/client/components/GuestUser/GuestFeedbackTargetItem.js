@@ -18,7 +18,6 @@ import {
 import FeedbackGivenIcon from '@material-ui/icons/Check'
 import NoFeedbackIcon from '@material-ui/icons/Edit'
 
-import { useQueryClient } from 'react-query'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 
@@ -142,9 +141,9 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
-  const queryClient = useQueryClient()
+  const { id, closesAt, opensAt, userFeedbackTargets } = feedbackTarget
 
-  const { id, closesAt, opensAt, feedback } = feedbackTarget
+  const { feedback } = userFeedbackTargets[0]
 
   const periodInfo = t('feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
@@ -154,10 +153,9 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const feedbackGiven = Boolean(feedback)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  // IMPLEMENT THIS
   const onDelete = async () => {
     await apiClient.delete(`/noad/feedbacks/${feedback.id}`)
-    queryClient.invalidateQueries('feedbackTargetsForStudent')
+    window.location.reload()
   }
 
   const editPath = `/noad/targets/${id}/feedback`

@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
-import useNoadCourses from '../../hooks/useNoadCourses'
+import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const GuestCourses = () => {
   const classes = useStyles()
-  const { courses, isLoading } = useNoadCourses()
+  const { feedbackTargets, isLoading } = useNoadfeedbackTargets()
   const { i18n, t } = useTranslation()
 
   if (isLoading) {
@@ -44,7 +44,7 @@ const GuestCourses = () => {
     )
   }
 
-  if (!isLoading && !courses.length) {
+  if (!isLoading && !feedbackTargets.length) {
     return (
       <Container>
         <Typography>
@@ -59,8 +59,7 @@ const GuestCourses = () => {
       <Typography variant="h4" component="h1" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
-      {courses.map((course) => {
-        const { feedbackTarget } = course
+      {feedbackTargets.map((feedbackTarget) => {
         const { courseUnit } = feedbackTarget
         const translatedName = getLanguageValue(courseUnit.name, i18n.language)
 

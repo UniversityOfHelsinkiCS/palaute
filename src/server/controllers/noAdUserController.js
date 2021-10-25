@@ -30,6 +30,34 @@ const noAdAccess = async (req, _, next) => {
   return next()
 }
 
+const getFeedbackTargetsIncludes = (userId, accessStatus) => {
+  // where parameter cant have undefined values
+  const where = accessStatus ? { userId, accessStatus } : { userId }
+  return [
+    {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTargets',
+      required: true,
+      where,
+      include: { model: Feedback, as: 'feedback' },
+    },
+    {
+      model: CourseUnit,
+      as: 'courseUnit',
+      required: true,
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          through: { attributes: [] },
+          required: true,
+        },
+      ],
+    },
+    { model: CourseRealisation, as: 'courseRealisation' },
+  ]
+}
+
 const getCourses = async (req, res) => {
   const { token } = req.headers
 
@@ -43,44 +71,16 @@ const getCourses = async (req, res) => {
 
   if (!user) res.send([])
 
-  const courses = await UserFeedbackTarget.findAll({
+  const feedbackTargets = await FeedbackTarget.findAll({
     where: {
-      userId: user.id,
+      hidden: false,
     },
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-        required: true,
-        where: {
-          feedbackType: 'courseRealisation',
-        },
-        include: [
-          {
-            model: CourseUnit,
-            requred: true,
-            as: 'courseUnit',
-          },
-          {
-            model: CourseRealisation,
-            required: true,
-            as: 'courseRealisation',
-          },
-        ],
-      },
-      {
-        model: Feedback,
-        as: 'feedback',
-      },
-    ],
+    include: getFeedbackTargetsIncludes(user.id, 'STUDENT'),
   })
 
-  const filteredCourses = courses.filter((course) => {
-    const { feedbackTarget } = course
-    return feedbackTarget.isOpen()
-  })
-
-  console.log(filteredCourses)
+  const filteredCourses = feedbackTargets.filter((feedbackTarget) =>
+    feedbackTarget.isOpen(),
+  )
 
   res.send(filteredCourses)
 }
