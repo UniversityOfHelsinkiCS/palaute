@@ -1,7 +1,6 @@
 import React, { useState, forwardRef } from 'react'
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 import {
-  Typography,
   CircularProgress,
   makeStyles,
   Button,
