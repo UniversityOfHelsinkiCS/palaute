@@ -274,4 +274,9 @@ export default {
     feedbackPeriod: 'Feedback open',
     coursePage: 'Course page',
   },
+  noadUser: {
+    noUser:
+      'Something went wrong, you are not currently not logged in. Try going through the email link again or contact the course teacher',
+    noFeedback: 'There are currently no course feedbacks that are open',
+  },
 }

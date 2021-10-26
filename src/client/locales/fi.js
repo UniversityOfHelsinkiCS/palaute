@@ -272,4 +272,10 @@ export default {
     feedbackPeriod: 'Palaute käynnissä',
     coursePage: 'Kurssisivu',
   },
+  noadUser: {
+    noUser:
+      'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
+    noFeedback:
+      'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
+  },
 }

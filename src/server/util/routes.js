@@ -17,6 +17,7 @@ const organisation = require('../controllers/organisationController')
 const courseUnit = require('../controllers/courseUnitController')
 const courseRealisation = require('../controllers/courseRealisationController')
 const testingController = require('../controllers/testingController')
+const noAdUserController = require('../controllers/noAdUserController')
 
 const router = Router()
 
@@ -30,7 +31,16 @@ router.use(Router.json())
 router.use(shibbolethCharsetMiddleware)
 router.use(accessLogger)
 router.use(iamGroupsMiddleware)
+
 router.use(currentUserMiddleware)
+
+router.get('/noad/courses', noAdUserController.getCourses)
+
+router.get('/noad/feedback-targets/:id', feedbackTargets.getOne)
+router.get('/noad/feedback-targets/:id/feedbacks', feedbackTargets.getFeedbacks)
+router.post('/noad/feedbacks', feedbacks.create)
+router.put('/noad/feedbacks/:id', feedbacks.update)
+router.delete('/noad/feedbacks/:id', feedbacks.destroy)
 
 router.get('/login', users.getUser)
 router.get('/logout', users.logout)
