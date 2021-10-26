@@ -1,5 +1,6 @@
+const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
-const { ADMINS } = require('../util/config')
+const { ADMINS, JWT_KEY } = require('../util/config')
 const { User } = require('../models')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
@@ -40,8 +41,28 @@ const getUser = async (username) => {
   return user
 }
 
-const currentUserMiddleware = async (req, _, next) => {
+const getUsernameFromToken = (req) => {
+  const { token } = req.headers
+
+  const username = jwt.decode(token, JWT_KEY)
+
+  return username
+}
+
+const getUsernameFromShibboHeaders = (req) => {
   const { uid: username } = req.headers
+
+  if (!username) throw new ApplicationError('Missing uid header', 403)
+
+  return username
+}
+
+const currentUserMiddleware = async (req, _, next) => {
+  const isNoAdPath = req.path.startsWith('/noad')
+
+  const username = isNoAdPath
+    ? await getUsernameFromToken(req)
+    : getUsernameFromShibboHeaders(req)
 
   if (!username) throw new ApplicationError('Missing uid header', 403)
 
@@ -55,9 +76,9 @@ const currentUserMiddleware = async (req, _, next) => {
     if (loggedInAsUser) req.user = loggedInAsUser
   }
 
-  req.user.set('iamGroups', req.iamGroups ?? [])
+  req.user.set('iamGroups', isNoAdPath ? [] : req.iamGroups ?? [])
 
-  req.isAdmin = isSuperAdmin(req.user.username)
+  req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)
 
   return next()
 }
