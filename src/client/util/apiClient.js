@@ -4,6 +4,8 @@ import { basePath, inProduction, inE2EMode } from './common'
 
 const apiClient = axios.create({ baseURL: `${basePath}/api` })
 
+const getNoadUrl = (url) => `/noad${url}`
+
 apiClient.interceptors.request.use((config) => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
   const token = localStorage.getItem('token')
@@ -11,7 +13,11 @@ apiClient.interceptors.request.use((config) => {
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id
   if (adminLoggedInAs) headers['x-admin-logged-in-as'] = adminLoggedInAs
-  const newConfig = { ...config, headers }
+
+  const url = token ? getNoadUrl(config.url) : config.url
+
+  const newConfig = { ...config, headers, url }
+
   return newConfig
 })
 

@@ -154,7 +154,7 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const onDelete = async () => {
-    await apiClient.delete(`/noad/feedbacks/${feedback.id}`)
+    await apiClient.delete(`/feedbacks/${feedback.id}`)
     window.location.reload()
   }
 

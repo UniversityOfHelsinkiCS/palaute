@@ -5,7 +5,7 @@ const useNoadfeedbackTargets = (options = {}) => {
   const queryKey = 'noadUser'
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/noad/courses')
+    const { data } = await apiClient.get('/courses')
 
     return data
   }

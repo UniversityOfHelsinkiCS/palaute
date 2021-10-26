@@ -34,14 +34,14 @@ export const saveValues = async (values, feedbackTarget) => {
   const { id: feedbackTargetId, feedback } = feedbackTarget
 
   if (feedback) {
-    const { data } = await apiClient.put(`/noad/feedbacks/${feedback.id}`, {
+    const { data } = await apiClient.put(`/feedbacks/${feedback.id}`, {
       data: feedbackData,
     })
 
     return data
   }
 
-  const { data } = await apiClient.post('/noad/feedbacks', {
+  const { data } = await apiClient.post('/feedbacks', {
     feedbackTargetId,
     data: feedbackData,
   })
