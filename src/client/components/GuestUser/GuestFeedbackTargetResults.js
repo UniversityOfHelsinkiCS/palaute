@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, CircularProgress } from '@material-ui/core'
 
-import useGuestFeedbackTarget from '../../hooks/useGuestFeedbackTarget'
-import useGuestFeedbackTargetFeedbacks from '../../hooks/useGuestFeedbackTargetFeedbacks'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
 import Alert from '../Alert'
@@ -18,10 +18,10 @@ const GuestFeedbackTargetResults = () => {
   const { id } = useParams()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useGuestFeedbackTarget(id)
+    useFeedbackTarget(id, { skipCache: true })
 
   const { feedbackTargetData, isLoading: feedbacksIsLoading } =
-    useGuestFeedbackTargetFeedbacks(id)
+    useFeedbackTargetFeedbacks(id, { skipCache: true })
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 

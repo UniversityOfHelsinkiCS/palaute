@@ -6,7 +6,7 @@ const apiClient = axios.create({ baseURL: `${basePath}/api` })
 
 apiClient.interceptors.request.use((config) => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
-  const token = localStorage.getItem('token') || '{}'
+  const token = localStorage.getItem('token')
   const headers = { ...defaultHeaders, token }
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id

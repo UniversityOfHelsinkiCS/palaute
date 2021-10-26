@@ -22,7 +22,7 @@ import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import useGuestFeedbackTarget from '../../hooks/useGuestFeedbackTarget'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import GuestFeedbackView from './GuestFeedbackView'
 import GuestFeedbackTargetResults from './GuestFeedbackTargetResults'
 
@@ -69,7 +69,9 @@ const GuestFeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
   const { t, i18n } = useTranslation()
-  const { feedbackTarget, isLoading } = useGuestFeedbackTarget(id)
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
+    skipCache: true,
+  })
 
   const classes = useStyles()
 

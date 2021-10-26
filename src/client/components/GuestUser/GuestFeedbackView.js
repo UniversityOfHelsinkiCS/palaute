@@ -13,7 +13,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import FeedbackForm from '../FeedbackForm'
-import useGuestFeedbackTarget from '../../hooks/useGuestFeedbackTarget'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import PrivacyDialog from '../FeedbackView/PrivacyDialog'
 
 import Alert from '../Alert'
@@ -165,7 +165,7 @@ const GuestFeedbackView = () => {
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
-  const { feedbackTarget, isLoading } = useGuestFeedbackTarget(id, {
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
 
