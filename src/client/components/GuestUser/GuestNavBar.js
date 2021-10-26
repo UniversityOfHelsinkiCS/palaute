@@ -147,6 +147,8 @@ const GuestNavBar = () => {
     window.location.reload()
   }
 
+  const loggedIn = localStorage.getItem('token')
+
   const menu = (
     <Menu
       id="navBarMenu"
@@ -159,8 +161,12 @@ const GuestNavBar = () => {
         language={i18n.language}
         onLanguageChange={changeLanguage}
       />
-      <Divider component="li" className={classes.languageMenuDivider} />
-      <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+      {!!loggedIn && (
+        <div>
+          <Divider component="li" className={classes.languageMenuDivider} />
+          <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+        </div>
+      )}
     </Menu>
   )
 

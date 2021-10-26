@@ -144,11 +144,6 @@ const FormContainer = ({
                   ? t('feedbackView:editButton')
                   : t('feedbackView:submitButton')}
               </Button>
-              <Box mt={1}>
-                <Typography color="textSecondary">
-                  {t('feedbackView:cannotSubmitText')}
-                </Typography>
-              </Box>
             </Box>
           </Form>
         )
@@ -233,7 +228,7 @@ const GuestFeedbackView = () => {
           The feedback period has ended.{' '}
           <AlertLink
             component={Link}
-            to={`/targets/${feedbackTarget.id}/results`}
+            to={`/noad/targets/${feedbackTarget.id}/results`}
           >
             Take a look at the feedbacks
           </AlertLink>

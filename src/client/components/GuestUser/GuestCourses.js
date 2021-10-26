@@ -51,14 +51,18 @@ const GuestCourses = () => {
   if (!isLoading && !feedbackTargets) {
     return (
       <Box my={4} className={classes.container}>
-        <Typography>{t('noadUser:noUser')}</Typography>
+        <Typography variant="h6" component="h6">
+          {t('noadUser:noUser')}
+        </Typography>
       </Box>
     )
   }
 
   const NoOpenFeedbacks = () => (
     <Box my={4} className={classes.container}>
-      <Typography>{t('noadUser:noFeedback')}</Typography>
+      <Typography variant="h6" component="h6">
+        {t('noadUser:noFeedback')}
+      </Typography>
     </Box>
   )
 

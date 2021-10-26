@@ -274,7 +274,7 @@ export default {
   },
   noadUser: {
     noUser:
-      'Jotain meni pieleen, kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
+      'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
     noFeedback:
       'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
   },
