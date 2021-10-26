@@ -20,7 +20,6 @@ import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 import { getLanguageValue } from '../../util/languageUtils'
 import VerticalHeading from './VerticalHeading'
-
 import { getFeedbackResponseGiven } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -35,20 +34,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const getLabel = (courseRealisation, t) => {
-  const { startDate, endDate, feedbackTargetId, teachers } = courseRealisation
+const getLabel = (courseRealisation, t, language) => {
+  const { startDate, endDate, feedbackTargetId, teachers, name } =
+    courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
 
-  const label = `${formattedStartDate} - ${formattedEndDate}`
+  const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
+  const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTargetId ? (
     <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`}>
-      {label}
+      {translatedName}
     </Link>
   ) : (
-    label
+    translatedName
   )
 
   const teachersString = teachers
@@ -61,6 +62,9 @@ const getLabel = (courseRealisation, t) => {
   return (
     <>
       {link}
+      <Typography color="textSecondary" variant="body2">
+        {datePeriod}
+      </Typography>
       {teachersString && (
         <Typography color="textSecondary" variant="body2">
           {t('courseSummary:responsibleTeachers')}: {teachersString}
@@ -106,7 +110,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
               <Fragment key={courseRealisation.id}>
                 <ResultsRow
                   key={courseRealisation.id}
-                  label={getLabel(courseRealisation, t)}
+                  label={getLabel(courseRealisation, t, i18n.language)}
                   results={courseRealisation.results}
                   questions={questions}
                   feedbackCount={courseRealisation.feedbackCount}

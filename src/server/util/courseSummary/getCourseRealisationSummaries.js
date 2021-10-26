@@ -87,7 +87,11 @@ const getCourseRealisationsWithResults = (rows, questions) => {
     },
   )
 
-  return _.orderBy(courseRealisations, ['startDate'], ['desc'])
+  return _.orderBy(
+    courseRealisations,
+    ['startDate', 'feedbackCount'],
+    ['desc', 'desc'],
+  )
 }
 
 const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
