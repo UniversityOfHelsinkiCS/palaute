@@ -44,7 +44,9 @@ const getUser = async (username) => {
 const getUsernameFromToken = (req) => {
   const { token } = req.headers
 
-  const username = jwt.decode(token, JWT_KEY)
+  const { username } = jwt.decode(token, JWT_KEY)
+
+  if (!username) throw new ApplicationError('Token is missing username', 403)
 
   return username
 }

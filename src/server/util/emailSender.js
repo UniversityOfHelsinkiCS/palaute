@@ -284,6 +284,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               language: user.language,
               noAdUser: user.username === user.id,
               userId: user.id,
+              username: user.username,
             },
           ]))
         : (emails[user.email] = [
@@ -295,6 +296,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               language: user.language,
               noAdUser: user.username === user.id,
               userId: user.id,
+              username: user.username,
             },
           ])
     }

@@ -207,7 +207,10 @@ const notificationAboutSurveyOpeningToStudents = (
     ? studentFeedbackTargets[0].language
     : 'en'
   const courseName = studentFeedbackTargets[0].name[language]
-  const token = jwt.sign({ userId: studentFeedbackTargets[0].userId }, JWT_KEY)
+  const token = jwt.sign(
+    { username: studentFeedbackTargets[0].username },
+    JWT_KEY,
+  )
 
   let courseNamesAndUrls = ''
 

@@ -23,6 +23,7 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 const Question = require('./question')
+
 const {
   sendNotificationAboutFeedbackSummaryToStudents,
   sendNotificationAboutSurveyOpeningToStudents,
