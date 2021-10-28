@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useMemo } from 'react'
+import React, { Fragment } from 'react'
 
 import {
   Box,
@@ -14,11 +14,10 @@ import {
   LinearProgress,
 } from '@material-ui/core'
 
-import { Redirect, Link, useHistory } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/Settings'
 
-import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
 import useOrganisations from '../../hooks/useOrganisations'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
@@ -28,9 +27,11 @@ import DividerRow from './DividerRow'
 import Filters from './Filters'
 
 import {
-  filterByCourseCode,
   hasWriteAccess,
-  getInitialOpenAccordions,
+  useHistoryState,
+  useOpenAccordions,
+  useAggregatedOrganisationSummaries,
+  ORDER_BY_OPTIONS,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +82,7 @@ const OrganisationTable = ({
         <thead>
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
-            <th> </th>
+            <th aria-hidden="true" />
             {questions.map(({ id, data }) => (
               <VerticalHeading key={id}>
                 {getLanguageValue(data?.label, i18n.language)}
@@ -93,7 +94,7 @@ const OrganisationTable = ({
             <VerticalHeading>
               {t('courseSummary:feedbackResponse')}
             </VerticalHeading>
-            <th> </th>
+            <th aria-hidden="true" />
           </tr>
         </thead>
         <tbody>
@@ -145,35 +146,29 @@ const OrganisationTable = ({
 
 const OrganisationSummary = () => {
   const { t } = useTranslation()
-  const history = useHistory()
 
-  const historyState = history.location.state ?? {}
+  const [keyword, setKeyword] = useHistoryState('keyword', '')
 
-  const replaceHistoryState = (update) => {
-    history.replace({
-      state: { ...historyState, ...update },
-    })
-  }
+  const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
+    useHistoryState('includeOpenUniCourseUnits', true)
 
-  const [keyword, setKeyword] = useState(historyState.keyword ?? '')
-
-  const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useState(
-    historyState.includeOpenUniCourseUnits ?? true,
+  const [orderBy, setOrderBy] = useHistoryState(
+    'orderBy',
+    ORDER_BY_OPTIONS[0].value,
   )
 
   const { organisations: organisationAccess } = useOrganisations()
 
-  const { organisationSummaries, isLoading, isFetching } =
-    useOrganisationSummaries({
-      includeOpenUniCourseUnits,
-      keepPreviousData: true,
-    })
-
-  const filteredOrganisations = useMemo(
-    () =>
-      filterByCourseCode(organisationSummaries?.organisations ?? [], keyword),
-    [organisationSummaries?.organisations, keyword],
-  )
+  const {
+    organisationSummaries,
+    aggregatedOrganisations,
+    isLoading,
+    isFetching,
+  } = useAggregatedOrganisationSummaries({
+    keyword,
+    orderBy,
+    includeOpenUniCourseUnits,
+  })
 
   if (isLoading) {
     return (
@@ -189,33 +184,20 @@ const OrganisationSummary = () => {
 
   const { questions, organisations } = organisationSummaries
 
-  const openAccordions = getInitialOpenAccordions(organisations, history)
-
-  const handleToggleAccordion = (id) => {
-    let nextOpenAccordions = openAccordions
-
-    if (openAccordions.includes(id)) {
-      nextOpenAccordions = openAccordions.filter((a) => a !== id)
-    } else {
-      nextOpenAccordions = openAccordions.concat(id)
-    }
-
-    replaceHistoryState({ openAccordions: nextOpenAccordions })
-  }
+  const { openAccordions, toggleAccordion } = useOpenAccordions(organisations)
 
   const handleKeywordChange = (nextKeyword) => {
     setKeyword(nextKeyword)
-    replaceHistoryState({ keyword: nextKeyword })
   }
 
   const handleIncludeOpenUniCourseUnitsChange = (
     nextIncludeOpenUniCourseUnits,
   ) => {
     setIncludeOpenUniCourseUnits(nextIncludeOpenUniCourseUnits)
+  }
 
-    replaceHistoryState({
-      includeOpenUniCourseUnits: nextIncludeOpenUniCourseUnits,
-    })
+  const handleOrderByChange = (nextOrderBy) => {
+    setOrderBy(nextOrderBy)
   }
 
   return (
@@ -228,11 +210,11 @@ const OrganisationSummary = () => {
       <Card>
         <CardContent>
           <OrganisationTable
-            organisations={filteredOrganisations}
+            organisations={aggregatedOrganisations}
             questions={questions}
             organisationAccess={organisationAccess}
             initialOpenAccordions={openAccordions}
-            onToggleAccordion={handleToggleAccordion}
+            onToggleAccordion={toggleAccordion}
             loading={isFetching}
             filters={
               <>
@@ -244,6 +226,8 @@ const OrganisationSummary = () => {
                     onIncludeOpenUniCourseUnitsChange={
                       handleIncludeOpenUniCourseUnitsChange
                     }
+                    orderBy={orderBy}
+                    onOrderByChange={handleOrderByChange}
                   />
                 </Box>
                 <Divider />

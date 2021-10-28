@@ -134,7 +134,7 @@ const getCourseUnitsWithResults = (rows, questions) => {
     },
   )
 
-  return _.orderBy(courseUnits, ['courseCode'])
+  return _.orderBy(courseUnits, ['courseCode'], ['asc'])
 }
 
 const getOrganisationsWithResults = (rows, questions) => {
@@ -196,7 +196,7 @@ const getOrganisationsWithResults = (rows, questions) => {
     },
   )
 
-  return _.orderBy(organisations, ['code'])
+  return _.orderBy(organisations, ['code'], ['asc'])
 }
 
 const withMissingOrganisations = (

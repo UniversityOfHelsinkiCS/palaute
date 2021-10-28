@@ -236,6 +236,10 @@ export default {
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',
+    orderByLabel: 'Order',
+    orderByCodeAsc: 'Code ascending',
+    orderByFeedbackCountAsc: 'Feedback count ascending',
+    orderByFeedbackCountDesc: 'Feedback count descending',
   },
   footer: {
     contactSupport: 'Contact support',

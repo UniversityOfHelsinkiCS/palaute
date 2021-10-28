@@ -233,6 +233,10 @@ export default {
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
+    orderByLabel: 'Järjestys',
+    orderByCodeAsc: 'Koodi nousevasti',
+    orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',
+    orderByFeedbackCountDesc: 'Palautteiden määrä laskevasti',
   },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',
