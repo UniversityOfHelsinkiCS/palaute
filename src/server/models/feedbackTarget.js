@@ -336,10 +336,11 @@ class FeedbackTarget extends Model {
     { accessStatus, isAdmin, userOrganisationAccess } = {},
   ) {
     const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
+    const isTeacher = accessStatus === 'TEACHER'
 
-    const organisationAdmin = userOrganisationAccess.admin
+    const isOrganisationAdmin = Boolean(userOrganisationAccess?.admin)
 
-    if (isAdmin || organisationAdmin) {
+    if (isAdmin || isOrganisationAdmin || isTeacher) {
       return publicFeedbacks
     }
 
@@ -347,11 +348,9 @@ class FeedbackTarget extends Model {
 
     const filteredFeedbacks = publicFeedbacks.map((feedback) => ({
       ...feedback,
-      data: feedback.data.filter((question) => {
-        if (accessStatus === 'STUDENT')
-          return publicQuestionIds.includes(question.questionId)
-        return true
-      }),
+      data: feedback.data.filter((question) =>
+        publicQuestionIds.includes(question.questionId),
+      ),
     }))
 
     return filteredFeedbacks

@@ -57,6 +57,36 @@ WHERE
   AND course_realisations.start_date > NOW() - interval '48 months';
 `
 
+const getCurrentCourseRealisationId = (rows) => {
+  const rowsByCourseRealisationId = _.groupBy(
+    rows,
+    (row) => row.course_realisation_id,
+  )
+
+  const courseRealisations = Object.entries(rowsByCourseRealisationId).map(
+    ([courseRealisationId, courseRealisationRows]) => {
+      const { course_realisation_start_date: startDate } =
+        courseRealisationRows[0]
+
+      const { feedbackCount } = getCounts(courseRealisationRows)
+
+      return {
+        id: courseRealisationId,
+        startDate: new Date(startDate),
+        feedbackCount,
+      }
+    },
+  )
+
+  const sortedCourseRealisations = _.orderBy(
+    courseRealisations,
+    ['startDate', 'feedbackCount'],
+    ['desc', 'desc'],
+  )
+
+  return sortedCourseRealisations[0].id
+}
+
 const getCourseUnitsWithResults = (rows, questions) => {
   const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
 
@@ -64,13 +94,11 @@ const getCourseUnitsWithResults = (rows, questions) => {
     ([courseCode, courseUnitRows]) => {
       const { course_unit_name: name, closes_at: closesAt } = courseUnitRows[0]
 
-      const latestRow = _.maxBy(
-        courseUnitRows,
-        (row) => new Date(row.course_realisation_start_date),
-      )
+      const currentCourseRealisationId =
+        getCurrentCourseRealisationId(courseUnitRows)
 
       const { current = [], previous = [] } = _.groupBy(courseUnitRows, (row) =>
-        row.course_realisation_id === latestRow.course_realisation_id
+        row.course_realisation_id === currentCourseRealisationId
           ? 'current'
           : 'previous',
       )

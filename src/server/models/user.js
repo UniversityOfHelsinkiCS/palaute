@@ -22,6 +22,7 @@ const normalizeOrganisationCode = (r) => {
 
 const RELEVANT_ORGANISATION_CODES = [
   'H906', // Kielikeskus
+  'H930', // Avoin yliopisto
 ]
 
 const ORGANISATION_ACCESS_BY_IAM_GROUP = {
@@ -42,6 +43,9 @@ const ORGANISATION_ACCESS_BY_IAM_GROUP = {
     },
   },
 }
+
+const isVaradekaani = (user) =>
+  (user.iamGroups ?? []).includes('hy-varadekaanit-opetus')
 
 const organisationIsRelevant = (organisation) => {
   const { code } = organisation
@@ -113,36 +117,47 @@ class User extends Model {
       },
     })
 
-    return organisations.map((organisation) => ({
+    let organisationAccess = organisations.map((organisation) => ({
       organisation,
       access: access[codeByNormalizedCode[organisation.code]],
     }))
+
+    if (isVaradekaani(this)) {
+      organisationAccess = organisationAccess.map(({ organisation }) => ({
+        organisation,
+        access: { read: true, write: true, admin: true },
+      }))
+    }
+
+    return organisationAccess
   }
 
-  async hasAccessByOrganisation(courseCode) {
+  async getOrganisationAccessByCourseUnitId(courseUnitId) {
     const organisations = await this.getOrganisationAccess()
 
-    if (!organisations.length) return false
+    if (organisations.length === 0) {
+      return null
+    }
 
     const courseOrganisations = await sequelize.query(
-      'SELECT O.* FROM organisations O, course_units C, course_units_organisations J ' +
-        'WHERE C.id = J.course_unit_id AND C.course_code = :courseCode AND J.organisation_id = O.id AND O.id IN (:ids) LIMIT 1',
+      `
+      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = :courseUnitId
+    `,
       {
         replacements: {
-          courseCode,
-          ids: organisations.map((o) => o.organisation.id),
+          courseUnitId,
         },
         type: sequelize.QueryTypes.SELECT,
       },
     )
 
-    if (courseOrganisations.length > 0) {
-      const adminStatus = organisations.find(
-        (org) => org.id === courseOrganisations[0].organisationId,
-      )
-      return adminStatus.access
-    }
-    return false
+    const organisationIds = courseOrganisations.map((co) => co.organisation_id)
+
+    const organisationAccess = organisations.find(({ organisation }) =>
+      organisationIds.includes(organisation.id),
+    )
+
+    return organisationAccess?.access ?? null
   }
 
   async getResponsibleCourseCodes() {
