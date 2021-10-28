@@ -1,6 +1,4 @@
-const jwt = require('jsonwebtoken')
 const {
-  User,
   UserFeedbackTarget,
   FeedbackTarget,
   CourseUnit,
@@ -8,7 +6,6 @@ const {
   CourseRealisation,
   Organisation,
 } = require('../models')
-const { JWT_KEY } = require('../util/config')
 
 const getFeedbackTargetsIncludes = (userId, accessStatus) => {
   // where parameter cant have undefined values
@@ -39,15 +36,7 @@ const getFeedbackTargetsIncludes = (userId, accessStatus) => {
 }
 
 const getCourses = async (req, res) => {
-  const { token } = req.headers
-
-  const username = jwt.decode(token, JWT_KEY)
-
-  const user = await User.findOne({
-    where: {
-      username,
-    },
-  })
+  const { user } = req
 
   if (!user) res.send([])
 
