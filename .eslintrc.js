@@ -24,5 +24,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/no-array-index-key': 'off',
+    'no-restricted-syntax': 'off',
+    'no-await-in-loop': 'off',
   },
 }

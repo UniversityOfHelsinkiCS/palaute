@@ -1,11 +1,9 @@
 const axios = require('axios')
 const { format } = require('date-fns')
 const { chunk } = require('lodash')
-const jwt = require('jsonwebtoken')
 
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
-const { JWT_KEY } = require('./config')
 
 const template = {
   from: 'Norppa',
@@ -33,8 +31,6 @@ const sendToPate = async (options = {}) => {
     return null
   }
 
-  /* eslint-disable */
-
   logger.info(`sending email to: ${options.emails.length}`)
 
   const chunkedEmails = chunk(options.emails, 50)
@@ -44,13 +40,12 @@ const sendToPate = async (options = {}) => {
     template: options.template,
   }))
 
-  for (chunkedOption of chunkedOptions) {
+  for (const chunkedOption of chunkedOptions) {
     await pateClient.post('/', chunkedOption)
   }
+
   return options
 }
-
-/* eslint-enable */
 
 const sendEmail = async (listOfEmails) => {
   const options = {
@@ -119,9 +114,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (
 
   let courseNamesAndUrls = ''
 
-  /* eslint-disable */
-
-  for (feedbackTarget of teacherFeedbackTargets) {
+  for (const feedbackTarget of teacherFeedbackTargets) {
     const { id, name, opensAt, closesAt } = feedbackTarget
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
@@ -138,9 +131,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (
       sv: `stängs ${humanClosesAtDate}`,
     }
 
-    courseNamesAndUrls =
-      courseNamesAndUrls +
-      `<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
       ${name[language]}
       </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
@@ -201,26 +192,19 @@ const notificationAboutSurveyOpeningToStudents = (
   emailAddress,
   studentFeedbackTargets,
 ) => {
-  const { noAdUser } = studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
+
   const language = studentFeedbackTargets[0].language
     ? studentFeedbackTargets[0].language
     : 'en'
+
   const courseName = studentFeedbackTargets[0].name[language]
-  const token = jwt.sign(
-    { username: studentFeedbackTargets[0].username },
-    JWT_KEY,
-  )
 
   let courseNamesAndUrls = ''
 
-  /* eslint-disable */
-
-  for (feedbackTarget of studentFeedbackTargets) {
+  for (const feedbackTarget of studentFeedbackTargets) {
     const { id, name, closesAt } = feedbackTarget
-    const url = noAdUser
-      ? `https://coursefeedback.helsinki.fi/noad/token/${token}`
-      : `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
+    const url = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
     const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const openUntil = {
       en: `Open until ${humanDate}`,
@@ -228,9 +212,7 @@ const notificationAboutSurveyOpeningToStudents = (
       sv: `Open until ${humanDate}`,
     }
 
-    courseNamesAndUrls =
-      courseNamesAndUrls +
-      `<a href=${url}>
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${url}>
       ${name[language]}
       </a> (${openUntil[language]}) <br/>`
   }
@@ -265,7 +247,6 @@ const notificationAboutSurveyOpeningToStudents = (
         : `Kursresponsen för kursen ${courseName} har öppnats`,
     },
   }
-  /* eslint-enable */
 
   const email = {
     to: emailAddress,
