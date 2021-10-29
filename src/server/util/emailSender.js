@@ -308,11 +308,15 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
 
 const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
   const singleFbt = feedbackTarget[0]
-  /* eslint-disable */
-  let emails = {}
 
-  for (user of singleFbt.users) {
-    if (!user.email) continue
+  const emails = {}
+
+  for (const user of singleFbt.users) {
+    if (!user.email) {
+      // eslint-disable-next-line
+      continue
+    }
+
     emails[user.email] = {
       id: singleFbt.id,
       name: singleFbt.courseUnit.name,
@@ -321,15 +325,12 @@ const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
       language: user.language,
     }
   }
-  /* eslint-enable */
 
   return emails
 }
 
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
-
-  /* eslint-disable */
 
   const studentsWithFeedbackTargets = await aggregateFeedbackTargets(
     feedbackTargets,
@@ -396,7 +397,6 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   sendEmail(emailsToBeSent)
 
   return emailsToBeSent
-  /* eslint-enable */
 }
 
 const returnEmailsToBeSentToday = async () => {
