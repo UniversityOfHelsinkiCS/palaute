@@ -25,6 +25,9 @@ const pateClient = axios.create({
   },
 })
 
+const sleep = (time) =>
+  new Promise((resolve) => setTimeout(() => resolve(), time))
+
 const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
@@ -42,6 +45,7 @@ const sendToPate = async (options = {}) => {
 
   for (const chunkedOption of chunkedOptions) {
     await pateClient.post('/', chunkedOption)
+    await sleep(1000)
   }
 
   return options
