@@ -120,10 +120,7 @@ export const useHistoryState = (key, initialValue) => {
 
   const handleSetState = (nextState) => {
     setState(nextState)
-
-    window.requestAnimationFrame(() =>
-      replaceHistoryState({ [key]: nextState }),
-    )
+    replaceHistoryState({ [key]: nextState })
   }
 
   return [state, handleSetState]

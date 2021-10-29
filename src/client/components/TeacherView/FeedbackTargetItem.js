@@ -13,7 +13,7 @@ import {
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import { formatDate } from './utils'
+import { formatDate, getFeedbackPercentageString } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
@@ -50,6 +50,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
     closesAt,
   } = feedbackTarget
 
+  const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
+
   const { name, startDate, endDate } = courseRealisation
 
   const periodInfo = (
@@ -82,12 +84,17 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
         secondary={
           <>
             <Typography variant="body2" color="textSecondary" component="span">
-              {parseISO(feedbackTarget.opensAt) < new Date()
-                ? t('teacherView:feedbackCount', {
+              {parseISO(feedbackTarget.opensAt) < new Date() ? (
+                <>
+                  {t('teacherView:feedbackCount', {
                     count: feedbackCount,
                     totalCount: enrolledCount,
-                  })
-                : t('teacherView:feedbackNotStarted')}
+                  })}{' '}
+                  ({feedbackPercentage})
+                </>
+              ) : (
+                t('teacherView:feedbackNotStarted')
+              )}
             </Typography>{' '}
             {chip}
           </>

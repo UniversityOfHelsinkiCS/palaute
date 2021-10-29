@@ -45,7 +45,9 @@ const OrderSelect = ({ orderBy, onOrderByChange }) => {
         }
       >
         {ORDER_BY_OPTIONS.map(({ value, label }) => (
-          <MenuItem value={value}>{t(label)}</MenuItem>
+          <MenuItem value={value} key={value}>
+            {t(label)}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>

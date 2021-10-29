@@ -170,6 +170,10 @@ const OrganisationSummary = () => {
     includeOpenUniCourseUnits,
   })
 
+  const { openAccordions, toggleAccordion } = useOpenAccordions(
+    organisationSummaries?.organisations ?? [],
+  )
+
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" my={4}>
@@ -182,9 +186,7 @@ const OrganisationSummary = () => {
     return <Redirect to="/" />
   }
 
-  const { questions, organisations } = organisationSummaries
-
-  const { openAccordions, toggleAccordion } = useOpenAccordions(organisations)
+  const { questions } = organisationSummaries
 
   const handleKeywordChange = (nextKeyword) => {
     setKeyword(nextKeyword)
