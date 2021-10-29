@@ -22,7 +22,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.gt]: subDays(new Date(), 6),
+        [Op.gt]: subDays(new Date(), 3),
         [Op.lt]: addDays(new Date(), 1),
       },
       closesAt: {
@@ -87,7 +87,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
     where: {
       opensAt: {
         [Op.lt]: addDays(new Date(), 7),
-        [Op.gt]: addDays(new Date(), 1),
+        [Op.gt]: addDays(new Date(), 6),
       },
       feedbackOpeningReminderEmailSent: false,
       hidden: false,
