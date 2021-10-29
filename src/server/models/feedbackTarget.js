@@ -79,7 +79,13 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
 class FeedbackTarget extends Model {
   async getSurveys() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
-      include: [{ model: Organisation, as: 'organisations' }],
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          through: { where: { type: 'PRIMARY' } },
+        },
+      ],
     })
 
     const organisation = courseUnit.organisations[0]

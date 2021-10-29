@@ -134,7 +134,7 @@ const getIncludes = (userId, accessStatus) => {
         {
           model: Organisation,
           as: 'organisations',
-          through: { attributes: [] },
+          through: { attributes: ['type'], as: 'courseUnitOrganisation' },
           required: true,
         },
       ],
