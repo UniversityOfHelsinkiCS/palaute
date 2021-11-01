@@ -156,12 +156,13 @@ export const feedbackTargetIsOpenOrClosed = (feedbackTarget) => {
 
 export const getOrganisationNames = (feedbackTarget, language) => {
   const { organisations } = feedbackTarget.courseUnit
+
+  if (organisations.length === 1)
+    return { primaryOrganisation: organisations[0].name[language] }
+
   const primaryOrganisation = organisations.find(
     (org) => org.courseUnitOrganisation.type === 'PRIMARY',
   )
-
-  if (organisations.length === 1)
-    return { primaryOrganisation: primaryOrganisation.name[language] }
 
   const lastCode = organisations[organisations.length - 1].code
 
