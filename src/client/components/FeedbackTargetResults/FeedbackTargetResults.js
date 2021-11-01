@@ -60,6 +60,10 @@ const FeedbackTargetResults = () => {
   const isTeacher = accessStatus === 'TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
+  if (isOpen && !feedback && !userOrganisationAccess) {
+    return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
+  }
+
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
   const handleCloseClick = async () => {
