@@ -157,8 +157,7 @@ export const feedbackTargetIsOpenOrClosed = (feedbackTarget) => {
 export const getOrganisationNames = (feedbackTarget, language) => {
   const { organisations } = feedbackTarget.courseUnit
 
-  if (organisations.length < 1)
-    return { primaryOrganisation: 'Helsingin yliopisto' }
+  if (!organisations) return { primaryOrganisation: 'Helsingin yliopisto' }
 
   const primaryOrganisation = organisations.find(
     (org) => org.courseUnitOrganisation.type === 'PRIMARY',
