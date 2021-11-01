@@ -48,7 +48,6 @@ const EmailAccordion = () => {
     teacherEmails,
     teacherEmailCounts,
     studentEmailCounts,
-    tokenPresent,
   } = emailData
 
   return (
@@ -92,7 +91,6 @@ const EmailAccordion = () => {
                 </Typography>
               ))}
             </div>
-            {tokenPresent && <Typography>token</Typography>}
           </div>
           <Table>
             <TableHead>

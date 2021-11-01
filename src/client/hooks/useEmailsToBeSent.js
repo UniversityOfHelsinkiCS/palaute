@@ -24,7 +24,6 @@ const useEmailsToBeSent = () => {
       emails: [],
       teacherEmailCounts: [],
       studentEmailCounts: [],
-      tokenPresent: false,
     },
     getTheEmails,
   ]
