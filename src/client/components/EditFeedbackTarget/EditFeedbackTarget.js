@@ -32,6 +32,7 @@ import {
   getQuestionsInitialValues,
   saveQuestionsValues,
   saveFeedbackPeriodValues,
+  getOrganisationNames,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -186,6 +187,7 @@ const EditFeedbackTarget = () => {
   const feedbackPeriodInitialValues =
     getFeedbackPeriodInitialValues(feedbackTarget)
 
+  const organisationNames = getOrganisationNames(feedbackTarget, language)
   return (
     <>
       <Box mb={2}>
@@ -204,9 +206,16 @@ const EditFeedbackTarget = () => {
       {upperLevelQuestions.length > 0 && (
         <Box mb={2}>
           <Alert severity="info">
-            {t('editFeedbackTarget:upperLevelQuestionsInfo', {
-              count: upperLevelQuestions.length,
-            })}
+            {Object.keys(organisationNames) > 1
+              ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
+                  count: upperLevelQuestions.length,
+                  primaryOrganisation: organisationNames.primaryOrganisation,
+                })
+              : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
+                  count: upperLevelQuestions.length,
+                  primaryOrganisation: organisationNames.primaryOrganisation,
+                  otherOrganisations: organisationNames.otherOrganisations,
+                })}
           </Alert>
         </Box>
       )}

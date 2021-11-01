@@ -131,6 +131,10 @@ export default {
     hidden: 'Hidden',
     upperLevelQuestionsInfo:
       'Survey already has {{count}} university and programme level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions',
+    upperLevelQuestionsInfoOne:
+      'Survey already has {{count}} university and programme ({{primaryOrganisation}}) level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions',
+    upperLevelQuestionsInfoMany:
+      'Survey already has {{count}} university and programme level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions.\n Programme level questions come from the primary responsible organisation, which is {{primaryOrganisation}}. Other organisations are ({{otherOrganisations}}).',
     showPreview: 'Show survey preview',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
