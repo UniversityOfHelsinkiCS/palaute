@@ -48,6 +48,7 @@ const EmailAccordion = () => {
     teacherEmails,
     teacherEmailCounts,
     studentEmailCounts,
+    tokenPresent,
   } = emailData
 
   return (
@@ -75,8 +76,8 @@ const EmailAccordion = () => {
               <Typography>
                 Approximate teacher emails this week (~ +5-10%)
               </Typography>
-              {teacherEmailCounts.map((row) => (
-                <Typography>
+              {teacherEmailCounts.map((row, index) => (
+                <Typography key={index}>
                   {row.date}: {row.count}
                 </Typography>
               ))}
@@ -85,12 +86,13 @@ const EmailAccordion = () => {
               <Typography>
                 Approximate student emails this week (~ +5-10%)
               </Typography>
-              {studentEmailCounts.map((row) => (
-                <Typography>
+              {studentEmailCounts.map((row, index) => (
+                <Typography key={index}>
                   {row.date}: {row.count}
                 </Typography>
               ))}
             </div>
+            {tokenPresent && <Typography>token</Typography>}
           </div>
           <Table>
             <TableHead>

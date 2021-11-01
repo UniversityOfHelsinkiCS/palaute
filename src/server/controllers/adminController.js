@@ -4,7 +4,7 @@ const { Op } = require('sequelize')
 const _ = require('lodash')
 
 const { ApplicationError } = require('../util/customErrors')
-const { ADMINS } = require('../util/config')
+const { ADMINS, JWT_KEY } = require('../util/config')
 const { run } = require('../updater/index')
 
 const {
@@ -260,6 +260,7 @@ const findEmailsForToday = async (_, res) => {
     teacherEmails: teachers.length,
     teacherEmailCounts,
     studentEmailCounts,
+    tokenPresent: !!JWT_KEY,
   })
 }
 
