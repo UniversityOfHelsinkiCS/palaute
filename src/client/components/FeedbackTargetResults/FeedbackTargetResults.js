@@ -60,7 +60,7 @@ const FeedbackTargetResults = () => {
   const isTeacher = accessStatus === 'TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  if (isOpen && !feedback && !userOrganisationAccess) {
+  if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
