@@ -206,7 +206,7 @@ const EditFeedbackTarget = () => {
       {upperLevelQuestions.length > 0 && (
         <Box mb={2}>
           <Alert severity="info">
-            {Object.keys(organisationNames) > 1
+            {Object.keys(organisationNames).length === 1
               ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
                   count: upperLevelQuestions.length,
                   primaryOrganisation: organisationNames.primaryOrganisation,
