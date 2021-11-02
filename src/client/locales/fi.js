@@ -166,6 +166,10 @@ export default {
       'Tämän kysymyksen tulokset ovat julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
     notPublicInfo:
       'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
+    publicityOfQuestions:
+      'Nämä kysymykset ovat näkyvissä vain kurssin opettajalle',
+    moreInfo: 'Lisää tietoa kysymysten näkyvyydestä lötyy',
+    here: 'täältä',
   },
   feedbackSummary: {
     question: 'Kysymys',

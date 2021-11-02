@@ -170,6 +170,7 @@ const FeedbackTargetResults = () => {
           questions={questions}
           feedbacks={feedbacks}
           isTeacher={isTeacher}
+          organisationAccess={!!userOrganisationAccess}
         />
       )}
     </>

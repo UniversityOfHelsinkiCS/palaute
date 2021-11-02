@@ -170,6 +170,10 @@ export default {
       'The results from these questions are visible to students. <2>Select public questions</2>',
     notPublicInfo:
       'The results from these questions are not visible to students. <2>Select public questions</2>',
+    publicityOfQuestions:
+      'These questions are only visible for the course teacher',
+    moreInfo: 'More information about visibility can be found',
+    here: 'here',
   },
   feedbackSummary: {
     question: 'Question',
