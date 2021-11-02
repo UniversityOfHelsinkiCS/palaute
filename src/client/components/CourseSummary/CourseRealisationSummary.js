@@ -153,7 +153,8 @@ const CourseRealisationSummary = () => {
     <>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
-          {getLanguageValue(courseUnit.name, i18n.language)}
+          {getLanguageValue(courseUnit.name, i18n.language)},{' '}
+          {courseUnit.courseCode}
         </Typography>
       </Box>
       <Card>

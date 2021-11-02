@@ -105,6 +105,8 @@ const FeedbackTargetView = () => {
     studentListVisible,
   } = feedbackTarget
 
+  const { courseCode } = feedbackTarget.courseUnit
+
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
@@ -138,12 +140,16 @@ const FeedbackTargetView = () => {
     i18n.language,
   )
 
+  const visibleCourseCode =
+    courseRealisationName.indexOf(courseCode) > -1 ? '' : `, ${courseCode}`
+
   return (
     <>
       <Box mb={2}>
         <div className={classes.headingContainer}>
           <Typography variant="h4" component="h1">
             {courseRealisationName}
+            {visibleCourseCode}
           </Typography>
 
           {isTeacher && (
