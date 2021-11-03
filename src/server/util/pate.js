@@ -198,18 +198,15 @@ const notificationAboutSurveyOpeningToStudents = (
   emailAddress,
   studentFeedbackTargets,
 ) => {
-  const { noAdUser } = studentFeedbackTargets[0]
+  const { noAdUser, language, name, username } = studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
 
-  const language = studentFeedbackTargets[0].language
-    ? studentFeedbackTargets[0].language
-    : 'en'
+  const emailLanguage = !language ? 'en' : language
 
-  const courseName = studentFeedbackTargets[0].name[language]
-  const token = jwt.sign(
-    { username: studentFeedbackTargets[0].username },
-    JWT_KEY,
-  )
+  const courseName = name[emailLanguage]
+    ? name[emailLanguage]
+    : Object.values(name)[0]
+  const token = jwt.sign({ username }, JWT_KEY)
 
   let courseNamesAndUrls = ''
 
@@ -226,8 +223,8 @@ const notificationAboutSurveyOpeningToStudents = (
     }
 
     courseNamesAndUrls = `${courseNamesAndUrls}<a href=${url}>
-      ${name[language]}
-      </a> (${openUntil[language]}) <br/>`
+      ${name[emailLanguage]}
+      </a> (${openUntil[emailLanguage]}) <br/>`
   }
 
   const translations = {
