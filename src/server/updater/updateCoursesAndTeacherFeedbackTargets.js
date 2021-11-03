@@ -25,6 +25,7 @@ const validRealisationTypes = [
 ]
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
+const formatClosesAt = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
 
 const commonFeedbackName = {
   fi: 'Yleinen palaute kurssista',
@@ -185,7 +186,9 @@ const createFeedbackTargets = async (courses) => {
       const courseEndDate = new Date(course.activityPeriod.endDate)
 
       const opensAt = formatDate(courseEndDate)
-      const closesAt = formatDate(dateFns.addDays(courseEndDate, 14))
+      const closesAt = formatClosesAt(
+        dateFns.add(courseEndDate, { days: 14, hours: 23, minutes: 59 }),
+      )
 
       const targets = [
         {
