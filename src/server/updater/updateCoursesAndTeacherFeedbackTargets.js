@@ -176,7 +176,7 @@ const createCourseRealisations = async (courseRealisations) => {
 const createFeedbackTargets = async (courses) => {
   const courseIdToPersonIds = {}
 
-  const feedbackTargets = [].concat(
+  const feedbackTargetPayloads = [].concat(
     ...courses.map((course) => {
       courseIdToPersonIds[course.id] = course.responsibilityInfos
         .filter(({ personId }) => personId)
@@ -218,6 +218,23 @@ const createFeedbackTargets = async (courses) => {
       )
       return targets
     }),
+  )
+
+  const existingCourseUnits = await CourseUnit.findAll({
+    where: {
+      id: {
+        [Op.in]: _.uniq(
+          feedbackTargetPayloads.map(({ courseUnitId }) => courseUnitId),
+        ),
+      },
+    },
+    attributes: ['id'],
+  })
+
+  const existingCourseUnitIds = existingCourseUnits.map(({ id }) => id)
+
+  const feedbackTargets = feedbackTargetPayloads.filter(({ courseUnitId }) =>
+    existingCourseUnitIds.includes(courseUnitId),
   )
 
   const feedbackTargetsWithEditedDatesIds = await FeedbackTarget.findAll({
