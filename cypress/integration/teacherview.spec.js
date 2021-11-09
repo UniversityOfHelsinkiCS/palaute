@@ -81,7 +81,7 @@ describe('Teacher view', () => {
       'Test description',
     )
 
-    cy.get('button').contains('Done').click()
+    cy.get('[data-cy=saveQuestion]').click()
   })
   it('Teacher can view survey results', () => {
     cy.loginAsSecondaryTeacher()

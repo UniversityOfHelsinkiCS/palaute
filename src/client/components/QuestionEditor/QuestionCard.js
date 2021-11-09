@@ -159,7 +159,11 @@ const QuestionCard = ({
           {canEdit && (
             <div>
               {isEditing ? (
-                <Button color="primary" onClick={onStopEditing}>
+                <Button
+                  color="primary"
+                  onClick={onStopEditing}
+                  data-cy="saveQuestion"
+                >
                   {t('questionEditor:done')}
                 </Button>
               ) : (
