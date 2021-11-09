@@ -20,8 +20,13 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const getHeaders = (questions, language) => {
-  const headers = questions
+const getHeaders = (questions, feedbacks, language) => {
+  const orderOfIds = feedbacks[0].data.map((f) => f.questionId)
+  const sortedQuestions = questions.sort(
+    (a, b) => orderOfIds.indexOf(a.id) - orderOfIds.indexOf(b.id),
+  )
+
+  const headers = sortedQuestions
     .filter((q) => {
       if (!q.data.label) return false
       return true
@@ -65,7 +70,7 @@ export const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
-  const headers = getHeaders(feedbackTarget.questions, language)
+  const headers = getHeaders(feedbackTarget.questions, feedbacks, language)
   const questions = getData(feedbackTarget.questions, feedbacks, language)
 
   const data = [headers, ...questions]
