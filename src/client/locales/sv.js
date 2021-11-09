@@ -103,7 +103,7 @@ export default {
     removeQuestionConfirmation: 'Är du säker, att du vill radera frågan?',
     removeOptionConfirmation: 'Är du säker, att du vill radera alternativet?',
     description: 'Beskrivning',
-    done: 'Färdigt',
+    done: 'Spara',
     languageInfo:
       'Då håller för tillfället på att redigera språkversionen "{{language}}" av frågan',
     descriptionHelper:

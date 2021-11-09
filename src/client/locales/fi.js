@@ -111,7 +111,7 @@ export default {
     removeQuestionConfirmation: 'Haluatko varmasti poistaa tämän kysymyksen?',
     removeOptionConfirmation: 'Haluatko varmasti poistaa tämän vaihtoehdon?',
     description: 'Kuvaus',
-    done: 'Valmis',
+    done: 'Tallenna',
     languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
     descriptionHelper:
       'Vapaaehtoinen kysymystä kuvaileva tai tarkentava tekstikappale',
@@ -168,7 +168,7 @@ export default {
       'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
     publicityOfQuestions:
       'Nämä kysymykset ovat näkyvissä vain kurssin opettajalle',
-    moreInfo: 'Lisää tietoa kysymysten näkyvyydestä lötyy',
+    moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',
     here: 'täältä',
   },
   feedbackSummary: {
