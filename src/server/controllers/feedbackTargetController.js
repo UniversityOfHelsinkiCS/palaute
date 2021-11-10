@@ -54,9 +54,12 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   return updatedQuestionIdsList
 }
 
-const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
+const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject()
+    const responsibleTeachers = isAdmin
+      ? await feedbackTarget.getTeachersForFeedbackTarget()
+      : null
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
@@ -71,6 +74,7 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
       ...publicTarget,
       accessStatus,
       feedback,
+      responsibleTeachers,
     }
   }
 
@@ -92,11 +96,15 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets) => {
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject()
+    const responsibleTeachers = isAdmin
+      ? await feedbackTarget.getTeachersForFeedbackTarget()
+      : null
 
     return {
       ...publicTarget,
       accessStatus: isAdmin ? 'TEACHER' : 'NONE',
       feedback: null,
+      responsibleTeachers,
     }
   }
 
@@ -213,7 +221,10 @@ const getOne = async (req, res) => {
     return
   }
 
-  const responseReady = await asyncFeedbackTargetsToJSON(feedbackTarget)
+  const responseReady = await asyncFeedbackTargetsToJSON(
+    feedbackTarget,
+    req.isAdmin,
+  )
 
   res.send({ ...responseReady, studentListVisible })
 }

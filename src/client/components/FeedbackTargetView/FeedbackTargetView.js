@@ -75,6 +75,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     marginTop: theme.spacing(1),
   },
+  infoContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 }))
 
 const FeedbackTargetView = () => {
@@ -103,6 +107,7 @@ const FeedbackTargetView = () => {
     opensAt,
     feedback,
     studentListVisible,
+    responsibleTeachers,
   } = feedbackTarget
 
   const { courseCode } = feedbackTarget.courseUnit
@@ -164,28 +169,50 @@ const FeedbackTargetView = () => {
             </div>
           )}
         </div>
+        <div className={classes.infoContainer}>
+          <div>
+            <dl className={classes.datesContainer}>
+              <Typography color="textSecondary" variant="body2" component="dt">
+                {t('feedbackTargetView:coursePeriod')}:
+              </Typography>
 
-        <dl className={classes.datesContainer}>
-          <Typography color="textSecondary" variant="body2" component="dt">
-            {t('feedbackTargetView:coursePeriod')}:
-          </Typography>
+              <Typography color="textSecondary" variant="body2" component="dd">
+                {coursePeriod}
+              </Typography>
 
-          <Typography color="textSecondary" variant="body2" component="dd">
-            {coursePeriod}
-          </Typography>
+              <Typography color="textSecondary" variant="body2" component="dt">
+                {t('feedbackTargetView:feedbackPeriod')}:
+              </Typography>
 
-          <Typography color="textSecondary" variant="body2" component="dt">
-            {t('feedbackTargetView:feedbackPeriod')}:
-          </Typography>
+              <Typography color="textSecondary" variant="body2" component="dd">
+                {feedbackPeriod}
+              </Typography>
+            </dl>
 
-          <Typography color="textSecondary" variant="body2" component="dd">
-            {feedbackPeriod}
-          </Typography>
-        </dl>
-
-        <ExternalLink href={coursePageUrl} className={classes.coursePageLink}>
-          {t('feedbackTargetView:coursePage')}
-        </ExternalLink>
+            <ExternalLink
+              href={coursePageUrl}
+              className={classes.coursePageLink}
+            >
+              {t('feedbackTargetView:coursePage')}
+            </ExternalLink>
+          </div>
+          <div>
+            {responsibleTeachers && (
+              <div>
+                <Typography>Responsible teachers</Typography>
+                {responsibleTeachers.map((teacher) => (
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                    component="p"
+                  >
+                    {teacher.firstName} {teacher.lastName}
+                  </Typography>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </Box>
 
       <Box mb={2}>
