@@ -189,7 +189,7 @@ const QuestionResults = ({
           />
         ))}
       </div>
-      {organisationAccess && (
+      {organisationAccess && hiddenQuestions.length > 0 && (
         <HiddenQuestionsList
           hiddenQuestions={hiddenQuestions}
           classes={classes}
