@@ -202,6 +202,7 @@ const FeedbackTargetView = () => {
                 <Typography>Responsible teachers</Typography>
                 {responsibleTeachers.map((teacher) => (
                   <Typography
+                    key={teacher.id}
                     color="textSecondary"
                     variant="body2"
                     component="p"

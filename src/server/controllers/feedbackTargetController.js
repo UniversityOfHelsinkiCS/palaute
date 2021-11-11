@@ -206,7 +206,18 @@ const getOne = async (req, res) => {
       Number(req.params.id),
       {
         include: [
-          { model: CourseUnit, as: 'courseUnit' },
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+            include: [
+              {
+                model: Organisation,
+                as: 'organisations',
+                through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+                required: true,
+              },
+            ],
+          },
           { model: CourseRealisation, as: 'courseRealisation' },
         ],
       },

@@ -164,14 +164,16 @@ export const getOrganisationNames = (feedbackTarget, language) => {
   )
 
   if (organisations.length === 1)
-    return { primaryOrganisation: organisations[0].name[language] }
+    return {
+      primaryOrganisation: organisations[0].name[language].replace("'", '`'),
+    }
 
   const lastCode = organisations[organisations.length - 1].code
 
   const otherOrganisations = organisations.reduce((a, b) => {
     if (b.code === primaryOrganisation.code) return a
-    if (b.code === lastCode) return `${a} ${b.name[language]}`
-    return `${a}, ${b.name[language]}`
+    if (b.code === lastCode) return `${a}${b.name[language].replace("'", '`')}`
+    return `${a}, ${b.name[language].replace("'", '`')}`
   }, '')
 
   return {
