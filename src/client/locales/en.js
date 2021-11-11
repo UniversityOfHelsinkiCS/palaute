@@ -66,7 +66,7 @@ export default {
     editSurvey: 'Edit survey',
     translationLanguage: 'Survey preview language',
     cannotSubmitText:
-      'You cannot submit because you are not enrolled in this course',
+      'You cannot submit because you are not enrolled in this course or your enrollment has not updated to our system yet. Enrollments update every 24 hours.',
     feedbackClosedError: 'Feedback is closed',
     endedInfo:
       'The feedback period has ended. <2>Take a look at the feedback</2>',

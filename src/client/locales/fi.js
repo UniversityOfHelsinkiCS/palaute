@@ -65,7 +65,7 @@ export default {
     editSurvey: 'Muokkaa kyselyä',
     translationLanguage: 'Kyselyn esikatselun kieli',
     cannotSubmitText:
-      'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille',
+      'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille tai ilmoittautumisesi ei ole vielä päivittynyt järjestelmäämme. Ilmoittautumiset päivittyvät 24 tunnin välein.',
     feedbackClosedError: 'Palautteenanto on sulkeutunut',
     endedInfo: 'Palautteenanto on sulkeutunut. <2>Katso palautteita</2>',
   },
