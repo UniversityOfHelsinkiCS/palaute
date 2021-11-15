@@ -43,6 +43,10 @@ export default {
     feedbackClosedTab: 'Responsen är stängd',
     waitingForFeedbackTab: 'Väntar på respons',
     feedbackGivenTab: 'Responsen är given',
+    feedbackGivenChip: '',
+    waitingForFeedbackChip: '',
+    feedbackNotStartedChip: '',
+    feedbackEndedChip: '',
   },
   feedbackView: {
     submitButton: 'Ge respons',
@@ -56,10 +60,12 @@ export default {
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
     translationLanguage: 'Språket på förfrågans förhandsvisning',
-    cannotSubmitText:
-      'Du kan inte skicka respons eftersom du inte är anmäld till kursen.',
+    cannotSubmitText: '',
     feedbackClosedError: 'Responsen är stängd',
     endedInfo: 'Responsen är stängd. <2>Se på responserna</2>',
+    editButton: '',
+    feedbackInfoTitle: '',
+    feedbackInfoContent: '',
   },
   teacherView: {
     mainHeading: 'Mina kurser',
@@ -112,6 +118,7 @@ export default {
     programmeQuestion: 'Utbildningsprogramsnivå',
     uneditableTooltip:
       'Detta är definierat på förhand och läggs till automatiskt i förfrågan och kan inte redigeras eller raderas',
+    duplicate: '',
   },
   editFeedbackTarget: {
     closesAt: 'Stängs',
@@ -130,6 +137,24 @@ export default {
     openImmediately: 'Öppna reponsen genast',
     openImmediatelyConfirm:
       'När responsen har öppnats kan förfrågan inte längre redigeras. Är du säker på att du vill öppna repsonsen?',
+    upperLevelQuestionsInfoOne: '',
+    upperLevelQuestionsInfoMany: '',
+    copyFromCourseDialogTitle: '',
+    copySuccessSnackbar: '',
+    copyQuestionsButton: '',
+    copyFromCourseButton: '',
+    copyFromCourseInfoAlert: '',
+    copyFromCourseChooseCourse: '',
+    copyFromCourseNoQuestions: '',
+    copyFromCourseQuestionCount: '',
+    copyFromCourseSearchLabel: '',
+    openFeedbackImmediatelyDialogTitle: '',
+    openFeedbackImmediatelyDialogContent: '',
+    openFeedbackImmediatelyDialogCancel: '',
+    openFeedbackImmediatelyDialogConfirm: '',
+    opensAtInPastError: '',
+    closesAtBeforeOpensAtError: '',
+    tooShortFeedbackPeriodError: '',
   },
   questionResults: {
     answerCount: 'Antalet svar',
@@ -138,6 +163,9 @@ export default {
       'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
     notPublicInfo:
       'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
+    publicityOfQuestions: '',
+    moreInfo: '',
+    here: '',
   },
   feedbackSummary: {
     question: 'Fråga',
@@ -159,6 +187,9 @@ export default {
     exportCsv: 'Exportera som csv',
     thankYouMessage:
       'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
+    closeImmediately: '',
+    closeImmediatelyConfirm: '',
+    closeImmediatelyTomorrowConfirm: '',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
@@ -200,6 +231,14 @@ export default {
     courseOngoing: 'Kursen är fortfarande på gång',
     editProgrammeSettings: 'Redigera inställningar för utbildningsprogrammet',
     courseRealisation: 'Kursinstans',
+    searchLabel: '',
+    searchPlaceholder: '',
+    responsibleTeachers: '',
+    includeOpenUniCourses: '',
+    orderByLabel: '',
+    orderByCodeAsc: '',
+    orderByFeedbackCountAsc: '',
+    orderByFeedbackCountDesc: '',
   },
   footer: {
     contactSupport: 'Kontakta stödet',
@@ -219,6 +258,10 @@ export default {
     generalTab: 'Allmänna inställningar',
     coursesTab: 'Aktiverade kurser',
     surveyTab: 'Utbildningsprogrammets förfrågan',
+    editProgrammeQuestionsDialogTitle: '',
+    editProgrammeQuestionsDialogContent: '',
+    editProgrammeQuestionsDialogCancel: '',
+    editProgrammeQuestionsDialogConfirm: '',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna repons är inte i bruk',
@@ -231,5 +274,10 @@ export default {
     copyLink: 'Kopiera länken',
     coursePeriod: 'Kursen på gång',
     feedbackPeriod: 'Responsgivningen öppen',
+    editFeedbackTab: '',
+  },
+  noadUser: {
+    noUser: '',
+    noFeedback: '',
   },
 }
