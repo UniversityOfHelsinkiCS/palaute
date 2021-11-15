@@ -116,12 +116,13 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
-      <Box mb={2} display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="flex-end">
         {showCloseImmediately && (
           <Button
             variant="contained"
             color="secondary"
             onClick={handleCloseClick}
+            style={{ top: -50 }}
           >
             {t('feedbackTargetResults:closeImmediately')}
           </Button>
