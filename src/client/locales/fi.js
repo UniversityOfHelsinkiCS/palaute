@@ -213,10 +213,16 @@ export default {
     responseLabel: 'Vastapalaute',
     responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
     previewLabel: 'Esikatselu',
-    sendEmail: 'Ilmoita opiskelijoille vastapalautteesta sähköpostitse',
+    sendEmail:
+      'Tallenna vastapalaute ja ilmoita opiskelijoille vastapalautteesta sähköpostitse',
     instructionTitle: 'Ohjeita vastapalautteen kirjoittamiseen',
     responseInstruction:
       'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille.',
+    dialogTitle: 'Tallenna vastapalaute',
+    dialogContent:
+      'Tallentaessasi vastapalautteen opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Tallennettuasi vastapalautteen et voi enää muokata sitä.',
+    dialogCancel: 'Peruuta',
+    dialogSubmit: 'Tallenna',
   },
   publicQuestions: {
     publicInfo:

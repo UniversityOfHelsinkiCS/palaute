@@ -625,9 +625,13 @@ const emailStudentsAboutResponse = async (req, res) => {
   if (relevantFeedbackTarget.feedbackResponseEmailSent)
     throw new ApplicationError('Email has already been sent', 400) // or 409 ?
 
+  const { feedbackResponse } = req.body.data
+
   relevantFeedbackTarget.feedbackResponseEmailSent = true
   const emailsSentTo =
-    await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents()
+    await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents(
+      feedbackResponse,
+    )
   await relevantFeedbackTarget.save()
 
   res.send(emailsSentTo)

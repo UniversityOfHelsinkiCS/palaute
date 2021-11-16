@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Typography,
   Divider,
-  Button,
 } from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -59,8 +58,6 @@ const FeedbackResponse = () => {
     skipCache: true,
   })
 
-  const [currentResponse, setCurrentResponse] = useState('')
-
   if (isLoading) {
     return (
       <Box my={4} display="flex" justifyContent="center">
@@ -78,18 +75,10 @@ const FeedbackResponse = () => {
   const handleSubmit = async (values) => {
     try {
       await saveValues(values, feedbackTarget.id)
-      setCurrentResponse(values.feedbackResponse)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
-  }
-
-  const checkFeedbackIsSaved = (isSubmitting, values) => {
-    if (isSubmitting) return true
-    if (values.feedbackResponse === feedbackTarget.feedbackResponse) return true
-    if (values.feedbackResponse === currentResponse) return true
-    return false
   }
 
   return (
@@ -116,30 +105,24 @@ const FeedbackResponse = () => {
             validateOnChange={false}
           >
             {({ isSubmitting, values }) => (
-              <Form>
+              <Form id="feedback-response-form">
                 <FormikTextField
                   label={t('feedbackResponse:responseLabel')}
                   name="feedbackResponse"
                   rows={10}
                   fullWidth
                   multiline
+                  disabled={feedbackTarget.feedbackResponseEmailSent}
                 />
                 <Box my={2}>
-                  <Button
-                    disabled={checkFeedbackIsSaved(isSubmitting, values)}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                  >
-                    {t('save')}
-                  </Button>
-                  {'  '}
                   <ResponseEmailButton
                     disabled={
-                      !checkFeedbackIsSaved(false, values) ||
-                      feedbackTarget.feedbackResponseEmailSent
+                      isSubmitting ||
+                      feedbackTarget.feedbackResponseEmailSent ||
+                      !values.feedbackResponse
                     }
                     feedbackTargetId={feedbackTarget.id}
+                    values={values}
                   />
                 </Box>
                 <Box my={2}>

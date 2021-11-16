@@ -247,7 +247,7 @@ class FeedbackTarget extends Model {
     })
   }
 
-  async sendFeedbackSummaryReminderToStudents() {
+  async sendFeedbackSummaryReminderToStudents(feedbackResponse) {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsWhoHaveGivenFeedback()
     const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/results`
@@ -261,6 +261,7 @@ class FeedbackTarget extends Model {
       url,
       formattedStudents,
       courseUnit.name,
+      feedbackResponse,
     )
   }
 
