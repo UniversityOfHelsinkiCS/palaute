@@ -23,6 +23,11 @@ const useStyles = makeStyles({
     '&::-webkit-scrollbar-thumb:hover': {
       background: '#0e6e95',
     },
+    '@media print': {
+      overflow: 'visible',
+      maxHeight: '100%',
+      height: 'auto',
+    },
   },
 })
 
