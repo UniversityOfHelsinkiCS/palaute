@@ -211,6 +211,10 @@ export default {
     instructionTitle: 'Instruktioner för kursresponsen',
     responseInstruction:
       'Efter genomgång av kursresponsen som studerandena gett har läraren möjlighet att skicka till studerandena ett gemensamt svar som kommenterar kursresponsen. Detta fritt formulerade svar till kursresponsen skickas samtidigt till alla studerande på kursen.',
+    dialogTitle: '',
+    dialogContent: '',
+    dialogCancel: '',
+    dialogSubmit: '',
   },
   publicQuestions: {
     publicInfo:
