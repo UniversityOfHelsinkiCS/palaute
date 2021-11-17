@@ -23,6 +23,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onConfirm }) => {
           {t('feedbackResponse:dialogCancel')}
         </Button>
         <Button
+          data-cy="saveFeedbackResponse"
           color="primary"
           form="feedback-response-form"
           onClick={onConfirm}
