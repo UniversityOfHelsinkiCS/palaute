@@ -130,7 +130,7 @@ export default {
     upperLevelQuestionsInfoOne:
       'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason ({{primaryOrganisation}}) kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.',
     upperLevelQuestionsInfoMany:
-      'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.\n Koulutusohjelmatason kysymykset tulevat primäärisestä organisaatiosta, joka on {{primaryOrganisation}}. Muut organisaatiot ovat ({{otherOrganisations}}).',
+      'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.\n Koulutusohjelmatason kysymykset tulevat vastuuorganisaatioilta, jotka ovat {{organisations}}.',
     showPreview: 'Esikatsele kyselyä',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:

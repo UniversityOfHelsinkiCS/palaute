@@ -83,12 +83,19 @@ class FeedbackTarget extends Model {
         {
           model: Organisation,
           as: 'organisations',
-          through: { where: { type: 'PRIMARY' } },
         },
       ],
     })
 
-    const organisation = courseUnit.organisations[0]
+    const organisations =
+      courseUnit.organisations.length > 1
+        ? courseUnit.organisations.filter((org) => org.code !== 'H930')
+        : courseUnit.organisations[0]
+
+    const organisationCodes =
+      organisations.length > 1
+        ? organisations.map((org) => org.code)
+        : [organisations.code]
 
     const courseRealisation = await CourseRealisation.findByPk(
       this.courseRealisationId,
@@ -142,15 +149,18 @@ class FeedbackTarget extends Model {
       where: { type: 'university' },
     })
 
-    const programmeSurvey = organisation
-      ? await Survey.findOne({
-          where: { type: 'programme', typeId: organisation.code },
+    const programmeSurvey = organisations
+      ? await Survey.findAll({
+          where: { type: 'programme', typeId: { [Op.in]: organisationCodes } },
         })
       : null
 
     await teacherSurvey.populateQuestions()
     await universitySurvey.populateQuestions()
-    await programmeSurvey?.populateQuestions()
+
+    for (const survey of programmeSurvey) {
+      await survey.populateQuestions()
+    }
 
     return {
       teacherSurvey,
@@ -321,9 +331,17 @@ class FeedbackTarget extends Model {
   }
 
   populateQuestions(surveys) {
+    const programmeSurveyQuestions =
+      surveys.programmeSurvey.length > 1
+        ? surveys.programmeSurvey.reduce(
+            (questions, survey) => questions.concat(survey.questions),
+            [],
+          )
+        : surveys.programmeSurvey.questions
+
     const questions = [
       ...(surveys.universitySurvey?.questions ?? []),
-      ...(surveys.programmeSurvey?.questions ?? []),
+      ...(programmeSurveyQuestions ?? []),
       ...(surveys.teacherSurvey?.questions ?? []),
     ]
 

@@ -82,13 +82,20 @@ export const getFeedbackPeriodInitialValues = (feedbackTarget) => {
 export const getQuestionsInitialValues = (feedbackTarget) => {
   const { surveys } = feedbackTarget
 
+  const programmeSurveyQuestions = surveys.programmeSurvey
+    ? surveys.programmeSurvey.reduce(
+        (questions, survey) => questions.concat(survey.questions),
+        [],
+      )
+    : surveys.programmeSurvey[0].questions
+
   const questions = [
     ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
       ...question,
       editable: false,
       chip: 'questionEditor:universityQuestion',
     })),
-    ...(surveys.programmeSurvey?.questions ?? []).map((question) => ({
+    ...(programmeSurveyQuestions ?? []).map((question) => ({
       ...question,
       editable: false,
       chip: 'questionEditor:programmeQuestion',
@@ -159,10 +166,6 @@ export const getOrganisationNames = (feedbackTarget, language) => {
 
   if (!organisations) return { primaryOrganisation: 'Helsingin yliopisto' }
 
-  const primaryOrganisation = organisations.find(
-    (org) => org.courseUnitOrganisation.type === 'PRIMARY',
-  )
-
   if (organisations.length === 1)
     return {
       primaryOrganisation: organisations[0].name[language].replace("'", '`'),
@@ -170,14 +173,12 @@ export const getOrganisationNames = (feedbackTarget, language) => {
 
   const lastCode = organisations[organisations.length - 1].code
 
-  const otherOrganisations = organisations.reduce((a, b) => {
-    if (b.code === primaryOrganisation.code) return a
+  const allOrganisations = organisations.reduce((a, b) => {
     if (b.code === lastCode) return `${a}${b.name[language].replace("'", '`')}`
-    return `${a}, ${b.name[language].replace("'", '`')}`
+    return `${a}${b.name[language].replace("'", '`')}, `
   }, '')
 
   return {
-    primaryOrganisation: primaryOrganisation.name[language],
-    otherOrganisations,
+    allOrganisations,
   }
 }
