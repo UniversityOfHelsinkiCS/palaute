@@ -15,15 +15,12 @@ describe('Course summary view', () => {
     cy.contains('Programme survey').click()
 
     cy.contains('Add question').click()
-    cy.get('li').contains('Single choice question').click()
+    cy.get('li').contains('Textual content').click()
 
-    cy.get('input[id^=choice-question-en-questions]').type(
+    cy.get('textarea[id^=textual-context-text-en-questions]').type(
       'Test question programme level',
     )
 
-    cy.get('input[id^=choice-description-en-questions]').type(
-      'Test description programme level',
-    )
     cy.get('[data-cy=saveQuestion]').click()
     cy.contains('Save').click()
 
