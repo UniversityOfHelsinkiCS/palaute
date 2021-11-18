@@ -331,13 +331,12 @@ class FeedbackTarget extends Model {
   }
 
   populateQuestions(surveys) {
-    const programmeSurveyQuestions =
-      surveys.programmeSurvey.length > 1
-        ? surveys.programmeSurvey.reduce(
-            (questions, survey) => questions.concat(survey.questions),
-            [],
-          )
-        : surveys.programmeSurvey.questions
+    const programmeSurveyQuestions = surveys.programmeSurvey
+      ? surveys.programmeSurvey.reduce(
+          (questions, survey) => questions.concat(survey.questions),
+          [],
+        )
+      : null
 
     const questions = [
       ...(surveys.universitySurvey?.questions ?? []),
