@@ -445,6 +445,9 @@ FeedbackTarget.init(
     feedbackOpeningReminderEmailSent: {
       type: BOOLEAN,
     },
+    feedbackResponseReminderEmailSent: {
+      type: BOOLEAN,
+    },
     feedbackVisibility: {
       type: TEXT,
       defaultValue: 'ENROLLED',

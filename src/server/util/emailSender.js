@@ -12,6 +12,7 @@ const {
 const {
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutSurveyOpeningToTeachers,
+  emailReminderAboutFeedbackResponseToTeachers,
   sendEmail,
 } = require('./pate')
 
@@ -120,7 +121,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['email', 'language'],
+        attributes: ['id', 'username', 'email', 'language'],
         through: {
           where: {
             accessStatus: 'TEACHER',
@@ -183,6 +184,65 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
   })
 
   return feedbackTarget
+}
+
+const getFeedbackTargetsWithoutResponseForTeachers = async () => {
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      closesAt: {
+        [Op.lt]: addDays(new Date(), 1),
+        [Op.gt]: subDays(new Date(), 2),
+      },
+      hidden: false,
+      feedbackType: 'courseRealisation',
+      feedbackResponse: null,
+      feedbackResponseReminderEmailSent: false,
+    },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
+        },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        attributes: ['courseCode', 'name'],
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            required: true,
+            attributes: ['disabledCourseCodes'],
+          },
+        ],
+      },
+      {
+        model: User,
+        as: 'users',
+        required: true,
+        attributes: ['id', 'username', 'email', 'language'],
+        through: {
+          where: {
+            accessStatus: 'TEACHER',
+          },
+        },
+      },
+    ],
+  })
+
+  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
+    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
+      (org) => org.disabledCourseCodes,
+    )
+    return !disabledCourseCodes.includes(target.courseUnit.courseCode)
+  })
+
+  return filteredFeedbackTargets
 }
 
 const getTeacherEmailCounts = async () => {
@@ -399,10 +459,47 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   return emailsToBeSent
 }
 
+const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
+  const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
+
+  const teachersWithFeedbackTargets = await aggregateFeedbackTargets(
+    feedbackTargets,
+  )
+
+  const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
+    (teacher) =>
+      emailReminderAboutFeedbackResponseToTeachers(
+        teacher,
+        teachersWithFeedbackTargets[teacher],
+      ),
+  )
+
+  const ids = feedbackTargets.map((target) => target.id)
+
+  FeedbackTarget.update(
+    {
+      feedbackResponseReminderEmailSent: true,
+    },
+    {
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+    },
+  )
+
+  sendEmail(emailsToBeSent)
+
+  return emailsToBeSent
+}
+
 const returnEmailsToBeSentToday = async () => {
   const studentFeedbackTargets = await getOpenFeedbackTargetsForStudents()
   const teacherFeedbackTargets =
     await getFeedbackTargetsAboutToOpenForTeachers()
+  const teacherReminderTargets =
+    await getFeedbackTargetsWithoutResponseForTeachers()
 
   const teacherEmailCountFor7Days = await getTeacherEmailCounts()
   const studentEmailCountFor7Days = await getStudentEmailCounts()
@@ -415,6 +512,10 @@ const returnEmailsToBeSentToday = async () => {
     teacherFeedbackTargets,
   )
 
+  const teacherRemindersWithFeedbackTargets = await aggregateFeedbackTargets(
+    teacherReminderTargets,
+  )
+
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
     (student) =>
       notificationAboutSurveyOpeningToStudents(
@@ -423,13 +524,28 @@ const returnEmailsToBeSentToday = async () => {
       ),
   )
 
-  const teacherEmailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
-    (teacher) =>
-      emailReminderAboutSurveyOpeningToTeachers(
-        teacher,
-        teachersWithFeedbackTargets[teacher],
-      ),
+  const teacherSurveyReminderEmails = Object.keys(
+    teachersWithFeedbackTargets,
+  ).map((teacher) =>
+    emailReminderAboutSurveyOpeningToTeachers(
+      teacher,
+      teachersWithFeedbackTargets[teacher],
+    ),
   )
+
+  const teacherFeedbackReminderEmails = Object.keys(
+    teacherRemindersWithFeedbackTargets,
+  ).map((teacher) =>
+    emailReminderAboutFeedbackResponseToTeachers(
+      teacher,
+      teacherRemindersWithFeedbackTargets[teacher],
+    ),
+  )
+
+  const teacherEmailsToBeSent = [
+    ...teacherSurveyReminderEmails,
+    ...teacherFeedbackReminderEmails,
+  ]
 
   return {
     students: studentEmailsToBeSent,
@@ -481,5 +597,6 @@ module.exports = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailToStudentsWhenOpeningImmediately,
+  sendEmailReminderAboutFeedbackResponseToTeachers,
   returnEmailsToBeSentToday,
 }

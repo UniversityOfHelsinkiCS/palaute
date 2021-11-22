@@ -198,6 +198,82 @@ const emailReminderAboutSurveyOpeningToTeachers = (
   return email
 }
 
+const emailReminderAboutFeedbackResponseToTeachers = (
+  emailAddress,
+  teacherFeedbackTargets,
+) => {
+  const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
+  const language = teacherFeedbackTargets[0].language
+    ? teacherFeedbackTargets[0].language
+    : 'en'
+  const courseName = teacherFeedbackTargets[0].name[language]
+
+  let courseNamesAndUrls = ''
+
+  for (const feedbackTarget of teacherFeedbackTargets) {
+    const { id, name } = feedbackTarget
+
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/feedback-response`}>
+      ${name[language]}
+      </a> <br/>`
+  }
+
+  const instructionsAndSupport = {
+    en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    User instructions: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
+    <a href="https://flamma.helsinki.fi/en/group/ajankohtaista/news/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">More information about Norppa in Flamma</a>`,
+    fi: `Ota yhteyttä tukeen: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    Käyttöohje: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
+    <a href="https://flamma.helsinki.fi/fi/group/ajankohtaista/uutinen/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">Lisätietoja Norpasta Flammassa</a>`,
+    sv: `Kontakta stödet: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
+    Användarinstruktioner: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
+    <a href="https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">Mer information om Norppa i flamma</a>`,
+  }
+
+  const translations = {
+    text: {
+      en: `Dear teacher! <br/>
+      The feedback period for the following courses is ending: <br/>
+      ${courseNamesAndUrls}
+      Please give a feedback response for the students. You can give feedback response by clicking the course name. <br/>
+      Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. <br/>
+      Thank you! <br/>
+      ${instructionsAndSupport.en}`,
+      fi: `Hyvä opettaja! <br/> 
+      Palautejakso seuraaville kursseille on päättymässä: <br/>
+      ${courseNamesAndUrls}
+      Annathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä.  <br/>
+      Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. <br/>
+      Kiitos!  <br/>
+      ${instructionsAndSupport.fi}`,
+      sv: `Bästa lärare! <br/>
+      Kursresponsblanketten för följande kurser öppnas om en vecka: <br/>
+      ${courseNamesAndUrls}
+      Du kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>
+      ${instructionsAndSupport.sv}`,
+    },
+    subject: {
+      en: hasMultipleFeedbackTargets
+        ? `Please give feedback response for your courses`
+        : `Please give feedback response for the course ${courseName}`,
+      fi: hasMultipleFeedbackTargets
+        ? `Annathan vastapalautetta kursseillesi`
+        : `Annathan vastapalautetta kurssillesi ${courseName}`,
+      sv: hasMultipleFeedbackTargets
+        ? `Perioden för kursrespons börjar på dina kurser`
+        : `Tidsperioden för kursrespons på kursen ${courseName} börjar`,
+    },
+  }
+
+  const email = {
+    to: emailAddress,
+    subject: translations.subject[language] || translations.subject.en,
+    text: translations.text[language] || translations.text.en,
+  }
+
+  return email
+}
+
 const notificationAboutSurveyOpeningToStudents = (
   emailAddress,
   studentFeedbackTargets,
@@ -275,5 +351,6 @@ module.exports = {
   sendNotificationAboutFeedbackSummaryToStudents,
   emailReminderAboutSurveyOpeningToTeachers,
   notificationAboutSurveyOpeningToStudents,
+  emailReminderAboutFeedbackResponseToTeachers,
   sendEmail,
 }
