@@ -26,8 +26,6 @@ const Question = require('./question')
 
 const {
   sendNotificationAboutFeedbackSummaryToStudents,
-  sendNotificationAboutSurveyOpeningToStudents,
-  sendEmailReminderAboutSurveyOpeningToTeachers,
 } = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
@@ -272,36 +270,6 @@ class FeedbackTarget extends Model {
       formattedStudents,
       courseUnit.name,
       feedbackResponse,
-    )
-  }
-
-  async sendFeedbackOpenEmailToStudents() {
-    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
-    const students = await this.getStudentsForFeedbackTarget()
-    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/feedback`
-    const formattedStudents = students
-      .filter((student) => student.email)
-      .map((student) => ({
-        email: student.email,
-        language: student.language || 'en',
-      }))
-
-    return sendNotificationAboutSurveyOpeningToStudents(
-      url,
-      formattedStudents,
-      courseUnit.name,
-    )
-  }
-
-  async sendFeedbackOpeningReminderEmailToTeachers() {
-    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
-    const teachers = await this.getTeachersForFeedbackTarget()
-    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/edit`
-
-    return sendEmailReminderAboutSurveyOpeningToTeachers(
-      url,
-      teachers,
-      courseUnit.name,
     )
   }
 
