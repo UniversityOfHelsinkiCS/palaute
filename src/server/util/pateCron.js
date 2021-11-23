@@ -5,6 +5,7 @@ const logger = require('./logger')
 const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
+  sendEmailReminderAboutFeedbackResponseToTeachers,
 } = require('./emailSender')
 
 const schedule = (cronTime, func) =>
@@ -19,6 +20,7 @@ const run = async () => {
   logger.info('Running pate cron')
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
+  await sendEmailReminderAboutFeedbackResponseToTeachers()
 }
 
 const start = async () => {
