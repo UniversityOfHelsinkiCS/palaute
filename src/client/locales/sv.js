@@ -221,6 +221,7 @@ export default {
     instructionTitle: 'Instruktioner för kursresponsen',
     responseInstruction:
       'Efter genomgång av kursresponsen som studerandena gett har läraren möjlighet att skicka till studerandena ett gemensamt svar som kommenterar kursresponsen. Detta fritt formulerade svar till kursresponsen skickas samtidigt till alla studerande på kursen. \n Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden.',
+    writingInstruction: '',
     dialogTitle: '',
     dialogContent: '',
     dialogCancel: '',

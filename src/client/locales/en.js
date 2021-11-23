@@ -220,6 +220,8 @@ export default {
     instructionTitle: 'Instructions for counter feedback',
     responseInstruction:
       'Having reviewed the course feedback from students, the teacher may give a summarising response to the feedback. This feedback on feedback can be freely formulated and will be sent simultaneously to all the students on the course. \n Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future.',
+    writingInstruction:
+      'The length of the teacher’s response can vary. Examples of elements you can include in your response: thanking students for their feedback (and course participation), an overview of the feedback they gave, your subjective selection of points worth addressing, with your reactions and elaborations on them. Your concrete (planned, possible) actions to modify teaching in the course are especially valuable, showing students that giving feedback can have an impact.',
     dialogTitle: 'Save feedback response',
     dialogContent:
       'When you save the feedback repsonse students are sent an email which contains the feedback response content and a link to the feedback. After the feedback response is saved it can no longer be edited.',

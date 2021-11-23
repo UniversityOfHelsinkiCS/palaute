@@ -19,6 +19,13 @@ const useStyles = makeStyles(() => ({
   summary: {
     fontWeight: 'bold',
   },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  row: {
+    marginBottom: 5,
+  },
 }))
 
 const InstructionAccordion = () => {
@@ -37,8 +44,13 @@ const InstructionAccordion = () => {
             {t('feedbackResponse:instructionTitle')}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>{t('feedbackResponse:responseInstruction')}</Typography>
+        <AccordionDetails className={classes.details}>
+          <Typography className={classes.row}>
+            {t('feedbackResponse:responseInstruction')}
+          </Typography>
+          <Typography className={classes.row}>
+            {t('feedbackResponse:writingInstruction')}
+          </Typography>
         </AccordionDetails>
       </Accordion>
     </Box>
