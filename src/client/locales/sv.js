@@ -60,12 +60,14 @@ export default {
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
     translationLanguage: 'Språket på förfrågans förhandsvisning',
-    cannotSubmitText: 'Du kan inte ge respons för att du har inte anmält dig eller så har din anmälning ännu inte uppdaterats i vårt system. Anmälningar uppdateras var 24:e timme.',
+    cannotSubmitText:
+      'Du kan inte ge respons för att du har inte anmält dig eller så har din anmälning ännu inte uppdaterats i vårt system. Anmälningar uppdateras var 24:e timme.',
     feedbackClosedError: 'Responsen är stängd',
     endedInfo: 'Responsen är stängd. <2>Se på responserna</2>',
     editButton: 'Redigera respons',
     feedbackInfoTitle: 'Hur används mina svar och min information?',
-    feedbackInfoContent: 'Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.',
+    feedbackInfoContent:
+      'Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.',
   },
   teacherView: {
     mainHeading: 'Mina kurser',
@@ -137,24 +139,30 @@ export default {
     openImmediately: 'Öppna responsen genast',
     openImmediatelyConfirm:
       'När responsen har öppnats kan förfrågan inte längre redigeras. Är du säker på att du vill öppna responsen?',
-    upperLevelQuestionsInfoOne: 'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå ({{primaryOrganisation}}), men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
-    upperLevelQuestionsInfoMany: 'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna.\n Frågor på avdelningsnivå kommer från primära organisationen, {{primaryOrganisation}}. Övriga organisationer är {{otherOrganisations}}.',
+    upperLevelQuestionsInfoOne:
+      'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå ({{primaryOrganisation}}), men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
+    upperLevelQuestionsInfoMany:
+      'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna.\n Frågor på avdelningsnivå kommer från primära organisationen, {{primaryOrganisation}}. Övriga organisationer är {{otherOrganisations}}.',
     copyFromCourseDialogTitle: 'Kopiera frågor från en annan kurs',
     copySuccessSnackbar: 'Frågorna har kopierats till förfrågan',
     copyQuestionsButton: 'Kopiera frågor',
     copyFromCourseButton: 'Kopiera frågor från en annan kurs',
-    copyFromCourseInfoAlert: 'Du kan kopiera frågor från de kurser du undervisar. Välj först kursen och sedan genomförningen vars frågor du vill kopiera',
+    copyFromCourseInfoAlert:
+      'Du kan kopiera frågor från de kurser du undervisar. Välj först kursen och sedan genomförningen vars frågor du vill kopiera',
     copyFromCourseChooseCourse: 'Välj kurs för att se dess genomförningar',
     copyFromCourseNoQuestions: 'Inga av kursens genomförningar har egna frågor',
     copyFromCourseQuestionCount: '{{count}} frågor',
     copyFromCourseSearchLabel: 'Kurs',
     openFeedbackImmediatelyDialogTitle: 'Varning!',
-    openFeedbackImmediatelyDialogContent: 'Du håller på att öppna kursresponsen. Observera att efter kursresponsens öppnande kan du inte längre redigera dess förfrågan, eller tiden för när den är öppen.',
+    openFeedbackImmediatelyDialogContent:
+      'Du håller på att öppna kursresponsen. Observera att efter kursresponsens öppnande kan du inte längre redigera dess förfrågan, eller tiden för när den är öppen.',
     openFeedbackImmediatelyDialogCancel: 'Avbryt',
     openFeedbackImmediatelyDialogConfirm: 'Öppna respons',
     opensAtInPastError: 'Öppningsdatumet får inte vara i det förflutna',
-    closesAtBeforeOpensAtError: 'Stängningsdatumet måste vara efter öppningsdatumet',
-    tooShortFeedbackPeriodError: 'Responsen måste vara öppen åtminstone ett dygn',
+    closesAtBeforeOpensAtError:
+      'Stängningsdatumet måste vara efter öppningsdatumet',
+    tooShortFeedbackPeriodError:
+      'Responsen måste vara öppen åtminstone ett dygn',
   },
   questionResults: {
     answerCount: 'Antalet svar',
@@ -188,8 +196,10 @@ export default {
     thankYouMessage:
       'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
     closeImmediately: 'Stäng responsen genast',
-    closeImmediatelyConfirm: 'Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
-    closeImmediatelyTomorrowConfirm: 'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
+    closeImmediatelyConfirm:
+      'Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
+    closeImmediatelyTomorrowConfirm:
+      'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
@@ -210,7 +220,7 @@ export default {
     sendEmail: 'Meddela studerandena om responssammandraget via e-post',
     instructionTitle: 'Instruktioner för kursresponsen',
     responseInstruction:
-      'Efter genomgång av kursresponsen som studerandena gett har läraren möjlighet att skicka till studerandena ett gemensamt svar som kommenterar kursresponsen. Detta fritt formulerade svar till kursresponsen skickas samtidigt till alla studerande på kursen.',
+      'Efter genomgång av kursresponsen som studerandena gett har läraren möjlighet att skicka till studerandena ett gemensamt svar som kommenterar kursresponsen. Detta fritt formulerade svar till kursresponsen skickas samtidigt till alla studerande på kursen. \n Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden.',
     dialogTitle: '',
     dialogContent: '',
     dialogCancel: '',
@@ -263,7 +273,8 @@ export default {
     coursesTab: 'Aktiverade kurser',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     editProgrammeQuestionsDialogTitle: 'Varning!',
-    editProgrammeQuestionsDialogContent: 'Du håller på att redigera hela utbildningsprogrammets gemensamma frågor. Dessa ändringar syns på alla av utbildningsprogrammets kurser. Är du säker på att du vill redigera dessa frågor?',
+    editProgrammeQuestionsDialogContent:
+      'Du håller på att redigera hela utbildningsprogrammets gemensamma frågor. Dessa ändringar syns på alla av utbildningsprogrammets kurser. Är du säker på att du vill redigera dessa frågor?',
     editProgrammeQuestionsDialogCancel: 'Avbryt',
     editProgrammeQuestionsDialogConfirm: 'Redigera',
   },
@@ -281,7 +292,8 @@ export default {
     editFeedbackTab: 'Redigera responsen',
   },
   noadUser: {
-    noUser: 'Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare',
+    noUser:
+      'Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare',
     noFeedback: 'Just nu finns det inga öppna kursresponser',
   },
 }

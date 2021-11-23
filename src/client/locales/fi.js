@@ -217,7 +217,7 @@ export default {
       'Tallenna vastapalaute ja ilmoita opiskelijoille vastapalautteesta sähköpostitse',
     instructionTitle: 'Ohjeita vastapalautteen kirjoittamiseen',
     responseInstruction:
-      'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille.',
+      'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille. \n Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin.',
     dialogTitle: 'Tallenna vastapalaute',
     dialogContent:
       'Tallentaessasi vastapalautteen opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Tallennettuasi vastapalautteen et voi enää muokata sitä.',

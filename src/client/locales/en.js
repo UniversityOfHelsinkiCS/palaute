@@ -219,7 +219,7 @@ export default {
     sendEmail: 'Save feedback response and send email notification to students',
     instructionTitle: 'Instructions for counter feedback',
     responseInstruction:
-      'Having reviewed the course feedback from students, the teacher may give a summarising response to the feedback. This feedback on feedback can be freely formulated and will be sent simultaneously to all the students on the course.',
+      'Having reviewed the course feedback from students, the teacher may give a summarising response to the feedback. This feedback on feedback can be freely formulated and will be sent simultaneously to all the students on the course. \n Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future.',
     dialogTitle: 'Save feedback response',
     dialogContent:
       'When you save the feedback repsonse students are sent an email which contains the feedback response content and a link to the feedback. After the feedback response is saved it can no longer be edited.',

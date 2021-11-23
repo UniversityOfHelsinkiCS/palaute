@@ -1,4 +1,5 @@
 const dateFns = require('date-fns')
+const { parseFromTimeZone } = require('date-fns-timezone')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
@@ -186,9 +187,13 @@ const createFeedbackTargets = async (courses) => {
       const courseEndDate = new Date(course.activityPeriod.endDate)
 
       const opensAt = formatDate(courseEndDate)
-      const closesAt = formatClosesAt(
+      const closesAtWithoutTimeZone = formatClosesAt(
         dateFns.add(courseEndDate, { days: 14, hours: 23, minutes: 59 }),
       )
+
+      const closesAt = parseFromTimeZone(closesAtWithoutTimeZone, {
+        timeZone: 'Europe/Helsinki',
+      })
 
       const targets = [
         {
