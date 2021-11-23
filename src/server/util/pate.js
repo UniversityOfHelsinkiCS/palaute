@@ -247,9 +247,11 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       Kiitos!  <br/>
       ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
-      Kursresponsblanketten för följande kurser öppnas om en vecka: <br/>
+      Responstiden för följande kurser håller på att ta slut: <br/>
       ${courseNamesAndUrls}
-      Du kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>
+      Ge gärna studerandena respons tillbaka. Du kan ge tillbaka respons genom att klicka på kursens namn. <br/>
+      Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. <br/>
+      Tack! <br/>
       ${instructionsAndSupport.sv}`,
     },
     subject: {
@@ -260,8 +262,8 @@ const emailReminderAboutFeedbackResponseToTeachers = (
         ? `Annathan vastapalautetta kursseillesi`
         : `Annathan vastapalautetta kurssillesi ${courseName}`,
       sv: hasMultipleFeedbackTargets
-        ? `Perioden för kursrespons börjar på dina kurser`
-        : `Tidsperioden för kursrespons på kursen ${courseName} börjar`,
+        ? `Ge gärna respons tillbaka för dina kurser`
+        : `Ge gärna respons tillbaka för kursen ${courseName}`,
     },
   }
 
