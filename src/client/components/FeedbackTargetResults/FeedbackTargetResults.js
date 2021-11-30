@@ -13,12 +13,9 @@ import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
+import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 
-import {
-  ExportCsvLink,
-  closeCourseImmediately,
-  feedbackCanBeClosed,
-} from './utils'
+import { closeCourseImmediately, feedbackCanBeClosed } from './utils'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
@@ -116,25 +113,29 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
-      <Box display="flex" justifyContent="flex-end">
+      <Box
+        display="flex"
+        alignItems="flex-end"
+        flexDirection="column"
+        position="relative"
+        style={{ top: -50 }}
+      >
         {showCloseImmediately && (
           <Button
             variant="contained"
             color="secondary"
             onClick={handleCloseClick}
-            style={{ top: -50 }}
           >
             {t('feedbackTargetResults:closeImmediately')}
           </Button>
         )}
         {feedbacks.length !== 0 && isTeacher && (
-          <ExportCsvLink
+          <ExportFeedbacksMenu
             feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
           />
         )}
       </Box>
-
       {feedbackHasStarted && !isOpen && (
         <Box mb={2}>
           <FeedbackResponse feedbackTarget={feedbackTarget} />

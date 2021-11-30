@@ -192,7 +192,9 @@ export default {
     giveResponse: 'Ge svar på responsen',
     editResponse: 'Redigera svaret på responsen',
     noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
+    export: 'Exportera som',
     exportCsv: 'Exportera som csv',
+    exportPdf: 'Exportera som pdf',
     thankYouMessage:
       'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
     closeImmediately: 'Stäng responsen genast',

@@ -192,7 +192,9 @@ export default {
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given a counter feedback yet",
+    export: 'Download feedback',
     exportCsv: 'Download feedback as a CSV file',
+    exportPdf: 'Download feedback as a PDF file',
     thankYouMessage:
       'Thank you for the feedback, here is a summary of the feedback so far.',
     closeImmediately: 'Close feedback immediately',
