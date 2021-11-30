@@ -48,7 +48,7 @@ describe('Teacher view', () => {
       'Save feedback response and send email notification to students',
     ).click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
-    cy.contains('Norppa').click()
+    cy.visit('localhost:8000/courses')
     cy.contains('TKT20002 Software Development Methods').click()
     cy.contains('Counter feedback given')
   })
