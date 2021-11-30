@@ -18,12 +18,14 @@ describe('Teacher view', () => {
     cy.loginAsTeacher()
   })
   it('A logged in teacher can view its courses', () => {
+    cy.visit('localhost:8000/courses')
     cy.contains('My teaching')
     cy.contains('Ongoing courses (0)')
     cy.contains('Upcoming courses (0)')
     cy.contains('Ended courses')
   })
   it('A logged in teacher can view its ended courses', () => {
+    cy.visit('localhost:8000/courses')
     cy.contains('My teaching')
     cy.contains('TKT20002 Software Development Methods')
     cy.get('div').contains('TKT20002 Software Development Methods').click()
@@ -31,6 +33,7 @@ describe('Teacher view', () => {
     cy.contains(`${startDate} - ${endDate}`)
   })
   it('A logged in teacher can give feedback response for an ended course', () => {
+    cy.visit('localhost:8000/courses')
     cy.contains(
       '[data-cy=courseUnitItem]',
       'TKT20002 Software Development Methods',
