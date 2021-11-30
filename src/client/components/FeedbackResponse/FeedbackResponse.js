@@ -81,24 +81,41 @@ const FeedbackResponse = () => {
     }
   }
 
+  const { feedbackResponse, feedbackResponseEmailSent } = feedbackTarget
+
+  const hideResponseForm = feedbackResponse || feedbackResponseEmailSent
+
   return (
     <>
       <PublicQuestions />
       <Card>
         <CardContent>
-          <InstructionAccordion />
-          <Box mb={2}>
-            <Alert severity="info">
-              <Trans i18nKey="feedbackResponse:responseInfo">
-                This field supports{' '}
-                <AlertLink href="https://commonmark.org/help/" target="_blank">
-                  Markdown
-                </AlertLink>{' '}
-                syntax
-              </Trans>
-            </Alert>
-          </Box>
-
+          {hideResponseForm && (
+            <Box mb={2}>
+              <Typography variant="h6">
+                {t('feedbackResponse:responseLabel')}
+              </Typography>
+            </Box>
+          )}
+          {!hideResponseForm && (
+            <>
+              <InstructionAccordion />
+              <Box mb={2}>
+                <Alert severity="info">
+                  <Trans i18nKey="feedbackResponse:responseInfo">
+                    This field supports{' '}
+                    <AlertLink
+                      href="https://commonmark.org/help/"
+                      target="_blank"
+                    >
+                      Markdown
+                    </AlertLink>{' '}
+                    syntax
+                  </Trans>
+                </Alert>
+              </Box>
+            </>
+          )}
           <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
@@ -106,33 +123,37 @@ const FeedbackResponse = () => {
           >
             {({ isSubmitting, values }) => (
               <Form id="feedback-response-form">
-                <FormikTextField
-                  label={t('feedbackResponse:responseLabel')}
-                  name="feedbackResponse"
-                  rows={10}
-                  fullWidth
-                  multiline
-                  disabled={feedbackTarget.feedbackResponseEmailSent}
-                />
-                <Box my={2}>
-                  <ResponseEmailButton
-                    disabled={
-                      isSubmitting ||
-                      feedbackTarget.feedbackResponseEmailSent ||
-                      !values.feedbackResponse
-                    }
-                    feedbackTargetId={feedbackTarget.id}
-                    values={values}
-                  />
-                </Box>
-                <Box my={2}>
-                  <Divider />
-                </Box>
-                <Box mb={2}>
-                  <Typography color="textSecondary">
-                    {t('feedbackResponse:previewLabel')}
-                  </Typography>
-                </Box>
+                {!hideResponseForm && (
+                  <>
+                    <FormikTextField
+                      label={t('feedbackResponse:responseLabel')}
+                      name="feedbackResponse"
+                      rows={10}
+                      fullWidth
+                      multiline
+                      disabled={feedbackTarget.feedbackResponseEmailSent}
+                    />
+                    <Box my={2}>
+                      <ResponseEmailButton
+                        disabled={
+                          isSubmitting ||
+                          feedbackTarget.feedbackResponseEmailSent ||
+                          !values.feedbackResponse
+                        }
+                        feedbackTargetId={feedbackTarget.id}
+                        values={values}
+                      />
+                    </Box>
+                    <Box my={2}>
+                      <Divider />
+                    </Box>
+                    <Box mb={2}>
+                      <Typography color="textSecondary">
+                        {t('feedbackResponse:previewLabel')}
+                      </Typography>
+                    </Box>
+                  </>
+                )}
                 <MarkdownPreview />
               </Form>
             )}
