@@ -221,9 +221,11 @@ export default {
     instructionTitle: 'Instruktioner för kursresponsen',
     responseInstruction:
       'Efter genomgång av kursresponsen som studerandena gett har läraren möjlighet att skicka till studerandena ett gemensamt svar som kommenterar kursresponsen. Detta fritt formulerade svar till kursresponsen skickas samtidigt till alla studerande på kursen. \n Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden.',
-    writingInstruction: 'Längden på lärarens svar kan variera. Du kan till exempel inkludera i ditt svar: ett tack till studerandena för responsen (och deltagande i kursen), ett sammandrag av responsen som getts, ett urval av de delar av responsen som du tycker är viktiga att svara på, med din reaktion och klargörande tillägg. Dina konkreta åtgärder för att ändra på undervisningen och kursinnehållet som svar till studerandenas respons är av största vikt.',
+    writingInstruction:
+      'Längden på lärarens svar kan variera. Du kan till exempel inkludera i ditt svar: ett tack till studerandena för responsen (och deltagande i kursen), ett sammandrag av responsen som getts, ett urval av de delar av responsen som du tycker är viktiga att svara på, med din reaktion och klargörande tillägg. Dina konkreta åtgärder för att ändra på undervisningen och kursinnehållet som svar till studerandenas respons är av största vikt.',
     dialogTitle: 'Spara svar',
-    dialogContent: 'När du sparar svaret på respons, skickas till studerandena ett e-post med svarets innehåll och en länk till kursens respons. När du sparat svaret kan du inte längre redigera det.',
+    dialogContent:
+      'När du sparar svaret på respons, skickas till studerandena ett e-post med svarets innehåll och en länk till kursens respons. När du sparat svaret kan du inte längre redigera det.',
     dialogCancel: 'Avbryt',
     dialogSubmit: 'Spara',
   },

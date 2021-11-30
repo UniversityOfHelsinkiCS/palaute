@@ -5,6 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import UserFeedbacks from './UserFeedbacks'
 import AdminView from './AdminView'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
+import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from './CourseSummary'
 import TeacherView from './TeacherView'
 import CourseRealisationFeedback from './CourseRealisationFeedback'
@@ -19,9 +20,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Home = () => {
-  const { authorizedUser, isLoading } = useAuthorizedUser()
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const { courseSummaryAccessInfo, isLoading: accessInfoLoading } =
+    useCourseSummaryAccessInfo()
 
-  if (isLoading) {
+  if (authorizedUserLoading || accessInfoLoading) {
     return (
       <Box my={4}>
         <CircularProgress />
@@ -29,10 +33,13 @@ const Home = () => {
     )
   }
 
+  if (courseSummaryAccessInfo.adminAccess) {
+    return <Redirect to="/course-summary" />
+  }
+
   if (authorizedUser?.isTeacher) {
     return <Redirect to="/courses" />
   }
-
   return <Redirect to="/feedbacks" />
 }
 
