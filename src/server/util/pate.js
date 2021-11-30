@@ -249,7 +249,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       sv: `Bästa lärare! <br/>
       Responstiden för följande kurser håller på att ta slut: <br/>
       ${courseNamesAndUrls}
-      Ge gärna studerandena respons tillbaka. Du kan ge tillbaka respons genom att klicka på kursens namn. <br/>
+      Ge gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>
       Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. <br/>
       Tack! <br/>
       ${instructionsAndSupport.sv}`,
@@ -262,8 +262,8 @@ const emailReminderAboutFeedbackResponseToTeachers = (
         ? `Annathan vastapalautetta kursseillesi`
         : `Annathan vastapalautetta kurssillesi ${courseName}`,
       sv: hasMultipleFeedbackTargets
-        ? `Ge gärna respons tillbaka för dina kurser`
-        : `Ge gärna respons tillbaka för kursen ${courseName}`,
+        ? `Ge gärna motrespons för dina kurser`
+        : `Ge gärna motrespons för kursen ${courseName}`,
     },
   }
 
