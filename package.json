@@ -17,7 +17,8 @@
     "test:cypress": "cypress open",
     "format": "prettier --write 'src/**/*.js'",
     "lint": "eslint 'src/**/*.js'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tira2": "docker exec -it palaute node src/server/util/tira2util.js"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
