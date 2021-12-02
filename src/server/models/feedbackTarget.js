@@ -187,31 +187,6 @@ class FeedbackTarget extends Model {
     return now > this.closesAt
   }
 
-  async getStudentsWhoHaveGivenFeedback() {
-    return User.findAll({
-      include: {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        include: [
-          {
-            model: FeedbackTarget,
-            as: 'feedbackTarget',
-            where: {
-              id: this.id,
-            },
-            required: true,
-          },
-          {
-            model: Feedback,
-            as: 'feedback',
-            required: true,
-          },
-        ],
-      },
-    })
-  }
-
   async getStudentsForFeedbackTarget() {
     return User.findAll({
       include: {
@@ -257,7 +232,7 @@ class FeedbackTarget extends Model {
 
   async sendFeedbackSummaryReminderToStudents(feedbackResponse) {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
-    const students = await this.getStudentsWhoHaveGivenFeedback()
+    const students = await this.getStudentsForFeedbackTarget()
     const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/results`
     const formattedStudents = students
       .filter((student) => student.email)

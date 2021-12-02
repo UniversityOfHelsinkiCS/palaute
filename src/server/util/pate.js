@@ -236,21 +236,21 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       The feedback period for the following courses is ending: <br/>
       ${courseNamesAndUrls}
       Please give a feedback response for the students. You can give feedback response by clicking the course name. <br/>
-      Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. <br/>
+      Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>
       Thank you! <br/>
       ${instructionsAndSupport.en}`,
       fi: `Hyvä opettaja! <br/> 
       Palautejakso seuraaville kursseille on päättymässä: <br/>
       ${courseNamesAndUrls}
       Annathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä.  <br/>
-      Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. <br/>
+      Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>
       Kiitos!  <br/>
       ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
       Responstiden för följande kurser håller på att ta slut: <br/>
       ${courseNamesAndUrls}
       Ge gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>
-      Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. <br/>
+      Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>
       Tack! <br/>
       ${instructionsAndSupport.sv}`,
     },
