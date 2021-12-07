@@ -324,7 +324,7 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
       courseRealisationId: {
         [Op.in]: cancelledCourseIds,
       },
-      feedbackTargetId: {
+      id: {
         [Op.notIn]: cancelledWithFeedbacksIds,
       },
     },
