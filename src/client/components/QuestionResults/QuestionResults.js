@@ -53,6 +53,12 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'underline',
     color: 'black',
   },
+  hidePrint: {
+    display: 'inherit',
+    '@media print': {
+      display: 'none',
+    },
+  },
 }))
 
 const componentByType = {
@@ -68,6 +74,7 @@ const QuestionItem = ({
   selectPublicQuestionsLink,
   isPublic,
   className,
+  hidePrint,
 }) => {
   const Component = componentByType[question.type]
 
@@ -83,7 +90,7 @@ const QuestionItem = ({
     <Card className={className}>
       <CardContent>
         {isTeacher && (
-          <Box mb={2}>
+          <Box mb={2} className={hidePrint}>
             <Alert severity="info">
               {isPublic ? (
                 <Trans i18nKey="questionResults:publicInfo">
@@ -186,6 +193,7 @@ const QuestionResults = ({
             isTeacher={isTeacher}
             selectPublicQuestionsLink={selectPublicQuestionsLink}
             className={classes.openQuestionItem}
+            hidePrint={classes.hidePrint}
           />
         ))}
       </div>
@@ -203,6 +211,7 @@ const QuestionResults = ({
               isPublic={publicQuestionIds.includes(q.id)}
               isTeacher={isTeacher}
               selectPublicQuestionsLink={selectPublicQuestionsLink}
+              hidePrint={classes.hidePrint}
             />
           </Grid>
         ))}

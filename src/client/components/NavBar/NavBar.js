@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
     width: '100%',
+    '@media print': {
+      display: 'none',
+    },
   },
   link: {
     display: 'inline-flex',

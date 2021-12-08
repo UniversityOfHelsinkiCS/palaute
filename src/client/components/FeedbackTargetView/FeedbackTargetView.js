@@ -70,14 +70,25 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: 0,
       paddingTop: theme.spacing(1),
     },
+    '@media print': {
+      display: 'none',
+    },
   },
   coursePageLink: {
     display: 'inline-block',
     marginTop: theme.spacing(1),
+    '@media print': {
+      display: 'none',
+    },
   },
   infoContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  hidePrint: {
+    '@media print': {
+      display: 'none',
+    },
   },
 }))
 
@@ -216,7 +227,7 @@ const FeedbackTargetView = () => {
         </div>
       </Box>
 
-      <Box mb={2}>
+      <Box mb={2} className={classes.hidePrint}>
         <RouterTabs
           indicatorColor="primary"
           textColor="primary"

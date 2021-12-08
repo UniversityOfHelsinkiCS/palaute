@@ -32,6 +32,9 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'flex-end',
     marginTop: 10,
+    '@media print': {
+      display: 'none',
+    },
   },
   menu: {
     display: 'flex',
