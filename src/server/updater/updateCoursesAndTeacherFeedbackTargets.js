@@ -14,6 +14,7 @@ const {
 
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
+const { sequelize } = require('../util/dbConnection')
 
 const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-lab',
@@ -296,46 +297,39 @@ const createFeedbackTargets = async (courses) => {
 }
 
 const deleteCancelledCourses = async (cancelledCourseIds) => {
-  const cancelledWithFeedbacks = await FeedbackTarget.findAll({
-    where: {
-      courseRealisationId: {
-        [Op.in]: cancelledCourseIds,
+  const rows = await sequelize.query(
+    `
+    SELECT count(user_feedback_targets.feedback_id) as feedback_count, feedback_targets.course_realisation_id
+    FROM user_feedback_targets
+    INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
+    WHERE feedback_targets.course_realisation_id IN (:cancelledCourseIds)
+    GROUP BY feedback_targets.course_realisation_id
+    HAVING count(user_feedback_targets.feedback_id) = 0
+  `,
+    {
+      replacements: {
+        cancelledCourseIds,
       },
+      type: sequelize.QueryTypes.SELECT,
     },
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        attributes: ['id'],
-        required: true,
-        where: {
-          feedbackId: {
-            [Op.not]: null,
-          },
-        },
-      },
-    ],
-  })
-
-  const cancelledWithFeedbacksIds = cancelledWithFeedbacks.map(({ id }) => id)
-
-  const cancelledWithoutFeedbacks = await FeedbackTarget.findAll({
-    where: {
-      courseRealisationId: {
-        [Op.in]: cancelledCourseIds,
-      },
-      id: {
-        [Op.notIn]: cancelledWithFeedbacksIds,
-      },
-    },
-  })
-
-  const feedbackTargetIds = cancelledWithoutFeedbacks.map(({ id }) => id)
-  const courseRealisationIds = _.uniq(
-    cancelledWithoutFeedbacks.map(
-      ({ courseRealisationId }) => courseRealisationId,
-    ),
   )
+
+  const courseRealisationIds = rows.map((row) => row.course_realisation_id)
+
+  if (courseRealisationIds.length === 0) {
+    return
+  }
+
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      courseRealisationId: {
+        [Op.in]: courseRealisationIds,
+      },
+    },
+    attributes: ['id'],
+  })
+
+  const feedbackTargetIds = feedbackTargets.map((target) => target.id)
 
   const destroyedUserFeedbackTargets = await UserFeedbackTarget.destroy({
     where: {
@@ -345,7 +339,7 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
     },
   })
 
-  logger.info(`Destroyed ${destroyedUserFeedbackTargets} userFeedbackTargets`)
+  logger.info(`Destroyed ${destroyedUserFeedbackTargets} user feedback targets`)
 
   const destroyedSurveys = await Survey.destroy({
     where: {
@@ -365,7 +359,7 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
     },
   })
 
-  logger.info(`Destroyed ${destroyedFeedbackTargets} feedbackTargets`)
+  logger.info(`Destroyed ${destroyedFeedbackTargets} feedback targets`)
 
   const destroyedCourseRealisations = await CourseRealisation.destroy({
     where: {
@@ -374,7 +368,8 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
       },
     },
   })
-  logger.info(`Destroyed ${destroyedCourseRealisations} courseRealisations`)
+
+  logger.info(`Destroyed ${destroyedCourseRealisations} course realisations`)
 }
 
 const coursesHandler = async (courses) => {
