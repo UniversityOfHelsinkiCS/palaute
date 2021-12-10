@@ -580,6 +580,7 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
   FeedbackTarget.update(
     {
       feedbackOpeningReminderEmailSent: true,
+      feedbackOpenNotificationEmailSent: true,
     },
     {
       where: {
