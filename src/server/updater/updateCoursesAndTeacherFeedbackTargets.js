@@ -10,6 +10,7 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
   Survey,
+  CourseRealisationsOrganisation,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -172,6 +173,26 @@ const createCourseRealisations = async (courseRealisations) => {
       ...getCourseRealisationPeriod(activityPeriod),
     })),
     { updateOnDuplicate: ['name', 'endDate', 'startDate'] },
+  )
+
+  const courseRealisationsOrganisations = [].concat(
+    ...courseRealisations.map(({ id, organisations }) =>
+      organisations
+        .sort((a, b) => b.share - a.share)
+        .map(({ organisationId }, index) => ({
+          type: index === 0 ? 'PRIMARY' : 'DIRECT',
+          courseRealisationId: id,
+          organisationId,
+        })),
+    ),
+  )
+
+  const filteredCourseRealisationOrganisations =
+    courseRealisationsOrganisations.filter((c) => c.organisationId !== null)
+
+  await CourseRealisationsOrganisation.bulkCreate(
+    filteredCourseRealisationOrganisations,
+    { ignoreDuplicates: true },
   )
 }
 
