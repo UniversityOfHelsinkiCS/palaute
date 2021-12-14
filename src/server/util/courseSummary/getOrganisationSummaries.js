@@ -46,8 +46,8 @@ FROM question_averages
   INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
   INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
   INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
-  INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
+  INNER JOIN course_realisations_organisations ON course_realisations.id = course_realisations_organisations.course_realisation_id
+  INNER JOIN organisations ON course_realisations_organisations.organisation_id = organisations.id
   INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
   feedback_targets.feedback_type = 'courseRealisation'
