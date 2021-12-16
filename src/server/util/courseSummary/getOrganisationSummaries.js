@@ -20,6 +20,13 @@ const openUniversityValues = {
     sv: 'Öppna universitetet',
   },
   code: 'H930',
+  defaultQuestions: [
+    { questionId: 6, mean: 0, distribution: {} },
+    { questionId: 7, mean: 0, distribution: {} },
+    { questionId: 8, mean: 0, distribution: {} },
+    { questionId: 9, mean: 0, distribution: {} },
+    { questionId: 1042, mean: 0, distribution: {} },
+  ],
 }
 
 const ORGANISATION_SUMMARY_QUERY = `
@@ -219,6 +226,61 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
   return organisations
 }
 
+const createOpenUniOrganisation = (openUniOrganisations) => {
+  if (openUniOrganisations.length < 2) return openUniOrganisations
+
+  const openUniOrganisationCourseUnits = openUniOrganisations.reduce(
+    (allCourseUnits, { courseUnits }) => allCourseUnits.concat(courseUnits),
+    [],
+  )
+
+  const seen = new Set()
+  const uniqueCourseUnits = openUniOrganisationCourseUnits.filter((c) => {
+    const duplicate = seen.has(c.courseCode)
+    seen.add(c.courseCode)
+    return !duplicate
+  })
+
+  const counts = uniqueCourseUnits.reduce(
+    (countSums, { feedbackCount, studentCount }) => ({
+      feedbackCount: countSums.feedbackCount + feedbackCount,
+      studentCount: countSums.studentCount + studentCount,
+    }),
+    { feedbackCount: 0, studentCount: 0 },
+  )
+
+  let divider = 0
+
+  const results = uniqueCourseUnits.reduce((allResults, { results }) => {
+    if (results[0].mean !== 0) divider += 1
+    const r = results.map((r, index) => ({
+      questionId: r.questionId,
+      mean: allResults[index].mean + r.mean,
+      distribution: r.distribution,
+    }))
+    return r
+  }, openUniversityValues.defaultQuestions)
+
+  const dividedResults = results.map((r) => ({
+    ...r,
+    mean: (r.mean / divider).toFixed(2),
+  }))
+
+  const openUniOrganisation = [
+    {
+      id: openUniversityValues.id,
+      name: openUniversityValues.name,
+      code: openUniversityValues.code,
+      courseUnits: uniqueCourseUnits,
+      feedbackCount: counts.feedbackCount,
+      studentCount: counts.studentCount,
+      results: dividedResults,
+    },
+  ]
+
+  return openUniOrganisation
+}
+
 const getOrganisationsWithResults = (rows, questions, allRows) => {
   const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
 
@@ -228,11 +290,17 @@ const getOrganisationsWithResults = (rows, questions, allRows) => {
     false,
   )
 
+  const filteredOrganisations = organisations.filter(
+    (org) => org.id !== OPEN_UNI_ORGANISATION_ID,
+  )
+
   const allRowsById = _.groupBy(allRows, (row) => row.organisation_id)
 
-  const openUniOrganisation = createOrganisations(allRowsById, questions, true)
+  const openUniOrganisations = createOrganisations(allRowsById, questions, true)
 
-  const allOrganisations = organisations.concat(openUniOrganisation)
+  const openUniOrganisation = createOpenUniOrganisation(openUniOrganisations)
+
+  const allOrganisations = filteredOrganisations.concat(openUniOrganisation)
 
   return _.orderBy(allOrganisations, ['code'], ['asc'])
 }
