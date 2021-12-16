@@ -12,6 +12,16 @@ const {
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 
+const openUniversityValues = {
+  id: 'hy-org-48645785',
+  name: {
+    en: 'Open University',
+    fi: 'Avoin yliopisto',
+    sv: 'Öppna universitetet',
+  },
+  code: 'H930',
+}
+
 const ORGANISATION_SUMMARY_QUERY = `
 WITH question_averages AS (
   ${QUESTION_AVERAGES_QUERY}
@@ -93,7 +103,8 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
   const relevantRows = !openUni
     ? rows
     : rows.filter(
-        (row) => row.course_realisations_organisation_id === 'hy-org-48645785',
+        (row) =>
+          row.course_realisations_organisation_id === OPEN_UNI_ORGANISATION_ID,
       )
 
   const rowsByCourseCode = _.groupBy(relevantRows, (row) => row.course_code)
@@ -194,15 +205,9 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
       })
 
       return {
-        id: openUni ? 'hy-org-48645785' : organisationId,
-        name: openUni
-          ? {
-              en: 'Open University',
-              fi: 'Avoin yliopisto',
-              sv: 'Öppna universitetet',
-            }
-          : name,
-        code: openUni ? 'H930' : code,
+        id: openUni ? openUniversityValues.id : organisationId,
+        name: openUni ? openUniversityValues.name : name,
+        code: openUni ? openUniversityValues.code : code,
         results,
         feedbackCount,
         studentCount,
