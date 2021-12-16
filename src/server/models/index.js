@@ -8,6 +8,7 @@ const CourseUnit = require('./courseUnit')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const Organisation = require('./organisation')
 const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
+const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -45,6 +46,16 @@ CourseUnit.belongsToMany(Organisation, {
 Organisation.belongsToMany(CourseUnit, {
   through: CourseUnitsOrganisation,
   as: 'courseUnits',
+})
+
+CourseRealisation.belongsToMany(Organisation, {
+  through: CourseRealisationsOrganisation,
+  as: 'organisations',
+})
+
+Organisation.belongsToMany(CourseRealisation, {
+  through: CourseRealisationsOrganisation,
+  as: 'courseRealisations',
 })
 
 // eslint-disable-next-line func-names
@@ -85,4 +96,5 @@ module.exports = {
   Question,
   Organisation,
   CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
 }

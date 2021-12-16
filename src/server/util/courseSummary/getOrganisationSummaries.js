@@ -12,6 +12,23 @@ const {
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 
+const openUniversityValues = {
+  id: 'hy-org-48645785',
+  name: {
+    en: 'Open University',
+    fi: 'Avoin yliopisto',
+    sv: 'Öppna universitetet',
+  },
+  code: 'H930',
+  defaultQuestions: [
+    { questionId: 6, mean: 0, distribution: {} },
+    { questionId: 7, mean: 0, distribution: {} },
+    { questionId: 8, mean: 0, distribution: {} },
+    { questionId: 9, mean: 0, distribution: {} },
+    { questionId: 1042, mean: 0, distribution: {} },
+  ],
+}
+
 const ORGANISATION_SUMMARY_QUERY = `
 WITH question_averages AS (
   ${QUESTION_AVERAGES_QUERY}
@@ -34,6 +51,7 @@ SELECT
   course_units.course_code AS course_code,
   course_units.name AS course_unit_name,
   course_units.id AS course_unit_id,
+  course_realisations_organisations.organisation_id AS course_realisations_organisation_id,
   organisations.id AS organisation_id,
   organisations.name AS organisation_name,
   organisations.code AS organisation_code,
@@ -45,8 +63,9 @@ SELECT
 FROM question_averages
   INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
   INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
   INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  INNER JOIN course_realisations_organisations ON course_realisations.id = course_realisations_organisations.course_realisation_id
   INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
   INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
 WHERE
@@ -87,9 +106,15 @@ const getCurrentCourseRealisationId = (rows) => {
   return sortedCourseRealisations[0].id
 }
 
-const getCourseUnitsWithResults = (rows, questions) => {
-  const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
+const getCourseUnitsWithResults = (rows, questions, openUni) => {
+  const relevantRows = !openUni
+    ? rows
+    : rows.filter(
+        (row) =>
+          row.course_realisations_organisation_id === OPEN_UNI_ORGANISATION_ID,
+      )
 
+  const rowsByCourseCode = _.groupBy(relevantRows, (row) => row.course_code)
   const courseUnits = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
       const { course_unit_name: name, closes_at: closesAt } = courseUnitRows[0]
@@ -137,15 +162,17 @@ const getCourseUnitsWithResults = (rows, questions) => {
   return _.orderBy(courseUnits, ['courseCode'], ['asc'])
 }
 
-const getOrganisationsWithResults = (rows, questions) => {
-  const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
-
+const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
   const organisations = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
       const { organisation_name: name, organisation_code: code } =
         organisationRows[0]
 
-      const courseUnits = getCourseUnitsWithResults(organisationRows, questions)
+      const courseUnits = getCourseUnitsWithResults(
+        organisationRows,
+        questions,
+        openUni,
+      )
 
       const feedbackCount = _.sumBy(
         courseUnits,
@@ -185,9 +212,9 @@ const getOrganisationsWithResults = (rows, questions) => {
       })
 
       return {
-        id: organisationId,
-        name,
-        code,
+        id: openUni ? openUniversityValues.id : organisationId,
+        name: openUni ? openUniversityValues.name : name,
+        code: openUni ? openUniversityValues.code : code,
         results,
         feedbackCount,
         studentCount,
@@ -196,7 +223,86 @@ const getOrganisationsWithResults = (rows, questions) => {
     },
   )
 
-  return _.orderBy(organisations, ['code'], ['asc'])
+  return organisations
+}
+
+const createOpenUniOrganisation = (openUniOrganisations) => {
+  if (openUniOrganisations.length < 2) return openUniOrganisations
+
+  const openUniOrganisationCourseUnits = openUniOrganisations.reduce(
+    (allCourseUnits, { courseUnits }) => allCourseUnits.concat(courseUnits),
+    [],
+  )
+
+  const seen = new Set()
+  const uniqueCourseUnits = openUniOrganisationCourseUnits.filter((c) => {
+    const duplicate = seen.has(c.courseCode)
+    seen.add(c.courseCode)
+    return !duplicate
+  })
+
+  const counts = uniqueCourseUnits.reduce(
+    (countSums, { feedbackCount, studentCount }) => ({
+      feedbackCount: countSums.feedbackCount + feedbackCount,
+      studentCount: countSums.studentCount + studentCount,
+    }),
+    { feedbackCount: 0, studentCount: 0 },
+  )
+
+  let divider = 0
+
+  const results = uniqueCourseUnits.reduce((allResults, { results }) => {
+    if (results[0].mean !== 0) divider += 1
+    const r = results.map((r, index) => ({
+      questionId: r.questionId,
+      mean: allResults[index].mean + r.mean,
+      distribution: r.distribution,
+    }))
+    return r
+  }, openUniversityValues.defaultQuestions)
+
+  const dividedResults = results.map((r) => ({
+    ...r,
+    mean: (r.mean / divider).toFixed(2),
+  }))
+
+  const openUniOrganisation = [
+    {
+      id: openUniversityValues.id,
+      name: openUniversityValues.name,
+      code: openUniversityValues.code,
+      courseUnits: uniqueCourseUnits,
+      feedbackCount: counts.feedbackCount,
+      studentCount: counts.studentCount,
+      results: dividedResults,
+    },
+  ]
+
+  return openUniOrganisation
+}
+
+const getOrganisationsWithResults = (rows, questions, allRows) => {
+  const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
+
+  const organisations = createOrganisations(
+    rowsByOrganisationId,
+    questions,
+    false,
+  )
+
+  const filteredOrganisations = organisations.filter(
+    (org) => org.id !== OPEN_UNI_ORGANISATION_ID,
+  )
+
+  const allRowsById = _.groupBy(allRows, (row) => row.organisation_id)
+
+  const openUniOrganisations = createOrganisations(allRowsById, questions, true)
+
+  const openUniOrganisation = createOpenUniOrganisation(openUniOrganisations)
+
+  const allOrganisations = filteredOrganisations.concat(openUniOrganisation)
+
+  return _.orderBy(allOrganisations, ['code'], ['asc'])
 }
 
 const withMissingOrganisations = (
@@ -300,7 +406,7 @@ const getOrganisationSummaries = async ({
     : rows
 
   const organisationsWithMissing = withMissingOrganisations(
-    getOrganisationsWithResults(normalizedRows, questions),
+    getOrganisationsWithResults(normalizedRows, questions, rows),
     organisationAccess,
     questions,
   )
