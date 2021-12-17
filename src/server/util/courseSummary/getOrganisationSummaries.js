@@ -253,12 +253,12 @@ const createOpenUniOrganisation = (openUniOrganisations) => {
 
   const results = uniqueCourseUnits.reduce((allResults, { results }) => {
     if (results[0].mean !== 0) divider += 1
-    const r = results.map((r, index) => ({
+    const result = results.map((r, index) => ({
       questionId: r.questionId,
       mean: allResults[index].mean + r.mean,
       distribution: r.distribution,
     }))
-    return r
+    return result
   }, openUniversityValues.defaultQuestions)
 
   const dividedResults = results.map((r) => ({
