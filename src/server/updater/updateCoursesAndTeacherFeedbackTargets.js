@@ -382,6 +382,19 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
 
   logger.info(`Destroyed ${destroyedFeedbackTargets} feedback targets`)
 
+  const destroyedCourseRealisationOrganisations =
+    await CourseRealisationsOrganisation.destroy({
+      where: {
+        courseRealisationId: {
+          [Op.in]: courseRealisationIds,
+        },
+      },
+    })
+
+  logger.info(
+    `Destroyed ${destroyedCourseRealisationOrganisations} course realisation organisations`,
+  )
+
   const destroyedCourseRealisations = await CourseRealisation.destroy({
     where: {
       id: {
