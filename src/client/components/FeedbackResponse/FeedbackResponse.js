@@ -81,9 +81,13 @@ const FeedbackResponse = () => {
     }
   }
 
-  const { feedbackResponse, feedbackResponseEmailSent } = feedbackTarget
+  const { feedbackResponse, feedbackResponseEmailSent, closesAt } =
+    feedbackTarget
 
   const hideResponseForm = feedbackResponse || feedbackResponseEmailSent
+
+  const feedbackResponseFormDisabled =
+    feedbackResponseEmailSent || new Date() < new Date(closesAt)
 
   return (
     <>
@@ -126,12 +130,16 @@ const FeedbackResponse = () => {
                 {!hideResponseForm && (
                   <>
                     <FormikTextField
-                      label={t('feedbackResponse:responseLabel')}
+                      label={
+                        feedbackResponseFormDisabled
+                          ? t('feedbackResponse:formDisabled')
+                          : t('feedbackResponse:responseLabel')
+                      }
                       name="feedbackResponse"
                       rows={10}
                       fullWidth
                       multiline
-                      disabled={feedbackTarget.feedbackResponseEmailSent}
+                      disabled={feedbackResponseFormDisabled}
                     />
                     <Box my={2}>
                       <ResponseEmailButton

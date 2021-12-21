@@ -227,6 +227,7 @@ export default {
       'Tallentaessasi vastapalautteen opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Tallennettuasi vastapalautteen et voi enää muokata sitä.',
     dialogCancel: 'Peruuta',
     dialogSubmit: 'Tallenna',
+    formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {
     publicInfo:

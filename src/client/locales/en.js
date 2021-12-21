@@ -229,6 +229,7 @@ export default {
       'When you save the feedback repsonse students are sent an email which contains the feedback response content and a link to the feedback. After the feedback response is saved it can no longer be edited.',
     dialogCancel: 'Cancel',
     dialogSubmit: 'Save',
+    formDisabled: 'Counter feedback can only be given after feedback has ended',
   },
   publicQuestions: {
     publicInfo:

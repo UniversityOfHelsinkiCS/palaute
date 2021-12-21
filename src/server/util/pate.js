@@ -233,14 +233,14 @@ const emailReminderAboutFeedbackResponseToTeachers = (
   const translations = {
     text: {
       en: `Dear teacher! <br/>
-      The feedback period for the following courses is ending: <br/>
+      The feedback period for the following courses has ended: <br/>
       ${courseNamesAndUrls}
       Please give a feedback response for the students. You can give feedback response by clicking the course name. <br/>
       Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>
       Thank you! <br/>
       ${instructionsAndSupport.en}`,
       fi: `Hyvä opettaja! <br/> 
-      Palautejakso seuraaville kursseille on päättymässä: <br/>
+      Palautejakso seuraaville kursseille on päättynyt: <br/>
       ${courseNamesAndUrls}
       Annathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä.  <br/>
       Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>

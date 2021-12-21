@@ -185,8 +185,8 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       closesAt: {
-        [Op.lt]: addDays(new Date(), 1),
-        [Op.gt]: subDays(new Date(), 2),
+        [Op.lt]: new Date(),
+        [Op.gt]: subDays(new Date(), 3),
       },
       hidden: false,
       feedbackType: 'courseRealisation',
