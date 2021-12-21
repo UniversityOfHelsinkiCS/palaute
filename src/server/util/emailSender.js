@@ -174,11 +174,6 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
         as: 'users',
         required: true,
         attributes: ['email', 'language'],
-        through: {
-          where: {
-            accessStatus: 'STUDENT',
-          },
-        },
       },
     ],
   })
@@ -369,9 +364,13 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
 const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
   const singleFbt = feedbackTarget[0]
 
+  const students = singleFbt.users.filter(
+    (user) => user.UserFeedbackTarget.accessStatus === 'STUDENT',
+  )
+
   const emails = {}
 
-  for (const user of singleFbt.users) {
+  for (const user of students) {
     if (!user.email) {
       // eslint-disable-next-line
       continue

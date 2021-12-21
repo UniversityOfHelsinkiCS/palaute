@@ -58,7 +58,7 @@ const getTitleByType = (type, t) => {
 const ActionsContainer = ({ children }) => (
   <div>
     <Divider />
-    <Box mt={2} display="flex" justifyContent="flex-end">
+    <Box mt={2} display="flex" justifyContent="space-between">
       {children}
     </Box>
   </div>
@@ -156,42 +156,32 @@ const QuestionCard = ({
               />
             </Tooltip>
           )}
-          {canEdit && (
-            <div>
-              {isEditing ? (
-                <Button
-                  color="primary"
-                  onClick={onStopEditing}
-                  data-cy="saveQuestion"
-                >
-                  {t('questionEditor:done')}
-                </Button>
-              ) : (
-                <>
-                  <Button color="primary" onClick={onCopy}>
-                    {t('questionEditor:duplicate')}
-                  </Button>
-                  <Button color="primary" onClick={onStartEditing}>
-                    {t('edit')}
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
         </Box>
-
         {isEditing ? (
           <>
             <Box mb={2}>
               <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
             </Box>
-
             <ActionsContainer>
-              <EditActions
-                {...orderButtonsProps}
-                onRemove={onRemove}
-                name={name}
-              />
+              {canEdit && (
+                <div>
+                  <Button
+                    style={{ display: 'flex' }}
+                    color="primary"
+                    onClick={onStopEditing}
+                    data-cy="saveQuestion"
+                  >
+                    {t('questionEditor:done')}
+                  </Button>
+                </div>
+              )}
+              <div style={{ display: 'flex' }}>
+                <EditActions
+                  {...orderButtonsProps}
+                  onRemove={onRemove}
+                  name={name}
+                />
+              </div>
             </ActionsContainer>
           </>
         ) : (
@@ -199,9 +189,16 @@ const QuestionCard = ({
             <Box mb={canEdit ? 2 : 0}>
               <PreviewComponent question={question} language={language} />
             </Box>
-
             {canEdit && (
               <ActionsContainer>
+                <div style={{ display: 'flex' }}>
+                  <Button color="primary" onClick={onCopy}>
+                    {t('questionEditor:duplicate')}
+                  </Button>
+                  <Button color="primary" onClick={onStartEditing}>
+                    {t('edit')}
+                  </Button>
+                </div>
                 <OrderButtons {...orderButtonsProps} />
               </ActionsContainer>
             )}

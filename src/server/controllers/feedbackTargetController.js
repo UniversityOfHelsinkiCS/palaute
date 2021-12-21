@@ -662,10 +662,18 @@ const openFeedbackImmediately = async (req, res) => {
     )
   }
 
-  sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+  if (
+    !feedbackTarget.feedbackOpenNotificationSent &&
+    !feedbackTarget.feedbackOpeningReminderEmailSent
+  ) {
+    sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+  }
 
   feedbackTarget.opensAt = req.body.opensAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
+  feedbackTarget.feedbackOpenNotificationSent = true
+  feedbackTarget.feedbackOpeningReminderEmailSent = true
+
   await feedbackTarget.save()
 
   res.sendStatus(200)
