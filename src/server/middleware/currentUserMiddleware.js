@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS, JWT_KEY } = require('../util/config')
 const { User } = require('../models')
+const logger = require('../util/logger')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
@@ -44,11 +45,16 @@ const getUser = async (username) => {
 const getUsernameFromToken = (req) => {
   const { token } = req.headers
 
-  const { username } = jwt.verify(token, JWT_KEY)
+  try {
+    const { username } = jwt.verify(token, JWT_KEY)
 
-  if (!username) throw new ApplicationError('Token is missing username', 403)
+    if (!username) throw new ApplicationError('Token is missing username', 403)
 
-  return username
+    return username
+  } catch (err) {
+    logger.info('Token broken', { token })
+    throw new ApplicationError('Access token was malformed', 500)
+  }
 }
 
 const getUsernameFromShibboHeaders = (req) => {
