@@ -230,6 +230,7 @@ export default {
       'När du sparar svaret på respons, skickas till studerandena ett e-post med svarets innehåll och en länk till kursens respons. När du sparat svaret kan du inte längre redigera det.',
     dialogCancel: 'Avbryt',
     dialogSubmit: 'Spara',
+    formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
   publicQuestions: {
     publicInfo:
