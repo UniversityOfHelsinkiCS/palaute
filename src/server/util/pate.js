@@ -247,7 +247,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       Kiitos!  <br/>
       ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
-      Responstiden för följande kurser håller på att ta slut: <br/>
+      Responsperioden för följande kurser har tagit slut: <br/>
       ${courseNamesAndUrls}
       Ge gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>
       Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>
