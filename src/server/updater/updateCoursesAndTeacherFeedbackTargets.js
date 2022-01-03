@@ -28,7 +28,7 @@ const validRealisationTypes = [
 ]
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
-const formatClosesAt = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
+const formatWithHours = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
 
 const commonFeedbackName = {
   fi: 'Yleinen palaute kurssista',
@@ -159,9 +159,20 @@ const createCourseUnits = async (courseUnits) => {
 const getCourseRealisationPeriod = (activityPeriod) => {
   const { startDate, endDate } = activityPeriod
 
+  const formattedEndDate = endDate
+    ? formatWithHours(
+        dateFns.add(dateFns.subDays(new Date(endDate), 1), {
+          hours: 23,
+          minutes: 59,
+        }),
+      )
+    : null
+
   return {
     startDate,
-    endDate: endDate ? formatDate(dateFns.subDays(new Date(endDate), 1)) : null,
+    endDate: endDate
+      ? parseFromTimeZone(formattedEndDate, { timeZone: 'Europe/Helsinki' })
+      : null,
   }
 }
 
@@ -209,7 +220,7 @@ const createFeedbackTargets = async (courses) => {
       const courseEndDate = new Date(course.activityPeriod.endDate)
 
       const opensAt = formatDate(courseEndDate)
-      const closesAtWithoutTimeZone = formatClosesAt(
+      const closesAtWithoutTimeZone = formatWithHours(
         dateFns.add(courseEndDate, { days: 14, hours: 23, minutes: 59 }),
       )
 
