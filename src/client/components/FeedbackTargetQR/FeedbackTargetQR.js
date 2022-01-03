@@ -45,7 +45,7 @@ const FeedbackTargetResults = () => {
         marginTop={5}
         marginBottom={5}
       >
-        <QRCode value={`${basePath}/targets/${id}/feedback`} />
+        <QRCode value={`${window.location.host}/targets/${id}/feedback`} />
       </Box>
     </>
   )
