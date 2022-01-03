@@ -45,15 +45,7 @@ const FeedbackTargetResults = ({ feedbackTarget }) => {
 
         {isTeacher && (
           <Box mt={2}>
-            {feedbackResponse ? (
-              <Button
-                color="primary"
-                component={Link}
-                to={`/targets/${id}/feedback-response`}
-              >
-                {t('feedbackTargetResults:editResponse')}
-              </Button>
-            ) : (
+            {!feedbackResponse && (
               <Button
                 variant="contained"
                 color="primary"
