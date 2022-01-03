@@ -6,20 +6,21 @@ import { Box, CircularProgress } from '@material-ui/core'
 
 import { basePath } from '../../../config'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { isAdmin } from '../NavBar/utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackTargetResults = () => {
   const { id } = useParams()
 
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdminUser = isAdmin(authorizedUser)
+
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
 
-  const { feedbackTargetData, isLoading: feedbacksIsLoading } =
-    useFeedbackTargetFeedbacks(id)
-
-  const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
+  const isLoading = feedbackTargetIsLoading || authorizedUserLoading
 
   if (isLoading) {
     return (
@@ -29,13 +30,9 @@ const FeedbackTargetResults = () => {
     )
   }
 
-  if (!feedbackTarget || !feedbackTargetData) {
-    return <Redirect to="/" />
-  }
-
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  if (!isOpen) {
+  if (!isOpen && !isAdminUser) {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
