@@ -47,6 +47,7 @@ const ResultsRow = ({
   children,
   level = 0,
   feedbackCount,
+  studentCount,
   feedbackResponseGiven,
   accordionEnabled = false,
   accordionCellEnabled = true,
@@ -83,6 +84,9 @@ const ResultsRow = ({
     </Tooltip>
   )
 
+  const percent =
+    studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
+
   return (
     <>
       <tr {...props}>
@@ -112,7 +116,9 @@ const ResultsRow = ({
             className={classes.resultCell}
           />
         ))}
-        <td className={classes.resultCell}>{feedbackCount}</td>
+        <td className={classes.resultCell}>
+          {feedbackCount}/{studentCount} ({percent}%)
+        </td>
         <td className={classes.resultCell}>
           {feedbackResponseGiven === 'GIVEN' && feedbackResponseGivenContent}
           {feedbackResponseGiven === 'NONE' && feedbackResponseNotGivenContent}

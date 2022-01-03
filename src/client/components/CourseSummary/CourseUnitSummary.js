@@ -21,6 +21,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             name,
             results,
             feedbackCount,
+            studentCount,
             feedbackResponseGiven,
             closesAt,
           },
@@ -46,6 +47,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 results={results}
                 questions={questions}
                 feedbackCount={feedbackCount}
+                studentCount={studentCount}
                 feedbackResponseGiven={feedbackResponseStatus}
                 lastChild={i === courseUnits.length - 1}
               />

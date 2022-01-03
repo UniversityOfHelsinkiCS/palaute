@@ -106,7 +106,15 @@ const OrganisationTable = ({
             </tr>
           )}
           {organisations.map(
-            ({ code, id, name, results, feedbackCount, courseUnits }) => (
+            ({
+              code,
+              id,
+              name,
+              results,
+              feedbackCount,
+              courseUnits,
+              studentCount,
+            }) => (
               <Fragment key={id}>
                 <ResultsRow
                   id={id}
@@ -118,6 +126,7 @@ const OrganisationTable = ({
                   results={results}
                   questions={questions}
                   feedbackCount={feedbackCount}
+                  studentCount={studentCount}
                   accordionEnabled={courseUnits.length > 0}
                   accordionInitialOpen={initialOpenAccordions.includes(id)}
                   onToggleAccordion={() => onToggleAccordion(id)}

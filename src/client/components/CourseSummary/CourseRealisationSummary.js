@@ -114,6 +114,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                   results={courseRealisation.results}
                   questions={questions}
                   feedbackCount={courseRealisation.feedbackCount}
+                  studentCount={courseRealisation.studentCount}
                   feedbackResponseGiven={feedbackResponseGiven}
                   accordionCellEnabled={false}
                 />
