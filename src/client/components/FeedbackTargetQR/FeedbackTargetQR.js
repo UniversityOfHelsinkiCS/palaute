@@ -4,7 +4,6 @@ import QRCode from 'react-qr-code'
 
 import { Box, CircularProgress } from '@material-ui/core'
 
-import { basePath } from '../../../config'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { isAdmin } from '../NavBar/utils'
