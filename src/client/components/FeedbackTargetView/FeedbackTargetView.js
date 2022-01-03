@@ -27,6 +27,7 @@ import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
 import FeedbackResponse from '../FeedbackResponse'
+import FeedbackTargetQR from '../FeedbackTargetQR'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -243,7 +244,6 @@ const FeedbackTargetView = () => {
             component={Link}
             to={`${url}/feedback`}
           />
-
           {showFeedbacksTab && (
             <Tab
               label={t('feedbackTargetView:feedbacksTab')}
@@ -275,6 +275,13 @@ const FeedbackTargetView = () => {
               to={`${url}/students-with-feedback`}
             />
           )}
+          {isOpen && (
+            <Tab
+              label={t('feedbackTargetView:QR')}
+              component={Link}
+              to={`${url}/QR`}
+            />
+          )}
         </RouterTabs>
       </Box>
 
@@ -290,6 +297,7 @@ const FeedbackTargetView = () => {
           path={`${path}/feedback-response`}
           component={FeedbackResponse}
         />
+        <Route path={`${path}/QR`} component={FeedbackTargetQR} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>
