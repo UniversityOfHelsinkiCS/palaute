@@ -295,6 +295,7 @@ export default {
     coursePeriod: 'Course ongoing',
     feedbackPeriod: 'Feedback open',
     coursePage: 'Course page',
+    responsibleTeachers: 'Responsible teachers',
   },
   noadUser: {
     noUser:

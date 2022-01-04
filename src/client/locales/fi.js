@@ -294,6 +294,7 @@ export default {
     coursePeriod: 'Kurssi käynnissä',
     feedbackPeriod: 'Palaute käynnissä',
     coursePage: 'Kurssisivu',
+    responsibleTeachers: 'Vastuuopettajat',
   },
   noadUser: {
     noUser:

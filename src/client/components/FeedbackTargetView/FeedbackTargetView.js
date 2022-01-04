@@ -210,7 +210,9 @@ const FeedbackTargetView = () => {
           <div>
             {responsibleTeachers && (
               <div>
-                <Typography>Responsible teachers</Typography>
+                <Typography>
+                  {t('feedbackTargetView:responsibleTeachers')}
+                </Typography>
                 {responsibleTeachers.map((teacher) => (
                   <Typography
                     key={teacher.id}
