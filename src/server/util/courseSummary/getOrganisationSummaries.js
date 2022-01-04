@@ -188,7 +188,8 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         ({ studentCount }) => studentCount,
       )
 
-      const feedbackPercentage = feedbackCount / studentCount
+      const feedbackPercentage =
+        studentCount > 0 ? feedbackCount / studentCount : 0
 
       const allResults = courseUnits.flatMap(({ results }) => results)
 
@@ -256,7 +257,8 @@ const createOpenUniOrganisation = (openUniOrganisations) => {
     { feedbackCount: 0, studentCount: 0 },
   )
 
-  const feedbackPercentage = counts.feedbackCount / counts.studentCount
+  const feedbackPercentage =
+    counts.studentCount > 0 ? counts.feedbackCount / counts.studentCount : 0
 
   let divider = 0
 
