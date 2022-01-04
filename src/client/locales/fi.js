@@ -295,6 +295,7 @@ export default {
     feedbackPeriod: 'Palaute käynnissä',
     coursePage: 'Kurssisivu',
     responsibleTeachers: 'Vastuuopettajat',
+    QR: 'QR-koodi',
   },
   noadUser: {
     noUser:

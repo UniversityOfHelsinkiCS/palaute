@@ -117,7 +117,7 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
   const rowsByCourseCode = _.groupBy(relevantRows, (row) => row.course_code)
   const courseUnits = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
-      const { course_unit_name: name, closes_at: closesAt } = courseUnitRows[0]
+      const { course_unit_name: name } = courseUnitRows[0]
 
       const currentCourseRealisationId =
         getCurrentCourseRealisationId(courseUnitRows)
@@ -129,6 +129,8 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
       )
 
       const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
+
+      const closesAt = current[0]?.closes_at
 
       const currentResults = getResults(current, questions)
       const previousResults = getResults(previous, questions)

@@ -296,6 +296,7 @@ export default {
     feedbackPeriod: 'Feedback open',
     coursePage: 'Course page',
     responsibleTeachers: 'Responsible teachers',
+    QR: 'QR code',
   },
   noadUser: {
     noUser:
