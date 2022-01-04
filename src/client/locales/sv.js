@@ -296,6 +296,7 @@ export default {
     coursePeriod: 'Kursen på gång',
     feedbackPeriod: 'Responsgivningen öppen',
     editFeedbackTab: 'Redigera responsen',
+    responsibleTeachers: 'Ansvariga lärare',
     QR: 'QR-kod',
   },
   noadUser: {
