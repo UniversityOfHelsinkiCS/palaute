@@ -135,6 +135,7 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
       const currentResults = getResults(current, questions)
       const previousResults = getResults(previous, questions)
       const { feedbackCount, studentCount } = getCounts(current)
+      const feedbackPercentage = feedbackCount / studentCount
 
       const results = currentResults.map((r) => {
         const previousQuestionResults = previousResults.find(
@@ -155,6 +156,7 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
         results,
         feedbackCount,
         studentCount,
+        feedbackPercentage,
         feedbackResponseGiven,
         closesAt,
       }
@@ -185,6 +187,8 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         courseUnits,
         ({ studentCount }) => studentCount,
       )
+
+      const feedbackPercentage = feedbackCount / studentCount
 
       const allResults = courseUnits.flatMap(({ results }) => results)
 
@@ -220,6 +224,7 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         results,
         feedbackCount,
         studentCount,
+        feedbackPercentage,
         courseUnits,
       }
     },
@@ -251,6 +256,8 @@ const createOpenUniOrganisation = (openUniOrganisations) => {
     { feedbackCount: 0, studentCount: 0 },
   )
 
+  const feedbackPercentage = counts.feedbackCount / counts.studentCount
+
   let divider = 0
 
   const results = uniqueCourseUnits.reduce((allResults, { results }) => {
@@ -276,6 +283,7 @@ const createOpenUniOrganisation = (openUniOrganisations) => {
       courseUnits: uniqueCourseUnits,
       feedbackCount: counts.feedbackCount,
       studentCount: counts.studentCount,
+      feedbackPercentage,
       results: dividedResults,
     },
   ]
@@ -334,6 +342,7 @@ const withMissingOrganisations = (
       })),
       feedbackCount: 0,
       studentCount: 0,
+      feedbackPercentage: 0,
     })),
   ]
 

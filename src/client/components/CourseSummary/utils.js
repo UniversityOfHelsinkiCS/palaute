@@ -79,12 +79,12 @@ export const ORDER_BY_OPTIONS = [
 
 const ARGS_BY_ORDER_BY = {
   FEEDBACK_COUNT_ASC: {
-    organisations: [['feedbackCount'], ['asc']],
-    courseUnits: [['feedbackCount'], ['asc']],
+    organisations: [['feedbackPercentage'], ['asc']],
+    courseUnits: [['feedbackPercentage'], ['asc']],
   },
   FEEDBACK_COUNT_DESC: {
-    organisations: [['feedbackCount'], ['desc']],
-    courseUnits: [['feedbackCount'], ['desc']],
+    organisations: [['feedbackPercentage'], ['desc']],
+    courseUnits: [['feedbackPercentage'], ['desc']],
   },
 }
 
