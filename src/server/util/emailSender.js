@@ -446,31 +446,19 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
       ),
   )
 
-  const rows = feedbackTargets.flatMap((target) =>
-    target.users.map((user) => ({
-      userId: user.UserFeedbackTarget.userId,
-      feedbackTargetId: user.UserFeedbackTarget.feedbackTargetId,
-    })),
-  )
-
-  for (const userFeedbackTarget of rows) {
-    UserFeedbackTarget.update(
-      {
-        feedbackOpenEmailSent: true,
-      },
-      {
-        where: {
-          userId: {
-            [Op.eq]: userFeedbackTarget.userId,
-          },
-          feedbackTargetId: {
-            [Op.eq]: userFeedbackTarget.feedbackTargetId,
-          },
+  const ids = feedbackTargets.map((target) => target.id)
+  FeedbackTarget.update(
+    {
+      feedbackOpeningReminderEmailSent: true,
+    },
+    {
+      where: {
+        id: {
+          [Op.in]: ids,
         },
       },
-    )
-  }
-
+    },
+  )
   sendEmail(emailsToBeSent)
 
   return emailsToBeSent
