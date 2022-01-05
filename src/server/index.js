@@ -10,6 +10,11 @@ const logger = require('./util/logger')
 
 const app = express()
 
+const {
+  sendEmailAboutSurveyOpeningToStudents,
+  sendEmailReminderAboutSurveyOpeningToTeachers,
+} = require('./util/emailSender')
+
 app.use('/api', (req, res, next) => require('./util/routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))
 
@@ -34,5 +39,8 @@ const start = async () => {
 }
 
 start()
+
+sendEmailAboutSurveyOpeningToStudents()
+sendEmailReminderAboutSurveyOpeningToTeachers()
 
 module.exports = app

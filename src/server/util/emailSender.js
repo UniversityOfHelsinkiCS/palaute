@@ -7,6 +7,7 @@ const {
   CourseUnit,
   Organisation,
   User,
+  UserFeedbackTarget,
 } = require('../models')
 
 const {
@@ -24,12 +25,10 @@ const getOpenFeedbackTargetsForStudents = async () => {
     where: {
       opensAt: {
         [Op.gt]: subDays(new Date(), 3),
-        [Op.lt]: addDays(new Date(), 1),
       },
       closesAt: {
         [Op.gt]: new Date(),
       },
-      feedbackOpenNotificationEmailSent: false,
       hidden: false,
       feedbackType: 'courseRealisation',
     },
@@ -146,7 +145,6 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
     where: {
       id: feedbackTargetId,
       hidden: false,
-      feedbackOpenNotificationEmailSent: false,
       feedbackType: 'courseRealisation',
     },
     include: [
@@ -173,7 +171,7 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['email', 'language'],
+        attributes: ['id', 'username', 'email', 'language'],
       },
     ],
   })
@@ -328,7 +326,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
   let emails = {}
   for (feedbackTarget of feedbackTargets) {
     for (user of feedbackTarget.users) {
-      if (!user.email) continue
+      if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) continue
       emails[user.email]
         ? (emails[user.email] = emails[user.email].concat([
             {
@@ -403,20 +401,30 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
       ),
   )
 
-  const ids = feedbackTargets.map((target) => target.id)
+  const rows = feedbackTargets.flatMap((target) =>
+    target.users.map((user) => ({
+      userId: user.UserFeedbackTarget.userId,
+      feedbackTargetId: user.UserFeedbackTarget.feedbackTargetId,
+    })),
+  )
 
-  FeedbackTarget.update(
-    {
-      feedbackOpenNotificationEmailSent: true,
-    },
-    {
-      where: {
-        id: {
-          [Op.in]: ids,
+  for (const userFeedbackTarget of rows) {
+    UserFeedbackTarget.update(
+      {
+        feedbackOpenEmailSent: true,
+      },
+      {
+        where: {
+          userId: {
+            [Op.eq]: userFeedbackTarget.userId,
+          },
+          feedbackTargetId: {
+            [Op.eq]: userFeedbackTarget.feedbackTargetId,
+          },
         },
       },
-    },
-  )
+    )
+  }
 
   sendEmail(emailsToBeSent)
 
@@ -438,20 +446,30 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
       ),
   )
 
-  const ids = feedbackTargets.map((target) => target.id)
+  const rows = feedbackTargets.flatMap((target) =>
+    target.users.map((user) => ({
+      userId: user.UserFeedbackTarget.userId,
+      feedbackTargetId: user.UserFeedbackTarget.feedbackTargetId,
+    })),
+  )
 
-  FeedbackTarget.update(
-    {
-      feedbackOpeningReminderEmailSent: true,
-    },
-    {
-      where: {
-        id: {
-          [Op.in]: ids,
+  for (const userFeedbackTarget of rows) {
+    UserFeedbackTarget.update(
+      {
+        feedbackOpenEmailSent: true,
+      },
+      {
+        where: {
+          userId: {
+            [Op.eq]: userFeedbackTarget.userId,
+          },
+          feedbackTargetId: {
+            [Op.eq]: userFeedbackTarget.feedbackTargetId,
+          },
         },
       },
-    },
-  )
+    )
+  }
 
   sendEmail(emailsToBeSent)
 
