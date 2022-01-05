@@ -291,6 +291,7 @@ const getStudentEmailCounts = async () => {
           AND f.feedback_open_notification_email_sent = false
           AND f.hidden = false
           AND c.start_date > '2021-8-1 00:00:00+00'
+          AND u.feedback_open_email_sent = false
         GROUP BY f.opens_at`,
     {
       replacements: {
@@ -369,7 +370,7 @@ const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
   const emails = {}
 
   for (const user of students) {
-    if (!user.email) {
+    if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) {
       // eslint-disable-next-line
       continue
     }
@@ -447,6 +448,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   )
 
   const ids = feedbackTargets.map((target) => target.id)
+
   FeedbackTarget.update(
     {
       feedbackOpeningReminderEmailSent: true,
@@ -459,6 +461,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
       },
     },
   )
+
   sendEmail(emailsToBeSent)
 
   return emailsToBeSent
@@ -582,17 +585,28 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
       ]),
   )
 
-  FeedbackTarget.update(
-    {
-      feedbackOpeningReminderEmailSent: true,
-      feedbackOpenNotificationEmailSent: true,
-    },
-    {
-      where: {
-        id: feedbackTargetId,
+  const rows = feedbackTarget[0].users.map((user) => ({
+    userId: user.UserFeedbackTarget.userId,
+    feedbackTargetId: user.UserFeedbackTarget.feedbackTargetId,
+  }))
+
+  for (const userFeedbackTarget of rows) {
+    UserFeedbackTarget.update(
+      {
+        feedbackOpenEmailSent: true,
       },
-    },
-  )
+      {
+        where: {
+          userId: {
+            [Op.eq]: userFeedbackTarget.userId,
+          },
+          feedbackTargetId: {
+            [Op.eq]: userFeedbackTarget.feedbackTargetId,
+          },
+        },
+      },
+    )
+  }
 
   sendEmail(studentEmailsToBeSent)
 
