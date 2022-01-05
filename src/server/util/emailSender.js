@@ -24,10 +24,10 @@ const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.gt]: subDays(new Date(), 3),
+        [Op.lte]: new Date(),
       },
       closesAt: {
-        [Op.gt]: new Date(),
+        [Op.gte]: new Date(),
       },
       hidden: false,
       feedbackType: 'courseRealisation',
