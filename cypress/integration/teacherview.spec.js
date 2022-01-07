@@ -52,7 +52,7 @@ describe('Teacher view', () => {
     cy.contains('TKT20002 Software Development Methods').click()
     cy.contains('Counter feedback given')
   })
-  it('If teacher has ongoing courses their surveys can be edited', () => {
+  /* it('If teacher has ongoing courses their surveys can be edited', () => {
     cy.loginAsSecondaryTeacher()
     cy.contains('Ongoing courses')
     cy.get('div').contains('TKT21024 Programming Challenges I').click()
@@ -61,7 +61,7 @@ describe('Teacher view', () => {
     cy.contains('Edit survey').click()
     cy.contains('Programming Challenges I')
     cy.contains('Add question')
-  })
+  }) */
   it('Teacher can add questions to a survey', () => {
     cy.visit('localhost:8000/targets/165/edit')
     cy.contains('Add question').click()
