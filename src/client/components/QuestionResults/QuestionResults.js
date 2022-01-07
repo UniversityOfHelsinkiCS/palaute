@@ -59,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  displayStyle: {
+    '@media print': {
+      display: 'block',
+    },
+  },
 }))
 
 const componentByType = {
@@ -203,7 +208,7 @@ const QuestionResults = ({
           classes={classes}
         />
       )}
-      <Grid spacing={2} container>
+      <Grid spacing={2} container className={classes.displayStyle}>
         {notOpenQuestions.map((q) => (
           <Grid key={q.id} xs={12} sm={12} md={6} item>
             <QuestionItem
