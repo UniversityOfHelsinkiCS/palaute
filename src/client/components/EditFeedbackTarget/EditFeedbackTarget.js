@@ -23,6 +23,9 @@ import Toolbar from './Toolbar'
 import CopyFromCourseDialog from './CopyFromCourseDialog'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { isAdmin } from '../NavBar/utils'
+
 import {
   getUpperLevelQuestions,
   openFeedbackImmediately,
@@ -33,6 +36,7 @@ import {
   saveQuestionsValues,
   saveFeedbackPeriodValues,
   getOrganisationNames,
+  feedbackTargetIsOpenOrClosed,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -125,12 +129,15 @@ const EditFeedbackTarget = () => {
   const { i18n, t } = useTranslation()
   const queryClient = useQueryClient()
   const { language } = i18n
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdminUser = isAdmin(authorizedUser)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
 
-  if (isLoading) {
+  if (isLoading || authorizedUserLoading) {
     return (
       <div className={classes.progressContainer}>
         <CircularProgress />
@@ -140,6 +147,10 @@ const EditFeedbackTarget = () => {
 
   if (!feedbackTarget) {
     return <Redirect to="/" />
+  }
+
+  if (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser) {
+    return <Redirect to={`/targets/${id}/feedback`} />
   }
 
   const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(
