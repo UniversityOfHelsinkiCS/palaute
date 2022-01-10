@@ -136,6 +136,8 @@ export default {
     upperLevelQuestionsInfoMany:
       'Survey already has {{count}} university and programme level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions.\n Programme level questions come from the responsible organisations, which are {{organisations}}.',
     showPreview: 'Show survey preview',
+    showPreviewConfirmation:
+      'Are you sure you want to preview? Unsaved changes will be lost.',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
       'NB! The survey cannot be edited after the feedback opens. The feedback must be open at least for a day',

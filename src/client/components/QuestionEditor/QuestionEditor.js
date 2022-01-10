@@ -127,7 +127,10 @@ const QuestionEditor = ({
             {editable && (
               <Button
                 color="primary"
-                onClick={() => setMenuOpen(true)}
+                onClick={() => {
+                  setMenuOpen(true)
+                  handleStopEditing()
+                }}
                 ref={addButtonRef}
               >
                 {t('questionEditor:addQuestion')}

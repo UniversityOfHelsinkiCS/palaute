@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { makeStyles, Button } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
@@ -20,16 +20,24 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
   const classes = useStyles()
+  const history = useHistory()
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    // eslint-disable-next-line no-alert
+    const redirect = window.confirm(
+      t('editFeedbackTarget:showPreviewConfirmation'),
+    )
+    if (redirect) {
+      history.push(previewLink)
+    }
+    return false
+  }
 
   return (
     <FixedContainer>
       <div className={classes.container}>
-        <Button
-          color="primary"
-          variant="contained"
-          component={Link}
-          to={previewLink}
-        >
+        <Button color="primary" variant="contained" onClick={handleClick}>
           {t('editFeedbackTarget:showPreview')}
         </Button>
 

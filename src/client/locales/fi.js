@@ -132,6 +132,8 @@ export default {
     upperLevelQuestionsInfoMany:
       'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.\n Koulutusohjelmatason kysymykset tulevat vastuuorganisaatioilta, jotka ovat {{organisations}}.',
     showPreview: 'Esikatsele kyselyä',
+    showPreviewConfirmation:
+      'Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
       'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
