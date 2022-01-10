@@ -117,8 +117,8 @@ const FeedbackTargetResults = () => {
         display="flex"
         alignItems="flex-end"
         flexDirection="column"
-        position="relative"
-        style={{ top: -50 }}
+        position="static"
+        style={{ marginTop: -50 }}
       >
         {showCloseImmediately && (
           <Button
