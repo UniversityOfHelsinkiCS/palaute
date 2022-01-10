@@ -129,6 +129,8 @@ export default {
     upperLevelQuestionsInfo:
       'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
     showPreview: 'Visa förfrågans förhandsvisning',
+    showPreviewConfirmation:
+      'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
     translationLanguage: 'Språkversion',
     warningAboutOpeningCourse:
       'VARNING! Formulärets information kan inte ändras efter att föfrågan har öppnats',
