@@ -100,6 +100,11 @@ router.get(
   courseSummary.getByCourseUnit,
 )
 
+router.get(
+  '/course-summaries/organisations/:code',
+  courseSummary.getByOrganisation,
+)
+
 router.get('/course-summaries/access', courseSummary.getAccessInfo)
 
 router.get('/organisations', organisation.getOrganisations)

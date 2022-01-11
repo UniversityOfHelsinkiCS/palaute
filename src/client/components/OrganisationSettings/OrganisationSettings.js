@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import CourseSettings from './CourseSettings'
 import GeneralSettings from './GeneralSettings'
 import EditSurvey from './EditSurvey'
+import ProgrammeSummary from './ProgrammeSummary'
 import useOrganisation from '../../hooks/useOrganisation'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -71,6 +72,11 @@ const OrganisationSettings = () => {
             component={Link}
             to={`${url}/survey`}
           />
+          <Tab
+            label={t('organisationSettings:summaryTab')}
+            component={Link}
+            to={`${url}/summary`}
+          />
         </RouterTabs>
       </Box>
 
@@ -85,6 +91,10 @@ const OrganisationSettings = () => {
 
         <Route path={`${path}/survey`}>
           <EditSurvey />
+        </Route>
+
+        <Route path={`${path}/summary`}>
+          <ProgrammeSummary />
         </Route>
 
         <Redirect to={`${path}/general`} />

@@ -277,6 +277,7 @@ export default {
     generalTab: 'Yleiset asetukset',
     coursesTab: 'Aktivoidut kurssit',
     surveyTab: 'Koulutusohjelman kysely',
+    summaryTab: 'Yhteenveto',
     editProgrammeQuestionsDialogTitle: 'Varoitus!',
     editProgrammeQuestionsDialogContent:
       'Olet muokkaamassa koko koulutusohjelman yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla koulutusohjelman kursseilla. Oletko varma, että haluat muokata näitä kysymyksiä?',

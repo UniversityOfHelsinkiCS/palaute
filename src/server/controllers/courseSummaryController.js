@@ -210,7 +210,59 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
+const getByOrganisation = async (req, res) => {
+  const { user } = req
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const { code } = req.params
+  const { includeOpenUniCourseUnits } = req.query
+
+  const access = organisationAccess.filter(
+    (org) => org.organisation.code === code,
+  )
+
+  if (access.length === 0) {
+    throw new ApplicationError(403, 'Forbidden')
+  }
+
+  const universitySurvey = await Survey.findOne({
+    where: { type: 'university' },
+  })
+  const programmeSurvey = await Survey.findOne({
+    where: { type: 'programme', typeId: code },
+  })
+
+  await universitySurvey.populateQuestions()
+  await programmeSurvey.populateQuestions()
+
+  const questions = [
+    ...universitySurvey.questions,
+    ...programmeSurvey.questions,
+  ]
+
+  const summaryQuestions = questions
+    .filter((q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
+    .map((question) => ({
+      ...question.toJSON(),
+      secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
+    }))
+
+  const organisations = await getOrganisationSummaries({
+    questions: summaryQuestions,
+    organisationAccess: access,
+    accessibleCourseRealisationIds: [],
+    includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
+  })
+
+  res.send({
+    organisations: organisations.filter((org) => org.code === code),
+    summaryQuestions,
+  })
+}
+
 module.exports = {
+  getByOrganisation,
   getByOrganisations,
   getByCourseUnit,
   getAccessInfo,
