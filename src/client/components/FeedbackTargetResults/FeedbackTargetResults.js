@@ -111,6 +111,8 @@ const FeedbackTargetResults = () => {
   const showCloseImmediately =
     isTeacher && isOpen && feedbackCanBeClosed(feedbackTarget)
 
+  const raiseButton = showCloseImmediately ? { marginTop: -50 } : {}
+
   return (
     <>
       <Box
@@ -118,7 +120,7 @@ const FeedbackTargetResults = () => {
         alignItems="flex-end"
         flexDirection="column"
         position="static"
-        style={{ marginTop: -50 }}
+        style={raiseButton}
       >
         {showCloseImmediately && (
           <Button
