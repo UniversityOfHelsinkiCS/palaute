@@ -159,7 +159,7 @@ const OrganisationSummary = () => {
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
-    useHistoryState('includeOpenUniCourseUnits', true)
+    useHistoryState('includeOpenUniCourseUnits', false)
 
   const [orderBy, setOrderBy] = useHistoryState(
     'orderBy',
