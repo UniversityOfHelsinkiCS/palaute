@@ -62,7 +62,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
       })}
     >
       <Typography>
-        {formatDate(startDate)} - {formatDate(endDate)}
+        {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} -{' '}
+        {formatDate(endDate)}
       </Typography>
     </Tooltip>
   )
@@ -78,7 +79,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
             <Link component={RouterLink} to={`/targets/${id}`}>
               {getLanguageValue(name, i18n.language)}{' '}
             </Link>
-            <Typography>{periodInfo}</Typography>
+            <>{periodInfo}</>
           </>
         }
         secondary={
