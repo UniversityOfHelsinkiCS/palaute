@@ -1,4 +1,4 @@
-const { BOOLEAN } = require('sequelize/types')
+const { BOOLEAN } = require('sequelize')
 
 module.exports = {
   up: async (queryInterface) => {
