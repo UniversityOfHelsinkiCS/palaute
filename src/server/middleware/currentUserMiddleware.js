@@ -53,8 +53,7 @@ const getUsernameFromToken = (req) => {
     return username
   } catch (err) {
     logger.info('Token broken', { token })
-    logger.info('Request path', { path: req.path })
-    logger.info('Request headers', { headers: req.headers })
+    logger.info('Request user', { user: req.user })
     throw new ApplicationError('Access token was malformed', 500)
   }
 }
