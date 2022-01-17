@@ -414,9 +414,6 @@ FeedbackTarget.init(
     feedbackResponseEmailSent: {
       type: BOOLEAN,
     },
-    feedbackOpenNotificationEmailSent: {
-      type: BOOLEAN,
-    },
     feedbackOpeningReminderEmailSent: {
       type: BOOLEAN,
     },

@@ -7,6 +7,7 @@ const {
   CourseUnit,
   Organisation,
   User,
+  UserFeedbackTarget,
 } = require('../models')
 
 const {
@@ -23,13 +24,11 @@ const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.gt]: subDays(new Date(), 3),
-        [Op.lt]: addDays(new Date(), 1),
+        [Op.lte]: new Date(),
       },
       closesAt: {
-        [Op.gt]: new Date(),
+        [Op.gte]: new Date(),
       },
-      feedbackOpenNotificationEmailSent: false,
       hidden: false,
       feedbackType: 'courseRealisation',
     },
@@ -146,7 +145,6 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
     where: {
       id: feedbackTargetId,
       hidden: false,
-      feedbackOpenNotificationEmailSent: false,
       feedbackType: 'courseRealisation',
     },
     include: [
@@ -173,7 +171,7 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['email', 'language'],
+        attributes: ['id', 'username', 'email', 'language'],
       },
     ],
   })
@@ -290,9 +288,9 @@ const getStudentEmailCounts = async () => {
         WHERE f.opens_at > :opensAtLow and f.opens_at < :opensAtHigh 
           AND u.access_status = 'STUDENT' 
           AND f.feedback_type = 'courseRealisation'
-          AND f.feedback_open_notification_email_sent = false
           AND f.hidden = false
           AND c.start_date > '2021-8-1 00:00:00+00'
+          AND u.feedback_open_email_sent = false
         GROUP BY f.opens_at`,
     {
       replacements: {
@@ -328,11 +326,12 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
   let emails = {}
   for (feedbackTarget of feedbackTargets) {
     for (user of feedbackTarget.users) {
-      if (!user.email) continue
+      if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) continue
       emails[user.email]
         ? (emails[user.email] = emails[user.email].concat([
             {
               id: feedbackTarget.id,
+              userFeedbackTargetId: user.UserFeedbackTarget.id,
               name: feedbackTarget.courseUnit.name,
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
@@ -345,6 +344,7 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
         : (emails[user.email] = [
             {
               id: feedbackTarget.id,
+              userFeedbackTargetId: user.UserFeedbackTarget.id,
               name: feedbackTarget.courseUnit.name,
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
@@ -371,13 +371,14 @@ const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
   const emails = {}
 
   for (const user of students) {
-    if (!user.email) {
+    if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) {
       // eslint-disable-next-line
       continue
     }
 
     emails[user.email] = {
       id: singleFbt.id,
+      userFeedbackTargetId: user.UserFeedbackTarget.id,
       name: singleFbt.courseUnit.name,
       opensAt: singleFbt.opensAt,
       closesAt: singleFbt.closesAt,
@@ -403,11 +404,15 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
       ),
   )
 
-  const ids = feedbackTargets.map((target) => target.id)
+  const ids = Object.keys(studentsWithFeedbackTargets).flatMap((key) =>
+    studentsWithFeedbackTargets[key].map(
+      (course) => course.userFeedbackTargetId,
+    ),
+  )
 
-  FeedbackTarget.update(
+  UserFeedbackTarget.update(
     {
-      feedbackOpenNotificationEmailSent: true,
+      feedbackOpenEmailSent: true,
     },
     {
       where: {
@@ -576,14 +581,19 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
       ]),
   )
 
-  FeedbackTarget.update(
+  const ids = Object.values(studentsWithFeedbackTarget).map(
+    (value) => value.userFeedbackTargetId,
+  )
+
+  UserFeedbackTarget.update(
     {
-      feedbackOpeningReminderEmailSent: true,
-      feedbackOpenNotificationEmailSent: true,
+      feedbackOpenEmailSent: true,
     },
     {
       where: {
-        id: feedbackTargetId,
+        id: {
+          [Op.in]: ids,
+        },
       },
     },
   )
