@@ -1,4 +1,4 @@
-const { STRING, INTEGER, Model } = require('sequelize')
+const { STRING, INTEGER, Model, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class UserFeedbackTarget extends Model {
@@ -13,6 +13,11 @@ class UserFeedbackTarget extends Model {
 
 UserFeedbackTarget.init(
   {
+    id: {
+      primaryKey: true,
+      type: STRING,
+      allowNull: false,
+    },
     accessStatus: {
       type: STRING,
       allowNull: false,
@@ -24,6 +29,10 @@ UserFeedbackTarget.init(
     },
     feedbackTargetId: {
       type: INTEGER,
+      allowNull: false,
+    },
+    feedbackOpenEmailSent: {
+      type: BOOLEAN,
       allowNull: false,
     },
   },
