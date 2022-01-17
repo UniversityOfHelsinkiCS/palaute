@@ -21,7 +21,7 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
   return feedbackResponseGiven ? 'GIVEN' : 'NONE'
 }
 
-const filterByCourseCode = (organisations, keyword) => {
+export const filterByCourseCode = (organisations, keyword) => {
   const normalizedKeyword = keyword.trim().toLowerCase()
 
   if (!normalizedKeyword) {
@@ -88,7 +88,7 @@ const ARGS_BY_ORDER_BY = {
   },
 }
 
-const orderByCriteria = (organisations, orderByCriteria) => {
+export const orderByCriteria = (organisations, orderByCriteria) => {
   const orderByArgs = ARGS_BY_ORDER_BY[orderByCriteria]
 
   return orderByArgs

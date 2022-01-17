@@ -6,8 +6,7 @@ import {
   CircularProgress,
   TableContainer,
   makeStyles,
-  FormControlLabel,
-  Switch,
+  Divider,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -17,11 +16,16 @@ import ResultsRow from '../CourseSummary/ResultsRow'
 import VerticalHeading from '../CourseSummary/VerticalHeading'
 import CourseUnitSummary from '../CourseSummary/CourseUnitSummary'
 import DividerRow from '../CourseSummary/DividerRow'
+import Filters from '../CourseSummary/Filters'
 
+import {
+  ORDER_BY_OPTIONS,
+  useHistoryState,
+  filterByCourseCode,
+  orderByCriteria,
+} from '../CourseSummary/utils'
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationSummary from '../../hooks/useOrganisationSummary'
-
-import { useHistoryState } from '../CourseSummary/utils'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -38,12 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // A lot taken from OrganisationSummary.js
-const ProgrammeTable = ({
-  organisations,
-  questions,
-  handleIncludeOpenUniCourseUnitsChange,
-  includeOpenUniCourseUnits,
-}) => {
+const ProgrammeTable = ({ organisations, questions, filters }) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
@@ -52,22 +51,7 @@ const ProgrammeTable = ({
       <table className={classes.table}>
         <thead>
           <tr>
-            <th>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={includeOpenUniCourseUnits}
-                    onChange={(event) => {
-                      handleIncludeOpenUniCourseUnitsChange(
-                        event.target.checked,
-                      )
-                    }}
-                    color="primary"
-                  />
-                }
-                label={t('courseSummary:includeOpenUniCourses')}
-              />
-            </th>
+            <th className={classes.filtersCell}>{filters}</th>
             <th aria-hidden="true" />
             {questions.map(({ id, data }) => (
               <VerticalHeading key={id}>
@@ -130,6 +114,11 @@ const ProgrammeSummary = () => {
   const { code } = useParams()
   const queryClient = useQueryClient()
 
+  const [keyword, setKeyword] = useHistoryState('keyword', '')
+  const [orderBy, setOrderBy] = useHistoryState(
+    'orderBy',
+    ORDER_BY_OPTIONS[0].value,
+  )
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
@@ -137,11 +126,19 @@ const ProgrammeSummary = () => {
     includeOpenUniCourseUnits,
   })
 
+  const handleKeywordChange = (nextKeyword) => {
+    setKeyword(nextKeyword)
+  }
+
   const handleIncludeOpenUniCourseUnitsChange = (
     nextIncludeOpenUniCourseUnits,
   ) => {
     setIncludeOpenUniCourseUnits(nextIncludeOpenUniCourseUnits)
     queryClient.invalidateQueries('organisationSummary')
+  }
+
+  const handleOrderByChange = (nextOrderBy) => {
+    setOrderBy(nextOrderBy)
   }
 
   if (isLoading) {
@@ -154,15 +151,31 @@ const ProgrammeSummary = () => {
 
   const { organisations, summaryQuestions } = data
 
+  const filteredOrganisations = filterByCourseCode(organisations ?? [], keyword)
+  const sortedOrganisations = orderByCriteria(filteredOrganisations, orderBy)
+
   return (
     <>
       <ProgrammeTable
-        organisations={organisations}
+        organisations={sortedOrganisations}
         questions={summaryQuestions}
-        handleIncludeOpenUniCourseUnitsChange={
-          handleIncludeOpenUniCourseUnitsChange
+        filters={
+          <>
+            <Box mb={2}>
+              <Filters
+                keyword={keyword}
+                onKeywordChange={handleKeywordChange}
+                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+                onIncludeOpenUniCourseUnitsChange={
+                  handleIncludeOpenUniCourseUnitsChange
+                }
+                orderBy={orderBy}
+                onOrderByChange={handleOrderByChange}
+              />
+            </Box>
+            <Divider />
+          </>
         }
-        includeOpenUniCourseUnits={includeOpenUniCourseUnits}
       />
     </>
   )
