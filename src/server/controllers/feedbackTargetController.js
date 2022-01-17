@@ -662,10 +662,7 @@ const openFeedbackImmediately = async (req, res) => {
     )
   }
 
-  if (
-    !feedbackTarget.feedbackOpenNotificationSent &&
-    !feedbackTarget.feedbackOpeningReminderEmailSent
-  ) {
+  if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
     sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 

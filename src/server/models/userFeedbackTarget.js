@@ -13,6 +13,11 @@ class UserFeedbackTarget extends Model {
 
 UserFeedbackTarget.init(
   {
+    id: {
+      primaryKey: true,
+      type: STRING,
+      allowNull: false,
+    },
     accessStatus: {
       type: STRING,
       allowNull: false,
