@@ -182,3 +182,20 @@ export const getOrganisationNames = (feedbackTarget, language) => {
     allOrganisations,
   }
 }
+
+export const validateQuestions = (values) => {
+  const { questions } = values
+
+  const editableQuestions = questions.filter(({ editable }) => editable)
+
+  for (const question of editableQuestions) {
+    if (
+      question.type === 'SINGLE_CHOICE' ||
+      question.type === 'MULTIPLE_CHOICE'
+    ) {
+      if (!question.data.options || question.data.options.length < 1)
+        return false
+    }
+  }
+  return true
+}

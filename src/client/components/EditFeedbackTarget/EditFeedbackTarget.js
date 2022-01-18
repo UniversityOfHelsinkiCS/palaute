@@ -37,6 +37,7 @@ import {
   saveFeedbackPeriodValues,
   getOrganisationNames,
   feedbackTargetIsOpenOrClosed,
+  validateQuestions,
 } from './utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -185,9 +186,13 @@ const EditFeedbackTarget = () => {
 
   const handleSaveQuestions = async (values) => {
     try {
-      await saveQuestionsValues(values, feedbackTarget)
+      if (!validateQuestions(values)) {
+        enqueueSnackbar(t('choiceQuestionError'), { variant: 'error' })
+      } else {
+        await saveQuestionsValues(values, feedbackTarget)
 
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      }
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
