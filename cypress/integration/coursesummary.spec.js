@@ -2,6 +2,7 @@ describe('Course summary view', () => {
   it('An user with organisation access can visit summary page', () => {
     cy.loginAsStudyCoordinator()
     cy.contains('Course summary').click()
+    cy.wait(10000)
     cy.contains('Summary of course feedback')
     cy.contains(`Bachelor's Programme in Theology and Religious Studies`)
   })
@@ -9,6 +10,8 @@ describe('Course summary view', () => {
   it('An user with write access can edit programme level questions', () => {
     cy.loginAsStudyCoordinator()
     cy.contains('Course summary').click()
+    cy.wait(10000)
+
     cy.get('a[id=settings-button-500-K005]').click()
     cy.contains(`Bachelor's Programme in Computer Science`)
 
