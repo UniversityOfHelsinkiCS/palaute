@@ -29,7 +29,54 @@ const openUniversityValues = {
   ],
 }
 
-const ORGANISATION_SUMMARY_QUERY = `
+const ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS = `
+WITH question_averages AS (
+  ${QUESTION_AVERAGES_QUERY}
+), feedback_counts AS (
+  ${COUNTS_QUERY}
+)
+
+SELECT
+  question_id,
+  question_data,
+  question_data_count,
+  feedback_count,
+  student_count,
+  feedback_targets.id AS feedback_target_id,
+  feedback_targets.closes_at AS closes_at,
+  course_realisations.id AS course_realisation_id,
+  course_realisations.name AS course_realisation_name,
+  course_realisations.start_date AS course_realisation_start_date,
+  course_realisations.end_date AS course_realisation_end_date,
+  course_units.course_code AS course_code,
+  course_units.name AS course_unit_name,
+  course_units.id AS course_unit_id,
+  course_realisations_organisations.organisation_id AS course_realisations_organisation_id,
+  organisations.id AS organisation_id,
+  organisations.name AS organisation_name,
+  organisations.code AS organisation_code,
+  CASE
+    WHEN feedback_targets.feedback_response IS NOT NULL
+    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+    ELSE FALSE
+  END AS feedback_response_given
+FROM question_averages
+  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
+  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  INNER JOIN course_realisations_organisations ON course_realisations.id = course_realisations_organisations.course_realisation_id
+  INNER JOIN organisations ON course_realisations_organisations.organisation_id = organisations.id
+  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
+WHERE
+  feedback_targets.feedback_type = 'courseRealisation'
+  AND (organisations.id IN (:organisationIds) OR course_realisations.id IN (:accessibleCourseRealisationIds))
+  AND course_units.course_code NOT IN (:disabledCourseCodes)
+  AND course_realisations.start_date < NOW()
+  AND course_realisations.start_date > NOW() - interval '48 months';
+`
+
+const ORGANISATION_SUMMARY_QUERY_BY_UNITS = `
 WITH question_averages AS (
   ${QUESTION_AVERAGES_QUERY}
 ), feedback_counts AS (
@@ -312,7 +359,10 @@ const getOrganisationsWithResults = (rows, questions, allRows) => {
 
   const openUniOrganisation = createOpenUniOrganisation(openUniOrganisations)
 
-  const allOrganisations = filteredOrganisations.concat(openUniOrganisation)
+  const allOrganisations =
+    openUniOrganisation[0].courseUnits.length > 0
+      ? filteredOrganisations.concat(openUniOrganisation)
+      : filteredOrganisations
 
   return _.orderBy(allOrganisations, ['code'], ['asc'])
 }
@@ -394,9 +444,29 @@ const getOrganisationSummaries = async ({
     ({ disabledCourseCodes }) => disabledCourseCodes ?? [],
   )
 
-  const rows =
+  const rowsByRealisations =
     organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
+      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS, {
+          replacements: {
+            questionIds,
+            organisationIds: [
+              ...organisationIds,
+              '_', // in case of empty array
+            ],
+            validDataValues,
+            disabledCourseCodes: [...disabledCourseCodes, '_'],
+            accessibleCourseRealisationIds: [
+              ...accessibleCourseRealisationIds,
+              '_',
+            ],
+          },
+          type: sequelize.QueryTypes.SELECT,
+        })
+      : []
+
+  const rowsByUnits =
+    organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
+      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_UNITS, {
           replacements: {
             questionIds,
             organisationIds: [
@@ -415,11 +485,11 @@ const getOrganisationSummaries = async ({
       : []
 
   const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOpenUniRows(rows)
-    : rows
+    ? await omitOpenUniRows(rowsByRealisations)
+    : rowsByUnits
 
   const organisationsWithMissing = withMissingOrganisations(
-    getOrganisationsWithResults(normalizedRows, questions, rows),
+    getOrganisationsWithResults(normalizedRows, questions, rowsByRealisations),
     organisationAccess,
     questions,
   )
