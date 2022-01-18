@@ -360,7 +360,7 @@ const getOrganisationsWithResults = (rows, questions, allRows) => {
   const openUniOrganisation = createOpenUniOrganisation(openUniOrganisations)
 
   const allOrganisations =
-    openUniOrganisation[0].courseUnits.length > 0
+    openUniOrganisation[0] && openUniOrganisation[0].courseUnits.length > 0
       ? filteredOrganisations.concat(openUniOrganisation)
       : filteredOrganisations
 

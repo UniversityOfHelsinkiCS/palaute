@@ -30,7 +30,7 @@ const student = {
 }
 
 const studyCoordinator = {
-  uid: 'keolli',
+  uid: 'mluukkai',
   givenname: 'Daniel',
   sn: 'Dekaani',
   mail: 'dekaani@toska.fi',
