@@ -23,6 +23,10 @@ CourseRealisation.init(
       type: JSONB,
       allowNull: false,
     },
+    educationalInstitutionUrn: {
+      type: STRING,
+      allowNull: true,
+    },
   },
   {
     underscored: true,

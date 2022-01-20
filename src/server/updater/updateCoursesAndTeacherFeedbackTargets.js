@@ -176,12 +176,33 @@ const getCourseRealisationPeriod = (activityPeriod) => {
   }
 }
 
+const getEducationalInstitutionUrn = (organisations) => {
+  const urns = new Set()
+
+  organisations.forEach((organisation) => {
+    if (
+      organisation.roleUrn ===
+        'urn:code:organisation-role:coordinating-organisation' &&
+      organisation.educationalInstitutionUrn
+    ) {
+      urns.add(organisation.educationalInstitutionUrn)
+    }
+  })
+
+  if (urns.size > 1) {
+    logger.info('More than one org', {})
+  }
+
+  return urns.values().next().value // Yes wtf
+}
+
 const createCourseRealisations = async (courseRealisations) => {
   await CourseRealisation.bulkCreate(
-    courseRealisations.map(({ id, name, activityPeriod }) => ({
+    courseRealisations.map(({ id, name, activityPeriod, organisations }) => ({
       id,
       name,
       ...getCourseRealisationPeriod(activityPeriod),
+      educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
     })),
     { updateOnDuplicate: ['name', 'endDate', 'startDate'] },
   )
@@ -216,7 +237,7 @@ const createFeedbackTargets = async (courses) => {
         .filter(({ personId }) => personId)
         .map(({ personId }) => personId)
 
-      const courseUnit = course.courseUnits[0] // TODO fix
+      const courseUnit = course.courseUnits[0]
       const courseEndDate = new Date(course.activityPeriod.endDate)
 
       const opensAt = formatDate(courseEndDate)
