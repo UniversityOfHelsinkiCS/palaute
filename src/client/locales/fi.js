@@ -12,6 +12,7 @@ export default {
       wrongDate: 'Kysely sulkeutuu ennen sen avautumista',
     },
     unknownError: 'Jotain meni pieleen',
+    choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
     save: 'Tallenna',
     saveSuccess: 'Tiedot tallennettiin onnistuneesti',
     name: 'Nimi',

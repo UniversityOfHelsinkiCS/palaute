@@ -12,6 +12,7 @@ export default {
       wrongDate: 'Survey closing date is before opening date',
     },
     unknownError: 'Something went wrong',
+    choiceQuestionError: 'Choice questions require answer options',
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',

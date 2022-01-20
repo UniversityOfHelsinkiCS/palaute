@@ -15,8 +15,9 @@ UserFeedbackTarget.init(
   {
     id: {
       primaryKey: true,
-      type: STRING,
+      type: INTEGER,
       allowNull: false,
+      autoIncrement: true,
     },
     accessStatus: {
       type: STRING,
