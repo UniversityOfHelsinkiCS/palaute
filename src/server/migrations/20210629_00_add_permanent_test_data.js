@@ -61,6 +61,7 @@ module.exports = {
         },
         endDate: '2021-08-01',
         startDate: '2021-06-01',
+        educationalInstitutionUrn: 'hy',
       },
     })
   },
