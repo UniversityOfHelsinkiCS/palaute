@@ -110,6 +110,10 @@ router.get('/course-summaries/access', courseSummary.getAccessInfo)
 router.get('/organisations', organisation.getOrganisations)
 router.put('/organisations/:code', organisation.updateOrganisation)
 router.get('/organisations/:code', organisation.getOrganisationByCode)
+router.get(
+  '/organisations/:code/open',
+  courseSummary.getOpenQuestionsByOrganisation,
+)
 
 router.get(
   '/organisations/:code/course-units',

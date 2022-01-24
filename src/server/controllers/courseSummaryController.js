@@ -1,7 +1,13 @@
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 
-const { CourseUnit, Survey, Organisation } = require('../models')
+const {
+  CourseUnit,
+  Survey,
+  Organisation,
+  FeedbackTarget,
+  Feedback,
+} = require('../models')
 
 const {
   getOrganisationSummaries,
@@ -234,12 +240,11 @@ const getByOrganisation = async (req, res) => {
   })
 
   await universitySurvey.populateQuestions()
-  await programmeSurvey.populateQuestions()
 
-  const questions = [
-    ...universitySurvey.questions,
-    ...programmeSurvey.questions,
-  ]
+  if (programmeSurvey) await programmeSurvey.populateQuestions()
+  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
+
+  const questions = [...universitySurvey.questions, ...programmeQuestions]
 
   const summaryQuestions = questions
     .filter((q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
@@ -261,9 +266,103 @@ const getByOrganisation = async (req, res) => {
   })
 }
 
+const getOpenQuestionsByOrganisation = async (req, res) => {
+  const { user } = req
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const { code } = req.params
+
+  const access = organisationAccess.filter(
+    (org) => org.organisation.code === code,
+  )
+
+  if (access.length === 0) {
+    throw new ApplicationError(403, 'Forbidden')
+  }
+
+  const universitySurvey = await Survey.findOne({
+    where: { type: 'university' },
+  })
+  const programmeSurvey = await Survey.findOne({
+    where: { type: 'programme', typeId: code },
+  })
+
+  await universitySurvey.populateQuestions()
+
+  if (programmeSurvey) await programmeSurvey.populateQuestions()
+  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
+
+  const questions = [
+    ...universitySurvey.questions,
+    ...programmeQuestions,
+  ].filter((q) => q.type === 'OPEN')
+
+  const courseCodes = await sequelize.query(
+    `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 
+    WHERE C.id = CO.course_unit_id AND CO.organisation_id = O.id AND O.code = :code`,
+    {
+      replacements: { code },
+      type: QueryTypes.SELECT,
+      mapToModel: true,
+      model: CourseUnit,
+    },
+  )
+
+  const codesWithIds = await Promise.all(
+    courseCodes.map(async ({ courseCode, name }) => {
+      const courseUnitIds = await CourseUnit.findAll({
+        where: {
+          courseCode,
+        },
+        attributes: ['id'],
+      })
+
+      const feedbackTargets = await FeedbackTarget.findAll({
+        where: {
+          courseUnitId: {
+            [Op.in]: courseUnitIds.map((unit) => unit.dataValues.id),
+          },
+        },
+      })
+
+      const feedbacks = await sequelize.query(
+        'SELECT F.* FROM feedbacks F, user_feedback_targets UFT WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id IN (:ftids)',
+        {
+          replacements: {
+            ftids: feedbackTargets.map((ft) => ft.id) || ['false-id'],
+          },
+          mapToModel: true,
+          model: Feedback,
+        },
+      )
+
+      const allFeedbacksWithId = feedbacks
+        .map((feedback) => feedback.dataValues.data)
+        .flat()
+
+      const questionsWithResponses = questions.map((question) => ({
+        question,
+        responses: allFeedbacksWithId
+          .filter((feedback) => feedback.questionId === question.id)
+          .map((feedback) => feedback.data),
+      }))
+
+      return {
+        code: courseCode,
+        name,
+        questions: questionsWithResponses,
+      }
+    }),
+  )
+
+  res.send(codesWithIds)
+}
+
 module.exports = {
   getByOrganisation,
   getByOrganisations,
   getByCourseUnit,
   getAccessInfo,
+  getOpenQuestionsByOrganisation,
 }
