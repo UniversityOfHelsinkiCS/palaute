@@ -1,6 +1,12 @@
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
-const { UserFeedbackTarget, User } = require('../models')
+const {
+  UserFeedbackTarget,
+  User,
+  FeedbackTarget,
+  CourseUnit,
+  CourseRealisation,
+} = require('../models')
 const { JWT_KEY } = require('./config')
 
 /* eslint-disable */
@@ -38,4 +44,59 @@ const getTiraUrls = async () => {
   }
 }
 
-getTiraUrls()
+const getCoursesWithNoStudents = async () => {
+  const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      feedbackType: {
+        [Op.eq]: 'courseRealisation',
+      },
+    },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          startDate: {
+            [Op.gt]: '2021-09-01 00:00:00',
+          },
+          endDate: {
+            [Op.lt]: '2021-12-30 00:00:00',
+          },
+        },
+      },
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+      },
+    ],
+  })
+
+  let relevantFbt = []
+
+  for (const fbt of feedbackTargets) {
+    let notRelevant = false
+    for (const ufbt of fbt.userFeedbackTargets) {
+      if (ufbt.accessStatus === 'STUDENT') {
+        notRelevant = true
+      }
+    }
+    if (!notRelevant) {
+      relevantFbt.push(fbt)
+    }
+  }
+
+  for (const r of relevantFbt) {
+    console.log(r.courseUnit.name.fi, ';', r.id)
+  }
+}
+
+// getCoursesWithNoStudents()
+
+// getTiraUrls()
