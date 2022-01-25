@@ -203,6 +203,13 @@ export default {
     closeImmediately: 'Close feedback immediately',
     closeImmediatelyConfirm: `Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
+    sendReminder: 'Send reminder email',
+    sendReminderButton: 'Send reminder',
+    cancelReminder: 'Cancel',
+    modalTitle: 'Send a reminder about feedback via email',
+    writeAMessage: 'Write a message to students',
+    emailMessage:
+      'Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. \n << The message you write will appear here >>',
   },
   navBar: {
     myFeedbacks: 'My feedback',

@@ -112,6 +112,57 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
   return options
 }
 
+const sendReminderToGiveFeedbackToStudents = (
+  urlToGiveFeedback,
+  students,
+  courseName,
+  reminder,
+  closesAt,
+) => {
+  const translations = {
+    text: {
+      en: `Dear student!\n 
+      Please give feedback for the course <a href=${urlToGiveFeedback}>${courseName.en}</a>. 
+      The feedback period ends on ${closesAt}. \n
+      ${reminder}`,
+      fi: `Hyvä opiskelija!\n 
+      Vastaathan kurssin <a href=${urlToGiveFeedback}>${courseName.fi}</a> palautteeseen.
+      Palautejakso päättyy ${closesAt}. \n 
+      ${reminder}`,
+      sv: `Bästa studerande!\n
+      Läraren på kursen ${courseName.sv} har svarat på responsen som kursens studerande har gett. \n
+      Svaret: ${reminder}\n
+      Du kan läsa responsen här: <a href=${urlToGiveFeedback}>${courseName.sv}</a>`,
+    },
+    subject: {
+      en: `Please give feedback for the course ${courseName.en}`,
+      fi: `Annathan palautetta kurssille ${courseName.fi}`,
+      sv: `Din lärare har gett ett nytt svar till kursresponsen på kursen ${courseName.sv}`,
+    },
+  }
+
+  const emails = students.map((student) => {
+    const email = {
+      to: student.email,
+      subject:
+        translations.subject[student.language] || translations.subject.en,
+      text: translations.text[student.language] || translations.text.en,
+    }
+    return email
+  })
+  const options = {
+    template: {
+      ...template,
+    },
+    emails,
+    settings: { ...settings },
+  }
+
+  sendEmail(options)
+
+  return options
+}
+
 const emailReminderAboutSurveyOpeningToTeachers = (
   emailAddress,
   teacherFeedbackTargets,
@@ -354,5 +405,6 @@ module.exports = {
   emailReminderAboutSurveyOpeningToTeachers,
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutFeedbackResponseToTeachers,
+  sendReminderToGiveFeedbackToStudents,
   sendEmail,
 }

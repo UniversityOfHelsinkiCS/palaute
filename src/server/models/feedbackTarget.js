@@ -13,6 +13,7 @@ const {
 } = require('sequelize')
 
 const _ = require('lodash')
+const { format } = require('date-fns')
 
 const CourseUnit = require('./courseUnit')
 const Organisation = require('./organisation')
@@ -25,6 +26,7 @@ const Question = require('./question')
 
 const {
   sendNotificationAboutFeedbackSummaryToStudents,
+  sendReminderToGiveFeedbackToStudents,
 } = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
@@ -202,6 +204,35 @@ class FeedbackTarget extends Model {
             required: true,
           },
         ],
+        where: {
+          accessStatus: 'STUDENT',
+        },
+      },
+    })
+  }
+
+  async getStudentsWhoHaveNotGivenFeedback() {
+    return User.findAll({
+      include: {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            where: {
+              id: this.id,
+            },
+            required: true,
+          },
+        ],
+        where: {
+          accessStatus: 'STUDENT',
+          feedbackId: {
+            [Op.is]: null,
+          },
+        },
       },
     })
   }
@@ -244,6 +275,28 @@ class FeedbackTarget extends Model {
       formattedStudents,
       courseUnit.name,
       feedbackResponse,
+    )
+  }
+
+  async sendFeedbackReminderToStudents(reminder) {
+    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
+    const students = await this.getStudentsWhoHaveNotGivenFeedback()
+    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/feedback`
+    const formattedStudents = students
+      .filter((student) => student.email)
+      .map((student) => ({
+        email: student.email,
+        language: student.language || 'en',
+      }))
+
+    const formattedClosesAt = format(new Date(this.closesAt), 'dd.MM.yyyy')
+
+    return sendReminderToGiveFeedbackToStudents(
+      url,
+      formattedStudents,
+      courseUnit.name,
+      reminder,
+      formattedClosesAt,
     )
   }
 
@@ -417,6 +470,9 @@ FeedbackTarget.init(
       type: BOOLEAN,
     },
     feedbackResponseReminderEmailSent: {
+      type: BOOLEAN,
+    },
+    feedbackReminderEmailToStudentsSent: {
       type: BOOLEAN,
     },
     feedbackVisibility: {

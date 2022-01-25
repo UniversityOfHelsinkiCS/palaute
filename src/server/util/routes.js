@@ -64,6 +64,11 @@ router.put(
   feedbackTargets.emailStudentsAboutResponse,
 )
 
+router.put(
+  '/feedback-targets/:id/remind-students',
+  feedbackTargets.remindStudentsOnFeedback,
+)
+
 router.get(
   '/feedback-targets/:id/students-with-feedback',
   feedbackTargets.getStudentsWithFeedback,

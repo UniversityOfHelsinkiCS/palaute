@@ -1,4 +1,4 @@
-import { set } from 'date-fns'
+import { format, set } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 
@@ -32,3 +32,6 @@ export const feedbackCanBeClosed = (feedbackTarget) => {
 
   return openTime >= 86400000
 }
+
+export const formatClosesAt = (closesAt) =>
+  format(new Date(closesAt), 'dd.MM.yyyy')

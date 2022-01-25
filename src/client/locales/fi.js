@@ -200,6 +200,13 @@ export default {
     closeImmediatelyConfirm:
       'Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?',
     closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
+    sendReminder: 'Lähetä muistutusviesti',
+    sendReminderButton: 'Lähetä muistutus',
+    cancelReminder: 'Peruuta',
+    modalTitle: 'Lähetä muistutus palautteesta sähköpostilla',
+    writeAMessage: 'Kirjoita viesti opiskelijoille',
+    emailMessage:
+      'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. \n << Kirjoittamasi viesti tulee tähän >>',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

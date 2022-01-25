@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -14,12 +14,17 @@ import QuestionResults from '../QuestionResults'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
+import ReminderEmailModal from './ReminderEmailModal'
 
 import { closeCourseImmediately, feedbackCanBeClosed } from './utils'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackTargetResults = () => {
+  const [open, setOpen] = useState(false)
+  const openModal = () => setOpen(true)
+  const closeModal = () => setOpen(false)
+
   const { t } = useTranslation()
   const { id } = useParams()
   const { enqueueSnackbar } = useSnackbar()
@@ -47,8 +52,13 @@ const FeedbackTargetResults = () => {
   const { feedbacks, feedbackVisible, userOrganisationAccess } =
     feedbackTargetData
 
-  const { questions, publicQuestionIds, accessStatus, feedback } =
-    feedbackTarget
+  const {
+    questions,
+    publicQuestionIds,
+    accessStatus,
+    feedback,
+    feedbackReminderEmailToStudentsSent,
+  } = feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
     ? userOrganisationAccess.admin
@@ -115,6 +125,11 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
+      <ReminderEmailModal
+        open={open}
+        onClose={closeModal}
+        feedbackTarget={feedbackTarget}
+      />
       <Box
         display="flex"
         alignItems="flex-end"
@@ -123,13 +138,24 @@ const FeedbackTargetResults = () => {
         style={raiseButton}
       >
         {showCloseImmediately && (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleCloseClick}
-          >
-            {t('feedbackTargetResults:closeImmediately')}
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleCloseClick}
+            >
+              {t('feedbackTargetResults:closeImmediately')}
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={openModal}
+              style={{ marginTop: 10, display: 'none' }}
+              disabled={feedbackReminderEmailToStudentsSent}
+            >
+              {t('feedbackTargetResults:sendReminder')}
+            </Button>
+          </>
         )}
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
