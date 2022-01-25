@@ -330,7 +330,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
         'SELECT F.* FROM feedbacks F, user_feedback_targets UFT WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id IN (:ftids)',
         {
           replacements: {
-            ftids: feedbackTargets.map((ft) => ft.id) || ['false-id'],
+            ftids: [...feedbackTargets.map((ft) => ft.id), 999999999],
           },
           mapToModel: true,
           model: Feedback,
