@@ -287,6 +287,7 @@ export default {
     coursesTab: 'Activated courses',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
+    openQuestionsTab: 'Open questions',
     editProgrammeQuestionsDialogTitle: 'Warning!',
     editProgrammeQuestionsDialogContent:
       'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?',

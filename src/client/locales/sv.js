@@ -280,6 +280,7 @@ export default {
     generalTab: 'Allmänna inställningar',
     coursesTab: 'Aktiverade kurser',
     surveyTab: 'Utbildningsprogrammets förfrågan',
+    openQuestionsTab: 'Öppna frågor',
     editProgrammeQuestionsDialogTitle: 'Varning!',
     editProgrammeQuestionsDialogContent:
       'Du håller på att redigera hela utbildningsprogrammets gemensamma frågor. Dessa ändringar syns på alla av utbildningsprogrammets kurser. Är du säker på att du vill redigera dessa frågor?',

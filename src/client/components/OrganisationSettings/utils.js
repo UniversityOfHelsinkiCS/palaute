@@ -30,3 +30,20 @@ export const saveSurveyValues = async (values, surveyId) => {
 
   return data
 }
+
+export const filterCoursesWithNoResponses = (courses) => {
+  const remappedCourses = courses.map((course) => {
+    const remappedQuestions = course.questions.map((q) => ({
+      ...q,
+      responses: q.responses.filter((r) => r !== ''),
+    }))
+    const questions = remappedQuestions.filter((q) => q.responses.length > 0)
+    return { ...course, questions }
+  })
+
+  const filteredCourses = remappedCourses.filter(
+    ({ questions }) => questions.length > 0,
+  )
+
+  return filteredCourses
+}

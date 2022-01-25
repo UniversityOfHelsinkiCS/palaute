@@ -16,6 +16,7 @@ import CourseSettings from './CourseSettings'
 import GeneralSettings from './GeneralSettings'
 import EditSurvey from './EditSurvey'
 import ProgrammeSummary from './ProgrammeSummary'
+import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -77,6 +78,11 @@ const OrganisationSettings = () => {
             component={Link}
             to={`${url}/summary`}
           />
+          <Tab
+            label={t('organisationSettings:openQuestionsTab')}
+            component={Link}
+            to={`${url}/open`}
+          />
         </RouterTabs>
       </Box>
 
@@ -95,6 +101,9 @@ const OrganisationSettings = () => {
 
         <Route path={`${path}/summary`}>
           <ProgrammeSummary />
+        </Route>
+        <Route path={`${path}/open`}>
+          <ProgrammeOpenQuestions />
         </Route>
 
         <Redirect to={`${path}/general`} />
