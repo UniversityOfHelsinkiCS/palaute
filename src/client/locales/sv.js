@@ -12,6 +12,7 @@ export default {
       wrongDate: 'Förfrågans slutdatum är före startdatumet',
     },
     unknownError: 'Något gick fel',
+    choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
     save: 'Spara',
     saveSuccess: 'Informationen har sparats',
     name: 'Namn',
@@ -204,6 +205,13 @@ export default {
       'Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
     closeImmediatelyTomorrowConfirm:
       'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
+    sendReminder: 'Skicka påminnelse via e-post',
+    sendReminderButton: 'Skicka påminnelse',
+    cancelReminder: 'Avbryt',
+    modalTitle: 'Skicka en påminnelse om respons via e-post',
+    writeAMessage: 'Skriv ett meddelande till studerande',
+    emailMessage:
+      'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. \n << Meddelandet du skriver kommer synas här >>',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
