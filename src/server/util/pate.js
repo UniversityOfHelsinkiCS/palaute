@@ -130,14 +130,14 @@ const sendReminderToGiveFeedbackToStudents = (
       Palautejakso päättyy ${closesAt}. \n 
       ${reminder}`,
       sv: `Bästa studerande!\n
-      Läraren på kursen ${courseName.sv} har svarat på responsen som kursens studerande har gett. \n
-      Svaret: ${reminder}\n
-      Du kan läsa responsen här: <a href=${urlToGiveFeedback}>${courseName.sv}</a>`,
+      Ge gärna respons på kursen <a href=${urlToGiveFeedback}>${courseName.sv}</a>. 
+      Responsperioden tar slut ${closesAt}. \n
+      ${reminder}`,
     },
     subject: {
       en: `Please give feedback for the course ${courseName.en}`,
       fi: `Annathan palautetta kurssille ${courseName.fi}`,
-      sv: `Din lärare har gett ett nytt svar till kursresponsen på kursen ${courseName.sv}`,
+      sv: `Ge gärna respons på kursen ${courseName.sv}`,
     },
   }
 
