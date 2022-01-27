@@ -309,77 +309,14 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
     },
   )
 
-  // This is much slower
-  /* const codesWithIds = []
-
-  await courseCodes.reduce(async (p, { courseCode, name }) => {
-    await p
-    const courseUnitIds = await CourseUnit.findAll({
-      where: {
-        courseCode,
-      },
-      attributes: ['id'],
-    })
-
-    const feedbackTargets = await FeedbackTarget.findAll({
-      where: {
-        courseUnitId: {
-          [Op.in]: courseUnitIds.map((unit) => unit.dataValues.id),
-        },
-      },
-    })
-
-    const feedbacks = await sequelize.query(
-      'SELECT F.* FROM feedbacks F, user_feedback_targets UFT WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id IN (:ftids)',
-      {
-        replacements: {
-          ftids: [...feedbackTargets.map((ft) => ft.id), 999999999],
-        },
-        mapToModel: true,
-        model: Feedback,
-      },
-    )
-
-    const allFeedbacksWithId = feedbacks
-      .map((feedback) => feedback.dataValues.data)
-      .flat()
-
-    const questionsWithResponses = questions.map((question) => ({
-      question,
-      responses: allFeedbacksWithId
-        .filter((feedback) => feedback.questionId === question.id)
-        .map((feedback) => feedback.data),
-    }))
-
-    codesWithIds.push({
-      code: courseCode,
-      name,
-      questions: questionsWithResponses,
-    })
-  }, Promise.resolve()) */
-
   const codesWithIds = await Promise.all(
     courseCodes.map(async ({ courseCode, name }) => {
-      const courseUnitIds = await CourseUnit.findAll({
-        where: {
-          courseCode,
-        },
-        attributes: ['id'],
-      })
-
-      const feedbackTargets = await FeedbackTarget.findAll({
-        where: {
-          courseUnitId: {
-            [Op.in]: courseUnitIds.map((unit) => unit.dataValues.id),
-          },
-        },
-      })
-
       const feedbacks = await sequelize.query(
-        'SELECT F.* FROM feedbacks F, user_feedback_targets UFT WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id IN (:ftids)',
+        `SELECT F.* FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C 
+        WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND C.course_code = :code`,
         {
           replacements: {
-            ftids: [...feedbackTargets.map((ft) => ft.id), 999999999],
+            code: courseCode,
           },
           mapToModel: true,
           model: Feedback,
