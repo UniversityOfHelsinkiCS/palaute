@@ -501,7 +501,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   if (new Date().getDay() === 0) {
     logger.info('Deleting teacher rights', {})
     await sequelize.query(
-      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND access_status = 'TEACHER'`,
+      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND access_status = 'TEACHER' AND user_id NOT 'abc1234'`,
     )
   }
 
