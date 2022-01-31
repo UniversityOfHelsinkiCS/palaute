@@ -82,6 +82,7 @@ const OrganisationSettings = () => {
             label={t('organisationSettings:openQuestionsTab')}
             component={Link}
             to={`${url}/open`}
+            style={{ display: 'none' }}
           />
         </RouterTabs>
       </Box>

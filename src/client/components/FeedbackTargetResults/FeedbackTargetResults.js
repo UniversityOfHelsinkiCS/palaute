@@ -150,7 +150,7 @@ const FeedbackTargetResults = () => {
               variant="contained"
               color="primary"
               onClick={openModal}
-              style={{ marginTop: 10, display: 'none' }}
+              style={{ marginTop: 10 }}
               disabled={feedbackReminderEmailToStudentsSent}
             >
               {t('feedbackTargetResults:sendReminder')}

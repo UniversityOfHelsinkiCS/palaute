@@ -23,8 +23,6 @@ const ProgrammeOpenQuestions = () => {
 
   const filteredCourses = filterCoursesWithNoResponses(codesWithIds)
 
-  console.log(filteredCourses)
-
   return (
     <div>
       {filteredCourses.map((course) => (
