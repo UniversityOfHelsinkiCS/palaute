@@ -1,18 +1,16 @@
 const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 
-const {
-  CourseUnit,
-  Survey,
-  Organisation,
-  FeedbackTarget,
-  Feedback,
-} = require('../models')
+const { CourseUnit, Survey, Organisation, Feedback } = require('../models')
 
 const {
   getOrganisationSummaries,
   getCourseRealisationSummaries,
 } = require('../util/courseSummary')
+
+const {
+  getOpenFeedbackByOrganisation,
+} = require('../util/organisationOpenFeedback')
 
 const { ApplicationError } = require('../util/customErrors')
 const { sequelize } = require('../util/dbConnection')
@@ -281,66 +279,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
     throw new ApplicationError(403, 'Forbidden')
   }
 
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-  const programmeSurvey = await Survey.findOne({
-    where: { type: 'programme', typeId: code },
-  })
-
-  await universitySurvey.populateQuestions()
-
-  if (programmeSurvey) await programmeSurvey.populateQuestions()
-  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
-
-  const questions = [
-    ...universitySurvey.questions,
-    ...programmeQuestions,
-  ].filter((q) => q.type === 'OPEN')
-
-  const courseCodes = await sequelize.query(
-    `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 
-    WHERE C.id = CO.course_unit_id AND CO.organisation_id = O.id AND O.code = :code`,
-    {
-      replacements: { code },
-      type: QueryTypes.SELECT,
-      mapToModel: true,
-      model: CourseUnit,
-    },
-  )
-
-  const codesWithIds = await Promise.all(
-    courseCodes.map(async ({ courseCode, name }) => {
-      const feedbacks = await sequelize.query(
-        `SELECT F.* FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C 
-        WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND C.course_code = :code`,
-        {
-          replacements: {
-            code: courseCode,
-          },
-          mapToModel: true,
-          model: Feedback,
-        },
-      )
-
-      const allFeedbacksWithId = feedbacks
-        .map((feedback) => feedback.dataValues.data)
-        .flat()
-
-      const questionsWithResponses = questions.map((question) => ({
-        question,
-        responses: allFeedbacksWithId
-          .filter((feedback) => feedback.questionId === question.id)
-          .map((feedback) => feedback.data),
-      }))
-
-      return {
-        code: courseCode,
-        name,
-        questions: questionsWithResponses,
-      }
-    }),
-  )
+  const codesWithIds = await getOpenFeedbackByOrganisation(code)
 
   res.send(codesWithIds)
 }
