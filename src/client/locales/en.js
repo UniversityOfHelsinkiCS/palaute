@@ -30,6 +30,8 @@ export default {
     close: 'Close',
     required: 'Required',
     copy: 'Copy',
+    settings: 'Settings',
+    feedbacks: 'Feedbacks',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',

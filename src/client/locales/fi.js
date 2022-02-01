@@ -30,6 +30,8 @@ export default {
     close: 'Sulje',
     required: 'Pakollinen',
     copy: 'Kopioi',
+    settings: 'Asetukset',
+    feedbacks: 'Palautteet',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',

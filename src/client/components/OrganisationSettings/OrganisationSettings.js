@@ -9,7 +9,13 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, CircularProgress, Typography, Tab } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Tab,
+  makeStyles,
+} from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import CourseSettings from './CourseSettings'
@@ -21,11 +27,33 @@ import useOrganisation from '../../hooks/useOrganisation'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 
+const useStyles = makeStyles((theme) => ({
+  title: {
+    marginTop: 10,
+    marginBottom: 10,
+    textTransform: 'uppercase',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiTabs-flexContainer': {
+      display: 'block',
+    },
+    '& .MuiTabs-indicator': {
+      display: 'none',
+    },
+    '& .Mui-selected': {
+      borderBottom: `2px solid #1077A1`,
+    },
+  },
+}))
+
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { organisation, isLoading } = useOrganisation(code)
+  const classes = useStyles()
 
   if (isLoading) {
     return (
@@ -53,13 +81,16 @@ const OrganisationSettings = () => {
         <RouterTabs
           indicatorColor="primary"
           textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
+          className={classes.container}
         >
+          <Typography variant="h6" component="h6" className={classes.title}>
+            {t('settings')}
+          </Typography>
           <Tab
             label={t('organisationSettings:generalTab')}
             component={Link}
             to={`${url}/general`}
+            className={classes.tab}
           />
           {hasAdminAccess && (
             <Tab
@@ -73,6 +104,9 @@ const OrganisationSettings = () => {
             component={Link}
             to={`${url}/survey`}
           />
+          <Typography variant="h6" component="h6" className={classes.title}>
+            {t('feedbacks')}
+          </Typography>
           <Tab
             label={t('organisationSettings:summaryTab')}
             component={Link}

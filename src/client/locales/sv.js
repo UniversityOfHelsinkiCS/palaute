@@ -29,6 +29,8 @@ export default {
     close: 'Stäng',
     required: 'Krävs',
     copy: 'Kopiera',
+    settings: 'Inställningar',
+    feedbacks: 'Responser',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',
