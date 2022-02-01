@@ -32,7 +32,7 @@ const getOpenFeedbackByOrganisation = async (code) => {
   )
 
   const allFeedbacks = await sequelize.query(
-    `SELECT DISTINCT ON (F.id) F.*, C.course_code FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C 
+    `SELECT DISTINCT ON (F.id) F.*, C.course_code, FT.id as feedback_target_id, FT.name FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C 
     WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND C.course_code IN (:codes)`,
     {
       replacements: {
@@ -57,21 +57,44 @@ const getOpenFeedbackByOrganisation = async (code) => {
 
   const codesWithIds = courseCodes.map(({ courseCode, name }) => {
     const feedbacks = feedbacksByCourseCode[courseCode] || []
-    const allFeedbacksWithId = feedbacks
-      .map((feedback) => feedback.dataValues.data)
-      .flat()
 
-    const questionsWithResponses = questions.map((question) => ({
-      question,
-      responses: allFeedbacksWithId
-        .filter((feedback) => feedback.questionId === question.id)
-        .map((feedback) => feedback.data),
-    }))
+    const feedbacksByTargetId = {}
+    const feedbackTargetIds = new Set()
+
+    feedbacks.forEach((feedback) => {
+      const id = feedback.dataValues.feedback_target_id
+      feedbackTargetIds.add(id)
+      if (feedbacksByTargetId[id]) {
+        feedbacksByTargetId[id].push(feedback)
+      } else {
+        feedbacksByTargetId[id] = [feedback]
+      }
+    })
+
+    const realisations = Array.from(feedbackTargetIds).map((id) => {
+      const targetFeedbacks = feedbacksByTargetId[id] || []
+      const allFeedbacksWithId = targetFeedbacks
+        .map((feedback) => feedback.dataValues.data)
+        .flat()
+
+      const questionsWithResponses = questions.map((question) => ({
+        question,
+        responses: allFeedbacksWithId
+          .filter((feedback) => feedback.questionId === question.id)
+          .map((feedback) => feedback.data),
+      }))
+
+      return {
+        id: targetFeedbacks[0].dataValues.feedback_target_id,
+        name: targetFeedbacks[0].dataValues.name,
+        questions: questionsWithResponses,
+      }
+    })
 
     return {
       code: courseCode,
       name,
-      questions: questionsWithResponses,
+      realisations,
     }
   })
 
