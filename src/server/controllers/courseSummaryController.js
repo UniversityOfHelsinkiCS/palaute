@@ -1,7 +1,7 @@
-const { Op, QueryTypes } = require('sequelize')
+const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { CourseUnit, Survey, Organisation, Feedback } = require('../models')
+const { CourseUnit, Survey, Organisation } = require('../models')
 
 const {
   getOrganisationSummaries,

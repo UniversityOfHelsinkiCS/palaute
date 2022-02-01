@@ -55,27 +55,25 @@ const getOpenFeedbackByOrganisation = async (code) => {
     }
   })
 
-  const codesWithIds = await Promise.all(
-    courseCodes.map(({ courseCode, name }) => {
-      const feedbacks = feedbacksByCourseCode[courseCode] || []
-      const allFeedbacksWithId = feedbacks
-        .map((feedback) => feedback.dataValues.data)
-        .flat()
+  const codesWithIds = courseCodes.map(({ courseCode, name }) => {
+    const feedbacks = feedbacksByCourseCode[courseCode] || []
+    const allFeedbacksWithId = feedbacks
+      .map((feedback) => feedback.dataValues.data)
+      .flat()
 
-      const questionsWithResponses = questions.map((question) => ({
-        question,
-        responses: allFeedbacksWithId
-          .filter((feedback) => feedback.questionId === question.id)
-          .map((feedback) => feedback.data),
-      }))
+    const questionsWithResponses = questions.map((question) => ({
+      question,
+      responses: allFeedbacksWithId
+        .filter((feedback) => feedback.questionId === question.id)
+        .map((feedback) => feedback.data),
+    }))
 
-      return {
-        code: courseCode,
-        name,
-        questions: questionsWithResponses,
-      }
-    }),
-  )
+    return {
+      code: courseCode,
+      name,
+      questions: questionsWithResponses,
+    }
+  })
 
   return codesWithIds
 }
