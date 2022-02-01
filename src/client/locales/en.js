@@ -260,7 +260,7 @@ export default {
     feedbackResponseNotGiven: 'Feedback response has not been given',
     feedbackStillOpen: 'Feedback for this course is still ongoing',
     courseOngoing: 'The course is still ongoing',
-    editProgrammeSettings: "Edit programme's settings",
+    programmePage: "Programme's page",
     courseRealisation: 'Course realisation',
     searchLabel: 'Filter courses',
     searchPlaceholder: 'Filter courses by course code',

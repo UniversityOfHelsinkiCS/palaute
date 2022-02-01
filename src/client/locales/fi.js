@@ -258,7 +258,7 @@ export default {
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',
     feedbackStillOpen: 'Kurssin palautejakso on vielä käynnissä',
     courseOngoing: 'Kurssi on vielä käynnissä',
-    editProgrammeSettings: 'Muokkaa koulutusohjelman asetuksia',
+    programmePage: 'Koulutusohjelman sivu',
     courseRealisation: 'Kurssitoteutus',
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',

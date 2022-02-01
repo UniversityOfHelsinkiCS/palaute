@@ -261,7 +261,7 @@ export default {
     feedbackResponseNotGiven: 'Svar på reponsen saknas',
     feedbackStillOpen: 'Responsgivningen för kursen är fortfarande öppen',
     courseOngoing: 'Kursen är fortfarande på gång',
-    editProgrammeSettings: 'Redigera inställningar för utbildningsprogrammet',
+    programmePage: 'Utbildningsprogrammet sidan',
     courseRealisation: 'Kursinstans',
     searchLabel: 'Begränsa kurser',
     searchPlaceholder: 'Begränsa kurser med kurskod',
