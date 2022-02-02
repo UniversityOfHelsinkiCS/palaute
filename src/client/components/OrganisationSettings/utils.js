@@ -32,17 +32,28 @@ export const saveSurveyValues = async (values, surveyId) => {
 }
 
 export const filterCoursesWithNoResponses = (courses) => {
-  const remappedCourses = courses.map((course) => {
-    const remappedQuestions = course.questions.map((q) => ({
-      ...q,
-      responses: q.responses.filter((r) => r !== ''),
-    }))
-    const questions = remappedQuestions.filter((q) => q.responses.length > 0)
-    return { ...course, questions }
+  const coursesWithRealisations = courses.filter(
+    (course) => course.realisations.length > 0,
+  )
+
+  const remappedCourses = coursesWithRealisations.map((course) => {
+    const realisations = course.realisations.map((real) => {
+      const remappedQuestions = real.questions.map((q) => ({
+        ...q,
+        responses: q.responses.filter((r) => r !== ''),
+      }))
+      const questions = remappedQuestions.filter((q) => q.responses.length > 0)
+      return { ...real, questions }
+    })
+    const filteredRealisations = realisations.filter(
+      ({ questions }) => questions.length > 0,
+    )
+
+    return { ...course, realisations: filteredRealisations }
   })
 
   const filteredCourses = remappedCourses.filter(
-    ({ questions }) => questions.length > 0,
+    (course) => course.realisations.length > 0,
   )
 
   return filteredCourses

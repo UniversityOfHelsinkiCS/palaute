@@ -27,7 +27,7 @@ import useOrganisation from '../../hooks/useOrganisation'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     marginTop: 10,
     marginBottom: 10,
@@ -116,7 +116,6 @@ const OrganisationSettings = () => {
             label={t('organisationSettings:openQuestionsTab')}
             component={Link}
             to={`${url}/open`}
-            style={{ display: 'none' }}
           />
         </RouterTabs>
       </Box>
