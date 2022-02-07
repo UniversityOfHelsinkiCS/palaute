@@ -46,6 +46,11 @@ const useStyles = makeStyles(() => ({
       borderBottom: `2px solid #1077A1`,
     },
   },
+  hidePrint: {
+    '@media print': {
+      display: 'none',
+    },
+  },
 }))
 
 const OrganisationSettings = () => {
@@ -77,7 +82,7 @@ const OrganisationSettings = () => {
           {getLanguageValue(organisation.name, i18n.language)}
         </Typography>
       </Box>
-      <Box mb={2}>
+      <Box mb={2} className={classes.hidePrint}>
         <RouterTabs
           indicatorColor="primary"
           textColor="primary"

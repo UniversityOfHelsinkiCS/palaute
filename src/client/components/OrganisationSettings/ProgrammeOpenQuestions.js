@@ -6,6 +6,7 @@ import {
   Typography,
   Divider,
   makeStyles,
+  Button,
 } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
@@ -25,6 +26,17 @@ const useStyles = makeStyles(() => ({
     marginTop: 5,
     marginBottom: 10,
   },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '-40px',
+    '@media print': {
+      display: 'none',
+    },
+  },
+  response: {
+    margin: 5,
+  },
 }))
 
 const RealisationItem = ({ realisation, language, classes }) => {
@@ -39,18 +51,20 @@ const RealisationItem = ({ realisation, language, classes }) => {
               {question.data.label[language]}
             </Link>
           </Typography>
-          {responses.map((r, index) => (
-            <div key={index}>
-              <Typography
-                variant="body2"
-                component="p"
-                style={{ marginLeft: 5 }}
-              >
-                {r}
-              </Typography>
-              <Divider style={{ margin: 2 }} />
-            </div>
-          ))}
+          <Box my={1}>
+            {responses.map((r, index) => (
+              <>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  className={classes.response}
+                >
+                  {r}
+                </Typography>
+                <Divider style={{ margin: 2 }} />
+              </>
+            ))}
+          </Box>
         </Box>
       ))}
     </Box>
@@ -59,7 +73,7 @@ const RealisationItem = ({ realisation, language, classes }) => {
 
 const ProgrammeOpenQuestions = () => {
   const { code } = useParams()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { language } = i18n
   const classes = useStyles()
 
@@ -76,7 +90,16 @@ const ProgrammeOpenQuestions = () => {
   const filteredCourses = filterCoursesWithNoResponses(codesWithIds)
 
   return (
-    <div>
+    <Box>
+      <div className={classes.buttonContainer}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => window.print()}
+        >
+          {t('feedbackTargetResults:exportPdf')}
+        </Button>
+      </div>
       {filteredCourses.map((course) => (
         <Box key={course.code}>
           <Typography component="h6" variant="h6">
@@ -95,7 +118,7 @@ const ProgrammeOpenQuestions = () => {
           ))}
         </Box>
       ))}
-    </div>
+    </Box>
   )
 }
 
