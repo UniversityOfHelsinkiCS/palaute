@@ -99,17 +99,10 @@ const sendNotificationAboutFeedbackSummaryToStudents = (
     }
     return email
   })
-  const options = {
-    template: {
-      ...template,
-    },
-    emails,
-    settings: { ...settings },
-  }
 
-  sendEmail(options)
+  sendEmail(emails)
 
-  return options
+  return emails
 }
 
 const sendReminderToGiveFeedbackToStudents = (
@@ -150,17 +143,10 @@ const sendReminderToGiveFeedbackToStudents = (
     }
     return email
   })
-  const options = {
-    template: {
-      ...template,
-    },
-    emails,
-    settings: { ...settings },
-  }
 
-  sendEmail(options)
+  sendEmail(emails)
 
-  return options
+  return emails
 }
 
 const emailReminderAboutSurveyOpeningToTeachers = (
