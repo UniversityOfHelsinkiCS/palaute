@@ -21,9 +21,9 @@ const settings = {
 }
 
 const pateClient = axios.create({
-  baseURL: 'https://pate.toska.cs.helsinki.fi',
+  baseURL: 'https://importer.cs.helsinki.fi/api/pate',
   params: {
-    token: process.env.PATE_API_TOKEN,
+    token: process.env.API_TOKEN,
   },
 })
 
