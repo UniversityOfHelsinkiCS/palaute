@@ -15,6 +15,7 @@ import {
   Typography,
   Tab,
   makeStyles,
+  Paper,
 } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
@@ -34,11 +35,6 @@ const useStyles = makeStyles(() => ({
     textTransform: 'uppercase',
   },
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    '& .MuiTabs-flexContainer': {
-      display: 'block',
-    },
     '& .MuiTabs-indicator': {
       display: 'none',
     },
@@ -50,6 +46,14 @@ const useStyles = makeStyles(() => ({
     '@media print': {
       display: 'none',
     },
+  },
+  tabContainer: {
+    marginRight: 15,
+    padding: 10,
+  },
+  selected: {
+    color: ' #1077A1',
+    borderBottom: `2px solid #1077A1`,
   },
 }))
 
@@ -75,6 +79,8 @@ const OrganisationSettings = () => {
     return <Redirect to="/" />
   }
 
+  const selected = window.location.pathname.split('/').pop()
+
   return (
     <>
       <Box mb={2}>
@@ -88,40 +94,48 @@ const OrganisationSettings = () => {
           textColor="primary"
           className={classes.container}
         >
-          <Typography variant="h6" component="h6" className={classes.title}>
-            {t('settings')}
-          </Typography>
-          <Tab
-            label={t('organisationSettings:generalTab')}
-            component={Link}
-            to={`${url}/general`}
-            className={classes.tab}
-          />
-          {hasAdminAccess && (
+          <Paper className={classes.tabContainer}>
+            <Typography variant="h6" component="h6" className={classes.title}>
+              {t('settings')}
+            </Typography>
             <Tab
-              label={t('organisationSettings:coursesTab')}
+              label={t('organisationSettings:generalTab')}
               component={Link}
-              to={`${url}/courses`}
+              to={`${url}/general`}
+              className={selected === 'general' && classes.selected}
             />
-          )}
-          <Tab
-            label={t('organisationSettings:surveyTab')}
-            component={Link}
-            to={`${url}/survey`}
-          />
-          <Typography variant="h6" component="h6" className={classes.title}>
-            {t('feedbacks')}
-          </Typography>
-          <Tab
-            label={t('organisationSettings:summaryTab')}
-            component={Link}
-            to={`${url}/summary`}
-          />
-          <Tab
-            label={t('organisationSettings:openQuestionsTab')}
-            component={Link}
-            to={`${url}/open`}
-          />
+            {hasAdminAccess && (
+              <Tab
+                label={t('organisationSettings:coursesTab')}
+                component={Link}
+                to={`${url}/courses`}
+                className={selected === 'courses' && classes.selected}
+              />
+            )}
+            <Tab
+              label={t('organisationSettings:surveyTab')}
+              component={Link}
+              to={`${url}/survey`}
+              className={selected === 'survey' && classes.selected}
+            />
+          </Paper>
+          <Paper className={classes.tabContainer}>
+            <Typography variant="h6" component="h6" className={classes.title}>
+              {t('feedbacks')}
+            </Typography>
+            <Tab
+              label={t('organisationSettings:summaryTab')}
+              component={Link}
+              to={`${url}/summary`}
+              className={selected === 'summary' && classes.selected}
+            />
+            <Tab
+              label={t('organisationSettings:openQuestionsTab')}
+              component={Link}
+              to={`${url}/open`}
+              className={selected === 'open' && classes.selected}
+            />
+          </Paper>
         </RouterTabs>
       </Box>
 

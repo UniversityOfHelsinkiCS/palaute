@@ -29,7 +29,6 @@ const useStyles = makeStyles(() => ({
   buttonContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
-    marginTop: '-40px',
     '@media print': {
       display: 'none',
     },
