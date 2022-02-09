@@ -32,8 +32,8 @@ const getOpenFeedbackByOrganisation = async (code) => {
   )
 
   const allFeedbacks = await sequelize.query(
-    `SELECT DISTINCT ON (F.id) F.*, C.course_code, FT.id as feedback_target_id, FT.name FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C 
-    WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND C.course_code IN (:codes)`,
+    `SELECT DISTINCT ON (F.id) F.*, C.course_code, FT.id as feedback_target_id, CR.name FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C, course_realisations CR
+    WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND FT.course_realisation_id = CR.id AND C.course_code IN (:codes)`,
     {
       replacements: {
         codes: courseCodes.map(({ courseCode }) => courseCode),

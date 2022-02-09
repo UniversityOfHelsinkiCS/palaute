@@ -16,11 +16,12 @@ import { filterCoursesWithNoResponses } from './utils'
 const useStyles = makeStyles(() => ({
   courseTitle: {
     textDecoration: 'none',
-    color: 'black',
+    color: '#1077A1',
   },
   realisationTitle: {
     textDecoration: 'none',
-    color: '#1077A1',
+    color: '#0084bb',
+    fontSize: 'large',
   },
   realisationContainer: {
     marginTop: 5,
@@ -36,22 +37,30 @@ const useStyles = makeStyles(() => ({
   response: {
     margin: 5,
   },
+  questionTitle: {
+    fontWeight: 500,
+  },
 }))
 
 const RealisationItem = ({ realisation, language, classes }) => {
-  const url = `/targets/${realisation.id}`
+  const url = `/targets/${realisation.id}/results`
 
   return (
     <Box key={realisation.id} className={classes.realisationContainer}>
+      <Link to={url} className={classes.realisationTitle} replace>
+        {realisation.name[language]}
+      </Link>
       {realisation.questions.map(({ question, responses }) => (
         <Box key={`${realisation.id}-${question.id}`}>
-          <Typography variant="body1" component="p">
-            <Link to={url} className={classes.realisationTitle} replace>
-              {question.data.label[language]}
-            </Link>
+          <Typography
+            variant="body1"
+            component="p"
+            className={classes.questionTitle}
+          >
+            {question.data.label[language]}
           </Typography>
           <Box my={1}>
-            {responses.map((r, index) => (
+            {responses.map((r) => (
               <>
                 <Typography
                   variant="body2"
