@@ -1,5 +1,6 @@
 const { STRING } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
+const { BOOLEAN } = require('sequelize')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 
@@ -23,6 +24,10 @@ Feedback.init(
     userId: {
       type: STRING,
       allowNull: false,
+    },
+    degreeStudyRight: {
+      type: BOOLEAN,
+      allowNull: true,
     },
   },
   {
