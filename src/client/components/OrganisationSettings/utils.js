@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 export const getUpperLevelQuestions = (survey) =>
@@ -40,7 +41,7 @@ export const filterCoursesWithNoResponses = (courses) => {
     const realisations = course.realisations.map((real) => {
       const remappedQuestions = real.questions.map((q) => ({
         ...q,
-        responses: q.responses.filter((r) => r !== ''),
+        responses: q.responses.filter((r) => r.length >= 5),
       }))
       const questions = remappedQuestions.filter((q) => q.responses.length > 0)
       return { ...real, questions }
@@ -57,4 +58,11 @@ export const filterCoursesWithNoResponses = (courses) => {
   )
 
   return filteredCourses
+}
+
+export const formateDates = (realisation) => {
+  const startDate = format(parseISO(realisation.startDate), 'dd.MM.yyyy')
+  const endDate = format(parseISO(realisation.endDate), 'dd.MM.yyyy')
+
+  return `${startDate} - ${endDate}`
 }

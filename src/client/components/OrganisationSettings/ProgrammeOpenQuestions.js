@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
-import { filterCoursesWithNoResponses } from './utils'
+import { filterCoursesWithNoResponses, formateDates } from './utils'
 
 const useStyles = makeStyles(() => ({
   courseTitle: {
@@ -40,16 +40,25 @@ const useStyles = makeStyles(() => ({
   questionTitle: {
     fontWeight: 500,
   },
+  dates: {
+    color: '#646464',
+    marginBottom: 5,
+  },
 }))
 
 const RealisationItem = ({ realisation, language, classes }) => {
   const url = `/targets/${realisation.id}/results`
+
+  const realisationDates = formateDates(realisation)
 
   return (
     <Box key={realisation.id} className={classes.realisationContainer}>
       <Link to={url} className={classes.realisationTitle} replace>
         {realisation.name[language]}
       </Link>
+      <Typography variant="body2" component="p" className={classes.dates}>
+        {realisationDates}
+      </Typography>
       {realisation.questions.map(({ question, responses }) => (
         <Box key={`${realisation.id}-${question.id}`}>
           <Typography
