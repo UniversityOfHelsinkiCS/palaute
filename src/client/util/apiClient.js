@@ -9,7 +9,8 @@ const getNoadUrl = (url) => `/noad${url}`
 apiClient.interceptors.request.use((config) => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
   const token = localStorage.getItem('token')
-  const headers = { ...defaultHeaders, token }
+  const tokenUser = localStorage.getItem('tokenUser')
+  const headers = { ...defaultHeaders, token, tokenUser }
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id
   if (adminLoggedInAs) headers['x-admin-logged-in-as'] = adminLoggedInAs

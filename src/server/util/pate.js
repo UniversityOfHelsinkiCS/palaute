@@ -317,7 +317,8 @@ const notificationAboutSurveyOpeningToStudents = (
   emailAddress,
   studentFeedbackTargets,
 ) => {
-  const { noAdUser, language, name, username } = studentFeedbackTargets[0]
+  const { noAdUser, language, name, username, userId } =
+    studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
 
   const emailLanguage = !language ? 'en' : language
@@ -332,7 +333,7 @@ const notificationAboutSurveyOpeningToStudents = (
   for (const feedbackTarget of studentFeedbackTargets) {
     const { id, name, closesAt } = feedbackTarget
     const url = noAdUser
-      ? `https://coursefeedback.helsinki.fi/noad/token/${token}`
+      ? `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
       : `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
     const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const openUntil = {

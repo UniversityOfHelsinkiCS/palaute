@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
 import { useParams } from 'react-router'
 
@@ -13,10 +13,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const useQuery = () => {
+  const { search } = useLocation()
+
+  return useMemo(() => new URLSearchParams(search), [search])
+}
+
 const ParseToken = () => {
   const { token } = useParams()
+  const query = useQuery()
+  const userId = query.get('userId')
 
   window.localStorage.setItem('token', token)
+  window.localStorage.setItem('tokenUser', userId)
 
   return <Redirect to="/noad/courses" />
 }

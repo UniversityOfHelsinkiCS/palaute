@@ -43,7 +43,7 @@ const getUser = async (username) => {
 }
 
 const getUsernameFromToken = (req) => {
-  const { token } = req.headers
+  const { token, tokenuser } = req.headers
 
   try {
     const { username } = jwt.verify(token, JWT_KEY)
@@ -53,7 +53,7 @@ const getUsernameFromToken = (req) => {
     return username
   } catch (err) {
     logger.info('Token broken', { token })
-    logger.info('Request user', { user: req.user })
+    logger.info('Token user', { tokenuser })
     throw new ApplicationError('Access token was malformed', 500)
   }
 }
