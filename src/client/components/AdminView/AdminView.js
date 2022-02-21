@@ -6,7 +6,7 @@ import { ADMINS } from '../../util/common'
 import apiClient from '../../util/apiClient'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import LoginAs from './LoginAsSelector'
-import EditUniversitySurvey from './EditUniversitySurvey'
+import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
 import EmailAccordion from './EmailAccordion'
 
 const AdminView = () => {
@@ -26,14 +26,14 @@ const AdminView = () => {
     <>
       <h1>Admin page</h1>
       <LoginAs />
-      <EditUniversitySurvey />
+      <EditUniversitySurveyAccordion />
+      <EmailAccordion />
       <Button variant="contained" color="primary" onClick={runUpdater}>
         Run updater
       </Button>
       <Button variant="contained" color="primary" onClick={resetTestCourse}>
         Reset test course
       </Button>
-      <EmailAccordion />
     </>
   )
 }

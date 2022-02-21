@@ -6,6 +6,7 @@ import {
   CardContent,
   CardActions,
   Button,
+  Box,
 } from '@material-ui/core'
 import { debounce } from 'lodash'
 
@@ -46,7 +47,7 @@ const LoginAsSelector = () => {
   }
 
   return (
-    <>
+    <Box my={4}>
       <TextField
         style={{ width: '30em' }}
         label="Username, sisu id or studentnumber"
@@ -76,7 +77,7 @@ const LoginAsSelector = () => {
           </CardActions>
         </Card>
       ))}
-    </>
+    </Box>
   )
 }
 
