@@ -15,11 +15,20 @@ import ResultItem from './ResultItem'
 const useStyles = makeStyles((theme) => ({
   resultCell: {
     padding: theme.spacing(1),
+    whiteSpace: 'nowrap',
     textAlign: 'center',
   },
   labelCell: ({ level }) => ({
-    width: '450px',
-    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      width: '250px',
+      height: '74px', // Sets a good height for the entire row
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '400px',
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '450px',
+    },
     paddingLeft: theme.spacing(2 + level * 2),
   }),
   doneIcon: {
@@ -117,7 +126,9 @@ const ResultsRow = ({
           />
         ))}
         <td className={classes.resultCell}>
-          {feedbackCount}/{studentCount} ({percent}%)
+          <Typography component="div">
+            {feedbackCount}/{studentCount} ({percent}%)
+          </Typography>
         </td>
         <td className={classes.resultCell}>
           {feedbackResponseGiven === 'GIVEN' && feedbackResponseGivenContent}
