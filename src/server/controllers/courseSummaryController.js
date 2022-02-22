@@ -14,6 +14,7 @@ const {
 
 const { ApplicationError } = require('../util/customErrors')
 const { sequelize } = require('../util/dbConnection')
+const logger = require('../util/logger')
 
 const WORKLOAD_QUESTION_ID = 1042
 

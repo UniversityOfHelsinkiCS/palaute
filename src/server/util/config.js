@@ -16,6 +16,10 @@ const DB_CONFIG = {
   logging: false,
 }
 
+const REDIS_CONFIG = {
+  url: `redis://default:redis@${process.env.REDIS_HOST}:6379`,
+}
+
 const PORT = process.env.PORT || 8000
 
 const { API_TOKEN, JWT_KEY } = process.env
@@ -27,6 +31,7 @@ const useOldImporter = false
 module.exports = {
   ...common,
   DB_CONFIG,
+  REDIS_CONFIG,
   PORT,
   API_TOKEN,
   IMPORTER_API_URL,
