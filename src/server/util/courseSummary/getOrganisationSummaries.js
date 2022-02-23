@@ -528,7 +528,8 @@ const getOrganisationSummaries = async ({
   )
 
   const organisationsFromDb =
-    remainingOrganisationAccess.length > 0
+    remainingOrganisationAccess.length > 0 ||
+    accessibleCourseRealisationIds.length > 0
       ? await getOrganisationSummariesFromDb(
           questions,
           remainingOrganisationAccess,
