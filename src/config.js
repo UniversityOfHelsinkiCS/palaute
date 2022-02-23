@@ -16,6 +16,7 @@ const ADMINS = [
   'keolli',
   'ttiittan',
   'kurhila',
+  'vesuvesu',
 ]
 
 // These courses bypass the starting after 1.9 filter

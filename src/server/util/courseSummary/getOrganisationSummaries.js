@@ -1,6 +1,7 @@
 const _ = require('lodash')
 
 const { sequelize } = require('../dbConnection')
+const { redisClient } = require('../redisClient')
 
 const {
   QUESTION_AVERAGES_QUERY,
@@ -425,12 +426,21 @@ const omitOpenUniRows = async (rows) => {
   return rows.filter((row) => !openUniCourseCodes.includes(row.course_code))
 }
 
-const getOrganisationSummaries = async ({
+const cacheOrganisationSummaries = (organisations) => {
+  organisations.forEach((organisation) => {
+    redisClient.set(organisation.id, JSON.stringify(organisation))
+  })
+}
+
+const getCachedOrganisationSummaries = (organisationIds) =>
+  Promise.all(organisationIds.map((id) => redisClient.get(id).then(JSON.parse)))
+
+const getOrganisationSummariesFromDb = async (
   questions,
   organisationAccess,
   accessibleCourseRealisationIds,
   includeOpenUniCourseUnits = true,
-}) => {
+) => {
   const validDataValues = getValidDataValues(questions)
   const questionIds = questions.map(({ id }) => id.toString())
 
@@ -438,15 +448,15 @@ const getOrganisationSummaries = async ({
     ({ organisation }) => organisation,
   )
 
-  const organisationIds = organisations.map(({ id }) => id)
-
   const disabledCourseCodes = organisations.flatMap(
     ({ disabledCourseCodes }) => disabledCourseCodes ?? [],
   )
 
+  const organisationIds = organisations.map(({ id }) => id)
+
   const rowsByRealisations =
     organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS, {
+      ? sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS, {
           replacements: {
             questionIds,
             organisationIds: [
@@ -466,7 +476,7 @@ const getOrganisationSummaries = async ({
 
   const rowsByUnits =
     organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? await sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_UNITS, {
+      ? sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_UNITS, {
           replacements: {
             questionIds,
             organisationIds: [
@@ -485,8 +495,8 @@ const getOrganisationSummaries = async ({
       : []
 
   const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOpenUniRows(rowsByRealisations)
-    : rowsByUnits
+    ? await omitOpenUniRows(await rowsByRealisations)
+    : await rowsByUnits
 
   const organisationsWithMissing = withMissingOrganisations(
     getOrganisationsWithResults(normalizedRows, questions, rowsByRealisations),
@@ -495,6 +505,45 @@ const getOrganisationSummaries = async ({
   )
 
   return organisationsWithMissing
+}
+
+const getOrganisationSummaries = async ({
+  questions,
+  organisationAccess,
+  accessibleCourseRealisationIds,
+  includeOpenUniCourseUnits = true,
+}) => {
+  const organisationIds = organisationAccess.map(
+    ({ organisation }) => organisation.id,
+  )
+
+  const cachedOrganisations = (
+    await getCachedOrganisationSummaries(organisationIds)
+  ).filter((org) => org !== null)
+  const cachedIds = cachedOrganisations.map((org) => org.id)
+
+  // filter out all orgs found in cache
+  const remainingOrganisationAccess = organisationAccess.filter(
+    (oa) => !cachedIds.some((id) => id === oa.organisation.id),
+  )
+
+  const organisationsFromDb =
+    remainingOrganisationAccess.length > 0
+      ? await getOrganisationSummariesFromDb(
+          questions,
+          remainingOrganisationAccess,
+          accessibleCourseRealisationIds,
+          includeOpenUniCourseUnits,
+        )
+      : []
+
+  cacheOrganisationSummaries(organisationsFromDb)
+
+  const allOrganisations = cachedOrganisations
+    .concat(organisationsFromDb)
+    .sort((org1, org2) => org1.code.localeCompare(org2.code))
+
+  return allOrganisations
 }
 
 module.exports = {
