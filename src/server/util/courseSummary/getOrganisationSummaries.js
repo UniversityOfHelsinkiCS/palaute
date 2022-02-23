@@ -1,7 +1,6 @@
 const _ = require('lodash')
 
 const { sequelize } = require('../dbConnection')
-const logger = require('../logger')
 const { redisClient } = require('../redisClient')
 
 const {
@@ -540,15 +539,9 @@ const getOrganisationSummaries = async ({
 
   cacheOrganisationSummaries(organisationsFromDb)
 
-  logger.debug(
-    `${cachedOrganisations.length} from cache and ${organisationsFromDb.length} from db`,
-  )
-
   const allOrganisations = cachedOrganisations
     .concat(organisationsFromDb)
     .sort((org1, org2) => org1.code.localeCompare(org2.code))
-
-  logger.debug(`${allOrganisations.length} in total`)
 
   return allOrganisations
 }
