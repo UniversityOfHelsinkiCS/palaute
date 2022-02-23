@@ -17,7 +17,6 @@ const useOrganisationSummary = (code, options = {}) => {
       `/course-summaries/organisations/${code}`,
       {
         params,
-        code,
       },
     )
 

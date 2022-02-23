@@ -131,6 +131,15 @@ const getAccessInfo = async (req, res) => {
   const accessible =
     organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
 
+  // For grafana statistics
+  if (organisationAccess.length === 1) {
+    const { name, code } = organisationAccess[0].organisation.dataValues
+    logger.info('Organisation access', {
+      organisationName: name.fi,
+      organisationCode: code,
+    })
+  }
+
   res.send({
     accessible,
     adminAccess,

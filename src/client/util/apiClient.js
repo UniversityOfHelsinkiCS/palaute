@@ -10,8 +10,7 @@ apiClient.interceptors.request.use((config) => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
   const token = localStorage.getItem('token')
   const tokenUser = localStorage.getItem('tokenUser')
-  const organisationCode = config.code ? config.code : null
-  const headers = { ...defaultHeaders, token, tokenUser, organisationCode }
+  const headers = { ...defaultHeaders, token, tokenUser }
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id
   if (adminLoggedInAs) headers['x-admin-logged-in-as'] = adminLoggedInAs
