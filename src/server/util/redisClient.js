@@ -17,6 +17,7 @@ const redisClient = redis.createClient({
 const client = {
   get: (key) => redisClient.get(key),
   set: (key, value) => redisClient.set(key, value),
+  flushDb: () => redisClient.flushDb(),
 }
 
 const connectRedis = async () => {
@@ -33,6 +34,7 @@ const connectRedis = async () => {
     logger.warn('Connection to redis failed, cache not available')
     client.get = () => Promise.resolve(null)
     client.set = () => Promise.resolve(null)
+    client.flushDb = () => Promise.resolve(null)
     return
   }
 

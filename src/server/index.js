@@ -7,6 +7,7 @@ const { connectToDatabase } = require('./util/dbConnection')
 const { connectRedis } = require('./util/redisClient')
 const { start: startUpdater } = require('./updater')
 const { start: startPateCron } = require('./util/pateCron')
+const { start: startCacheCron } = require('./util/organisationSummaryCacheCron')
 const logger = require('./util/logger')
 
 const app = express()
@@ -26,6 +27,7 @@ const start = async () => {
   await connectToDatabase()
   await connectRedis()
   await startUpdater()
+  await startCacheCron()
 
   if (!inStaging && inProduction) {
     await startPateCron()
