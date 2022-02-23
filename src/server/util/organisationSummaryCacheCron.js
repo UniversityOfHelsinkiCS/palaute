@@ -34,7 +34,7 @@ const start = async () => {
   if (inE2EMode) {
     return logger.info('Not running cache cron in E2EMode')
   }
-  const cronTime = '0 4 * * *' // 4 am
+  const cronTime = '30 6 * * *' // 4 am
   run()
   return schedule(cronTime, run)
 }
