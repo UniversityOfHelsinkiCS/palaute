@@ -540,9 +540,17 @@ const getOrganisationSummaries = async ({
 
   cacheOrganisationSummaries(organisationsFromDb)
 
-  const allOrganisations = cachedOrganisations
-    .concat(organisationsFromDb)
-    .sort((org1, org2) => org1.code.localeCompare(org2.code))
+  // this causes duplicate orgs, some of which have a subset of all courseUnits of that org
+  let allOrganisations = cachedOrganisations.concat(organisationsFromDb)
+
+  // sort by id and then by number of courseunits (greater first)
+  allOrganisations = _.sortBy(allOrganisations, [
+    'id',
+    (org) => -org.courseUnits.length,
+  ])
+
+  // unique by id. Because of the sort order, orgs with more units are prioritised, they contain the courseUnits of the duplicates.
+  allOrganisations = _.sortedUniqBy(allOrganisations, (org) => org.id)
 
   return allOrganisations
 }
