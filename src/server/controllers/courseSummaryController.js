@@ -169,7 +169,6 @@ const getByOrganisations = async (req, res) => {
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    cache: req.cacheSummaries,
   })
 
   res.send({

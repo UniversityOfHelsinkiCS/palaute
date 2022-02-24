@@ -496,9 +496,7 @@ const getOrganisationSummariesFromDb = async (
       : []
 
   const normalizedRows = !includeOpenUniCourseUnits
-    ? await (
-        await rowsByRealisations
-      ).filter((row) => row.organisation_id !== OPEN_UNI_ORGANISATION_ID)
+    ? await omitOpenUniRows(await rowsByRealisations)
     : await rowsByUnits
 
   const organisationsWithMissing = withMissingOrganisations(
@@ -543,6 +541,7 @@ const getOrganisationSummaries = async ({
       : []
 
   if (cache) {
+    console.log(`Caching ${organisationsFromDb.length} organisations`)
     cacheOrganisationSummaries(organisationsFromDb)
   }
 
