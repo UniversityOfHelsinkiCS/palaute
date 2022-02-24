@@ -22,6 +22,7 @@ const run = async () => {
       // req
       user: admin,
       query: { includeOpenUniCourseUnits: true },
+      cache: true,
     },
     {
       // res

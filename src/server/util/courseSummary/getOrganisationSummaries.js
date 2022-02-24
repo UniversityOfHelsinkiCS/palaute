@@ -406,6 +406,7 @@ const withMissingOrganisations = (
   )
 }
 
+// why not just filter rows where organisation_id === OPEN_UNI_ORGANISATION_ID ?
 const omitOpenUniRows = async (rows) => {
   const openUniRows = await sequelize.query(
     `
@@ -495,7 +496,9 @@ const getOrganisationSummariesFromDb = async (
       : []
 
   const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOpenUniRows(await rowsByRealisations)
+    ? await (
+        await rowsByRealisations
+      ).filter((row) => row.organisation_id !== OPEN_UNI_ORGANISATION_ID)
     : await rowsByUnits
 
   const organisationsWithMissing = withMissingOrganisations(
@@ -512,6 +515,7 @@ const getOrganisationSummaries = async ({
   organisationAccess,
   accessibleCourseRealisationIds,
   includeOpenUniCourseUnits = true,
+  cache = false,
 }) => {
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,
@@ -538,21 +542,11 @@ const getOrganisationSummaries = async ({
         )
       : []
 
-  cacheOrganisationSummaries(organisationsFromDb)
+  if (cache) {
+    cacheOrganisationSummaries(organisationsFromDb)
+  }
 
-  // this causes duplicate orgs, some of which have a subset of all courseUnits of that org
-  let allOrganisations = cachedOrganisations.concat(organisationsFromDb)
-
-  // sort by id and then by number of courseunits (greater first)
-  allOrganisations = _.sortBy(allOrganisations, [
-    'id',
-    (org) => -org.courseUnits.length,
-  ])
-
-  // unique by id. Because of the sort order, orgs with more units are prioritised, they contain the courseUnits of the duplicates.
-  allOrganisations = _.sortedUniqBy(allOrganisations, (org) => org.id)
-
-  return allOrganisations
+  return _.sortBy(cachedOrganisations.concat(organisationsFromDb), ['code'])
 }
 
 module.exports = {
