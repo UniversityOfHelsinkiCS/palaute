@@ -515,37 +515,17 @@ const getOrganisationSummaries = async ({
   includeOpenUniCourseUnits = true,
   cache = false,
 }) => {
-  const organisationIds = organisationAccess.map(
-    ({ organisation }) => organisation.id,
-  )
-
-  const cachedOrganisations = (
-    await getCachedOrganisationSummaries(organisationIds)
-  ).filter((org) => org !== null)
-  const cachedIds = cachedOrganisations.map((org) => org.id)
-
-  // filter out all orgs found in cache
-  const remainingOrganisationAccess = organisationAccess.filter(
-    (oa) => !cachedIds.some((id) => id === oa.organisation.id),
-  )
-
   const organisationsFromDb =
-    remainingOrganisationAccess.length > 0 ||
-    accessibleCourseRealisationIds.length > 0
+    organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
       ? await getOrganisationSummariesFromDb(
           questions,
-          remainingOrganisationAccess,
+          organisationAccess,
           accessibleCourseRealisationIds,
           includeOpenUniCourseUnits,
         )
       : []
 
-  if (cache) {
-    console.log(`Caching ${organisationsFromDb.length} organisations`)
-    cacheOrganisationSummaries(organisationsFromDb)
-  }
-
-  return _.sortBy(cachedOrganisations.concat(organisationsFromDb), ['code'])
+  return _.sortBy(organisationsFromDb, ['code'])
 }
 
 module.exports = {

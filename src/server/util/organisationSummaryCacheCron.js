@@ -15,7 +15,7 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running OrganisationSummary caching cron')
-  await redisClient.flushDb()
+  // await redisClient.flushDb()
   const admin = await User.findOne({ where: { username: 'varisleo' } })
   courseSummaryController.getByOrganisations(
     {
