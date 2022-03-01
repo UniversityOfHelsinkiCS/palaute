@@ -19,6 +19,7 @@ const usersHandler = async (users) => {
     username: user.eduPersonPrincipalName
       ? user.eduPersonPrincipalName.split('@')[0]
       : user.id,
+    degreeStudyRight: user.has_study_right,
   }))
 
   // By default updates all fields on duplicate id
@@ -31,12 +32,13 @@ const usersHandler = async (users) => {
       'employeeNumber',
       'language',
       'email',
+      'degreeStudyRight',
     ],
   })
 }
 
 const updateUsers = async () => {
-  await mangleData('persons', 3000, usersHandler)
+  await mangleData('persons', 1000, usersHandler)
 }
 
 module.exports = updateUsers
