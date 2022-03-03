@@ -71,7 +71,7 @@ const executeSummaryQuery = ({
   WHERE
     feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > NOW() - interval '48 months'
+    AND course_realisations.start_date > NOW() - interval '24 months'
     AND NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
     ${organisationId ? 'AND organisations.id = :organisationId' : ''};
   `
