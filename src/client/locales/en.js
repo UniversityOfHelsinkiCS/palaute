@@ -220,6 +220,7 @@ export default {
     admin: 'Admin',
     courseSummary: 'Course summary',
     nameFallback: 'Menu',
+    feedback: 'Give feedback',
   },
   studentsWithFeedback: {
     noFeedbackInfo:
@@ -316,5 +317,16 @@ export default {
     noUser:
       'Something went wrong, you are not currently not logged in. Try going through the email link again or contact the course teacher',
     noFeedback: 'There are currently no course feedbacks that are open',
+  },
+  norppaFeedback: {
+    feedback: 'Feedback',
+    feedbackHelper: 'Give a free form feedback',
+    responseWanted: 'I want a response to my feedback',
+    submit: 'Send feedback',
+    title: 'Give feedback',
+    description:
+      'You can give free form feedback or some improvement suggestions to the developers of the course feedback system. This feedback is gathered so that user experiences and improvement suggestions can be easily forwarded to the development team and so that the system can be further improved based on the feedback. You can also request a response to your feedback to be contacted via email on a later date. This feedback is only meant for the teachers and staff of the university.',
+    feedbackLengthError: 'The minimum length of the feedback is one symbol',
+    successAlert: 'Feedback has been sent succesfully',
   },
 }

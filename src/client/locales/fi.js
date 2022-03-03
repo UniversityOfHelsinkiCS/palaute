@@ -217,6 +217,7 @@ export default {
     admin: 'Ylläpito',
     courseSummary: 'Kurssiyhteenveto',
     nameFallback: 'Valikko',
+    feedback: 'Anna palautetta',
   },
   studentsWithFeedback: {
     noFeedbackInfo:
@@ -316,5 +317,16 @@ export default {
       'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
     noFeedback:
       'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
+  },
+  norppaFeedback: {
+    feedback: 'Palaute',
+    feedbackHelper: 'Anna vapaamuotoista palautetta',
+    responseWanted: 'Haluan vastauksen palautteeseen',
+    submit: 'Lähetä palaute',
+    title: 'Anna palautetta',
+    description:
+      'Voit lähettää vapaamuotoista palautetta tai keksimiäsi kehitysehdotuksia kurssipalautejärjestelmän kehittäjille. Tätä palautetta kerätään, jotta käyttäjien kokemuksia ja kehitysehdotuksia saadaan kehitystiimin tietoon ja jotta niiden perusteella voidaan jatkokehittää sovellusta. Voit myös pyytää vastauksen palautteeseesi jolloin siihen vastataan sähköpostitse. Tämä palaute on tarkoitettu vain yliopiston opettajille ja henkilökunnalle.',
+    feedbackLengthError: 'Palautteen vähimmäispituus on yksi merkki',
+    successAlert: 'Palaute lähetetty onnistuneesti!',
   },
 }

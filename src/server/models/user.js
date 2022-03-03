@@ -225,6 +225,10 @@ User.init(
       type: BOOLEAN,
       allowNull: true,
     },
+    norppaFeedbackGiven: {
+      type: BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     underscored: true,

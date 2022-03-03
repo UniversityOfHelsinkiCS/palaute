@@ -18,6 +18,7 @@ const courseUnit = require('../controllers/courseUnitController')
 const courseRealisation = require('../controllers/courseRealisationController')
 const testingController = require('../controllers/testingController')
 const noAdUserController = require('../controllers/noAdUserController')
+const norppaFeedbackController = require('../controllers/norppaFeedbackController')
 
 const router = Router()
 
@@ -130,6 +131,8 @@ router.get(
   '/course-realisations/:id/feedback-targets',
   courseRealisation.getFeedbackTargetsByCourseRealisation,
 )
+
+router.post('/norppa-feedback', norppaFeedbackController.submitFeedback)
 
 router.use('/admin', adminController)
 

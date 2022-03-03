@@ -169,6 +169,10 @@ const NavBar = () => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
+    courseSummaryAccessInfo && {
+      label: t('navBar:feedback'),
+      to: '/norppa-feedback',
+    },
     isAdminUser && {
       label: t('navBar:admin'),
       to: '/admin',

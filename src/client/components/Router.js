@@ -10,6 +10,7 @@ import TeacherView from './TeacherView'
 import CourseRealisationFeedback from './CourseRealisationFeedback'
 import OrganisationSettings from './OrganisationSettings'
 import FeedbackTargetView from './FeedbackTargetView'
+import NorppaFeedback from './NorppaFeedback'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,6 +57,7 @@ const Router = () => {
         />
         <Route path="/course-summary" component={CourseSummary} />
         <Route path="/cur/:id" component={CourseRealisationFeedback} />
+        <Route path="/norppa-feedback" component={NorppaFeedback} />
         <Route path="/admin" component={AdminView} />
       </Switch>
     </Container>
