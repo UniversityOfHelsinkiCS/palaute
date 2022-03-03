@@ -22,6 +22,7 @@ const FormikDatePicker = ({ name, ...props }) => {
       error={showError}
       helperText={showError ? t(meta.error) : ''}
       inputVariant="outlined"
+      maxDate={new Date('2300-01-01')}
       {...props}
     />
   )
