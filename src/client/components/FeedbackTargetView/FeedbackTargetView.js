@@ -28,6 +28,7 @@ import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
 import FeedbackResponse from '../FeedbackResponse'
 import FeedbackTargetQR from '../FeedbackTargetQR'
+import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -300,6 +301,7 @@ const FeedbackTargetView = () => {
           component={FeedbackResponse}
         />
         <Route path={`${path}/QR`} component={FeedbackTargetQR} />
+        <Route path={`${path}/togen`} component={FeedbackLinksView} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

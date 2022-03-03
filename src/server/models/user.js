@@ -205,6 +205,9 @@ User.init(
     email: {
       type: STRING,
     },
+    secondaryEmail: {
+      type: STRING,
+    },
     employeeNumber: {
       type: STRING,
     },

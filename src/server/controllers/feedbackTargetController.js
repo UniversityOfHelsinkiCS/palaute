@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
+const jwt = require('jsonwebtoken')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -20,6 +21,7 @@ const logger = require('../util/logger')
 const {
   sendEmailToStudentsWhenOpeningImmediately,
 } = require('../util/emailSender')
+const { JWT_KEY } = require('../util/config')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -732,6 +734,38 @@ const closeFeedbackImmediately = async (req, res) => {
   res.sendStatus(200)
 }
 
+const getUsers = async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+
+  const { isAdmin } = req
+
+  if (!isAdmin) {
+    throw new ApplicationError('User is not authorized', 403)
+  }
+
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+    },
+    include: [
+      {
+        model: User,
+        as: 'user',
+        required: true,
+      },
+    ],
+  })
+
+  const users = userFeedbackTargets.map(({ user }) => ({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    studentNumber: user.studentNumber,
+    token: jwt.sign({ username: user.username }, JWT_KEY),
+  }))
+
+  res.send(users)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -744,4 +778,5 @@ module.exports = {
   openFeedbackImmediately,
   closeFeedbackImmediately,
   remindStudentsOnFeedback,
+  getUsers,
 }

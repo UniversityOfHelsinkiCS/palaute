@@ -14,11 +14,13 @@ const usersHandler = async (users) => {
   const filteredUsers = users.map((user) => ({
     ...user,
     email: user.primaryEmail ? user.primaryEmail : user.secondaryEmail,
+    secondaryEmail: user.primaryEmail ? user.secondaryEmail : null,
     language: parsePreferredLanguageUrnToLanguage(user.preferredLanguageUrn),
     firstName: user.firstNames ? user.firstNames.split(' ')[0] : null,
     username: user.eduPersonPrincipalName
       ? user.eduPersonPrincipalName.split('@')[0]
       : user.id,
+    degreeStudyRight: user.has_study_right,
   }))
 
   // By default updates all fields on duplicate id
@@ -31,12 +33,14 @@ const usersHandler = async (users) => {
       'employeeNumber',
       'language',
       'email',
+      'degreeStudyRight',
+      'secondaryEmail',
     ],
   })
 }
 
 const updateUsers = async () => {
-  await mangleData('persons', 3000, usersHandler)
+  await mangleData('persons', 1000, usersHandler)
 }
 
 module.exports = updateUsers

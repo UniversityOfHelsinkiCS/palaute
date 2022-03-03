@@ -53,6 +53,7 @@ router.get('/feedback-targets/for-student', feedbackTargets.getForStudent)
 router.get('/feedback-targets/:id', feedbackTargets.getOne)
 router.put('/feedback-targets/:id', feedbackTargets.update)
 router.get('/feedback-targets/:id/feedbacks', feedbackTargets.getFeedbacks)
+router.get('/feedback-targets/:id/users', feedbackTargets.getUsers)
 
 router.put(
   '/feedback-targets/:id/reply',
