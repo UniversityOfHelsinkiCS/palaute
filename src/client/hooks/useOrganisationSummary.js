@@ -10,7 +10,7 @@ const useOrganisationSummary = (code, options = {}) => {
       includeOpenUniCourseUnits === true ? 'true' : 'false',
   }
 
-  const queryKey = ['organisationSummary', params]
+  const queryKey = ['organisationSummary', code, params]
 
   const queryFn = async () => {
     const { data } = await apiClient.get(

@@ -124,6 +124,7 @@ const ProgrammeSummary = () => {
 
   const { data, isLoading } = useOrganisationSummary(code, {
     includeOpenUniCourseUnits,
+    keepPreviousData: true,
   })
 
   const handleKeywordChange = (nextKeyword) => {
