@@ -10,6 +10,7 @@ const Organisation = require('./organisation')
 const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
 const FeedbackSummaryCache = require('./feedbackSummaryCache')
+const NorppaFeedback = require('./norppaFeedback')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -86,6 +87,10 @@ User.belongsToMany(FeedbackTarget, {
   foreignKey: 'user_id',
 })
 
+NorppaFeedback.belongsTo(User, {
+  as: 'user',
+})
+
 module.exports = {
   Feedback,
   User,
@@ -99,4 +104,5 @@ module.exports = {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
   FeedbackSummaryCache,
+  NorppaFeedback,
 }
