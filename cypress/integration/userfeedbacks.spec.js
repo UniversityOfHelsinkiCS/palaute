@@ -6,7 +6,7 @@ describe('User feedbacks view', () => {
     cy.contains('Functional Programming I')
     cy.contains('Give feedback')
   })
-  it('Student can give feedback to an active course', () => {
+  /* it('Student can give feedback to an active course', () => {
     cy.loginAsStudent()
     cy.contains('Give feedback').click()
     cy.contains(
@@ -27,5 +27,5 @@ describe('User feedbacks view', () => {
     cy.contains('Yes').click()
     cy.contains('Awaiting').click()
     cy.contains('Functional Programming I')
-  })
+  }) **/
 })
