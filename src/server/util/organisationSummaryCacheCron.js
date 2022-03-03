@@ -1,5 +1,5 @@
 const { CronJob } = require('cron')
-const { inE2EMode } = require('../../config')
+const { inE2EMode, inProduction } = require('../../config')
 const logger = require('./logger')
 const {
   populateOrganisationSummaryCache,
@@ -23,7 +23,7 @@ const start = async () => {
     return logger.info('Not running cache cron in E2EMode')
   }
   const cronTime = '30 6 * * *' // 4 am
-  run()
+  if (inProduction) run()
   return schedule(cronTime, run)
 }
 
