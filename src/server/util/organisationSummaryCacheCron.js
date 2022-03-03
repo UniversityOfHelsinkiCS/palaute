@@ -1,9 +1,9 @@
 const { CronJob } = require('cron')
 const { inE2EMode } = require('../../config')
-const { User } = require('../models')
 const logger = require('./logger')
-const courseSummaryController = require('../controllers/courseSummaryController')
-const { redisClient } = require('./redisClient')
+const {
+  populateOrganisationSummaryCache,
+} = require('./courseSummary/getOrganisationSummaries')
 
 const schedule = (cronTime, func) =>
   new CronJob({
@@ -15,19 +15,7 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running OrganisationSummary caching cron')
-  // await redisClient.flushDb()
-  const admin = await User.findOne({ where: { username: 'varisleo' } })
-  courseSummaryController.getByOrganisations(
-    {
-      // req
-      user: admin,
-      query: { includeOpenUniCourseUnits: true },
-    },
-    {
-      // res
-      send: () => {},
-    },
-  )
+  await populateOrganisationSummaryCache()
 }
 
 const start = async () => {

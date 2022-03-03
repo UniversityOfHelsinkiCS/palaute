@@ -6,6 +6,7 @@ const { CourseUnit, Survey, Organisation } = require('../models')
 const {
   getOrganisationSummaries,
   getCourseRealisationSummaries,
+  getSummaryByOrganisation,
 } = require('../util/courseSummary')
 
 const {
@@ -232,45 +233,22 @@ const getByOrganisation = async (req, res) => {
   const { code } = req.params
   const { includeOpenUniCourseUnits } = req.query
 
-  const access = organisationAccess.filter(
+  const access = organisationAccess.find(
     (org) => org.organisation.code === code,
   )
 
-  if (access.length === 0) {
+  if (!access) {
     throw new ApplicationError(403, 'Forbidden')
   }
 
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-  const programmeSurvey = await Survey.findOne({
-    where: { type: 'programme', typeId: code },
-  })
-
-  await universitySurvey.populateQuestions()
-
-  if (programmeSurvey) await programmeSurvey.populateQuestions()
-  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
-
-  const questions = [...universitySurvey.questions, ...programmeQuestions]
-
-  const summaryQuestions = questions
-    .filter((q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
-    .map((question) => ({
-      ...question.toJSON(),
-      secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
-    }))
-
-  const organisations = await getOrganisationSummaries({
-    questions: summaryQuestions,
-    organisationAccess: access,
-    accessibleCourseRealisationIds: [],
+  const { organisations, questions } = await getSummaryByOrganisation({
+    organisationCode: code,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
   })
 
   res.send({
-    organisations: organisations.filter((org) => org.code === code),
-    summaryQuestions,
+    organisations,
+    summaryQuestions: questions,
   })
 }
 

@@ -9,6 +9,7 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const Organisation = require('./organisation')
 const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
+const FeedbackSummaryCache = require('./feedbackSummaryCache')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -97,4 +98,5 @@ module.exports = {
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  FeedbackSummaryCache,
 }

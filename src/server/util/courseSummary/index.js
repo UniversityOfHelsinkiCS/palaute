@@ -2,6 +2,13 @@ const {
   getCourseRealisationSummaries,
 } = require('./getCourseRealisationSummaries')
 
-const { getOrganisationSummaries } = require('./getOrganisationSummaries')
+const {
+  getOrganisationSummaries,
+  getSummaryByOrganisation,
+} = require('./getOrganisationSummaries')
 
-module.exports = { getCourseRealisationSummaries, getOrganisationSummaries }
+module.exports = {
+  getCourseRealisationSummaries,
+  getOrganisationSummaries,
+  getSummaryByOrganisation,
+}

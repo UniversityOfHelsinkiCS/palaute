@@ -1,7 +1,9 @@
+/* eslint-disable camelcase */
 const _ = require('lodash')
 
+const { Op } = require('sequelize')
 const { sequelize } = require('../dbConnection')
-const { redisClient } = require('../redisClient')
+const { Survey, FeedbackSummaryCache, Organisation } = require('../../models')
 
 const {
   QUESTION_AVERAGES_QUERY,
@@ -10,119 +12,78 @@ const {
   getResults,
   getCounts,
 } = require('./utils')
+const logger = require('../logger')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 
-const openUniversityValues = {
-  id: 'hy-org-48645785',
-  name: {
-    en: 'Open University',
-    fi: 'Avoin yliopisto',
-    sv: 'Öppna universitetet',
-  },
-  code: 'H930',
-  defaultQuestions: [
-    { questionId: 6, mean: 0, distribution: {} },
-    { questionId: 7, mean: 0, distribution: {} },
-    { questionId: 8, mean: 0, distribution: {} },
-    { questionId: 9, mean: 0, distribution: {} },
-    { questionId: 1042, mean: 0, distribution: {} },
-  ],
+const WORKLOAD_QUESTION_ID = 1042
+
+const executeSummaryQuery = ({
+  questionIds,
+  organisationId,
+  validDataValues,
+}) => {
+  const query = `
+  WITH question_averages AS (
+    ${QUESTION_AVERAGES_QUERY}
+  ), feedback_counts AS (
+    ${COUNTS_QUERY}
+  )
+  
+  SELECT
+    question_id,
+    question_data,
+    question_data_count,
+    feedback_count,
+    student_count,
+    feedback_targets.id AS feedback_target_id,
+    feedback_targets.closes_at AS closes_at,
+    course_realisations.id AS course_realisation_id,
+    course_realisations.name AS course_realisation_name,
+    course_realisations.start_date AS course_realisation_start_date,
+    course_realisations.end_date AS course_realisation_end_date,
+    course_units.course_code AS course_code,
+    course_units.name AS course_unit_name,
+    course_units.id AS course_unit_id,
+    organisation_access.organisation_id AS course_realisations_organisation_id,
+    organisations.id AS organisation_id,
+    organisations.name AS organisation_name,
+    organisations.code AS organisation_code,
+    CASE
+      WHEN feedback_targets.feedback_response IS NOT NULL
+      AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+      ELSE FALSE
+    END AS feedback_response_given
+  FROM question_averages
+    INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
+    INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
+    INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
+    INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+  
+    INNER JOIN LATERAL (
+      SELECT organisation_id FROM course_realisations_organisations WHERE course_realisation_id = course_realisations.id
+      UNION
+      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = course_units.id
+    ) organisation_access ON TRUE
+  
+    INNER JOIN organisations ON organisation_access.organisation_id = organisations.id
+    INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
+  WHERE
+    feedback_targets.feedback_type = 'courseRealisation'
+    AND course_realisations.start_date < NOW()
+    AND course_realisations.start_date > NOW() - interval '48 months'
+    AND NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
+    ${organisationId ? 'AND organisations.id = :organisationId' : ''};
+  `
+  return sequelize.query(query, {
+    replacements: {
+      questionIds,
+      organisationId,
+      validDataValues,
+    },
+    type: sequelize.QueryTypes.SELECT,
+  })
 }
-
-const ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS = `
-WITH question_averages AS (
-  ${QUESTION_AVERAGES_QUERY}
-), feedback_counts AS (
-  ${COUNTS_QUERY}
-)
-
-SELECT
-  question_id,
-  question_data,
-  question_data_count,
-  feedback_count,
-  student_count,
-  feedback_targets.id AS feedback_target_id,
-  feedback_targets.closes_at AS closes_at,
-  course_realisations.id AS course_realisation_id,
-  course_realisations.name AS course_realisation_name,
-  course_realisations.start_date AS course_realisation_start_date,
-  course_realisations.end_date AS course_realisation_end_date,
-  course_units.course_code AS course_code,
-  course_units.name AS course_unit_name,
-  course_units.id AS course_unit_id,
-  course_realisations_organisations.organisation_id AS course_realisations_organisation_id,
-  organisations.id AS organisation_id,
-  organisations.name AS organisation_name,
-  organisations.code AS organisation_code,
-  CASE
-    WHEN feedback_targets.feedback_response IS NOT NULL
-    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
-    ELSE FALSE
-  END AS feedback_response_given
-FROM question_averages
-  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
-  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
-  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-  INNER JOIN course_realisations_organisations ON course_realisations.id = course_realisations_organisations.course_realisation_id
-  INNER JOIN organisations ON course_realisations_organisations.organisation_id = organisations.id
-  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
-WHERE
-  feedback_targets.feedback_type = 'courseRealisation'
-  AND (organisations.id IN (:organisationIds) OR course_realisations.id IN (:accessibleCourseRealisationIds))
-  AND course_units.course_code NOT IN (:disabledCourseCodes)
-  AND course_realisations.start_date < NOW()
-  AND course_realisations.start_date > NOW() - interval '48 months';
-`
-
-const ORGANISATION_SUMMARY_QUERY_BY_UNITS = `
-WITH question_averages AS (
-  ${QUESTION_AVERAGES_QUERY}
-), feedback_counts AS (
-  ${COUNTS_QUERY}
-)
-
-SELECT
-  question_id,
-  question_data,
-  question_data_count,
-  feedback_count,
-  student_count,
-  feedback_targets.id AS feedback_target_id,
-  feedback_targets.closes_at AS closes_at,
-  course_realisations.id AS course_realisation_id,
-  course_realisations.name AS course_realisation_name,
-  course_realisations.start_date AS course_realisation_start_date,
-  course_realisations.end_date AS course_realisation_end_date,
-  course_units.course_code AS course_code,
-  course_units.name AS course_unit_name,
-  course_units.id AS course_unit_id,
-  course_realisations_organisations.organisation_id AS course_realisations_organisation_id,
-  organisations.id AS organisation_id,
-  organisations.name AS organisation_name,
-  organisations.code AS organisation_code,
-  CASE
-    WHEN feedback_targets.feedback_response IS NOT NULL
-    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
-    ELSE FALSE
-  END AS feedback_response_given
-FROM question_averages
-  INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
-  INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-  INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
-  INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-  INNER JOIN course_realisations_organisations ON course_realisations.id = course_realisations_organisations.course_realisation_id
-  INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
-  INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
-WHERE
-  feedback_targets.feedback_type = 'courseRealisation'
-  AND (organisations.id IN (:organisationIds) OR course_realisations.id IN (:accessibleCourseRealisationIds))
-  AND course_units.course_code NOT IN (:disabledCourseCodes)
-  AND course_realisations.start_date < NOW()
-  AND course_realisations.start_date > NOW() - interval '48 months';
-`
 
 const getCurrentCourseRealisationId = (rows) => {
   const rowsByCourseRealisationId = _.groupBy(
@@ -154,13 +115,8 @@ const getCurrentCourseRealisationId = (rows) => {
   return sortedCourseRealisations[0].id
 }
 
-const getCourseUnitsWithResults = (rows, questions, openUni) => {
-  const relevantRows = !openUni
-    ? rows
-    : rows.filter(
-        (row) =>
-          row.course_realisations_organisation_id === OPEN_UNI_ORGANISATION_ID,
-      )
+const getCourseUnitsWithResults = (rows, questions) => {
+  const relevantRows = rows
 
   const rowsByCourseCode = _.groupBy(relevantRows, (row) => row.course_code)
   const courseUnits = Object.entries(rowsByCourseCode).map(
@@ -215,12 +171,14 @@ const getCourseUnitsWithResults = (rows, questions, openUni) => {
 }
 
 const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
+  // 400 ms
   const organisations = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
       const { organisation_name: name, organisation_code: code } =
         organisationRows[0]
 
       const courseUnits = getCourseUnitsWithResults(
+        // 320 ms total
         organisationRows,
         questions,
         openUni,
@@ -267,9 +225,9 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
       })
 
       return {
-        id: openUni ? openUniversityValues.id : organisationId,
-        name: openUni ? openUniversityValues.name : name,
-        code: openUni ? openUniversityValues.code : code,
+        id: organisationId,
+        name,
+        code,
         results,
         feedbackCount,
         studentCount,
@@ -282,90 +240,12 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
   return organisations
 }
 
-const createOpenUniOrganisation = (openUniOrganisations) => {
-  if (openUniOrganisations.length < 2) return openUniOrganisations
-
-  const openUniOrganisationCourseUnits = openUniOrganisations.reduce(
-    (allCourseUnits, { courseUnits }) => allCourseUnits.concat(courseUnits),
-    [],
-  )
-
-  const seen = new Set()
-  const uniqueCourseUnits = openUniOrganisationCourseUnits.filter((c) => {
-    const duplicate = seen.has(c.courseCode)
-    seen.add(c.courseCode)
-    return !duplicate
-  })
-
-  const counts = uniqueCourseUnits.reduce(
-    (countSums, { feedbackCount, studentCount }) => ({
-      feedbackCount: countSums.feedbackCount + feedbackCount,
-      studentCount: countSums.studentCount + studentCount,
-    }),
-    { feedbackCount: 0, studentCount: 0 },
-  )
-
-  const feedbackPercentage =
-    counts.studentCount > 0 ? counts.feedbackCount / counts.studentCount : 0
-
-  let divider = 0
-
-  const results = uniqueCourseUnits.reduce((allResults, { results }) => {
-    if (results[0].mean !== 0) divider += 1
-    const result = results.map((r, index) => ({
-      questionId: r.questionId,
-      mean: allResults[index].mean + r.mean,
-      distribution: r.distribution,
-    }))
-    return result
-  }, openUniversityValues.defaultQuestions)
-
-  const dividedResults = results.map((r) => ({
-    ...r,
-    mean: (r.mean / divider).toFixed(2),
-  }))
-
-  const openUniOrganisation = [
-    {
-      id: openUniversityValues.id,
-      name: openUniversityValues.name,
-      code: openUniversityValues.code,
-      courseUnits: uniqueCourseUnits,
-      feedbackCount: counts.feedbackCount,
-      studentCount: counts.studentCount,
-      feedbackPercentage,
-      results: dividedResults,
-    },
-  ]
-
-  return openUniOrganisation
-}
-
-const getOrganisationsWithResults = (rows, questions, allRows) => {
+const getOrganisationsWithResults = (rows, questions) => {
   const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
 
-  const organisations = createOrganisations(
-    rowsByOrganisationId,
-    questions,
-    false,
-  )
+  const organisations = createOrganisations(rowsByOrganisationId, questions)
 
-  const filteredOrganisations = organisations.filter(
-    (org) => org.id !== OPEN_UNI_ORGANISATION_ID,
-  )
-
-  const allRowsById = _.groupBy(allRows, (row) => row.organisation_id)
-
-  const openUniOrganisations = createOrganisations(allRowsById, questions, true)
-
-  const openUniOrganisation = createOpenUniOrganisation(openUniOrganisations)
-
-  const allOrganisations =
-    openUniOrganisation[0] && openUniOrganisation[0].courseUnits.length > 0
-      ? filteredOrganisations.concat(openUniOrganisation)
-      : filteredOrganisations
-
-  return _.orderBy(allOrganisations, ['code'], ['asc'])
+  return organisations
 }
 
 const withMissingOrganisations = (
@@ -406,106 +286,172 @@ const withMissingOrganisations = (
   )
 }
 
-// why not just filter rows where organisation_id === OPEN_UNI_ORGANISATION_ID ?
-const omitOpenUniRows = async (rows) => {
-  const openUniRows = await sequelize.query(
-    `
-    SELECT DISTINCT ON (course_units.course_code) course_units.course_code FROM course_units_organisations
-    INNER JOIN course_units ON course_units_organisations.course_unit_id = course_units.id
-    WHERE course_units_organisations.organisation_id = :openUniOrganisationId;
-  `,
-    {
-      replacements: {
-        openUniOrganisationId: OPEN_UNI_ORGANISATION_ID,
-      },
-      type: sequelize.QueryTypes.SELECT,
+const omitOrganisationOpenUniRows = async (rows) => {
+  const courseRealisationIds = _.uniq(
+    rows.map((row) => row.course_realisation_id),
+  )
+  const courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
+
+  const query = `
+    SELECT NULL AS course_unit_id, course_realisation_id
+    FROM course_realisations_organisations
+    WHERE organisation_id = :openUniOrganisationId
+    AND course_realisation_id IN (:courseRealisationIds)
+    UNION
+    SELECT NULL AS course_realisation_id, course_unit_id
+    FROM course_units_organisations
+    WHERE organisation_id = :openUniOrganisationId
+    AND course_unit_id IN (:courseUnitIds);
+  `
+
+  const results = await sequelize.query(query, {
+    replacements: {
+      courseRealisationIds,
+      courseUnitIds,
+      openUniOrganisationId: OPEN_UNI_ORGANISATION_ID,
     },
+    type: sequelize.QueryTypes.SELECT,
+  })
+
+  const openUniCourseRealisationIds = results
+    .map((r) => r.course_realisation_id)
+    .filter(Boolean)
+  const openUniCourseUnitIds = results
+    .map((r) => r.course_unit_id)
+    .filter(Boolean)
+
+  const filtered = rows.filter(
+    (r) =>
+      !openUniCourseRealisationIds.includes(r.course_realisation_id) &&
+      !openUniCourseUnitIds.includes(r.course_unit_id),
   )
 
-  const openUniCourseCodes = openUniRows.map((row) => row.course_code)
-
-  return rows.filter((row) => !openUniCourseCodes.includes(row.course_code))
+  return filtered
 }
 
-const cacheOrganisationSummaries = (organisations) => {
-  organisations.forEach((organisation) => {
-    redisClient.set(organisation.id, JSON.stringify(organisation))
+const omitOpenUniRows = (rows) => {
+  const openUniCourseRealisationIds = _.uniq(
+    rows
+      .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
+      .map((row) => row.course_realisation_id),
+  )
+
+  return rows.filter(
+    (row) => !openUniCourseRealisationIds.includes(row.course_realisation_id),
+  )
+}
+
+const getOrganisationQuestions = async (organisationCode) => {
+  const programmeSurvey = await Survey.findOne({
+    where: { type: 'programme', typeId: organisationCode },
   })
+
+  if (programmeSurvey) await programmeSurvey.populateQuestions()
+  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
+
+  const summaryQuestions = programmeQuestions.filter((q) => q.type === 'LIKERT')
+
+  return summaryQuestions
 }
 
-const getCachedOrganisationSummaries = (organisationIds) =>
-  Promise.all(organisationIds.map((id) => redisClient.get(id).then(JSON.parse)))
+const getUniversityQuestions = async () => {
+  const universitySurvey = await Survey.findOne({
+    where: { type: 'university' },
+  })
 
-const getOrganisationSummariesFromDb = async (
-  questions,
-  organisationAccess,
-  accessibleCourseRealisationIds,
+  await universitySurvey.populateQuestions()
+
+  const { questions = [] } = universitySurvey
+
+  const summaryQuestions = questions.filter(
+    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
+  )
+
+  return summaryQuestions.map((question) => ({
+    ...question.toJSON(),
+    secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
+  }))
+}
+
+const getSummaryByOrganisation = async ({
+  organisationCode,
   includeOpenUniCourseUnits = true,
-) => {
+}) => {
+  const universityQuestions = await getUniversityQuestions()
+  const programmeQuestions = await getOrganisationQuestions(organisationCode)
+  const questions = universityQuestions.concat(programmeQuestions)
+
   const validDataValues = getValidDataValues(questions)
   const questionIds = questions.map(({ id }) => id.toString())
 
-  const organisations = organisationAccess.map(
-    ({ organisation }) => organisation,
-  )
+  const organisation = await Organisation.findOne({
+    where: { code: organisationCode },
+  })
 
-  const disabledCourseCodes = organisations.flatMap(
-    ({ disabledCourseCodes }) => disabledCourseCodes ?? [],
-  )
-
-  const organisationIds = organisations.map(({ id }) => id)
-
-  const rowsByRealisations =
-    organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_REALISATIONS, {
-          replacements: {
-            questionIds,
-            organisationIds: [
-              ...organisationIds,
-              '_', // in case of empty array
-            ],
-            validDataValues,
-            disabledCourseCodes: [...disabledCourseCodes, '_'],
-            accessibleCourseRealisationIds: [
-              ...accessibleCourseRealisationIds,
-              '_',
-            ],
-          },
-          type: sequelize.QueryTypes.SELECT,
-        })
-      : []
-
-  const rowsByUnits =
-    organisationIds.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? sequelize.query(ORGANISATION_SUMMARY_QUERY_BY_UNITS, {
-          replacements: {
-            questionIds,
-            organisationIds: [
-              ...organisationIds,
-              '_', // in case of empty array
-            ],
-            validDataValues,
-            disabledCourseCodes: [...disabledCourseCodes, '_'],
-            accessibleCourseRealisationIds: [
-              ...accessibleCourseRealisationIds,
-              '_',
-            ],
-          },
-          type: sequelize.QueryTypes.SELECT,
-        })
-      : []
+  const rows = await executeSummaryQuery({
+    questionIds,
+    organisationId: organisation.id,
+    validDataValues,
+  })
 
   const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOpenUniRows(await rowsByRealisations)
-    : await rowsByUnits
+    ? await omitOrganisationOpenUniRows(rows)
+    : rows
 
-  const organisationsWithMissing = withMissingOrganisations(
-    getOrganisationsWithResults(normalizedRows, questions, rowsByRealisations),
-    organisationAccess,
-    questions,
+  const results = getOrganisationsWithResults(normalizedRows, questions)
+
+  return { organisations: results, questions }
+}
+
+const getAllRowsFromDb = async () => {
+  const questions = await getUniversityQuestions()
+  const validDataValues = getValidDataValues(questions)
+  const questionIds = questions.map(({ id }) => id.toString())
+
+  const courseRealisationRows = await executeSummaryQuery({
+    questionIds,
+    validDataValues,
+  })
+
+  return courseRealisationRows
+}
+
+const cacheSummary = async (rows) => {
+  // slow but run only in cronjob
+  await FeedbackSummaryCache.destroy({ where: {} })
+
+  const groupedRows = _.groupBy(
+    rows,
+    (row) => `${row.course_realisation_id}#${row.organisation_id}`,
   )
+  const cacheRows = Object.entries(groupedRows).map(([key, value]) => {
+    const [course_realisation_id, organisation_id] = key.split('#')
+    return {
+      course_realisation_id,
+      organisation_id,
+      data: value,
+    }
+  })
 
-  return organisationsWithMissing
+  await FeedbackSummaryCache.bulkCreate(cacheRows)
+}
+
+const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
+  // 530 ms
+  const cacheRows = await FeedbackSummaryCache.findAll({
+    where: {
+      [Op.or]: {
+        organisation_id: {
+          [Op.in]: organisationIds,
+        },
+        course_realisation_id: {
+          /* eslint-disable-line camelcase */ [Op.in]: courseRealisationIds,
+        },
+      },
+    },
+  })
+
+  return cacheRows.flatMap((row) => row.data)
 }
 
 const getOrganisationSummaries = async ({
@@ -513,21 +459,48 @@ const getOrganisationSummaries = async ({
   organisationAccess,
   accessibleCourseRealisationIds,
   includeOpenUniCourseUnits = true,
-  cache = false,
 }) => {
-  const organisationsFromDb =
-    organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
-      ? await getOrganisationSummariesFromDb(
-          questions,
-          organisationAccess,
-          accessibleCourseRealisationIds,
-          includeOpenUniCourseUnits,
-        )
-      : []
+  const organisationIds = organisationAccess.map(
+    ({ organisation }) => organisation.id,
+  )
 
-  return _.sortBy(organisationsFromDb, ['code'])
+  const rows = await getSummaryFromCache(
+    organisationIds,
+    accessibleCourseRealisationIds,
+  ) // ~530 ms db query
+  if (rows.length === 0) {
+    logger.warn(
+      'Got empty array from courseSummaryCache, looks like kakku is not yet ready',
+    )
+  }
+
+  const normalizedRows = !includeOpenUniCourseUnits
+    ? await omitOpenUniRows(rows) // ~60 ms
+    : rows
+
+  const organisationsWithResults = getOrganisationsWithResults(
+    normalizedRows,
+    questions,
+  ) // ~420 ms of pure epic mangling
+
+  const organisationsWithMissing = withMissingOrganisations(
+    // ~8 ms
+    organisationsWithResults,
+    organisationAccess,
+    questions,
+  )
+
+  return _.sortBy(organisationsWithMissing, 'code')
+}
+
+const populateOrganisationSummaryCache = async () => {
+  const rows = await getAllRowsFromDb()
+  await cacheSummary(rows)
+  logger.info(`Populated cache with ${rows.length} rows`)
 }
 
 module.exports = {
   getOrganisationSummaries,
+  getSummaryByOrganisation,
+  populateOrganisationSummaryCache,
 }
