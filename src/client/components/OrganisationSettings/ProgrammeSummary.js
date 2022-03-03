@@ -7,6 +7,7 @@ import {
   TableContainer,
   makeStyles,
   Divider,
+  LinearProgress,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -42,7 +43,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // A lot taken from OrganisationSummary.js
-const ProgrammeTable = ({ organisations, questions, filters }) => {
+const ProgrammeTable = ({
+  organisations,
+  questions,
+  filters,
+  loading = false,
+}) => {
   const { t, i18n } = useTranslation()
   const classes = useStyles()
 
@@ -68,6 +74,13 @@ const ProgrammeTable = ({ organisations, questions, filters }) => {
           </tr>
         </thead>
         <tbody>
+          {loading && (
+            <tr>
+              <td colSpan={99} className={classes.progressCell}>
+                <LinearProgress />
+              </td>
+            </tr>
+          )}
           {organisations.map(
             ({
               code,
@@ -122,7 +135,7 @@ const ProgrammeSummary = () => {
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
-  const { data, isLoading } = useOrganisationSummary(code, {
+  const { data, isLoading, isFetching } = useOrganisationSummary(code, {
     includeOpenUniCourseUnits,
     keepPreviousData: true,
   })
@@ -160,6 +173,7 @@ const ProgrammeSummary = () => {
       <ProgrammeTable
         organisations={sortedOrganisations}
         questions={summaryQuestions}
+        loading={isFetching}
         filters={
           <>
             <Box mb={2}>
