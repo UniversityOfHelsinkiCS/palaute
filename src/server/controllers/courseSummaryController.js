@@ -47,7 +47,7 @@ const getAccessibleCourseRealisationIds = async (user) => {
     AND user_feedback_targets.access_status = 'TEACHER'
     AND feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > NOW() - interval '48 months';
+    AND course_realisations.start_date > NOW() - interval '12 months';
   `,
     {
       replacements: {

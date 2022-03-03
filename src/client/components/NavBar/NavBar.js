@@ -111,7 +111,6 @@ const NavBar = () => {
   const isMobile = useMediaQuery('(max-width:500px)')
 
   const isStudent = Boolean(feedbackTargets?.length)
-  const isTeacher = Boolean(authorizedUser?.isTeacher)
   const isAdminUser = isAdmin(authorizedUser)
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
 
@@ -158,7 +157,7 @@ const NavBar = () => {
   )
 
   const links = [
-    isTeacher && {
+    courseSummaryIsAccessible && {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
