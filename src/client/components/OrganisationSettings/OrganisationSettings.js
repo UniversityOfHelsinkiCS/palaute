@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
   tabSection: {
     display: 'flex',
+    '@media print': {
+      display: 'none',
+    },
     flexWrap: 'wrap',
     flexDirection: 'row',
   },
