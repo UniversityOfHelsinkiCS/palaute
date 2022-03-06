@@ -25,35 +25,40 @@ import EditSurvey from './EditSurvey'
 import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'
-import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   title: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 8,
+    marginBottom: 20,
+    marginLeft: 10,
     textTransform: 'uppercase',
-  },
-  container: {
-    '& .MuiTabs-indicator': {
-      display: 'none',
-    },
-    '& .Mui-selected': {
-      borderBottom: `2px solid #1077A1`,
-    },
-  },
-  hidePrint: {
-    '@media print': {
-      display: 'none',
-    },
   },
   tabContainer: {
     marginRight: 15,
+    marginBottom: 15,
     padding: 10,
+    flexShrink: 0,
+  },
+  tabSection: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  tabRow: {
+    display: 'flex',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
   },
   selected: {
     color: ' #1077A1',
-    borderBottom: `2px solid #1077A1`,
+    [theme.breakpoints.down('xs')]: {
+      borderLeft: `2px solid #1077A1`,
+    },
+    [theme.breakpoints.up('sm')]: {
+      borderBottom: `2px solid #1077A1`,
+    },
   },
 }))
 
@@ -83,21 +88,25 @@ const OrganisationSettings = () => {
 
   return (
     <>
-      <Box mb={2}>
+      <Box mb={4}>
         <Typography variant="h4" component="h1">
           {getLanguageValue(organisation.name, i18n.language)}
         </Typography>
       </Box>
-      <Box mb={2} className={classes.hidePrint}>
-        <RouterTabs
-          indicatorColor="primary"
-          textColor="primary"
-          className={classes.container}
+      <Box mb={2} className={classes.tabSection}>
+        <Paper
+          className={classes.tabContainer}
+          display="flex"
+          flexDirection="column"
         >
-          <Paper className={classes.tabContainer}>
-            <Typography variant="h6" component="h6" className={classes.title}>
-              {t('settings')}
-            </Typography>
+          <Typography
+            variant="subtitle1"
+            component="h6"
+            className={classes.title}
+          >
+            {t('settings')}
+          </Typography>
+          <Box className={classes.tabRow}>
             <Tab
               label={t('organisationSettings:generalTab')}
               component={Link}
@@ -118,11 +127,17 @@ const OrganisationSettings = () => {
               to={`${url}/survey`}
               className={selected === 'survey' && classes.selected}
             />
-          </Paper>
-          <Paper className={classes.tabContainer}>
-            <Typography variant="h6" component="h6" className={classes.title}>
-              {t('feedbacks')}
-            </Typography>
+          </Box>
+        </Paper>
+        <Paper className={classes.tabContainer}>
+          <Typography
+            variant="subtitle1"
+            component="h6"
+            className={classes.title}
+          >
+            {t('feedbacks')}
+          </Typography>
+          <Box className={classes.tabRow}>
             <Tab
               label={t('organisationSettings:summaryTab')}
               component={Link}
@@ -135,8 +150,8 @@ const OrganisationSettings = () => {
               to={`${url}/open`}
               className={selected === 'open' && classes.selected}
             />
-          </Paper>
-        </RouterTabs>
+          </Box>
+        </Paper>
       </Box>
 
       <Switch>

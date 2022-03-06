@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, makeStyles } from '@material-ui/core'
+import { Box, Container, CircularProgress, makeStyles } from '@material-ui/core'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -14,8 +14,8 @@ import NorppaFeedback from './NorppaFeedback'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
 }))
 
