@@ -76,8 +76,8 @@ const enrolmentsHandler = async (enrolments) => {
               accessStatus,
             },
           })
-        } catch (_) {
-          logger.error('ERR', {})
+        } catch (err) {
+          logger.error('ERR', err)
         }
       },
       Promise.resolve(),
