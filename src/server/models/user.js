@@ -228,6 +228,7 @@ User.init(
     norppaFeedbackGiven: {
       type: BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   {

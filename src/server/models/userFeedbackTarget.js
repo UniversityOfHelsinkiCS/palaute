@@ -35,6 +35,7 @@ UserFeedbackTarget.init(
     feedbackOpenEmailSent: {
       type: BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   {
