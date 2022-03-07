@@ -69,8 +69,8 @@ const RealisationItem = ({ realisation, language, classes }) => {
             {question.data.label[language]}
           </Typography>
           <Box my={1}>
-            {responses.map((r) => (
-              <>
+            {responses.map((r, index) => (
+              <div key={index}>
                 <Typography
                   variant="body2"
                   component="p"
@@ -79,7 +79,7 @@ const RealisationItem = ({ realisation, language, classes }) => {
                   {r}
                 </Typography>
                 <Divider style={{ margin: 2 }} />
-              </>
+              </div>
             ))}
           </Box>
         </Box>
@@ -128,6 +128,7 @@ const ProgrammeOpenQuestions = () => {
           </Typography>
           {course.realisations.map((realisation) => (
             <RealisationItem
+              key={realisation.id}
               realisation={realisation}
               language={language}
               classes={classes}

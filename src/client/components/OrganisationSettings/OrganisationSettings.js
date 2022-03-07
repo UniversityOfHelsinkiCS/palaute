@@ -38,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 15,
     marginBottom: 15,
     padding: 10,
+    display: 'flex',
     flexShrink: 0,
+    flexDirection: 'column',
   },
   tabSection: {
     display: 'flex',
@@ -97,11 +99,7 @@ const OrganisationSettings = () => {
         </Typography>
       </Box>
       <Box mb={2} className={classes.tabSection}>
-        <Paper
-          className={classes.tabContainer}
-          display="flex"
-          flexDirection="column"
-        >
+        <Paper className={classes.tabContainer}>
           <Typography
             variant="subtitle1"
             component="h6"
@@ -114,21 +112,21 @@ const OrganisationSettings = () => {
               label={t('organisationSettings:generalTab')}
               component={Link}
               to={`${url}/general`}
-              className={selected === 'general' && classes.selected}
+              className={selected === 'general' ? classes.selected : ''}
             />
             {hasAdminAccess && (
               <Tab
                 label={t('organisationSettings:coursesTab')}
                 component={Link}
                 to={`${url}/courses`}
-                className={selected === 'courses' && classes.selected}
+                className={selected === 'courses' ? classes.selected : ''}
               />
             )}
             <Tab
               label={t('organisationSettings:surveyTab')}
               component={Link}
               to={`${url}/survey`}
-              className={selected === 'survey' && classes.selected}
+              className={selected === 'survey' ? classes.selected : ''}
             />
           </Box>
         </Paper>
@@ -145,13 +143,13 @@ const OrganisationSettings = () => {
               label={t('organisationSettings:summaryTab')}
               component={Link}
               to={`${url}/summary`}
-              className={selected === 'summary' && classes.selected}
+              className={selected === 'summary' ? classes.selected : ''}
             />
             <Tab
               label={t('organisationSettings:openQuestionsTab')}
               component={Link}
               to={`${url}/open`}
-              className={selected === 'open' && classes.selected}
+              className={selected === 'open' ? classes.selected : ''}
             />
           </Box>
         </Paper>
