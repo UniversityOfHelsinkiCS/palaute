@@ -16,7 +16,7 @@ describe('User feedbacks view', () => {
       cy.get($el).click()
     })
     cy.get('textarea[id=19-label]').type('Other comments and such')
-    cy.get('div').contains('Give feedback').click()
+    cy.get('[data-cy=submitFeedbackButton]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
     cy.get('table').contains('The course was laborious')
   })

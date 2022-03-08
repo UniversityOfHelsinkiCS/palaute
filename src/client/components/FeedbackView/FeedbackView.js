@@ -146,6 +146,7 @@ const FormContainer = ({
                   color="primary"
                   variant="contained"
                   type="submit"
+                  data-cy="submitFeedbackButton"
                 >
                   {isEdit
                     ? t('feedbackView:editButton')
