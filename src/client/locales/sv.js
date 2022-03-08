@@ -317,4 +317,18 @@ export default {
       'Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare',
     noFeedback: 'Just nu finns det inga öppna kursresponser',
   },
+  norppaFeedback: {
+    feedback: 'Respons',
+    feedbackHelper: 'Ge fritt formulerad respons',
+    responseWanted: 'Jag vill ha svar på responsen',
+    submit: 'Skicka respons',
+    title: 'Ge respons',
+    description:
+      'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',
+    feedbackLengthError: 'Minimilängden på responsen är ett tecken',
+    successAlert: 'Responsen har skickats!',
+    bannerTitle: 'Hej',
+    feedbackBanner:
+      'Vi ber dig vänligen ge respons, så att vi kan utveckla Norppa på ett användarorienterat sätt så bra som möjligt.',
+  },
 }
