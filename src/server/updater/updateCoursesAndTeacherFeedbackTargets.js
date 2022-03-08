@@ -196,15 +196,27 @@ const getEducationalInstitutionUrn = (organisations) => {
   return urns.values().next().value // Yes wtf
 }
 
+const isOpenCourse = (customCodeUrns) => {
+  if (!customCodeUrns) return false
+  if (!customCodeUrns['urn:code:custom:hy-university-root-id:opintotarjonta'])
+    return false
+  return customCodeUrns[
+    'urn:code:custom:hy-university-root-id:opintotarjonta'
+  ].includes('urn:code:custom:hy-university-root-id:opintotarjonta:mooc')
+}
+
 const createCourseRealisations = async (courseRealisations) => {
   await CourseRealisation.bulkCreate(
-    courseRealisations.map(({ id, name, activityPeriod, organisations }) => ({
-      id,
-      name,
-      ...getCourseRealisationPeriod(activityPeriod),
-      educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
-    })),
-    { updateOnDuplicate: ['name', 'endDate', 'startDate'] },
+    courseRealisations.map(
+      ({ id, name, activityPeriod, organisations, customCodeUrns }) => ({
+        id,
+        name,
+        ...getCourseRealisationPeriod(activityPeriod),
+        educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
+        isOpenCourse: isOpenCourse(customCodeUrns),
+      }),
+    ),
+    { updateOnDuplicate: ['name', 'endDate', 'startDate', 'isOpenCourse'] },
   )
 
   const courseRealisationsOrganisations = [].concat(

@@ -1,4 +1,4 @@
-const { STRING } = require('sequelize')
+const { STRING, BOOLEAN } = require('sequelize')
 const { Model, JSONB, DATE } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
@@ -26,6 +26,11 @@ CourseRealisation.init(
     educationalInstitutionUrn: {
       type: STRING,
       allowNull: true,
+    },
+    isOpenCourse: {
+      type: BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
     },
   },
   {
