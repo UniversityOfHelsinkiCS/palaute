@@ -248,6 +248,19 @@ const getOrganisationsWithResults = (rows, questions) => {
   return organisations
 }
 
+const getOpenUniOrganisationWithResults = (rows, questions) => {
+  if (!rows || rows.length === 0) {
+    return []
+  }
+  const rowsByOrganisationId = {
+    [OPEN_UNI_ORGANISATION_ID]: rows.filter(
+      (row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID,
+    ),
+  }
+  const organisations = createOrganisations(rowsByOrganisationId, questions)
+  return organisations[0]
+}
+
 const withMissingOrganisations = (
   organisations,
   organisationAccess,
@@ -329,14 +342,15 @@ const omitOrganisationOpenUniRows = async (rows) => {
   return filtered
 }
 
-const omitOpenUniRows = (rows) => {
+const partitionOpenUniRows = (rows) => {
   const openUniCourseRealisationIds = _.uniq(
     rows
       .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
       .map((row) => row.course_realisation_id),
   )
 
-  return rows.filter(
+  return _.partition(
+    rows,
     (row) => !openUniCourseRealisationIds.includes(row.course_realisation_id),
   )
 }
@@ -417,7 +431,6 @@ const getAllRowsFromDb = async () => {
 }
 
 const cacheSummary = async (rows) => {
-  // slow but run only in cronjob
   await FeedbackSummaryCache.destroy({ where: {} })
 
   const groupedRows = _.groupBy(
@@ -437,7 +450,6 @@ const cacheSummary = async (rows) => {
 }
 
 const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
-  // 530 ms
   const cacheRows = await FeedbackSummaryCache.findAll({
     where: {
       [Op.or]: {
@@ -445,7 +457,7 @@ const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
           [Op.in]: organisationIds,
         },
         course_realisation_id: {
-          /* eslint-disable-line camelcase */ [Op.in]: courseRealisationIds,
+          [Op.in]: courseRealisationIds,
         },
       },
     },
@@ -467,30 +479,37 @@ const getOrganisationSummaries = async ({
   const rows = await getSummaryFromCache(
     organisationIds,
     accessibleCourseRealisationIds,
-  ) // ~530 ms db query
+  )
   if (rows.length === 0) {
     logger.warn(
       'Got empty array from courseSummaryCache, looks like kakku is not yet ready',
     )
   }
 
-  const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOpenUniRows(rows) // ~60 ms
-    : rows
+  const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
+    ? partitionOpenUniRows(rows)
+    : [rows, partitionOpenUniRows(rows)[1]]
 
   const organisationsWithResults = getOrganisationsWithResults(
     normalizedRows,
     questions,
-  ) // ~420 ms of pure epic mangling
+  )
 
-  const organisationsWithMissing = withMissingOrganisations(
-    // ~8 ms
-    organisationsWithResults,
-    organisationAccess,
+  const openUniOrganisationWithResults = getOpenUniOrganisationWithResults(
+    openUniRows,
     questions,
   )
 
-  return _.sortBy(organisationsWithMissing, 'code')
+  const organisationsWithMissing = withMissingOrganisations(
+    organisationsWithResults,
+    organisationAccess,
+    questions,
+  ).filter((org) => org.id !== OPEN_UNI_ORGANISATION_ID)
+
+  return _.sortBy(
+    organisationsWithMissing.concat(openUniOrganisationWithResults),
+    'code',
+  )
 }
 
 const populateOrganisationSummaryCache = async () => {
