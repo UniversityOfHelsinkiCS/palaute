@@ -325,8 +325,11 @@ export default {
     submit: 'Lähetä palaute',
     title: 'Anna palautetta',
     description:
-      'Voit lähettää vapaamuotoista palautetta tai keksimiäsi kehitysehdotuksia kurssipalautejärjestelmän kehittäjille. Tätä palautetta kerätään, jotta käyttäjien kokemuksia ja kehitysehdotuksia saadaan kehitystiimin tietoon ja jotta niiden perusteella voidaan jatkokehittää sovellusta. Voit myös pyytää vastauksen palautteeseesi jolloin siihen vastataan sähköpostitse. Tämä palaute on tarkoitettu vain yliopiston opettajille ja henkilökunnalle.',
+      'Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää palautetta kehittäjille',
     feedbackLengthError: 'Palautteen vähimmäispituus on yksi merkki',
     successAlert: 'Palaute lähetetty onnistuneesti!',
+    bannerTitle: 'Hei',
+    feedbackBanner:
+      'Pyydämme ystävällisesti antamaan palautetta, jotta voimme kehittää Norppaa käyttäjälähtöisesti mahdollisimman hyvin.',
   },
 }

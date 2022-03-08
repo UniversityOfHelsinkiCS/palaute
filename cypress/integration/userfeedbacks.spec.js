@@ -6,9 +6,9 @@ describe('User feedbacks view', () => {
     cy.contains('Functional Programming I')
     cy.contains('Give feedback')
   })
-  /* it('Student can give feedback to an active course', () => {
+  it('Student can give feedback to an active course', () => {
     cy.loginAsStudent()
-    cy.contains('Give feedback').click()
+    cy.get('[data-cy=giveCourseFeedback]').click()
     cy.contains(
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',
     )
@@ -16,7 +16,7 @@ describe('User feedbacks view', () => {
       cy.get($el).click()
     })
     cy.get('textarea[id=19-label]').type('Other comments and such')
-    cy.get('div').contains('Give feedback').click()
+    cy.get('[data-cy=submitFeedbackButton]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
     cy.get('table').contains('The course was laborious')
   })
@@ -27,5 +27,5 @@ describe('User feedbacks view', () => {
     cy.contains('Yes').click()
     cy.contains('Awaiting').click()
     cy.contains('Functional Programming I')
-  }) **/
+  })
 })

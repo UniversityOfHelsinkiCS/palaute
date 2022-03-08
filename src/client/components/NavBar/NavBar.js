@@ -25,6 +25,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
+import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -113,6 +114,7 @@ const NavBar = () => {
   const isStudent = Boolean(feedbackTargets?.length)
   const isAdminUser = isAdmin(authorizedUser)
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
+  const { norppaFeedbackGiven } = authorizedUser
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -239,6 +241,7 @@ const NavBar = () => {
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
       </AppBar>
+      {isAdmin && !norppaFeedbackGiven && <NorppaFeedbackBanner />}
     </>
   )
 }

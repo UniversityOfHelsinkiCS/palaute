@@ -325,8 +325,11 @@ export default {
     submit: 'Send feedback',
     title: 'Give feedback',
     description:
-      'You can give free form feedback or some improvement suggestions to the developers of the course feedback system. This feedback is gathered so that user experiences and improvement suggestions can be easily forwarded to the development team and so that the system can be further improved based on the feedback. You can also request a response to your feedback to be contacted via email on a later date. This feedback is only meant for the teachers and staff of the university.',
+      'Norppa is being developed based on the user feedback recieved. With this form you can submit feedback to the developers.',
     feedbackLengthError: 'The minimum length of the feedback is one symbol',
     successAlert: 'Feedback has been sent succesfully',
+    bannerTitle: 'Hi',
+    feedbackBanner:
+      'We kindly ask that you give feedback so that we can develop Norppa based on the user feedback as best as we can.',
   },
 }

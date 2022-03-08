@@ -20,4 +20,16 @@ const submitFeedback = async (req, res) => {
   res.send(newFeedback)
 }
 
-module.exports = { submitFeedback }
+const hideBanner = async (req, res) => {
+  const { user } = req
+
+  if (!user) res.sendStatus(500)
+
+  const acualUser = await User.findByPk(user.id)
+  acualUser.norppaFeedbackGiven = true
+  await acualUser.save()
+
+  res.sendStatus(200)
+}
+
+module.exports = { submitFeedback, hideBanner }

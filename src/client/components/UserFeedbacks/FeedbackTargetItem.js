@@ -52,6 +52,7 @@ const NoFeedbackActions = ({ editPath }) => {
       color="primary"
       to={editPath}
       component={Link}
+      data-cy="giveCourseFeedback"
     >
       {t('userFeedbacks:giveFeedbackButton')}
     </ActionButton>
