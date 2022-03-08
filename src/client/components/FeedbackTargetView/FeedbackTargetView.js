@@ -134,7 +134,8 @@ const FeedbackTargetView = () => {
 
   const showEditSurveyTab = isTeacher && !isOpen && !isEnded
   const showFeedbackResponseTab = isTeacher && isEnded
-  const showStudentsWithFeedbackTab = isTeacher && studentListVisible && isEnded
+  const showStudentsWithFeedbackTab =
+    isTeacher && studentListVisible && (isOpen || isEnded)
 
   const handleCopyLink = () => {
     copyLink(feedbackTarget)
