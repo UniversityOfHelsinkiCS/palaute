@@ -133,6 +133,7 @@ router.get(
 )
 
 router.post('/norppa-feedback', norppaFeedbackController.submitFeedback)
+router.put('/norppa-feedback/hide', norppaFeedbackController.hideBanner)
 
 router.use('/admin', adminController)
 
