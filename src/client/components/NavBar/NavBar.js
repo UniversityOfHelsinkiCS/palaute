@@ -241,7 +241,9 @@ const NavBar = () => {
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>
       </AppBar>
-      {isAdmin && !norppaFeedbackGiven && <NorppaFeedbackBanner />}
+      {courseSummaryIsAccessible && !norppaFeedbackGiven && (
+        <NorppaFeedbackBanner />
+      )}
     </>
   )
 }
