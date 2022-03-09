@@ -27,7 +27,8 @@ CourseRealisation.init(
       type: STRING,
       allowNull: true,
     },
-    isOpenCourse: {
+    // no AD is given for students in this course
+    isMoocCourse: {
       type: BOOLEAN,
       defaultValue: false,
       allowNull: false,

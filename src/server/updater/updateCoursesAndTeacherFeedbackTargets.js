@@ -196,7 +196,7 @@ const getEducationalInstitutionUrn = (organisations) => {
   return urns.values().next().value // Yes wtf
 }
 
-const isOpenCourse = (customCodeUrns) => {
+const isMoocCourse = (customCodeUrns) => {
   if (!customCodeUrns) return false
   if (!customCodeUrns['urn:code:custom:hy-university-root-id:opintotarjonta'])
     return false
@@ -213,10 +213,10 @@ const createCourseRealisations = async (courseRealisations) => {
         name,
         ...getCourseRealisationPeriod(activityPeriod),
         educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
-        isOpenCourse: isOpenCourse(customCodeUrns),
+        isMoocCourse: isMoocCourse(customCodeUrns),
       }),
     ),
-    { updateOnDuplicate: ['name', 'endDate', 'startDate', 'isOpenCourse'] },
+    { updateOnDuplicate: ['name', 'endDate', 'startDate', 'isMoocCourse'] },
   )
 
   const courseRealisationsOrganisations = [].concat(
