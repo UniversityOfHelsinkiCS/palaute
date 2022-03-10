@@ -300,10 +300,16 @@ const withMissingOrganisations = (
 }
 
 const omitOrganisationOpenUniRows = async (rows) => {
-  const courseRealisationIds = _.uniq(
+  let courseRealisationIds = _.uniq(
     rows.map((row) => row.course_realisation_id),
   )
-  const courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
+  if (!courseRealisationIds || courseRealisationIds.length === 0) {
+    courseRealisationIds = '_'
+  }
+  let courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
+  if (!courseUnitIds || courseUnitIds.length === 0) {
+    courseUnitIds = '_'
+  }
 
   const query = `
     SELECT NULL AS course_unit_id, course_realisation_id
