@@ -1,17 +1,11 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Divider,
-  makeStyles,
-  Button,
-} from '@material-ui/core'
+import { Box, Typography, Divider, makeStyles, Button } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
 import { filterCoursesWithNoResponses, formateDates } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles(() => ({
   courseTitle: {
@@ -97,11 +91,7 @@ const ProgrammeOpenQuestions = () => {
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const filteredCourses = filterCoursesWithNoResponses(codesWithIds)

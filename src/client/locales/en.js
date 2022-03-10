@@ -13,6 +13,7 @@ export default {
     },
     unknownError: 'Something went wrong',
     choiceQuestionError: 'Choice questions require answer options',
+    fetchError: 'Error while fetching data. Refreshing the page may help.',
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',

@@ -1,10 +1,11 @@
 import { React } from 'react'
 
-import { Box, CircularProgress, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { Redirect, useParams } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetUsers from '../../hooks/useFeedbackTargetUsers'
 import { isAdmin } from '../NavBar/utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackLinksView = () => {
   const { id } = useParams()
@@ -19,11 +20,7 @@ const FeedbackLinksView = () => {
   const { isLoading, users } = useFeedbackTargetUsers(id)
 
   if (isLoading) {
-    return (
-      <Box>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const sortedUsers = users.sort((a, b) =>

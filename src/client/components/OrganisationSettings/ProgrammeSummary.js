@@ -3,7 +3,6 @@ import { useQueryClient } from 'react-query'
 
 import {
   Box,
-  CircularProgress,
   TableContainer,
   makeStyles,
   Divider,
@@ -27,6 +26,7 @@ import {
 } from '../CourseSummary/utils'
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationSummary from '../../hooks/useOrganisationSummary'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -156,11 +156,7 @@ const ProgrammeSummary = () => {
   }
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const { organisations, summaryQuestions } = data

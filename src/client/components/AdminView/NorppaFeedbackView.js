@@ -1,18 +1,12 @@
 import React from 'react'
-import {
-  Box,
-  Button,
-  CircularProgress,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core'
+import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import useNorppaFeedbacks from '../../hooks/useNorppaFeedbacks'
 import apiClient from '../../util/apiClient'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -40,7 +34,7 @@ const NorppaFeedbackView = () => {
   const { t } = useTranslation()
 
   if (isLoading) {
-    return <CircularProgress />
+    return <LoadingProgress />
   }
 
   const sortedFeedbacks = feedbacks.sort(

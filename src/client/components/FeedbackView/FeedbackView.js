@@ -4,7 +4,6 @@ import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
 import {
   Typography,
-  CircularProgress,
   makeStyles,
   Button,
   Box,
@@ -35,6 +34,7 @@ import {
 } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -182,11 +182,7 @@ const FeedbackView = () => {
   })
 
   if (isLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

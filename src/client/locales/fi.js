@@ -13,6 +13,8 @@ export default {
     },
     unknownError: 'Jotain meni pieleen',
     choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
+    fetchError:
+      'Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.',
     save: 'Tallenna',
     saveSuccess: 'Tiedot tallennettiin onnistuneesti',
     name: 'Nimi',

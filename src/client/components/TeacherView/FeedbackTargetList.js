@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, CircularProgress, List, Typography } from '@material-ui/core'
+import { Box, List, Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
@@ -10,6 +10,7 @@ import {
 } from './utils'
 
 import FeedbackTargetItem from './FeedbackTargetItem'
+import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackTargetList = ({ courseCode, group }) => {
   const { t } = useTranslation()
@@ -25,11 +26,7 @@ const FeedbackTargetList = ({ courseCode, group }) => {
   )
 
   if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" my={2}>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (targets.length === 0) {

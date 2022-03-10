@@ -7,7 +7,6 @@ import {
   ListItemText,
   Switch,
   Box,
-  CircularProgress,
   Card,
   CardContent,
 } from '@material-ui/core'
@@ -22,6 +21,7 @@ import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
+import { LoadingProgress } from '../LoadingProgress'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
   (courseUnits ?? []).map(({ courseCode, name }) => ({
@@ -136,11 +136,7 @@ const CourseSettings = () => {
   const isLoading = courseUnitsIsLoading || organisationIsLoading
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   return (

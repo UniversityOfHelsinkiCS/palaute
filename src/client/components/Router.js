@@ -1,4 +1,4 @@
-import { Box, Container, CircularProgress, makeStyles } from '@material-ui/core'
+import { Box, Container, makeStyles } from '@material-ui/core'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import CourseRealisationFeedback from './CourseRealisationFeedback'
 import OrganisationSettings from './OrganisationSettings'
 import FeedbackTargetView from './FeedbackTargetView'
 import NorppaFeedback from './NorppaFeedback'
+import { LoadingProgress } from './LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,11 +25,7 @@ const Home = () => {
     useCourseSummaryAccessInfo()
 
   if (accessInfoLoading) {
-    return (
-      <Box my={4}>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (courseSummaryAccessInfo.adminAccess) {

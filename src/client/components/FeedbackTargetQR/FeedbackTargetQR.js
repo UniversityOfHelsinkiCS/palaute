@@ -2,12 +2,13 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { isAdmin } from '../NavBar/utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackTargetResults = () => {
   const { id } = useParams()
@@ -22,11 +23,7 @@ const FeedbackTargetResults = () => {
   const isLoading = feedbackTargetIsLoading || authorizedUserLoading
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)

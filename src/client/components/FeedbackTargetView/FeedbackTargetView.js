@@ -9,14 +9,7 @@ import {
   Link,
 } from 'react-router-dom'
 
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Tab,
-  Button,
-  makeStyles,
-} from '@material-ui/core'
+import { Box, Typography, Tab, Button, makeStyles } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -43,6 +36,7 @@ import {
   getFeedbackPeriod,
   getCoursePageUrl,
 } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -103,11 +97,7 @@ const FeedbackTargetView = () => {
   const classes = useStyles()
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

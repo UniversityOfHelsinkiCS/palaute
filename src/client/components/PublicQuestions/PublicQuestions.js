@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Card, CardContent, Box, CircularProgress } from '@material-ui/core'
+import { Card, CardContent, Box } from '@material-ui/core'
 
 import { useParams, Redirect, Link } from 'react-router-dom'
 import { Trans } from 'react-i18next'
@@ -10,6 +10,7 @@ import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
+import { LoadingProgress } from '../LoadingProgress'
 
 const PublicQuestions = () => {
   const [visibility, setVisibility] = useState('ALL')
@@ -27,11 +28,7 @@ const PublicQuestions = () => {
   }, [])
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

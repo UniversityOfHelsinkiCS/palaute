@@ -1,13 +1,6 @@
 import React, { useState, forwardRef } from 'react'
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import {
-  CircularProgress,
-  makeStyles,
-  Button,
-  Box,
-  Card,
-  CardContent,
-} from '@material-ui/core'
+import { makeStyles, Button, Box, Card, CardContent } from '@material-ui/core'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -30,6 +23,7 @@ import {
 } from '../FeedbackView/utils'
 
 import { saveValues } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -164,11 +158,7 @@ const GuestFeedbackView = () => {
   })
 
   if (isLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

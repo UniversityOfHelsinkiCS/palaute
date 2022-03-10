@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 
 import {
   Box,
-  CircularProgress,
   Card,
   CardContent,
   Typography,
@@ -33,6 +32,7 @@ import {
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
 } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -173,6 +173,7 @@ const OrganisationSummary = () => {
     aggregatedOrganisations,
     isLoading,
     isFetching,
+    failureCount,
   } = useAggregatedOrganisationSummaries({
     keyword,
     orderBy,
@@ -185,9 +186,10 @@ const OrganisationSummary = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
-      </Box>
+      <LoadingProgress
+        isError={failureCount > 1}
+        message={t('common:fetchError')}
+      />
     )
   }
 
