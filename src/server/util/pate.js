@@ -65,7 +65,7 @@ const sendEmail = async (listOfEmails) => {
   sendToPate(options)
 }
 
-const sendNotificationAboutFeedbackSummaryToStudents = (
+const sendNotificationAboutFeedbackResponseToStudents = (
   urlToSeeFeedbackSummary,
   students,
   courseName,
@@ -388,8 +388,8 @@ const notificationAboutSurveyOpeningToStudents = (
 }
 
 module.exports = {
-  sendNotificationAboutFeedbackSummaryToStudents,
-  emailReminderAboutSurveyOpeningToTeachers,
+  sendNotificationAboutFeedbackResponseToStudents:
+    emailReminderAboutSurveyOpeningToTeachers,
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutFeedbackResponseToTeachers,
   sendReminderToGiveFeedbackToStudents,
