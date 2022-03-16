@@ -374,11 +374,10 @@ const createEmailsForFeedbackTargets = async (
   return emails
 }
 
-const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
-  return createEmailsForFeedbackTargets([feedbackTarget[0]], {
+const createEmailsForSingleFeedbackTarget = async (feedbackTarget) =>
+  createEmailsForFeedbackTargets([feedbackTarget[0]], {
     studentsOnly: false,
   })
-}
 
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
