@@ -388,8 +388,8 @@ const notificationAboutSurveyOpeningToStudents = (
 }
 
 module.exports = {
-  sendNotificationAboutFeedbackResponseToStudents:
-    emailReminderAboutSurveyOpeningToTeachers,
+  sendNotificationAboutFeedbackResponseToStudents,
+  emailReminderAboutSurveyOpeningToTeachers,
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutFeedbackResponseToTeachers,
   sendReminderToGiveFeedbackToStudents,
