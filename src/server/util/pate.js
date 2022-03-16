@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const axios = require('axios')
 const { format } = require('date-fns')
 const { chunk } = require('lodash')
@@ -33,6 +34,11 @@ const sleep = (time) =>
 const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
+    logger.debug('Would send', options.emails.length, 'emails')
+    if (options.emails.length < 100)
+      options.emails.forEach((e) => {
+        logger.debug(e.to)
+      })
     return null
   }
 
@@ -326,14 +332,17 @@ const notificationAboutSurveyOpeningToStudents = (
   const courseName = name[emailLanguage]
     ? name[emailLanguage]
     : Object.values(name)[0]
-  const token = jwt.sign({ username }, JWT_KEY)
 
   let courseNamesAndUrls = ''
 
   for (const feedbackTarget of studentFeedbackTargets) {
     const { id, name, closesAt } = feedbackTarget
     const url = noAdUser
-      ? `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
+      ? `https://coursefeedback.helsinki.fi/noad/token/${jwt.sign(
+          { username },
+          JWT_KEY,
+          { expiresIn: '14d' },
+        )}?userId=${userId}`
       : `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
     const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const openUntil = {

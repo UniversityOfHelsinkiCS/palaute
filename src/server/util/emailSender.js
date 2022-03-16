@@ -59,7 +59,14 @@ const getOpenFeedbackTargetsForStudents = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['id', 'username', 'email', 'language'],
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'language',
+          'degreeStudyRight',
+          'secondaryEmail',
+        ],
         through: {
           where: {
             accessStatus: 'STUDENT',
@@ -120,7 +127,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['id', 'username', 'email', 'language'],
+        attributes: ['id', 'username', 'email', 'language', 'secondaryEmail'],
         through: {
           where: {
             accessStatus: 'TEACHER',
@@ -171,7 +178,7 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['id', 'username', 'email', 'language'],
+        attributes: ['id', 'username', 'email', 'language', 'secondaryEmail'],
       },
     ],
   })
@@ -218,7 +225,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['id', 'username', 'email', 'language'],
+        attributes: ['id', 'username', 'email', 'language', 'secondaryEmail'],
         through: {
           where: {
             accessStatus: 'TEACHER',
@@ -319,29 +326,35 @@ const getStudentEmailCounts = async () => {
   return finalEmailCounts
 }
 
-const aggregateFeedbackTargets = async (feedbackTargets) => {
+const createEmailsForFeedbackTargets = async (
+  feedbackTargets,
+  options = { primaryOnly: false, studentsOnly: false },
+) => {
   // Leo if you are reading this you are allowed to refactor :)
-  /* eslint-disable */
+  // Too late 😤
 
-  let emails = {}
-  for (feedbackTarget of feedbackTargets) {
-    for (user of feedbackTarget.users) {
-      if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) continue
-      emails[user.email]
-        ? (emails[user.email] = emails[user.email].concat([
-            {
-              id: feedbackTarget.id,
-              userFeedbackTargetId: user.UserFeedbackTarget.id,
-              name: feedbackTarget.courseUnit.name,
-              opensAt: feedbackTarget.opensAt,
-              closesAt: feedbackTarget.closesAt,
-              language: user.language,
-              noAdUser: user.username === user.id,
-              userId: user.id,
-              username: user.username,
-            },
-          ]))
-        : (emails[user.email] = [
+  const emails = {}
+
+  feedbackTargets.forEach((feedbackTarget) => {
+    feedbackTarget.users
+      .filter((u) => !u.UserFeedbackTarget.feedbackOpenEmailSent)
+      .filter(
+        options.studentsOnly
+          ? (u) => u.UserFeedbackTarget.accessStatus === 'STUDENT'
+          : () => true,
+      )
+      .forEach((user) => {
+        const sendToBothEmails =
+          !options.primaryOnly &&
+          feedbackTarget.courseRealisation.isMoocCourse &&
+          !user.degreeStudyright
+        const userEmails = [
+          user.email,
+          sendToBothEmails ? user.secondaryEmail : false,
+        ]
+
+        userEmails.filter(Boolean).forEach((email) => {
+          emails[email] = (emails[email] ? emails[email] : []).concat([
             {
               id: feedbackTarget.id,
               userFeedbackTargetId: user.UserFeedbackTarget.id,
@@ -354,45 +367,23 @@ const aggregateFeedbackTargets = async (feedbackTargets) => {
               username: user.username,
             },
           ])
-    }
-  }
-  /* eslint-enable */
+        })
+      })
+  })
 
   return emails
 }
 
 const createEmailsForSingleFeedbackTarget = async (feedbackTarget) => {
-  const singleFbt = feedbackTarget[0]
-
-  const students = singleFbt.users.filter(
-    (user) => user.UserFeedbackTarget.accessStatus === 'STUDENT',
-  )
-
-  const emails = {}
-
-  for (const user of students) {
-    if (!user.email || user.UserFeedbackTarget.feedbackOpenEmailSent) {
-      // eslint-disable-next-line
-      continue
-    }
-
-    emails[user.email] = {
-      id: singleFbt.id,
-      userFeedbackTargetId: user.UserFeedbackTarget.id,
-      name: singleFbt.courseUnit.name,
-      opensAt: singleFbt.opensAt,
-      closesAt: singleFbt.closesAt,
-      language: user.language,
-    }
-  }
-
-  return emails
+  return createEmailsForFeedbackTargets([feedbackTarget[0]], {
+    studentsOnly: false,
+  })
 }
 
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
 
-  const studentsWithFeedbackTargets = await aggregateFeedbackTargets(
+  const studentsWithFeedbackTargets = await createEmailsForFeedbackTargets(
     feedbackTargets,
   )
 
@@ -431,8 +422,9 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  const teachersWithFeedbackTargets = await aggregateFeedbackTargets(
+  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
     feedbackTargets,
+    { primaryOnly: true },
   )
 
   const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
@@ -466,8 +458,9 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
 const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
 
-  const teachersWithFeedbackTargets = await aggregateFeedbackTargets(
+  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
     feedbackTargets,
+    { primaryOnly: true },
   )
 
   const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
@@ -508,17 +501,19 @@ const returnEmailsToBeSentToday = async () => {
   const teacherEmailCountFor7Days = await getTeacherEmailCounts()
   const studentEmailCountFor7Days = await getStudentEmailCounts()
 
-  const studentsWithFeedbackTargets = await aggregateFeedbackTargets(
+  const studentsWithFeedbackTargets = await createEmailsForFeedbackTargets(
     studentFeedbackTargets,
   )
 
-  const teachersWithFeedbackTargets = await aggregateFeedbackTargets(
+  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
     teacherFeedbackTargets,
+    { primaryOnly: true },
   )
 
-  const teacherRemindersWithFeedbackTargets = await aggregateFeedbackTargets(
-    teacherReminderTargets,
-  )
+  const teacherRemindersWithFeedbackTargets =
+    await createEmailsForFeedbackTargets(teacherReminderTargets, {
+      primaryOnly: true,
+    })
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
     (student) =>
@@ -576,9 +571,10 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(
     (student) =>
-      notificationAboutSurveyOpeningToStudents(student, [
+      notificationAboutSurveyOpeningToStudents(
+        student,
         studentsWithFeedbackTarget[student],
-      ]),
+      ),
   )
 
   const ids = Object.values(studentsWithFeedbackTarget).map(
