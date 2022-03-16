@@ -114,7 +114,7 @@ const NavBar = () => {
   const isStudent = Boolean(feedbackTargets?.length)
   const isAdminUser = isAdmin(authorizedUser)
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
-  const { norppaFeedbackGiven } = authorizedUser
+  const norppaFeedbackGiven = authorizedUser?.norppaFeedbackGiven ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
