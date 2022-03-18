@@ -37,7 +37,7 @@ const sendToPate = async (options = {}) => {
     logger.debug('Would send', options.emails.length, 'emails')
     if (options.emails.length < 100)
       options.emails.forEach((e) => {
-        logger.debug(e.to)
+        logger.debug(JSON.stringify(e, null, 2))
       })
     return null
   }
@@ -319,12 +319,53 @@ const emailReminderAboutFeedbackResponseToTeachers = (
   return email
 }
 
+const getNoAdUrl = (username, userId) => {
+  const token = jwt.sign({ username }, JWT_KEY, { expiresIn: '14d' })
+  return `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
+}
+
+const getFeedbackTargetLink = (feedbackTarget) => {
+  const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } =
+    feedbackTarget
+  const language = feedbackTarget.language ? feedbackTarget.language : 'en'
+
+  const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
+  const openUntil = {
+    en: `Open until ${humanDate}`,
+    fi: `Avoinna ${humanDate} asti`,
+    sv: `Open until ${humanDate}`,
+  }
+  const noAdLinkInfo = {
+    en: 'If you have no university ad-account',
+    fi: 'Jos sinulla ei ole yliopiston ad-tunnusta',
+    sv: 'If you have no university ad-account',
+  }
+  const noAdLink = {
+    en: 'use this link',
+    fi: 'käytä tätä linkkiä',
+    sv: 'use this link',
+  }
+
+  if (noAdUser) {
+    const noAdUrl = getNoAdUrl(username, userId)
+    return `<a href=${noAdUrl}>${name[language]}</a> (${openUntil[language]})<br/>`
+  }
+  if (possiblyNoAdUser) {
+    const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
+    const noAdUrl = getNoAdUrl(username, userId)
+    return `<a href=${adUrl}>${name[language]}</a> (${openUntil[language]})
+      ${noAdLinkInfo[language]}, <a href=${noAdUrl}>${noAdLink[language]}</a><br/>`
+  }
+
+  const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
+  return `<a href=${adUrl}>${name[language]}</a> (${openUntil[language]})<br/>`
+}
+
 const notificationAboutSurveyOpeningToStudents = (
   emailAddress,
   studentFeedbackTargets,
 ) => {
-  const { noAdUser, language, name, username, userId } =
-    studentFeedbackTargets[0]
+  const { language, name } = studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
 
   const emailLanguage = !language ? 'en' : language
@@ -336,24 +377,9 @@ const notificationAboutSurveyOpeningToStudents = (
   let courseNamesAndUrls = ''
 
   for (const feedbackTarget of studentFeedbackTargets) {
-    const { id, name, closesAt } = feedbackTarget
-    const url = noAdUser
-      ? `https://coursefeedback.helsinki.fi/noad/token/${jwt.sign(
-          { username },
-          JWT_KEY,
-          { expiresIn: '14d' },
-        )}?userId=${userId}`
-      : `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
-    const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
-    const openUntil = {
-      en: `Open until ${humanDate}`,
-      fi: `Avoinna ${humanDate} asti`,
-      sv: `Open until ${humanDate}`,
-    }
-
-    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${url}>
-      ${name[emailLanguage]}
-      </a> (${openUntil[emailLanguage]}) <br/>`
+    courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(
+      feedbackTarget,
+    )}`
   }
 
   const translations = {

@@ -344,14 +344,20 @@ const createEmailsForFeedbackTargets = async (
           : () => true,
       )
       .forEach((user) => {
-        const sendToBothEmails =
-          !options.primaryOnly &&
+        const certainlyNoAdUser = user.username === user.id
+        const possiblyNoAdUser =
           feedbackTarget.courseRealisation.isMoocCourse &&
           !user.degreeStudyright
+
+        const sendToBothEmails =
+          !options.primaryOnly && (certainlyNoAdUser || possiblyNoAdUser)
+
         const userEmails = [
           user.email,
           sendToBothEmails ? user.secondaryEmail : false,
         ]
+        // for some users, email === secondaryEmail. In that case, use only primary.
+        userEmails[1] = userEmails[0] === userEmails[1] ? false : userEmails[1]
 
         userEmails.filter(Boolean).forEach((email) => {
           emails[email] = (emails[email] ? emails[email] : []).concat([
@@ -362,7 +368,8 @@ const createEmailsForFeedbackTargets = async (
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,
-              noAdUser: user.username === user.id,
+              noAdUser: certainlyNoAdUser,
+              possiblyNoAdUser,
               userId: user.id,
               username: user.username,
             },
