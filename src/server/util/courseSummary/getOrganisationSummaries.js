@@ -17,7 +17,8 @@ const logger = require('../logger')
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 const ALL_OPEN_UNI_ORGANISATION_IDS = [
   OPEN_UNI_ORGANISATION_ID,
-  'hy-org-48901898',
+  'hy-org-48901898', // "Lukuvuosi"
+  'hy-org-48902017', // "Kesälukukausi"
 ]
 
 const WORKLOAD_QUESTION_ID = 1042
