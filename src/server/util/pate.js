@@ -35,10 +35,6 @@ const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
     logger.debug('Would send', options.emails.length, 'emails')
-    if (options.emails.length < 100)
-      options.emails.forEach((e) => {
-        logger.debug(JSON.stringify(e, null, 2))
-      })
     return null
   }
 

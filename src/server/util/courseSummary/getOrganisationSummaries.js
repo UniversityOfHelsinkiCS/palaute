@@ -15,6 +15,10 @@ const {
 const logger = require('../logger')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
+const ALL_OPEN_UNI_ORGANISATION_IDS = [
+  OPEN_UNI_ORGANISATION_ID,
+  'hy-org-48901898',
+]
 
 const WORKLOAD_QUESTION_ID = 1042
 
@@ -510,7 +514,7 @@ const getOrganisationSummaries = async ({
     organisationsWithResults,
     organisationAccess,
     questions,
-  ).filter((org) => org.id !== OPEN_UNI_ORGANISATION_ID)
+  ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
 
   return _.sortBy(
     organisationsWithMissing.concat(openUniOrganisationWithResults),
