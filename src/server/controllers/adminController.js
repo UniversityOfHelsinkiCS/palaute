@@ -263,6 +263,27 @@ const findEmailsForToday = async (_, res) => {
   })
 }
 
+const getNorppaStatistics = async (req, res) => {
+  const { opensAt, closesAt } = req.query
+
+  const results = await sequelize.query(
+    `select distinct f.id, count (distinct u.id) as ufbts, count (u.feedback_id) as feedbacks, case when f.feedback_response is null then false else true end as feedback_response_given
+    from feedback_targets f inner join user_feedback_targets u on f.id = u.feedback_target_id
+    where opens_at > :opensAt AND closes_at < :closesAt AND feedback_type = 'courseRealisation' AND u.access_status != 'TEACHER' group by f.id;
+    `,
+    {
+      replacements: {
+        opensAt,
+        closesAt,
+      },
+
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  res.send(results)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -272,5 +293,6 @@ router.get('/feedback-targets', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
+router.get('/norppa-statistics', getNorppaStatistics)
 
 module.exports = router

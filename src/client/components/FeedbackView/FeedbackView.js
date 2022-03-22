@@ -36,17 +36,6 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
-  progressContainer: {
-    padding: theme.spacing(4, 0),
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}))
-
 const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
   alert: {
     fontSize: '1.1rem',
@@ -172,7 +161,6 @@ const FeedbackView = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { language } = i18n
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
