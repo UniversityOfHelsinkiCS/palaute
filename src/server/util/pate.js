@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
-const { JWT_KEY } = require('./config')
+const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS } = require('./config')
 
 const template = {
   from: 'Norppa',
@@ -35,6 +35,7 @@ const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
     logger.debug('Would send', options.emails.length, 'emails')
+    options.emails.forEach((e) => console.log(JSON.stringify(e, null, 2)))
     return null
   }
 
@@ -315,8 +316,8 @@ const emailReminderAboutFeedbackResponseToTeachers = (
   return email
 }
 
-const getNoAdUrl = (username, userId) => {
-  const token = jwt.sign({ username }, JWT_KEY, { expiresIn: '14d' })
+const getNoAdUrl = (username, userId, days) => {
+  const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
   return `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
 }
 
@@ -325,36 +326,58 @@ const getFeedbackTargetLink = (feedbackTarget) => {
     feedbackTarget
   const language = feedbackTarget.language ? feedbackTarget.language : 'en'
 
-  const humanDate = format(new Date(closesAt), 'dd.MM.yyyy')
+  const closeDate = new Date(closesAt)
+  const formattedCloseDate = format(closeDate, 'dd.MM.yyyy')
+  const expirationDate = (() => {
+    const d = new Date(closeDate)
+    d.setDate(d.getDate() + NOAD_LINK_EXPIRATION_DAYS)
+    return d
+  })()
+  const formattedExpirationDate = format(expirationDate, 'dd.MM.yyyy')
+  const daysUntilExpiration = (() => {
+    const ms = expirationDate.getTime() - Date.now()
+    return ms / 1000 / 3600 / 24
+  })()
+
   const openUntil = {
-    en: `Open until ${humanDate}`,
-    fi: `Avoinna ${humanDate} asti`,
-    sv: `Open until ${humanDate}`,
+    en: `Open until ${formattedCloseDate}`,
+    fi: `Avoinna ${formattedCloseDate} asti`,
+    sv: `Open until ${formattedCloseDate}`,
+  }
+  const adLinkInfo = {
+    en: 'If you have a university ad-account',
+    fi: 'Jos sinulla on yliopiston ad-tunnus',
+    sv: 'If you have a university ad-account',
   }
   const noAdLinkInfo = {
-    en: 'If you have no university ad-account',
+    en: 'If you do not have a university ad-account',
     fi: 'Jos sinulla ei ole yliopiston ad-tunnusta',
-    sv: 'If you have no university ad-account',
+    sv: 'If you do not have a university ad-account',
   }
-  const noAdLink = {
+  const linkText = {
     en: 'use this link',
     fi: 'käytä tätä linkkiä',
     sv: 'use this link',
   }
+  const noAdLinkExpirationInfo = {
+    en: `expires ${formattedExpirationDate}`,
+    fi: `vanhenee ${formattedExpirationDate}`,
+    sv: `expires ${formattedExpirationDate}`,
+  }
 
   if (noAdUser) {
-    const noAdUrl = getNoAdUrl(username, userId)
-    return `<a href=${noAdUrl}>${name[language]}</a> (${openUntil[language]})<br/>`
+    const noAdUrl = getNoAdUrl(username, userId, daysUntilExpiration)
+    return `<i><a href=${noAdUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
   }
   if (possiblyNoAdUser) {
     const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
-    const noAdUrl = getNoAdUrl(username, userId)
-    return `<a href=${adUrl}>${name[language]}</a> (${openUntil[language]})
-      ${noAdLinkInfo[language]}, <a href=${noAdUrl}>${noAdLink[language]}</a><br/>`
+    const noAdUrl = getNoAdUrl(username, userId, daysUntilExpiration)
+    return `<i>${name[language]}</i> (${openUntil[language]})<br/>${adLinkInfo[language]}, <a href=${adUrl}>${linkText[language]}</a> 
+      ${noAdLinkInfo[language]}, <a href=${noAdUrl}>${linkText[language]}</a> (${noAdLinkExpirationInfo[language]})<br/>`
   }
 
   const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
-  return `<a href=${adUrl}>${name[language]}</a> (${openUntil[language]})<br/>`
+  return `<i><a href=${adUrl}>${name[language]}</a></i> (${openUntil[language]}) (${noAdLinkExpirationInfo[language]})<br/>`
 }
 
 const notificationAboutSurveyOpeningToStudents = (
