@@ -211,6 +211,8 @@ export default {
     writeAMessage: 'Kirjoita viesti opiskelijoille',
     emailMessage:
       'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. \n << Kirjoittamasi viesti tulee tähän >>',
+    modalSubtitle:
+      'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

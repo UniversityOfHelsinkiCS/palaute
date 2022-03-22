@@ -213,6 +213,8 @@ export default {
     writeAMessage: 'Write a message to students',
     emailMessage:
       'Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. \n << The message you write will appear here >>',
+    modalSubtitle:
+      'Students who have already given feedback wont receive this email',
   },
   navBar: {
     myFeedbacks: 'My feedback',
