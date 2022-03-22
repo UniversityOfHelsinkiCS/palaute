@@ -1,12 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Switch,
-  FormControlLabel,
-  Box,
-} from '@material-ui/core'
+import { Card, CardContent, Switch, FormControlLabel } from '@material-ui/core'
 
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'

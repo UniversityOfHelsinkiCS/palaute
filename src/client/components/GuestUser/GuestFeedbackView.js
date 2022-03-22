@@ -25,17 +25,6 @@ import {
 import { saveValues } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
-  progressContainer: {
-    padding: theme.spacing(4, 0),
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}))
-
 const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
   alert: {
     fontSize: '1.1rem',
@@ -148,7 +137,6 @@ const FormContainer = ({
 const GuestFeedbackView = () => {
   const { id } = useParams()
   const { t } = useTranslation()
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
