@@ -342,27 +342,27 @@ const getFeedbackTargetLink = (feedbackTarget) => {
   const openUntil = {
     en: `Open until ${formattedCloseDate}`,
     fi: `Avoinna ${formattedCloseDate} asti`,
-    sv: `Open until ${formattedCloseDate}`,
+    sv: `Öppet till ${formattedCloseDate}`,
   }
   const adLinkInfo = {
     en: 'If you have a university ad-account',
     fi: 'Jos sinulla on yliopiston ad-tunnus',
-    sv: 'If you have a university ad-account',
+    sv: 'Om du har ett universitets ad-konto',
   }
   const noAdLinkInfo = {
     en: 'If you do not have a university ad-account',
     fi: 'Jos sinulla ei ole yliopiston ad-tunnusta',
-    sv: 'If you do not have a university ad-account',
+    sv: 'Om du inte har ett universitets ad-konto',
   }
   const linkText = {
     en: 'use this link',
     fi: 'käytä tätä linkkiä',
-    sv: 'use this link',
+    sv: 'använd denhär länken',
   }
   const noAdLinkExpirationInfo = {
     en: `expires ${formattedExpirationDate}`,
     fi: `vanhenee ${formattedExpirationDate}`,
-    sv: `expires ${formattedExpirationDate}`,
+    sv: `går ut ${formattedExpirationDate}`,
   }
 
   if (noAdUser) {
