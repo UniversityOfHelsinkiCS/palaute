@@ -2,6 +2,7 @@ const Router = require('express')
 
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const { format } = require('date-fns')
 
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS } = require('../util/config')
@@ -267,9 +268,23 @@ const getNorppaStatistics = async (req, res) => {
   const { opensAt, closesAt } = req.query
 
   const results = await sequelize.query(
-    `select distinct f.id, count (distinct u.id) as ufbts, count (u.feedback_id) as feedbacks, case when f.feedback_response is null then false else true end as feedback_response_given
-    from feedback_targets f inner join user_feedback_targets u on f.id = u.feedback_target_id
-    where opens_at > :opensAt AND closes_at < :closesAt AND feedback_type = 'courseRealisation' AND u.access_status != 'TEACHER' group by f.id;
+    `SELECT
+    DISTINCT f.id,
+    COUNT (DISTINCT u.id) AS ufbts,
+    COUNT (u.feedback_id) AS feedbacks,
+    c.start_date,
+    c.end_date,
+    cu.course_code,
+    CASE WHEN f.feedback_response IS null THEN false ELSE true END AS feedback_response_given
+    FROM feedback_targets f
+    INNER JOIN user_feedback_targets u ON f.id = u.feedback_target_id
+    INNER JOIN course_realisations c ON f.course_realisation_id = c.id
+    INNER JOIN course_units cu ON f.course_unit_id = cu.id
+    WHERE opens_at > :opensAt
+    AND closes_at < :closesAt
+    AND feedback_type = 'courseRealisation'
+    AND u.access_status != 'TEACHER'
+    GROUP BY f.id, c.start_date, c.end_date, cu.course_code;
     `,
     {
       replacements: {
@@ -281,7 +296,13 @@ const getNorppaStatistics = async (req, res) => {
     },
   )
 
-  res.send(results)
+  const resultsWithBetterDates = results.map((r) => ({
+    ...r,
+    start_date: format(r.start_date, 'dd.MM.yyyy'),
+    end_date: format(r.end_date, 'dd.MM.yyyy'),
+  }))
+
+  res.send(resultsWithBetterDates)
 }
 
 const router = Router()
