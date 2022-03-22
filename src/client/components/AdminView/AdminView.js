@@ -10,6 +10,7 @@ import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
 import EmailAccordion from './EmailAccordion'
 import { tabProps, TabPanel } from './AdminTabPanel'
 import NorppaFeedbackView from './NorppaFeedbackView'
+import NorppaStatisticView from './NorppaStatisticsView'
 
 const AdminView = () => {
   const [tab, setTab] = useState(0)
@@ -41,6 +42,7 @@ const AdminView = () => {
         >
           <Tab label="General" {...tabProps(0)} />
           <Tab label="Norppa feedback" {...tabProps(1)} />
+          <Tab label="Norppa statistics" {...tabProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
@@ -56,6 +58,9 @@ const AdminView = () => {
       </TabPanel>
       <TabPanel value={tab} index={1}>
         <NorppaFeedbackView />
+      </TabPanel>
+      <TabPanel value={tab} index={2}>
+        <NorppaStatisticView />
       </TabPanel>
     </>
   )
