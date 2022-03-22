@@ -232,6 +232,12 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
           },
         },
       },
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        attributes: ['id', 'feedback_id'],
+      },
     ],
   })
 
@@ -242,7 +248,14 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     return !disabledCourseCodes.includes(target.courseUnit.courseCode)
   })
 
-  return filteredFeedbackTargets
+  const filteredByFeedbacks = filteredFeedbackTargets.filter((target) => {
+    const found = target.userFeedbackTargets.find(
+      (u) => u.dataValues.feedback_id,
+    )
+    return !!found
+  })
+
+  return filteredByFeedbacks
 }
 
 const getTeacherEmailCounts = async () => {
