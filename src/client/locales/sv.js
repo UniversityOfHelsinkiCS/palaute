@@ -13,6 +13,8 @@ export default {
     },
     unknownError: 'Något gick fel',
     choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
+    fetchError:
+      'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
     save: 'Spara',
     saveSuccess: 'Informationen har sparats',
     name: 'Namn',
@@ -214,6 +216,9 @@ export default {
     writeAMessage: 'Skriv ett meddelande till studerande',
     emailMessage:
       'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. \n << Meddelandet du skriver kommer synas här >>',
+  },
+    modalSubtitle:
+      'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
