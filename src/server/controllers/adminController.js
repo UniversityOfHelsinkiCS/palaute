@@ -269,22 +269,31 @@ const getNorppaStatistics = async (req, res) => {
 
   const results = await sequelize.query(
     `SELECT
+
     DISTINCT f.id,
     COUNT (DISTINCT u.id) AS ufbts,
     COUNT (u.feedback_id) AS feedbacks,
     c.start_date,
     c.end_date,
     cu.course_code,
-    CASE WHEN f.feedback_response IS null THEN false ELSE true END AS feedback_response_given
+    CASE WHEN f.feedback_response IS null THEN false ELSE true END AS feedback_response_given,
+    org.name as organisation_name,
+    parentorg.name as parent_name
+
     FROM feedback_targets f
+
     INNER JOIN user_feedback_targets u ON f.id = u.feedback_target_id
     INNER JOIN course_realisations c ON f.course_realisation_id = c.id
     INNER JOIN course_units cu ON f.course_unit_id = cu.id
+    INNER JOIN course_realisations_organisations cuo ON cuo.course_realisation_id = c.id
+    INNER JOIN organisations org ON org.id = cuo.organisation_id
+    INNER JOIN organisations parentorg ON parentorg.id = org.parent_id
+
     WHERE opens_at > :opensAt
     AND closes_at < :closesAt
     AND feedback_type = 'courseRealisation'
     AND u.access_status != 'TEACHER'
-    GROUP BY f.id, c.start_date, c.end_date, cu.course_code;
+    GROUP BY f.id, c.start_date, c.end_date, cu.course_code, org.id, parentorg.id;
     `,
     {
       replacements: {
@@ -302,7 +311,13 @@ const getNorppaStatistics = async (req, res) => {
     end_date: format(r.end_date, 'dd.MM.yyyy'),
   }))
 
-  res.send(resultsWithBetterDates)
+  const resultsWithBetterNames = results.map((r) => ({
+    ...r,
+    organisation_name: r.organisation_name.fi,
+    parent_name: r.parent_name.fi,
+  }))
+
+  res.send(resultsWithBetterNames)
 }
 
 const router = Router()

@@ -39,7 +39,7 @@ const ExportCsv = ({ results }) => {
     <CSVLink
       className={classes.link}
       data={parsedData}
-      filename="norppaStatistics"
+      filename="norppa-statistics.csv"
     >
       Export as csv
     </CSVLink>
