@@ -317,16 +317,9 @@ const getNorppaStatistics = async (req, res) => {
     parent_name: r.parent_name.fi,
   }))
 
-  const resultsWithBetterAvoin = resultsWithBetterNames.map((r) => {
-    const isAvoin =
-      r.organisation_name === 'Avoin yliopisto' ||
-      r.parent_name === 'Avoin yliopisto 9301'
-    return {
-      ...r,
-      organisation_name: isAvoin ? 'Avoin yliopisto' : r.organisation_name,
-      parent_name: isAvoin ? 'Avoin yliopisto' : r.parent_name,
-    }
-  })
+  const resultsWithBetterAvoin = resultsWithBetterNames.filter(
+    (r) => r.organisation_name !== 'Lukuvuosi',
+  )
 
   res.send(resultsWithBetterAvoin)
 }
