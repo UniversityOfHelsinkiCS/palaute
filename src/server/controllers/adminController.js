@@ -311,13 +311,24 @@ const getNorppaStatistics = async (req, res) => {
     end_date: format(r.end_date, 'dd.MM.yyyy'),
   }))
 
-  const resultsWithBetterNames = results.map((r) => ({
+  const resultsWithBetterNames = resultsWithBetterDates.map((r) => ({
     ...r,
     organisation_name: r.organisation_name.fi,
     parent_name: r.parent_name.fi,
   }))
 
-  res.send(resultsWithBetterNames)
+  const resultsWithBetterAvoin = resultsWithBetterNames.map((r) => {
+    const isAvoin =
+      r.organisation_name === 'Avoin yliopisto' ||
+      r.parent_name === 'Avoin yliopisto 9301'
+    return {
+      ...r,
+      organisation_name: isAvoin ? 'Avoin yliopisto' : r.organisation_name,
+      parent_name: isAvoin ? 'Avoin yliopisto' : r.parent_name,
+    }
+  })
+
+  res.send(resultsWithBetterAvoin)
 }
 
 const router = Router()
