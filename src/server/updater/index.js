@@ -15,12 +15,14 @@ const schedule = (cronTime, func) =>
   })
 
 const run = async () => {
-  logger.info('Running updater')
+  logger.info('[UPDATER] Running updater')
   // Dependencies between updating, may result in failure if order not kept
   await updateUsers()
   await updateOrganisations()
   await updateCoursesAndTeacherFeedbackTargets()
   await updateStudentFeedbackTargets()
+
+  logger.info('[UPDATER] Finished updating')
 }
 
 /* eslint-disable */

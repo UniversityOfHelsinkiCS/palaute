@@ -60,7 +60,7 @@ const enrolmentsHandler = async (enrolments) => {
   try {
     await bulkCreateUserFeedbackTargets(userFeedbackTargets)
   } catch (err) {
-    logger.info('RUNNING TARGETS ONE BY ONE')
+    logger.info('[UPDATER] RUNNING TARGETS ONE BY ONE')
     userFeedbackTargets.reduce(
       async (promise, { userId, feedbackTargetId, accessStatus }) => {
         await promise
@@ -89,7 +89,7 @@ const updateStudentFeedbackTargets = async () => {
   // Delete all old enrolments once a week sunday-monday night.
   // Delete only enrollments, not teacher relations
   if (new Date().getDay() === 1) {
-    logger.info('Deleting old enrolments', {})
+    logger.info('[UPDATER] Deleting old enrolments', {})
     await sequelize.query(
       `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL
        AND access_status = 'STUDENT'

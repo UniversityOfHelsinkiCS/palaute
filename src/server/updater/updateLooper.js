@@ -11,7 +11,7 @@ const getData = async (limit, offset, url) => {
 }
 
 const mangleData = async (url, limit, handler) => {
-  logger.info(`Starting to update items with url ${url}`)
+  logger.info(`[UPDATER] Starting to update items with url ${url}`)
   let offset = 0
   let count = 0
   const start = new Date()
@@ -31,9 +31,12 @@ const mangleData = async (url, limit, handler) => {
     offset += limit
   }
   logger.info(
-    `Updated ${count} items at ${((new Date() - start) / count).toFixed(
-      4,
-    )}ms/item, total time ${((new Date() - start) / 1000).toFixed(2)}s`,
+    `[UPDATER] Updated ${count} items at ${(
+      (new Date() - start) /
+      count
+    ).toFixed(4)}ms/item, total time ${((new Date() - start) / 1000).toFixed(
+      2,
+    )}s`,
   )
 }
 

@@ -511,7 +511,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
 
   // Delete all teacher rights once a week (saturday-sunday night)
   if (new Date().getDay() === 0) {
-    logger.info('Deleting teacher rights', {})
+    logger.info('[UPDATER] Deleting teacher rights', {})
     await sequelize.query(
       `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND access_status = 'TEACHER' AND user_id != 'abc1234'`,
     )
