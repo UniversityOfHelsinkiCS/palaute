@@ -279,6 +279,7 @@ const getNorppaStatistics = async (req, res) => {
     c.end_date,
     CASE WHEN f.feedback_response IS null THEN false ELSE true END AS feedback_response_given,
     org.name as organisation_name,
+    org.code as organisation_code,
     parentorg.name as parent_name
 
     FROM feedback_targets f

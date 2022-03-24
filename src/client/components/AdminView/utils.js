@@ -33,6 +33,7 @@ export const getHeaders = () => [
   'Kurssi päättyy',
   'Vastapalaute',
   'Koulutusohjelma',
+  'Koulutusohjelman koodi',
   'Tiedekunta',
   'Palaute %',
 ]
