@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Button,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core'
+import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 import { DatePicker } from '@material-ui/pickers'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
@@ -47,7 +41,7 @@ const ExportCsv = ({ results }) => {
 }
 
 const NorppaStatisticView = () => {
-  const [opensAt, setOpensAt] = useState(new Date())
+  const [opensAt, setOpensAt] = useState(new Date('9.1.2021'))
   const [closesAt, setClosesAt] = useState(new Date())
   const [results, setResults] = useState([])
 
