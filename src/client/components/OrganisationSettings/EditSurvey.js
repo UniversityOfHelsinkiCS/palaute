@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CircularProgress, Box, Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -18,6 +18,7 @@ import {
   getUpperLevelQuestions,
 } from './utils'
 import EditProgrammeQuestionsDialog from './EditProgrammeQuestionsDialog'
+import { LoadingProgress } from '../LoadingProgress'
 
 const EditSurvey = () => {
   const { t, i18n } = useTranslation()
@@ -36,11 +37,7 @@ const EditSurvey = () => {
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const handleSubmit = async (values, actions) => {

@@ -209,6 +209,8 @@ const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
+const NOAD_LINK_EXPIRATION_DAYS = 14
+
 module.exports = {
   inProduction,
   inE2EMode,
@@ -217,4 +219,5 @@ module.exports = {
   GIT_SHA,
   ADMINS,
   INCLUDE_COURSES,
+  NOAD_LINK_EXPIRATION_DAYS,
 }

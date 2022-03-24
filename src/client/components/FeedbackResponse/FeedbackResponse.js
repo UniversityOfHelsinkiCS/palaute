@@ -2,14 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
-import {
-  Card,
-  CardContent,
-  Box,
-  CircularProgress,
-  Typography,
-  Divider,
-} from '@material-ui/core'
+import { Card, CardContent, Box, Typography, Divider } from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -23,6 +16,7 @@ import apiClient from '../../util/apiClient'
 import PublicQuestions from '../PublicQuestions'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
+import { LoadingProgress } from '../LoadingProgress'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -59,11 +53,7 @@ const FeedbackResponse = () => {
   })
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

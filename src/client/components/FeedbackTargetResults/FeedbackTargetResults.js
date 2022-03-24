@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, CircularProgress, Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
 import { differenceInDays, format } from 'date-fns'
@@ -19,6 +19,7 @@ import ReminderEmailModal from './ReminderEmailModal'
 import { closeCourseImmediately, feedbackCanBeClosed } from './utils'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackTargetResults = () => {
   const [open, setOpen] = useState(false)
@@ -38,11 +39,7 @@ const FeedbackTargetResults = () => {
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget || !feedbackTargetData) {

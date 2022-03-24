@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Switch,
-  FormControlLabel,
-  Box,
-  CircularProgress,
-} from '@material-ui/core'
+import { Card, CardContent, Switch, FormControlLabel } from '@material-ui/core'
 
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
+import { LoadingProgress } from '../LoadingProgress'
 
 const saveGeneralSettings = async ({ code, studentListVisible }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -68,11 +62,7 @@ const GeneralSettings = () => {
   const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   return <GeneralSettingsContainer organisation={organisation} />

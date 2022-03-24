@@ -15,6 +15,11 @@ const {
 const logger = require('../logger')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
+const ALL_OPEN_UNI_ORGANISATION_IDS = [
+  OPEN_UNI_ORGANISATION_ID,
+  'hy-org-48901898', // "Lukuvuosi"
+  'hy-org-48902017', // "Kesälukukausi"
+]
 
 const WORKLOAD_QUESTION_ID = 1042
 
@@ -300,10 +305,16 @@ const withMissingOrganisations = (
 }
 
 const omitOrganisationOpenUniRows = async (rows) => {
-  const courseRealisationIds = _.uniq(
+  let courseRealisationIds = _.uniq(
     rows.map((row) => row.course_realisation_id),
   )
-  const courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
+  if (!courseRealisationIds || courseRealisationIds.length === 0) {
+    courseRealisationIds = '_'
+  }
+  let courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
+  if (!courseUnitIds || courseUnitIds.length === 0) {
+    courseUnitIds = '_'
+  }
 
   const query = `
     SELECT NULL AS course_unit_id, course_realisation_id
@@ -504,7 +515,7 @@ const getOrganisationSummaries = async ({
     organisationsWithResults,
     organisationAccess,
     questions,
-  ).filter((org) => org.id !== OPEN_UNI_ORGANISATION_ID)
+  ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
 
   return _.sortBy(
     organisationsWithMissing.concat(openUniOrganisationWithResults),

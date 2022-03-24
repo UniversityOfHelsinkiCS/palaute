@@ -1,4 +1,6 @@
 const { NorppaFeedback, User } = require('../models')
+const { ADMINS } = require('../../config')
+const ApplicationError = require('../util/customErrors')
 
 const submitFeedback = async (req, res) => {
   const { user } = req
@@ -32,4 +34,39 @@ const hideBanner = async (req, res) => {
   res.sendStatus(200)
 }
 
-module.exports = { submitFeedback, hideBanner }
+const getFeedbacks = async (req, res) => {
+  const { user } = req
+
+  if (!user) res.sendStatus(500)
+  if (!ADMINS.includes(user.username))
+    throw new ApplicationError('Forbidden', 403)
+
+  const feedbacks = await NorppaFeedback.findAll({
+    include: [
+      {
+        model: User,
+        as: 'user',
+        required: true,
+      },
+    ],
+  })
+
+  res.send(feedbacks)
+}
+
+const markAsSolved = async (req, res) => {
+  const { user } = req
+  const { id } = req.params
+
+  if (!user) res.sendStatus(500)
+  if (!ADMINS.includes(user.username))
+    throw new ApplicationError('Forbidden', 403)
+
+  const feedback = await NorppaFeedback.findByPk(id)
+  feedback.responseWanted = false
+  await feedback.save()
+
+  res.sendStatus(200)
+}
+
+module.exports = { submitFeedback, hideBanner, getFeedbacks, markAsSolved }

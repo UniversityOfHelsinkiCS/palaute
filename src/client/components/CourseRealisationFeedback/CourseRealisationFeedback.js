@@ -1,10 +1,10 @@
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
-import { Box, CircularProgress } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
+import { LoadingProgress } from '../LoadingProgress'
 
 const getCourseRealisationFeedbackTarget = (feedbackTargets) =>
   (feedbackTargets ?? []).find(
@@ -18,11 +18,7 @@ const CourseRealisationFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const courseRealisationFeedbackTarget =

@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   Typography,
-  CircularProgress,
   makeStyles,
   Button,
   Box,
@@ -20,6 +19,7 @@ import QuestionEditor from '../QuestionEditor'
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
 import { getInitialValues, validate, saveValues } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   accordion: {
@@ -45,11 +45,7 @@ const EditUniversitySurveyAccordion = () => {
   const isLoading = surveyIsLoading
 
   if (isLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   const handleSubmit = async (values) => {

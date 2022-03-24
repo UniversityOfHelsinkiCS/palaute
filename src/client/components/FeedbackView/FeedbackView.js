@@ -4,7 +4,6 @@ import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
 import {
   Typography,
-  CircularProgress,
   makeStyles,
   Button,
   Box,
@@ -35,17 +34,7 @@ import {
 } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
-  progressContainer: {
-    padding: theme.spacing(4, 0),
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}))
+import { LoadingProgress } from '../LoadingProgress'
 
 const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
   alert: {
@@ -172,7 +161,6 @@ const FeedbackView = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { language } = i18n
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
@@ -182,11 +170,7 @@ const FeedbackView = () => {
   })
 
   if (isLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

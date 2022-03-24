@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -12,6 +12,7 @@ import Alert from '../Alert'
 import FeedbackResponse from '../FeedbackTargetResults/FeedbackResponse'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { LoadingProgress } from '../LoadingProgress'
 
 const GuestFeedbackTargetResults = () => {
   const { t } = useTranslation()
@@ -26,11 +27,7 @@ const GuestFeedbackTargetResults = () => {
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget || !feedbackTargetData) {

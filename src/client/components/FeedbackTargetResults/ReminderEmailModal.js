@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: 10,
   },
+  subtitle: {
+    marginBottom: 5,
+    color: '#4c4c4c',
+  },
   buttons: {
     marginTop: 20,
     display: 'flex',
@@ -70,6 +74,9 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
       <Box mb={2} className={classes.container}>
         <Typography variant="h6" component="h2" className={classes.title}>
           {t('feedbackTargetResults:modalTitle')}
+        </Typography>
+        <Typography variant="body2" component="p" className={classes.subtitle}>
+          {t('feedbackTargetResults:modalSubtitle')}
         </Typography>
         <Typography variant="body1" component="p" className={classes.textField}>
           {t('feedbackTargetResults:emailMessage', {

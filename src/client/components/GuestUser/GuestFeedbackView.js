@@ -1,13 +1,6 @@
 import React, { useState, forwardRef } from 'react'
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import {
-  CircularProgress,
-  makeStyles,
-  Button,
-  Box,
-  Card,
-  CardContent,
-} from '@material-ui/core'
+import { makeStyles, Button, Box, Card, CardContent } from '@material-ui/core'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -30,17 +23,7 @@ import {
 } from '../FeedbackView/utils'
 
 import { saveValues } from './utils'
-
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
-  progressContainer: {
-    padding: theme.spacing(4, 0),
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}))
+import { LoadingProgress } from '../LoadingProgress'
 
 const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
   alert: {
@@ -154,7 +137,6 @@ const FormContainer = ({
 const GuestFeedbackView = () => {
   const { id } = useParams()
   const { t } = useTranslation()
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
@@ -164,11 +146,7 @@ const GuestFeedbackView = () => {
   })
 
   if (isLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

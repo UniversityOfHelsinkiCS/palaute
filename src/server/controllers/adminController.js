@@ -2,6 +2,7 @@ const Router = require('express')
 
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const { format } = require('date-fns')
 
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS } = require('../util/config')
@@ -263,6 +264,65 @@ const findEmailsForToday = async (_, res) => {
   })
 }
 
+const getNorppaStatistics = async (req, res) => {
+  const { opensAt, closesAt } = req.query
+
+  const results = await sequelize.query(
+    `SELECT
+
+    DISTINCT f.id,
+    COUNT (DISTINCT u.id) AS ufbts,
+    COUNT (u.feedback_id) AS feedbacks,
+    cu.name,
+    cu.course_code,
+    c.start_date,
+    c.end_date,
+    CASE WHEN f.feedback_response IS null THEN false ELSE true END AS feedback_response_given,
+    org.name as organisation_name,
+    org.code as organisation_code,
+    parentorg.name as parent_name
+
+    FROM feedback_targets f
+
+    INNER JOIN user_feedback_targets u ON f.id = u.feedback_target_id
+    INNER JOIN course_realisations c ON f.course_realisation_id = c.id
+    INNER JOIN course_units cu ON f.course_unit_id = cu.id
+    INNER JOIN course_realisations_organisations cuo ON cuo.course_realisation_id = c.id
+    INNER JOIN organisations org ON org.id = cuo.organisation_id
+    INNER JOIN organisations parentorg ON parentorg.id = org.parent_id
+
+    WHERE opens_at > :opensAt
+    AND closes_at < :closesAt
+    AND feedback_type = 'courseRealisation'
+    AND u.access_status != 'TEACHER'
+    GROUP BY f.id, cu.name, cu.course_code, c.start_date, c.end_date, org.id, parentorg.id;
+    `,
+    {
+      replacements: {
+        opensAt,
+        closesAt,
+      },
+
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  const resultsWithBetterNames = results.map((r) => ({
+    ...r,
+    start_date: format(r.start_date, 'dd.MM.yyyy'),
+    end_date: format(r.end_date, 'dd.MM.yyyy'),
+    organisation_name: r.organisation_name.fi,
+    parent_name: r.parent_name.fi,
+    name: r.name.en ? r.name.en : r.name[0],
+  }))
+
+  const resultsWithBetterAvoin = resultsWithBetterNames.filter(
+    (r) => r.organisation_name !== 'Lukuvuosi',
+  )
+
+  res.send(resultsWithBetterAvoin)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -272,5 +332,6 @@ router.get('/feedback-targets', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
+router.get('/norppa-statistics', getNorppaStatistics)
 
 module.exports = router

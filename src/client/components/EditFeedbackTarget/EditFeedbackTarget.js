@@ -3,7 +3,6 @@ import { useParams, useHistory, Redirect } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
 
 import {
-  CircularProgress,
   makeStyles,
   Divider,
   Box,
@@ -39,6 +38,7 @@ import {
   feedbackTargetIsOpenOrClosed,
   validateQuestions,
 } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -139,11 +139,7 @@ const EditFeedbackTarget = () => {
   })
 
   if (isLoading || authorizedUserLoading) {
-    return (
-      <div className={classes.progressContainer}>
-        <CircularProgress />
-      </div>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget) {

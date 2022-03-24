@@ -9,14 +9,7 @@ import {
   Link,
 } from 'react-router-dom'
 
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Tab,
-  makeStyles,
-  Paper,
-} from '@material-ui/core'
+import { Box, Typography, Tab, makeStyles, Paper } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import CourseSettings from './CourseSettings'
@@ -26,6 +19,7 @@ import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'
 import { getLanguageValue } from '../../util/languageUtils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -75,11 +69,7 @@ const OrganisationSettings = () => {
   const classes = useStyles()
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const hasWriteAccess = Boolean(organisation?.access?.write)

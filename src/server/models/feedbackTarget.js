@@ -25,7 +25,7 @@ const Survey = require('./survey')
 const Question = require('./question')
 
 const {
-  sendNotificationAboutFeedbackSummaryToStudents,
+  sendNotificationAboutFeedbackResponseToStudents,
   sendReminderToGiveFeedbackToStudents,
 } = require('../util/pate')
 
@@ -270,7 +270,7 @@ class FeedbackTarget extends Model {
         email: student.email,
         language: student.language || 'en',
       }))
-    return sendNotificationAboutFeedbackSummaryToStudents(
+    return sendNotificationAboutFeedbackResponseToStudents(
       url,
       formattedStudents,
       courseUnit.name,

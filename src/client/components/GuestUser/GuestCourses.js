@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   Box,
-  CircularProgress,
   Container,
   Typography,
   makeStyles,
@@ -13,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -41,11 +41,7 @@ const GuestCourses = () => {
   const { i18n, t } = useTranslation()
 
   if (isLoading) {
-    return (
-      <Box my={4} className={classes.container}>
-        <CircularProgress className={classes.progressContainer} />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!isLoading && !feedbackTargets) {

@@ -2,19 +2,14 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Typography,
-  List,
-  Box,
-  CircularProgress,
-  makeStyles,
-} from '@material-ui/core'
+import { Typography, List, Box, makeStyles } from '@material-ui/core'
 
 import CourseRealisationItem from './CourseRealisationItem'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseRealisationsWithFeedbackTargets } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   courseRealisationItem: {
@@ -37,11 +32,7 @@ const FeedbackTargetList = () => {
   const isLoading = feedbackTargetsIsLoading
 
   if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (feedbackTargets.length === 0) {

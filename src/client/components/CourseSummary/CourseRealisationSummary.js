@@ -5,7 +5,6 @@ import { Link as RouterLink, Redirect, useParams } from 'react-router-dom'
 import {
   Link,
   Box,
-  CircularProgress,
   Card,
   CardContent,
   Typography,
@@ -21,6 +20,7 @@ import DividerRow from './DividerRow'
 import { getLanguageValue } from '../../util/languageUtils'
 import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -130,16 +130,17 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
 
 const CourseRealisationSummary = () => {
   const { code } = useParams()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
 
-  const { courseRealisationSummaries, isLoading } =
+  const { courseRealisationSummaries, isLoading, failureCount } =
     useCourseRealisationSummaries(code)
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
-      </Box>
+      <LoadingProgress
+        isError={failureCount > 1}
+        message={t('common:fetchError')}
+      />
     )
   }
 

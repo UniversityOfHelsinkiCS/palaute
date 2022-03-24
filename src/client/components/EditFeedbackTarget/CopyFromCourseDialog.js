@@ -9,7 +9,6 @@ import {
   Box,
   TextField,
   Typography,
-  CircularProgress,
   makeStyles,
   List,
   ListItem,
@@ -25,6 +24,7 @@ import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
+import { LoadingProgress } from '../LoadingProgress'
 
 const useFeedbackTargetItemStyles = makeStyles({
   listItem: {
@@ -156,11 +156,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
             {t('editFeedbackTarget:copyFromCourseChooseCourse')}
           </Typography>
         )}
-        {feedbackTargetsIsLoading && (
-          <Box display="flex" justifyContent="center">
-            <CircularProgress />
-          </Box>
-        )}
+        {feedbackTargetsIsLoading && <LoadingProgress />}
         {feedbackTargetsWithQuestions?.length > 0 && (
           <FeedbackTargetList
             feedbackTargets={feedbackTargetsWithQuestions}

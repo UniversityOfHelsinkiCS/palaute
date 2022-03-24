@@ -2,11 +2,12 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
 import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
+import { LoadingProgress } from '../LoadingProgress'
 
 const StudentsWithFeedback = () => {
   const { t } = useTranslation()
@@ -20,11 +21,7 @@ const StudentsWithFeedback = () => {
   const isLoading = feedbackTargetIsLoading || studentsIsLoading
 
   if (isLoading) {
-    return (
-      <Box my={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   if (!feedbackTarget || !students) {

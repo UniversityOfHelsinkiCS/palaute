@@ -605,6 +605,13 @@ const updateFeedbackResponse = async (req, res) => {
     throw new ApplicationError('User is not authorized to respond', 403)
   }
 
+  if (userFeedbackTarget.feedbackResponseEmailSent) {
+    throw new ApplicationError(
+      'Feedback response email has already been sent',
+      400,
+    )
+  }
+
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
   feedbackTarget.feedbackResponse = req.body.data
@@ -616,16 +623,22 @@ const emailStudentsAboutResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   const feedbackTargetsUserIsTeacherTo =
     await req.user.feedbackTargetsHasTeacherAccessTo()
+
   const relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
     (target) => target.id === feedbackTargetId,
   )
+
   if (!relevantFeedbackTarget)
     throw new ApplicationError(
       `No feedback target found with id ${feedbackTargetId} for user`,
       404,
     )
+
   if (relevantFeedbackTarget.feedbackResponseEmailSent)
-    throw new ApplicationError('Email has already been sent', 400) // or 409 ?
+    throw new ApplicationError(
+      'Feedback response email has already been sent',
+      400,
+    ) // or 409 ?
 
   const { feedbackResponse } = req.body.data
 

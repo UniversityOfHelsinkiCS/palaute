@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Grid, Box, CircularProgress, Typography } from '@material-ui/core'
+import { Grid, Box, Typography } from '@material-ui/core'
 import OngoingIcon from '@material-ui/icons/Schedule'
 import UpcomingIcon from '@material-ui/icons/Event'
 import EndedIcon from '@material-ui/icons/Done'
@@ -9,17 +9,14 @@ import { useTranslation } from 'react-i18next'
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
+import { LoadingProgress } from '../LoadingProgress'
 
 const TeacherView = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
   const { t } = useTranslation()
 
   if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" my={4}>
-        <CircularProgress />
-      </Box>
-    )
+    return <LoadingProgress />
   }
 
   const { ongoing, upcoming, ended } = getGroupedCourseUnits(courseUnits)

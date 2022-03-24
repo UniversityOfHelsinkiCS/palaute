@@ -132,8 +132,10 @@ router.get(
   courseRealisation.getFeedbackTargetsByCourseRealisation,
 )
 
+router.get('/norppa-feedback', norppaFeedbackController.getFeedbacks)
 router.post('/norppa-feedback', norppaFeedbackController.submitFeedback)
 router.put('/norppa-feedback/hide', norppaFeedbackController.hideBanner)
+router.put('/norppa-feedback/:id', norppaFeedbackController.markAsSolved)
 
 router.use('/admin', adminController)
 
