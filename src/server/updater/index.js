@@ -70,7 +70,7 @@ const start = async () => {
     return logger.info('Not running updater outside production')
   }
   logger.info('Setup cron job')
-  const cronTime = '30 5 * * *' // Every night at 05:30 in production
+  const cronTime = '30 1 * * *' // Every night at 01:30 in production
   schedule(cronTime, run)
 
   logger.info('Running updater according to cron', { cron: cronTime })
