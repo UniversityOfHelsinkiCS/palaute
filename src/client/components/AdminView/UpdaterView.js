@@ -23,14 +23,14 @@ const StatusTable = ({ updaterStatus }) => {
   const [endOfDuration, setEndOfDuration] = useState(Date.now())
 
   useEffect(() => {
-    setEndOfDuration(Date.now())
     if (status === 'RUNNING') {
+      setEndOfDuration(Date.now())
       const id = setInterval(() => setEndOfDuration(Date.now()), 1000)
       return () => {
         window.clearInterval(id)
       }
     }
-    setEndOfDuration(Date.parse(finishedAt))
+    if (finishedAt) setEndOfDuration(Date.parse(finishedAt))
     return null
   }, [status])
 
