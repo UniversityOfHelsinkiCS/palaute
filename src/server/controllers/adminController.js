@@ -15,6 +15,7 @@ const {
   CourseUnit,
   UserFeedbackTarget,
   User,
+  UpdaterStatus,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -34,6 +35,11 @@ const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
   run()
   res.send({})
+}
+
+const getUpdaterStatus = async (_, res) => {
+  const status = await UpdaterStatus.findOne()
+  res.send(status?.toPublicObject())
 }
 
 const findUser = async (req, res) => {
@@ -330,6 +336,7 @@ router.use(adminAccess)
 router.get('/users', findUser)
 router.get('/feedback-targets', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
+router.get('/updater-status', getUpdaterStatus)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)

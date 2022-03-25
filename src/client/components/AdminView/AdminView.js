@@ -11,16 +11,13 @@ import EmailAccordion from './EmailAccordion'
 import { tabProps, TabPanel } from './AdminTabPanel'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
+import UpdaterView from './UpdaterView'
 
 const AdminView = () => {
   const [tab, setTab] = useState(0)
   const { authorizedUser } = useAuthorizedUser()
 
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
-
-  const runUpdater = async () => {
-    await apiClient.post('/admin/run-updater', {})
-  }
 
   const resetTestCourse = async () => {
     await apiClient.post('/admin/reset-course', {})
@@ -43,15 +40,13 @@ const AdminView = () => {
           <Tab label="General" {...tabProps(0)} />
           <Tab label="Norppa feedback" {...tabProps(1)} />
           <Tab label="Norppa statistics" {...tabProps(2)} />
+          <Tab label="Updater" {...tabProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
         <LoginAs />
         <EditUniversitySurveyAccordion />
         <EmailAccordion />
-        <Button variant="contained" color="primary" onClick={runUpdater}>
-          Run updater
-        </Button>
         <Button variant="contained" color="primary" onClick={resetTestCourse}>
           Reset test course
         </Button>
@@ -61,6 +56,9 @@ const AdminView = () => {
       </TabPanel>
       <TabPanel value={tab} index={2}>
         <NorppaStatisticView />
+      </TabPanel>
+      <TabPanel value={tab} index={3}>
+        <UpdaterView />
       </TabPanel>
     </>
   )

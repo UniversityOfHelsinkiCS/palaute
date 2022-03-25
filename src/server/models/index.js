@@ -11,6 +11,7 @@ const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
 const FeedbackSummaryCache = require('./feedbackSummaryCache')
 const NorppaFeedback = require('./norppaFeedback')
+const UpdaterStatus = require('./updaterStatus')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -105,4 +106,5 @@ module.exports = {
   CourseRealisationsOrganisation,
   FeedbackSummaryCache,
   NorppaFeedback,
+  UpdaterStatus,
 }
