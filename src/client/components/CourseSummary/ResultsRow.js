@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 
-import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
+import {
+  Tooltip,
+  Typography,
+  IconButton,
+  makeStyles,
+  Box,
+} from '@material-ui/core'
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
@@ -20,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   labelCell: ({ level }) => ({
     [theme.breakpoints.down('sm')]: {
-      width: '250px',
+      width: '290px',
       height: '74px', // Sets a good height for the entire row
     },
     [theme.breakpoints.up('md')]: {
@@ -102,7 +108,9 @@ const ResultsRow = ({
         <td
           className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
         >
-          <Typography component="div">{label}</Typography>
+          <Box position="absolute" maxHeight="200px" maxWidth="200px">
+            <Typography component="span">{label}</Typography>
+          </Box>
         </td>
         {accordionCellEnabled && (
           <td>

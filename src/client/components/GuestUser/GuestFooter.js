@@ -34,7 +34,7 @@ const GuestFooter = () => {
   const { t } = useTranslation()
 
   return (
-    <>
+    <Box marginTop="auto">
       <Divider />
       <Container component="footer">
         <Box
@@ -67,7 +67,7 @@ const GuestFooter = () => {
           </Link>
         </Box>
       </Container>
-    </>
+    </Box>
   )
 }
 

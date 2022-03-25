@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import * as Sentry from '@sentry/browser'
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
+import { Box } from '@material-ui/core'
 
 import NavBar from './NavBar'
 import Footer from './Footer'
@@ -39,13 +40,13 @@ const AdUser = () => {
   if (isLoading) return null
 
   return (
-    <>
+    <Box display="flex" flexDirection="column" height="100vh">
       <NavBar />
       <Router />
       <DevTools />
       <AdminLoggedInAsBanner />
       <Footer user={authorizedUser} />
-    </>
+    </Box>
   )
 }
 

@@ -35,7 +35,7 @@ const Footer = ({ user }) => {
   const { t } = useTranslation()
 
   return (
-    <>
+    <Box marginTop="auto">
       <Divider />
       <Container component="footer">
         <Box
@@ -75,7 +75,7 @@ const Footer = ({ user }) => {
           </Link>
         </Box>
       </Container>
-    </>
+    </Box>
   )
 }
 

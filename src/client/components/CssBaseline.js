@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
   '@global': {
     body: {
       ...theme.typography.body1,
+      height: '100vh',
     },
   },
 }))
