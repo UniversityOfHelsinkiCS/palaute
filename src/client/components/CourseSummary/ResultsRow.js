@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   labelCell: ({ level }) => ({
     [theme.breakpoints.down('sm')]: {
-      width: '290px',
+      width: '250px',
       height: '74px', // Sets a good height for the entire row
     },
     [theme.breakpoints.up('md')]: {
@@ -108,9 +108,7 @@ const ResultsRow = ({
         <td
           className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
         >
-          <Box position="absolute" maxHeight="200px" maxWidth="200px">
-            <Typography component="span">{label}</Typography>
-          </Box>
+          <Typography component="div">{label}</Typography>
         </td>
         {accordionCellEnabled && (
           <td>
