@@ -149,7 +149,7 @@ const getAccessInfo = async (req, res) => {
 
 const getByOrganisations = async (req, res) => {
   const { user } = req
-  const { includeOpenUniCourseUnits } = req.query
+  const { includeOpenUniCourseUnits, startDate } = req.query
 
   const [organisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
@@ -170,6 +170,7 @@ const getByOrganisations = async (req, res) => {
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
+    since: startDate ? Date.parse(startDate) : null,
   })
 
   res.send({

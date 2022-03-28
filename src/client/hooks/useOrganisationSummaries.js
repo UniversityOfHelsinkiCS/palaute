@@ -5,11 +5,16 @@ import apiClient from '../util/apiClient'
 const defaultCacheTime = 900000
 
 const useOrganisationSummaries = (options = {}) => {
-  const { includeOpenUniCourseUnits = true, ...queryOptions } = options
+  const {
+    includeOpenUniCourseUnits = true,
+    startDate,
+    ...queryOptions
+  } = options
 
   const params = {
     includeOpenUniCourseUnits:
       includeOpenUniCourseUnits === true ? 'true' : 'false',
+    startDate,
   }
 
   const queryKey = ['organisationSummaries', params]

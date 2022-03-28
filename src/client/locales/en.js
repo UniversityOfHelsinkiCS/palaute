@@ -274,6 +274,7 @@ export default {
     orderByCodeAsc: 'Code ascending',
     orderByFeedbackCountAsc: 'Feedback count ascending',
     orderByFeedbackCountDesc: 'Feedback count descending',
+    startDateLabel: 'Start of time period',
   },
   footer: {
     contactSupport: 'Contact support',

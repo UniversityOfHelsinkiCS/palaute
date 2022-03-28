@@ -2,6 +2,8 @@
 const _ = require('lodash')
 
 const { Op } = require('sequelize')
+const { subMonths } = require('date-fns')
+
 const { sequelize } = require('../dbConnection')
 const { Survey, FeedbackSummaryCache, Organisation } = require('../../models')
 
@@ -27,6 +29,7 @@ const executeSummaryQuery = ({
   questionIds,
   organisationId,
   validDataValues,
+  since = subMonths(new Date(), 24),
 }) => {
   const query = `
   WITH question_averages AS (
@@ -76,7 +79,7 @@ const executeSummaryQuery = ({
   WHERE
     feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > NOW() - interval '24 months'
+    AND course_realisations.start_date > :since
     AND NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
     ${organisationId ? 'AND organisations.id = :organisationId' : ''};
   `
@@ -85,6 +88,7 @@ const executeSummaryQuery = ({
       questionIds,
       organisationId,
       validDataValues,
+      since,
     },
     type: sequelize.QueryTypes.SELECT,
   })
@@ -482,6 +486,7 @@ const getOrganisationSummaries = async ({
   organisationAccess,
   accessibleCourseRealisationIds,
   includeOpenUniCourseUnits = true,
+  since = subMonths(Date.now(), 24),
 }) => {
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,
@@ -497,9 +502,13 @@ const getOrganisationSummaries = async ({
     )
   }
 
+  const rowsFromTimeperiod = rows.filter(
+    (r) => Date.parse(r.course_realisation_start_date) > since,
+  )
+
   const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
-    ? partitionOpenUniRows(rows)
-    : [rows, partitionOpenUniRows(rows)[1]]
+    ? partitionOpenUniRows(rowsFromTimeperiod)
+    : [rowsFromTimeperiod, partitionOpenUniRows(rowsFromTimeperiod)[1]]
 
   const organisationsWithResults = getOrganisationsWithResults(
     normalizedRows,

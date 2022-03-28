@@ -161,6 +161,8 @@ const OrganisationSummary = () => {
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
+  const [startDate, setStartDate] = useHistoryState('startDate', null)
+
   const [orderBy, setOrderBy] = useHistoryState(
     'orderBy',
     ORDER_BY_OPTIONS[0].value,
@@ -178,6 +180,7 @@ const OrganisationSummary = () => {
     keyword,
     orderBy,
     includeOpenUniCourseUnits,
+    startDate,
   })
 
   const { openAccordions, toggleAccordion } = useOpenAccordions(
@@ -241,6 +244,8 @@ const OrganisationSummary = () => {
                     }
                     orderBy={orderBy}
                     onOrderByChange={handleOrderByChange}
+                    startDate={startDate}
+                    onStartDateChange={(d) => setStartDate(d)}
                   />
                 </Box>
                 <Divider />

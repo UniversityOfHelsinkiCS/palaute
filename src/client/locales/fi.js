@@ -273,6 +273,7 @@ export default {
     orderByCodeAsc: 'Koodi nousevasti',
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',
     orderByFeedbackCountDesc: 'Palautteiden määrä laskevasti',
+    startDateLabel: 'Alkaen päivästä',
   },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',

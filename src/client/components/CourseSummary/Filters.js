@@ -17,8 +17,10 @@ import SearchIcon from '@material-ui/icons/Search'
 import SortIcon from '@material-ui/icons/Sort'
 
 import { useTranslation } from 'react-i18next'
+import { subMonths } from 'date-fns'
 
 import { ORDER_BY_OPTIONS } from './utils'
+import { DatePicker } from '../DatePicker'
 
 const useStyles = makeStyles({
   container: {
@@ -59,6 +61,8 @@ const Filters = ({
   onKeywordChange,
   includeOpenUniCourseUnits,
   onIncludeOpenUniCourseUnitsChange,
+  startDate,
+  onStartDateChange,
   orderBy,
   onOrderByChange,
 }) => {
@@ -84,8 +88,17 @@ const Filters = ({
           fullWidth
         />
       </Box>
-      <Box mb={2}>
+      <Box>
         <OrderSelect orderBy={orderBy} onOrderByChange={onOrderByChange} />
+      </Box>
+      <Box mb={2}>
+        <DatePicker
+          value={startDate}
+          onChange={onStartDateChange}
+          label={t('courseSummary:startDateLabel')}
+          minDate={subMonths(Date.now(), 24)}
+          disableFuture
+        />
       </Box>
       <FormControlLabel
         control={
