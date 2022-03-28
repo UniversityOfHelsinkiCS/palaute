@@ -16,6 +16,7 @@ import {
 import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/Settings'
+import { subMonths } from 'date-fns'
 
 import useOrganisations from '../../hooks/useOrganisations'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -161,7 +162,10 @@ const OrganisationSummary = () => {
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
-  const [startDate, setStartDate] = useHistoryState('startDate', null)
+  const [startDate, setStartDate] = useHistoryState(
+    'startDate',
+    subMonths(Date.now(), 24),
+  )
 
   const [orderBy, setOrderBy] = useHistoryState(
     'orderBy',
