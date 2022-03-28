@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
 const axios = require('axios')
 const { format } = require('date-fns')
-const { chunk } = require('lodash')
+const _ = require('lodash')
 const jwt = require('jsonwebtoken')
+const Sentry = require('@sentry/node')
 
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
@@ -31,17 +32,36 @@ const pateClient = axios.create({
 const sleep = (time) =>
   new Promise((resolve) => setTimeout(() => resolve(), time))
 
+const postWithRetries = async (data, retries = 3) => {
+  let i = 0
+  while (i < retries) {
+    try {
+      await pateClient.post('/', data)
+      break
+    } catch (error) {
+      Sentry.captureException(error)
+      logger.error(
+        `[Pate] error when posting emails, retrying ${
+          i + 1
+        }/${retries}: ${error}`,
+      )
+      await sleep(4000 + i * 6000)
+    }
+    i++
+  }
+}
+
 const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
     logger.debug('Would send', options.emails.length, 'emails')
-    options.emails.forEach((e) => console.log(JSON.stringify(e, null, 2)))
+    // options.emails.forEach((e) => console.log(JSON.stringify(e, null, 2)))
     return null
   }
 
   logger.info(`sending email to: ${options.emails.length}`)
 
-  const chunkedEmails = chunk(options.emails, 50)
+  const chunkedEmails = _.chunk(options.emails, 40)
   const chunkedOptions = chunkedEmails.map((emails) => ({
     emails,
     settings: options.settings,
@@ -49,7 +69,7 @@ const sendToPate = async (options = {}) => {
   }))
 
   for (const chunkedOption of chunkedOptions) {
-    await pateClient.post('/', chunkedOption)
+    postWithRetries(chunkedOption, 3)
     await sleep(1000)
   }
 
