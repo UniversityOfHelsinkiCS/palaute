@@ -486,7 +486,8 @@ const getOrganisationSummaries = async ({
   organisationAccess,
   accessibleCourseRealisationIds,
   includeOpenUniCourseUnits = true,
-  since = subMonths(Date.now(), 24),
+  startDate = subMonths(Date.now(), 24),
+  endDate = Date.now(),
 }) => {
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,
@@ -502,9 +503,10 @@ const getOrganisationSummaries = async ({
     )
   }
 
-  const rowsFromTimeperiod = rows.filter(
-    (r) => Date.parse(r.course_realisation_start_date) > since,
-  )
+  const rowsFromTimeperiod = rows.filter((r) => {
+    const d = Date.parse(r.course_realisation_start_date)
+    return d >= startDate && d < endDate
+  })
 
   const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
     ? partitionOpenUniRows(rowsFromTimeperiod)

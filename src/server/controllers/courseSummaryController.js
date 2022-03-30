@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const { addYears } = require('date-fns')
 
 const { CourseUnit, Survey, Organisation } = require('../models')
 
@@ -170,7 +171,8 @@ const getByOrganisations = async (req, res) => {
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    since: startDate ? Date.parse(startDate) : null,
+    startDate: startDate ? Date.parse(startDate) : null,
+    endDate: startDate ? addYears(Date.parse(startDate), 1) : null,
   })
 
   res.send({

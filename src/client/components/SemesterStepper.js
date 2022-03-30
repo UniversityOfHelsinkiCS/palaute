@@ -1,6 +1,5 @@
 import { Box, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { ChevronLeft, ChevronRight } from '@material-ui/icons'
-import { addYears, subYears } from 'date-fns'
 import React from 'react'
 
 const useStyles = makeStyles({
@@ -27,38 +26,36 @@ const useStyles = makeStyles({
 /**
  *
  * @param {{
- * 	value: Date,
- * 	onChange: (newValue: Date) => (),
- * 	maxValue?: Date,
- * 	minValue?: Date,
+ * 	value: number,
+ * 	onChange: (year: number) => (),
+ * 	minYear?: number,
  * }} params
  * @returns
  */
-export const SemesterStepper = ({
-  value,
-  onChange,
-  maxValue = new Date(),
-  minValue = new Date('2020-9-1'),
-}) => {
+export const SemesterStepper = ({ value, onChange, minYear = 2020 }) => {
   const classes = useStyles()
 
   const handleIncrease = () => {
-    onChange(addYears(value, 1))
+    onChange(value + 1)
   }
 
   const handleDecrease = () => {
-    onChange(subYears(value, 1))
+    onChange(value - 1)
   }
 
-  const year = value.getFullYear()
-  const displayValue = `${year} – ${year + 1}`
+  const now = new Date()
+  const currentYear = now.getFullYear() + (now.getMonth() >= 9 ? 1 : 0)
 
-  const canIncrease = year + 1 < maxValue.getFullYear()
-  const canDecrease = year > minValue.getFullYear()
+  const displayValue = `${value} – ${value + 1}`
+
+  const canIncrease = value + 1 < currentYear
+  const canDecrease = value > minYear
 
   return (
     <Box className={classes.stepper}>
-      <Typography color="textSecondary">Lukuvuosi</Typography>
+      <Typography color="textSecondary" className={classes.stepperValue}>
+        Lukuvuosi
+      </Typography>
       <Box className={classes.stepperContainer}>
         <IconButton onClick={handleDecrease} disabled={!canDecrease}>
           <ChevronLeft />
