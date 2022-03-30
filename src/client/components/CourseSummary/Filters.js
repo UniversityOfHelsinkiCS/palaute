@@ -21,6 +21,7 @@ import { subMonths } from 'date-fns'
 
 import { ORDER_BY_OPTIONS } from './utils'
 import { DatePicker } from '../DatePicker'
+import { SemesterStepper } from '../SemesterStepper'
 
 const useStyles = makeStyles({
   container: {
@@ -71,6 +72,9 @@ const Filters = ({
 
   return (
     <div className={classes.container}>
+      <Box mb={3}>
+        <SemesterStepper value={startDate} onChange={onStartDateChange} />
+      </Box>
       <Box mb={2}>
         <TextField
           value={keyword}
@@ -88,17 +92,8 @@ const Filters = ({
           fullWidth
         />
       </Box>
-      <Box>
-        <OrderSelect orderBy={orderBy} onOrderByChange={onOrderByChange} />
-      </Box>
       <Box mb={2}>
-        <DatePicker
-          value={startDate}
-          onChange={onStartDateChange}
-          label={t('courseSummary:startDateLabel')}
-          minDate={subMonths(Date.now(), 24)}
-          disableFuture
-        />
+        <OrderSelect orderBy={orderBy} onOrderByChange={onOrderByChange} />
       </Box>
       <FormControlLabel
         control={
