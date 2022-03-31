@@ -73,10 +73,11 @@ const getNorppaFeedbackCount = async (req, res) => {
   const { user } = req
 
   if (!user) res.sendStatus(500)
-  if (!ADMINS.includes(user.username))
-    throw new ApplicationError('Forbidden', 403)
+  if (!ADMINS.includes(user.username)) {
+    return res.send(403)
+  }
 
-  const feedbacks = await NorppaFeedback.findAll({
+  const feedbacks = await NorppaFeedback.count({
     where: {
       responseWanted: true,
     },
@@ -84,7 +85,7 @@ const getNorppaFeedbackCount = async (req, res) => {
 
   const count = feedbacks ? feedbacks.length : null
 
-  res.send({ count })
+  return res.send({ count })
 }
 
 module.exports = {

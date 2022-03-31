@@ -127,8 +127,12 @@ const NavBar = () => {
 
   const isStudent = Boolean(feedbackTargets?.length)
   const isAdminUser = isAdmin(authorizedUser)
-  const { norppaFeedbackCount, isLoading } =
-    isAdminUser && useNorppaFeedbackCount({ refetchInterval: 60000 })
+  const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount(
+    {
+      refetchInterval: 60000,
+    },
+    isAdminUser,
+  )
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
   const norppaFeedbackGiven = authorizedUser?.norppaFeedbackGiven ?? false
 
