@@ -9,11 +9,11 @@ const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
 const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS } = require('./config')
 const {
-  BuildNotificationAboutFeedbackResponseToStudents,
-  BuildReminderToGiveFeedbackToStudents,
-  BuildReminderAboutSurveyOpeningToTeachers,
-  BuildReminderAboutFeedbackResponseToTeachers,
-  BuildNotificationAboutSurveyOpeningToStudents,
+  buildNotificationAboutFeedbackResponseToStudents,
+  buildReminderToGiveFeedbackToStudents,
+  buildReminderAboutSurveyOpeningToTeachers,
+  buildReminderAboutFeedbackResponseToTeachers,
+  buildNotificationAboutSurveyOpeningToStudents,
 } = require('./emailBuilder')
 
 const template = {
@@ -101,7 +101,7 @@ const sendNotificationAboutFeedbackResponseToStudents = (
   courseName,
   feedbackResponse,
 ) => {
-  const translations = BuildNotificationAboutFeedbackResponseToStudents(
+  const translations = buildNotificationAboutFeedbackResponseToStudents(
     courseName,
     urlToSeeFeedbackSummary,
     feedbackResponse,
@@ -129,7 +129,7 @@ const sendReminderToGiveFeedbackToStudents = (
   reminder,
   closesAt,
 ) => {
-  const translations = BuildReminderToGiveFeedbackToStudents(
+  const translations = buildReminderToGiveFeedbackToStudents(
     urlToGiveFeedback,
     courseName,
     reminder,
@@ -185,7 +185,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (
       </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
 
-  const translations = BuildReminderAboutSurveyOpeningToTeachers(
+  const translations = buildReminderAboutSurveyOpeningToTeachers(
     courseNamesAndUrls,
     courseName,
     hasMultipleFeedbackTargets,
@@ -220,7 +220,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       </a> <br/>`
   }
 
-  const translations = BuildReminderAboutFeedbackResponseToTeachers(
+  const translations = buildReminderAboutFeedbackResponseToTeachers(
     courseNamesAndUrls,
     courseName,
     hasMultipleFeedbackTargets,
@@ -320,7 +320,7 @@ const notificationAboutSurveyOpeningToStudents = (
     )}`
   }
 
-  const translations = BuildNotificationAboutSurveyOpeningToStudents(
+  const translations = buildNotificationAboutSurveyOpeningToStudents(
     courseNamesAndUrls,
     courseName,
     hasMultipleFeedbackTargets,

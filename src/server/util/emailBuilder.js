@@ -10,7 +10,7 @@ const instructionsAndSupport = {
     <a href="https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">Mer information om Norppa i flamma</a>`,
 }
 
-const BuildReminderAboutSurveyOpeningToTeachers = (
+const buildReminderAboutSurveyOpeningToTeachers = (
   courseNamesAndUrls,
   courseName,
   hasMultipleFeedbackTargets,
@@ -49,7 +49,7 @@ const BuildReminderAboutSurveyOpeningToTeachers = (
   return translations
 }
 
-const BuildNotificationAboutFeedbackResponseToStudents = (
+const buildNotificationAboutFeedbackResponseToStudents = (
   courseName,
   urlToSeeFeedbackSummary,
   feedbackResponse,
@@ -77,7 +77,7 @@ const BuildNotificationAboutFeedbackResponseToStudents = (
   return translations
 }
 
-const BuildReminderToGiveFeedbackToStudents = (
+const buildReminderToGiveFeedbackToStudents = (
   urlToGiveFeedback,
   courseName,
   reminder,
@@ -108,7 +108,7 @@ const BuildReminderToGiveFeedbackToStudents = (
   return translations
 }
 
-const BuildReminderAboutFeedbackResponseToTeachers = (
+const buildReminderAboutFeedbackResponseToTeachers = (
   courseNamesAndUrls,
   courseName,
   hasMultipleFeedbackTargets,
@@ -153,7 +153,7 @@ const BuildReminderAboutFeedbackResponseToTeachers = (
   return translations
 }
 
-const BuildNotificationAboutSurveyOpeningToStudents = (
+const buildNotificationAboutSurveyOpeningToStudents = (
   courseNamesAndUrls,
   courseName,
   hasMultipleFeedbackTargets,
@@ -193,9 +193,9 @@ const BuildNotificationAboutSurveyOpeningToStudents = (
 }
 
 module.exports = {
-  BuildNotificationAboutFeedbackResponseToStudents,
-  BuildReminderToGiveFeedbackToStudents,
-  BuildReminderAboutSurveyOpeningToTeachers,
-  BuildReminderAboutFeedbackResponseToTeachers,
-  BuildNotificationAboutSurveyOpeningToStudents,
+  buildNotificationAboutFeedbackResponseToStudents,
+  buildReminderToGiveFeedbackToStudents,
+  buildReminderAboutSurveyOpeningToTeachers,
+  buildReminderAboutFeedbackResponseToTeachers,
+  buildNotificationAboutSurveyOpeningToStudents,
 }
