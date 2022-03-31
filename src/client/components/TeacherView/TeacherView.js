@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Grid, Box, Typography } from '@material-ui/core'
 import OngoingIcon from '@material-ui/icons/Schedule'
@@ -14,6 +14,10 @@ import { LoadingProgress } from '../LoadingProgress'
 const TeacherView = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    document.title = t('teacherPage')
+  }, [t])
 
   if (isLoading) {
     return <LoadingProgress />

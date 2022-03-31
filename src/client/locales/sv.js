@@ -32,7 +32,10 @@ export default {
     required: 'Krävs',
     copy: 'Kopiera',
     settings: 'Inställningar',
-    feedbacks: 'Responser',
+    feedbacks: 'Mina responser',
+    teacherPage: 'Mina kurser',
+    courseSummaryPage: 'Kurssammandrag',
+    norppaFeedback: 'Ge respons',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',
@@ -226,6 +229,7 @@ export default {
     admin: 'Admin',
     courseSummary: 'Kurssammandrag',
     nameFallback: 'Menu',
+    feedback: 'Ge respons',
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Ingen har tillsvidare givit respons',

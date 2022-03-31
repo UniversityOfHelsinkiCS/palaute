@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { Box, Button, Tabs, Tab } from '@material-ui/core'
@@ -16,6 +16,10 @@ import UpdaterView from './UpdaterView'
 const AdminView = () => {
   const [tab, setTab] = useState(0)
   const { authorizedUser } = useAuthorizedUser()
+
+  useEffect(() => {
+    document.title = 'Admin'
+  }, [])
 
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
 

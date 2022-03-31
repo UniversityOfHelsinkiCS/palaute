@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 
 import {
   Box,
@@ -155,6 +155,10 @@ const OrganisationTable = ({
 
 const OrganisationSummary = () => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    document.title = t('courseSummaryPage')
+  }, [t])
 
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 

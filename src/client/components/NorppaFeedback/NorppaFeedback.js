@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
@@ -31,6 +31,10 @@ const NorppaFeedback = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
+
+  useEffect(() => {
+    document.title = t('norppaFeedback')
+  }, [t])
 
   const handleSubmit = async (values) => {
     try {

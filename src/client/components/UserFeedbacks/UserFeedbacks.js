@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { useEffect, useMemo, Fragment } from 'react'
 import { Typography, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
@@ -43,6 +43,10 @@ const UserFeedbacks = () => {
 
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
+
+  useEffect(() => {
+    document.title = t('feedbacks')
+  }, [t])
 
   const filteredFeedbackTargets = useMemo(
     () => filterFeedbackTargetsByStatus(feedbackTargets, status),

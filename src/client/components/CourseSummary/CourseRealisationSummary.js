@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { lightFormat } from 'date-fns'
 import { Link as RouterLink, Redirect, useParams } from 'react-router-dom'
 
@@ -134,6 +134,10 @@ const CourseRealisationSummary = () => {
 
   const { courseRealisationSummaries, isLoading, failureCount } =
     useCourseRealisationSummaries(code)
+
+  useEffect(() => {
+    document.title = t('courseSummaryPage')
+  }, [t])
 
   if (isLoading) {
     return (
