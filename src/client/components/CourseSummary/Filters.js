@@ -17,10 +17,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import SortIcon from '@material-ui/icons/Sort'
 
 import { useTranslation } from 'react-i18next'
-import { subMonths } from 'date-fns'
 
 import { ORDER_BY_OPTIONS } from './utils'
-import { DatePicker } from '../DatePicker'
 import { SemesterStepper } from '../SemesterStepper'
 
 const useStyles = makeStyles({

@@ -89,8 +89,8 @@ const UpdaterView = () => {
 
   const runUpdater = async () => {
     if (updaterStatus?.status === 'RUNNING') {
-      // eslint-disable-next-line
       if (
+        // eslint-disable-next-line
         !window.confirm(
           'Updater seems to be running. Are you sure you want to start another run anyway?',
         )

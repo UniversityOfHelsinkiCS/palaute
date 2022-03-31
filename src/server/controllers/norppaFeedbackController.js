@@ -69,4 +69,28 @@ const markAsSolved = async (req, res) => {
   res.sendStatus(200)
 }
 
-module.exports = { submitFeedback, hideBanner, getFeedbacks, markAsSolved }
+const getNorppaFeedbackCount = async (req, res) => {
+  const { user } = req
+
+  if (!user) res.sendStatus(500)
+  if (!ADMINS.includes(user.username))
+    throw new ApplicationError('Forbidden', 403)
+
+  const feedbacks = await NorppaFeedback.findAll({
+    where: {
+      responseWanted: true,
+    },
+  })
+
+  const count = feedbacks ? feedbacks.length : null
+
+  res.send({ count })
+}
+
+module.exports = {
+  submitFeedback,
+  hideBanner,
+  getFeedbacks,
+  markAsSolved,
+  getNorppaFeedbackCount,
+}

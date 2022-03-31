@@ -19,13 +19,14 @@ import cn from 'classnames'
 
 import MenuIcon from '@material-ui/icons/Menu'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-
+import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout, isAdmin } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import NorppaFeedbackBanner from './NorppaFeedbackBanner'
+import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -63,6 +64,19 @@ const useStyles = makeStyles((theme) => ({
   },
   languageMenuDivider: {
     margin: theme.spacing(1, 0),
+  },
+  norppaFeedback: {
+    background: 'red',
+    color: 'white',
+    textDecoration: 'none',
+    padding: '6px 12px',
+    borderRadius: 4,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    display: 'flex',
+  },
+  mailIcon: {
+    marginLeft: 5,
   },
 }))
 
@@ -113,6 +127,8 @@ const NavBar = () => {
 
   const isStudent = Boolean(feedbackTargets?.length)
   const isAdminUser = isAdmin(authorizedUser)
+  const { norppaFeedbackCount, isLoading } =
+    isAdminUser && useNorppaFeedbackCount({ refetchInterval: 60000 })
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
   const norppaFeedbackGiven = authorizedUser?.norppaFeedbackGiven ?? false
 
@@ -199,6 +215,12 @@ const NavBar = () => {
           {label}
         </ButtonBase>
       ))}
+      {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
+        <Link to="/admin" className={classes.norppaFeedback}>
+          {norppaFeedbackCount.count}
+          <MailOutlineIcon className={classes.mailIcon} />
+        </Link>
+      )}
     </div>
   )
 
