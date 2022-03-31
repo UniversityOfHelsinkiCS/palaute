@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Grid, Box, Typography } from '@material-ui/core'
 import OngoingIcon from '@material-ui/icons/Schedule'
@@ -10,14 +10,11 @@ import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const TeacherView = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
   const { t } = useTranslation()
-
-  useEffect(() => {
-    document.title = t('teacherPage')
-  }, [t])
 
   if (isLoading) {
     return <LoadingProgress />
@@ -27,6 +24,7 @@ const TeacherView = () => {
 
   return (
     <>
+      <Title>{t('teacherPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {t('teacherView:mainHeading')}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, Fragment } from 'react'
+import React, { useMemo, Fragment } from 'react'
 import { Typography, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
@@ -15,6 +15,7 @@ import {
   sortCourseRealisations,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -44,10 +45,6 @@ const UserFeedbacks = () => {
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
 
-  useEffect(() => {
-    document.title = t('feedbacks')
-  }, [t])
-
   const filteredFeedbackTargets = useMemo(
     () => filterFeedbackTargetsByStatus(feedbackTargets, status),
     [feedbackTargets, status],
@@ -67,6 +64,7 @@ const UserFeedbacks = () => {
 
   return (
     <div>
+      <Title>{t('feedbacks')}</Title>
       <Typography variant="h4" component="h1" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>

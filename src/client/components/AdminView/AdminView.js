@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { Box, Button, Tabs, Tab } from '@material-ui/core'
@@ -12,14 +12,11 @@ import { tabProps, TabPanel } from './AdminTabPanel'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
 import UpdaterView from './UpdaterView'
+import Title from '../Title'
 
 const AdminView = () => {
   const [tab, setTab] = useState(0)
   const { authorizedUser } = useAuthorizedUser()
-
-  useEffect(() => {
-    document.title = 'Admin'
-  }, [])
 
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
 
@@ -34,6 +31,7 @@ const AdminView = () => {
   return (
     <>
       <h1>Admin page</h1>
+      <Title>Admin</Title>
       <Box>
         <Tabs
           value={tab}

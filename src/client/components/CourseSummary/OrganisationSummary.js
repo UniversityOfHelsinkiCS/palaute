@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 
 import {
   Box,
@@ -33,6 +33,7 @@ import {
   ORDER_BY_OPTIONS,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -156,10 +157,6 @@ const OrganisationTable = ({
 const OrganisationSummary = () => {
   const { t } = useTranslation()
 
-  useEffect(() => {
-    document.title = t('courseSummaryPage')
-  }, [t])
-
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
@@ -223,6 +220,7 @@ const OrganisationSummary = () => {
 
   return (
     <>
+      <Title>{t('courseSummaryPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}

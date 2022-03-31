@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { lightFormat } from 'date-fns'
 import { Link as RouterLink, Redirect, useParams } from 'react-router-dom'
 
@@ -21,6 +21,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -135,10 +136,6 @@ const CourseRealisationSummary = () => {
   const { courseRealisationSummaries, isLoading, failureCount } =
     useCourseRealisationSummaries(code)
 
-  useEffect(() => {
-    document.title = t('courseSummaryPage')
-  }, [t])
-
   if (isLoading) {
     return (
       <LoadingProgress
@@ -157,6 +154,7 @@ const CourseRealisationSummary = () => {
 
   return (
     <>
+      <Title>{t('courseSummaryPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {getLanguageValue(courseUnit.name, i18n.language)},{' '}

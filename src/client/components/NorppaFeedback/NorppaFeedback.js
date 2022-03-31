@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router'
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
@@ -9,6 +9,7 @@ import { useSnackbar } from 'notistack'
 import FormikTextField from '../FormikTextField'
 import FormikCheckBox from '../FormikCheckbox'
 import { saveValues } from './utils'
+import Title from '../Title'
 
 const useStyles = makeStyles(() => ({
   descritpion: {
@@ -32,10 +33,6 @@ const NorppaFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
-  useEffect(() => {
-    document.title = t('norppaFeedback')
-  }, [t])
-
   const handleSubmit = async (values) => {
     try {
       if (!values.feedback.length) {
@@ -57,6 +54,7 @@ const NorppaFeedback = () => {
   }
   return (
     <Box>
+      <Title>{t('norppaFeedback')}</Title>
       <Typography variant="h4" component="h4">
         {t('norppaFeedback:title')}
       </Typography>
