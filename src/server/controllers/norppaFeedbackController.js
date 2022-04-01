@@ -83,9 +83,7 @@ const getNorppaFeedbackCount = async (req, res) => {
     },
   })
 
-  const count = feedbacks ? feedbacks.length : null
-
-  return res.send({ count })
+  return res.send({ count: feedbacks })
 }
 
 module.exports = {
