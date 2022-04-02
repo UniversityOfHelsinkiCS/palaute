@@ -158,11 +158,12 @@ export const useAggregatedOrganisationSummaries = ({
   orderBy,
   keyword,
   includeOpenUniCourseUnits,
-  startDate,
+  dateRange,
 }) => {
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
     includeOpenUniCourseUnits,
-    startDate,
+    startDate: dateRange.start,
+    endDate: dateRange.end,
     keepPreviousData: true,
   })
 

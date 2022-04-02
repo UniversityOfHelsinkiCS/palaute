@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import {
   Box,
@@ -161,8 +161,10 @@ const OrganisationSummary = () => {
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
-  const [year, setYear] = useHistoryState('year', 2021)
-  const startDate = new Date(`${year}-09-01`)
+  const [dateRange, setDateRange] = useState({
+    start: new Date(`2021-09-01`),
+    end: new Date('2022-09-01'),
+  })
 
   const [orderBy, setOrderBy] = useHistoryState(
     'orderBy',
@@ -181,7 +183,7 @@ const OrganisationSummary = () => {
     keyword,
     orderBy,
     includeOpenUniCourseUnits,
-    startDate,
+    dateRange,
   })
 
   const { openAccordions, toggleAccordion } = useOpenAccordions(
@@ -245,8 +247,8 @@ const OrganisationSummary = () => {
                     }
                     orderBy={orderBy}
                     onOrderByChange={handleOrderByChange}
-                    startDate={year}
-                    onStartDateChange={setYear}
+                    dateRange={dateRange}
+                    onDateRangeChange={setDateRange}
                   />
                 </Box>
                 <Divider />

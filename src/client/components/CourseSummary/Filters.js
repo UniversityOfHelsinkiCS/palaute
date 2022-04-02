@@ -17,11 +17,9 @@ import SearchIcon from '@material-ui/icons/Search'
 import SortIcon from '@material-ui/icons/Sort'
 
 import { useTranslation } from 'react-i18next'
-import { subMonths } from 'date-fns'
 
 import { ORDER_BY_OPTIONS } from './utils'
-import { DatePicker } from '../DatePicker'
-import { SemesterStepper } from '../SemesterStepper'
+import { YearSemesterSelector } from '../YearSemesterSelector'
 
 const useStyles = makeStyles({
   container: {
@@ -62,8 +60,8 @@ const Filters = ({
   onKeywordChange,
   includeOpenUniCourseUnits,
   onIncludeOpenUniCourseUnitsChange,
-  startDate,
-  onStartDateChange,
+  dateRange,
+  onDateRangeChange,
   orderBy,
   onOrderByChange,
 }) => {
@@ -73,7 +71,7 @@ const Filters = ({
   return (
     <div className={classes.container}>
       <Box mb={3}>
-        <SemesterStepper value={startDate} onChange={onStartDateChange} />
+        <YearSemesterSelector value={dateRange} onChange={onDateRangeChange} />
       </Box>
       <Box mb={2}>
         <TextField

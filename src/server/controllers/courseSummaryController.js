@@ -150,7 +150,7 @@ const getAccessInfo = async (req, res) => {
 
 const getByOrganisations = async (req, res) => {
   const { user } = req
-  const { includeOpenUniCourseUnits, startDate } = req.query
+  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
 
   const [organisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
@@ -166,13 +166,17 @@ const getByOrganisations = async (req, res) => {
     throw new ApplicationError('Forbidden', 403)
   }
 
+  const parsedStartDate = startDate ? Date.parse(startDate) : null
+  const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
+  const parsedEndDate = endDate ? Date.parse(endDate) : defaultEndDate
+
   const organisations = await getOrganisationSummaries({
     questions,
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    startDate: startDate ? Date.parse(startDate) : null,
-    endDate: startDate ? addYears(Date.parse(startDate), 1) : null,
+    startDate: parsedStartDate,
+    endDate: parsedEndDate,
   })
 
   res.send({

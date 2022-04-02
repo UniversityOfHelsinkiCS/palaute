@@ -274,6 +274,10 @@ export default {
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',
     orderByFeedbackCountDesc: 'Palautteiden määrä laskevasti',
     startDateLabel: 'Alkaen päivästä',
+    year: 'Lukuvuosi',
+    semester: 'Lukukausi',
+    spring: 'Kevät',
+    fall: 'Syksy',
   },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',

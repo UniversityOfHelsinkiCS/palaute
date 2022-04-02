@@ -275,6 +275,10 @@ export default {
     orderByFeedbackCountAsc: 'Feedback count ascending',
     orderByFeedbackCountDesc: 'Feedback count descending',
     startDateLabel: 'Start of time period',
+    year: 'Year',
+    semester: 'Semester',
+    spring: 'Spring',
+    fall: 'Fall',
   },
   footer: {
     contactSupport: 'Contact support',

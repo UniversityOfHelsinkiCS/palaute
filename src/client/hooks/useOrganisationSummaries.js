@@ -8,6 +8,7 @@ const useOrganisationSummaries = (options = {}) => {
   const {
     includeOpenUniCourseUnits = true,
     startDate,
+    endDate,
     ...queryOptions
   } = options
 
@@ -15,6 +16,7 @@ const useOrganisationSummaries = (options = {}) => {
     includeOpenUniCourseUnits:
       includeOpenUniCourseUnits === true ? 'true' : 'false',
     startDate,
+    endDate,
   }
 
   const queryKey = ['organisationSummaries', params]
