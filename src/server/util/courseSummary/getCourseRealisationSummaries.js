@@ -131,7 +131,14 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
         as: 'userFeedbackTargets',
         where: { accessStatus: 'TEACHER' },
         required: true,
-        include: [{ model: User, as: 'user', required: true }],
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'firstName', 'lastName'],
+            as: 'user',
+            required: true,
+          },
+        ],
       },
     ],
   })
