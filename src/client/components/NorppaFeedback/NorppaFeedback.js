@@ -9,6 +9,7 @@ import { useSnackbar } from 'notistack'
 import FormikTextField from '../FormikTextField'
 import FormikCheckBox from '../FormikCheckbox'
 import { saveValues } from './utils'
+import Title from '../Title'
 
 const useStyles = makeStyles(() => ({
   descritpion: {
@@ -53,6 +54,7 @@ const NorppaFeedback = () => {
   }
   return (
     <Box>
+      <Title>{t('norppaFeedback')}</Title>
       <Typography variant="h4" component="h4">
         {t('norppaFeedback:title')}
       </Typography>

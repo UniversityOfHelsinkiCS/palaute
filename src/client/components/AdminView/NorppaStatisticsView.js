@@ -6,7 +6,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core'
-import { DatePicker, KeyboardDatePicker } from '@material-ui/pickers'
+import { KeyboardDatePicker } from '@material-ui/pickers'
 import { Alert } from '@material-ui/lab'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'

@@ -33,6 +33,9 @@ export default {
     copy: 'Copy',
     settings: 'Settings',
     feedbacks: 'Feedbacks',
+    teacherPage: 'My teaching',
+    courseSummaryPage: 'Course summary',
+    norppaFeedback: 'Give feedback',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',

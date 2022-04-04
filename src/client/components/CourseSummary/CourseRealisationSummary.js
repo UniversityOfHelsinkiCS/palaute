@@ -21,6 +21,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -153,6 +154,7 @@ const CourseRealisationSummary = () => {
 
   return (
     <>
+      <Title>{t('courseSummaryPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {getLanguageValue(courseUnit.name, i18n.language)},{' '}

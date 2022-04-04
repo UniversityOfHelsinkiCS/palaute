@@ -34,6 +34,9 @@ export default {
     copy: 'Kopioi',
     settings: 'Asetukset',
     feedbacks: 'Palautteet',
+    teacherPage: 'Opetukseni',
+    courseSummaryPage: 'Kurssiyhteenveto',
+    norppaFeedback: 'Anna palautetta',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',

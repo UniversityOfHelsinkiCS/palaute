@@ -69,4 +69,27 @@ const markAsSolved = async (req, res) => {
   res.sendStatus(200)
 }
 
-module.exports = { submitFeedback, hideBanner, getFeedbacks, markAsSolved }
+const getNorppaFeedbackCount = async (req, res) => {
+  const { user } = req
+
+  if (!user) res.sendStatus(500)
+  if (!ADMINS.includes(user.username)) {
+    return res.send(403)
+  }
+
+  const feedbacks = await NorppaFeedback.count({
+    where: {
+      responseWanted: true,
+    },
+  })
+
+  return res.send({ count: feedbacks })
+}
+
+module.exports = {
+  submitFeedback,
+  hideBanner,
+  getFeedbacks,
+  markAsSolved,
+  getNorppaFeedbackCount,
+}

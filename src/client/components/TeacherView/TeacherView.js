@@ -10,6 +10,7 @@ import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const TeacherView = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
@@ -23,6 +24,7 @@ const TeacherView = () => {
 
   return (
     <>
+      <Title>{t('teacherPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {t('teacherView:mainHeading')}

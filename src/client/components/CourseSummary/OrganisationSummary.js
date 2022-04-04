@@ -33,6 +33,7 @@ import {
   ORDER_BY_OPTIONS,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -221,6 +222,7 @@ const OrganisationSummary = () => {
 
   return (
     <>
+      <Title>{t('courseSummaryPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}

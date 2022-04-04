@@ -13,7 +13,6 @@ import {
 import { formatDuration, intervalToDuration } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
-import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import { LoadingProgress } from '../LoadingProgress'
 import Alert from '../Alert'
 
@@ -82,15 +81,15 @@ const StatusTable = ({ updaterStatus }) => {
   )
 }
 
-const UpdaterView = () => {
-  const { updaterStatus, isLoading, refetch } = useUpdaterStatus({
-    refetchInterval: 10_000,
-  })
+const UpdaterView = ({ isLoading, updaterStatus, refetch }) => {
+  if (isLoading) {
+    return <LoadingProgress />
+  }
 
   const runUpdater = async () => {
     if (updaterStatus?.status === 'RUNNING') {
-      // eslint-disable-next-line
       if (
+        // eslint-disable-next-line
         !window.confirm(
           'Updater seems to be running. Are you sure you want to start another run anyway?',
         )
@@ -99,10 +98,6 @@ const UpdaterView = () => {
     }
     await apiClient.post('/admin/run-updater', {})
     setTimeout(refetch, 1000)
-  }
-
-  if (isLoading) {
-    return <LoadingProgress />
   }
 
   return (

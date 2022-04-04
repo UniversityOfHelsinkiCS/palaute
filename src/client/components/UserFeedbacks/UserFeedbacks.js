@@ -15,6 +15,7 @@ import {
   sortCourseRealisations,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import Title from '../Title'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -63,6 +64,7 @@ const UserFeedbacks = () => {
 
   return (
     <div>
+      <Title>{t('feedbacks')}</Title>
       <Typography variant="h4" component="h1" className={classes.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>

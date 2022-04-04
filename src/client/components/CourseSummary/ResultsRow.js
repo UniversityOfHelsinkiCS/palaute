@@ -1,12 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  Tooltip,
-  Typography,
-  IconButton,
-  makeStyles,
-  Box,
-} from '@material-ui/core'
+import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
