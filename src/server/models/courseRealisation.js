@@ -33,6 +33,11 @@ CourseRealisation.init(
       defaultValue: false,
       allowNull: false,
     },
+    teachingLanguages: {
+      type: JSONB,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     underscored: true,

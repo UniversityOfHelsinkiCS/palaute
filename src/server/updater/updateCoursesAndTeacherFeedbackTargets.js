@@ -205,6 +205,20 @@ const isMoocCourse = (customCodeUrns) => {
   ].includes('urn:code:custom:hy-university-root-id:opintotarjonta:mooc')
 }
 
+const getTeachingLanguages = (customCodeUrns) => {
+  if (!customCodeUrns) return null
+  if (!customCodeUrns['urn:code:custom:hy-university-root-id:opetuskielet'])
+    return null
+
+  const languages = customCodeUrns[
+    'urn:code:custom:hy-university-root-id:opetuskielet'
+  ].map((urn) => urn.slice(-2))
+
+  if (languages.length === 0) return null
+
+  return languages
+}
+
 const createCourseRealisations = async (courseRealisations) => {
   await CourseRealisation.bulkCreate(
     courseRealisations.map(
@@ -214,9 +228,18 @@ const createCourseRealisations = async (courseRealisations) => {
         ...getCourseRealisationPeriod(activityPeriod),
         educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
         isMoocCourse: isMoocCourse(customCodeUrns),
+        teachingLanguages: getTeachingLanguages(customCodeUrns),
       }),
     ),
-    { updateOnDuplicate: ['name', 'endDate', 'startDate', 'isMoocCourse'] },
+    {
+      updateOnDuplicate: [
+        'name',
+        'endDate',
+        'startDate',
+        'isMoocCourse',
+        'teachingLanguages',
+      ],
+    },
   )
 
   const courseRealisationsOrganisations = [].concat(
