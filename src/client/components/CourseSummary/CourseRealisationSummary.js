@@ -33,11 +33,24 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     fontWeight: theme.typography.fontWeightBold,
   },
+  languageRow: {
+    display: 'flex',
+    gap: '4px',
+    alignItems: 'center',
+  },
 }))
 
-const getLabel = (courseRealisation, t, language) => {
-  const { startDate, endDate, feedbackTargetId, teachers, name } =
-    courseRealisation
+const Label = ({ courseRealisation, t, language }) => {
+  const classes = useStyles()
+
+  const {
+    startDate,
+    endDate,
+    feedbackTargetId,
+    teachers,
+    name,
+    teachingLanguages,
+  } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
@@ -60,6 +73,10 @@ const getLabel = (courseRealisation, t, language) => {
     .filter(Boolean)
     .join(', ')
 
+  const languagesString = teachingLanguages
+    .map((teachingLanguage) => teachingLanguage[language])
+    .join(', ')
+
   return (
     <>
       {link}
@@ -71,6 +88,14 @@ const getLabel = (courseRealisation, t, language) => {
           {t('courseSummary:responsibleTeachers')}: {teachersString}
         </Typography>
       )}
+      <Box className={classes.languageRow}>
+        <Typography color="textSecondary" variant="body2">
+          {t('courseSummary:teachingLanguages')}:
+        </Typography>
+        <Typography color="textSecondary" variant="body2">
+          {languagesString}
+        </Typography>
+      </Box>
     </>
   )
 }
@@ -111,7 +136,13 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
               <Fragment key={courseRealisation.id}>
                 <ResultsRow
                   key={courseRealisation.id}
-                  label={getLabel(courseRealisation, t, i18n.language)}
+                  label={
+                    <Label
+                      courseRealisation={courseRealisation}
+                      t={t}
+                      language={i18n.language}
+                    />
+                  }
                   results={courseRealisation.results}
                   questions={questions}
                   feedbackCount={courseRealisation.feedbackCount}

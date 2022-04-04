@@ -277,6 +277,7 @@ export default {
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',
     orderByFeedbackCountDesc: 'Palautteiden määrä laskevasti',
     startDateLabel: 'Alkaen päivästä',
+    teachingLanguages: 'Opetuskielet',
     year: 'Lukuvuosi',
     semester: 'Lukukausi',
     spring: 'Kevät',

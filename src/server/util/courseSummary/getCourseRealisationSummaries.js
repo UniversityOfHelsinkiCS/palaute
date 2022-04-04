@@ -3,6 +3,7 @@ const { Op } = require('sequelize')
 
 const { sequelize } = require('../dbConnection')
 const { FeedbackTarget, UserFeedbackTarget, User } = require('../../models')
+const languages = require('../languages.json')
 
 const {
   QUESTION_AVERAGES_QUERY,
@@ -32,6 +33,7 @@ SELECT
   course_realisations.start_date AS course_realisation_start_date,
   course_realisations.end_date AS course_realisation_end_date,
   course_units.course_code AS course_code,
+  course_realisations.teaching_languages as teaching_languages,
   CASE
     WHEN feedback_targets.feedback_response IS NOT NULL
     AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
@@ -49,6 +51,11 @@ WHERE
   AND course_realisations.start_date > NOW() - interval '72 months';
 `
 
+const getLanguageNames = (teachingLanguages) =>
+  teachingLanguages.map(
+    (languageCode) => languages[languageCode]?.name || languageCode,
+  )
+
 const getCourseRealisationsWithResults = (rows, questions) => {
   const rowsByCourseRealisationId = _.groupBy(
     rows,
@@ -65,6 +72,7 @@ const getCourseRealisationsWithResults = (rows, questions) => {
         course_code: courseCode,
         feedback_target_id: feedbackTargetId,
         closes_at: closesAt,
+        teaching_languages: teachingLanguages,
       } = courseRealisationRows[0]
 
       const results = getResults(courseRealisationRows, questions)
@@ -83,6 +91,7 @@ const getCourseRealisationsWithResults = (rows, questions) => {
         feedbackResponseGiven,
         feedbackTargetId,
         closesAt,
+        teachingLanguages: getLanguageNames(teachingLanguages),
       }
     },
   )

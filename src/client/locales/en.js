@@ -278,6 +278,7 @@ export default {
     orderByFeedbackCountAsc: 'Feedback count ascending',
     orderByFeedbackCountDesc: 'Feedback count descending',
     startDateLabel: 'Start of time period',
+    teachingLanguages: 'Teaching languages',
     year: 'Year',
     semester: 'Semester',
     spring: 'Spring',
