@@ -34,13 +34,18 @@ const useYearSemesters = (currentStart) => {
       },
     ])
     .map((s, i) => ({ ...s, spring: i % 2 === 0 }))
+    .reverse()
 
-  semesters = now.getMonth() < MONTH ? semesters.slice(0, -1) : semesters
+  semesters = now.getMonth() < MONTH ? semesters.slice(1) : semesters
+
+  const currentSemester =
+    semesters.find((s) => s.start <= currentStart) ||
+    semesters.find((s) => s.start <= now)
 
   return {
     year,
     semesters,
-    currentSemester: semesters.find((s) => s.start >= currentStart),
+    currentSemester,
   }
 }
 
