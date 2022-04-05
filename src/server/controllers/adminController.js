@@ -329,6 +329,32 @@ const getNorppaStatistics = async (req, res) => {
   res.send(resultsWithBetterAvoin)
 }
 
+const getFeedbackTargetsToCheck = async (req, res) => {
+  const relevantFeedbackTargets = await sequelize.query(
+    `
+    SELECT 
+      DISTINCT feedback_targets.id as id, 
+      feedback_targets.closes_at as closes_at,
+      feedback_targets.opens_at as opens_at,
+      course_realisations.start_date as start_date,
+      course_realisations.end_date as end_date,
+      course_units.name as name
+
+    FROM feedback_targets, course_realisations, course_units
+
+    WHERE course_realisations.id = feedback_targets.course_realisation_id 
+    AND course_units.id = feedback_targets.course_unit_id
+    AND feedback_targets.closes_at - course_realisations.end_date > interval '16 days'
+    AND NOT feedback_targets.feedback_dates_edited_by_teacher
+    AND ( feedback_targets.closes_at >= NOW() OR course_realisations.end_date >= NOW() );`,
+    {
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  res.send(relevantFeedbackTargets)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -340,5 +366,6 @@ router.get('/updater-status', getUpdaterStatus)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
+router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
 
 module.exports = router

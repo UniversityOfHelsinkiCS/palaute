@@ -17,6 +17,7 @@ import NorppaStatisticView from './NorppaStatisticsView'
 import UpdaterView from './UpdaterView'
 import Title from '../Title'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
+import { ChangedClosingDates } from './ChangedClosingDates'
 
 const useStyles = makeStyles(() => ({
   failureIcon: {
@@ -75,13 +76,14 @@ const AdminView = () => {
           <Tab label="General" {...tabProps(0)} />
           <Tab label="Norppa feedback" {...tabProps(1)} />
           <Tab label="Norppa statistics" {...tabProps(2)} />
+          <Tab label="Changed closing dates" {...tabProps(3)} />
           <Tab
             component={forwardRef((props, ref) => (
               <Button
                 ref={ref}
-                onClick={() => setTab(3)}
+                onClick={() => setTab(4)}
                 className={`MuiTab-root MuiTab-textColorPrimary ${
-                  tab === 3 && 'Mui-selected'
+                  tab === 4 && 'Mui-selected'
                 }`}
               >
                 {updaterIcon}
@@ -105,6 +107,9 @@ const AdminView = () => {
         <NorppaStatisticView />
       </TabPanel>
       <TabPanel value={tab} index={3}>
+        <ChangedClosingDates language="fi" />
+      </TabPanel>
+      <TabPanel value={tab} index={4}>
         <UpdaterView
           updaterStatus={updaterStatus}
           isLoading={isLoading}
