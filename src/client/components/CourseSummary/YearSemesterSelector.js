@@ -72,6 +72,9 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     userSelect: 'none',
   },
+  disabledButton: {
+    opacity: 0.0,
+  },
 })
 
 const YearStepper = ({ value, onChange }) => {
@@ -95,11 +98,18 @@ const YearStepper = ({ value, onChange }) => {
 
   return (
     <Box className={classes.stepperContainer}>
-      <IconButton onClick={handleDecrease} disabled={!canDecrease}>
+      <IconButton
+        onClick={handleDecrease}
+        disabled={!canDecrease}
+        className={!canDecrease ? classes.disabledButton : ''}
+      >
         <ChevronLeft />
       </IconButton>
       <Typography className={classes.stepperValue}>{displayValue}</Typography>
-      <IconButton onClick={handleIncrease} disabled={!canIncrease}>
+      <IconButton
+        onClick={handleIncrease}
+        className={!canIncrease ? classes.disabledButton : ''}
+      >
         <ChevronRight />
       </IconButton>
     </Box>
