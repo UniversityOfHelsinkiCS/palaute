@@ -197,7 +197,7 @@ const NavBar = () => {
     },
     isAdminUser && {
       label: t('navBar:admin'),
-      to: '/admin',
+      to: '/admin/general',
     },
   ]
     .filter(Boolean)
@@ -220,7 +220,7 @@ const NavBar = () => {
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
-        <Link to="/admin" className={classes.norppaFeedback}>
+        <Link to="/admin/feedback" className={classes.norppaFeedback}>
           {norppaFeedbackCount.count}
           <MailOutlineIcon className={classes.mailIcon} />
         </Link>
