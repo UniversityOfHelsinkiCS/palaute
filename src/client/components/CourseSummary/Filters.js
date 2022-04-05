@@ -19,7 +19,7 @@ import SortIcon from '@material-ui/icons/Sort'
 import { useTranslation } from 'react-i18next'
 
 import { ORDER_BY_OPTIONS } from './utils'
-import { YearSemesterSelector } from '../YearSemesterSelector'
+import { YearSemesterSelector } from './YearSemesterSelector'
 
 const useStyles = makeStyles({
   container: {

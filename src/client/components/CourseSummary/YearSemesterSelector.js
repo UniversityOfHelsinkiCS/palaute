@@ -10,28 +10,32 @@ import {
 } from '@material-ui/core'
 import { ChevronLeft, ChevronRight } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
+import { useHistoryState } from './utils'
+
+// Year starting month
+const MONTH = 8
 
 const useYearSemesters = (currentStart) => {
   const now = new Date()
   const year = Math.min(
     currentStart.getFullYear(),
-    now.getFullYear() - (now.getMonth() < 9 ? 1 : 0),
+    now.getFullYear() - (now.getMonth() < MONTH ? 1 : 0),
   )
 
   let semesters = _.range(2021, now.getFullYear() + 1)
     .flatMap((year) => [
       {
         start: new Date(`${year}-01-01`),
-        end: new Date(`${year}-09-01`),
+        end: new Date(`${year}-0${MONTH}-01`),
       },
       {
-        start: new Date(`${year}-09-01`),
+        start: new Date(`${year}-0${MONTH}-01`),
         end: new Date(`${year + 1}-01-01`),
       },
     ])
     .map((s, i) => ({ ...s, spring: i % 2 === 0 }))
 
-  semesters = now.getMonth() < 9 ? semesters.slice(0, -1) : semesters
+  semesters = now.getMonth() < MONTH ? semesters.slice(0, -1) : semesters
 
   return {
     year,
@@ -77,7 +81,7 @@ const YearStepper = ({ value, onChange }) => {
   }
 
   const now = new Date()
-  const currentYear = now.getFullYear() + (now.getMonth() >= 9 ? 1 : 0)
+  const currentYear = now.getFullYear() + (now.getMonth() >= MONTH ? 1 : 0)
 
   const displayValue = `${value} – ${value + 1}`
 
@@ -130,13 +134,13 @@ export const YearSemesterSelector = ({ value, onChange }) => {
 
   const { t } = useTranslation()
 
-  const [option, setOption] = useState('year')
+  const [option, setOption] = useHistoryState('timeperiodOption', 'year')
   const { year, semesters, currentSemester } = useYearSemesters(value.start)
 
   const handleYearChange = (year) => {
     onChange({
-      start: new Date(`${year}-09-01`),
-      end: new Date(`${year + 1}-09-01`),
+      start: new Date(`${year}-0${MONTH}-01`),
+      end: new Date(`${year + 1}-0${MONTH}-01`),
     })
   }
 

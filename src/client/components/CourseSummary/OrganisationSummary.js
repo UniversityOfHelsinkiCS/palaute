@@ -162,9 +162,9 @@ const OrganisationSummary = () => {
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
 
-  const [dateRange, setDateRange] = useState({
-    start: new Date(`2021-09-01`),
-    end: new Date('2022-09-01'),
+  const [dateRange, setDateRange] = useHistoryState('dateRange', {
+    start: new Date(`2021-08-01`),
+    end: new Date('2022-08-01'),
   })
 
   const [orderBy, setOrderBy] = useHistoryState(
