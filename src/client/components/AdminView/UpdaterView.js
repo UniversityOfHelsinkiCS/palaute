@@ -15,6 +15,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
 import Alert from '../Alert'
+import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 
 const StatusTable = ({ updaterStatus }) => {
   const { startedAt, finishedAt, status } = updaterStatus
@@ -81,7 +82,11 @@ const StatusTable = ({ updaterStatus }) => {
   )
 }
 
-const UpdaterView = ({ isLoading, updaterStatus, refetch }) => {
+const UpdaterView = () => {
+  const { updaterStatus, isLoading, refetch } = useUpdaterStatus({
+    refetchInterval: 10_000,
+  })
+
   if (isLoading) {
     return <LoadingProgress />
   }

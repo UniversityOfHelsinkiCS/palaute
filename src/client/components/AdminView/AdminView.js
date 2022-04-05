@@ -1,22 +1,20 @@
-import React, { forwardRef, useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import React, { forwardRef } from 'react'
+import { Redirect, Link } from 'react-router-dom'
+import { Route, Switch, useRouteMatch, useHistory } from 'react-router'
 
-import { Box, Button, Tabs, Tab, makeStyles } from '@material-ui/core'
+import { Box, Button, Tab, makeStyles } from '@material-ui/core'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 
 import { ADMINS } from '../../util/common'
-import apiClient from '../../util/apiClient'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import LoginAs from './LoginAsSelector'
-import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
-import EmailAccordion from './EmailAccordion'
-import { tabProps, TabPanel } from './AdminTabPanel'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
 import UpdaterView from './UpdaterView'
 import Title from '../Title'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
+import RouterTabs from '../RouterTabs'
+import GeneralTab from './GeneralTab'
 
 const useStyles = makeStyles(() => ({
   failureIcon: {
@@ -30,24 +28,18 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AdminView = () => {
-  const [tab, setTab] = useState(0)
+  const { path, url } = useRouteMatch()
+  const history = useHistory()
+
   const { authorizedUser } = useAuthorizedUser()
 
   const classes = useStyles()
 
-  const { updaterStatus, isLoading, refetch } = useUpdaterStatus({
+  const { updaterStatus } = useUpdaterStatus({
     refetchInterval: 10_000,
   })
 
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
-
-  const resetTestCourse = async () => {
-    await apiClient.post('/admin/reset-course', {})
-  }
-
-  const changeTab = (event, newValue) => {
-    setTab(newValue)
-  }
 
   const updaterIcon = (
     <>
@@ -66,51 +58,46 @@ const AdminView = () => {
       <h1>Admin page</h1>
       <Title>Admin</Title>
       <Box>
-        <Tabs
-          value={tab}
-          onChange={changeTab}
+        <RouterTabs
           indicatorColor="primary"
           textColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
         >
-          <Tab label="General" {...tabProps(0)} />
-          <Tab label="Norppa feedback" {...tabProps(1)} />
-          <Tab label="Norppa statistics" {...tabProps(2)} />
+          <Tab label="General" component={Link} to={`${url}/general`} />
           <Tab
+            label="Norppa feedback"
+            component={Link}
+            to={`${url}/feedback`}
+          />
+          <Tab
+            label="Norppa statistics"
+            component={Link}
+            to={`${url}/statistics`}
+          />
+          <Tab
+            to={`${url}/updater`}
             component={forwardRef((props, ref) => (
               <Button
                 ref={ref}
-                onClick={() => setTab(3)}
+                onClick={() => history.push(`${url}/updater`)}
                 className={`MuiTab-root MuiTab-textColorPrimary ${
-                  tab === 3 && 'Mui-selected'
+                  history.location.pathname.indexOf('updater') > -1 &&
+                  'Mui-selected'
                 }`}
               >
                 {updaterIcon}
               </Button>
             ))}
           />
-        </Tabs>
+        </RouterTabs>
       </Box>
-      <TabPanel value={tab} index={0}>
-        <LoginAs />
-        <EditUniversitySurveyAccordion />
-        <EmailAccordion />
-        <Button variant="contained" color="primary" onClick={resetTestCourse}>
-          Reset test course
-        </Button>
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <NorppaFeedbackView />
-      </TabPanel>
-      <TabPanel value={tab} index={2}>
-        <NorppaStatisticView />
-      </TabPanel>
-      <TabPanel value={tab} index={3}>
-        <UpdaterView
-          updaterStatus={updaterStatus}
-          isLoading={isLoading}
-          refetch={refetch}
-        />
-      </TabPanel>
+      <Switch>
+        <Route path={`${path}/general`} component={GeneralTab} />
+        <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
+        <Route path={`${path}/statistics`} component={NorppaStatisticView} />
+        <Route path={`${path}/updater`} component={UpdaterView} />
+      </Switch>
     </>
   )
 }
