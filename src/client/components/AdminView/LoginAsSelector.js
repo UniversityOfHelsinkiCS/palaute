@@ -40,9 +40,10 @@ const LoginAsSelector = () => {
     )
       return
 
-    const { id } = user
+    const { id, employeeNumber } = user
 
     localStorage.setItem('adminLoggedInAs', id)
+    localStorage.setItem('employeenumber', employeeNumber ?? null)
     window.location.reload()
   }
 
