@@ -52,9 +52,9 @@ WHERE
 `
 
 const getLanguageNames = (teachingLanguages) =>
-  teachingLanguages.map(
+  teachingLanguages?.map(
     (languageCode) => languages[languageCode]?.name || languageCode,
-  )
+  ) || []
 
 const getCourseRealisationsWithResults = (rows, questions) => {
   const rowsByCourseRealisationId = _.groupBy(
