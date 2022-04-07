@@ -150,7 +150,9 @@ export const YearSemesterSelector = ({ value, onChange }) => {
   const { t } = useTranslation()
 
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
-  const { year, semesters, currentSemester } = useYearSemesters(value.start)
+  const { year, semesters, currentSemester } = useYearSemesters(
+    value?.start ?? new Date(),
+  )
 
   const handleYearChange = (year) => {
     onChange({
