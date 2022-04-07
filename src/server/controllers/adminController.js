@@ -7,6 +7,9 @@ const { format } = require('date-fns')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS } = require('../util/config')
 const { run } = require('../updater/index')
+const {
+  run: runFeedbackTargetDateCheckCron,
+} = require('../util/feedbackDateCheckUpdater')
 
 const {
   FeedbackTarget,
@@ -16,6 +19,7 @@ const {
   UserFeedbackTarget,
   User,
   UpdaterStatus,
+  FeedbackTargetDateCheck,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -330,29 +334,48 @@ const getNorppaStatistics = async (req, res) => {
 }
 
 const getFeedbackTargetsToCheck = async (req, res) => {
-  const relevantFeedbackTargets = await sequelize.query(
-    `
-    SELECT 
-      DISTINCT feedback_targets.id as id, 
-      feedback_targets.closes_at as closes_at,
-      feedback_targets.opens_at as opens_at,
-      course_realisations.start_date as start_date,
-      course_realisations.end_date as end_date,
-      course_units.name as name
+  const relevantFeedbackTargetDateChecks =
+    await FeedbackTargetDateCheck.findAll({
+      where: {},
+      attributes: ['is_solved', 'created_at'],
+      include: [
+        {
+          model: FeedbackTarget,
+          attributes: ['id', 'opens_at', 'closes_at'],
+          as: 'feedback_target',
+          include: [
+            {
+              model: CourseRealisation,
+              attributes: ['name', 'start_date', 'end_date'],
+              as: 'courseRealisation',
+            },
+          ],
+        },
+      ],
+    })
 
-    FROM feedback_targets, course_realisations, course_units
+  res.send(relevantFeedbackTargetDateChecks)
+}
 
-    WHERE course_realisations.id = feedback_targets.course_realisation_id 
-    AND course_units.id = feedback_targets.course_unit_id
-    AND feedback_targets.closes_at - course_realisations.end_date > interval '16 days'
-    AND NOT feedback_targets.feedback_dates_edited_by_teacher
-    AND ( feedback_targets.closes_at >= NOW() OR course_realisations.end_date >= NOW() );`,
-    {
-      type: sequelize.QueryTypes.SELECT,
-    },
+const solveFeedbackTargetDateCheck = async (req, res) => {
+  if (!req.body || !req?.params.id) return res.status(400).send()
+
+  const { id } = req.params
+  const { isSolved } = req.body
+
+  if (!id) return res.status(400)
+
+  await FeedbackTargetDateCheck.update(
+    { is_solved: isSolved },
+    { where: { feedback_target_id: id } },
   )
 
-  res.send(relevantFeedbackTargets)
+  return res.status(200).send()
+}
+
+const runUpdateFeedbackTargetDateChecks = async (req, res) => {
+  const { updates, deletes } = await runFeedbackTargetDateCheckCron()
+  return res.status(200).send({ updates, deletes })
 }
 
 const router = Router()
@@ -367,5 +390,7 @@ router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
+router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
+router.put('/update-changed-closing-dates/', runUpdateFeedbackTargetDateChecks)
 
 module.exports = router
