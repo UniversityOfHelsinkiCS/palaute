@@ -125,53 +125,30 @@ const getCurrentCourseRealisationId = (rows) => {
 }
 
 const getCourseUnitsWithResults = (rows, questions) => {
-  const relevantRows = rows
-
-  const rowsByCourseCode = _.groupBy(relevantRows, (row) => row.course_code)
+  const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
   const courseUnits = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
-      const { course_unit_name: name } = courseUnitRows[0]
-
       const currentCourseRealisationId =
         getCurrentCourseRealisationId(courseUnitRows)
 
-      const { current = [], previous = [] } = _.groupBy(courseUnitRows, (row) =>
-        row.course_realisation_id === currentCourseRealisationId
-          ? 'current'
-          : 'previous',
+      const current = courseUnitRows.find(
+        (row) => row.course_realisation_id === currentCourseRealisationId,
       )
 
-      const feedbackResponseGiven = Boolean(current[0]?.feedback_response_given)
+      const results = getResults(courseUnitRows, questions)
+      // console.log(courseUnitRows[0].course_unit_name.fi)
 
-      const closesAt = current[0]?.closes_at
-
-      const currentResults = getResults(current, questions)
-      const previousResults = getResults(previous, questions)
-      const { feedbackCount, studentCount } = getCounts(current)
-      const feedbackPercentage = feedbackCount / studentCount
-
-      const results = currentResults.map((r) => {
-        const previousQuestionResults = previousResults.find(
-          (pr) => r.questionId === pr.questionId,
-        )
-
-        return {
-          ...r,
-          previous: previousQuestionResults?.mean
-            ? previousQuestionResults
-            : null,
-        }
-      })
-
+      const { feedbackCount, studentCount } = getCounts(courseUnitRows)
+      // console.log(feedbackCount, studentCount)
       return {
-        name,
+        name: courseUnitRows[0].course_unit_name,
         courseCode,
         results,
         feedbackCount,
         studentCount,
-        feedbackPercentage,
-        feedbackResponseGiven,
-        closesAt,
+        feedbackPercentage: feedbackCount / studentCount,
+        feedbackResponseGiven: Boolean(current?.feedback_response_given),
+        closesAt: current?.closes_at,
       }
     },
   )
@@ -180,31 +157,14 @@ const getCourseUnitsWithResults = (rows, questions) => {
 }
 
 const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
-  // 400 ms
+  console.time('createOrganisations')
   const organisations = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
-      const { organisation_name: name, organisation_code: code } =
-        organisationRows[0]
-
       const courseUnits = getCourseUnitsWithResults(
-        // 320 ms total
         organisationRows,
         questions,
         openUni,
       )
-
-      const feedbackCount = _.sumBy(
-        courseUnits,
-        ({ feedbackCount }) => feedbackCount,
-      )
-
-      const studentCount = _.sumBy(
-        courseUnits,
-        ({ studentCount }) => studentCount,
-      )
-
-      const feedbackPercentage =
-        studentCount > 0 ? feedbackCount / studentCount : 0
 
       const allResults = courseUnits.flatMap(({ results }) => results)
 
@@ -233,27 +193,38 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         }
       })
 
+      const studentCount = _.sumBy(
+        courseUnits,
+        ({ studentCount }) => studentCount,
+      )
+      const feedbackCount = _.sumBy(
+        courseUnits,
+        ({ feedbackCount }) => feedbackCount,
+      )
       return {
         id: organisationId,
-        name,
-        code,
+        name: organisationRows[0].organisation_name,
+        code: organisationRows[0].organisation_code,
         results,
         feedbackCount,
         studentCount,
-        feedbackPercentage,
+        feedbackPercentage: studentCount > 0 ? feedbackCount / studentCount : 0,
         courseUnits,
       }
     },
   )
+  console.timeEnd('createOrganisations')
 
   return organisations
 }
 
 const getOrganisationsWithResults = (rows, questions) => {
+  console.time('getOrganisationsWithResults')
   const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
 
   const organisations = createOrganisations(rowsByOrganisationId, questions)
 
+  console.timeEnd('getOrganisationsWithResults')
   return organisations
 }
 
@@ -358,16 +329,19 @@ const omitOrganisationOpenUniRows = async (rows) => {
 }
 
 const partitionOpenUniRows = (rows) => {
+  console.time('partitionOpenUniRows')
   const openUniCourseRealisationIds = _.uniq(
     rows
       .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
       .map((row) => row.course_realisation_id),
   )
 
-  return _.partition(
+  const result = _.partition(
     rows,
     (row) => !openUniCourseRealisationIds.includes(row.course_realisation_id),
   )
+  console.timeEnd('partitionOpenUniRows')
+  return result
 }
 
 const getOrganisationQuestions = async (organisationCode) => {
@@ -465,6 +439,7 @@ const cacheSummary = async (rows) => {
 }
 
 const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
+  console.time('getSummaryFromCache')
   const cacheRows = await FeedbackSummaryCache.findAll({
     where: {
       [Op.or]: {
@@ -477,8 +452,9 @@ const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
       },
     },
   })
-
-  return cacheRows.flatMap((row) => row.data)
+  const result = cacheRows.flatMap((row) => row.data)
+  console.timeEnd('getSummaryFromCache')
+  return result
 }
 
 const getOrganisationSummaries = async ({
@@ -489,6 +465,8 @@ const getOrganisationSummaries = async ({
   startDate = subMonths(Date.now(), 24),
   endDate = Date.now(),
 }) => {
+  console.time('getOrganisationSummaries')
+
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,
   )
@@ -528,15 +506,20 @@ const getOrganisationSummaries = async ({
     questions,
   ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
 
-  return _.sortBy(
+  const result = _.sortBy(
     organisationsWithMissing.concat(openUniOrganisationWithResults),
     'code',
   )
+
+  console.timeEnd('getOrganisationSummaries')
+  return result
 }
 
 const populateOrganisationSummaryCache = async () => {
+  console.time('caching')
   const rows = await getAllRowsFromDb()
   await cacheSummary(rows)
+  console.timeEnd('caching')
   logger.info(`Populated cache with ${rows.length} rows`)
 }
 

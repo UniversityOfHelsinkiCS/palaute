@@ -6,36 +6,37 @@ SELECT
   question_id,
   question_data,
   COUNT(question_data) AS question_data_count
-FROM
+  FROM
   (
     SELECT
-      feedback_id,
-      feedback_target_id,
-      question_id,
-      question_data
+    --feedback_id,
+    feedback_target_id,
+    question_id,
+    question_data
     FROM
-      user_feedback_targets
-      INNER JOIN (
+    user_feedback_targets
+    INNER JOIN (
+      SELECT
+      id,
+      answer::jsonb->>'questionId' AS question_id,
+      answer::jsonb->>'data' AS question_data
+      FROM
+      (
         SELECT
-          id,
-          question_feedback::jsonb->>'questionId' AS question_id,
-          question_feedback::jsonb->>'data' AS question_data
+        id,
+        --user_id,
+        jsonb_array_elements_text(data) AS answer
         FROM
-          (
-            SELECT
-              id,
-              user_id,
-              jsonb_array_elements_text(data) AS question_feedback
-            FROM
-              feedbacks
-          ) feedbacks_1
-      ) feedbacks_2 ON user_feedback_targets.feedback_id = feedbacks_2.id
+        feedbacks  
+      ) feedbacks_1
+      WHERE 
+      answer::jsonb->>'questionId' IN (:questionIds)
+      AND answer::jsonb->>'data' IN (:validDataValues)
+    ) feedbacks_2 ON user_feedback_targets.feedback_id = feedbacks_2.id
     WHERE
-      user_feedback_targets.access_status = 'STUDENT'
-      AND feedbacks_2.question_id IN (:questionIds)
-      AND feedbacks_2.question_data IN (:validDataValues)
+    user_feedback_targets.access_status = 'STUDENT'
   ) as feedbacks_3
-GROUP BY
+  GROUP BY
   feedback_target_id,
   question_id,
   question_data

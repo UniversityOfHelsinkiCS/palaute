@@ -15,31 +15,7 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     lineHeight: 2,
   },
-  indicator: {
-    position: 'absolute',
-    right: '2px',
-    top: '2px',
-    fontSize: '1rem',
-  },
 })
-
-const getDifferenceIndicator = ({ mean, previous, className }) => {
-  if (!mean || !previous?.mean) {
-    return null
-  }
-
-  const meanDifference = mean - previous.mean
-
-  if (meanDifference <= -0.5) {
-    return <MinusIcon className={className} />
-  }
-
-  if (meanDifference >= 0.5) {
-    return <PlusIcon className={className} />
-  }
-
-  return null
-}
 
 const getColor = (mean) => {
   if (!mean) {
@@ -79,19 +55,12 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
     mean || t('courseSummary:noResults')
   }`
 
-  const differenceIndicator = getDifferenceIndicator({
-    mean,
-    previous,
-    className: classes.indicator,
-  })
-
   return (
     <ResultItemBase
       tooltipTitle={tooltipTitle}
       color={getColor(mean)}
       {...props}
     >
-      {differenceIndicator}
       <div className={classes.content}>
         <span>{mean ?? 0}</span>
       </div>
