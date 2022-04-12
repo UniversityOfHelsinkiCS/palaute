@@ -34,6 +34,7 @@ import {
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
+import ColumnHeadings from './ColumnHeadings'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -85,24 +86,27 @@ const OrganisationTable = ({
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
             <th aria-hidden="true" />
-            {questions.map(({ id, data }) => (
-              <VerticalHeading key={id}>
-                {getLanguageValue(data?.label, i18n.language)}
-              </VerticalHeading>
-            ))}
-            <VerticalHeading>
-              {t('courseSummary:feedbackCount')}
-            </VerticalHeading>
-            <VerticalHeading>
-              {t('courseSummary:feedbackResponse')}
-            </VerticalHeading>
+
+            <ColumnHeadings
+              questionNames={questions
+                .map(({ id, data }) => ({
+                  id,
+                  question: getLanguageValue(data?.label, i18n.language),
+                }))
+                .concat([
+                  { id: 0, question: t('courseSummary:feedbackCount') },
+                  { id: 1, question: t('courseSummary:feedbackResponse') },
+                ])}
+            />
             <th aria-hidden="true" />
           </tr>
         </thead>
         <tbody>
           <tr>
             <td colSpan={99} className={classes.progressCell}>
-              <Box height="12px">{loading && <LinearProgress />}</Box>
+              <Box height="0px" position="absolute">
+                {loading && <LinearProgress />}
+              </Box>
             </td>
           </tr>
 

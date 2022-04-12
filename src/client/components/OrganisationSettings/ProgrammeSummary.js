@@ -27,6 +27,7 @@ import {
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationSummary from '../../hooks/useOrganisationSummary'
 import { LoadingProgress } from '../LoadingProgress'
+import ColumnHeadings from '../CourseSummary/ColumnHeadings'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   progressCell: {
     padding: theme.spacing(1, 2),
+    minHeight: '12px',
   },
 }))
 
@@ -59,28 +61,28 @@ const ProgrammeTable = ({
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
             <th aria-hidden="true" />
-            {questions.map(({ id, data }) => (
-              <VerticalHeading key={id}>
-                {getLanguageValue(data?.label, i18n.language)}
-              </VerticalHeading>
-            ))}
-            <VerticalHeading>
-              {t('courseSummary:feedbackCount')}
-            </VerticalHeading>
-            <VerticalHeading>
-              {t('courseSummary:feedbackResponse')}
-            </VerticalHeading>
+            <ColumnHeadings
+              questionNames={questions
+                .map(({ id, data }) => ({
+                  id,
+                  question: getLanguageValue(data?.label, i18n.language),
+                }))
+                .concat([
+                  { id: 0, question: t('courseSummary:feedbackCount') },
+                  { id: 1, question: t('courseSummary:feedbackResponse') },
+                ])}
+            />
             <th aria-hidden="true" />
           </tr>
         </thead>
         <tbody>
-          {loading && (
-            <tr>
-              <td colSpan={99} className={classes.progressCell}>
-                <LinearProgress />
-              </td>
-            </tr>
-          )}
+          <tr>
+            <td colSpan={99} className={classes.progressCell}>
+              <Box height="0px" position="absolute">
+                {loading && <LinearProgress />}
+              </Box>
+            </td>
+          </tr>
           {organisations.map(
             ({
               code,
