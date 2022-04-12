@@ -2,8 +2,6 @@
 
 Production in <https://coursefeedback.helsinki.fi>
 
-Staging in <https://study.cs.helsinki.fi/norppastaging>
-
 ## Issues with Palaute
 
 Send an issue if you find mistakes, problems or something to improve in Palaute.
