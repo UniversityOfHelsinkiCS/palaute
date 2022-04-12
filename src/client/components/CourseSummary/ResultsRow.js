@@ -17,6 +17,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     whiteSpace: 'nowrap',
     textAlign: 'center',
+    minWidth: '50px',
+  },
+  countCell: {
+    padding: theme.spacing(1),
+    whiteSpace: 'nowrap',
+    textAlign: 'center',
+    minWidth: '155px',
   },
   labelCell: ({ level }) => ({
     [theme.breakpoints.down('sm')]: {
@@ -125,7 +132,7 @@ const ResultsRow = ({
             className={classes.resultCell}
           />
         ))}
-        <td className={classes.resultCell}>
+        <td className={classes.countCell}>
           <Typography component="div">
             {feedbackCount}/{studentCount} ({percent}%)
           </Typography>

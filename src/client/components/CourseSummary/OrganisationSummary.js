@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   progressCell: {
     padding: theme.spacing(1, 2),
+    minHeight: '12px',
   },
 }))
 
@@ -99,13 +100,12 @@ const OrganisationTable = ({
           </tr>
         </thead>
         <tbody>
-          {loading && (
-            <tr>
-              <td colSpan={99} className={classes.progressCell}>
-                <LinearProgress />
-              </td>
-            </tr>
-          )}
+          <tr>
+            <td colSpan={99} className={classes.progressCell}>
+              <Box height="12px">{loading && <LinearProgress />}</Box>
+            </td>
+          </tr>
+
           {organisations.map(
             ({
               code,
