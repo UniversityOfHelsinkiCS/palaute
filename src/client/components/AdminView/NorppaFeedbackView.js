@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Button,
-  makeStyles,
   Paper,
   Typography,
   IconButton,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core'
-import { Check, Undo } from '@material-ui/icons'
+import { Undo } from '@material-ui/icons'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -21,14 +22,17 @@ const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
+  const [filterUnsolved, setFilterUnsolved] = useState(false)
+  const [filterResponseWanted, setFilterResponseWanted] = useState(false)
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  const sortedFeedbacks = feedbacks.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-  )
+  const sortedFeedbacks = feedbacks
+    .filter((f) => !filterUnsolved || !f.solved)
+    .filter((f) => !filterResponseWanted || f.responseWanted)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   const handleMarkAsSolved = async (id, solved) => {
     try {
@@ -40,7 +44,29 @@ const NorppaFeedbackView = () => {
   }
 
   return (
-    <Box marginTop={10}>
+    <Box marginTop={8}>
+      <Box margin={2} paddingLeft={2} display="flex">
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={filterUnsolved}
+              onChange={() => setFilterUnsolved(!filterUnsolved)}
+              color="primary"
+            />
+          }
+          label="Unsolved"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={filterResponseWanted}
+              onChange={() => setFilterResponseWanted(!filterResponseWanted)}
+              color="primary"
+            />
+          }
+          label="Response wanted"
+        />
+      </Box>
       {sortedFeedbacks.map(
         ({ id, createdAt, data, responseWanted, solved, user }) => {
           const created = format(new Date(createdAt), 'dd.MM.yyyy')
