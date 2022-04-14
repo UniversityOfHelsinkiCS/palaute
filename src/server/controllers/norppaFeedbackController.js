@@ -62,8 +62,15 @@ const markAsSolved = async (req, res) => {
   if (!ADMINS.includes(user.username))
     throw new ApplicationError('Forbidden', 403)
 
+  const { solved } = req.body
+  if (typeof solved !== 'boolean')
+    throw new ApplicationError(
+      'Invalid data: missing "solved" boolean field',
+      400,
+    )
+
   const feedback = await NorppaFeedback.findByPk(id)
-  feedback.responseWanted = false
+  feedback.solved = solved
   await feedback.save()
 
   res.sendStatus(200)
@@ -79,7 +86,7 @@ const getNorppaFeedbackCount = async (req, res) => {
 
   const feedbacks = await NorppaFeedback.count({
     where: {
-      responseWanted: true,
+      solved: false,
     },
   })
 

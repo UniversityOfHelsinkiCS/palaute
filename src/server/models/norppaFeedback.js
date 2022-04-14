@@ -28,6 +28,11 @@ NorppaFeedback.init(
       type: BOOLEAN,
       allowNull: false,
     },
+    solved: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,

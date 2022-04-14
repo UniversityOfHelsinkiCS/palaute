@@ -1,5 +1,13 @@
 import React from 'react'
-import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  makeStyles,
+  Paper,
+  Typography,
+  IconButton,
+} from '@material-ui/core'
+import { Check, Undo } from '@material-ui/icons'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -7,29 +15,10 @@ import { useTranslation } from 'react-i18next'
 import useNorppaFeedbacks from '../../hooks/useNorppaFeedbacks'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
-
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: 10,
-  },
-  feedback: {
-    marginBottom: 5,
-    padding: 10,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  response: {
-    background: '#dde6ff',
-  },
-  text: {
-    marginBottom: 5,
-  },
-}))
+import Alert from '../Alert'
 
 const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
 
@@ -41,9 +30,9 @@ const NorppaFeedbackView = () => {
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   )
 
-  const handleClick = async (id) => {
+  const handleMarkAsSolved = async (id, solved) => {
     try {
-      await apiClient.put(`/norppa-feedback/${id}`)
+      await apiClient.put(`/norppa-feedback/${id}`, { solved })
       refetch()
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -51,46 +40,66 @@ const NorppaFeedbackView = () => {
   }
 
   return (
-    <Box className={classes.container}>
-      {sortedFeedbacks.map(({ id, createdAt, data, responseWanted, user }) => {
-        const created = format(new Date(createdAt), 'dd.MM.yyyy')
-        return (
-          <Paper
-            className={`${classes.feedback} ${
-              responseWanted ? classes.response : ''
-            }`}
-            key={id}
-          >
-            <Box>
-              <Typography
-                variant="body1"
-                component="p"
-                className={classes.text}
-              >
-                {data}
-              </Typography>
-              <Typography
-                variant="body2"
-                component="p"
-                className={classes.info}
-              >
-                {user.email} {created}
-              </Typography>
+    <Box marginTop={10}>
+      {sortedFeedbacks.map(
+        ({ id, createdAt, data, responseWanted, solved, user }) => {
+          const created = format(new Date(createdAt), 'dd.MM.yyyy')
+          return (
+            <Box key={id} margin={2}>
+              <Paper>
+                <Box display="flex">
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    flexGrow={1}
+                    padding={2}
+                  >
+                    <Box marginBottom={2}>
+                      <Typography variant="body1">{data}</Typography>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="body2">{created}</Typography>
+                      <Box marginLeft={4}>
+                        <Typography variant="body1">{user.email}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box display="flex" flexDirection="column" padding={2}>
+                    {!solved ? (
+                      <Box width="140px" paddingTop={1}>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          onClick={() => handleMarkAsSolved(id, true)}
+                        >
+                          <Typography variant="button" noWrap>
+                            Mark solved
+                          </Typography>
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Box display="flex" width="140px">
+                        <Alert>Solved!</Alert>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleMarkAsSolved(id, false)}
+                        >
+                          <Undo />
+                        </IconButton>
+                      </Box>
+                    )}
+                    {responseWanted && !solved && (
+                      <Box marginTop={2}>
+                        <Alert severity="warning">Response wanted!</Alert>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </Paper>
             </Box>
-            <Box>
-              {responseWanted && (
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleClick(id)}
-                >
-                  Mark as solved
-                </Button>
-              )}
-            </Box>
-          </Paper>
-        )
-      })}
+          )
+        },
+      )}
     </Box>
   )
 }
