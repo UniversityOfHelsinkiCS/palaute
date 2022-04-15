@@ -317,6 +317,8 @@ export default {
     coursePeriod: 'Kursen på gång',
     feedbackPeriod: 'Responsgivningen öppen',
     editFeedbackTab: 'Redigera responsen',
+    coursePage: 'Course page',
+    courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Ansvariga lärare',
     QR: 'QR-kod',
   },

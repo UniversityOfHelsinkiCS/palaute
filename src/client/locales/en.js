@@ -322,6 +322,7 @@ export default {
     coursePeriod: 'Course ongoing',
     feedbackPeriod: 'Feedback open',
     coursePage: 'Course page',
+    courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Responsible teachers',
     QR: 'QR code',
   },

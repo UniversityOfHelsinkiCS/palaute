@@ -322,6 +322,7 @@ export default {
     coursePeriod: 'Kurssi käynnissä',
     feedbackPeriod: 'Palaute käynnissä',
     coursePage: 'Kurssisivu',
+    courseSummary: 'Kurssin toteutusten yhteenveto',
     responsibleTeachers: 'Vastuuopettajat',
     QR: 'QR-koodi',
   },

@@ -35,14 +35,15 @@ import {
   copyLink,
   getFeedbackPeriod,
   getCoursePageUrl,
+  getCourseUnitSummaryUrl,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import InternalLink from '../InternalLink'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
-    margin: '0px',
     '& dt': {
       paddingRight: theme.spacing(1),
       gridColumn: 1,
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       justifyContent: 'flex-start',
@@ -143,6 +145,7 @@ const FeedbackTargetView = () => {
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = getCoursePageUrl(feedbackTarget)
+  const courseSummaryUrl = getCourseUnitSummaryUrl(feedbackTarget)
 
   const courseRealisationName = getLanguageValue(
     courseRealisation?.name,
@@ -154,7 +157,7 @@ const FeedbackTargetView = () => {
 
   return (
     <>
-      <Box mb={2}>
+      <Box mb={3}>
         <div className={classes.headingContainer}>
           <Typography variant="h4" component="h1">
             {courseRealisationName}
@@ -193,12 +196,23 @@ const FeedbackTargetView = () => {
               </Typography>
             </dl>
 
-            <ExternalLink
-              href={coursePageUrl}
-              className={classes.coursePageLink}
-            >
-              {t('feedbackTargetView:coursePage')}
-            </ExternalLink>
+            <Box display="flex">
+              <ExternalLink
+                href={coursePageUrl}
+                className={classes.coursePageLink}
+              >
+                {t('feedbackTargetView:coursePage')}
+              </ExternalLink>
+              <Box marginLeft={4} />
+              {isTeacher && (
+                <InternalLink
+                  href={courseSummaryUrl}
+                  className={classes.coursePageLink}
+                >
+                  {t('feedbackTargetView:courseSummary')}
+                </InternalLink>
+              )}
+            </Box>
           </div>
           <div>
             {responsibleTeachers && (

@@ -35,3 +35,6 @@ export const copyLink = (feedbackTarget) => {
 
 export const getCoursePageUrl = (feedbackTarget) =>
   `https://studies.helsinki.fi/opintotarjonta/cur/${feedbackTarget.courseRealisation.id}`
+
+export const getCourseUnitSummaryUrl = (feedbackTarget) =>
+  `/course-summary/${feedbackTarget.courseUnit.courseCode}`
