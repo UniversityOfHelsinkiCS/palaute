@@ -709,7 +709,6 @@ const openFeedbackImmediately = async (req, res) => {
 
   feedbackTarget.opensAt = req.body.opensAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
-  feedbackTarget.feedbackOpenNotificationSent = true
   feedbackTarget.feedbackOpeningReminderEmailSent = true
 
   await feedbackTarget.save()

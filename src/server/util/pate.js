@@ -61,7 +61,7 @@ const postWithRetries = async (data, retries = 3) => {
 const sendToPate = async (options = {}) => {
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment', options)
-    logger.debug('Would send', options.emails.length, 'emails')
+    logger.debug(`Would send  ${options.emails.length} emails`)
     // options.emails.forEach((e) => console.log(JSON.stringify(e, null, 2)))
     return null
   }

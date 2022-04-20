@@ -339,9 +339,9 @@ const getStudentEmailCounts = async () => {
   return finalEmailCounts
 }
 
-const createEmailsForFeedbackTargets = async (
+const createRecipientsForFeedbackTargets = async (
   feedbackTargets,
-  options = { primaryOnly: false, studentsOnly: false },
+  options = { primaryOnly: false, whereOpenEmailNotSent: false },
 ) => {
   // Leo if you are reading this you are allowed to refactor :)
   // Too late 😤
@@ -350,10 +350,9 @@ const createEmailsForFeedbackTargets = async (
 
   feedbackTargets.forEach((feedbackTarget) => {
     feedbackTarget.users
-      .filter((u) => !u.UserFeedbackTarget.feedbackOpenEmailSent)
       .filter(
-        options.studentsOnly
-          ? (u) => u.UserFeedbackTarget.accessStatus === 'STUDENT'
+        options.whereOpenEmailNotSent
+          ? (u) => !u.UserFeedbackTarget.feedbackOpenEmailSent
           : () => true,
       )
       .forEach((user) => {
@@ -394,16 +393,17 @@ const createEmailsForFeedbackTargets = async (
   return emails
 }
 
-const createEmailsForSingleFeedbackTarget = async (feedbackTarget) =>
-  createEmailsForFeedbackTargets([feedbackTarget[0]], {
-    studentsOnly: false,
-  })
+const createRecipientsForSingleFeedbackTarget = async (
+  feedbackTarget,
+  options,
+) => createRecipientsForFeedbackTargets([feedbackTarget[0]], options)
 
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
 
-  const studentsWithFeedbackTargets = await createEmailsForFeedbackTargets(
+  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(
     feedbackTargets,
+    { whereOpenEmailNotSent: true },
   )
 
   const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
@@ -441,7 +441,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
     feedbackTargets,
     { primaryOnly: true },
   )
@@ -477,7 +477,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
 const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
 
-  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
     feedbackTargets,
     { primaryOnly: true },
   )
@@ -520,17 +520,20 @@ const returnEmailsToBeSentToday = async () => {
   const teacherEmailCountFor7Days = await getTeacherEmailCounts()
   const studentEmailCountFor7Days = await getStudentEmailCounts()
 
-  const studentsWithFeedbackTargets = await createEmailsForFeedbackTargets(
+  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(
     studentFeedbackTargets,
+    {
+      whereOpenEmailNotSent: true,
+    },
   )
 
-  const teachersWithFeedbackTargets = await createEmailsForFeedbackTargets(
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
     teacherFeedbackTargets,
     { primaryOnly: true },
   )
 
   const teacherRemindersWithFeedbackTargets =
-    await createEmailsForFeedbackTargets(teacherReminderTargets, {
+    await createRecipientsForFeedbackTargets(teacherReminderTargets, {
       primaryOnly: true,
     })
 
@@ -584,9 +587,10 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
       400,
     )
 
-  const studentsWithFeedbackTarget = await createEmailsForSingleFeedbackTarget(
-    feedbackTarget,
-  )
+  const studentsWithFeedbackTarget =
+    await createRecipientsForSingleFeedbackTarget(feedbackTarget, {
+      whereOpenEmailNotSent: true,
+    })
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(
     (student) =>
