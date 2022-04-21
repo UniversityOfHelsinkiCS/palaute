@@ -66,8 +66,6 @@ const sendToPate = async (options = {}) => {
     return null
   }
 
-  logger.info(`sending email to: ${options.emails.length}`)
-
   const chunkedEmails = _.chunk(options.emails, 40)
   const chunkedOptions = chunkedEmails.map((emails) => ({
     emails,
@@ -83,7 +81,10 @@ const sendToPate = async (options = {}) => {
   return options
 }
 
-const sendEmail = async (listOfEmails) => {
+const sendEmail = async (listOfEmails, emailType = '') => {
+  logger.info(
+    `Sending email to ${listOfEmails.length} recipients, type = '${emailType}'`,
+  )
   const options = {
     template: {
       ...template,
@@ -117,7 +118,7 @@ const sendNotificationAboutFeedbackResponseToStudents = (
     return email
   })
 
-  sendEmail(emails)
+  sendEmail(emails, 'Notify students on feedback response')
 
   return emails
 }
@@ -146,7 +147,7 @@ const sendReminderToGiveFeedbackToStudents = (
     return email
   })
 
-  sendEmail(emails)
+  sendEmail(emails, 'Remind students about feedback')
 
   return emails
 }

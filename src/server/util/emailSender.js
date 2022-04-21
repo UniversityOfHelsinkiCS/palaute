@@ -433,7 +433,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent)
+  sendEmail(emailsToBeSent, 'Notify students about feedback opening')
 
   return emailsToBeSent
 }
@@ -469,7 +469,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent)
+  sendEmail(emailsToBeSent, 'Remind teachers about feedback opening')
 
   return emailsToBeSent
 }
@@ -505,7 +505,7 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent)
+  sendEmail(emailsToBeSent, 'Remind teachers about giving feedback response')
 
   return emailsToBeSent
 }
@@ -617,7 +617,10 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
     },
   )
 
-  sendEmail(studentEmailsToBeSent)
+  sendEmail(
+    studentEmailsToBeSent,
+    'Notify students about feedback opening immediately',
+  )
 
   return studentEmailsToBeSent
 }
