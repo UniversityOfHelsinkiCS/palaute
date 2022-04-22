@@ -14,15 +14,13 @@ const normalizeMean = (mean) => {
 }
 
 const getArrow = (mean) => {
-  if (!mean) {
-    return '-'
-  }
-
   const normalizedMean = normalizeMean(mean)
 
   const angle = mean < 3 ? -(normalizedMean * 90) : normalizedMean * 90
 
-  return <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} />
+  return (
+    <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} fontSize="medium" />
+  )
 }
 
 const getColor = (mean) => {
@@ -81,9 +79,9 @@ const WorkloadResultItem = ({
 }) => {
   const { t, i18n } = useTranslation()
 
-  const tooltipData = !isEmpty(distribution)
-    ? getTooltipData(distribution, question)
-    : null
+  const hasValue = !isEmpty(distribution)
+
+  const tooltipData = hasValue ? getTooltipData(distribution, question) : null
 
   const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
 
@@ -109,7 +107,7 @@ const WorkloadResultItem = ({
       tooltipTitle={tooltipTitle}
       {...props}
     >
-      {getArrow(mean)}
+      {hasValue ? getArrow(mean) : '–'}
     </ResultItemBase>
   )
 }

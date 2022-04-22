@@ -1,8 +1,7 @@
 import groupBy from 'lodash/groupBy'
 import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
-
-import theme from '../../theme'
+import { useTheme } from '@material-ui/core'
 
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -29,6 +28,8 @@ const getScalesConfig = (t) => ({
 })
 
 export const getLikertChartConfig = (question, language, t) => {
+  const theme = useTheme()
+
   const labels = [1, 2, 3, 4, 5, 0]
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
@@ -58,6 +59,8 @@ export const getLikertChartConfig = (question, language, t) => {
 }
 
 export const getMultipleChoiceChartConfig = (question, language, t) => {
+  const theme = useTheme()
+
   const arrayOptions = question.data?.options ?? []
 
   const labels = arrayOptions.map(({ label }) =>
@@ -90,6 +93,8 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
 }
 
 export const getSingleChoiceChartConfig = (question, language, t) => {
+  const theme = useTheme()
+
   const arrayOptions = question.data?.options ?? []
 
   let labels = arrayOptions.map(({ label }) =>

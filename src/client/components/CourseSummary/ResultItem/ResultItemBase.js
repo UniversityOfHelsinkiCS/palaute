@@ -1,8 +1,43 @@
 import React from 'react'
 import { Tooltip, makeStyles } from '@material-ui/core'
+import {
+  pink,
+  green,
+  lightGreen,
+  deepOrange,
+  amber,
+  grey,
+} from '@material-ui/core/colors'
 import cn from 'classnames'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  item: {
+    textAlign: 'center',
+    position: 'relative',
+    color: grey['900'],
+  },
+  missing: {
+    backgroundColor: theme.palette.divider,
+  },
+  bad: {
+    backgroundColor: pink['500'],
+  },
+  poor: {
+    backgroundColor: deepOrange['300'],
+  },
+  ok: {
+    backgroundColor: amber['200'],
+  },
+  good: {
+    backgroundColor: lightGreen['400'],
+  },
+  excellent: {
+    backgroundColor: green['600'],
+  },
+}))
+
+/* Old Norppa colors 
+const useStyles1 = makeStyles({
   item: {
     textAlign: 'center',
     position: 'relative',
@@ -25,7 +60,7 @@ const useStyles = makeStyles({
   excellent: {
     backgroundColor: '#63be7a',
   },
-})
+}) */
 
 const ResultItemBase = ({
   children,

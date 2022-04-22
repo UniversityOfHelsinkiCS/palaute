@@ -1,7 +1,5 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import PlusIcon from '@material-ui/icons/Add'
-import MinusIcon from '@material-ui/icons/Remove'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -62,7 +60,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
       {...props}
     >
       <div className={classes.content}>
-        <span>{mean ?? 0}</span>
+        <span>{mean || '–'}</span>
       </div>
     </ResultItemBase>
   )
