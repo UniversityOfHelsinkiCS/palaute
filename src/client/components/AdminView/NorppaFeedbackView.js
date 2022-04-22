@@ -22,16 +22,14 @@ const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
-  const [filterUnsolved, setFilterUnsolved] = useState(false)
-  const [filterResponseWanted, setFilterResponseWanted] = useState(false)
+  const [filterActionRequired, setFilterActionRequired] = useState(false)
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
   const sortedFeedbacks = feedbacks
-    .filter((f) => !filterUnsolved || !f.solved)
-    .filter((f) => !filterResponseWanted || f.responseWanted)
+    .filter((f) => !filterActionRequired || (!f.solved && f.responseWanted))
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   const handleMarkAsSolved = async (id, solved) => {
@@ -49,22 +47,12 @@ const NorppaFeedbackView = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={filterUnsolved}
-              onChange={() => setFilterUnsolved(!filterUnsolved)}
+              checked={filterActionRequired}
+              onChange={() => setFilterActionRequired(!filterActionRequired)}
               color="primary"
             />
           }
-          label="Unsolved"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={filterResponseWanted}
-              onChange={() => setFilterResponseWanted(!filterResponseWanted)}
-              color="primary"
-            />
-          }
-          label="Response wanted"
+          label="Waiting response"
         />
       </Box>
       {sortedFeedbacks.map(
@@ -91,7 +79,7 @@ const NorppaFeedbackView = () => {
                     </Box>
                   </Box>
                   <Box display="flex" flexDirection="column" padding={2}>
-                    {!solved ? (
+                    {!solved && responseWanted && (
                       <Box width="140px" paddingTop={1}>
                         <Button
                           color="primary"
@@ -103,7 +91,8 @@ const NorppaFeedbackView = () => {
                           </Typography>
                         </Button>
                       </Box>
-                    ) : (
+                    )}
+                    {solved && responseWanted && (
                       <Box display="flex" width="140px">
                         <Alert>Solved!</Alert>
                         <IconButton
@@ -114,7 +103,7 @@ const NorppaFeedbackView = () => {
                         </IconButton>
                       </Box>
                     )}
-                    {responseWanted && !solved && (
+                    {!solved && responseWanted && (
                       <Box marginTop={2}>
                         <Alert severity="warning">Response wanted!</Alert>
                       </Box>
