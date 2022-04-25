@@ -9,7 +9,15 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, makeStyles } from '@material-ui/core'
+import {
+  Box,
+  Typography,
+  Tab,
+  Button,
+  Link as MuiLink,
+  Chip,
+  makeStyles,
+} from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -35,10 +43,12 @@ import {
   copyLink,
   getFeedbackPeriod,
   getCoursePageUrl,
-  getCourseUnitSummaryUrl,
+  getCourseUnitSummaryPath,
+  deleteResponsibleTeacher,
 } from './utils'
+
 import { LoadingProgress } from '../LoadingProgress'
-import InternalLink from '../InternalLink'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -72,13 +82,6 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
-  coursePageLink: {
-    display: 'inline-block',
-    marginTop: theme.spacing(1),
-    '@media print': {
-      display: 'none',
-    },
-  },
   infoContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -90,12 +93,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
+  const list = teachers.map((teacher) => {
+    const displayName = `${teacher.firstName} ${teacher.lastName}`
+
+    return isAdmin ? (
+      <Box mb={1} key={teacher.id}>
+        <Chip
+          label={displayName}
+          variant="outlined"
+          onDelete={() => onDelete(teacher)}
+        />
+      </Box>
+    ) : (
+      <Typography
+        key={teacher.id}
+        color="textSecondary"
+        variant="body2"
+        component="p"
+      >
+        {displayName}
+      </Typography>
+    )
+  })
+
+  return <div>{list}</div>
+}
+
 const FeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id)
+  const { feedbackTarget, isLoading, refetch } = useFeedbackTarget(id)
+  const { authorizedUser } = useAuthorizedUser()
+  const isAdmin = authorizedUser?.isAdmin ?? false
   const classes = useStyles()
 
   if (isLoading) {
@@ -145,7 +177,7 @@ const FeedbackTargetView = () => {
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = getCoursePageUrl(feedbackTarget)
-  const courseSummaryUrl = getCourseUnitSummaryUrl(feedbackTarget)
+  const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
 
   const courseRealisationName = getLanguageValue(
     courseRealisation?.name,
@@ -154,6 +186,27 @@ const FeedbackTargetView = () => {
 
   const visibleCourseCode =
     courseRealisationName.indexOf(courseCode) > -1 ? '' : `, ${courseCode}`
+
+  const handleDeleteResponsibleTeacher = async (teacher) => {
+    const displayName = `${teacher.firstName} ${teacher.lastName}`
+
+    const message = t(
+      'feedbackTargetView:deleteResponsibleTeacherConfirmation',
+      { name: displayName },
+    )
+
+    // eslint-disable-next-line no-alert
+    if (window.confirm(message)) {
+      try {
+        await deleteResponsibleTeacher(feedbackTarget, teacher)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
+
+      refetch()
+    }
+  }
 
   return (
     <>
@@ -196,40 +249,31 @@ const FeedbackTargetView = () => {
               </Typography>
             </dl>
 
-            <Box display="flex">
-              <ExternalLink
-                href={coursePageUrl}
-                className={classes.coursePageLink}
-              >
+            <Box display="flex" className={classes.hidePrint}>
+              <ExternalLink href={coursePageUrl}>
                 {t('feedbackTargetView:coursePage')}
               </ExternalLink>
-              <Box marginLeft={4} />
+
+              <Box ml={2} />
               {isTeacher && (
-                <InternalLink
-                  href={courseSummaryUrl}
-                  className={classes.coursePageLink}
-                >
+                <MuiLink to={courseSummaryPath} component={Link}>
                   {t('feedbackTargetView:courseSummary')}
-                </InternalLink>
+                </MuiLink>
               )}
             </Box>
           </div>
           <div>
             {responsibleTeachers && (
               <div>
-                <Typography>
+                <Typography gutterBottom>
                   {t('feedbackTargetView:responsibleTeachers')}
                 </Typography>
-                {responsibleTeachers.map((teacher) => (
-                  <Typography
-                    key={teacher.id}
-                    color="textSecondary"
-                    variant="body2"
-                    component="p"
-                  >
-                    {teacher.firstName} {teacher.lastName}
-                  </Typography>
-                ))}
+
+                <ResponsibleTeachersList
+                  teachers={responsibleTeachers}
+                  isAdmin={isAdmin}
+                  onDelete={handleDeleteResponsibleTeacher}
+                />
               </div>
             )}
           </div>

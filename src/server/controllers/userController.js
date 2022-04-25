@@ -1,7 +1,7 @@
 const { ApplicationError } = require('../util/customErrors')
 
 const getUser = async (req, res) => {
-  const { user } = req
+  const { user, isAdmin } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
 
@@ -11,6 +11,7 @@ const getUser = async (req, res) => {
     ...user.toJSON(),
     isTeacher,
     iamGroups: user.iamGroups ?? [],
+    isAdmin,
   })
 }
 

@@ -325,6 +325,8 @@ export default {
     courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Responsible teachers',
     QR: 'QR code',
+    deleteResponsibleTeacherConfirmation:
+      'Delete teacher {{name}} from responsible teachers?',
   },
   noadUser: {
     noUser:

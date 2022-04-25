@@ -1,7 +1,7 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useNorppaFeedbackCount = (options = {}, isAdminUser) => {
+const useNorppaFeedbackCount = (options = {}) => {
   const queryKey = 'norppaFeedbackCount'
 
   const queryFn = async () => {
@@ -10,10 +10,11 @@ const useNorppaFeedbackCount = (options = {}, isAdminUser) => {
     return data
   }
 
-  const { data: norppaFeedbackCount, ...rest } = useQuery(queryKey, queryFn, {
-    ...options,
-    enabled: isAdminUser,
-  })
+  const { data: norppaFeedbackCount, ...rest } = useQuery(
+    queryKey,
+    queryFn,
+    options,
+  )
 
   return { norppaFeedbackCount, ...rest }
 }

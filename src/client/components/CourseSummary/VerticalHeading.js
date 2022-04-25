@@ -1,12 +1,6 @@
 import React from 'react'
-import classNames from 'classnames'
-import {
-  Tooltip,
-  Typography,
-  makeStyles,
-  Box,
-  Divider,
-} from '@material-ui/core'
+
+import { Tooltip, Typography, makeStyles, Box } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   heading: {

@@ -778,6 +778,32 @@ const getUsers = async (req, res) => {
   res.send(users)
 }
 
+const deleteUserFeedbackTarget = async (req, res) => {
+  const { isAdmin } = req
+
+  if (!isAdmin) {
+    throw new ApplicationError('User is not authorized', 403)
+  }
+
+  const feedbackTargetId = Number(req.params.id)
+  const { userId } = req.params
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackTargetId,
+      userId,
+    },
+  })
+
+  if (!userFeedbackTarget) {
+    throw new ApplicationError('User feedback target is not found', 404)
+  }
+
+  await userFeedbackTarget.destroy()
+
+  res.sendStatus(200)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -791,4 +817,5 @@ module.exports = {
   closeFeedbackImmediately,
   remindStudentsOnFeedback,
   getUsers,
+  deleteUserFeedbackTarget,
 }

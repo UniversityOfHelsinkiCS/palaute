@@ -23,7 +23,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
-import { handleLogout, isAdmin } from './utils'
+import { handleLogout } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
@@ -126,13 +126,13 @@ const NavBar = () => {
   const isMobile = useMediaQuery('(max-width:500px)')
 
   const isStudent = Boolean(feedbackTargets?.length)
-  const isAdminUser = isAdmin(authorizedUser)
-  const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount(
-    {
-      refetchInterval: 60000,
-    },
-    isAdminUser,
-  )
+  const isAdminUser = authorizedUser?.isAdmin ?? false
+
+  const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
+    refetchInterval: 60000,
+    enabled: isAdminUser,
+  })
+
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
   const norppaFeedbackGiven = authorizedUser?.norppaFeedbackGiven ?? false
 

@@ -325,6 +325,8 @@ export default {
     courseSummary: 'Kurssin toteutusten yhteenveto',
     responsibleTeachers: 'Vastuuopettajat',
     QR: 'QR-koodi',
+    deleteResponsibleTeacherConfirmation:
+      'Poista opettaja {{name}} vastuuopettajien joukosta?',
   },
   noadUser: {
     noUser:

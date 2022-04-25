@@ -86,6 +86,11 @@ router.put(
   feedbackTargets.closeFeedbackImmediately,
 )
 
+router.delete(
+  '/feedback-targets/:id/user-feedback-targets/:userId',
+  feedbackTargets.deleteUserFeedbackTarget,
+)
+
 router.put('/surveys/:id', surveys.update)
 router.post('/surveys/:id/questions', surveys.addQuestion)
 router.get('/surveys/university', surveys.getUniversitySurvey)

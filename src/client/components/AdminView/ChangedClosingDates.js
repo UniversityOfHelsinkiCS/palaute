@@ -9,7 +9,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import Alert from '../Alert'
 import { LoadingProgress } from '../LoadingProgress'
 
-export const ChangedClosingDates = ({ language }) => {
+export const ChangedClosingDates = () => {
   const { feedbackTargets, isLoading, refetch } = useChangedClosingDates()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -31,9 +31,11 @@ export const ChangedClosingDates = ({ language }) => {
   const handleRunDateCheckUpdate = async () => {
     try {
       const res = await apiClient.put(`/admin/update-changed-closing-dates`)
+
       refetch()
+
       const { updates } = res.data
-      console.log(res.data)
+
       enqueueSnackbar(updates ? `${updates} new cases` : `No new cases`, {
         variant: 'info',
       })

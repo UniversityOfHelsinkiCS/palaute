@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import ResultsRow from '../CourseSummary/ResultsRow'
-import VerticalHeading from '../CourseSummary/VerticalHeading'
 import CourseUnitSummary from '../CourseSummary/CourseUnitSummary'
 import DividerRow from '../CourseSummary/DividerRow'
 import Filters from '../CourseSummary/Filters'
@@ -24,6 +23,7 @@ import {
   filterByCourseCode,
   orderByCriteria,
 } from '../CourseSummary/utils'
+
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationSummary from '../../hooks/useOrganisationSummary'
 import { LoadingProgress } from '../LoadingProgress'

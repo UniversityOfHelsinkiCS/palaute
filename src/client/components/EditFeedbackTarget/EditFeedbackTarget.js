@@ -23,7 +23,6 @@ import CopyFromCourseDialog from './CopyFromCourseDialog'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { isAdmin } from '../NavBar/utils'
 
 import {
   getUpperLevelQuestions,
@@ -130,9 +129,11 @@ const EditFeedbackTarget = () => {
   const { i18n, t } = useTranslation()
   const queryClient = useQueryClient()
   const { language } = i18n
+
   const { authorizedUser, isLoading: authorizedUserLoading } =
     useAuthorizedUser()
-  const isAdminUser = isAdmin(authorizedUser)
+
+  const isAdminUser = authorizedUser?.isAdmin ?? false
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,

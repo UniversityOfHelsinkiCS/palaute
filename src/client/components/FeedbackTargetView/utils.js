@@ -1,5 +1,7 @@
 import { parseISO, format } from 'date-fns'
 
+import apiClient from '../../util/apiClient'
+
 export const feedbackTargetIsDisabled = (feedbackTarget) => {
   const { courseUnit } = feedbackTarget
   const organisations = courseUnit?.organisations ?? []
@@ -36,5 +38,11 @@ export const copyLink = (feedbackTarget) => {
 export const getCoursePageUrl = (feedbackTarget) =>
   `https://studies.helsinki.fi/opintotarjonta/cur/${feedbackTarget.courseRealisation.id}`
 
-export const getCourseUnitSummaryUrl = (feedbackTarget) =>
+export const getCourseUnitSummaryPath = (feedbackTarget) =>
   `/course-summary/${feedbackTarget.courseUnit.courseCode}`
+
+export const deleteResponsibleTeacher = async (feedbackTarget, teacher) => {
+  await apiClient.delete(
+    `/feedback-targets/${feedbackTarget.id}/user-feedback-targets/${teacher.id}`,
+  )
+}

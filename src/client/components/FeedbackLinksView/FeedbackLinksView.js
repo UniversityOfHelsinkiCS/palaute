@@ -4,14 +4,13 @@ import { Box, Typography } from '@material-ui/core'
 import { Redirect, useParams } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetUsers from '../../hooks/useFeedbackTargetUsers'
-import { isAdmin } from '../NavBar/utils'
 import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackLinksView = () => {
   const { id } = useParams()
 
   const { authorizedUser } = useAuthorizedUser()
-  const isAdminUser = isAdmin(authorizedUser)
+  const isAdminUser = authorizedUser?.isAdmin ?? false
 
   if (!isAdminUser) {
     return <Redirect to="/" />

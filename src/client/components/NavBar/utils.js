@@ -1,7 +1,6 @@
 import { inProduction } from '../../../config'
 import { clearHeaders } from '../../util/mockHeaders'
 import apiClient from '../../util/apiClient'
-import { ADMINS } from '../../util/common'
 
 const devLogout = () => {
   clearHeaders()
@@ -19,5 +18,3 @@ export const handleLogout = async () => {
 
   window.location.href = url
 }
-
-export const isAdmin = (user) => ADMINS.includes(user?.username)

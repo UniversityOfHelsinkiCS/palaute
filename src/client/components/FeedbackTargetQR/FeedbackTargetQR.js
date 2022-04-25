@@ -6,7 +6,6 @@ import { Box } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { isAdmin } from '../NavBar/utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
 
@@ -15,7 +14,8 @@ const FeedbackTargetResults = () => {
 
   const { authorizedUser, isLoading: authorizedUserLoading } =
     useAuthorizedUser()
-  const isAdminUser = isAdmin(authorizedUser)
+
+  const isAdminUser = authorizedUser?.isAdmin ?? false
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
