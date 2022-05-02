@@ -1,6 +1,6 @@
 const { NorppaFeedback, User } = require('../models')
 const { ADMINS } = require('../../config')
-const ApplicationError = require('../util/customErrors')
+const { ApplicationError } = require('../util/customErrors')
 
 const submitFeedback = async (req, res) => {
   const { user } = req
