@@ -327,7 +327,7 @@ const FeedbackTargetView = () => {
               to={`${url}/students-with-feedback`}
             />
           )}
-          {isOpen && isTeacher && (
+          {isTeacher && (
             <Tab
               label={t('feedbackTargetView:QR')}
               component={Link}
