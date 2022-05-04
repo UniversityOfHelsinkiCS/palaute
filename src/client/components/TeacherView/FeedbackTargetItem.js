@@ -25,7 +25,7 @@ const getChip = (feedbackTarget) => {
   const { feedbackResponse, feedbackCount } = feedbackTarget
   const feedbackResponseGiven = Boolean(feedbackResponse)
 
-  if (isEnded && feedbackCount > 0) {
+  if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
     return (
       <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
     )
