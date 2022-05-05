@@ -7,6 +7,7 @@ import {
   deepOrange,
   amber,
   grey,
+  red,
 } from '@material-ui/core/colors'
 import cn from 'classnames'
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.divider,
   },
   bad: {
-    backgroundColor: pink['500'],
+    backgroundColor: red.A400,
   },
   poor: {
     backgroundColor: deepOrange['300'],
