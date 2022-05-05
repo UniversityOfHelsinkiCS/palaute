@@ -17,6 +17,7 @@ services:
       - REDIS_HOST=redis
     ports:
       - 3000:3000
+      - 9229:9229
     container_name: palaute_dev
   db:
     image: postgres:13.2

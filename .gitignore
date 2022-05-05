@@ -3,6 +3,7 @@ dist
 build
 stats.json
 *.log
+*.cpuprofile
 .env
 .DS_Store
 backups

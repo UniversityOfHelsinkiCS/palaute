@@ -11,7 +11,7 @@
     "start:front": "react-scripts start",
     "start:prod": "NODE_ENV=production node ./src/server/index.js",
     "start:test": "NODE_ENV=test node ./src/server/index.js",
-    "start:dev": "NODE_ENV=development concurrently \"nodemon -L ./src/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-scripts start\" ",
+    "start:dev": "NODE_ENV=development concurrently \"nodemon --inspect=0.0.0.0 -L ./src/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-scripts start\" ",
     "test": "jest --verbose --runInBand --silent=false --forceExit",
     "test:e2e": "cypress run",
     "test:cypress": "cypress open",

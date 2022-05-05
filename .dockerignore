@@ -2,3 +2,4 @@
 node_modules
 docker-compose.yml
 Dockerfile
+npm-debug.log
