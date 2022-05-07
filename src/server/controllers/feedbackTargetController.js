@@ -224,6 +224,9 @@ const getOne = async (req, res) => {
         ],
       },
     )
+    if (!adminFeedbackTarget)
+      throw new ApplicationError('Feedback target not found', 404)
+
     const responseReady = await convertFeedbackTargetForAdmin(
       adminFeedbackTarget,
       req.isAdmin,
