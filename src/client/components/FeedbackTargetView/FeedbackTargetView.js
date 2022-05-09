@@ -160,6 +160,7 @@ const FeedbackTargetView = () => {
   const showFeedbackResponseTab = isTeacher && isEnded
   const showStudentsWithFeedbackTab =
     isTeacher && studentListVisible && (isOpen || isEnded)
+  const showCourseSummaryLink = feedbackTarget.courseSummaryLinkVisible
 
   const handleCopyLink = () => {
     copyLink(feedbackTarget)
@@ -255,7 +256,7 @@ const FeedbackTargetView = () => {
               </ExternalLink>
 
               <Box ml={2} />
-              {isTeacher && (
+              {isTeacher && showCourseSummaryLink && (
                 <MuiLink to={courseSummaryPath} component={Link}>
                   {t('feedbackTargetView:courseSummary')}
                 </MuiLink>
