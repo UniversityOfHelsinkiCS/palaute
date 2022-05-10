@@ -15,6 +15,8 @@ import ExternalLink from './ExternalLink'
 
 import { images } from '../util/common'
 
+import { inProduction } from '../../config'
+
 const useStyles = makeStyles((theme) => ({
   logo: {
     marginLeft: theme.spacing(2),
@@ -44,6 +46,11 @@ const Footer = ({ user }) => {
           justifyContent="space-between"
           alignItems="center"
         >
+          {!inProduction && (
+            <Box>
+              <Typography>DEVELOPMENT</Typography>
+            </Box>
+          )}
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
