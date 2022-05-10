@@ -7,9 +7,6 @@ const { format } = require('date-fns')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS } = require('../util/config')
 const { run } = require('../updater/index')
-const {
-  run: runFeedbackTargetDateCheckCron,
-} = require('../util/feedbackDateCheckUpdater')
 
 const {
   FeedbackTarget,
@@ -373,11 +370,6 @@ const solveFeedbackTargetDateCheck = async (req, res) => {
   return res.status(200).send()
 }
 
-const runUpdateFeedbackTargetDateChecks = async (req, res) => {
-  const { updates, deletes } = await runFeedbackTargetDateCheckCron()
-  return res.status(200).send({ updates, deletes })
-}
-
 const router = Router()
 
 router.use(adminAccess)
@@ -391,6 +383,5 @@ router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
 router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
-router.put('/update-changed-closing-dates/', runUpdateFeedbackTargetDateChecks)
 
 module.exports = router

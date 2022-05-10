@@ -28,22 +28,6 @@ export const ChangedClosingDates = () => {
     }
   }
 
-  const handleRunDateCheckUpdate = async () => {
-    try {
-      const res = await apiClient.put(`/admin/update-changed-closing-dates`)
-
-      refetch()
-
-      const { updates } = res.data
-
-      enqueueSnackbar(updates ? `${updates} new cases` : `No new cases`, {
-        variant: 'info',
-      })
-    } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
-
   const date = (d) => new Date(d).toLocaleDateString()
   const name = (n) => getLanguageValue(n, i18n.language)
 
@@ -58,27 +42,12 @@ export const ChangedClosingDates = () => {
     <>
       <Box margin={2} marginTop={4}>
         <Alert severity="info">
-          Showing feedback targets where the feedback closing date is later than
-          16 days or earlier than 6 days after the ending of the course
-          realisation, and the teacher has NOT manually edited the dates.
-        </Alert>
-      </Box>
-      <Box margin={2} marginBottom={4}>
-        <Alert severity="info">
-          Use the UPDATE NOW button to fetch new cases. Old cases where the
-          course has ended and the feedback period has ended 16 days ago will be
-          removed.
+          Showing feedback targets where the course start or end date has
+          changed in SIS, and the teacher has edited feedback opening or closing
+          dates.
         </Alert>
       </Box>
       <Box margin={2} display="flex">
-        <Button
-          onClick={handleRunDateCheckUpdate}
-          color="primary"
-          variant="outlined"
-        >
-          Update now
-        </Button>
-        <Box marginRight={4} />
         <Button
           variant="outlined"
           color="primary"
@@ -88,6 +57,14 @@ export const ChangedClosingDates = () => {
         </Button>
       </Box>
       <Box>
+        {sortedFeedbackTargets.length === 0 && (
+          <Box m={2}>
+            <Alert severity="info">
+              Empty, which is good I guess. This feature is still in development
+              and might not work correctly
+            </Alert>
+          </Box>
+        )}
         {sortedFeedbackTargets?.map(
           ({ feedback_target: fbt, is_solved: isSolved }, i) => (
             <Box key={i} margin={2}>

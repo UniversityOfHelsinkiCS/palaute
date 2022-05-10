@@ -11,6 +11,7 @@ const {
   UserFeedbackTarget,
   Survey,
   CourseRealisationsOrganisation,
+  FeedbackTargetDateCheck,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -219,27 +220,57 @@ const getTeachingLanguages = (customCodeUrns) => {
   return languages
 }
 
-const createCourseRealisations = async (courseRealisations) => {
-  await CourseRealisation.bulkCreate(
-    courseRealisations.map(
-      ({ id, name, activityPeriod, organisations, customCodeUrns }) => ({
-        id,
-        name,
-        ...getCourseRealisationPeriod(activityPeriod),
-        educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
-        isMoocCourse: isMoocCourse(customCodeUrns),
-        teachingLanguages: getTeachingLanguages(customCodeUrns),
-      }),
-    ),
-    {
-      updateOnDuplicate: [
-        'name',
-        'endDate',
-        'startDate',
-        'isMoocCourse',
-        'teachingLanguages',
-      ],
+const createDateCheck = async (old, updated) => {
+  const feedbackTarget = await FeedbackTarget.findOne({
+    where: {
+      courseRealisationId: old.id,
     },
+    attributes: ['id', 'feedback_dates_edited_by_teacher'],
+  })
+  if (!feedbackTarget?.id) return
+
+  if (old.startDate === updated.startDate && old.endDate === updated.startDate)
+    return
+
+  if (!feedbackTarget.feedbackDatesEditedByTeacher) return
+
+  logger.info(
+    '[UPDATER] FOUND A CHANGED COURSE DATE WITH TEACHER MODIFIED FEEDBACK DATES',
+  )
+  FeedbackTargetDateCheck.create({ feedback_target_id: feedbackTarget.id })
+}
+
+const createCourseRealisations = async (courseRealisations) => {
+  // Check when course's dates have changed in sis. If that happens, create a date check.
+  await Promise.all(
+    courseRealisations.map(
+      async ({ id, name, activityPeriod, organisations, customCodeUrns }) => {
+        const newRealisation = {
+          id,
+          name,
+          ...getCourseRealisationPeriod(activityPeriod),
+          educationalInstitutionUrn:
+            getEducationalInstitutionUrn(organisations),
+          isMoocCourse: isMoocCourse(customCodeUrns),
+          teachingLanguages: getTeachingLanguages(customCodeUrns),
+        }
+        const old = await CourseRealisation.findByPk(id, {
+          attributes: ['start_date', 'end_date', 'id'],
+        })
+        if (old) {
+          // update existing
+          await createDateCheck(old, newRealisation)
+
+          old.name = newRealisation.name
+          old.endDate = newRealisation.endDate
+          old.startDate = newRealisation.startDate
+          old.isMoocCourse = newRealisation.isMoocCourse
+          old.teachingLanguages = newRealisation.teachingLanguages
+          return old.save()
+        }
+        return CourseRealisation.create(newRealisation)
+      },
+    ),
   )
 
   const courseRealisationsOrganisations = [].concat(
