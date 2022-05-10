@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   headingContainer: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
     marginTop: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
@@ -141,13 +141,14 @@ const FeedbackTargetView = () => {
   const {
     accessStatus,
     courseRealisation,
+    courseUnit,
     opensAt,
     feedback,
     studentListVisible,
     responsibleTeachers,
   } = feedbackTarget
 
-  const { courseCode } = feedbackTarget.courseUnit
+  const { courseCode } = courseUnit
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -185,6 +186,8 @@ const FeedbackTargetView = () => {
     i18n.language,
   )
 
+  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
+
   const visibleCourseCode =
     courseRealisationName.indexOf(courseCode) > -1 ? '' : `, ${courseCode}`
 
@@ -213,11 +216,16 @@ const FeedbackTargetView = () => {
     <>
       <Box mb={3}>
         <div className={classes.headingContainer}>
-          <Typography variant="h4" component="h1">
-            {courseRealisationName}
-            {visibleCourseCode}
-          </Typography>
-
+          <Box display="flex" flexDirection="column">
+            <Typography variant="h4" component="h1">
+              {courseUnitName}
+              {visibleCourseCode}
+            </Typography>
+            <Box mt={1} />
+            <Typography variant="body1" component="h2">
+              {courseRealisationName}
+            </Typography>
+          </Box>
           {isTeacher && (
             <div className={classes.copyLinkButtonContainer}>
               <Button
