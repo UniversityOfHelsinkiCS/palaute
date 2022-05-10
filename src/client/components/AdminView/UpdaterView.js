@@ -16,6 +16,7 @@ import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
 import Alert from '../Alert'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
+import { inProduction } from '../../../config'
 
 const StatusTable = ({ updaterStatus }) => {
   const { startedAt, finishedAt, status } = updaterStatus
@@ -97,6 +98,14 @@ const UpdaterView = () => {
         // eslint-disable-next-line
         !window.confirm(
           'Updater seems to be running. Are you sure you want to start another run anyway?',
+        )
+      )
+        return
+    }
+    if (inProduction) {
+      if (
+        !window.confirm(
+          'You are in production. Please confirm that you want to run the full updater cycle.',
         )
       )
         return
