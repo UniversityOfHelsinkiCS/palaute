@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const {
   Op,
   DATE,
@@ -75,6 +76,64 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
   return teacherSurvey
 }
 
+/**
+ * Gets the previous feedback target that has at least one teacher from given feedback target
+ */
+const getPreviousFeedbackTarget = async (feedbackTarget, courseRealisation) => {
+  const currentTeachers = UserFeedbackTarget.findAll({
+    attributes: ['user_id'],
+    where: {
+      feedbackTargetId: feedbackTarget.id,
+      accessStatus: 'TEACHER',
+    },
+  })
+  /* eslint-disable-next-line no-use-before-define */
+  const allPreviousFeedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      courseUnitId: feedbackTarget.courseUnitId,
+      feedbackType: feedbackTarget.feedbackType,
+    },
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        where: {
+          startDate: {
+            [Op.lt]: courseRealisation.startDate,
+          },
+        },
+      },
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        attributes: ['user_id'],
+        where: {
+          accessStatus: 'TEACHER',
+        },
+      },
+    ],
+    order: [
+      [
+        { model: CourseRealisation, as: 'courseRealisation' },
+        'startDate',
+        'DESC',
+      ],
+    ],
+  })
+  if (!allPreviousFeedbackTargets || allPreviousFeedbackTargets.length === 0)
+    return null
+
+  const currentTeacherIds = (await currentTeachers).map(
+    ({ user_id }) => user_id,
+  )
+
+  return allPreviousFeedbackTargets.find((fbt) =>
+    fbt.userFeedbackTargets.some((ufbt) =>
+      currentTeacherIds.includes(ufbt.user_id),
+    ),
+  )
+}
+
 class FeedbackTarget extends Model {
   async getSurveys() {
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
@@ -100,31 +159,10 @@ class FeedbackTarget extends Model {
       this.courseRealisationId,
     )
 
-    const [previousFeedbackTarget] = await FeedbackTarget.findAll({
-      where: {
-        courseUnitId: this.courseUnitId,
-        feedbackType: this.feedbackType,
-      },
-      include: [
-        {
-          model: CourseRealisation,
-          as: 'courseRealisation',
-          where: {
-            startDate: {
-              [Op.lt]: courseRealisation.startDate,
-            },
-          },
-        },
-      ],
-      order: [
-        [
-          { model: CourseRealisation, as: 'courseRealisation' },
-          'startDate',
-          'DESC',
-        ],
-      ],
-      limit: 1,
-    })
+    const previousFeedbackTarget = await getPreviousFeedbackTarget(
+      this,
+      courseRealisation,
+    )
 
     const previousSurvey = previousFeedbackTarget
       ? await Survey.findOne({
