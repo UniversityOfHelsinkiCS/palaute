@@ -312,7 +312,7 @@ export default {
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
     surveyTab: 'Kysely',
-    feedbacksTab: 'Palautteet',
+    feedbacksTab: 'Vastaukset',
     feedbackResponseTab: 'Vastapalaute',
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',

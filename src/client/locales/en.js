@@ -312,7 +312,7 @@ export default {
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',
     surveyTab: 'Survey',
-    feedbacksTab: 'Feedback',
+    feedbacksTab: 'Answers',
     feedbackResponseTab: 'Counter feedback',
     editSurveyTab: 'Edit survey',
     studentsWithFeedbackTab: 'Respondents',
