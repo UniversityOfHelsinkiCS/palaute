@@ -20,6 +20,7 @@ export default {
     name: 'Nimi',
     edit: 'Muokkaa',
     show: 'Näytä',
+    copyToClipBoard: 'Kopioi leikepöydälle',
     feedbackOpenPeriod:
       'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
     firstName: 'Etunimi',
@@ -324,7 +325,11 @@ export default {
     coursePage: 'Kurssisivu',
     courseSummary: 'Kurssin toteutusten yhteenveto',
     responsibleTeachers: 'Vastuuopettajat',
-    QR: 'QR-koodi',
+    linksTab: 'Opiskelijan linkit',
+    studentLinkTitle: 'Opiskelijan vastauslinkki',
+    studentLinkQRTitle: 'Vastauslinkin QR-koodi',
+    qrCodeHelpText:
+      'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
     deleteResponsibleTeacherConfirmation:
       'Poista opettaja {{name}} vastuuopettajien joukosta?',
   },

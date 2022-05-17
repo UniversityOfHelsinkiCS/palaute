@@ -22,13 +22,22 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
+import {
+  CommentOutlined,
+  EditOutlined,
+  LiveHelpOutlined,
+  PeopleOutlined,
+  PollOutlined,
+  QuestionAnswer,
+  ShareOutlined,
+} from '@material-ui/icons'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
 import FeedbackResponse from '../FeedbackResponse'
-import FeedbackTargetQR from '../FeedbackTargetQR'
+import FeedbackTargetLinks from '../FeedbackTargetLinks'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import RouterTabs from '../RouterTabs'
@@ -298,16 +307,29 @@ const FeedbackTargetView = () => {
         >
           <Tab
             label={
-              feedback && isOpen
-                ? t('feedbackTargetView:editFeedbackTab')
-                : t('feedbackTargetView:surveyTab')
+              feedback && isOpen ? (
+                <TabLabel
+                  icon={<EditOutlined />}
+                  text={t('feedbackTargetView:editSurveyTab')}
+                />
+              ) : (
+                <TabLabel
+                  icon={<LiveHelpOutlined />}
+                  text={t('feedbackTargetView:surveyTab')}
+                />
+              )
             }
             component={Link}
             to={`${url}/feedback`}
           />
           {showFeedbacksTab && (
             <Tab
-              label={t('feedbackTargetView:feedbacksTab')}
+              label={
+                <TabLabel
+                  icon={<PollOutlined />}
+                  text={t('feedbackTargetView:feedbacksTab')}
+                />
+              }
               component={Link}
               to={`${url}/results`}
             />
@@ -315,7 +337,12 @@ const FeedbackTargetView = () => {
 
           {showFeedbackResponseTab && (
             <Tab
-              label={t('feedbackTargetView:feedbackResponseTab')}
+              label={
+                <TabLabel
+                  icon={<CommentOutlined />}
+                  text={t('feedbackTargetView:feedbackResponseTab')}
+                />
+              }
               component={Link}
               to={`${url}/feedback-response`}
             />
@@ -323,7 +350,12 @@ const FeedbackTargetView = () => {
 
           {showEditSurveyTab && (
             <Tab
-              label={t('feedbackTargetView:editSurveyTab')}
+              label={
+                <TabLabel
+                  icon={<EditOutlined />}
+                  text={t('feedbackTargetView:editSurveyTab')}
+                />
+              }
               component={Link}
               to={`${url}/edit`}
             />
@@ -331,16 +363,26 @@ const FeedbackTargetView = () => {
 
           {showStudentsWithFeedbackTab && (
             <Tab
-              label={t('feedbackTargetView:studentsWithFeedbackTab')}
+              label={
+                <TabLabel
+                  icon={<PeopleOutlined />}
+                  text={t('feedbackTargetView:studentsWithFeedbackTab')}
+                />
+              }
               component={Link}
               to={`${url}/students-with-feedback`}
             />
           )}
           {isTeacher && (
             <Tab
-              label={t('feedbackTargetView:QR')}
+              label={
+                <TabLabel
+                  icon={<ShareOutlined />}
+                  text={t('feedbackTargetView:linksTab')}
+                />
+              }
               component={Link}
-              to={`${url}/QR`}
+              to={`${url}/links`}
             />
           )}
         </RouterTabs>
@@ -358,12 +400,20 @@ const FeedbackTargetView = () => {
           path={`${path}/feedback-response`}
           component={FeedbackResponse}
         />
-        <Route path={`${path}/QR`} component={FeedbackTargetQR} />
+        <Route path={`${path}/links`} component={FeedbackTargetLinks} />
         <Route path={`${path}/togen`} component={FeedbackLinksView} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>
   )
 }
+
+const TabLabel = ({ icon, text }) => (
+  <Box display="flex">
+    {icon}
+    <Box ml={1} />
+    {text}
+  </Box>
+)
 
 export default FeedbackTargetView

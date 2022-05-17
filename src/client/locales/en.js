@@ -19,6 +19,7 @@ export default {
     name: 'Name',
     edit: 'Edit',
     show: 'Show',
+    copyToClipBoard: 'Copy to clipboard',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
     firstName: 'First name',
@@ -324,7 +325,10 @@ export default {
     coursePage: 'Course page',
     courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Responsible teachers',
-    QR: 'QR code',
+    linksTab: 'Student links',
+    studentLinkTitle: 'Student link to survey',
+    studentLinkQRTitle: 'QR-code to survey',
+    qrCodeHelpText: 'Easiest way to share the QR-code is by screenshotting it',
     deleteResponsibleTeacherConfirmation:
       'Delete teacher {{name}} from responsible teachers?',
   },
