@@ -297,7 +297,7 @@ const getFeedbackTargetLink = (feedbackTarget) => {
   }
 
   const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
-  return `<i><a href=${adUrl}>${name[language]}</a></i> (${openUntil[language]}) (${noAdLinkExpirationInfo[language]})<br/>`
+  return `<i><a href=${adUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
 }
 
 const notificationAboutSurveyOpeningToStudents = (
