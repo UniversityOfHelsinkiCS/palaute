@@ -310,7 +310,7 @@ const FeedbackTargetView = () => {
               feedback && isOpen ? (
                 <TabLabel
                   icon={<EditOutlined />}
-                  text={t('feedbackTargetView:editSurveyTab')}
+                  text={t('feedbackTargetView:editFeedbackTab')}
                 />
               ) : (
                 <TabLabel
