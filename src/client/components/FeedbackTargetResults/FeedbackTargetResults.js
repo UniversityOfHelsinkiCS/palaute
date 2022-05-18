@@ -133,6 +133,7 @@ const FeedbackTargetResults = () => {
         flexDirection="column"
         position="static"
         style={raiseButton}
+        mb={2}
       >
         {showCloseImmediately && (
           <>

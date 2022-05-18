@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
-import { Button, makeStyles, MenuItem, Menu } from '@material-ui/core'
+import { Button, makeStyles, MenuItem, Menu, Box } from '@material-ui/core'
 import Papa from 'papaparse'
 import * as _ from 'lodash'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -140,7 +140,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
   }
 
   return (
-    <div className={classes.container}>
+    <Box className={classes.container}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -155,7 +155,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        elevation={0}
+        elevation={2}
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: 'bottom',
@@ -176,7 +176,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
           <ExportPdfLink />
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   )
 }
 
