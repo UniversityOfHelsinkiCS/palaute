@@ -5,12 +5,10 @@ import { Card, CardContent, Box, Typography } from '@material-ui/core'
 import { useParams, Redirect, Link } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
-import { LoadingProgress } from '../LoadingProgress'
 
 const PublicQuestions = ({ feedbackTarget }) => {
   const [visibility, setVisibility] = useState('ALL')

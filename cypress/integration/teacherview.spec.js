@@ -49,6 +49,7 @@ describe('Teacher view', () => {
     ).click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
     cy.visit('localhost:8000/courses')
+    cy.reload()
     cy.contains('TKT20002 Software Development Methods').click()
     cy.contains('Counter feedback given')
   })
