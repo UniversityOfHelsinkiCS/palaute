@@ -1,28 +1,18 @@
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 
-import {
-  Box,
-  Button,
-  Chip,
-  FilledInput,
-  InputAdornment,
-  Paper,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@material-ui/core'
+import { Box, Button, Chip, Paper, Typography } from '@material-ui/core'
 import { FileCopyOutlined } from '@material-ui/icons'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
 import { copyLink } from '../FeedbackTargetView/utils'
 import Alert from '../Alert'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
@@ -37,54 +27,65 @@ const FeedbackTargetLinks = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { t, i18n } = useTranslation()
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id)
 
-  const isAdminUser = authorizedUser?.isAdmin ?? false
-
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
-
-  const isLoading = feedbackTargetIsLoading || authorizedUserLoading
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const feedbackLink = `${window.location.host}/targets/${id}/feedback`
+  const resultsLink = `${window.location.host}/targets/${id}/results`
 
-  const link = `${window.location.host}/targets/${id}/feedback`
-
-  const handleCopyLink = () => {
-    copyLink(feedbackTarget)
+  const handleCopyLink = (link) => {
+    copyLink(link)
     enqueueSnackbar(t('feedbackTargetView:linkCopied'), { variant: 'info' })
-  }
-
-  if (!isOpen && !isAdminUser) {
-    return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
   return (
     <Box display="flex" flexDirection="column" margin={3}>
+      {isEnded && (
+        <>
+          <Paper>
+            <Box p={2}>
+              <Chip
+                label={t('feedbackTargetView:studentResultsLinkTitle')}
+                variant="outlined"
+              />
+              <Box display="flex" alignItems="center" mt={1} ml={2}>
+                <Box fontStyle="italic">
+                  <Typography>{resultsLink}</Typography>
+                </Box>
+                <Box mr={2} />
+                <StudentLinkCopyButton
+                  onClick={() => handleCopyLink(resultsLink)}
+                  label={t('common:copyToClipBoard')}
+                />
+                <Box mr={2} />
+              </Box>
+            </Box>
+          </Paper>
+          <Box mt={4} />
+        </>
+      )}
       <Paper>
         <Box p={2}>
           <Chip
             label={t('feedbackTargetView:studentLinkTitle')}
             variant="outlined"
           />
-          <Box
-            fontStyle="italic"
-            display="flex"
-            alignItems="center"
-            mt={1}
-            ml={2}
-          >
-            <Typography>{link}</Typography>
+          <Box display="flex" alignItems="center" mt={1} ml={2}>
+            <Box fontStyle="italic">
+              <Typography>{feedbackLink}</Typography>
+            </Box>
             <Box mr={2} />
             <StudentLinkCopyButton
-              onClick={handleCopyLink}
+              onClick={() => handleCopyLink(feedbackLink)}
               label={t('common:copyToClipBoard')}
             />
+            <Box mr={2} />
           </Box>
         </Box>
       </Paper>
@@ -96,7 +97,7 @@ const FeedbackTargetLinks = () => {
             variant="outlined"
           />
           <Box p={4}>
-            <QRCode value={link} />
+            <QRCode value={feedbackLink} />
           </Box>
           <Alert severity="info">
             {t('feedbackTargetView:qrCodeHelpText')}

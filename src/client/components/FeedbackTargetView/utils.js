@@ -29,10 +29,8 @@ export const getFeedbackPeriod = (feedbackTarget) => {
   return `${opensAt} - ${closesAt}`
 }
 
-export const copyLink = (feedbackTarget) => {
-  const { origin } = window.location
-
-  navigator.clipboard.writeText(`${origin}/targets/${feedbackTarget.id}`)
+export const copyLink = (link) => {
+  navigator.clipboard.writeText(link)
 }
 
 export const getCoursePageUrl = (feedbackTarget) =>

@@ -254,12 +254,16 @@ export default {
     formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
   publicQuestions: {
+    // title: 'Vastausten näkyvyys',
     publicInfo:
       'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2>',
     selectVisibility: 'Välj användare som ser de offentliga frågorna',
     none: 'Endast personal på utbildningsprogrammet',
     enrolled: 'Studerande på kursen',
     everyone: 'Alla användare',
+  },
+  feedbackTargetSettings: {
+    // editPeriodTitle: 'Feedback period'
   },
   courseSummary: {
     heading: 'Sammandrag av kursens respons',
@@ -328,11 +332,14 @@ export default {
     // coursePage: 'Course page',
     courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Ansvariga lärare',
-    // linksTab: 'Student links',
+    // shareTab: 'Jaa kysely',
+    // surveySettingsTab: 'Kyselyn asetukset',
     // studentLinkTitle: 'Student link to survey',
+    // studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     // studentLinkQRTitle: 'QR-code to survey',
     // qrCodeHelpText: 'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
     // deleteResponsibleTeacherConfirmation: 'Poista opettaja {{name}} vastuuopettajien joukosta?',
+    // noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback'
   },
   noadUser: {
     noUser:

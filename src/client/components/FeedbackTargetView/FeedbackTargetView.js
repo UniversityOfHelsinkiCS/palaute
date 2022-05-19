@@ -17,6 +17,7 @@ import {
   Link as MuiLink,
   Chip,
   makeStyles,
+  Tooltip,
 } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
@@ -28,7 +29,7 @@ import {
   LiveHelpOutlined,
   PeopleOutlined,
   PollOutlined,
-  QuestionAnswer,
+  SettingsOutlined,
   ShareOutlined,
 } from '@material-ui/icons'
 
@@ -36,7 +37,7 @@ import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
-import FeedbackResponse from '../FeedbackResponse'
+import EditFeedbackResponse from '../EditFeedbackResponse'
 import FeedbackTargetLinks from '../FeedbackTargetLinks'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -58,6 +59,7 @@ import {
 
 import { LoadingProgress } from '../LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import FeedbackTargetSettings from '../FeedbackTargetSettings'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -155,6 +157,7 @@ const FeedbackTargetView = () => {
     feedback,
     studentListVisible,
     responsibleTeachers,
+    feedbackResponseEmailSent,
   } = feedbackTarget
 
   const { courseCode } = courseUnit
@@ -164,16 +167,20 @@ const FeedbackTargetView = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
-  const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
 
+  const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
   const showEditSurveyTab = isTeacher && !isOpen && !isEnded
-  const showFeedbackResponseTab = isTeacher && isEnded
+  const showEditFeedbackResponseTab =
+    isTeacher && isEnded && !feedbackResponseEmailSent
   const showStudentsWithFeedbackTab =
     isTeacher && studentListVisible && (isOpen || isEnded)
+  const showLinksTab = isTeacher
+  const showSettingsTab = isTeacher
+
   const showCourseSummaryLink = feedbackTarget.courseSummaryLinkVisible
 
   const handleCopyLink = () => {
-    copyLink(feedbackTarget)
+    copyLink(`${window.location.host}/targets/${id}/feedback`)
     enqueueSnackbar(t('feedbackTargetView:linkCopied'), { variant: 'info' })
   }
 
@@ -323,66 +330,45 @@ const FeedbackTargetView = () => {
             to={`${url}/feedback`}
           />
           {showFeedbacksTab && (
-            <Tab
-              label={
-                <TabLabel
-                  icon={<PollOutlined />}
-                  text={t('feedbackTargetView:feedbacksTab')}
-                />
-              }
-              component={Link}
+            <RouterTab
+              icon={<PollOutlined />}
+              label={t('feedbackTargetView:feedbacksTab')}
               to={`${url}/results`}
             />
           )}
-
-          {showFeedbackResponseTab && (
-            <Tab
-              label={
-                <TabLabel
-                  icon={<CommentOutlined />}
-                  text={t('feedbackTargetView:feedbackResponseTab')}
-                />
-              }
-              component={Link}
-              to={`${url}/feedback-response`}
+          {showEditFeedbackResponseTab && (
+            <RouterTab
+              icon={<EditOutlined />}
+              label="Anna vastapalaute"
+              to={`${url}/edit-feedback-response`}
             />
           )}
-
           {showEditSurveyTab && (
-            <Tab
-              label={
-                <TabLabel
-                  icon={<EditOutlined />}
-                  text={t('feedbackTargetView:editSurveyTab')}
-                />
-              }
-              component={Link}
+            <RouterTab
+              icon={<EditOutlined />}
+              label={t('feedbackTargetView:editSurveyTab')}
               to={`${url}/edit`}
             />
           )}
-
           {showStudentsWithFeedbackTab && (
-            <Tab
-              label={
-                <TabLabel
-                  icon={<PeopleOutlined />}
-                  text={t('feedbackTargetView:studentsWithFeedbackTab')}
-                />
-              }
-              component={Link}
+            <RouterTab
+              icon={<PeopleOutlined />}
+              label={t('feedbackTargetView:studentsWithFeedbackTab')}
               to={`${url}/students-with-feedback`}
             />
           )}
-          {isTeacher && (
-            <Tab
-              label={
-                <TabLabel
-                  icon={<ShareOutlined />}
-                  text={t('feedbackTargetView:linksTab')}
-                />
-              }
-              component={Link}
-              to={`${url}/links`}
+          {showLinksTab && (
+            <RouterTab
+              icon={<ShareOutlined />}
+              label={t('feedbackTargetView:shareTab')}
+              to={`${url}/share`}
+            />
+          )}
+          {showSettingsTab && (
+            <RouterTab
+              icon={<SettingsOutlined />}
+              label={t('feedbackTargetView:surveySettingsTab')}
+              to={`${url}/settings`}
             />
           )}
         </RouterTabs>
@@ -396,16 +382,41 @@ const FeedbackTargetView = () => {
           path={`${path}/students-with-feedback`}
           component={StudentsWithFeedback}
         />
-        <Route
-          path={`${path}/feedback-response`}
-          component={FeedbackResponse}
-        />
-        <Route path={`${path}/links`} component={FeedbackTargetLinks} />
+        <Route path={`${path}/share`} component={FeedbackTargetLinks} />
         <Route path={`${path}/togen`} component={FeedbackLinksView} />
+        <Route
+          path={`${path}/edit-feedback-response`}
+          component={EditFeedbackResponse}
+        />
+        <Route path={`${path}/settings`} component={FeedbackTargetSettings} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>
   )
+}
+
+const RouterTab = ({ icon, label, to, disabled, disabledTooltip }) => {
+  const content = icon ? (
+    <Box display="flex">
+      {icon}
+      <Box ml={1} />
+      {label}
+    </Box>
+  ) : (
+    label
+  )
+
+  const tab = (
+    <Tab label={content} component={Link} to={to} disabled={disabled} />
+  )
+
+  if (disabled)
+    return (
+      <Tooltip title={disabledTooltip} placement="top">
+        <Box>{tab}</Box>
+      </Tooltip>
+    )
+  return tab
 }
 
 const TabLabel = ({ icon, text }) => (

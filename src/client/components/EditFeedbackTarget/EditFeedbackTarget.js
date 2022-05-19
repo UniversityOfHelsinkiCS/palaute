@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useHistory, Redirect } from 'react-router-dom'
-import { useQueryClient } from 'react-query'
+import { useParams, Redirect } from 'react-router-dom'
 
-import {
-  makeStyles,
-  Divider,
-  Box,
-  Card,
-  CardContent,
-  Button,
-} from '@material-ui/core'
+import { makeStyles, Divider, Box, Button } from '@material-ui/core'
 
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'
@@ -20,19 +12,14 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
 import Toolbar from './Toolbar'
 import CopyFromCourseDialog from './CopyFromCourseDialog'
-import FeedbackPeriodForm from './FeedbackPeriodForm'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 import {
   getUpperLevelQuestions,
-  openFeedbackImmediately,
-  opensAtIsImmediately,
   copyQuestionsFromFeedbackTarget,
-  getFeedbackPeriodInitialValues,
   getQuestionsInitialValues,
   saveQuestionsValues,
-  saveFeedbackPeriodValues,
   getOrganisationNames,
   feedbackTargetIsOpenOrClosed,
   validateQuestions,
@@ -123,11 +110,9 @@ const QuestionEditorContainer = ({ onSave, language }) => {
 
 const EditFeedbackTarget = () => {
   const { id } = useParams()
-  const history = useHistory()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
-  const queryClient = useQueryClient()
   const { language } = i18n
 
   const { authorizedUser, isLoading: authorizedUserLoading } =
@@ -155,32 +140,6 @@ const EditFeedbackTarget = () => {
     (q) => q.type !== 'TEXT',
   )
 
-  const handleOpenFeedbackImmediately = async () => {
-    try {
-      await openFeedbackImmediately(feedbackTarget)
-      history.replace(`/targets/${id}`)
-      queryClient.refetchQueries(['feedbackTarget', id])
-    } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
-
-  const handleSubmitFeedbackPeriod = async (values) => {
-    try {
-      await saveFeedbackPeriodValues(values, feedbackTarget)
-
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-
-      if (opensAtIsImmediately(values)) {
-        history.replace(`/targets/${id}`)
-      }
-
-      queryClient.refetchQueries(['feedbackTarget', id])
-    } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
-
   const handleSaveQuestions = async (values) => {
     try {
       if (!validateQuestions(values)) {
@@ -197,25 +156,9 @@ const EditFeedbackTarget = () => {
 
   const questionsInitialValues = getQuestionsInitialValues(feedbackTarget)
 
-  const feedbackPeriodInitialValues =
-    getFeedbackPeriodInitialValues(feedbackTarget)
-
   const organisationNames = getOrganisationNames(feedbackTarget, language)
   return (
     <>
-      <Box mb={2}>
-        <Card>
-          <CardContent>
-            <FeedbackPeriodForm
-              onSubmit={handleSubmitFeedbackPeriod}
-              initialValues={feedbackPeriodInitialValues}
-              onOpenImmediately={handleOpenFeedbackImmediately}
-              feedbackTarget={feedbackTarget}
-            />
-          </CardContent>
-        </Card>
-      </Box>
-
       {upperLevelQuestions.length > 0 && (
         <Box mb={2}>
           <Alert severity="info">

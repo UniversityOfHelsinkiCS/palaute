@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
-import { Card, CardContent, Box } from '@material-ui/core'
+import { Card, CardContent, Box, Typography } from '@material-ui/core'
 
 import { useParams, Redirect, Link } from 'react-router-dom'
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
@@ -12,24 +12,14 @@ import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
 import { LoadingProgress } from '../LoadingProgress'
 
-const PublicQuestions = () => {
+const PublicQuestions = ({ feedbackTarget }) => {
   const [visibility, setVisibility] = useState('ALL')
-
+  const { t } = useTranslation()
   const { id } = useParams()
 
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
-
   useEffect(() => {
-    if (!isLoading) {
-      setVisibility(feedbackTarget.feedbackVisibility)
-    }
+    setVisibility(feedbackTarget.feedbackVisibility)
   }, [])
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
 
   if (!feedbackTarget) {
     return <Redirect to="/" />
@@ -39,6 +29,9 @@ const PublicQuestions = () => {
     <>
       <Card style={{ marginBottom: 10 }}>
         <CardContent>
+          <Box mb={4}>
+            <Typography variant="h6">{t('publicQuestions:title')}</Typography>
+          </Box>
           <Box mb={2}>
             <Alert severity="info">
               <Trans i18nKey="publicQuestions:publicInfo">

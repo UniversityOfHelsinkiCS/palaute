@@ -251,12 +251,16 @@ export default {
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {
+    title: 'Vastausten näkyvyys',
     publicInfo:
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2>. Huomaa, että yliopistotason Likert-asteikon kysymyksiin liittyvä palaute julkaistaan aina opiskelijoille',
     selectVisibility: 'Valitse käyttäjät jotka näkevät julkiset kysymykset',
     none: 'Vain koulutusohjelman henkilöstö',
     enrolled: 'Kurssin opiskelijat',
     everyone: 'Kaikki käyttäjät',
+  },
+  feedbackTargetSettings: {
+    editPeriodTitle: 'Palautteen käynnissäoloaika',
   },
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',
@@ -325,14 +329,19 @@ export default {
     coursePage: 'Kurssisivu',
     courseSummary: 'Kurssin toteutusten yhteenveto',
     responsibleTeachers: 'Vastuuopettajat',
-    linksTab: 'Opiskelijan linkit',
+    shareTab: 'Jaa kysely',
+    surveySettingsTab: 'Kyselyn asetukset',
     studentLinkTitle: 'Opiskelijan vastauslinkki',
+    studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',
     qrCodeHelpText:
       'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
     deleteResponsibleTeacherConfirmation:
       'Poista opettaja {{name}} vastuuopettajien joukosta?',
+    noFeedbackResponseYet:
+      'Kurssin opettaja ei ole vielä antanut vastapalautetta',
   },
+
   noadUser: {
     noUser:
       'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
