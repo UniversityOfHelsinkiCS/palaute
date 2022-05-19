@@ -339,7 +339,7 @@ const FeedbackTargetView = () => {
           {showEditFeedbackResponseTab && (
             <RouterTab
               icon={<EditOutlined />}
-              label="Anna vastapalaute"
+              label={t('feedbackTargetView:editFeedbackResponseTab')}
               to={`${url}/edit-feedback-response`}
             />
           )}

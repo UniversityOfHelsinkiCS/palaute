@@ -321,7 +321,7 @@ export default {
     feedbackDisabled: 'Denna respons är inte i bruk',
     surveyTab: 'Förfrågan',
     feedbacksTab: 'Responser',
-    feedbackResponseTab: 'Svar på responsen',
+    // editFeedbackResponseTab: 'Anna vastapalaute',
     editSurveyTab: 'Redigera förfrågan',
     studentsWithFeedbackTab: 'De som gett respons',
     linkCopied: 'Länken till responsen har kopierats till urklippet',

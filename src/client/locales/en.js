@@ -320,6 +320,7 @@ export default {
     feedbacksTab: 'Answers',
     feedbackResponseTab: 'Counter feedback',
     editSurveyTab: 'Edit survey',
+    editFeedbackResponseTab: 'Give counter feedback',
     studentsWithFeedbackTab: 'Respondents',
     linkCopied: 'A link to the feedback has been copied to clipboard',
     copyLink: "Copy student's feedback link",

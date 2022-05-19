@@ -318,7 +318,7 @@ export default {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
     surveyTab: 'Kysely',
     feedbacksTab: 'Vastaukset',
-    feedbackResponseTab: 'Vastapalaute',
+    editFeedbackResponseTab: 'Anna vastapalaute',
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
