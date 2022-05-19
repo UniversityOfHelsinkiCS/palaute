@@ -41,7 +41,7 @@ describe('Teacher view', () => {
 
     cy.get('div').contains('TKT20002 Software Development Methods').click()
     cy.get('a[href*="/targets/97"]').click()
-    cy.contains('Given counter feedback').click()
+    cy.contains('Give counter feedback').click()
     cy.get('textarea').type('Feedback response for students to see')
     cy.contains(
       'Save feedback response and send email notification to students',
