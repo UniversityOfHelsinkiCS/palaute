@@ -234,6 +234,9 @@ const getOne = async (req, res) => {
     : false
 
   if (!feedbackTarget) {
+    if (!req.isAdmin) {
+      throw new ApplicationError('Feedback target not found for user', 403)
+    }
     // admin way
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
       Number(req.params.id),
