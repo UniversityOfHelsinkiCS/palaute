@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core'
-import { Undo } from '@material-ui/icons'
+import { AddAlertOutlined, Undo } from '@material-ui/icons'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,7 @@ const NorppaFeedbackView = () => {
   }
 
   const sortedFeedbacks = feedbacks
-    .filter((f) => !filterActionRequired || (!f.solved && f.responseWanted))
+    .filter((f) => !filterActionRequired || !f.solved)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   const handleMarkAsSolved = async (id, solved) => {
@@ -52,7 +52,7 @@ const NorppaFeedbackView = () => {
               color="primary"
             />
           }
-          label="Waiting response"
+          label="Show only unsolved"
         />
       </Box>
       {sortedFeedbacks.map(
@@ -79,7 +79,7 @@ const NorppaFeedbackView = () => {
                     </Box>
                   </Box>
                   <Box display="flex" flexDirection="column" padding={2}>
-                    {!solved && responseWanted && (
+                    {!solved && (
                       <Box width="140px" paddingTop={1}>
                         <Button
                           color="primary"
@@ -107,6 +107,14 @@ const NorppaFeedbackView = () => {
                       <Box marginTop={2}>
                         <Alert severity="warning">Response wanted!</Alert>
                       </Box>
+                    )}
+                    {solved && !responseWanted && (
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleMarkAsSolved(id, false)}
+                      >
+                        <AddAlertOutlined />
+                      </IconButton>
                     )}
                   </Box>
                 </Box>
