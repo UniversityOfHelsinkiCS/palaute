@@ -403,16 +403,16 @@ class FeedbackTarget extends Model {
   }
 
   async toPublicObject() {
-    const surveys = await this.getSurveys()
-    const publicQuestionIds = await this.getPublicQuestionIds()
+    const surveys = this.getSurveys()
+    const publicQuestionIds = this.getPublicQuestionIds()
     const publicityConfigurableQuestionIds =
-      await this.getPublicityConfigurableQuestionIds(surveys)
+      this.getPublicityConfigurableQuestionIds(surveys)
 
     const feedbackTarget = {
       ...this.toJSON(),
-      surveys,
-      publicQuestionIds,
-      publicityConfigurableQuestionIds,
+      surveys: await surveys,
+      publicQuestionIds: await publicQuestionIds,
+      publicityConfigurableQuestionIds: await publicityConfigurableQuestionIds,
     }
 
     delete feedbackTarget.userFeedbackTargets
