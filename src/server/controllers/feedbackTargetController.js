@@ -591,6 +591,10 @@ const getStudentsWithFeedback = async (req, res) => {
     )
   }
 
+  if (!userFeedbackTarget?.feedbackTarget) {
+    return res.send([])
+  }
+
   const studentListVisible = await getStudentListVisibility(
     userFeedbackTarget.feedbackTarget.courseUnitId,
   )
