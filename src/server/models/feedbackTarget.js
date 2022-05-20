@@ -79,7 +79,12 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
 /**
  * Gets the previous feedback target that has at least one teacher from given feedback target
  */
-const getPreviousFeedbackTarget = async (feedbackTarget, courseRealisation) => {
+const getPreviousFeedbackTarget = async (feedbackTarget) => {
+  const courseRealisation = CourseRealisation.findByPk(
+    feedbackTarget.courseRealisationId,
+    { attributes: ['start_date'] },
+  )
+
   const currentTeachers = UserFeedbackTarget.findAll({
     attributes: ['user_id'],
     where: {
@@ -99,7 +104,7 @@ const getPreviousFeedbackTarget = async (feedbackTarget, courseRealisation) => {
         as: 'courseRealisation',
         where: {
           startDate: {
-            [Op.lt]: courseRealisation.startDate,
+            [Op.lt]: (await courseRealisation).startDate,
           },
         },
       },
@@ -136,6 +141,8 @@ const getPreviousFeedbackTarget = async (feedbackTarget, courseRealisation) => {
 
 class FeedbackTarget extends Model {
   async getSurveys() {
+    const previousFeedbackTarget = getPreviousFeedbackTarget(this)
+
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
       include: [
         {
@@ -155,28 +162,19 @@ class FeedbackTarget extends Model {
         ? organisations.map((org) => org.code)
         : [organisations.code]
 
-    const courseRealisation = await CourseRealisation.findByPk(
-      this.courseRealisationId,
-    )
-
-    const previousFeedbackTarget = await getPreviousFeedbackTarget(
-      this,
-      courseRealisation,
-    )
-
-    const previousSurvey = previousFeedbackTarget
-      ? await Survey.findOne({
-          where: {
-            feedbackTargetId: previousFeedbackTarget.id,
-          },
-        })
-      : null
-
     const existingTeacherSurvey = await Survey.findOne({
       where: {
         feedbackTargetId: this.id,
       },
     })
+
+    const previousSurvey = (await previousFeedbackTarget)
+      ? Survey.findOne({
+          where: {
+            feedbackTargetId: previousFeedbackTarget.id,
+          },
+        })
+      : null
 
     const teacherSurvey =
       existingTeacherSurvey ||
@@ -405,16 +403,16 @@ class FeedbackTarget extends Model {
   }
 
   async toPublicObject() {
-    const surveys = await this.getSurveys()
-    const publicQuestionIds = await this.getPublicQuestionIds()
+    const surveys = this.getSurveys()
+    const publicQuestionIds = this.getPublicQuestionIds()
     const publicityConfigurableQuestionIds =
-      await this.getPublicityConfigurableQuestionIds(surveys)
+      this.getPublicityConfigurableQuestionIds(surveys)
 
     const feedbackTarget = {
       ...this.toJSON(),
-      surveys,
-      publicQuestionIds,
-      publicityConfigurableQuestionIds,
+      surveys: await surveys,
+      publicQuestionIds: await publicQuestionIds,
+      publicityConfigurableQuestionIds: await publicityConfigurableQuestionIds,
     }
 
     delete feedbackTarget.userFeedbackTargets
