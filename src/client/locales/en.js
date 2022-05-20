@@ -263,6 +263,10 @@ export default {
   },
   feedbackTargetSettings: {
     editPeriodTitle: 'Feedback period',
+    cannotCloseImmediately: 'Feedback is not yet open',
+    cannotCloseImmediatelyWhenOpen:
+      'Feedback either closes within a day or has already ended',
+    cannotOpenImmediately: 'Feedback is already open or has ended',
   },
   courseSummary: {
     heading: 'Summary of course feedback',

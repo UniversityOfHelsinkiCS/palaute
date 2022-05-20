@@ -262,6 +262,10 @@ export default {
   },
   feedbackTargetSettings: {
     editPeriodTitle: 'Palautteen käynnissäoloaika',
+    cannotCloseImmediately: 'Palaute ei vielä ole käynnissä',
+    cannotCloseImmediatelyWhenOpen:
+      'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
+    cannotOpenImmediately: 'Palaute on jo käynnissä tai loppunut',
   },
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',

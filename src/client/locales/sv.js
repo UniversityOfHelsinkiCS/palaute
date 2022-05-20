@@ -264,7 +264,10 @@ export default {
     everyone: 'Alla användare',
   },
   feedbackTargetSettings: {
-    // editPeriodTitle: 'Feedback period'
+    // editPeriodTitle: 'Feedback period',
+    // cannotCloseImmediately: 'Palaute ei vielä ole käynnissä',
+    // cannotCloseImmediatelyWhenOpen: 'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
+    // cannotOpenImmediately: 'Palaute on jo käynnissä tai loppunut',
   },
   courseSummary: {
     heading: 'Sammandrag av kursens respons',
