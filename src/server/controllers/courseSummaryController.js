@@ -245,7 +245,7 @@ const getByOrganisation = async (req, res) => {
   )
 
   if (!access) {
-    throw new ApplicationError(403, 'Forbidden')
+    throw new ApplicationError('Forbidden', 403)
   }
 
   const { organisations, questions } = await getSummaryByOrganisation({
@@ -271,7 +271,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
   )
 
   if (access.length === 0) {
-    throw new ApplicationError(403, 'Forbidden')
+    throw new ApplicationError('Forbidden', 403)
   }
 
   const codesWithIds = await getOpenFeedbackByOrganisation(code)
