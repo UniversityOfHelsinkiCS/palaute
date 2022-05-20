@@ -17,13 +17,16 @@ import {
   validateFeedbackPeriod,
   requiresSubmitConfirmation,
   feedbackTargetIsOpenOrClosed,
+  feedbackCanBeClosed,
 } from './utils'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackPeriodForm = ({
   onSubmit = () => {},
   onOpenImmediately = () => {},
+  onCloseImmediately = () => {},
   initialValues,
   feedbackTarget,
 }) => {
@@ -41,6 +44,9 @@ const FeedbackPeriodForm = ({
     (feedbackTarget.accessStatus !== 'TEACHER' ||
       feedbackTargetIsOpenOrClosed(feedbackTarget)) &&
     !authorizedUser.isAdmin
+
+  const openImmediatelyVisible = !feedbackTargetIsOpenOrClosed(feedbackTarget)
+  const closeImmediatelyVisible = feedbackCanBeClosed(feedbackTarget)
 
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
@@ -143,13 +149,22 @@ const FeedbackPeriodForm = ({
                       </span>
                     </Tooltip>
                   )}
-                  {!feedbackTargetIsOpenOrClosed(feedbackTarget) && (
+                  {openImmediatelyVisible && (
                     <Button
                       variant="contained"
                       color="secondary"
                       onClick={handleOpenImmediatelyClick}
                     >
                       {t('editFeedbackTarget:openImmediately')}
+                    </Button>
+                  )}
+                  {closeImmediatelyVisible && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={onCloseImmediately}
+                    >
+                      {t('feedbackTargetResults:closeImmediately')}
                     </Button>
                   )}
                 </Box>
