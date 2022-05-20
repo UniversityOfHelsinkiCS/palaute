@@ -57,6 +57,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 }
 
 const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
+  // console.time("asyncFeedbackTargetsToJSON")
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject()
     const responsibleTeachers = isAdmin
@@ -82,8 +83,10 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
 
-  const responseReady = []
+  // console.time("for feedbackTargets")
+  // console.log(feedbackTargets.length)
 
+  const responseReady = []
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
@@ -91,6 +94,8 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
     }
   }
   /* eslint-enable */
+
+  // console.timeEnd("asyncFeedbackTargetsToJSON")
 
   return responseReady
 }
@@ -192,13 +197,14 @@ const getFeedbackTargetByIdForUser = async (req) => {
 }
 
 const getFeedbackTargetsForStudent = async (req) => {
+  // console.time("getFeedbackTargetsForStudent")
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       hidden: false,
     },
     include: getIncludes(req.user.id, 'STUDENT'),
   })
-
+  // console.timeEnd("getFeedbackTargetsForStudent")
   return feedbackTargets
 }
 
@@ -330,8 +336,10 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
+  // console.time("getForStudent")
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
+  // console.time("filter")
   const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
       courseUnit &&
@@ -339,11 +347,13 @@ const getForStudent = async (req, res) => {
         disabledCourseCodes.includes(courseUnit.courseCode),
       ),
   )
+  // console.timeEnd("filter")
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,
   )
 
+  // console.timeEnd("getForStudent")
   res.send(responseReady)
 }
 
