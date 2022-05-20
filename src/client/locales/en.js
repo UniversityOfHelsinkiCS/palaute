@@ -219,6 +219,7 @@ export default {
       'Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. \n << The message you write will appear here >>',
     modalSubtitle:
       'Students who have already given feedback wont receive this email',
+    emailSent: 'Reminder email sent',
   },
   navBar: {
     myFeedbacks: 'My feedback',

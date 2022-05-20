@@ -3,7 +3,6 @@ import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Button } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -16,7 +15,6 @@ import ReminderEmailModal from './ReminderEmailModal'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
-import { feedbackCanBeClosed } from './utils'
 
 const FeedbackTargetResults = () => {
   const [open, setOpen] = useState(false)
@@ -82,10 +80,9 @@ const FeedbackTargetResults = () => {
     </Box>
   )
 
-  const showCloseImmediately =
-    isTeacher && isOpen && feedbackCanBeClosed(feedbackTarget)
+  const showReminderEmailModal = isTeacher && isOpen
 
-  const raiseButton = showCloseImmediately ? { marginTop: -50 } : {}
+  const raiseButton = showReminderEmailModal ? { marginTop: -50 } : {}
 
   return (
     <>
@@ -102,7 +99,7 @@ const FeedbackTargetResults = () => {
         style={raiseButton}
         mb={2}
       >
-        {showCloseImmediately && (
+        {showReminderEmailModal && (
           <Button
             variant="contained"
             color="primary"

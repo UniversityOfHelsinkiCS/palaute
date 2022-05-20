@@ -217,6 +217,7 @@ export default {
       'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. \n << Kirjoittamasi viesti tulee tähän >>',
     modalSubtitle:
       'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
+    emailSent: 'Muistutusviesti lähetetty',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',
