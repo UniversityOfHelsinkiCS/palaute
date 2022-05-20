@@ -712,6 +712,8 @@ const remindStudentsOnFeedback = async (req, res) => {
 
   await relevantFeedbackTarget.sendFeedbackReminderToStudents(reminder)
   await relevantFeedbackTarget.save()
+
+  res.sendStatus(200)
 }
 
 const openFeedbackImmediately = async (req, res) => {

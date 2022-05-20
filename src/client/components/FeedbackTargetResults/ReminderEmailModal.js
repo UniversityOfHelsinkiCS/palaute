@@ -63,7 +63,9 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         data: { reminder },
       })
       console.log('YES')
-      enqueueSnackbar(t('feedbackTargetResults:emailSent'))
+      enqueueSnackbar(t('feedbackTargetResults:emailSent'), {
+        variant: 'success',
+      })
     } catch (err) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
