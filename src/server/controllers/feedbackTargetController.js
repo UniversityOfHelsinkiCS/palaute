@@ -285,7 +285,7 @@ const update = async (req, res) => {
 
   if (
     !req.isAdmin &&
-    feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
   )
     throw new ApplicationError('Forbidden', 403)
 
