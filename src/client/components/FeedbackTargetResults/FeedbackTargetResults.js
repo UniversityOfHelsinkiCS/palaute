@@ -3,9 +3,6 @@ import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Button } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
-
-import { differenceInDays, format } from 'date-fns'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -15,8 +12,6 @@ import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import ReminderEmailModal from './ReminderEmailModal'
-
-import { closeCourseImmediately, feedbackCanBeClosed } from './utils'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
@@ -28,7 +23,6 @@ const FeedbackTargetResults = () => {
 
   const { t } = useTranslation()
   const { id } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
@@ -70,35 +64,6 @@ const FeedbackTargetResults = () => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
-  const handleCloseClick = async () => {
-    const currentDate = new Date()
-    const difference = differenceInDays(
-      currentDate,
-      new Date(feedbackTarget.opensAt),
-    )
-
-    // eslint-disable-next-line no-alert
-    const result = window.confirm(
-      difference > 1
-        ? t('feedbackTargetResults:closeImmediatelyConfirm')
-        : t('feedbackTargetResults:closeImmediatelyTomorrowConfirm', {
-            date: format(
-              currentDate.setDate(currentDate.getDate() + 1),
-              'dd.MM.yyyy',
-            ),
-          }),
-    )
-
-    if (result) {
-      try {
-        await closeCourseImmediately(feedbackTarget, difference)
-        window.location.reload()
-      } catch (e) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
-      }
-    }
-  }
-
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
       <Alert severity="warning">
@@ -115,10 +80,9 @@ const FeedbackTargetResults = () => {
     </Box>
   )
 
-  const showCloseImmediately =
-    isTeacher && isOpen && feedbackCanBeClosed(feedbackTarget)
+  const showReminderEmailModal = isTeacher && isOpen
 
-  const raiseButton = showCloseImmediately ? { marginTop: -50 } : {}
+  const raiseButton = showReminderEmailModal ? { marginTop: -50 } : {}
 
   return (
     <>
@@ -135,25 +99,16 @@ const FeedbackTargetResults = () => {
         style={raiseButton}
         mb={2}
       >
-        {showCloseImmediately && (
-          <>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleCloseClick}
-            >
-              {t('feedbackTargetResults:closeImmediately')}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openModal}
-              style={{ marginTop: 10 }}
-              disabled={feedbackReminderEmailToStudentsSent}
-            >
-              {t('feedbackTargetResults:sendReminder')}
-            </Button>
-          </>
+        {showReminderEmailModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={openModal}
+            style={{ marginTop: 10 }}
+            disabled={feedbackReminderEmailToStudentsSent}
+          >
+            {t('feedbackTargetResults:sendReminder')}
+          </Button>
         )}
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
@@ -194,7 +149,7 @@ const FeedbackTargetResults = () => {
       {feedbacks.length !== 0 && (
         <QuestionResults
           publicQuestionIds={publicQuestionIds ?? []}
-          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/feedback-response`}
+          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
           questions={questions}
           feedbacks={feedbacks}
           isTeacher={isTeacher}

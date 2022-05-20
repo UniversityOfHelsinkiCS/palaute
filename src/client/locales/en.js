@@ -219,6 +219,7 @@ export default {
       'Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. \n << The message you write will appear here >>',
     modalSubtitle:
       'Students who have already given feedback wont receive this email',
+    emailSent: 'Reminder email sent',
   },
   navBar: {
     myFeedbacks: 'My feedback',
@@ -252,12 +253,20 @@ export default {
     formDisabled: 'Counter feedback can only be given after feedback has ended',
   },
   publicQuestions: {
+    title: 'Answer visibility',
     publicInfo:
       'Feedback related to public questions is visible to students on the <2>feedback page</2>. Note that feedback related to university level Likert scale questions is always visible for students',
     selectVisibility: 'Select who can see the public questions',
     none: 'Only programme personel',
     enrolled: 'Enrolled students',
     everyone: 'Everyone',
+  },
+  feedbackTargetSettings: {
+    editPeriodTitle: 'Feedback period',
+    cannotCloseImmediately: 'Feedback is not yet open',
+    cannotCloseImmediatelyWhenOpen:
+      'Feedback either closes within a day or has already ended',
+    cannotOpenImmediately: 'Feedback is already open or has ended',
   },
   courseSummary: {
     heading: 'Summary of course feedback',
@@ -316,6 +325,7 @@ export default {
     feedbacksTab: 'Answers',
     feedbackResponseTab: 'Counter feedback',
     editSurveyTab: 'Edit survey',
+    editFeedbackResponseTab: 'Give counter feedback',
     studentsWithFeedbackTab: 'Respondents',
     linkCopied: 'A link to the feedback has been copied to clipboard',
     copyLink: "Copy student's feedback link",
@@ -325,12 +335,16 @@ export default {
     coursePage: 'Course page',
     courseSummary: "Summary of course's instances",
     responsibleTeachers: 'Responsible teachers',
-    linksTab: 'Student links',
+    shareTab: 'Share survey',
+    surveySettingsTab: 'Survey settings',
     studentLinkTitle: 'Student link to survey',
+    studentResultsLinkTitle: 'Link to answers and feedback response',
     studentLinkQRTitle: 'QR-code to survey',
     qrCodeHelpText: 'Easiest way to share the QR-code is by screenshotting it',
     deleteResponsibleTeacherConfirmation:
       'Delete teacher {{name}} from responsible teachers?',
+    noFeedbackResponseYet:
+      'The teacher of the course has not yet given counter feedback',
   },
   noadUser: {
     noUser:

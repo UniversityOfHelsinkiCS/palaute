@@ -281,18 +281,9 @@ class FeedbackTarget extends Model {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         required: true,
-        include: [
-          {
-            model: FeedbackTarget,
-            as: 'feedbackTarget',
-            where: {
-              id: this.id,
-            },
-            required: true,
-          },
-        ],
         where: {
           accessStatus: 'TEACHER',
+          feedbackTargetId: this.id,
         },
       },
     })

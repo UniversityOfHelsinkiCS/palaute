@@ -234,6 +234,9 @@ const getOne = async (req, res) => {
     : false
 
   if (!feedbackTarget) {
+    if (!req.isAdmin) {
+      throw new ApplicationError('Feedback target not found for user', 403)
+    }
     // admin way
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
       Number(req.params.id),
@@ -285,7 +288,7 @@ const update = async (req, res) => {
 
   if (
     !req.isAdmin &&
-    feedbackTarget.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
   )
     throw new ApplicationError('Forbidden', 403)
 
@@ -591,6 +594,10 @@ const getStudentsWithFeedback = async (req, res) => {
     )
   }
 
+  if (!userFeedbackTarget?.feedbackTarget) {
+    return res.send([])
+  }
+
   const studentListVisible = await getStudentListVisibility(
     userFeedbackTarget.feedbackTarget.courseUnitId,
   )
@@ -712,6 +719,8 @@ const remindStudentsOnFeedback = async (req, res) => {
 
   await relevantFeedbackTarget.sendFeedbackReminderToStudents(reminder)
   await relevantFeedbackTarget.save()
+
+  res.sendStatus(200)
 }
 
 const openFeedbackImmediately = async (req, res) => {

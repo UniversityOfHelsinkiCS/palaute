@@ -222,6 +222,7 @@ export default {
       'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. \n << Meddelandet du skriver kommer synas här >>',
     modalSubtitle:
       'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
+    // emailSent: 'Muistutusviesti lähetetty',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
@@ -254,12 +255,19 @@ export default {
     formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
   publicQuestions: {
+    // title: 'Vastausten näkyvyys',
     publicInfo:
       'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2>',
     selectVisibility: 'Välj användare som ser de offentliga frågorna',
     none: 'Endast personal på utbildningsprogrammet',
     enrolled: 'Studerande på kursen',
     everyone: 'Alla användare',
+  },
+  feedbackTargetSettings: {
+    // editPeriodTitle: 'Feedback period',
+    // cannotCloseImmediately: 'Palaute ei vielä ole käynnissä',
+    // cannotCloseImmediatelyWhenOpen: 'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
+    // cannotOpenImmediately: 'Palaute on jo käynnissä tai loppunut',
   },
   courseSummary: {
     heading: 'Sammandrag av kursens respons',
@@ -317,7 +325,7 @@ export default {
     feedbackDisabled: 'Denna respons är inte i bruk',
     surveyTab: 'Förfrågan',
     feedbacksTab: 'Responser',
-    feedbackResponseTab: 'Svar på responsen',
+    // editFeedbackResponseTab: 'Anna vastapalaute',
     editSurveyTab: 'Redigera förfrågan',
     studentsWithFeedbackTab: 'De som gett respons',
     linkCopied: 'Länken till responsen har kopierats till urklippet',
@@ -328,11 +336,14 @@ export default {
     coursePage: 'Kurssida',
     courseSummary: "Sammandrag av kursens genomföranden",
     responsibleTeachers: 'Ansvariga lärare',
-    linksTab: 'Studerandelänkar',
+    // shareTab: 'Jaa kysely',
+    // surveySettingsTab: 'Kyselyn asetukset',
     studentLinkTitle: 'Studerandelänk till översikt',
+    // studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'QR-kod till översikt',
     qrCodeHelpText: 'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
     deleteResponsibleTeacherConfirmation: 'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
+    // noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback',
   },
   noadUser: {
     noUser:

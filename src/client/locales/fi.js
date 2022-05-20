@@ -217,6 +217,7 @@ export default {
       'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. \n << Kirjoittamasi viesti tulee tähän >>',
     modalSubtitle:
       'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
+    emailSent: 'Muistutusviesti lähetetty',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',
@@ -251,12 +252,20 @@ export default {
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {
+    title: 'Vastausten näkyvyys',
     publicInfo:
       'Valitse mihin kysymyksiin liittyvä palaute julkaistaan opiskelijoille <2>palautesivulla</2>. Huomaa, että yliopistotason Likert-asteikon kysymyksiin liittyvä palaute julkaistaan aina opiskelijoille',
     selectVisibility: 'Valitse käyttäjät jotka näkevät julkiset kysymykset',
     none: 'Vain koulutusohjelman henkilöstö',
     enrolled: 'Kurssin opiskelijat',
     everyone: 'Kaikki käyttäjät',
+  },
+  feedbackTargetSettings: {
+    editPeriodTitle: 'Palautteen käynnissäoloaika',
+    cannotCloseImmediately: 'Palaute ei vielä ole käynnissä',
+    cannotCloseImmediatelyWhenOpen:
+      'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
+    cannotOpenImmediately: 'Palaute on jo käynnissä tai loppunut',
   },
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',
@@ -314,7 +323,7 @@ export default {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
     surveyTab: 'Kysely',
     feedbacksTab: 'Vastaukset',
-    feedbackResponseTab: 'Vastapalaute',
+    editFeedbackResponseTab: 'Anna vastapalaute',
     editSurveyTab: 'Muokkaa kyselyä',
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
@@ -325,14 +334,19 @@ export default {
     coursePage: 'Kurssisivu',
     courseSummary: 'Kurssin toteutusten yhteenveto',
     responsibleTeachers: 'Vastuuopettajat',
-    linksTab: 'Opiskelijan linkit',
+    shareTab: 'Jaa kysely',
+    surveySettingsTab: 'Kyselyn asetukset',
     studentLinkTitle: 'Opiskelijan vastauslinkki',
+    studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',
     qrCodeHelpText:
       'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
     deleteResponsibleTeacherConfirmation:
       'Poista opettaja {{name}} vastuuopettajien joukosta?',
+    noFeedbackResponseYet:
+      'Kurssin opettaja ei ole vielä antanut vastapalautetta',
   },
+
   noadUser: {
     noUser:
       'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',

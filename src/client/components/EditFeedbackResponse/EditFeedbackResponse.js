@@ -13,7 +13,6 @@ import AlertLink from '../AlertLink'
 import Alert from '../Alert'
 import Markdown from '../Markdown'
 import apiClient from '../../util/apiClient'
-import PublicQuestions from '../PublicQuestions'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
 import { LoadingProgress } from '../LoadingProgress'
@@ -43,7 +42,7 @@ const MarkdownPreview = () => {
   return <Markdown>{value}</Markdown>
 }
 
-const FeedbackResponse = () => {
+const EditFeedbackResponse = () => {
   const { id } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -71,17 +70,15 @@ const FeedbackResponse = () => {
     }
   }
 
-  const { feedbackResponse, feedbackResponseEmailSent, closesAt } =
-    feedbackTarget
+  const { feedbackResponseEmailSent, closesAt } = feedbackTarget
 
-  const hideResponseForm = feedbackResponse || feedbackResponseEmailSent
+  const hideResponseForm = feedbackResponseEmailSent
 
   const feedbackResponseFormDisabled =
     feedbackResponseEmailSent || new Date() < new Date(closesAt)
 
   return (
     <>
-      <PublicQuestions />
       <Card>
         <CardContent>
           {hideResponseForm && (
@@ -162,4 +159,4 @@ const FeedbackResponse = () => {
   )
 }
 
-export default FeedbackResponse
+export default EditFeedbackResponse

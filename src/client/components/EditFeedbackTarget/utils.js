@@ -1,4 +1,4 @@
-import { isAfter, differenceInDays, startOfDay, endOfDay } from 'date-fns'
+import { startOfDay, endOfDay } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -11,72 +11,6 @@ export const getUpperLevelQuestions = (feedbackTarget) => {
     ...(universitySurvey?.questions ?? []),
     ...(programmeSurvey?.questions ?? []),
   ]
-}
-
-export const openFeedbackImmediately = async (feedbackTarget) => {
-  const { id } = feedbackTarget
-  const opensAt = new Date()
-
-  const payload = {
-    opensAt,
-  }
-
-  const { data } = await apiClient.put(
-    `/feedback-targets/${id}/open-immediately`,
-    payload,
-  )
-
-  return data
-}
-
-export const validateFeedbackPeriod = (values) => {
-  const { closesAt, opensAt } = values
-
-  const errors = {}
-
-  if (!closesAt) {
-    errors.closesAt = 'validationErrors.required'
-  }
-
-  if (!opensAt) {
-    errors.opensAt = 'validationErrors.required'
-  }
-
-  if (startOfDay(opensAt) < startOfDay(new Date())) {
-    errors.opensAt = 'editFeedbackTarget:opensAtInPastError'
-  }
-
-  if (!isAfter(closesAt, opensAt)) {
-    errors.closesAt = 'editFeedbackTarget:closesAtBeforeOpensAtError'
-  }
-
-  if (
-    opensAt &&
-    closesAt &&
-    Math.abs(differenceInDays(opensAt, closesAt)) < 1
-  ) {
-    errors.closesAt = 'editFeedbackTarget:tooShortFeedbackPeriodError'
-  }
-
-  return errors
-}
-
-export const opensAtIsImmediately = (values) => {
-  const { opensAt } = values
-
-  return startOfDay(opensAt).getTime() === startOfDay(new Date()).getTime()
-}
-
-export const requiresSubmitConfirmation = (values) =>
-  opensAtIsImmediately(values)
-
-export const getFeedbackPeriodInitialValues = (feedbackTarget) => {
-  const { closesAt, opensAt } = feedbackTarget
-
-  return {
-    opensAt: new Date(opensAt),
-    closesAt: new Date(closesAt),
-  }
 }
 
 export const getQuestionsInitialValues = (feedbackTarget) => {
