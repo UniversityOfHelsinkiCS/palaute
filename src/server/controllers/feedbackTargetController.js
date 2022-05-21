@@ -56,10 +56,14 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   return updatedQuestionIdsList
 }
 
-const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
+const asyncFeedbackTargetsToJSON = async (
+  feedbackTargets,
+  isAdmin = false,
+  includeSurveys = true,
+) => {
   // console.time(" asyncFeedbackTargetsToJSON")
   const convertSingle = async (feedbackTarget) => {
-    const publicTarget = await feedbackTarget.toPublicObject()
+    const publicTarget = await feedbackTarget.toPublicObject(includeSurveys)
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
@@ -364,6 +368,8 @@ const getForStudent = async (req, res) => {
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,
+    false,
+    false,
   )
 
   // console.timeEnd("getForStudent")

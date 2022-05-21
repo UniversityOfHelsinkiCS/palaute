@@ -411,7 +411,9 @@ class FeedbackTarget extends Model {
     return filteredFeedbacks
   }
 
-  async toPublicObject() {
+  async toPublicObject(includeSurveys = true) {
+    if (!includeSurveys) return this.toJSON()
+
     const surveys = await this.getSurveys()
     const publicQuestionIds = await this.getPublicQuestionIds()
     const publicityConfigurableQuestionIds =
