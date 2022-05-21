@@ -60,6 +60,7 @@ import {
 import { LoadingProgress } from '../LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
+import useFeedbackCount from '../../hooks/useFeedbackCount'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -137,6 +138,12 @@ const FeedbackTargetView = () => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading, refetch } = useFeedbackTarget(id)
+  const { feedbackCount, isLoading: feedbackCountLoading } = useFeedbackCount(
+    id,
+    {
+      enabled: !isLoading && feedbackTarget.accessStatus === 'TEACHER',
+    },
+  )
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
   const classes = useStyles()
@@ -168,6 +175,8 @@ const FeedbackTargetView = () => {
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
 
+  const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
+
   const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
   const showEditSurveyTab = isTeacher && !isOpen && !isEnded
   const showEditFeedbackResponseTab =
@@ -176,8 +185,6 @@ const FeedbackTargetView = () => {
     isTeacher && studentListVisible && (isOpen || isEnded)
   const showLinksTab = isTeacher
   const showSettingsTab = isTeacher
-
-  const showCourseSummaryLink = feedbackTarget.courseSummaryLinkVisible
 
   const handleCopyLink = () => {
     copyLink(`${window.location.host}/targets/${id}/feedback`)

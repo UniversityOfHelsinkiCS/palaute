@@ -176,10 +176,11 @@ const getIncludes = (userId, accessStatus) => {
 /**
  * Checks if the course realisations of the course unit of this feedback target have feedbacks.
  * If not, we know that course summary cannot be shown for this course unit.
- * @param {number} feedbackTargetId
- * @returns {Promise<number>}
  */
-const totalFeedbackCount = async (feedbackTargetId) => {
+const getFeedbackCount = async (req, res) => {
+  const feedbackTargetId = Number(req?.params?.id)
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+
   const feedbackCount = await sequelize.query(
     `
     SELECT COUNT(user_feedback_targets.feedback_id) AS feedback_count
@@ -199,8 +200,11 @@ const totalFeedbackCount = async (feedbackTargetId) => {
   `,
     { replacements: { feedbackTargetId } },
   )
-  if (feedbackCount.length < 1 || feedbackCount[0] < 1) return 0
-  return Number(feedbackCount[0][0].feedback_count)
+  if (feedbackCount.length < 1 || feedbackCount[0] < 1) {
+    res.send({ feedbackCount: 0 })
+  }
+
+  res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
 }
 
 const getFeedbackTargetByIdForUser = async (req) => {
@@ -247,7 +251,6 @@ const getStudentListVisibility = async (courseUnitId) => {
 }
 
 const getOne = async (req, res) => {
-  const totalFeedbackCountPromise = totalFeedbackCount(Number(req.params.id))
   const feedbackTarget = await getFeedbackTargetByIdForUser(req)
 
   const studentListVisible = feedbackTarget?.courseUnit
@@ -287,8 +290,7 @@ const getOne = async (req, res) => {
       req.isAdmin,
     )
 
-    const courseSummaryLinkVisible = Boolean(await totalFeedbackCountPromise)
-    res.send({ ...responseReady, studentListVisible, courseSummaryLinkVisible })
+    res.send({ ...responseReady, studentListVisible })
 
     return
   }
@@ -298,11 +300,9 @@ const getOne = async (req, res) => {
     req.isAdmin,
   )
 
-  const courseSummaryLinkVisible = Boolean(await totalFeedbackCountPromise)
   res.send({
     ...responseReady[0],
     studentListVisible,
-    courseSummaryLinkVisible,
   })
 }
 
@@ -892,4 +892,5 @@ module.exports = {
   remindStudentsOnFeedback,
   getUsers,
   deleteUserFeedbackTarget,
+  getFeedbackCount,
 }
