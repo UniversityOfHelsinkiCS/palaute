@@ -11,6 +11,7 @@ const {
   ARRAY,
   INTEGER,
   TEXT,
+  QueryTypes,
 } = require('sequelize')
 
 const _ = require('lodash')
@@ -141,65 +142,73 @@ const getPreviousFeedbackTarget = async (feedbackTarget) => {
 
 class FeedbackTarget extends Model {
   async getSurveys() {
-    const previousFeedbackTarget = getPreviousFeedbackTarget(this)
-
-    const courseUnit = await CourseUnit.findByPk(this.courseUnitId, {
-      include: [
+    // lazily evaluate the 3 types of surveys
+    const getProgrammeSurvey = async () => {
+      const programmeSurvey = await sequelize.query(
+        `
+        SELECT s.id, s.question_ids as "questionIds"
+        FROM
+          surveys s, organisations o, course_units_organisations cu_o
+        WHERE
+          s.type = 'programme' AND
+          s.type_id = o.code AND
+          cu_o.course_unit_id = :courseUnitId AND
+          cu_o.organisation_id = o.id AND
+          ARRAY_LENGTH(s.question_ids, 1) > 0
+      `,
         {
-          model: Organisation,
-          as: 'organisations',
+          type: QueryTypes.SELECT,
+          replacements: { courseUnitId: this.courseUnitId },
         },
-      ],
-    })
+      )
 
-    const organisations =
-      courseUnit.organisations.length > 1
-        ? courseUnit.organisations.filter((org) => org.code !== 'H930')
-        : courseUnit.organisations[0]
-
-    const organisationCodes =
-      organisations.length > 1
-        ? organisations.map((org) => org.code)
-        : [organisations.code]
-
-    const existingTeacherSurvey = await Survey.findOne({
-      where: {
-        feedbackTargetId: this.id,
-      },
-    })
-
-    const previousSurvey = (await previousFeedbackTarget)
-      ? Survey.findOne({
-          where: {
-            feedbackTargetId: previousFeedbackTarget.id,
-          },
-        })
-      : null
-
-    const teacherSurvey =
-      existingTeacherSurvey ||
-      (await createTeacherSurvey(this.id, previousSurvey))
-
-    const universitySurvey = await Survey.findOne({
-      where: { type: 'university' },
-    })
-
-    const programmeSurvey = organisations
-      ? await Survey.findAll({
-          where: { type: 'programme', typeId: { [Op.in]: organisationCodes } },
-        })
-      : null
-
-    await teacherSurvey.populateQuestions()
-    await universitySurvey.populateQuestions()
-
-    for (const survey of programmeSurvey) {
-      await survey.populateQuestions()
+      for (const survey of programmeSurvey) {
+        survey.questions = await Survey.getQuestionsOfSurvey(survey)
+      }
+      return programmeSurvey
     }
 
+    const getTeacherSurvey = async () => {
+      const previousFeedbackTarget = await getPreviousFeedbackTarget(this)
+      const previousSurvey = previousFeedbackTarget
+        ? Survey.findOne({
+            where: {
+              feedbackTargetId: previousFeedbackTarget.id,
+            },
+          })
+        : null
+
+      const existingTeacherSurvey = await Survey.findOne({
+        where: {
+          feedbackTargetId: this.id,
+        },
+      })
+
+      const teacherSurvey =
+        existingTeacherSurvey ||
+        (await createTeacherSurvey(this.id, await previousSurvey))
+      await teacherSurvey.populateQuestions()
+      return teacherSurvey
+    }
+
+    const getUniversitySurvey = async () => {
+      const universitySurvey = await Survey.findOne({
+        where: { type: 'university' },
+      })
+      await universitySurvey.populateQuestions()
+      return universitySurvey
+    }
+
+    const [programmeSurvey, teacherSurvey, universitySurvey] =
+      await Promise.all([
+        getProgrammeSurvey(),
+        getTeacherSurvey(),
+        getUniversitySurvey(),
+      ])
+
     return {
-      teacherSurvey,
       programmeSurvey,
+      teacherSurvey,
       universitySurvey,
     }
   }

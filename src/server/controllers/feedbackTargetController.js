@@ -57,12 +57,9 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 }
 
 const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
-  // console.time("asyncFeedbackTargetsToJSON")
+  // console.time(" asyncFeedbackTargetsToJSON")
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject()
-    const responsibleTeachers = isAdmin
-      ? await feedbackTarget.getTeachersForFeedbackTarget()
-      : null
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
@@ -77,27 +74,41 @@ const asyncFeedbackTargetsToJSON = async (feedbackTargets, isAdmin) => {
       ...publicTarget,
       accessStatus,
       feedback,
-      responsibleTeachers,
     }
   }
 
-  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
+  const convertedFeedbackTargets = []
 
-  // console.time("for feedbackTargets")
+  // console.time("  for feedbackTargets")
   // console.log(feedbackTargets.length)
 
-  const responseReady = []
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
-      responseReady.push(await convertSingle(feedbackTarget))
+      convertedFeedbackTargets.push(await convertSingle(feedbackTarget))
     }
+  }
+  // console.timeEnd("  for feedbackTargets")
+
+  if (isAdmin) {
+    // console.time("  add responsibleTeachers")
+    const fbtTeachers = await Promise.all(
+      feedbackTargets.map(
+        async (feedbackTarget) =>
+          await feedbackTarget.getTeachersForFeedbackTarget(),
+      ),
+    )
+    convertedFeedbackTargets.map((fbt, i) => ({
+      ...fbt,
+      responsibleTeachers: fbtTeachers[i],
+    }))
+    // console.timeEnd("  add responsibleTeachers")
   }
   /* eslint-enable */
 
-  // console.timeEnd("asyncFeedbackTargetsToJSON")
+  // console.timeEnd(" asyncFeedbackTargetsToJSON")
 
-  return responseReady
+  return convertedFeedbackTargets
 }
 
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
@@ -197,14 +208,14 @@ const getFeedbackTargetByIdForUser = async (req) => {
 }
 
 const getFeedbackTargetsForStudent = async (req) => {
-  // console.time("getFeedbackTargetsForStudent")
+  // console.time(" getFeedbackTargetsForStudent")
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       hidden: false,
     },
     include: getIncludes(req.user.id, 'STUDENT'),
   })
-  // console.timeEnd("getFeedbackTargetsForStudent")
+  // console.timeEnd(" getFeedbackTargetsForStudent")
   return feedbackTargets
 }
 
@@ -279,12 +290,16 @@ const getOne = async (req, res) => {
   }
 
   const responseReady = await asyncFeedbackTargetsToJSON(
-    feedbackTarget,
+    [feedbackTarget],
     req.isAdmin,
   )
 
   const courseSummaryLinkVisible = Boolean(await totalFeedbackCountPromise)
-  res.send({ ...responseReady, studentListVisible, courseSummaryLinkVisible })
+  res.send({
+    ...responseReady[0],
+    studentListVisible,
+    courseSummaryLinkVisible,
+  })
 }
 
 const update = async (req, res) => {
@@ -339,7 +354,6 @@ const getForStudent = async (req, res) => {
   // console.time("getForStudent")
   const feedbackTargets = await getFeedbackTargetsForStudent(req)
 
-  // console.time("filter")
   const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
       courseUnit &&
@@ -347,7 +361,6 @@ const getForStudent = async (req, res) => {
         disabledCourseCodes.includes(courseUnit.courseCode),
       ),
   )
-  // console.timeEnd("filter")
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,

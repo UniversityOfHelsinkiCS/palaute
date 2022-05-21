@@ -12,22 +12,26 @@ const { sequelize } = require('../util/dbConnection')
 const Question = require('./question')
 
 class Survey extends Model {
-  async getQuestions() {
+  static getQuestionsOfSurvey = async (survey) => {
     const questions = await Question.findAll({
       where: {
         id: {
-          [Op.in]: this.questionIds,
+          [Op.in]: survey.questionIds,
         },
       },
     })
 
     const questionIdOrder = {}
 
-    for (let i = 0; i < this.questionIds.length; ++i) {
-      questionIdOrder[this.questionIds[i]] = i
+    for (let i = 0; i < survey.questionIds.length; ++i) {
+      questionIdOrder[survey.questionIds[i]] = i
     }
     questions.sort((a, b) => questionIdOrder[a.id] - questionIdOrder[b.id])
     return questions
+  }
+
+  async getQuestions() {
+    return Survey.getQuestionsOfSurvey(this)
   }
 
   async populateQuestions() {
