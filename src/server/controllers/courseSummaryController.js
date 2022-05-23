@@ -1,4 +1,4 @@
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
@@ -189,6 +189,7 @@ const getByCourseUnit = async (req, res) => {
   const { user } = req
 
   const organisationAccess = await user.getOrganisationAccess()
+  console.log(organisationAccess)
 
   const { code } = req.params
 
@@ -206,28 +207,42 @@ const getByCourseUnit = async (req, res) => {
     courseCode: code,
     questions,
   })
+  console.log(
+    courseRealisations.flatMap(({ teachers }) =>
+      teachers.map((t) => t.toJSON()),
+    ),
+  )
 
   const hasCourseUnitAccess = accessibleCourseCodes.includes(
     courseRealisations[0]?.courseCode,
   )
 
-  const hasSomeCourseRealisationAccess = courseRealisations.some(
-    ({ teachers }) => Boolean(teachers.find((t) => t.id === user.id)),
-  )
+  const hasSomeCourseRealisationAccess = (
+    await sequelize.query(
+      `
+    SELECT COUNT(*) > 0 as "hasAccess"
+    FROM
+      user_feedback_targets, feedback_targets
+    WHERE
+      feedback_targets.course_unit_id = :courseUnitId
+      AND user_feedback_targets.feedback_target_id = feedback_targets.id
+      AND user_feedback_targets.access_status = 'TEACHER';    
+  `,
+      {
+        type: QueryTypes.SELECT,
+        replacements: { courseUnitId: courseUnit.id },
+      },
+    )
+  )[0]?.hasAccess
 
   if (!hasCourseUnitAccess && !hasSomeCourseRealisationAccess) {
+    console.log(hasCourseUnitAccess, hasSomeCourseRealisationAccess)
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const filteredCourseRealisations = hasCourseUnitAccess
-    ? courseRealisations
-    : courseRealisations.filter(({ teachers }) =>
-        Boolean(teachers.find((t) => t.id === user.id)),
-      )
-
   res.send({
     questions,
-    courseRealisations: filteredCourseRealisations,
+    courseRealisations,
     courseUnit,
   })
 }
