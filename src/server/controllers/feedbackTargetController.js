@@ -164,10 +164,6 @@ const getIncludes = (userId, accessStatus) => {
   ]
 }
 
-/**
- * Checks if the course realisations of the course unit of this feedback target have feedbacks.
- * If not, we know that course summary cannot be shown for this course unit.
- */
 const getFeedbackCount = async (req, res) => {
   const feedbackTargetId = Number(req?.params?.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
