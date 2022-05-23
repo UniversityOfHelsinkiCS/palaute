@@ -71,12 +71,11 @@ const asyncFeedbackTargetsToJSON = async (
     )
 
     const relevantUserFeedbackTarget = sortedUserFeedbackTargets[0]
-    const { accessStatus, feedback } = relevantUserFeedbackTarget
 
     return {
       ...publicTarget,
-      accessStatus,
-      feedback,
+      accessStatus: relevantUserFeedbackTarget?.accessStatus ?? 'NONE',
+      feedback: relevantUserFeedbackTarget?.feedback ?? null,
     }
   }
 
@@ -194,10 +193,45 @@ const getFeedbackCount = async (req, res) => {
   res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
 }
 
-const getFeedbackTargetByIdForUser = async (feedbackTargetId, userId) => {
+const getFeedbackTargetByOrganisationAccess = async (
+  feedbackTargetId,
+  user,
+) => {
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
-    include: getIncludes(userId),
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+        ],
+      },
+      { model: CourseRealisation, as: 'courseRealisation' },
+    ],
   })
+  feedbackTarget.userFeedbackTargets = []
+  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
+    feedbackTarget.courseUnitId,
+  )
+  if (organisationAccess) {
+    return feedbackTarget
+  }
+  return null
+}
+
+const getFeedbackTargetByIdForUser = async (feedbackTargetId, user) => {
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
+    include: getIncludes(user.id),
+  })
+  if (!feedbackTarget) {
+    return getFeedbackTargetByOrganisationAccess(feedbackTargetId, user)
+  }
 
   return feedbackTarget
 }
@@ -237,13 +271,11 @@ const getStudentListVisibility = async (courseUnitId) => {
 
 const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
-  const userId = req.user?.id
-  if (!feedbackTargetId || !userId)
-    throw new ApplicationError('Missing id or userid', 400)
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   const feedbackTarget = await getFeedbackTargetByIdForUser(
     feedbackTargetId,
-    userId,
+    req.user,
   )
 
   const studentListVisible = feedbackTarget?.courseUnit
@@ -301,14 +333,12 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
   const feedbackTargetId = Number(req.params?.id)
-  const userId = req?.user?.id
 
-  if (!feedbackTargetId || !userId)
-    throw new ApplicationError('Missing id or userid', 400)
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   const feedbackTarget = req.isAdmin
     ? await FeedbackTarget.findByPk(feedbackTargetId)
-    : await getFeedbackTargetByIdForUser(feedbackTargetId, userId)
+    : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   if (
     !req.isAdmin &&

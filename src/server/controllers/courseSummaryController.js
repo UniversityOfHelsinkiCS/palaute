@@ -189,7 +189,6 @@ const getByCourseUnit = async (req, res) => {
   const { user } = req
 
   const organisationAccess = await user.getOrganisationAccess()
-  console.log(organisationAccess)
 
   const { code } = req.params
 
@@ -207,11 +206,6 @@ const getByCourseUnit = async (req, res) => {
     courseCode: code,
     questions,
   })
-  console.log(
-    courseRealisations.flatMap(({ teachers }) =>
-      teachers.map((t) => t.toJSON()),
-    ),
-  )
 
   const hasCourseUnitAccess = accessibleCourseCodes.includes(
     courseRealisations[0]?.courseCode,
