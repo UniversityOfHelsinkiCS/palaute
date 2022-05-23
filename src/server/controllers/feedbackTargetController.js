@@ -219,7 +219,7 @@ const getFeedbackTargetByOrganisationAccess = async (
   const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
     feedbackTarget.courseUnitId,
   )
-  if (organisationAccess) {
+  if (organisationAccess?.read) {
     return feedbackTarget
   }
   return null
