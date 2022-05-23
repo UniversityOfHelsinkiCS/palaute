@@ -236,7 +236,6 @@ const getByCourseUnit = async (req, res) => {
   )[0]?.hasAccess
 
   if (!hasCourseUnitAccess && !hasSomeCourseRealisationAccess) {
-    console.log(hasCourseUnitAccess, hasSomeCourseRealisationAccess)
     throw new ApplicationError('Forbidden', 403)
   }
 

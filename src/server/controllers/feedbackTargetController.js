@@ -61,7 +61,6 @@ const asyncFeedbackTargetsToJSON = async (
   isAdmin = false,
   includeSurveys = true,
 ) => {
-  // console.time(" asyncFeedbackTargetsToJSON")
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject(includeSurveys)
 
@@ -83,19 +82,14 @@ const asyncFeedbackTargetsToJSON = async (
 
   const convertedFeedbackTargets = []
 
-  // console.time("  for feedbackTargets")
-  // console.log(feedbackTargets.length)
-
   /* eslint-disable */
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
       convertedFeedbackTargets.push(await convertSingle(feedbackTarget))
     }
   }
-  // console.timeEnd("  for feedbackTargets")
 
   if (isAdmin) {
-    // console.time("  add responsibleTeachers")
     const fbtTeachers = await Promise.all(
       feedbackTargets.map(
         async (feedbackTarget) =>
@@ -106,11 +100,8 @@ const asyncFeedbackTargetsToJSON = async (
       ...fbt,
       responsibleTeachers: fbtTeachers[i],
     }))
-    // console.timeEnd("  add responsibleTeachers")
   }
   /* eslint-enable */
-
-  // console.timeEnd(" asyncFeedbackTargetsToJSON")
 
   return convertedFeedbackTargets
 }
@@ -207,23 +198,21 @@ const getFeedbackCount = async (req, res) => {
   res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
 }
 
-const getFeedbackTargetByIdForUser = async (req) => {
-  const feedbackTarget = await FeedbackTarget.findByPk(Number(req.params.id), {
-    include: getIncludes(req.user.id),
+const getFeedbackTargetByIdForUser = async (feedbackTargetId, userId) => {
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
+    include: getIncludes(userId),
   })
 
   return feedbackTarget
 }
 
-const getFeedbackTargetsForStudent = async (req) => {
-  // console.time(" getFeedbackTargetsForStudent")
+const getFeedbackTargetsForStudent = async (userId) => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       hidden: false,
     },
-    include: getIncludes(req.user.id, 'STUDENT'),
+    include: getIncludes(userId, 'STUDENT'),
   })
-  // console.timeEnd(" getFeedbackTargetsForStudent")
   return feedbackTargets
 }
 
@@ -251,7 +240,15 @@ const getStudentListVisibility = async (courseUnitId) => {
 }
 
 const getOne = async (req, res) => {
-  const feedbackTarget = await getFeedbackTargetByIdForUser(req)
+  const feedbackTargetId = Number(req.params.id)
+  const userId = req.user?.id
+  if (!feedbackTargetId || !userId)
+    throw new ApplicationError('Missing id or userid', 400)
+
+  const feedbackTarget = await getFeedbackTargetByIdForUser(
+    feedbackTargetId,
+    userId,
+  )
 
   const studentListVisible = feedbackTarget?.courseUnit
     ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
@@ -263,7 +260,7 @@ const getOne = async (req, res) => {
     }
     // admin way
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
-      Number(req.params.id),
+      feedbackTargetId,
       {
         include: [
           {
@@ -307,9 +304,15 @@ const getOne = async (req, res) => {
 }
 
 const update = async (req, res) => {
+  const feedbackTargetId = Number(req.params?.id)
+  const userId = req?.user?.id
+
+  if (!feedbackTargetId || !userId)
+    throw new ApplicationError('Missing id or userid', 400)
+
   const feedbackTarget = req.isAdmin
-    ? await FeedbackTarget.findByPk(Number(req.params.id))
-    : await getFeedbackTargetByIdForUser(req)
+    ? await FeedbackTarget.findByPk(feedbackTargetId)
+    : await getFeedbackTargetByIdForUser(feedbackTargetId, userId)
 
   if (
     !req.isAdmin &&
@@ -355,8 +358,8 @@ const update = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  // console.time("getForStudent")
-  const feedbackTargets = await getFeedbackTargetsForStudent(req)
+  const userId = req.user?.id
+  const feedbackTargets = await getFeedbackTargetsForStudent(userId)
 
   const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
@@ -372,7 +375,6 @@ const getForStudent = async (req, res) => {
     false,
   )
 
-  // console.timeEnd("getForStudent")
   res.send(responseReady)
 }
 
