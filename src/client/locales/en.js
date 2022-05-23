@@ -36,7 +36,7 @@ export default {
     feedbacks: 'Feedbacks',
     teacherPage: 'My teaching',
     courseSummaryPage: 'Course summary',
-    norppaFeedback: 'Give feedback',
+    norppaFeedback: 'Give feedback to Norppa developers',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',
@@ -228,7 +228,7 @@ export default {
     admin: 'Admin',
     courseSummary: 'Course summary',
     nameFallback: 'Menu',
-    feedback: 'Give feedback',
+    feedback: 'Give feedback to Norppa developers',
   },
   studentsWithFeedback: {
     noFeedbackInfo:
@@ -356,7 +356,7 @@ export default {
     feedbackHelper: 'Give a free form feedback',
     responseWanted: 'I want a response to my feedback',
     submit: 'Send feedback',
-    title: 'Give feedback',
+    title: 'Give feedback to Norppa developers',
     description:
       'Norppa is being developed based on the user feedback recieved. With this form you can submit feedback to the developers.',
     feedbackLengthError: 'The minimum length of the feedback is one symbol',

@@ -231,7 +231,7 @@ export default {
     admin: 'Admin',
     courseSummary: 'Kurssammandrag',
     nameFallback: 'Menu',
-    feedback: 'Ge respons',
+    // feedback: 'Give feedback to Norppa developers',
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Ingen har tillsvidare givit respons',
@@ -334,15 +334,17 @@ export default {
     feedbackPeriod: 'Responsgivningen öppen',
     editFeedbackTab: 'Redigera responsen',
     coursePage: 'Kurssida',
-    courseSummary: "Sammandrag av kursens genomföranden",
+    courseSummary: 'Sammandrag av kursens genomföranden',
     responsibleTeachers: 'Ansvariga lärare',
     // shareTab: 'Jaa kysely',
     // surveySettingsTab: 'Kyselyn asetukset',
     studentLinkTitle: 'Studerandelänk till översikt',
     // studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'QR-kod till översikt',
-    qrCodeHelpText: 'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
-    deleteResponsibleTeacherConfirmation: 'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
+    qrCodeHelpText:
+      'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
+    deleteResponsibleTeacherConfirmation:
+      'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
     // noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback',
   },
   noadUser: {
@@ -355,7 +357,7 @@ export default {
     feedbackHelper: 'Ge fritt formulerad respons',
     responseWanted: 'Jag vill ha svar på responsen',
     submit: 'Skicka respons',
-    title: 'Ge respons',
+    // title: 'Give feedback to Norppa developers',
     description:
       'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',
     feedbackLengthError: 'Minimilängden på responsen är ett tecken',

@@ -226,7 +226,7 @@ export default {
     admin: 'Ylläpito',
     courseSummary: 'Kurssiyhteenveto',
     nameFallback: 'Valikko',
-    feedback: 'Anna palautetta',
+    feedback: 'Anna palautetta Norpan kehittäjille',
   },
   studentsWithFeedback: {
     noFeedbackInfo:
@@ -358,7 +358,7 @@ export default {
     feedbackHelper: 'Anna vapaamuotoista palautetta',
     responseWanted: 'Haluan vastauksen palautteeseen',
     submit: 'Lähetä palaute',
-    title: 'Anna palautetta',
+    title: 'Anna palautetta Norpan kehittäjille',
     description:
       'Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää palautetta kehittäjille',
     feedbackLengthError: 'Palautteen vähimmäispituus on yksi merkki',
