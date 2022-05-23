@@ -141,7 +141,7 @@ const FeedbackTargetView = () => {
   const { feedbackCount, isLoading: feedbackCountLoading } = useFeedbackCount(
     id,
     {
-      enabled: !isLoading && feedbackTarget.accessStatus === 'TEACHER',
+      enabled: !isLoading && feedbackTarget?.accessStatus === 'TEACHER',
     },
   )
   const { authorizedUser } = useAuthorizedUser()
