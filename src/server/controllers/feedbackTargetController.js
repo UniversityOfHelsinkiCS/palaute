@@ -273,20 +273,7 @@ const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const feedbackTarget = await getFeedbackTargetByIdForUser(
-    feedbackTargetId,
-    req.user,
-  )
-
-  const studentListVisible = feedbackTarget?.courseUnit
-    ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
-    : false
-
-  if (!feedbackTarget) {
-    if (!req.isAdmin) {
-      throw new ApplicationError('Feedback target not found for user', 403)
-    }
-    // admin way
+  if (req.isAdmin) {
     const adminFeedbackTarget = await FeedbackTarget.findByPk(
       feedbackTargetId,
       {
@@ -315,10 +302,27 @@ const getOne = async (req, res) => {
       req.isAdmin,
     )
 
+    const studentListVisible = adminFeedbackTarget?.courseUnit
+      ? await getStudentListVisibility(adminFeedbackTarget.courseUnit.id)
+      : false
+
     res.send({ ...responseReady, studentListVisible })
 
     return
   }
+
+  const feedbackTarget = await getFeedbackTargetByIdForUser(
+    feedbackTargetId,
+    req.user,
+  )
+
+  if (!feedbackTarget) {
+    throw new ApplicationError('Feedback target not found for user', 403)
+  }
+
+  const studentListVisible = feedbackTarget?.courseUnit
+    ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
+    : false
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     [feedbackTarget],
