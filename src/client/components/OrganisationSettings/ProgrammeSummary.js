@@ -186,8 +186,6 @@ const ProgrammeSummary = () => {
                 onIncludeOpenUniCourseUnitsChange={
                   handleIncludeOpenUniCourseUnitsChange
                 }
-                orderBy={orderBy}
-                onOrderByChange={handleOrderByChange}
               />
             </Box>
             <Divider />

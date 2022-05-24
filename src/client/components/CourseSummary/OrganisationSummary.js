@@ -254,8 +254,6 @@ const OrganisationSummary = () => {
                     onIncludeOpenUniCourseUnitsChange={
                       handleIncludeOpenUniCourseUnitsChange
                     }
-                    orderBy={orderBy}
-                    onOrderByChange={handleOrderByChange}
                     dateRange={dateRange}
                     onDateRangeChange={setDateRange}
                   />
