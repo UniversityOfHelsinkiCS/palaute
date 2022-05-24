@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const ProgrammeTable = ({
   organisations,
   questions,
+  onOrderByChange,
   filters,
   loading = false,
 }) => {
@@ -62,9 +63,11 @@ const ProgrammeTable = ({
             <th className={classes.filtersCell}>{filters}</th>
             <th aria-hidden="true" />
             <ColumnHeadings
+              onOrderByChange={onOrderByChange}
               questionNames={questions
-                .map(({ id, data }) => ({
+                .map(({ id, data }, index) => ({
                   id,
+                  index,
                   question: getLanguageValue(data?.label, i18n.language),
                 }))
                 .concat([
@@ -172,6 +175,7 @@ const ProgrammeSummary = () => {
         organisations={sortedOrganisations}
         questions={summaryQuestions}
         loading={isFetching}
+        onOrderByChange={handleOrderByChange}
         filters={
           <>
             <Box mb={2}>
