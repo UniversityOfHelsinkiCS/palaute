@@ -72,7 +72,7 @@ const VerticalHeading = ({
             </Box>
           </Box>
         </Tooltip>
-        {id !== 1 && (
+        {active && id !== 1 && (
           <OrderButton
             index={index}
             active={active}
