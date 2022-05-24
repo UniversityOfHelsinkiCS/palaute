@@ -7,7 +7,7 @@ import {
   Box,
   IconButton,
 } from '@material-ui/core'
-import { KeyboardArrowUp, KeyboardArrowDown, Remove } from '@material-ui/icons'
+import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'end',
     minHeight: '320px',
+  },
+  icon: {
+    margin: '-8px',
   },
 }))
 
@@ -90,15 +93,36 @@ const OrderButton = ({ index, active, handleOrderByChange }) => {
   if (index !== activeIndex) {
     return (
       <IconButton onClick={() => handleOrderByChange(false)}>
-        <Remove />
+        <Icon disabled />
       </IconButton>
     )
   }
 
   return (
     <IconButton onClick={() => handleOrderByChange(!ascending)}>
-      {ascending ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+      <Icon ascending={ascending} />
     </IconButton>
+  )
+}
+
+const Icon = ({ disabled, ascending }) => {
+  const classes = useStyles()
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+  }
+
+  return (
+    <div style={style}>
+      <ArrowDropUp
+        className={classes.icon}
+        color={!disabled && !ascending ? 'default' : 'disabled'}
+      />
+      <ArrowDropDown
+        className={classes.icon}
+        color={!disabled && ascending ? 'default' : 'disabled'}
+      />
+    </div>
   )
 }
 
