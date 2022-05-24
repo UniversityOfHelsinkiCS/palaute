@@ -177,14 +177,15 @@ const FeedbackTargetView = () => {
 
   const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
 
-  const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
-  const showEditSurveyTab = isTeacher && !isOpen && !isEnded
+  const showFeedbacksTab =
+    isAdmin || (isTeacher && isStarted) || feedback || isEnded
+  const showEditSurveyTab = isAdmin || (isTeacher && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
-    isTeacher && isEnded && !feedbackResponseEmailSent
+    isAdmin || (isTeacher && isEnded && !feedbackResponseEmailSent)
   const showStudentsWithFeedbackTab =
-    isTeacher && studentListVisible && (isOpen || isEnded)
-  const showLinksTab = isTeacher
-  const showSettingsTab = isTeacher
+    isAdmin || (isTeacher && studentListVisible && (isOpen || isEnded))
+  const showLinksTab = isAdmin || isTeacher
+  const showSettingsTab = isAdmin || isTeacher
 
   const handleCopyLink = () => {
     copyLink(`${window.location.host}/targets/${id}/feedback`)
