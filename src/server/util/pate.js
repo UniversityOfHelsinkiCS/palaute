@@ -39,43 +39,58 @@ const pateClient = axios.create({
 const sleep = (time) =>
   new Promise((resolve) => setTimeout(() => resolve(), time))
 
-const postWithRetries = async (data, retries = 3) => {
-  let i = 0
-  while (i < retries) {
-    try {
-      await pateClient.post('/', data)
-      break
-    } catch (error) {
-      Sentry.captureException(error)
-      logger.error(
-        `[Pate] error when posting emails, retrying ${
-          i + 1
-        }/${retries}: ${error}`,
-      )
-      await sleep(4000 + i * 6000)
-    }
-    i++
-  }
+const sizeOf = (object) => Buffer.byteLength(JSON.stringify(object), 'utf-8')
+
+const calculateGoodChunkSize = (emails) => {
+  const safeByteLength = 8000 * 10 // kind of arbitrary. It also may go over this slightly but it shouldn't matter because this limit is so small
+  const bytes = sizeOf(emails)
+
+  // what sized chunks to send this in so the total chunk size is less than safeByteLength
+  const nChunks = Math.ceil(bytes / safeByteLength)
+  const chunkSize = Math.ceil(emails.length / nChunks)
+  return chunkSize
 }
 
 const sendToPate = async (options = {}) => {
-  if (!inProduction || inStaging) {
-    logger.debug('Skipped sending email in non-production environment', options)
-    logger.debug(`Would send  ${options.emails.length} emails`)
-    // options.emails.forEach((e) => console.log(JSON.stringify(e, null, 2)))
-    return null
-  }
-
-  const chunkedEmails = _.chunk(options.emails, 40)
-  const chunkedOptions = chunkedEmails.map((emails) => ({
+  const emails = options.emails.map((emails) => ({
     emails,
     settings: options.settings,
     template: options.template,
   }))
+  const chunkSize = calculateGoodChunkSize(emails)
+  const chunkedEmails = _.chunk(emails, chunkSize)
+  logger.debug(
+    `[Pate] sending ${emails.length} emails (${sizeOf(emails)} bytes), in ${
+      chunkedEmails.length
+    } chunks of size ${chunkSize} (${sizeOf(chunkedEmails[0])} bytes)`,
+  )
 
-  for (const chunkedOption of chunkedOptions) {
-    postWithRetries(chunkedOption, 3)
-    await sleep(1000)
+  if (!inProduction || inStaging) {
+    logger.debug('Skipped sending email in non-production environment')
+    return null
+  }
+
+  const sendChunkedMail = async (chunk) => {
+    try {
+      await pateClient.post('/', chunk)
+    } catch (error) {
+      logger.error('[Pate] error: ', error)
+      if (error?.response?.status !== 413) throw error
+      if (chunk?.length > 1) {
+        await sleep(1000)
+        const newChunkSize = Math.ceil(chunk.length / 2)
+        logger.debug(`[Pate] retrying with smaller chunk size ${newChunkSize}`)
+        for (const c of _.chunk(chunk, newChunkSize)) {
+          await sendChunkedMail(c)
+        }
+      } else {
+        throw error
+      }
+    }
+  }
+
+  for (const chunk of chunkedEmails) {
+    await sendChunkedMail(chunk)
   }
 
   return options
