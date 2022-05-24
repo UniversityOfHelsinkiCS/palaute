@@ -72,6 +72,7 @@ const OrganisationTable = ({
   organisationAccess,
   initialOpenAccordions = [],
   onToggleAccordion = () => {},
+  onOrderByChange,
   filters,
   loading = false,
 }) => {
@@ -87,9 +88,11 @@ const OrganisationTable = ({
             <th aria-hidden="true" />
 
             <ColumnHeadings
+              onOrderByChange={onOrderByChange}
               questionNames={questions
-                .map(({ id, data }) => ({
+                .map(({ id, data }, index) => ({
                   id,
+                  index,
                   question: getLanguageValue(data?.label, i18n.language),
                 }))
                 .concat([
@@ -240,6 +243,7 @@ const OrganisationSummary = () => {
             initialOpenAccordions={openAccordions}
             onToggleAccordion={toggleAccordion}
             loading={isFetching}
+            onOrderByChange={handleOrderByChange}
             filters={
               <>
                 <Box mb={2}>

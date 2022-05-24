@@ -90,9 +90,9 @@ const Filters = ({
           fullWidth
         />
       </Box>
-      <Box mb={2}>
+      {/* <Box mb={2}>
         <OrderSelect orderBy={orderBy} onOrderByChange={onOrderByChange} />
-      </Box>
+        </Box> */}
       <FormControlLabel
         control={
           <Switch
