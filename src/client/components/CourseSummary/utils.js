@@ -88,8 +88,31 @@ const ARGS_BY_ORDER_BY = {
   },
 }
 
+const getOrderByArgs = (orderByCriteria) => {
+  let orderByArgs
+  if (orderByCriteria.includes('QUESTION_MEAN')) {
+    const orderByData = orderByCriteria.split('_')
+    const index = orderByData[2]
+    const sortOrder = orderByData[3].toLowerCase()
+    orderByArgs = {
+      organisations: [
+        [(organisation) => organisation.results[index].mean],
+        [sortOrder],
+      ],
+      courseUnits: [
+        [(courseUnit) => courseUnit.results[index].mean],
+        [[sortOrder]],
+      ],
+    }
+  } else {
+    orderByArgs = ARGS_BY_ORDER_BY[orderByCriteria]
+  }
+
+  return orderByArgs
+}
+
 export const orderByCriteria = (organisations, orderByCriteria) => {
-  const orderByArgs = ARGS_BY_ORDER_BY[orderByCriteria]
+  const orderByArgs = getOrderByArgs(orderByCriteria)
 
   return orderByArgs
     ? orderBy(
