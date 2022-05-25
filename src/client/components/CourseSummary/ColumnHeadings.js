@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import VerticalHeading from './VerticalHeading'
 
 const ColumnHeadings = ({ questionNames, onOrderByChange }) => {
-  const [active, setActive] = useState([null, false])
+  // [questionIndex, isAscending] of question being sorted by
+  const [orderBySelection, setOrderBySelection] = useState([null, false])
 
   return (
     <>
@@ -12,8 +13,8 @@ const ColumnHeadings = ({ questionNames, onOrderByChange }) => {
           key={id}
           id={id}
           index={index}
-          active={active}
-          setActive={setActive}
+          orderBySelection={orderBySelection}
+          setOrderBySelection={setOrderBySelection}
           onOrderByChange={onOrderByChange}
         >
           {question}

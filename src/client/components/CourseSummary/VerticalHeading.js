@@ -42,20 +42,21 @@ const VerticalHeading = ({
   height,
   id,
   index,
-  active,
-  setActive,
+  orderBySelection,
+  setOrderBySelection,
   onOrderByChange,
 }) => {
   const classes = useStyles()
+
   const handleOrderByChange = (isAscending) => {
-    if (id === 0) {
+    if (id === 0)
       onOrderByChange(`FEEDBACK_COUNT_${isAscending ? 'ASC' : 'DESC'}`)
-    } else if (id === 1) {
+    else if (id === 1)
       onOrderByChange(`FEEDBACK_RESPONSE_${isAscending ? 'ASC' : 'DESC'}`)
-    } else {
+    else
       onOrderByChange(`QUESTION_MEAN_${index}_${isAscending ? 'ASC' : 'DESC'}`)
-    }
-    setActive([index, isAscending])
+
+    setOrderBySelection([index, isAscending])
   }
 
   return (
@@ -77,10 +78,10 @@ const VerticalHeading = ({
             </Box>
           </Box>
         </Tooltip>
-        {active && (
+        {orderBySelection && (
           <OrderButton
             index={index}
-            active={active}
+            orderBySelection={orderBySelection}
             handleOrderByChange={handleOrderByChange}
           />
         )}
@@ -89,25 +90,25 @@ const VerticalHeading = ({
   )
 }
 
-const OrderButton = ({ index, active, handleOrderByChange }) => {
-  const [activeIndex, ascending] = active
+const OrderButton = ({ index, orderBySelection, handleOrderByChange }) => {
+  const [activeIndex, isAscending] = orderBySelection
 
-  if (index !== activeIndex) {
+  if (index === activeIndex) {
     return (
-      <IconButton onClick={() => handleOrderByChange(false)}>
-        <Icon disabled />
+      <IconButton onClick={() => handleOrderByChange(!isAscending)}>
+        <Icon isAscending={isAscending} />
       </IconButton>
     )
   }
 
   return (
-    <IconButton onClick={() => handleOrderByChange(!ascending)}>
-      <Icon ascending={ascending} />
+    <IconButton onClick={() => handleOrderByChange(false)}>
+      <Icon disabled />
     </IconButton>
   )
 }
 
-const Icon = ({ disabled, ascending }) => {
+const Icon = ({ disabled, isAscending }) => {
   const classes = useStyles()
   const style = {
     display: 'flex',
@@ -118,11 +119,11 @@ const Icon = ({ disabled, ascending }) => {
     <div style={style}>
       <ArrowDropUp
         className={classes.icon}
-        color={!disabled && !ascending ? 'default' : 'disabled'}
+        color={!disabled && !isAscending ? 'default' : 'disabled'}
       />
       <ArrowDropDown
         className={classes.icon}
-        color={!disabled && ascending ? 'default' : 'disabled'}
+        color={!disabled && isAscending ? 'default' : 'disabled'}
       />
     </div>
   )
