@@ -97,7 +97,6 @@ const ARGS_BY_ORDER_BY = {
 }
 
 const getOrderByArgs = (organisations, orderByCriteria) => {
-  let orderByArgs
   if (orderByCriteria.includes('QUESTION_MEAN')) {
     const orderByData = orderByCriteria.split('_')
     const id = Number(orderByData[2])
@@ -107,7 +106,7 @@ const getOrderByArgs = (organisations, orderByCriteria) => {
       organisations[0].results.find((result) => result.questionId === id),
     )
 
-    orderByArgs = {
+    return {
       organisations: [
         [(organisation) => organisation.results[index].mean],
         [sortOrder],
@@ -117,11 +116,9 @@ const getOrderByArgs = (organisations, orderByCriteria) => {
         [[sortOrder]],
       ],
     }
-  } else {
-    orderByArgs = ARGS_BY_ORDER_BY[orderByCriteria]
   }
 
-  return orderByArgs
+  return ARGS_BY_ORDER_BY[orderByCriteria]
 }
 
 const SORTABLE_FEEDBACK_RESPONSE = {
@@ -130,25 +127,27 @@ const SORTABLE_FEEDBACK_RESPONSE = {
   GIVEN: 3,
 }
 
+const formatForFeedbackResponse = (organisations) =>
+  // Add sortable feedbackResponse attribute to each courseUnit
+  organisations.map((organisation) => ({
+    ...organisation,
+    courseUnits: organisation.courseUnits.map((courseUnit) => ({
+      ...courseUnit,
+      feedbackResponse:
+        SORTABLE_FEEDBACK_RESPONSE[
+          getFeedbackResponseGiven(
+            courseUnit.feedbackResponseGiven,
+            courseUnit.closesAt,
+          )
+        ],
+    })),
+  }))
+
 export const orderByCriteria = (organisations, orderByCriteria) => {
   const orderByArgs = getOrderByArgs(organisations, orderByCriteria)
 
-  if (orderByCriteria.includes('FEEDBACK_RESPONSE')) {
-    // Add sortable feedbackResponse attribute to each courseUnit
-    organisations = organisations.map((organisation) => ({
-      ...organisation,
-      courseUnits: organisation.courseUnits.map((courseUnit) => ({
-        ...courseUnit,
-        feedbackResponse:
-          SORTABLE_FEEDBACK_RESPONSE[
-            getFeedbackResponseGiven(
-              courseUnit.feedbackResponseGiven,
-              courseUnit.closesAt,
-            )
-          ],
-      })),
-    }))
-  }
+  if (orderByCriteria.includes('FEEDBACK_RESPONSE'))
+    organisations = formatForFeedbackResponse(organisations)
 
   return orderByArgs
     ? orderBy(
