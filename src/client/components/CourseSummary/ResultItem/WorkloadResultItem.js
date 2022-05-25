@@ -18,9 +18,7 @@ const getArrow = (mean) => {
 
   const angle = mean < 3 ? -(normalizedMean * 90) : normalizedMean * 90
 
-  return (
-    <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} fontSize="medium" />
-  )
+  return <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} />
 }
 
 const getColor = (mean) => {
