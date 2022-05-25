@@ -50,6 +50,8 @@ const VerticalHeading = ({
   const handleOrderByChange = (isAscending) => {
     if (id === 0) {
       onOrderByChange(`FEEDBACK_COUNT_${isAscending ? 'ASC' : 'DESC'}`)
+    } else if (id === 1) {
+      onOrderByChange(`FEEDBACK_RESPONSE_${isAscending ? 'ASC' : 'DESC'}`)
     } else {
       onOrderByChange(`QUESTION_MEAN_${index}_${isAscending ? 'ASC' : 'DESC'}`)
     }
@@ -75,7 +77,7 @@ const VerticalHeading = ({
             </Box>
           </Box>
         </Tooltip>
-        {active && id !== 1 && (
+        {active && (
           <OrderButton
             index={index}
             active={active}
