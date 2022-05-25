@@ -96,12 +96,17 @@ const ARGS_BY_ORDER_BY = {
   },
 }
 
-const getOrderByArgs = (orderByCriteria) => {
+const getOrderByArgs = (organisations, orderByCriteria) => {
   let orderByArgs
   if (orderByCriteria.includes('QUESTION_MEAN')) {
     const orderByData = orderByCriteria.split('_')
-    const index = orderByData[2]
+    const id = Number(orderByData[2])
     const sortOrder = orderByData[3].toLowerCase()
+
+    const index = organisations[0].results.indexOf(
+      organisations[0].results.find((result) => result.questionId === id),
+    )
+
     orderByArgs = {
       organisations: [
         [(organisation) => organisation.results[index].mean],
@@ -126,7 +131,7 @@ const SORTABLE_FEEDBACK_RESPONSE = {
 }
 
 export const orderByCriteria = (organisations, orderByCriteria) => {
-  const orderByArgs = getOrderByArgs(orderByCriteria)
+  const orderByArgs = getOrderByArgs(organisations, orderByCriteria)
 
   if (orderByCriteria.includes('FEEDBACK_RESPONSE')) {
     // Add sortable feedbackResponse attribute to each courseUnit

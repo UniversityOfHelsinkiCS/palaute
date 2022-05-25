@@ -65,22 +65,13 @@ const ProgrammeTable = ({
             <ColumnHeadings
               onOrderByChange={onOrderByChange}
               questionNames={questions
-                .map(({ id, data }, index) => ({
+                .map(({ id, data }) => ({
                   id,
-                  index,
                   question: getLanguageValue(data?.label, i18n.language),
                 }))
                 .concat([
-                  {
-                    id: 0,
-                    index: questions.length,
-                    question: t('courseSummary:feedbackCount'),
-                  },
-                  {
-                    id: 1,
-                    index: questions.length + 1,
-                    question: t('courseSummary:feedbackResponse'),
-                  },
+                  { id: 0, question: t('courseSummary:feedbackCount') },
+                  { id: 1, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
             <th aria-hidden="true" />

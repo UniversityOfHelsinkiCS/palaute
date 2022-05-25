@@ -41,7 +41,6 @@ const VerticalHeading = ({
   component: Component = 'th',
   height,
   id,
-  index,
   orderBySelection,
   setOrderBySelection,
   onOrderByChange,
@@ -53,10 +52,9 @@ const VerticalHeading = ({
       onOrderByChange(`FEEDBACK_COUNT_${isAscending ? 'ASC' : 'DESC'}`)
     else if (id === 1)
       onOrderByChange(`FEEDBACK_RESPONSE_${isAscending ? 'ASC' : 'DESC'}`)
-    else
-      onOrderByChange(`QUESTION_MEAN_${index}_${isAscending ? 'ASC' : 'DESC'}`)
+    else onOrderByChange(`QUESTION_MEAN_${id}_${isAscending ? 'ASC' : 'DESC'}`)
 
-    setOrderBySelection([index, isAscending])
+    setOrderBySelection([id, isAscending])
   }
 
   return (
@@ -80,7 +78,7 @@ const VerticalHeading = ({
         </Tooltip>
         {orderBySelection && (
           <OrderButton
-            index={index}
+            id={id}
             orderBySelection={orderBySelection}
             handleOrderByChange={handleOrderByChange}
           />
@@ -90,10 +88,10 @@ const VerticalHeading = ({
   )
 }
 
-const OrderButton = ({ index, orderBySelection, handleOrderByChange }) => {
-  const [activeIndex, isAscending] = orderBySelection
+const OrderButton = ({ id, orderBySelection, handleOrderByChange }) => {
+  const [questionId, isAscending] = orderBySelection
 
-  if (index === activeIndex) {
+  if (id === questionId) {
     return (
       <IconButton onClick={() => handleOrderByChange(!isAscending)}>
         <Icon isAscending={isAscending} />
