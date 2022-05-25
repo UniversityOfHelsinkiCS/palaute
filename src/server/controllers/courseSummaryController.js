@@ -2,7 +2,12 @@ const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
-const { CourseUnit, Survey, Organisation } = require('../models')
+const {
+  CourseUnit,
+  Survey,
+  Organisation,
+  CourseUnitsOrganisation,
+} = require('../models')
 
 const {
   getOrganisationSummaries,
@@ -192,46 +197,57 @@ const getByCourseUnit = async (req, res) => {
 
   const { code } = req.params
 
-  const [questions, accessibleCourseCodes, courseUnit] = await Promise.all([
-    getSummaryQuestions(),
-    getAccessibleCourseCodes(organisationAccess),
-    CourseUnit.findOne({ where: { courseCode: code } }),
-  ])
+  const courseUnit = await CourseUnit.findOne({
+    where: { courseCode: code },
+    include: [
+      {
+        model: Organisation,
+        attributes: ['id'],
+        as: 'organisations',
+      },
+    ],
+  })
 
   if (!courseUnit) {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
+  const hasOrganisationAccess =
+    _.intersection(
+      organisationAccess.map((o) => o.organisation.id),
+      courseUnit.organisations.map((o) => o.id),
+    )?.length > 0
+
+  if (!hasOrganisationAccess) {
+    const hasSomeCourseRealisationAccess = (
+      await sequelize.query(
+        `
+      SELECT COUNT(*) > 0 as "hasAccess"
+      FROM
+        user_feedback_targets, feedback_targets
+      WHERE
+        feedback_targets.course_unit_id = :courseUnitId
+        AND user_feedback_targets.user_id = :userId
+        AND user_feedback_targets.feedback_target_id = feedback_targets.id
+        AND user_feedback_targets.access_status = 'TEACHER';
+    `,
+        {
+          type: QueryTypes.SELECT,
+          replacements: { userId: user.id, courseUnitId: courseUnit.id },
+        },
+      )
+    )[0]?.hasAccess
+
+    if (!hasSomeCourseRealisationAccess) {
+      throw new ApplicationError('Forbidden', 403)
+    }
+  }
+
+  const questions = await getSummaryQuestions()
   const courseRealisations = await getCourseRealisationSummaries({
     courseCode: code,
     questions,
   })
-
-  const hasCourseUnitAccess = accessibleCourseCodes.includes(
-    courseRealisations[0]?.courseCode,
-  )
-
-  const hasSomeCourseRealisationAccess = (
-    await sequelize.query(
-      `
-    SELECT COUNT(*) > 0 as "hasAccess"
-    FROM
-      user_feedback_targets, feedback_targets
-    WHERE
-      feedback_targets.course_unit_id = :courseUnitId
-      AND user_feedback_targets.feedback_target_id = feedback_targets.id
-      AND user_feedback_targets.access_status = 'TEACHER';    
-  `,
-      {
-        type: QueryTypes.SELECT,
-        replacements: { courseUnitId: courseUnit.id },
-      },
-    )
-  )[0]?.hasAccess
-
-  if (!hasCourseUnitAccess && !hasSomeCourseRealisationAccess) {
-    throw new ApplicationError('Forbidden', 403)
-  }
 
   res.send({
     questions,
