@@ -52,17 +52,18 @@ const calculateGoodChunkSize = (emails) => {
 }
 
 const sendToPate = async (options = {}) => {
-  const emails = options.emails.map((emails) => ({
+  const chunkSize = calculateGoodChunkSize(options.emails)
+  const chunkedEmails = _.chunk(options.emails, chunkSize).map((emails) => ({
     emails,
     settings: options.settings,
     template: options.template,
   }))
-  const chunkSize = calculateGoodChunkSize(emails)
-  const chunkedEmails = _.chunk(emails, chunkSize)
-  logger.debug(
-    `[Pate] sending ${emails.length} emails (${sizeOf(emails)} bytes), in ${
-      chunkedEmails.length
-    } chunks of size ${chunkSize} (${sizeOf(chunkedEmails[0])} bytes)`,
+  logger.info(
+    `[Pate] sending ${options.emails.length} emails (${sizeOf(
+      options.emails,
+    )} bytes), in ${chunkedEmails.length} chunks of size ${chunkSize} (${sizeOf(
+      chunkedEmails[0],
+    )} bytes)`,
   )
 
   if (!inProduction || inStaging) {
@@ -79,7 +80,7 @@ const sendToPate = async (options = {}) => {
       if (chunk?.length > 1) {
         await sleep(1000)
         const newChunkSize = Math.ceil(chunk.length / 2)
-        logger.debug(`[Pate] retrying with smaller chunk size ${newChunkSize}`)
+        logger.info(`[Pate] retrying with smaller chunk size ${newChunkSize}`)
         for (const c of _.chunk(chunk, newChunkSize)) {
           await sendChunkedMail(c)
         }
