@@ -28,7 +28,7 @@ const getOrganisationLogs = async (req, res) => {
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
   )
 
-  res.send(organisationLogs)
+  return res.send(organisationLogs)
 }
 
 module.exports = {
