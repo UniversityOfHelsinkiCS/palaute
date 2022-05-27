@@ -15,6 +15,7 @@ const {
   buildReminderAboutFeedbackResponseToTeachers,
   buildNotificationAboutSurveyOpeningToStudents,
 } = require('./emailBuilder')
+const { ApplicationError } = require('./customErrors')
 
 const template = {
   from: 'Norppa',
@@ -65,6 +66,7 @@ const sendToPate = async (options = {}) => {
       chunkedEmails[0],
     )} bytes)`,
   )
+  sleep(5000)
 
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment')
@@ -75,6 +77,7 @@ const sendToPate = async (options = {}) => {
     try {
       await pateClient.post('/', chunk)
     } catch (error) {
+      Sentry.captureException(error)
       logger.error('[Pate] error: ', error)
       if (error?.response?.status !== 413) throw error
       if (chunk?.length > 1) {
@@ -109,10 +112,10 @@ const sendEmail = async (listOfEmails, emailType = '') => {
     settings: { ...settings },
   }
 
-  sendToPate(options)
+  await sendToPate(options)
 }
 
-const sendNotificationAboutFeedbackResponseToStudents = (
+const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary,
   students,
   courseName,
@@ -134,12 +137,12 @@ const sendNotificationAboutFeedbackResponseToStudents = (
     return email
   })
 
-  sendEmail(emails, 'Notify students on feedback response')
+  await sendEmail(emails, 'Notify students on feedback response')
 
   return emails
 }
 
-const sendReminderToGiveFeedbackToStudents = (
+const sendReminderToGiveFeedbackToStudents = async (
   urlToGiveFeedback,
   students,
   courseName,
@@ -163,7 +166,7 @@ const sendReminderToGiveFeedbackToStudents = (
     return email
   })
 
-  sendEmail(emails, 'Remind students about feedback')
+  await sendEmail(emails, 'Remind students about feedback')
 
   return emails
 }

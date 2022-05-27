@@ -433,7 +433,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent, 'Notify students about feedback opening')
+  await sendEmail(emailsToBeSent, 'Notify students about feedback opening')
 
   return emailsToBeSent
 }
@@ -469,7 +469,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent, 'Remind teachers about feedback opening')
+  await sendEmail(emailsToBeSent, 'Remind teachers about feedback opening')
 
   return emailsToBeSent
 }
@@ -505,7 +505,10 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
     },
   )
 
-  sendEmail(emailsToBeSent, 'Remind teachers about giving feedback response')
+  await sendEmail(
+    emailsToBeSent,
+    'Remind teachers about giving feedback response',
+  )
 
   return emailsToBeSent
 }
@@ -617,12 +620,18 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
     },
   )
 
-  sendEmail(
+  await sendEmail(
     studentEmailsToBeSent,
     'Notify students about feedback opening immediately',
   )
 
   return studentEmailsToBeSent
+}
+
+const resendFailedFeedbackResponseEmailsToStudents = async () => {
+  /* find feedback targets which have closed somewhat recently, 
+  have a feedback response, and haven't send the notification email
+  */
 }
 
 module.exports = {
