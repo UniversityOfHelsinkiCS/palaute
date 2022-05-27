@@ -1,17 +1,39 @@
 import { Box, Paper, Typography } from '@material-ui/core'
+import { format } from 'date-fns'
 import React from 'react'
-import { useParams } from 'react-router'
+import { useParams, Redirect } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useOrganisationLogs from '../../hooks/useOrganisationLogs'
 import { LoadingProgress } from '../LoadingProgress'
 
-const getLogMessage = (data) => JSON.stringify(data)
+const getLogMessage = (data) => {
+  let messages = []
+  if (data.studentListVisible !== undefined) {
+    messages = messages.concat(
+      data.studentListVisible
+        ? 'Set student list as visible'
+        : 'Set student list as hidden',
+    )
+  }
+
+  if (data.enabledCourseCodes) {
+    messages = messages.concat(
+      data.enabledCourseCodes?.length > 0
+        ? `Enabled feedback for course ${data.enabledCourseCodes[0]}`
+        : `Disabled feedback for course ${data.disabledCourseCodes[0]}`,
+    )
+  }
+
+  return messages.join(', ')
+}
 
 const LogItem = ({ log }) => (
   <Box m={2}>
     <Paper>
       <Box display="flex" p={2}>
-        <Typography>{new Date(log.createdAt).toLocaleDateString()}</Typography>
+        <Typography>
+          {format(new Date(log.createdAt), 'yyyy/MM/dd hh.mm')}
+        </Typography>
         <Box m={2} />
         <Typography>{log.user.email}</Typography>
         <Box m={2} />
@@ -28,6 +50,10 @@ const OrganisationLogs = () => {
 
   if (isLoading || isUserLoading) {
     return <LoadingProgress />
+  }
+
+  if (!authorizedUser.isAdmin) {
+    return <Redirect to={`/organisations/${code}/settings/general`} />
   }
 
   return (
