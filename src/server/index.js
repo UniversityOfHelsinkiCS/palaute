@@ -2,6 +2,7 @@ require('dotenv').config()
 require('express-async-errors')
 const path = require('path')
 const express = require('express')
+const compression = require('compression')
 const { PORT, inProduction, inE2EMode, inStaging } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { connectRedis } = require('./util/redisClient')
@@ -15,6 +16,7 @@ const logger = require('./util/logger')
 
 const app = express()
 
+app.use(compression())
 app.use('/api', (req, res, next) => require('./util/routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))
 
