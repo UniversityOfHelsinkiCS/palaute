@@ -197,7 +197,7 @@ const getByCourseUnit = async (req, res) => {
 
   const { code } = req.params
 
-  const courseUnit = await CourseUnit.findOne({
+  const courseUnits = await CourseUnit.findAll({
     where: { courseCode: code },
     include: [
       {
@@ -206,16 +206,18 @@ const getByCourseUnit = async (req, res) => {
         as: 'organisations',
       },
     ],
+    order: [['updated_at', 'DESC']],
   })
+  console.log(courseUnits)
 
-  if (!courseUnit) {
+  if (!courseUnits?.length > 0) {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
   const hasOrganisationAccess =
     _.intersection(
       organisationAccess.map((o) => o.organisation.id),
-      courseUnit.organisations.map((o) => o.id),
+      courseUnits.flatMap((cu) => cu.organisations.map((o) => o.id)),
     )?.length > 0
 
   if (!hasOrganisationAccess) {
@@ -226,14 +228,17 @@ const getByCourseUnit = async (req, res) => {
       FROM
         user_feedback_targets, feedback_targets
       WHERE
-        feedback_targets.course_unit_id = :courseUnitId
+        feedback_targets.course_unit_id IN (:courseUnitIds)
         AND user_feedback_targets.user_id = :userId
         AND user_feedback_targets.feedback_target_id = feedback_targets.id
         AND user_feedback_targets.access_status = 'TEACHER';
     `,
         {
           type: QueryTypes.SELECT,
-          replacements: { userId: user.id, courseUnitId: courseUnit.id },
+          replacements: {
+            userId: user.id,
+            courseUnitIds: courseUnits.map((cu) => cu.id),
+          },
         },
       )
     )[0]?.hasAccess
@@ -252,7 +257,7 @@ const getByCourseUnit = async (req, res) => {
   res.send({
     questions,
     courseRealisations,
-    courseUnit,
+    courseUnit: courseUnits[0],
   })
 }
 
