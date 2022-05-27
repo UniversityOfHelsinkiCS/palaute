@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { OrganisationLog } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -32,6 +33,30 @@ const getOrganisations = async (req, res) => {
   }))
 
   return res.send(organisations)
+}
+
+const createOrganisationLog = async (organisation, updates, user) => {
+  const data = {}
+
+  if (Array.isArray(updates.disabledCourseCodes)) {
+    data.disabledCourseCodes = _.difference(
+      updates.disabledCourseCodes,
+      organisation.disabledCourseCodes,
+    )
+    data.enabledCourseCodes = _.difference(
+      organisation.disabledCourseCodes,
+      updates.disabledCourseCodes,
+    )
+  }
+
+  if (updates.studentListVisible !== undefined)
+    data.studentListVisible = Boolean(updates.studentListVisible)
+
+  await OrganisationLog.create({
+    data,
+    organisationId: organisation.id,
+    userId: user.id,
+  })
 }
 
 const updateOrganisation = async (req, res) => {
@@ -68,6 +93,8 @@ const updateOrganisation = async (req, res) => {
       organisation,
     )
   }
+
+  await createOrganisationLog(organisation, updates, user)
 
   Object.assign(organisation, updates)
 
