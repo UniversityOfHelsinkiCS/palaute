@@ -13,6 +13,7 @@ const FeedbackSummaryCache = require('./feedbackSummaryCache')
 const NorppaFeedback = require('./norppaFeedback')
 const UpdaterStatus = require('./updaterStatus')
 const FeedbackTargetDateCheck = require('./feedbackTargetDateCheck')
+const OrganisationLog = require('./organisationLog')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -98,6 +99,20 @@ FeedbackTargetDateCheck.belongsTo(FeedbackTarget, {
   foreign_key: 'feedback_target_id',
 })
 
+OrganisationLog.belongsTo(Organisation, {
+  as: 'organisation',
+  foreign_key: 'organisation_id',
+})
+
+OrganisationLog.belongsTo(User, {
+  as: 'user',
+  foreign_key: 'user_id',
+})
+
+User.hasMany(OrganisationLog, { as: 'organisationLogs' })
+
+Organisation.hasMany(OrganisationLog, { as: 'organisationLogs' })
+
 module.exports = {
   Feedback,
   User,
@@ -114,4 +129,5 @@ module.exports = {
   NorppaFeedback,
   UpdaterStatus,
   FeedbackTargetDateCheck,
+  OrganisationLog,
 }
