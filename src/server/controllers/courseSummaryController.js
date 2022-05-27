@@ -208,7 +208,6 @@ const getByCourseUnit = async (req, res) => {
     ],
     order: [['updated_at', 'DESC']],
   })
-  console.log(courseUnits)
 
   if (!courseUnits?.length > 0) {
     throw new ApplicationError('Course unit is not found', 404)

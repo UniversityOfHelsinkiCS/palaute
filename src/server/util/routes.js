@@ -14,6 +14,7 @@ const feedbackTargets = require('../controllers/feedbackTargetController')
 const adminController = require('../controllers/adminController')
 const courseSummary = require('../controllers/courseSummaryController')
 const organisation = require('../controllers/organisationController')
+const organisationLog = require('../controllers/organisationLogController')
 const courseUnit = require('../controllers/courseUnitController')
 const courseRealisation = require('../controllers/courseRealisationController')
 const testingController = require('../controllers/testingController')
@@ -135,6 +136,8 @@ router.get(
   '/organisations/:code/course-units',
   courseUnit.getCourseUnitsByOrganisation,
 )
+
+router.get('/organisation-logs/:code', organisationLog.getOrganisationLogs)
 
 router.get(
   '/course-realisations/:id/feedback-targets',
