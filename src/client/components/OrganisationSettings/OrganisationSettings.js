@@ -18,8 +18,10 @@ import EditSurvey from './EditSurvey'
 import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../LoadingProgress'
+import OrganisationLogs from './OrganisationLogs'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -67,6 +69,7 @@ const OrganisationSettings = () => {
   const { t, i18n } = useTranslation()
   const { organisation, isLoading } = useOrganisation(code)
   const classes = useStyles()
+  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -79,6 +82,7 @@ const OrganisationSettings = () => {
     return <Redirect to="/" />
   }
 
+  const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const selected = window.location.pathname.split('/').pop()
 
   return (
@@ -143,6 +147,23 @@ const OrganisationSettings = () => {
             />
           </Box>
         </Paper>
+        {isAdmin && (
+          <Paper className={classes.tabContainer}>
+            <Typography
+              variant="subtitle1"
+              component="h6"
+              className={classes.title}
+            >
+              Admin
+            </Typography>
+            <Tab
+              label="Organisation Logs"
+              component={Link}
+              to={`${url}/logs`}
+              className={selected === 'logs' ? classes.selected : ''}
+            />
+          </Paper>
+        )}
       </Box>
 
       <Switch>
@@ -163,6 +184,10 @@ const OrganisationSettings = () => {
         </Route>
         <Route path={`${path}/open`}>
           <ProgrammeOpenQuestions />
+        </Route>
+
+        <Route path={`${path}/logs`}>
+          <OrganisationLogs />
         </Route>
 
         <Redirect to={`${path}/general`} />
