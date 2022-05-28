@@ -6,6 +6,7 @@ import { Card, CardContent, Box, Typography, Divider } from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import { differenceInMonths } from 'date-fns'
 
 import FormikTextField from '../FormikTextField'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -74,8 +75,12 @@ const EditFeedbackResponse = () => {
 
   const hideResponseForm = feedbackResponseEmailSent
 
+  const now = Date.now()
+  const closeTime = Date.parse(closesAt)
   const feedbackResponseFormDisabled =
-    feedbackResponseEmailSent || new Date() < new Date(closesAt)
+    feedbackResponseEmailSent ||
+    now < closeTime ||
+    differenceInMonths(now, closeTime) > 6
 
   return (
     <>

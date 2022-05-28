@@ -178,7 +178,7 @@ const FeedbackTargetView = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
-  const isOld = differenceInMonths(Date.now(), Date.parse(closesAt)) > 3
+  const isOld = differenceInMonths(Date.now(), Date.parse(closesAt)) > 6
 
   const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
 

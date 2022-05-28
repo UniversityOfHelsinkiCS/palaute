@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
+const { differenceInMonths } = require('date-fns')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -748,6 +749,18 @@ const emailStudentsAboutResponse = async (req, res) => {
       'Feedback response email has already been sent',
       400,
     ) // or 409 ?
+
+  if (
+    differenceInMonths(
+      Date.now(),
+      Date.parse(relevantFeedbackTarget.closesAt),
+    ) > 6
+  ) {
+    throw new ApplicationError(
+      'Cannot send feedback response because feedback closed over 6 months ago',
+      403,
+    )
+  }
 
   const { feedbackResponse } = req.body.data
 
