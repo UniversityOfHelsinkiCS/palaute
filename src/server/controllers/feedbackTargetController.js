@@ -269,46 +269,45 @@ const getStudentListVisibility = async (courseUnitId) => {
   return studentListVisible ?? false
 }
 
+const getOneForAdmin = async (req, res, feedbackTargetId) => {
+  const adminFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+        ],
+      },
+      { model: CourseRealisation, as: 'courseRealisation' },
+    ],
+  })
+  if (!adminFeedbackTarget)
+    throw new ApplicationError('Feedback target not found', 404)
+
+  const responseReady = await convertFeedbackTargetForAdmin(
+    adminFeedbackTarget,
+    req.isAdmin,
+  )
+
+  const studentListVisible = adminFeedbackTarget?.courseUnit
+    ? await getStudentListVisibility(adminFeedbackTarget.courseUnit.id)
+    : false
+
+  return res.send({ ...responseReady, studentListVisible })
+}
+
 const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   if (req.isAdmin) {
-    const adminFeedbackTarget = await FeedbackTarget.findByPk(
-      feedbackTargetId,
-      {
-        include: [
-          {
-            model: CourseUnit,
-            as: 'courseUnit',
-            include: [
-              {
-                model: Organisation,
-                as: 'organisations',
-                through: { attributes: ['type'], as: 'courseUnitOrganisation' },
-                required: true,
-              },
-            ],
-          },
-          { model: CourseRealisation, as: 'courseRealisation' },
-        ],
-      },
-    )
-    if (!adminFeedbackTarget)
-      throw new ApplicationError('Feedback target not found', 404)
-
-    const responseReady = await convertFeedbackTargetForAdmin(
-      adminFeedbackTarget,
-      req.isAdmin,
-    )
-
-    const studentListVisible = adminFeedbackTarget?.courseUnit
-      ? await getStudentListVisibility(adminFeedbackTarget.courseUnit.id)
-      : false
-
-    res.send({ ...responseReady, studentListVisible })
-
-    return
+    return getOneForAdmin(req, res, feedbackTargetId)
   }
 
   const feedbackTarget = await getFeedbackTargetByIdForUser(
@@ -329,7 +328,7 @@ const getOne = async (req, res) => {
     req.isAdmin,
   )
 
-  res.send({
+  return res.send({
     ...responseReady[0],
     studentListVisible,
   })
