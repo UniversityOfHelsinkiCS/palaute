@@ -215,6 +215,12 @@ const getFeedbackTargetByOrganisationAccess = async (
       { model: CourseRealisation, as: 'courseRealisation' },
     ],
   })
+  if (!feedbackTarget)
+    throw new ApplicationError(
+      `Feedback target with id ${feedbackTargetId} not found`,
+      404,
+    )
+
   feedbackTarget.userFeedbackTargets = []
   const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
     feedbackTarget.courseUnitId,
