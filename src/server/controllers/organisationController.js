@@ -134,11 +134,14 @@ const getOrganisationLogs = async (req, res) => {
     return res.send([])
   }
 
-  const organisation = await Organisation.findOne({
+  const { organisationLogs } = await Organisation.findOne({
     where: {
       code,
     },
     attributes: [],
+    order: [
+      [{ model: OrganisationLog, as: 'organisationLogs' }, 'createdAt', 'DESC'],
+    ],
     include: {
       model: OrganisationLog,
       as: 'organisationLogs',
@@ -149,10 +152,6 @@ const getOrganisationLogs = async (req, res) => {
       },
     },
   })
-
-  const organisationLogs = organisation.organisationLogs.sort(
-    (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-  )
 
   return res.send(organisationLogs)
 }
