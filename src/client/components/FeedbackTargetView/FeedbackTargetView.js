@@ -20,6 +20,7 @@ import {
   Tooltip,
 } from '@material-ui/core'
 
+import { differenceInMonths } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
@@ -163,6 +164,7 @@ const FeedbackTargetView = () => {
     courseRealisation,
     courseUnit,
     opensAt,
+    closesAt,
     feedback,
     studentListVisible,
     responsibleTeachers,
@@ -176,6 +178,7 @@ const FeedbackTargetView = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
+  const isOld = differenceInMonths(Date.now(), Date.parse(closesAt)) > 3
 
   const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
 
@@ -183,7 +186,7 @@ const FeedbackTargetView = () => {
     isAdmin || (isTeacher && isStarted) || feedback || isEnded
   const showEditSurveyTab = isAdmin || (isTeacher && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
-    isAdmin || (isTeacher && isEnded && !feedbackResponseEmailSent)
+    isAdmin || (isTeacher && isEnded && !feedbackResponseEmailSent && !isOld)
   const showStudentsWithFeedbackTab =
     isAdmin || (isTeacher && studentListVisible && (isOpen || isEnded))
   const showLinksTab = isAdmin || isTeacher
