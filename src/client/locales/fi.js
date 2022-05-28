@@ -15,6 +15,8 @@ export default {
     choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
     fetchError:
       'Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.',
+    serverError:
+      'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.',
     save: 'Tallenna',
     saveSuccess: 'Tiedot tallennettiin onnistuneesti',
     name: 'Nimi',
@@ -33,6 +35,7 @@ export default {
     close: 'Sulje',
     required: 'Pakollinen',
     copy: 'Kopioi',
+    goBack: 'Takaisin',
     settings: 'Asetukset',
     feedbacks: 'Palautteet',
     teacherPage: 'Opetukseni',
@@ -345,6 +348,10 @@ export default {
       'Poista opettaja {{name}} vastuuopettajien joukosta?',
     noFeedbackResponseYet:
       'Kurssin opettaja ei ole vielä antanut vastapalautetta',
+    noAccess:
+      'Sinulla ei ole pääsyä tähän palautteeseen. Tarkista, että olet ilmoittautunut kurssille.',
+    notFound:
+      'Tätä palautetta ei löydy. Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
   },
 
   noadUser: {

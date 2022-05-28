@@ -12,6 +12,7 @@ export default {
       wrongDate: 'Förfrågans slutdatum är före startdatumet',
     },
     unknownError: 'Något gick fel',
+    // serverError: 'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.
     choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
     fetchError:
       'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
@@ -32,6 +33,7 @@ export default {
     close: 'Stäng',
     required: 'Krävs',
     copy: 'Kopiera',
+    // goBack: 'Go back',
     settings: 'Inställningar',
     feedbacks: 'Mina responser',
     teacherPage: 'Mina kurser',
@@ -346,6 +348,8 @@ export default {
     deleteResponsibleTeacherConfirmation:
       'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
     // noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback',
+    // noAccess: 'Sorry, you have no access to this feedback. Make sure you are enrolled.',
+    // notFound: 'Cannot find this feedback! If you entered the URL manually, make sure it is correct',
   },
   noadUser: {
     noUser:

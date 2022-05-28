@@ -24,7 +24,6 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
 import {
-  CommentOutlined,
   EditOutlined,
   LiveHelpOutlined,
   PeopleOutlined,
@@ -61,6 +60,8 @@ import { LoadingProgress } from '../LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
+import ErrorView from '../ErrorView'
+import { getFeedbackTargetLoadError } from '../../util/errorMessage'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -137,7 +138,8 @@ const FeedbackTargetView = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget, isLoading, refetch } = useFeedbackTarget(id)
+  const { feedbackTarget, isLoading, refetch, isLoadingError, error } =
+    useFeedbackTarget(id, { retry: 1 })
   const { feedbackCount, isLoading: feedbackCountLoading } = useFeedbackCount(
     id,
     {
@@ -152,8 +154,8 @@ const FeedbackTargetView = () => {
     return <LoadingProgress />
   }
 
-  if (!feedbackTarget) {
-    return <Redirect to="/" />
+  if (isLoadingError || !feedbackTarget) {
+    return <ErrorView message={getFeedbackTargetLoadError(error)} />
   }
 
   const {

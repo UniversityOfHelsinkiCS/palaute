@@ -14,6 +14,8 @@ export default {
     unknownError: 'Something went wrong',
     choiceQuestionError: 'Choice questions require answer options',
     fetchError: 'Error while fetching data. Refreshing the page may help.',
+    serverError:
+      'Oops, something broke on our end, we will try to fix it ASAP. Apologies.',
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',
@@ -32,6 +34,7 @@ export default {
     close: 'Close',
     required: 'Required',
     copy: 'Copy',
+    goBack: 'Go back',
     settings: 'Settings',
     feedbacks: 'Feedbacks',
     teacherPage: 'My teaching',
@@ -345,6 +348,10 @@ export default {
       'Delete teacher {{name}} from responsible teachers?',
     noFeedbackResponseYet:
       'The teacher of the course has not yet given counter feedback',
+    noAccess:
+      'Sorry, you have no access to this feedback. Make sure you are enrolled.',
+    notFound:
+      'Cannot find this feedback! If you entered the URL manually, make sure it is correct',
   },
   noadUser: {
     noUser:
