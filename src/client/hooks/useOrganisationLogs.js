@@ -8,7 +8,7 @@ const useOrganisationLogs = (code, options = {}) => {
   const queryKey = ['organisationsLogs', code]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/organisation-logs/${code}`)
+    const { data } = await apiClient.get(`/organisations/${code}/logs`)
 
     return data
   }
