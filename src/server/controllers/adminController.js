@@ -72,6 +72,7 @@ const findUser = async (req, res) => {
       })),
     })
   }
+  const isEmail = user.includes('.') || user.includes('@')
   const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
   const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
   const isSisuId =
@@ -82,7 +83,12 @@ const findUser = async (req, res) => {
 
   const params = {}
   const where = {}
-  if (isStudentNumber) {
+  if (isEmail) {
+    where[Op.or] = {
+      email: { [Op.iLike]: `${user}%` },
+      secondaryEmail: { [Op.iLike]: `${user}%` },
+    }
+  } else if (isStudentNumber) {
     where.studentNumber = {
       [Op.iLike]: `${user}%`,
     }

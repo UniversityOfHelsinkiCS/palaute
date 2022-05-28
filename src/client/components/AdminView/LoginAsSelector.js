@@ -51,7 +51,7 @@ const LoginAsSelector = () => {
     <Box my={4}>
       <TextField
         style={{ width: '30em' }}
-        label="Username, sisu id or studentnumber"
+        label="Email, Username, sisu id or studentnumber"
         variant="outlined"
         onChange={handleChange}
       />
@@ -67,7 +67,7 @@ const LoginAsSelector = () => {
         <Card key={user.id}>
           <CardContent>
             <b>
-              {user.id} - {user.firstNames} {user.lastName} -{' '}
+              {user.id} - {user.firstNames} {user.lastName} - {user.email} -{' '}
               {user.studentNumber}
             </b>
           </CardContent>
