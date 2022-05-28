@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { OrganisationLog } = require('../models')
+const { Organisation, OrganisationLog, User } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -126,8 +126,40 @@ const getOrganisationByCode = async (req, res) => {
   res.send(organisation)
 }
 
+const getOrganisationLogs = async (req, res) => {
+  const { isAdmin } = req
+  const { code } = req.params
+
+  if (!isAdmin) {
+    return res.send([])
+  }
+
+  const organisation = await Organisation.findOne({
+    where: {
+      code,
+    },
+    attributes: [],
+    include: {
+      model: OrganisationLog,
+      as: 'organisationLogs',
+      attributes: ['data', 'createdAt'],
+      include: {
+        model: User,
+        as: 'user',
+      },
+    },
+  })
+
+  const organisationLogs = organisation.organisationLogs.sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+  )
+
+  return res.send(organisationLogs)
+}
+
 module.exports = {
   getOrganisations,
   updateOrganisation,
   getOrganisationByCode,
+  getOrganisationLogs,
 }
