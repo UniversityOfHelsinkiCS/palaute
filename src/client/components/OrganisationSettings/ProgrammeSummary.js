@@ -19,7 +19,6 @@ import Filters from '../CourseSummary/Filters'
 
 import {
   ORDER_BY_OPTIONS,
-  useHistoryState,
   filterByCourseCode,
   orderByCriteria,
 } from '../CourseSummary/utils'
@@ -28,6 +27,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationSummary from '../../hooks/useOrganisationSummary'
 import { LoadingProgress } from '../LoadingProgress'
 import ColumnHeadings from '../CourseSummary/ColumnHeadings'
+import useHistoryState from '../../hooks/useHistoryState'
 
 const useStyles = makeStyles((theme) => ({
   table: {

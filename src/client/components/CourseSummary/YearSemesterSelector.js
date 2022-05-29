@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { ChevronLeft, ChevronRight } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
-import { useHistoryState } from './utils'
+import useHistoryState from '../../hooks/useHistoryState'
 
 // Year starting month
 const MONTH = 8

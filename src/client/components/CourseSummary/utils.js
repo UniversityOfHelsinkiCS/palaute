@@ -163,27 +163,6 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
     : organisations
 }
 
-export const useHistoryState = (key, initialValue) => {
-  const history = useHistory()
-
-  const historyState = history.location.state ?? {}
-
-  const replaceHistoryState = (update) => {
-    history.replace({
-      state: { ...historyState, ...update },
-    })
-  }
-
-  const [state, setState] = useState(historyState[key] ?? initialValue)
-
-  const handleSetState = (nextState) => {
-    setState(nextState)
-    replaceHistoryState({ [key]: nextState })
-  }
-
-  return [state, handleSetState]
-}
-
 export const useOpenAccordions = (organisations) => {
   const history = useHistory()
 

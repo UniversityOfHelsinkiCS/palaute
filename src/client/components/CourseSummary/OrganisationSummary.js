@@ -26,7 +26,6 @@ import Filters from './Filters'
 
 import {
   hasWriteAccess,
-  useHistoryState,
   useOpenAccordions,
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
@@ -34,6 +33,7 @@ import {
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import ColumnHeadings from './ColumnHeadings'
+import useHistoryState from '../../hooks/useHistoryState'
 
 const useStyles = makeStyles((theme) => ({
   table: {
