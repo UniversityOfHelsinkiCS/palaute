@@ -16,6 +16,7 @@ import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import RouterTabs from '../RouterTabs'
 import GeneralTab from './GeneralTab'
 import { ChangedClosingDates } from './ChangedClosingDates'
+import FeedbackTargetInspector from './FeedbackTargetInspector'
 
 const useStyles = makeStyles(() => ({
   failureIcon: {
@@ -82,6 +83,11 @@ const AdminView = () => {
             to={`${url}/changed-dates`}
           />
           <Tab
+            label="Feedback targets"
+            component={Link}
+            to={`${url}/feedback-targets`}
+          />
+          <Tab
             to={`${url}/updater`}
             component={forwardRef((props, ref) => (
               <Button
@@ -103,6 +109,10 @@ const AdminView = () => {
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route path={`${path}/changed-dates`} component={ChangedClosingDates} />
+        <Route
+          path={`${path}/feedback-targets`}
+          component={FeedbackTargetInspector}
+        />
         <Route path={`${path}/updater`} component={UpdaterView} />
       </Switch>
     </>

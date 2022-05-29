@@ -88,6 +88,7 @@ const findUser = async (req, res) => {
       email: { [Op.iLike]: `${user}%` },
       secondaryEmail: { [Op.iLike]: `${user}%` },
     }
+    params.email = user
   } else if (isStudentNumber) {
     where.studentNumber = {
       [Op.iLike]: `${user}%`,
@@ -122,6 +123,74 @@ const findUser = async (req, res) => {
       firstNames: person.firstName,
     })),
   })
+}
+
+const findFeedbackTargets = async (req, res) => {
+  const {
+    query: { id, code, name, language },
+  } = req
+  const params = {}
+
+  const include = [
+    {
+      model: CourseUnit,
+      attributes: ['courseCode', 'name'],
+      as: 'courseUnit',
+      required: true,
+    },
+    {
+      model: CourseRealisation,
+      attributes: ['startDate', 'endDate', 'name'],
+      as: 'courseRealisation',
+      required: true,
+    },
+  ]
+
+  const numberId = Number(id)
+  if (numberId) {
+    const result = await FeedbackTarget.findByPk(numberId, { include })
+    params.id = numberId
+    return res.send({
+      params,
+      feedbackTargets: [result.toJSON()],
+    })
+  }
+
+  if (code) {
+    include[0].where = { courseCode: { [Op.iLike]: `${code}%` } }
+  }
+  if (name?.length > 2) {
+    include[0].where = {
+      [Op.or]: {
+        [`name.${language}`]: { [Op.iLike]: `${name}%` },
+      },
+    }
+  }
+
+  const { count, rows: result } = await FeedbackTarget.findAndCountAll({
+    include,
+    order: [['closesAt', 'DESC']],
+    limit: 10,
+  })
+  return res.send({
+    params,
+    count,
+    feedbackTargets: result.map((r) => r.toJSON()),
+  })
+}
+
+const resendFeedbackResponseEmail = async (req, res) => {
+  console.log(req.body)
+  const { id } = req.body
+  const idNumber = Number(id)
+  if (!idNumber) throw new ApplicationError('Invalid id', 400)
+  const feedbackTarget = await FeedbackTarget.findByPk(idNumber)
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  const emailsSentTo =
+    await feedbackTarget.sendFeedbackSummaryReminderToStudents(
+      feedbackTarget.feedbackResponse,
+    )
+  return res.send({ count: emailsSentTo.length })
 }
 
 const formatFeedbackTargets = async (feedbackTargets) => {
@@ -381,7 +450,7 @@ const router = Router()
 router.use(adminAccess)
 
 router.get('/users', findUser)
-router.get('/feedback-targets', getFeedbackTargets)
+router.get('/feedback-targets-data', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.get('/updater-status', getUpdaterStatus)
 router.post('/reset-course', resetTestCourse)
@@ -389,5 +458,6 @@ router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
 router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
-
+router.get('/feedback-targets', findFeedbackTargets)
+router.put('/resend-response', resendFeedbackResponseEmail)
 module.exports = router
