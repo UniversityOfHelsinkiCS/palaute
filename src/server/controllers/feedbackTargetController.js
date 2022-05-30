@@ -372,6 +372,10 @@ const createLog = async (feedbackTarget, updates, user) => {
     data.closesAt = updates.closesAt
   }
 
+  if (updates.feedbackVisibility) {
+    data.feedbackVisibility = updates.feedbackVisibility
+  }
+
   await FeedbackTargetLog.create({
     data,
     feedbackTargetId: feedbackTarget.id,
