@@ -12,3 +12,4 @@ scripts/my_username
 *.mp4
 cypress/screenshots
 cypress/videos
+temp

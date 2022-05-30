@@ -152,7 +152,7 @@ const findFeedbackTargets = async (req, res) => {
     params.id = numberId
     return res.send({
       params,
-      feedbackTargets: [result.toJSON()],
+      feedbackTargets: result ? [result.toJSON()] : [],
     })
   }
 
@@ -180,7 +180,6 @@ const findFeedbackTargets = async (req, res) => {
 }
 
 const resendFeedbackResponseEmail = async (req, res) => {
-  console.log(req.body)
   const { id } = req.body
   const idNumber = Number(id)
   if (!idNumber) throw new ApplicationError('Invalid id', 400)
