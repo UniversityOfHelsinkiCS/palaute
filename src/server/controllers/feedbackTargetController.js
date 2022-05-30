@@ -15,6 +15,7 @@ const {
   Question,
   User,
   Organisation,
+  FeedbackTargetLog,
 } = require('../models')
 
 const { sequelize } = require('../util/dbConnection')
@@ -341,6 +342,43 @@ const getOne = async (req, res) => {
   })
 }
 
+const createLog = async (feedbackTarget, updates, user) => {
+  const data = {}
+
+  if (Array.isArray(updates.publicQuestionIds)) {
+    data.enabledPublicQuestions = _.difference(
+      updates.publicQuestionIds,
+      feedbackTarget.publicQuestionIds,
+    )
+    data.disabledPublicQuestions = _.difference(
+      feedbackTarget.publicQuestionIds,
+      updates.publicQuestionIds,
+    )
+  }
+
+  if (
+    updates.opensAt &&
+    new Date(updates.opensAt).toDateString() !==
+      feedbackTarget.opensAt.toDateString()
+  ) {
+    data.opensAt = updates.opensAt
+  }
+
+  if (
+    updates.closesAt &&
+    new Date(updates.closesAt).toDateString() !==
+      feedbackTarget.closesAt.toDateString()
+  ) {
+    data.closesAt = updates.closesAt
+  }
+
+  await FeedbackTargetLog.create({
+    data,
+    feedbackTargetId: feedbackTarget.id,
+    userId: user.id,
+  })
+}
+
 const update = async (req, res) => {
   const feedbackTargetId = Number(req.params?.id)
 
@@ -370,6 +408,8 @@ const update = async (req, res) => {
   if (updates.opensAt || updates.closesAt) {
     feedbackTarget.feedbackDatesEditedByTeacher = true
   }
+
+  await createLog(feedbackTarget, updates, req.user)
 
   Object.assign(feedbackTarget, updates)
 
