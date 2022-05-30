@@ -42,6 +42,7 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
 
   feedbackTargets.forEach((target) => {
     const { courseRealisation } = target
+    courseRealisation.name = target.courseUnit.name
 
     courseRealisationById.set(courseRealisation.id, courseRealisation)
   })
