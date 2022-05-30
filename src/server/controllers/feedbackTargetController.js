@@ -152,7 +152,6 @@ const getIncludes = (userId, accessStatus) => {
       model: CourseUnit,
       as: 'courseUnit',
       required: true,
-      attributes: ['name'],
       include: [
         {
           model: Organisation,
