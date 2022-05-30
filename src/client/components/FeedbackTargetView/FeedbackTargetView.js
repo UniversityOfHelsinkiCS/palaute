@@ -60,6 +60,7 @@ import {
 import { LoadingProgress } from '../LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
+import FeedbackTargetLogs from '../FeedbackTargetLogs'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../ErrorView'
 import { getFeedbackTargetLoadError } from '../../util/errorMessage'
@@ -191,6 +192,7 @@ const FeedbackTargetView = () => {
     isAdmin || (isTeacher && studentListVisible && (isOpen || isEnded))
   const showLinksTab = isAdmin || isTeacher
   const showSettingsTab = isAdmin || isTeacher
+  const showLogsTab = isAdmin
 
   const handleCopyLink = () => {
     copyLink(`${window.location.host}/targets/${id}/feedback`)
@@ -384,6 +386,13 @@ const FeedbackTargetView = () => {
               to={`${url}/settings`}
             />
           )}
+          {showLogsTab && (
+            <RouterTab
+              icon={<SettingsOutlined />}
+              label="Feedback target logs"
+              to={`${url}/logs`}
+            />
+          )}
         </RouterTabs>
       </Box>
 
@@ -402,6 +411,7 @@ const FeedbackTargetView = () => {
           component={EditFeedbackResponse}
         />
         <Route path={`${path}/settings`} component={FeedbackTargetSettings} />
+        <Route path={`${path}/logs`} component={FeedbackTargetLogs} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

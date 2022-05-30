@@ -3,24 +3,42 @@ import { format } from 'date-fns'
 import React from 'react'
 import { useParams, Redirect } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import useOrganisationLogs from '../../hooks/useOrganisationLogs'
+import useFeedbackTargetLogs from '../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../LoadingProgress'
 
 const getLogMessage = (data) => {
   let messages = []
-  if (data.studentListVisible !== undefined) {
+  if (data.opensAt) {
     messages = messages.concat(
-      data.studentListVisible
-        ? 'Set student list as visible'
-        : 'Set student list as hidden',
+      `Set feedback period to open at ${format(
+        new Date(data.opensAt),
+        'yyyy/MM/dd',
+      )}`,
     )
   }
 
-  if (data.enabledCourseCodes) {
+  if (data.closesAt) {
     messages = messages.concat(
-      data.enabledCourseCodes.length > 0
-        ? `Enabled feedback for course ${data.enabledCourseCodes[0]}`
-        : `Disabled feedback for course ${data.disabledCourseCodes[0]}`,
+      `Set feedback period to close at ${format(
+        new Date(data.closesAt),
+        'yyyy/MM/dd',
+      )}`,
+    )
+  }
+
+  if (data.feedbackVisibility) {
+    messages = messages.concat(
+      data.feedbackVisibility === 'ALL'
+        ? 'Set public questions visible to all students'
+        : 'Set public questions visible to enrolled students',
+    )
+  }
+
+  if (data.enabledPublicQuestions) {
+    messages = messages.concat(
+      data.enabledPublicQuestions.length > 0
+        ? `Set answers visible for question ${data.enabledPublicQuestions[0]}`
+        : `Set answers hidden for question ${data.disabledPublicQuestions[0]}`,
     )
   }
 
@@ -43,9 +61,9 @@ const LogItem = ({ log }) => (
   </Box>
 )
 
-const OrganisationLogs = () => {
-  const { code } = useParams()
-  const { organisationLogs, isLoading } = useOrganisationLogs(code)
+const FeedbackTargetLogs = () => {
+  const { id } = useParams()
+  const { feedbackTargetLogs, isLoading } = useFeedbackTargetLogs(id)
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
   if (isLoading || isUserLoading) {
@@ -53,16 +71,16 @@ const OrganisationLogs = () => {
   }
 
   if (!authorizedUser.isAdmin) {
-    return <Redirect to={`/organisations/${code}/settings/general`} />
+    return <Redirect to={`/targets/${id}/feedback`} />
   }
 
   return (
     <Box display="flex" flexDirection="column">
-      {organisationLogs.map((log, idx) => (
+      {feedbackTargetLogs.map((log, idx) => (
         <LogItem key={idx} log={log} />
       ))}
     </Box>
   )
 }
 
-export default OrganisationLogs
+export default FeedbackTargetLogs
