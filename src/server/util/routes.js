@@ -59,6 +59,7 @@ router.get(
   '/feedback-targets/:id/feedback-count',
   feedbackTargets.getFeedbackCount,
 )
+router.get('/feedback-targets/:id/logs', feedbackTargets.getLogs)
 
 router.put(
   '/feedback-targets/:id/reply',

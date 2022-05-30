@@ -124,9 +124,9 @@ FeedbackTargetLog.belongsTo(User, {
   foreign_key: 'user_id',
 })
 
-User.hasMany(FeedbackTargetLog, { as: 'FeedbackTargetLogs' })
+User.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
-FeedbackTarget.hasMany(FeedbackTargetLog, { as: 'FeedbackTargetLogs' })
+FeedbackTarget.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
 module.exports = {
   Feedback,

@@ -972,6 +972,40 @@ const deleteUserFeedbackTarget = async (req, res) => {
   res.sendStatus(200)
 }
 
+const getLogs = async (req, res) => {
+  const { isAdmin } = req
+  const feedbackTargetId = req.params.id
+
+  if (!isAdmin) {
+    throw new ApplicationError('User is not authorized', 403)
+  }
+
+  const { feedbackTargetLogs } = await FeedbackTarget.findByPk(
+    feedbackTargetId,
+    {
+      attributes: [],
+      order: [
+        [
+          { model: FeedbackTargetLog, as: 'feedbackTargetLogs' },
+          'createdAt',
+          'DESC',
+        ],
+      ],
+      include: {
+        model: FeedbackTargetLog,
+        as: 'feedbackTargetLogs',
+        attributes: ['data', 'createdAt'],
+        include: {
+          model: User,
+          as: 'user',
+        },
+      },
+    },
+  )
+
+  return res.send(feedbackTargetLogs)
+}
+
 module.exports = {
   getForStudent,
   getTargetsByCourseUnit,
@@ -987,4 +1021,5 @@ module.exports = {
   getUsers,
   deleteUserFeedbackTarget,
   getFeedbackCount,
+  getLogs,
 }
