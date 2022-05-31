@@ -1,3 +1,5 @@
+import { baseUrl } from '.'
+
 const adminUser = {
   uid: 'mluukkai',
   givenName: 'Matti',
@@ -42,23 +44,23 @@ const studyCoordinator = {
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(adminUser))
 
-  cy.visit('localhost:8000')
+  cy.visit(baseUrl)
 })
 
 Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(teacher))
 
-  cy.visit('localhost:8000')
+  cy.visit(baseUrl)
 })
 
 Cypress.Commands.add('loginAsStudent', () => {
   localStorage.setItem('fakeUser', JSON.stringify(student))
-  cy.visit('localhost:8000')
+  cy.visit(baseUrl)
 })
 
 Cypress.Commands.add('loginAsStudyCoordinator', () => {
   localStorage.setItem('fakeUser', JSON.stringify(studyCoordinator))
-  cy.visit('localhost:8000')
+  cy.visit(baseUrl)
 })
 
 Cypress.Commands.add('setUpAdminTeacherView', () => {
@@ -119,7 +121,7 @@ Cypress.Commands.add('setFeedbackActive', () => {
 })
 
 Cypress.Commands.add('enableCourses', () => {
-  cy.visit('localhost:8000')
+  cy.visit(baseUrl)
   cy.request({
     method: 'PUT',
     url: '/api/test/enableCourses',

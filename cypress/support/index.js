@@ -14,7 +14,9 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import { inE2EMode } from '../../src/config'
 import './commands'
 
+export const baseUrl = inE2EMode ? 'localhost:8000' : 'localhost:3000'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

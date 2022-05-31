@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { baseUrl } from '../support'
 
 // eslint-disable-next-line no-unused-vars
 const getDates = () => {
@@ -18,14 +19,14 @@ describe('Teacher view', () => {
     cy.loginAsTeacher()
   })
   it('A logged in teacher can view its courses', () => {
-    cy.visit('localhost:8000/courses')
+    cy.visit(`${baseUrl}/courses`)
     cy.contains('My teaching')
     cy.contains('Ongoing courses (0)')
     cy.contains('Upcoming courses (0)')
     cy.contains('Ended courses')
   })
   it('A logged in teacher can view its ended courses', () => {
-    cy.visit('localhost:8000/courses')
+    cy.visit(`${baseUrl}/courses`)
     cy.contains('My teaching')
     cy.contains('TKT20002 Software Development Methods')
     cy.get('div').contains('TKT20002 Software Development Methods').click()
@@ -33,7 +34,7 @@ describe('Teacher view', () => {
     cy.contains(`${startDate} - ${endDate}`)
   })
   it('A logged in teacher can give feedback response for an ended course', () => {
-    cy.visit('localhost:8000/courses')
+    cy.visit(`${baseUrl}/courses`)
     cy.contains(
       '[data-cy=courseUnitItem]',
       'TKT20002 Software Development Methods',
@@ -45,12 +46,12 @@ describe('Teacher view', () => {
     cy.get('textarea').type('Feedback response for students to see')
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
-    cy.visit('localhost:8000/courses')
+    cy.visit(`${baseUrl}/courses`)
     cy.contains('TKT20002 Software Development Methods').click()
     cy.contains('Counter feedback given')
   })
   it('Teacher can add questions to a survey', () => {
-    cy.visit('localhost:8000/targets/165/edit')
+    cy.visit(`${baseUrl}/targets/165/edit`)
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-en-questions]').type('Test question')
@@ -65,7 +66,7 @@ describe('Teacher view', () => {
     cy.loginAsSecondaryTeacher()
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('a[href*="/targets/163"]').click()
-    cy.visit('localhost:8000/targets/163/results')
+    cy.visit(`${baseUrl}/targets/163/results`)
     cy.contains('Feedback').click()
     cy.contains(
       'Survey results will not be displayed because it does not have enough feedback',
