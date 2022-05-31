@@ -9,9 +9,9 @@ import FeedbackTargetItem from './FeedbackTargetItem'
 
 const CourseRealisationItem = ({ courseRealisation, className }) => {
   const { i18n } = useTranslation()
-  const { feedbackTargets, name } = courseRealisation
+  const { feedbackTargets, courseUnitName } = courseRealisation
 
-  const translatedName = getLanguageValue(name, i18n.language)
+  const translatedName = getLanguageValue(courseUnitName, i18n.language)
 
   return (
     <Card className={className}>

@@ -346,14 +346,23 @@ const createLog = async (feedbackTarget, updates, user) => {
   const data = {}
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    data.enabledPublicQuestions = _.difference(
+    const enabledPublicQuestionIds = _.difference(
       updates.publicQuestionIds,
       feedbackTarget.publicQuestionIds,
     )
-    data.disabledPublicQuestions = _.difference(
+    const disabledPublicQuestionIds = _.difference(
       feedbackTarget.publicQuestionIds,
       updates.publicQuestionIds,
     )
+
+    data.enabledPublicQuestions = await Question.findAll({
+      where: { id: enabledPublicQuestionIds },
+      attributes: ['id', 'data'],
+    })
+    data.disabledPublicQuestions = await Question.findAll({
+      where: { id: disabledPublicQuestionIds },
+      attributes: ['id', 'data'],
+    })
   }
 
   if (
@@ -374,6 +383,10 @@ const createLog = async (feedbackTarget, updates, user) => {
 
   if (updates.feedbackVisibility) {
     data.feedbackVisibility = updates.feedbackVisibility
+  }
+
+  if (updates.openImmediately !== undefined) {
+    data.openImmediately = updates.openImmediately
   }
 
   await FeedbackTargetLog.create({
@@ -879,6 +892,8 @@ const openFeedbackImmediately = async (req, res) => {
   feedbackTarget.feedbackDatesEditedByTeacher = true
   feedbackTarget.feedbackOpeningReminderEmailSent = true
 
+  await createLog(feedbackTarget, { openImmediately: true }, user)
+
   await feedbackTarget.save()
 
   res.sendStatus(200)
@@ -909,6 +924,9 @@ const closeFeedbackImmediately = async (req, res) => {
 
   feedbackTarget.closesAt = req.body.closesAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
+
+  await createLog(feedbackTarget, { openImmediately: false }, user)
+
   await feedbackTarget.save()
 
   res.sendStatus(200)
