@@ -42,6 +42,14 @@ const getLogMessage = (data) => {
     )
   }
 
+  if (data.openImmediately !== undefined) {
+    messages = messages.concat(
+      data.openImmediately
+        ? 'Opened feedback period immediately'
+        : 'Closed feedback period immediately',
+    )
+  }
+
   return messages.join(', ')
 }
 

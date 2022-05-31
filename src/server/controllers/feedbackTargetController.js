@@ -385,6 +385,10 @@ const createLog = async (feedbackTarget, updates, user) => {
     data.feedbackVisibility = updates.feedbackVisibility
   }
 
+  if (updates.openImmediately !== undefined) {
+    data.openImmediately = updates.openImmediately
+  }
+
   await FeedbackTargetLog.create({
     data,
     feedbackTargetId: feedbackTarget.id,
@@ -888,6 +892,8 @@ const openFeedbackImmediately = async (req, res) => {
   feedbackTarget.feedbackDatesEditedByTeacher = true
   feedbackTarget.feedbackOpeningReminderEmailSent = true
 
+  await createLog(feedbackTarget, { openImmediately: true }, user)
+
   await feedbackTarget.save()
 
   res.sendStatus(200)
@@ -918,6 +924,9 @@ const closeFeedbackImmediately = async (req, res) => {
 
   feedbackTarget.closesAt = req.body.closesAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
+
+  await createLog(feedbackTarget, { openImmediately: false }, user)
+
   await feedbackTarget.save()
 
   res.sendStatus(200)
