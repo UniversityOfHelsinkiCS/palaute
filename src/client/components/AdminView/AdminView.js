@@ -83,7 +83,7 @@ const AdminView = () => {
             to={`${url}/changed-dates`}
           />
           <Tab
-            label="Feedback targets"
+            label="Search feedback targets"
             component={Link}
             to={`${url}/feedback-targets`}
           />

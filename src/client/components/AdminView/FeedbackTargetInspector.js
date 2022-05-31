@@ -165,40 +165,45 @@ const FeedbackTargetInspector = () => {
 
   return (
     <Box mt={4}>
-      <TextField
-        variant="outlined"
-        label="id"
-        value={query.id}
-        onChange={(e) => handleChange({ ...query, id: e.target.value })}
-      />
-      <TextField
-        variant="outlined"
-        label="course code"
-        value={query.code}
-        onFocus={() => setQuery({ ...query, id: '' })}
-        onChange={(e) => handleChange({ ...query, code: e.target.value })}
-      />
-      <TextField
-        variant="outlined"
-        label="CU name"
-        value={query.name}
-        onFocus={() => setQuery({ ...query, id: '' })}
-        onChange={(e) => handleChange({ ...query, name: e.target.value })}
-      />
-      <Button
-        onClick={() => {
-          const newQuery = {
-            ...query,
-            language: query.language === 'fi' ? 'en' : 'fi',
-          }
-          setQuery(newQuery)
-          if (query.name?.length > 2) {
-            runQuery(newQuery)
-          }
-        }}
-      >
-        {query.language === 'fi' ? 'finnish' : 'english'}
-      </Button>
+      <Box display="flex" alignItems="center">
+        <TextField
+          variant="outlined"
+          label="id"
+          value={query.id}
+          onChange={(e) => handleChange({ ...query, id: e.target.value })}
+        />
+        <Box m={1} />
+        <TextField
+          variant="outlined"
+          label="course code"
+          value={query.code}
+          onFocus={() => setQuery({ ...query, id: '' })}
+          onChange={(e) => handleChange({ ...query, code: e.target.value })}
+        />
+        <Box m={1} />
+        <TextField
+          variant="outlined"
+          label="CU name"
+          value={query.name}
+          onFocus={() => setQuery({ ...query, id: '' })}
+          onChange={(e) => handleChange({ ...query, name: e.target.value })}
+        />
+        <Box m={1} />
+        <Button
+          onClick={() => {
+            const newQuery = {
+              ...query,
+              language: query.language === 'fi' ? 'en' : 'fi',
+            }
+            setQuery(newQuery)
+            if (query.name?.length > 2) {
+              runQuery(newQuery)
+            }
+          }}
+        >
+          {query.language === 'fi' ? 'finnish' : 'english'}
+        </Button>
+      </Box>
       <Box m={2} />
       <Typography>
         Showing {potentialFeedbackTargets.length}/{count} results
