@@ -37,8 +37,8 @@ const getLogMessage = (data) => {
   if (data.enabledPublicQuestions) {
     messages = messages.concat(
       data.enabledPublicQuestions.length > 0
-        ? `Set answers visible for question ${data.enabledPublicQuestions[0]}`
-        : `Set answers hidden for question ${data.disabledPublicQuestions[0]}`,
+        ? `Set answers visible for question '${data.enabledPublicQuestions[0].data.label.en}'`
+        : `Set answers hidden for question '${data.disabledPublicQuestions[0].data.label.en}'`,
     )
   }
 

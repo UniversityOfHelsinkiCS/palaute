@@ -346,14 +346,23 @@ const createLog = async (feedbackTarget, updates, user) => {
   const data = {}
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    data.enabledPublicQuestions = _.difference(
+    const enabledPublicQuestionIds = _.difference(
       updates.publicQuestionIds,
       feedbackTarget.publicQuestionIds,
     )
-    data.disabledPublicQuestions = _.difference(
+    const disabledPublicQuestionIds = _.difference(
       feedbackTarget.publicQuestionIds,
       updates.publicQuestionIds,
     )
+
+    data.enabledPublicQuestions = await Question.findAll({
+      where: { id: enabledPublicQuestionIds },
+      attributes: ['id', 'data'],
+    })
+    data.disabledPublicQuestions = await Question.findAll({
+      where: { id: disabledPublicQuestionIds },
+      attributes: ['id', 'data'],
+    })
   }
 
   if (
