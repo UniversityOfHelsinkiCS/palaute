@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import {
   Accordion,
@@ -6,8 +6,6 @@ import {
   AccordionSummary,
   Box,
   Button,
-  Card,
-  CardContent,
   TextField,
   Typography,
   Link as MuiLink,
@@ -20,13 +18,9 @@ import {
   TableCell,
 } from '@material-ui/core'
 import { debounce } from 'lodash'
-import { Form, Formik } from 'formik'
 import { useSnackbar } from 'notistack'
 
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import LoadingProgress from '../LoadingProgress'
 import apiClient from '../../util/apiClient'
-import FormikTextField from '../FormikTextField'
 import useHistoryState from '../../hooks/useHistoryState'
 
 const Details = ({ feedbackTarget: fbt }) => (
@@ -96,6 +90,7 @@ const Actions = ({ feedbackTarget }) => {
 
   const resendFeedbackResponseEmail = async () => {
     if (
+      // eslint-disable-next-line no-alert
       !window.confirm(
         `Resend feedback response email to students of ${feedbackTarget.courseUnit.name?.fi}?`,
       )
@@ -140,7 +135,7 @@ const FeedbackTargetInspector = () => {
 
   const runQuery = debounce(async (params) => {
     const { data } = await apiClient.get('/admin/feedback-targets', { params })
-    const { params: queried, feedbackTargets, count } = data
+    const { feedbackTargets, count } = data
 
     setPotentialFeedbackTargets(
       feedbackTargets.map((fbt) => ({

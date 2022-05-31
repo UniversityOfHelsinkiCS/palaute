@@ -2,12 +2,7 @@ const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
-const {
-  CourseUnit,
-  Survey,
-  Organisation,
-  CourseUnitsOrganisation,
-} = require('../models')
+const { CourseUnit, Survey, Organisation } = require('../models')
 
 const {
   getOrganisationSummaries,
@@ -66,6 +61,7 @@ const getAccessibleCourseRealisationIds = async (user) => {
   return rows.map((row) => row.id)
 }
 
+// eslint-disable-next-line no-unused-vars
 const getAccessibleCourseCodes = async (organisationAccess) => {
   const organisationIds = organisationAccess.map(
     ({ organisation }) => organisation.id,

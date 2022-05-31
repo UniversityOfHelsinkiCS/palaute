@@ -33,7 +33,7 @@ const runUpdater = async () => {
 const run = async () => {
   logger.info('[UPDATER] Running updater')
 
-  const [status, _] = await UpdaterStatus.findOrCreate({ where: { id: 1 } })
+  const [status] = await UpdaterStatus.findOrCreate({ where: { id: 1 } })
   status.started_at = new Date()
   status.finished_at = null
   status.status = 'RUNNING'

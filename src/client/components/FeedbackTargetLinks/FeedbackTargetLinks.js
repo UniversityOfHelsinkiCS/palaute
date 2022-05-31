@@ -11,7 +11,6 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { LoadingProgress } from '../LoadingProgress'
 import { copyLink } from '../FeedbackTargetView/utils'
 import Alert from '../Alert'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
@@ -25,11 +24,10 @@ const StudentLinkCopyButton = ({ onClick, label }) => (
 const FeedbackTargetLinks = () => {
   const { id } = useParams()
   const { enqueueSnackbar } = useSnackbar()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id)
 
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
   if (isLoading) {

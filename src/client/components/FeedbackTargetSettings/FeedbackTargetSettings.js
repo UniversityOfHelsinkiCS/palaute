@@ -12,7 +12,6 @@ import {
   opensAtIsImmediately,
   saveFeedbackPeriodValues,
   closeCourseImmediately,
-  feedbackCanBeClosed,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import PublicQuestions from '../PublicQuestions'

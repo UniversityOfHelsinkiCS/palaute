@@ -15,7 +15,6 @@ const {
   buildReminderAboutFeedbackResponseToTeachers,
   buildNotificationAboutSurveyOpeningToStudents,
 } = require('./emailBuilder')
-const { ApplicationError } = require('./customErrors')
 
 const template = {
   from: 'Norppa',

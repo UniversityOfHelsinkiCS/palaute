@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
 import { orderBy } from 'lodash'
 import { useHistory } from 'react-router-dom'

@@ -639,5 +639,6 @@ module.exports = {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailToStudentsWhenOpeningImmediately,
   sendEmailReminderAboutFeedbackResponseToTeachers,
+  resendFailedFeedbackResponseEmailsToStudents,
   returnEmailsToBeSentToday,
 }
