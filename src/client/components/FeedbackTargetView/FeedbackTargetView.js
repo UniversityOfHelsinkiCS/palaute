@@ -309,7 +309,6 @@ const FeedbackTargetView = () => {
                 <Typography gutterBottom>
                   {t('feedbackTargetView:responsibleTeachers')}
                 </Typography>
-
                 <ResponsibleTeachersList
                   teachers={responsibleTeachers}
                   isAdmin={isAdmin}
@@ -366,13 +365,6 @@ const FeedbackTargetView = () => {
               to={`${url}/edit`}
             />
           )}
-          {showStudentsWithFeedbackTab && (
-            <RouterTab
-              icon={<PeopleOutlined />}
-              label={t('feedbackTargetView:studentsWithFeedbackTab')}
-              to={`${url}/students-with-feedback`}
-            />
-          )}
           {showLinksTab && (
             <RouterTab
               icon={<ShareOutlined />}
@@ -385,6 +377,13 @@ const FeedbackTargetView = () => {
               icon={<SettingsOutlined />}
               label={t('feedbackTargetView:surveySettingsTab')}
               to={`${url}/settings`}
+            />
+          )}
+          {showStudentsWithFeedbackTab && (
+            <RouterTab
+              icon={<PeopleOutlined />}
+              label={t('feedbackTargetView:studentsWithFeedbackTab')}
+              to={`${url}/students-with-feedback`}
             />
           )}
           {showLogsTab && (
