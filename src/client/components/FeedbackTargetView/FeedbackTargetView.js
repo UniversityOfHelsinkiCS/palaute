@@ -26,6 +26,7 @@ import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
 import {
   EditOutlined,
+  ListOutlined,
   LiveHelpOutlined,
   PeopleOutlined,
   PollOutlined,
@@ -388,8 +389,8 @@ const FeedbackTargetView = () => {
           )}
           {showLogsTab && (
             <RouterTab
-              icon={<SettingsOutlined />}
-              label="Feedback target logs"
+              icon={<ListOutlined />}
+              label="Logs"
               to={`${url}/logs`}
             />
           )}

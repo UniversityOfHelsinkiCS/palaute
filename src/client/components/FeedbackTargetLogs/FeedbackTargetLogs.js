@@ -1,4 +1,5 @@
 import { Box, Paper, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { format } from 'date-fns'
 import React from 'react'
 import { useParams, Redirect } from 'react-router'
@@ -76,6 +77,9 @@ const FeedbackTargetLogs = () => {
 
   return (
     <Box display="flex" flexDirection="column">
+      {!feedbackTargetLogs?.length > 0 && (
+        <Alert severity="info">No logs yet</Alert>
+      )}
       {feedbackTargetLogs.map((log, idx) => (
         <LogItem key={idx} log={log} />
       ))}
