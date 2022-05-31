@@ -62,13 +62,8 @@ router.get(
 router.get('/feedback-targets/:id/logs', feedbackTargets.getLogs)
 
 router.put(
-  '/feedback-targets/:id/reply',
+  '/feedback-targets/:id/response',
   feedbackTargets.updateFeedbackResponse,
-)
-
-router.put(
-  '/feedback-targets/:id/notify-students',
-  feedbackTargets.emailStudentsAboutResponse,
 )
 
 router.put(

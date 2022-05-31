@@ -247,11 +247,16 @@ export default {
       'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille. \n Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin.',
     writingInstruction:
       'Opettajan vastauksen pituus voi vaihdella. Asioita joita voit esimerkiksi sisällyttää vastaukseesi on: opiskelijoiden kiittäminen annetusta palautteesta (ja kurssille osallistumisesta), läpikatsaus annetusta palautteesta, valinta palautteen osa-alueista joihin koet olevan tärkeää vastata sekä reaktiosi ja selvennyksesi niihin. Vastauksessa olevat konkreettiset toimet opetuksen ja kurssien sisällön muokkaukseen vastineena opiskelijoiden palautteeseen ovat ensiarvoisen tärkeitä.',
-    dialogTitle: 'Tallenna vastapalaute',
-    dialogContent:
-      'Tallentaessasi vastapalautteen opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Tallennettuasi vastapalautteen et voi enää muokata sitä.',
+    sendEmailOption: 'Lähetä vastapalaute sähköpostitse opiskelijoille',
+    dialogSaveTitle: 'Tallenna vastapalaute',
+    dialogSendEmailTitle: 'Tallenna vastapalaute ja lähetä sähköposti',
+    dialogSaveContent:
+      'Kurssin opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.',
+    dialogSendEmailContent:
+      'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin et voi enää muokata vastapalautetta.',
     dialogCancel: 'Peruuta',
-    dialogSubmit: 'Tallenna',
+    dialogSaveSubmit: 'Tallenna',
+    dialogSendEmailSubmit: 'Lähetä',
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {

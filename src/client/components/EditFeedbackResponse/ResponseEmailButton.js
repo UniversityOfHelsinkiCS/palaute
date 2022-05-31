@@ -6,30 +6,41 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Box,
 } from '@material-ui/core'
+import { SendOutlined } from '@material-ui/icons'
 
 import { useTranslation } from 'react-i18next'
-import apiClient from '../../util/apiClient'
 
-const SubmitResponseDialog = ({ open = false, onClose, onConfirm }) => {
+const SubmitResponseDialog = ({ open = false, onClose, onSubmit, values }) => {
   const { t } = useTranslation()
+  const { sendEmail } = values
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>{t('feedbackResponse:dialogTitle')}</DialogTitle>
-      <DialogContent>{t('feedbackResponse:dialogContent')}</DialogContent>
+      <DialogTitle>
+        {sendEmail
+          ? t('feedbackResponse:dialogSendEmailTitle')
+          : t('feedbackResponse:dialogSaveTitle')}
+      </DialogTitle>
+      <DialogContent>
+        {sendEmail
+          ? t('feedbackResponse:dialogSendEmailContent')
+          : t('feedbackResponse:dialogSaveContent')}
+      </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
           {t('feedbackResponse:dialogCancel')}
         </Button>
         <Button
-          data-cy="saveFeedbackResponse"
           color="primary"
           form="feedback-response-form"
-          onClick={onConfirm}
+          onClick={onSubmit}
           type="submit"
         >
-          {t('feedbackResponse:dialogSubmit')}
+          {sendEmail
+            ? t('feedbackResponse:dialogSendEmailSubmit')
+            : t('feedbackResponse:dialogSaveSubmit')}
         </Button>
       </DialogActions>
     </Dialog>
@@ -41,7 +52,6 @@ const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false)
 
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
 
   const handleOpenSubmitDialog = () => setSubmitDialogOpen(true)
   const handleCloseSubmitDialog = () => setSubmitDialogOpen(false)
@@ -50,36 +60,35 @@ const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
     handleOpenSubmitDialog()
   }
 
-  const sendEmail = async () => {
-    setSent(true)
+  const handleSubmit = async () => {
+    setSent(values.sendEmail)
     handleCloseSubmitDialog()
-    const { feedbackResponse } = values
-    try {
-      await apiClient.put(
-        `/feedback-targets/${feedbackTargetId}/notify-students`,
-        { data: { feedbackResponseEmailSent: true, feedbackResponse } },
-      )
-    } catch (err) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
   }
 
   return (
     <>
       <SubmitResponseDialog
+        values={values}
         open={submitDialogOpen}
         onClose={handleCloseSubmitDialog}
-        onConfirm={sendEmail}
+        onSubmit={handleSubmit}
       />
-      <Button
-        disabled={disabled || sent}
-        type="button"
-        variant="contained"
-        color="primary"
-        onClick={handleOpenDialog}
-      >
-        {t('feedbackResponse:sendEmail')}
-      </Button>
+      <Box display="flex" mr={2}>
+        <Button
+          disabled={disabled || sent}
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={handleOpenDialog}
+          style={{ width: 130 }}
+        >
+          {values.sendEmail
+            ? t('feedbackResponse:dialogSendEmailSubmit')
+            : t('feedbackResponse:dialogSaveSubmit')}
+          <Box mr={1} />
+          <SendOutlined fontSize="small" />
+        </Button>
+      </Box>
     </>
   )
 }

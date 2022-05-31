@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
-import { Card, CardContent, Box, Typography, Divider } from '@material-ui/core'
+import {
+  Card,
+  CardContent,
+  Box,
+  Typography,
+  Divider,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -22,19 +30,6 @@ const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
 })
 
-const saveValues = async (values, feedbackTargetId) => {
-  const { feedbackResponse } = values
-
-  const { data } = await apiClient.put(
-    `/feedback-targets/${feedbackTargetId}/reply`,
-    {
-      data: feedbackResponse,
-    },
-  )
-
-  return data
-}
-
 const MarkdownPreview = () => {
   const [field] = useField('feedbackResponse')
 
@@ -48,9 +43,20 @@ const EditFeedbackResponse = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
+  const { feedbackTarget, isLoading, refetch } = useFeedbackTarget(id, {
     skipCache: true,
   })
+
+  const [sendEmail, setSendEmail] = useState(true)
+  useEffect(() => {
+    setSendEmail(
+      Boolean(
+        feedbackTarget &&
+          !feedbackTarget.feedbackResponse &&
+          !feedbackTarget.feedbackResponseEmailSent,
+      ),
+    )
+  }, [feedbackTarget])
 
   if (isLoading) {
     return <LoadingProgress />
@@ -62,18 +68,12 @@ const EditFeedbackResponse = () => {
 
   const initialValues = getInitialValues(feedbackTarget)
 
-  const handleSubmit = async (values) => {
-    try {
-      await saveValues(values, feedbackTarget.id)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
-
   const { feedbackResponseEmailSent, closesAt } = feedbackTarget
 
   const hideResponseForm = feedbackResponseEmailSent
+  if (hideResponseForm) {
+    return <Redirect to={`/targets/${feedbackTarget.id}/results`} />
+  }
 
   const now = Date.now()
   const closeTime = Date.parse(closesAt)
@@ -82,78 +82,87 @@ const EditFeedbackResponse = () => {
     now < closeTime ||
     differenceInMonths(now, closeTime) > 6
 
+  const handleSubmit = async (values) => {
+    try {
+      await apiClient.put(`/feedback-targets/${feedbackTarget.id}/response`, {
+        data: {
+          feedbackResponse: values.feedbackResponse,
+          feedbackResponseEmailSent: sendEmail,
+        },
+      })
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      if (sendEmail) {
+        refetch()
+      }
+    } catch (err) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
   return (
     <>
       <Card>
         <CardContent>
-          {hideResponseForm && (
-            <Box mb={2}>
-              <Typography variant="h6">
-                {t('feedbackResponse:responseLabel')}
-              </Typography>
-            </Box>
-          )}
-          {!hideResponseForm && (
-            <>
-              <InstructionAccordion />
-              <Box mb={2}>
-                <Alert severity="info">
-                  <Trans i18nKey="feedbackResponse:responseInfo">
-                    This field supports{' '}
-                    <AlertLink
-                      href="https://commonmark.org/help/"
-                      target="_blank"
-                    >
-                      Markdown
-                    </AlertLink>{' '}
-                    syntax
-                  </Trans>
-                </Alert>
-              </Box>
-            </>
-          )}
+          <InstructionAccordion />
+          <Box mb={2}>
+            <Alert severity="info">
+              <Trans i18nKey="feedbackResponse:responseInfo">
+                This field supports{' '}
+                <AlertLink href="https://commonmark.org/help/" target="_blank">
+                  Markdown
+                </AlertLink>{' '}
+                syntax
+              </Trans>
+            </Alert>
+          </Box>
           <Formik
             initialValues={initialValues}
-            onSubmit={handleSubmit}
             validateOnChange={false}
+            onSubmit={handleSubmit}
           >
             {({ isSubmitting, values }) => (
               <Form id="feedback-response-form">
-                {!hideResponseForm && (
-                  <>
-                    <FormikTextField
-                      label={
-                        feedbackResponseFormDisabled
-                          ? t('feedbackResponse:formDisabled')
-                          : t('feedbackResponse:responseLabel')
-                      }
-                      name="feedbackResponse"
-                      rows={10}
-                      fullWidth
-                      multiline
-                      disabled={feedbackResponseFormDisabled}
-                    />
-                    <Box my={2}>
-                      <ResponseEmailButton
-                        disabled={
-                          isSubmitting ||
-                          feedbackTarget.feedbackResponseEmailSent ||
-                          !values.feedbackResponse
-                        }
-                        feedbackTargetId={feedbackTarget.id}
-                        values={values}
+                <FormikTextField
+                  label={
+                    feedbackResponseFormDisabled
+                      ? t('feedbackResponse:formDisabled')
+                      : t('feedbackResponse:responseLabel')
+                  }
+                  name="feedbackResponse"
+                  rows={10}
+                  fullWidth
+                  multiline
+                  disabled={feedbackResponseFormDisabled}
+                />
+                <Box my={2} display="flex">
+                  <ResponseEmailButton
+                    disabled={
+                      isSubmitting ||
+                      feedbackTarget.feedbackResponseEmailSent ||
+                      !values.feedbackResponse
+                    }
+                    feedbackTargetId={feedbackTarget.id}
+                    values={{ ...values, sendEmail }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={sendEmail}
+                        onChange={() => setSendEmail(!sendEmail)}
+                        disabled={feedbackResponseFormDisabled}
                       />
-                    </Box>
-                    <Box my={2}>
-                      <Divider />
-                    </Box>
-                    <Box mb={2}>
-                      <Typography color="textSecondary">
-                        {t('feedbackResponse:previewLabel')}
-                      </Typography>
-                    </Box>
-                  </>
-                )}
+                    }
+                    label={t('feedbackResponse:sendEmailOption')}
+                  />
+                </Box>
+                <Box my={2}>
+                  <Divider />
+                </Box>
+                <Box mb={2}>
+                  <Typography color="textSecondary">
+                    {t('feedbackResponse:previewLabel')}
+                  </Typography>
+                </Box>
                 <MarkdownPreview />
               </Form>
             )}

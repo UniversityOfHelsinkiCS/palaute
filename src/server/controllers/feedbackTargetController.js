@@ -758,35 +758,7 @@ const getStudentsWithFeedback = async (req, res) => {
 }
 
 const updateFeedbackResponse = async (req, res) => {
-  const feedbackTargetId = Number(req.params.id)
-  const { user, isAdmin } = req
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
-  })
-
-  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
-    throw new ApplicationError('User is not authorized to respond', 403)
-  }
-
-  if (userFeedbackTarget.feedbackResponseEmailSent) {
-    throw new ApplicationError(
-      'Feedback response email has already been sent',
-      400,
-    )
-  }
-
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-
-  feedbackTarget.feedbackResponse = req.body.data
-  await feedbackTarget.save()
-  res.sendStatus(200)
-}
-
-const emailStudentsAboutResponse = async (req, res) => {
+  console.log(req.body.data)
   const feedbackTargetId = Number(req.params.id)
   const feedbackTargetsUserIsTeacherTo =
     await req.user.feedbackTargetsHasTeacherAccessTo()
@@ -819,13 +791,20 @@ const emailStudentsAboutResponse = async (req, res) => {
     )
   }
 
-  const { feedbackResponse } = req.body.data
+  const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
 
-  relevantFeedbackTarget.feedbackResponseEmailSent = true
-  const emailsSentTo =
-    await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents(
-      feedbackResponse,
-    )
+  relevantFeedbackTarget.feedbackResponse = feedbackResponse
+  relevantFeedbackTarget.feedbackResponseEmailSent = Boolean(
+    feedbackResponseEmailSent,
+  )
+
+  let emailsSentTo = []
+  if (feedbackResponseEmailSent) {
+    emailsSentTo =
+      await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents(
+        feedbackResponse,
+      )
+  }
   await relevantFeedbackTarget.save()
 
   res.send(emailsSentTo)
@@ -1032,7 +1011,6 @@ module.exports = {
   getFeedbacks,
   getStudentsWithFeedback,
   updateFeedbackResponse,
-  emailStudentsAboutResponse,
   openFeedbackImmediately,
   closeFeedbackImmediately,
   remindStudentsOnFeedback,
