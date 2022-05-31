@@ -144,6 +144,7 @@ const formatForFeedbackResponse = (organisations) =>
   }))
 
 export const orderByCriteria = (organisations, orderByCriteria) => {
+  if (organisations.length === 0) return []
   const orderByArgs = getOrderByArgs(organisations, orderByCriteria)
 
   if (orderByCriteria.includes('FEEDBACK_RESPONSE'))
