@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const instructionsAndSupport = {
   en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
     User instructions: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>

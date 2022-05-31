@@ -117,11 +117,11 @@ const Icon = ({ disabled, isAscending }) => {
     <div style={style}>
       <ArrowDropUp
         className={classes.icon}
-        color={!disabled && !isAscending ? 'default' : 'disabled'}
+        color={!disabled && !isAscending ? 'action' : 'disabled'}
       />
       <ArrowDropDown
         className={classes.icon}
-        color={!disabled && isAscending ? 'default' : 'disabled'}
+        color={!disabled && isAscending ? 'action' : 'disabled'}
       />
     </div>
   )

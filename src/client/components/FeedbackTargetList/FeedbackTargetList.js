@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { Typography, List, Box, makeStyles } from '@material-ui/core'
+import { Typography, List, makeStyles } from '@material-ui/core'
 
 import CourseRealisationItem from './CourseRealisationItem'
 

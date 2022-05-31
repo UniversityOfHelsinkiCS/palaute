@@ -62,7 +62,6 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
       await apiClient.put(`/feedback-targets/${id}/remind-students`, {
         data: { reminder },
       })
-      console.log('YES')
       enqueueSnackbar(t('feedbackTargetResults:emailSent'), {
         variant: 'success',
       })

@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, no-console */
 const _ = require('lodash')
 
 const { Op } = require('sequelize')

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Tooltip, makeStyles } from '@material-ui/core'
 import {
-  pink,
   green,
   lightGreen,
   deepOrange,

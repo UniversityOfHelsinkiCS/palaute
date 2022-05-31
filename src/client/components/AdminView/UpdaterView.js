@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react'
 import {
   Box,
@@ -95,7 +96,6 @@ const UpdaterView = () => {
   const runUpdater = async () => {
     if (updaterStatus?.status === 'RUNNING') {
       if (
-        // eslint-disable-next-line
         !window.confirm(
           'Updater seems to be running. Are you sure you want to start another run anyway?',
         )
