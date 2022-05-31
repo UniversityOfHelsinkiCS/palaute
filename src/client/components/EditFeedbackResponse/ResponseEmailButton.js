@@ -37,6 +37,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit, values }) => {
           form="feedback-response-form"
           onClick={onSubmit}
           type="submit"
+          data-cy="saveFeedbackResponse"
         >
           {sendEmail
             ? t('feedbackResponse:dialogSendEmailSubmit')
@@ -81,6 +82,7 @@ const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
           color="primary"
           onClick={handleOpenDialog}
           style={{ width: 130 }}
+          data-cy="openFeedbackResponseSubmitDialog"
         >
           {values.sendEmail
             ? t('feedbackResponse:dialogSendEmailSubmit')
