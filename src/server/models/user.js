@@ -5,6 +5,7 @@ const { sequelize } = require('../util/dbConnection')
 const lomakeClient = require('../util/lomakeClient')
 const Organisation = require('./organisation')
 const { ADMINS, inProduction } = require('../util/config')
+const { getOrganisationAccess } = require('../util/organisationAccess')
 
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
@@ -76,69 +77,20 @@ const canHaveOrganisationAccess = (user) => {
 
 class User extends Model {
   async getOrganisationAccess() {
-    if (ADMINS.includes(this.username)) {
-      const allOrganisations = await Organisation.findAll({})
-      return allOrganisations
-        .filter(organisationIsRelevant)
-        .map((organisation) => ({
-          organisation,
-          access: { read: true, write: true, admin: true },
-        }))
-    }
-
-    if (!canHaveOrganisationAccess(this)) {
-      return []
-    }
-
-    const lomakeAccess = await getOrganisationAccessFromLomake(this.username)
-    const iamGroupAccess = getOrganisationAccessFromIamGroups(this.iamGroups)
-    const access = _.merge({}, lomakeAccess, iamGroupAccess)
-
-    const organisationCodes = Object.keys(access)
-
-    const normalizedOrganisationCodes = organisationCodes.map(
-      normalizeOrganisationCode,
-    )
-
-    const codeByNormalizedCode = _.zipObject(
-      normalizedOrganisationCodes,
-      organisationCodes,
-    )
+    const organisationAccess = await getOrganisationAccess(this)
 
     const organisations = await Organisation.findAll({
       where: {
-        [Op.or]: {
-          responsibleUserId: this.id,
-          code: {
-            [Op.in]: normalizedOrganisationCodes,
-          },
+        code: {
+          [Op.in]: Object.keys(organisationAccess),
         },
       },
     })
 
-    if (organisations.lenght === 0) return []
-
-    const getAccess = (organisation) => {
-      if (this.id === organisation.responsibleUserId) {
-        return { read: true, write: true, admin: true }
-      }
-
-      return access[codeByNormalizedCode[organisation.code]]
-    }
-
-    let organisationAccess = organisations.map((organisation) => ({
-      organisation,
-      access: getAccess(organisation),
+    return organisations.map((org) => ({
+      access: organisationAccess[org.code],
+      organisation: org,
     }))
-
-    if (isVaradekaani(this)) {
-      organisationAccess = organisationAccess.map(({ organisation }) => ({
-        organisation,
-        access: { read: true, write: true, admin: true },
-      }))
-    }
-
-    return organisationAccess
   }
 
   async getOrganisationAccessByCourseUnitId(courseUnitId) {
