@@ -53,6 +53,9 @@ Organisation.init(
       allowNull: false,
       defaultValue: [],
     },
+    responsibleUserId: {
+      type: STRING,
+    },
   },
   {
     underscored: true,
