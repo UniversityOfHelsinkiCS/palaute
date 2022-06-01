@@ -1,5 +1,5 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useFeedbackTarget = (targetId, options = {}) => {
   const queryKey = ['feedbackTarget', targetId]

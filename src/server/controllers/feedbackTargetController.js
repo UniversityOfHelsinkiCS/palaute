@@ -807,7 +807,7 @@ const updateFeedbackResponse = async (req, res) => {
   }
   await relevantFeedbackTarget.save()
 
-  res.send(emailsSentTo)
+  return res.send(relevantFeedbackTarget.toJSON())
 }
 
 const remindStudentsOnFeedback = async (req, res) => {

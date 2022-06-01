@@ -25,6 +25,7 @@ import apiClient from '../../util/apiClient'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
 import { LoadingProgress } from '../LoadingProgress'
+import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -43,9 +44,10 @@ const EditFeedbackResponse = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { feedbackTarget, isLoading, refetch } = useFeedbackTarget(id, {
+  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
+  const updateFeedbackResponse = useUpdateFeedbackResponse()
 
   const [sendEmail, setSendEmail] = useState(true)
   useEffect(() => {
@@ -84,16 +86,14 @@ const EditFeedbackResponse = () => {
 
   const handleSubmit = async (values) => {
     try {
-      await apiClient.put(`/feedback-targets/${feedbackTarget.id}/response`, {
+      await updateFeedbackResponse.mutateAsync({
+        id,
         data: {
           feedbackResponse: values.feedbackResponse,
           feedbackResponseEmailSent: sendEmail,
         },
       })
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-      if (sendEmail) {
-        refetch()
-      }
     } catch (err) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
