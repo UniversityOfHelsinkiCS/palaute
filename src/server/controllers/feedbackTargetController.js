@@ -758,7 +758,6 @@ const getStudentsWithFeedback = async (req, res) => {
 }
 
 const updateFeedbackResponse = async (req, res) => {
-  console.log(req.body.data)
   const feedbackTargetId = Number(req.params.id)
   const feedbackTargetsUserIsTeacherTo =
     await req.user.feedbackTargetsHasTeacherAccessTo()
