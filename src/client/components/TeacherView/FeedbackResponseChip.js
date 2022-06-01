@@ -14,7 +14,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FeedbackResponseChip = ({ feedbackResponseGiven, className }) => {
+const FeedbackResponseChip = ({
+  feedbackResponseGiven,
+  className,
+  ...props
+}) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -33,6 +37,7 @@ const FeedbackResponseChip = ({ feedbackResponseGiven, className }) => {
       className={classNames}
       variant="outlined"
       size="small"
+      {...props}
     />
   )
 }

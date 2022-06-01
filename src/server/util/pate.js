@@ -52,6 +52,10 @@ const calculateGoodChunkSize = (emails) => {
 }
 
 const sendToPate = async (options = {}) => {
+  if (!options.emails?.length > 0) {
+    logger.info('[Pate] skipping email sending because 0 recipients')
+    return options
+  }
   const chunkSize = calculateGoodChunkSize(options.emails)
   const chunkedEmails = _.chunk(options.emails, chunkSize).map((emails) => ({
     emails,
