@@ -2,78 +2,8 @@ const { Model, STRING, Op, VIRTUAL, BOOLEAN } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
-const lomakeClient = require('../util/lomakeClient')
 const Organisation = require('./organisation')
-const { ADMINS, inProduction } = require('../util/config')
 const { getOrganisationAccess } = require('../util/organisationAccess')
-
-const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
-
-const normalizeOrganisationCode = (r) => {
-  if (!r.includes('_')) {
-    return r
-  }
-
-  const [left, right] = r.split('_')
-  const prefix = [...left].filter(isNumber).join('')
-  const suffix = `${left[0]}${right}`
-  const providercode = `${prefix}0-${suffix}`
-  return providercode
-}
-
-const RELEVANT_ORGANISATION_CODES = [
-  'H906', // Kielikeskus
-  'H930', // Avoin yliopisto
-]
-
-const ORGANISATION_ACCESS_BY_IAM_GROUP = {
-  'grp-kielikeskus-esihenkilot': {
-    // Kielikeskus
-    H906: {
-      read: true,
-      write: true,
-      admin: true,
-    },
-  },
-  'grp-avoin-johto': {
-    // Avoin yliopisto
-    H930: {
-      read: true,
-      write: false,
-      admin: false,
-    },
-  },
-}
-
-const isVaradekaani = (user) =>
-  (user.iamGroups ?? []).includes('hy-varadekaanit-opetus')
-
-const organisationIsRelevant = (organisation) => {
-  const { code } = organisation
-
-  return code.includes('-') || RELEVANT_ORGANISATION_CODES.includes(code)
-}
-
-const getOrganisationAccessFromLomake = async (username) => {
-  const { data: access } = await lomakeClient.get(`/organizations/${username}`)
-
-  return _.isObject(access) ? access : {}
-}
-
-const getOrganisationAccessFromIamGroups = (iamGroups) =>
-  (iamGroups ?? []).reduce(
-    (access, group) =>
-      _.merge(access, ORGANISATION_ACCESS_BY_IAM_GROUP[group] ?? {}),
-    {},
-  )
-
-const canHaveOrganisationAccess = (user) => {
-  if (!inProduction) {
-    return true
-  }
-
-  return Boolean(user.iamGroups?.includes('hy-employees'))
-}
 
 class User extends Model {
   async getOrganisationAccess() {
