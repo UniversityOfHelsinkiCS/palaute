@@ -33,14 +33,17 @@ const useStyles = makeStyles({
   },
 })
 
-const getChip = (courseRealisation) => {
+const getChip = (courseRealisation, code) => {
   const { feedbackResponseGiven, feedbackTarget } = courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isEnded || feedbackResponseGiven) {
     return (
-      <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+      <FeedbackResponseChip
+        feedbackResponseGiven={feedbackResponseGiven}
+        data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
+      />
     )
   }
 
@@ -57,7 +60,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
-  const chip = getChip(courseRealisation)
+  const chip = getChip(courseRealisation, courseCode)
 
   return (
     <Accordion
@@ -65,7 +68,10 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="courseUnitItem"
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        data-cy={`courseUnitAccordion-${courseCode}`}
+      >
         <div>
           <Typography>
             {courseCode} {getLanguageValue(name, i18n.language)}

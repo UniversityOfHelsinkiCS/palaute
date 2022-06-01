@@ -363,6 +363,7 @@ const FeedbackTargetView = () => {
               icon={<EditOutlined />}
               label={t('feedbackTargetView:editSurveyTab')}
               to={`${url}/edit`}
+              data-cy="giveCounterFeedback"
             />
           )}
           {showLinksTab && (
@@ -418,7 +419,14 @@ const FeedbackTargetView = () => {
   )
 }
 
-const RouterTab = ({ icon, label, to, disabled, disabledTooltip }) => {
+const RouterTab = ({
+  icon,
+  label,
+  to,
+  disabled,
+  disabledTooltip,
+  ...props
+}) => {
   const content = icon ? (
     <Box display="flex">
       {icon}
@@ -430,7 +438,13 @@ const RouterTab = ({ icon, label, to, disabled, disabledTooltip }) => {
   )
 
   const tab = (
-    <Tab label={content} component={Link} to={to} disabled={disabled} />
+    <Tab
+      label={content}
+      component={Link}
+      to={to}
+      disabled={disabled}
+      {...props}
+    />
   )
 
   if (disabled)

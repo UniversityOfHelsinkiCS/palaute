@@ -27,7 +27,10 @@ const getChip = (feedbackTarget) => {
 
   if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
     return (
-      <FeedbackResponseChip feedbackResponseGiven={feedbackResponseGiven} />
+      <FeedbackResponseChip
+        feedbackResponseGiven={feedbackResponseGiven}
+        data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
+      />
     )
   }
 
@@ -71,7 +74,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const chip = getChip(feedbackTarget)
 
   return (
-    <ListItem divider={divider}>
+    <ListItem divider={divider} data-cy={`feedbackTargetItem-${id}`}>
       <ListItemText
         disableTypography
         primary={
