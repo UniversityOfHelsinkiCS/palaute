@@ -1,3 +1,5 @@
+const { baseUrl } = require('../support')
+
 describe('Course summary view', () => {
   it('An user with organisation access can visit summary page', () => {
     cy.loginAsStudyCoordinator()
