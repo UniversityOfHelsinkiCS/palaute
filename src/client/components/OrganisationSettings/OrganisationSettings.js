@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import CourseSettings from './CourseSettings'
 import GeneralSettings from './GeneralSettings'
+import FeedbackCorrespondent from './FeedbackCorrespondent'
 import EditSurvey from './EditSurvey'
 import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
@@ -109,12 +110,20 @@ const OrganisationSettings = () => {
               className={selected === 'general' ? classes.selected : ''}
             />
             {hasAdminAccess && (
-              <Tab
-                label={t('organisationSettings:coursesTab')}
-                component={Link}
-                to={`${url}/courses`}
-                className={selected === 'courses' ? classes.selected : ''}
-              />
+              <>
+                <Tab
+                  label={t('organisationSettings:coursesTab')}
+                  component={Link}
+                  to={`${url}/courses`}
+                  className={selected === 'courses' ? classes.selected : ''}
+                />
+                <Tab
+                  label={t('organisationSettings:feedbackCorrespondentTab')}
+                  component={Link}
+                  to={`${url}/correspondent`}
+                  className={selected === 'responsible' ? classes.selected : ''}
+                />
+              </>
             )}
             <Tab
               label={t('organisationSettings:surveyTab')}
@@ -173,6 +182,10 @@ const OrganisationSettings = () => {
 
         <Route path={`${path}/courses`}>
           <CourseSettings />
+        </Route>
+
+        <Route path={`${path}/correspondent`}>
+          <FeedbackCorrespondent />
         </Route>
 
         <Route path={`${path}/survey`}>

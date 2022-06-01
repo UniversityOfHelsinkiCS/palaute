@@ -45,6 +45,7 @@ router.delete('/noad/feedbacks/:id', feedbacks.destroy)
 
 router.get('/login', users.getUser)
 router.get('/logout', users.logout)
+router.get('/users', users.getUserByEmail)
 router.post('/feedbacks', feedbacks.create)
 router.get('/feedbacks/:id', feedbacks.getOne)
 router.put('/feedbacks/:id', feedbacks.update)

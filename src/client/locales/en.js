@@ -318,6 +318,7 @@ export default {
     courseSettingsInfo: 'Feedback is only collected from activated courses',
     generalTab: 'General settings',
     coursesTab: 'Activated courses',
+    feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
     openQuestionsTab: 'Open questions',
@@ -326,6 +327,8 @@ export default {
       'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?',
     editProgrammeQuestionsDialogCancel: 'Cancel',
     editProgrammeQuestionsDialogConfirm: 'Edit',
+    setAsCorrespondent: 'Set as feedback correspondent',
+    email: 'Email',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',

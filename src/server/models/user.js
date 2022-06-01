@@ -110,6 +110,10 @@ class User extends Model {
     }
 
     const organisations = await Organisation.findAll({
+      /* include: {
+        model: User,
+        as: 'responsible_user',
+      }, */
       where: {
         code: {
           [Op.in]: normalizedOrganisationCodes,

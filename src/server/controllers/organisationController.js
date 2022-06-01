@@ -78,7 +78,11 @@ const updateOrganisation = async (req, res) => {
       'User does not have write access for organisation',
     )
 
-  const updates = _.pick(body, ['studentListVisible', 'disabledCourseCodes'])
+  const updates = _.pick(body, [
+    'studentListVisible',
+    'responsibleUserId',
+    'disabledCourseCodes',
+  ])
 
   if (updates.disabledCourseCodes && !hasAdminAccess) {
     throw new ApplicationError(

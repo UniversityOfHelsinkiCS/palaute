@@ -320,6 +320,7 @@ export default {
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
     generalTab: 'Allmänna inställningar',
     coursesTab: 'Aktiverade kurser',
+    // feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
     openQuestionsTab: 'Öppna frågor',
@@ -328,6 +329,8 @@ export default {
       'Du håller på att redigera hela utbildningsprogrammets gemensamma frågor. Dessa ändringar syns på alla av utbildningsprogrammets kurser. Är du säker på att du vill redigera dessa frågor?',
     editProgrammeQuestionsDialogCancel: 'Avbryt',
     editProgrammeQuestionsDialogConfirm: 'Redigera',
+    // setAsCorrespondent: 'Set as feedback correspondent',
+    // email: 'Email',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna respons är inte i bruk',

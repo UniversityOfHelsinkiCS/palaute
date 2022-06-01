@@ -318,6 +318,7 @@ export default {
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
     generalTab: 'Yleiset asetukset',
     coursesTab: 'Aktivoidut kurssit',
+    feedbackCorrespondentTab: 'Palautevastaava',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
     openQuestionsTab: 'Avoimet kysymykset',
@@ -326,6 +327,8 @@ export default {
       'Olet muokkaamassa koko koulutusohjelman yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla koulutusohjelman kursseilla. Oletko varma, että haluat muokata näitä kysymyksiä?',
     editProgrammeQuestionsDialogCancel: 'Peruuta',
     editProgrammeQuestionsDialogConfirm: 'Muokkaa',
+    setAsCorrespondent: 'Aseta palautevastaavaksi',
+    email: 'Sähköposti',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
