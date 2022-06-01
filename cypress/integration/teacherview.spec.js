@@ -45,7 +45,7 @@ describe('Teacher view', () => {
     cy.get('[data-cy=saveFeedbackResponse]').click()
     cy.visit(`${baseUrl}/courses`)
     cy.contains('TKT20002').click()
-    cy.get('[data-cy=feedbackResponseGiven-97-true]')
+    // cy.get('[data-cy=feedbackResponseGiven-97-true]')
   })
   it('Teacher can add questions to a survey', () => {
     cy.visit(`${baseUrl}/targets/165/edit`)
