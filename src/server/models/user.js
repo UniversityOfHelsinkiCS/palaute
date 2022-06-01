@@ -105,25 +105,30 @@ class User extends Model {
       organisationCodes,
     )
 
-    if (normalizedOrganisationCodes.length === 0) {
-      return []
-    }
-
     const organisations = await Organisation.findAll({
-      /* include: {
-        model: User,
-        as: 'responsible_user',
-      }, */
       where: {
-        code: {
-          [Op.in]: normalizedOrganisationCodes,
+        [Op.or]: {
+          responsibleUserId: this.id,
+          code: {
+            [Op.in]: normalizedOrganisationCodes,
+          },
         },
       },
     })
 
+    if (organisations.lenght === 0) return []
+
+    const getAccess = (organisation) => {
+      if (this.id === organisation.responsibleUserId) {
+        return { read: true, write: true, admin: true }
+      }
+
+      return access[codeByNormalizedCode[organisation.code]]
+    }
+
     let organisationAccess = organisations.map((organisation) => ({
       organisation,
-      access: access[codeByNormalizedCode[organisation.code]],
+      access: getAccess(organisation),
     }))
 
     if (isVaradekaani(this)) {
