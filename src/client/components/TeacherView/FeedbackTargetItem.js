@@ -29,7 +29,7 @@ const getChip = (feedbackTarget) => {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
-        data-cy={`feedbackTargetResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
+        data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
       />
     )
   }
