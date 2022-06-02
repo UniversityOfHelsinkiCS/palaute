@@ -24,6 +24,13 @@ const getLogMessage = (data) => {
     )
   }
 
+  if (data.newFeedbackCorrespondent) {
+    const { firstName, lastName } = data.newFeedbackCorrespondent
+    messages = messages.concat(
+      `Set feedback correspondent to ${firstName} ${lastName}`,
+    )
+  }
+
   return messages.join(', ')
 }
 

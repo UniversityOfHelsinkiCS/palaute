@@ -52,6 +52,15 @@ const createOrganisationLog = async (organisation, updates, user) => {
   if (updates.studentListVisible !== undefined)
     data.studentListVisible = Boolean(updates.studentListVisible)
 
+  if (updates.responsibleUserId !== undefined) {
+    data.newFeedbackCorrespondent = await User.findByPk(
+      updates.responsibleUserId,
+      {
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+    )
+  }
+
   await OrganisationLog.create({
     data,
     organisationId: organisation.id,
