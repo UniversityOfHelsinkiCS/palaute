@@ -121,7 +121,9 @@ const OrganisationSettings = () => {
                   label={t('organisationSettings:feedbackCorrespondentTab')}
                   component={Link}
                   to={`${url}/correspondent`}
-                  className={selected === 'responsible' ? classes.selected : ''}
+                  className={
+                    selected === 'correspondent' ? classes.selected : ''
+                  }
                 />
               </>
             )}

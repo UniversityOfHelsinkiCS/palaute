@@ -8,6 +8,7 @@ import {
   Button,
   Box,
 } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash'
@@ -26,6 +27,7 @@ const saveFeedbackCorrespondent = async (code, responsibleUserId) => {
 
 const ResponsibleSelector = ({ code }) => {
   const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const [potentialUsers, setPotentialUsers] = useState([])
 
@@ -52,7 +54,14 @@ const ResponsibleSelector = ({ code }) => {
     )
       return
 
-    await saveFeedbackCorrespondent(code, user.id)
+    try {
+      await saveFeedbackCorrespondent(code, user.id)
+      enqueueSnackbar(t('organisationSettings:setCorrespondentSuccess'), {
+        variant: 'success',
+      })
+    } catch {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
   }
 
   return (

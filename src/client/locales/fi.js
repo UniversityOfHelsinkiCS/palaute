@@ -328,6 +328,7 @@ export default {
     editProgrammeQuestionsDialogCancel: 'Peruuta',
     editProgrammeQuestionsDialogConfirm: 'Muokkaa',
     setAsCorrespondent: 'Aseta palautevastaavaksi',
+    setCorrespondentSuccess: 'Palautevastaava asetettu onnistuneesti',
     email: 'Sähköposti',
   },
   feedbackTargetView: {

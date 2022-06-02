@@ -330,6 +330,7 @@ export default {
     editProgrammeQuestionsDialogCancel: 'Avbryt',
     editProgrammeQuestionsDialogConfirm: 'Redigera',
     // setAsCorrespondent: 'Set as feedback correspondent',
+    // setCorrespondentSuccess: 'Feedback correspondent set succesfully',
     // email: 'Email',
   },
   feedbackTargetView: {
