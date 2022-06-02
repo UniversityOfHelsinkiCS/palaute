@@ -593,30 +593,36 @@ const getTargetsByCourseUnit = async (req, res) => {
     }
   }
 
-  const formattedFeedbackTargets = feedbackTargets.map((target) => {
-    const targetCounts = counts.find(
-      (row) => parseInt(row.feedback_target_id, 10) === target.id,
-    )
+  const formattedFeedbackTargets = feedbackTargets
+    .map((target) => {
+      const targetCounts = counts.find(
+        (row) => parseInt(row.feedback_target_id, 10) === target.id,
+      )
 
-    return {
-      ..._.pick(target.toJSON(), [
-        'id',
-        'name',
-        'opensAt',
-        'closesAt',
-        'feedbackType',
-        'courseRealisation',
-        'courseUnit',
-        'feedbackResponse',
-        'questions',
-        'surveys',
-      ]),
-      feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
-      enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
-      feedbackResponseGiven: !!target.get('feedbackResponse'),
-      studentListVisible,
-    }
-  })
+      return {
+        ..._.pick(target.toJSON(), [
+          'id',
+          'name',
+          'opensAt',
+          'closesAt',
+          'feedbackType',
+          'courseRealisation',
+          'courseUnit',
+          'feedbackResponse',
+          'questions',
+          'surveys',
+        ]),
+        feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
+        enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
+        feedbackResponseGiven: !!target.get('feedbackResponse'),
+        studentListVisible,
+      }
+    })
+    .filter(
+      (fbt) =>
+        fbt.feedbackCount > 0 ||
+        Date.parse(fbt.courseRealisation.endDate) > new Date('2021-09-01'),
+    )
 
   return res.send(formattedFeedbackTargets)
 }

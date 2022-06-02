@@ -65,16 +65,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'name',
           'opensAt',
           'closesAt',
-          [
-            sequelize.literal(`
-          CASE
-            WHEN "feedbackTarget".feedback_response IS NOT NULL
-            AND char_length("feedbackTarget".feedback_response) > 0 THEN TRUE
-            ELSE FALSE
-          END
-          `),
-            'feedbackResponseGiven',
-          ],
+          'feedbackResponseEmailSent',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -199,7 +190,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       const ongoingCourseRealisation = ongoingTarget
         ? {
             ...ongoingTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: ongoingTarget.get('feedbackResponseGiven'),
+            feedbackResponseGiven: ongoingTarget.feedbackResponseEmailSent,
             feedbackTarget: _.pick(ongoingTarget, targetFields),
           }
         : null
@@ -207,7 +198,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       const upcomingCourseRealisation = upcomingTarget
         ? {
             ...upcomingTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: upcomingTarget.get('feedbackResponseGiven'),
+            feedbackResponseGiven: upcomingTarget.feedbackResponseEmailSent,
             feedbackTarget: _.pick(upcomingTarget, targetFields),
           }
         : null
@@ -215,7 +206,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       const endedCourseRealisation = endedTarget
         ? {
             ...endedTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: endedTarget.get('feedbackResponseGiven'),
+            feedbackResponseGiven: endedTarget.feedbackResponseEmailSent,
             feedbackTarget: _.pick(endedTarget, targetFields),
           }
         : null
