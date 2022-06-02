@@ -38,7 +38,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
   )
 }
 
-const ResponseEmailButton = ({ disabled, onSubmit }) => {
+const ResponseEmailButton = ({ isSent, disabled, onSubmit }) => {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false)
 
   const { t } = useTranslation()
@@ -72,7 +72,7 @@ const ResponseEmailButton = ({ disabled, onSubmit }) => {
           style={{ width: 130 }}
           data-cy="openFeedbackResponseSubmitDialog"
         >
-          {disabled
+          {isSent
             ? t('feedbackResponse:emailSent')
             : t('feedbackResponse:dialogSendEmailSubmit')}
           <Box mr={1} />
