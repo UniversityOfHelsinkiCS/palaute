@@ -166,33 +166,6 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         openUni,
       )
 
-      const allResults = courseUnits.flatMap(({ results }) => results)
-
-      const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
-        questionId.toString(),
-      )
-
-      const results = questions.map(({ id: questionId }) => {
-        const questionResults = resultsByQuestionId[questionId.toString()] ?? []
-
-        const questionMeans = questionResults
-          .map(({ mean }) => mean)
-          .filter(Boolean)
-
-        const distribution = questionResults.reduce(
-          (acc, curr) =>
-            _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
-          {},
-        )
-
-        return {
-          questionId,
-          mean:
-            questionMeans.length > 0 ? _.round(_.mean(questionMeans), 2) : 0,
-          distribution,
-        }
-      })
-
       const studentCount = _.sumBy(
         courseUnits,
         ({ studentCount }) => studentCount,
@@ -201,6 +174,40 @@ const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
         courseUnits,
         ({ feedbackCount }) => feedbackCount,
       )
+
+      const allResults = courseUnits.flatMap((cu) =>
+        cu.results.map((r) => ({ ...r, count: cu.feedbackCount })),
+      )
+
+      const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
+        questionId.toString(),
+      )
+
+      const results = questions.map(({ id: questionId }) => {
+        const questionResults = resultsByQuestionId[questionId.toString()] ?? []
+
+        const distribution = questionResults.reduce(
+          (acc, curr) =>
+            _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
+          {},
+        )
+
+        const mean =
+          questionResults.length > 0
+            ? _.round(
+                _.sumBy(questionResults, (r) => r.mean * r.count) /
+                  feedbackCount,
+                2,
+              )
+            : 0
+
+        return {
+          questionId,
+          mean,
+          distribution,
+        }
+      })
+
       return {
         id: organisationId,
         name: organisationRows[0].organisation_name,
