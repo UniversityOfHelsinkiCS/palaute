@@ -22,8 +22,8 @@ import FeedbackOpenChip from './FeedbackOpenChip'
 const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const { feedbackResponse, feedbackCount } = feedbackTarget
-  const feedbackResponseGiven = Boolean(feedbackResponse)
+  const { feedbackResponse, feedbackResponseGiven, feedbackCount } =
+    feedbackTarget
 
   if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
     return (

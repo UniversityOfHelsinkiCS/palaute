@@ -529,6 +529,7 @@ const getTargetsByCourseUnit = async (req, res) => {
       'id',
       'name',
       'feedbackResponse',
+      'feedbackResponseEmailSent',
       'courseUnitId',
       'courseRealisationId',
       'feedbackType',
@@ -614,7 +615,7 @@ const getTargetsByCourseUnit = async (req, res) => {
         ]),
         feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
         enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
-        feedbackResponseGiven: !!target.get('feedbackResponse'),
+        feedbackResponseGiven: target.feedbackResponseEmailSent,
         studentListVisible,
       }
     })

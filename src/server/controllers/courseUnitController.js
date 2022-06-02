@@ -186,7 +186,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ),
         ({ courseRealisation }) => courseRealisation.startDate,
       )
-
+      console.log(endedTarget?.toJSON())
       const ongoingCourseRealisation = ongoingTarget
         ? {
             ...ongoingTarget.courseRealisation.toJSON(),
