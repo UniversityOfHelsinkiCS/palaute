@@ -15,6 +15,11 @@ class User extends Model {
           [Op.in]: Object.keys(organisationAccess),
         },
       },
+      include: {
+        model: User,
+        as: 'responsible_user',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
     })
 
     return organisations.map((org) => ({

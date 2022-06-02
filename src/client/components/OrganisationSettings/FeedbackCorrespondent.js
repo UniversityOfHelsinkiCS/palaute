@@ -7,6 +7,7 @@ import {
   CardActions,
   Button,
   Box,
+  Typography,
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +16,7 @@ import { debounce } from 'lodash'
 
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../LoadingProgress'
+import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 
 const saveFeedbackCorrespondent = async (code, responsibleUserId) => {
@@ -25,7 +27,7 @@ const saveFeedbackCorrespondent = async (code, responsibleUserId) => {
   return data
 }
 
-const ResponsibleSelector = ({ code }) => {
+const CorrepondentSelector = ({ code }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -46,10 +48,14 @@ const ResponsibleSelector = ({ code }) => {
   }, 400)
 
   const handleSetAsFeedbackCorrespondent = (user) => async () => {
+    const { firstName, lastName } = user
     if (
       // eslint-disable-next-line no-alert
       !window.confirm(
-        `Set ${user.firstName} ${user.lastName} (${user.id}) as feedback correspondent`,
+        t('organisationSettings:confirmSetCorrespondent', {
+          firstName,
+          lastName,
+        }),
       )
     )
       return
@@ -66,6 +72,9 @@ const ResponsibleSelector = ({ code }) => {
 
   return (
     <Box my={4}>
+      <Typography variant="h6" component="h6">
+        {t('organisationSettings:newCorrespondent')}
+      </Typography>
       <TextField
         style={{ width: '30em', paddingBottom: 10 }}
         label={t('organisationSettings:email')}
@@ -93,22 +102,56 @@ const ResponsibleSelector = ({ code }) => {
   )
 }
 
-const FeedbackCorrespondentContainer = ({ organisation }) => {
-  const { code } = organisation
+const FeedbackCorrespondentInfo = ({ correspondent }) => {
+  const { t } = useTranslation()
 
-  return <ResponsibleSelector code={code} />
+  return (
+    <Card>
+      <CardContent>
+        <Typography variant="h5" component="h5">
+          {t('organisationSettings:feedbackCorrespondentTab')}
+        </Typography>
+        <Typography variant="h6" component="h6">
+          {correspondent.firstName} {correspondent.lastName}
+        </Typography>
+        <Typography>{correspondent.email.toLowerCase()}</Typography>
+      </CardContent>
+    </Card>
+  )
 }
 
 const FeedbackCorrespondent = () => {
+  const { t } = useTranslation()
   const { code } = useParams()
-
   const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+  }
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  return <FeedbackCorrespondentContainer organisation={organisation} />
+  return (
+    <div style={style}>
+      {organisation.responsible_user ? (
+        <FeedbackCorrespondentInfo
+          correspondent={organisation.responsible_user}
+        />
+      ) : (
+        <Alert severity="warning">
+          {t('organisationSettings:correspondentMissing')}
+        </Alert>
+      )}
+      <Card>
+        <CardContent>
+          <CorrepondentSelector code={code} />
+        </CardContent>
+      </Card>
+    </div>
+  )
 }
 
 export default FeedbackCorrespondent
