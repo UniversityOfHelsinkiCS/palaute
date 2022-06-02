@@ -248,15 +248,15 @@ export default {
     writingInstruction:
       'Opettajan vastauksen pituus voi vaihdella. Asioita joita voit esimerkiksi sisällyttää vastaukseesi on: opiskelijoiden kiittäminen annetusta palautteesta (ja kurssille osallistumisesta), läpikatsaus annetusta palautteesta, valinta palautteen osa-alueista joihin koet olevan tärkeää vastata sekä reaktiosi ja selvennyksesi niihin. Vastauksessa olevat konkreettiset toimet opetuksen ja kurssien sisällön muokkaukseen vastineena opiskelijoiden palautteeseen ovat ensiarvoisen tärkeitä.',
     sendEmailOption: 'Lähetä vastapalaute sähköpostitse opiskelijoille',
-    dialogSaveTitle: 'Tallenna vastapalaute',
     dialogSendEmailTitle: 'Tallenna vastapalaute ja lähetä sähköposti',
     dialogSaveContent:
       'Kurssin opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.',
     dialogSendEmailContent:
-      'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin et voi enää muokata vastapalautetta.',
+      'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
     dialogCancel: 'Peruuta',
     dialogSaveSubmit: 'Tallenna',
     dialogSendEmailSubmit: 'Lähetä',
+    emailSent: 'Lähetetty',
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {

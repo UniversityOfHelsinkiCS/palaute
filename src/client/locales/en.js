@@ -250,14 +250,12 @@ export default {
       'The length of the teacher’s response can vary. Examples of elements you can include in your response: thanking students for their feedback (and course participation), an overview of the feedback they gave, your subjective selection of points worth addressing, with your reactions and elaborations on them. Your concrete (planned, possible) actions to modify teaching in the course are especially valuable, showing students that giving feedback can have an impact.',
     sendEmailOption: 'Email response to students',
     dialogSendEmailTitle: 'Save response and email students',
-    dialogSaveTitle: 'Save feedback response',
     dialogSendEmailContent:
-      'An email will be sent to students containing the feedback response content and a link to the feedback. After the feedback response is sent, it can no longer be edited.',
-    dialogSaveContent:
-      'Teachers may still edit the feedback response. No email will be sent yet.',
+      'An email will be sent to students containing the feedback response content and a link to the feedback. The feedback response can be edited afterwards.',
     dialogCancel: 'Cancel',
     dialogSaveSubmit: 'Save',
     dialogSendEmailSubmit: 'Send',
+    emailSent: 'Sent',
     formDisabled: 'Counter feedback can only be given after feedback has ended',
   },
   publicQuestions: {

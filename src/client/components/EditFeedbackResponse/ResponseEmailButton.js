@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useSnackbar } from 'notistack'
 import {
   Dialog,
   DialogTitle,
@@ -12,21 +11,14 @@ import { SendOutlined } from '@material-ui/icons'
 
 import { useTranslation } from 'react-i18next'
 
-const SubmitResponseDialog = ({ open = false, onClose, onSubmit, values }) => {
+const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
   const { t } = useTranslation()
-  const { sendEmail } = values
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>
-        {sendEmail
-          ? t('feedbackResponse:dialogSendEmailTitle')
-          : t('feedbackResponse:dialogSaveTitle')}
-      </DialogTitle>
+      <DialogTitle>{t('feedbackResponse:dialogSendEmailTitle')}</DialogTitle>
       <DialogContent>
-        {sendEmail
-          ? t('feedbackResponse:dialogSendEmailContent')
-          : t('feedbackResponse:dialogSaveContent')}
+        {t('feedbackResponse:dialogSendEmailContent')}
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
@@ -39,17 +31,14 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit, values }) => {
           type="submit"
           data-cy="saveFeedbackResponse"
         >
-          {sendEmail
-            ? t('feedbackResponse:dialogSendEmailSubmit')
-            : t('feedbackResponse:dialogSaveSubmit')}
+          {t('feedbackResponse:dialogSendEmailSubmit')}
         </Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
-  const [sent, setSent] = useState(false)
+const ResponseEmailButton = ({ disabled, onSubmit }) => {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false)
 
   const { t } = useTranslation()
@@ -62,21 +51,20 @@ const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
   }
 
   const handleSubmit = async () => {
-    setSent(values.sendEmail)
+    onSubmit()
     handleCloseSubmitDialog()
   }
 
   return (
     <>
       <SubmitResponseDialog
-        values={values}
         open={submitDialogOpen}
         onClose={handleCloseSubmitDialog}
         onSubmit={handleSubmit}
       />
       <Box display="flex" mr={2}>
         <Button
-          disabled={disabled || sent}
+          disabled={disabled}
           type="button"
           variant="contained"
           color="primary"
@@ -84,9 +72,9 @@ const ResponseEmailButton = ({ disabled, feedbackTargetId, values }) => {
           style={{ width: 130 }}
           data-cy="openFeedbackResponseSubmitDialog"
         >
-          {values.sendEmail
-            ? t('feedbackResponse:dialogSendEmailSubmit')
-            : t('feedbackResponse:dialogSaveSubmit')}
+          {disabled
+            ? t('feedbackResponse:emailSent')
+            : t('feedbackResponse:dialogSendEmailSubmit')}
           <Box mr={1} />
           <SendOutlined fontSize="small" />
         </Button>

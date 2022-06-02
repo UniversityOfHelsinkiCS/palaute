@@ -255,11 +255,11 @@ export default {
     // sendEmailOption: 'Lähetä vastapalaute sähköpostitse opiskelijoille',
     dialogSaveTitle: 'Spara svar',
     // dialogSendEmailTitle: 'Tallenna vastapalaute ja lähetä sähköposti',
-    // dialogSaveContent: 'Kurssin opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.',
     // dialogSendEmailContent:
-    //   'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin et voi enää muokata vastapalautetta.',
+    //   'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
     dialogSaveSubmit: 'Spara',
     dialogSendEmailSubmit: 'Skicka',
+    // emailSent: 'Lähetetty',
     formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
   publicQuestions: {

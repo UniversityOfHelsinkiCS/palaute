@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
@@ -8,8 +8,7 @@ import {
   Box,
   Typography,
   Divider,
-  FormControlLabel,
-  Checkbox,
+  Button,
 } from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -21,7 +20,6 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import AlertLink from '../AlertLink'
 import Alert from '../Alert'
 import Markdown from '../Markdown'
-import apiClient from '../../util/apiClient'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
 import { LoadingProgress } from '../LoadingProgress'
@@ -49,17 +47,6 @@ const EditFeedbackResponse = () => {
   })
   const updateFeedbackResponse = useUpdateFeedbackResponse()
 
-  const [sendEmail, setSendEmail] = useState(true)
-  useEffect(() => {
-    setSendEmail(
-      Boolean(
-        feedbackTarget &&
-          !feedbackTarget.feedbackResponse &&
-          !feedbackTarget.feedbackResponseEmailSent,
-      ),
-    )
-  }, [feedbackTarget])
-
   if (isLoading) {
     return <LoadingProgress />
   }
@@ -70,28 +57,18 @@ const EditFeedbackResponse = () => {
 
   const initialValues = getInitialValues(feedbackTarget)
 
-  const { feedbackResponseEmailSent, closesAt } = feedbackTarget
-
-  const hideResponseForm = feedbackResponseEmailSent
-  if (hideResponseForm) {
-    return <Redirect to={`/targets/${feedbackTarget.id}/results`} />
-  }
+  const { closesAt } = feedbackTarget
 
   const now = Date.now()
   const closeTime = Date.parse(closesAt)
   const feedbackResponseFormDisabled =
-    feedbackResponseEmailSent ||
-    now < closeTime ||
-    differenceInMonths(now, closeTime) > 6
+    now < closeTime || differenceInMonths(now, closeTime) > 6
 
   const handleSubmit = async (values) => {
     try {
       await updateFeedbackResponse.mutateAsync({
         id,
-        data: {
-          feedbackResponse: values.feedbackResponse,
-          feedbackResponseEmailSent: sendEmail,
-        },
+        data: values,
       })
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (err) {
@@ -141,19 +118,24 @@ const EditFeedbackResponse = () => {
                       feedbackTarget.feedbackResponseEmailSent ||
                       !values.feedbackResponse
                     }
-                    feedbackTargetId={feedbackTarget.id}
-                    values={{ ...values, sendEmail }}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={sendEmail}
-                        onChange={() => setSendEmail(!sendEmail)}
-                        disabled={feedbackResponseFormDisabled}
-                      />
+                    onSubmit={() =>
+                      handleSubmit({
+                        ...values,
+                        feedbackResponseEmailSent: true,
+                      })
                     }
-                    label={t('feedbackResponse:sendEmailOption')}
                   />
+                  <Button
+                    color="primary"
+                    onClick={() =>
+                      handleSubmit({
+                        ...values,
+                        feedbackResponseEmailSent: false,
+                      })
+                    }
+                  >
+                    {t('feedbackResponse:dialogSaveSubmit')}
+                  </Button>
                 </Box>
                 <Box my={2}>
                   <Divider />

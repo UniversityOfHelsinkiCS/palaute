@@ -772,7 +772,12 @@ const updateFeedbackResponse = async (req, res) => {
       404,
     )
 
-  if (relevantFeedbackTarget.feedbackResponseEmailSent)
+  const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
+
+  if (
+    feedbackResponseEmailSent &&
+    relevantFeedbackTarget.feedbackResponseEmailSent
+  )
     throw new ApplicationError(
       'Feedback response email has already been sent',
       400,
@@ -790,12 +795,10 @@ const updateFeedbackResponse = async (req, res) => {
     )
   }
 
-  const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
-
   relevantFeedbackTarget.feedbackResponse = feedbackResponse
-  relevantFeedbackTarget.feedbackResponseEmailSent = Boolean(
-    feedbackResponseEmailSent,
-  )
+  relevantFeedbackTarget.feedbackResponseEmailSent =
+    Boolean(feedbackResponseEmailSent) ||
+    relevantFeedbackTarget.feedbackResponseEmailSent
 
   let emailsSentTo = []
   if (feedbackResponseEmailSent) {
