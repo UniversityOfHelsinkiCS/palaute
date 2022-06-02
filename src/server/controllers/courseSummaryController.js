@@ -143,7 +143,7 @@ const getAccessInfo = async (req, res) => {
     })
   }
 
-  res.send({
+  return res.send({
     accessible,
     adminAccess,
   })
@@ -180,7 +180,7 @@ const getByOrganisations = async (req, res) => {
     endDate: parsedEndDate,
   })
 
-  res.send({
+  return res.send({
     questions,
     organisations,
   })
@@ -249,7 +249,7 @@ const getByCourseUnit = async (req, res) => {
     questions,
   })
 
-  res.send({
+  return res.send({
     questions,
     courseRealisations,
     courseUnit: courseUnits[0],
@@ -277,7 +277,7 @@ const getByOrganisation = async (req, res) => {
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
   })
 
-  res.send({
+  return res.send({
     organisations,
     summaryQuestions: questions,
   })
@@ -300,7 +300,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
 
   const codesWithIds = await getOpenFeedbackByOrganisation(code)
 
-  res.send(codesWithIds)
+  return res.send(codesWithIds)
 }
 
 module.exports = {

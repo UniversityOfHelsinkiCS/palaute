@@ -43,7 +43,7 @@ const create = async (req, res) => {
   userFeedbackTarget.feedbackId = newFeedback.id
   await userFeedbackTarget.save()
 
-  res.send(newFeedback)
+  return res.send(newFeedback)
 }
 
 const getFeedbackForUser = async (req) => {
@@ -65,7 +65,7 @@ const getFeedbackForUser = async (req) => {
 const getOne = async (req, res) => {
   const feedback = await getFeedbackForUser(req)
 
-  res.send(feedback)
+  return res.send(feedback)
 }
 
 const update = async (req, res) => {
@@ -97,14 +97,14 @@ const update = async (req, res) => {
 
   const updatedFeedback = await feedback.save()
 
-  res.send(updatedFeedback)
+  return res.send(updatedFeedback)
 }
 
 const destroy = async (req, res) => {
   const feedback = await getFeedbackForUser(req)
 
   await feedback.destroy()
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 module.exports = {

@@ -10,7 +10,7 @@ const getUser = async (req, res) => {
 
   const isTeacher = !!user.employeeNumber
 
-  res.send({
+  return res.send({
     ...user.toJSON(),
     isTeacher,
     iamGroups: user.iamGroups ?? [],
@@ -47,7 +47,7 @@ const logout = async (req, res) => {
     headers: { shib_logout_url: shibLogoutUrl },
   } = req
 
-  res.send({
+  return res.send({
     url: shibLogoutUrl,
   })
 }

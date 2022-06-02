@@ -189,10 +189,10 @@ const getFeedbackCount = async (req, res) => {
     { replacements: { feedbackTargetId } },
   )
   if (feedbackCount.length < 1 || feedbackCount[0] < 1) {
-    res.send({ feedbackCount: 0 })
+    return res.send({ feedbackCount: 0 })
   }
 
-  res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
+  return res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
 }
 
 const getFeedbackTargetByOrganisationAccess = async (
@@ -447,7 +447,7 @@ const update = async (req, res) => {
 
   await feedbackTarget.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const getForStudent = async (req, res) => {
@@ -468,7 +468,7 @@ const getForStudent = async (req, res) => {
     false,
   )
 
-  res.send(responseReady)
+  return res.send(responseReady)
 }
 
 const getTargetsByCourseUnit = async (req, res) => {
@@ -837,7 +837,7 @@ const remindStudentsOnFeedback = async (req, res) => {
   await relevantFeedbackTarget.sendFeedbackReminderToStudents(reminder)
   await relevantFeedbackTarget.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const openFeedbackImmediately = async (req, res) => {
@@ -877,7 +877,7 @@ const openFeedbackImmediately = async (req, res) => {
 
   await feedbackTarget.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const closeFeedbackImmediately = async (req, res) => {
@@ -910,7 +910,7 @@ const closeFeedbackImmediately = async (req, res) => {
 
   await feedbackTarget.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const getUsers = async (req, res) => {
@@ -942,7 +942,7 @@ const getUsers = async (req, res) => {
     token: jwt.sign({ username: user.username }, JWT_KEY),
   }))
 
-  res.send(users)
+  return res.send(users)
 }
 
 const deleteUserFeedbackTarget = async (req, res) => {
@@ -968,7 +968,7 @@ const deleteUserFeedbackTarget = async (req, res) => {
 
   await userFeedbackTarget.destroy()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const getLogs = async (req, res) => {

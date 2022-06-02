@@ -114,10 +114,10 @@ const updateOrganisation = async (req, res) => {
       responsible_user: responsibleUser,
     }
 
-    res.send(organisationIncludeUser)
+    return res.send(organisationIncludeUser)
   }
 
-  res.send(updatedOrganisation)
+  return res.send(updatedOrganisation)
 }
 
 const getOrganisationByCode = async (req, res) => {
@@ -140,7 +140,7 @@ const getOrganisationByCode = async (req, res) => {
     )
   }
 
-  res.send(organisation)
+  return res.send(organisation)
 }
 
 const getOrganisationLogs = async (req, res) => {

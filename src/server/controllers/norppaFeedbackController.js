@@ -5,7 +5,7 @@ const { ApplicationError } = require('../util/customErrors')
 const submitFeedback = async (req, res) => {
   const { user } = req
 
-  if (!user) res.send([])
+  if (!user) return res.send([])
 
   const { feedback, responseWanted } = req.body
 
@@ -19,25 +19,25 @@ const submitFeedback = async (req, res) => {
   feedbackUser.norppaFeedbackGiven = true
   await feedbackUser.save()
 
-  res.send(newFeedback)
+  return res.send(newFeedback)
 }
 
 const hideBanner = async (req, res) => {
   const { user } = req
 
-  if (!user) res.sendStatus(500)
+  if (!user) return res.sendStatus(500)
 
   const acualUser = await User.findByPk(user.id)
   acualUser.norppaFeedbackGiven = true
   await acualUser.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const getFeedbacks = async (req, res) => {
   const { user } = req
 
-  if (!user) res.sendStatus(500)
+  if (!user) return res.sendStatus(500)
   if (!ADMINS.includes(user.username))
     throw new ApplicationError('Forbidden', 403)
 
@@ -51,14 +51,14 @@ const getFeedbacks = async (req, res) => {
     ],
   })
 
-  res.send(feedbacks)
+  return res.send(feedbacks)
 }
 
 const markAsSolved = async (req, res) => {
   const { user } = req
   const { id } = req.params
 
-  if (!user) res.sendStatus(500)
+  if (!user) return res.sendStatus(500)
   if (!ADMINS.includes(user.username))
     throw new ApplicationError('Forbidden', 403)
 
@@ -73,13 +73,13 @@ const markAsSolved = async (req, res) => {
   feedback.solved = solved
   await feedback.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const getNorppaFeedbackCount = async (req, res) => {
   const { user } = req
 
-  if (!user) res.sendStatus(500)
+  if (!user) return res.sendStatus(500)
   if (!ADMINS.includes(user.username)) {
     return res.send(403)
   }

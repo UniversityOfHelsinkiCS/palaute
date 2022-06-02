@@ -47,10 +47,10 @@ const feedbackTargetByCourseRealisation = async (req, res) => {
   })
 
   if (!feedbackTarget) {
-    res.send(404)
+    return res.send(404)
   }
 
-  res.redirect(301, `/targets/${feedbackTarget.id}/feedback`)
+  return res.redirect(301, `/targets/${feedbackTarget.id}/feedback`)
 }
 
 module.exports = {

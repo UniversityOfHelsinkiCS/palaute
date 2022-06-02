@@ -38,7 +38,7 @@ const getFeedbackTargetsIncludes = (userId, accessStatus) => {
 const getCourses = async (req, res) => {
   const { user } = req
 
-  if (!user) res.send([])
+  if (!user) return res.send([])
 
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -51,7 +51,7 @@ const getCourses = async (req, res) => {
     feedbackTarget.isOpen(),
   )
 
-  res.send(filteredCourses)
+  return res.send(filteredCourses)
 }
 
 module.exports = { getCourses }

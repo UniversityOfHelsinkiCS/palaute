@@ -229,7 +229,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     },
   )
 
-  res.send(courseUnits)
+  return res.send(courseUnits)
 }
 
 const getCourseUnitsByOrganisation = async (req, res) => {
@@ -262,7 +262,7 @@ const getCourseUnitsByOrganisation = async (req, res) => {
     courseCode: row.course_code,
   }))
 
-  res.send(courseUnits)
+  return res.send(courseUnits)
 }
 
 module.exports = {

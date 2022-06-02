@@ -35,12 +35,12 @@ const adminAccess = (req, _, next) => {
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
   run()
-  res.send({})
+  return res.send({})
 }
 
 const getUpdaterStatus = async (_, res) => {
   const status = await UpdaterStatus.findOne()
-  res.send(status?.toPublicObject())
+  return res.send(status?.toPublicObject())
 }
 
 const findUser = async (req, res) => {
@@ -265,7 +265,7 @@ const getFeedbackTargets = async (req, res) => {
     feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
   }))
 
-  res.send(feedbackTargetsWithCount)
+  return res.send(feedbackTargetsWithCount)
 }
 
 const resetTestCourse = async (_, res) => {
@@ -328,7 +328,7 @@ const resetTestCourse = async (_, res) => {
     accessStatus: 'STUDENT',
     userId: 'hy-hlo-135680147', // varisleo
   })
-  res.send({})
+  return res.send({})
 }
 
 const findEmailsForToday = async (_, res) => {
@@ -336,7 +336,7 @@ const findEmailsForToday = async (_, res) => {
     await returnEmailsToBeSentToday()
 
   const emails = students.concat(teachers)
-  res.send({
+  return res.send({
     emails,
     studentEmails: students.length,
     teacherEmails: teachers.length,
@@ -401,7 +401,7 @@ const getNorppaStatistics = async (req, res) => {
     (r) => r.organisation_name !== 'Lukuvuosi',
   )
 
-  res.send(resultsWithBetterAvoin)
+  return res.send(resultsWithBetterAvoin)
 }
 
 const getFeedbackTargetsToCheck = async (req, res) => {
@@ -425,7 +425,7 @@ const getFeedbackTargetsToCheck = async (req, res) => {
       ],
     })
 
-  res.send(relevantFeedbackTargetDateChecks)
+  return res.send(relevantFeedbackTargetDateChecks)
 }
 
 const solveFeedbackTargetDateCheck = async (req, res) => {

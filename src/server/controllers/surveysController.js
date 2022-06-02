@@ -49,7 +49,7 @@ const addQuestion = async (req, res) => {
   const updatedSurvey = await survey.save()
 
   updatedSurvey.questions = await survey.getQuestions()
-  res.send(updatedSurvey)
+  return res.send(updatedSurvey)
 }
 
 const update = async (req, res) => {
@@ -77,7 +77,7 @@ const update = async (req, res) => {
   const updatedSurvey = await survey.save()
   await updatedSurvey.populateQuestions()
 
-  res.send(updatedSurvey)
+  return res.send(updatedSurvey)
 }
 
 const getSurveyByCourseCode = async (req, res) => {
@@ -98,7 +98,7 @@ const getSurveyByCourseCode = async (req, res) => {
 
   await survey.populateQuestions()
 
-  res.send(survey)
+  return res.send(survey)
 }
 
 const getUniversitySurvey = async (req, res) => {
@@ -112,7 +112,7 @@ const getUniversitySurvey = async (req, res) => {
 
   await survey.populateQuestions()
 
-  res.send(survey)
+  return res.send(survey)
 }
 
 const getProgrammeSurvey = async (req, res) => {
@@ -148,7 +148,7 @@ const getProgrammeSurvey = async (req, res) => {
 
   const response = { ...survey.toJSON(), universitySurvey, organisation }
 
-  res.send(response)
+  return res.send(response)
 }
 
 module.exports = {

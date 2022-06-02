@@ -3,14 +3,14 @@ const { Question } = require('../models')
 
 const getAll = async (_, res) => {
   const questions = await Question.findAll()
-  res.send(questions)
+  return res.send(questions)
 }
 
 const getOne = async (req, res) => {
   const question = await Question.findByPk(Number(req.params.id))
   if (!question) throw new ApplicationError('Not found', 404)
 
-  res.send(question)
+  return res.send(question)
 }
 
 const update = async (req, res) => {
@@ -20,7 +20,7 @@ const update = async (req, res) => {
   question.data = req.body
   const updatedQuestion = await question.save()
 
-  res.send(updatedQuestion)
+  return res.send(updatedQuestion)
 }
 
 const destroy = async (req, res) => {
@@ -29,7 +29,7 @@ const destroy = async (req, res) => {
 
   await question.destroy()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 module.exports = {

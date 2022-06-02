@@ -43,7 +43,7 @@ const updateCourseRealisation = async (req, res) => {
 
   await feedbackTarget.save()
 
-  res.sendStatus(200)
+  return res.sendStatus(200)
 }
 
 const updateManyCourseRealisations = async (req, res) => {
@@ -75,7 +75,7 @@ const updateManyCourseRealisations = async (req, res) => {
   }
   /* eslint-enable */
 
-  res.send(200)
+  return res.send(200)
 }
 
 const enableAllCourses = async (_, res) => {
@@ -85,7 +85,7 @@ const enableAllCourses = async (_, res) => {
     },
     { where: {} },
   )
-  res.send(200)
+  return res.send(200)
 }
 
 const updateUser = async (req, res) => {
@@ -105,7 +105,7 @@ const updateUser = async (req, res) => {
 
   await user.save()
 
-  res.send(200)
+  return res.send(200)
 }
 
 const router = Router()
