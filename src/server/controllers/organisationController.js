@@ -104,6 +104,19 @@ const updateOrganisation = async (req, res) => {
 
   const updatedOrganisation = await organisation.save()
 
+  if (updates.responsibleUserId) {
+    const responsibleUser = await User.findByPk(
+      updatedOrganisation.responsibleUserId,
+      { attributes: ['id', 'firstName', 'lastName', 'email'] },
+    )
+    const organisationIncludeUser = {
+      ...updatedOrganisation.toJSON(),
+      responsible_user: responsibleUser,
+    }
+
+    res.send(organisationIncludeUser)
+  }
+
   res.send(updatedOrganisation)
 }
 

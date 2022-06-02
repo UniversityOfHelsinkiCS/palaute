@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
+import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash'
@@ -19,7 +20,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 
-const saveFeedbackCorrespondent = async (code, responsibleUserId) => {
+const saveFeedbackCorrespondent = async ({ code, responsibleUserId }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     responsibleUserId,
   })
@@ -27,11 +28,12 @@ const saveFeedbackCorrespondent = async (code, responsibleUserId) => {
   return data
 }
 
-const CorrepondentSelector = ({ code }) => {
+const CorrepondentSelector = ({ code, setCorrespondent }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
   const [potentialUsers, setPotentialUsers] = useState([])
+  const mutation = useMutation(saveFeedbackCorrespondent)
 
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
@@ -61,7 +63,11 @@ const CorrepondentSelector = ({ code }) => {
       return
 
     try {
-      await saveFeedbackCorrespondent(code, user.id)
+      const updatedOrganisation = await mutation.mutateAsync({
+        code,
+        responsibleUserId: user.id,
+      })
+      setCorrespondent(updatedOrganisation.responsible_user)
       enqueueSnackbar(t('organisationSettings:setCorrespondentSuccess'), {
         variant: 'success',
       })
@@ -120,26 +126,22 @@ const FeedbackCorrespondentInfo = ({ correspondent }) => {
   )
 }
 
-const FeedbackCorrespondent = () => {
+const FeedbackCorrespondentContainer = ({ organisation }) => {
+  const [correspondent, setCorrespondent] = useState(
+    organisation.responsible_user,
+  )
   const { t } = useTranslation()
   const { code } = useParams()
-  const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
   const style = {
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
   }
 
-  if (isLoading) {
-    return <LoadingProgress />
-  }
-
   return (
     <div style={style}>
-      {organisation.responsible_user ? (
-        <FeedbackCorrespondentInfo
-          correspondent={organisation.responsible_user}
-        />
+      {correspondent ? (
+        <FeedbackCorrespondentInfo correspondent={correspondent} />
       ) : (
         <Alert severity="warning">
           {t('organisationSettings:correspondentMissing')}
@@ -147,11 +149,26 @@ const FeedbackCorrespondent = () => {
       )}
       <Card>
         <CardContent>
-          <CorrepondentSelector code={code} />
+          <CorrepondentSelector
+            code={code}
+            setCorrespondent={setCorrespondent}
+          />
         </CardContent>
       </Card>
     </div>
   )
+}
+
+const FeedbackCorrespondent = () => {
+  const { code } = useParams()
+
+  const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
+
+  if (isLoading) {
+    return <LoadingProgress />
+  }
+
+  return <FeedbackCorrespondentContainer organisation={organisation} />
 }
 
 export default FeedbackCorrespondent
