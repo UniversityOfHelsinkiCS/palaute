@@ -18,6 +18,7 @@ import {
   Chip,
   makeStyles,
   Tooltip,
+  Badge,
 } from '@material-ui/core'
 
 import { differenceInMonths } from 'date-fns'
@@ -25,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
 import {
+  Check,
   EditOutlined,
   ListOutlined,
   LiveHelpOutlined,
@@ -356,6 +358,7 @@ const FeedbackTargetView = () => {
               icon={<EditOutlined />}
               label={t('feedbackTargetView:editFeedbackResponseTab')}
               to={`${url}/edit-feedback-response`}
+              badge={!feedbackResponseEmailSent}
             />
           )}
           {showEditSurveyTab && (
@@ -425,9 +428,10 @@ const RouterTab = ({
   to,
   disabled,
   disabledTooltip,
+  badge,
   ...props
 }) => {
-  const content = icon ? (
+  let content = icon ? (
     <Box display="flex">
       {icon}
       <Box ml={1} />
@@ -436,6 +440,14 @@ const RouterTab = ({
   ) : (
     label
   )
+
+  if (badge) {
+    content = (
+      <Badge color="primary" variant="dot">
+        {content}
+      </Badge>
+    )
+  }
 
   const tab = (
     <Tab
@@ -446,7 +458,6 @@ const RouterTab = ({
       {...props}
     />
   )
-
   if (disabled)
     return (
       <Tooltip title={disabledTooltip} placement="top">
