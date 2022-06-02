@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     // Im not proud of this but it does its thing
     transform:
-      'translateX(-50%) translateX(-10px) rotate(-45deg) translateX(50%)',
+      'translateY(15px) translateX(-50%) translateX(-10px) rotate(-45deg) translateX(50%)',
   },
   title: {
     whiteSpace: 'nowrap',
@@ -93,16 +93,23 @@ const OrderButton = ({ id, orderBySelection, handleOrderByChange }) => {
 
   if (id === questionId) {
     return (
-      <IconButton onClick={() => handleOrderByChange(!isAscending)}>
-        <Icon isAscending={isAscending} />
-      </IconButton>
+      <Box display="flex" justifyContent="center">
+        <IconButton
+          disableFocusRipple
+          onClick={() => handleOrderByChange(!isAscending)}
+        >
+          <Icon isAscending={isAscending} />
+        </IconButton>
+      </Box>
     )
   }
 
   return (
-    <IconButton onClick={() => handleOrderByChange(false)}>
-      <Icon disabled />
-    </IconButton>
+    <Box display="flex" justifyContent="center">
+      <IconButton onClick={() => handleOrderByChange(false)}>
+        <Icon disabled />
+      </IconButton>
+    </Box>
   )
 }
 
