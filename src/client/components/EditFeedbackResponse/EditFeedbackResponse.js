@@ -114,7 +114,11 @@ const EditFeedbackResponse = () => {
                 <Box my={2} display="flex">
                   <ResponseEmailButton
                     isSent={feedbackTarget.feedbackResponseEmailSent}
-                    disabled={isSubmitting || !values.feedbackResponse}
+                    disabled={
+                      isSubmitting ||
+                      !values.feedbackResponse ||
+                      feedbackTarget.feedbackResponseEmailSent
+                    }
                     onSubmit={() =>
                       handleSubmit({
                         ...values,
