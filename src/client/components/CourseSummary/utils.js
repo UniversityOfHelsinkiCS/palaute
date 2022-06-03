@@ -160,7 +160,7 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
           ),
         })),
         ...orderByArgs.organisations,
-      )
+      ).sort((organisation) => (organisation.feedbackCount ? 0 : 1))
     : organisations
 }
 
