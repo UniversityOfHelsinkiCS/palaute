@@ -40,6 +40,8 @@ const create = async (req, res) => {
     degreeStudyRigth,
   })
 
+  await feedbackTarget.increment('feedbackCount', { by: 1 })
+
   userFeedbackTarget.feedbackId = newFeedback.id
   await userFeedbackTarget.save()
 

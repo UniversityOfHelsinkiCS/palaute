@@ -171,11 +171,9 @@ const getFeedbackCount = async (req, res) => {
 
   const feedbackCount = await sequelize.query(
     `
-    SELECT COUNT(user_feedback_targets.feedback_id) AS feedback_count
-    FROM user_feedback_targets, feedback_targets
-    WHERE user_feedback_targets.feedback_target_id = feedback_targets.id
-    
-    AND feedback_targets.course_unit_id IN (
+    SELECT SUM(feedback_count) as "feedbackCount"
+    FROM feedback_targets
+    WHERE feedback_targets.course_unit_id IN (
       SELECT cu.id as ids
       FROM course_units as cu, feedback_targets as fbt 
       WHERE fbt.id = :feedbackTargetId
@@ -183,16 +181,16 @@ const getFeedbackCount = async (req, res) => {
       AND cu.course_code IN (
         SELECT course_code FROM course_units WHERE id = fbt.course_unit_id
       )
-    )
-    AND user_feedback_targets.access_status = 'STUDENT';
+    );
   `,
     { replacements: { feedbackTargetId } },
   )
+
   if (feedbackCount.length < 1 || feedbackCount[0] < 1) {
     return res.send({ feedbackCount: 0 })
   }
 
-  return res.send({ feedbackCount: Number(feedbackCount[0][0].feedback_count) })
+  return res.send({ feedbackCount: Number(feedbackCount[0][0].feedbackCount) })
 }
 
 const getFeedbackTargetByOrganisationAccess = async (

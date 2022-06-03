@@ -66,6 +66,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'opensAt',
           'closesAt',
           'feedbackResponseEmailSent',
+          'feedbackCount',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -186,11 +187,12 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ),
         ({ courseRealisation }) => courseRealisation.startDate,
       )
-      console.log(endedTarget?.toJSON())
+
       const ongoingCourseRealisation = ongoingTarget
         ? {
             ...ongoingTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: ongoingTarget.feedbackResponseEmailSent,
+            feedbackCount: Number(ongoingTarget.dataValues.feedbackCount),
             feedbackTarget: _.pick(ongoingTarget, targetFields),
           }
         : null
@@ -199,6 +201,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ? {
             ...upcomingTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: upcomingTarget.feedbackResponseEmailSent,
+            feedbackCount: Number(upcomingTarget.dataValues.feedbackCount),
             feedbackTarget: _.pick(upcomingTarget, targetFields),
           }
         : null
@@ -207,6 +210,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ? {
             ...endedTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: endedTarget.feedbackResponseEmailSent,
+            feedbackCount: Number(endedTarget.dataValues.feedbackCount),
             feedbackTarget: _.pick(endedTarget, targetFields),
           }
         : null

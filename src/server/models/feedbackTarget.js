@@ -484,6 +484,11 @@ FeedbackTarget.init(
       allowNull: false,
       defaultValue: true,
     },
+    feedbackCount: {
+      type: INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
     opensAt: {
       type: DATE,
     },

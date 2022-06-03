@@ -34,11 +34,12 @@ const useStyles = makeStyles({
 })
 
 const getChip = (courseRealisation, code) => {
-  const { feedbackResponseGiven, feedbackTarget } = courseRealisation
+  const { feedbackResponseGiven, feedbackTarget, feedbackCount } =
+    courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  if (isEnded || feedbackResponseGiven) {
+  if ((feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
