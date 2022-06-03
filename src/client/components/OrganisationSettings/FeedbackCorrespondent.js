@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState } from 'react'
 
 import {
@@ -28,12 +29,9 @@ const saveFeedbackCorrespondent = async ({ code, responsibleUserId }) => {
   return data
 }
 
-const CorrepondentSelector = ({ code, setCorrespondent }) => {
-  const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
-
+const CorrepondentSelector = ({ handleSetAsFeedbackCorrespondent }) => {
   const [potentialUsers, setPotentialUsers] = useState([])
-  const mutation = useMutation(saveFeedbackCorrespondent)
+  const { t } = useTranslation()
 
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
@@ -48,33 +46,6 @@ const CorrepondentSelector = ({ code, setCorrespondent }) => {
 
     setPotentialUsers(persons)
   }, 400)
-
-  const handleSetAsFeedbackCorrespondent = (user) => async () => {
-    const { firstName, lastName } = user
-    if (
-      // eslint-disable-next-line no-alert
-      !window.confirm(
-        t('organisationSettings:confirmSetCorrespondent', {
-          firstName,
-          lastName,
-        }),
-      )
-    )
-      return
-
-    try {
-      const updatedOrganisation = await mutation.mutateAsync({
-        code,
-        responsibleUserId: user.id,
-      })
-      setCorrespondent(updatedOrganisation.responsible_user)
-      enqueueSnackbar(t('organisationSettings:setCorrespondentSuccess'), {
-        variant: 'success',
-      })
-    } catch {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
 
   return (
     <Box my={4}>
@@ -108,19 +79,40 @@ const CorrepondentSelector = ({ code, setCorrespondent }) => {
   )
 }
 
-const FeedbackCorrespondentInfo = ({ correspondent }) => {
+const FeedbackCorrespondentInfo = ({
+  correspondent,
+  handleSetAsFeedbackCorrespondent,
+}) => {
   const { t } = useTranslation()
 
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5" component="h5">
-          {t('organisationSettings:feedbackCorrespondentTab')}
-        </Typography>
-        <Typography variant="h6" component="h6">
-          {correspondent.firstName} {correspondent.lastName}
-        </Typography>
-        <Typography>{correspondent.email.toLowerCase()}</Typography>
+        <Box
+          display="flex"
+          width="100%"
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
+          <Box>
+            <Typography variant="h5" component="h5">
+              {t('organisationSettings:feedbackCorrespondentTab')}
+            </Typography>
+            <Typography variant="h6" component="h6">
+              {correspondent.firstName} {correspondent.lastName}
+            </Typography>
+            <Typography>{correspondent.email.toLowerCase()}</Typography>
+          </Box>
+          <Box>
+            <Button
+              color="secondary"
+              onClick={handleSetAsFeedbackCorrespondent(null)}
+              data-cy="resetCorrespondentButton"
+            >
+              {t('organisationSettings:remove')}
+            </Button>
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   )
@@ -130,18 +122,54 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
   const [correspondent, setCorrespondent] = useState(
     organisation.responsible_user,
   )
-  const { t } = useTranslation()
   const { code } = useParams()
+  const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+  const mutation = useMutation(saveFeedbackCorrespondent)
   const style = {
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
   }
 
+  const confirmSetCorrespondent = (user) => {
+    if (!user) {
+      return window.confirm(t('organisationSettings:confirmResetCorrespondent'))
+    }
+
+    const { firstName, lastName } = user
+    return window.confirm(
+      t('organisationSettings:confirmSetCorrespondent', {
+        firstName,
+        lastName,
+      }),
+    )
+  }
+
+  const handleSetAsFeedbackCorrespondent = (user) => async () => {
+    if (!confirmSetCorrespondent(user)) return
+
+    try {
+      const updatedOrganisation = await mutation.mutateAsync({
+        code,
+        responsibleUserId: user ? user.id : null,
+      })
+      setCorrespondent(updatedOrganisation.responsible_user)
+      enqueueSnackbar(t('organisationSettings:setCorrespondentSuccess'), {
+        variant: 'success',
+      })
+    } catch {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
   return (
     <div style={style}>
       {correspondent ? (
-        <FeedbackCorrespondentInfo correspondent={correspondent} />
+        <FeedbackCorrespondentInfo
+          correspondent={correspondent}
+          handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
+        />
       ) : (
         <Alert severity="warning">
           {t('organisationSettings:correspondentMissing')}
@@ -150,8 +178,7 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
       <Card>
         <CardContent>
           <CorrepondentSelector
-            code={code}
-            setCorrespondent={setCorrespondent}
+            handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
           />
         </CardContent>
       </Card>

@@ -332,9 +332,11 @@ export default {
     // correspondentMissing: 'No feedback correspondent set',
     // newCorrespondent: 'Set new feedback correspondent:',
     // confirmSetCorrespondent: `Set {{firstName}} {{lastName}} as feedback correspondent`,
+    // confirmResetCorrespondent: 'Remove feedback correspondent',
     // setAsCorrespondent: 'Set as feedback correspondent',
     // setCorrespondentSuccess: 'Feedback correspondent set succesfully',
     // email: 'Email',
+    // remove: 'Remove',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna respons är inte i bruk',
