@@ -42,7 +42,7 @@ const executeSummaryQuery = ({
     question_id,
     question_data,
     question_data_count,
-    feedback_count,
+    feedback_counts.feedback_count as feedback_count,
     student_count,
     feedback_targets.id AS feedback_target_id,
     feedback_targets.closes_at AS closes_at,
