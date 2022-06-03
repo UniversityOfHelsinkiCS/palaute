@@ -330,9 +330,11 @@ export default {
     correspondentMissing: 'Palautevastaava puuttuu',
     newCorrespondent: 'Aseta uusi palautevastaava:',
     confirmSetCorrespondent: `Aseta {{firstName}} {{lastName}} palautevastaavaksi`,
+    confirmResetCorrespondent: 'Poista palautevastaava',
     setAsCorrespondent: 'Aseta palautevastaavaksi',
     setCorrespondentSuccess: 'Palautevastaava asetettu onnistuneesti',
     email: 'Sähköposti',
+    remove: 'Poista',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
