@@ -36,7 +36,6 @@ describe('Teacher view', () => {
   it('A logged in teacher can give feedback response for an ended course', () => {
     cy.visit(`${baseUrl}/courses`)
     cy.get('[data-cy=courseUnitAccordion-TKT20002]').click()
-    cy.get('[data-cy=feedbackResponseGiven-TKT20002-false]')
 
     cy.visit(`${baseUrl}/targets/97/edit-feedback-response`)
 
