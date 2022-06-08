@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const Organisation = require('../models/organisation')
 const { ADMINS } = require('./config')
-const lomakeClient = require('./lomakeClient')
+const { getIAMRights } = require('./IAMrights')
 
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
@@ -79,12 +79,11 @@ const getAccessToAll = async (accessLevel) => {
 
 const getLomakeAccess = async (user) => {
   const access = {}
-  const { data: lomakeAccess } = await lomakeClient.get(
-    `/organizations/${user.username}`,
-  )
-  if (!_.isObject(lomakeAccess)) return access
-  Object.keys(lomakeAccess).forEach((code) => {
-    access[normalizeOrganisationCode(code)] = lomakeAccess[code]
+  const { access: iamAccess } = getIAMRights(user.iamGroups)
+
+  if (!_.isObject(iamAccess)) return access
+  Object.keys(iamAccess).forEach((code) => {
+    access[normalizeOrganisationCode(code)] = iamAccess[code]
   })
   return access
 }
