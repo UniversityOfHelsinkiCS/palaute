@@ -11,6 +11,8 @@ import {
   IconButton,
   Divider,
   ButtonBase,
+  Box,
+  Typography,
 } from '@material-ui/core'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -254,6 +256,16 @@ const NavBar = () => {
       <Divider component="li" className={classes.languageMenuDivider} />
       {isMobile && mobileMenuLinks}
       <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+      <Divider component="li" className={classes.languageMenuDivider} />
+      <Box>
+        {authorizedUser.iamGroups.map((iamGroup) => (
+          <Box ml={2}>
+            <Typography variant="subtitle2" color="textSecondary">
+              {iamGroup}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
     </Menu>
   )
 
