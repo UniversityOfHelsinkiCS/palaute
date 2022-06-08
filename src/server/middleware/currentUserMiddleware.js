@@ -83,9 +83,10 @@ const currentUserMiddleware = async (req, _, next) => {
       req.headers['x-admin-logged-in-as'],
     )
     if (loggedInAsUser) req.user = loggedInAsUser
+  } else if (req.path.includes('login')) {
+    req.user.set('iamGroups', isNoAdPath ? [] : req.iamGroups ?? [])
+    await req.user.save()
   }
-
-  req.user.set('iamGroups', isNoAdPath ? [] : req.iamGroups ?? [])
 
   req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)
 

@@ -10,8 +10,6 @@ const getUser = async (req, res) => {
 
   const isTeacher = !!user.employeeNumber
 
-  await user.save()
-
   return res.send({
     ...user.toJSON(),
     isTeacher,
