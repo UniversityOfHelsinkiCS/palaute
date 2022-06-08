@@ -10,11 +10,10 @@ import {
   Card,
   CardContent,
 } from '@material-ui/core'
-
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
@@ -137,6 +136,10 @@ const CourseSettings = () => {
 
   if (isLoading) {
     return <LoadingProgress />
+  }
+
+  if (!organisation.access.admin) {
+    return <Redirect to={`/organisations/${code}/settings`} />
   }
 
   return (

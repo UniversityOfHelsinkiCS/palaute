@@ -1,9 +1,10 @@
 import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, Redirect } from 'react-router-dom'
 import { Box, Typography, Divider, makeStyles, Button } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
+import useOrganisation from '../../hooks/useOrganisation'
 import { filterCoursesWithNoResponses, formateDates } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
@@ -89,9 +90,15 @@ const ProgrammeOpenQuestions = () => {
   const classes = useStyles()
 
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
+  const { organisation, isLoading: isOrganisationLoading } =
+    useOrganisation(code)
 
-  if (isLoading) {
+  if (isLoading || isOrganisationLoading) {
     return <LoadingProgress />
+  }
+
+  if (!organisation.access.admin) {
+    return <Redirect to={`/organisations/${code}/settings`} />
   }
 
   const filteredCourses = filterCoursesWithNoResponses(codesWithIds)

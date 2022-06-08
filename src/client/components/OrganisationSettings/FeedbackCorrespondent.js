@@ -13,7 +13,7 @@ import {
 import { useSnackbar } from 'notistack'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 import { debounce } from 'lodash'
 
 import useOrganisation from '../../hooks/useOrganisation'
@@ -193,6 +193,10 @@ const FeedbackCorrespondent = () => {
 
   if (isLoading) {
     return <LoadingProgress />
+  }
+
+  if (!organisation.access.admin) {
+    return <Redirect to={`/organisations/${code}/settings`} />
   }
 
   return <FeedbackCorrespondentContainer organisation={organisation} />

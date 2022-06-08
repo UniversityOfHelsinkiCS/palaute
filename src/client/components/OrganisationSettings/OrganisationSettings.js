@@ -150,12 +150,14 @@ const OrganisationSettings = () => {
               to={`${url}/summary`}
               className={selected === 'summary' ? classes.selected : ''}
             />
-            <Tab
-              label={t('organisationSettings:openQuestionsTab')}
-              component={Link}
-              to={`${url}/open`}
-              className={selected === 'open' ? classes.selected : ''}
-            />
+            {hasAdminAccess && (
+              <Tab
+                label={t('organisationSettings:openQuestionsTab')}
+                component={Link}
+                to={`${url}/open`}
+                className={selected === 'open' ? classes.selected : ''}
+              />
+            )}
           </Box>
         </Paper>
         {isAdmin && (
