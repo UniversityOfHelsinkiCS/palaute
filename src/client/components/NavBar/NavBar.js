@@ -258,13 +258,14 @@ const NavBar = () => {
       <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
       <Divider component="li" className={classes.languageMenuDivider} />
       <Box>
-        {authorizedUser.iamGroups.map((iamGroup) => (
-          <Box ml={2}>
-            <Typography variant="subtitle2" color="textSecondary">
-              {iamGroup}
-            </Typography>
-          </Box>
-        ))}
+        {authorizedUser &&
+          authorizedUser.iamGroups.map((iamGroup) => (
+            <Box ml={2}>
+              <Typography variant="subtitle2" color="textSecondary">
+                {iamGroup}
+              </Typography>
+            </Box>
+          ))}
       </Box>
     </Menu>
   )
