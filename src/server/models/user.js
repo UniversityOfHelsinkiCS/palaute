@@ -1,4 +1,4 @@
-const { Model, STRING, Op, VIRTUAL, BOOLEAN } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, ARRAY } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
@@ -113,10 +113,6 @@ User.init(
     studentNumber: {
       type: STRING,
     },
-    iamGroups: {
-      type: VIRTUAL,
-      defaultValue: [],
-    },
     degreeStudyRight: {
       type: BOOLEAN,
       allowNull: true,
@@ -125,6 +121,11 @@ User.init(
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    iamGroups: {
+      type: ARRAY(STRING),
+      allowNull: false,
+      defaultValue: [],
     },
   },
   {
