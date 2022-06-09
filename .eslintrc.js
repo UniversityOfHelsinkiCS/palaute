@@ -7,7 +7,7 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'warn',
-    'max-len': [1, 200],
+    'max-len': [1, 300],
     'no-shadow': 0,
     'no-plusplus': 0,
     'import/no-unresolved': 'off',
@@ -24,7 +24,10 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/no-array-index-key': 'off',
+    'react/jsx-boolean-value': 'warn',
+    'react/jsx-curly-brace-presence': 'warn',
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
+    'spaced-comment': 'off',
   },
 }
