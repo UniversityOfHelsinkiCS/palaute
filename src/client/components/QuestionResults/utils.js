@@ -138,13 +138,17 @@ export const getQuestionsWithFeedback = (questions, feedbacks) => {
 
   const feedbacksArray = feedbacks ?? []
 
-  const feedbackData = feedbacksArray.reduce(
-    (acc, feedback) => [
-      ...acc,
-      ...(Array.isArray(feedback.data) ? feedback.data : []),
-    ],
-    [],
-  )
+  const feedbackData = feedbacksArray
+    .reduce(
+      (acc, feedback) => [
+        ...acc,
+        ...(Array.isArray(feedback.data) ? feedback.data : []),
+      ],
+      [],
+    ) // filter short answers which are not a number
+    .filter(
+      (answer) => answer.data?.length > 1 === Number.isNaN(Number(answer.data)),
+    )
 
   const feedbackDataByQuestionId = groupBy(
     feedbackData,
