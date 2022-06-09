@@ -97,6 +97,7 @@ export default {
     noCourses: 'No courses',
     editFeedbackResponse: 'Edit counter feedback',
     feedbackResponseGiven: 'Counter feedback given',
+    feedbackResponseNotSent: 'Counter feedback not sent',
     feedbackResponseMissing: 'Counter feedback missing',
     feedbackOpen: 'Feedback open',
     ongoingCourses: 'Ongoing courses',

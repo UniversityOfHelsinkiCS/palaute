@@ -96,6 +96,7 @@ export default {
     noCourseRealisations: 'Ei kurssitoteutuksia',
     noCourses: 'Ei kursseja',
     feedbackResponseGiven: 'Vastapalaute annettu',
+    feedbackResponseNotSent: 'Vastapalaute lähettämättä',
     feedbackResponseMissing: 'Vastapalaute puuttuu',
     feedbackOpen: 'Palaute käynnissä',
     ongoingCourses: 'Käynnissä olevat kurssit',

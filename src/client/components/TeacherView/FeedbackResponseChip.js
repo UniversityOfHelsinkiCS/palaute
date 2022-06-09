@@ -4,7 +4,7 @@ import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
-  given: {
+  sent: {
     borderColor: theme.palette.success.dark,
     color: theme.palette.success.dark,
   },
@@ -12,23 +12,36 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.error.light,
     color: theme.palette.error.main,
   },
+  notSent: {
+    borderColor: theme.palette.warning.dark,
+    color: theme.palette.warning.dark,
+  },
 }))
 
 const FeedbackResponseChip = ({
   feedbackResponseGiven,
+  feedbackResponseSent,
   className,
   ...props
 }) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
-  const label = feedbackResponseGiven
-    ? t('teacherView:feedbackResponseGiven')
+  const notSentLabel = feedbackResponseGiven
+    ? t('teacherView:feedbackResponseNotSent')
     : t('teacherView:feedbackResponseMissing')
+
+  const label = feedbackResponseSent
+    ? t('teacherView:feedbackResponseGiven')
+    : notSentLabel
+
+  const notSentClassName = feedbackResponseGiven
+    ? classes.notSent
+    : classes.notGiven
 
   const classNames = cn(
     className,
-    feedbackResponseGiven ? classes.given : classes.notGiven,
+    feedbackResponseSent ? classes.sent : notSentClassName,
   )
 
   return (

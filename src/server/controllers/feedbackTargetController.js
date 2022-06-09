@@ -613,7 +613,8 @@ const getTargetsByCourseUnit = async (req, res) => {
         ]),
         feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
         enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
-        feedbackResponseGiven: target.feedbackResponseEmailSent,
+        feedbackResponseGiven: target.feedbackResponse?.length > 3,
+        feedbackResponseSent: target.feedbackResponseEmailSent,
         studentListVisible,
       }
     })

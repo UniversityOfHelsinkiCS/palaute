@@ -65,7 +65,11 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'name',
           'opensAt',
           'closesAt',
-          'feedbackResponseEmailSent',
+          ['feedback_response_email_sent', 'feedbackResponseSent'],
+          [
+            sequelize.literal(`length(feedback_response) > 3`),
+            'feedbackResponseGiven',
+          ],
           'feedbackCount',
         ],
         where: {
@@ -187,39 +191,25 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ),
         ({ courseRealisation }) => courseRealisation.startDate,
       )
-
-      const ongoingCourseRealisation = ongoingTarget
-        ? {
-            ...ongoingTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: ongoingTarget.feedbackResponseEmailSent,
-            feedbackCount: Number(ongoingTarget.dataValues.feedbackCount),
-            feedbackTarget: _.pick(ongoingTarget, targetFields),
-          }
-        : null
-
-      const upcomingCourseRealisation = upcomingTarget
-        ? {
-            ...upcomingTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: upcomingTarget.feedbackResponseEmailSent,
-            feedbackCount: Number(upcomingTarget.dataValues.feedbackCount),
-            feedbackTarget: _.pick(upcomingTarget, targetFields),
-          }
-        : null
-
-      const endedCourseRealisation = endedTarget
-        ? {
-            ...endedTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: endedTarget.feedbackResponseEmailSent,
-            feedbackCount: Number(endedTarget.dataValues.feedbackCount),
-            feedbackTarget: _.pick(endedTarget, targetFields),
-          }
-        : null
+      // console.log(JSON.stringify(endedTarget))
+      const makeTargetObject = (feedbackTarget) =>
+        feedbackTarget
+          ? {
+              ...feedbackTarget.courseRealisation.toJSON(),
+              feedbackResponseGiven:
+                feedbackTarget.dataValues.feedbackResponseGiven,
+              feedbackResponseSent:
+                feedbackTarget.dataValues.feedbackResponseSent,
+              feedbackCount: Number(feedbackTarget.dataValues.feedbackCount),
+              feedbackTarget: _.pick(feedbackTarget, targetFields),
+            }
+          : null
 
       return {
         ...courseUnit,
-        ongoingCourseRealisation,
-        upcomingCourseRealisation,
-        endedCourseRealisation,
+        ongoingCourseRealisation: makeTargetObject(ongoingTarget),
+        upcomingCourseRealisation: makeTargetObject(upcomingTarget),
+        endedCourseRealisation: makeTargetObject(endedTarget),
       }
     },
   )

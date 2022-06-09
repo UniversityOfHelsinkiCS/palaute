@@ -95,6 +95,7 @@ export default {
     noCourseRealisations: 'Inga kursinstanser',
     noCourses: 'Inga kurser',
     feedbackResponseGiven: 'Svar på responsen given',
+    // feedbackResponseNotSent: 'Counter feedback not sent',
     feedbackResponseMissing: 'Svar på responsen saknas',
     feedbackOpen: 'Responsen är öppen',
     ongoingCourses: 'Pågående kurser',

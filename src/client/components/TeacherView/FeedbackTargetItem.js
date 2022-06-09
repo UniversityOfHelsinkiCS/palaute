@@ -22,13 +22,14 @@ import FeedbackOpenChip from './FeedbackOpenChip'
 const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const { feedbackResponse, feedbackResponseGiven, feedbackCount } =
+  const { feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
     feedbackTarget
 
   if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
+        feedbackResponseSent={feedbackResponseSent}
         data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
       />
     )

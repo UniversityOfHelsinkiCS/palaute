@@ -34,8 +34,12 @@ const useStyles = makeStyles({
 })
 
 const getChip = (courseRealisation, code) => {
-  const { feedbackResponseGiven, feedbackTarget, feedbackCount } =
-    courseRealisation
+  const {
+    feedbackResponseGiven,
+    feedbackResponseSent,
+    feedbackTarget,
+    feedbackCount,
+  } = courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
@@ -43,6 +47,7 @@ const getChip = (courseRealisation, code) => {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
+        feedbackResponseSent={feedbackResponseSent}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
       />
     )
