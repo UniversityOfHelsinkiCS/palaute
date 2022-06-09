@@ -26,7 +26,6 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
 import {
-  Check,
   EditOutlined,
   ListOutlined,
   LiveHelpOutlined,
