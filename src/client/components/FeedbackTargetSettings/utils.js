@@ -128,7 +128,7 @@ export const feedbackCanBeClosed = (feedbackTarget) => {
   const { opensAt } = feedbackTarget
   const openTime = new Date() - new Date(opensAt)
 
-  return openTime >= 86400000
+  return openTime >= 86400000 && feedbackTargetIsOpen(feedbackTarget)
 }
 
 export const formatClosesAt = (closesAt) =>
