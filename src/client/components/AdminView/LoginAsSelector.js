@@ -67,6 +67,7 @@ const Details = ({ user }) => (
       >
         {user.iamGroups.map(({ iam, isRelevant }) => (
           <Box
+            key={iam}
             color={isRelevant ? 'blue' : 'gray'}
             fontWeight={isRelevant ? 'fontWeightBold' : 'fontWeightLight'}
             fontFamily="monospace"
