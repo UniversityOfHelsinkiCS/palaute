@@ -199,7 +199,7 @@ const NavBar = () => {
     },
     isAdminUser && {
       label: t('navBar:admin'),
-      to: '/admin/general',
+      to: '/admin/users',
     },
   ]
     .filter(Boolean)

@@ -7,10 +7,65 @@ import {
   CardActions,
   Button,
   Box,
+  Accordion,
+  AccordionSummary,
+  AccordionActions,
+  AccordionDetails,
+  TableCell,
+  TableRow,
+  TableBody,
+  TableContainer,
+  Table,
+  TableHead,
+  Typography,
 } from '@material-ui/core'
 import { debounce } from 'lodash'
 
 import apiClient from '../../util/apiClient'
+
+const Details = ({ user }) => (
+  <TableContainer>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>ID</TableCell>
+          <TableCell>SN</TableCell>
+          <TableCell>EN</TableCell>
+          <TableCell>username</TableCell>
+          <TableCell>secondary email</TableCell>
+          <TableCell>degree study right</TableCell>
+          <TableCell>language</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>{user.id}</TableCell>
+          <TableCell>{user.studentNumber}</TableCell>
+          <TableCell>{user.employeeNumber}</TableCell>
+          <TableCell>{user.username}</TableCell>
+          <TableCell>{user.secondaryEmail}</TableCell>
+          <TableCell>{String(user.degreeStudyRight)}</TableCell>
+          <TableCell>{user.language}</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+    <Box my={2} />
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>IAM</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {user.iamGroups.map((iam) => (
+          <TableRow key={iam}>
+            <TableCell>{iam}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+)
 
 const LoginAsSelector = () => {
   const [potentialUsers, setPotentialUsers] = useState([])
@@ -46,6 +101,7 @@ const LoginAsSelector = () => {
     localStorage.setItem('employeenumber', employeeNumber ?? null)
     window.location.reload()
   }
+  console.log(potentialUsers[0])
 
   return (
     <Box my={4}>
@@ -64,19 +120,27 @@ const LoginAsSelector = () => {
         ))}
       </div>
       {potentialUsers.map((user) => (
-        <Card key={user.id}>
-          <CardContent>
-            <b>
-              {user.id} - {user.firstNames} {user.lastName} - {user.email} -{' '}
-              {user.studentNumber}
-            </b>
-          </CardContent>
-          <CardActions>
-            <Button onClick={handleLoginAs(user)} variant="outlined">
-              Log in as
-            </Button>
-          </CardActions>
-        </Card>
+        <Accordion key={user.id}>
+          <AccordionSummary style={{ cursor: 'default' }}>
+            <Box display="flex" alignItems="center" width="100%">
+              <Typography>
+                {user.firstName} {user.lastName}
+              </Typography>
+              <Box mr={2} />
+              <Typography>{user.email ?? user.secondaryEmail}</Typography>
+              <Box mr="auto" />
+              <Button onClick={() => handleLoginAs(user)} variant="outlined">
+                Login as
+              </Button>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails style={{ backgroundColor: 'Background' }}>
+            <Details user={user} />
+          </AccordionDetails>
+          <AccordionActions>
+            <Button variant="outlined">This does nothing yet</Button>
+          </AccordionActions>
+        </Accordion>
       ))}
     </Box>
   )

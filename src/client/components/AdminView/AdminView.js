@@ -14,9 +14,10 @@ import UpdaterView from './UpdaterView'
 import Title from '../Title'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import RouterTabs from '../RouterTabs'
-import GeneralTab from './GeneralTab'
+import MiscTab from './MiscTab'
 import { ChangedClosingDates } from './ChangedClosingDates'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
+import UsersTab from './UsersTab'
 
 const useStyles = makeStyles(() => ({
   failureIcon: {
@@ -66,7 +67,7 @@ const AdminView = () => {
           variant="scrollable"
           scrollButtons="auto"
         >
-          <Tab label="General" component={Link} to={`${url}/general`} />
+          <Tab label="Users" component={Link} to={`${url}/users`} />
           <Tab
             label="Norppa feedback"
             component={Link}
@@ -102,10 +103,11 @@ const AdminView = () => {
               </Button>
             ))}
           />
+          <Tab label="Misc" component={Link} to={`${url}/misc`} />
         </RouterTabs>
       </Box>
       <Switch>
-        <Route path={`${path}/general`} component={GeneralTab} />
+        <Route path={`${path}/users`} component={UsersTab} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route path={`${path}/changed-dates`} component={ChangedClosingDates} />
@@ -114,6 +116,7 @@ const AdminView = () => {
           component={FeedbackTargetInspector}
         />
         <Route path={`${path}/updater`} component={UpdaterView} />
+        <Route path={`${path}/misc`} component={MiscTab} />
       </Switch>
     </>
   )
