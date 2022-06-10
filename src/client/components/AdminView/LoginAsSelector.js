@@ -15,7 +15,10 @@ import {
   TableHead,
   Typography,
   Chip,
+  IconButton,
+  AccordionActions,
 } from '@material-ui/core'
+import { ArrowRight } from '@material-ui/icons'
 import { debounce } from 'lodash'
 import { format } from 'date-fns'
 
@@ -109,15 +112,7 @@ const LoginAsSelector = () => {
     setPotentialUsers(transformUsers(persons))
   }, 400)
 
-  const handleLoginAs = (user) => async () => {
-    if (
-      // eslint-disable-next-line no-alert
-      !window.confirm(
-        `This will log you in as ${user.firstNames} (${user.id}) and refresh the page.`,
-      )
-    )
-      return
-
+  const handleLoginAs = (user) => () => {
     const { id, employeeNumber } = user
 
     localStorage.setItem('adminLoggedInAs', id)
@@ -163,15 +158,20 @@ const LoginAsSelector = () => {
               <Typography>{user.email ?? user.secondaryEmail}</Typography>
               <Box mr={4} />
               {getChip(user)}
-              <Box mr="auto" />
-              <Button onClick={() => handleLoginAs(user)} variant="outlined">
-                Login as
-              </Button>
             </Box>
           </AccordionSummary>
           <AccordionDetails style={{ backgroundColor: 'Background' }}>
             <Details user={user} />
           </AccordionDetails>
+          <AccordionActions>
+            <Button
+              onClick={handleLoginAs(user)}
+              variant="outlined"
+              color="primary"
+            >
+              Login as
+            </Button>
+          </AccordionActions>
         </Accordion>
       ))}
     </Box>
