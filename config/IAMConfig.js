@@ -326,7 +326,7 @@ const universityWideGroups = [
   'hy-sskh-rehtoraatti',
   'hy-mmtdk-dekanaatti',
   'hy-eltdk-dekanaatti',
-].concat(Object.values(kojoMap))
+]
 
 const superAdminGroups = ['grp-toska']
 
