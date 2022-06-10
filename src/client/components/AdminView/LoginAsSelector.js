@@ -6,7 +6,6 @@ import {
   Box,
   Accordion,
   AccordionSummary,
-  AccordionActions,
   AccordionDetails,
   TableCell,
   TableRow,
@@ -15,8 +14,10 @@ import {
   Table,
   TableHead,
   Typography,
+  Chip,
 } from '@material-ui/core'
 import { debounce } from 'lodash'
+import { format } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 
@@ -44,31 +45,53 @@ const Details = ({ user }) => (
           <TableCell>{user.secondaryEmail}</TableCell>
           <TableCell>{String(user.degreeStudyRight)}</TableCell>
           <TableCell>{user.language}</TableCell>
-          <TableCell>{user.lastLoggedIn ?? 'Not since 10.6.22'}</TableCell>
+          <TableCell>
+            {user.lastLoggedIn
+              ? format(Date.parse(user.lastLoggedIn), 'dd/MM/YYYY hh.mm')
+              : 'Not since 10.6.22'}
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>
-    <Box my={2} />
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>IAM</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {user.iamGroups.map((iam) => (
-          <TableRow key={iam}>
-            <TableCell>{iam}</TableCell>
-          </TableRow>
+    <Box my={3} />
+    <Box m={2}>
+      <Typography variant="button">IAM-groups</Typography>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignContent="flex-start"
+        flexWrap="wrap"
+        maxHeight="200px"
+        mt={1}
+        style={{ columnGap: '20px' }}
+      >
+        {user.iamGroups.map(({ iam, isRelevant }) => (
+          <Box
+            color={isRelevant ? 'blue' : 'gray'}
+            fontWeight={isRelevant ? 'fontWeightBold' : 'fontWeightLight'}
+            fontFamily="monospace"
+            fontSize={14}
+          >
+            {iam}
+          </Box>
         ))}
-      </TableBody>
-    </Table>
+      </Box>
+    </Box>
   </TableContainer>
 )
 
 const LoginAsSelector = () => {
   const [potentialUsers, setPotentialUsers] = useState([])
   const [lastQuery, setLastQuery] = useState({})
+
+  const transformUsers = (users) =>
+    users.map((u) => ({
+      ...u,
+      probablyStaff:
+        u.iamGroups.some((iam) => iam.iam === 'hy-employees') &&
+        u.employeeNumber,
+      possiblyStaff: Boolean(u.employeeNumber),
+    }))
 
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
@@ -82,7 +105,7 @@ const LoginAsSelector = () => {
     const { params: queried, persons } = data
 
     setLastQuery(queried)
-    setPotentialUsers(persons)
+    setPotentialUsers(transformUsers(persons))
   }, 400)
 
   const handleLoginAs = (user) => async () => {
@@ -100,6 +123,17 @@ const LoginAsSelector = () => {
     localStorage.setItem('employeenumber', employeeNumber ?? null)
     window.location.reload()
   }
+
+  const getChip = (user) => (
+    <>
+      {user.possiblyStaff && !user.probablyStaff && (
+        <Chip label="Possibly staff" variant="outlined" />
+      )}
+      {user.probablyStaff && (
+        <Chip label="Definitely staff" color="primary" variant="outlined" />
+      )}
+    </>
+  )
 
   return (
     <Box my={4}>
@@ -126,6 +160,8 @@ const LoginAsSelector = () => {
               </Typography>
               <Box mr={2} />
               <Typography>{user.email ?? user.secondaryEmail}</Typography>
+              <Box mr={4} />
+              {getChip(user)}
               <Box mr="auto" />
               <Button onClick={() => handleLoginAs(user)} variant="outlined">
                 Login as
@@ -135,9 +171,6 @@ const LoginAsSelector = () => {
           <AccordionDetails style={{ backgroundColor: 'Background' }}>
             <Details user={user} />
           </AccordionDetails>
-          <AccordionActions>
-            <Button variant="outlined">This does nothing yet</Button>
-          </AccordionActions>
         </Accordion>
       ))}
     </Box>

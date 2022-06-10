@@ -23,6 +23,7 @@ const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 
 const { returnEmailsToBeSentToday } = require('../util/emailSender')
+const { relevantIAMs } = require('../../../config/IAMConfig')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -68,7 +69,10 @@ const findUser = async (req, res) => {
       },
       persons: persons.map((person) => ({
         ...person.dataValues,
-        firstNames: person.firstName,
+        iamGroups: person.iamGroups.map((iam) => ({
+          iam,
+          isRelevant: relevantIAMs.includes(iam),
+        })),
       })),
     })
   }
@@ -120,7 +124,10 @@ const findUser = async (req, res) => {
     params,
     persons: persons.map((person) => ({
       ...person.dataValues,
-      firstNames: person.firstName,
+      iamGroups: person.iamGroups.map((iam) => ({
+        iam,
+        isRelevant: relevantIAMs.includes(iam),
+      })),
     })),
   })
 }
