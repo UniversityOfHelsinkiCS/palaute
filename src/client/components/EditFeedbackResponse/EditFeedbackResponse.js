@@ -97,58 +97,64 @@ const EditFeedbackResponse = () => {
             validateOnChange={false}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, values }) => (
-              <Form id="feedback-response-form">
-                <FormikTextField
-                  label={
-                    feedbackResponseFormDisabled
-                      ? t('feedbackResponse:formDisabled')
-                      : t('feedbackResponse:responseLabel')
-                  }
-                  name="feedbackResponse"
-                  rows={10}
-                  fullWidth
-                  multiline
-                  disabled={feedbackResponseFormDisabled}
-                />
-                <Box my={2} display="flex">
-                  <ResponseEmailButton
-                    isSent={feedbackTarget.feedbackResponseEmailSent}
-                    disabled={
-                      isSubmitting ||
-                      !values.feedbackResponse ||
-                      feedbackTarget.feedbackResponseEmailSent
+            {({ isSubmitting, values }) => {
+              const edited =
+                values.feedbackResponse !== feedbackTarget.feedbackResponse
+              return (
+                <Form id="feedback-response-form">
+                  <FormikTextField
+                    label={
+                      feedbackResponseFormDisabled
+                        ? t('feedbackResponse:formDisabled')
+                        : t('feedbackResponse:responseLabel')
                     }
-                    onSubmit={() =>
-                      handleSubmit({
-                        ...values,
-                        feedbackResponseEmailSent: true,
-                      })
-                    }
+                    name="feedbackResponse"
+                    rows={10}
+                    fullWidth
+                    multiline
+                    disabled={feedbackResponseFormDisabled}
                   />
-                  <Button
-                    color="primary"
-                    onClick={() =>
-                      handleSubmit({
-                        ...values,
-                        feedbackResponseEmailSent: false,
-                      })
-                    }
-                  >
-                    {t('feedbackResponse:dialogSaveSubmit')}
-                  </Button>
-                </Box>
-                <Box my={2}>
-                  <Divider />
-                </Box>
-                <Box mb={2}>
-                  <Typography color="textSecondary">
-                    {t('feedbackResponse:previewLabel')}
-                  </Typography>
-                </Box>
-                <MarkdownPreview />
-              </Form>
-            )}
+                  <Box my={2} display="flex">
+                    <ResponseEmailButton
+                      isSent={feedbackTarget.feedbackResponseEmailSent}
+                      disabled={
+                        !edited ||
+                        isSubmitting ||
+                        !values.feedbackResponse ||
+                        feedbackTarget.feedbackResponseEmailSent
+                      }
+                      onSubmit={() =>
+                        handleSubmit({
+                          ...values,
+                          feedbackResponseEmailSent: true,
+                        })
+                      }
+                    />
+                    <Button
+                      color="primary"
+                      disabled={!edited}
+                      onClick={() =>
+                        handleSubmit({
+                          ...values,
+                          feedbackResponseEmailSent: false,
+                        })
+                      }
+                    >
+                      {t('feedbackResponse:dialogSaveSubmit')}
+                    </Button>
+                  </Box>
+                  <Box my={2}>
+                    <Divider />
+                  </Box>
+                  <Box mb={2}>
+                    <Typography color="textSecondary">
+                      {t('feedbackResponse:previewLabel')}
+                    </Typography>
+                  </Box>
+                  <MarkdownPreview />
+                </Form>
+              )
+            }}
           </Formik>
         </CardContent>
       </Card>
