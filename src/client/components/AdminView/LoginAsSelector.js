@@ -35,6 +35,7 @@ const Details = ({ user }) => (
           <TableCell>secondary email</TableCell>
           <TableCell>degree study right</TableCell>
           <TableCell>language</TableCell>
+          <TableCell>Last logged in</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -46,6 +47,7 @@ const Details = ({ user }) => (
           <TableCell>{user.secondaryEmail}</TableCell>
           <TableCell>{String(user.degreeStudyRight)}</TableCell>
           <TableCell>{user.language}</TableCell>
+          <TableCell>{user.lastLoggedIn ?? 'Not since 10.6.22'}</TableCell>
         </TableRow>
       </TableBody>
     </Table>

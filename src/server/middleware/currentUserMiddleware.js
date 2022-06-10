@@ -84,7 +84,8 @@ const currentUserMiddleware = async (req, _, next) => {
     )
     if (loggedInAsUser) req.user = loggedInAsUser
   } else if (req.path.includes('login')) {
-    req.user.set('iamGroups', isNoAdPath ? [] : req.iamGroups ?? [])
+    req.user.iamGroups = isNoAdPath ? [] : req.iamGroups ?? []
+    req.user.lastLoggedIn = new Date()
     await req.user.save()
   }
 

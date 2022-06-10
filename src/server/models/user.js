@@ -1,4 +1,4 @@
-const { Model, STRING, Op, BOOLEAN, ARRAY } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, ARRAY, DATE } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
@@ -126,6 +126,10 @@ User.init(
       type: ARRAY(STRING),
       allowNull: false,
       defaultValue: [],
+    },
+    lastLoggedIn: {
+      type: DATE,
+      allowNull: true,
     },
   },
   {
