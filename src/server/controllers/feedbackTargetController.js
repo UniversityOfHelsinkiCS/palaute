@@ -806,12 +806,10 @@ const updateFeedbackResponse = async (req, res) => {
     Boolean(feedbackResponseEmailSent) ||
     relevantFeedbackTarget.feedbackResponseEmailSent
 
-  let emailsSentTo = []
   if (feedbackResponseEmailSent) {
-    emailsSentTo =
-      await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents(
-        feedbackResponse,
-      )
+    await relevantFeedbackTarget.sendFeedbackSummaryReminderToStudents(
+      feedbackResponse,
+    )
   }
   await relevantFeedbackTarget.save()
 

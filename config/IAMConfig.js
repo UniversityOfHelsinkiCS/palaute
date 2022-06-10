@@ -356,7 +356,8 @@ const iamToOrganisationCode = (iam) => {
   return [organisationCodes]
 }
 
-const relevantIAMs = Object.keys(joryMap)
+const relevantIAMs = []
+  .concat(Object.keys(joryMap))
   .concat(Object.keys(kojoMap))
   .concat(Object.values(kojoMap))
   .concat(doctoralIams)
