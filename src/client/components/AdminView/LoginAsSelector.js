@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 
 import {
   TextField,
-  Card,
-  CardContent,
-  CardActions,
   Button,
   Box,
   Accordion,
@@ -103,7 +100,6 @@ const LoginAsSelector = () => {
     localStorage.setItem('employeenumber', employeeNumber ?? null)
     window.location.reload()
   }
-  console.log(potentialUsers[0])
 
   return (
     <Box my={4}>
