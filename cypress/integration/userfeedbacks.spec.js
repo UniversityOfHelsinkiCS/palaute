@@ -18,7 +18,6 @@ describe('User feedbacks view', () => {
     cy.get('textarea[id=19-label]').type('Other comments and such')
     cy.get('[data-cy=submitFeedbackButton]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
-    cy.get('table').contains('The course was laborious')
   })
   it('Student can clear given feedback', () => {
     cy.loginAsStudent()
