@@ -11,8 +11,6 @@ import {
   IconButton,
   Divider,
   ButtonBase,
-  Box,
-  Typography,
 } from '@material-ui/core'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -29,6 +27,7 @@ import { handleLogout } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
+import UserPermissionsWindow from './UserPermissionsWindow'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -126,6 +125,7 @@ const NavBar = () => {
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width:500px)')
+  const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(feedbackTargets?.length)
   const isAdminUser = authorizedUser?.isAdmin ?? false
@@ -255,23 +255,20 @@ const NavBar = () => {
       />
       <Divider component="li" className={classes.languageMenuDivider} />
       {isMobile && mobileMenuLinks}
-      <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+      <MenuItem onClick={() => setPermissionsWindowOpen(true)}>
+        {t('navBar:userInformation')}
+      </MenuItem>
       <Divider component="li" className={classes.languageMenuDivider} />
-      <Box>
-        {authorizedUser &&
-          authorizedUser.iamGroups.map((iamGroup) => (
-            <Box ml={2}>
-              <Typography variant="subtitle2" color="textSecondary">
-                {iamGroup}
-              </Typography>
-            </Box>
-          ))}
-      </Box>
+      <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
     </Menu>
   )
 
   return (
     <>
+      <UserPermissionsWindow
+        isOpen={permissionsWindowOpen}
+        onClose={() => setPermissionsWindowOpen(false)}
+      />
       {menu}
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>

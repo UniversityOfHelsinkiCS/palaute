@@ -233,6 +233,15 @@ export default {
     courseSummary: 'Course summary',
     nameFallback: 'Menu',
     feedback: 'Give feedback to Norppa developers',
+    userInformation: 'Your information',
+  },
+  userInformation: {
+    iamGroups: 'IAM-groups',
+    iamGroupsTooltip: 'Showing only groups relevant to Norppa',
+    organisationAccess: 'Organisation access rights',
+    organisationCode: 'organisation code',
+    access: 'Access level',
+    none: 'none',
   },
   studentsWithFeedback: {
     noFeedbackInfo:

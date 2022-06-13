@@ -231,6 +231,15 @@ export default {
     courseSummary: 'Kurssiyhteenveto',
     nameFallback: 'Valikko',
     feedback: 'Anna palautetta Norpan kehittäjille',
+    userInformation: 'Tietosi',
+  },
+  userInformation: {
+    iamGroups: 'IAM-ryhmät',
+    iamGroupsTooltip: 'Näytetään vain Norppaan vaikutavat',
+    organisationAccess: 'Organisaatio-oikeudet',
+    organisationCode: 'Organisaatiokoodi',
+    access: 'Oikeus',
+    none: 'ei ole',
   },
   studentsWithFeedback: {
     noFeedbackInfo:

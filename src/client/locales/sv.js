@@ -235,6 +235,15 @@ export default {
     courseSummary: 'Kurssammandrag',
     nameFallback: 'Menu',
     // feedback: 'Give feedback to Norppa developers',
+    // userInformation: 'Tietosi',
+  },
+  userInformation: {
+    // iamGroups: 'IAM-ryhmät',
+    // iamGroupsTooltip: 'Näytetään vain Norppaan vaikutavat',
+    // organisationAccess: 'Organisaatio-oikeudet',
+    // organisationCode: 'Organisaatiokoodi',
+    // access: 'Oikeus',
+    // none: 'ei ole',
   },
   studentsWithFeedback: {
     noFeedbackInfo: 'Ingen har tillsvidare givit respons',
