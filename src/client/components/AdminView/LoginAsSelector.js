@@ -20,25 +20,9 @@ import {
 } from '@material-ui/core'
 import { debounce } from 'lodash'
 import { format } from 'date-fns'
-import { useQuery } from 'react-query'
 
 import apiClient from '../../util/apiClient'
-
-const useUserDetails = (userId, options = {}) => {
-  const queryKey = ['user', userId]
-
-  const queryFn = async () => {
-    const { data } = await apiClient.get(`/admin/users/${userId}`)
-
-    return data
-  }
-
-  const { data: user, ...rest } = useQuery(queryKey, queryFn, {
-    ...options,
-  })
-
-  return { user, ...rest }
-}
+import useUserDetails from '../../hooks/useUserDetails'
 
 const Details = ({ user }) => {
   const { user: userDetails, isLoading } = useUserDetails(user.id)

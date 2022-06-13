@@ -127,20 +127,6 @@ const findUser = async (req, res) => {
   })
 }
 
-const getUserDetails = async (req, res) => {
-  const { id } = req.params
-  const user = await User.findByPk(id)
-  const access = await user.getOrganisationAccess()
-  return res.send({
-    ...user.dataValues,
-    iamGroups: user.iamGroups.map((iam) => ({
-      iam,
-      isRelevant: relevantIAMs.includes(iam),
-    })),
-    access,
-  })
-}
-
 const findFeedbackTargets = async (req, res) => {
   const {
     query: { id, code, name, language },
@@ -465,7 +451,6 @@ const router = Router()
 router.use(adminAccess)
 
 router.get('/users', findUser)
-router.get('/users/:id', getUserDetails)
 router.get('/feedback-targets-data', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.get('/updater-status', getUpdaterStatus)
