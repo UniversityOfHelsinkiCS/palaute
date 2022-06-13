@@ -9,6 +9,11 @@ import {
   Button,
   Box,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Chip,
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import { useMutation } from 'react-query'
@@ -48,32 +53,41 @@ const CorrepondentSelector = ({ handleSetAsFeedbackCorrespondent }) => {
   }, 400)
 
   return (
-    <Box my={4}>
-      <Typography variant="h6" component="h6">
-        {t('organisationSettings:newCorrespondent')}
-      </Typography>
-      <TextField
-        style={{ width: '30em', paddingBottom: 10 }}
-        label={t('organisationSettings:email')}
-        variant="outlined"
-        onChange={handleChange}
-      />
+    <Box>
+      <Card>
+        <CardContent>
+          <Typography variant="body1">
+            {t('organisationSettings:newCorrespondent')}
+          </Typography>
+          <Box mb={2} />
+          <TextField
+            style={{ width: '30em', paddingBottom: 10 }}
+            label={t('organisationSettings:email')}
+            variant="outlined"
+            onChange={handleChange}
+          />
+        </CardContent>
+      </Card>
+      <Box my={1} />
       {potentialUsers.map((user) => (
-        <Card key={user.id}>
-          <CardContent>
-            <b>
-              {user.firstName} {user.lastName} - {user.email}
-            </b>
-          </CardContent>
-          <CardActions>
-            <Button
-              onClick={handleSetAsFeedbackCorrespondent(user)}
-              variant="outlined"
-            >
-              {t('organisationSettings:setAsCorrespondent')}
-            </Button>
-          </CardActions>
-        </Card>
+        <>
+          <Card key={user.id}>
+            <CardContent>
+              <b>
+                {user.firstName} {user.lastName} - {user.email}
+              </b>
+            </CardContent>
+            <CardActions>
+              <Button
+                onClick={handleSetAsFeedbackCorrespondent(user)}
+                variant="outlined"
+              >
+                {t('organisationSettings:setAsCorrespondent')}
+              </Button>
+            </CardActions>
+          </Card>
+          <Box mb={1} />
+        </>
       ))}
     </Box>
   )
@@ -95,10 +109,12 @@ const FeedbackCorrespondentInfo = ({
           alignItems="flex-end"
         >
           <Box>
-            <Typography variant="h5" component="h5">
-              {t('organisationSettings:feedbackCorrespondentTab')}
-            </Typography>
-            <Typography variant="h6" component="h6">
+            <Chip
+              label={t('organisationSettings:feedbackCorrespondentTab')}
+              variant="outlined"
+            />
+            <Box mb={2} />
+            <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
             </Typography>
             <Typography>{correspondent.email.toLowerCase()}</Typography>
@@ -175,13 +191,9 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
           {t('organisationSettings:correspondentMissing')}
         </Alert>
       )}
-      <Card>
-        <CardContent>
-          <CorrepondentSelector
-            handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
-          />
-        </CardContent>
-      </Card>
+      <CorrepondentSelector
+        handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
+      />
     </div>
   )
 }

@@ -331,7 +331,7 @@ export default {
     editProgrammeQuestionsDialogCancel: 'Avbryt',
     editProgrammeQuestionsDialogConfirm: 'Redigera',
     // correspondentMissing: 'No feedback correspondent set',
-    // newCorrespondent: 'Set new feedback correspondent:',
+    // newCorrespondent: 'Set new feedback correspondent',
     // confirmSetCorrespondent: `Set {{firstName}} {{lastName}} as feedback correspondent`,
     // confirmResetCorrespondent: 'Remove feedback correspondent',
     // setAsCorrespondent: 'Set as feedback correspondent',

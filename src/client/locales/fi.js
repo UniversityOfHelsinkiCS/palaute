@@ -329,7 +329,7 @@ export default {
     editProgrammeQuestionsDialogCancel: 'Peruuta',
     editProgrammeQuestionsDialogConfirm: 'Muokkaa',
     correspondentMissing: 'Palautevastaava puuttuu',
-    newCorrespondent: 'Aseta uusi palautevastaava:',
+    newCorrespondent: 'Aseta uusi palautevastaava',
     confirmSetCorrespondent: `Aseta {{firstName}} {{lastName}} palautevastaavaksi`,
     confirmResetCorrespondent: 'Poista palautevastaava',
     setAsCorrespondent: 'Aseta palautevastaavaksi',
