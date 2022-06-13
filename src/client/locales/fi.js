@@ -235,7 +235,7 @@ export default {
   },
   userInformation: {
     iamGroups: 'IAM-ryhmät',
-    iamGroupsTooltip: 'Näytetään vain Norppaan vaikutavat',
+    iamTooltip: 'Näytetään vain Norppaan vaikutavat',
     organisationAccess: 'Organisaatio-oikeudet',
     organisationCode: 'Organisaatiokoodi',
     access: 'Oikeus',

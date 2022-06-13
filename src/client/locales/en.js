@@ -237,7 +237,7 @@ export default {
   },
   userInformation: {
     iamGroups: 'IAM-groups',
-    iamGroupsTooltip: 'Showing only groups relevant to Norppa',
+    iamTooltip: 'Showing only groups relevant to Norppa',
     organisationAccess: 'Organisation access rights',
     organisationCode: 'organisation code',
     access: 'Access level',
