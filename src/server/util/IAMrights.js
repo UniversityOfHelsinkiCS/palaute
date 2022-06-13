@@ -7,22 +7,10 @@ const {
   iamToOrganisationCode,
   isEmployeeIam,
   iamToDoctoralSchool,
+  kosuIamToFaculties,
 } = require('../../../config/IAMConfig')
 const { data } = require('../../../config/data')
 const { mapToDegreeCode } = require('../../../config/common')
-
-/**
- * Parses the header string with IAM groups separated by semicolons
- * @param {string} hyGroups
- * @returns {string[]}
- */
-const parseHyGroupsFromHeader = (hyGroups) => {
-  let parsedHyGroups = []
-  if (!(hyGroups === undefined || hyGroups === '' || hyGroups === null)) {
-    parsedHyGroups = hyGroups.split(';')
-  }
-  return parsedHyGroups
-}
 
 /**
  * Return given access to all programmes where predicate is true
@@ -83,6 +71,23 @@ const getUniversityReadingRights = (hyGroups) => {
   const specialGroup = { allProgrammes: true }
 
   return { access, specialGroup }
+}
+
+/**
+ * Grant reading rights to programmes of faculties if user is kosu of some faculties
+ * @param {string[]} hyGroups
+ */
+const getFacultyReadingRights = (hyGroups) => {
+  const facultyCodes = hyGroups.flatMap(kosuIamToFaculties)
+  const access = {}
+  facultyCodes.forEach((fc) => {
+    const faculty = data.find((faculty) => faculty.code === fc)
+    const programmeCodes = faculty.programmes.map((p) => p.key)
+    programmeCodes.forEach((code) => {
+      access[code] = { read: true }
+    })
+  })
+  return { access, specialGroup: {} }
 }
 
 /**
@@ -189,6 +194,7 @@ const getIAMRights = (hyGroups) => {
 
   ;[
     getUniversityReadingRights,
+    getFacultyReadingRights,
     getDoctoralAccess,
     getDoctoralSchoolAccess,
     getProgrammeReadAccess,

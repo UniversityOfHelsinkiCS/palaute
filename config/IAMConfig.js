@@ -1,3 +1,5 @@
+const { facultyMap } = require('./data')
+
 const joryMap = {
   'hy-ttdk-tuk-jory': '100-K001',
   'hy-ttdk-tum-jory': '100-M001',
@@ -258,6 +260,52 @@ const kojoMap = {
   'hy-dp-docs-jory': 'hy-tohtoriohjelma-johtajat',
 }
 
+/**
+ * Maps kosu IAM to the name of TDKs, defined in data.js facultyMap
+ */
+const kosuFacultyMap = {
+  'hy-ypa-opa-kosu-kumpula': 'matemaattis-luonnontieteellinen',
+  'hy-ypa-opa-kosu-meilahti': ['lääketieteellinen'],
+  'hy-ypa-opa-kosu-kruununhaka': [
+    'oikeustieteellinen',
+    'valtiotieteellinen',
+    'kasvatustieteellinen',
+    'humanistinen',
+    'teologinen',
+    'svenska',
+  ],
+  'hy-ypa-opa-kosu-metsatalo': [
+    'oikeustieteellinen',
+    'valtiotieteellinen',
+    'kasvatustieteellinen',
+    'humanistinen',
+    'teologinen',
+    'svenska',
+  ],
+  'hy-ypa-opa-kosu-porthania': [
+    'oikeustieteellinen',
+    'valtiotieteellinen',
+    'kasvatustieteellinen',
+    'humanistinen',
+    'teologinen',
+    'svenska',
+  ],
+  'hy-ypa-opa-kosu-siltavuori': [
+    'oikeustieteellinen',
+    'valtiotieteellinen',
+    'kasvatustieteellinen',
+    'humanistinen',
+    'teologinen',
+    'svenska',
+  ],
+  'hy-ypa-opa-kosu-viikki': [
+    'bio- ja ympäristötieteellinen',
+    'farmasia',
+    'maatalous -metsätieteellinen',
+    'eläinlääketieteellinen',
+  ],
+}
+
 const doctoralIams = ['hy-tohtorikoulutus-johtoryhma', 'hy-tine']
 
 const doctoralSchoolMap = {
@@ -307,13 +355,6 @@ const doctoralSchoolMap = {
 const universityWideGroups = [
   'hy-ypa-opa-opintoasiainpaallikot',
   'hy-rehtoraatti',
-  'hy-ypa-opa-kosu-kumpula',
-  'hy-ypa-opa-kosu-meilahti',
-  'hy-ypa-opa-kosu-kruununhaka',
-  'hy-ypa-opa-kosu-metsatalo',
-  'hy-ypa-opa-kosu-porthania',
-  'hy-ypa-opa-kosu-siltavuori',
-  'hy-ypa-opa-kosu-viikki',
   'hy-ttdk-dekanaatti',
   'hy-oiktdk-dekanaatti',
   'hy-ltdk-dekanaatti',
@@ -356,10 +397,18 @@ const iamToOrganisationCode = (iam) => {
   return [organisationCodes]
 }
 
+const kosuIamToFaculties = (iam) => {
+  const faculties = kosuFacultyMap[iam]
+  if (!faculties?.length > 0) return []
+
+  return faculties.map((f) => facultyMap[f])
+}
+
 const relevantIAMs = []
   .concat(Object.keys(joryMap))
   .concat(Object.keys(kojoMap))
   .concat(Object.values(kojoMap))
+  .concat(Object.keys(kosuFacultyMap))
   .concat(doctoralIams)
   .concat(Object.keys(doctoralSchoolMap))
   .concat(universityWideGroups)
@@ -375,6 +424,7 @@ module.exports = {
   isEmployeeIam,
   iamToDoctoralSchool,
   iamToOrganisationCode,
+  kosuIamToFaculties,
   getStudyLeaderGroup,
   relevantIAMs,
 }
