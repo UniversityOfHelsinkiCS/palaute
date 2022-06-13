@@ -233,7 +233,7 @@ export default {
     courseSummary: 'Course summary',
     nameFallback: 'Menu',
     feedback: 'Give feedback to Norppa developers',
-    userInformation: 'Your information',
+    userInformation: 'My information',
   },
   userInformation: {
     iamGroups: 'IAM-groups',

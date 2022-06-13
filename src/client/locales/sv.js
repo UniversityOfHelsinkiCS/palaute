@@ -235,7 +235,7 @@ export default {
     courseSummary: 'Kurssammandrag',
     nameFallback: 'Menu',
     // feedback: 'Give feedback to Norppa developers',
-    // userInformation: 'Tietosi',
+    // userInformation: 'Omat tietoni',
   },
   userInformation: {
     // iamGroups: 'IAM-ryhmät',
