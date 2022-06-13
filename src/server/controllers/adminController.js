@@ -23,7 +23,6 @@ const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 
 const { returnEmailsToBeSentToday } = require('../util/emailSender')
-const { relevantIAMs } = require('../../../config/IAMConfig')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
