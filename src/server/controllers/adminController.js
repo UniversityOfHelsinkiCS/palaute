@@ -48,87 +48,96 @@ const findUser = async (req, res) => {
   const {
     query: { user },
   } = req
+
+  let params = {}
+  let where = {}
+
   if (user.split(' ').length === 2) {
     const firstName = user.split(' ')[0]
     const lastName = user.split(' ')[1]
-    const persons = await User.findAll({
-      where: {
-        firstName: {
-          [Op.iLike]: `%${firstName}%`,
-        },
-        lastName: {
-          [Op.iLike]: `%${lastName}%`,
-        },
+    params = { firstName, lastName }
+    where = {
+      firstName: {
+        [Op.iLike]: `%${firstName}%`,
       },
-      limit: 100,
-    })
-    return res.send({
-      params: {
-        firstName,
-        lastName,
+      lastName: {
+        [Op.iLike]: `%${lastName}%`,
       },
-      persons: persons.map((person) => ({
-        ...person.dataValues,
-        iamGroups: person.iamGroups.map((iam) => ({
-          iam,
-          isRelevant: relevantIAMs.includes(iam),
-        })),
-      })),
-    })
-  }
-  const isEmail = user.includes('.') || user.includes('@')
-  const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
-  const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
-  const isSisuId =
-    !isEmployeeNumber &&
-    !isStudentNumber &&
-    !Number.isNaN(Number(user[user.length - 1]))
-  const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
+    }
+  } else {
+    const isEmail = user.includes('.') || user.includes('@')
+    const isEmployeeNumber =
+      !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
+    const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
+    const isSisuId =
+      !isEmployeeNumber &&
+      !isStudentNumber &&
+      !Number.isNaN(Number(user[user.length - 1]))
+    const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
 
-  const params = {}
-  const where = {}
-  if (isEmail) {
-    where[Op.or] = {
-      email: { [Op.iLike]: `${user}%` },
-      secondaryEmail: { [Op.iLike]: `${user}%` },
+    if (isEmail) {
+      where[Op.or] = {
+        email: { [Op.iLike]: `${user}%` },
+        secondaryEmail: { [Op.iLike]: `${user}%` },
+      }
+      params.email = user
+    } else if (isStudentNumber) {
+      where.studentNumber = {
+        [Op.iLike]: `${user}%`,
+      }
+      params.studentNumber = user
+    } else if (isSisuId) {
+      where.id = {
+        [Op.iLike]: `${user}%`,
+      }
+      params.id = user
+    } else if (isEmployeeNumber) {
+      where.employeeNumber = {
+        [Op.iLike]: `${user}%`,
+      }
+      params.employeeNumber = user
+    } else if (isUsername) {
+      where.username = {
+        [Op.iLike]: `%${user}%`,
+      }
+      params.username = user
     }
-    params.email = user
-  } else if (isStudentNumber) {
-    where.studentNumber = {
-      [Op.iLike]: `${user}%`,
-    }
-    params.studentNumber = user
-  } else if (isSisuId) {
-    where.id = {
-      [Op.iLike]: `${user}%`,
-    }
-    params.id = user
-  } else if (isEmployeeNumber) {
-    where.employeeNumber = {
-      [Op.iLike]: `${user}%`,
-    }
-    params.employeeNumber = user
-  } else if (isUsername) {
-    where.username = {
-      [Op.iLike]: `%${user}%`,
-    }
-    params.username = user
   }
 
-  const persons = await User.findAll({
+  const { rows: persons, count } = await User.findAndCountAll({
     where,
-    limit: 100,
+    limit: 20,
+    attributes: {
+      exclude: ['iamGroups'],
+      include: [
+        [
+          sequelize.literal(`'hy-employees' = ANY (iam_groups)`),
+          'hasEmployeeIam',
+        ],
+      ],
+    },
   })
 
   return res.send({
     params,
     persons: persons.map((person) => ({
       ...person.dataValues,
-      iamGroups: person.iamGroups.map((iam) => ({
-        iam,
-        isRelevant: relevantIAMs.includes(iam),
-      })),
     })),
+    count,
+  })
+}
+
+const getUserDetails = async (req, res) => {
+  const { id } = req.params
+  const user = await User.findByPk(id)
+  const access = await user.getOrganisationAccess()
+  return res.send({
+    ...user.dataValues,
+    iamGroups: user.iamGroups.map((iam) => ({
+      iam,
+      isRelevant: relevantIAMs.includes(iam),
+    })),
+    access,
   })
 }
 
@@ -456,6 +465,7 @@ const router = Router()
 router.use(adminAccess)
 
 router.get('/users', findUser)
+router.get('/users/:id', getUserDetails)
 router.get('/feedback-targets-data', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
 router.get('/updater-status', getUpdaterStatus)
