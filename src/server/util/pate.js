@@ -68,6 +68,7 @@ const sendToPate = async (options = {}) => {
     )} bytes), in ${chunkedEmails.length} chunks of size ${chunkSize} (${sizeOf(
       chunkedEmails[0],
     )} bytes)`,
+    console.log(options.emails),
   )
   sleep(5000)
 
@@ -122,10 +123,14 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary,
   students,
   courseName,
+  startDate,
+  endDate,
   feedbackResponse,
 ) => {
   const translations = buildNotificationAboutFeedbackResponseToStudents(
     courseName,
+    startDate,
+    endDate,
     urlToSeeFeedbackSummary,
     feedbackResponse,
   )

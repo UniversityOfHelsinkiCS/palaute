@@ -1,3 +1,5 @@
+const { format } = require('date-fns')
+
 /* eslint-disable max-len */
 const instructionsAndSupport = {
   en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
@@ -52,19 +54,25 @@ const buildReminderAboutSurveyOpeningToTeachers = (
 
 const buildNotificationAboutFeedbackResponseToStudents = (
   courseName,
+  startDate,
+  endDate,
   urlToSeeFeedbackSummary,
   feedbackResponse,
 ) => {
+  const dates = `(${format(startDate, 'dd.MM')} - ${format(
+    endDate,
+    'dd.MM.yyyy',
+  )})`
   const translations = {
     text: {
-      en: `Dear student!\n The teacher of the course ${courseName.en} has responded to the course feedback recieved from students. \n 
+      en: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to the course feedback recieved from students. \n 
           Feedback response: ${feedbackResponse}\n
           You can read the course feedbacks here: <a href=${urlToSeeFeedbackSummary}>${courseName.en}</a>`,
-      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n
+      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} ${dates} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n
           Vastapalaute: ${feedbackResponse}\n
           Voit käydä lukemassa kurssin palautteita täältä: <a href=${urlToSeeFeedbackSummary}>${courseName.fi}</a>`,
       sv: `Bästa studerande!\n
-          Läraren på kursen ${courseName.sv} har svarat på responsen som kursens studerande har gett. \n
+          Läraren på kursen ${courseName.sv} ${dates} har svarat på responsen som kursens studerande har gett. \n
           Svaret: ${feedbackResponse}\n
           Du kan läsa responsen här: <a href=${urlToSeeFeedbackSummary}>${courseName.sv}</a>`,
     },
