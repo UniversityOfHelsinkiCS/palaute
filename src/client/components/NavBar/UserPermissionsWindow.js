@@ -57,8 +57,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
               </Typography>
               <Box mb={2} />
               {user?.iamGroups
-                ?.filter((iam) => iam.isRelevant)
-                .map(({ iam }) => (
+                .map((iam) => (
                   <Box fontFamily="monospace" fontSize={12}>
                     {iam}
                   </Box>

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS, JWT_KEY } = require('../util/config')
+const { relevantIAMs } = require('../../../config/IAMConfig')
 const { User } = require('../models')
 const logger = require('../util/logger')
 
@@ -84,7 +85,8 @@ const currentUserMiddleware = async (req, _, next) => {
     )
     if (loggedInAsUser) req.user = loggedInAsUser
   } else if (req.path.includes('login')) {
-    req.user.iamGroups = isNoAdPath ? [] : req.iamGroups ?? []
+    const iamGroups = isNoAdPath ? [] : req.iamGroups ?? []
+    req.user.iamGroups = iamGroups.filter((iam) => relevantIAMs.includes(iam))
     req.user.lastLoggedIn = new Date()
     await req.user.save()
   }

@@ -74,14 +74,8 @@ const Details = ({ user }) => {
               mb={4}
               style={{ columnGap: '20px' }}
             >
-              {userDetails.iamGroups.map(({ iam, isRelevant }) => (
-                <Box
-                  key={iam}
-                  color={isRelevant ? 'blue' : 'gray'}
-                  fontWeight={isRelevant ? 'fontWeightBold' : 'fontWeightLight'}
-                  fontFamily="monospace"
-                  fontSize={14}
-                >
+              {userDetails.iamGroups.map((iam) => (
+                <Box key={iam} fontFamily="monospace" fontSize={14}>
                   {iam}
                 </Box>
               ))}

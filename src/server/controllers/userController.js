@@ -3,7 +3,6 @@ const { Op } = require('sequelize')
 const { ApplicationError } = require('../util/customErrors')
 const { User } = require('../models')
 const { ADMINS } = require('../../config')
-const { relevantIAMs } = require('../../../config/IAMConfig')
 
 const getUser = async (req, res) => {
   const { user, isAdmin } = req
@@ -53,10 +52,7 @@ const getUserDetails = async (req, res) => {
   const access = await user.getOrganisationAccess()
   return res.send({
     ...user.dataValues,
-    iamGroups: user.iamGroups.map((iam) => ({
-      iam,
-      isRelevant: relevantIAMs.includes(iam),
-    })),
+    iamGroups: user.iamGroups,
     access,
   })
 }
