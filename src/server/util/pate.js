@@ -68,7 +68,7 @@ const sendToPate = async (options = {}) => {
     )} bytes), in ${chunkedEmails.length} chunks of size ${chunkSize} (${sizeOf(
       chunkedEmails[0],
     )} bytes)`,
-    console.log(options.emails),
+    logger.info(options.emails),
   )
   sleep(5000)
 
