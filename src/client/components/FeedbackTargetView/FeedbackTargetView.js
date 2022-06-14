@@ -389,6 +389,13 @@ const FeedbackTargetView = () => {
               to={`${url}/students-with-feedback`}
             />
           )}
+          {isAdmin && (
+            <RouterTab
+              icon={<ListOutlined />}
+              label="Togen"
+              to={`${url}/togen`}
+            />
+          )}
           {showLogsTab && (
             <RouterTab
               icon={<ListOutlined />}
