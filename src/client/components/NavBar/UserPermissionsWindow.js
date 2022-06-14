@@ -56,12 +56,11 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {user?.iamGroups
-                .map((iam) => (
-                  <Box fontFamily="monospace" fontSize={12}>
-                    {iam}
-                  </Box>
-                ))}
+              {user?.iamGroups.map((iam) => (
+                <Box fontFamily="monospace" fontSize={12}>
+                  {iam}
+                </Box>
+              ))}
               {!user?.iamGroups?.length > 0 && (
                 <Box fontSize={12} fontFamily="monospace">
                   {t('userInformation:none')}

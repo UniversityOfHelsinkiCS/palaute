@@ -9,10 +9,6 @@ import {
   Button,
   Box,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Chip,
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'

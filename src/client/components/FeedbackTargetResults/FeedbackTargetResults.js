@@ -38,12 +38,8 @@ const FeedbackTargetResults = () => {
   const { feedbacks, feedbackVisible, userOrganisationAccess } =
     feedbackTargetData
 
-  const {
-    questions,
-    publicQuestionIds,
-    accessStatus,
-    feedback,
-  } = feedbackTarget
+  const { questions, publicQuestionIds, accessStatus, feedback } =
+    feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
     ? userOrganisationAccess.admin
@@ -76,12 +72,7 @@ const FeedbackTargetResults = () => {
 
   return (
     <>
-      <Box
-        display="flex"
-        alignItems="flex-end"
-        flexDirection="column"
-        mb={2}
-      >
+      <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
             feedbackTarget={feedbackTarget}
