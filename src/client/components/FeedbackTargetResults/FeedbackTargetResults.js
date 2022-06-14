@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -11,16 +11,11 @@ import QuestionResults from '../QuestionResults'
 import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
-import ReminderEmailModal from './ReminderEmailModal'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackTargetResults = () => {
-  const [open, setOpen] = useState(false)
-  const openModal = () => setOpen(true)
-  const closeModal = () => setOpen(false)
-
   const { t } = useTranslation()
   const { id } = useParams()
 
@@ -48,7 +43,6 @@ const FeedbackTargetResults = () => {
     publicQuestionIds,
     accessStatus,
     feedback,
-    feedbackReminderEmailToStudentsSent,
   } = feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
@@ -80,36 +74,14 @@ const FeedbackTargetResults = () => {
     </Box>
   )
 
-  const showReminderEmailModal = isTeacher && isOpen
-
-  const raiseButton = showReminderEmailModal ? { marginTop: -50 } : {}
-
   return (
     <>
-      <ReminderEmailModal
-        open={open}
-        onClose={closeModal}
-        feedbackTarget={feedbackTarget}
-      />
       <Box
         display="flex"
         alignItems="flex-end"
         flexDirection="column"
-        position="static"
-        style={raiseButton}
         mb={2}
       >
-        {showReminderEmailModal && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={openModal}
-            style={{ marginTop: 10 }}
-            disabled={feedbackReminderEmailToStudentsSent}
-          >
-            {t('feedbackTargetResults:sendReminder')}
-          </Button>
-        )}
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
             feedbackTarget={feedbackTarget}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 
@@ -12,6 +12,8 @@ import { LoadingProgress } from '../LoadingProgress'
 import { copyLink } from '../FeedbackTargetView/utils'
 import Alert from '../Alert'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import ReminderEmailModal from './ReminderEmailModal'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
@@ -22,6 +24,10 @@ const StudentLinkCopyButton = ({ onClick, label }) => (
 )
 
 const FeedbackTargetLinks = () => {
+  const [open, setOpen] = useState(false)
+  const openModal = () => setOpen(true)
+  const closeModal = () => setOpen(false)
+
   const { id } = useParams()
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
@@ -29,6 +35,7 @@ const FeedbackTargetLinks = () => {
   const { feedbackTarget, isLoading } = useFeedbackTarget(id)
 
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isLoading) {
     return <LoadingProgress />
@@ -44,6 +51,24 @@ const FeedbackTargetLinks = () => {
 
   return (
     <Box display="flex" flexDirection="column" margin={3}>
+      <ReminderEmailModal
+        open={open}
+        onClose={closeModal}
+        feedbackTarget={feedbackTarget}
+      />
+      {isOpen && (
+        <Box mb={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={openModal}
+            style={{ marginTop: 10 }}
+            disabled={feedbackTarget.feedbackReminderEmailToStudentsSent}
+          >
+            {t('feedbackTargetResults:sendReminder')}
+          </Button>
+        </Box>
+      )}
       {isEnded && (
         <>
           <Paper>
