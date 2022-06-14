@@ -21,7 +21,7 @@ import { LoadingProgress } from '../LoadingProgress'
 const UserPermissionsWindow = ({ isOpen, onClose }) => {
   const { authorizedUser, isLoading } = useAuthorizedUser()
   const { user, isLoading: isUserDetailsLoading } = useUserDetails(
-    authorizedUser.id,
+    authorizedUser?.id,
     { enabled: isOpen && !isLoading },
   )
 
