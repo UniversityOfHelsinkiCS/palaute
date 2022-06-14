@@ -182,7 +182,7 @@ export default {
     notPublicInfo:
       'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
     publicityOfQuestions:
-      'Nämä kysymykset ovat näkyvissä vain kurssin opettajalle',
+      'Näiden kysymysten tulokset eivät ole julkisia opiskelijoille',
     moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',
     here: 'täältä',
   },

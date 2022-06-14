@@ -185,7 +185,8 @@ export default {
       'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
     notPublicInfo:
       'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
-    publicityOfQuestions: 'Dessa frågor är endast synliga för kursens lärare',
+    // publicityOfQuestions:
+    //  'The results of these questions are not visible to students',
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
   },
