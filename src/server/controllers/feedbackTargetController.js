@@ -765,12 +765,18 @@ const getStudentsWithFeedback = async (req, res) => {
 
 const updateFeedbackResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
-  const feedbackTargetsUserIsTeacherTo =
-    await req.user.feedbackTargetsHasTeacherAccessTo()
 
-  const relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
-    (target) => target.id === feedbackTargetId,
-  )
+  let relevantFeedbackTarget
+  if (req.isAdmin) {
+    relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  } else {
+    const feedbackTargetsUserIsTeacherTo =
+      await req.user.feedbackTargetsHasTeacherAccessTo()
+
+    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
+      (target) => target.id === feedbackTargetId,
+    )
+  }
 
   if (!relevantFeedbackTarget)
     throw new ApplicationError(
@@ -819,18 +825,24 @@ const updateFeedbackResponse = async (req, res) => {
 const remindStudentsOnFeedback = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
 
-  const feedbackTargetsUserIsTeacherTo =
-    await req.user.feedbackTargetsHasTeacherAccessTo()
+  let relevantFeedbackTarget
+  if (req.isAdmin) {
+    relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  } else {
+    const feedbackTargetsUserIsTeacherTo =
+      await req.user.feedbackTargetsHasTeacherAccessTo()
 
-  const relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
-    (target) => target.id === feedbackTargetId,
-  )
+    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
+      (target) => target.id === feedbackTargetId,
+    )
+  }
 
   if (!relevantFeedbackTarget)
     throw new ApplicationError(
       `No feedback target found with id ${feedbackTargetId} for user`,
       404,
     )
+
   if (relevantFeedbackTarget.feedbackReminderEmailToStudentsSent)
     throw new ApplicationError('Email reminder has already been sent', 400) // or 409 ?
 
