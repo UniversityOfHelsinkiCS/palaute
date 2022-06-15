@@ -12,7 +12,7 @@ import { saveValues } from './utils'
 import Title from '../Title'
 
 const useStyles = makeStyles(() => ({
-  descritpion: {
+  description: {
     width: '80%',
     marginTop: 10,
     marginBottom: 10,
@@ -58,7 +58,7 @@ const NorppaFeedback = () => {
       <Typography variant="h4" component="h4">
         {t('norppaFeedback:title')}
       </Typography>
-      <Typography variant="body1" component="p" className={classes.descritpion}>
+      <Typography variant="body1" component="p" className={classes.description}>
         {t('norppaFeedback:description')}
       </Typography>
       <Formik
