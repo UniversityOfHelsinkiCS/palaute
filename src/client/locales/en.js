@@ -385,6 +385,8 @@ export default {
     feedbackHelper: 'Give a free form feedback',
     responseWanted: 'I want a response to my feedback',
     submit: 'Send feedback',
+    confirm:
+      'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
     title: 'Give feedback to Norppa developers',
     description:
       'Norppa is being developed based on the user feedback recieved. With this form you can submit feedback to the developers.',

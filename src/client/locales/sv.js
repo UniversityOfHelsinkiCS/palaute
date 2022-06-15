@@ -387,6 +387,8 @@ export default {
     feedbackHelper: 'Ge fritt formulerad respons',
     responseWanted: 'Jag vill ha svar på responsen',
     submit: 'Skicka respons',
+    // confirm:
+    //   'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
     // title: 'Give feedback to Norppa developers',
     description:
       'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',

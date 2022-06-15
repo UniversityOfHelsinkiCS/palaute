@@ -389,6 +389,8 @@ export default {
     feedbackHelper: 'Anna vapaamuotoista palautetta',
     responseWanted: 'Haluan vastauksen palautteeseen',
     submit: 'Lähetä palaute',
+    confirm:
+      'Ymmärrän että tämä ei ole kurssin vastapalaute opiskelijoille vaan palaute Norpan kehittäjille',
     title: 'Anna palautetta Norpan kehittäjille',
     description:
       'Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää palautetta kehittäjille',

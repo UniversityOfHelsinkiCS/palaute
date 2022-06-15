@@ -52,6 +52,14 @@ const NorppaFeedback = () => {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
+
+  const confirmSubmit = (event) => {
+    if (
+      // eslint-disable-next-line no-alert
+      !window.confirm(t('norppaFeedback:confirm'))
+    )
+      event.preventDefault()
+  }
   return (
     <Box>
       <Title>{t('norppaFeedback')}</Title>
@@ -80,6 +88,7 @@ const NorppaFeedback = () => {
               label={t('norppaFeedback:responseWanted')}
             />
             <Button
+              onClick={confirmSubmit}
               type="submit"
               color="primary"
               variant="contained"
