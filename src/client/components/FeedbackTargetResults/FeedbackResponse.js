@@ -50,7 +50,7 @@ const FeedbackTargetResults = ({ feedbackTarget }) => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={`/targets/${id}/feedback-response`}
+                to={`/targets/${id}/edit-feedback-response`}
               >
                 {t('feedbackTargetResults:giveResponse')}
               </Button>
