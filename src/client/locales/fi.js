@@ -266,7 +266,8 @@ export default {
     dialogCancel: 'Peruuta',
     dialogSaveSubmit: 'Tallenna',
     dialogSendEmailSubmit: 'Lähetä',
-    emailSent: 'Lähetetty',
+    checkboxSendEmail: 'Lähetä sähköposti',
+    emailSent: 'Sähköposti lähetetty',
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },
   publicQuestions: {

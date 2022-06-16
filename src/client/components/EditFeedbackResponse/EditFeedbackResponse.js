@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
@@ -8,7 +8,8 @@ import {
   Box,
   Typography,
   Divider,
-  Button,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -38,6 +39,7 @@ const MarkdownPreview = () => {
 }
 
 const EditFeedbackResponse = () => {
+  const [sendEmail, setSendEmail] = useState(true)
   const { id } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -56,6 +58,7 @@ const EditFeedbackResponse = () => {
   }
 
   const initialValues = getInitialValues(feedbackTarget)
+  const isSent = feedbackTarget.feedbackResponseEmailSent
 
   const { closesAt } = feedbackTarget
 
@@ -116,32 +119,37 @@ const EditFeedbackResponse = () => {
                   />
                   <Box my={2} display="flex">
                     <ResponseEmailButton
-                      isSent={feedbackTarget.feedbackResponseEmailSent}
+                      sendEmail={!isSent && sendEmail}
                       disabled={
-                        !edited ||
+                        (!edited && !sendEmail) ||
+                        (!edited && isSent) ||
                         isSubmitting ||
-                        !values.feedbackResponse ||
-                        feedbackTarget.feedbackResponseEmailSent
+                        !values.feedbackResponse
                       }
                       onSubmit={() =>
                         handleSubmit({
                           ...values,
-                          feedbackResponseEmailSent: true,
+                          feedbackResponseEmailSent: !isSent && sendEmail,
                         })
                       }
                     />
-                    <Button
-                      color="primary"
-                      disabled={!edited}
-                      onClick={() =>
-                        handleSubmit({
-                          ...values,
-                          feedbackResponseEmailSent: false,
-                        })
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="primary"
+                          checked={sendEmail || isSent}
+                          disabled={isSent}
+                          onChange={({ target }) =>
+                            setSendEmail(target.checked)
+                          }
+                        />
                       }
-                    >
-                      {t('feedbackResponse:dialogSaveSubmit')}
-                    </Button>
+                      label={
+                        isSent
+                          ? t('feedbackResponse:emailSent')
+                          : t('feedbackResponse:checkboxSendEmail')
+                      }
+                    />
                   </Box>
                   <Box my={2}>
                     <Divider />

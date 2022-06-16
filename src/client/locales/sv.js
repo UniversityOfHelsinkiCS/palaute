@@ -270,7 +270,8 @@ export default {
     //   'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
     dialogSaveSubmit: 'Spara',
     dialogSendEmailSubmit: 'Skicka',
-    // emailSent: 'Lähetetty',
+    // checkboxSendEmail: 'Send email',
+    // emailSent: 'Email sent',
     formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
   publicQuestions: {

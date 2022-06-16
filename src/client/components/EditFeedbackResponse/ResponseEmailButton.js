@@ -7,7 +7,6 @@ import {
   Button,
   Box,
 } from '@material-ui/core'
-import { SendOutlined } from '@material-ui/icons'
 
 import { useTranslation } from 'react-i18next'
 
@@ -38,7 +37,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
   )
 }
 
-const ResponseEmailButton = ({ isSent, disabled, onSubmit }) => {
+const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false)
 
   const { t } = useTranslation()
@@ -68,15 +67,13 @@ const ResponseEmailButton = ({ isSent, disabled, onSubmit }) => {
           type="button"
           variant="contained"
           color="primary"
-          onClick={handleOpenDialog}
+          onClick={sendEmail ? handleOpenDialog : handleSubmit}
           style={{ width: 130 }}
           data-cy="openFeedbackResponseSubmitDialog"
         >
-          {isSent
-            ? t('feedbackResponse:emailSent')
-            : t('feedbackResponse:dialogSendEmailSubmit')}
-          <Box mr={1} />
-          <SendOutlined fontSize="small" />
+          {sendEmail
+            ? t('feedbackResponse:dialogSendEmailSubmit')
+            : t('feedbackResponse:dialogSaveSubmit')}
         </Button>
       </Box>
     </>

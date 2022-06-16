@@ -265,7 +265,8 @@ export default {
     dialogCancel: 'Cancel',
     dialogSaveSubmit: 'Save',
     dialogSendEmailSubmit: 'Send',
-    emailSent: 'Sent',
+    checkboxSendEmail: 'Send email',
+    emailSent: 'Email sent',
     formDisabled: 'Counter feedback can only be given after feedback has ended',
   },
   publicQuestions: {
