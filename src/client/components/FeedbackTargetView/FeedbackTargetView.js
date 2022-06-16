@@ -21,7 +21,6 @@ import {
   Badge,
 } from '@material-ui/core'
 
-import { differenceInMonths } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import CopyIcon from '@material-ui/icons/FileCopyOutlined'
@@ -47,6 +46,7 @@ import RouterTabs from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import ExternalLink from '../ExternalLink'
 
 import {
@@ -167,7 +167,6 @@ const FeedbackTargetView = () => {
     courseRealisation,
     courseUnit,
     opensAt,
-    closesAt,
     feedback,
     studentListVisible,
     responsibleTeachers,
@@ -181,7 +180,7 @@ const FeedbackTargetView = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isTeacher = accessStatus === 'TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
-  const isOld = differenceInMonths(Date.now(), Date.parse(closesAt)) > 6
+  const isOld = feedbackTargetIsOld(feedbackTarget)
 
   const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
 

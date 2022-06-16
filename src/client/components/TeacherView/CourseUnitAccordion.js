@@ -17,6 +17,7 @@ import { getRelevantCourseRealisation } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import FeedbackOpenChip from './FeedbackOpenChip'
 
 const useStyles = makeStyles({
@@ -42,12 +43,13 @@ const getChip = (courseRealisation, code) => {
   } = courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const isOld = feedbackTargetIsOld(feedbackTarget)
 
   if ((feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent}
+        feedbackResponseSent={feedbackResponseSent || isOld}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
       />
     )

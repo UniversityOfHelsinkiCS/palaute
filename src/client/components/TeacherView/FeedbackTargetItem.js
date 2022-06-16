@@ -13,6 +13,7 @@ import {
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import { formatDate, getFeedbackPercentageString } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -22,6 +23,7 @@ import FeedbackOpenChip from './FeedbackOpenChip'
 const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const isOld = feedbackTargetIsOld(feedbackTarget)
   const { feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
     feedbackTarget
 
@@ -29,7 +31,7 @@ const getChip = (feedbackTarget) => {
     return (
       <FeedbackResponseChip
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent}
+        feedbackResponseSent={feedbackResponseSent || isOld}
         data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
       />
     )
