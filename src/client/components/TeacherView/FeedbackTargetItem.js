@@ -24,12 +24,13 @@ const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const { feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
+  const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
     feedbackTarget
 
   if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
     return (
       <FeedbackResponseChip
+        id={id}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}

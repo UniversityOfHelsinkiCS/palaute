@@ -2,6 +2,7 @@ import React from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   sent: {
@@ -19,12 +20,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const FeedbackResponseChip = ({
+  id,
   feedbackResponseGiven,
   feedbackResponseSent,
   className,
   ...props
 }) => {
   const classes = useStyles()
+  const history = useHistory()
   const { t } = useTranslation()
 
   const notSentLabel = feedbackResponseGiven
@@ -39,6 +42,14 @@ const FeedbackResponseChip = ({
     ? classes.notSent
     : classes.notGiven
 
+  const handleClick = () => {
+    const url = feedbackResponseSent
+      ? `/targets/${id}/results`
+      : `/targets/${id}/edit-feedback-response`
+
+    history.push(url)
+  }
+
   const classNames = cn(
     className,
     feedbackResponseSent ? classes.sent : notSentClassName,
@@ -46,6 +57,7 @@ const FeedbackResponseChip = ({
 
   return (
     <Chip
+      onClick={id ? handleClick : undefined}
       label={label}
       className={classNames}
       variant="outlined"
