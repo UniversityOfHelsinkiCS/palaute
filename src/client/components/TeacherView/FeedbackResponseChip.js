@@ -7,15 +7,18 @@ import { useHistory } from 'react-router'
 const useStyles = makeStyles((theme) => {
   const common = {
     '&:hover': {
-      transform: 'scaleX(1.04)',
+      borderRadius: '4px',
     },
-    transition: theme.transitions.create(['transform'], {
-      duration: theme.transitions.duration.shortest,
+    transition: theme.transitions.create(['border-radius'], {
       easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.shortest,
     }),
   }
-
   return {
+    '@keyframes pulse': {
+      '0%, 93%': { transform: 'scaleX(1.0)' },
+      '100%': { transform: 'scaleX(1.04) translateY(-1px)' },
+    },
     sent: {
       borderColor: theme.palette.success.dark,
       color: theme.palette.success.dark,
@@ -24,11 +27,13 @@ const useStyles = makeStyles((theme) => {
     notGiven: {
       borderColor: theme.palette.error.light,
       color: theme.palette.error.main,
+      animation: `$pulse 3s 1s alternate infinite`,
       ...common,
     },
     notSent: {
       borderColor: theme.palette.warning.dark,
       color: theme.palette.warning.dark,
+      animation: `$pulse 3s 0s alternate infinite`,
       ...common,
     },
   }
@@ -41,7 +46,7 @@ const FeedbackResponseChip = ({
   className,
   ...props
 }) => {
-  const classes = useStyles()
+  const classes = useStyles({ id })
   const history = useHistory()
   const { t } = useTranslation()
 
