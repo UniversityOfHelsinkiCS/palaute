@@ -23,6 +23,9 @@ const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 
 const { returnEmailsToBeSentToday } = require('../util/emailSender')
+const {
+  updateEnrolmentsOfCourse,
+} = require('../updater/updateStudentFeedbackTargets')
 
 const adminAccess = (req, _, next) => {
   const { uid: username } = req.headers
@@ -35,6 +38,21 @@ const adminAccess = (req, _, next) => {
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
   run()
+  return res.send({})
+}
+
+const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
+  const curId = req.params?.courseRealisationId
+  if (!curId) return res.sendStatus(400)
+
+  try {
+    await updateEnrolmentsOfCourse(curId)
+  } catch (error) {
+    if (error?.response) {
+      res.status(error.response.status).send(error.response.data)
+    }
+  }
+
   return res.send({})
 }
 
@@ -452,6 +470,10 @@ router.use(adminAccess)
 router.get('/users', findUser)
 router.get('/feedback-targets-data', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
+router.post(
+  '/run-updater/enrolments/:courseRealisationId',
+  runUpdaterForEnrolmentsOfCourse,
+)
 router.get('/updater-status', getUpdaterStatus)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)

@@ -4,6 +4,7 @@ const { sequelize } = require('../util/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
+const importerClient = require('./importerClient')
 
 const createEnrolmentTargets = async (enrolment) => {
   const {
@@ -100,4 +101,21 @@ const updateStudentFeedbackTargets = async () => {
   await mangleData('enrolments', 3000, enrolmentsHandler)
 }
 
-module.exports = updateStudentFeedbackTargets
+const updateEnrolmentsOfCourse = async (courseRealisationId) => {
+  logger.info(`[UPDATER] updating enrolments of ${courseRealisationId}`)
+  try {
+    const { data: enrolments } = await importerClient.get(
+      `palaute/updater/enrolments/${courseRealisationId}`,
+    )
+    logger.info(`[UPDATER] updating ${enrolments.length} enrolments`)
+    await enrolmentsHandler(enrolments)
+  } catch (error) {
+    logger.error(`[UPDATER] error ${error}`)
+    throw error
+  }
+}
+
+module.exports = {
+  updateStudentFeedbackTargets,
+  updateEnrolmentsOfCourse,
+}

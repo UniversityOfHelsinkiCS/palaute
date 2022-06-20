@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Accordion,
@@ -87,6 +87,7 @@ const Details = ({ feedbackTarget: fbt }) => (
 
 const Actions = ({ feedbackTarget }) => {
   const { enqueueSnackbar } = useSnackbar()
+  const [updaterRunning, setUpdaterRunning] = useState(false)
 
   const resendFeedbackResponseEmail = async () => {
     if (
@@ -107,6 +108,27 @@ const Actions = ({ feedbackTarget }) => {
     }
   }
 
+  const handleRunUpdater = (feedbackTarget) => async () => {
+    if (
+      // eslint-disable-next-line no-alert
+      !window.confirm(
+        `Update enrollments of ${feedbackTarget.courseUnit.name?.fi}?`,
+      )
+    )
+      return
+    try {
+      const req = apiClient.post(
+        `/admin/run-updater/enrolments/${feedbackTarget?.courseRealisationId}`,
+      )
+      setUpdaterRunning(true)
+      await req
+      enqueueSnackbar('Enrolments updated', { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(`Error: ${error.response?.status}`, { variant: 'error' })
+    }
+    setUpdaterRunning(false)
+  }
+
   return (
     <>
       <MuiLink to={`/targets/${feedbackTarget.id}`} component={Link}>
@@ -117,6 +139,12 @@ const Actions = ({ feedbackTarget }) => {
           Resend feedback response
         </Button>
       )}
+      <Button
+        onClick={handleRunUpdater(feedbackTarget)}
+        style={{ width: '300px' }}
+      >
+        {!updaterRunning ? 'Run updater for enrollments' : 'Working on it...'}
+      </Button>
     </>
   )
 }

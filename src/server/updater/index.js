@@ -5,7 +5,9 @@ const logger = require('../util/logger')
 const updateUsers = require('./updateUsers')
 const updateOrganisations = require('./updateOrganisations')
 const updateCoursesAndTeacherFeedbackTargets = require('./updateCoursesAndTeacherFeedbackTargets')
-const updateStudentFeedbackTargets = require('./updateStudentFeedbackTargets')
+const {
+  updateStudentFeedbackTargets,
+} = require('./updateStudentFeedbackTargets')
 const { UpdaterStatus } = require('../models')
 
 const checkStatusOnStartup = async () => {
