@@ -18,6 +18,8 @@ import {
   AccordionActions,
   Tooltip,
 } from '@material-ui/core'
+import { KeyboardReturn } from '@material-ui/icons'
+
 import { debounce } from 'lodash'
 import { format } from 'date-fns'
 
@@ -120,6 +122,7 @@ const Details = ({ user }) => {
 
 const LoginAsSelector = () => {
   const [potentialUsers, setPotentialUsers] = useState([])
+  const [focusIndex, setFocusIndex] = useState(0)
   const [lastQuery, setLastQuery] = useState({})
 
   const transformUsers = (users) =>
@@ -142,6 +145,7 @@ const LoginAsSelector = () => {
 
     setLastQuery(queried)
     setPotentialUsers(transformUsers(persons))
+    setFocusIndex(Math.min(focusIndex, persons.length - 1))
   }, 400)
 
   const handleLoginAs = (user) => () => {
@@ -150,6 +154,19 @@ const LoginAsSelector = () => {
     localStorage.setItem('adminLoggedInAs', id)
     localStorage.setItem('employeenumber', employeeNumber ?? null)
     window.location.reload()
+  }
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && potentialUsers.length > 0)
+      handleLoginAs(potentialUsers[0])()
+    if (event.key === 'ArrowDown') {
+      setFocusIndex(Math.min(focusIndex + 1, potentialUsers.length - 1))
+      event.preventDefault()
+    }
+    if (event.key === 'ArrowUp') {
+      setFocusIndex(Math.max(focusIndex - 1, 0))
+      event.preventDefault()
+    }
   }
 
   const getChip = (user) => (
@@ -164,7 +181,7 @@ const LoginAsSelector = () => {
   )
 
   return (
-    <Box my={4}>
+    <Box my={4} onKeyDown={handleKeyPress}>
       <TextField
         style={{ width: '30em' }}
         label="Email, Username, sisu id or studentnumber"
@@ -179,7 +196,7 @@ const LoginAsSelector = () => {
           </p>
         ))}
       </div>
-      {potentialUsers.map((user) => (
+      {potentialUsers.map((user, index) => (
         <Accordion
           key={user.id}
           TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
@@ -193,6 +210,16 @@ const LoginAsSelector = () => {
               <Typography>{user.email ?? user.secondaryEmail}</Typography>
               <Box mr={4} />
               {getChip(user)}
+              <Box mr="auto" />
+              {index === focusIndex && (
+                <Box display="flex" alignItems="center" justifySelf="end">
+                  <Typography variant="body2" color="textSecondary">
+                    Login as
+                  </Typography>
+                  <Box mr={1} />
+                  <KeyboardReturn />
+                </Box>
+              )}
             </Box>
           </AccordionSummary>
           <AccordionDetails style={{ backgroundColor: 'Background' }}>
