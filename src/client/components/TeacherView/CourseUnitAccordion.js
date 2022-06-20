@@ -48,6 +48,7 @@ const getChip = (courseRealisation, code) => {
   if ((feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
+        id={feedbackTarget?.id}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}

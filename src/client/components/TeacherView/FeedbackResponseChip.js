@@ -4,20 +4,35 @@ import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
 
-const useStyles = makeStyles((theme) => ({
-  sent: {
-    borderColor: theme.palette.success.dark,
-    color: theme.palette.success.dark,
-  },
-  notGiven: {
-    borderColor: theme.palette.error.light,
-    color: theme.palette.error.main,
-  },
-  notSent: {
-    borderColor: theme.palette.warning.dark,
-    color: theme.palette.warning.dark,
-  },
-}))
+const useStyles = makeStyles((theme) => {
+  const common = {
+    '&:hover': {
+      transform: 'scaleX(1.04)',
+    },
+    transition: theme.transitions.create(['transform'], {
+      duration: theme.transitions.duration.shortest,
+      easing: theme.transitions.easing.easeOut,
+    }),
+  }
+
+  return {
+    sent: {
+      borderColor: theme.palette.success.dark,
+      color: theme.palette.success.dark,
+      ...common,
+    },
+    notGiven: {
+      borderColor: theme.palette.error.light,
+      color: theme.palette.error.main,
+      ...common,
+    },
+    notSent: {
+      borderColor: theme.palette.warning.dark,
+      color: theme.palette.warning.dark,
+      ...common,
+    },
+  }
+})
 
 const FeedbackResponseChip = ({
   id,
