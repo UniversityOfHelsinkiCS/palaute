@@ -145,7 +145,9 @@ const LoginAsSelector = () => {
 
     setLastQuery(queried)
     setPotentialUsers(transformUsers(persons))
-    setFocusIndex(Math.min(focusIndex, persons.length - 1))
+    setFocusIndex(
+      Math.min(focusIndex, persons.length > 0 ? persons.length - 1 : 0),
+    )
   }, 400)
 
   const handleLoginAs = (user) => () => {
@@ -158,7 +160,7 @@ const LoginAsSelector = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && potentialUsers.length > 0)
-      handleLoginAs(potentialUsers[0])()
+      handleLoginAs(potentialUsers[focusIndex])()
     if (event.key === 'ArrowDown') {
       setFocusIndex(Math.min(focusIndex + 1, potentialUsers.length - 1))
       event.preventDefault()
