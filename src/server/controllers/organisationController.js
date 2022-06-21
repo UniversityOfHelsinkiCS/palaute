@@ -3,16 +3,11 @@ const { Organisation, OrganisationLog, User } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 
-const getUpdatedDisabledCourseCodes = async (
-  updatedDisabledCourseCodes,
-  organisation,
-) => {
+const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
 
   return _.uniq(
-    updatedDisabledCourseCodes.filter((c) =>
-      organisationCourseCodes.includes(c),
-    ),
+    updatedCourseCodes.filter((c) => organisationCourseCodes.includes(c)),
   )
 }
 
@@ -91,18 +86,29 @@ const updateOrganisation = async (req, res) => {
     'studentListVisible',
     'responsibleUserId',
     'disabledCourseCodes',
+    'enabledStudentListCourseCodes',
   ])
 
-  if (updates.disabledCourseCodes && !hasAdminAccess) {
+  if (
+    !hasAdminAccess &&
+    (updates.disabledCourseCodes || updates.enabledStudentListCourseCodes)
+  ) {
     throw new ApplicationError(
       403,
-      'Disabled course codes can only be updated by organisation admins',
+      'Course codes can only be updated by organisation admins',
     )
   }
 
   if (updates.disabledCourseCodes) {
-    updates.disabledCourseCodes = await getUpdatedDisabledCourseCodes(
+    updates.disabledCourseCodes = await getUpdatedCourseCodes(
       updates.disabledCourseCodes,
+      organisation,
+    )
+  }
+
+  if (updates.enabledStudentListCourseCodes) {
+    updates.enabledStudentListCourseCodes = await getUpdatedCourseCodes(
+      updates.enabledStudentListCourseCodes,
       organisation,
     )
   }

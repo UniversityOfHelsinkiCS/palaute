@@ -29,9 +29,14 @@ const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
     checked: !disabledCourseCodes.includes(courseCode),
   }))
 
-const saveDisabledCourseCodes = async ({ code, disabledCourseCodes }) => {
+const saveChangedCourseCodes = async ({
+  code,
+  disabledCourseCodes,
+  enabledStudentListCourseCodes,
+}) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     disabledCourseCodes,
+    enabledStudentListCourseCodes,
   })
 
   return data
@@ -67,7 +72,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { t } = useTranslation()
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
-  const mutation = useMutation(saveDisabledCourseCodes)
+  const mutation = useMutation(saveChangedCourseCodes)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(
     organisation.disabledCourseCodes ?? [],
