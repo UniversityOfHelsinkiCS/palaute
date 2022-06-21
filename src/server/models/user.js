@@ -1,4 +1,4 @@
-const { Model, STRING, Op, BOOLEAN, ARRAY, DATE } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, ARRAY, DATE, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../util/dbConnection')
@@ -35,25 +35,39 @@ class User extends Model {
       return null
     }
 
-    const courseOrganisations = await sequelize.query(
+    const rows = await sequelize.query(
       `
-      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = :courseUnitId
-    `,
+      SELECT DISTINCT
+        course_units_organisations.organisation_id AS cu_org_id,
+        course_realisations_organisations.organisation_id AS cur_org_id
+      FROM
+        course_units
+      LEFT JOIN
+        course_units_organisations ON course_units_organisations.course_unit_id = course_units.id
+      LEFT JOIN
+        feedback_targets ON feedback_targets.course_unit_id = course_units.id
+      LEFT JOIN
+        course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+      LEFT JOIN
+        course_realisations_organisations ON course_realisations_organisations.course_realisation_id = course_realisations.id
+      WHERE
+        course_units.id = :courseUnitId;
+      `,
       {
+        type: QueryTypes.SELECT,
         replacements: {
           courseUnitId,
         },
-        type: sequelize.QueryTypes.SELECT,
       },
     )
 
-    const organisationIds = courseOrganisations.map((co) => co.organisation_id)
+    const organisationIds = rows.flatMap((row) => Object.values(row))
 
-    const organisationAccess = organisations.find(({ organisation }) =>
-      organisationIds.includes(organisation.id),
-    )
+    const organisationAccess = organisations
+      .filter(({ organisation }) => organisationIds.includes(organisation.id))
+      .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
 
-    return organisationAccess?.access ?? null
+    return organisationAccess ?? null
   }
 
   async getResponsibleCourseCodes() {

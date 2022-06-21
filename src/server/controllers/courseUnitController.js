@@ -191,7 +191,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ),
         ({ courseRealisation }) => courseRealisation.startDate,
       )
-      // console.log(JSON.stringify(endedTarget))
+
       const makeTargetObject = (feedbackTarget) =>
         feedbackTarget
           ? {

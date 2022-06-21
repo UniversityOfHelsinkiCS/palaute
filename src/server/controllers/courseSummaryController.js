@@ -2,7 +2,7 @@ const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
-const { CourseUnit, Survey, Organisation } = require('../models')
+const { CourseUnit, Survey, Organisation, CourseRealisation, FeedbackTarget } = require('../models')
 
 const {
   getOrganisationSummaries,
@@ -189,8 +189,6 @@ const getByOrganisations = async (req, res) => {
 const getByCourseUnit = async (req, res) => {
   const { user } = req
 
-  const organisationAccess = await user.getOrganisationAccess()
-
   const { code } = req.params
 
   const courseUnits = await CourseUnit.findAll({
@@ -209,13 +207,11 @@ const getByCourseUnit = async (req, res) => {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
-  const hasOrganisationAccess =
-    _.intersection(
-      organisationAccess.map((o) => o.organisation.id),
-      courseUnits.flatMap((cu) => cu.organisations.map((o) => o.id)),
-    )?.length > 0
+  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
+    courseUnits[0].id,
+  )
 
-  if (!hasOrganisationAccess) {
+  if (!organisationAccess?.read) {
     const hasSomeCourseRealisationAccess = (
       await sequelize.query(
         `
