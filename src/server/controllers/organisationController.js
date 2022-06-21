@@ -44,6 +44,17 @@ const createOrganisationLog = async (organisation, updates, user) => {
     )
   }
 
+  if (Array.isArray(updates.studentListVisibleCourseCodes)) {
+    data.enabledStudentList = _.difference(
+      updates.studentListVisibleCourseCodes,
+      organisation.studentListVisibleCourseCodes,
+    )
+    data.disabledStudentList = _.difference(
+      organisation.studentListVisibleCourseCodes,
+      updates.studentListVisibleCourseCodes,
+    )
+  }
+
   if (updates.studentListVisible !== undefined)
     data.studentListVisible = Boolean(updates.studentListVisible)
 
