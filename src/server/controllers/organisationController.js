@@ -86,12 +86,12 @@ const updateOrganisation = async (req, res) => {
     'studentListVisible',
     'responsibleUserId',
     'disabledCourseCodes',
-    'enabledStudentListCourseCodes',
+    'studentListVisibleCourseCodes',
   ])
 
   if (
     !hasAdminAccess &&
-    (updates.disabledCourseCodes || updates.enabledStudentListCourseCodes)
+    (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)
   ) {
     throw new ApplicationError(
       403,
@@ -106,9 +106,9 @@ const updateOrganisation = async (req, res) => {
     )
   }
 
-  if (updates.enabledStudentListCourseCodes) {
-    updates.enabledStudentListCourseCodes = await getUpdatedCourseCodes(
-      updates.enabledStudentListCourseCodes,
+  if (updates.studentListVisibleCourseCodes) {
+    updates.studentListVisibleCourseCodes = await getUpdatedCourseCodes(
+      updates.studentListVisibleCourseCodes,
       organisation,
     )
   }

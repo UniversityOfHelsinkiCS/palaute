@@ -28,27 +28,40 @@ import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../LoadingProgress'
 
-const getCourseUnitItems = (courseUnits, disabledCourseCodes) =>
+const getCourseUnitItems = (
+  courseUnits,
+  disabledCourseCodes,
+  studentListVisibleCourseCodes,
+) =>
   (courseUnits ?? []).map(({ courseCode, name }) => ({
     courseCode,
     name,
-    checked: !disabledCourseCodes.includes(courseCode),
+    enabledCourse: !disabledCourseCodes.includes(courseCode),
+    studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
   }))
 
 const saveChangedCourseCodes = async ({
   code,
   disabledCourseCodes,
-  enabledStudentListCourseCodes,
+  studentListVisibleCourseCodes,
 }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     disabledCourseCodes,
-    enabledStudentListCourseCodes,
+    studentListVisibleCourseCodes,
   })
 
   return data
 }
 
-const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
+const CourseUnitItem = ({
+  courseCode,
+  name,
+  disabled,
+  enabledCourse,
+  studentListVisible,
+  onChangeDisabledCourses,
+  onChangeStudentList,
+}) => {
   const { i18n } = useTranslation()
   const labelId = `courseUnitItem-${courseCode}`
 
@@ -63,8 +76,8 @@ const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
       <TableCell>
         <Switch
           edge="start"
-          checked={checked}
-          onChange={onChange}
+          checked={enabledCourse}
+          onChange={onChangeDisabledCourses}
           tabIndex={-1}
           disableRipple
           inputProps={{ 'aria-labelledby': labelId }}
@@ -75,8 +88,8 @@ const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
       <TableCell>
         <Switch
           edge="start"
-          checked={checked}
-          onChange={onChange}
+          checked={studentListVisible}
+          onChange={onChangeStudentList}
           tabIndex={-1}
           disableRipple
           inputProps={{ 'aria-labelledby': labelId }}
@@ -98,9 +111,16 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
     organisation.disabledCourseCodes ?? [],
   )
 
-  const courseUnitItems = getCourseUnitItems(courseUnits, disabledCourseCodes)
+  const [studentListVisibleCourseCodes, setStudentListVisibleCourseCodes] =
+    useState(organisation.studentListVisibleCourseCodes ?? [])
 
-  const makeOnToggle = (courseCode) => async () => {
+  const courseUnitItems = getCourseUnitItems(
+    courseUnits,
+    disabledCourseCodes,
+    studentListVisibleCourseCodes,
+  )
+
+  const makeOnToggleDisabledCourses = (courseCode) => async () => {
     const checked = disabledCourseCodes.includes(courseCode)
 
     const updatedDisabledCourseCodes = checked
@@ -114,6 +134,28 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
       })
 
       setDisabledCourseCodes(updatedOrganisation.disabledCourseCodes)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
+  const makeOnToggleStudentListVisible = (courseCode) => async () => {
+    const checked = studentListVisibleCourseCodes.includes(courseCode)
+
+    const updatedStudentListVisibleCourseCodes = checked
+      ? studentListVisibleCourseCodes.filter((c) => c !== courseCode)
+      : [...studentListVisibleCourseCodes, courseCode]
+
+    try {
+      const updatedOrganisation = await mutation.mutateAsync({
+        code,
+        studentListVisibleCourseCodes: updatedStudentListVisibleCourseCodes,
+      })
+
+      setStudentListVisibleCourseCodes(
+        updatedOrganisation.studentListVisibleCourseCodes,
+      )
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -136,16 +178,24 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
               <TableCell>Feedback enabled</TableCell>
             </TableHead>
             <TableBody>
-              {courseUnitItems.map(({ courseCode, name, checked }) => (
-                <CourseUnitItem
-                  name={name}
-                  courseCode={courseCode}
-                  key={courseCode}
-                  checked={checked}
-                  onChange={makeOnToggle(courseCode)}
-                  disabled={mutation.isLoading}
-                />
-              ))}
+              {courseUnitItems.map(
+                ({ courseCode, name, enabledCourse, studentListVisible }) => (
+                  <CourseUnitItem
+                    name={name}
+                    courseCode={courseCode}
+                    key={courseCode}
+                    enabledCourse={enabledCourse}
+                    studentListVisible={studentListVisible}
+                    onChangeDisabledCourses={makeOnToggleDisabledCourses(
+                      courseCode,
+                    )}
+                    onChangeStudentList={makeOnToggleStudentListVisible(
+                      courseCode,
+                    )}
+                    disabled={mutation.isLoading}
+                  />
+                ),
+              )}
             </TableBody>
           </Table>
         </TableContainer>
