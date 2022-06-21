@@ -224,7 +224,7 @@ const LoginAsSelector = () => {
               )}
             </Box>
           </AccordionSummary>
-          <AccordionDetails style={{ backgroundColor: 'Background' }}>
+          <AccordionDetails style={{ backgroundColor: '#fff6de' }}>
             <Details user={user} />
           </AccordionDetails>
           <AccordionActions>
