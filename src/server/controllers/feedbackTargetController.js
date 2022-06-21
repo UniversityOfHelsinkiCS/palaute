@@ -23,7 +23,7 @@ const logger = require('../util/logger')
 const {
   sendEmailToStudentsWhenOpeningImmediately,
 } = require('../util/emailSender')
-const { JWT_KEY } = require('../util/config')
+const { JWT_KEY, STUDENT_LIST_BY_COURSE_ENABLED } = require('../util/config')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -270,7 +270,19 @@ const getStudentListVisibility = async (courseUnitId) => {
 
   if (!organisationRows[0].length) return false
 
-  const { student_list_visible: studentListVisible } = organisationRows[0][0]
+  const {
+    code,
+    student_list_visible: studentListVisible,
+    student_list_visible_course_codes: studentListVisibleCourseCodes,
+  } = organisationRows[0][0]
+
+  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
+    const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
+      attributes: ['courseCode'],
+    })
+
+    if (studentListVisibleCourseCodes.includes(courseCode)) return true
+  }
 
   return studentListVisible ?? false
 }
@@ -709,27 +721,33 @@ const getStudentsWithFeedback = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
-  })
+  let feedbackTarget
+  if (isAdmin) {
+    feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  } else {
+    const userFeedbackTarget = await UserFeedbackTarget.findOne({
+      where: {
+        userId: user.id,
+        feedbackTargetId,
+      },
+      include: 'feedbackTarget',
+    })
 
-  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
-    throw new ApplicationError(
-      'User is not authorized to view students with feedback',
-      403,
-    )
+    if (!userFeedbackTarget?.hasTeacherAccess()) {
+      throw new ApplicationError(
+        'User is not authorized to view students with feedback',
+        403,
+      )
+    }
+    feedbackTarget = userFeedbackTarget.feedbackTarget
   }
 
-  if (!userFeedbackTarget?.feedbackTarget) {
+  if (!feedbackTarget) {
     return res.send([])
   }
 
   const studentListVisible = await getStudentListVisibility(
-    userFeedbackTarget.feedbackTarget.courseUnitId,
+    feedbackTarget.courseUnitId,
   )
 
   if (!studentListVisible) {

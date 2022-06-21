@@ -206,6 +206,8 @@ const INCLUDE_COURSES = new Set([
   'hy-CUR-142349531',
 ])
 
+const STUDENT_LIST_BY_COURSE_ENABLED = ['700-K003', '700-M008']
+
 const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
@@ -220,5 +222,6 @@ module.exports = {
   GIT_SHA,
   ADMINS,
   INCLUDE_COURSES,
+  STUDENT_LIST_BY_COURSE_ENABLED,
   NOAD_LINK_EXPIRATION_DAYS,
 }
