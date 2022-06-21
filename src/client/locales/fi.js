@@ -30,6 +30,9 @@ export default {
     username: 'Käyttäjätunnus',
     studentNumber: 'Opiskelijanumero',
     email: 'Sähköposti',
+    feedback: 'Palaute',
+    feedbackGiven: 'Annettu',
+    feedbackNotGiven: 'Ei annettu',
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',

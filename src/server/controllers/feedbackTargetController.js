@@ -767,7 +767,6 @@ const getStudentsWithFeedback = async (req, res) => {
       {
         model: Feedback,
         as: 'feedback',
-        required: true,
       },
     ],
   })
@@ -776,7 +775,10 @@ const getStudentsWithFeedback = async (req, res) => {
     return res.send([])
   }
 
-  const users = studentFeedbackTargets.map((target) => target.user)
+  const users = studentFeedbackTargets.map((target) => ({
+    ...target.user.dataValues,
+    feedbackGiven: Boolean(target.feedback),
+  }))
 
   return res.send(users)
 }

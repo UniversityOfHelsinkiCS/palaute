@@ -28,6 +28,9 @@ export default {
     username: 'Användarnamn',
     studentNumber: 'Studentnummer',
     // email: 'Email',
+    // feedback: 'Feedback',
+    // feedbackGiven: 'Given',
+    // feedbackNotGiven: 'Not given',
     dirtyFormPrompt:
       'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
     actions: 'Handlingar',
