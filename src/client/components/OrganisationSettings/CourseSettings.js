@@ -9,6 +9,12 @@ import {
   Box,
   Card,
   CardContent,
+  TableRow,
+  TableCell,
+  Table,
+  TableHead,
+  TableBody,
+  TableContainer,
 } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -47,19 +53,33 @@ const CourseUnitItem = ({ courseCode, name, disabled, checked, onChange }) => {
   )} (${courseCode})`
 
   return (
-    <ListItem onClick={onChange} disabled={disabled} dense button>
-      <ListItemIcon>
+    <TableRow>
+      <TableCell>{translatedLabel}</TableCell>
+      <TableCell>
         <Switch
           edge="start"
           checked={checked}
+          onChange={onChange}
           tabIndex={-1}
           disableRipple
           inputProps={{ 'aria-labelledby': labelId }}
           color="primary"
+          disabled={disabled}
         />
-      </ListItemIcon>
-      <ListItemText id={labelId} primary={translatedLabel} />
-    </ListItem>
+      </TableCell>
+      <TableCell>
+        <Switch
+          edge="start"
+          checked={checked}
+          onChange={onChange}
+          tabIndex={-1}
+          disableRipple
+          inputProps={{ 'aria-labelledby': labelId }}
+          color="primary"
+          disabled={disabled}
+        />
+      </TableCell>
+    </TableRow>
   )
 }
 
@@ -103,19 +123,27 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
             {t('organisationSettings:courseSettingsInfo')}
           </Alert>
         </Box>
-
-        <List>
-          {courseUnitItems.map(({ courseCode, name, checked }) => (
-            <CourseUnitItem
-              name={name}
-              courseCode={courseCode}
-              key={courseCode}
-              checked={checked}
-              onChange={makeOnToggle(courseCode)}
-              disabled={mutation.isLoading}
-            />
-          ))}
-        </List>
+        <TableContainer style={{ maxHeight: '640px' }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableCell>Course</TableCell>
+              <TableCell>Student list visible</TableCell>
+              <TableCell>Feedback enabled</TableCell>
+            </TableHead>
+            <TableBody>
+              {courseUnitItems.map(({ courseCode, name, checked }) => (
+                <CourseUnitItem
+                  name={name}
+                  courseCode={courseCode}
+                  key={courseCode}
+                  checked={checked}
+                  onChange={makeOnToggle(courseCode)}
+                  disabled={mutation.isLoading}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </CardContent>
     </Card>
   )
