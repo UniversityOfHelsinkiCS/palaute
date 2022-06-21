@@ -335,7 +335,7 @@ export default {
       'Visa studerandena som har gett respons till kursens lärare',
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
     generalTab: 'Allmänna inställningar',
-    coursesTab: 'Aktiverade kurser',
+    // coursesTab: 'Kurssikohtaiset asetukset',
     // feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
@@ -353,6 +353,8 @@ export default {
     // setCorrespondentSuccess: 'Feedback correspondent set succesfully',
     // email: 'Email',
     // remove: 'Remove',
+    // feedbackEnabled: 'Palaute käytössä',
+    // courseStudentListVisible: 'Näytä palautteenantajat',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna respons är inte i bruk',

@@ -330,7 +330,7 @@ export default {
       "Show course's teacher students who have given feedback if at least five students have given feeedback",
     courseSettingsInfo: 'Feedback is only collected from activated courses',
     generalTab: 'General settings',
-    coursesTab: 'Activated courses',
+    coursesTab: 'Course settings',
     feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
@@ -348,6 +348,9 @@ export default {
     setCorrespondentSuccess: 'Feedback correspondent set succesfully',
     email: 'Email',
     remove: 'Remove',
+    course: 'Course',
+    feedbackEnabled: 'Feedback enabled',
+    courseStudentListVisible: 'Student list visible',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',

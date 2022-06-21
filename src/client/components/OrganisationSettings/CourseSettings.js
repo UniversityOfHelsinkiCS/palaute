@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 
 import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Switch,
   Box,
   Card,
@@ -27,6 +23,7 @@ import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../LoadingProgress'
+import { STUDENT_LIST_BY_COURSE_ENABLED } from '../../../config'
 
 const getCourseUnitItems = (
   courseUnits,
@@ -61,6 +58,7 @@ const CourseUnitItem = ({
   studentListVisible,
   onChangeDisabledCourses,
   onChangeStudentList,
+  studentListVisibleFeatureEnabled,
 }) => {
   const { i18n } = useTranslation()
   const labelId = `courseUnitItem-${courseCode}`
@@ -85,18 +83,21 @@ const CourseUnitItem = ({
           disabled={disabled}
         />
       </TableCell>
-      <TableCell>
-        <Switch
-          edge="start"
-          checked={studentListVisible}
-          onChange={onChangeStudentList}
-          tabIndex={-1}
-          disableRipple
-          inputProps={{ 'aria-labelledby': labelId }}
-          color="primary"
-          disabled={disabled}
-        />
-      </TableCell>
+
+      {studentListVisibleFeatureEnabled && (
+        <TableCell>
+          <Switch
+            edge="start"
+            checked={studentListVisible}
+            onChange={onChangeStudentList}
+            tabIndex={-1}
+            disableRipple
+            inputProps={{ 'aria-labelledby': labelId }}
+            color="primary"
+            disabled={disabled}
+          />
+        </TableCell>
+      )}
     </TableRow>
   )
 }
@@ -106,6 +107,9 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
+
+  const studentListVisibleFeatureEnabled =
+    STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(
     organisation.disabledCourseCodes ?? [],
@@ -171,11 +175,15 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
           </Alert>
         </Box>
         <TableContainer style={{ maxHeight: '640px' }}>
-          <Table stickyHeader>
+          <Table stickyHeader size="small">
             <TableHead>
-              <TableCell>Course</TableCell>
-              <TableCell>Student list visible</TableCell>
-              <TableCell>Feedback enabled</TableCell>
+              <TableCell>{t('organisationSettings:course')}</TableCell>
+              <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
+              {studentListVisibleFeatureEnabled && (
+                <TableCell>
+                  {t('organisationSettings:courseStudentListVisible')}
+                </TableCell>
+              )}
             </TableHead>
             <TableBody>
               {courseUnitItems.map(
@@ -193,6 +201,9 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
                       courseCode,
                     )}
                     disabled={mutation.isLoading}
+                    studentListVisibleFeatureEnabled={
+                      studentListVisibleFeatureEnabled
+                    }
                   />
                 ),
               )}

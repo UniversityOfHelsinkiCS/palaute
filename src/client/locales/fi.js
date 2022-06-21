@@ -332,7 +332,7 @@ export default {
       'Näytä palautetta antaneet opiskelijat kurssin opettajalle, jos palautetta antaneita opiskelijoita on vähintään viisi',
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
     generalTab: 'Yleiset asetukset',
-    coursesTab: 'Aktivoidut kurssit',
+    coursesTab: 'Kurssikohtaiset asetukset',
     feedbackCorrespondentTab: 'Palautevastaava',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
@@ -350,6 +350,9 @@ export default {
     setCorrespondentSuccess: 'Palautevastaava asetettu onnistuneesti',
     email: 'Sähköposti',
     remove: 'Poista',
+    course: 'Kurssi',
+    feedbackEnabled: 'Palaute käytössä',
+    courseStudentListVisible: 'Näytä palautteenantajat',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',
