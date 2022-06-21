@@ -27,6 +27,7 @@ export default {
     lastName: 'Efternamn',
     username: 'Användarnamn',
     studentNumber: 'Studentnummer',
+    // email: 'Email',
     dirtyFormPrompt:
       'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
     actions: 'Handlingar',

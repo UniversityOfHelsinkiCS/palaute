@@ -51,15 +51,23 @@ const StudentTable = ({ students }) => {
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
+            <TableHeadCell
+              id="email"
+              name={t('email')}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
           </TableRow>
         </TableHead>
         <TableBody>
           {sortTable(students, order, orderBy).map(
-            ({ id, firstName, lastName, studentNumber }) => (
+            ({ id, firstName, lastName, studentNumber, email }) => (
               <TableRow key={id}>
                 <TableCell>{firstName}</TableCell>
                 <TableCell>{lastName}</TableCell>
                 <TableCell>{studentNumber}</TableCell>
+                <TableCell>{email}</TableCell>
               </TableRow>
             ),
           )}

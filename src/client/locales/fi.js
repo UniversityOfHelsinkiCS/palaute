@@ -29,6 +29,7 @@ export default {
     lastName: 'Sukunimi',
     username: 'Käyttäjätunnus',
     studentNumber: 'Opiskelijanumero',
+    email: 'Sähköposti',
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',
