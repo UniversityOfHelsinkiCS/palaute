@@ -23,7 +23,11 @@ const logger = require('../util/logger')
 const {
   sendEmailToStudentsWhenOpeningImmediately,
 } = require('../util/emailSender')
-const { JWT_KEY, STUDENT_LIST_BY_COURSE_ENABLED } = require('../util/config')
+const {
+  JWT_KEY,
+  STUDENT_LIST_BY_COURSE_ENABLED,
+  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
+} = require('../util/config')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -252,7 +256,7 @@ const getFeedbackTargetsForStudent = async (userId) => {
   return feedbackTargets
 }
 
-const getStudentListVisibility = async (courseUnitId) => {
+const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   const organisationRows = await sequelize.query(
     'SELECT O.* from organisations O, course_units_organisations C ' +
       " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
@@ -276,7 +280,10 @@ const getStudentListVisibility = async (courseUnitId) => {
     student_list_visible_course_codes: studentListVisibleCourseCodes,
   } = organisationRows[0][0]
 
-  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
+  if (
+    STUDENT_LIST_BY_COURSE_ENABLED.includes(code) ||
+    (STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code) && isAdmin)
+  ) {
     const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })
@@ -314,7 +321,10 @@ const getOneForAdmin = async (req, res, feedbackTargetId) => {
   )
 
   const studentListVisible = adminFeedbackTarget?.courseUnit
-    ? await getStudentListVisibility(adminFeedbackTarget.courseUnit.id)
+    ? await getStudentListVisibility(
+        adminFeedbackTarget.courseUnit.id,
+        req.isAdmin,
+      )
     : false
 
   return res.send({ ...responseReady, studentListVisible })
@@ -594,6 +604,7 @@ const getTargetsByCourseUnit = async (req, res) => {
 
   const studentListVisible = await getStudentListVisibility(
     feedbackTargets[0].courseUnitId,
+    req.isAdmin,
   )
 
   if (includeSurveys === 'true') {
@@ -748,6 +759,7 @@ const getStudentsWithFeedback = async (req, res) => {
 
   const studentListVisible = await getStudentListVisibility(
     feedbackTarget.courseUnitId,
+    isAdmin,
   )
 
   if (!studentListVisible) {
