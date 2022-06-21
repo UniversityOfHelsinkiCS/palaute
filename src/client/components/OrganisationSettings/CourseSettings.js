@@ -22,8 +22,12 @@ import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
-import { STUDENT_LIST_BY_COURSE_ENABLED } from '../../../config'
+import {
+  STUDENT_LIST_BY_COURSE_ENABLED,
+  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
+} from '../../../config'
 
 const getCourseUnitItems = (
   courseUnits,
@@ -107,9 +111,13 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
+  const { authorizedUser } = useAuthorizedUser()
 
   const studentListVisibleFeatureEnabled =
-    STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
+    STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code) ||
+    ((STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(organisation.code) &&
+      authorizedUser?.isAdmin) ??
+      false)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(
     organisation.disabledCourseCodes ?? [],
