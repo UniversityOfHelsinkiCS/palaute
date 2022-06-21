@@ -35,8 +35,6 @@ const ORGANISATION_ACCESS_BY_IAM_GROUP = {
     // Avoin yliopisto
     H930: {
       read: true,
-      write: false,
-      admin: false,
     },
   },
 }
