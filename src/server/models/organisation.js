@@ -53,6 +53,11 @@ Organisation.init(
       allowNull: false,
       defaultValue: [],
     },
+    studentListVisibleCourseCodes: {
+      type: ARRAY(TEXT),
+      allowNull: false,
+      defaultValue: [],
+    },
     responsibleUserId: {
       type: STRING,
     },
