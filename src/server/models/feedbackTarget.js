@@ -283,7 +283,7 @@ class FeedbackTarget extends Model {
   }
 
   async getTeachersForFeedbackTarget() {
-    return User.findAll({
+    const result = User.findAll({
       attributes: ['id', 'firstName', 'lastName', 'email'],
       include: {
         model: UserFeedbackTarget,
@@ -296,6 +296,7 @@ class FeedbackTarget extends Model {
         },
       },
     })
+    return result
   }
 
   async sendFeedbackSummaryReminderToStudents(feedbackResponse) {
@@ -416,11 +417,14 @@ class FeedbackTarget extends Model {
     return filteredFeedbacks
   }
 
-  async toPublicObject(includeSurveys = true) {
-    if (!includeSurveys) return this.toJSON()
+  async toPublicObject(includeSurveysAndTeachers) {
+    if (!includeSurveysAndTeachers) return this.toJSON()
 
-    const surveys = await this.getSurveys()
-    const publicQuestionIds = await this.getPublicQuestionIds()
+    const [surveys, teachers, publicQuestionIds] = await Promise.all([
+      this.getSurveys(),
+      this.getTeachersForFeedbackTarget(),
+      this.getPublicQuestionIds(),
+    ])
     const publicityConfigurableQuestionIds =
       await this.getPublicityConfigurableQuestionIds(surveys)
 
@@ -429,6 +433,7 @@ class FeedbackTarget extends Model {
       surveys,
       publicQuestionIds,
       publicityConfigurableQuestionIds,
+      responsibleTeachers: teachers,
     }
 
     delete feedbackTarget.userFeedbackTargets

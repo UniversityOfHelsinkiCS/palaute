@@ -64,10 +64,14 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 
 const asyncFeedbackTargetsToJSON = async (
   feedbackTargets,
+  includeTeachers = true,
   includeSurveys = true,
 ) => {
   const convertSingle = async (feedbackTarget) => {
-    const publicTarget = await feedbackTarget.toPublicObject(includeSurveys)
+    const publicTarget = await feedbackTarget.toPublicObject(
+      includeSurveys,
+      includeTeachers,
+    )
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
@@ -93,16 +97,7 @@ const asyncFeedbackTargetsToJSON = async (
     }
   }
 
-  const fbtTeachers = await Promise.all(
-    feedbackTargets.map(
-      async (feedbackTarget) =>
-        await feedbackTarget.getTeachersForFeedbackTarget(),
-    ),
-  )
-  return convertedFeedbackTargets.map((fbt, i) => ({
-    ...fbt,
-    responsibleTeachers: fbtTeachers[i],
-  }))
+  return convertedFeedbackTargets
 }
 
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
@@ -345,7 +340,11 @@ const getOne = async (req, res) => {
     ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
     : false
 
-  const responseReady = await asyncFeedbackTargetsToJSON([feedbackTarget])
+  const responseReady = await asyncFeedbackTargetsToJSON(
+    [feedbackTarget],
+    true,
+    true,
+  )
 
   return res.send({
     ...responseReady[0],
@@ -475,6 +474,7 @@ const getForStudent = async (req, res) => {
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,
+    false,
     false,
   )
 
