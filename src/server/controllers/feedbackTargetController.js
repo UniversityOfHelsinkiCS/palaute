@@ -73,8 +73,7 @@ const asyncFeedbackTargetsToJSON = async (
 ) => {
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject(
-      includeSurveys,
-      includeTeachers,
+      includeSurveys || includeTeachers,
     )
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
@@ -106,7 +105,7 @@ const asyncFeedbackTargetsToJSON = async (
 
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
   const convertSingle = async (feedbackTarget) => {
-    const publicTarget = await feedbackTarget.toPublicObject()
+    const publicTarget = await feedbackTarget.toPublicObject(true)
     const responsibleTeachers = isAdmin
       ? await feedbackTarget.getTeachersForFeedbackTarget()
       : null
