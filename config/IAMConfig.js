@@ -372,18 +372,6 @@ const dekaaniFacultyMap = {
 const universityWideGroups = [
   'hy-ypa-opa-opintoasiainpaallikot',
   'hy-rehtoraatti',
-  'hy-ttdk-dekanaatti',
-  'hy-oiktdk-dekanaatti',
-  'hy-ltdk-dekanaatti',
-  'hy-humtdk-dekanaatti',
-  'hy-mltdk-dekanaatti',
-  'hy-ftdk-dekanaatti',
-  'hy-bytdk-dekanaatti',
-  'hy-ktdk-dekanaatti',
-  'hy-valttdk-dekanaatti',
-  'hy-sskh-rehtoraatti',
-  'hy-mmtdk-dekanaatti',
-  'hy-eltdk-dekanaatti',
 ]
 
 const superAdminGroups = ['grp-toska']

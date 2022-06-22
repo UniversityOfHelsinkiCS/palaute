@@ -32,7 +32,8 @@ const getAllProgrammeAccess = (accessLevel, where) => {
 }
 
 /**
- * Grant super-admin rights to the Form if the user has correct iams (eg. grp-toska)
+ * NOT USED
+ * Grant super-admin rights if the user has correct iams (eg. grp-toska)
  * @param {string[]} hyGroups
  * @returns superAdmin special group
  */
@@ -45,7 +46,8 @@ const getSuperAdmin = (hyGroups) => {
 }
 
 /**
- * Grant admin rights to the Form if the user has correct iams (eg. grp-ospa)
+ * NOT USED
+ * Grant admin rights if the user has correct iams (eg. grp-ospa)
  * @param {string[]} hyGroups
  * @returns admin special group
  */
