@@ -11,6 +11,7 @@ import {
   IconButton,
   Divider,
   ButtonBase,
+  Box,
 } from '@material-ui/core'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -18,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
 import MenuIcon from '@material-ui/icons/Menu'
+import { PersonOutlined } from '@material-ui/icons'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
@@ -168,7 +170,10 @@ const NavBar = () => {
       endIcon={<KeyboardArrowDownIcon />}
       {...menuButtonProps}
     >
-      {menuLabel}
+      <PersonOutlined />
+      <Box fontSize={14} ml={1}>
+        {menuLabel}
+      </Box>
     </Button>
   )
 
@@ -221,13 +226,15 @@ const NavBar = () => {
           to={to}
           focusRipple
         >
-          {label}
+          <Box fontWeight="fontWeightMedium" fontSize={15} mx={1}>
+            {label}
+          </Box>
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
         <Link to="/admin/feedback" className={classes.norppaFeedback}>
           {norppaFeedbackCount.count}
-          <MailOutlineIcon className={classes.mailIcon} />
+          <MailOutlineIcon className={classes.mailIcon} fontSize="small" />
         </Link>
       )}
     </div>
