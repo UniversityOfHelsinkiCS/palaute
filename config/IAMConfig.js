@@ -352,6 +352,23 @@ const doctoralSchoolMap = {
   ],
 }
 
+const opetusVaradekaani = 'hy-varadekaanit-opetus'
+
+const dekaaniFacultyMap = {
+  'hy-ttdk-dekanaatti': 'teologinen',
+  'hy-oiktdk-dekanaatti': 'oikeustieteellinen',
+  'hy-ltdk-dekanaatti': 'lääketieteellinen',
+  'hy-humtdk-dekanaatti': 'humanistinen',
+  'hy-mltdk-dekanaatti': 'matemaattis-luonnontieteellinen',
+  'hy-ftdk-dekanaatti': 'farmasia',
+  'hy-bytdk-dekanaatti': 'bio- ja ympäristötieteellinen',
+  'hy-ktdk-dekanaatti': 'kasvatustieteellinen',
+  'hy-valttdk-dekanaatti': 'valtiotieteellinen',
+  'hy-sskh-rehtoraatti': 'svenska',
+  'hy-mmtdk-dekanaatti': 'maatalous -metsätieteellinen',
+  'hy-eltdk-dekanaatti': 'eläinlääketieteellinen',
+}
+
 const universityWideGroups = [
   'hy-ypa-opa-opintoasiainpaallikot',
   'hy-rehtoraatti',
@@ -404,11 +421,19 @@ const kosuIamToFaculties = (iam) => {
   return faculties.map((f) => facultyMap[f])
 }
 
+const dekaaniIamToFaculty = (iam) => {
+  const faculty = dekaaniFacultyMap[iam]
+  if (!faculty) return null
+  return facultyMap[faculty]
+}
+
 const relevantIAMs = []
   .concat(Object.keys(joryMap))
   .concat(Object.keys(kojoMap))
   .concat(Object.values(kojoMap))
   .concat(Object.keys(kosuFacultyMap))
+  .concat(Object.keys(dekaaniFacultyMap))
+  .concat(opetusVaradekaani)
   .concat(doctoralIams)
   .concat(Object.keys(doctoralSchoolMap))
   .concat(universityWideGroups)
@@ -425,6 +450,8 @@ module.exports = {
   iamToDoctoralSchool,
   iamToOrganisationCode,
   kosuIamToFaculties,
+  dekaaniIamToFaculty,
+  opetusVaradekaani,
   getStudyLeaderGroup,
   relevantIAMs,
 }

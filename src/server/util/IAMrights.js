@@ -8,6 +8,7 @@ const {
   isEmployeeIam,
   iamToDoctoralSchool,
   kosuIamToFaculties,
+  dekaaniIamToFaculty,
 } = require('../../../config/IAMConfig')
 const { data } = require('../../../config/data')
 const { mapToDegreeCode } = require('../../../config/common')
@@ -74,11 +75,16 @@ const getUniversityReadingRights = (hyGroups) => {
 }
 
 /**
- * Grant reading rights to programmes of faculties if user is kosu of some faculties
+ * Grant reading rights to programmes of faculties if user is kosu or dekaanaatti of some faculties
  * @param {string[]} hyGroups
  */
 const getFacultyReadingRights = (hyGroups) => {
-  const facultyCodes = hyGroups.flatMap(kosuIamToFaculties)
+  // faculty codes from kosu iam
+  const facultyCodes = hyGroups
+    .flatMap(kosuIamToFaculties)
+    // faculty codes from dekanaatti iam
+    .concat(hyGroups.map(dekaaniIamToFaculty).filter(Boolean))
+
   const access = {}
   facultyCodes.forEach((fc) => {
     const faculty = data.find((faculty) => faculty.code === fc)
