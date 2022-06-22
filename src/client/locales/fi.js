@@ -382,7 +382,7 @@ export default {
     noFeedbackResponseYet:
       'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     noAccess:
-      'Sinulla ei ole pääsyä tähän palautteeseen. Tarkista, että olet ilmoittautunut kurssille.',
+      'Sinulla ei ole pääsyä tähän palautteeseen. Tarkista, että olet ilmoittautunut kurssille. Ilmoittautumiset päivittyvät joka yö.',
     notFound:
       'Tätä palautetta ei löydy. Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
   },

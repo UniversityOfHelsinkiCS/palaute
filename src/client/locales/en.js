@@ -380,7 +380,7 @@ export default {
     noFeedbackResponseYet:
       'The teacher of the course has not yet given counter feedback',
     noAccess:
-      'Sorry, you have no access to this feedback. Make sure you are enrolled.',
+      'Sorry, you have no access to this feedback. Make sure you are enrolled. Enrollments update every night.',
     notFound:
       'Cannot find this feedback! If you entered the URL manually, make sure it is correct',
   },

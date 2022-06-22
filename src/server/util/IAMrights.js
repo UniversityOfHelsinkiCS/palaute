@@ -8,6 +8,8 @@ const {
   isEmployeeIam,
   iamToDoctoralSchool,
   kosuIamToFaculties,
+  dekaaniIamToFaculty,
+  opetusVaradekaani,
 } = require('../../../config/IAMConfig')
 const { data } = require('../../../config/data')
 const { mapToDegreeCode } = require('../../../config/common')
@@ -31,7 +33,8 @@ const getAllProgrammeAccess = (accessLevel, where) => {
 }
 
 /**
- * Grant super-admin rights to the Form if the user has correct iams (eg. grp-toska)
+ * NOT USED
+ * Grant super-admin rights if the user has correct iams (eg. grp-toska)
  * @param {string[]} hyGroups
  * @returns superAdmin special group
  */
@@ -44,7 +47,8 @@ const getSuperAdmin = (hyGroups) => {
 }
 
 /**
- * Grant admin rights to the Form if the user has correct iams (eg. grp-ospa)
+ * NOT USED
+ * Grant admin rights if the user has correct iams (eg. grp-ospa)
  * @param {string[]} hyGroups
  * @returns admin special group
  */
@@ -74,17 +78,41 @@ const getUniversityReadingRights = (hyGroups) => {
 }
 
 /**
- * Grant reading rights to programmes of faculties if user is kosu of some faculties
+ * Grant reading rights to programmes of faculties if user is kosu or dekaanaatti of some faculties
  * @param {string[]} hyGroups
  */
 const getFacultyReadingRights = (hyGroups) => {
-  const facultyCodes = hyGroups.flatMap(kosuIamToFaculties)
+  // faculty codes from kosu iam
+  const facultyCodes = hyGroups
+    .flatMap(kosuIamToFaculties)
+    // faculty codes from dekanaatti iam
+    .concat(hyGroups.map(dekaaniIamToFaculty).filter(Boolean))
+
   const access = {}
   facultyCodes.forEach((fc) => {
     const faculty = data.find((faculty) => faculty.code === fc)
     const programmeCodes = faculty.programmes.map((p) => p.key)
     programmeCodes.forEach((code) => {
       access[code] = { read: true }
+    })
+  })
+  return { access, specialGroup: {} }
+}
+
+/**
+ * Grant admin rights to faculty programmes if user is opetusvaradekaani of that faculty
+ * @param {string[]} hyGroups
+ */
+const getFacultyAdminRights = (hyGroups) => {
+  if (!hyGroups.includes(opetusVaradekaani)) return {}
+  const facultyCodes = hyGroups.map(dekaaniIamToFaculty).filter(Boolean)
+
+  const access = {}
+  facultyCodes.forEach((fc) => {
+    const faculty = data.find((faculty) => faculty.code === fc)
+    const programmeCodes = faculty.programmes.map((p) => p.key)
+    programmeCodes.forEach((code) => {
+      access[code] = { read: true, write: true, admin: true }
     })
   })
   return { access, specialGroup: {} }
@@ -200,6 +228,7 @@ const getIAMRights = (hyGroups) => {
     getProgrammeReadAccess,
     getProgrammeWriteAccess,
     getProgrammeAdminAccess,
+    getFacultyAdminRights,
     getAdmin,
     getSuperAdmin,
   ]
