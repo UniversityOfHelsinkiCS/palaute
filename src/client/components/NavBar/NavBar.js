@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0),
   },
   norppaFeedback: {
-    background: 'red',
+    background: theme.palette.warning.dark,
     color: 'white',
     textDecoration: 'none',
     padding: '6px 12px',
@@ -75,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     alignItems: 'center',
     display: 'flex',
+    '&:hover': {
+      background: theme.palette.warning.main,
+    },
   },
   mailIcon: {
     marginLeft: 5,
