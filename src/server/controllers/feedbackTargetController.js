@@ -21,6 +21,10 @@ const {
 const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 const {
+  createFeedbackTargetSurveyLog,
+  createFeedbackTargetLog,
+} = require('../util/auditLog')
+const {
   sendEmailToStudentsWhenOpeningImmediately,
 } = require('../util/emailSender')
 const {
@@ -362,147 +366,6 @@ const getOne = async (req, res) => {
   })
 }
 
-const createLog = async (feedbackTarget, updates, user) => {
-  const data = {}
-
-  if (Array.isArray(updates.publicQuestionIds)) {
-    const enabledPublicQuestionIds = _.difference(
-      updates.publicQuestionIds,
-      feedbackTarget.publicQuestionIds,
-    )
-    const disabledPublicQuestionIds = _.difference(
-      feedbackTarget.publicQuestionIds,
-      updates.publicQuestionIds,
-    )
-
-    data.enabledPublicQuestions = await Question.findAll({
-      where: { id: enabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
-    data.disabledPublicQuestions = await Question.findAll({
-      where: { id: disabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
-  }
-
-  if (
-    updates.opensAt &&
-    new Date(updates.opensAt).toDateString() !==
-      feedbackTarget.opensAt.toDateString()
-  ) {
-    data.opensAt = updates.opensAt
-  }
-
-  if (
-    updates.closesAt &&
-    new Date(updates.closesAt).toDateString() !==
-      feedbackTarget.closesAt.toDateString()
-  ) {
-    data.closesAt = updates.closesAt
-  }
-
-  if (updates.feedbackVisibility) {
-    data.feedbackVisibility = updates.feedbackVisibility
-  }
-
-  if (updates.openImmediately !== undefined) {
-    data.openImmediately = updates.openImmediately
-  }
-
-  if (Object.keys(data).length === 0) return
-
-  await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId: feedbackTarget.id,
-    userId: user.id,
-  })
-}
-
-const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
-  const survey = await Survey.findByPk(surveyId, {
-    attributes: ['id', 'feedbackTargetId', 'questionIds'],
-  })
-
-  let previousQuestions = await Question.findAll({
-    where: {
-      id: { [Op.in]: survey.questionIds },
-    },
-    attributes: ['id', 'type', 'data', 'required'],
-  })
-  previousQuestions = previousQuestions.map((question) => question.dataValues)
-
-  questions = questions.map(({ id, type, data, required }) => ({
-    id,
-    type,
-    data,
-    required,
-  }))
-
-  const deletedQuestions = previousQuestions.filter(
-    (question) => !questions.find((q) => q.id === question.id),
-  )
-
-  for (const question of deletedQuestions) {
-    const data = {
-      deleteQuestion: {
-        id: question.id,
-        type: question.type,
-        ...question.data,
-      },
-    }
-
-    await FeedbackTargetLog.create({
-      data,
-      feedbackTargetId: survey.feedbackTargetId,
-      userId: user.id,
-    })
-  }
-
-  for (const question of questions) {
-    let data
-    if (question.id) {
-      const previousQuestion = previousQuestions.find(
-        (q) => q.id === question.id,
-      )
-      // Get the changed values of the question
-      const difference = _.fromPairs(
-        _.differenceWith(
-          _.toPairs(question),
-          _.toPairs(previousQuestion),
-          _.isEqual,
-        ),
-      )
-
-      // eslint-disable-next-line no-continue
-      if (Object.keys(difference).length === 0) continue
-
-      const { label } = previousQuestion.data
-      data = {
-        updateQuestion: {
-          id: question.id,
-          previousLabel: label.en || label.fi || label.sv,
-          ...difference,
-        },
-      }
-    } else {
-      data = {
-        createQuestion: {
-          id: question.id,
-          ...question.data,
-          type: question.type,
-          required: question.required,
-        },
-      }
-    }
-
-    await FeedbackTargetLog.create({
-      data,
-      feedbackTargetId: survey.feedbackTargetId,
-      userId: user.id,
-    })
-  }
-}
-
 const update = async (req, res) => {
   const { isAdmin, user } = req
 
@@ -535,7 +398,7 @@ const update = async (req, res) => {
     feedbackTarget.feedbackDatesEditedByTeacher = true
   }
 
-  await createLog(feedbackTarget, updates, user)
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   Object.assign(feedbackTarget, updates)
 
@@ -1011,7 +874,7 @@ const openFeedbackImmediately = async (req, res) => {
   feedbackTarget.feedbackDatesEditedByTeacher = true
   feedbackTarget.feedbackOpeningReminderEmailSent = true
 
-  await createLog(feedbackTarget, { openImmediately: true }, user)
+  await createFeedbackTargetLog(feedbackTarget, { openImmediately: true }, user)
 
   await feedbackTarget.save()
 
@@ -1044,7 +907,11 @@ const closeFeedbackImmediately = async (req, res) => {
   feedbackTarget.closesAt = req.body.closesAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
 
-  await createLog(feedbackTarget, { openImmediately: false }, user)
+  await createFeedbackTargetLog(
+    feedbackTarget,
+    { openImmediately: false },
+    user,
+  )
 
   await feedbackTarget.save()
 

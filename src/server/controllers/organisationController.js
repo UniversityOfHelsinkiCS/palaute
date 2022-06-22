@@ -2,6 +2,7 @@ const _ = require('lodash')
 const { Organisation, OrganisationLog, User } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
+const { createOrganisationLog } = require('../util/auditLog')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
@@ -28,50 +29,6 @@ const getOrganisations = async (req, res) => {
   }))
 
   return res.send(organisations)
-}
-
-const createOrganisationLog = async (organisation, updates, user) => {
-  const data = {}
-
-  if (Array.isArray(updates.disabledCourseCodes)) {
-    data.disabledCourseCodes = _.difference(
-      updates.disabledCourseCodes,
-      organisation.disabledCourseCodes,
-    )
-    data.enabledCourseCodes = _.difference(
-      organisation.disabledCourseCodes,
-      updates.disabledCourseCodes,
-    )
-  }
-
-  if (Array.isArray(updates.studentListVisibleCourseCodes)) {
-    data.enabledStudentList = _.difference(
-      updates.studentListVisibleCourseCodes,
-      organisation.studentListVisibleCourseCodes,
-    )
-    data.disabledStudentList = _.difference(
-      organisation.studentListVisibleCourseCodes,
-      updates.studentListVisibleCourseCodes,
-    )
-  }
-
-  if (updates.studentListVisible !== undefined)
-    data.studentListVisible = Boolean(updates.studentListVisible)
-
-  if (updates.responsibleUserId !== undefined) {
-    data.newFeedbackCorrespondent = await User.findByPk(
-      updates.responsibleUserId,
-      {
-        attributes: ['id', 'firstName', 'lastName'],
-      },
-    )
-  }
-
-  await OrganisationLog.create({
-    data,
-    organisationId: organisation.id,
-    userId: user.id,
-  })
 }
 
 const updateOrganisation = async (req, res) => {
