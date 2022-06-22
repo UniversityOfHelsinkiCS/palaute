@@ -284,10 +284,12 @@ class FeedbackTarget extends Model {
 
   async getTeachersForFeedbackTarget() {
     return User.findAll({
+      attributes: ['id', 'firstName', 'lastName', 'email'],
       include: {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         required: true,
+        attributes: [],
         where: {
           accessStatus: 'TEACHER',
           feedbackTargetId: this.id,

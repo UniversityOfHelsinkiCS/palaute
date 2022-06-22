@@ -22,6 +22,7 @@ import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
+import TeacherChip from '../TeacherChip'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -66,13 +67,6 @@ const Label = ({ courseRealisation, t, language }) => {
     translatedName
   )
 
-  const teachersString = teachers
-    .map(({ firstName, lastName }) =>
-      [firstName, lastName].filter(Boolean).join(' '),
-    )
-    .filter(Boolean)
-    .join(', ')
-
   const languagesString = teachingLanguages
     .map((teachingLanguage) => teachingLanguage[language])
     .join(', ')
@@ -80,21 +74,19 @@ const Label = ({ courseRealisation, t, language }) => {
   return (
     <>
       {link}
-      <Typography color="textSecondary" variant="body2">
-        {datePeriod}
-      </Typography>
-      {teachersString && (
+      <Box display="flex" alignItems="center" mb={0.5}>
         <Typography color="textSecondary" variant="body2">
-          {t('courseSummary:responsibleTeachers')}: {teachersString}
+          {datePeriod}
         </Typography>
-      )}
-      <Box className={classes.languageRow}>
-        <Typography color="textSecondary" variant="body2">
-          {t('courseSummary:teachingLanguages')}:
-        </Typography>
-        <Typography color="textSecondary" variant="body2">
+        <Box mr={2} />
+        <Typography color="textSecondary" variant="subtitle2">
           {languagesString}
         </Typography>
+      </Box>
+      <Box display="flex">
+        {teachers.map((t) => (
+          <TeacherChip user={t} />
+        ))}
       </Box>
     </>
   )

@@ -15,7 +15,6 @@ import {
   Tab,
   Button,
   Link as MuiLink,
-  Chip,
   makeStyles,
   Tooltip,
   Badge,
@@ -66,6 +65,7 @@ import FeedbackTargetLogs from '../FeedbackTargetLogs'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../ErrorView'
 import { getFeedbackTargetLoadError } from '../../util/errorMessage'
+import TeacherChip from '../TeacherChip'
 
 const useStyles = makeStyles((theme) => ({
   datesContainer: {
@@ -111,30 +111,17 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
-  const list = teachers.map((teacher) => {
-    const displayName = `${teacher.firstName} ${teacher.lastName}`
-
-    return isAdmin ? (
-      <Box mb={1} key={teacher.id}>
-        <Chip
-          label={displayName}
-          variant="outlined"
-          onDelete={() => onDelete(teacher)}
-        />
-      </Box>
-    ) : (
-      <Typography
-        key={teacher.id}
-        color="textSecondary"
-        variant="body2"
-        component="p"
-      >
-        {displayName}
-      </Typography>
-    )
-  })
-
-  return <div>{list}</div>
+  const list = teachers.map((teacher) => (
+    <TeacherChip
+      user={teacher}
+      onDelete={isAdmin && (() => onDelete(teacher))}
+    />
+  ))
+  return (
+    <Box display="flex" flexDirection="column">
+      {list}
+    </Box>
+  )
 }
 
 const FeedbackTargetView = () => {
@@ -304,18 +291,16 @@ const FeedbackTargetView = () => {
             </Box>
           </div>
           <div>
-            {responsibleTeachers && (
-              <div>
-                <Typography gutterBottom>
-                  {t('feedbackTargetView:responsibleTeachers')}
-                </Typography>
-                <ResponsibleTeachersList
-                  teachers={responsibleTeachers}
-                  isAdmin={isAdmin}
-                  onDelete={handleDeleteResponsibleTeacher}
-                />
-              </div>
-            )}
+            <div>
+              <Typography gutterBottom>
+                {t('feedbackTargetView:responsibleTeachers')}
+              </Typography>
+              <ResponsibleTeachersList
+                teachers={responsibleTeachers}
+                isAdmin={isAdmin}
+                onDelete={handleDeleteResponsibleTeacher}
+              />
+            </div>
           </div>
         </div>
       </Box>

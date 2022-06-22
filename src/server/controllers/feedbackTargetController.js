@@ -94,21 +94,16 @@ const asyncFeedbackTargetsToJSON = async (
     }
   }
 
-  if (isAdmin) {
-    const fbtTeachers = await Promise.all(
-      feedbackTargets.map(
-        async (feedbackTarget) =>
-          await feedbackTarget.getTeachersForFeedbackTarget(),
-      ),
-    )
-    convertedFeedbackTargets.map((fbt, i) => ({
-      ...fbt,
-      responsibleTeachers: fbtTeachers[i],
-    }))
-  }
-  /* eslint-enable */
-
-  return convertedFeedbackTargets
+  const fbtTeachers = await Promise.all(
+    feedbackTargets.map(
+      async (feedbackTarget) =>
+        await feedbackTarget.getTeachersForFeedbackTarget(),
+    ),
+  )
+  return convertedFeedbackTargets.map((fbt, i) => ({
+    ...fbt,
+    responsibleTeachers: fbtTeachers[i],
+  }))
 }
 
 const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
