@@ -21,6 +21,10 @@ const {
 const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 const {
+  createFeedbackTargetSurveyLog,
+  createFeedbackTargetLog,
+} = require('../util/auditLog')
+const {
   sendEmailToStudentsWhenOpeningImmediately,
 } = require('../util/emailSender')
 const {
@@ -352,71 +356,19 @@ const getOne = async (req, res) => {
   })
 }
 
-const createLog = async (feedbackTarget, updates, user) => {
-  const data = {}
-
-  if (Array.isArray(updates.publicQuestionIds)) {
-    const enabledPublicQuestionIds = _.difference(
-      updates.publicQuestionIds,
-      feedbackTarget.publicQuestionIds,
-    )
-    const disabledPublicQuestionIds = _.difference(
-      feedbackTarget.publicQuestionIds,
-      updates.publicQuestionIds,
-    )
-
-    data.enabledPublicQuestions = await Question.findAll({
-      where: { id: enabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
-    data.disabledPublicQuestions = await Question.findAll({
-      where: { id: disabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
-  }
-
-  if (
-    updates.opensAt &&
-    new Date(updates.opensAt).toDateString() !==
-      feedbackTarget.opensAt.toDateString()
-  ) {
-    data.opensAt = updates.opensAt
-  }
-
-  if (
-    updates.closesAt &&
-    new Date(updates.closesAt).toDateString() !==
-      feedbackTarget.closesAt.toDateString()
-  ) {
-    data.closesAt = updates.closesAt
-  }
-
-  if (updates.feedbackVisibility) {
-    data.feedbackVisibility = updates.feedbackVisibility
-  }
-
-  if (updates.openImmediately !== undefined) {
-    data.openImmediately = updates.openImmediately
-  }
-
-  await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId: feedbackTarget.id,
-    userId: user.id,
-  })
-}
-
 const update = async (req, res) => {
+  const { isAdmin, user } = req
+
   const feedbackTargetId = Number(req.params?.id)
 
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const feedbackTarget = req.isAdmin
+  const feedbackTarget = isAdmin
     ? await FeedbackTarget.findByPk(feedbackTargetId)
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   if (
-    !req.isAdmin &&
+    !isAdmin &&
     feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
   )
     throw new ApplicationError('Forbidden', 403)
@@ -436,7 +388,7 @@ const update = async (req, res) => {
     feedbackTarget.feedbackDatesEditedByTeacher = true
   }
 
-  await createLog(feedbackTarget, updates, req.user)
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   Object.assign(feedbackTarget, updates)
 
@@ -448,6 +400,7 @@ const update = async (req, res) => {
       },
     })
     if (!survey) throw new ApplicationError('Not found', 404)
+    await createFeedbackTargetSurveyLog(surveyId, questions, user)
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
@@ -911,7 +864,7 @@ const openFeedbackImmediately = async (req, res) => {
   feedbackTarget.feedbackDatesEditedByTeacher = true
   feedbackTarget.feedbackOpeningReminderEmailSent = true
 
-  await createLog(feedbackTarget, { openImmediately: true }, user)
+  await createFeedbackTargetLog(feedbackTarget, { openImmediately: true }, user)
 
   await feedbackTarget.save()
 
@@ -944,7 +897,11 @@ const closeFeedbackImmediately = async (req, res) => {
   feedbackTarget.closesAt = req.body.closesAt
   feedbackTarget.feedbackDatesEditedByTeacher = true
 
-  await createLog(feedbackTarget, { openImmediately: false }, user)
+  await createFeedbackTargetLog(
+    feedbackTarget,
+    { openImmediately: false },
+    user,
+  )
 
   await feedbackTarget.save()
 

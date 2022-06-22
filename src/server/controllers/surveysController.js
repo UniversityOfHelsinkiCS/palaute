@@ -1,5 +1,6 @@
 const { ApplicationError } = require('../util/customErrors')
 const { Survey, Question, Organisation } = require('../models')
+const { createOrganisationSurveyLog } = require('../util/auditLog')
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
@@ -69,6 +70,7 @@ const update = async (req, res) => {
   const { questions } = req.body
 
   if (questions) {
+    await createOrganisationSurveyLog(survey, questions, user)
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
