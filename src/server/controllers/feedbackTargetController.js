@@ -409,6 +409,8 @@ const createLog = async (feedbackTarget, updates, user) => {
     data.openImmediately = updates.openImmediately
   }
 
+  if (Object.keys(data).length === 0) return
+
   await FeedbackTargetLog.create({
     data,
     feedbackTargetId: feedbackTarget.id,
@@ -416,17 +418,102 @@ const createLog = async (feedbackTarget, updates, user) => {
   })
 }
 
+const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
+  const survey = await Survey.findByPk(surveyId, {
+    attributes: ['id', 'feedbackTargetId', 'questionIds'],
+  })
+
+  let previousQuestions = await Question.findAll({
+    where: {
+      id: { [Op.in]: survey.questionIds },
+    },
+    attributes: ['id', 'type', 'data', 'required'],
+  })
+  previousQuestions = previousQuestions.map((question) => question.dataValues)
+
+  questions = questions.map(({ id, type, data, required }) => ({
+    id,
+    type,
+    data,
+    required,
+  }))
+
+  const deletedQuestions = previousQuestions.filter(
+    (question) => !questions.find((q) => q.id === question.id),
+  )
+
+  for (const question of deletedQuestions) {
+    const data = {
+      deleteQuestion: {
+        id: question.id,
+        type: question.type,
+        ...question.data,
+      },
+    }
+
+    await FeedbackTargetLog.create({
+      data,
+      feedbackTargetId: survey.feedbackTargetId,
+      userId: user.id,
+    })
+  }
+
+  for (const question of questions) {
+    let data
+    if (question.id) {
+      const previousQuestion = previousQuestions.find(
+        (q) => q.id === question.id,
+      )
+      // Get the changed values of the question
+      const difference = _.fromPairs(
+        _.differenceWith(
+          _.toPairs(question),
+          _.toPairs(previousQuestion),
+          _.isEqual,
+        ),
+      )
+
+      // eslint-disable-next-line no-continue
+      if (Object.keys(difference).length === 0) continue
+      data = {
+        updateQuestion: {
+          id: question.id,
+          previousLabel: previousQuestion.data.label.en,
+          ...difference,
+        },
+      }
+    } else {
+      data = {
+        createQuestion: {
+          id: question.id,
+          ...question.data,
+          type: question.type,
+          required: question.required,
+        },
+      }
+    }
+
+    await FeedbackTargetLog.create({
+      data,
+      feedbackTargetId: survey.feedbackTargetId,
+      userId: user.id,
+    })
+  }
+}
+
 const update = async (req, res) => {
+  const { isAdmin, user } = req
+
   const feedbackTargetId = Number(req.params?.id)
 
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const feedbackTarget = req.isAdmin
+  const feedbackTarget = isAdmin
     ? await FeedbackTarget.findByPk(feedbackTargetId)
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   if (
-    !req.isAdmin &&
+    !isAdmin &&
     feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
   )
     throw new ApplicationError('Forbidden', 403)
@@ -446,7 +533,7 @@ const update = async (req, res) => {
     feedbackTarget.feedbackDatesEditedByTeacher = true
   }
 
-  await createLog(feedbackTarget, updates, req.user)
+  await createLog(feedbackTarget, updates, user)
 
   Object.assign(feedbackTarget, updates)
 
@@ -458,6 +545,7 @@ const update = async (req, res) => {
       },
     })
     if (!survey) throw new ApplicationError('Not found', 404)
+    await createFeedbackTargetSurveyLog(surveyId, questions, user)
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )

@@ -51,6 +51,30 @@ const getLogMessage = (data) => {
     )
   }
 
+  if (data.createQuestion) {
+    messages = messages.concat(
+      `Added question '${data.createQuestion.label.en}'`,
+    )
+  }
+
+  if (data.deleteQuestion) {
+    messages = messages.concat(
+      `Deleted question '${data.deleteQuestion.label.en}'`,
+    )
+  }
+
+  if (data.updateQuestion) {
+    const { previousLabel, required } = data.updateQuestion
+    const genericMessage = `Updated question '${previousLabel}'`
+
+    messages = messages.concat(genericMessage)
+    if (required !== undefined) {
+      messages = required
+        ? messages.concat(`Set question as required`)
+        : messages.concat(`Set question as voluntary`)
+    }
+  }
+
   return messages.join(', ')
 }
 
