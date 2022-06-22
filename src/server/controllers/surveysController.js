@@ -1,5 +1,8 @@
+const { Op } = require('sequelize')
+const _ = require('lodash')
+
 const { ApplicationError } = require('../util/customErrors')
-const { Survey, Question, Organisation } = require('../models')
+const { Survey, Question, Organisation, OrganisationLog } = require('../models')
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
@@ -9,6 +12,92 @@ const checkUserWriteAccess = async (survey, user) => {
   )
 
   return organisation?.access?.write ?? false
+}
+
+const createOrganisationSurveyLog = async (survey, questions, user) => {
+  let previousQuestions = await Question.findAll({
+    where: {
+      id: { [Op.in]: survey.questionIds },
+    },
+    attributes: ['id', 'type', 'data', 'required'],
+  })
+  previousQuestions = previousQuestions.map((question) => question.dataValues)
+
+  questions = questions.map(({ id, type, data, required }) => ({
+    id,
+    type,
+    data,
+    required,
+  }))
+
+  const organisation = await Organisation.findOne({
+    where: {
+      code: survey.typeId,
+    },
+    attributes: ['id'],
+  })
+
+  const deletedQuestions = previousQuestions.filter(
+    (question) => !questions.find((q) => q.id === question.id),
+  )
+
+  for (const question of deletedQuestions) {
+    const data = {
+      deleteQuestion: {
+        id: question.id,
+        type: question.type,
+        ...question.data,
+      },
+    }
+
+    await OrganisationLog.create({
+      data,
+      organisationId: organisation.id,
+      userId: user.id,
+    })
+  }
+
+  for (const question of questions) {
+    let data
+    if (question.id) {
+      const previousQuestion = previousQuestions.find(
+        (q) => q.id === question.id,
+      )
+      // Get the changed values of the question
+      const difference = _.fromPairs(
+        _.differenceWith(
+          _.toPairs(question),
+          _.toPairs(previousQuestion),
+          _.isEqual,
+        ),
+      )
+      // eslint-disable-next-line no-continue
+      if (Object.keys(difference).length === 0) continue
+
+      data = {
+        updateQuestion: {
+          id: question.id,
+          previousLabel: previousQuestion.data.label.en,
+          ...difference,
+        },
+      }
+    } else {
+      data = {
+        createQuestion: {
+          id: question.id,
+          ...question.data,
+          type: question.type,
+          required: question.required,
+        },
+      }
+    }
+
+    await OrganisationLog.create({
+      data,
+      organisationId: organisation.id,
+      userId: user.id,
+    })
+  }
 }
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
@@ -69,6 +158,7 @@ const update = async (req, res) => {
   const { questions } = req.body
 
   if (questions) {
+    await createOrganisationSurveyLog(survey, questions, user)
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
