@@ -33,6 +33,7 @@ export default {
     feedback: 'Palaute',
     feedbackGiven: 'Annettu',
     feedbackNotGiven: 'Ei annettu',
+    exportCSV: 'Vie CSV-muodossa',
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',

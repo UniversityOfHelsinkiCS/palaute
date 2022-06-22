@@ -32,6 +32,7 @@ export default {
     feedback: 'Feedback',
     feedbackGiven: 'Given',
     feedbackNotGiven: 'Not given',
+    exportCSV: 'Export as CSV',
     dirtyFormPrompt:
       'The page has unsaved changes. Are you sure want to leave the page?',
     actions: 'Actions',

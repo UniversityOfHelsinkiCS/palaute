@@ -31,6 +31,7 @@ export default {
     // feedback: 'Feedback',
     // feedbackGiven: 'Given',
     // feedbackNotGiven: 'Not given',
+    // exportCSV: 'Export as CSV',
     dirtyFormPrompt:
       'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
     actions: 'Handlingar',
