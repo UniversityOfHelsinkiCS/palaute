@@ -9,6 +9,7 @@ const {
   iamToDoctoralSchool,
   kosuIamToFaculties,
   dekaaniIamToFaculty,
+  opetusVaradekaani,
 } = require('../../../config/IAMConfig')
 const { data } = require('../../../config/data')
 const { mapToDegreeCode } = require('../../../config/common')
@@ -93,6 +94,25 @@ const getFacultyReadingRights = (hyGroups) => {
     const programmeCodes = faculty.programmes.map((p) => p.key)
     programmeCodes.forEach((code) => {
       access[code] = { read: true }
+    })
+  })
+  return { access, specialGroup: {} }
+}
+
+/**
+ * Grant admin rights to faculty programmes if user is opetusvaradekaani of that faculty
+ * @param {string[]} hyGroups
+ */
+const getFacultyAdminRights = (hyGroups) => {
+  if (!hyGroups.includes(opetusVaradekaani)) return {}
+  const facultyCodes = hyGroups.map(dekaaniIamToFaculty).filter(Boolean)
+
+  const access = {}
+  facultyCodes.forEach((fc) => {
+    const faculty = data.find((faculty) => faculty.code === fc)
+    const programmeCodes = faculty.programmes.map((p) => p.key)
+    programmeCodes.forEach((code) => {
+      access[code] = { read: true, write: true, admin: true }
     })
   })
   return { access, specialGroup: {} }
@@ -208,6 +228,7 @@ const getIAMRights = (hyGroups) => {
     getProgrammeReadAccess,
     getProgrammeWriteAccess,
     getProgrammeAdminAccess,
+    getFacultyAdminRights,
     getAdmin,
     getSuperAdmin,
   ]

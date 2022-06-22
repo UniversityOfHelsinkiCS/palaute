@@ -55,9 +55,6 @@ const getOrganisationAccessFromIamGroups = (user) => {
   return access
 }
 
-const isVaradekaani = (user) =>
-  (user.iamGroups ?? []).includes('hy-varadekaanit-opetus')
-
 const isSuperAdmin = (user) => ADMINS.includes(user.username)
 
 const organisationIsRelevant = (organisation) => {
@@ -100,7 +97,7 @@ const getFeedbackCorrespondentAccess = async (user) => {
 }
 
 const getOrganisationAccess = async (user) => {
-  if (isSuperAdmin(user) || isVaradekaani(user)) {
+  if (isSuperAdmin(user)) {
     return getAccessToAll({ read: true, write: true, admin: true })
   }
 
