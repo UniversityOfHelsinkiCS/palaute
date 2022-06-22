@@ -52,14 +52,16 @@ const getLogMessage = (data) => {
   }
 
   if (data.createQuestion) {
+    const { label } = data.createQuestion
     messages = messages.concat(
-      `Added question '${data.createQuestion.label.en}'`,
+      `Added question '${label.en || label.fi || label.sv}'`,
     )
   }
 
   if (data.deleteQuestion) {
+    const { label } = data.deleteQuestion
     messages = messages.concat(
-      `Deleted question '${data.deleteQuestion.label.en}'`,
+      `Deleted question '${label.en || label.fi || label.sv}'`,
     )
   }
 

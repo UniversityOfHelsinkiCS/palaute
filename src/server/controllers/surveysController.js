@@ -74,10 +74,11 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
       // eslint-disable-next-line no-continue
       if (Object.keys(difference).length === 0) continue
 
+      const { label } = previousQuestion.data
       data = {
         updateQuestion: {
           id: question.id,
-          previousLabel: previousQuestion.data.label.en,
+          previousLabel: label.en || label.fi || label.sv,
           ...difference,
         },
       }
