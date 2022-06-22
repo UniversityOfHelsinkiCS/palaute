@@ -41,9 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Label = ({ courseRealisation, t, language }) => {
-  const classes = useStyles()
-
+const Label = ({ courseRealisation, language }) => {
   const {
     startDate,
     endDate,
@@ -131,7 +129,6 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                   label={
                     <Label
                       courseRealisation={courseRealisation}
-                      t={t}
                       language={i18n.language}
                     />
                   }

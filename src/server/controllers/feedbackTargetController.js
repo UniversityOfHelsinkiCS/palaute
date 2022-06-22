@@ -64,7 +64,6 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
 
 const asyncFeedbackTargetsToJSON = async (
   feedbackTargets,
-  isAdmin = false,
   includeSurveys = true,
 ) => {
   const convertSingle = async (feedbackTarget) => {
@@ -346,10 +345,7 @@ const getOne = async (req, res) => {
     ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
     : false
 
-  const responseReady = await asyncFeedbackTargetsToJSON(
-    [feedbackTarget],
-    req.isAdmin,
-  )
+  const responseReady = await asyncFeedbackTargetsToJSON([feedbackTarget])
 
   return res.send({
     ...responseReady[0],
@@ -479,7 +475,6 @@ const getForStudent = async (req, res) => {
 
   const responseReady = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,
-    false,
     false,
   )
 
