@@ -14,13 +14,18 @@ import {
   makeStyles,
   Paper,
   Button,
+  Box,
 } from '@material-ui/core'
 
 import { sortTable } from '../../util/tableUtils'
 
 const useStyles = makeStyles(() => ({
+  box: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+  },
   button: {
-    margin: 5,
+    margin: 10,
     width: '170px',
   },
   link: {
@@ -71,25 +76,27 @@ const StudentTable = ({ students }) => {
         data={parsedData}
         filename="norppa-statistics.csv"
       >
-        Export as csv
+        {t('exportCSV')}
       </CSVLink>
     )
   }
 
   return (
     <TableContainer component={Paper}>
-      <Button
-        variant="contained"
-        color="primary"
-        disabled={!studentsCSV.length}
-        className={classes.button}
-      >
-        {studentsCSV.length ? (
-          <ExportCsv students={studentsCSV} />
-        ) : (
-          'Export as CSV'
-        )}
-      </Button>
+      <Box className={classes.box}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!studentsCSV.length}
+          className={classes.button}
+        >
+          {studentsCSV.length ? (
+            <ExportCsv students={studentsCSV} />
+          ) : (
+            t('exportCSV')
+          )}
+        </Button>
+      </Box>
       <Table>
         <TableHead>
           <TableRow>
