@@ -26,6 +26,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'react/jsx-boolean-value': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
+    'react/destructuring-assignment': 'warn',
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
     'spaced-comment': 'off',
