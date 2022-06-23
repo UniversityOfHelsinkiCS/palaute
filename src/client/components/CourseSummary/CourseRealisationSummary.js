@@ -81,9 +81,9 @@ const Label = ({ courseRealisation, language }) => {
           {languagesString}
         </Typography>
       </Box>
-      <Box display="flex">
+      <Box display="flex" flexWrap="wrap" maxWidth="100rem">
         {teachers.map((t) => (
-          <TeacherChip user={t} />
+          <TeacherChip key={t.id} user={t} />
         ))}
       </Box>
     </>
