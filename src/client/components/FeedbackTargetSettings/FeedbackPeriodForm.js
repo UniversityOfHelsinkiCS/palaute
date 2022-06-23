@@ -6,8 +6,9 @@ import {
   CardContent,
   Tooltip,
   Typography,
+  Link,
 } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 
 import FormikDatePicker from '../FormikDatePicker'
@@ -40,6 +41,8 @@ const FeedbackPeriodForm = ({
   if (isLoading) {
     return <LoadingProgress />
   }
+
+  const supportEmail = 'coursefeedback@helsinki.fi'
 
   const formDisabled =
     (feedbackTarget.accessStatus !== 'TEACHER' ||
@@ -118,7 +121,13 @@ const FeedbackPeriodForm = ({
             {({ dirty }) => (
               <Form>
                 <Alert severity="warning">
-                  {t('editFeedbackTarget:warningAboutOpeningCourse')}
+                  <Trans
+                    i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
+                    values={{ supportEmail }}
+                    components={{
+                      mailTo: <Link href={`mailto:${supportEmail}`} />,
+                    }}
+                  />
                 </Alert>
                 <Box mb={1}>
                   <FormikDatePicker

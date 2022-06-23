@@ -157,7 +157,7 @@ export default {
       'Are you sure you want to preview? Unsaved changes will be lost.',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'NB! The survey cannot be edited after the feedback opens. The feedback must be open at least for a day',
+      'NB! The survey cannot be edited after the feedback opens. If you want to make changes afterwards, contact support at <mailTo>{{supportEmail}}</mailTo>. The feedback must be open at least for a day',
     noUnsavedChanges: 'No unsaved changes',
     openImmediately: 'Open feedback now',
     openImmediatelyConfirm:

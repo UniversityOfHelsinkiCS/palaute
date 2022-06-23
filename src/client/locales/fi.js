@@ -154,7 +154,7 @@ export default {
       'Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse:
-      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
+      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo>, jos haluat tehdä muutoksia jälkeenpäin. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
     noUnsavedChanges: 'Ei tallentamattomia muutoksia',
     openImmediately: 'Avaa palaute heti',
     copyFromCourseDialogTitle: 'Kopioi kysymykset toiselta kurssilta',
