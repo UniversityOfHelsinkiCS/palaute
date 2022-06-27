@@ -74,7 +74,7 @@ const StudentTable = ({ students }) => {
       <CSVLink
         className={classes.link}
         data={parsedData}
-        filename="norppa-statistics.csv"
+        filename="students.csv"
       >
         {t('exportCSV')}
       </CSVLink>
