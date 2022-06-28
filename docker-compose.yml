@@ -8,7 +8,7 @@ services:
     image: palaute_dev
     volumes:
       - ./:/usr/src/app
-      - nodemod:/usr/src/app/node_modules/
+      # - nodemod:/usr/src/app/node_modules/
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_USER=postgres
@@ -33,5 +33,5 @@ services:
     container_name: palaute_redis
 
 volumes:
-  nodemod:
+  # nodemod:
   pg_data:

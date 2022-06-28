@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # Setup
 COPY package* ./
-RUN npm ci
+RUN npm i
 
 EXPOSE 3000
 

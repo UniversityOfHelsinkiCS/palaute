@@ -4,7 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 
 export const TooltipButton = ({ tooltip, disabled, children }, props) => {
   const button = <Button {...props}>{children}</Button>
-
+  const a = 'a'
   if (disabled) {
     return (
       <Tooltip title={tooltip}>
