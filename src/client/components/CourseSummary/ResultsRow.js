@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
       width: '450px',
     },
     paddingLeft: theme.spacing(2 + level * 2),
+    paddingRight: '1rem',
   }),
   accordionButton: {
     width: '100%',
@@ -55,9 +56,11 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     padding: '1rem',
     '&:hover': {
-      boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+      transform: 'scale(1.02, 1.04)',
       // transition: 'opacity 0.3s ease-in-out',
     },
+    transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)',
   },
   doneIcon: {
     color: theme.palette.success.main,

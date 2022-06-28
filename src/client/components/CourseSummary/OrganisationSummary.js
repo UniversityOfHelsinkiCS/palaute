@@ -85,7 +85,6 @@ const OrganisationTable = ({
         <thead>
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
-            <th aria-hidden="true" />
 
             <ColumnHeadings
               onOrderByChange={onOrderByChange}
