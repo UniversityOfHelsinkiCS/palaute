@@ -139,7 +139,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                   feedbackResponseGiven={feedbackResponseGiven}
                   accordionCellEnabled={false}
                 />
-                <DividerRow />
+                <DividerRow height={1.3} />
               </Fragment>
             )
           })}

@@ -13,6 +13,7 @@ import DownIcon from '@material-ui/icons/KeyboardArrowDown'
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
@@ -55,12 +56,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     textTransform: 'none',
     padding: '1rem',
-    '&:hover': {
-      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-      transform: 'scale(1.02, 1.04)',
-      // transition: 'opacity 0.3s ease-in-out',
-    },
-    transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)',
+  },
+  link: {
+    color: theme.palette.primary.main,
   },
   doneIcon: {
     color: theme.palette.success.main,
@@ -71,9 +69,6 @@ const useStyles = makeStyles((theme) => ({
   accessTime: {
     color: theme.palette.warning.main,
   },
-  lastChildRow: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-  },
 }))
 
 const getQuestion = (questions, questionId) =>
@@ -81,6 +76,7 @@ const getQuestion = (questions, questionId) =>
 
 const ResultsRow = ({
   id,
+  link,
   label,
   results,
   questions,
@@ -93,8 +89,6 @@ const ResultsRow = ({
   accordionInitialOpen = false,
   onToggleAccordion = () => {},
   cellsAfter = null,
-  lastChild = false,
-  ...props
 }) => {
   const { t } = useTranslation()
   const classes = useStyles({ level })
@@ -128,15 +122,16 @@ const ResultsRow = ({
 
   return (
     <>
-      <tr {...props}>
-        <td
-          className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
-        >
+      <tr>
+        <td className={cn(classes.labelCell)}>
           {accordionEnabled ? (
             // eslint-disable-next-line react/button-has-type
             <ButtonBase
               onClick={handleToggleAccordion}
-              className={classes.accordionButton}
+              className={cn(
+                classes.accordionButton,
+                'shadow-scale-hover-effect',
+              )}
               variant="contained"
             >
               <Typography variant="body1">{label}</Typography>
@@ -144,7 +139,24 @@ const ResultsRow = ({
               {accordionOpen ? <UpIcon /> : <DownIcon />}
             </ButtonBase>
           ) : (
-            <Typography component="div">{label}</Typography>
+            <>
+              {link ? (
+                <ButtonBase
+                  to={link}
+                  component={RouterLink}
+                  className={cn(
+                    classes.accordionButton,
+                    classes.link,
+                    'shadow-scale-hover-effect',
+                  )}
+                  variant="contained"
+                >
+                  <Typography component="div">{label}</Typography>
+                </ButtonBase>
+              ) : (
+                <Typography component="div">{label}</Typography>
+              )}
+            </>
           )}
         </td>
         {results.map(({ questionId, mean, distribution, previous }) => (

@@ -5,12 +5,12 @@ import { makeStyles } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   divider: {
     display: 'block',
-    height: theme.spacing(1),
+    height: ({ height }) => theme.spacing(height),
   },
 }))
 
-const DividerRow = () => {
-  const classes = useStyles()
+const DividerRow = ({ height = 0.4 }) => {
+  const classes = useStyles({ height })
 
   return <tr className={classes.divider} />
 }

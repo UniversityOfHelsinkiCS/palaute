@@ -148,7 +148,7 @@ const OrganisationTable = ({
                     questions={questions}
                   />
                 </ResultsRow>
-                <DividerRow />
+                <DividerRow height={1.3} />
               </Fragment>
             ),
           )}
