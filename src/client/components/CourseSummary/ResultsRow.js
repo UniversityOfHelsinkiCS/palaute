@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 
-import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
+import {
+  Tooltip,
+  Typography,
+  IconButton,
+  makeStyles,
+  Button,
+  ButtonBase,
+  Box,
+} from '@material-ui/core'
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
@@ -38,6 +46,21 @@ const useStyles = makeStyles((theme) => ({
     },
     paddingLeft: theme.spacing(2 + level * 2),
   }),
+  accordionButton: {
+    width: '100%',
+    height: '100%',
+    maxHeight: '74px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderRadius: '10px',
+    textAlign: 'left',
+    textTransform: 'none',
+    padding: '1rem',
+    '&:hover': {
+      boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+      // transition: 'opacity 0.3s ease-in-out',
+    },
+  },
   doneIcon: {
     color: theme.palette.success.main,
   },
@@ -109,19 +132,21 @@ const ResultsRow = ({
         <td
           className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
         >
-          <Typography component="div">{label}</Typography>
+          {accordionEnabled ? (
+            // eslint-disable-next-line react/button-has-type
+            <ButtonBase
+              onClick={handleToggleAccordion}
+              className={classes.accordionButton}
+              variant="contained"
+            >
+              <Typography variant="body1">{label}</Typography>
+              <Box mr={1} />
+              {accordionOpen ? <UpIcon /> : <DownIcon />}
+            </ButtonBase>
+          ) : (
+            <Typography component="div">{label}</Typography>
+          )}
         </td>
-        {accordionCellEnabled && (
-          <td>
-            {accordionEnabled ? (
-              <IconButton onClick={handleToggleAccordion}>
-                {accordionOpen ? <UpIcon /> : <DownIcon />}
-              </IconButton>
-            ) : (
-              ' '
-            )}
-          </td>
-        )}
         {results.map(({ questionId, mean, distribution, previous }) => (
           <ResultItem
             key={questionId}
