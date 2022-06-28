@@ -3,9 +3,7 @@ import React, { useState } from 'react'
 import {
   Tooltip,
   Typography,
-  IconButton,
   makeStyles,
-  Button,
   ButtonBase,
   Box,
 } from '@material-ui/core'
@@ -89,7 +87,6 @@ const ResultsRow = ({
   studentCount,
   feedbackResponseGiven,
   accordionEnabled = false,
-  accordionCellEnabled = true,
   accordionInitialOpen = false,
   onToggleAccordion = () => {},
   cellsAfter = null,
