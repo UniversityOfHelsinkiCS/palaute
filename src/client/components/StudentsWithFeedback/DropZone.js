@@ -54,6 +54,7 @@ const rejectStyle = {
 
 const DropZone = ({ students }) => {
   const [data, setData] = useState([])
+  const [filename, setFilename] = useState('')
 
   const classes = useStyles()
   const { t } = useTranslation()
@@ -69,7 +70,9 @@ const DropZone = ({ students }) => {
       const fileString = reader.result
       let rows = fileString.trim().split('\n')
       rows = rows.map((row) => row.replaceAll(re2, '').split(re))
+
       setData(rows)
+      setFilename(acceptedFiles[0].name.slice(0, -4))
     }
     acceptedFiles.forEach((file) => reader.readAsText(file))
   }
@@ -107,13 +110,18 @@ const DropZone = ({ students }) => {
             <p>{t('dropZoneInfo2')}</p>
           </div>
         </div>
-        <ExportCsv headers={data[0]} rows={data.slice(1)} students={students} />
+        <ExportCsv
+          headers={data[0]}
+          rows={data.slice(1)}
+          students={students}
+          filename={filename}
+        />
       </Box>
     </Box>
   )
 }
 
-const ExportCsv = ({ headers, rows, students }) => {
+const ExportCsv = ({ headers, rows, students, filename }) => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -169,7 +177,7 @@ const ExportCsv = ({ headers, rows, students }) => {
         <CSVLink
           className={classes.link}
           data={parsedData}
-          filename="testing.csv"
+          filename={`${filename}_combined.csv`}
         >
           {t('downloadCSV')}
         </CSVLink>
