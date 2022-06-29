@@ -16,8 +16,10 @@ import {
   Button,
   Box,
 } from '@material-ui/core'
+import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons'
 
 import { sortTable } from '../../util/tableUtils'
+import DropZone from './DropZone'
 
 const useStyles = makeStyles(() => ({
   box: {
@@ -35,6 +37,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const StudentTable = ({ students }) => {
+  const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('firstName')
   const { t } = useTranslation()
@@ -85,6 +88,15 @@ const StudentTable = ({ students }) => {
     <TableContainer component={Paper}>
       <Box className={classes.box}>
         <Button
+          endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={() => setDropZoneVisible(!dropZoneVisible)}
+        >
+          {t('combineCSV')}
+        </Button>
+        <Button
           variant="contained"
           color="primary"
           disabled={!studentsCSV.length}
@@ -97,6 +109,7 @@ const StudentTable = ({ students }) => {
           )}
         </Button>
       </Box>
+      {dropZoneVisible && <DropZone students={studentsCSV} />}
       <Table>
         <TableHead>
           <TableRow>
