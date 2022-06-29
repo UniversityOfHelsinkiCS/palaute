@@ -6,7 +6,7 @@ const useGlobalStyles = makeStyles((theme) => ({
       transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
       borderRadius: theme.shape.borderRadius,
       '&:hover': {
-        transform: 'scale(1.01, 1.02)',
+        transform: 'scale(1.0)',
       },
       '&::after': {
         content: '""',
@@ -17,7 +17,7 @@ const useGlobalStyles = makeStyles((theme) => ({
         left: 0,
         width: '100%',
         height: '100%',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
+        boxShadow: '0 3px 9px rgba(0, 0, 0, 0.2)',
         opacity: 0,
         '-webkit-transition': 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
         transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',

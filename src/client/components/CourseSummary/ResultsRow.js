@@ -49,13 +49,15 @@ const useStyles = makeStyles((theme) => ({
   accordionButton: {
     width: '100%',
     height: '100%',
+    minHeight: '48px',
     maxHeight: '74px',
+    paddingLeft: '0.5rem',
+    paddingRight: '0.5rem',
     display: 'flex',
     justifyContent: 'space-between',
     borderRadius: '10px',
     textAlign: 'left',
     textTransform: 'none',
-    padding: '1rem',
   },
   link: {
     color: theme.palette.primary.main,

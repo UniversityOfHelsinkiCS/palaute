@@ -98,7 +98,6 @@ const OrganisationTable = ({
                   { id: 1, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
-            <th aria-hidden="true" />
           </tr>
         </thead>
         <tbody>
