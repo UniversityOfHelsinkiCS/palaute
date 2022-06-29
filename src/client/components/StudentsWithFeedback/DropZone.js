@@ -139,6 +139,26 @@ const ExportCsv = ({ headers, rows, students }) => {
     updatedRows.push(newRow)
   }
 
+  const studentNumbers = updatedRows.map((row) => Number(row[index]))
+  const missingStudents = students.filter(
+    (student) => !studentNumbers.includes(Number(student.studentNumber)),
+  )
+
+  for (const student of missingStudents) {
+    const [firstName, lastName, studentNumber, email, feedbackGiven] = [
+      ...Object.values(student),
+    ]
+    const newRow = [
+      lastName,
+      firstName,
+      studentNumber,
+      email,
+      ...new Array(headers.length - 4).fill(''),
+      feedbackGiven,
+    ]
+    updatedRows.push(newRow)
+  }
+
   const data = [headers.concat(t('feedbackHeader')), ...updatedRows]
   const parsedData = Papa.unparse(data, { delimiter: ';' })
 
