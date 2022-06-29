@@ -15,7 +15,7 @@ const {
 } = require('sequelize')
 
 const _ = require('lodash')
-const { format } = require('date-fns')
+const { format, differenceInHours } = require('date-fns')
 
 const CourseUnit = require('./courseUnit')
 const Organisation = require('./organisation')
@@ -25,6 +25,8 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 const Question = require('./question')
+
+const { ApplicationError } = require('../util/customErrors')
 
 const {
   sendNotificationAboutFeedbackResponseToStudents,
@@ -321,6 +323,13 @@ class FeedbackTarget extends Model {
   }
 
   async sendFeedbackReminderToStudents(reminder) {
+    if (differenceInHours(this.feedbackReminderLastSentAt, new Date()) < 24) {
+      throw new ApplicationError(
+        'Can send only 1 feedback reminder every 24 hours',
+        403,
+      )
+    }
+
     const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
     const students = await this.getStudentsWhoHaveNotGivenFeedback()
     const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/feedback`
@@ -333,13 +342,20 @@ class FeedbackTarget extends Model {
 
     const formattedClosesAt = format(new Date(this.closesAt), 'dd.MM.yyyy')
 
-    return sendReminderToGiveFeedbackToStudents(
-      url,
-      formattedStudents,
-      courseUnit.name,
-      reminder,
-      formattedClosesAt,
-    )
+    return (async () => {
+      const emails = await sendReminderToGiveFeedbackToStudents(
+        url,
+        formattedStudents,
+        courseUnit.name,
+        reminder,
+        formattedClosesAt,
+      )
+
+      this.feedbackReminderLastSentAt = new Date()
+      await this.save()
+
+      return emails
+    })()
   }
 
   async getPublicQuestionIds() {
@@ -525,8 +541,10 @@ FeedbackTarget.init(
     feedbackResponseReminderEmailSent: {
       type: BOOLEAN,
     },
-    feedbackReminderEmailToStudentsSent: {
-      type: BOOLEAN,
+    feedbackReminderLastSentAt: {
+      type: DATE,
+      defaultValue: null,
+      allowNull: true,
     },
     feedbackVisibility: {
       type: TEXT,

@@ -68,8 +68,6 @@ const sendToPate = async (options = {}) => {
     )} bytes), in ${chunkedEmails.length} chunks of size ${chunkSize} (${sizeOf(
       chunkedEmails[0],
     )} bytes)`,
-    // eslint-disable-next-line no-console
-    console.log(options.email),
   )
   sleep(5000)
 

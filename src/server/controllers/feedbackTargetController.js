@@ -817,17 +817,14 @@ const remindStudentsOnFeedback = async (req, res) => {
       404,
     )
 
-  if (relevantFeedbackTarget.feedbackReminderEmailToStudentsSent)
-    throw new ApplicationError('Email reminder has already been sent', 400) // or 409 ?
-
   const { reminder } = req.body.data
 
-  relevantFeedbackTarget.feedbackReminderEmailToStudentsSent = true
-
   await relevantFeedbackTarget.sendFeedbackReminderToStudents(reminder)
-  await relevantFeedbackTarget.save()
 
-  return res.sendStatus(200)
+  return res.send({
+    feedbackReminderLastSentAt:
+      relevantFeedbackTarget.feedbackReminderLastSentAt,
+  })
 }
 
 const openFeedbackImmediately = async (req, res) => {
