@@ -113,8 +113,9 @@ const useStyles = makeStyles((theme) => ({
 const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
   const list = teachers.map((teacher) => (
     <TeacherChip
+      key={teacher.id}
       user={teacher}
-      onDelete={isAdmin && (() => onDelete(teacher))}
+      onDelete={isAdmin ? () => onDelete(teacher) : undefined}
     />
   ))
   return (

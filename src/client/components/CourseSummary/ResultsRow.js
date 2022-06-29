@@ -77,7 +77,7 @@ const getQuestion = (questions, questionId) =>
   questions.find((q) => q.id === questionId)
 
 const ResultsRow = ({
-  id,
+  // id,
   link,
   label,
   results,
