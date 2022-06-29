@@ -1,6 +1,4 @@
 import React, { Fragment } from 'react'
-import { Link } from '@material-ui/core'
-import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -35,21 +33,17 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
           return (
             <Fragment key={courseCode}>
               <ResultsRow
-                label={
-                  <Link
-                    component={RouterLink}
-                    to={`/course-summary/${courseCode}`}
-                  >
-                    {getLanguageValue(name, i18n.language)} ({courseCode})
-                  </Link>
-                }
+                link={`/course-summary/${courseCode}`}
+                label={`${getLanguageValue(
+                  name,
+                  i18n.language,
+                )} (${courseCode})`}
                 level={1}
                 results={results}
                 questions={questions}
                 feedbackCount={feedbackCount}
                 studentCount={studentCount}
                 feedbackResponseGiven={feedbackResponseStatus}
-                lastChild={i === courseUnits.length - 1}
               />
               {i < courseUnits.length - 1 && <DividerRow />}
             </Fragment>

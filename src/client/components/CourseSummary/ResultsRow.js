@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
 
-import { Tooltip, Typography, IconButton, makeStyles } from '@material-ui/core'
+import {
+  Tooltip,
+  Typography,
+  makeStyles,
+  ButtonBase,
+  Box,
+} from '@material-ui/core'
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import DownIcon from '@material-ui/icons/KeyboardArrowDown'
 import DoneIcon from '@material-ui/icons/Done'
 import ClearIcon from '@material-ui/icons/Clear'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
@@ -37,7 +44,24 @@ const useStyles = makeStyles((theme) => ({
       width: '450px',
     },
     paddingLeft: theme.spacing(2 + level * 2),
+    paddingRight: '1rem',
   }),
+  accordionButton: {
+    width: '100%',
+    height: '100%',
+    minHeight: '48px',
+    maxHeight: '74px',
+    paddingLeft: '0.5rem',
+    paddingRight: '0.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderRadius: '10px',
+    textAlign: 'left',
+    textTransform: 'none',
+  },
+  link: {
+    color: theme.palette.primary.main,
+  },
   doneIcon: {
     color: theme.palette.success.main,
   },
@@ -47,9 +71,6 @@ const useStyles = makeStyles((theme) => ({
   accessTime: {
     color: theme.palette.warning.main,
   },
-  lastChildRow: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-  },
 }))
 
 const getQuestion = (questions, questionId) =>
@@ -57,6 +78,7 @@ const getQuestion = (questions, questionId) =>
 
 const ResultsRow = ({
   id,
+  link,
   label,
   results,
   questions,
@@ -66,12 +88,9 @@ const ResultsRow = ({
   studentCount,
   feedbackResponseGiven,
   accordionEnabled = false,
-  accordionCellEnabled = true,
   accordionInitialOpen = false,
   onToggleAccordion = () => {},
   cellsAfter = null,
-  lastChild = false,
-  ...props
 }) => {
   const { t } = useTranslation()
   const classes = useStyles({ level })
@@ -105,23 +124,43 @@ const ResultsRow = ({
 
   return (
     <>
-      <tr {...props}>
-        <td
-          className={cn(classes.labelCell, lastChild && classes.lastChildRow)}
-        >
-          <Typography component="div">{label}</Typography>
+      <tr>
+        <td className={cn(classes.labelCell)}>
+          {accordionEnabled ? (
+            // eslint-disable-next-line react/button-has-type
+            <ButtonBase
+              onClick={handleToggleAccordion}
+              className={cn(
+                classes.accordionButton,
+                'shadow-scale-hover-effect',
+              )}
+              variant="contained"
+            >
+              <Typography variant="body1">{label}</Typography>
+              <Box mr={1} />
+              {accordionOpen ? <UpIcon /> : <DownIcon />}
+            </ButtonBase>
+          ) : (
+            <>
+              {link ? (
+                <ButtonBase
+                  to={link}
+                  component={RouterLink}
+                  className={cn(
+                    classes.accordionButton,
+                    classes.link,
+                    'shadow-scale-hover-effect',
+                  )}
+                  variant="contained"
+                >
+                  <Typography component="div">{label}</Typography>
+                </ButtonBase>
+              ) : (
+                <Typography component="div">{label}</Typography>
+              )}
+            </>
+          )}
         </td>
-        {accordionCellEnabled && (
-          <td>
-            {accordionEnabled ? (
-              <IconButton onClick={handleToggleAccordion}>
-                {accordionOpen ? <UpIcon /> : <DownIcon />}
-              </IconButton>
-            ) : (
-              ' '
-            )}
-          </td>
-        )}
         {results.map(({ questionId, mean, distribution, previous }) => (
           <ResultItem
             key={questionId}

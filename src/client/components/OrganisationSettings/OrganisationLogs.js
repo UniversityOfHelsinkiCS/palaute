@@ -28,7 +28,7 @@ const getLogMessage = (data) => {
     messages = messages.concat(
       data.enabledStudentList.length > 0
         ? `Set student list visible for course ${data.enabledStudentList[0]}`
-        : `Set student list as not visible for course ${data.disabledStudentList[0]}`
+        : `Set student list as not visible for course ${data.disabledStudentList[0]}`,
     )
   }
 

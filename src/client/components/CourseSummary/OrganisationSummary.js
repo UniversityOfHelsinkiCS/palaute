@@ -85,7 +85,6 @@ const OrganisationTable = ({
         <thead>
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
-            <th aria-hidden="true" />
 
             <ColumnHeadings
               onOrderByChange={onOrderByChange}
@@ -99,7 +98,6 @@ const OrganisationTable = ({
                   { id: 1, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
-            <th aria-hidden="true" />
           </tr>
         </thead>
         <tbody>
@@ -149,7 +147,7 @@ const OrganisationTable = ({
                     questions={questions}
                   />
                 </ResultsRow>
-                <DividerRow />
+                <DividerRow height={1.3} />
               </Fragment>
             ),
           )}
