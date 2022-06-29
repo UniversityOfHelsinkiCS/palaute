@@ -34,6 +34,11 @@ export default {
     feedbackGiven: 'Annettu',
     feedbackNotGiven: 'Ei annettu',
     exportCSV: 'Vie CSV-muodossa',
+    combineCSV: 'Yhdistä Sisu-CSV:n kanssa',
+    downloadCSV: 'Lataa tiedosto',
+    dropZoneInfo1: 'Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.',
+    dropZoneInfo2: 'Alle 5MB .csv-päätteinen tiedosto hyväksytään.',
+    feedbackHeader: 'PALAUTE',
     dirtyFormPrompt:
       'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',

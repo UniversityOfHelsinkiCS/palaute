@@ -32,6 +32,11 @@ export default {
     // feedbackGiven: 'Given',
     // feedbackNotGiven: 'Not given',
     // exportCSV: 'Export as CSV',
+    // combineCSV: 'Combine with Sisu CSV',
+    // downloadCSV: 'Download file',
+    // dropZoneInfo1: 'Drag a file here, or find it by clicking this box.',
+    // dropZoneInfo2: 'One .csv-ended file, under 5MB is accepted',
+    // feedbackHeader: 'FEEDBACK',
     dirtyFormPrompt:
       'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
     actions: 'Handlingar',
