@@ -6,6 +6,7 @@ import { Box, Button, Chip, Paper, Typography } from '@material-ui/core'
 import { FileCopyOutlined } from '@material-ui/icons'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
+import { differenceInHours, format } from 'date-fns'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { LoadingProgress } from '../LoadingProgress'
@@ -14,6 +15,7 @@ import Alert from '../Alert'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import ReminderEmailModal from './ReminderEmailModal'
+import { TooltipButton } from '../TooltipButton'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
@@ -23,7 +25,7 @@ const StudentLinkCopyButton = ({ onClick, label }) => (
   </Box>
 )
 
-const FeedbackTargetLinks = () => {
+const FeedbackTargetShare = () => {
   const [open, setOpen] = useState(false)
   const openModal = () => setOpen(true)
   const closeModal = () => setOpen(false)
@@ -41,6 +43,12 @@ const FeedbackTargetLinks = () => {
     return <LoadingProgress />
   }
 
+  const lastSentAt = Date.parse(feedbackTarget.feedbackReminderLastSentAt)
+  const modalDisabled = differenceInHours(Date.now(), lastSentAt) < 24
+  const formattedLastSentAt = lastSentAt
+    ? format(lastSentAt, 'dd.MM hh.mm')
+    : undefined
+
   const feedbackLink = `${window.location.host}/targets/${id}/feedback`
   const resultsLink = `${window.location.host}/targets/${id}/results`
 
@@ -57,16 +65,23 @@ const FeedbackTargetLinks = () => {
         feedbackTarget={feedbackTarget}
       />
       {isOpen && (
-        <Box mb={2}>
-          <Button
+        <Box mb={2} display="flex" alignItems="center">
+          <TooltipButton
             variant="contained"
             color="primary"
             onClick={openModal}
-            style={{ marginTop: 10 }}
-            disabled={feedbackTarget.feedbackReminderEmailToStudentsSent}
+            disabled={modalDisabled}
+            tooltip={t('feedbackTargetResults:reminderDisabled')}
           >
             {t('feedbackTargetResults:sendReminder')}
-          </Button>
+          </TooltipButton>
+          <Box mr={2} />
+          <Typography variant="subtitle1" color="textSecondary">
+            {formattedLastSentAt &&
+              `${t(
+                'feedbackTargetResults:reminderLastSent',
+              )} ${formattedLastSentAt}`}
+          </Typography>
         </Box>
       )}
       {isEnded && (
@@ -131,4 +146,4 @@ const FeedbackTargetLinks = () => {
   )
 }
 
-export default FeedbackTargetLinks
+export default FeedbackTargetShare

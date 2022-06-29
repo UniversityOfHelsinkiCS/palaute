@@ -221,6 +221,9 @@ export default {
     closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     sendReminder: 'Send reminder email',
     sendReminderButton: 'Send reminder',
+    reminderDisabled:
+      'You have already sent a reminder email less than 24 hours ago',
+    reminderLastSent: 'Reminder last sent',
     cancelReminder: 'Cancel',
     modalTitle: 'Send a reminder about feedback via email',
     writeAMessage: 'Write a message to students',

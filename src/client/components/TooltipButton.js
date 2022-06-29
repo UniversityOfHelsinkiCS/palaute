@@ -2,8 +2,12 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
 
-export const TooltipButton = ({ tooltip, disabled, children }, props) => {
-  const button = <Button {...props}>{children}</Button>
+export const TooltipButton = ({ tooltip, disabled, children, ...props }) => {
+  const button = (
+    <Button disabled={disabled} {...props}>
+      {children}
+    </Button>
+  )
   if (disabled) {
     return (
       <Tooltip title={tooltip}>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useMutation } from 'react-query'
+import { differenceInHours } from 'date-fns'
 
 import {
   Box,
@@ -13,6 +15,8 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import apiClient from '../../util/apiClient'
 import { formatClosesAt } from './utils'
+import queryClient from '../../util/queryClient'
+import { TooltipButton } from '../TooltipButton'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,25 +47,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const useSendReminderEmail = () => {
+  const mutationFn = async ({ id, data }) =>
+    apiClient.put(`/feedback-targets/${id}/remind-students`, {
+      data: { data },
+    })
+
+  const mutation = useMutation(mutationFn, {
+    onSuccess: (response, variables) => {
+      queryClient.setQueryData(
+        ['feedbackTarget', String(variables.id)],
+        (feedbackTarget) => ({ ...feedbackTarget, ...response.data }),
+      )
+    },
+  })
+
+  return mutation
+}
+
 const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const [reminder, setReminder] = useState('')
-  const [sent, setSent] = useState(false)
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
+  const sendReminderEmail = useSendReminderEmail(feedbackTarget.id)
 
   const { t, i18n } = useTranslation()
   const { language } = i18n
 
-  const { courseUnit, id } = feedbackTarget
+  const { courseUnit, id, feedbackReminderLastSentAt } = feedbackTarget
+  const lastSentAt = Date.parse(feedbackReminderLastSentAt)
+  const disabled = differenceInHours(Date.now(), lastSentAt) < 24
 
   const sendEmail = async () => {
-    setSent(true)
     onClose()
 
     try {
-      await apiClient.put(`/feedback-targets/${id}/remind-students`, {
-        data: { reminder },
-      })
+      await sendReminderEmail.mutateAsync({ id, data: reminder })
       enqueueSnackbar(t('feedbackTargetResults:emailSent'), {
         variant: 'success',
       })
@@ -81,12 +102,14 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         <Typography variant="body2" component="p" className={classes.subtitle}>
           {t('feedbackTargetResults:modalSubtitle')}
         </Typography>
+        <Box mb={4} />
         <Typography variant="body1" component="p" className={classes.textField}>
           {t('feedbackTargetResults:emailMessage', {
             courseName: courseUnit.name[language],
             closesAt,
           })}
         </Typography>
+        <Box mb={2} />
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
           value={reminder}
@@ -94,14 +117,15 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           fullWidth
         />
         <div className={classes.buttons}>
-          <Button
+          <TooltipButton
             onClick={sendEmail}
             color="primary"
             variant="contained"
-            disabled={sent}
+            tooltip={t('feedbackTargetResults:reminderDisabled')}
+            disabled={disabled}
           >
             {t('feedbackTargetResults:sendReminderButton')}
-          </Button>
+          </TooltipButton>
           <Button onClick={onClose} color="secondary" variant="contained">
             {t('feedbackTargetResults:cancelReminder')}
           </Button>

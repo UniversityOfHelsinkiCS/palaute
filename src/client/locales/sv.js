@@ -225,6 +225,9 @@ export default {
       'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
     sendReminder: 'Skicka påminnelse via e-post',
     sendReminderButton: 'Skicka påminnelse',
+    // reminderDisabled:
+    //  'Olet jo lähettänyt muistutusviestin viimeisen 24 tunnin aikana',
+    // reminderLastSent: 'Muistutus viimeksi lähetetty',
     cancelReminder: 'Avbryt',
     modalTitle: 'Skicka en påminnelse om respons via e-post',
     writeAMessage: 'Skriv ett meddelande till studerande',

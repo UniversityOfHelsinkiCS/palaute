@@ -38,7 +38,7 @@ import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
 import EditFeedbackResponse from '../EditFeedbackResponse'
-import FeedbackTargetLinks from '../FeedbackTargetLinks'
+import FeedbackTargetShare from '../FeedbackTargetShare'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import RouterTabs from '../RouterTabs'
@@ -399,7 +399,7 @@ const FeedbackTargetView = () => {
           path={`${path}/students-with-feedback`}
           component={StudentsWithFeedback}
         />
-        <Route path={`${path}/share`} component={FeedbackTargetLinks} />
+        <Route path={`${path}/share`} component={FeedbackTargetShare} />
         <Route path={`${path}/togen`} component={FeedbackLinksView} />
         <Route
           path={`${path}/edit-feedback-response`}
