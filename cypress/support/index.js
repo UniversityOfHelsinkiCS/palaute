@@ -17,6 +17,13 @@
 import { inE2EMode } from '../../src/config'
 import './commands'
 
+before(() => {
+  cy.enableCourses()
+  cy.enableTestUsers()
+  cy.setUpAdminTeacherView()
+  cy.setUpSecondaryTeacherView()
+})
+
 export const baseUrl = inE2EMode ? 'localhost:8000' : 'localhost:8000'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
