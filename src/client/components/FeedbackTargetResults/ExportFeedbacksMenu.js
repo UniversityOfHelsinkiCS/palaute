@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
+import { parseISO, format } from 'date-fns'
 import { Button, makeStyles, MenuItem, Menu, Box } from '@material-ui/core'
 import Papa from 'papaparse'
 import * as _ from 'lodash'
@@ -102,7 +103,11 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   const parsedData = Papa.unparse(data, { delimiter: ';' })
 
-  const filename = `${feedbackTarget.courseUnit.courseCode}_${feedbackTarget.courseUnit.validityPeriod.startDate}.csv`
+  const startDate = format(
+    parseISO(feedbackTarget.courseRealisation.startDate),
+    'yyyy-MM-dd',
+  )
+  const filename = `${feedbackTarget.courseUnit.courseCode}_${startDate}.csv`
 
   return (
     <Button className={classes.button}>
