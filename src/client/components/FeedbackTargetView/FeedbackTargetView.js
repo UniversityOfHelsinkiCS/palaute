@@ -178,7 +178,7 @@ const FeedbackTargetView = () => {
   const showEditFeedbackResponseTab =
     isAdmin || (isTeacher && isEnded && !isOld)
   const showStudentsWithFeedbackTab =
-    isAdmin || (isTeacher && studentListVisible && (isOpen || isEnded))
+    isAdmin || (isTeacher && (isOpen || isEnded))
   const showLinksTab = isAdmin || isTeacher
   const showSettingsTab = isAdmin || isTeacher
   const showLogsTab = isAdmin
