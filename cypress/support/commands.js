@@ -72,6 +72,8 @@ Cypress.Commands.add('setUpAdminTeacherView', () => {
     body: {
       startDate: new Date().setDate(date.getDate() - 1),
       endDate: new Date().setHours(date.getHours() - 10),
+      feedbackResponse: null,
+      feedbackResponseEmailSent: false,
     },
   })
 
