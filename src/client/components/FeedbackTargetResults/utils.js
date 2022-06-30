@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 export const feedbackCanBeClosed = (feedbackTarget) => {
   const { opensAt } = feedbackTarget
@@ -9,3 +9,6 @@ export const feedbackCanBeClosed = (feedbackTarget) => {
 
 export const formatClosesAt = (closesAt) =>
   format(new Date(closesAt), 'dd.MM.yyyy')
+
+export const getCourseStartDate = (feedbackTarget) =>
+  format(parseISO(feedbackTarget.courseRealisation.startDate), 'yyyy-MM-dd')
