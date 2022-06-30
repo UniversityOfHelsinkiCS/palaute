@@ -6,6 +6,7 @@ const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
+  sendEmailReminderOnFeedbackToStudents,
 } = require('./emailSender')
 
 const schedule = (cronTime, func) =>
@@ -21,6 +22,7 @@ const run = async () => {
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
   await sendEmailReminderAboutFeedbackResponseToTeachers()
+  await sendEmailReminderOnFeedbackToStudents()
 }
 
 const start = async () => {
