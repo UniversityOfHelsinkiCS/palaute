@@ -39,7 +39,7 @@ describe('Teacher view', () => {
 
     cy.visit(`${baseUrl}/targets/97/edit-feedback-response`)
 
-    cy.get('textarea').type('Feedback response for students to see')
+    cy.get('textarea').first().type('Feedback response for students to see')
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
     cy.visit(`${baseUrl}/courses`)
