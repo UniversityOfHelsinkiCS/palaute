@@ -434,7 +434,7 @@ const RouterTab = ({
 
   if (badge) {
     content = (
-      <Badge color="primary" variant="dot">
+      <Badge color="primary" variant="dot" overlap="rectangular">
         {content}
       </Badge>
     )
