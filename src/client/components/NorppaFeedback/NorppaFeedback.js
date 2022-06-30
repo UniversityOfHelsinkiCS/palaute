@@ -80,7 +80,7 @@ const NorppaFeedback = () => {
               label={t('norppaFeedback:feedback')}
               helperText={t('norppaFeedback:feedbackHelper')}
               fullWidth
-              rows={4}
+              minRows={4}
               multiline
             />
             <FormikCheckBox

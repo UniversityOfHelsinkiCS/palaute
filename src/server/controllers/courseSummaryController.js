@@ -2,7 +2,7 @@ const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
-const { CourseUnit, Survey, Organisation, CourseRealisation, FeedbackTarget } = require('../models')
+const { CourseUnit, Survey, Organisation } = require('../models')
 
 const {
   getOrganisationSummaries,

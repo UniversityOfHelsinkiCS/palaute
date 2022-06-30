@@ -112,7 +112,7 @@ const EditFeedbackResponse = () => {
                         : t('feedbackResponse:responseLabel')
                     }
                     name="feedbackResponse"
-                    rows={10}
+                    minRows={10}
                     fullWidth
                     multiline
                     disabled={feedbackResponseFormDisabled}
