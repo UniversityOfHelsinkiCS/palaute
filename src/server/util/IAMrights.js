@@ -86,8 +86,8 @@ const getFacultyReadingRights = (hyGroups) => {
   const facultyCodes = hyGroups
     .flatMap(kosuIamToFaculties)
     // faculty codes from dekanaatti iam
-    .concat(hyGroups.map(dekaaniIamToFaculty).filter(Boolean))
-
+    .concat(hyGroups.map(dekaaniIamToFaculty))
+    .filter(Boolean)
   const access = {}
   facultyCodes.forEach((fc) => {
     const faculty = data.find((faculty) => faculty.code === fc)
