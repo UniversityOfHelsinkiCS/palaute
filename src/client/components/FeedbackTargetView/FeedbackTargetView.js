@@ -15,10 +15,10 @@ import {
   Tab,
   Button,
   Link as MuiLink,
-  makeStyles,
   Tooltip,
   Badge,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'

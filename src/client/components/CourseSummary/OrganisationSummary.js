@@ -8,10 +8,10 @@ import {
   TableContainer,
   IconButton,
   Tooltip,
-  makeStyles,
   Divider,
   LinearProgress,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'

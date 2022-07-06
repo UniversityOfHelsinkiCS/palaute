@@ -7,8 +7,8 @@ import {
   AccordionDetails,
   Box,
   Typography,
-  makeStyles,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 

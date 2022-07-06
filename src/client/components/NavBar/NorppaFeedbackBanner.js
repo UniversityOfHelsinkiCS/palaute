@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
-import { Button, Paper, Typography, makeStyles, Box } from '@mui/material'
+import { Button, Paper, Typography, Box } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import CloseIcon from '@mui/icons-material/Close'
 import { useSnackbar } from 'notistack'

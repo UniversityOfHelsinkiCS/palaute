@@ -1,6 +1,7 @@
 import React, { useState, forwardRef } from 'react'
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import { makeStyles, Button, Box, Card, CardContent } from '@mui/material'
+import { Button, Box, Card, CardContent } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'

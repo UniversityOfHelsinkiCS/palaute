@@ -1,13 +1,8 @@
 import React, { Fragment } from 'react'
 import { useQueryClient } from 'react-query'
 
-import {
-  Box,
-  TableContainer,
-  makeStyles,
-  Divider,
-  LinearProgress,
-} from '@mui/material'
+import { Box, TableContainer, Divider, LinearProgress } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'

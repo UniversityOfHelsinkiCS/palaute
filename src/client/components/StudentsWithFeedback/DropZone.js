@@ -5,7 +5,8 @@ import { useDropzone } from 'react-dropzone'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
 
-import { Box, Button, makeStyles } from '@mui/material'
+import { Box, Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(() => ({
   box: {

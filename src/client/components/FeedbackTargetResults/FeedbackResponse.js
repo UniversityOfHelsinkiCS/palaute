@@ -2,14 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import {
-  Typography,
-  Box,
-  Button,
-  makeStyles,
-  Card,
-  CardContent,
-} from '@mui/material'
+import { Typography, Box, Button, Card, CardContent } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import Alert from '../Alert'
 import Markdown from '../Markdown'

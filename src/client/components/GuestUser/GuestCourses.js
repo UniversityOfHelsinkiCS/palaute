@@ -1,13 +1,7 @@
 import React from 'react'
 
-import {
-  Box,
-  Container,
-  Typography,
-  makeStyles,
-  Card,
-  CardContent,
-} from '@mui/material'
+import { Box, Container, Typography, Card, CardContent } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'

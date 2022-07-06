@@ -2,13 +2,13 @@ import React from 'react'
 
 import {
   Typography,
-  makeStyles,
   Button,
   Box,
   Accordion,
   AccordionSummary,
   AccordionDetails,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { useTranslation } from 'react-i18next'

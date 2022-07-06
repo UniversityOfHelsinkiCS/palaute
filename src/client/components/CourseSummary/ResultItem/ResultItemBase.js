@@ -1,5 +1,6 @@
 import React from 'react'
-import { Tooltip, makeStyles } from '@mui/material'
+import { Tooltip } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import {
   green,
   lightGreen,

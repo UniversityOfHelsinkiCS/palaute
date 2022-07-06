@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { makeStyles, Button } from '@mui/material'
+import { Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import FixedContainer from '../FixedContainer'

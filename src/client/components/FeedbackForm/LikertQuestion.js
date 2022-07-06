@@ -5,9 +5,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  makeStyles,
   FormHelperText,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'

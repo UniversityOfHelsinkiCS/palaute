@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import cn from 'classnames'
-import { Link, Typography, makeStyles } from '@mui/material'
+import { Link, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
   gutterBottom: {

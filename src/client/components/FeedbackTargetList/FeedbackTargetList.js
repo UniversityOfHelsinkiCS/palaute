@@ -2,7 +2,8 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { Typography, List, makeStyles } from '@mui/material'
+import { Typography, List } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import CourseRealisationItem from './CourseRealisationItem'
 

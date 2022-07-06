@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
-import { Container, makeStyles } from '@mui/material'
+import { Container } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useParams } from 'react-router'
 
 import GuestCourses from './GuestCourses'

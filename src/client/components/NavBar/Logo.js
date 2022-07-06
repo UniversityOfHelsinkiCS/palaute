@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Typography, makeStyles } from '@mui/material'
+import { Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { Link } from 'react-router-dom'
 import hyLogo from '../../assets/hy_logo.svg'

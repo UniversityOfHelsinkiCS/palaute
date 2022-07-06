@@ -2,7 +2,8 @@ import React, { forwardRef } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { Route, Switch, useRouteMatch, useHistory } from 'react-router'
 
-import { Box, Button, Tab, makeStyles } from '@mui/material'
+import { Box, Button, Tab } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 

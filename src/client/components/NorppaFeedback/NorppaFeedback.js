@@ -1,7 +1,8 @@
 import React from 'react'
 import { useHistory } from 'react-router'
 
-import { Box, Button, makeStyles, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'

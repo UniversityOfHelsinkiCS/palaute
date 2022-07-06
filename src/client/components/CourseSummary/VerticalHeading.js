@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Tooltip, Typography, makeStyles, Box, IconButton } from '@mui/material'
+import { Tooltip, Typography, Box, IconButton } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({

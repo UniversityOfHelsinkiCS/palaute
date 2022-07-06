@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'

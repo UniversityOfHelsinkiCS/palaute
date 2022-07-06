@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-import { Tooltip, Typography, makeStyles, ButtonBase, Box } from '@mui/material'
+import { Tooltip, Typography, ButtonBase, Box } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import UpIcon from '@mui/icons-material/KeyboardArrowUp'
 import DownIcon from '@mui/icons-material/KeyboardArrowDown'

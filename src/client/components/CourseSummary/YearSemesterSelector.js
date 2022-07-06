@@ -1,13 +1,7 @@
 import React from 'react'
 import * as _ from 'lodash'
-import {
-  Box,
-  IconButton,
-  makeStyles,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton, MenuItem, Select, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import useHistoryState from '../../hooks/useHistoryState'

@@ -1,4 +1,5 @@
-import { Container, makeStyles } from '@mui/material'
+import { Container } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 

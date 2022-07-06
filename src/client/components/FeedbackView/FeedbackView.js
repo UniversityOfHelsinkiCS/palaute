@@ -2,14 +2,8 @@ import React, { useState, forwardRef } from 'react'
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
-import {
-  Typography,
-  makeStyles,
-  Button,
-  Box,
-  Card,
-  CardContent,
-} from '@mui/material'
+import { Typography, Button, Box, Card, CardContent } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'

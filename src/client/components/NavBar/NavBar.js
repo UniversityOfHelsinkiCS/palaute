@@ -3,7 +3,6 @@ import React, { useRef, useState, forwardRef } from 'react'
 import {
   AppBar,
   Toolbar,
-  makeStyles,
   Button,
   Menu,
   MenuItem,
@@ -13,6 +12,7 @@ import {
   ButtonBase,
   Box,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'

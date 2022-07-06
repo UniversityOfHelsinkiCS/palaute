@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { makeStyles, Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import OptionEditor from './OptionEditor'

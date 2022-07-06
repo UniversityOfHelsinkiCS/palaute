@@ -5,13 +5,13 @@ import {
   CardContent,
   Grid,
   Box,
-  makeStyles,
   Typography,
   List,
   ListItem,
   ListItemText,
   Link as MuiLink,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useTranslation, Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

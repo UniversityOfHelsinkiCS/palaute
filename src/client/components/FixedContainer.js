@@ -1,4 +1,5 @@
-import { Container, makeStyles, Paper } from '@mui/material'
+import { Container, Paper } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 

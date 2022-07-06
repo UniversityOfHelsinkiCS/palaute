@@ -7,11 +7,11 @@ import {
   ListItemText,
   ListItem,
   Box,
-  makeStyles,
   Button,
   Menu,
   MenuItem,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import MoreHoriz from '@mui/icons-material/MoreHoriz'
 

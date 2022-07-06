@@ -1,13 +1,7 @@
 import React from 'react'
 
-import {
-  Box,
-  Container,
-  Divider,
-  Link,
-  makeStyles,
-  Typography,
-} from '@mui/material'
+import { Box, Container, Divider, Link, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 

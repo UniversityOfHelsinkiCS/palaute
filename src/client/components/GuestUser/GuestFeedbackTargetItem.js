@@ -12,8 +12,8 @@ import {
   Dialog,
   DialogTitle,
   ListItem,
-  makeStyles,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'

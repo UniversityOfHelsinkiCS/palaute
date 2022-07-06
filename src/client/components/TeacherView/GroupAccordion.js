@@ -5,10 +5,10 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  makeStyles,
   Box,
   Divider,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 

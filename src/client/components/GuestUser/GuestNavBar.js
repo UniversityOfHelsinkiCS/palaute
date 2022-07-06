@@ -5,7 +5,6 @@ import {
   Typography,
   AppBar,
   Toolbar,
-  makeStyles,
   Button,
   Menu,
   MenuItem,
@@ -13,6 +12,7 @@ import {
   IconButton,
   Divider,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import MenuIcon from '@mui/icons-material/Menu'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Typography, makeStyles } from '@mui/material'
+import { Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
   label: {

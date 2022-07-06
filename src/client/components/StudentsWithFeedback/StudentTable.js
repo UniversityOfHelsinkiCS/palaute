@@ -11,11 +11,11 @@ import {
   TableHead,
   TableContainer,
   TableSortLabel,
-  makeStyles,
   Paper,
   Button,
   Box,
 } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 
 import { sortTable } from '../../util/tableUtils'

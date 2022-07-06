@@ -1,12 +1,7 @@
 import React from 'react'
 
-import {
-  makeStyles,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from '@mui/material'
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 
