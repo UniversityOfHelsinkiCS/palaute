@@ -9,7 +9,7 @@ import {
   Box,
   Card,
   CardContent,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'

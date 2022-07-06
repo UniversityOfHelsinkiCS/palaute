@@ -1,4 +1,4 @@
-import { Container, makeStyles } from '@material-ui/core'
+import { Container, makeStyles } from '@mui/material'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 

@@ -11,7 +11,7 @@ import {
   ListItem,
   ListItemText,
   Link as MuiLink,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardContent, Typography, List } from '@material-ui/core'
+import { Card, CardContent, Typography, List } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 

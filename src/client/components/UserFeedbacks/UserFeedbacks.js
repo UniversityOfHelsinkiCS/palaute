@@ -1,5 +1,5 @@
 import React, { useMemo, Fragment } from 'react'
-import { Typography, makeStyles } from '@material-ui/core'
+import { Typography, makeStyles } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'

@@ -12,16 +12,16 @@ import {
   Divider,
   ButtonBase,
   Box,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import MenuIcon from '@material-ui/icons/Menu'
-import { PersonOutlined } from '@material-ui/icons'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import MailOutlineIcon from '@material-ui/icons/MailOutline'
+import MenuIcon from '@mui/icons-material/Menu'
+import { PersonOutlined } from '@mui/icons-material'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'

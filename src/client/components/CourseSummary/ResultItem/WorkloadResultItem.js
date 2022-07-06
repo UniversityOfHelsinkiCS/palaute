@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
-import ArrowIcon from '@material-ui/icons/TrendingFlat'
+import { Box } from '@mui/material'
+import ArrowIcon from '@mui/icons-material/TrendingFlat'
 import { useTranslation } from 'react-i18next'
 import { sumBy, isEmpty, round } from 'lodash'
 

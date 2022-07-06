@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText,
-} from '@material-ui/core'
+import { Select, MenuItem, FormControl, FormHelperText } from '@mui/material'
 
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'

@@ -9,7 +9,7 @@ import {
   makeStyles,
   Card,
   CardContent,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import Alert from '../Alert'
 import Markdown from '../Markdown'

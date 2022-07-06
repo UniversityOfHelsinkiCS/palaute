@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
-import { makeStyles, Divider, Box, Button } from '@material-ui/core'
+import { makeStyles, Divider, Box, Button } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'

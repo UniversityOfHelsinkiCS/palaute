@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Snackbar, Button } from '@material-ui/core'
+import { Snackbar, Button } from '@mui/material'
 
 const AdminLoggedInAsBanner = () => {
   const [open, setOpen] = useState(false)

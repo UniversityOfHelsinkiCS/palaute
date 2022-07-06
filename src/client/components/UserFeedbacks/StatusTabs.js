@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tabs, Tab } from '@material-ui/core'
+import { Tabs, Tab } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 const tabOrder = ['waitingForFeedback', 'feedbackGiven', 'feedbackClosed']

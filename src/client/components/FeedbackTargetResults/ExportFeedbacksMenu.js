@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
-import { Button, makeStyles, MenuItem, Menu, Box } from '@material-ui/core'
+import { Button, makeStyles, MenuItem, Menu, Box } from '@mui/material'
 import Papa from 'papaparse'
 import * as _ from 'lodash'
 import { getCourseStartDate } from './utils'

@@ -7,8 +7,8 @@ import {
   IconButton,
   FormControlLabel,
   Checkbox,
-} from '@material-ui/core'
-import { AddAlertOutlined, Undo } from '@material-ui/icons'
+} from '@mui/material'
+import { AddAlertOutlined, Undo } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'

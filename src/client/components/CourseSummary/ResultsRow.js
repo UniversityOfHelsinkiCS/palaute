@@ -1,18 +1,12 @@
 import React, { useState } from 'react'
 
-import {
-  Tooltip,
-  Typography,
-  makeStyles,
-  ButtonBase,
-  Box,
-} from '@material-ui/core'
+import { Tooltip, Typography, makeStyles, ButtonBase, Box } from '@mui/material'
 
-import UpIcon from '@material-ui/icons/KeyboardArrowUp'
-import DownIcon from '@material-ui/icons/KeyboardArrowDown'
-import DoneIcon from '@material-ui/icons/Done'
-import ClearIcon from '@material-ui/icons/Clear'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import UpIcon from '@mui/icons-material/KeyboardArrowUp'
+import DownIcon from '@mui/icons-material/KeyboardArrowDown'
+import DoneIcon from '@mui/icons-material/Done'
+import ClearIcon from '@mui/icons-material/Clear'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'

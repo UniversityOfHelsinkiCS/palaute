@@ -10,7 +10,7 @@ import {
   Box,
   Typography,
   Chip,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'

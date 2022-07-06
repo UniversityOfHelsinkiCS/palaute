@@ -6,9 +6,9 @@ import {
   AccordionDetails,
   Typography,
   makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'

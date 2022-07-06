@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Grid, Box, Typography } from '@material-ui/core'
-import OngoingIcon from '@material-ui/icons/Schedule'
-import UpcomingIcon from '@material-ui/icons/Event'
-import EndedIcon from '@material-ui/icons/Done'
+import { Grid, Box, Typography } from '@mui/material'
+import OngoingIcon from '@mui/icons-material/Schedule'
+import UpcomingIcon from '@mui/icons-material/Event'
+import EndedIcon from '@mui/icons-material/Done'
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'

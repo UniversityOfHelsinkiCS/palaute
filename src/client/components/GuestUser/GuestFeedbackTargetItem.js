@@ -13,10 +13,10 @@ import {
   DialogTitle,
   ListItem,
   makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import FeedbackGivenIcon from '@material-ui/icons/Check'
-import NoFeedbackIcon from '@material-ui/icons/Edit'
+import FeedbackGivenIcon from '@mui/icons-material/Check'
+import NoFeedbackIcon from '@mui/icons-material/Edit'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'

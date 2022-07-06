@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { makeStyles, Button } from '@material-ui/core'
+import { makeStyles, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import FixedContainer from '../FixedContainer'

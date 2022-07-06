@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@mui/material/styles'
 
 import CssBaseline from './CssBaseline'
 import PickerUtilsProvider from './PickerUtilsProvider'

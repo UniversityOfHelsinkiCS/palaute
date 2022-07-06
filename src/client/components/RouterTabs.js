@@ -1,5 +1,5 @@
 import React from 'react'
-import Tabs from '@material-ui/core/Tabs'
+import Tabs from '@mui/material/Tabs'
 import { useLocation, matchPath } from 'react-router-dom'
 import { get } from 'lodash'
 

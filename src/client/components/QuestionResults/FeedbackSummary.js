@@ -10,7 +10,7 @@ import {
   Card,
   TableBody,
   useMediaQuery,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
 

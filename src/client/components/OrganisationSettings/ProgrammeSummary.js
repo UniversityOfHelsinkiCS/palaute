@@ -7,7 +7,7 @@ import {
   makeStyles,
   Divider,
   LinearProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'

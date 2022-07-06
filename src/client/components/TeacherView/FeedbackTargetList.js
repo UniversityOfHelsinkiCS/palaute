@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, List, Typography } from '@material-ui/core'
+import { Box, List, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'

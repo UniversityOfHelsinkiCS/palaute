@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormGroup, FormControlLabel, Checkbox } from '@material-ui/core'
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'

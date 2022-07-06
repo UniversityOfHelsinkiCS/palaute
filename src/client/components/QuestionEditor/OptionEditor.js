@@ -7,10 +7,10 @@ import {
   Tooltip,
   Box,
   Grid,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { FieldArray, useField } from 'formik'
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
 
 import { createOption } from './utils'

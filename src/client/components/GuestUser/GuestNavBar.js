@@ -12,9 +12,9 @@ import {
   useMediaQuery,
   IconButton,
   Divider,
-} from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 

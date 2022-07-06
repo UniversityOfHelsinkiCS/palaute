@@ -8,11 +8,11 @@ import {
   makeStyles,
   Box,
   Divider,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import CourseUnitAccordion from './CourseUnitAccordion'
 

@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy'
 import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
 

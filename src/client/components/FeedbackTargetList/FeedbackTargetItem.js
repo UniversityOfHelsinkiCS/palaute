@@ -11,9 +11,9 @@ import {
   Button,
   Menu,
   MenuItem,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import MoreHoriz from '@material-ui/icons/MoreHoriz'
+import MoreHoriz from '@mui/icons-material/MoreHoriz'
 
 import { formatDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'

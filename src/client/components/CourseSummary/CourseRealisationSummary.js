@@ -10,7 +10,7 @@ import {
   Typography,
   TableContainer,
   makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 

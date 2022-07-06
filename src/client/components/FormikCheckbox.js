@@ -1,6 +1,6 @@
 import React from 'react'
 import { useField } from 'formik'
-import { Checkbox, FormControlLabel } from '@material-ui/core'
+import { Checkbox, FormControlLabel } from '@mui/material'
 
 const FormikCheckbox = ({ name, helperText, label, ...props }) => {
   const [field, meta, helpers] = useField(name)

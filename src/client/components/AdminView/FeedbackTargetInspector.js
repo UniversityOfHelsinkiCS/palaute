@@ -16,7 +16,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from '@material-ui/core'
+} from '@mui/material'
 import { debounce } from 'lodash'
 import { useSnackbar } from 'notistack'
 

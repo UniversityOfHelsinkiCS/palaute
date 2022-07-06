@@ -1,6 +1,6 @@
 import { React } from 'react'
 
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { Redirect, useParams } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetUsers from '../../hooks/useFeedbackTargetUsers'

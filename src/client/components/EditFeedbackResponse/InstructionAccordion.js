@@ -8,9 +8,9 @@ import {
   Box,
   Typography,
   makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const useStyles = makeStyles(() => ({
   accordion: {

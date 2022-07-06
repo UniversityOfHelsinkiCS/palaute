@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField as MuiTextField } from '@material-ui/core'
+import { TextField as MuiTextField } from '@mui/material'
 
 const TextField = (props) => <MuiTextField variant="outlined" {...props} />
 

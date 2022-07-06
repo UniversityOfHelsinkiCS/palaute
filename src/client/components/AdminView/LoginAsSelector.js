@@ -17,8 +17,8 @@ import {
   Chip,
   AccordionActions,
   Tooltip,
-} from '@material-ui/core'
-import { KeyboardReturn } from '@material-ui/icons'
+} from '@mui/material'
+import { KeyboardReturn } from '@mui/icons-material'
 
 import { debounce } from 'lodash'
 import { format } from 'date-fns'

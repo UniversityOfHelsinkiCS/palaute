@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Card, CardContent, Box, Typography } from '@material-ui/core'
+import { Card, CardContent, Box, Typography } from '@mui/material'
 
 import { useParams, Redirect, Link } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'

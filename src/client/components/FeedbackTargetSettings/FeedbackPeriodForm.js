@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
   Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 

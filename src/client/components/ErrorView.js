@@ -1,5 +1,5 @@
-import { Box, Link as MuiLink } from '@material-ui/core'
-import { KeyboardReturnOutlined } from '@material-ui/icons'
+import { Box, Link as MuiLink } from '@mui/material'
+import { KeyboardReturnOutlined } from '@mui/icons-material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'

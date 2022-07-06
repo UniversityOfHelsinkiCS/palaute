@@ -1,5 +1,5 @@
 import React from 'react'
-import { CssBaseline as MuiCssBaseline, makeStyles } from '@material-ui/core'
+import { CssBaseline as MuiCssBaseline, makeStyles } from '@mui/material'
 
 const useStyles = makeStyles((theme) => ({
   '@global': {

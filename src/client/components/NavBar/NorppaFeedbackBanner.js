@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
-import { Button, Paper, Typography, makeStyles, Box } from '@material-ui/core'
+import { Button, Paper, Typography, makeStyles, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@mui/icons-material/Close'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'

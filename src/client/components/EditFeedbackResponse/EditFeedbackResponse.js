@@ -10,7 +10,7 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useParams, Redirect } from 'react-router-dom'
-import { Box, Typography, Divider, makeStyles, Button } from '@material-ui/core'
+import { Box, Typography, Divider, makeStyles, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'

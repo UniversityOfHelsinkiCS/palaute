@@ -2,9 +2,9 @@ import React, { forwardRef } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { Route, Switch, useRouteMatch, useHistory } from 'react-router'
 
-import { Box, Button, Tab, makeStyles } from '@material-ui/core'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
+import { Box, Button, Tab, makeStyles } from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
 import { ADMINS } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chip, makeStyles } from '@material-ui/core'
+import { Chip, makeStyles } from '@mui/material'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'

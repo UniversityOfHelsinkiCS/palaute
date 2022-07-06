@@ -9,7 +9,7 @@ import {
   Button,
   makeStyles,
   TextField,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'

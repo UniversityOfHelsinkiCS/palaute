@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles, Link } from '@material-ui/core'
-import ExternalLinkIcon from '@material-ui/icons/OpenInNew'
+import { makeStyles, Link } from '@mui/material'
+import ExternalLinkIcon from '@mui/icons-material/OpenInNew'
 
 const useStyles = makeStyles((theme) => ({
   icon: {

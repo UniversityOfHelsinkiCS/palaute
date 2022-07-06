@@ -1,5 +1,5 @@
-import { useMediaQuery } from '@material-ui/core'
-import { createTheme, responsiveFontSizes } from '@material-ui/core/styles'
+import { useMediaQuery } from '@mui/material'
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { useMemo } from 'react'
 
 import { inStaging } from '../config'

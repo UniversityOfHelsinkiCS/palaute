@@ -1,11 +1,6 @@
 import React from 'react'
 
-import {
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  makeStyles,
-} from '@material-ui/core'
+import { RadioGroup, FormControlLabel, Radio, makeStyles } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'

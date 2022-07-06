@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import GuestFooter from './GuestUser/GuestFooter'
 import GuestNavBar from './GuestUser/GuestNavBar'
 import GuestRouter from './GuestUser/GuestRouter'

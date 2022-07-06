@@ -7,8 +7,8 @@ import {
   FormControlLabel,
   Switch,
   makeStyles,
-} from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
+} from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
 import { YearSemesterSelector } from './YearSemesterSelector'
 

@@ -13,11 +13,11 @@ import {
   DialogTitle,
   ListItem,
   makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import FeedbackGivenIcon from '@material-ui/icons/Check'
-import NoFeedbackIcon from '@material-ui/icons/Edit'
-import FeedbackClosedIcon from '@material-ui/icons/Lock'
+import FeedbackGivenIcon from '@mui/icons-material/Check'
+import NoFeedbackIcon from '@mui/icons-material/Edit'
+import FeedbackClosedIcon from '@mui/icons-material/Lock'
 
 import { useQueryClient } from 'react-query'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'

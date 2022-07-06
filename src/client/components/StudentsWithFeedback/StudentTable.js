@@ -15,8 +15,8 @@ import {
   Paper,
   Button,
   Box,
-} from '@material-ui/core'
-import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons'
+} from '@mui/material'
+import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 
 import { sortTable } from '../../util/tableUtils'
 import DropZone from './DropZone'

@@ -11,11 +11,11 @@ import {
   makeStyles,
   Divider,
   LinearProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import SettingsIcon from '@material-ui/icons/Settings'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 import useOrganisations from '../../hooks/useOrganisations'
 import { getLanguageValue } from '../../util/languageUtils'

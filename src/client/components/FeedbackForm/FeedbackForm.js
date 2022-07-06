@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@mui/material'
 
 import LikertQuestion from './LikertQuestion'
 import OpenQuestion from './OpenQuestion'

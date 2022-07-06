@@ -1,6 +1,6 @@
 import React from 'react'
 import { useField } from 'formik'
-import { Switch, FormControlLabel } from '@material-ui/core'
+import { Switch, FormControlLabel } from '@mui/material'
 
 const FormikSwitch = ({ name, label, ...props }) => {
   const [field, , helpers] = useField(name)

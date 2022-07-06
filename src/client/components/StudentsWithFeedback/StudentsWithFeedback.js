@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import Alert from '../Alert'
 import StudentTable from './StudentTable'

@@ -9,7 +9,7 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, Typography, Tab, makeStyles } from '@material-ui/core'
+import { Box, Typography, Tab, makeStyles } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import RouterTabs from '../RouterTabs'

@@ -11,7 +11,7 @@ import {
   TableHead,
   TableBody,
   TableContainer,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'

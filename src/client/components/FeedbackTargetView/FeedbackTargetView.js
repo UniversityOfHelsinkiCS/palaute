@@ -18,11 +18,11 @@ import {
   makeStyles,
   Tooltip,
   Badge,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import CopyIcon from '@material-ui/icons/FileCopyOutlined'
+import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 import {
   EditOutlined,
   ListOutlined,
@@ -31,7 +31,7 @@ import {
   PollOutlined,
   SettingsOutlined,
   ShareOutlined,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'

@@ -1,5 +1,5 @@
-import { Box, Paper, Typography } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { Box, Paper, Typography } from '@mui/material'
+import { Alert } from '@mui/lab'
 import { format } from 'date-fns'
 import React from 'react'
 import { useParams, Redirect } from 'react-router'

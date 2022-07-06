@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
+import { List, ListItem, ListItemText, makeStyles } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'

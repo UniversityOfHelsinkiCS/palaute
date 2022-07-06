@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tooltip, makeStyles } from '@material-ui/core'
+import { Tooltip, makeStyles } from '@mui/material'
 import {
   green,
   lightGreen,
@@ -7,7 +7,7 @@ import {
   amber,
   grey,
   red,
-} from '@material-ui/core/colors'
+} from '@mui/material/colors'
 import cn from 'classnames'
 
 const useStyles = makeStyles((theme) => ({

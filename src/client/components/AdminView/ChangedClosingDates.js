@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography } from '@material-ui/core'
+import { Box, Button, Paper, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'

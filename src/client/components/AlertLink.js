@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import { Link, makeStyles } from '@material-ui/core'
+import { Link, makeStyles } from '@mui/material'
 
 const useStyles = makeStyles((theme) => ({
   alertLink: {

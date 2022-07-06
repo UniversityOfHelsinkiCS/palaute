@@ -9,7 +9,7 @@ import {
   Typography,
   Link,
   Tooltip,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'

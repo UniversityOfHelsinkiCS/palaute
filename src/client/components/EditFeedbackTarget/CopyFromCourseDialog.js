@@ -14,9 +14,9 @@ import {
   ListItem,
   Link,
   ListItemText,
-} from '@material-ui/core'
+} from '@mui/material'
 
-import { Autocomplete } from '@material-ui/lab'
+import { Autocomplete } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 
 import Alert from '../Alert'

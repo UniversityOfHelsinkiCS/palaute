@@ -10,7 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@material-ui/core'
+} from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
 import apiClient from '../../util/apiClient'

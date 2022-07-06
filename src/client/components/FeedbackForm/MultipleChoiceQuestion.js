@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   Checkbox,
   FormHelperText,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'

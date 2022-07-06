@@ -9,7 +9,7 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, Typography, Tab, makeStyles, Paper } from '@material-ui/core'
+import { Box, Typography, Tab, makeStyles, Paper } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import CourseSettings from './CourseSettings'

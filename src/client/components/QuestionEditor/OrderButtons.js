@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { IconButton, Tooltip, Box } from '@material-ui/core'
-import UpIcon from '@material-ui/icons/KeyboardArrowUp'
-import DownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { IconButton, Tooltip, Box } from '@mui/material'
+import UpIcon from '@mui/icons-material/KeyboardArrowUp'
+import DownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'react-i18next'
 
 const OrderButtons = ({
