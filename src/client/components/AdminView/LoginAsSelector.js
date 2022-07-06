@@ -99,8 +99,8 @@ const Details = ({ user }) => {
               style={{ columnGap: '20px' }}
             >
               {userDetails.access.map(({ organisation: org, access }) => (
-                <Tooltip title={org.name.fi}>
-                  <Box key={org.id} fontFamily="monospace" fontSize={14}>
+                <Tooltip key={org.id} title={org.name.fi}>
+                  <Box fontFamily="monospace" fontSize={14}>
                     {org.code} {access.read ? 'r' : '-'}
                     {access.write ? 'w' : '-'}
                     {access.admin ? 'a' : '-'}

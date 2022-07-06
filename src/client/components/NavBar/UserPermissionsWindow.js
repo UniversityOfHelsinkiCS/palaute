@@ -57,7 +57,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
               </Typography>
               <Box mb={2} />
               {user?.iamGroups.map((iam) => (
-                <Box fontFamily="monospace" fontSize={12}>
+                <Box key={iam} fontFamily="monospace" fontSize={12}>
                   {iam}
                 </Box>
               ))}
@@ -84,7 +84,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                   </TableHead>
                   <TableBody>
                     {user?.access?.map(({ organisation: org, access }) => (
-                      <TableRow>
+                      <TableRow key={org.id}>
                         <TableCell>
                           <Tooltip title={org.name[user.language]}>
                             <Typography>{org.code}</Typography>
