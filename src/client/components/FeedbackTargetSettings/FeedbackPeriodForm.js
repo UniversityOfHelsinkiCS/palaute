@@ -138,7 +138,6 @@ const FeedbackPeriodForm = ({
                   <FormikDatePicker
                     name="opensAt"
                     label={t('editFeedbackTarget:opensAt')}
-                    fullWidth
                     disablePast
                     disabled={formDisabled}
                   />
@@ -147,7 +146,6 @@ const FeedbackPeriodForm = ({
                   <FormikDatePicker
                     name="closesAt"
                     label={t('editFeedbackTarget:closesAt')}
-                    fullWidth
                     disablePast
                     disabled={formDisabled}
                   />

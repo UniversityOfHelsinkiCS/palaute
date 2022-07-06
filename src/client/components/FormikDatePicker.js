@@ -1,7 +1,8 @@
 import React from 'react'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { KeyboardDatePicker } from '@material-ui/pickers'
+import { TextField } from '@mui/material'
+import DatePicker from '@mui/lab/DatePicker'
 
 const FormikDatePicker = ({ name, ...props }) => {
   const [field, meta, helpers] = useField(name)
@@ -10,16 +11,17 @@ const FormikDatePicker = ({ name, ...props }) => {
   const showError = meta.error && meta.touched
 
   return (
-    <KeyboardDatePicker
-      format="dd/MM/yyyy"
-      variant="inline"
-      margin="normal"
+    <DatePicker
+      inputFormat="dd/MM/yyyy"
       id={name}
       value={field.value ?? ''}
       onChange={(value) => {
         helpers.setValue(value)
       }}
       onBlur={() => helpers.setTouched(true)}
+      renderInput={(props) => (
+        <TextField fullWidth margin="normal" {...props} />
+      )}
       error={showError}
       helperText={showError ? t(meta.error) : ''}
       KeyboardButtonProps={{

@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  TextField,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { KeyboardDatePicker } from '@material-ui/pickers'
+import DatePicker from '@mui/lab/DatePicker'
 import { Alert } from '@mui/lab'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
@@ -80,22 +86,22 @@ const NorppaStatisticView = () => {
         Select date range for statistics
       </Typography>
       <Box marginBottom={2}>
-        <KeyboardDatePicker
+        <DatePicker
           label="Opens at"
-          format="dd.MM.yyyy"
+          inputFormat="dd/MM/yyyy"
           disableFuture
           disableToolbar
-          variant="inline"
           value={opensAt}
+          renderInput={(props) => <TextField margin="normal" {...props} />}
           onChange={handleOpensAtChange}
           className={classes.datePicker}
         />
-        <KeyboardDatePicker
+        <DatePicker
           label="Closes at"
-          format="dd.MM.yyyy"
+          inputFormat="dd/MM/yyyy"
           disableToolbar
-          variant="inline"
           value={closesAt}
+          renderInput={(props) => <TextField margin="normal" {...props} />}
           onChange={handleClosesAtChange}
           className={classes.datePicker}
         />

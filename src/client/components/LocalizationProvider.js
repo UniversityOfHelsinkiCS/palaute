@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
+import MuiLocalizationProvider from '@mui/lab/LocalizationProvider'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import fiLocale from 'date-fns/locale/fi'
 import svLocale from 'date-fns/locale/sv'
 
@@ -10,13 +10,17 @@ const localeMap = {
   sv: svLocale,
 }
 
-const PickerUtilsProvider = (props) => {
+const LocalizationProvider = (props) => {
   const { i18n } = useTranslation()
   const locale = localeMap[i18n.language]
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={locale} {...props} />
+    <MuiLocalizationProvider
+      dateAdapter={AdapterDateFns}
+      locale={locale}
+      {...props}
+    />
   )
 }
 
-export default PickerUtilsProvider
+export default LocalizationProvider

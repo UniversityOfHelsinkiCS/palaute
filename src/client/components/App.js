@@ -4,7 +4,7 @@ import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import CssBaseline from './CssBaseline'
-import PickerUtilsProvider from './PickerUtilsProvider'
+import LocalizationProvider from './LocalizationProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
@@ -14,7 +14,7 @@ const App = () => {
   const theme = useTheme()
 
   return (
-    <PickerUtilsProvider>
+    <LocalizationProvider>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -32,7 +32,7 @@ const App = () => {
           </Suspense>
         </ThemeProvider>
       </StyledEngineProvider>
-    </PickerUtilsProvider>
+    </LocalizationProvider>
   )
 }
 /* eslint-enable */
