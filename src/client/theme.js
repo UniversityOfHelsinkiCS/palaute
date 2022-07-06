@@ -4,6 +4,7 @@ import {
   responsiveFontSizes,
   adaptV4Theme,
 } from '@mui/material/styles'
+import { lightBlue, green } from '@mui/material/colors'
 import { useMemo } from 'react'
 
 import { inStaging } from '../config'
@@ -19,6 +20,16 @@ const useTheme = () => {
             palette: {
               primary: {
                 main: !inStaging ? '#1077A1' : '#77dcbb',
+              },
+              info: {
+                main: lightBlue[700],
+                light: lightBlue[500],
+                dark: lightBlue[900],
+              },
+              success: {
+                main: green[800],
+                light: green[500],
+                dark: green[900],
               },
             },
           }),
