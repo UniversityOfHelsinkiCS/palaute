@@ -13,7 +13,7 @@ const ExternalLink = ({ children, ...props }) => {
   const classes = useStyles()
 
   return (
-    <Link target="_blank" rel="noopener" {...props}>
+    <Link target="_blank" rel="noopener" {...props} underline="hover">
       {children}
       <ExternalLinkIcon className={classes.icon} />
     </Link>

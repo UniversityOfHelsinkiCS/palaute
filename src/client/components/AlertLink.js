@@ -17,6 +17,7 @@ const AlertLink = ({ className, ...props }) => {
       color="inherit"
       className={cn(className, classes.alertLink)}
       {...props}
+      underline="hover"
     />
   )
 }

@@ -132,6 +132,7 @@ const GuestNavBar = () => {
       className={classes.mobileMenuButton}
       aria-label={menuLabel}
       {...menuButtonProps}
+      size="large"
     >
       <MenuIcon />
     </IconButton>

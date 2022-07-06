@@ -84,14 +84,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(3),
     marginTop: theme.spacing(1),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
       justifyContent: 'flex-start',
     },
   },
   copyLinkButtonContainer: {
     paddingLeft: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
       paddingTop: theme.spacing(1),
     },
@@ -285,7 +285,11 @@ const FeedbackTargetView = () => {
 
               <Box ml={2} />
               {isTeacher && showCourseSummaryLink && (
-                <MuiLink to={courseSummaryPath} component={Link}>
+                <MuiLink
+                  to={courseSummaryPath}
+                  component={Link}
+                  underline="hover"
+                >
                   {t('feedbackTargetView:courseSummary')}
                 </MuiLink>
               )}

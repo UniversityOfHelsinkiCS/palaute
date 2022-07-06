@@ -83,7 +83,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
         disableTypography
         primary={
           <>
-            <Link component={RouterLink} to={`/targets/${id}`}>
+            <Link
+              component={RouterLink}
+              to={`/targets/${id}`}
+              underline="hover"
+            >
               {getLanguageValue(name, i18n.language)}{' '}
             </Link>
             <>{periodInfo}</>

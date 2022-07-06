@@ -49,13 +49,13 @@ const useStyles = makeStyles((theme) => ({
   },
   tabRow: {
     display: 'flex',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
   },
   selected: {
     color: ' #1077A1',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       borderLeft: `2px solid #1077A1`,
     },
     [theme.breakpoints.up('sm')]: {

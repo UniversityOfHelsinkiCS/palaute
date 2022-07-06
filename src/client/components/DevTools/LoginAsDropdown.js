@@ -35,7 +35,7 @@ const LogInAsDropdown = () => {
       }}
       options={possibleUsers}
       getOptionLabel={(option) => option.uid || ''}
-      getOptionSelected={(option) => option.uid === loggedInAs.uid}
+      isOptionEqualToValue={(option) => option.uid === loggedInAs.uid}
       style={{ width: 300 }}
       renderInput={(params) => (
         <TextField {...params} label="Login As User" variant="outlined" /> // eslint-disable-line

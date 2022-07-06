@@ -58,7 +58,11 @@ const Label = ({ courseRealisation, language }) => {
   const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTargetId ? (
-    <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`}>
+    <Link
+      component={RouterLink}
+      to={`/targets/${feedbackTargetId}/results`}
+      underline="hover"
+    >
       {translatedName}
     </Link>
   ) : (

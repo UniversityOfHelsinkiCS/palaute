@@ -98,7 +98,7 @@ const EditActions = ({
 
       <Tooltip title={t('questionEditor:removeQuestion')}>
         <div>
-          <IconButton onClick={handleRemove}>
+          <IconButton onClick={handleRemove} size="large">
             <DeleteIcon />
           </IconButton>
         </div>

@@ -102,6 +102,7 @@ const YearStepper = ({ value, onChange }) => {
         onClick={handleDecrease}
         disabled={!canDecrease}
         className={!canDecrease ? classes.disabledButton : ''}
+        size="large"
       >
         <ChevronLeft />
       </IconButton>
@@ -109,6 +110,7 @@ const YearStepper = ({ value, onChange }) => {
       <IconButton
         onClick={handleIncrease}
         className={!canIncrease ? classes.disabledButton : ''}
+        size="large"
       >
         <ChevronRight />
       </IconButton>

@@ -183,6 +183,7 @@ const NavBar = () => {
       className={classes.mobileMenuButton}
       aria-label={menuLabel}
       {...menuButtonProps}
+      size="large"
     >
       <MenuIcon />
     </IconButton>

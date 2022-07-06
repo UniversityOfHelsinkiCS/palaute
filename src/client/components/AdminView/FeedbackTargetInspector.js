@@ -131,7 +131,11 @@ const Actions = ({ feedbackTarget }) => {
 
   return (
     <>
-      <MuiLink to={`/targets/${feedbackTarget.id}`} component={Link}>
+      <MuiLink
+        to={`/targets/${feedbackTarget.id}`}
+        component={Link}
+        underline="hover"
+      >
         Go to feedback view
       </MuiLink>
       {feedbackTarget.feedbackResponseEmailSent && (

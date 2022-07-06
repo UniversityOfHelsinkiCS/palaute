@@ -17,7 +17,7 @@ const OrderButtons = ({
     <Box display="inline-flex">
       <Tooltip title={t('questionEditor:moveUp')}>
         <div>
-          <IconButton disabled={moveUpDisabled} onClick={onMoveUp}>
+          <IconButton disabled={moveUpDisabled} onClick={onMoveUp} size="large">
             <UpIcon />
           </IconButton>
         </div>
@@ -25,7 +25,11 @@ const OrderButtons = ({
 
       <Tooltip title={t('questionEditor:moveDown')}>
         <div>
-          <IconButton disabled={moveDownDisabled} onClick={onMoveDown}>
+          <IconButton
+            disabled={moveDownDisabled}
+            onClick={onMoveDown}
+            size="large"
+          >
             <DownIcon />
           </IconButton>
         </div>

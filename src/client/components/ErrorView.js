@@ -16,7 +16,7 @@ const ErrorView = ({ message, returnTo = '/feedbacks' }) => {
     <Box m={4}>
       {t(message)}
       <Box mb={2} />
-      <MuiLink to={returnTo} component={Link}>
+      <MuiLink to={returnTo} component={Link} underline="hover">
         <Box display="flex">
           {t('common:goBack')}
           <Box mr={1} />

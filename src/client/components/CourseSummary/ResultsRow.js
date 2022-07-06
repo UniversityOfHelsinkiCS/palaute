@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '155px',
   },
   labelCell: ({ level }) => ({
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '250px',
       height: '74px', // Sets a good height for the entire row
     },

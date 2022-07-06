@@ -59,6 +59,7 @@ const SettingsButton = ({ code }) => {
         id={`settings-button-${code}`}
         component={Link}
         to={`/organisations/${code}/settings`}
+        size="large"
       >
         <SettingsIcon />
       </IconButton>

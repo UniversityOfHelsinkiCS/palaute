@@ -91,6 +91,7 @@ const OrderButton = ({ id, orderBySelection, handleOrderByChange }) => {
         <IconButton
           disableFocusRipple
           onClick={() => handleOrderByChange(!isAscending)}
+          size="large"
         >
           <Icon isAscending={isAscending} />
         </IconButton>
@@ -100,7 +101,7 @@ const OrderButton = ({ id, orderBySelection, handleOrderByChange }) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <IconButton onClick={() => handleOrderByChange(false)}>
+      <IconButton onClick={() => handleOrderByChange(false)} size="large">
         <Icon disabled />
       </IconButton>
     </Box>

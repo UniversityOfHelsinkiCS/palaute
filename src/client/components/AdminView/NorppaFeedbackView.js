@@ -112,6 +112,7 @@ const NorppaFeedbackView = () => {
                       <IconButton
                         color="primary"
                         onClick={() => handleMarkAsSolved(id, false)}
+                        size="large"
                       >
                         <AddAlertOutlined />
                       </IconButton>

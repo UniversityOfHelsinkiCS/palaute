@@ -64,7 +64,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
 
       <Box ml={2} flexGrow={0}>
         <Tooltip title={t('questionEditor:removeOption')}>
-          <IconButton onClick={handleRemove}>
+          <IconButton onClick={handleRemove} size="large">
             <CloseIcon />
           </IconButton>
         </Tooltip>

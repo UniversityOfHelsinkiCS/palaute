@@ -54,7 +54,9 @@ const Footer = ({ user }) => {
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${supportEmail}`}>{supportEmail}</Link>
+              <Link href={`mailto:${supportEmail}`} underline="hover">
+                {supportEmail}
+              </Link>
             </Typography>
             <ExternalLink href={accessibilityDocument}>
               {t('footer:accessibilityDocument')}
@@ -73,7 +75,12 @@ const Footer = ({ user }) => {
             )}
           </div>
 
-          <Link href="https://toska.dev" target="_blank" rel="noopener">
+          <Link
+            href="https://toska.dev"
+            target="_blank"
+            rel="noopener"
+            underline="hover"
+          >
             <img
               src={images.toska_color}
               className={classes.logo}

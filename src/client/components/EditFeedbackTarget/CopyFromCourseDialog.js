@@ -56,6 +56,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
             href={`/targets/${feedbackTarget.id}`}
             target="_blank"
             rel="noopener"
+            underline="hover"
           >
             {getLanguageValue(courseRealisation?.name, i18n.language)}
           </Link>
