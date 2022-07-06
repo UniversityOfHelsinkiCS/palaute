@@ -1,10 +1,9 @@
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography, Alert } from '@mui/material'
 import React from 'react'
 
 import { useTranslation, Trans } from 'react-i18next'
 
 import FormikTextField from '../FormikTextField'
-import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 
 const LanguageTextEditor = ({ name, language }) => {

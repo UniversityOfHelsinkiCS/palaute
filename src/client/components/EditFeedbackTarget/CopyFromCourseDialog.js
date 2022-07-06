@@ -13,13 +13,13 @@ import {
   ListItem,
   Link,
   ListItemText,
+  Alert,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import { Autocomplete } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 
-import Alert from '../Alert'
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'

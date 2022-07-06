@@ -11,6 +11,7 @@ import {
   TableHead,
   TableBody,
   TableContainer,
+  Alert,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -19,7 +20,6 @@ import { useParams, Redirect } from 'react-router-dom'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
-import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'

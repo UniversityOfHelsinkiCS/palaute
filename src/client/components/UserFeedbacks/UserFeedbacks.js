@@ -1,5 +1,5 @@
 import React, { useMemo, Fragment } from 'react'
-import { Typography } from '@mui/material'
+import { Typography, Alert } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
@@ -7,7 +7,6 @@ import qs from 'qs'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
-import Alert from '../Alert'
 import StatusTabs from './StatusTabs'
 
 import {

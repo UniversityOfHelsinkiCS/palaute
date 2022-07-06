@@ -10,6 +10,7 @@ import {
   ListItem,
   ListItemText,
   Link as MuiLink,
+  Alert,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useTranslation, Trans } from 'react-i18next'
@@ -20,7 +21,6 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
-import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 
 const useStyles = makeStyles((theme) => ({

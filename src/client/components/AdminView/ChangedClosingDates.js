@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography } from '@mui/material'
+import { Box, Button, Paper, Typography, Alert } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import useChangedClosingDates from '../../hooks/useChangedClosingDates'
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'
-import Alert from '../Alert'
 import { LoadingProgress } from '../LoadingProgress'
 
 export const ChangedClosingDates = () => {

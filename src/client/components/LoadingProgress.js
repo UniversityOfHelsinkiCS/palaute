@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { Box, CircularProgress } from '@mui/material'
-
-import Alert from './Alert'
+import { Box, CircularProgress, Alert } from '@mui/material'
 
 export const LoadingProgress = ({ isError = false, message = '' }) => (
   <Box display="flex" justifyContent="center" my={4}>

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import { Card, CardContent, Box, Typography } from '@mui/material'
+import { Card, CardContent, Box, Typography, Alert } from '@mui/material'
 
 import { useParams, Redirect, Link } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 
-import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'

@@ -10,6 +10,7 @@ import {
   Box,
   Typography,
   Chip,
+  Alert,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation } from 'react-query'
@@ -19,7 +20,6 @@ import { debounce } from 'lodash'
 
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../LoadingProgress'
-import Alert from '../Alert'
 import apiClient from '../../util/apiClient'
 
 const saveFeedbackCorrespondent = async ({ code, responsibleUserId }) => {

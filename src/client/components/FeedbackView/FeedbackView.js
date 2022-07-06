@@ -2,7 +2,14 @@ import React, { useState, forwardRef } from 'react'
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
-import { Typography, Button, Box, Card, CardContent } from '@mui/material'
+import {
+  Typography,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  Alert,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -11,7 +18,6 @@ import { useSnackbar } from 'notistack'
 
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import Alert from '../Alert'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'

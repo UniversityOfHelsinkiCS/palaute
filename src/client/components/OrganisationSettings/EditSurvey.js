@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button } from '@mui/material'
+import { Box, Button, Alert } from '@mui/material'
 
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
 import QuestionEditor from '../QuestionEditor'
-import Alert from '../Alert'
 
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
 

@@ -10,12 +10,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Alert,
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
-import Alert from '../Alert'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import { inProduction } from '../../../config'
 

@@ -7,12 +7,12 @@ import {
   Tooltip,
   Typography,
   Link,
+  Alert,
 } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 
 import FormikDatePicker from '../FormikDatePicker'
-import Alert from '../Alert'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
 import {
   validateFeedbackPeriod,

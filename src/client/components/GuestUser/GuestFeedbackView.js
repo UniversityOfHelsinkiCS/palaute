@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react'
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import { Button, Box, Card, CardContent } from '@mui/material'
+import { Button, Box, Card, CardContent, Alert } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -9,7 +9,6 @@ import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import PrivacyDialog from '../FeedbackView/PrivacyDialog'
 
-import Alert from '../Alert'
 import AlertLink from '../AlertLink'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'

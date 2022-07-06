@@ -2,13 +2,12 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
-import Alert from '../Alert'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 

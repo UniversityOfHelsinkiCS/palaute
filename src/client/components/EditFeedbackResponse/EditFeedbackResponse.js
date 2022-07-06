@@ -10,6 +10,7 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
+  Alert,
 } from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -19,7 +20,6 @@ import { differenceInMonths } from 'date-fns'
 import FormikTextField from '../FormikTextField'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import AlertLink from '../AlertLink'
-import Alert from '../Alert'
 import Markdown from '../Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
