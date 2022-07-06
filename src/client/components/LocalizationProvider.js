@@ -17,7 +17,7 @@ const LocalizationProvider = (props) => {
   return (
     <MuiLocalizationProvider
       dateAdapter={AdapterDateFns}
-      locale={locale}
+      adapterLocale={locale}
       {...props}
     />
   )
