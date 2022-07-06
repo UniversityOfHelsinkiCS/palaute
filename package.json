@@ -38,6 +38,7 @@
     "@mui/lab": "^5.0.0-alpha.89",
     "@mui/material": "^5.8.7",
     "@mui/styles": "^5.8.7",
+    "@mui/x-date-pickers": "^5.0.0-alpha.7",
     "@sentry/browser": "^6.7.2",
     "@sentry/node": "^6.7.2",
     "@sentry/tracing": "^6.7.2",

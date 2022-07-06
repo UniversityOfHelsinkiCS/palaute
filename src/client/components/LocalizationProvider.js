@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import MuiLocalizationProvider from '@mui/lab/LocalizationProvider'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import fiLocale from 'date-fns/locale/fi'
 import svLocale from 'date-fns/locale/sv'
 

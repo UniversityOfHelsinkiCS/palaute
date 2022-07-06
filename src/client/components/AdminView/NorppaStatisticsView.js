@@ -7,7 +7,7 @@ import {
   TextField,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import DatePicker from '@mui/lab/DatePicker'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { Alert } from '@mui/lab'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
