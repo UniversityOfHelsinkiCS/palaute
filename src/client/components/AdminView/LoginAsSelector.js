@@ -55,7 +55,7 @@ const Details = ({ user }) => {
             <TableCell>{user.language}</TableCell>
             <TableCell>
               {user.lastLoggedIn
-                ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy hh.mm')
+                ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy HH.mm')
                 : 'Not since 10.6.22'}
             </TableCell>
           </TableRow>
