@@ -20,6 +20,7 @@ module.exports = {
     'eslintreact/jsx-props-no-spreading': 'off',
     'no-unused-vars': 'warn',
     'no-param-reassign': 'off',
+    'no-restricted-exports': 'off',
     'react/prop-types': [
       1,
       {
@@ -32,6 +33,14 @@ module.exports = {
     'react/jsx-boolean-value': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
     'react/destructuring-assignment': 'warn',
+    'react/no-unstable-nested-components': 'warn',
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
     'spaced-comment': 'off',
