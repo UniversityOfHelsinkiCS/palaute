@@ -37,6 +37,7 @@ const pateClient = axios.create({
 })
 
 const sleep = (time) =>
+  // eslint-disable-next-line no-promise-executor-return
   new Promise((resolve) => setTimeout(() => resolve(), time))
 
 const sizeOf = (object) => Buffer.byteLength(JSON.stringify(object), 'utf-8')

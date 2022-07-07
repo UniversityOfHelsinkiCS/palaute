@@ -40,17 +40,15 @@ const FeedbackTargetList = ({ courseCode, group }) => {
   }
 
   return (
-    <>
-      <List>
-        {targets.map((target, i) => (
-          <FeedbackTargetItem
-            key={target.id}
-            feedbackTarget={target}
-            divider={i < targets.length - 1}
-          />
-        ))}
-      </List>
-    </>
+    <List>
+      {targets.map((target, i) => (
+        <FeedbackTargetItem
+          key={target.id}
+          feedbackTarget={target}
+          divider={i < targets.length - 1}
+        />
+      ))}
+    </List>
   )
 }
 

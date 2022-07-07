@@ -80,93 +80,89 @@ const EditFeedbackResponse = () => {
   }
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <InstructionAccordion />
-          <Box mb={2}>
-            <Alert severity="info">
-              <Trans i18nKey="feedbackResponse:responseInfo">
-                This field supports{' '}
-                <AlertLink href="https://commonmark.org/help/" target="_blank">
-                  Markdown
-                </AlertLink>{' '}
-                syntax
-              </Trans>
-            </Alert>
-          </Box>
-          <Formik
-            initialValues={initialValues}
-            validateOnChange={false}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting, values }) => {
-              const edited =
-                values.feedbackResponse !== feedbackTarget.feedbackResponse
-              return (
-                <Form id="feedback-response-form">
-                  <FormikTextField
-                    label={
-                      feedbackResponseFormDisabled
-                        ? t('feedbackResponse:formDisabled')
-                        : t('feedbackResponse:responseLabel')
+    <Card>
+      <CardContent>
+        <InstructionAccordion />
+        <Box mb={2}>
+          <Alert severity="info">
+            <Trans i18nKey="feedbackResponse:responseInfo">
+              This field supports{' '}
+              <AlertLink href="https://commonmark.org/help/" target="_blank">
+                Markdown
+              </AlertLink>{' '}
+              syntax
+            </Trans>
+          </Alert>
+        </Box>
+        <Formik
+          initialValues={initialValues}
+          validateOnChange={false}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, values }) => {
+            const edited =
+              values.feedbackResponse !== feedbackTarget.feedbackResponse
+            return (
+              <Form id="feedback-response-form">
+                <FormikTextField
+                  label={
+                    feedbackResponseFormDisabled
+                      ? t('feedbackResponse:formDisabled')
+                      : t('feedbackResponse:responseLabel')
+                  }
+                  name="feedbackResponse"
+                  minRows={10}
+                  fullWidth
+                  multiline
+                  disabled={feedbackResponseFormDisabled}
+                />
+                <Box my={2} display="flex">
+                  <ResponseEmailButton
+                    sendEmail={!isSent && sendEmail}
+                    disabled={
+                      (!edited && !sendEmail) ||
+                      (!edited && isSent) ||
+                      isSubmitting ||
+                      !values.feedbackResponse
                     }
-                    name="feedbackResponse"
-                    minRows={10}
-                    fullWidth
-                    multiline
-                    disabled={feedbackResponseFormDisabled}
+                    onSubmit={() =>
+                      handleSubmit({
+                        ...values,
+                        feedbackResponseEmailSent: !isSent && sendEmail,
+                      })
+                    }
                   />
-                  <Box my={2} display="flex">
-                    <ResponseEmailButton
-                      sendEmail={!isSent && sendEmail}
-                      disabled={
-                        (!edited && !sendEmail) ||
-                        (!edited && isSent) ||
-                        isSubmitting ||
-                        !values.feedbackResponse
-                      }
-                      onSubmit={() =>
-                        handleSubmit({
-                          ...values,
-                          feedbackResponseEmailSent: !isSent && sendEmail,
-                        })
-                      }
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          color="primary"
-                          checked={sendEmail || isSent}
-                          disabled={isSent}
-                          onChange={({ target }) =>
-                            setSendEmail(target.checked)
-                          }
-                        />
-                      }
-                      label={
-                        isSent
-                          ? t('feedbackResponse:emailSent')
-                          : t('feedbackResponse:checkboxSendEmail')
-                      }
-                    />
-                  </Box>
-                  <Box my={2}>
-                    <Divider />
-                  </Box>
-                  <Box mb={2}>
-                    <Typography color="textSecondary">
-                      {t('feedbackResponse:previewLabel')}
-                    </Typography>
-                  </Box>
-                  <MarkdownPreview />
-                </Form>
-              )
-            }}
-          </Formik>
-        </CardContent>
-      </Card>
-    </>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="primary"
+                        checked={sendEmail || isSent}
+                        disabled={isSent}
+                        onChange={({ target }) => setSendEmail(target.checked)}
+                      />
+                    }
+                    label={
+                      isSent
+                        ? t('feedbackResponse:emailSent')
+                        : t('feedbackResponse:checkboxSendEmail')
+                    }
+                  />
+                </Box>
+                <Box my={2}>
+                  <Divider />
+                </Box>
+                <Box mb={2}>
+                  <Typography color="textSecondary">
+                    {t('feedbackResponse:previewLabel')}
+                  </Typography>
+                </Box>
+                <MarkdownPreview />
+              </Form>
+            )
+          }}
+        </Formik>
+      </CardContent>
+    </Card>
   )
 }
 

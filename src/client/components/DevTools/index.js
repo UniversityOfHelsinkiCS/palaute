@@ -6,11 +6,7 @@ import { inProduction } from '../../util/common'
 const DevTools = () => {
   if (inProduction) return null
 
-  return (
-    <>
-      <ReactQueryDevtools position="bottom-right" />
-    </>
-  )
+  return <ReactQueryDevtools position="bottom-right" />
 }
 
 export default DevTools

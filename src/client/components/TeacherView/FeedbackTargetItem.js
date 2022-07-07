@@ -90,7 +90,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
             >
               {getLanguageValue(name, i18n.language)}{' '}
             </Link>
-            <>{periodInfo}</>
+            {periodInfo}
           </>
         }
         secondary={

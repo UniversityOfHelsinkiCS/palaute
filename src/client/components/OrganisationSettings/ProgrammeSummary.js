@@ -163,29 +163,27 @@ const ProgrammeSummary = () => {
   const sortedOrganisations = orderByCriteria(filteredOrganisations, orderBy)
 
   return (
-    <>
-      <ProgrammeTable
-        organisations={sortedOrganisations}
-        questions={summaryQuestions}
-        loading={isFetching}
-        onOrderByChange={handleOrderByChange}
-        filters={
-          <>
-            <Box mb={2}>
-              <Filters
-                keyword={keyword}
-                onKeywordChange={handleKeywordChange}
-                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-                onIncludeOpenUniCourseUnitsChange={
-                  handleIncludeOpenUniCourseUnitsChange
-                }
-              />
-            </Box>
-            <Divider />
-          </>
-        }
-      />
-    </>
+    <ProgrammeTable
+      organisations={sortedOrganisations}
+      questions={summaryQuestions}
+      loading={isFetching}
+      onOrderByChange={handleOrderByChange}
+      filters={
+        <>
+          <Box mb={2}>
+            <Filters
+              keyword={keyword}
+              onKeywordChange={handleKeywordChange}
+              includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+              onIncludeOpenUniCourseUnitsChange={
+                handleIncludeOpenUniCourseUnitsChange
+              }
+            />
+          </Box>
+          <Divider />
+        </>
+      }
+    />
   )
 }
 

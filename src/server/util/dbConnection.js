@@ -33,6 +33,7 @@ const testConnection = async () => {
   await runMigrations()
 }
 
+// eslint-disable-next-line no-promise-executor-return
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const connectToDatabase = async (attempt = 0) => {

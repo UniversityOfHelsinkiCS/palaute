@@ -136,6 +136,7 @@ const ResultsRow = ({
               {accordionOpen ? <UpIcon /> : <DownIcon />}
             </ButtonBase>
           ) : (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
             <>
               {link ? (
                 <ButtonBase
