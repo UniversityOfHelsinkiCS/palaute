@@ -6,6 +6,7 @@ module.exports = function override(config) {
   Object.assign(fallback, {
     path: require.resolve('path-browserify'),
     fs: require.resolve('browserify-fs'),
+    os: require.resolve('os-browserify/browser'),
     stream: require.resolve('stream-browserify'),
     util: require.resolve('util/'),
   })
