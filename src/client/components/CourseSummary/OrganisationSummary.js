@@ -124,9 +124,12 @@ const OrganisationTable = ({
                 <ResultsRow
                   id={id}
                   label={
-                    <>
-                      {getLanguageValue(name, i18n.language)} ({code})
-                    </>
+                    <Box display="flex" flexDirection="column">
+                      <Typography variant="caption" color="textSecondary">
+                        {code}
+                      </Typography>
+                      {getLanguageValue(name, i18n.language)}
+                    </Box>
                   }
                   results={results}
                   questions={questions}

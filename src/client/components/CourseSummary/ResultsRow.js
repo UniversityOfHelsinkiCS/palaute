@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Tooltip, Typography, ButtonBase, Box } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
-import UpIcon from '@mui/icons-material/KeyboardArrowUp'
-import DownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
 import ClearIcon from '@mui/icons-material/Clear'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
@@ -29,14 +28,14 @@ const useStyles = makeStyles((theme) => ({
   },
   labelCell: ({ level }) => ({
     [theme.breakpoints.down('md')]: {
-      width: '250px',
+      width: '300px',
       height: '74px', // Sets a good height for the entire row
     },
     [theme.breakpoints.up('md')]: {
-      width: '400px',
+      width: '450px',
     },
     [theme.breakpoints.up('lg')]: {
-      width: '450px',
+      width: '500px',
     },
     paddingLeft: theme.spacing(2 + level * 2),
     paddingRight: '1rem',
@@ -47,12 +46,15 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '48px',
     maxHeight: '74px',
     paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
+    paddingRight: '2.5rem',
     display: 'flex',
     justifyContent: 'space-between',
     borderRadius: '10px',
     textAlign: 'left',
     textTransform: 'none',
+    '&:hover': {
+      background: 'background',
+    },
   },
   link: {
     color: theme.palette.primary.main,
@@ -65,6 +67,25 @@ const useStyles = makeStyles((theme) => ({
   },
   accessTime: {
     color: theme.palette.warning.main,
+  },
+  arrowContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    paddingRight: '0.5rem',
+    '&:hover': {
+      color: theme.palette.text.primary,
+    },
+    color: theme.palette.info.main,
+  },
+  arrow: {
+    transition: 'transform 0.2s ease-out',
+  },
+  arrowOpen: {
+    transform: 'rotate(90deg)',
   },
 }))
 
@@ -125,15 +146,18 @@ const ResultsRow = ({
             // eslint-disable-next-line react/button-has-type
             <ButtonBase
               onClick={handleToggleAccordion}
-              className={cn(
-                classes.accordionButton,
-                'shadow-scale-hover-effect',
-              )}
+              className={classes.accordionButton}
               variant="contained"
             >
               <Typography variant="body1">{label}</Typography>
-              <Box mr={1} />
-              {accordionOpen ? <UpIcon /> : <DownIcon />}
+              <Box className={classes.arrowContainer}>
+                <ChevronRight
+                  className={cn({
+                    [classes.arrow]: true,
+                    [classes.arrowOpen]: accordionOpen,
+                  })}
+                />
+              </Box>
             </ButtonBase>
           ) : (
             // eslint-disable-next-line react/jsx-no-useless-fragment

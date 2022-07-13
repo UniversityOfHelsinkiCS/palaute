@@ -1,7 +1,13 @@
 import React, { Fragment } from 'react'
 import { useQueryClient } from 'react-query'
 
-import { Box, TableContainer, Divider, LinearProgress } from '@mui/material'
+import {
+  Box,
+  TableContainer,
+  Divider,
+  LinearProgress,
+  Typography,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
@@ -93,9 +99,12 @@ const ProgrammeTable = ({
                 <ResultsRow
                   id={id}
                   label={
-                    <>
-                      {getLanguageValue(name, i18n.language)} ({code})
-                    </>
+                    <Box display="flex" flexDirection="column">
+                      <Typography variant="caption" color="textSecondary">
+                        {code}
+                      </Typography>
+                      {getLanguageValue(name, i18n.language)}
+                    </Box>
                   }
                   results={results}
                   questions={questions}

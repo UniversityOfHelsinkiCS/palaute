@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Box, Typography } from '@mui/material'
+
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
@@ -34,10 +36,12 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             <Fragment key={courseCode}>
               <ResultsRow
                 link={`/course-summary/${courseCode}`}
-                label={`${getLanguageValue(
-                  name,
-                  i18n.language,
-                )} (${courseCode})`}
+                label={
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="caption">{courseCode}</Typography>
+                    {getLanguageValue(name, i18n.language)}
+                  </Box>
+                }
                 level={1}
                 results={results}
                 questions={questions}
