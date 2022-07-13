@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'background',
     },
+    '&:press': {},
   },
   link: {
     color: theme.palette.primary.main,
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
     alignItems: 'center',
-    paddingRight: '0.5rem',
+    paddingRight: '0.7rem',
     '&:hover': {
       color: theme.palette.text.primary,
     },
@@ -148,6 +149,7 @@ const ResultsRow = ({
               onClick={handleToggleAccordion}
               className={classes.accordionButton}
               variant="contained"
+              disableRipple
             >
               <Typography variant="body1">{label}</Typography>
               <Box className={classes.arrowContainer}>
