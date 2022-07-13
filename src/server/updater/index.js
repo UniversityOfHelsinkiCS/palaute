@@ -45,6 +45,7 @@ const run = async () => {
     await runUpdater()
   } catch (error) {
     Sentry.captureException(error)
+    Sentry.captureMessage('Updater run failed!')
     status.status = 'FAILURE'
     status.finished_at = new Date()
     await status.save()
