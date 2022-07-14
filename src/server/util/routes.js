@@ -84,11 +84,6 @@ router.put(
   feedbackTargets.openFeedbackImmediately,
 )
 
-router.put(
-  '/feedback-targets/:id/close-immediately',
-  feedbackTargets.closeFeedbackImmediately,
-)
-
 router.delete(
   '/feedback-targets/:id/user-feedback-targets/:userId',
   feedbackTargets.deleteUserFeedbackTarget,
