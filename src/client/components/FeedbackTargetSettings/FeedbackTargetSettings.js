@@ -11,7 +11,6 @@ import {
   openFeedbackImmediately,
   opensAtIsImmediately,
   saveFeedbackPeriodValues,
-  closeCourseImmediately,
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import PublicQuestions from '../PublicQuestions'
@@ -41,35 +40,6 @@ const FeedbackTargetSettings = () => {
     }
   }
 
-  const handleCloseImmediately = async () => {
-    const currentDate = new Date()
-    const difference = differenceInDays(
-      currentDate,
-      new Date(feedbackTarget.opensAt),
-    )
-
-    // eslint-disable-next-line no-alert
-    const result = window.confirm(
-      difference > 1
-        ? t('feedbackTargetResults:closeImmediatelyConfirm')
-        : t('feedbackTargetResults:closeImmediatelyTomorrowConfirm', {
-            date: format(
-              currentDate.setDate(currentDate.getDate() + 1),
-              'dd.MM.yyyy',
-            ),
-          }),
-    )
-
-    if (result) {
-      try {
-        await closeCourseImmediately(feedbackTarget, difference)
-        window.location.reload()
-      } catch (e) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
-      }
-    }
-  }
-
   const handleSubmitFeedbackPeriod = async (values) => {
     try {
       await saveFeedbackPeriodValues(values, feedbackTarget)
@@ -95,7 +65,6 @@ const FeedbackTargetSettings = () => {
         onSubmit={handleSubmitFeedbackPeriod}
         initialValues={feedbackPeriodInitialValues}
         onOpenImmediately={handleOpenFeedbackImmediately}
-        onCloseImmediately={handleCloseImmediately}
         feedbackTarget={feedbackTarget}
       />
       <PublicQuestions feedbackTarget={feedbackTarget} />

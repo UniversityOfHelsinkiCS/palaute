@@ -18,17 +18,14 @@ import {
   validateFeedbackPeriod,
   requiresSubmitConfirmation,
   feedbackTargetIsOpenOrClosed,
-  feedbackCanBeClosed,
 } from './utils'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { TooltipButton } from '../TooltipButton'
 
 const FeedbackPeriodForm = ({
   onSubmit = () => {},
   onOpenImmediately = () => {},
-  onCloseImmediately = () => {},
   initialValues,
   feedbackTarget,
 }) => {
@@ -50,14 +47,10 @@ const FeedbackPeriodForm = ({
     !authorizedUser.isAdmin
 
   const openImmediatelyEnabled = !feedbackTargetIsOpenOrClosed(feedbackTarget)
-  const closeImmediatelyEnabled = feedbackCanBeClosed(feedbackTarget)
 
   const cannotOpenImmediatelyMessage = t(
     'feedbackTargetSettings:cannotOpenImmediately',
   )
-  const cannotCloseImmediatelyMessage = feedbackTargetIsOpen(feedbackTarget)
-    ? t('feedbackTargetSettings:cannotCloseImmediatelyWhenOpen')
-    : t('feedbackTargetSettings:cannotCloseImmediately')
 
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
@@ -177,15 +170,6 @@ const FeedbackPeriodForm = ({
                     tooltip={cannotOpenImmediatelyMessage}
                   >
                     {t('editFeedbackTarget:openImmediately')}
-                  </TooltipButton>
-                  <TooltipButton
-                    variant="contained"
-                    color="secondary"
-                    onClick={onCloseImmediately}
-                    disabled={!closeImmediatelyEnabled}
-                    tooltip={cannotCloseImmediatelyMessage}
-                  >
-                    {t('feedbackTargetResults:closeImmediately')}
                   </TooltipButton>
                 </Box>
               </Form>
