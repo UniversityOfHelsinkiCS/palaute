@@ -43,7 +43,7 @@ const Router = () => {
   const classes = useStyles()
 
   return (
-    <Container className={classes.container}>
+    <Container className={classes.container} disableGutters>
       <Switch>
         <Route path="/" component={Home} exact />
         <Route path="/feedbacks" component={UserFeedbacks} exact />

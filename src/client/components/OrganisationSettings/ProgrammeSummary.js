@@ -31,13 +31,10 @@ import ColumnHeadings from '../CourseSummary/ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 
 const useStyles = makeStyles((theme) => ({
-  table: {
-    borderSpacing: '2px',
-  },
   filtersCell: {
     verticalAlign: 'bottom',
     width: '450px',
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 2, 2, 0),
   },
   progressCell: {
     padding: theme.spacing(1, 2),
@@ -57,8 +54,8 @@ const ProgrammeTable = ({
   const classes = useStyles()
 
   return (
-    <TableContainer>
-      <table className={classes.table}>
+    <TableContainer sx={{ overflow: 'visible' }}>
+      <table>
         <thead>
           <tr>
             <th className={classes.filtersCell}>{filters}</th>

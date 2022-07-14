@@ -7,7 +7,12 @@ import GuestRouter from './GuestUser/GuestRouter'
 /* eslint-disable */
 const GuestUser = () => {
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
+    <Box
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      sx={{ overflowX: 'hidden' }}
+    >
       <GuestNavBar />
       <GuestRouter />
       <GuestFooter />

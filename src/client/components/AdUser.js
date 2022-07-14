@@ -40,7 +40,12 @@ const AdUser = () => {
   if (isLoading) return null
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
+    <Box
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      sx={{ overflowX: 'hidden' }}
+    >
       <NavBar />
       <Router />
       <DevTools />

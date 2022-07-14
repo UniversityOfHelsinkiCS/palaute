@@ -1,6 +1,14 @@
 import React from 'react'
 import * as _ from 'lodash'
-import { Box, IconButton, MenuItem, Select, Typography } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  MenuItem,
+  Select,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +57,6 @@ const useStyles = makeStyles({
     alignItems: 'center',
     gap: '8px',
     height: '70px',
-    marginLeft: '0.9rem',
   },
   stepperContainer: {
     display: 'flex',
@@ -172,10 +179,16 @@ export const YearSemesterSelector = ({ value, onChange }) => {
 
   return (
     <Box className={classes.stepper}>
-      <Select value={option} onChange={handleOptionChange}>
-        <MenuItem value="year">{t('courseSummary:year')}</MenuItem>
-        <MenuItem value="semester">{t('courseSummary:semester')}</MenuItem>
-      </Select>
+      <ToggleButtonGroup
+        value={option}
+        onChange={handleOptionChange}
+        color="primary"
+      >
+        <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
+        <ToggleButton value="semester">
+          {t('courseSummary:semester')}
+        </ToggleButton>
+      </ToggleButtonGroup>
       <Box>
         {option === 'year' ? (
           <YearStepper value={year} onChange={handleYearChange} />

@@ -2,14 +2,13 @@ import React, { Fragment } from 'react'
 
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
   TableContainer,
   IconButton,
   Tooltip,
   Divider,
   LinearProgress,
+  Container,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
@@ -36,16 +35,13 @@ import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 
 const useStyles = makeStyles((theme) => ({
-  table: {
-    borderSpacing: '2px',
-  },
   filtersCell: {
     verticalAlign: 'bottom',
     width: '450px',
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 2, 2, 0),
   },
   progressCell: {
-    padding: theme.spacing(1, 2),
+    padding: theme.spacing(1, 0),
     minHeight: '12px',
   },
 }))
@@ -81,8 +77,8 @@ const OrganisationTable = ({
   const classes = useStyles()
 
   return (
-    <TableContainer>
-      <table className={classes.table}>
+    <TableContainer sx={{ overflow: 'visible' }}>
+      <table>
         <thead>
           <tr>
             <th className={classes.filtersCell}>{filters}</th>
@@ -230,41 +226,37 @@ const OrganisationSummary = () => {
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mb={2}>
+      <Box mt={2}>
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}
         </Typography>
       </Box>
-      <Card>
-        <CardContent>
-          <OrganisationTable
-            organisations={aggregatedOrganisations}
-            questions={questions}
-            organisationAccess={organisationAccess}
-            initialOpenAccordions={openAccordions}
-            onToggleAccordion={toggleAccordion}
-            loading={isFetching}
-            onOrderByChange={handleOrderByChange}
-            filters={
-              <>
-                <Box mb={2}>
-                  <Filters
-                    keyword={keyword}
-                    onKeywordChange={handleKeywordChange}
-                    includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-                    onIncludeOpenUniCourseUnitsChange={
-                      handleIncludeOpenUniCourseUnitsChange
-                    }
-                    dateRange={dateRange}
-                    onDateRangeChange={setDateRange}
-                  />
-                </Box>
-                <Divider />
-              </>
-            }
-          />
-        </CardContent>
-      </Card>
+      <OrganisationTable
+        organisations={aggregatedOrganisations}
+        questions={questions}
+        organisationAccess={organisationAccess}
+        initialOpenAccordions={openAccordions}
+        onToggleAccordion={toggleAccordion}
+        loading={isFetching}
+        onOrderByChange={handleOrderByChange}
+        filters={
+          <>
+            <Box mb={2}>
+              <Filters
+                keyword={keyword}
+                onKeywordChange={handleKeywordChange}
+                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+                onIncludeOpenUniCourseUnitsChange={
+                  handleIncludeOpenUniCourseUnitsChange
+                }
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+              />
+            </Box>
+            <Divider />
+          </>
+        }
+      />
     </>
   )
 }

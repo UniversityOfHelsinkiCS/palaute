@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('lg')]: {
       width: '500px',
     },
-    paddingLeft: theme.spacing(2 + level * 2),
+    paddingLeft: theme.spacing(level * 2),
     paddingRight: '1rem',
   }),
   accordionButton: {
@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'background',
     },
-    '&:press': {},
   },
   link: {
     color: theme.palette.primary.main,

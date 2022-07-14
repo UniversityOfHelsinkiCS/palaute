@@ -25,9 +25,6 @@ import Title from '../Title'
 import TeacherChip from '../TeacherChip'
 
 const useStyles = makeStyles((theme) => ({
-  table: {
-    borderSpacing: '2px',
-  },
   realisationHeading: {
     textAlign: 'left',
     verticalAlign: 'Bottom',
@@ -100,7 +97,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
 
   return (
     <TableContainer>
-      <table className={classes.table}>
+      <table>
         <thead>
           <tr>
             <th className={classes.realisationHeading}>
