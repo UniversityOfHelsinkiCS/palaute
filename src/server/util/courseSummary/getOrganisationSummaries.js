@@ -15,6 +15,7 @@ const {
   getCounts,
 } = require('./utils')
 const logger = require('../logger')
+const { cacheSummary, getSummaryFromCache } = require('./cache')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 const ALL_OPEN_UNI_ORGANISATION_IDS = [
@@ -456,44 +457,6 @@ const getAllRowsFromDb = async () => {
   return courseRealisationRows
 }
 
-const cacheSummary = async (rows) => {
-  await FeedbackSummaryCache.destroy({ where: {} })
-
-  const groupedRows = _.groupBy(
-    rows,
-    (row) => `${row.course_realisation_id}#${row.organisation_id}`,
-  )
-  const cacheRows = Object.entries(groupedRows).map(([key, value]) => {
-    const [course_realisation_id, organisation_id] = key.split('#')
-    return {
-      course_realisation_id,
-      organisation_id,
-      data: value,
-    }
-  })
-
-  await FeedbackSummaryCache.bulkCreate(cacheRows)
-}
-
-const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
-  console.time('-getSummaryFromCache')
-  const cacheRows = await FeedbackSummaryCache.findAll({
-    where: {
-      [Op.or]: {
-        organisation_id: {
-          [Op.in]: organisationIds,
-        },
-        course_realisation_id: {
-          [Op.in]: courseRealisationIds,
-        },
-      },
-    },
-  })
-  const result = cacheRows.flatMap((row) => row.data)
-  console.timeEnd('-getSummaryFromCache')
-  return result
-}
-
 const getOrganisationSummaries = async ({
   questions,
   organisationAccess,
@@ -511,6 +474,8 @@ const getOrganisationSummaries = async ({
   const rows = await getSummaryFromCache(
     organisationIds,
     accessibleCourseRealisationIds,
+    startDate,
+    endDate,
   )
   if (rows.length === 0) {
     logger.warn(
@@ -518,14 +483,9 @@ const getOrganisationSummaries = async ({
     )
   }
 
-  const rowsFromTimeperiod = rows.filter((r) => {
-    const d = Date.parse(r.course_realisation_start_date)
-    return d >= startDate && d < endDate
-  })
-
   const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
-    ? partitionOpenUniRows(rowsFromTimeperiod)
-    : [rowsFromTimeperiod, partitionOpenUniRows(rowsFromTimeperiod)[1]]
+    ? partitionOpenUniRows(rows)
+    : [rows, partitionOpenUniRows(rows)[1]]
 
   const organisationsWithResults = getOrganisationsWithResults(
     normalizedRows,

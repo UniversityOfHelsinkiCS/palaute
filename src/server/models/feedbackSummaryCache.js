@@ -1,4 +1,4 @@
-const { STRING, INTEGER, Model, JSONB } = require('sequelize')
+const { STRING, INTEGER, Model, JSONB, DATEONLY } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class FeedbackSummaryCache extends Model {}
@@ -17,6 +17,10 @@ FeedbackSummaryCache.init(
     },
     organisation_id: {
       type: STRING,
+      allowNull: false,
+    },
+    course_realisation_start_date: {
+      type: DATEONLY,
       allowNull: false,
     },
     data: {
