@@ -13,3 +13,4 @@ scripts/my_username
 cypress/screenshots
 cypress/videos
 temp
+tools/benchmark.mjs

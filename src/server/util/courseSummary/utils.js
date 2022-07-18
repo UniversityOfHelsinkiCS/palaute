@@ -1,4 +1,7 @@
 const _ = require('lodash')
+const { Survey } = require('../../models')
+
+const WORKLOAD_QUESTION_ID = 1042
 
 const QUESTION_AVERAGES_QUERY = `
 SELECT
@@ -67,6 +70,25 @@ const getValidDataValues = (questions) => {
   return [...singleChoiceValues, ...likertValues]
 }
 
+const getUniversityQuestions = async () => {
+  const universitySurvey = await Survey.findOne({
+    where: { type: 'university' },
+  })
+
+  await universitySurvey.populateQuestions()
+
+  const { questions = [] } = universitySurvey
+
+  const summaryQuestions = questions.filter(
+    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
+  )
+
+  return summaryQuestions.map((question) => ({
+    ...question.toJSON(),
+    secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
+  }))
+}
+
 const getFeedbackDistribution = (rows) => {
   const grouped = _.groupBy(rows, (row) => row.question_data)
 
@@ -76,48 +98,60 @@ const getFeedbackDistribution = (rows) => {
 }
 
 const getLikertMean = (distribution) => {
-  const entries = Object.entries(
-    _.pick(distribution, ['1', '2', '3', '4', '5']),
+  const entries = [
+    distribution['1'] || 0,
+    distribution['2'] || 0,
+    distribution['3'] || 0,
+    distribution['4'] || 0,
+    distribution['5'] || 0,
+  ]
+
+  // hack to convert possible strings to numbers when doing math
+  const totalCount = -(
+    -entries[0] -
+    entries[1] -
+    entries[2] -
+    entries[3] -
+    entries[4]
   )
 
-  if (entries.length === 0) {
-    return 0
+  if (totalCount === 0) return 0
+
+  let sum = 0
+  for (let i = 0; i < entries.length; i++) {
+    const count = entries[i]
+    const value = i + 1
+    sum += value * count
   }
-
-  const totalCount = _.sumBy(entries, ([, count]) => parseInt(count, 10))
-
-  const sum = _.sumBy(
-    entries,
-    ([value, count]) => parseInt(value, 10) * parseInt(count, 10),
-  )
 
   return _.round(sum / totalCount, 2)
 }
 
 const getSingleChoiceMean = (distribution, question) => {
-  const options = question.data?.options ?? []
-  const optionIds = options.map(({ id }) => id)
+  const entries = []
 
-  const entries = Object.entries(_.pick(distribution, optionIds))
-
-  if (entries.length === 0) {
-    return 0
+  for (let i = 0; i < question.data.options.length; i++) {
+    const optionId = question.data.options[i].id
+    entries.push(distribution[optionId] || 0)
   }
 
-  const indexByOptionId = optionIds.reduce(
-    (acc, id, index) => ({
-      ...acc,
-      [id]: index + 1,
-    }),
-    {},
+  // hack to convert possible strings to numbers when doing math
+  const totalCount = -(
+    -entries[0] -
+    entries[1] -
+    entries[2] -
+    entries[3] -
+    entries[4]
   )
 
-  const totalCount = _.sumBy(entries, ([, count]) => parseInt(count, 10))
+  if (totalCount === 0) return 0
 
-  const sum = _.sumBy(
-    entries,
-    ([value, count]) => indexByOptionId[value] * parseInt(count, 10),
-  )
+  let sum = 0
+  for (let i = 0; i < entries.length; i++) {
+    const count = entries[i]
+    const value = i + 1
+    sum += value * count
+  }
 
   return _.round(sum / totalCount, 2)
 }
@@ -169,4 +203,5 @@ module.exports = {
   getValidDataValues,
   getResults,
   getCounts,
+  getUniversityQuestions,
 }

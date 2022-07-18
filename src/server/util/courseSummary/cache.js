@@ -12,7 +12,6 @@ const serialize = (rows) => {
     rows,
     (row) => `${row.course_realisation_id}#${row.organisation_id}`,
   )
-  // console.log(JSON.stringify(Object.entries(groupedRows)[0], null, 2))
   const cacheRows = Object.entries(groupedRows).map(([key, value]) => {
     const [course_realisation_id, organisation_id] = key.split('#')
 
@@ -50,7 +49,6 @@ const serialize = (rows) => {
 
 const deserialize = (cacheData) => {
   console.time('deserialize')
-  console.log(cacheData[0].dataValues)
   const rows = []
   for (let i = 0; i < cacheData.length; i++) {
     const cacheRow = cacheData[i]

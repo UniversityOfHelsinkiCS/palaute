@@ -13,9 +13,10 @@ const {
   getValidDataValues,
   getResults,
   getCounts,
+  getUniversityQuestions,
 } = require('./utils')
 const logger = require('../logger')
-const { cacheSummary, getSummaryFromCache } = require('./cache')
+const { getSummaryFromCache } = require('./cache')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 const ALL_OPEN_UNI_ORGANISATION_IDS = [
@@ -23,8 +24,6 @@ const ALL_OPEN_UNI_ORGANISATION_IDS = [
   'hy-org-48901898', // "Lukuvuosi"
   'hy-org-48902017', // "Kesälukukausi"
 ]
-
-const WORKLOAD_QUESTION_ID = 1042
 
 const executeSummaryQuery = ({
   questionIds,
@@ -371,27 +370,8 @@ const getOrganisationQuestions = async (organisationCode) => {
   return summaryQuestions
 }
 
-const getUniversityQuestions = async () => {
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-
-  await universitySurvey.populateQuestions()
-
-  const { questions = [] } = universitySurvey
-
-  const summaryQuestions = questions.filter(
-    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
-  )
-
-  return summaryQuestions.map((question) => ({
-    ...question.toJSON(),
-    secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
-  }))
-}
-
 const addOrganisationInfo = async (organisations) => {
-  console.time('addOrganisationInfo')
+  console.time('-addOrganisationInfo')
   const sorted = _.sortBy(organisations, 'id')
 
   const orgNames = await Organisation.findAll({
@@ -408,7 +388,7 @@ const addOrganisationInfo = async (organisations) => {
     ...orgNames[index].dataValues,
   }))
   const sortedResult = _.sortBy(result, 'code')
-  console.timeEnd('addOrganisationInfo')
+  console.timeEnd('-addOrganisationInfo')
   return sortedResult
 }
 
@@ -451,8 +431,6 @@ const getAllRowsFromDb = async () => {
     questionIds,
     validDataValues,
   })
-
-  console.log(JSON.stringify(courseRealisationRows[0], null, 2))
 
   return courseRealisationRows
 }
@@ -514,16 +492,8 @@ const getOrganisationSummaries = async ({
   return result
 }
 
-const populateOrganisationSummaryCache = async () => {
-  console.time('caching')
-  const rows = await getAllRowsFromDb()
-  await cacheSummary(rows)
-  console.timeEnd('caching')
-  logger.info(`Populated cache with ${rows.length} rows`)
-}
-
 module.exports = {
   getOrganisationSummaries,
   getSummaryByOrganisation,
-  populateOrganisationSummaryCache,
+  getAllRowsFromDb,
 }
