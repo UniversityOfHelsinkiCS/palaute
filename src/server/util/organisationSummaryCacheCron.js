@@ -21,6 +21,7 @@ const run = async () => {
 const start = async () => {
   const cronTime = '30 6 * * *' // 4 am
   if (inE2EMode || inProduction) run()
+  run()
   return schedule(cronTime, run)
 }
 

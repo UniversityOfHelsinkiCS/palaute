@@ -136,17 +136,13 @@ const getMean = (distribution, question) => {
 const getCounts = (rows) => {
   const uniqueFeedbackTargets = _.uniqBy(rows, (row) => row.feedback_target_id)
 
-  const feedbackCount = _.sumBy(uniqueFeedbackTargets, (row) =>
-    parseInt(row.feedback_count, 10),
-  )
-
-  const studentCount = _.sumBy(uniqueFeedbackTargets, (row) =>
-    parseInt(row.student_count, 10),
-  )
-
   return {
-    feedbackCount,
-    studentCount,
+    feedbackCount: _.sumBy(uniqueFeedbackTargets, (row) =>
+      parseInt(row.feedback_count, 10),
+    ),
+    studentCount: _.sumBy(uniqueFeedbackTargets, (row) =>
+      parseInt(row.student_count, 10),
+    ),
   }
 }
 

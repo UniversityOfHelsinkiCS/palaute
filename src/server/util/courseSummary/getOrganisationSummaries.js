@@ -42,46 +42,42 @@ const executeSummaryQuery = ({
     question_id,
     question_data,
     question_data_count,
-    feedback_counts.feedback_count as feedback_count,
     student_count,
-    feedback_targets.id AS feedback_target_id,
-    feedback_targets.closes_at AS closes_at,
-    course_realisations.id AS course_realisation_id,
-    course_realisations.name AS course_realisation_name,
-    course_realisations.start_date AS course_realisation_start_date,
-    course_realisations.end_date AS course_realisation_end_date,
-    course_units.course_code AS course_code,
-    course_units.name AS course_unit_name,
-    course_units.id AS course_unit_id,
-    organisation_access.organisation_id AS course_realisations_organisation_id,
-    organisations.id AS organisation_id,
-    organisations.name AS organisation_name,
-    organisations.code AS organisation_code,
+    fbt.feedback_count as feedback_count,
+    fbt.id AS feedback_target_id,
+    fbt.closes_at AS closes_at,
+    cur.id AS course_realisation_id,
+    cur.start_date AS course_realisation_start_date,
+    cur.end_date AS course_realisation_end_date,
+    cu.course_code AS course_code,
+    cu.name AS course_unit_name,
+    cu.id AS course_unit_id,
+    org.id AS organisation_id,
     CASE
-      WHEN feedback_targets.feedback_response IS NOT NULL
-      AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
+      WHEN fbt.feedback_response IS NOT NULL
+      AND char_length(fbt.feedback_response) > 0 THEN TRUE
       ELSE FALSE
     END AS feedback_response_given
   FROM question_averages
-    INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
-    INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-    INNER JOIN course_units_organisations ON course_units.id = course_units_organisations.course_unit_id
-    INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+    INNER JOIN feedback_targets as fbt ON question_averages.feedback_target_id = fbt.id
+    INNER JOIN course_units as cu ON fbt.course_unit_id = cu.id
+    INNER JOIN course_units_organisations as cuo ON cu.id = cuo.course_unit_id
+    INNER JOIN course_realisations as cur ON fbt.course_realisation_id = cur.id
   
     INNER JOIN LATERAL (
-      SELECT organisation_id FROM course_realisations_organisations WHERE course_realisation_id = course_realisations.id
+      SELECT organisation_id FROM course_realisations_organisations WHERE course_realisation_id = cur.id
       UNION
-      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = course_units.id
+      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = cu.id
     ) organisation_access ON TRUE
   
-    INNER JOIN organisations ON organisation_access.organisation_id = organisations.id
-    INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = feedback_targets.id
+    INNER JOIN organisations as org ON organisation_access.organisation_id = org.id
+    INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = fbt.id
   WHERE
-    feedback_targets.feedback_type = 'courseRealisation'
-    AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > :since
-    AND NOT (course_units.course_code = ANY (organisations.disabled_course_codes))
-    ${organisationId ? 'AND organisations.id = :organisationId' : ''};
+    fbt.feedback_type = 'courseRealisation'
+    AND cur.start_date < NOW()
+    AND cur.start_date > :since
+    AND NOT (cu.course_code = ANY (org.disabled_course_codes))
+    ${organisationId ? 'AND org.id = :organisationId' : ''};
   `
   return sequelize.query(query, {
     replacements: {
@@ -126,24 +122,29 @@ const getCurrentCourseRealisationId = (rows) => {
 
 const getCourseUnitsWithResults = (rows, questions) => {
   const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
-  const courseUnits = Object.entries(rowsByCourseCode).map(
+
+  const courseUnitsWithCurId = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
-      const currentCourseRealisationId =
-        getCurrentCourseRealisationId(courseUnitRows)
-
+      const currentId = getCurrentCourseRealisationId(courseUnitRows)
       const current = courseUnitRows.find(
-        (row) => row.course_realisation_id === currentCourseRealisationId,
+        (row) => row.course_realisation_id === currentId,
       )
+      return {
+        courseUnitRows,
+        courseCode,
+        current,
+      }
+    },
+  )
 
-      const results = getResults(courseUnitRows, questions)
-      // console.log(courseUnitRows[0].course_unit_name.fi)
-
+  const courseUnits = courseUnitsWithCurId.map(
+    ({ courseUnitRows, courseCode, current }) => {
       const { feedbackCount, studentCount } = getCounts(courseUnitRows)
-      // console.log(feedbackCount, studentCount)
+
       return {
         name: courseUnitRows[0].course_unit_name,
         courseCode,
-        results,
+        results: getResults(courseUnitRows, questions),
         feedbackCount,
         studentCount,
         feedbackPercentage: feedbackCount / studentCount,
@@ -157,81 +158,88 @@ const getCourseUnitsWithResults = (rows, questions) => {
 }
 
 const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
-  console.time('createOrganisations')
-  const organisations = Object.entries(rowsByOrganisationId).map(
+  console.time('--organisationsWithCourseUnits')
+
+  const organisationsWithCourseUnits = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
       const courseUnits = getCourseUnitsWithResults(
         organisationRows,
         questions,
         openUni,
       )
-
-      const studentCount = _.sumBy(
-        courseUnits,
-        ({ studentCount }) => studentCount,
-      )
-      const feedbackCount = _.sumBy(
-        courseUnits,
-        ({ feedbackCount }) => feedbackCount,
-      )
-
-      const allResults = courseUnits.flatMap((cu) =>
-        cu.results.map((r) => ({ ...r, count: cu.feedbackCount })),
-      )
-
-      const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
-        questionId.toString(),
-      )
-
-      const results = questions.map(({ id: questionId }) => {
-        const questionResults = resultsByQuestionId[questionId.toString()] ?? []
-
-        const distribution = questionResults.reduce(
-          (acc, curr) =>
-            _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
-          {},
-        )
-
-        const mean =
-          questionResults.length > 0
-            ? _.round(
-                _.sumBy(questionResults, (r) => r.mean * r.count) /
-                  feedbackCount,
-                2,
-              )
-            : 0
-
-        return {
-          questionId,
-          mean,
-          distribution,
-        }
-      })
-
       return {
         id: organisationId,
-        name: organisationRows[0].organisation_name,
-        code: organisationRows[0].organisation_code,
-        results,
-        feedbackCount,
-        studentCount,
-        feedbackPercentage: studentCount > 0 ? feedbackCount / studentCount : 0,
         courseUnits,
       }
     },
   )
-  console.timeEnd('createOrganisations')
+  console.timeEnd('--organisationsWithCourseUnits')
 
-  return organisations
+  console.time('--organisationsWithResults')
+  const organisationsWithResults = organisationsWithCourseUnits.map((org) => {
+    const { courseUnits } = org
+    const studentCount = _.sumBy(
+      courseUnits,
+      ({ studentCount }) => studentCount,
+    )
+    const feedbackCount = _.sumBy(
+      courseUnits,
+      ({ feedbackCount }) => feedbackCount,
+    )
+
+    const allResults = courseUnits.flatMap((cu) =>
+      cu.results.map((r) => ({ ...r, count: cu.feedbackCount })),
+    )
+
+    const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
+      questionId.toString(),
+    )
+
+    const results = questions.map(({ id: questionId }) => {
+      const questionResults = resultsByQuestionId[questionId.toString()] ?? []
+
+      const distribution = questionResults.reduce(
+        (acc, curr) =>
+          _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
+        {},
+      )
+
+      const mean =
+        questionResults.length > 0
+          ? _.round(
+              _.sumBy(questionResults, (r) => r.mean * r.count) / feedbackCount,
+              2,
+            )
+          : 0
+
+      return {
+        questionId,
+        mean,
+        distribution,
+      }
+    })
+
+    return {
+      ...org,
+      results,
+      feedbackCount,
+      studentCount,
+      feedbackPercentage: studentCount > 0 ? feedbackCount / studentCount : 0,
+    }
+  })
+
+  console.timeEnd('--organisationsWithResults')
+
+  return organisationsWithResults
 }
 
 const getOrganisationsWithResults = (rows, questions) => {
-  console.time('getOrganisationsWithResults')
+  console.time('-getOrganisationsWithResults')
   const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
 
   const organisations = createOrganisations(rowsByOrganisationId, questions)
 
-  console.timeEnd('getOrganisationsWithResults')
+  console.timeEnd('-getOrganisationsWithResults')
   return organisations
 }
 
@@ -265,8 +273,6 @@ const withMissingOrganisations = (
     ...organisations,
     ...missingOrganisations.map((org) => ({
       id: org.id,
-      name: org.name,
-      code: org.code,
       courseUnits: [],
       results: questions.map(({ id: questionId }) => ({
         questionId,
@@ -336,7 +342,7 @@ const omitOrganisationOpenUniRows = async (rows) => {
 }
 
 const partitionOpenUniRows = (rows) => {
-  console.time('partitionOpenUniRows')
+  console.time('-partitionOpenUniRows')
   const openUniCourseRealisationIds = _.uniq(
     rows
       .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
@@ -347,7 +353,7 @@ const partitionOpenUniRows = (rows) => {
     rows,
     (row) => !openUniCourseRealisationIds.includes(row.course_realisation_id),
   )
-  console.timeEnd('partitionOpenUniRows')
+  console.timeEnd('-partitionOpenUniRows')
   return result
 }
 
@@ -423,6 +429,8 @@ const getAllRowsFromDb = async () => {
     validDataValues,
   })
 
+  console.log(JSON.stringify(courseRealisationRows[0], null, 2))
+
   return courseRealisationRows
 }
 
@@ -446,7 +454,7 @@ const cacheSummary = async (rows) => {
 }
 
 const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
-  console.time('getSummaryFromCache')
+  console.time('-getSummaryFromCache')
   const cacheRows = await FeedbackSummaryCache.findAll({
     where: {
       [Op.or]: {
@@ -460,7 +468,7 @@ const getSummaryFromCache = async (organisationIds, courseRealisationIds) => {
     },
   })
   const result = cacheRows.flatMap((row) => row.data)
-  console.timeEnd('getSummaryFromCache')
+  console.timeEnd('-getSummaryFromCache')
   return result
 }
 
@@ -513,10 +521,7 @@ const getOrganisationSummaries = async ({
     questions,
   ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
 
-  const result = _.sortBy(
-    organisationsWithMissing.concat(openUniOrganisationWithResults),
-    'code',
-  )
+  const result = organisationsWithMissing.concat(openUniOrganisationWithResults)
 
   console.timeEnd('getOrganisationSummaries')
   return result

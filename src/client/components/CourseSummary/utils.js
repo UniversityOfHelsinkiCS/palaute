@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
-import { orderBy } from 'lodash'
+import _, { orderBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
@@ -197,6 +197,7 @@ export const useAggregatedOrganisationSummaries = ({
   keyword,
   includeOpenUniCourseUnits,
   dateRange,
+  organisationAccess,
 }) => {
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
     includeOpenUniCourseUnits,
@@ -216,9 +217,14 @@ export const useAggregatedOrganisationSummaries = ({
     [filteredOrganisations, orderBy],
   )
 
+  const namedOrganisations = sortedOrganisations.map((org) => {
+    const orgInfo = organisationAccess.find((org2) => org.id === org2.id)
+    return { ...org, name: orgInfo.name, code: orgInfo.code }
+  })
+
   return {
     organisationSummaries,
-    aggregatedOrganisations: sortedOrganisations,
+    aggregatedOrganisations: namedOrganisations,
     ...rest,
   }
 }

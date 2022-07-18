@@ -188,6 +188,7 @@ const OrganisationSummary = () => {
     orderBy,
     includeOpenUniCourseUnits,
     dateRange,
+    organisationAccess,
   })
 
   const { openAccordions, toggleAccordion } = useOpenAccordions(
