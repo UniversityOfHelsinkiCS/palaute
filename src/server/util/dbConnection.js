@@ -49,6 +49,7 @@ const connectToDatabase = async (attempt = 0) => {
     logger.info(
       `Connection to database failed! Attempt ${attempt} of ${DB_CONNECTION_RETRY_LIMIT}`,
     )
+    console.log(err)
     await sleep(5000)
     return connectToDatabase(attempt + 1)
   }

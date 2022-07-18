@@ -256,7 +256,7 @@ const getOpenUniOrganisationWithResults = (rows, questions) => {
   return organisations[0]
 }
 
-const withMissingOrganisations = (
+const includeEmptyOrganisations = (
   organisations,
   organisationAccess,
   questions,
@@ -287,8 +287,8 @@ const withMissingOrganisations = (
 
   return _.orderBy(
     allOrganisations,
-    [(org) => (org.courseUnits.length > 0 ? 1 : 0), 'code'],
-    ['desc', 'asc'],
+    [(org) => (org.courseUnits.length > 0 ? 1 : 0)],
+    ['desc'],
   )
 }
 
@@ -387,6 +387,28 @@ const getUniversityQuestions = async () => {
     ...question.toJSON(),
     secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
   }))
+}
+
+const addOrganisationInfo = async (organisations) => {
+  console.time('addOrganisationInfo')
+  const sorted = _.sortBy(organisations, 'id')
+
+  const orgNames = await Organisation.findAll({
+    attributes: ['id', 'name', 'code'],
+    where: {
+      id: {
+        [Op.in]: sorted.map((org) => org.id),
+      },
+    },
+    order: [['id', 'asc']],
+  })
+  const result = sorted.map((org, index) => ({
+    ...org,
+    ...orgNames[index].dataValues,
+  }))
+  const sortedResult = _.sortBy(result, 'code')
+  console.timeEnd('addOrganisationInfo')
+  return sortedResult
 }
 
 const getSummaryByOrganisation = async ({
@@ -515,15 +537,20 @@ const getOrganisationSummaries = async ({
     questions,
   )
 
-  const organisationsWithMissing = withMissingOrganisations(
+  const organisationsWithMissing = includeEmptyOrganisations(
     organisationsWithResults,
     organisationAccess,
     questions,
   ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
 
-  const result = organisationsWithMissing.concat(openUniOrganisationWithResults)
+  const allOrganisations = organisationsWithMissing.concat(
+    openUniOrganisationWithResults,
+  )
+
+  const result = await addOrganisationInfo(allOrganisations)
 
   console.timeEnd('getOrganisationSummaries')
+
   return result
 }
 
