@@ -59,15 +59,6 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: theme.palette.primary.main,
   },
-  doneIcon: {
-    color: theme.palette.success.main,
-  },
-  clearIcon: {
-    color: theme.palette.error.main,
-  },
-  accessTime: {
-    color: theme.palette.warning.main,
-  },
   arrowContainer: {
     position: 'absolute',
     width: '100%',
@@ -92,10 +83,45 @@ const useStyles = makeStyles((theme) => ({
 const getQuestion = (questions, questionId) =>
   questions.find((q) => q.id === questionId)
 
+const ResponseGivenIcon = () => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
+      <DoneIcon color="primary" />
+    </Tooltip>
+  )
+}
+
+const ResponseNotGivenIcon = () => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
+      <ClearIcon color="error" />
+    </Tooltip>
+  )
+}
+
+const FeedbackOpenIcon = () => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip title={t('courseSummary:feedbackStillOpen')}>
+      <AccessTimeIcon color="warning" />
+    </Tooltip>
+  )
+}
+
+const FeedbackResponseIndicator = ({ status }) => (
+  <>
+    {status === 'GIVEN' && <ResponseGivenIcon />}
+    {status === 'NONE' && <ResponseNotGivenIcon />}
+    {status === 'OPEN' && <FeedbackOpenIcon />}
+  </>
+)
+
 const ResultsRow = ({
   // id,
-  link,
   label,
+  link,
   results,
   questions,
   children,
@@ -108,7 +134,6 @@ const ResultsRow = ({
   onToggleAccordion = () => {},
   cellsAfter = null,
 }) => {
-  const { t } = useTranslation()
   const classes = useStyles({ level })
   const [accordionOpen, setAccordionOpen] = useState(accordionInitialOpen)
 
@@ -116,24 +141,6 @@ const ResultsRow = ({
     setAccordionOpen((previousOpen) => !previousOpen)
     onToggleAccordion()
   }
-
-  const feedbackResponseGivenContent = (
-    <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
-      <DoneIcon className={classes.doneIcon} />
-    </Tooltip>
-  )
-
-  const feedbackResponseNotGivenContent = (
-    <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
-      <ClearIcon className={classes.clearIcon} />
-    </Tooltip>
-  )
-
-  const feedbackStillOpenContent = (
-    <Tooltip title={t('courseSummary:feedbackStillOpen')}>
-      <AccessTimeIcon className={classes.accessTime} />
-    </Tooltip>
-  )
 
   const percent =
     studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
@@ -150,7 +157,7 @@ const ResultsRow = ({
               variant="contained"
               disableRipple
             >
-              <Typography variant="body1">{label}</Typography>
+              {label}
               <Box className={classes.arrowContainer}>
                 <ChevronRight
                   className={cn({
@@ -167,17 +174,13 @@ const ResultsRow = ({
                 <ButtonBase
                   to={link}
                   component={RouterLink}
-                  className={cn(
-                    classes.accordionButton,
-                    classes.link,
-                    'shadow-scale-hover-effect',
-                  )}
+                  className={cn(classes.accordionButton, classes.link)}
                   variant="contained"
                 >
-                  <Typography component="div">{label}</Typography>
+                  {label}
                 </ButtonBase>
               ) : (
-                <Typography component="div">{label}</Typography>
+                <Box paddingLeft="0.5rem">{label}</Box>
               )}
             </>
           )}
@@ -198,9 +201,7 @@ const ResultsRow = ({
           </Typography>
         </td>
         <td className={classes.resultCell}>
-          {feedbackResponseGiven === 'GIVEN' && feedbackResponseGivenContent}
-          {feedbackResponseGiven === 'NONE' && feedbackResponseNotGivenContent}
-          {feedbackResponseGiven === 'OPEN' && feedbackStillOpenContent}
+          <FeedbackResponseIndicator status={feedbackResponseGiven} />
         </td>
         {cellsAfter}
       </tr>

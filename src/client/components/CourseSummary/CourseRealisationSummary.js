@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react'
-import { lightFormat } from 'date-fns'
-import { Link as RouterLink, Redirect, useParams } from 'react-router-dom'
+import { Redirect, useParams } from 'react-router-dom'
 
 import {
-  Link,
   Box,
   Card,
   CardContent,
@@ -22,14 +20,14 @@ import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
-import TeacherChip from '../TeacherChip'
+import { CourseRealisationLabel } from './Labels'
 
 const useStyles = makeStyles((theme) => ({
   realisationHeading: {
     textAlign: 'left',
     verticalAlign: 'Bottom',
-    padding: theme.spacing(2),
-    fontWeight: theme.typography.fontWeightBold,
+    paddingLeft: '0.5rem',
+    paddingBottom: '0.5rem',
   },
   languageRow: {
     display: 'flex',
@@ -37,59 +35,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 }))
-
-const Label = ({ courseRealisation, language }) => {
-  const {
-    startDate,
-    endDate,
-    feedbackTargetId,
-    teachers,
-    name,
-    teachingLanguages,
-  } = courseRealisation
-
-  const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
-  const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
-
-  const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
-  const translatedName = getLanguageValue(name, language)
-
-  const link = feedbackTargetId ? (
-    <Link
-      component={RouterLink}
-      to={`/targets/${feedbackTargetId}/results`}
-      underline="hover"
-    >
-      {translatedName}
-    </Link>
-  ) : (
-    translatedName
-  )
-
-  const languagesString = teachingLanguages
-    .map((teachingLanguage) => teachingLanguage[language])
-    .join(', ')
-
-  return (
-    <>
-      {link}
-      <Box display="flex" alignItems="center" mb={0.5}>
-        <Typography color="textSecondary" variant="body2">
-          {datePeriod}
-        </Typography>
-        <Box mr={2} />
-        <Typography color="textSecondary" variant="subtitle2">
-          {languagesString}
-        </Typography>
-      </Box>
-      <Box display="flex" flexWrap="wrap" maxWidth="100rem">
-        {teachers.map((t) => (
-          <TeacherChip key={t.id} user={t} />
-        ))}
-      </Box>
-    </>
-  )
-}
 
 const CourseRealisationTable = ({ courseRealisations, questions }) => {
   const { t, i18n } = useTranslation()
@@ -128,7 +73,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                 <ResultsRow
                   key={courseRealisation.id}
                   label={
-                    <Label
+                    <CourseRealisationLabel
                       courseRealisation={courseRealisation}
                       language={i18n.language}
                     />

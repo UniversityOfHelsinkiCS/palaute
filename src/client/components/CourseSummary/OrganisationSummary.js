@@ -8,7 +8,6 @@ import {
   Tooltip,
   Divider,
   LinearProgress,
-  Container,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
@@ -33,6 +32,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
+import { OrganisationLabel } from './Labels'
 
 const useStyles = makeStyles((theme) => ({
   filtersCell: {
@@ -120,12 +120,10 @@ const OrganisationTable = ({
                 <ResultsRow
                   id={id}
                   label={
-                    <Box display="flex" flexDirection="column">
-                      <Typography variant="caption" color="textSecondary">
-                        {code}
-                      </Typography>
-                      {getLanguageValue(name, i18n.language)}
-                    </Box>
+                    <OrganisationLabel
+                      name={getLanguageValue(name, i18n.language)}
+                      code={code}
+                    />
                   }
                   results={results}
                   questions={questions}
