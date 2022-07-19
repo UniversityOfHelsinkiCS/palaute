@@ -418,6 +418,12 @@ const getSummaryByOrganisation = async ({
     : rows
 
   const results = getOrganisationsWithResults(normalizedRows, questions)
+  // must add name and code to the result json
+  results[0] = {
+    name: organisation.name,
+    code: organisation.code,
+    ...results[0],
+  }
 
   return { organisations: results, questions }
 }
