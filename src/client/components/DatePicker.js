@@ -3,7 +3,6 @@ import {
   DesktopDatePicker,
   DatePicker as MuiDatePicker,
 } from '@mui/x-date-pickers'
-import '@mui/lab'
 import { TextField } from '@mui/material'
 
 export const KeyboardDatePicker = ({ value, onChange, ...props }) => (

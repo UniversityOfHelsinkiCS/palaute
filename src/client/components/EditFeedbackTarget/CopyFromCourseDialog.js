@@ -14,10 +14,10 @@ import {
   Link,
   ListItemText,
   Alert,
+  Autocomplete,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
-import { Autocomplete } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'

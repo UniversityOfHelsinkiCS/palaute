@@ -1,6 +1,5 @@
 import React from 'react'
-import { Autocomplete } from '@mui/lab'
-import { TextField } from '@mui/material'
+import { Autocomplete, TextField } from '@mui/material'
 import { inProduction } from '../../util/common'
 
 import {
