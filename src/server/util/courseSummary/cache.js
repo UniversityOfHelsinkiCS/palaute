@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, no-console */
 /* eslint-disable prefer-destructuring */
 
 const _ = require('lodash')
@@ -104,6 +104,7 @@ const getSummaryFromCache = async (
         [Op.between]: [startDate, endDate],
       },
     },
+    order: [['course_realisation_id', 'asc']], // partitionOpenUniRows benefits from this 100ms
   })
 
   const result = deserialize(cacheRows)

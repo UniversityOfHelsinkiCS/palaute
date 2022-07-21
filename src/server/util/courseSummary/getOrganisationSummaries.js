@@ -5,7 +5,7 @@ const { Op } = require('sequelize')
 const { subMonths } = require('date-fns')
 
 const { sequelize } = require('../dbConnection')
-const { Survey, FeedbackSummaryCache, Organisation } = require('../../models')
+const { Survey, Organisation } = require('../../models')
 
 const {
   QUESTION_AVERAGES_QUERY,
@@ -90,83 +90,74 @@ const executeSummaryQuery = ({
   })
 }
 
-const getCurrentCourseRealisationId = (rows) => {
-  const rowsByCourseRealisationId = _.groupBy(
-    rows,
-    (row) => row.course_realisation_id,
-  )
-
-  const courseRealisations = Object.entries(rowsByCourseRealisationId).map(
-    ([courseRealisationId, courseRealisationRows]) => {
-      const { course_realisation_start_date: startDate } =
-        courseRealisationRows[0]
-
-      const { feedbackCount } = getCounts(courseRealisationRows)
-
-      return {
-        id: courseRealisationId,
-        startDate: new Date(startDate),
-        feedbackCount,
-      }
-    },
-  )
-
-  const sortedCourseRealisations = _.orderBy(
-    courseRealisations,
-    ['startDate', 'feedbackCount'],
-    ['desc', 'desc'],
-  )
-
-  return sortedCourseRealisations[0].id
-}
-
 const getCourseUnitsWithResults = (rows, questions) => {
   const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
 
-  const courseUnitsWithCurId = Object.entries(rowsByCourseCode).map(
+  const courseUnits = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
-      const currentId = getCurrentCourseRealisationId(courseUnitRows)
+      //===== get latest relevant CUR of CU to see if its feedback response is given =======//
+      const rowsByCourseRealisationId = _.groupBy(
+        courseUnitRows,
+        (row) => row.course_realisation_id,
+      )
+
+      let feedbackCountSum = 0
+      let studentCountSum = 0
+
+      // find the latest cur's id with most feedbacks. Also count the sum of feedbacks and students
+      let currentId = Object.keys(rowsByCourseRealisationId)[0]
+      let currentRank = -1
+
+      Object.entries(rowsByCourseRealisationId).forEach(
+        ([courseRealisationId, courseRealisationRows]) => {
+          const { feedbackCount, studentCount } = getCounts(
+            courseRealisationRows,
+          )
+          feedbackCountSum += feedbackCount
+          studentCountSum += studentCount
+
+          const rank =
+            Date.parse(courseRealisationRows[0].course_realisation_start_date) *
+              10_000 +
+            feedbackCount // assuming no course has over 10_000 feedbacks
+
+          if (rank > currentRank) {
+            currentRank = rank
+            currentId = courseRealisationId
+          }
+        },
+      )
+
       const current = courseUnitRows.find(
         (row) => row.course_realisation_id === currentId,
       )
-      return {
-        courseUnitRows,
-        courseCode,
-        current,
-      }
-    },
-  )
 
-  const courseUnits = courseUnitsWithCurId.map(
-    ({ courseUnitRows, courseCode, current }) => {
-      const { feedbackCount, studentCount } = getCounts(courseUnitRows)
+      const results = getResults(courseUnitRows, questions)
 
       return {
         name: courseUnitRows[0].course_unit_name,
         courseCode,
-        results: getResults(courseUnitRows, questions),
-        feedbackCount,
-        studentCount,
-        feedbackPercentage: feedbackCount / studentCount,
+        results,
+        feedbackCount: feedbackCountSum,
+        studentCount: studentCountSum,
+        feedbackPercentage: feedbackCountSum / studentCountSum,
         feedbackResponseGiven: Boolean(current?.feedback_response_given),
         closesAt: current?.closes_at,
       }
     },
   )
 
-  return _.orderBy(courseUnits, ['courseCode'], ['asc'])
+  const sortedCourseUnits = _.orderBy(courseUnits, ['courseCode'], ['asc'])
+
+  return sortedCourseUnits
 }
 
-const createOrganisations = (rowsByOrganisationId, questions, openUni) => {
+const createOrganisations = (rowsByOrganisationId, questions) => {
   console.time('--organisationsWithCourseUnits')
 
   const organisationsWithCourseUnits = Object.entries(rowsByOrganisationId).map(
     ([organisationId, organisationRows]) => {
-      const courseUnits = getCourseUnitsWithResults(
-        organisationRows,
-        questions,
-        openUni,
-      )
+      const courseUnits = getCourseUnitsWithResults(organisationRows, questions)
       return {
         id: organisationId,
         courseUnits,
@@ -343,18 +334,41 @@ const omitOrganisationOpenUniRows = async (rows) => {
 
 const partitionOpenUniRows = (rows) => {
   console.time('-partitionOpenUniRows')
-  const openUniCourseRealisationIds = _.uniq(
-    rows
+
+  const sortedRows = rows.sort((a, b) =>
+    a.course_realisation_id.localeCompare(b.course_realisation_id),
+  )
+
+  const openUniCourseRealisationIds = _.sortedUniq(
+    sortedRows
       .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
       .map((row) => row.course_realisation_id),
   )
 
-  const result = _.partition(
-    rows,
-    (row) => !openUniCourseRealisationIds.includes(row.course_realisation_id),
-  )
+  const openUni = []
+  const justUni = []
+
+  let j = 0
+  for (let i = 0; i < sortedRows.length; i++) {
+    const row = sortedRows[i]
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const k = row.course_realisation_id.localeCompare(
+        openUniCourseRealisationIds[j],
+      )
+      if (k === 0) {
+        openUni.push(row)
+        break
+      } else if (k < 0) {
+        justUni.push(row)
+        break
+      }
+      j++
+    }
+  }
   console.timeEnd('-partitionOpenUniRows')
-  return result
+
+  return [justUni, openUni]
 }
 
 const getOrganisationQuestions = async (organisationCode) => {
@@ -467,9 +481,11 @@ const getOrganisationSummaries = async ({
     )
   }
 
+  const partitionedRows = partitionOpenUniRows(rows)
+
   const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
-    ? partitionOpenUniRows(rows)
-    : [rows, partitionOpenUniRows(rows)[1]]
+    ? partitionedRows
+    : [rows, partitionedRows[1]]
 
   const organisationsWithResults = getOrganisationsWithResults(
     normalizedRows,
