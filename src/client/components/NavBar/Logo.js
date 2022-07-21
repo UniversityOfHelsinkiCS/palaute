@@ -8,7 +8,6 @@ import hyLogo from '../../assets/hy_logo.svg'
 
 const styles = {
   link: {
-    textDecoration: 'none',
     marginRight: 4,
   },
   image: {
@@ -18,17 +17,15 @@ const styles = {
 }
 
 const Logo = () => (
-  <Box sx={styles.link}>
-    <Link to="/">
-      <Box display="inline-flex" alignItems="center">
-        <img src={hyLogo} alt="HY" css={styles.image} />
-        <Box mr={1} />
-        <Typography variant="h6" component="h1" color="white">
-          Norppa
-        </Typography>
-      </Box>
-    </Link>
-  </Box>
+  <Link to="/" style={{ textDecoration: 'none' }}>
+    <Box display="inline-flex" alignItems="center" sx={styles.link}>
+      <img src={hyLogo} alt="HY" css={styles.image} />
+      <Box mr={1} />
+      <Typography variant="h6" component="h1" color="white">
+        Norppa
+      </Typography>
+    </Box>
+  </Link>
 )
 
 export default Logo
