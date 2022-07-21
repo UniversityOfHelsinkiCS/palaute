@@ -86,21 +86,7 @@ const AdminView = () => {
             component={Link}
             to={`${url}/feedback-targets`}
           />
-          <Tab
-            to={`${url}/updater`}
-            component={forwardRef((props, ref) => (
-              <Button
-                ref={ref}
-                onClick={() => history.push(`${url}/updater`)}
-                className={`MuiTab-root MuiTab-textColorPrimary ${
-                  history.location.pathname.indexOf('updater') > -1 &&
-                  'Mui-selected'
-                }`}
-              >
-                {updaterIcon}
-              </Button>
-            ))}
-          />
+          <Tab label="Updater" to={`${url}/updater`} component={Link} />
           <Tab label="Misc" component={Link} to={`${url}/misc`} />
         </RouterTabs>
       </Box>

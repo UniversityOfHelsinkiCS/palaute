@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chip, keyframes } from '@mui/material'
+import { Chip, css, keyframes } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 const flow = keyframes`
@@ -17,11 +17,9 @@ const styles = {
     backgroundImage:
       'linear-gradient(to right, #edf7ff 0%, #d2e7fc 10%, #edf7ff 20%)',
     backgroundSize: '300px, 20px',
-    animationName: flow,
-    animationDuration: '6.5s',
-    animationIterationCount: 'infinite',
-    animationFillMode: 'forwards',
-    animationTimingFunction: 'linear',
+    animation: css`
+      ${flow} 6.5s infinite forwards linear
+    `,
     color: '#09233d',
     borderColor: '#a3bed9',
   },
