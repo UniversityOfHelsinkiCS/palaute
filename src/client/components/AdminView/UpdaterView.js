@@ -33,7 +33,7 @@ const StatusTable = ({ updaterStatus }) => {
       }
     }
     if (finishedAt) setEndOfDuration(Date.parse(finishedAt))
-    return null
+    return undefined
   }, [status])
 
   if (!startedAt) {
