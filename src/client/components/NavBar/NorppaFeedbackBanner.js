@@ -9,13 +9,13 @@ import apiClient from '../../util/apiClient'
 
 const styles = {
   container: {
-    margin: 10,
+    margin: 2,
     background: '#ffe06d',
     borderRadius: '5px',
-    padding: 15,
+    padding: 1.5,
   },
   button: {
-    marginTop: 10,
+    marginTop: 1,
   },
   heading: {
     display: 'flex',
