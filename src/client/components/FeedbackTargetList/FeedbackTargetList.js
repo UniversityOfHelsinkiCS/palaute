@@ -3,7 +3,6 @@ import { useParams, Redirect } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
 import { Typography, List } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import CourseRealisationItem from './CourseRealisationItem'
 
@@ -12,19 +11,18 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseRealisationsWithFeedbackTargets } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   courseRealisationItem: {
     '&:not(:last-child)': {
-      marginBottom: theme.spacing(2),
+      marginBottom: (theme) => theme.spacing(2),
     },
   },
   title: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
-}))
+}
 
 const FeedbackTargetList = () => {
-  const classes = useStyles()
   const { code } = useParams()
   const { i18n, t } = useTranslation()
 
@@ -50,7 +48,7 @@ const FeedbackTargetList = () => {
   if (courseRealisations.length === 0) {
     return (
       <div>
-        <Typography variant="h4" component="h1" className={classes.title}>
+        <Typography variant="h4" component="h1" sx={styles.title}>
           {name}
         </Typography>
         <Typography variant="subtitle1">
@@ -62,7 +60,7 @@ const FeedbackTargetList = () => {
 
   return (
     <div>
-      <Typography variant="h4" component="h1" className={classes.title}>
+      <Typography variant="h4" component="h1" sx={styles.title}>
         {name}
       </Typography>
       <List>
@@ -70,7 +68,7 @@ const FeedbackTargetList = () => {
           <CourseRealisationItem
             key={courseRealisation.id}
             courseRealisation={courseRealisation}
-            className={classes.courseRealisationItem}
+            sx={styles.courseRealisationItem}
           />
         ))}
       </List>

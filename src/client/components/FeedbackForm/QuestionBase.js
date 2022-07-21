@@ -1,17 +1,16 @@
 import React from 'react'
 
 import { Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   label: {
-    marginBottom: theme.spacing(1),
+    marginBottom: (theme) => theme.spacing(1),
     display: 'block',
   },
   description: {
-    marginBottom: theme.spacing(1),
+    marginBottom: (theme) => theme.spacing(1),
   },
-}))
+}
 
 const QuestionBase = ({
   children,
@@ -19,21 +18,17 @@ const QuestionBase = ({
   description,
   required,
   labelProps = {},
-}) => {
-  const classes = useStyles()
-
-  return (
-    <>
-      <Typography variant="h6" className={classes.label} {...labelProps}>
-        {label}
-        {required && ' *'}
-      </Typography>
-      {description && (
-        <Typography className={classes.description}>{description}</Typography>
-      )}
-      {children}
-    </>
-  )
-}
+}) => (
+  <>
+    <Typography variant="h6" sx={styles.label} {...labelProps}>
+      {label}
+      {required && ' *'}
+    </Typography>
+    {description && (
+      <Typography sx={styles.description}>{description}</Typography>
+    )}
+    {children}
+  </>
+)
 
 export default QuestionBase

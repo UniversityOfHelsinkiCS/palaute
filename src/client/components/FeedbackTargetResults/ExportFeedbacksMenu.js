@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
 import { Button, MenuItem, Menu, Box } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import Papa from 'papaparse'
 import * as _ from 'lodash'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   link: {
     textDecoration: 'none',
     color: 'black',
@@ -45,7 +44,7 @@ const useStyles = makeStyles(() => ({
   menuitem: {
     cursor: 'pointer',
   },
-}))
+}
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map((f) => f.questionId)
@@ -92,8 +91,6 @@ const getData = (questions, feedbacks, language) => {
 }
 
 const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
-  const classes = useStyles()
-
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
@@ -109,8 +106,8 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   }_${getCourseStartDate(feedbackTarget)}.csv`
 
   return (
-    <Button className={classes.button}>
-      <CSVLink data={parsedData} className={classes.link} filename={filename}>
+    <Button sx={styles.button}>
+      <CSVLink data={parsedData} sx={styles.link} filename={filename}>
         {t('feedbackTargetResults:exportCsv')}
       </CSVLink>
     </Button>
@@ -118,12 +115,10 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 }
 
 const ExportPdfLink = () => {
-  const classes = useStyles()
-
   const { t } = useTranslation()
 
   return (
-    <Button className={classes.button} onClick={() => window.print()}>
+    <Button sx={styles.button} onClick={() => window.print()}>
       {t('feedbackTargetResults:exportPdf')}
     </Button>
   )
@@ -132,8 +127,6 @@ const ExportPdfLink = () => {
 const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
-
-  const classes = useStyles()
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget)
@@ -144,7 +137,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
   }
 
   return (
-    <Box className={classes.container}>
+    <Box sx={styles.container}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -169,13 +162,13 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
           horizontal: 'center',
         }}
       >
-        <MenuItem value="csv" className={classes.menuitem}>
+        <MenuItem value="csv" sx={styles.menuitem}>
           <ExportCsvLink
             feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
           />
         </MenuItem>
-        <MenuItem value="pdf" className={classes.menuitem}>
+        <MenuItem value="pdf" sx={styles.menuitem}>
           <ExportPdfLink />
         </MenuItem>
       </Menu>

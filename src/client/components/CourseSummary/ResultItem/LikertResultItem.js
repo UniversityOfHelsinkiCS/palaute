@@ -1,11 +1,10 @@
 import React from 'react'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
 
-const useStyles = makeStyles({
+const styles = {
   content: {
     display: 'inline-flex',
     justifyContent: 'center',
@@ -13,7 +12,7 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     lineHeight: 2,
   },
-})
+}
 
 const getColor = (mean) => {
   if (!mean) {
@@ -44,7 +43,6 @@ const getColor = (mean) => {
 }
 
 const LikertResultItem = ({ mean, previous, question, ...props }) => {
-  const classes = useStyles()
   const { t, i18n } = useTranslation()
 
   const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
@@ -59,7 +57,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
       color={getColor(mean)}
       {...props}
     >
-      <div className={classes.content}>
+      <div style={styles.content}>
         <span>{mean || '–'}</span>
       </div>
     </ResultItemBase>

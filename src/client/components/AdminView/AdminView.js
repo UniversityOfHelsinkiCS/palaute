@@ -3,7 +3,6 @@ import { Redirect, Link } from 'react-router-dom'
 import { Route, Switch, useRouteMatch, useHistory } from 'react-router'
 
 import { Box, Button, Tab } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
@@ -20,7 +19,7 @@ import { ChangedClosingDates } from './ChangedClosingDates'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   failureIcon: {
     color: 'red',
     marginLeft: 5,
@@ -29,15 +28,13 @@ const useStyles = makeStyles(() => ({
     color: 'orange',
     marginLeft: 5,
   },
-}))
+}
 
 const AdminView = () => {
   const { path, url } = useRouteMatch()
   const history = useHistory()
 
   const { authorizedUser } = useAuthorizedUser()
-
-  const classes = useStyles()
 
   const { updaterStatus } = useUpdaterStatus({
     refetchInterval: 10_000,
@@ -49,10 +46,10 @@ const AdminView = () => {
     <>
       Updater
       {updaterStatus?.status === 'RUNNING' && (
-        <AccessTimeIcon className={classes.runningIcon} />
+        <AccessTimeIcon sx={styles.runningIcon} />
       )}
       {updaterStatus?.status === 'FAILURE' && (
-        <ErrorOutlineIcon className={classes.failureIcon} />
+        <ErrorOutlineIcon sx={styles.failureIcon} />
       )}
     </>
   )

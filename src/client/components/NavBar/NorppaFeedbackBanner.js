@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import { Button, Paper, Typography, Box } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import CloseIcon from '@mui/icons-material/Close'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   container: {
     margin: 10,
     background: '#ffe06d',
@@ -31,11 +30,10 @@ const useStyles = makeStyles(() => ({
       background: '#c80000',
     },
   },
-}))
+}
 
 const NorppaFeedbackBanner = () => {
   const [visible, setVisible] = useState(true)
-  const classes = useStyles()
   const { t } = useTranslation()
   const history = useHistory()
 
@@ -62,12 +60,12 @@ const NorppaFeedbackBanner = () => {
 
   return (
     visible && (
-      <Paper className={classes.container}>
-        <Box className={classes.heading}>
+      <Paper sx={styles.container}>
+        <Box sx={styles.heading}>
           <Typography variant="h6" component="h6">
             {t('norppaFeedback:bannerTitle')}
           </Typography>
-          <Button onClick={handleClose} className={classes.close}>
+          <Button onClick={handleClose} sx={styles.close}>
             <CloseIcon />
           </Button>
         </Box>
@@ -78,7 +76,7 @@ const NorppaFeedbackBanner = () => {
           variant="contained"
           color="primary"
           onClick={handleClick}
-          className={classes.button}
+          sx={styles.button}
         >
           {t('norppaFeedback:title')}
         </Button>

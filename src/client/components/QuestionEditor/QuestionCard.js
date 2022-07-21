@@ -114,7 +114,7 @@ const QuestionCard = ({
   onMoveUp,
   onMoveDown,
   onCopy,
-  className,
+  sx,
   isEditing = false,
   onStartEditing,
   onStopEditing,
@@ -143,7 +143,7 @@ const QuestionCard = ({
   }
 
   return (
-    <Card className={className}>
+    <Card sx={sx}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />

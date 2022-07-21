@@ -1,18 +1,13 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
 
-import { makeStyles } from '@mui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  divider: {
-    display: 'block',
-    height: ({ height }) => theme.spacing(height),
-  },
-}))
-
-const DividerRow = ({ height = 0.4 }) => {
-  const classes = useStyles({ height })
-
-  return <tr className={classes.divider} />
-}
+const DividerRow = ({ height = 0.4 }) => (
+  <tr
+    css={(theme) => ({
+      display: 'block',
+      height: theme.spacing(height),
+    })}
+  />
+)
 
 export default DividerRow

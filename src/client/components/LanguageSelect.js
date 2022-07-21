@@ -1,21 +1,19 @@
 import React from 'react'
 
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 
 import useId from '../hooks/useId'
 
-const useStyles = makeStyles({
+const style = {
   select: {
-    minWidth: '200px',
+    maxWidth: '200px',
   },
-})
+}
 
 const LanguageSelect = ({ value, onChange, label }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
   const id = useId()
   const labelId = `languageSelect-${id}`
 
@@ -28,7 +26,7 @@ const LanguageSelect = ({ value, onChange, label }) => {
       <InputLabel id={labelId}>{label}</InputLabel>
       <Select
         labelId={labelId}
-        className={classes.select}
+        sx={style.select}
         onChange={handleChange}
         value={value}
         label={label}

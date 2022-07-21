@@ -1,53 +1,59 @@
 import React from 'react'
-import { Chip } from '@mui/material'
-import { makeStyles } from '@mui/styles'
-import cn from 'classnames'
+import { Chip, css, keyframes } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
 
-const useStyles = makeStyles((theme) => {
-  const common = {
-    '&:hover': {
-      borderRadius: '4px',
-    },
-    transition: theme.transitions.create(['border-radius'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.shortest,
+const common = {
+  '&:hover': {
+    borderRadius: '4px',
+  },
+  transition: (theme) =>
+    theme.transitions.create(['border-radius'], {
+      easing: 'ease-out',
+      duration: '0.2s',
     }),
+}
+
+const pulse = keyframes`
+  0%, 88% { 
+    transform: scaleX(1.0);
   }
-  return {
-    '@keyframes pulse': {
-      '0%, 88%': { transform: 'scaleX(1.0)' },
-      '100%': { transform: 'scaleX(1.05) translateY(-2px)' },
-    },
-    sent: {
-      borderColor: theme.palette.success.dark,
-      color: theme.palette.success.dark,
-      ...common,
-    },
-    notGiven: {
-      borderColor: theme.palette.error.light,
-      color: theme.palette.error.main,
-      animation: `$pulse 2s 1s alternate infinite`,
-      ...common,
-    },
-    notSent: {
-      borderColor: theme.palette.warning.dark,
-      color: theme.palette.warning.dark,
-      animation: `$pulse 2.2s 0s alternate infinite`,
-      ...common,
-    },
-  }
-})
+  100% { 
+    transform: scaleX(1.05) translateY(-2px);
+}
+`
+
+const styles = {
+  sent: {
+    borderColor: (theme) => theme.palette.success.dark,
+    color: (theme) => theme.palette.success.dark,
+    ...common,
+  },
+  notGiven: {
+    borderColor: (theme) => theme.palette.error.light,
+    color: (theme) => theme.palette.error.main,
+    animation: css`
+      ${pulse} 2s 1s alternate infinite
+    `,
+    ...common,
+  },
+  notSent: {
+    borderColor: (theme) => theme.palette.warning.dark,
+    color: (theme) => theme.palette.warning.dark,
+    animation: css`
+      ${pulse} 2.2s 0s alternate infinite
+    `,
+    ...common,
+  },
+}
 
 const FeedbackResponseChip = ({
   id,
   feedbackResponseGiven,
   feedbackResponseSent,
-  className,
+  sx,
   ...props
 }) => {
-  const classes = useStyles({ id })
   const history = useHistory()
   const { t } = useTranslation()
 
@@ -59,9 +65,7 @@ const FeedbackResponseChip = ({
     ? t('teacherView:feedbackResponseGiven')
     : notSentLabel
 
-  const notSentClassName = feedbackResponseGiven
-    ? classes.notSent
-    : classes.notGiven
+  const notSentStyle = feedbackResponseGiven ? styles.notSent : styles.notGiven
 
   const handleClick = () => {
     const url = feedbackResponseSent
@@ -71,16 +75,13 @@ const FeedbackResponseChip = ({
     history.push(url)
   }
 
-  const classNames = cn(
-    className,
-    feedbackResponseSent ? classes.sent : notSentClassName,
-  )
+  const finalSx = [sx, feedbackResponseSent ? styles.sent : notSentStyle]
 
   return (
     <Chip
       onClick={id ? handleClick : undefined}
       label={label}
-      className={classNames}
+      sx={finalSx}
       variant="outlined"
       size="small"
       {...props}

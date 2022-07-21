@@ -1,4 +1,6 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
+
 import {
   Box,
   AccordionSummary,
@@ -11,15 +13,11 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import useEmailsToBeSent from '../../hooks/useEmailsToBeSent'
 
-const useStyles = makeStyles(() => ({
-  accordion: {
-    marginTop: 10,
-  },
+const styles = {
   details: {
     display: 'flex',
     flexDirection: 'column',
@@ -36,11 +34,10 @@ const useStyles = makeStyles(() => ({
     marginTop: 10,
     marginRight: 20,
   },
-}))
+}
 
 const EmailAccordion = () => {
   const [emailData, getTheEmails] = useEmailsToBeSent()
-  const classes = useStyles()
 
   const {
     emails,
@@ -51,7 +48,7 @@ const EmailAccordion = () => {
   } = emailData
 
   return (
-    <Box mb={2} className={classes.accordion}>
+    <Box mb={2} mt={2}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -61,17 +58,17 @@ const EmailAccordion = () => {
         >
           <Typography>Email statistics</Typography>
         </AccordionSummary>
-        <AccordionDetails className={classes.details}>
-          <div className={classes.emailCounts}>
-            <Typography className={classes.count}>
+        <AccordionDetails sx={styles.details}>
+          <div css={styles.emailCounts}>
+            <Typography sx={styles.count}>
               Student emails TODAY: {studentEmails}
             </Typography>
-            <Typography className={classes.count}>
+            <Typography sx={styles.count}>
               Teacher emails TODAY: {teacherEmails}
             </Typography>
           </div>
-          <div className={classes.emailCounts}>
-            <div className={classes.container}>
+          <div css={styles.emailCounts}>
+            <div css={styles.container}>
               <Typography>
                 Approximate teacher emails this week (~ +5-10%)
               </Typography>
@@ -81,7 +78,7 @@ const EmailAccordion = () => {
                 </Typography>
               ))}
             </div>
-            <div className={classes.container}>
+            <div css={styles.container}>
               <Typography>
                 Approximate student emails this week (~ +5-10%)
               </Typography>

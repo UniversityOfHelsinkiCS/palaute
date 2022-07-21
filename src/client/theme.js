@@ -28,6 +28,15 @@ const useTheme = () => {
               dark: green[900],
             },
           },
+          components: {
+            MuiCssBaseline: {
+              styleOverrides: `
+                body {
+                  height: 100vh
+                }
+              `,
+            },
+          },
         }),
       ),
     [prefersDarkMode],

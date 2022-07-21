@@ -12,11 +12,9 @@ import {
   ButtonBase,
   Box,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import cn from 'classnames'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import { PersonOutlined } from '@mui/icons-material'
@@ -31,7 +29,7 @@ import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import UserPermissionsWindow from './UserPermissionsWindow'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   toolbar: {
     display: 'flex',
     width: '100%',
@@ -44,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     color: 'inherit',
     textDecoration: 'none',
-    marginRight: 8,
-    fontWeight: theme.typography.fontWeightMedium,
+    marginRight: 1,
+    fontWeight: (theme) => theme.typography.fontWeightMedium,
     padding: '6px 12px',
     backgroundColor: 'rgba(255, 255, 255, 0)',
     transition: 'background-color 0.25s',
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 1,
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.2)',
     },
@@ -66,27 +64,23 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
   },
   languageMenuDivider: {
-    margin: theme.spacing(1, 0),
+    margin: (theme) => theme.spacing(1, 0),
   },
   norppaFeedback: {
-    background: theme.palette.warning.dark,
+    background: (theme) => theme.palette.warning.dark,
     color: 'white',
-    textDecoration: 'none',
     padding: '6px 12px',
     borderRadius: 4,
     fontWeight: 'bold',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
-      background: theme.palette.warning.main,
+      background: (theme) => theme.palette.warning.main,
     },
   },
   mailIcon: {
-    marginLeft: 5,
+    marginLeft: 1,
   },
-}))
-
-const useLanguageMenuStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
   },
@@ -95,34 +89,31 @@ const useLanguageMenuStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   activeItem: {
-    color: theme.palette.primary.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    color: (theme) => theme.palette.primary.main,
+    fontWeight: (theme) => theme.typography.fontWeightMedium,
   },
-}))
+}
 
 const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
-  const classes = useLanguageMenuStyles()
-
   const languages = ['fi', 'sv', 'en']
 
   return (
-    <div className={classes.container} ref={ref}>
+    <Box sx={styles.container} ref={ref}>
       {languages.map((l) => (
         <MenuItem
           key={l}
-          className={cn(classes.item, language === l && classes.activeItem)}
+          sx={[styles.item, language === l && styles.activeItem]}
           onClick={() => onLanguageChange(l)}
         >
           {l.toUpperCase()}
         </MenuItem>
       ))}
-    </div>
+    </Box>
   )
 })
 
 const NavBar = () => {
   const { pathname } = useLocation()
-  const classes = useStyles()
   const { feedbackTargets } = useFeedbackTargetsForStudent()
   const { authorizedUser } = useAuthorizedUser()
   const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo()
@@ -180,7 +171,7 @@ const NavBar = () => {
   const mobileMenuButton = (
     <IconButton
       color="inherit"
-      className={classes.mobileMenuButton}
+      sx={styles.mobileMenuButton}
       aria-label={menuLabel}
       {...menuButtonProps}
       size="large"
@@ -218,12 +209,12 @@ const NavBar = () => {
     }))
 
   const navBarLinks = (
-    <div className={classes.linkContainer}>
+    <Box sx={styles.linkContainer}>
       {links.map(({ label, to, active }, index) => (
         <ButtonBase
           component={Link}
           key={index}
-          className={cn(classes.link, active && classes.activeLink)}
+          sx={[styles.link, active && styles.activeLink]}
           to={to}
           focusRipple
         >
@@ -233,12 +224,14 @@ const NavBar = () => {
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
-        <Link to="/admin/feedback" className={classes.norppaFeedback}>
-          {norppaFeedbackCount.count}
-          <MailOutlineIcon className={classes.mailIcon} fontSize="small" />
+        <Link to="/admin/feedback" style={{ textDecoration: 'none' }}>
+          <Box sx={styles.norppaFeedback}>
+            {norppaFeedbackCount.count}
+            <MailOutlineIcon sx={styles.mailIcon} fontSize="small" />
+          </Box>
         </Link>
       )}
-    </div>
+    </Box>
   )
 
   const mobileMenuLinks = links.map(({ label, to }, index) => (
@@ -264,12 +257,12 @@ const NavBar = () => {
         language={i18n.language}
         onLanguageChange={changeLanguage}
       />
-      <Divider component="li" className={classes.languageMenuDivider} />
+      <Divider component="li" sx={styles.languageMenuDivider} />
       {isMobile && mobileMenuLinks}
       <MenuItem onClick={() => setPermissionsWindowOpen(true)}>
         {t('navBar:userInformation')}
       </MenuItem>
-      <Divider component="li" className={classes.languageMenuDivider} />
+      <Divider component="li" sx={styles.languageMenuDivider} />
       <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
     </Menu>
   )
@@ -282,7 +275,7 @@ const NavBar = () => {
       />
       {menu}
       <AppBar position="static">
-        <Toolbar className={classes.toolbar}>
+        <Toolbar sx={styles.toolbar}>
           <Logo />
           {!isMobile && navBarLinks}
           {isMobile ? mobileMenuButton : desktopMenuButton}

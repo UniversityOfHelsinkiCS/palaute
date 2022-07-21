@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom'
 
 import { Box, Typography, Tab, Paper } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import CourseSettings from './CourseSettings'
@@ -25,17 +24,16 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   title: {
-    marginTop: 8,
-    marginBottom: 20,
-    marginLeft: 10,
+    marginTop: 1,
+    marginBottom: 4,
     textTransform: 'uppercase',
   },
   tabContainer: {
-    marginRight: 15,
-    marginBottom: 15,
-    padding: 10,
+    marginRight: 4,
+    marginBottom: 4,
+    padding: 2,
     display: 'flex',
     flexShrink: 0,
     flexDirection: 'column',
@@ -48,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     flexDirection: 'row',
   },
-  tabRow: {
+  tabRow: (theme) => ({
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
-  },
-  selected: {
+  }),
+  selected: (theme) => ({
     color: ' #1077A1',
     [theme.breakpoints.down('sm')]: {
       borderLeft: `2px solid #1077A1`,
@@ -62,15 +60,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       borderBottom: `2px solid #1077A1`,
     },
-  },
-}))
+  }),
+}
 
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { organisation, isLoading } = useOrganisation(code)
-  const classes = useStyles()
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
   if (isLoading) {
@@ -94,21 +91,17 @@ const OrganisationSettings = () => {
           {getLanguageValue(organisation.name, i18n.language)}
         </Typography>
       </Box>
-      <Box mb={2} className={classes.tabSection}>
-        <Paper className={classes.tabContainer}>
-          <Typography
-            variant="subtitle1"
-            component="h6"
-            className={classes.title}
-          >
+      <Box mb={2} sx={styles.tabSection}>
+        <Paper sx={styles.tabContainer}>
+          <Typography variant="subtitle1" component="h6" sx={styles.title}>
             {t('settings')}
           </Typography>
-          <Box className={classes.tabRow}>
+          <Box sx={styles.tabRow}>
             <Tab
               label={t('organisationSettings:generalTab')}
               component={Link}
               to={`${url}/general`}
-              className={selected === 'general' ? classes.selected : ''}
+              sx={selected === 'general' ? styles.selected : {}}
             />
             {hasAdminAccess && (
               <>
@@ -116,15 +109,13 @@ const OrganisationSettings = () => {
                   label={t('organisationSettings:coursesTab')}
                   component={Link}
                   to={`${url}/courses`}
-                  className={selected === 'courses' ? classes.selected : ''}
+                  sx={selected === 'courses' ? styles.selected : {}}
                 />
                 <Tab
                   label={t('organisationSettings:feedbackCorrespondentTab')}
                   component={Link}
                   to={`${url}/correspondent`}
-                  className={
-                    selected === 'correspondent' ? classes.selected : ''
-                  }
+                  sx={selected === 'correspondent' ? styles.selected : {}}
                 />
               </>
             )}
@@ -132,49 +123,41 @@ const OrganisationSettings = () => {
               label={t('organisationSettings:surveyTab')}
               component={Link}
               to={`${url}/survey`}
-              className={selected === 'survey' ? classes.selected : ''}
+              sx={selected === 'survey' ? styles.selected : {}}
             />
           </Box>
         </Paper>
-        <Paper className={classes.tabContainer}>
-          <Typography
-            variant="subtitle1"
-            component="h6"
-            className={classes.title}
-          >
+        <Paper sx={styles.tabContainer}>
+          <Typography variant="subtitle1" component="h6" sx={styles.title}>
             {t('feedbacks')}
           </Typography>
-          <Box className={classes.tabRow}>
+          <Box sx={styles.tabRow}>
             <Tab
               label={t('organisationSettings:summaryTab')}
               component={Link}
               to={`${url}/summary`}
-              className={selected === 'summary' ? classes.selected : ''}
+              sx={selected === 'summary' ? styles.selected : {}}
             />
             {hasAdminAccess && (
               <Tab
                 label={t('organisationSettings:openQuestionsTab')}
                 component={Link}
                 to={`${url}/open`}
-                className={selected === 'open' ? classes.selected : ''}
+                sx={selected === 'open' ? styles.selected : {}}
               />
             )}
           </Box>
         </Paper>
         {isAdmin && (
-          <Paper className={classes.tabContainer}>
-            <Typography
-              variant="subtitle1"
-              component="h6"
-              className={classes.title}
-            >
+          <Paper sx={styles.tabContainer}>
+            <Typography variant="subtitle1" component="h6" sx={styles.title}>
               Admin
             </Typography>
             <Tab
               label="Organisation Logs"
               component={Link}
               to={`${url}/logs`}
-              className={selected === 'logs' ? classes.selected : ''}
+              sx={selected === 'logs' ? styles.selected : {}}
             />
           </Paper>
         )}

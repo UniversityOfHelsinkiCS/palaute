@@ -1,5 +1,4 @@
-import { Box, Paper, Typography } from '@mui/material'
-import { Alert } from '@mui/lab'
+import { Alert, Box, Paper, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
 import { useParams, Redirect } from 'react-router'

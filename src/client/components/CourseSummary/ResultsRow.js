@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
+/** @jsxImportSource @emotion/react */
 
 import { Tooltip, Typography, ButtonBase, Box } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
@@ -9,24 +9,23 @@ import ClearIcon from '@mui/icons-material/Clear'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import cn from 'classnames'
 
 import ResultItem from './ResultItem'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   resultCell: {
-    padding: theme.spacing(1),
+    padding: (theme) => theme.spacing(1),
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '50px',
   },
   countCell: {
-    padding: theme.spacing(1),
+    padding: (theme) => theme.spacing(1),
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '155px',
   },
-  labelCell: ({ level }) => ({
+  labelCell: (theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '300px',
       height: '74px', // Sets a good height for the entire row
@@ -37,8 +36,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('lg')]: {
       width: '500px',
     },
-    paddingLeft: theme.spacing(level * 2),
     paddingRight: '1rem',
+  }),
+  innerLabelCell: (theme) => ({
+    paddingLeft: theme.spacing(1),
   }),
   accordionButton: {
     width: '100%',
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   link: {
-    color: theme.palette.primary.main,
+    color: (theme) => theme.palette.primary.main,
   },
   arrowContainer: {
     position: 'absolute',
@@ -68,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     paddingRight: '0.7rem',
     '&:hover': {
-      color: theme.palette.text.primary,
+      color: (theme) => theme.palette.text.primary,
     },
-    color: theme.palette.info.main,
+    color: (theme) => theme.palette.info.main,
   },
   arrow: {
     transition: 'transform 0.2s ease-out',
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   arrowOpen: {
     transform: 'rotate(90deg)',
   },
-}))
+}
 
 const getQuestion = (questions, questionId) =>
   questions.find((q) => q.id === questionId)
@@ -134,7 +135,6 @@ const ResultsRow = ({
   onToggleAccordion = () => {},
   cellsAfter = null,
 }) => {
-  const classes = useStyles({ level })
   const [accordionOpen, setAccordionOpen] = useState(accordionInitialOpen)
 
   const handleToggleAccordion = () => {
@@ -148,22 +148,22 @@ const ResultsRow = ({
   return (
     <>
       <tr>
-        <td className={cn(classes.labelCell)}>
+        <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
           {accordionEnabled ? (
             // eslint-disable-next-line react/button-has-type
             <ButtonBase
               onClick={handleToggleAccordion}
-              className={classes.accordionButton}
+              css={styles.accordionButton}
               variant="contained"
               disableRipple
             >
               {label}
-              <Box className={classes.arrowContainer}>
+              <Box sx={styles.arrowContainer}>
                 <ChevronRight
-                  className={cn({
-                    [classes.arrow]: true,
-                    [classes.arrowOpen]: accordionOpen,
-                  })}
+                  sx={{
+                    ...styles.arrow,
+                    ...(accordionOpen ? styles.arrowOpen : {}),
+                  }}
                 />
               </Box>
             </ButtonBase>
@@ -174,7 +174,7 @@ const ResultsRow = ({
                 <ButtonBase
                   to={link}
                   component={RouterLink}
-                  className={cn(classes.accordionButton, classes.link)}
+                  sx={{ ...styles.accordionButton, ...styles.link }}
                   variant="contained"
                 >
                   {label}
@@ -192,15 +192,15 @@ const ResultsRow = ({
             mean={mean}
             distribution={distribution}
             previous={previous}
-            className={classes.resultCell}
+            sx={styles.resultCell}
           />
         ))}
-        <td className={classes.countCell}>
+        <td css={styles.countCell}>
           <Typography component="div">
             {feedbackCount}/{studentCount} ({percent}%)
           </Typography>
         </td>
-        <td className={classes.resultCell}>
+        <td sx={styles.resultCell}>
           <FeedbackResponseIndicator status={feedbackResponseGiven} />
         </td>
         {cellsAfter}

@@ -8,11 +8,10 @@ import {
   Box,
   Typography,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   accordion: {
     backgroundColor: '#f1f1f1',
   },
@@ -26,29 +25,28 @@ const useStyles = makeStyles(() => ({
   row: {
     marginBottom: 5,
   },
-}))
+}
 
 const InstructionAccordion = () => {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   return (
     <Box mb={2}>
-      <Accordion className={classes.accordion}>
+      <Accordion sx={styles.accordion}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.summary}>
+          <Typography sx={styles.summary}>
             {t('feedbackResponse:instructionTitle')}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails className={classes.details}>
-          <Typography className={classes.row}>
+        <AccordionDetails sx={styles.details}>
+          <Typography sx={styles.row}>
             {t('feedbackResponse:responseInstruction')}
           </Typography>
-          <Typography className={classes.row}>
+          <Typography sx={styles.row}>
             {t('feedbackResponse:writingInstruction')}
           </Typography>
         </AccordionDetails>

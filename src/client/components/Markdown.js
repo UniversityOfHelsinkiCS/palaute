@@ -1,22 +1,16 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import cn from 'classnames'
 import { Link, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   gutterBottom: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
-}))
-
-const GutterTypography = ({ className, ...props }) => {
-  const classes = useStyles()
-
-  return (
-    <Typography className={cn(className, classes.gutterBottom)} {...props} />
-  )
 }
+
+const GutterTypography = ({ sx, ...props }) => (
+  <Typography sx={[sx, styles.gutterBottom]} {...props} />
+)
 
 const H1 = (props) => (
   <GutterTypography variant="h3" component="h1" {...props} />

@@ -1,19 +1,18 @@
 import React from 'react'
 
 import { Box, Grid, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import OptionEditor from './OptionEditor'
 import FormikTextField from '../FormikTextField'
 
-const useStyles = makeStyles((theme) => ({
-  container: {
+const styles = {
+  container: (theme) => ({
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 64px)',
     },
-  },
-}))
+  }),
+}
 
 const InfoEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
@@ -44,12 +43,11 @@ const InfoEditor = ({ name, language }) => {
 }
 
 const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
-  const classes = useStyles()
   const { i18n } = useTranslation()
 
   return (
     <>
-      <div className={classes.container}>
+      <Box sx={styles.container}>
         <Grid spacing={4} container>
           {languages.map((language) => (
             <Grid md={4} sm={12} xs={12} item key={language}>
@@ -63,9 +61,9 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             </Grid>
           ))}
         </Grid>
-      </div>
+      </Box>
 
-      <div className={classes.container}>
+      <Box sx={styles.container}>
         <Box mb={2}>
           <Grid spacing={4} container>
             {languages.map((language) => {
@@ -81,7 +79,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             })}
           </Grid>
         </Box>
-      </div>
+      </Box>
 
       <OptionEditor name={`${name}.data.options`} languages={languages} />
     </>

@@ -3,7 +3,6 @@ import { useMutation } from 'react-query'
 import { differenceInHours } from 'date-fns'
 
 import { Box, Typography, Modal, Button, TextField } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -12,12 +11,12 @@ import { formatClosesAt } from './utils'
 import queryClient from '../../util/queryClient'
 import { TooltipButton } from '../TooltipButton'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   container: {
     position: 'absolute',
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(4, 5, 3),
+    backgroundColor: (theme) => theme.palette.background.paper,
+    boxShadow: (theme) => theme.shadows[5],
+    padding: (theme) => theme.spacing(4, 5, 3),
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'pre-line',
     marginBottom: 10,
   },
-}))
+}
 
 const useSendReminderEmail = () => {
   const mutationFn = async ({ id, data }) =>
@@ -61,7 +60,6 @@ const useSendReminderEmail = () => {
 
 const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const [reminder, setReminder] = useState('')
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const sendReminderEmail = useSendReminderEmail(feedbackTarget.id)
 
@@ -89,15 +87,15 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box mb={2} className={classes.container}>
-        <Typography variant="h6" component="h2" className={classes.title}>
+      <Box mb={2} sx={styles.container}>
+        <Typography variant="h6" component="h2" sx={styles.title}>
           {t('feedbackTargetResults:modalTitle')}
         </Typography>
-        <Typography variant="body2" component="p" className={classes.subtitle}>
+        <Typography variant="body2" component="p" sx={styles.subtitle}>
           {t('feedbackTargetResults:modalSubtitle')}
         </Typography>
         <Box mb={4} />
-        <Typography variant="body1" component="p" className={classes.textField}>
+        <Typography variant="body1" component="p" sx={styles.textField}>
           {t('feedbackTargetResults:emailMessage', {
             courseName: courseUnit.name[language],
             closesAt,
@@ -110,7 +108,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           onChange={(e) => setReminder(e.target.value)}
           fullWidth
         />
-        <div className={classes.buttons}>
+        <div sx={styles.buttons}>
           <TooltipButton
             onClick={sendEmail}
             color="primary"

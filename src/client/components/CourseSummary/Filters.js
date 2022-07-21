@@ -1,4 +1,5 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
 
 import {
   TextField,
@@ -7,16 +8,15 @@ import {
   FormControlLabel,
   Switch,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
 import { YearSemesterSelector } from './YearSemesterSelector'
 
-const useStyles = makeStyles({
+const styles = {
   container: {
     textAlign: 'left',
   },
-})
+}
 
 const Filters = ({
   keyword,
@@ -27,10 +27,9 @@ const Filters = ({
   onDateRangeChange,
 }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
 
   return (
-    <div className={classes.container}>
+    <div css={styles.container}>
       <Box mb={3}>
         <YearSemesterSelector value={dateRange} onChange={onDateRangeChange} />
       </Box>

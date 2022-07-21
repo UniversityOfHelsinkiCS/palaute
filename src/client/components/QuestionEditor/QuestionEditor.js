@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
 import { Button, Menu, MenuItem, Box } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -14,11 +13,11 @@ import {
   questionCanMoveDown,
 } from './utils'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   questionCard: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
-}))
+}
 
 const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
@@ -59,7 +58,6 @@ const QuestionEditor = ({
   editable = true,
   actions,
 }) => {
-  const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
   const [questionsField] = useField(name)
@@ -102,7 +100,7 @@ const QuestionEditor = ({
               moveUpDisabled={!questionCanMoveUp(questions, index)}
               moveDownDisabled={!questionCanMoveDown(questions, index)}
               language={language}
-              className={classes.questionCard}
+              sx={styles.questionCard}
               isEditing={editingQuestionId === getQuestionId(question)}
               onStopEditing={() => handleStopEditing()}
               onStartEditing={() =>

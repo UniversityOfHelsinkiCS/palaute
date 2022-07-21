@@ -1,36 +1,34 @@
 import React from 'react'
 
 import { Box, Container, Typography, Card, CardContent } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   heading: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   statusTabs: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   progressContainer: {
-    padding: theme.spacing(4, 0),
+    padding: (theme) => theme.spacing(4, 0),
     display: 'table',
     justifyContent: 'center',
   },
   courseRealisationItem: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   container: {
     display: 'flex',
     justifyContent: 'center',
   },
-}))
+}
 
 const GuestCourses = () => {
-  const classes = useStyles()
   const { feedbackTargets, isLoading } = useNoadfeedbackTargets()
   const { i18n, t } = useTranslation()
 
@@ -40,7 +38,7 @@ const GuestCourses = () => {
 
   if (!isLoading && !feedbackTargets) {
     return (
-      <Box my={4} className={classes.container}>
+      <Box my={4} sx={styles.container}>
         <Typography variant="h6" component="h6">
           {t('noadUser:noUser')}
         </Typography>
@@ -49,7 +47,7 @@ const GuestCourses = () => {
   }
 
   const NoOpenFeedbacks = () => (
-    <Box my={4} className={classes.container}>
+    <Box my={4} sx={styles.container}>
       <Typography variant="h6" component="h6">
         {t('noadUser:noFeedback')}
       </Typography>
@@ -58,7 +56,7 @@ const GuestCourses = () => {
 
   return (
     <Container>
-      <Typography variant="h4" component="h1" className={classes.heading}>
+      <Typography variant="h4" component="h1" sx={styles.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
       {!feedbackTargets.length && <NoOpenFeedbacks />}
@@ -67,10 +65,7 @@ const GuestCourses = () => {
         const translatedName = getLanguageValue(courseUnit.name, i18n.language)
 
         return (
-          <Card
-            className={classes.courseRealisationItem}
-            key={feedbackTarget.id}
-          >
+          <Card sx={styles.courseRealisationItem} key={feedbackTarget.id}>
             <CardContent>
               <Typography variant="h6" component="h2">
                 {translatedName}

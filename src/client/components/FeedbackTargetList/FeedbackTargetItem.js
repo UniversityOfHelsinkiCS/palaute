@@ -11,7 +11,6 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import MoreHoriz from '@mui/icons-material/MoreHoriz'
 
@@ -19,14 +18,14 @@ import { formatDate } from './utils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   listItem: {},
   action: {
     '&:not(:last-child)': {
-      marginRight: theme.spacing(1),
+      marginRight: (theme) => theme.spacing(1),
     },
   },
-}))
+}
 
 const ActionsButton = ({ feedbackTarget }) => {
   const buttonRef = useRef()
@@ -117,7 +116,6 @@ const ActionsButton = ({ feedbackTarget }) => {
 }
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   const { closesAt, opensAt, feedbackCount, enrolledCount } = feedbackTarget
@@ -128,7 +126,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   })
 
   return (
-    <ListItem className={classes.listItem} divider={divider} disableGutters>
+    <ListItem sx={styles.listItem} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
       <ListItemText
         primary={t('feedbackTargetList:studentFeedbacks', {

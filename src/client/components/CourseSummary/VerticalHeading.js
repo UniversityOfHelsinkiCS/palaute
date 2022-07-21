@@ -1,10 +1,9 @@
 import React from 'react'
 
 import { Tooltip, Typography, Box, IconButton } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   heading: {
     position: 'absolute',
     display: 'flex',
@@ -17,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     maxWidth: '300px',
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: (theme) => theme.typography.fontWeightRegular,
   },
   container: {
     position: 'relative',
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     margin: '-8px',
   },
-}))
+}
 
 const VerticalHeading = ({
   children,
@@ -40,8 +39,6 @@ const VerticalHeading = ({
   setOrderBySelection,
   onOrderByChange,
 }) => {
-  const classes = useStyles()
-
   const handleOrderByChange = (isAscending) => {
     if (id === 0)
       onOrderByChange(`FEEDBACK_COUNT_${isAscending ? 'ASC' : 'DESC'}`)
@@ -54,7 +51,7 @@ const VerticalHeading = ({
 
   return (
     <Component>
-      <Box className={classes.container} height={height}>
+      <Box sx={styles.container} height={height}>
         <Tooltip title={children}>
           <Box
             display="flex"
@@ -63,8 +60,8 @@ const VerticalHeading = ({
             height="100px"
           >
             <Box>
-              <Box className={classes.heading}>
-                <Typography component="span" className={classes.title}>
+              <Box sx={styles.heading}>
+                <Typography component="span" sx={styles.title}>
                   {children}
                 </Typography>
               </Box>
@@ -110,7 +107,6 @@ const OrderButton = ({ id, orderBySelection, handleOrderByChange }) => {
 }
 
 const Icon = ({ disabled, isAscending }) => {
-  const classes = useStyles()
   const style = {
     display: 'flex',
     flexDirection: 'column',
@@ -119,11 +115,11 @@ const Icon = ({ disabled, isAscending }) => {
   return (
     <div style={style}>
       <ArrowDropUp
-        className={classes.icon}
+        sx={styles.icon}
         color={!disabled && !isAscending ? 'action' : 'disabled'}
       />
       <ArrowDropDown
-        className={classes.icon}
+        sx={styles.icon}
         color={!disabled && isAscending ? 'action' : 'disabled'}
       />
     </div>

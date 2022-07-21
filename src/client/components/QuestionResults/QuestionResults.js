@@ -12,7 +12,6 @@ import {
   Link as MuiLink,
   Alert,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation, Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -23,12 +22,12 @@ import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 import AlertLink from '../AlertLink'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   openQuestionItem: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   container: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   list: {
     maxHeight: '800px',
@@ -49,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   link: {
-    fontWeight: theme.typography.fontWeightMedium,
+    fontWeight: (theme) => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
     color: 'black',
   },
@@ -64,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
-}))
+}
 
 const componentByType = {
   LIKERT: LikertResults,
@@ -78,8 +77,7 @@ const QuestionItem = ({
   isTeacher,
   selectPublicQuestionsLink,
   isPublic,
-  className,
-  hidePrint,
+  sx,
 }) => {
   const Component = componentByType[question.type]
 
@@ -92,10 +90,10 @@ const QuestionItem = ({
   )
 
   return (
-    <Card className={className}>
+    <Card sx={sx}>
       <CardContent>
         {isTeacher && (
-          <Box mb={2} className={hidePrint}>
+          <Box mb={2} sx={styles.hidePrint}>
             <Alert severity="info">
               {isPublic ? (
                 <Trans i18nKey="questionResults:publicInfo">
@@ -117,7 +115,7 @@ const QuestionItem = ({
   )
 }
 
-const HiddenQuestionsList = ({ hiddenQuestions, classes }) => {
+const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
   const infoSite =
@@ -125,7 +123,7 @@ const HiddenQuestionsList = ({ hiddenQuestions, classes }) => {
 
   const infoLink = (
     <AlertLink
-      className={classes.link}
+      sx={styles.link}
       component={MuiLink}
       href={infoSite}
       target="_blank"
@@ -136,7 +134,7 @@ const HiddenQuestionsList = ({ hiddenQuestions, classes }) => {
   )
 
   return (
-    <Card className={classes.container}>
+    <Card sx={styles.container}>
       <CardContent>
         <Typography variant="h6" component="h2">
           {t('questionResults:publicityOfQuestions')}
@@ -144,7 +142,7 @@ const HiddenQuestionsList = ({ hiddenQuestions, classes }) => {
         <Typography variant="body2">
           {t('questionResults:moreInfo')} {infoLink}
         </Typography>
-        <List className={classes.list}>
+        <List sx={styles.list}>
           {hiddenQuestions.map((question, index) => (
             <ListItem
               divider={index < hiddenQuestions.length - 1}
@@ -168,8 +166,6 @@ const QuestionResults = ({
   selectPublicQuestionsLink,
   organisationAccess,
 }) => {
-  const classes = useStyles()
-
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
     [questions, feedbacks, publicQuestionIds],
@@ -197,18 +193,14 @@ const QuestionResults = ({
             isPublic={publicQuestionIds.includes(q.id)}
             isTeacher={isTeacher}
             selectPublicQuestionsLink={selectPublicQuestionsLink}
-            className={classes.openQuestionItem}
-            hidePrint={classes.hidePrint}
+            sx={styles.openQuestionItem}
           />
         ))}
       </div>
       {organisationAccess && hiddenQuestions.length > 0 && (
-        <HiddenQuestionsList
-          hiddenQuestions={hiddenQuestions}
-          classes={classes}
-        />
+        <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />
       )}
-      <Grid spacing={2} container className={classes.displayStyle}>
+      <Grid spacing={2} container sx={styles.displayStyle}>
         {notOpenQuestions.map((q) => (
           <Grid key={q.id} xs={12} sm={12} md={6} item>
             <QuestionItem
@@ -216,7 +208,6 @@ const QuestionResults = ({
               isPublic={publicQuestionIds.includes(q.id)}
               isTeacher={isTeacher}
               selectPublicQuestionsLink={selectPublicQuestionsLink}
-              hidePrint={classes.hidePrint}
             />
           </Grid>
         ))}

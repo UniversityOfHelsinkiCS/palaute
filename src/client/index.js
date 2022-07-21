@@ -2,7 +2,7 @@ import 'intersection-observer'
 import './util/resizeObserverPolyfill'
 
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClientProvider } from 'react-query'
 
@@ -28,7 +28,10 @@ const ensureDevUser = () => {
 
 ensureDevUser()
 
-render(
+const container = document.getElementById('root')
+const root = createRoot(container)
+
+root.render(
   <BrowserRouter basename={basePath}>
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
@@ -36,5 +39,4 @@ render(
       </ErrorBoundary>
     </QueryClientProvider>
   </BrowserRouter>,
-  document.getElementById('root'),
 )

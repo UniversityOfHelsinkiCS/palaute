@@ -5,42 +5,40 @@ import {
   CircularProgress,
   Typography,
   TextField,
+  Alert,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { Alert } from '@mui/lab'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
 
 import apiClient from '../../util/apiClient'
 import { getHeaders, getData } from './utils'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   button: {
-    margin: 5,
+    margin: 1,
     width: '170px',
   },
   datePicker: {
-    margin: 5,
+    margin: 1,
   },
   link: {
     textDecoration: 'none',
     color: 'white',
   },
-}))
+}
 
 const ExportCsv = ({ results }) => {
   const headers = getHeaders(results)
   const stats = getData(results)
 
   const data = [headers, ...stats]
-  const classes = useStyles()
 
   const parsedData = Papa.unparse(data, { delimiter: ';' })
 
   return (
     <CSVLink
-      className={classes.link}
+      sx={styles.link}
       data={parsedData}
       filename="norppa-statistics.csv"
     >
@@ -55,8 +53,6 @@ const NorppaStatisticView = () => {
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [paramsChanged, setParamsChanged] = useState(true)
-
-  const classes = useStyles()
 
   const getStatistics = async () => {
     setLoading(true)
@@ -94,7 +90,7 @@ const NorppaStatisticView = () => {
           value={opensAt}
           renderInput={(props) => <TextField margin="normal" {...props} />}
           onChange={handleOpensAtChange}
-          className={classes.datePicker}
+          sx={styles.datePicker}
         />
         <DatePicker
           label="Closes at"
@@ -103,14 +99,14 @@ const NorppaStatisticView = () => {
           value={closesAt}
           renderInput={(props) => <TextField margin="normal" {...props} />}
           onChange={handleClosesAtChange}
-          className={classes.datePicker}
+          sx={styles.datePicker}
         />
       </Box>
       <Button
         variant="contained"
         color="primary"
         onClick={getStatistics}
-        className={classes.button}
+        sx={styles.button}
         disabled={!paramsChanged}
       >
         {!loading && <span>Fetch statistics</span>}
@@ -124,7 +120,7 @@ const NorppaStatisticView = () => {
         variant="contained"
         color="primary"
         disabled={!results.length}
-        className={classes.button}
+        sx={styles.button}
       >
         {results.length ? <ExportCsv results={results} /> : 'Export as CSV'}
       </Button>
