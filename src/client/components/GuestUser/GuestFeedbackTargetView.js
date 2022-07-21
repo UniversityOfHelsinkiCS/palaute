@@ -1,4 +1,5 @@
 import React from 'react'
+/** @jcssImportSource @emotion/react */
 
 import {
   Route,
@@ -10,7 +11,6 @@ import {
 } from 'react-router-dom'
 
 import { Box, Typography, Tab } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 import RouterTabs from '../RouterTabs'
@@ -26,20 +26,20 @@ import ExternalLink from '../ExternalLink'
 import { getCoursePageUrl, getCoursePeriod, getFeedbackPeriod } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   datesContainer: {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
     margin: '0px',
     '& dt': {
-      paddingRight: theme.spacing(1),
+      paddingRight: (theme) => theme.spacing(1),
       gridColumn: 1,
     },
     '& dd': {
       gridColumn: 2,
     },
   },
-  headingContainer: {
+  headingContainer: (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
@@ -47,19 +47,19 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
       justifyContent: 'flex-start',
     },
-  },
-  copyLinkButtonContainer: {
+  }),
+  copyLinkButtonContainer: (theme) => ({
     paddingLeft: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
       paddingTop: theme.spacing(1),
     },
-  },
+  }),
   coursePageLink: {
     display: 'inline-block',
-    marginTop: theme.spacing(1),
+    marginTop: (theme) => theme.spacing(1),
   },
-}))
+}
 
 const GuestFeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
@@ -68,8 +68,6 @@ const GuestFeedbackTargetView = () => {
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
-
-  const classes = useStyles()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -99,13 +97,13 @@ const GuestFeedbackTargetView = () => {
   return (
     <>
       <Box mb={2}>
-        <div className={classes.headingContainer}>
+        <div css={styles.headingContainer}>
           <Typography variant="h4" component="h1">
             {courseRealisationName}
           </Typography>
         </div>
 
-        <dl className={classes.datesContainer}>
+        <dl css={styles.datesContainer}>
           <Typography color="textSecondary" variant="body2" component="dt">
             {t('feedbackTargetView:coursePeriod')}:
           </Typography>
@@ -123,7 +121,7 @@ const GuestFeedbackTargetView = () => {
           </Typography>
         </dl>
 
-        <ExternalLink href={coursePageUrl} className={classes.coursePageLink}>
+        <ExternalLink href={coursePageUrl} sx={styles.coursePageLink}>
           {t('feedbackTargetView:coursePage')}
         </ExternalLink>
       </Box>

@@ -10,19 +10,17 @@ import {
   CardContent,
   Alert,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import Markdown from '../Markdown'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   title: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
-}))
+}
 
 const FeedbackTargetResults = ({ feedbackTarget }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
 
   const { accessStatus, feedbackResponse, id } = feedbackTarget
 
@@ -31,7 +29,7 @@ const FeedbackTargetResults = ({ feedbackTarget }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" component="h2" className={classes.title}>
+        <Typography variant="h6" component="h2" sx={styles.title}>
           {t('feedbackTargetResults:responseHeading')}
         </Typography>
 

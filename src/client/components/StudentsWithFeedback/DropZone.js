@@ -6,9 +6,8 @@ import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
 
 import { Box, Button } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   box: {
     display: 'flex',
     flexDirection: 'row-reverse',
@@ -21,7 +20,7 @@ const useStyles = makeStyles(() => ({
     opacity: 0,
     position: 'absolute',
   },
-}))
+}
 
 const baseStyle = {
   flex: 1,
@@ -57,7 +56,6 @@ const DropZone = ({ students }) => {
   const [data, setData] = useState([])
   const [filename, setFilename] = useState('')
 
-  const classes = useStyles()
   const { t } = useTranslation()
 
   const onDrop = (acceptedFiles) => {
@@ -102,7 +100,7 @@ const DropZone = ({ students }) => {
   )
 
   return (
-    <Box className={classes.box}>
+    <Box sx={styles.box}>
       <Box>
         <div className="container" style={{ cursor: 'pointer' }}>
           <div data-cy="dropzone" {...getRootProps({ style })}>
@@ -123,7 +121,6 @@ const DropZone = ({ students }) => {
 }
 
 const ExportCsv = ({ headers, rows, students, filename }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   const isStudentNumber = (value) => {
@@ -172,11 +169,11 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
   const parsedData = Papa.unparse(data, { delimiter: ';' })
 
   return (
-    <Box className={classes.box}>
-      <Button variant="outlined" color="primary" className={classes.button}>
+    <Box sx={styles.box}>
+      <Button variant="outlined" color="primary" sx={styles.button}>
         {t('downloadCSV')}
         <CSVLink
-          className={classes.link}
+          sx={styles.link}
           data={parsedData}
           filename={`${filename}_combined.csv`}
         >

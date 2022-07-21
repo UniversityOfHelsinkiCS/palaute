@@ -7,7 +7,6 @@ import {
   Radio,
   FormHelperText,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -16,21 +15,20 @@ import { getLanguageValue } from '../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 import { getDontKnowOption } from './utils'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   optionLabel: {
-    marginLeft: theme.spacing(0.2),
-    marginRight: theme.spacing(0.2),
+    marginLeft: (theme) => theme.spacing(0.2),
+    marginRight: (theme) => theme.spacing(0.2),
   },
   dontKnowLabel: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(0.5),
+    marginLeft: (theme) => theme.spacing(1),
+    marginRight: (theme) => theme.spacing(0.5),
   },
-}))
+}
 
 const options = [1, 2, 3, 4, 5, 0]
 
 const LikertQuestion = ({ question, name }) => {
-  const classes = useStyles()
   const [{ value: answer }, meta, helpers] = useField(name)
   const { i18n, t } = useTranslation()
   const { language } = i18n
@@ -75,9 +73,7 @@ const LikertQuestion = ({ question, name }) => {
                 control={<Radio color="primary" />}
                 label={parseOption(option)}
                 key={option}
-                className={
-                  option !== 0 ? classes.optionLabel : classes.dontKnowLabel
-                }
+                sx={option !== 0 ? styles.optionLabel : styles.dontKnowLabel}
               />
             ))}
           </RadioGroup>

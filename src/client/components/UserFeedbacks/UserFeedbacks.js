@@ -1,6 +1,5 @@
 import React, { useMemo, Fragment } from 'react'
 import { Typography, Alert } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
@@ -17,25 +16,24 @@ import {
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   heading: {
-    marginBottom: theme.spacing(2),
+    marginBottom: 1,
   },
   courseRealisationItem: {
-    marginBottom: theme.spacing(2),
+    marginBottom: 1,
   },
   statusTabs: {
-    marginBottom: theme.spacing(2),
+    marginBottom: 1,
   },
   progressContainer: {
-    padding: theme.spacing(4, 0),
+    padding: (theme) => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
-}))
+}
 
 const UserFeedbacks = () => {
-  const classes = useStyles()
   const location = useLocation()
 
   const { status = 'waitingForFeedback' } = qs.parse(location.search, {
@@ -65,11 +63,11 @@ const UserFeedbacks = () => {
   return (
     <div>
       <Title>{t('feedbacks')}</Title>
-      <Typography variant="h4" component="h1" className={classes.heading}>
+      <Typography variant="h4" component="h1" sx={styles.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
 
-      <StatusTabs className={classes.statusTabs} status={status} />
+      <StatusTabs sx={styles.statusTabs} status={status} />
 
       {isLoading && <LoadingProgress />}
 
@@ -80,7 +78,7 @@ const UserFeedbacks = () => {
       {sortedCourseRealations.map((courseRealisation) => (
         <Fragment key={courseRealisation.id}>
           <CourseRealisationItem
-            className={classes.courseRealisationItem}
+            sx={styles.courseRealisationItem}
             courseRealisation={courseRealisation}
           />
         </Fragment>

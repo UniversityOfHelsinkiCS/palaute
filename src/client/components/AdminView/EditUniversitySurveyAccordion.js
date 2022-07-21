@@ -8,7 +8,6 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { useTranslation } from 'react-i18next'
@@ -21,24 +20,24 @@ import { getInitialValues, validate, saveValues } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   accordion: {
     marginTop: 10,
   },
   heading: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   progressContainer: {
-    padding: theme.spacing(4, 0),
+    padding: (theme) => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
-}))
+}
 
 const EditUniversitySurveyAccordion = () => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
-  const classes = useStyles()
+
   const { enqueueSnackbar } = useSnackbar()
 
   const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()
@@ -72,7 +71,7 @@ const EditUniversitySurveyAccordion = () => {
         </AccordionSummary>
 
         <AccordionDetails>
-          <Typography variant="h4" component="h1" className={classes.heading}>
+          <Typography variant="h4" component="h1" sx={styles.heading}>
             {name}
           </Typography>
 

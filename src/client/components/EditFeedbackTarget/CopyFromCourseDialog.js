@@ -16,7 +16,6 @@ import {
   Alert,
   Autocomplete,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 
@@ -26,17 +25,16 @@ import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useFeedbackTargetItemStyles = makeStyles({
+const styles = {
   listItem: {
     alignItems: 'flex-start',
     flexDirection: 'column',
   },
-})
+}
 
 const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
-  const classes = useFeedbackTargetItemStyles()
 
   const periodInfo = `${formatDate(courseRealisation.startDate)} - ${formatDate(
     courseRealisation.endDate,
@@ -49,7 +47,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
     .filter(Boolean)
 
   return (
-    <ListItem divider={divider} className={classes.listItem} disableGutters>
+    <ListItem divider={divider} sx={styles.listItem} disableGutters>
       <ListItemText
         primary={
           <Link

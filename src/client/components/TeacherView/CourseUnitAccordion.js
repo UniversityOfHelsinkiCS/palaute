@@ -6,7 +6,6 @@ import {
   AccordionDetails,
   Typography,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +19,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import FeedbackOpenChip from './FeedbackOpenChip'
 
-const useStyles = makeStyles({
+const styles = {
   accordion: {
     boxShadow: 'none',
     margin: '0px !important',
@@ -32,7 +31,7 @@ const useStyles = makeStyles({
     display: 'block',
     padding: 0,
   },
-})
+}
 
 const getChip = (courseRealisation, code) => {
   const {
@@ -65,7 +64,6 @@ const getChip = (courseRealisation, code) => {
 
 const CourseUnitAccordion = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
-  const classes = useStyles()
 
   const { name, courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
@@ -73,7 +71,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   return (
     <Accordion
-      className={classes.accordion}
+      sx={styles.accordion}
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="courseUnitItem"
     >
@@ -88,7 +86,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           {chip}
         </div>
       </AccordionSummary>
-      <AccordionDetails className={classes.details}>
+      <AccordionDetails sx={styles.details}>
         <FeedbackTargetList courseCode={courseCode} group={group} />
       </AccordionDetails>
     </Accordion>

@@ -1,4 +1,5 @@
 import React, { useState, forwardRef } from 'react'
+/** @jsxImportSource @emotion/react */
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
 
@@ -9,8 +10,9 @@ import {
   Card,
   CardContent,
   Alert,
+  keyframes,
+  css,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -36,54 +38,51 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useFeedbackGivenSnackbarStyles = makeStyles((theme) => ({
+const tada = keyframes({
+  from: {
+    transform: 'scale3d(1, 1, 1)',
+  },
+
+  '10%, 20%': {
+    transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -6deg)',
+  },
+
+  '30%, 50%, 70%, 90%': {
+    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 6deg)',
+  },
+
+  '40%, 60%, 80%': {
+    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -6deg)',
+  },
+  to: {
+    transform: 'scale3d(1, 1, 1)',
+  },
+})
+
+const styles = {
   alert: {
     fontSize: '1.1rem',
-    fontWeight: theme.typography.fontWeightBold,
+    fontWeight: (theme) => theme.typography.fontWeightBold,
   },
-  icon: {
-    animation: '$tada 2500ms',
-    animationDelay: '500ms',
-  },
-  '@keyframes tada': {
-    from: {
-      transform: 'scale3d(1, 1, 1)',
-    },
+  icon: css`
+    animation: ${tada} 2500ms;
+    animation-delay: 500ms;
+  `,
+}
 
-    '10%, 20%': {
-      transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg)',
-    },
-
-    '30%, 50%, 70%, 90%': {
-      transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)',
-    },
-
-    '40%, 60%, 80%': {
-      transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)',
-    },
-    to: {
-      transform: 'scale3d(1, 1, 1)',
-    },
-  },
-}))
-
-const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => {
-  const classes = useFeedbackGivenSnackbarStyles()
-
-  return (
-    <Alert
-      variant="filled"
-      severity="success"
-      className={classes.alert}
-      ref={ref}
-      elevation={6}
-      icon={<span className={classes.icon}>🎉</span>}
-      {...props}
-    >
-      {children}
-    </Alert>
-  )
-})
+const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
+  <Alert
+    variant="filled"
+    severity="success"
+    sx={styles.alert}
+    ref={ref}
+    elevation={6}
+    icon={<span css={styles.icon}>🎉</span>}
+    {...props}
+  >
+    {children}
+  </Alert>
+))
 
 const FormContainer = ({
   onSubmit,

@@ -8,7 +8,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetItem from './FeedbackTargetItem'
 import { formatDate } from './utils'
 
-const CourseRealisationItem = ({ courseRealisation, className }) => {
+const CourseRealisationItem = ({ courseRealisation, sx }) => {
   const { i18n } = useTranslation()
   const { feedbackTargets, name, startDate, endDate } = courseRealisation
 
@@ -21,7 +21,7 @@ const CourseRealisationItem = ({ courseRealisation, className }) => {
   const periodInfo = `${formatDate(startDate)} - ${formatDate(endDate)}`
 
   return (
-    <Card className={className}>
+    <Card sx={sx}>
       <CardContent>
         <Typography variant="h6" component="h2" gutterBottom>
           {translatedName}

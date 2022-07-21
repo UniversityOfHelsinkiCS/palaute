@@ -1,6 +1,6 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
 import { Tooltip } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import {
   green,
   lightGreen,
@@ -9,16 +9,15 @@ import {
   grey,
   red,
 } from '@mui/material/colors'
-import cn from 'classnames'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   item: {
     textAlign: 'center',
     position: 'relative',
     color: grey['900'],
   },
   missing: {
-    backgroundColor: theme.palette.divider,
+    backgroundColor: (theme) => theme.palette.divider,
   },
   bad: {
     backgroundColor: red.A400,
@@ -35,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
   excellent: {
     backgroundColor: green['600'],
   },
-}))
+}
 
 /* Old Norppa colors 
-const useStyles1 = makeStyles({
+const styles = {
   item: {
     textAlign: 'center',
     position: 'relative',
@@ -61,22 +60,21 @@ const useStyles1 = makeStyles({
   excellent: {
     backgroundColor: '#63be7a',
   },
-}) */
+} */
 
 const ResultItemBase = ({
   children,
-  className: classNameProp,
+  sx,
   tooltipTitle = '',
   component: Component = 'td',
   color = 'missing',
   ...props
 }) => {
-  const classes = useStyles()
-  const className = cn(classNameProp, classes.item, classes[color])
+  const style = { ...sx, ...styles.item, ...styles[color] }
 
   return (
     <Tooltip title={tooltipTitle}>
-      <Component className={className} {...props}>
+      <Component css={style} {...props}>
         {children}
       </Component>
     </Tooltip>

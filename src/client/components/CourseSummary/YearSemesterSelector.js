@@ -9,7 +9,6 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import useHistoryState from '../../hooks/useHistoryState'
@@ -51,7 +50,7 @@ const useYearSemesters = (currentStart) => {
   }
 }
 
-const useStyles = makeStyles({
+const styles = {
   stepper: {
     display: 'flex',
     alignItems: 'center',
@@ -74,13 +73,12 @@ const useStyles = makeStyles({
     userSelect: 'none',
   },
   disabledButton: {
-    opacity: 0.0,
+    opacity: '0.0',
+    zIndex: -10,
   },
-})
+}
 
 const YearStepper = ({ value, onChange }) => {
-  const classes = useStyles()
-
   const handleIncrease = () => {
     onChange(value + 1)
   }
@@ -98,19 +96,19 @@ const YearStepper = ({ value, onChange }) => {
   const canDecrease = value > 2020
 
   return (
-    <Box className={classes.stepperContainer}>
+    <Box sx={styles.stepperContainer}>
       <IconButton
         onClick={handleDecrease}
         disabled={!canDecrease}
-        className={!canDecrease ? classes.disabledButton : ''}
+        sx={!canDecrease ? styles.disabledButton : {}}
         size="large"
       >
         <ChevronLeft />
       </IconButton>
-      <Typography className={classes.stepperValue}>{displayValue}</Typography>
+      <Typography sx={styles.stepperValue}>{displayValue}</Typography>
       <IconButton
         onClick={handleIncrease}
-        className={!canIncrease ? classes.disabledButton : ''}
+        sx={!canIncrease ? styles.disabledButton : {}}
         size="large"
       >
         <ChevronRight />
@@ -122,10 +120,8 @@ const YearStepper = ({ value, onChange }) => {
 const SemesterSelector = ({ value, onChange, semesters }) => {
   const { t } = useTranslation()
 
-  const classes = useStyles()
-
   return (
-    <Box className={classes.selectorContainer}>
+    <Box sx={styles.selectorContainer}>
       <Select value={value} onChange={(event) => onChange(event.target.value)}>
         {semesters.map((s) => (
           <MenuItem value={s} key={s.start}>
@@ -148,8 +144,6 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
  * @returns
  */
 export const YearSemesterSelector = ({ value, onChange }) => {
-  const classes = useStyles()
-
   const { t } = useTranslation()
 
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
@@ -178,7 +172,7 @@ export const YearSemesterSelector = ({ value, onChange }) => {
   }
 
   return (
-    <Box className={classes.stepper}>
+    <Box sx={styles.stepper}>
       <ToggleButtonGroup
         value={option}
         onChange={handleOptionChange}

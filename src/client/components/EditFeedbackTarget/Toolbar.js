@@ -1,26 +1,24 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import FixedContainer from '../FixedContainer'
 import LanguageSelect from '../LanguageSelect'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   saveButton: {
-    marginRight: theme.spacing(1),
+    marginRight: (theme) => theme.spacing(1),
   },
   container: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-}))
+}
 
 const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
   const history = useHistory()
 
   const handleClick = (e) => {
@@ -37,7 +35,7 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
 
   return (
     <FixedContainer>
-      <div className={classes.container}>
+      <div sx={styles.container}>
         <Button color="primary" variant="contained" onClick={handleClick}>
           {t('editFeedbackTarget:showPreview')}
         </Button>

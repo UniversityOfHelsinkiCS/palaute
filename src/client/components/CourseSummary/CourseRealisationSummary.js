@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+/** @jsxImportSource @emotion/react */
+
 import { Redirect, useParams } from 'react-router-dom'
 
 import {
@@ -8,7 +10,6 @@ import {
   Typography,
   TableContainer,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 
@@ -22,7 +23,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import { CourseRealisationLabel } from './Labels'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   realisationHeading: {
     textAlign: 'left',
     verticalAlign: 'Bottom',
@@ -34,18 +35,17 @@ const useStyles = makeStyles((theme) => ({
     gap: '4px',
     alignItems: 'center',
   },
-}))
+}
 
 const CourseRealisationTable = ({ courseRealisations, questions }) => {
   const { t, i18n } = useTranslation()
-  const classes = useStyles()
 
   return (
     <TableContainer>
       <table>
         <thead>
           <tr>
-            <th className={classes.realisationHeading}>
+            <th css={styles.realisationHeading}>
               {t('courseSummary:courseRealisation')}
             </th>
             {questions.map(({ id, data }) => (

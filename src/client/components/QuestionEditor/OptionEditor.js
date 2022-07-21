@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Button, IconButton, Tooltip, Box, Grid } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { FieldArray, useField } from 'formik'
 import CloseIcon from '@mui/icons-material/Close'
@@ -10,13 +9,13 @@ import { useTranslation } from 'react-i18next'
 import { createOption } from './utils'
 import FormikTextField from '../FormikTextField'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   optionsContainer: {
     '& > *': {
-      marginBottom: theme.spacing(2),
+      marginBottom: (theme) => theme.spacing(2),
     },
   },
-}))
+}
 
 const OptionItem = ({ name, index, languages, onRemove }) => {
   const { t, i18n } = useTranslation()
@@ -69,7 +68,6 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
 
 const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
   const [optionsField] = useField(name)
   const { value: options = [] } = optionsField
 
@@ -78,7 +76,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
       name={name}
       render={(arrayHelpers) => (
         <>
-          <div className={classes.optionsContainer}>
+          <Box sx={styles.optionsContainer}>
             {options.map((option, index) => (
               <OptionItem
                 index={index}
@@ -88,7 +86,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
                 onRemove={() => arrayHelpers.remove(index)}
               />
             ))}
-          </div>
+          </Box>
 
           <Button
             color="primary"

@@ -1,5 +1,4 @@
 import { Container } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
@@ -14,12 +13,12 @@ import FeedbackTargetView from './FeedbackTargetView'
 import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from './LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    paddingTop: (theme) => theme.spacing(4),
+    paddingBottom: (theme) => theme.spacing(4),
   },
-}))
+}
 
 const Home = () => {
   const { courseSummaryAccessInfo, isLoading: accessInfoLoading } =
@@ -39,27 +38,23 @@ const Home = () => {
   return <Redirect to="/feedbacks" />
 }
 
-const Router = () => {
-  const classes = useStyles()
-
-  return (
-    <Container className={classes.container} disableGutters>
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/feedbacks" component={UserFeedbacks} exact />
-        <Route path="/courses" component={TeacherView} exact />
-        <Route path="/targets/:id" component={FeedbackTargetView} />
-        <Route
-          path="/organisations/:code/settings"
-          component={OrganisationSettings}
-        />
-        <Route path="/course-summary" component={CourseSummary} />
-        <Route path="/cur/:id" component={CourseRealisationFeedback} />
-        <Route path="/norppa-feedback" component={NorppaFeedback} />
-        <Route path="/admin" component={AdminView} />
-      </Switch>
-    </Container>
-  )
-}
+const Router = () => (
+  <Container sx={styles.container} disableGutters>
+    <Switch>
+      <Route path="/" component={Home} exact />
+      <Route path="/feedbacks" component={UserFeedbacks} exact />
+      <Route path="/courses" component={TeacherView} exact />
+      <Route path="/targets/:id" component={FeedbackTargetView} />
+      <Route
+        path="/organisations/:code/settings"
+        component={OrganisationSettings}
+      />
+      <Route path="/course-summary" component={CourseSummary} />
+      <Route path="/cur/:id" component={CourseRealisationFeedback} />
+      <Route path="/norppa-feedback" component={NorppaFeedback} />
+      <Route path="/admin" component={AdminView} />
+    </Switch>
+  </Container>
+)
 
 export default Router

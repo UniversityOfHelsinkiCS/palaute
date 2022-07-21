@@ -1,4 +1,6 @@
 import React, { useRef, useState, forwardRef } from 'react'
+/** @jsxImportSource @emotion/react */
+
 import { Link } from 'react-router-dom'
 
 import {
@@ -12,15 +14,13 @@ import {
   IconButton,
   Divider,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import MenuIcon from '@mui/icons-material/Menu'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'react-i18next'
-import cn from 'classnames'
 
 import hyLogo from '../../assets/hy_logo.svg'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   container: {
     display: 'flex',
   },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     width: '2.5rem',
     height: 'auto',
-    marginRight: theme.spacing(1),
+    marginRight: (theme) => theme.spacing(1),
   },
   toolbar: {
     display: 'flex',
@@ -45,44 +45,38 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
   },
   languageMenuDivider: {
-    margin: theme.spacing(1, 0),
+    margin: (theme) => theme.spacing(1, 0),
   },
   item: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   activeItem: {
-    color: theme.palette.primary.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    color: (theme) => theme.palette.primary.main,
+    fontWeight: (theme) => theme.typography.fontWeightMedium,
   },
-}))
-
-const Logo = () => {
-  const classes = useStyles()
-
-  return (
-    <div className={classes.container}>
-      <Link to="/noad/courses" className={classes.logoLink}>
-        <img src={hyLogo} alt="HY" className={classes.image} />
-        <Typography variant="h6" component="h1">
-          Norppa
-        </Typography>
-      </Link>
-    </div>
-  )
 }
 
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
-  const classes = useStyles()
+const Logo = () => (
+  <div css={styles.container}>
+    <Link to="/noad/courses" sx={styles.logoLink}>
+      <img src={hyLogo} alt="HY" css={styles.image} />
+      <Typography variant="h6" component="h1">
+        Norppa
+      </Typography>
+    </Link>
+  </div>
+)
 
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
   const languages = ['fi', 'sv', 'en']
 
   return (
-    <div className={classes.container} ref={ref}>
+    <div css={styles.container} ref={ref}>
       {languages.map((l) => (
         <MenuItem
           key={l}
-          className={cn(classes.item, language === l && classes.activeItem)}
+          sx={[styles.item, language === l && styles.activeItem]}
           onClick={() => onLanguageChange(l)}
         >
           {l.toUpperCase()}
@@ -93,7 +87,6 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
 })
 
 const GuestNavBar = () => {
-  const classes = useStyles()
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -129,7 +122,7 @@ const GuestNavBar = () => {
   const mobileMenuButton = (
     <IconButton
       color="inherit"
-      className={classes.mobileMenuButton}
+      css={styles.mobileMenuButton}
       aria-label={menuLabel}
       {...menuButtonProps}
       size="large"
@@ -164,7 +157,7 @@ const GuestNavBar = () => {
       />
       {!!loggedIn && (
         <div>
-          <Divider component="li" className={classes.languageMenuDivider} />
+          <Divider component="li" sx={styles.languageMenuDivider} />
           <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
         </div>
       )}
@@ -175,7 +168,7 @@ const GuestNavBar = () => {
     <>
       {menu}
       <AppBar position="static">
-        <Toolbar className={classes.toolbar}>
+        <Toolbar sx={styles.toolbar}>
           <Logo />
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>

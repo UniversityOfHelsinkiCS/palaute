@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useParams, Redirect } from 'react-router-dom'
 import { Box, Typography, Divider, Button } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
@@ -9,7 +8,7 @@ import useOrganisation from '../../hooks/useOrganisation'
 import { filterCoursesWithNoResponses, formateDates } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   courseTitle: {
     textDecoration: 'none',
     color: '#1077A1',
@@ -40,38 +39,30 @@ const useStyles = makeStyles(() => ({
     color: '#646464',
     marginBottom: 5,
   },
-}))
+}
 
-const RealisationItem = ({ realisation, language, classes }) => {
+const RealisationItem = ({ realisation, language }) => {
   const url = `/targets/${realisation.id}/results`
 
   const realisationDates = formateDates(realisation)
 
   return (
-    <Box key={realisation.id} className={classes.realisationContainer}>
-      <Link to={url} className={classes.realisationTitle} replace>
+    <Box key={realisation.id} sx={styles.realisationContainer}>
+      <Link to={url} sx={styles.realisationTitle} replace>
         {realisation.name[language]}
       </Link>
-      <Typography variant="body2" component="p" className={classes.dates}>
+      <Typography variant="body2" component="p" sx={styles.dates}>
         {realisationDates}
       </Typography>
       {realisation.questions.map(({ question, responses }) => (
         <Box key={`${realisation.id}-${question.id}`}>
-          <Typography
-            variant="body1"
-            component="p"
-            className={classes.questionTitle}
-          >
+          <Typography variant="body1" component="p" sx={styles.questionTitle}>
             {question.data.label[language]}
           </Typography>
           <Box my={1}>
             {responses.map((r, index) => (
               <div key={index}>
-                <Typography
-                  variant="body2"
-                  component="p"
-                  className={classes.response}
-                >
+                <Typography variant="body2" component="p" sx={styles.response}>
                   {r}
                 </Typography>
                 <Divider style={{ margin: 2 }} />
@@ -88,7 +79,6 @@ const ProgrammeOpenQuestions = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { language } = i18n
-  const classes = useStyles()
 
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
   const { organisation, isLoading: isOrganisationLoading } =
@@ -106,7 +96,7 @@ const ProgrammeOpenQuestions = () => {
 
   return (
     <Box>
-      <div className={classes.buttonContainer}>
+      <Box sx={styles.buttonContainer}>
         <Button
           color="primary"
           variant="contained"
@@ -114,13 +104,13 @@ const ProgrammeOpenQuestions = () => {
         >
           {t('feedbackTargetResults:exportPdf')}
         </Button>
-      </div>
+      </Box>
       {filteredCourses.map((course) => (
         <Box key={course.code}>
           <Typography component="h6" variant="h6">
             <Link
               to={`/course-summary/${course.code}`}
-              className={classes.courseTitle}
+              sx={styles.courseTitle}
               replace
             >{`${course.code} - ${course.name[language]}`}</Link>
           </Typography>
@@ -129,7 +119,6 @@ const ProgrammeOpenQuestions = () => {
               key={realisation.id}
               realisation={realisation}
               language={language}
-              classes={classes}
             />
           ))}
         </Box>

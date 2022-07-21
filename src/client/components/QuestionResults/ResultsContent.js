@@ -1,34 +1,29 @@
 import React from 'react'
-import { Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Box, Typography } from '@mui/material'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   title: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   description: {
-    marginBottom: theme.spacing(2),
+    marginBottom: (theme) => theme.spacing(2),
   },
   chart: {
     margin: '0px auto',
   },
-}))
-
-const ResultsContent = ({ chart, title, children, description }) => {
-  const classes = useStyles()
-
-  return (
-    <>
-      <Typography variant="h6" component="h2" className={classes.title}>
-        {title}
-      </Typography>
-      {description && (
-        <Typography className={classes.description}>{description}</Typography>
-      )}
-      {chart && <div className={classes.chart}>{chart}</div>}
-      {children}
-    </>
-  )
 }
+
+const ResultsContent = ({ chart, title, children, description }) => (
+  <>
+    <Typography variant="h6" component="h2" sx={styles.title}>
+      {title}
+    </Typography>
+    {description && (
+      <Typography sx={styles.description}>{description}</Typography>
+    )}
+    {chart && <Box sx={styles.chart}>{chart}</Box>}
+    {children}
+  </>
+)
 
 export default ResultsContent

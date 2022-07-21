@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles } from '@mui/styles'
 
+import { Box } from '@mui/material'
 import LikertQuestion from './LikertQuestion'
 import OpenQuestion from './OpenQuestion'
 import SingleChoiceQuestion from './SingleChoiceQuestion'
@@ -15,40 +15,35 @@ const componentByType = {
   TEXT: Text,
 }
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   questionItem: {
     '&:not(:last-child)': {
-      marginBottom: theme.spacing(4),
+      marginBottom: '2rem',
     },
   },
-}))
+}
 
-const QuestionItem = ({ question, name, className }) => {
+const QuestionItem = ({ question, name }) => {
   const QuestionComponent = componentByType[question.type]
 
   return (
-    <div className={className}>
+    <Box sx={styles.questionItem}>
       <QuestionComponent question={question} name={name} />
-    </div>
+    </Box>
   )
 }
 
-const FeedbackForm = ({ questions = [], name = 'answers' }) => {
-  const classes = useStyles()
-
-  return (
-    <div>
-      {questions.map((question) => (
-        <QuestionItem
-          name={`${name}.${question.id.toString()}`}
-          type={question.type}
-          question={question}
-          className={classes.questionItem}
-          key={question.id}
-        />
-      ))}
-    </div>
-  )
-}
+const FeedbackForm = ({ questions = [], name = 'answers' }) => (
+  <div>
+    {questions.map((question) => (
+      <QuestionItem
+        name={`${name}.${question.id.toString()}`}
+        type={question.type}
+        question={question}
+        key={question.id}
+      />
+    ))}
+  </div>
+)
 
 export default FeedbackForm

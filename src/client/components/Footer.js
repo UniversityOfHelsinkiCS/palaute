@@ -1,7 +1,7 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
 
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 
@@ -11,13 +11,13 @@ import { images } from '../util/common'
 
 import { inProduction } from '../../config'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   logo: {
-    marginLeft: theme.spacing(2),
+    marginLeft: (theme) => theme.spacing(2),
     width: '80px',
     height: 'auto',
   },
-}))
+}
 
 const supportEmail = 'coursefeedback@helsinki.fi'
 const wikiLink = 'https://wiki.helsinki.fi/display/CF'
@@ -27,7 +27,6 @@ const dataProtectionNotice =
   'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991'
 
 const Footer = ({ user }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   return (
@@ -75,11 +74,7 @@ const Footer = ({ user }) => {
             rel="noopener"
             underline="hover"
           >
-            <img
-              src={images.toska_color}
-              className={classes.logo}
-              alt="Toska"
-            />
+            <img src={images.toska_color} css={styles.logo} alt="Toska" />
           </Link>
         </Box>
       </Container>

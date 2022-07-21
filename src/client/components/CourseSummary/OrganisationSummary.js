@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+/** @jsxImportSource @emotion/react */
 
 import {
   Box,
@@ -9,7 +10,6 @@ import {
   Divider,
   LinearProgress,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -34,17 +34,18 @@ import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 import { OrganisationLabel } from './Labels'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   filtersCell: {
     verticalAlign: 'bottom',
     width: '450px',
-    padding: theme.spacing(2, 2, 2, 0),
+    padding: '1rem',
   },
   progressCell: {
-    padding: theme.spacing(1, 0),
+    paddingTop: '1rem',
+    paddingBottom: '1rem',
     minHeight: '12px',
   },
-}))
+}
 
 const SettingsButton = ({ code }) => {
   const { t } = useTranslation()
@@ -74,14 +75,13 @@ const OrganisationTable = ({
   loading = false,
 }) => {
   const { t, i18n } = useTranslation()
-  const classes = useStyles()
 
   return (
     <TableContainer sx={{ overflow: 'visible' }}>
       <table>
         <thead>
           <tr>
-            <th className={classes.filtersCell}>{filters}</th>
+            <th css={styles.filtersCell}>{filters}</th>
 
             <ColumnHeadings
               onOrderByChange={onOrderByChange}
@@ -99,7 +99,7 @@ const OrganisationTable = ({
         </thead>
         <tbody>
           <tr>
-            <td colSpan={99} className={classes.progressCell}>
+            <td colSpan={99} css={styles.progressCell}>
               <Box height="0px" position="absolute">
                 {loading && <LinearProgress />}
               </Box>

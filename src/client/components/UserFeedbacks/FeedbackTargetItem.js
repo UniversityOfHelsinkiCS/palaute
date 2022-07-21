@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
-import cn from 'classnames'
 
 import {
   Box,
@@ -13,7 +12,6 @@ import {
   DialogTitle,
   ListItem,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
@@ -24,24 +22,17 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
-const useStyles = makeStyles({
+const styles = {
   listItem: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-})
-
-const useActionButtonStyles = makeStyles((theme) => ({
   button: {
-    margin: theme.spacing(0.5),
+    margin: (theme) => theme.spacing(0.5),
   },
-}))
-
-const ActionButton = ({ className, ...props }) => {
-  const classes = useActionButtonStyles()
-
-  return <Button className={cn(className, classes.button)} {...props} />
 }
+
+const ActionButton = ({ ...props }) => <Button sx={styles.button} {...props} />
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -181,7 +172,6 @@ const FeedbackNotStartedChip = () => {
 const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   const queryClient = useQueryClient()
@@ -207,7 +197,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const viewPath = `/targets/${id}/results`
 
   return (
-    <ListItem className={classes.listItem} divider={divider} disableGutters>
+    <ListItem sx={styles.listItem} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
 
       <Box mt={1} mb={1}>

@@ -1,4 +1,5 @@
 import React from 'react'
+/** @jsxImportSource @emotion/react */
 
 import {
   Route,
@@ -18,7 +19,6 @@ import {
   Tooltip,
   Badge,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -67,19 +67,19 @@ import ErrorView from '../ErrorView'
 import { getFeedbackTargetLoadError } from '../../util/errorMessage'
 import TeacherChip from '../TeacherChip'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   datesContainer: {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
     '& dt': {
-      paddingRight: theme.spacing(1),
+      paddingRight: (theme) => theme.spacing(1),
       gridColumn: 1,
     },
     '& dd': {
       gridColumn: 2,
     },
   },
-  headingContainer: {
+  headingContainer: (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(3),
@@ -88,8 +88,8 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
       justifyContent: 'flex-start',
     },
-  },
-  copyLinkButtonContainer: {
+  }),
+  copyLinkButtonContainer: (theme) => ({
     paddingLeft: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
     '@media print': {
       display: 'none',
     },
-  },
+  }),
   infoContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
-}))
+}
 
 const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
   const list = teachers.map((teacher) => (
@@ -140,7 +140,6 @@ const FeedbackTargetView = () => {
   )
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
-  const classes = useStyles()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -235,7 +234,7 @@ const FeedbackTargetView = () => {
   return (
     <>
       <Box mb={3}>
-        <div className={classes.headingContainer}>
+        <div css={styles.headingContainer}>
           <Box display="flex" flexDirection="column">
             <Typography variant="h4" component="h1">
               {courseUnitName}
@@ -247,7 +246,7 @@ const FeedbackTargetView = () => {
             </Typography>
           </Box>
           {isTeacher && (
-            <div className={classes.copyLinkButtonContainer}>
+            <div css={styles.copyLinkButtonContainer}>
               <Button
                 startIcon={<CopyIcon />}
                 color="primary"
@@ -258,9 +257,9 @@ const FeedbackTargetView = () => {
             </div>
           )}
         </div>
-        <div className={classes.infoContainer}>
+        <div css={styles.infoContainer}>
           <div>
-            <dl className={classes.datesContainer}>
+            <dl css={styles.datesContainer}>
               <Typography color="textSecondary" variant="body2" component="dt">
                 {t('feedbackTargetView:coursePeriod')}:
               </Typography>
@@ -278,7 +277,7 @@ const FeedbackTargetView = () => {
               </Typography>
             </dl>
 
-            <Box display="flex" className={classes.hidePrint}>
+            <Box display="flex" sx={styles.hidePrint}>
               <ExternalLink href={coursePageUrl}>
                 {t('feedbackTargetView:coursePage')}
               </ExternalLink>
@@ -310,7 +309,7 @@ const FeedbackTargetView = () => {
         </div>
       </Box>
 
-      <Box mb={2} className={classes.hidePrint}>
+      <Box mb={2} sx={styles.hidePrint}>
         <RouterTabs
           indicatorColor="primary"
           textColor="primary"

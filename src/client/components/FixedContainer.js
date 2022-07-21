@@ -1,27 +1,18 @@
 import { Container, Paper } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   floatingWrapper: {
     position: 'fixed',
-    bottom: (props) => (props.placement === 'bottom' ? '0px' : 'auto'),
-    top: (props) => (props.placement === 'top' ? '0px' : 'auto'),
     width: '100%',
     left: '0px',
-    padding: theme.spacing(2, 0),
+    padding: (theme) => theme.spacing(2, 0),
     zIndex: 999,
   },
-}))
+}
 
-const FixedContainer = ({
-  children,
-  placement = 'bottom',
-  intersectionObserverOptions = {},
-}) => {
-  const classes = useStyles({ placement })
-
+const FixedContainer = ({ children, intersectionObserverOptions = {} }) => {
   const { ref, inView } = useInView({
     threshold: 0,
     ...intersectionObserverOptions,
@@ -30,7 +21,7 @@ const FixedContainer = ({
   return (
     <>
       {!inView && (
-        <Paper className={classes.floatingWrapper} elevation={3} square>
+        <Paper sx={styles.floatingWrapper} elevation={3} square>
           <Container>{children}</Container>
         </Paper>
       )}

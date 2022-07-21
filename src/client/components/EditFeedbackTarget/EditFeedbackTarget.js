@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 
 import { Divider, Box, Button, Alert } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'
@@ -26,19 +25,19 @@ import {
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   heading: {
-    marginBottom: theme.spacing(1),
+    marginBottom: (theme) => theme.spacing(1),
   },
   progressContainer: {
-    padding: theme.spacing(4, 0),
+    padding: (theme) => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
   toolbarDivider: {
-    margin: theme.spacing(2, 0),
+    margin: (theme) => theme.spacing(2, 0),
   },
-}))
+}
 
 const QuestionEditorActions = ({ onCopy = () => {} }) => {
   const { t } = useTranslation()
@@ -110,7 +109,6 @@ const QuestionEditorContainer = ({ onSave, language }) => {
 
 const EditFeedbackTarget = () => {
   const { id } = useParams()
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
   const { language } = i18n
@@ -184,7 +182,7 @@ const EditFeedbackTarget = () => {
         )}
       </Formik>
 
-      <Divider className={classes.toolbarDivider} />
+      <Divider sx={styles.toolbarDivider} />
 
       <Toolbar
         onSave={() => {}}

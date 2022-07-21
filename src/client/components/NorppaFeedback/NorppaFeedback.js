@@ -2,7 +2,6 @@ import React from 'react'
 import { useHistory } from 'react-router'
 
 import { Box, Button, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -12,11 +11,11 @@ import FormikCheckBox from '../FormikCheckbox'
 import { saveValues } from './utils'
 import Title from '../Title'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   description: {
     width: '80%',
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 2,
+    marginBottom: 3,
     color: '#606060',
   },
   button: {
@@ -26,11 +25,10 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
   },
-}))
+}
 
 const NorppaFeedback = () => {
   const { t } = useTranslation()
-  const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
@@ -67,7 +65,7 @@ const NorppaFeedback = () => {
       <Typography variant="h4" component="h4">
         {t('norppaFeedback:title')}
       </Typography>
-      <Typography variant="body1" component="p" className={classes.description}>
+      <Typography variant="body1" component="p" sx={styles.description}>
         {t('norppaFeedback:description')}
       </Typography>
       <Formik
@@ -75,7 +73,7 @@ const NorppaFeedback = () => {
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting }) => (
-          <Form className={classes.container}>
+          <Form sx={styles.container}>
             <FormikTextField
               name="feedback"
               label={t('norppaFeedback:feedback')}
@@ -94,7 +92,7 @@ const NorppaFeedback = () => {
               color="primary"
               variant="contained"
               disabled={!values.feedback.length || isSubmitting}
-              className={classes.button}
+              sx={styles.button}
             >
               {t('norppaFeedback:submit')}
             </Button>

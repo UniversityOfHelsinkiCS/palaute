@@ -15,34 +15,55 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 
 import { sortTable } from '../../util/tableUtils'
 import DropZone from './DropZone'
 
-const useStyles = makeStyles(() => ({
+const styles = {
   box: {
     display: 'flex',
     flexDirection: 'row-reverse',
   },
   button: {
-    margin: 10,
+    margin: 2,
     width: '170px',
   },
   link: {
     textDecoration: 'none',
     color: 'white',
   },
-}))
+}
+
+const ExportCsv = ({ students, t }) => {
+  const headers = [
+    t('firstName'),
+    t('lastName'),
+    t('studentNumber'),
+    t('email'),
+    t('feedback'),
+  ]
+  const stats = students.map((student) => [...Object.values(student)])
+  const data = [headers, ...stats]
+
+  const parsedData = Papa.unparse(data, { delimiter: ';' })
+
+  return (
+    <CSVLink
+      style={{ textDecoration: 'none' }}
+      data={parsedData}
+      filename="students.csv"
+    >
+      <Box sx={styles.link}>{t('exportCSV')}</Box>
+    </CSVLink>
+  )
+}
 
 const StudentTable = ({ students }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('firstName')
   const { t } = useTranslation()
-
-  const classes = useStyles()
 
   const handleRequestSort = (e, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -60,38 +81,14 @@ const StudentTable = ({ students }) => {
     }),
   )
 
-  const ExportCsv = ({ students }) => {
-    const headers = [
-      t('firstName'),
-      t('lastName'),
-      t('studentNumber'),
-      t('email'),
-      t('feedback'),
-    ]
-    const stats = students.map((student) => [...Object.values(student)])
-    const data = [headers, ...stats]
-
-    const parsedData = Papa.unparse(data, { delimiter: ';' })
-
-    return (
-      <CSVLink
-        className={classes.link}
-        data={parsedData}
-        filename="students.csv"
-      >
-        {t('exportCSV')}
-      </CSVLink>
-    )
-  }
-
   return (
     <TableContainer component={Paper}>
-      <Box className={classes.box}>
+      <Box sx={styles.box}>
         <Button
           endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
           variant="contained"
           color="primary"
-          className={classes.button}
+          sx={styles.button}
           onClick={() => setDropZoneVisible(!dropZoneVisible)}
         >
           {t('combineCSV')}
@@ -100,10 +97,10 @@ const StudentTable = ({ students }) => {
           variant="contained"
           color="primary"
           disabled={!studentsCSV.length}
-          className={classes.button}
+          sx={styles.button}
         >
           {studentsCSV.length ? (
-            <ExportCsv students={studentsCSV} />
+            <ExportCsv students={studentsCSV} t={t} />
           ) : (
             t('exportCSV')
           )}
