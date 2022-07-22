@@ -46,18 +46,14 @@ const executeSummaryQuery = ({
     fbt.feedback_count as feedback_count,
     fbt.id AS feedback_target_id,
     fbt.closes_at AS closes_at,
+    fbt.feedback_response_email_sent AS feedback_response_given,
     cur.id AS course_realisation_id,
     cur.start_date AS course_realisation_start_date,
     cur.end_date AS course_realisation_end_date,
     cu.course_code AS course_code,
     cu.name AS course_unit_name,
     cu.id AS course_unit_id,
-    org.id AS organisation_id,
-    CASE
-      WHEN fbt.feedback_response IS NOT NULL
-      AND char_length(fbt.feedback_response) > 0 THEN TRUE
-      ELSE FALSE
-    END AS feedback_response_given
+    org.id AS organisation_id
   FROM question_averages
     INNER JOIN feedback_targets as fbt ON question_averages.feedback_target_id = fbt.id
     INNER JOIN course_units as cu ON fbt.course_unit_id = cu.id
@@ -410,26 +406,32 @@ const getSummaryByOrganisation = async ({
   organisationCode,
   includeOpenUniCourseUnits = true,
 }) => {
+  console.time('getQuestions')
   const universityQuestions = await getUniversityQuestions()
   const programmeQuestions = await getOrganisationQuestions(organisationCode)
   const questions = universityQuestions.concat(programmeQuestions)
 
   const validDataValues = getValidDataValues(questions)
   const questionIds = questions.map(({ id }) => id.toString())
+  console.timeEnd('getQuestions')
 
   const organisation = await Organisation.findOne({
     where: { code: organisationCode },
   })
 
+  console.time('executeSummaryQuery')
   const rows = await executeSummaryQuery({
     questionIds,
     organisationId: organisation.id,
     validDataValues,
   })
+  console.timeEnd('executeSummaryQuery')
 
+  console.time('omitOrganisationOpenUniRows')
   const normalizedRows = !includeOpenUniCourseUnits
     ? await omitOrganisationOpenUniRows(rows)
     : rows
+  console.timeEnd('omitOrganisationOpenUniRows')
 
   const results = getOrganisationsWithResults(normalizedRows, questions)
   // must add name and code to the result json

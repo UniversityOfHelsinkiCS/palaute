@@ -24,21 +24,17 @@ SELECT
   question_id,
   question_data,
   question_data_count,
-  feedback_counts.feedback_count as feedback_count,
+  feedback_targets.feedback_count as feedback_count,
   student_count,
   feedback_targets.id AS feedback_target_id,
   feedback_targets.closes_at AS closes_at,
+  feedback_targets.feedback_response_email_sent AS feedback_response_given,
   course_realisations.id AS course_realisation_id,
   course_realisations.name AS course_realisation_name,
   course_realisations.start_date AS course_realisation_start_date,
   course_realisations.end_date AS course_realisation_end_date,
   course_units.course_code AS course_code,
-  course_realisations.teaching_languages as teaching_languages,
-  CASE
-    WHEN feedback_targets.feedback_response IS NOT NULL
-    AND char_length(feedback_targets.feedback_response) > 0 THEN TRUE
-    ELSE FALSE
-  END AS feedback_response_given
+  course_realisations.teaching_languages as teaching_languages
 FROM question_averages
   INNER JOIN feedback_targets ON question_averages.feedback_target_id = feedback_targets.id
   INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
