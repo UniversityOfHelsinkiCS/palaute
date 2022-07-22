@@ -8,7 +8,8 @@ import useId from '../hooks/useId'
 
 const style = {
   select: {
-    maxWidth: '200px',
+    maxWidth: '220px',
+    minWidth: '170px',
   },
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import FixedContainer from '../FixedContainer'
@@ -35,7 +35,7 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
 
   return (
     <FixedContainer>
-      <div sx={styles.container}>
+      <Box sx={styles.container}>
         <Button color="primary" variant="contained" onClick={handleClick}>
           {t('editFeedbackTarget:showPreview')}
         </Button>
@@ -45,7 +45,7 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
           onChange={onLanguageChange}
           label={t('editFeedbackTarget:translationLanguage')}
         />
-      </div>
+      </Box>
     </FixedContainer>
   )
 }
