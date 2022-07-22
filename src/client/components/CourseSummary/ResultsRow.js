@@ -54,7 +54,7 @@ const styles = {
     textAlign: 'left',
     textTransform: 'none',
     '&:hover': {
-      background: 'background',
+      background: (theme) => theme.palette.grey['100'],
     },
   },
   link: {
@@ -153,7 +153,7 @@ const ResultsRow = ({
             // eslint-disable-next-line react/button-has-type
             <ButtonBase
               onClick={handleToggleAccordion}
-              css={styles.accordionButton}
+              sx={styles.accordionButton}
               variant="contained"
               disableRipple
             >
