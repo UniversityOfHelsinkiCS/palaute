@@ -72,7 +72,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'auto 1fr',
     '& dt': {
-      paddingRight: (theme) => theme.spacing(1),
+      paddingRight: 3,
       gridColumn: 1,
     },
     '& dd': {
@@ -158,6 +158,7 @@ const FeedbackTargetView = () => {
     studentListVisible,
     responsibleTeachers,
     feedbackResponseEmailSent,
+    settingsReadByTeacher,
   } = feedbackTarget
 
   const { courseCode } = courseUnit
@@ -368,6 +369,7 @@ const FeedbackTargetView = () => {
               icon={<SettingsOutlined />}
               label={t('feedbackTargetView:surveySettingsTab')}
               to={`${url}/settings`}
+              badge={!settingsReadByTeacher}
             />
           )}
           {showStudentsWithFeedbackTab && (

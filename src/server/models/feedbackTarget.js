@@ -553,6 +553,11 @@ FeedbackTarget.init(
     feedbackDatesEditedByTeacher: {
       type: BOOLEAN,
     },
+    settingsReadByTeacher: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     surveys: {
       type: VIRTUAL,
     },

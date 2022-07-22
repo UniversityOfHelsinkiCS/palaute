@@ -412,6 +412,27 @@ const update = async (req, res) => {
   return res.sendStatus(200)
 }
 
+const updateSettingsReadByTeacher = async (req, res) => {
+  const { user } = req
+
+  const feedbackTargetId = Number(req.params?.id)
+
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+
+  const feedbackTarget = await getFeedbackTargetByIdForUser(
+    feedbackTargetId,
+    user,
+  )
+
+  if (feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
+    throw new ApplicationError('Forbidden', 403)
+
+  feedbackTarget.settingsReadByTeacher = true
+  await feedbackTarget.save()
+
+  return res.send({ settingsReadByTeacher: true })
+}
+
 const getForStudent = async (req, res) => {
   const userId = req.user?.id
   const feedbackTargets = await getFeedbackTargetsForStudent(userId)
@@ -964,6 +985,7 @@ module.exports = {
   getTargetsByCourseUnit,
   getOne,
   update,
+  updateSettingsReadByTeacher,
   getFeedbacks,
   getStudentsWithFeedback,
   updateFeedbackResponse,

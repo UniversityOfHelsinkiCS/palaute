@@ -1,9 +1,8 @@
 import { useSnackbar } from 'notistack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from 'react-query'
 import { useHistory, useParams } from 'react-router'
-import { differenceInDays, format } from 'date-fns'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 import {
@@ -14,6 +13,7 @@ import {
 } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import PublicQuestions from '../PublicQuestions'
+import useUpdateSettingsRead from './useUpdateSettingsRead'
 
 const FeedbackTargetSettings = () => {
   const { id } = useParams()
@@ -21,10 +21,15 @@ const FeedbackTargetSettings = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-
+  const updateSettingsRead = useUpdateSettingsRead()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
+
+  useEffect(() => {
+    if (isLoading || feedbackTarget.settingsReadByTeacher) return
+    updateSettingsRead.mutateAsync({ id })
+  }, [isLoading])
 
   if (isLoading) {
     return <LoadingProgress />
