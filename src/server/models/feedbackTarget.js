@@ -323,7 +323,7 @@ class FeedbackTarget extends Model {
   }
 
   async sendFeedbackReminderToStudents(reminder) {
-    if (differenceInHours(this.feedbackReminderLastSentAt, new Date()) < 24) {
+    if (differenceInHours(new Date(), this.feedbackReminderLastSentAt) < 24) {
       throw new ApplicationError(
         'Can send only 1 feedback reminder every 24 hours',
         403,
