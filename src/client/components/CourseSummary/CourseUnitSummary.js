@@ -22,6 +22,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             feedbackCount,
             studentCount,
             feedbackResponseGiven,
+            currentFeedbackTargetId,
             closesAt,
           },
           i,
@@ -47,6 +48,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 feedbackCount={feedbackCount}
                 studentCount={studentCount}
                 feedbackResponseGiven={feedbackResponseStatus}
+                currentFeedbackTargetId={currentFeedbackTargetId}
               />
               {i < courseUnits.length - 1 && <DividerRow />}
             </Fragment>

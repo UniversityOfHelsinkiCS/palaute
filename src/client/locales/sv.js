@@ -308,6 +308,7 @@ export default {
     noResults: 'Inga responser',
     feedbackResponse: 'Svar på responsen för den senaste kursen given',
     feedbackCount: 'Antal respons',
+    // clickForDetails: 'Click for details',
     feedbackResponseGiven: 'Svar på responsen given',
     feedbackResponseNotGiven: 'Svar på reponsen saknas',
     feedbackStillOpen: 'Responsgivningen för kursen är fortfarande öppen',

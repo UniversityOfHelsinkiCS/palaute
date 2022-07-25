@@ -83,6 +83,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                   feedbackCount={courseRealisation.feedbackCount}
                   studentCount={courseRealisation.studentCount}
                   feedbackResponseGiven={feedbackResponseGiven}
+                  currentFeedbackTargetId={courseRealisation.feedbackTargetId}
                   accordionCellEnabled={false}
                 />
                 <DividerRow height={1.3} />

@@ -301,6 +301,7 @@ export default {
   courseSummary: {
     heading: 'Summary of course feedback',
     noResults: 'No feedback',
+    clickForDetails: 'Click for details',
     feedbackResponse: 'Latest course feedback response given',
     feedbackCount: 'Feedback count',
     feedbackResponseGiven: 'Feedback response has been given',

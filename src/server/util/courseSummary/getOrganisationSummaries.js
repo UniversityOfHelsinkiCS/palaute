@@ -138,6 +138,7 @@ const getCourseUnitsWithResults = (rows, questions) => {
         studentCount: studentCountSum,
         feedbackPercentage: feedbackCountSum / studentCountSum,
         feedbackResponseGiven: Boolean(current?.feedback_response_given),
+        currentFeedbackTargetId: current.feedback_target_id,
         closesAt: current?.closes_at,
       }
     },

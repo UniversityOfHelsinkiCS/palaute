@@ -7,7 +7,7 @@ import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
 import ClearIcon from '@mui/icons-material/Clear'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link, Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import ResultItem from './ResultItem'
@@ -79,45 +79,76 @@ const styles = {
   arrowOpen: {
     transform: 'rotate(90deg)',
   },
+  responseIcon: {
+    transition: 'transform 0.2s ease-out',
+    '&:hover': {
+      transform: 'scale(1.2)',
+      // background: (theme) => theme.palette.grey['100'],
+    },
+  },
 }
 
 const getQuestion = (questions, questionId) =>
   questions.find((q) => q.id === questionId)
 
-const ResponseGivenIcon = () => {
+const ResponseGivenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
-    <Tooltip title={t('courseSummary:feedbackResponseGiven')}>
-      <DoneIcon color="primary" />
+    <Tooltip
+      title={`${t('courseSummary:feedbackResponseGiven')}.\n${t(
+        'courseSummary:clickForDetails',
+      )}`}
+      placement="right"
+    >
+      <Link to={link}>
+        <DoneIcon color="primary" sx={styles.responseIcon} />
+      </Link>
     </Tooltip>
   )
 }
 
-const ResponseNotGivenIcon = () => {
+const ResponseNotGivenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
-    <Tooltip title={t('courseSummary:feedbackResponseNotGiven')}>
-      <ClearIcon color="error" />
+    <Tooltip
+      title={`${t('courseSummary:feedbackResponseNotGiven')}.\n${t(
+        'courseSummary:clickForDetails',
+      )}`}
+      placement="right"
+    >
+      <Link to={link}>
+        <ClearIcon color="error" sx={styles.responseIcon} />
+      </Link>
     </Tooltip>
   )
 }
 
-const FeedbackOpenIcon = () => {
+const FeedbackOpenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
-    <Tooltip title={t('courseSummary:feedbackStillOpen')}>
-      <AccessTimeIcon color="warning" />
+    <Tooltip
+      title={`${t('courseSummary:feedbackStillOpen')}.\n${t(
+        'courseSummary:clickForDetails',
+      )}`}
+      placement="right"
+    >
+      <Link to={link}>
+        <AccessTimeIcon color="warning" sx={styles.responseIcon} />
+      </Link>
     </Tooltip>
   )
 }
 
-const FeedbackResponseIndicator = ({ status }) => (
-  <>
-    {status === 'GIVEN' && <ResponseGivenIcon />}
-    {status === 'NONE' && <ResponseNotGivenIcon />}
-    {status === 'OPEN' && <FeedbackOpenIcon />}
-  </>
-)
+const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
+  const link = `/targets/${currentFeedbackTargetId}`
+  return (
+    <>
+      {status === 'GIVEN' && <ResponseGivenIcon link={link} />}
+      {status === 'NONE' && <ResponseNotGivenIcon link={link} />}
+      {status === 'OPEN' && <FeedbackOpenIcon link={link} />}
+    </>
+  )
+}
 
 const ResultsRow = ({
   // id,
@@ -130,6 +161,7 @@ const ResultsRow = ({
   feedbackCount,
   studentCount,
   feedbackResponseGiven,
+  currentFeedbackTargetId,
   accordionEnabled = false,
   accordionInitialOpen = false,
   onToggleAccordion = () => {},
@@ -201,7 +233,10 @@ const ResultsRow = ({
           </Typography>
         </td>
         <td sx={styles.resultCell}>
-          <FeedbackResponseIndicator status={feedbackResponseGiven} />
+          <FeedbackResponseIndicator
+            status={feedbackResponseGiven}
+            currentFeedbackTargetId={currentFeedbackTargetId}
+          />
         </td>
         {cellsAfter}
       </tr>
