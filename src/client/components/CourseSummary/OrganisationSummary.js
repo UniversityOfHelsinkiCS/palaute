@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Fragment } from 'react'
 /** @jsxImportSource @emotion/react */
 
@@ -7,7 +8,6 @@ import {
   TableContainer,
   IconButton,
   Tooltip,
-  Divider,
   LinearProgress,
 } from '@mui/material'
 
@@ -38,7 +38,7 @@ const styles = {
   filtersCell: {
     verticalAlign: 'bottom',
     width: '450px',
-    padding: '1rem',
+    padding: '0 1rem 1rem 1rem',
   },
   progressCell: {
     paddingTop: '1rem',
@@ -92,7 +92,8 @@ const OrganisationTable = ({
                 }))
                 .concat([
                   { id: 0, question: t('courseSummary:feedbackCount') },
-                  { id: 1, question: t('courseSummary:feedbackResponse') },
+                  { id: 1, question: t('courseSummary:feedbackPercentage') },
+                  { id: 2, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
           </tr>
@@ -115,6 +116,7 @@ const OrganisationTable = ({
               feedbackCount,
               courseUnits,
               studentCount,
+              feedbackResponsePercentage,
             }) => (
               <Fragment key={id}>
                 <ResultsRow
@@ -129,6 +131,7 @@ const OrganisationTable = ({
                   questions={questions}
                   feedbackCount={feedbackCount}
                   studentCount={studentCount}
+                  feedbackResponsePercentage={feedbackResponsePercentage}
                   accordionEnabled={courseUnits.length > 0}
                   accordionInitialOpen={initialOpenAccordions.includes(id)}
                   onToggleAccordion={() => onToggleAccordion(id)}
@@ -224,7 +227,7 @@ const OrganisationSummary = () => {
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mt={2}>
+      <Box mt={2} mb={6}>
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}
         </Typography>
@@ -238,21 +241,18 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         filters={
-          <>
-            <Box mb={2}>
-              <Filters
-                keyword={keyword}
-                onKeywordChange={handleKeywordChange}
-                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-                onIncludeOpenUniCourseUnitsChange={
-                  handleIncludeOpenUniCourseUnitsChange
-                }
-                dateRange={dateRange}
-                onDateRangeChange={setDateRange}
-              />
-            </Box>
-            <Divider />
-          </>
+          <Box mb={1}>
+            <Filters
+              keyword={keyword}
+              onKeywordChange={handleKeywordChange}
+              includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+              onIncludeOpenUniCourseUnitsChange={
+                handleIncludeOpenUniCourseUnitsChange
+              }
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+            />
+          </Box>
         }
       />
     </>

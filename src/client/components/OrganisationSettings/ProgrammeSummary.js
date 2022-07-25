@@ -69,7 +69,8 @@ const ProgrammeTable = ({
                 }))
                 .concat([
                   { id: 0, question: t('courseSummary:feedbackCount') },
-                  { id: 1, question: t('courseSummary:feedbackResponse') },
+                  { id: 1, question: t('courseSummary:feedbackPercentage') },
+                  { id: 2, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
             <th aria-hidden="true" />
@@ -90,6 +91,7 @@ const ProgrammeTable = ({
               name,
               results,
               feedbackCount,
+              feedbackResponsePercentage,
               courseUnits,
               studentCount,
             }) => (
@@ -108,6 +110,7 @@ const ProgrammeTable = ({
                   questions={questions}
                   feedbackCount={feedbackCount}
                   studentCount={studentCount}
+                  feedbackResponsePercentage={feedbackResponsePercentage}
                   accordionEnabled={courseUnits.length > 0}
                   accordionInitialOpen
                   onToggleAccordion={() => null}

@@ -304,6 +304,7 @@ export default {
     noResults: 'Ei palautteita',
     feedbackResponse: 'Viimeisimmän kurssin vastapalaute annettu',
     feedbackCount: 'Palautteiden määrä',
+    feedbackPercentage: 'Palauteprosentti',
     clickForDetails: 'Katso lisätiedot',
     feedbackResponseGiven: 'Vastapalaute on annettu',
     feedbackResponseNotGiven: 'Vastapalautetta ei ole annettu',

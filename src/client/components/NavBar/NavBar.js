@@ -274,7 +274,7 @@ const NavBar = () => {
         onClose={() => setPermissionsWindowOpen(false)}
       />
       {menu}
-      <AppBar position="static">
+      <AppBar position="static" sx={{ zIndex: 2 }}>
         <Toolbar sx={styles.toolbar}>
           <Logo />
           {!isMobile && navBarLinks}

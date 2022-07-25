@@ -75,23 +75,39 @@ export const ORDER_BY_OPTIONS = [
     value: 'FEEDBACK_COUNT_DESC',
     label: 'courseSummary:orderByFeedbackCountDesc',
   },
+  {
+    value: 'FEEDBACK_PERCENTAGE_ASC',
+    label: 'courseSummary:orderByFeedbackCountAsc',
+  },
+  {
+    value: 'FEEDBACK_PERCENTAGE_DESC',
+    label: 'courseSummary:orderByFeedbackCountDesc',
+  },
 ]
 
 const ARGS_BY_ORDER_BY = {
   FEEDBACK_COUNT_ASC: {
-    organisations: [['feedbackPercentage'], ['asc']],
-    courseUnits: [['feedbackPercentage'], ['asc']],
+    organisations: [['feedbackCount'], ['asc']],
+    courseUnits: [['feedbackCount'], ['asc']],
   },
   FEEDBACK_COUNT_DESC: {
+    organisations: [['feedbackCount'], ['desc']],
+    courseUnits: [['feedbackCount'], ['desc']],
+  },
+  FEEDBACK_PERCENTAGE_ASC: {
+    organisations: [['feedbackCount'], ['asc']],
+    courseUnits: [['feedbackCount'], ['asc']],
+  },
+  FEEDBACK_PERCENTAGE_DESC: {
     organisations: [['feedbackPercentage'], ['desc']],
     courseUnits: [['feedbackPercentage'], ['desc']],
   },
   FEEDBACK_RESPONSE_ASC: {
-    organisations: [['code'], ['asc']],
+    organisations: [['feedbackResponsePercentage'], ['asc']],
     courseUnits: [['feedbackResponse'], ['asc']],
   },
   FEEDBACK_RESPONSE_DESC: {
-    organisations: [['code'], ['asc']],
+    organisations: [['feedbackResponsePercentage'], ['desc']],
     courseUnits: [['feedbackResponse'], ['desc']],
   },
 }

@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -58,7 +59,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
       {...props}
     >
       <div style={styles.content}>
-        <span>{mean || '–'}</span>
+        <Typography fontFamily="">{mean?.toFixed(2) || '–'}</Typography>
       </div>
     </ResultItemBase>
   )

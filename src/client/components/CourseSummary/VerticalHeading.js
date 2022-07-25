@@ -23,7 +23,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'end',
-    minHeight: '320px',
+    minHeight: '200px',
   },
   icon: {
     margin: '-8px',
@@ -43,6 +43,8 @@ const VerticalHeading = ({
     if (id === 0)
       onOrderByChange(`FEEDBACK_COUNT_${isAscending ? 'ASC' : 'DESC'}`)
     else if (id === 1)
+      onOrderByChange(`FEEDBACK_PERCENTAGE_${isAscending ? 'ASC' : 'DESC'}`)
+    else if (id === 2)
       onOrderByChange(`FEEDBACK_RESPONSE_${isAscending ? 'ASC' : 'DESC'}`)
     else onOrderByChange(`QUESTION_MEAN_${id}_${isAscending ? 'ASC' : 'DESC'}`)
 

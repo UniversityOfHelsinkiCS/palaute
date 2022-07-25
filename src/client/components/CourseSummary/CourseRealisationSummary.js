@@ -57,6 +57,9 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
               {t('courseSummary:feedbackCount')}
             </VerticalHeading>
             <VerticalHeading>
+              {t('courseSummary:feedbackPercentage')}
+            </VerticalHeading>
+            <VerticalHeading>
               {t('courseSummary:feedbackResponse')}
             </VerticalHeading>
           </tr>

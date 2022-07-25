@@ -207,12 +207,17 @@ const createOrganisations = (rowsByOrganisationId, questions) => {
       }
     })
 
+    const feedbackResponsePercentage =
+      _.sumBy(courseUnits, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) /
+      courseUnits.length
+
     return {
       ...org,
       results,
       feedbackCount,
       studentCount,
       feedbackPercentage: studentCount > 0 ? feedbackCount / studentCount : 0,
+      feedbackResponsePercentage,
     }
   })
 
@@ -270,6 +275,7 @@ const includeEmptyOrganisations = (
       feedbackCount: 0,
       studentCount: 0,
       feedbackPercentage: 0,
+      feedbackResponsePercentage: 0,
     })),
   ]
 

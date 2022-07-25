@@ -23,7 +23,13 @@ const styles = {
     padding: (theme) => theme.spacing(1),
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    minWidth: '155px',
+    minWidth: '100px',
+  },
+  percentCell: {
+    paddingRight: '1rem',
+    whiteSpace: 'nowrap',
+    textAlign: 'right',
+    minWidth: '60px',
   },
   labelCell: (theme) => ({
     [theme.breakpoints.down('md')]: {
@@ -161,6 +167,7 @@ const ResultsRow = ({
   feedbackCount,
   studentCount,
   feedbackResponseGiven,
+  feedbackResponsePercentage,
   currentFeedbackTargetId,
   accordionEnabled = false,
   accordionInitialOpen = false,
@@ -176,6 +183,8 @@ const ResultsRow = ({
 
   const percent =
     studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
+
+  const feedbackResponsePercent = (feedbackResponsePercentage * 100).toFixed(0)
 
   return (
     <>
@@ -229,14 +238,21 @@ const ResultsRow = ({
         ))}
         <td css={styles.countCell}>
           <Typography component="div">
-            {feedbackCount}/{studentCount} ({percent}%)
+            {feedbackCount}/{studentCount}
           </Typography>
         </td>
-        <td sx={styles.resultCell}>
-          <FeedbackResponseIndicator
-            status={feedbackResponseGiven}
-            currentFeedbackTargetId={currentFeedbackTargetId}
-          />
+        <td css={styles.percentCell}>
+          <Typography component="div">{percent}%</Typography>
+        </td>
+        <td css={styles.percentCell}>
+          {feedbackResponsePercentage !== undefined ? (
+            <Typography component="div">{feedbackResponsePercent}%</Typography>
+          ) : (
+            <FeedbackResponseIndicator
+              status={feedbackResponseGiven}
+              currentFeedbackTargetId={currentFeedbackTargetId}
+            />
+          )}
         </td>
         {cellsAfter}
       </tr>

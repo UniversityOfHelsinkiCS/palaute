@@ -304,6 +304,7 @@ export default {
     clickForDetails: 'Click for details',
     feedbackResponse: 'Latest course feedback response given',
     feedbackCount: 'Feedback count',
+    feedbackPercentage: 'Feedback percentage',
     feedbackResponseGiven: 'Feedback response has been given',
     feedbackResponseNotGiven: 'Feedback response has not been given',
     feedbackStillOpen: 'Feedback for this course is still ongoing',
