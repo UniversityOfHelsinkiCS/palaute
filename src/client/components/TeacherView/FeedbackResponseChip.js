@@ -1,17 +1,18 @@
 import React from 'react'
 import { Chip, css, keyframes } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
 
 const common = {
   '&:hover': {
-    borderRadius: '4px',
+    borderRadius: '3px',
   },
   transition: (theme) =>
     theme.transitions.create(['border-radius'], {
       easing: 'ease-out',
       duration: '0.2s',
     }),
+  cursor: 'pointer',
 }
 
 const pulse = keyframes`
@@ -23,15 +24,24 @@ const pulse = keyframes`
 }
 `
 
+const flow = keyframes`
+  0% { 
+    background-position: -100px 0;
+  }
+  100% {
+    background-position: 100px 0;
+  }
+`
+
 const styles = {
   sent: {
-    borderColor: (theme) => theme.palette.success.dark,
-    color: (theme) => theme.palette.success.dark,
+    borderColor: (theme) => theme.palette.success.main,
+    color: (theme) => theme.palette.success.main,
     ...common,
   },
   notGiven: {
     borderColor: (theme) => theme.palette.error.light,
-    color: (theme) => theme.palette.error.main,
+    color: (theme) => theme.palette.error.light,
     animation: css`
       ${pulse} 2s 1s alternate infinite
     `,
@@ -45,16 +55,27 @@ const styles = {
     `,
     ...common,
   },
+  shimmer: {
+    background: (theme) => theme.palette.primary,
+    backgroundImage:
+      'linear-gradient(to right, #edf7ff 0%, #d2e7fc 10%, #edf7ff 20%)',
+    backgroundSize: '300px, 20px',
+    animation: css`
+      ${flow} 6.5s infinite forwards linear
+    `,
+    color: '#09233d',
+    borderColor: '#a3bed9',
+    ...common,
+  },
 }
 
 const FeedbackResponseChip = ({
   id,
   feedbackResponseGiven,
   feedbackResponseSent,
-  sx,
+  ongoing,
   ...props
 }) => {
-  const history = useHistory()
   const { t } = useTranslation()
 
   const notSentLabel = feedbackResponseGiven
@@ -65,27 +86,31 @@ const FeedbackResponseChip = ({
     ? t('teacherView:feedbackResponseGiven')
     : notSentLabel
 
+  const ongoingLabel = t('teacherView:feedbackOpen')
+
+  const ongoingStyle = styles.shimmer
+
   const notSentStyle = feedbackResponseGiven ? styles.notSent : styles.notGiven
 
-  const handleClick = () => {
-    const url = feedbackResponseSent
+  const url =
+    feedbackResponseSent || ongoing
       ? `/targets/${id}/results`
       : `/targets/${id}/edit-feedback-response`
 
-    history.push(url)
-  }
-
-  const finalSx = [sx, feedbackResponseSent ? styles.sent : notSentStyle]
+  const sx = [feedbackResponseSent ? styles.sent : notSentStyle]
 
   return (
-    <Chip
-      onClick={id ? handleClick : undefined}
-      label={label}
-      sx={finalSx}
-      variant="outlined"
-      size="small"
-      {...props}
-    />
+    <Link to={url} style={{ textDecoration: 'none' }}>
+      <Chip
+        onClick={undefined}
+        label={ongoing ? ongoingLabel : label}
+        sx={ongoing ? ongoingStyle : sx}
+        variant="outlined"
+        size="small"
+        href={url}
+        {...props}
+      />
+    </Link>
   )
 }
 

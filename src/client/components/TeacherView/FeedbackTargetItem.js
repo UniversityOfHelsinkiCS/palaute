@@ -18,7 +18,6 @@ import { formatDate, getFeedbackPercentageString } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
-import FeedbackOpenChip from './FeedbackOpenChip'
 
 const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -27,19 +26,16 @@ const getChip = (feedbackTarget) => {
   const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
     feedbackTarget
 
-  if (isEnded && (feedbackCount > 0 || feedbackResponseGiven)) {
+  if (isOpen || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
     return (
       <FeedbackResponseChip
         id={id}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
+        ongoing={isOpen}
         data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
       />
     )
-  }
-
-  if (isOpen) {
-    return <FeedbackOpenChip />
   }
 
   return null
