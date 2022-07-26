@@ -92,6 +92,24 @@ const styles = {
       // background: (theme) => theme.palette.grey['100'],
     },
   },
+  given: {
+    color: (theme) => theme.palette.success.main,
+    '&:hover': {
+      color: (theme) => theme.palette.success.light,
+    },
+  },
+  notGiven: {
+    color: (theme) => theme.palette.error.main,
+    '&:hover': {
+      color: (theme) => theme.palette.error.light,
+    },
+  },
+  feedbackOpen: {
+    color: (theme) => theme.palette.primary.main,
+    '&:hover': {
+      color: (theme) => theme.palette.primary.light,
+    },
+  },
 }
 
 const getQuestion = (questions, questionId) =>
@@ -107,7 +125,7 @@ const ResponseGivenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <DoneIcon color="primary" sx={styles.responseIcon} />
+        <DoneIcon sx={[styles.responseIcon, styles.given]} />
       </Link>
     </Tooltip>
   )
@@ -123,7 +141,7 @@ const ResponseNotGivenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <ClearIcon color="error" sx={styles.responseIcon} />
+        <ClearIcon sx={[styles.responseIcon, styles.notGiven]} />
       </Link>
     </Tooltip>
   )
@@ -139,7 +157,7 @@ const FeedbackOpenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <AccessTimeIcon color="warning" sx={styles.responseIcon} />
+        <AccessTimeIcon sx={[styles.responseIcon, styles.feedbackOpen]} />
       </Link>
     </Tooltip>
   )
