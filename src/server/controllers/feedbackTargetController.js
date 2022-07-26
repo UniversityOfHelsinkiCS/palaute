@@ -1,7 +1,14 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
-const { differenceInMonths, addMonths } = require('date-fns')
+const {
+  differenceInMonths,
+  addMonths,
+  getYear,
+  subDays,
+  getDate,
+  compareAsc,
+} = require('date-fns')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -368,12 +375,28 @@ const getFeedbackTargetsForOrganisations = async (req, res) => {
       delete fbt.userFeedbackTargets
       return {
         ...fbt,
+        startDate: fbt.courseRealisation.startDate,
         studentCount,
         teachers,
       }
     })
 
-  return res.send(feedbackTargetsWithStudentCounts)
+  const dateGrouped = Object.entries(
+    _.groupBy(feedbackTargetsWithStudentCounts, (fbt) => fbt.startDate),
+  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
+
+  const monthGrouped = Object.entries(
+    _.groupBy(dateGrouped, ([date]) => {
+      const d = Date.parse(date)
+      return subDays(d, getDate(d) - 1) // first day of month
+    }),
+  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
+
+  const yearGrouped = Object.entries(
+    _.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date))),
+  ).sort(([a], [b]) => a.localeCompare(b))
+
+  return res.send(yearGrouped)
 }
 
 const getOneForAdmin = async (req, res, feedbackTargetId) => {

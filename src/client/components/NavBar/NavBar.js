@@ -274,7 +274,10 @@ const NavBar = () => {
         onClose={() => setPermissionsWindowOpen(false)}
       />
       {menu}
-      <AppBar position="static" sx={{ zIndex: 2 }}>
+      <AppBar
+        position="static"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar sx={styles.toolbar}>
           <Logo />
           {!isMobile && navBarLinks}

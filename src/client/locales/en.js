@@ -345,6 +345,7 @@ export default {
     feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
+    overviewTab: 'Upcoming courses',
     openQuestionsTab: 'Open questions',
     editProgrammeQuestionsDialogTitle: 'Warning!',
     editProgrammeQuestionsDialogContent:

@@ -351,6 +351,7 @@ export default {
     // feedbackCorrespondentTab: 'Feedback correspondent',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
+    // overviewTab: 'Tulevat kurssit',
     openQuestionsTab: 'Öppna frågor',
     editProgrammeQuestionsDialogTitle: 'Varning!',
     editProgrammeQuestionsDialogContent:

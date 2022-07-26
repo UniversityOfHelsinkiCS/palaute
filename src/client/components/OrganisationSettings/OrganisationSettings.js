@@ -24,6 +24,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
+import Title from '../Title'
 
 const styles = {
   title: {
@@ -85,11 +86,14 @@ const OrganisationSettings = () => {
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const selected = window.location.pathname.split('/').pop()
 
+  const name = getLanguageValue(organisation.name, i18n.language)
+
   return (
     <>
+      <Title>{name}</Title>
       <Box mb={4}>
         <Typography variant="h4" component="h1">
-          {getLanguageValue(organisation.name, i18n.language)}
+          {name}
         </Typography>
       </Box>
       <Box mb={2} sx={styles.tabSection}>
@@ -129,8 +133,8 @@ const OrganisationSettings = () => {
             <Tab
               label={t('organisationSettings:overviewTab')}
               component={Link}
-              to={`${url}/semester-overview`}
-              sx={selected === 'semester-overview' ? styles.selected : {}}
+              to={`${url}/upcoming`}
+              sx={selected === 'upcoming' ? styles.selected : {}}
             />
           </Box>
         </Paper>
@@ -175,7 +179,7 @@ const OrganisationSettings = () => {
           <GeneralSettings />
         </Route>
 
-        <Route path={`${path}/semester-overview`}>
+        <Route path={`${path}/upcoming`}>
           <SemesterOverview />
         </Route>
 

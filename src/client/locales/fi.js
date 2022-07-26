@@ -347,6 +347,7 @@ export default {
     feedbackCorrespondentTab: 'Palautevastaava',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
+    overviewTab: 'Tulevat kurssit',
     openQuestionsTab: 'Avoimet kysymykset',
     editProgrammeQuestionsDialogTitle: 'Varoitus!',
     editProgrammeQuestionsDialogContent:
