@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
-const { differenceInMonths } = require('date-fns')
+const { differenceInMonths, addMonths } = require('date-fns')
 
 const { ApplicationError } = require('../util/customErrors')
 
@@ -284,6 +284,96 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   }
 
   return studentListVisible ?? false
+}
+
+const getFeedbackTargetsForOrganisations = async (req, res) => {
+  const { code } = req.params
+  if (!code) throw new ApplicationError('Missing code', 400)
+  const start = req.params.start ? new Date(req.params.start) : new Date()
+  const end = req.params.end ? new Date(req.params.end) : addMonths(start, 12)
+
+  const feedbackTargets = await FeedbackTarget.findAll({
+    attributes: [
+      'id',
+      'name',
+      'feedbackCount',
+      'opensAt',
+      'closesAt',
+      'feedbackResponseEmailSent',
+    ],
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        attributes: [
+          'id',
+          'name',
+          'startDate',
+          'endDate',
+          'isMoocCourse',
+          'teachingLanguages',
+        ],
+        required: true,
+        include: {
+          model: Organisation,
+          as: 'organisations',
+          attributes: [],
+          required: true,
+          where: {
+            code,
+          },
+        },
+        where: {
+          startDate: {
+            [Op.gte]: start,
+          },
+          endDate: {
+            [Op.lte]: end,
+          },
+        },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id', 'name', 'courseCode'],
+      },
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        attributes: ['accessStatus'],
+        include: {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'firstName', 'lastName', 'email'],
+        },
+      },
+    ],
+  })
+
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(
+    feedbackTargets,
+    (fbt) => fbt.dataValues.courseRealisation.id,
+  )
+
+  const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
+    .map((fbt) => fbt.toJSON())
+    .map((fbt) => {
+      const studentCount = _.sumBy(fbt.userFeedbackTargets, (ufbt) =>
+        ufbt.accessStatus === 'STUDENT' ? 1 : 0,
+      )
+      const teachers = fbt.userFeedbackTargets
+        .filter((ufbt) => ufbt.accessStatus === 'TEACHER')
+        .map((ufbt) => ufbt.user)
+
+      delete fbt.userFeedbackTargets
+      return {
+        ...fbt,
+        studentCount,
+        teachers,
+      }
+    })
+
+  return res.send(feedbackTargetsWithStudentCounts)
 }
 
 const getOneForAdmin = async (req, res, feedbackTargetId) => {
@@ -982,6 +1072,7 @@ const getLogs = async (req, res) => {
 
 module.exports = {
   getForStudent,
+  getFeedbackTargetsForOrganisations,
   getTargetsByCourseUnit,
   getOne,
   update,

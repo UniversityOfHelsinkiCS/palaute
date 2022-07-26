@@ -23,6 +23,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
+import SemesterOverview from './SemesterOverview'
 
 const styles = {
   title: {
@@ -125,6 +126,12 @@ const OrganisationSettings = () => {
               to={`${url}/survey`}
               sx={selected === 'survey' ? styles.selected : {}}
             />
+            <Tab
+              label={t('organisationSettings:overviewTab')}
+              component={Link}
+              to={`${url}/semester-overview`}
+              sx={selected === 'semester-overview' ? styles.selected : {}}
+            />
           </Box>
         </Paper>
         <Paper sx={styles.tabContainer}>
@@ -166,6 +173,10 @@ const OrganisationSettings = () => {
       <Switch>
         <Route path={`${path}/general`}>
           <GeneralSettings />
+        </Route>
+
+        <Route path={`${path}/semester-overview`}>
+          <SemesterOverview />
         </Route>
 
         <Route path={`${path}/courses`}>
