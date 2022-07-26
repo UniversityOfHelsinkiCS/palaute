@@ -33,7 +33,11 @@ const getChip = (feedbackTarget) => {
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         ongoing={isOpen}
-        data-cy={`feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`}
+        data-cy={
+          isOpen
+            ? `feedbackOpen-${feedbackTarget.id}`
+            : `feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`
+        }
       />
     )
   }
