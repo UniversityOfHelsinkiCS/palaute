@@ -10,10 +10,10 @@ import {
   Tooltip,
   LinearProgress,
 } from '@mui/material'
+import { SettingsOutlined } from '@mui/icons-material'
 
 import { Redirect, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import SettingsIcon from '@mui/icons-material/Settings'
 
 import useOrganisations from '../../hooks/useOrganisations'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -45,20 +45,32 @@ const styles = {
     paddingBottom: '1rem',
     minHeight: '12px',
   },
+  settingsButton: {
+    marginX: 4,
+    transition: 'transform 0.2s ease-out',
+    '&:hover': {
+      transform: 'scale(1.1)',
+      color: (theme) => theme.palette.primary.light,
+      background: 'transparent',
+    },
+  },
 }
 
 const SettingsButton = ({ code }) => {
   const { t } = useTranslation()
 
   return (
-    <Tooltip title={t('courseSummary:programmePage')}>
+    <Tooltip title={t('courseSummary:programmePage')} placement="right">
       <IconButton
         id={`settings-button-${code}`}
         component={Link}
         to={`/organisations/${code}/settings`}
         size="large"
+        sx={styles.settingsButton}
+        color="primary"
+        disableFocusRipple
       >
-        <SettingsIcon />
+        <SettingsOutlined sx={{ fontSize: '26px' }} />
       </IconButton>
     </Tooltip>
   )
