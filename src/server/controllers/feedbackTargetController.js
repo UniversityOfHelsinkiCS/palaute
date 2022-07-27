@@ -295,9 +295,10 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
 
 const getFeedbackTargetsForOrganisations = async (req, res) => {
   const { code } = req.params
+  const { startDate, endDate } = req.query
   if (!code) throw new ApplicationError('Missing code', 400)
-  const start = req.params.start ? new Date(req.params.start) : new Date()
-  const end = req.params.end ? new Date(req.params.end) : addMonths(start, 12)
+  const start = startDate ? new Date(startDate) : new Date()
+  const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
   const feedbackTargets = await FeedbackTarget.findAll({
     attributes: [

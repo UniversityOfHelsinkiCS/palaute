@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { debounce } from 'lodash'
 import {
   Box,
   Link as MuiLink,
@@ -10,24 +11,33 @@ import {
   Toolbar,
   Typography,
   Divider,
+  TextField,
 } from '@mui/material'
 import { ChevronRight } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { format } from 'date-fns'
+import { addMonths, format } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../TeacherChip'
 
-const useOrganisationFeedbackTargets = ({ code }) => {
-  const queryKey = ['organisationFeedbackTargets', code]
+const useOrganisationFeedbackTargets = ({
+  code,
+  startDate,
+  endDate,
+  teacherQuery,
+  courseQuery,
+  language,
+}) => {
+  const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
   const queryFn = async () => {
     const { data: feedbackTargets } = await apiClient.get(
       `/feedback-targets/for-organisation/${code}`,
+      { params: { startDate, endDate } },
     )
 
     return feedbackTargets
@@ -35,13 +45,58 @@ const useOrganisationFeedbackTargets = ({ code }) => {
 
   const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn)
 
-  return { feedbackTargets, ...rest }
+  const [filtered, setFiltered] = useState([])
+
+  const [first, last] = teacherQuery.toLowerCase().split(' ')
+  const courseQueryLower = courseQuery.toLowerCase()
+
+  const filterFn = (fbt) =>
+    getLanguageValue(fbt.courseUnit.name, language)
+      .toLowerCase()
+      .includes(courseQueryLower) &&
+    fbt.teachers.some((u) => {
+      const firstName = u.firstName.toLowerCase()
+      const lastName = u.lastName.toLowerCase()
+      return last
+        ? firstName.startsWith(first) && lastName.startsWith(last)
+        : firstName.startsWith(first) || lastName.startsWith(first)
+    })
+
+  const filter = debounce((feedbackTargets) => {
+    console.log('filter')
+    if (rest.isLoading) return
+    if (teacherQuery.length < 3 && courseQuery.length < 3) {
+      setFiltered(feedbackTargets)
+      return
+    }
+    const filteredTargets = feedbackTargets
+      .map(([d, months]) => [
+        d,
+        months
+          .map(([d, days]) => [
+            d,
+            days
+              .map(([d, fbts]) => [d, fbts.filter(filterFn)])
+              .filter(([, fbts]) => fbts.length > 0),
+          ])
+          .filter(([, days]) => days.length > 0),
+      ])
+      .filter(([, months]) => months.length > 0)
+    setFiltered(filteredTargets)
+  }, 600)
+
+  useEffect(
+    () => filter(feedbackTargets),
+    [courseQuery, teacherQuery, rest.isLoading],
+  )
+
+  return { feedbackTargets: filtered, ...rest }
 }
 
 const styles = {
   date: {
     position: 'sticky',
-    top: '3rem',
+    top: '6rem',
     height: '3rem',
     minWidth: '5rem',
     textTransform: 'capitalize',
@@ -159,18 +214,62 @@ const FeedbackTargetItem = ({ title, onClick, selected }) => (
   </Box>
 )
 
+const Filters = ({ onChange, value, t }) => (
+  <Box position="sticky" top="0" mb={2} zIndex={1}>
+    <Paper elevation={2}>
+      <Box display="flex" p={1} pb={2} alignItems="start">
+        <TextField
+          type="date"
+          value={format(value.startDate, 'yyyy-MM-dd')}
+          onChange={({ target }) =>
+            onChange({ ...value, startDate: new Date(target.value) })
+          }
+          label={t('organisationSettings:startDate')}
+        />
+        <Box m={1} />
+        <TextField
+          type="date"
+          value={format(value.endDate, 'yyyy-MM-dd')}
+          onChange={({ target }) =>
+            onChange({ ...value, endDate: new Date(target.value) })
+          }
+          label={t('organisationSettings:endDate')}
+        />
+        <Box m={2} />
+        <TextField
+          value={value.teacherQuery}
+          onChange={(e) => onChange({ ...value, teacherQuery: e.target.value })}
+          label={t('organisationSettings:findByTeacher')}
+        />
+        <Box m={1} />
+        <TextField
+          value={value.courseQuery}
+          onChange={(e) => onChange({ ...value, courseQuery: e.target.value })}
+          label={t('organisationSettings:findByCourseUnit')}
+        />
+      </Box>
+    </Paper>
+  </Box>
+)
+
 const toMonth = (date, locale) =>
   new Date(date).toLocaleString(locale, { month: 'short' })
 
 const SemesterOverview = () => {
   const [selected, setSelected] = useState(null)
+  const [filters, setFilters] = useState({
+    startDate: new Date(),
+    endDate: addMonths(new Date(), 12),
+    teacherQuery: '',
+    courseQuery: '',
+  })
+
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { feedbackTargets: years, isLoading } = useOrganisationFeedbackTargets({
     code,
+    ...filters,
   })
-
-  if (isLoading) return <LoadingProgress />
 
   return (
     <Box>
@@ -180,44 +279,47 @@ const SemesterOverview = () => {
         language={i18n.language}
         t={t}
       />
-      {years.map(([year, months]) => (
-        <Box display="flex" mb={4} key={year}>
-          <Box sx={styles.date} mt={1}>
-            {year}
-          </Box>
-          <Box>
-            {months.map(([firstDayOfMonth, days]) => (
-              <Box display="flex" mb={3} key={firstDayOfMonth}>
-                <Box sx={styles.date} mt={1}>
-                  {toMonth(firstDayOfMonth, i18n.language)}
-                </Box>
-                <Box>
-                  {days.map(([startDate, feedbackTargets]) => (
-                    <Box key={startDate} display="flex">
-                      <Box sx={styles.date} mr={2} mt={1}>
-                        {format(Date.parse(startDate), 'dd/MM')}
+      <Filters value={filters} onChange={setFilters} t={t} />
+      {isLoading && <LoadingProgress />}
+      {!isLoading &&
+        years.map(([year, months]) => (
+          <Box display="flex" mb={4} key={year}>
+            <Box sx={styles.date} mt={1}>
+              {year}
+            </Box>
+            <Box>
+              {months.map(([firstDayOfMonth, days]) => (
+                <Box display="flex" mb={3} key={firstDayOfMonth}>
+                  <Box sx={styles.date} mt={1}>
+                    {toMonth(firstDayOfMonth, i18n.language)}
+                  </Box>
+                  <Box>
+                    {days.map(([startDate, feedbackTargets]) => (
+                      <Box key={startDate} display="flex">
+                        <Box sx={styles.date} mr={2} mt={1}>
+                          {format(Date.parse(startDate), 'dd/MM')}
+                        </Box>
+                        <Box display="flex" flexWrap="wrap">
+                          {feedbackTargets.map((fbt) => (
+                            <FeedbackTargetItem
+                              key={fbt.id}
+                              title={getLanguageValue(
+                                fbt.courseUnit.name,
+                                i18n.language,
+                              )}
+                              onClick={() => setSelected(fbt)}
+                              selected={selected?.id === fbt.id}
+                            />
+                          ))}
+                        </Box>
                       </Box>
-                      <Box display="flex" flexWrap="wrap">
-                        {feedbackTargets.map((fbt) => (
-                          <FeedbackTargetItem
-                            key={fbt.id}
-                            title={getLanguageValue(
-                              fbt.courseUnit.name,
-                              i18n.language,
-                            )}
-                            onClick={() => setSelected(fbt)}
-                            selected={selected?.id === fbt.id}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-                  ))}
+                    ))}
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
+            </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
     </Box>
   )
 }
