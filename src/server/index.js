@@ -34,10 +34,8 @@ const start = async () => {
   await checkUpdaterStatus()
   await startUpdater()
   await startCacheCron()
+  await startPateCron()
 
-  if (!inStaging && inProduction) {
-    await startPateCron()
-  }
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
   })

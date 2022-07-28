@@ -191,6 +191,11 @@ const emailReminderAboutSurveyOpeningToTeachers = (
 
   let courseNamesAndUrls = ''
 
+  // Sort them so they come neatly in order in the email
+  teacherFeedbackTargets.sort((a, b) =>
+    a.name[language]?.localeCompare(b.name[language]),
+  )
+
   for (const feedbackTarget of teacherFeedbackTargets) {
     const { id, name, opensAt, closesAt } = feedbackTarget
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
