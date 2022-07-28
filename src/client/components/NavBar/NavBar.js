@@ -36,6 +36,7 @@ const styles = {
     '@media print': {
       display: 'none',
     },
+    padding: '1rem',
   },
   link: {
     display: 'inline-flex',
@@ -276,7 +277,11 @@ const NavBar = () => {
       {menu}
       <AppBar
         position="static"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          borderRadius: '0 0 0.5rem 0.5rem',
+          mb: '1rem',
+        }}
       >
         <Toolbar sx={styles.toolbar}>
           <Logo />
