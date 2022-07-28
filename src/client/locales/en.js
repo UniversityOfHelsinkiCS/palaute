@@ -363,6 +363,12 @@ export default {
     course: 'Course',
     feedbackEnabled: 'Feedback enabled',
     courseStudentListVisible: 'Student list visible',
+    filters: 'Filters',
+    startDate: 'From',
+    endDate: 'To',
+    findByTeacher: 'Find by teacher',
+    findByCourseUnit: 'Find by course name',
+    includeWithoutTeachers: 'Show courses without teachers',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',

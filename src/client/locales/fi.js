@@ -365,6 +365,12 @@ export default {
     course: 'Kurssi',
     feedbackEnabled: 'Palaute käytössä',
     courseStudentListVisible: 'Näytä palautteenantajat',
+    filters: 'Rajaus',
+    startDate: 'Alkaen',
+    endDate: 'Loppuen',
+    findByTeacher: 'Hae opettajaa',
+    findByCourseUnit: 'Hae kurssia',
+    includeWithoutTeachers: 'Näytä kurssit joilla ei ole opettajia',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',

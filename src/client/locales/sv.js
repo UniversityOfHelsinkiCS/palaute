@@ -368,6 +368,12 @@ export default {
     // remove: 'Remove',
     // feedbackEnabled: 'Palaute käytössä',
     // courseStudentListVisible: 'Näytä palautteenantajat',
+    // filters: 'Rajaus',
+    // startDate: 'Alkaen',
+    // endDate: 'Loppuen',
+    // findByTeacher: 'Hae opettajaa',
+    // findByCourseUnit: 'Hae kurssia',
+    // includeWithoutTeachers: 'Näytä kurssit joilla ei ole opettajia',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna respons är inte i bruk',

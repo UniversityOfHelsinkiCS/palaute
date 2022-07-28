@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { debounce } from 'lodash'
+import _, { debounce } from 'lodash'
 import {
   Box,
   Link as MuiLink,
   ButtonBase,
   ClickAwayListener,
   Drawer,
-  IconButton,
   Paper,
   Toolbar,
   Typography,
   Divider,
   TextField,
+  FormControlLabel,
+  Checkbox,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
 } from '@mui/material'
-import { ChevronRight } from '@mui/icons-material'
+import { ArrowDropDown, Menu } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -30,6 +35,7 @@ const useOrganisationFeedbackTargets = ({
   endDate,
   teacherQuery,
   courseQuery,
+  includeWithoutTeachers,
   language,
 }) => {
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
@@ -51,24 +57,24 @@ const useOrganisationFeedbackTargets = ({
   const courseQueryLower = courseQuery.toLowerCase()
 
   const filterFn = (fbt) =>
+    // filter by course name
     getLanguageValue(fbt.courseUnit.name, language)
       .toLowerCase()
       .includes(courseQueryLower) &&
-    fbt.teachers.some((u) => {
-      const firstName = u.firstName.toLowerCase()
-      const lastName = u.lastName.toLowerCase()
-      return last
-        ? firstName.startsWith(first) && lastName.startsWith(last)
-        : firstName.startsWith(first) || lastName.startsWith(first)
-    })
+    // if teacher name query not empty, filter by teachers
+    ((!first && !last) ||
+      fbt.teachers.some((u) => {
+        const firstName = u.firstName.toLowerCase()
+        const lastName = u.lastName.toLowerCase()
+        return last
+          ? firstName.startsWith(first) && lastName.startsWith(last)
+          : firstName.startsWith(first) || lastName.startsWith(first)
+      })) &&
+    // if includeWithoutTeachers, skip checking that there are teachers
+    (includeWithoutTeachers || fbt.teachers.length > 0)
 
   const filter = debounce((feedbackTargets) => {
-    console.log('filter')
     if (rest.isLoading) return
-    if (teacherQuery.length < 3 && courseQuery.length < 3) {
-      setFiltered(feedbackTargets)
-      return
-    }
     const filteredTargets = feedbackTargets
       .map(([d, months]) => [
         d,
@@ -87,7 +93,7 @@ const useOrganisationFeedbackTargets = ({
 
   useEffect(
     () => filter(feedbackTargets),
-    [courseQuery, teacherQuery, rest.isLoading],
+    [courseQuery, teacherQuery, includeWithoutTeachers, rest.isLoading],
   )
 
   return { feedbackTargets: filtered, ...rest }
@@ -96,7 +102,7 @@ const useOrganisationFeedbackTargets = ({
 const styles = {
   date: {
     position: 'sticky',
-    top: '6rem',
+    top: '4rem',
     height: '3rem',
     minWidth: '5rem',
     textTransform: 'capitalize',
@@ -105,9 +111,18 @@ const styles = {
   },
   item: {
     borderRadius: '3px',
+    '&:hover': {
+      color: (theme) => theme.palette.primary.main,
+    },
   },
-  selectedItem: {
-    background: (theme) => theme.palette.grey['100'],
+  specialItem: {
+    background: (theme) => theme.palette.grey['300'],
+  },
+  filtersHead: {
+    color: (theme) => theme.palette.text.secondary,
+  },
+  filtersContent: {
+    background: (theme) => theme.palette.grey['50'],
   },
 }
 
@@ -122,27 +137,27 @@ const FeedbackTargetDrawer = ({ feedbackTarget, onClose, language, t }) => (
       <Toolbar />
       {feedbackTarget && (
         <Box mr={2} maxWidth="30rem">
-          <Box display="flex" mb={2}>
-            <IconButton onClick={onClose} disableFocusRipple>
-              <ChevronRight />
-            </IconButton>
-            <Box ml={1}>
-              <Box display="flex" alignItems="center">
-                <Typography variant="h6">
-                  {getLanguageValue(feedbackTarget.courseUnit.name, language)}
-                </Typography>
-                <Box mr={1} />
-                <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
-              </Box>
-              <Box mb={1}>
-                <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
-                  {getLanguageValue(
-                    feedbackTarget.courseRealisation.name,
-                    language,
-                  )}
-                </MuiLink>
-              </Box>
+          <Box mb={2} m={3}>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h6">
+                {getLanguageValue(feedbackTarget.courseUnit.name, language)}
+              </Typography>
+              <Box mr={1} />
+              <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
             </Box>
+            <Box mb={1}>
+              <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
+                {getLanguageValue(
+                  feedbackTarget.courseRealisation.name,
+                  language,
+                )}
+              </MuiLink>
+            </Box>
+            {feedbackTarget.isMoocCourse && (
+              <Box>
+                <Chip label="mooc" />
+              </Box>
+            )}
           </Box>
           <Divider />
           <Box m={3}>
@@ -197,15 +212,18 @@ const FeedbackTargetDrawer = ({ feedbackTarget, onClose, language, t }) => (
   </ClickAwayListener>
 )
 
-const FeedbackTargetItem = ({ title, onClick, selected }) => (
-  <Box m={0.5}>
+const FeedbackTargetItem = ({ title, onClick, selected, special }) => (
+  <Box m={0.5} zIndex={selected ? 1 : 0}>
     <ButtonBase
       onClick={(e) => {
         e.stopPropagation()
         onClick()
       }}
     >
-      <Paper sx={[styles.item, selected && styles.selectedItem]}>
+      <Paper
+        elevation={selected ? 7 : 2}
+        sx={[styles.item, special && styles.specialItem]}
+      >
         <Box m={1.5} fontSize="16px">
           {title}
         </Box>
@@ -214,43 +232,78 @@ const FeedbackTargetItem = ({ title, onClick, selected }) => (
   </Box>
 )
 
-const Filters = ({ onChange, value, t }) => (
-  <Box position="sticky" top="0" mb={2} zIndex={1}>
-    <Paper elevation={2}>
-      <Box display="flex" p={1} pb={2} alignItems="start">
-        <TextField
-          type="date"
-          value={format(value.startDate, 'yyyy-MM-dd')}
-          onChange={({ target }) =>
-            onChange({ ...value, startDate: new Date(target.value) })
-          }
-          label={t('organisationSettings:startDate')}
-        />
-        <Box m={1} />
-        <TextField
-          type="date"
-          value={format(value.endDate, 'yyyy-MM-dd')}
-          onChange={({ target }) =>
-            onChange({ ...value, endDate: new Date(target.value) })
-          }
-          label={t('organisationSettings:endDate')}
-        />
-        <Box m={2} />
-        <TextField
-          value={value.teacherQuery}
-          onChange={(e) => onChange({ ...value, teacherQuery: e.target.value })}
-          label={t('organisationSettings:findByTeacher')}
-        />
-        <Box m={1} />
-        <TextField
-          value={value.courseQuery}
-          onChange={(e) => onChange({ ...value, courseQuery: e.target.value })}
-          label={t('organisationSettings:findByCourseUnit')}
-        />
-      </Box>
-    </Paper>
-  </Box>
-)
+const Filters = ({ onChange, value, t }) => {
+  const [open, setOpen] = useState(false)
+  const activeCount = _.sum(Object.values(value).map((v) => (v ? 1 : 0))) - 2
+
+  return (
+    <Box position="sticky" top="0" mb={2} zIndex={1}>
+      <Accordion elevation={3} onChange={() => setOpen(!open)}>
+        <AccordionSummary sx={styles.filtersHead}>
+          <Box display="flex" width="100%" pl={1}>
+            {t('organisationSettings:filters')}
+            <Box ml={1}>
+              {activeCount > 0 ? <Chip label={activeCount} size="small" /> : ''}
+            </Box>
+            <Box ml="auto">{open ? <ArrowDropDown /> : <Menu />}</Box>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails sx={styles.filtersContent}>
+          <Box display="flex" p={1} pb={2} alignItems="center">
+            <TextField
+              type="date"
+              value={format(value.startDate, 'yyyy-MM-dd')}
+              onChange={({ target }) =>
+                onChange({ ...value, startDate: new Date(target.value) })
+              }
+              label={t('organisationSettings:startDate')}
+            />
+            <Box m={1} />
+            <TextField
+              type="date"
+              value={format(value.endDate, 'yyyy-MM-dd')}
+              onChange={({ target }) =>
+                onChange({ ...value, endDate: new Date(target.value) })
+              }
+              label={t('organisationSettings:endDate')}
+            />
+            <Box m={2} />
+            <TextField
+              value={value.teacherQuery}
+              onChange={(e) =>
+                onChange({ ...value, teacherQuery: e.target.value })
+              }
+              label={t('organisationSettings:findByTeacher')}
+            />
+            <Box m={1} />
+            <TextField
+              value={value.courseQuery}
+              onChange={(e) =>
+                onChange({ ...value, courseQuery: e.target.value })
+              }
+              label={t('organisationSettings:findByCourseUnit')}
+            />
+            <Box m={2} />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={value.includeWithoutTeachers}
+                  onChange={(e) =>
+                    onChange({
+                      ...value,
+                      includeWithoutTeachers: e.target.checked,
+                    })
+                  }
+                />
+              }
+              label={t('organisationSettings:includeWithoutTeachers')}
+            />
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </Box>
+  )
+}
 
 const toMonth = (date, locale) =>
   new Date(date).toLocaleString(locale, { month: 'short' })
@@ -262,6 +315,7 @@ const SemesterOverview = () => {
     endDate: addMonths(new Date(), 12),
     teacherQuery: '',
     courseQuery: '',
+    includeWithoutTeachers: false,
   })
 
   const { code } = useParams()
@@ -309,6 +363,7 @@ const SemesterOverview = () => {
                               )}
                               onClick={() => setSelected(fbt)}
                               selected={selected?.id === fbt.id}
+                              special={fbt.teachers.length === 0}
                             />
                           ))}
                         </Box>
