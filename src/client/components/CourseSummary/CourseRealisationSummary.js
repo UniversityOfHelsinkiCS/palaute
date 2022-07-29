@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Redirect, useParams } from 'react-router-dom'
+import { Link, Redirect, useParams } from 'react-router-dom'
 
 import {
   Box,
@@ -9,6 +9,7 @@ import {
   CardContent,
   Typography,
   TableContainer,
+  Link as MuiLink,
 } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
@@ -22,6 +23,7 @@ import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import { CourseRealisationLabel } from './Labels'
+import useOrganisations from '../../hooks/useOrganisations'
 
 const styles = {
   realisationHeading: {
@@ -41,7 +43,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
   const { t, i18n } = useTranslation()
 
   return (
-    <TableContainer>
+    <TableContainer sx={{ p: 1, pt: 5 }}>
       <table>
         <thead>
           <tr>
@@ -103,6 +105,7 @@ const CourseRealisationSummary = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
+  const { organisations, isLoading: organisationsLoading } = useOrganisations()
   const { courseRealisationSummaries, isLoading, failureCount } =
     useCourseRealisationSummaries(code)
 
@@ -122,14 +125,27 @@ const CourseRealisationSummary = () => {
   const { questions, courseRealisations, courseUnit } =
     courseRealisationSummaries
 
+  const organisation = organisationsLoading
+    ? null
+    : organisations.find((org) => org.id === courseUnit.organisations[0]?.id)
+
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mb={2}>
+      <Box mb={4}>
         <Typography variant="h4" component="h1">
           {getLanguageValue(courseUnit.name, i18n.language)},{' '}
           {courseUnit.courseCode}
         </Typography>
+        <Box mb={1} />
+        {organisation && (
+          <MuiLink
+            component={Link}
+            to={`/organisations/${organisation.code}/settings`}
+          >
+            {getLanguageValue(organisation.name, i18n.language)}
+          </MuiLink>
+        )}
       </Box>
       <Card>
         <CardContent>

@@ -58,6 +58,7 @@ import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../ErrorView'
 import { getFeedbackTargetLoadError } from '../../util/errorMessage'
 import TeacherChip from '../TeacherChip'
+import useOrganisations from '../../hooks/useOrganisations'
 
 const styles = {
   datesContainer: {
@@ -133,6 +134,8 @@ const FeedbackTargetView = () => {
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
 
+  const { organisations, isLoading: organisationsLoading } = useOrganisations()
+
   if (isLoading) {
     return <LoadingProgress />
   }
@@ -153,6 +156,9 @@ const FeedbackTargetView = () => {
   } = feedbackTarget
 
   const { courseCode } = courseUnit
+  const organisation = organisationsLoading
+    ? null
+    : organisations.find((org) => courseUnit.organisations[0].id === org.id)
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -236,6 +242,14 @@ const FeedbackTargetView = () => {
             <Typography variant="body1" component="h2">
               {courseRealisationName}
             </Typography>
+            {organisation && (
+              <MuiLink
+                to={`/organisations/${organisation.code}/settings`}
+                component={Link}
+              >
+                {getLanguageValue(organisation.name, i18n.language)}
+              </MuiLink>
+            )}
           </Box>
           {isTeacher && (
             <div css={styles.copyLinkButtonContainer}>
