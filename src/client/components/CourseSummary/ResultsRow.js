@@ -60,7 +60,7 @@ const styles = {
     textAlign: 'left',
     textTransform: 'none',
     '&:hover': {
-      background: (theme) => theme.palette.grey['100'],
+      background: (theme) => theme.palette.action.hover,
     },
   },
   link: {

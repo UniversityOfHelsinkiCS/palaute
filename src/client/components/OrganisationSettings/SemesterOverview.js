@@ -58,9 +58,11 @@ const useOrganisationFeedbackTargets = ({
 
   const filterFn = (fbt) =>
     // filter by course name
-    getLanguageValue(fbt.courseUnit.name, language)
+    (getLanguageValue(fbt.courseUnit.name, language)
       .toLowerCase()
-      .includes(courseQueryLower) &&
+      .includes(courseQueryLower) ||
+      // filter by code
+      fbt.courseUnit.courseCode.toLowerCase().includes(courseQueryLower)) &&
     // if teacher name query not empty, filter by teachers
     ((!first && !last) ||
       fbt.teachers.some((u) => {
@@ -103,7 +105,7 @@ const styles = {
   date: {
     position: 'sticky',
     top: '4rem',
-    height: '3rem',
+    height: '1rem',
     minWidth: '5rem',
     textTransform: 'capitalize',
     color: (theme) => theme.palette.text.secondary,
@@ -116,13 +118,16 @@ const styles = {
     },
   },
   specialItem: {
-    background: (theme) => theme.palette.grey['300'],
+    background: (theme) => theme.palette.action.disabled,
+  },
+  selectedItem: {
+    color: (theme) => theme.palette.primary.main,
   },
   filtersHead: {
     color: (theme) => theme.palette.text.secondary,
   },
   filtersContent: {
-    background: (theme) => theme.palette.grey['50'],
+    background: (theme) => theme.palette.background.default,
   },
 }
 
@@ -212,8 +217,8 @@ const FeedbackTargetDrawer = ({ feedbackTarget, onClose, language, t }) => (
   </ClickAwayListener>
 )
 
-const FeedbackTargetItem = ({ title, onClick, selected, special }) => (
-  <Box m={0.5} zIndex={selected ? 1 : 0}>
+const FeedbackTargetItem = ({ code, name, onClick, selected, special }) => (
+  <Box m="0.2rem" zIndex={selected ? 1 : 0}>
     <ButtonBase
       onClick={(e) => {
         e.stopPropagation()
@@ -221,11 +226,23 @@ const FeedbackTargetItem = ({ title, onClick, selected, special }) => (
       }}
     >
       <Paper
-        elevation={selected ? 7 : 2}
-        sx={[styles.item, special && styles.specialItem]}
+        elevation={selected ? 8 : 4}
+        sx={[
+          styles.item,
+          special && styles.specialItem,
+          selected && styles.selectedItem,
+        ]}
       >
-        <Box m={1.5} fontSize="16px">
-          {title}
+        <Box
+          m="0.2rem"
+          mx="0.6rem"
+          fontSize="16px"
+          display="flex"
+          alignItems="center"
+        >
+          <Typography color="textSecondary">{code}</Typography>
+          <Box mr="0.5rem" />
+          {name}
         </Box>
       </Paper>
     </ButtonBase>
@@ -337,27 +354,28 @@ const SemesterOverview = () => {
       {isLoading && <LoadingProgress />}
       {!isLoading &&
         years.map(([year, months]) => (
-          <Box display="flex" mb={4} key={year}>
-            <Box sx={styles.date} mt={1}>
+          <Box display="flex" key={year}>
+            <Box sx={styles.date} mt={1.5}>
               {year}
             </Box>
             <Box>
               {months.map(([firstDayOfMonth, days]) => (
-                <Box display="flex" mb={3} key={firstDayOfMonth}>
-                  <Box sx={styles.date} mt={1}>
+                <Box display="flex" mb={4} key={firstDayOfMonth}>
+                  <Box sx={styles.date} mt={1.5}>
                     {toMonth(firstDayOfMonth, i18n.language)}
                   </Box>
                   <Box>
                     {days.map(([startDate, feedbackTargets]) => (
-                      <Box key={startDate} display="flex">
-                        <Box sx={styles.date} mr={2} mt={1}>
+                      <Box key={startDate} display="flex" my={1.5}>
+                        <Box sx={styles.date} mr={2}>
                           {format(Date.parse(startDate), 'dd/MM')}
                         </Box>
                         <Box display="flex" flexWrap="wrap">
                           {feedbackTargets.map((fbt) => (
                             <FeedbackTargetItem
                               key={fbt.id}
-                              title={getLanguageValue(
+                              code={fbt.courseUnit.courseCode}
+                              name={getLanguageValue(
                                 fbt.courseUnit.name,
                                 i18n.language,
                               )}
