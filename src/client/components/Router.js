@@ -15,8 +15,7 @@ import { LoadingProgress } from './LoadingProgress'
 
 const styles = {
   container: {
-    paddingTop: (theme) => theme.spacing(4),
-    paddingBottom: (theme) => theme.spacing(4),
+    padding: '2rem',
   },
 }
 
@@ -39,7 +38,7 @@ const Home = () => {
 }
 
 const Router = () => (
-  <Container sx={styles.container} disableGutters>
+  <Container sx={styles.container} maxWidth="xl">
     <Switch>
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={UserFeedbacks} exact />

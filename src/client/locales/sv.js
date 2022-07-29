@@ -346,9 +346,10 @@ export default {
     studentListVisible:
       'Visa studerandena som har gett respons till kursens lärare',
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
-    generalTab: 'Allmänna inställningar',
-    // coursesTab: 'Kurssikohtaiset asetukset',
-    // feedbackCorrespondentTab: 'Feedback correspondent',
+    // settingsTab: 'Settings',
+    // generalSettings: 'General settings',
+    // courseSettings: 'Course settings',
+    // feedbackCorrespondent: 'Feedback correspondent',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
     // overviewTab: 'Tulevat kurssit',

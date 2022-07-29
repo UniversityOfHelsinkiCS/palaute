@@ -10,15 +10,7 @@ import {
   Link,
 } from 'react-router-dom'
 
-import {
-  Box,
-  Typography,
-  Tab,
-  Button,
-  Link as MuiLink,
-  Tooltip,
-  Badge,
-} from '@mui/material'
+import { Box, Typography, Tab, Button, Link as MuiLink } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -41,7 +33,7 @@ import EditFeedbackResponse from '../EditFeedbackResponse'
 import FeedbackTargetShare from '../FeedbackTargetShare'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import RouterTabs from '../RouterTabs'
+import { RouterTab, RouterTabs, TabLabel } from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -155,7 +147,6 @@ const FeedbackTargetView = () => {
     courseUnit,
     opensAt,
     feedback,
-    studentListVisible,
     responsibleTeachers,
     feedbackResponseEmailSent,
     settingsReadByTeacher,
@@ -417,58 +408,5 @@ const FeedbackTargetView = () => {
     </>
   )
 }
-
-const RouterTab = ({
-  icon,
-  label,
-  to,
-  disabled,
-  disabledTooltip,
-  badge,
-  ...props
-}) => {
-  let content = icon ? (
-    <Box display="flex">
-      {icon}
-      <Box ml={1} />
-      {label}
-    </Box>
-  ) : (
-    label
-  )
-
-  if (badge) {
-    content = (
-      <Badge color="primary" variant="dot" overlap="rectangular">
-        {content}
-      </Badge>
-    )
-  }
-
-  const tab = (
-    <Tab
-      label={content}
-      component={Link}
-      to={to}
-      disabled={disabled}
-      {...props}
-    />
-  )
-  if (disabled)
-    return (
-      <Tooltip title={disabledTooltip} placement="top">
-        <Box>{tab}</Box>
-      </Tooltip>
-    )
-  return tab
-}
-
-const TabLabel = ({ icon, text }) => (
-  <Box display="flex">
-    {icon}
-    <Box ml={1} />
-    {text}
-  </Box>
-)
 
 export default FeedbackTargetView

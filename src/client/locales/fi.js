@@ -342,9 +342,10 @@ export default {
     studentListVisible:
       'Näytä palautetta antaneet opiskelijat kurssin opettajalle, jos palautetta antaneita opiskelijoita on vähintään viisi',
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
-    generalTab: 'Yleiset asetukset',
-    coursesTab: 'Kurssikohtaiset asetukset',
-    feedbackCorrespondentTab: 'Palautevastaava',
+    settingsTab: 'Asetukset',
+    generalSettings: 'Yleiset asetukset',
+    courseSettings: 'Kurssikohtaiset asetukset',
+    feedbackCorrespondent: 'Palautevastaava',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
     overviewTab: 'Tulevat kurssit',

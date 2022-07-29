@@ -177,6 +177,9 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
 
   return (
     <div style={style}>
+      <Typography textTransform="uppercase">
+        {t('organisationSettings:feedbackCorrespondent')}
+      </Typography>
       {correspondent ? (
         <FeedbackCorrespondentInfo
           correspondent={correspondent}

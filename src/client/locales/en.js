@@ -340,9 +340,10 @@ export default {
     studentListVisible:
       "Show course's teacher students who have given feedback if at least five students have given feeedback",
     courseSettingsInfo: 'Feedback is only collected from activated courses',
-    generalTab: 'General settings',
-    coursesTab: 'Course settings',
-    feedbackCorrespondentTab: 'Feedback correspondent',
+    settingsTab: 'Settings',
+    generalSettings: 'General settings',
+    courseSettings: 'Course settings',
+    feedbackCorrespondent: 'Feedback correspondent',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
     overviewTab: 'Upcoming courses',

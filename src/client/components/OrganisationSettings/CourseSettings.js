@@ -12,6 +12,7 @@ import {
   TableBody,
   TableContainer,
   Alert,
+  Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -73,7 +74,9 @@ const CourseUnitItem = ({
   )} (${courseCode})`
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{ '&:hover': { background: (theme) => theme.palette.action.hover } }}
+    >
       <TableCell>{translatedLabel}</TableCell>
       <TableCell>
         <Switch
@@ -106,8 +109,7 @@ const CourseUnitItem = ({
   )
 }
 
-const CourseSettingsContainer = ({ organisation, courseUnits }) => {
-  const { t } = useTranslation()
+const CourseSettingsContainer = ({ organisation, courseUnits, t }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
@@ -182,7 +184,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
             {t('organisationSettings:courseSettingsInfo')}
           </Alert>
         </Box>
-        <TableContainer style={{ maxHeight: '640px' }}>
+        <TableContainer>
           <Table stickyHeader size="small">
             <TableHead>
               <TableCell>{t('organisationSettings:course')}</TableCell>
@@ -225,6 +227,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
 
 const CourseSettings = () => {
   const { code } = useParams()
+  const { t } = useTranslation()
 
   const { courseUnits, isLoading: courseUnitsIsLoading } =
     useOrganisationCourseUnits(code)
@@ -245,10 +248,16 @@ const CourseSettings = () => {
   }
 
   return (
-    <CourseSettingsContainer
-      organisation={organisation}
-      courseUnits={courseUnits}
-    />
+    <Box>
+      <Typography textTransform="uppercase">
+        {t('organisationSettings:courseSettings')}
+      </Typography>
+      <CourseSettingsContainer
+        organisation={organisation}
+        courseUnits={courseUnits}
+        t={t}
+      />
+    </Box>
   )
 }
 

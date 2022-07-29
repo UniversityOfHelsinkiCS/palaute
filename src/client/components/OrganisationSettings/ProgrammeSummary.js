@@ -55,7 +55,7 @@ const ProgrammeTable = ({
   const { t, i18n } = useTranslation()
 
   return (
-    <TableContainer sx={{ overflow: 'visible' }}>
+    <TableContainer sx={{ overflowX: 'scroll', pt: '3rem' }}>
       <table>
         <thead>
           <tr>

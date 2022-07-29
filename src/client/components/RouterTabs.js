@@ -1,9 +1,10 @@
 import React from 'react'
-import Tabs from '@mui/material/Tabs'
-import { useLocation, matchPath } from 'react-router-dom'
+import { useLocation, matchPath, Link } from 'react-router-dom'
+import { Tabs, Tab, Box, Tooltip, Badge } from '@mui/material'
+
 import { get } from 'lodash'
 
-const RouterTabs = ({ children, ...props }) => {
+export const RouterTabs = ({ children, ...props }) => {
   const { pathname } = useLocation()
 
   const activeIndex = React.Children.toArray(children)
@@ -17,4 +18,55 @@ const RouterTabs = ({ children, ...props }) => {
   )
 }
 
-export default RouterTabs
+export const RouterTab = ({
+  icon,
+  label,
+  to,
+  disabled,
+  disabledTooltip,
+  badge,
+  ...props
+}) => {
+  let content = icon ? (
+    <Box display="flex" alignItems="center">
+      {icon}
+      <Box ml="0.5rem" />
+      {label}
+    </Box>
+  ) : (
+    label
+  )
+
+  if (badge) {
+    content = (
+      <Badge color="primary" variant="dot" overlap="rectangular">
+        {content}
+      </Badge>
+    )
+  }
+
+  const tab = (
+    <Tab
+      label={content}
+      component={Link}
+      to={to}
+      disabled={disabled}
+      {...props}
+    />
+  )
+  if (disabled)
+    return (
+      <Tooltip title={disabledTooltip} placement="top">
+        <Box>{tab}</Box>
+      </Tooltip>
+    )
+  return tab
+}
+
+export const TabLabel = ({ icon, text }) => (
+  <Box display="flex" alignItems="center">
+    {icon}
+    <Box ml="0.5rem" />
+    {text}
+  </Box>
+)

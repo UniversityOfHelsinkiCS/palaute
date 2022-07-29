@@ -13,7 +13,7 @@ import {
 import { Box, Typography, Tab } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
-import RouterTabs from '../RouterTabs'
+import { RouterTabs } from '../RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
