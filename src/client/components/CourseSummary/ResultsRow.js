@@ -11,6 +11,7 @@ import { Link, Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import ResultItem from './ResultItem'
+import PercentageCell from './PercentageCell'
 
 const styles = {
   resultCell: {
@@ -260,11 +261,11 @@ const ResultsRow = ({
           </Typography>
         </td>
         <td css={styles.percentCell}>
-          <Typography component="div">{percent}%</Typography>
+          <PercentageCell percent={percent} />
         </td>
         <td css={styles.percentCell}>
           {feedbackResponsePercentage !== undefined ? (
-            <Typography component="div">{feedbackResponsePercent}%</Typography>
+            <PercentageCell percent={feedbackResponsePercent} />
           ) : (
             <FeedbackResponseIndicator
               status={feedbackResponseGiven}
