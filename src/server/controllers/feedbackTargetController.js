@@ -559,13 +559,27 @@ const getForStudent = async (req, res) => {
       ),
   )
 
-  const responseReady = await asyncFeedbackTargetsToJSON(
+  const publicFeedbackTargets = await asyncFeedbackTargetsToJSON(
     filteredFeedbackTargets,
     false,
     false,
   )
 
-  return res.send(responseReady)
+  const now = Date.now()
+  const response = {
+    waiting: publicFeedbackTargets.filter(
+      (fbt) =>
+        Date.parse(fbt.opensAt) < now &&
+        Date.parse(fbt.closesAt) > now &&
+        !fbt.feedback,
+    ),
+    given: publicFeedbackTargets.filter((fbt) => fbt.feedback),
+    ended: publicFeedbackTargets.filter(
+      (fbt) => Date.parse(fbt.closesAt) < now,
+    ),
+  }
+
+  return res.send(response)
 }
 
 const getTargetsByCourseUnit = async (req, res) => {

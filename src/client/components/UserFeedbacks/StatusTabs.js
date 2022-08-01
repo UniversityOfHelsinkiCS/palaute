@@ -1,15 +1,32 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tabs, Tab } from '@mui/material'
+import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-const tabOrder = ['waitingForFeedback', 'feedbackGiven', 'feedbackClosed']
+const styles = {
+  badge: {
+    '& .MuiBadge-badge': {
+      top: 24,
+      right: 4,
+    },
+  },
+}
 
-const StatusTab = ({ status, ...props }) => (
-  <Tab component={Link} to={{ search: `?status=${status}` }} {...props} />
-)
+const tabOrder = ['waiting', 'given', 'ended']
 
-const StatusTabs = ({ status, ...props }) => {
+const StatusTab = ({ status, count, color, ...props }) => {
+  const tab = (
+    <Tab component={Link} to={{ search: `?status=${status}` }} {...props} />
+  )
+
+  return (
+    <Badge sx={styles.badge} badgeContent={count} color={color}>
+      {tab}
+    </Badge>
+  )
+}
+
+const StatusTabs = ({ status, counts, ...props }) => {
   const index = tabOrder.indexOf(status)
   const value = index < 0 ? 0 : index
   const { t } = useTranslation()
@@ -25,16 +42,12 @@ const StatusTabs = ({ status, ...props }) => {
     >
       <StatusTab
         label={t('userFeedbacks:waitingForFeedbackTab')}
-        status="waitingForFeedback"
+        status="waiting"
+        count={counts.waiting}
+        color="primary"
       />
-      <StatusTab
-        label={t('userFeedbacks:feedbackGivenTab')}
-        status="feedbackGiven"
-      />
-      <StatusTab
-        label={t('userFeedbacks:feedbackClosedTab')}
-        status="feedbackClosed"
-      />
+      <StatusTab label={t('userFeedbacks:feedbackGivenTab')} status="given" />
+      <StatusTab label={t('userFeedbacks:feedbackClosedTab')} status="ended" />
     </Tabs>
   )
 }

@@ -207,7 +207,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>
 
-      <Box m={-0.5}>
+      <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {isOpen && feedbackGiven && (
           <FeedbackGivenActions

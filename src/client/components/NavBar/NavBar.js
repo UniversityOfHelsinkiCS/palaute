@@ -124,7 +124,11 @@ const NavBar = () => {
   const isMobile = useMediaQuery('(max-width:500px)')
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
-  const isStudent = Boolean(feedbackTargets?.length)
+  const isStudent = Boolean(
+    feedbackTargets?.waiting?.length ||
+      feedbackTargets?.given?.length ||
+      feedbackTargets?.ended?.length,
+  )
   const isAdminUser = authorizedUser?.isAdmin ?? false
 
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({

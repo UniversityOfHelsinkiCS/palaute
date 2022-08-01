@@ -7,19 +7,19 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetItem from './FeedbackTargetItem'
 
-const CourseRealisationItem = ({ courseRealisation, className }) => {
+const CourseRealisationItem = ({ courseRealisation, sx }) => {
   const { i18n } = useTranslation()
   const { feedbackTargets, courseUnitName } = courseRealisation
 
   const translatedName = getLanguageValue(courseUnitName, i18n.language)
 
   return (
-    <Card className={className}>
+    <Card sx={sx} elevation={4}>
       <CardContent>
         <Typography variant="h6" component="h2">
           {translatedName}
         </Typography>
-        <List>
+        <List disablePadding>
           {feedbackTargets.map((feedbackTarget, index) => (
             <FeedbackTargetItem
               feedbackTarget={feedbackTarget}

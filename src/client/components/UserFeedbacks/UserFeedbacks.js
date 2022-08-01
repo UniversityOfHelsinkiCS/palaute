@@ -9,7 +9,7 @@ import CourseRealisationItem from './CourseRealisationItem'
 import StatusTabs from './StatusTabs'
 
 import {
-  filterFeedbackTargetsByStatus,
+  filterFeedbackTargets,
   getCourseRealisationsWithFeedbackTargets,
   sortCourseRealisations,
 } from './utils'
@@ -18,13 +18,13 @@ import Title from '../Title'
 
 const styles = {
   heading: {
-    marginBottom: 1,
+    marginBottom: 2,
   },
   courseRealisationItem: {
-    marginBottom: 1,
+    marginBottom: 3,
   },
   statusTabs: {
-    marginBottom: 1,
+    marginBottom: 3,
   },
   progressContainer: {
     padding: (theme) => theme.spacing(4, 0),
@@ -36,7 +36,7 @@ const styles = {
 const UserFeedbacks = () => {
   const location = useLocation()
 
-  const { status = 'waitingForFeedback' } = qs.parse(location.search, {
+  const { status = 'waiting' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
 
@@ -44,13 +44,18 @@ const UserFeedbacks = () => {
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
 
   const filteredFeedbackTargets = useMemo(
-    () => filterFeedbackTargetsByStatus(feedbackTargets, status),
-    [feedbackTargets, status],
+    () => filterFeedbackTargets(feedbackTargets),
+    [feedbackTargets],
+  )
+
+  const statusFeedbackTargets = useMemo(
+    () => filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting,
+    [status],
   )
 
   const courseRealisations = useMemo(
-    () => getCourseRealisationsWithFeedbackTargets(filteredFeedbackTargets),
-    [filteredFeedbackTargets],
+    () => getCourseRealisationsWithFeedbackTargets(statusFeedbackTargets),
+    [statusFeedbackTargets],
   )
 
   const sortedCourseRealations = useMemo(
@@ -67,7 +72,15 @@ const UserFeedbacks = () => {
         {t('userFeedbacks:mainHeading')}
       </Typography>
 
-      <StatusTabs sx={styles.statusTabs} status={status} />
+      <StatusTabs
+        sx={styles.statusTabs}
+        status={status}
+        counts={{
+          waiting: filteredFeedbackTargets.waiting?.length,
+          given: filteredFeedbackTargets.given?.length,
+          ended: filteredFeedbackTargets.ended?.length,
+        }}
+      />
 
       {isLoading && <LoadingProgress />}
 

@@ -60,38 +60,27 @@ export const getCourseRealisationsWithFeedbackTargets = (feedbackTargets) => {
   )
 }
 
-export const filterFeedbackTargetsByStatus = (feedbackTargets, status) => {
+export const filterFeedbackTargets = (feedbackTargets) => {
   if (!feedbackTargets) {
     return []
   }
-  const acualFeedbackTargets = feedbackTargets
-    .filter((target) => new Date(2020, 11, 0) < new Date(target.opensAt))
-    .filter(
-      (target) =>
-        new Date(target.courseRealisation.startDate) >= new Date(2021, 8, 1) ||
-        (new Date(target.courseRealisation.startDate) >=
-          new Date(2021, 7, 15) &&
-          new Date(target.courseRealisation.endDate) >= new Date(2021, 9, 1)) ||
-        INCLUDE_COURSES.has(target.courseRealisation.id),
-    )
-  if (status === 'waitingForFeedback') {
-    return acualFeedbackTargets.filter(
-      (feedbackTarget) =>
-        feedbackTargetIsOpen(feedbackTarget) && !feedbackTarget.feedback,
-    )
-  }
+  const filter = (feedbackTargets) =>
+    feedbackTargets
+      .filter((target) => new Date(2020, 11, 0) < new Date(target.opensAt))
+      .filter(
+        (target) =>
+          new Date(target.courseRealisation.startDate) >=
+            new Date(2021, 8, 1) ||
+          (new Date(target.courseRealisation.startDate) >=
+            new Date(2021, 7, 15) &&
+            new Date(target.courseRealisation.endDate) >=
+              new Date(2021, 9, 1)) ||
+          INCLUDE_COURSES.has(target.courseRealisation.id),
+      )
 
-  if (status === 'feedbackGiven') {
-    return acualFeedbackTargets.filter(
-      (feedbackTarget) => feedbackTarget.feedback,
-    )
+  return {
+    waiting: filter(feedbackTargets.waiting),
+    given: filter(feedbackTargets.given),
+    ended: filter(feedbackTargets.ended),
   }
-
-  if (status === 'feedbackClosed') {
-    return acualFeedbackTargets.filter((target) =>
-      feedbackTargetIsEnded(target),
-    )
-  }
-
-  return acualFeedbackTargets
 }
