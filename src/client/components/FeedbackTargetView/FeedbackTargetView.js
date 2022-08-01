@@ -246,6 +246,7 @@ const FeedbackTargetView = () => {
               <MuiLink
                 to={`/organisations/${organisation.code}/settings`}
                 component={Link}
+                underline="hover"
               >
                 {getLanguageValue(organisation.name, i18n.language)}
               </MuiLink>
