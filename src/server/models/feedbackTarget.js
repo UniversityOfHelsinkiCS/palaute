@@ -235,6 +235,25 @@ class FeedbackTarget extends Model {
     return now > this.closesAt
   }
 
+  async getProgrammePublicQuestionIds() {
+    const programmePublicQuestionIdsResult = await sequelize.query(
+      `
+      SELECT o.public_question_ids as "publicQuestionIds" 
+      FROM course_units_organisations cuo
+      INNER JOIN organisations o ON o.id = cuo.organisation_id
+      INNER JOIN feedback_targets fbt ON fbt.course_unit_id = cuo.course_unit_id
+      WHERE fbt.id = :id AND cuo.type = 'PRIMARY'
+      `,
+      {
+        replacements: {
+          id: this.id,
+        },
+      },
+    )
+
+    return programmePublicQuestionIdsResult[0][0]?.publicQuestionIds
+  }
+
   async getStudentsForFeedbackTarget() {
     return User.findAll({
       include: {
@@ -362,8 +381,11 @@ class FeedbackTarget extends Model {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
     const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
+    const programmePublicQuestionIds =
+      await this.getProgrammePublicQuestionIds()
 
     const publicQuestionIds = _.uniq([
+      ...programmePublicQuestionIds,
       ...targetPublicQuestionIds,
       ...globallyPublicQuestionIds,
     ])
@@ -375,9 +397,15 @@ class FeedbackTarget extends Model {
     this.populateQuestions(surveys)
 
     const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
+    const programmePublicQuestionIds =
+      await this.getProgrammePublicQuestionIds()
 
     const questionIds = this.questions
-      .filter(({ id }) => !globallyPublicQuestionIds.includes(id))
+      .filter(
+        ({ id }) =>
+          !globallyPublicQuestionIds?.includes(id) &&
+          !programmePublicQuestionIds?.includes(id),
+      )
       .map(({ id }) => id)
 
     return questionIds
