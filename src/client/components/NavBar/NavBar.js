@@ -121,7 +121,7 @@ const NavBar = () => {
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width:500px)')
+  const isMobile = useMediaQuery('(max-width:700px)')
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
