@@ -86,7 +86,7 @@ const EditSurvey = () => {
         {({ handleSubmit, dirty }) => (
           <Form>
             <QuestionEditor language={language} name="questions" />
-            <Box mt={2}>
+            <Box mt="2rem">
               <EditProgrammeQuestionsDialog
                 open={warningDialogOpen}
                 onClose={handleCloseWarningDialog}

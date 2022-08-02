@@ -143,7 +143,7 @@ const QuestionCard = ({
   }
 
   return (
-    <Card sx={sx}>
+    <Card sx={sx} elevation={3}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Chip label={title} variant="outlined" />

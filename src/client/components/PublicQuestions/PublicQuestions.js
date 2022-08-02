@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react'
 
 import { Card, CardContent, Box, Typography, Alert } from '@mui/material'
 
-import { useParams, Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 
-import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
 
 const PublicQuestions = ({ type = 'feedback-targets', target }) => {
   const [visibility, setVisibility] = useState('ALL')
   const { t } = useTranslation()
-  const { id } = useParams()
 
   useEffect(() => {
     setVisibility(target.feedbackVisibility)
@@ -23,7 +21,7 @@ const PublicQuestions = ({ type = 'feedback-targets', target }) => {
   }
 
   return (
-    <Card style={{ marginBottom: 10 }}>
+    <Card sx={{ marginBottom: '4rem', marginTop: '1rem' }} elevation={3}>
       <CardContent>
         <Box mb={4}>
           <Typography variant="h6">{t('publicQuestions:title')}</Typography>
@@ -31,11 +29,8 @@ const PublicQuestions = ({ type = 'feedback-targets', target }) => {
         <Box mb={2}>
           <Alert severity="info">
             <Trans i18nKey="publicQuestions:publicInfo">
-              Feedback related to public questions is visible to students on the{' '}
-              <AlertLink component={Link} to={`/targets/${id}/results`}>
-                feedback page
-              </AlertLink>{' '}
-              once the feedback period has ended
+              Feedback related to public questions is visible to students on the
+              feedback page once the feedback period has ended
             </Trans>
           </Alert>
         </Box>

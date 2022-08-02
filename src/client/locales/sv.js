@@ -291,7 +291,7 @@ export default {
   publicQuestions: {
     // title: 'Vastausten näkyvyys',
     publicInfo:
-      'Responsen gällande offentligtgjorda frågor visas för studeranden på <2>responssidan</2>',
+      'Responsen gällande offentligtgjorda frågor visas för studeranden på responssidan',
     selectVisibility: 'Välj användare som ser de offentliga frågorna',
     none: 'Endast personal på utbildningsprogrammet',
     enrolled: 'Studerande på kursen',

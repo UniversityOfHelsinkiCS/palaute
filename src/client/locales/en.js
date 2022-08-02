@@ -285,7 +285,7 @@ export default {
   publicQuestions: {
     title: 'Answer visibility',
     publicInfo:
-      'Feedback related to public questions is visible to students on the <2>feedback page</2>. Note that feedback related to university level Likert scale questions is always visible for students',
+      'Feedback related to public questions is visible to students on the feedback page. Note that feedback related to university level Likert scale questions is always visible for students',
     selectVisibility: 'Select who can see the public questions',
     none: 'Only programme personel',
     enrolled: 'Enrolled students',
