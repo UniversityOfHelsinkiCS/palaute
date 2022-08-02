@@ -251,7 +251,10 @@ class FeedbackTarget extends Model {
       },
     )
 
-    return programmePublicQuestionIdsResult[0][0]?.publicQuestionIds
+    const publicQuestionIds =
+      programmePublicQuestionIdsResult[0][0]?.publicQuestionIds
+
+    return Array.isArray(publicQuestionIds) ? publicQuestionIds : []
   }
 
   async getStudentsForFeedbackTarget() {
