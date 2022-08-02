@@ -45,6 +45,7 @@ const SingleChoiceQuestion = ({ question, name }) => {
               helpers.setValue(event.target.value)
             }}
             onBlur={() => helpers.setTouched(true)}
+            sx={{ paddingLeft: '0.8rem' }}
           >
             {options.map((option) => (
               <FormControlLabel

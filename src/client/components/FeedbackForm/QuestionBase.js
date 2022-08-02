@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 const styles = {
   label: {
@@ -19,7 +19,7 @@ const QuestionBase = ({
   required,
   labelProps = {},
 }) => (
-  <>
+  <Box m="0.5rem" ml="1.5rem">
     <Typography variant="h6" sx={styles.label} {...labelProps}>
       {label}
       {required && ' *'}
@@ -28,7 +28,7 @@ const QuestionBase = ({
       <Typography sx={styles.description}>{description}</Typography>
     )}
     {children}
-  </>
+  </Box>
 )
 
 export default QuestionBase

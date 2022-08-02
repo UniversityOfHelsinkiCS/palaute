@@ -48,7 +48,7 @@ const MultipleChoiceQuestion = ({ question, name }) => {
           description={description}
           labelProps={{ component: 'legend' }}
         >
-          <FormGroup>
+          <FormGroup sx={{ paddingLeft: '0.75rem' }}>
             {options.map((option) => (
               <FormControlLabel
                 value={option.id}

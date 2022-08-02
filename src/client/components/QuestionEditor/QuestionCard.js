@@ -145,7 +145,7 @@ const QuestionCard = ({
   return (
     <Card sx={sx} elevation={3}>
       <CardContent>
-        <Box display="flex" justifyContent="space-between" mb={2}>
+        <Box display="flex" justifyContent="space-between" mb="1.5rem">
           <Chip label={title} variant="outlined" />
           {question.chip && (
             <Tooltip title={t('questionEditor:uneditableTooltip')}>

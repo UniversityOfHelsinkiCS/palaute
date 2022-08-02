@@ -16,6 +16,8 @@ import {
 const styles = {
   questionCard: {
     marginBottom: (theme) => theme.spacing(2),
+    marginTop: '1.5rem',
+    padding: '0.5rem',
   },
 }
 
