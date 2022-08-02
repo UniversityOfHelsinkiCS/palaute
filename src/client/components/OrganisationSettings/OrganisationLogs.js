@@ -24,6 +24,14 @@ const getLogMessage = (data) => {
     )
   }
 
+  if (data.addedPublicQuestionIds) {
+    messages = messages.concat(
+      data.addedPublicQuestionIds.length > 0
+        ? `Set question ${data.addedPublicQuestionIds[0]} public`
+        : `Unset question ${data.removedPublicQuestionIds[0]} public`,
+    )
+  }
+
   if (data.enabledStudentList) {
     messages = messages.concat(
       data.enabledStudentList.length > 0

@@ -207,6 +207,17 @@ const createOrganisationLog = async (organisation, updates, user) => {
     )
   }
 
+  if (Array.isArray(updates.publicQuestionIds)) {
+    data.addedPublicQuestionIds = _.difference(
+      updates.publicQuestionIds,
+      organisation.publicQuestionIds,
+    )
+    data.removedPublicQuestionIds = _.difference(
+      organisation.publicQuestionIds,
+      updates.publicQuestionIds,
+    )
+  }
+
   if (updates.studentListVisible !== undefined)
     data.studentListVisible = Boolean(updates.studentListVisible)
 
