@@ -1,4 +1,12 @@
-const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT } = require('sequelize')
+const {
+  Model,
+  JSONB,
+  STRING,
+  BOOLEAN,
+  ARRAY,
+  TEXT,
+  INTEGER,
+} = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class Organisation extends Model {
@@ -60,6 +68,11 @@ Organisation.init(
     },
     responsibleUserId: {
       type: STRING,
+    },
+    publicQuestionIds: {
+      type: ARRAY(INTEGER),
+      allowNull: false,
+      defaultValue: [],
     },
   },
   {
