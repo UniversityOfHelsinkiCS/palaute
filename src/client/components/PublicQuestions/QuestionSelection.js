@@ -15,11 +15,11 @@ import { useSnackbar } from 'notistack'
 import { getLanguageValue } from '../../util/languageUtils'
 import apiClient from '../../util/apiClient'
 
-const getQuestionItems = (feedbackTarget) => {
-  const questions = feedbackTarget.questions ?? []
+const getQuestionItems = (target) => {
+  const questions = target.questions ?? []
 
   const publicityConfigurableQuestionIds =
-    feedbackTarget.publicityConfigurableQuestionIds ?? []
+    target.publicityConfigurableQuestionIds ?? []
 
   return questions
     .filter((q) => q.type !== 'TEXT')
@@ -30,8 +30,8 @@ const getQuestionItems = (feedbackTarget) => {
     }))
 }
 
-const updatePublicQuestionIds = async ({ id, publicQuestionIds }) => {
-  const { data } = await apiClient.put(`/feedback-targets/${id}`, {
+const updatePublicQuestionIds = async ({ resource, id, publicQuestionIds }) => {
+  const { data } = await apiClient.put(`/${resource}/${id}`, {
     publicQuestionIds,
   })
 
@@ -60,19 +60,16 @@ const QuestionItem = ({ id, label, checked, onChange, disabled }) => {
   )
 }
 
-const QuestionSelection = ({ feedbackTarget, visibility }) => {
+const QuestionSelection = ({ resource, target, visibility }) => {
   const { t } = useTranslation()
   const mutation = useMutation(updatePublicQuestionIds)
   const { enqueueSnackbar } = useSnackbar()
 
   const [publicQuestionIds, setPublicQuestionIds] = useState(
-    feedbackTarget.publicQuestionIds ?? [],
+    target.publicQuestionIds ?? [],
   )
 
-  const questionItems = useMemo(
-    () => getQuestionItems(feedbackTarget),
-    [feedbackTarget],
-  )
+  const questionItems = useMemo(() => getQuestionItems(target), [target])
 
   const makeOnToggle = (id) => async () => {
     const checked = publicQuestionIds.includes(id)
@@ -83,7 +80,8 @@ const QuestionSelection = ({ feedbackTarget, visibility }) => {
 
     try {
       await mutation.mutateAsync({
-        id: feedbackTarget.id,
+        resource,
+        id: target.id,
         publicQuestionIds: updatedQuestionIds,
       })
 

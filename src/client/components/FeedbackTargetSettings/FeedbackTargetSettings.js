@@ -72,7 +72,7 @@ const FeedbackTargetSettings = () => {
         onOpenImmediately={handleOpenFeedbackImmediately}
         feedbackTarget={feedbackTarget}
       />
-      <PublicQuestions feedbackTarget={feedbackTarget} />
+      <PublicQuestions target={feedbackTarget} type="feedback-targets" />
     </>
   )
 }

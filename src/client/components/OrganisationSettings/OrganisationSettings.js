@@ -18,8 +18,8 @@ import {
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
-import GeneralSettings from './GeneralSettings'
 import EditSurvey from './EditSurvey'
+import GeneralSettings from './GeneralSettings'
 import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'

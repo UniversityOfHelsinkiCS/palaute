@@ -9,16 +9,16 @@ import AlertLink from '../AlertLink'
 import QuestionSelection from './QuestionSelection'
 import PublicitySelection from './PublicitySelection'
 
-const PublicQuestions = ({ feedbackTarget }) => {
+const PublicQuestions = ({ type = 'feedback-targets', target }) => {
   const [visibility, setVisibility] = useState('ALL')
   const { t } = useTranslation()
   const { id } = useParams()
 
   useEffect(() => {
-    setVisibility(feedbackTarget.feedbackVisibility)
+    setVisibility(target.feedbackVisibility)
   }, [])
 
-  if (!feedbackTarget) {
+  if (!target) {
     return <Redirect to="/" />
   }
 
@@ -39,12 +39,15 @@ const PublicQuestions = ({ feedbackTarget }) => {
             </Trans>
           </Alert>
         </Box>
-        <PublicitySelection
-          visibility={visibility}
-          setVisibility={setVisibility}
-        />
+        {target.feedbackVisibility && (
+          <PublicitySelection
+            visibility={visibility}
+            setVisibility={setVisibility}
+          />
+        )}
         <QuestionSelection
-          feedbackTarget={feedbackTarget}
+          resource={type}
+          target={target}
           visibility={visibility}
         />
       </CardContent>

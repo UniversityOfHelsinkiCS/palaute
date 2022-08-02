@@ -8,8 +8,10 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
 import QuestionEditor from '../QuestionEditor'
+import PublicQuestions from '../PublicQuestions'
 
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
+import useOrganisation from '../../hooks/useOrganisation'
 
 import {
   getSurveyInitialValues,
@@ -20,9 +22,11 @@ import EditProgrammeQuestionsDialog from './EditProgrammeQuestionsDialog'
 import { LoadingProgress } from '../LoadingProgress'
 
 const EditSurvey = () => {
+  const { code } = useParams()
+  const { organisation, isLoading: isOrganisationLoading } =
+    useOrganisation(code)
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { code } = useParams()
   const { language } = i18n
 
   const { survey, isLoading } = useProgrammeSurvey(code)
@@ -35,7 +39,7 @@ const EditSurvey = () => {
   const handleCloseWarningDialog = () => setWarningDialogOpen(false)
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
-  if (isLoading) {
+  if (isLoading || isOrganisationLoading) {
     return <LoadingProgress />
   }
 
@@ -52,6 +56,9 @@ const EditSurvey = () => {
 
   const initialValues = getSurveyInitialValues(survey)
 
+  const questions = survey.universitySurvey.questions.concat(survey.questions)
+  const publicityConfigurableQuestionIds = survey.questions.map(({ id }) => id)
+
   return (
     <>
       <Box mb={2}>
@@ -61,6 +68,16 @@ const EditSurvey = () => {
           })}
         </Alert>
       </Box>
+      <PublicQuestions
+        type="organisations"
+        target={{
+          id: organisation.code,
+          feedbackVisibility: null,
+          publicQuestionIds: organisation.publicQuestionIds,
+          questions,
+          publicityConfigurableQuestionIds,
+        }}
+      />
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}

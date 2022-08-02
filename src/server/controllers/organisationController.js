@@ -55,6 +55,7 @@ const updateOrganisation = async (req, res) => {
     'responsibleUserId',
     'disabledCourseCodes',
     'studentListVisibleCourseCodes',
+    'publicQuestionIds',
   ])
 
   if (
@@ -109,12 +110,9 @@ const getOrganisationByCode = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const organisation = organisationAccess
-    .map(({ organisation, access }) => ({
-      ...organisation.toJSON(),
-      access,
-    }))
-    .find((org) => org.code === code)
+  const { organisation, access } = organisationAccess.find(
+    ({ organisation }) => organisation.code === code,
+  )
 
   if (!organisation) {
     throw new ApplicationError(
@@ -123,7 +121,12 @@ const getOrganisationByCode = async (req, res) => {
     )
   }
 
-  return res.send(organisation)
+  const publicOrganisation = {
+    ...organisation.toJSON(),
+    access,
+  }
+
+  return res.send(publicOrganisation)
 }
 
 const getOrganisationLogs = async (req, res) => {
