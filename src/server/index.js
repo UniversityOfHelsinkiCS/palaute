@@ -3,7 +3,7 @@ require('express-async-errors')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
-const { PORT, inProduction, inE2EMode, inStaging } = require('./util/config')
+const { PORT, inProduction, inE2EMode } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { connectRedis } = require('./util/redisClient')
 const {
@@ -11,7 +11,7 @@ const {
   checkStatusOnStartup: checkUpdaterStatus,
 } = require('./updater')
 const { start: startPateCron } = require('./util/pateCron')
-const { start: startCacheCron } = require('./util/organisationSummaryCacheCron')
+const { start: startCacheCron } = require('./util/courseSummaryCacheCron')
 const logger = require('./util/logger')
 
 const app = express()

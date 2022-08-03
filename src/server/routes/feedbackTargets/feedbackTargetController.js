@@ -111,16 +111,15 @@ const asyncFeedbackTargetsToJSON = async (
   return convertedFeedbackTargets
 }
 
-const convertFeedbackTargetForAdmin = async (feedbackTargets, isAdmin) => {
+const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject(true)
-    const responsibleTeachers = isAdmin
-      ? await feedbackTarget.getTeachersForFeedbackTarget()
-      : null
+    const responsibleTeachers =
+      await feedbackTarget.getTeachersForFeedbackTarget()
 
     return {
       ...publicTarget,
-      accessStatus: isAdmin ? 'TEACHER' : 'NONE',
+      accessStatus: 'TEACHER',
       feedback: null,
       responsibleTeachers,
     }
@@ -422,10 +421,7 @@ const getOneForAdmin = async (req, res, feedbackTargetId) => {
   if (!adminFeedbackTarget)
     throw new ApplicationError('Feedback target not found', 404)
 
-  const responseReady = await convertFeedbackTargetForAdmin(
-    adminFeedbackTarget,
-    req.isAdmin,
-  )
+  const responseReady = await convertFeedbackTargetForAdmin(adminFeedbackTarget)
 
   const studentListVisible = adminFeedbackTarget?.courseUnit
     ? await getStudentListVisibility(
