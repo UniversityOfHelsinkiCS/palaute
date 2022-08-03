@@ -92,10 +92,27 @@ const styles = {
       display: 'none',
     },
   }),
-  infoContainer: {
+  infoContainer: (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
-  },
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
+  }),
+  teacherListContainer: (theme) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'row',
+    },
+  }),
+  linkContainer: (theme) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
+  }),
   hidePrint: {
     '@media print': {
       display: 'none',
@@ -111,11 +128,7 @@ const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
       onDelete={isAdmin ? () => onDelete(teacher) : undefined}
     />
   ))
-  return (
-    <Box display="flex" flexDirection="column">
-      {list}
-    </Box>
-  )
+  return <Box sx={styles.teacherListContainer}>{list}</Box>
 }
 
 const FeedbackTargetView = () => {
@@ -264,7 +277,7 @@ const FeedbackTargetView = () => {
             </div>
           )}
         </div>
-        <div css={styles.infoContainer}>
+        <Box sx={styles.infoContainer}>
           <div>
             <dl css={styles.datesContainer}>
               <Typography color="textSecondary" variant="body2" component="dt">
@@ -284,7 +297,7 @@ const FeedbackTargetView = () => {
               </Typography>
             </dl>
 
-            <Box display="flex" sx={styles.hidePrint}>
+            <Box sx={[styles.linkContainer, styles.hidePrint]}>
               <ExternalLink href={coursePageUrl}>
                 {t('feedbackTargetView:coursePage')}
               </ExternalLink>
@@ -301,19 +314,17 @@ const FeedbackTargetView = () => {
               )}
             </Box>
           </div>
-          <div>
-            <div>
-              <Typography gutterBottom>
-                {t('feedbackTargetView:responsibleTeachers')}
-              </Typography>
-              <ResponsibleTeachersList
-                teachers={responsibleTeachers}
-                isAdmin={isAdmin}
-                onDelete={handleDeleteResponsibleTeacher}
-              />
-            </div>
-          </div>
-        </div>
+          <Box mt="1rem">
+            <Typography gutterBottom>
+              {t('feedbackTargetView:responsibleTeachers')}
+            </Typography>
+            <ResponsibleTeachersList
+              teachers={responsibleTeachers}
+              isAdmin={isAdmin}
+              onDelete={handleDeleteResponsibleTeacher}
+            />
+          </Box>
+        </Box>
       </Box>
 
       <Box mb={2} sx={styles.hidePrint}>
