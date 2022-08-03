@@ -10,7 +10,8 @@ const {
   compareAsc,
 } = require('date-fns')
 
-const { ApplicationError } = require('../util/customErrors')
+const { Router } = require('express')
+const { ApplicationError } = require('../../util/customErrors')
 
 const {
   UserFeedbackTarget,
@@ -23,22 +24,22 @@ const {
   User,
   Organisation,
   FeedbackTargetLog,
-} = require('../models')
+} = require('../../models')
 
-const { sequelize } = require('../util/dbConnection')
-const logger = require('../util/logger')
+const { sequelize } = require('../../util/dbConnection')
+const logger = require('../../util/logger')
 const {
   createFeedbackTargetSurveyLog,
   createFeedbackTargetLog,
-} = require('../util/auditLog')
+} = require('../../util/auditLog')
 const {
   sendEmailToStudentsWhenOpeningImmediately,
-} = require('../util/emailSender')
+} = require('../../util/emailSender')
 const {
   JWT_KEY,
   STUDENT_LIST_BY_COURSE_ENABLED,
   STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
-} = require('../util/config')
+} = require('../../util/config')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -583,7 +584,7 @@ const getForStudent = async (req, res) => {
 }
 
 const getTargetsByCourseUnit = async (req, res) => {
-  const courseCode = req.params.id
+  const courseCode = req.params.code
 
   const {
     courseRealisationStartDateAfter,
@@ -1108,20 +1109,30 @@ const getLogs = async (req, res) => {
   return res.send(feedbackTargetLogs)
 }
 
+const adRouter = Router()
+
+adRouter.get('/for-student', getForStudent)
+adRouter.get('/for-course-unit/:code', getTargetsByCourseUnit)
+adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisations)
+adRouter.get('/:id', getOne)
+adRouter.put('/:id', update)
+adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
+adRouter.get('/:id/feedbacks', getFeedbacks)
+adRouter.get('/:id/users', getUsers)
+adRouter.get('/:id/feedback-count', getFeedbackCount)
+adRouter.get('/:id/logs', getLogs)
+adRouter.put('/:id/response', updateFeedbackResponse)
+adRouter.put('/:id/remind-students', remindStudentsOnFeedback)
+adRouter.get('/:id/students-with-feedback', getStudentsWithFeedback)
+adRouter.put('/:id/open-immediately', openFeedbackImmediately)
+adRouter.delete('/:id/user-feedback-targets/:userId', deleteUserFeedbackTarget)
+
+const noadRouter = Router()
+
+noadRouter.get(':id', getOne)
+noadRouter.get(':id/feedbacks', getFeedbacks)
+
 module.exports = {
-  getForStudent,
-  getFeedbackTargetsForOrganisations,
-  getTargetsByCourseUnit,
-  getOne,
-  update,
-  updateSettingsReadByTeacher,
-  getFeedbacks,
-  getStudentsWithFeedback,
-  updateFeedbackResponse,
-  openFeedbackImmediately,
-  remindStudentsOnFeedback,
-  getUsers,
-  deleteUserFeedbackTarget,
-  getFeedbackCount,
-  getLogs,
+  adRouter,
+  noadRouter,
 }

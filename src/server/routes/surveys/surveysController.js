@@ -1,6 +1,7 @@
-const { ApplicationError } = require('../util/customErrors')
-const { Survey, Question, Organisation } = require('../models')
-const { createOrganisationSurveyLog } = require('../util/auditLog')
+const { Router } = require('express')
+const { ApplicationError } = require('../../util/customErrors')
+const { Survey, Question, Organisation } = require('../../models')
+const { createOrganisationSurveyLog } = require('../../util/auditLog')
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
@@ -82,27 +83,6 @@ const update = async (req, res) => {
   return res.send(updatedSurvey)
 }
 
-const getSurveyByCourseCode = async (req, res) => {
-  const courseCode = req.params.code
-
-  const [survey] = await Survey.findOrCreate({
-    where: {
-      type: 'courseUnit',
-      typeId: courseCode,
-    },
-    include: 'courseUnit',
-    defaults: {
-      questionIds: [],
-      type: 'courseUnit',
-      typeId: courseCode,
-    },
-  })
-
-  await survey.populateQuestions()
-
-  return res.send(survey)
-}
-
 const getUniversitySurvey = async (req, res) => {
   const survey = await Survey.findOne({
     where: {
@@ -153,10 +133,11 @@ const getProgrammeSurvey = async (req, res) => {
   return res.send(response)
 }
 
-module.exports = {
-  addQuestion,
-  update,
-  getSurveyByCourseCode,
-  getUniversitySurvey,
-  getProgrammeSurvey,
-}
+const router = Router()
+
+router.put('/:id', update)
+router.post('/:id/questions', addQuestion)
+router.get('/university', getUniversitySurvey)
+router.get('/programme/:surveyCode', getProgrammeSurvey)
+
+module.exports = router

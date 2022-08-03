@@ -48,7 +48,7 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
 
   const queryFn = async () => {
     const { data } = await apiClient.get(
-      `/course-units/${code}/feedback-targets`,
+      `/feedback-targets/for-course-unit/${code}`,
       {
         params,
       },

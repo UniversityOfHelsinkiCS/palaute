@@ -1,4 +1,5 @@
-const { FeedbackTarget, UserFeedbackTarget } = require('../models')
+const { Router } = require('express')
+const { FeedbackTarget, UserFeedbackTarget } = require('../../models')
 
 const getFeedbackTargetsByCourseRealisation = async (req, res) => {
   const { user, isAdmin } = req
@@ -35,25 +36,8 @@ const getFeedbackTargetsByCourseRealisation = async (req, res) => {
   return res.send(targets)
 }
 
-const feedbackTargetByCourseRealisation = async (req, res) => {
-  const courseId = req.params.id
+const router = Router()
 
-  const feedbackTarget = await FeedbackTarget.findOne({
-    where: {
-      courseRealisationId: courseId,
-      type: 'courseRealisation',
-      hidden: false,
-    },
-  })
+router.get('/:id/feedback-targets', getFeedbackTargetsByCourseRealisation)
 
-  if (!feedbackTarget) {
-    return res.send(404)
-  }
-
-  return res.redirect(301, `/targets/${feedbackTarget.id}/feedback`)
-}
-
-module.exports = {
-  getFeedbackTargetsByCourseRealisation,
-  feedbackTargetByCourseRealisation,
-}
+module.exports = router

@@ -1,8 +1,13 @@
 const _ = require('lodash')
-const { Organisation, OrganisationLog, User } = require('../models')
+const { Router } = require('express')
 
-const { ApplicationError } = require('../util/customErrors')
-const { createOrganisationLog } = require('../util/auditLog')
+const { Organisation, OrganisationLog, User } = require('../../models')
+
+const { ApplicationError } = require('../../util/customErrors')
+const { createOrganisationLog } = require('../../util/auditLog')
+const {
+  getOpenFeedbackByOrganisation,
+} = require('../../util/organisationOpenFeedback')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
@@ -159,9 +164,32 @@ const getOrganisationLogs = async (req, res) => {
   return res.send(organisationLogs)
 }
 
-module.exports = {
-  getOrganisations,
-  updateOrganisation,
-  getOrganisationByCode,
-  getOrganisationLogs,
+const getOpenQuestionsByOrganisation = async (req, res) => {
+  const { user } = req
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const { code } = req.params
+
+  const access = organisationAccess.filter(
+    (org) => org.organisation.code === code,
+  )
+
+  if (access.length === 0) {
+    throw new ApplicationError('Forbidden', 403)
+  }
+
+  const codesWithIds = await getOpenFeedbackByOrganisation(code)
+
+  return res.send(codesWithIds)
 }
+
+const router = Router()
+
+router.get('/', getOrganisations)
+router.put('/:code', updateOrganisation)
+router.get('/:code', getOrganisationByCode)
+router.get('/:code/open', getOpenQuestionsByOrganisation)
+router.get('/:code/logs', getOrganisationLogs)
+
+module.exports = router

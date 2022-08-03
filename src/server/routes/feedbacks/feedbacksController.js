@@ -1,6 +1,7 @@
-const { ApplicationError } = require('../util/customErrors')
-const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../models')
-const { validateFeedback } = require('../util/feedbackValidator')
+const { Router } = require('express')
+const { ApplicationError } = require('../../util/customErrors')
+const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
+const { validateFeedback } = require('../../util/feedbackValidator')
 
 const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
@@ -109,9 +110,20 @@ const destroy = async (req, res) => {
   return res.sendStatus(200)
 }
 
+const adRouter = Router()
+
+adRouter.post('/', create)
+adRouter.get('/:id', getOne)
+adRouter.put('/:id', update)
+adRouter.delete('/:id', destroy)
+
+const noadRouter = Router()
+
+noadRouter.post('/', create)
+noadRouter.put('/:id', update)
+noadRouter.delete('/:id', destroy)
+
 module.exports = {
-  getOne,
-  create,
-  update,
-  destroy,
+  adRouter,
+  noadRouter,
 }

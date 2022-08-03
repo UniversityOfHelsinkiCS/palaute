@@ -1,22 +1,19 @@
+const { Router } = require('express')
 const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 const { addYears } = require('date-fns')
 
-const { CourseUnit, Survey, Organisation } = require('../models')
+const { CourseUnit, Survey, Organisation } = require('../../models')
 
 const {
   getOrganisationSummaries,
   getCourseRealisationSummaries,
   getSummaryByOrganisation,
-} = require('../util/courseSummary')
+} = require('../../util/courseSummary')
 
-const {
-  getOpenFeedbackByOrganisation,
-} = require('../util/organisationOpenFeedback')
-
-const { ApplicationError } = require('../util/customErrors')
-const { sequelize } = require('../util/dbConnection')
-const logger = require('../util/logger')
+const { ApplicationError } = require('../../util/customErrors')
+const { sequelize } = require('../../util/dbConnection')
+const logger = require('../../util/logger')
 
 const WORKLOAD_QUESTION_ID = 1042
 
@@ -279,30 +276,11 @@ const getByOrganisation = async (req, res) => {
   })
 }
 
-const getOpenQuestionsByOrganisation = async (req, res) => {
-  const { user } = req
+const router = Router()
 
-  const organisationAccess = await user.getOrganisationAccess()
+router.get('/organisations', getByOrganisations)
+router.get('/course-units/:code', getByCourseUnit)
+router.get('/organisations/:code', getByOrganisation)
+router.get('/access', getAccessInfo)
 
-  const { code } = req.params
-
-  const access = organisationAccess.filter(
-    (org) => org.organisation.code === code,
-  )
-
-  if (access.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
-  const codesWithIds = await getOpenFeedbackByOrganisation(code)
-
-  return res.send(codesWithIds)
-}
-
-module.exports = {
-  getByOrganisation,
-  getByOrganisations,
-  getByCourseUnit,
-  getAccessInfo,
-  getOpenQuestionsByOrganisation,
-}
+module.exports = router

@@ -1,3 +1,4 @@
+const { Router } = require('express')
 const { NorppaFeedback, User } = require('../models')
 const { ADMINS } = require('../../config')
 const { ApplicationError } = require('../util/customErrors')
@@ -94,10 +95,12 @@ const getNorppaFeedbackCount = async (req, res) => {
   return res.send({ count: feedbacks })
 }
 
-module.exports = {
-  submitFeedback,
-  hideBanner,
-  getFeedbacks,
-  markAsSolved,
-  getNorppaFeedbackCount,
-}
+const router = Router()
+
+router.get('/', getFeedbacks)
+router.post('/', submitFeedback)
+router.put('/hide', hideBanner)
+router.put('/:id', markAsSolved)
+router.get('/count', getNorppaFeedbackCount)
+
+module.exports = router

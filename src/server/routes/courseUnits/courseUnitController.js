@@ -1,6 +1,7 @@
+const { Router } = require('express')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { INCLUDE_COURSES } = require('../../config')
+const { INCLUDE_COURSES } = require('../../../config')
 
 const {
   UserFeedbackTarget,
@@ -8,9 +9,9 @@ const {
   CourseRealisation,
   CourseUnit,
   Organisation,
-} = require('../models')
+} = require('../../models')
 
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../../util/dbConnection')
 
 const getCourseUnitsForTeacher = async (req, res) => {
   const { user } = req
@@ -250,7 +251,9 @@ const getCourseUnitsByOrganisation = async (req, res) => {
   return res.send(courseUnits)
 }
 
-module.exports = {
-  getCourseUnitsForTeacher,
-  getCourseUnitsByOrganisation,
-}
+const router = Router()
+
+router.get('/responsible', getCourseUnitsForTeacher)
+router.get('/for-organisation/:code', getCourseUnitsByOrganisation)
+
+module.exports = router

@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 
+const { Router } = require('express')
 const { ApplicationError } = require('../util/customErrors')
 const { User } = require('../models')
 const { ADMINS } = require('../../config')
@@ -67,9 +68,11 @@ const logout = async (req, res) => {
   })
 }
 
-module.exports = {
-  getUserDetails,
-  getUser,
-  getUserByEmail,
-  logout,
-}
+const router = Router()
+
+router.get('/login', getUser)
+router.get('/logout', logout)
+router.get('/users', getUserByEmail)
+router.get('/users/:id', getUserDetails)
+
+module.exports = router
