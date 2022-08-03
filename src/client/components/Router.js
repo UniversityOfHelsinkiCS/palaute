@@ -14,9 +14,15 @@ import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from './LoadingProgress'
 
 const styles = {
-  container: {
+  container: (theme) => ({
     padding: '2rem',
-  },
+    [theme.breakpoints.down('md')]: {
+      padding: '1rem',
+    },
+    [theme.breakpoints.down('sm')]: {
+      padding: '0.6rem',
+    },
+  }),
 }
 
 const Home = () => {

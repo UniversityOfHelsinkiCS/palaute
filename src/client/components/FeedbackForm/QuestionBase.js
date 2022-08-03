@@ -10,6 +10,14 @@ const styles = {
   description: {
     marginBottom: (theme) => theme.spacing(1),
   },
+  questionContainer: (theme) => ({
+    margin: '0.5rem',
+    marginLeft: '1rem',
+    [theme.breakpoints.down('md')]: {
+      margin: 0,
+      marginLeft: 0,
+    },
+  }),
 }
 
 const QuestionBase = ({
@@ -19,7 +27,7 @@ const QuestionBase = ({
   required,
   labelProps = {},
 }) => (
-  <Box m="0.5rem" ml="1.5rem">
+  <Box sx={styles.questionContainer}>
     <Typography variant="h6" sx={styles.label} {...labelProps}>
       {label}
       {required && ' *'}
