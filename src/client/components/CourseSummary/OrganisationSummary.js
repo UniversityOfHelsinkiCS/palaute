@@ -47,9 +47,7 @@ const styles = {
   },
   settingsButton: {
     marginX: 4,
-    transition: 'transform 0.2s ease-out',
     '&:hover': {
-      transform: 'scale(1.1)',
       color: (theme) => theme.palette.primary.light,
       background: 'transparent',
     },

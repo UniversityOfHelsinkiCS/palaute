@@ -86,13 +86,6 @@ const styles = {
   arrowOpen: {
     transform: 'rotate(90deg)',
   },
-  responseIcon: {
-    transition: 'transform 0.2s ease-out',
-    '&:hover': {
-      transform: 'scale(1.2)',
-      // background: (theme) => theme.palette.grey['100'],
-    },
-  },
   given: {
     color: (theme) => theme.palette.success.main,
     '&:hover': {
@@ -126,7 +119,7 @@ const ResponseGivenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <DoneIcon sx={[styles.responseIcon, styles.given]} />
+        <DoneIcon sx={styles.given} />
       </Link>
     </Tooltip>
   )
@@ -142,7 +135,7 @@ const ResponseNotGivenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <ClearIcon sx={[styles.responseIcon, styles.notGiven]} />
+        <ClearIcon sx={styles.notGiven} />
       </Link>
     </Tooltip>
   )
@@ -158,7 +151,7 @@ const FeedbackOpenIcon = ({ link }) => {
       placement="right"
     >
       <Link to={link}>
-        <AccessTimeIcon sx={[styles.responseIcon, styles.feedbackOpen]} />
+        <AccessTimeIcon sx={styles.feedbackOpen} />
       </Link>
     </Tooltip>
   )
