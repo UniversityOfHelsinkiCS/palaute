@@ -4,7 +4,7 @@ const _ = require('lodash')
 const { Op } = require('sequelize')
 const { subMonths } = require('date-fns')
 
-const { sequelize } = require('../dbConnection')
+const { sequelize } = require('../../util/dbConnection')
 const { Survey, Organisation } = require('../../models')
 
 const {
@@ -15,8 +15,8 @@ const {
   getCounts,
   getUniversityQuestions,
 } = require('./utils')
-const logger = require('../logger')
-const { getSummaryFromCache } = require('./cache')
+const logger = require('../../util/logger')
+const { getSummaryFromCache } = require('../../util/courseSummaryCache')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 const ALL_OPEN_UNI_ORGANISATION_IDS = [

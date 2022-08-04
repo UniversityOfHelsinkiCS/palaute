@@ -4,7 +4,7 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 
-const { FeedbackSummaryCache } = require('../../models')
+const { FeedbackSummaryCache } = require('../models')
 
 const serialize = (rows) => {
   console.time('serialize')

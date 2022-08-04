@@ -1,9 +1,9 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 
-const { sequelize } = require('../dbConnection')
+const { sequelize } = require('../../util/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget, User } = require('../../models')
-const languages = require('../languages.json')
+const languages = require('../../util/languages.json')
 
 const {
   QUESTION_AVERAGES_QUERY,
@@ -168,6 +168,4 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
   return courseRealisationsWithTeachers
 }
 
-module.exports = {
-  getCourseRealisationSummaries,
-}
+module.exports = getCourseRealisationSummaries

@@ -1,6 +1,6 @@
 const { CronJob } = require('cron')
 const { inE2EMode, inProduction } = require('../../config')
-const { populateCache } = require('./courseSummary')
+const { populateCache } = require('./courseSummaryCache')
 const logger = require('./logger')
 
 const schedule = (cronTime, func) =>

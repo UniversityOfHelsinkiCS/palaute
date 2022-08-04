@@ -7,9 +7,10 @@ const { CourseUnit, Survey, Organisation } = require('../../models')
 
 const {
   getOrganisationSummaries,
-  getCourseRealisationSummaries,
   getSummaryByOrganisation,
-} = require('../../util/courseSummary')
+} = require('./getOrganisationSummaries')
+
+const getCourseRealisationSummaries = require('./getCourseRealisationSummaries')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')
