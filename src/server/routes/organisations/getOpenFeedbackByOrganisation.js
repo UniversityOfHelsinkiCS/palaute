@@ -1,6 +1,6 @@
 const { QueryTypes } = require('sequelize')
-const { CourseUnit, Survey, Feedback } = require('../models')
-const { sequelize } = require('./dbConnection')
+const { CourseUnit, Survey, Feedback } = require('../../models')
+const { sequelize } = require('../../util/dbConnection')
 
 const getOpenFeedbackByOrganisation = async (code) => {
   const universitySurvey = await Survey.findOne({
@@ -104,6 +104,4 @@ const getOpenFeedbackByOrganisation = async (code) => {
   return codesWithIds
 }
 
-module.exports = {
-  getOpenFeedbackByOrganisation,
-}
+module.exports = getOpenFeedbackByOrganisation

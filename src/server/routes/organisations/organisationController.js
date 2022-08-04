@@ -7,7 +7,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../util/auditLog')
 const {
   getOpenFeedbackByOrganisation,
-} = require('../../util/organisationOpenFeedback')
+} = require('./getOpenFeedbackByOrganisation')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
