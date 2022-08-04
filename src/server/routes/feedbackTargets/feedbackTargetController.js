@@ -579,7 +579,7 @@ const getForStudent = async (req, res) => {
   return res.send(response)
 }
 
-const getTargetsByCourseUnit = async (req, res) => {
+const getTargetsForCourseUnit = async (req, res) => {
   const courseCode = req.params.code
 
   const {
@@ -1105,10 +1105,49 @@ const getLogs = async (req, res) => {
   return res.send(feedbackTargetLogs)
 }
 
+const getFeedbackTargetsForCourseRealisation = async (req, res) => {
+  const { user, isAdmin } = req
+  const { id } = req.params
+
+  if (isAdmin) {
+    const feedbackTargets = await FeedbackTarget.findAll({
+      where: {
+        courseRealisationId: id,
+      },
+    })
+
+    return res.send(feedbackTargets)
+  }
+
+  const userTargets = await UserFeedbackTarget.findAll({
+    where: {
+      userId: user.id,
+    },
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        required: true,
+        where: {
+          courseRealisationId: id,
+        },
+      },
+    ],
+  })
+
+  const targets = userTargets.map(({ feedbackTarget }) => feedbackTarget)
+
+  return res.send(targets)
+}
+
 const adRouter = Router()
 
 adRouter.get('/for-student', getForStudent)
-adRouter.get('/for-course-unit/:code', getTargetsByCourseUnit)
+adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
+adRouter.get(
+  '/for-course-realisation/:id',
+  getFeedbackTargetsForCourseRealisation,
+)
 adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisations)
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)

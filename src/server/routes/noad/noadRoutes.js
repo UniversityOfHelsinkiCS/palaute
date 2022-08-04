@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const noAdUserController = require('./noAdUserController')
-const feedbackTargets = require('./feedbackTargets')
-const feedbacks = require('./feedbacks')
+const feedbackTargets = require('../feedbackTargets')
+const feedbacks = require('../feedbacks')
 
 const noadRouter = Router()
 

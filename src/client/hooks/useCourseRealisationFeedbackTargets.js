@@ -7,7 +7,7 @@ const useCourseRealisationFeedbackTargets = (id, options = {}) => {
 
   const queryFn = async () => {
     const { data } = await apiClient.get(
-      `/course-realisations/${id}/feedback-targets`,
+      `/feedback-targets/for-course-realisation/${id}`,
     )
 
     return data

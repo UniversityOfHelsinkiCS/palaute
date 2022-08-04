@@ -5,7 +5,7 @@ const {
   Feedback,
   CourseRealisation,
   Organisation,
-} = require('../models')
+} = require('../../models')
 
 const getFeedbackTargetsIncludes = (userId, accessStatus) => {
   // where parameter cant have undefined values
