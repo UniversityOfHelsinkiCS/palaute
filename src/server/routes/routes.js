@@ -8,17 +8,17 @@ const errorMiddleware = require('../middleware/errorMiddleware')
 const iamGroupsMiddleware = require('../middleware/iamGroupsMiddleware')
 const initializeSentry = require('../util/sentry')
 const feedbacks = require('./feedbacks')
-const users = require('./userController')
+const users = require('./users')
 const surveys = require('./surveys')
 const feedbackTargets = require('./feedbackTargets')
 const admin = require('./admin')
 const courseSummary = require('./courseSummary')
 const organisation = require('./organisations')
 const courseUnit = require('./courseUnits')
-const testingController = require('./testingController')
+const testing = require('./testing')
 const noad = require('./noad')
-const norppaFeedback = require('./norppaFeedbackController')
-const { redirectFromCoursesPage } = require('./coursesPageController')
+const norppaFeedback = require('./norppaFeedback')
+const { redirectFromCoursesPage } = require('./misc/coursesPageController')
 
 const router = Router()
 
@@ -44,7 +44,7 @@ router.use('/norppa-feedback', norppaFeedback)
 router.use('/admin', admin)
 
 if (inE2EMode) {
-  router.use('/test', testingController)
+  router.use('/test', testing)
 }
 
 // Link from courses-page
