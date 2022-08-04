@@ -1,6 +1,9 @@
 const { CronJob } = require('cron')
 const { inE2EMode, inProduction } = require('../../config')
-const { populateCache } = require('./courseSummaryCache')
+const {
+  getAllRowsFromDb,
+} = require('../routes/courseSummary/getOrganisationSummaries')
+const { cacheSummary } = require('./courseSummaryCache')
 const logger = require('./logger')
 
 const schedule = (cronTime, func) =>
@@ -13,7 +16,8 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running OrganisationSummary caching cron')
-  await populateCache()
+  const rows = await getAllRowsFromDb()
+  await cacheSummary(rows)
 }
 
 const start = async () => {
