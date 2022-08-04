@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { addDays, subDays, format } = require('date-fns')
+const { addDays, subDays, format, differenceInHours } = require('date-fns')
 const _ = require('lodash')
 
 const {
@@ -9,18 +9,20 @@ const {
   Organisation,
   User,
   UserFeedbackTarget,
-} = require('../models')
+} = require('../../models')
 
 const {
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutSurveyOpeningToTeachers,
   emailReminderAboutFeedbackResponseToTeachers,
   sendEmail,
+  sendNotificationAboutFeedbackResponseToStudents,
+  sendReminderToGiveFeedbackToStudents,
 } = require('./pate')
 
-const { ApplicationError } = require('./customErrors')
-const { sequelize } = require('./dbConnection')
-const logger = require('./logger')
+const { ApplicationError } = require('../customErrors')
+const { sequelize } = require('../dbConnection')
+const logger = require('../logger')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -667,11 +669,76 @@ const sendEmailReminderOnFeedbackToStudents = async () => {
   )
 }
 
+const sendFeedbackSummaryReminderToStudents = async (
+  feedbackTarget,
+  feedbackResponse,
+) => {
+  const courseUnit = await feedbackTarget.getCourseUnit()
+  const cr = await feedbackTarget.getCourseRealisation()
+  const students = await feedbackTarget.getStudentsForFeedbackTarget()
+  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/results`
+  const formattedStudents = students
+    .filter((student) => student.email)
+    .map((student) => ({
+      email: student.email,
+      language: student.language || 'en',
+    }))
+  return sendNotificationAboutFeedbackResponseToStudents(
+    url,
+    formattedStudents,
+    courseUnit.name,
+    cr.startDate,
+    cr.endDate,
+    feedbackResponse,
+  )
+}
+
+const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
+  if (differenceInHours(new Date(), this.feedbackReminderLastSentAt) < 24) {
+    throw new ApplicationError(
+      'Can send only 1 feedback reminder every 24 hours',
+      403,
+    )
+  }
+
+  const courseUnit = await CourseUnit.findByPk(feedbackTarget.courseUnitId)
+  const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
+  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback`
+  const formattedStudents = students
+    .filter((student) => student.email)
+    .map((student) => ({
+      email: student.email,
+      language: student.language || 'en',
+    }))
+
+  const formattedClosesAt = format(
+    new Date(feedbackTarget.closesAt),
+    'dd.MM.yyyy',
+  )
+
+  return (async () => {
+    const emails = await sendReminderToGiveFeedbackToStudents(
+      url,
+      formattedStudents,
+      courseUnit.name,
+      reminder,
+      formattedClosesAt,
+    )
+
+    feedbackTarget.feedbackReminderLastSentAt = new Date()
+    await feedbackTarget.save()
+
+    return emails
+  })()
+}
+
 module.exports = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailToStudentsWhenOpeningImmediately,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderOnFeedbackToStudents,
+  sendFeedbackSummaryReminderToStudents,
+  sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
 }

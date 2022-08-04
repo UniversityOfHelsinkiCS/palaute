@@ -22,7 +22,10 @@ const {
 const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
 
-const { returnEmailsToBeSentToday } = require('../../util/emailSender')
+const {
+  returnEmailsToBeSentToday,
+  sendFeedbackSummaryReminderToStudents,
+} = require('../../util/email')
 const {
   updateEnrolmentsOfCourse,
 } = require('../../updater/updateStudentFeedbackTargets')
@@ -204,10 +207,10 @@ const resendFeedbackResponseEmail = async (req, res) => {
   if (!idNumber) throw new ApplicationError('Invalid id', 400)
   const feedbackTarget = await FeedbackTarget.findByPk(idNumber)
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-  const emailsSentTo =
-    await feedbackTarget.sendFeedbackSummaryReminderToStudents(
-      feedbackTarget.feedbackResponse,
-    )
+  const emailsSentTo = await sendFeedbackSummaryReminderToStudents(
+    feedbackTarget,
+    feedbackTarget.feedbackResponse,
+  )
   return res.send({ count: emailsSentTo.length })
 }
 

@@ -15,9 +15,7 @@ const {
 } = require('sequelize')
 
 const _ = require('lodash')
-const { format, differenceInHours } = require('date-fns')
 
-const CourseUnit = require('./courseUnit')
 const Organisation = require('./organisation')
 const CourseRealisation = require('./courseRealisation')
 const User = require('./user')
@@ -25,13 +23,6 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
 const Survey = require('./survey')
 const Question = require('./question')
-
-const { ApplicationError } = require('../util/customErrors')
-
-const {
-  sendNotificationAboutFeedbackResponseToStudents,
-  sendReminderToGiveFeedbackToStudents,
-} = require('../util/pate')
 
 const getGloballyPublicQuestionIds = async () => {
   const universitySurvey = await Survey.findOne({
@@ -321,63 +312,6 @@ class FeedbackTarget extends Model {
       },
     })
     return result
-  }
-
-  async sendFeedbackSummaryReminderToStudents(feedbackResponse) {
-    const courseUnit = await this.getCourseUnit()
-    const cr = await this.getCourseRealisation()
-    const students = await this.getStudentsForFeedbackTarget()
-    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/results`
-    const formattedStudents = students
-      .filter((student) => student.email)
-      .map((student) => ({
-        email: student.email,
-        language: student.language || 'en',
-      }))
-    return sendNotificationAboutFeedbackResponseToStudents(
-      url,
-      formattedStudents,
-      courseUnit.name,
-      cr.startDate,
-      cr.endDate,
-      feedbackResponse,
-    )
-  }
-
-  async sendFeedbackReminderToStudents(reminder) {
-    if (differenceInHours(new Date(), this.feedbackReminderLastSentAt) < 24) {
-      throw new ApplicationError(
-        'Can send only 1 feedback reminder every 24 hours',
-        403,
-      )
-    }
-
-    const courseUnit = await CourseUnit.findByPk(this.courseUnitId)
-    const students = await this.getStudentsWhoHaveNotGivenFeedback()
-    const url = `https://coursefeedback.helsinki.fi/targets/${this.id}/feedback`
-    const formattedStudents = students
-      .filter((student) => student.email)
-      .map((student) => ({
-        email: student.email,
-        language: student.language || 'en',
-      }))
-
-    const formattedClosesAt = format(new Date(this.closesAt), 'dd.MM.yyyy')
-
-    return (async () => {
-      const emails = await sendReminderToGiveFeedbackToStudents(
-        url,
-        formattedStudents,
-        courseUnit.name,
-        reminder,
-        formattedClosesAt,
-      )
-
-      this.feedbackReminderLastSentAt = new Date()
-      await this.save()
-
-      return emails
-    })()
   }
 
   async getPublicQuestionIds() {

@@ -7,7 +7,7 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderOnFeedbackToStudents,
-} = require('./emailSender')
+} = require('./email')
 
 const schedule = (cronTime, func) =>
   new CronJob({
