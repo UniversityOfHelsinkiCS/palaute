@@ -32,7 +32,7 @@ export default {
     feedback: 'Feedback',
     feedbackGiven: 'Given',
     feedbackNotGiven: 'Not given',
-    exportCSV: 'Export as CSV',
+    exportCSV: 'Download as CSV',
     combineCSV: 'Combine with Sisu CSV',
     downloadCSV: 'Download file',
     dropZoneInfo1: 'Drag a file here, or find it by clicking this box.',

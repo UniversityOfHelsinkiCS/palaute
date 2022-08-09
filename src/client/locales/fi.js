@@ -33,7 +33,7 @@ export default {
     feedback: 'Palaute',
     feedbackGiven: 'Annettu',
     feedbackNotGiven: 'Ei annettu',
-    exportCSV: 'Vie CSV-muodossa',
+    exportCSV: 'Lataa CSV-muodossa',
     combineCSV: 'Yhdistä Sisu-CSV:n kanssa',
     downloadCSV: 'Lataa tiedosto',
     dropZoneInfo1: 'Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.',

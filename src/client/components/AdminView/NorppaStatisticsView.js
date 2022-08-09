@@ -42,7 +42,7 @@ const ExportCsv = ({ results }) => {
       data={parsedData}
       filename="norppa-statistics.csv"
     >
-      Export as csv
+      Download as CSV
     </CSVLink>
   )
 }
@@ -122,7 +122,7 @@ const NorppaStatisticView = () => {
         disabled={!results.length}
         sx={styles.button}
       >
-        {results.length ? <ExportCsv results={results} /> : 'Export as CSV'}
+        {results.length ? <ExportCsv results={results} /> : 'Download as CSV'}
       </Button>
       {!results.length && !paramsChanged && (
         <Alert marginTop={2} severity="warning">
