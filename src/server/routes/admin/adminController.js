@@ -6,7 +6,7 @@ const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { ADMINS } = require('../../util/config')
-const { run } = require('../../updater/index')
+const { updater } = require('../../updater')
 
 const {
   FeedbackTarget,
@@ -37,7 +37,7 @@ const adminAccess = (req, _, next) => {
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
-  run()
+  updater.run()
   return res.send({})
 }
 
