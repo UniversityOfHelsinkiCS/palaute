@@ -22,10 +22,7 @@ const {
 const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
 
-const {
-  returnEmailsToBeSentToday,
-  sendFeedbackSummaryReminderToStudents,
-} = require('../../util/email')
+const { mailer } = require('../../util/mailer')
 const {
   updateEnrolmentsOfCourse,
 } = require('../../updater/updateStudentFeedbackTargets')
@@ -207,7 +204,7 @@ const resendFeedbackResponseEmail = async (req, res) => {
   if (!idNumber) throw new ApplicationError('Invalid id', 400)
   const feedbackTarget = await FeedbackTarget.findByPk(idNumber)
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-  const emailsSentTo = await sendFeedbackSummaryReminderToStudents(
+  const emailsSentTo = await mailer.sendFeedbackSummaryReminderToStudents(
     feedbackTarget,
     feedbackTarget.feedbackResponse,
   )
@@ -355,7 +352,7 @@ const resetTestCourse = async (_, res) => {
 
 const findEmailsForToday = async (_, res) => {
   const { students, teachers, teacherEmailCounts, studentEmailCounts } =
-    await returnEmailsToBeSentToday()
+    await mailer.returnEmailsToBeSentToday()
 
   const emails = students.concat(teachers)
   return res.send({

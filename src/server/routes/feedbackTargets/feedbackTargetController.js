@@ -32,11 +32,7 @@ const {
   createFeedbackTargetSurveyLog,
   createFeedbackTargetLog,
 } = require('../../util/auditLog')
-const {
-  sendEmailToStudentsWhenOpeningImmediately,
-  sendFeedbackReminderToStudents,
-  sendFeedbackSummaryReminderToStudents,
-} = require('../../util/email')
+const { mailer } = require('../../util/mailer')
 const {
   JWT_KEY,
   STUDENT_LIST_BY_COURSE_ENABLED,
@@ -935,7 +931,7 @@ const updateFeedbackResponse = async (req, res) => {
     relevantFeedbackTarget.feedbackResponseEmailSent
 
   if (feedbackResponseEmailSent) {
-    await sendFeedbackSummaryReminderToStudents(
+    await mailer.sendFeedbackSummaryReminderToStudents(
       relevantFeedbackTarget,
       feedbackResponse,
     )
@@ -968,7 +964,7 @@ const remindStudentsOnFeedback = async (req, res) => {
 
   const { reminder } = req.body.data
 
-  await sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
+  await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
 
   return res.send({
     feedbackReminderLastSentAt:
@@ -1002,7 +998,7 @@ const openFeedbackImmediately = async (req, res) => {
   }
 
   if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
-    sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+    mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 
   feedbackTarget.opensAt = req.body.opensAt
