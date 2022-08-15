@@ -5,7 +5,7 @@ const express = require('express')
 const compression = require('compression')
 const { PORT, inProduction, inE2EMode } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
-const { connectRedis } = require('./util/redisClient')
+const { redisClient } = require('./util/redisClient')
 const { updater } = require('./updater')
 const { start: startPateCron } = require('./util/pateCron')
 const { start: startCacheCron } = require('./util/courseSummaryCacheCron')
@@ -27,7 +27,7 @@ if (inProduction || inE2EMode) {
 
 const start = async () => {
   await connectToDatabase()
-  await connectRedis()
+  await redisClient.connect()
   await updater.checkStatusOnStartup()
   await updater.start()
   await startCacheCron()

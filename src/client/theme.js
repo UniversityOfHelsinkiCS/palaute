@@ -40,13 +40,33 @@ const useTheme = () => {
           components: {
             MuiCssBaseline: {
               styleOverrides: `
-            body {
-              height: 100vh;
-            }
-            ::-webkit-scrollbar {
-              display: none;
-            }
-          `,
+                body {
+                  height: 100vh;
+                }
+                ::-webkit-scrollbar {
+                  display: none;
+                }
+              `,
+            },
+            MuiPaper: {
+              defaultProps: {
+                elevation: 2,
+              },
+            },
+            MuiCard: {
+              defaultProps: {
+                elevation: 2,
+              },
+            },
+            MuiAccordion: {
+              defaultProps: {
+                elevation: 2,
+              },
+            },
+            MuiAlert: {
+              defaultProps: {
+                elevation: 0,
+              },
             },
           },
         }),

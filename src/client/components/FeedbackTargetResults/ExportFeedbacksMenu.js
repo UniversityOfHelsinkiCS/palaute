@@ -152,7 +152,6 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        elevation={2}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',

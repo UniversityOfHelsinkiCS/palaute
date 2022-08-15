@@ -18,27 +18,26 @@ const client = {
   get: (key) => redisClient.get(key),
   set: (key, value) => redisClient.set(key, value),
   flushDb: () => redisClient.flushDb(),
+  connect: async () => {
+    redisClient.on('error', (err) => logger.error('Redis Client Error', err))
+    logger.info('Connecting to redis...', REDIS_CONFIG)
+
+    try {
+      await redisClient.connect(reconnectStrategy)
+
+      await redisClient.set('key', 'value')
+      await redisClient.get('key')
+      await redisClient.del('key')
+    } catch (error) {
+      logger.warn('Connection to redis failed, cache not available')
+      client.get = () => Promise.resolve(null)
+      client.set = () => Promise.resolve(null)
+      client.flushDb = () => Promise.resolve(null)
+      return
+    }
+
+    logger.info('Redis client connected')
+  },
 }
 
-const connectRedis = async () => {
-  redisClient.on('error', (err) => logger.error('Redis Client Error', err))
-  logger.info('Connecting to redis...', REDIS_CONFIG)
-
-  try {
-    await redisClient.connect(reconnectStrategy)
-
-    await redisClient.set('key', 'value')
-    await redisClient.get('key')
-    await redisClient.del('key')
-  } catch (error) {
-    logger.warn('Connection to redis failed, cache not available')
-    client.get = () => Promise.resolve(null)
-    client.set = () => Promise.resolve(null)
-    client.flushDb = () => Promise.resolve(null)
-    return
-  }
-
-  logger.info('Redis client connected')
-}
-
-module.exports = { redisClient: client, connectRedis }
+module.exports = { redisClient: client }

@@ -14,7 +14,7 @@ const CourseRealisationItem = ({ courseRealisation, sx }) => {
   const translatedName = getLanguageValue(courseUnitName, i18n.language)
 
   return (
-    <Card sx={sx} elevation={4}>
+    <Card sx={sx}>
       <CardContent>
         <Typography variant="h6" component="h2">
           {translatedName}

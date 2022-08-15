@@ -92,7 +92,7 @@ const FeedbackPeriodForm = ({
   }
 
   return (
-    <Box mb={2}>
+    <Box mb={5}>
       <Card>
         <CardContent>
           <Box mb={4}>
