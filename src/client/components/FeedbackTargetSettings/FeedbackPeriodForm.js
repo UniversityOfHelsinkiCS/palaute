@@ -22,6 +22,7 @@ import {
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
 import { TooltipButton } from '../TooltipButton'
+import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 
 const FeedbackPeriodForm = ({
   onSubmit = () => {},
@@ -31,6 +32,7 @@ const FeedbackPeriodForm = ({
 }) => {
   const { t } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
+  const orgAccess = useOrganisationAccess(feedbackTarget)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
@@ -44,7 +46,7 @@ const FeedbackPeriodForm = ({
   const formDisabled =
     (feedbackTarget.accessStatus !== 'TEACHER' ||
       feedbackTargetIsOpenOrClosed(feedbackTarget)) &&
-    !authorizedUser.isAdmin
+    !(authorizedUser.isAdmin || orgAccess.admin)
 
   const openImmediatelyEnabled = !feedbackTargetIsOpenOrClosed(feedbackTarget)
 

@@ -475,10 +475,14 @@ const update = async (req, res) => {
     ? await FeedbackTarget.findByPk(feedbackTargetId)
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
-  if (
-    !isAdmin &&
+  const isTeacher =
     feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
-  )
+  const isOrganisationAdmin = (
+    await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
+  )?.admin
+  console.log(isOrganisationAdmin)
+
+  if (!isAdmin && !isTeacher && !isOrganisationAdmin)
     throw new ApplicationError('Forbidden', 403)
 
   const updates = _.pick(req.body, [
@@ -818,25 +822,26 @@ const getStudentsWithFeedback = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  let feedbackTarget
-  if (isAdmin) {
-    feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  } else {
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  if (!isAdmin) {
     const userFeedbackTarget = await UserFeedbackTarget.findOne({
       where: {
         userId: user.id,
         feedbackTargetId,
       },
-      include: 'feedbackTarget',
     })
 
-    if (!userFeedbackTarget?.hasTeacherAccess()) {
+    if (
+      !userFeedbackTarget?.hasTeacherAccess() &&
+      !(await user.getOrganisationAccessByCourseUnitId(
+        feedbackTarget?.courseUnitId,
+      ))
+    ) {
       throw new ApplicationError(
         'User is not authorized to view students with feedback',
         403,
       )
     }
-    feedbackTarget = userFeedbackTarget.feedbackTarget
   }
 
   if (!feedbackTarget) {
