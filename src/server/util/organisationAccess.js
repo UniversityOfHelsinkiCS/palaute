@@ -84,14 +84,18 @@ const getLomakeAccess = async (user) => {
 }
 
 const getFeedbackCorrespondentAccess = async (user) => {
-  const organisation = await Organisation.findOne({
+  const organisations = await Organisation.findAll({
     attributes: ['code'],
     where: {
       responsibleUserId: user.id,
     },
   })
-  if (organisation) {
-    return { [organisation.code]: { read: true, write: true, admin: true } }
+  if (organisations?.length > 0) {
+    const access = {}
+    organisations.forEach((org) => {
+      access[org.code] = { read: true, write: true, admin: true }
+    })
+    return access
   }
   return {}
 }
