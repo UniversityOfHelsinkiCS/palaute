@@ -1,5 +1,5 @@
 const { CronJob } = require('cron')
-const { inProduction, inStaging } = require('../../config')
+const { inProduction, inStaging } = require('../../config/config')
 const logger = require('./logger')
 
 const { mailer } = require('./mailer')

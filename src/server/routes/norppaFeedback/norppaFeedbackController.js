@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { NorppaFeedback, User } = require('../../models')
-const { ADMINS } = require('../../../config')
+const { ADMINS } = require('../../../config/config')
 const { ApplicationError } = require('../../util/customErrors')
 
 const submitFeedback = async (req, res) => {

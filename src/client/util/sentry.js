@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/browser'
 import { Integrations } from '@sentry/tracing'
-import { inProduction, inStaging, GIT_SHA } from '../../config'
+import { inProduction, inStaging, GIT_SHA } from '../../config/config'
 
 const initializeSentry = () => {
   if (!inProduction || inStaging) return

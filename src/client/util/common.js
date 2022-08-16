@@ -11,4 +11,4 @@ export const images = {
 
 export const colors = {}
 
-export * from '../../config'
+export * from '../../config/config'

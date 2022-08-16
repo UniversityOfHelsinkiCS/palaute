@@ -1,6 +1,6 @@
 import groupBy from 'lodash/groupBy'
 
-import { INCLUDE_COURSES } from '../../../config'
+import { INCLUDE_COURSES } from '../../../config/config'
 
 export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {

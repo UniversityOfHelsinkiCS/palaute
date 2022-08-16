@@ -17,7 +17,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../LoadingProgress'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
-import { inProduction } from '../../../config'
+import { inProduction } from '../../../config/config'
 
 const StatusTable = ({ updaterStatus }) => {
   const { startedAt, finishedAt, status } = updaterStatus
