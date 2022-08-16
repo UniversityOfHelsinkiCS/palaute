@@ -2,7 +2,20 @@ const _ = require('lodash')
 const Organisation = require('../models/organisation')
 const { ADMINS } = require('./config')
 const { getIAMRights } = require('./IAMrights')
-const { normalizeOrganisationCode } = require('../../config/common')
+
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  if (!r.includes('_')) {
+    return r
+  }
+
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
+}
 
 const RELEVANT_ORGANISATION_CODES = [
   'H906', // Kielikeskus

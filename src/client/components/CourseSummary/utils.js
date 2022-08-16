@@ -4,7 +4,6 @@ import _, { orderBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
-import { normalizeOrganisationCode } from '../../../config/common'
 import { data } from '../../../config/data'
 
 const courseCodeMatches = (courseCode, keyword) => {
@@ -21,6 +20,20 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
   if (isBefore(Date.now(), parseISO(closesAt))) return 'OPEN'
 
   return feedbackResponseGiven ? 'GIVEN' : 'NONE'
+}
+
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  if (!r.includes('_')) {
+    return r
+  }
+
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
 }
 
 const filterByFaculty = (organisations, facultyCode) => {
