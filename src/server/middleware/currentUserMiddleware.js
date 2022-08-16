@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS, JWT_KEY } = require('../util/config')
-const { relevantIAMs } = require('../../../config/IAMConfig')
+const { relevantIAMs } = require('../../config/IAMConfig')
 const { User } = require('../models')
 const logger = require('../util/logger')
 

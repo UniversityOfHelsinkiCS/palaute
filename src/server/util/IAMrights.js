@@ -10,9 +10,9 @@ const {
   kosuIamToFaculties,
   dekaaniIamToFaculty,
   opetusVaradekaani,
-} = require('../../../config/IAMConfig')
-const { data } = require('../../../config/data')
-const { mapToDegreeCode } = require('../../../config/common')
+} = require('../../config/IAMConfig')
+const { data } = require('../../config/data')
+const { mapToDegreeCode } = require('../../config/common')
 
 /**
  * Return given access to all programmes where predicate is true
