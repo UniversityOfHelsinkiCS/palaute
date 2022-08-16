@@ -40,20 +40,6 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   return updatedQuestionIdsList
 }
 
-const addQuestion = async (req, res) => {
-  const survey = await Survey.findByPk(Number(req.params.id))
-  if (!survey) throw new ApplicationError('Not found', 404)
-
-  const question = await Question.create({
-    ...req.body,
-  })
-  survey.questionIds = [...survey.questionIds, question.id]
-  const updatedSurvey = await survey.save()
-
-  updatedSurvey.questions = await survey.getQuestions()
-  return res.send(updatedSurvey)
-}
-
 const update = async (req, res) => {
   const { isAdmin, user } = req
   const survey = await Survey.findByPk(Number(req.params.id))
@@ -136,7 +122,6 @@ const getProgrammeSurvey = async (req, res) => {
 const router = Router()
 
 router.put('/:id', update)
-router.post('/:id/questions', addQuestion)
 router.get('/university', getUniversitySurvey)
 router.get('/programme/:surveyCode', getProgrammeSurvey)
 
