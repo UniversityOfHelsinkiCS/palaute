@@ -312,6 +312,8 @@ export default {
     courseOngoing: 'Kurssi on vielä käynnissä',
     programmePage: 'Koulutusohjelman sivu',
     courseRealisation: 'Kurssitoteutus',
+    facultyLabel: 'Tiedekunta',
+    allFaculties: 'Kaikki tiedekunnat',
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',

@@ -316,6 +316,8 @@ export default {
     courseOngoing: 'Kursen är fortfarande på gång',
     programmePage: 'Utbildningsprogrammet sidan',
     courseRealisation: 'Kursinstans',
+    // facultyLabel: 'Faculty',
+    // allFaculties: 'All faculties',
     searchLabel: 'Begränsa kurser',
     searchPlaceholder: 'Begränsa kurser med kurskod',
     responsibleTeachers: 'Ansvariga lärare',

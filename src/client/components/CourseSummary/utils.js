@@ -4,6 +4,8 @@ import _, { orderBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
+import { normalizeOrganisationCode } from '../../../config/common'
+import { data } from '../../../config/data'
 
 const courseCodeMatches = (courseCode, keyword) => {
   if (!keyword) {
@@ -19,6 +21,22 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
   if (isBefore(Date.now(), parseISO(closesAt))) return 'OPEN'
 
   return feedbackResponseGiven ? 'GIVEN' : 'NONE'
+}
+
+const filterByFaculty = (organisations, facultyCode) => {
+  if (!facultyCode) return organisations
+
+  const facultyProgrammeCodes = data
+    .find((faculty) => faculty.code === facultyCode)
+    ?.programmes.map((programme) => normalizeOrganisationCode(programme.key))
+
+  if (!facultyProgrammeCodes) return organisations
+
+  const organisationsFilteredByFaculty = organisations.filter((organisation) =>
+    facultyProgrammeCodes.includes(organisation.code),
+  )
+
+  return organisationsFilteredByFaculty
 }
 
 export const filterByCourseCode = (organisations, keyword) => {
@@ -210,6 +228,7 @@ export const useOpenAccordions = (organisations) => {
 
 export const useAggregatedOrganisationSummaries = ({
   orderBy,
+  facultyCode,
   keyword,
   includeOpenUniCourseUnits,
   dateRange,
@@ -227,9 +246,14 @@ export const useAggregatedOrganisationSummaries = ({
     [organisationSummaries?.organisations, keyword],
   )
 
+  const facultyOrganisations = useMemo(
+    () => filterByFaculty(filteredOrganisations, facultyCode),
+    [filteredOrganisations, facultyCode],
+  )
+
   const sortedOrganisations = useMemo(
-    () => orderByCriteria(filteredOrganisations, orderBy),
-    [filteredOrganisations, orderBy],
+    () => orderByCriteria(facultyOrganisations, orderBy),
+    [facultyOrganisations, orderBy],
   )
 
   return {

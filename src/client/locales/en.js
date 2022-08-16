@@ -311,6 +311,8 @@ export default {
     courseOngoing: 'The course is still ongoing',
     programmePage: "Programme's page",
     courseRealisation: 'Course realisation',
+    facultyLabel: 'Faculty',
+    allFaculties: 'All faculties',
     searchLabel: 'Filter courses',
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',

@@ -32,6 +32,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { OrganisationLabel } from './Labels'
 
 const styles = {
@@ -171,6 +172,11 @@ const OrganisationTable = ({
 const OrganisationSummary = () => {
   const { t } = useTranslation()
 
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
+
+  const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
@@ -196,6 +202,7 @@ const OrganisationSummary = () => {
     isFetching,
     failureCount,
   } = useAggregatedOrganisationSummaries({
+    facultyCode,
     keyword,
     orderBy,
     includeOpenUniCourseUnits,
@@ -220,6 +227,10 @@ const OrganisationSummary = () => {
   }
 
   const { questions } = organisationSummaries
+
+  const handleFacultyChange = (newFaculty) => {
+    setFacultyCode(newFaculty)
+  }
 
   const handleKeywordChange = (nextKeyword) => {
     setKeyword(nextKeyword)
@@ -254,7 +265,9 @@ const OrganisationSummary = () => {
         filters={
           <Box mb={1}>
             <Filters
+              facultyCode={isAdmin && facultyCode}
               keyword={keyword}
+              onFacultyChange={handleFacultyChange}
               onKeywordChange={handleKeywordChange}
               includeOpenUniCourseUnits={includeOpenUniCourseUnits}
               onIncludeOpenUniCourseUnitsChange={
