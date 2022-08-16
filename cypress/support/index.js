@@ -14,7 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import { inE2EMode } from '../../src/config/config'
+import { inE2EMode } from '../../src/config'
 import './commands'
 
 before(() => {

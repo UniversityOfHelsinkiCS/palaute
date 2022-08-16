@@ -9,7 +9,7 @@ import ExternalLink from './ExternalLink'
 
 import { images } from '../util/common'
 
-import { inProduction } from '../../config/config'
+import { inProduction } from '../../config'
 
 const styles = {
   logo: {

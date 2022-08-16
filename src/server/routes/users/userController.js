@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User } = require('../../models')
-const { ADMINS } = require('../../../config/config')
+const { ADMINS } = require('../../../config')
 
 const getUser = async (req, res) => {
   const { user, isAdmin } = req

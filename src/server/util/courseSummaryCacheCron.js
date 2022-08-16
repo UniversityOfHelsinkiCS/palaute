@@ -1,5 +1,5 @@
 const { CronJob } = require('cron')
-const { inE2EMode, inProduction } = require('../../config/config')
+const { inE2EMode, inProduction } = require('../../config')
 const {
   getAllRowsFromDb,
 } = require('../routes/courseSummary/getOrganisationSummaries')

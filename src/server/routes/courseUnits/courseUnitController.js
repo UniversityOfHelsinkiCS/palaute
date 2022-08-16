@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { INCLUDE_COURSES } = require('../../../config/config')
+const { INCLUDE_COURSES } = require('../../../config')
 
 const {
   UserFeedbackTarget,

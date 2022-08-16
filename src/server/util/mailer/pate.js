@@ -5,7 +5,7 @@ const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const Sentry = require('@sentry/node')
 
-const { inProduction, inStaging } = require('../../../config/config')
+const { inProduction, inStaging } = require('../../../config')
 const logger = require('../logger')
 const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS } = require('../config')
 const {

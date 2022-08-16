@@ -1,4 +1,4 @@
-const common = require('../../config/config')
+const common = require('../../config')
 
 const DB_CONFIG = {
   dialect: 'postgres',

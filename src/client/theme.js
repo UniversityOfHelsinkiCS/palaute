@@ -3,7 +3,7 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { lightBlue, green, red, grey } from '@mui/material/colors'
 import { useMemo } from 'react'
 
-import { inStaging } from '../config/config'
+import { inStaging } from '../config'
 
 const useTheme = () => {
   const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')

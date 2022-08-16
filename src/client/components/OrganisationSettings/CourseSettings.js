@@ -29,7 +29,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import {
   STUDENT_LIST_BY_COURSE_ENABLED,
   STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
-} from '../../../config/config'
+} from '../../../config'
 
 const getCourseUnitItems = (
   courseUnits,
