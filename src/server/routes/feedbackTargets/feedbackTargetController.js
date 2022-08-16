@@ -476,11 +476,11 @@ const update = async (req, res) => {
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   const isTeacher =
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
+
   const isOrganisationAdmin = (
     await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
   )?.admin
-  console.log(isOrganisationAdmin)
 
   if (!isAdmin && !isTeacher && !isOrganisationAdmin)
     throw new ApplicationError('Forbidden', 403)
