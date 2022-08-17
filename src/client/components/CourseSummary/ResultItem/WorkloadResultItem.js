@@ -21,34 +21,6 @@ const getArrow = (mean) => {
   return <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} />
 }
 
-const getColor = (mean) => {
-  if (!mean) {
-    return 'missing'
-  }
-
-  if (mean <= 1.5 || mean >= 4.5) {
-    return 'bad'
-  }
-
-  if (mean <= 2 || mean >= 4) {
-    return 'poor'
-  }
-
-  if (mean <= 2.5 || mean >= 3.5) {
-    return 'ok'
-  }
-
-  if (mean <= 2.75 || mean >= 3.25) {
-    return 'good'
-  }
-
-  if (mean >= 2.75 && mean <= 3.25) {
-    return 'excellent'
-  }
-
-  return 'missing'
-}
-
 const getTooltipData = (distribution, question) => {
   const labelByQuestionId = (question.data?.options ?? []).reduce(
     (acc, curr) => ({
@@ -101,7 +73,7 @@ const WorkloadResultItem = ({
 
   return (
     <ResultItemBase
-      color={getColor(mean)}
+      mean={5.0 - Math.abs((mean - 3) * 2.0)}
       tooltipTitle={tooltipTitle}
       {...props}
     >

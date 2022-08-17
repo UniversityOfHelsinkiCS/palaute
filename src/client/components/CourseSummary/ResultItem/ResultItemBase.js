@@ -62,15 +62,43 @@ const styles = {
   },
 } */
 
+const MAX = 5.0
+const MIN = 1.8 // Below min everything is the "worst" color
+const COLORS = [
+  '#fe233f',
+  '#ff5d4c',
+  '#ff8a5c',
+  '#ffb86f',
+  '#ffe985',
+  '#d5d977',
+  '#a5c767',
+  '#6cb255',
+  '#009b40',
+]
+
+const getColorIndex = (mean) => {
+  if (mean < 1.0) return '#ffffff00' // Case: no data
+  // map range MIN-MAX to 0-8
+  const index = Math.max(
+    0,
+    Math.ceil(((mean - MIN) / (MAX - MIN)) * (COLORS.length - 1)),
+  )
+  return index
+}
+
 const ResultItemBase = ({
   children,
   sx,
   tooltipTitle = '',
   component: Component = 'td',
-  color = 'missing',
+  mean,
   ...props
 }) => {
-  const style = { ...sx, ...styles.item, ...styles[color] }
+  const style = {
+    ...sx,
+    ...styles.item,
+    backgroundColor: COLORS[getColorIndex(mean)],
+  }
 
   return (
     <Tooltip title={tooltipTitle}>
