@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
-import _, { orderBy } from 'lodash'
+import _, { orderBy, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
@@ -198,17 +198,20 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
     organisations = formatForFeedbackResponse(organisations)
 
   return orderByArgs
-    ? orderBy(
-        organisations.map((organisation) => ({
-          ...organisation,
-          courseUnits: orderBy(
-            organisation.courseUnits,
-            ...orderByArgs.courseUnits,
-          ),
-        })),
-        ...orderByArgs.organisations,
-      ).sort((organisation) => (organisation.feedbackCount ? 0 : 1))
-    : organisations
+    ? sortBy(
+        orderBy(
+          organisations.map((organisation) => ({
+            ...organisation,
+            courseUnits: orderBy(
+              organisation.courseUnits,
+              ...orderByArgs.courseUnits,
+            ),
+          })),
+          ...orderByArgs.organisations,
+        ),
+        (org) => (org.feedbackCount ? 0 : 1),
+      )
+    : organisations.sort((organisation) => (organisation.feedbackCount ? 1 : 0))
 }
 
 export const useOpenAccordions = (organisations) => {
