@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CSVLink } from 'react-csv'
 import Papa from 'papaparse'
+import { parseISO, format } from 'date-fns'
 
 import {
   Table,
@@ -35,7 +36,7 @@ const styles = {
   },
 }
 
-const ExportCsv = ({ students, t }) => {
+const ExportCsv = ({ students, t, fileName }) => {
   const headers = [
     t('firstName'),
     t('lastName'),
@@ -52,14 +53,14 @@ const ExportCsv = ({ students, t }) => {
     <CSVLink
       style={{ textDecoration: 'none' }}
       data={parsedData}
-      filename="students.csv"
+      filename={fileName}
     >
       <Box sx={styles.link}>{t('exportCSV')}</Box>
     </CSVLink>
   )
 }
 
-const StudentTable = ({ students }) => {
+const StudentTable = ({ students, feedbackTarget }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('firstName')
@@ -81,6 +82,11 @@ const StudentTable = ({ students }) => {
     }),
   )
 
+  const fileName = `${feedbackTarget.courseUnit.courseCode}_${format(
+    parseISO(feedbackTarget.courseRealisation.startDate),
+    'yyyy-MM-dd',
+  )}_students`
+
   return (
     <TableContainer component={Paper}>
       <Box sx={styles.box}>
@@ -100,7 +106,7 @@ const StudentTable = ({ students }) => {
           sx={styles.button}
         >
           {studentsCSV.length ? (
-            <ExportCsv students={studentsCSV} t={t} />
+            <ExportCsv students={studentsCSV} t={t} fileName={fileName} />
           ) : (
             t('exportCSV')
           )}
