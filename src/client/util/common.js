@@ -11,4 +11,5 @@ export const images = {
 
 export const colors = {}
 
-export * from '../../config'
+// eslint-disable-next-line import/extensions
+export * from '../../config.js'
