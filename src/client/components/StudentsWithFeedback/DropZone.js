@@ -7,21 +7,6 @@ import Papa from 'papaparse'
 
 import { Box, Button } from '@mui/material'
 
-const styles = {
-  box: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-  },
-  button: {
-    margin: 10,
-    width: '170px',
-  },
-  link: {
-    opacity: 0,
-    position: 'absolute',
-  },
-}
-
 const baseStyle = {
   flex: 1,
   display: 'flex',
@@ -100,7 +85,7 @@ const DropZone = ({ students }) => {
   )
 
   return (
-    <Box sx={styles.box}>
+    <Box style={{ display: 'flex', flexDirection: 'row-reverse' }}>
       <Box>
         <div className="container" style={{ cursor: 'pointer' }}>
           <div data-cy="dropzone" {...getRootProps({ style })}>
@@ -169,11 +154,15 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
   const parsedData = Papa.unparse(data, { delimiter: ';' })
 
   return (
-    <Box sx={styles.box}>
-      <Button variant="outlined" color="primary" sx={styles.button}>
+    <Box style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+      <Button
+        variant="outlined"
+        color="primary"
+        style={{ margin: 10, width: '170px' }}
+      >
         {t('downloadCSV')}
         <CSVLink
-          sx={styles.link}
+          style={{ opacity: 0, position: 'absolute' }}
           data={parsedData}
           filename={`${filename}_combined.csv`}
         >
