@@ -1,14 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 import { Tooltip } from '@mui/material'
-import {
-  green,
-  lightGreen,
-  deepOrange,
-  amber,
-  grey,
-  red,
-} from '@mui/material/colors'
+import { grey } from '@mui/material/colors'
 
 const styles = {
   item: {
@@ -16,73 +9,29 @@ const styles = {
     position: 'relative',
     color: grey['900'],
   },
-  missing: {
-    backgroundColor: (theme) => theme.palette.divider,
-  },
-  bad: {
-    backgroundColor: red.A400,
-  },
-  poor: {
-    backgroundColor: deepOrange['300'],
-  },
-  ok: {
-    backgroundColor: amber['200'],
-  },
-  good: {
-    backgroundColor: lightGreen['400'],
-  },
-  excellent: {
-    backgroundColor: green['600'],
-  },
 }
 
-/* Old Norppa colors 
-const styles = {
-  item: {
-    textAlign: 'center',
-    position: 'relative',
-  },
-  missing: {
-    backgroundColor: '#f5f5f5',
-  },
-  bad: {
-    backgroundColor: '#f8696b',
-  },
-  poor: {
-    backgroundColor: '#fba275',
-  },
-  ok: {
-    backgroundColor: '#f5e984',
-  },
-  good: {
-    backgroundColor: '#aad381',
-  },
-  excellent: {
-    backgroundColor: '#63be7a',
-  },
-} */
-
-const MAX = 5.0
-const MIN = 1.8 // Below min everything is the "worst" color
+const MAX = 4.5
+const MIN = 2.0 // Below min everything is the "worst" color
 const COLORS = [
-  '#fe233f',
-  '#ff5d4c',
-  '#ff8a5c',
-  '#ffb86f',
-  '#ffe985',
-  '#d5d977',
-  '#a5c767',
-  '#6cb255',
-  '#009b40',
+  '#c9586f',
+  '#e66067',
+  '#f57368',
+  '#fb8c6e',
+  '#fba678',
+  '#dbda7d',
+  '#9ec27c',
+  '#60a866',
+  '#008c59',
 ]
 
 const getColorIndex = (mean) => {
-  if (mean < 1.0) return '#ffffff00' // Case: no data
+  if (mean < 1.0) return -1 // Case: no data
+  if (mean < MIN) return 0 // Case: bad
+  if (mean >= MAX) return COLORS.length - 1 // Case: awesome
+
   // map range MIN-MAX to 0-8
-  const index = Math.max(
-    0,
-    Math.ceil(((mean - MIN) / (MAX - MIN)) * (COLORS.length - 1)),
-  )
+  const index = Math.ceil(((mean - MIN) / (MAX - MIN)) * (COLORS.length - 2))
   return index
 }
 
