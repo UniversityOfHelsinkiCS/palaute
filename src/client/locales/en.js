@@ -10,6 +10,7 @@ export default {
     validationErrors: {
       required: 'This field is required',
       wrongDate: 'Survey closing date is before opening date',
+      invalidDate: 'Invalid date',
     },
     unknownError: 'Something went wrong',
     choiceQuestionError: 'Choice questions require answer options',
@@ -162,7 +163,7 @@ export default {
       'Are you sure you want to preview? Unsaved changes will be lost.',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'NB! The survey cannot be edited after the feedback opens. If you want to make changes afterwards, contact support at <mailTo>{{supportEmail}}</mailTo>. The feedback must be open at least for a day',
+      'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>. ',
     noUnsavedChanges: 'No unsaved changes',
     openImmediately: 'Open feedback now',
     openImmediatelyConfirm:
@@ -183,6 +184,7 @@ export default {
       "You are about to open the course's feedback. Note that once the course's feedback is open you won't be able to edit its survey or the feedback period dates.",
     openFeedbackImmediatelyDialogCancel: 'Cancel',
     openFeedbackImmediatelyDialogConfirm: 'Open feedback',
+    closesAtInPastError: 'Closing date can not be in the past',
     opensAtInPastError: "Opening date can't be in the past",
     closesAtBeforeOpensAtError: 'Closing date has to be after the opening date',
     tooShortFeedbackPeriodError: 'The feedback must open at least for a day',

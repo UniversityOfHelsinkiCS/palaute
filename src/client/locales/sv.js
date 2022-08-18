@@ -10,6 +10,7 @@ export default {
     validationErrors: {
       required: 'Fältet krävs',
       wrongDate: 'Förfrågans slutdatum är före startdatumet',
+      invalidDate: 'Ogiltigt datum',
     },
     unknownError: 'Något gick fel',
     // serverError: 'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.
@@ -183,6 +184,7 @@ export default {
       'Du håller på att öppna kursresponsen. Observera att efter kursresponsens öppnande kan du inte längre redigera dess förfrågan, eller tiden för när den är öppen.',
     openFeedbackImmediatelyDialogCancel: 'Avbryt',
     openFeedbackImmediatelyDialogConfirm: 'Öppna respons',
+    // closesAtInPastError: 'Closing date can not be in the past',
     opensAtInPastError: 'Öppningsdatumet får inte vara i det förflutna',
     closesAtBeforeOpensAtError:
       'Stängningsdatumet måste vara efter öppningsdatumet',

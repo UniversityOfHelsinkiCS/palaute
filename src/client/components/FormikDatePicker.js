@@ -1,14 +1,23 @@
 import React from 'react'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { TextField } from '@mui/material'
+import {
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  TextField,
+} from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 const FormikDatePicker = ({ name, ...props }) => {
   const [field, meta, helpers] = useField(name)
+  const { setFieldValue } = useFormikContext()
   const { t } = useTranslation()
 
-  const showError = meta.error && meta.touched
+  const showError = Boolean(meta.error)
+
+  console.log(showError)
 
   return (
     <DatePicker
@@ -16,14 +25,19 @@ const FormikDatePicker = ({ name, ...props }) => {
       id={name}
       value={field.value ?? ''}
       onChange={(value) => {
-        helpers.setValue(value)
+        setFieldValue(name, value, true)
+        console.log('changed')
       }}
-      onBlur={() => helpers.setTouched(true)}
       renderInput={(props) => (
-        <TextField fullWidth margin="normal" {...props} />
+        <TextField
+          fullWidth
+          margin="normal"
+          {...props}
+          helperText={t(meta.error)}
+          error={showError}
+        />
       )}
       error={showError}
-      helperText={showError ? t(meta.error) : ''}
       KeyboardButtonProps={{
         'aria-label': 'change date',
       }}

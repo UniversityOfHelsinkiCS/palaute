@@ -6,6 +6,7 @@ import {
   format,
   set,
 } from 'date-fns'
+import _ from 'lodash'
 
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -26,7 +27,7 @@ export const openFeedbackImmediately = async (feedbackTarget) => {
   return data
 }
 
-export const validateFeedbackPeriod = (values) => {
+export const validateFeedbackPeriod = (isOpen, isOver) => (values) => {
   const { closesAt, opensAt } = values
 
   const errors = {}
@@ -34,17 +35,28 @@ export const validateFeedbackPeriod = (values) => {
   if (!closesAt) {
     errors.closesAt = 'validationErrors.required'
   }
+  if (_.isNaN(Date.parse(closesAt))) {
+    errors.closesAt = 'validationErrors.invalidDate'
+    return errors
+  }
 
   if (!opensAt) {
     errors.opensAt = 'validationErrors.required'
   }
+  if (_.isNaN(Date.parse(opensAt))) {
+    errors.opensAt = 'validationErrors.invalidDate'
+    return errors
+  }
 
-  if (startOfDay(opensAt) < startOfDay(new Date())) {
+  if (startOfDay(opensAt) < startOfDay(new Date()) && !isOpen) {
     errors.opensAt = 'editFeedbackTarget:opensAtInPastError'
   }
 
   if (!isAfter(closesAt, opensAt)) {
     errors.closesAt = 'editFeedbackTarget:closesAtBeforeOpensAtError'
+  }
+  if (closesAt < new Date() && !isOver) {
+    errors.closesAt = 'editFeedbackTarget:opensAtInPastError'
   }
 
   if (
