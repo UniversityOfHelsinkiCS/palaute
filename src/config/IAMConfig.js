@@ -301,7 +301,7 @@ const kosuFacultyMap = {
   'hy-ypa-opa-kosu-viikki': [
     'bio- ja ympäristötieteellinen',
     'farmasia',
-    'maatalous -metsätieteellinen',
+    'maatalous-metsätieteellinen',
     'eläinlääketieteellinen',
   ],
 }
