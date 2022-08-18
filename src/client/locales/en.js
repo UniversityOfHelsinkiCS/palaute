@@ -163,7 +163,7 @@ export default {
       'Are you sure you want to preview? Unsaved changes will be lost.',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
-      'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>. ',
+      'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.',
     noUnsavedChanges: 'No unsaved changes',
     openImmediately: 'Open feedback now',
     openImmediatelyConfirm:

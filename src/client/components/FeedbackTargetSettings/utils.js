@@ -4,7 +4,6 @@ import {
   startOfDay,
   endOfDay,
   format,
-  set,
 } from 'date-fns'
 import _ from 'lodash'
 

@@ -155,9 +155,7 @@ export default {
     showPreviewConfirmation:
       'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
     translationLanguage: 'Språkversion',
-    warningAboutOpeningCourse:
-      // 'NB! The survey cannot be edited after the feedback opens. If you want to make changes afterwards, contact support at <mailTo>{{supportEmail}}</mailTo>. The feedback must be open at least for a day',
-      'VARNING! Formulärets information kan inte ändras efter att föfrågan har öppnats',
+    // warningAboutOpeningCourse: 'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.',
     opensAtIsNow:
       'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
     checkbox: 'Jag förstår',

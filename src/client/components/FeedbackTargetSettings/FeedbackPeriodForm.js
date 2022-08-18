@@ -11,15 +11,10 @@ import {
 } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
-import { addDays } from 'date-fns'
 
 import FormikDatePicker from '../FormikDatePicker'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
-import {
-  validateFeedbackPeriod,
-  requiresSubmitConfirmation,
-  feedbackTargetIsOpenOrClosed,
-} from './utils'
+import { validateFeedbackPeriod, requiresSubmitConfirmation } from './utils'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
 import { TooltipButton } from '../TooltipButton'
@@ -98,10 +93,8 @@ const FeedbackPeriodForm = ({
     handleOpenWarningDialog()
   }
 
-  const submitButtonTooltip = (errors) => {
-    console.log(errors)
-    return Object.values(errors).map(t).join('\n')
-  }
+  const submitButtonTooltip = (errors) =>
+    Object.values(errors).map(t).join('\n')
 
   return (
     <Box mb={5}>
@@ -122,7 +115,7 @@ const FeedbackPeriodForm = ({
             onSubmit={handleSubmit}
             validate={validateFeedbackPeriod(isOpen, isOver)}
           >
-            {({ dirty, errors, isValid, values }) => (
+            {({ dirty, errors, isValid }) => (
               <Form>
                 <Alert severity="warning">
                   <Trans

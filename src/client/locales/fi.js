@@ -10,7 +10,7 @@ export default {
     validationErrors: {
       required: 'Tämä kenttä vaaditaan',
       wrongDate: 'Kysely sulkeutuu ennen sen avautumista',
-      invalidDate: 'Kelpaamaton päivämäärä',
+      invalidDate: 'Virheellinen päivämäärä',
     },
     unknownError: 'Jotain meni pieleen',
     choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
