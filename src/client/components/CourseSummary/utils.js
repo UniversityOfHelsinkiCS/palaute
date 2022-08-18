@@ -211,7 +211,9 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
         ),
         (org) => (org.feedbackCount ? 0 : 1),
       )
-    : organisations.sort((organisation) => (organisation.feedbackCount ? 1 : 0))
+    : sortBy(organisations, (organisation) =>
+        organisation.feedbackCount ? 0 : 1,
+      )
 }
 
 export const useOpenAccordions = (organisations) => {
