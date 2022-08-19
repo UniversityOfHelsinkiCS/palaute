@@ -472,7 +472,9 @@ const update = async (req, res) => {
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   const feedbackTarget = isAdmin
-    ? await FeedbackTarget.findByPk(feedbackTargetId)
+    ? await FeedbackTarget.findByPk(feedbackTargetId, {
+        include: { model: UserFeedbackTarget, as: 'userFeedbackTargets' },
+      })
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   const isTeacher =

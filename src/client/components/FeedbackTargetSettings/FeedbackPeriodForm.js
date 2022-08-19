@@ -37,6 +37,7 @@ const FeedbackPeriodForm = ({
   if (isLoading) {
     return <LoadingProgress />
   }
+  const { isAdmin } = authorizedUser
 
   const supportEmail = 'coursefeedback@helsinki.fi'
 
@@ -44,9 +45,9 @@ const FeedbackPeriodForm = ({
   const isOver = Date.parse(feedbackTarget.closesAt) < Date.now()
 
   const formDisabled =
-    (feedbackTarget.accessStatus !== 'TEACHER' &&
-      !(authorizedUser.isAdmin || orgAccess.admin)) ||
-    isOver
+    ((feedbackTarget.accessStatus !== 'TEACHER' && !orgAccess.admin) ||
+      isOver) &&
+    !isAdmin
 
   const openImmediatelyEnabled = !(isOpen || isOver)
 
@@ -136,7 +137,7 @@ const FeedbackPeriodForm = ({
                     name="opensAt"
                     label={t('editFeedbackTarget:opensAt')}
                     disablePast
-                    disabled={formDisabled || isOpen}
+                    disabled={(formDisabled || isOpen || isOver) && !isAdmin}
                   />
                 </Box>
                 <Box mb={2}>
@@ -155,9 +156,11 @@ const FeedbackPeriodForm = ({
                           variant="contained"
                           color="primary"
                           type="submit"
-                          disabled={!dirty || formDisabled || !isValid}
+                          disabled={
+                            !dirty || formDisabled || (!isValid && !isAdmin)
+                          }
                         >
-                          {t('save')}
+                          {t('save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                         </Button>
                       </span>
                     </Tooltip>
