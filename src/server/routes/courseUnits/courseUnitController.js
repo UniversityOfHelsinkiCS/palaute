@@ -242,11 +242,13 @@ const getCourseUnitsByOrganisation = async (req, res) => {
     },
   )
 
-  const courseUnits = courseUnitRows.map((row) => ({
-    name: row.course_unit_name,
-    id: row.course_unit_id,
-    courseCode: row.course_code,
-  }))
+  const courseUnits = courseUnitRows
+    .filter((row) => !row.course_code.startsWith('AY'))
+    .map((row) => ({
+      name: row.course_unit_name,
+      id: row.course_unit_id,
+      courseCode: row.course_code,
+    }))
 
   return res.send(courseUnits)
 }

@@ -2,12 +2,7 @@ const { CronJob } = require('cron')
 const { inProduction, inStaging } = require('../../config')
 const logger = require('./logger')
 
-const {
-  sendEmailAboutSurveyOpeningToStudents,
-  sendEmailReminderAboutSurveyOpeningToTeachers,
-  sendEmailReminderAboutFeedbackResponseToTeachers,
-  sendEmailReminderOnFeedbackToStudents,
-} = require('./email')
+const { mailer } = require('./mailer')
 
 const schedule = (cronTime, func) =>
   new CronJob({
@@ -19,10 +14,10 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running pate cron')
-  await sendEmailAboutSurveyOpeningToStudents()
-  await sendEmailReminderAboutSurveyOpeningToTeachers()
-  await sendEmailReminderAboutFeedbackResponseToTeachers()
-  await sendEmailReminderOnFeedbackToStudents()
+  await mailer.sendEmailAboutSurveyOpeningToStudents()
+  await mailer.sendEmailReminderAboutSurveyOpeningToTeachers()
+  await mailer.sendEmailReminderAboutFeedbackResponseToTeachers()
+  await mailer.sendEmailReminderOnFeedbackToStudents()
 }
 
 const start = async () => {

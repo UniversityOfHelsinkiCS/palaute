@@ -104,12 +104,7 @@ const FeedbackCorrespondentInfo = ({
           justifyContent="space-between"
           alignItems="flex-end"
         >
-          <Box>
-            <Chip
-              label={t('organisationSettings:feedbackCorrespondentTab')}
-              variant="outlined"
-            />
-            <Box mb={2} />
+          <Box m={1}>
             <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
             </Typography>
@@ -186,13 +181,15 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
           handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
         />
       ) : (
-        <Alert severity="warning">
-          {t('organisationSettings:correspondentMissing')}
-        </Alert>
+        <>
+          <Alert severity="warning">
+            {t('organisationSettings:correspondentMissing')}
+          </Alert>
+          <CorrepondentSelector
+            handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
+          />
+        </>
       )}
-      <CorrepondentSelector
-        handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
-      />
     </div>
   )
 }

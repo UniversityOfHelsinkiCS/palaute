@@ -173,6 +173,8 @@ const FeedbackTargetView = () => {
     ? null
     : organisations.find((org) => courseUnit.organisations[0].id === org.id)
 
+  const isOrganisationAdmin = organisation?.access?.admin || isAdmin
+
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
@@ -183,14 +185,15 @@ const FeedbackTargetView = () => {
   const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
 
   const showFeedbacksTab =
-    isAdmin || (isTeacher && isStarted) || feedback || isEnded
-  const showEditSurveyTab = isAdmin || (isTeacher && !isOpen && !isEnded)
+    isOrganisationAdmin || (isTeacher && isStarted) || feedback || isEnded
+  const showEditSurveyTab =
+    isOrganisationAdmin || (isTeacher && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
-    isAdmin || (isTeacher && isEnded && !isOld)
+    isOrganisationAdmin || (isTeacher && isEnded && !isOld)
   const showStudentsWithFeedbackTab =
-    isAdmin || (isTeacher && (isOpen || isEnded))
-  const showLinksTab = isAdmin || isTeacher
-  const showSettingsTab = isAdmin || isTeacher
+    isOrganisationAdmin || (isTeacher && (isOpen || isEnded))
+  const showLinksTab = isOrganisationAdmin || isTeacher
+  const showSettingsTab = isOrganisationAdmin || isTeacher
   const showLogsTab = isAdmin
 
   const handleCopyLink = () => {

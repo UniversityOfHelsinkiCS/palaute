@@ -14,14 +14,12 @@ import { Formik, Form } from 'formik'
 
 import FormikDatePicker from '../FormikDatePicker'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
-import {
-  validateFeedbackPeriod,
-  requiresSubmitConfirmation,
-  feedbackTargetIsOpenOrClosed,
-} from './utils'
+import { validateFeedbackPeriod, requiresSubmitConfirmation } from './utils'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../LoadingProgress'
 import { TooltipButton } from '../TooltipButton'
+import useOrganisationAccess from '../../hooks/useOrganisationAccess'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const FeedbackPeriodForm = ({
   onSubmit = () => {},
@@ -31,6 +29,7 @@ const FeedbackPeriodForm = ({
 }) => {
   const { t } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
+  const orgAccess = useOrganisationAccess(feedbackTarget)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
@@ -41,12 +40,15 @@ const FeedbackPeriodForm = ({
 
   const supportEmail = 'coursefeedback@helsinki.fi'
 
-  const formDisabled =
-    (feedbackTarget.accessStatus !== 'TEACHER' ||
-      feedbackTargetIsOpenOrClosed(feedbackTarget)) &&
-    !authorizedUser.isAdmin
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const isOver = Date.parse(feedbackTarget.closesAt) < Date.now()
 
-  const openImmediatelyEnabled = !feedbackTargetIsOpenOrClosed(feedbackTarget)
+  const formDisabled =
+    (feedbackTarget.accessStatus !== 'TEACHER' &&
+      !(authorizedUser.isAdmin || orgAccess.admin)) ||
+    isOver
+
+  const openImmediatelyEnabled = !(isOpen || isOver)
 
   const cannotOpenImmediatelyMessage = t(
     'feedbackTargetSettings:cannotOpenImmediately',
@@ -91,8 +93,11 @@ const FeedbackPeriodForm = ({
     handleOpenWarningDialog()
   }
 
+  const submitButtonTooltip = (errors) =>
+    Object.values(errors).map(t).join('\n')
+
   return (
-    <Box mb={2}>
+    <Box mb={5}>
       <Card>
         <CardContent>
           <Box mb={4}>
@@ -108,10 +113,9 @@ const FeedbackPeriodForm = ({
           <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
-            validate={validateFeedbackPeriod}
-            validateOnChange={false}
+            validate={validateFeedbackPeriod(isOpen, isOver)}
           >
-            {({ dirty }) => (
+            {({ dirty, errors, isValid }) => (
               <Form>
                 <Alert severity="warning">
                   <Trans
@@ -132,7 +136,7 @@ const FeedbackPeriodForm = ({
                     name="opensAt"
                     label={t('editFeedbackTarget:opensAt')}
                     disablePast
-                    disabled={formDisabled}
+                    disabled={formDisabled || isOpen}
                   />
                 </Box>
                 <Box mb={2}>
@@ -145,17 +149,13 @@ const FeedbackPeriodForm = ({
                 </Box>
                 <Box display="flex" justifyContent="space-between">
                   {!formDisabled && (
-                    <Tooltip
-                      title={
-                        dirty ? '' : t('editFeedbackTarget:noUnsavedChanges')
-                      }
-                    >
+                    <Tooltip title={submitButtonTooltip(errors)}>
                       <span>
                         <Button
                           variant="contained"
                           color="primary"
                           type="submit"
-                          disabled={!dirty || formDisabled}
+                          disabled={!dirty || formDisabled || !isValid}
                         >
                           {t('save')}
                         </Button>

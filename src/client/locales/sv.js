@@ -10,6 +10,7 @@ export default {
     validationErrors: {
       required: 'Fältet krävs',
       wrongDate: 'Förfrågans slutdatum är före startdatumet',
+      invalidDate: 'Ogiltigt datum',
     },
     unknownError: 'Något gick fel',
     // serverError: 'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.
@@ -31,7 +32,7 @@ export default {
     // feedback: 'Feedback',
     // feedbackGiven: 'Given',
     // feedbackNotGiven: 'Not given',
-    // exportCSV: 'Export as CSV',
+    // exportCSV: 'Download as CSV',
     // combineCSV: 'Combine with Sisu CSV',
     // downloadCSV: 'Download file',
     // dropZoneInfo1: 'Drag a file here, or find it by clicking this box.',
@@ -154,9 +155,7 @@ export default {
     showPreviewConfirmation:
       'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
     translationLanguage: 'Språkversion',
-    warningAboutOpeningCourse:
-      // 'NB! The survey cannot be edited after the feedback opens. If you want to make changes afterwards, contact support at <mailTo>{{supportEmail}}</mailTo>. The feedback must be open at least for a day',
-      'VARNING! Formulärets information kan inte ändras efter att föfrågan har öppnats',
+    // warningAboutOpeningCourse: 'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.',
     opensAtIsNow:
       'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
     checkbox: 'Jag förstår',
@@ -183,6 +182,7 @@ export default {
       'Du håller på att öppna kursresponsen. Observera att efter kursresponsens öppnande kan du inte längre redigera dess förfrågan, eller tiden för när den är öppen.',
     openFeedbackImmediatelyDialogCancel: 'Avbryt',
     openFeedbackImmediatelyDialogConfirm: 'Öppna respons',
+    // closesAtInPastError: 'Closing date can not be in the past',
     opensAtInPastError: 'Öppningsdatumet får inte vara i det förflutna',
     closesAtBeforeOpensAtError:
       'Stängningsdatumet måste vara efter öppningsdatumet',
@@ -316,6 +316,8 @@ export default {
     courseOngoing: 'Kursen är fortfarande på gång',
     programmePage: 'Utbildningsprogrammet sidan',
     courseRealisation: 'Kursinstans',
+    // facultyLabel: 'Faculty',
+    // allFaculties: 'All faculties',
     searchLabel: 'Begränsa kurser',
     searchPlaceholder: 'Begränsa kurser med kurskod',
     responsibleTeachers: 'Ansvariga lärare',

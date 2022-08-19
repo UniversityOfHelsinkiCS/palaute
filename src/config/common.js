@@ -1,3 +1,17 @@
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  if (!r.includes('_')) {
+    return r
+  }
+
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
+}
+
 const mapToDegreeCode = (organisationCode) => {
   if (!organisationCode) return ''
   if (organisationCode.length < 7) return ''
@@ -15,5 +29,6 @@ const mapToDegreeCode = (organisationCode) => {
 }
 
 module.exports = {
+  normalizeOrganisationCode,
   mapToDegreeCode,
 }

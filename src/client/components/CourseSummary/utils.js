@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
-import _, { orderBy } from 'lodash'
+import _, { orderBy, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
+import { data } from '../../../config/data'
 
 const courseCodeMatches = (courseCode, keyword) => {
   if (!keyword) {
@@ -19,6 +20,36 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
   if (isBefore(Date.now(), parseISO(closesAt))) return 'OPEN'
 
   return feedbackResponseGiven ? 'GIVEN' : 'NONE'
+}
+
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  if (!r.includes('_')) {
+    return r
+  }
+
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
+}
+
+const filterByFaculty = (organisations, facultyCode) => {
+  if (!facultyCode) return organisations
+
+  const facultyProgrammeCodes = data
+    .find((faculty) => faculty.code === facultyCode)
+    ?.programmes.map((programme) => normalizeOrganisationCode(programme.key))
+
+  if (!facultyProgrammeCodes) return organisations
+
+  const organisationsFilteredByFaculty = organisations.filter((organisation) =>
+    facultyProgrammeCodes.includes(organisation.code),
+  )
+
+  return organisationsFilteredByFaculty
 }
 
 export const filterByCourseCode = (organisations, keyword) => {
@@ -167,17 +198,22 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
     organisations = formatForFeedbackResponse(organisations)
 
   return orderByArgs
-    ? orderBy(
-        organisations.map((organisation) => ({
-          ...organisation,
-          courseUnits: orderBy(
-            organisation.courseUnits,
-            ...orderByArgs.courseUnits,
-          ),
-        })),
-        ...orderByArgs.organisations,
-      ).sort((organisation) => (organisation.feedbackCount ? 0 : 1))
-    : organisations
+    ? sortBy(
+        orderBy(
+          organisations.map((organisation) => ({
+            ...organisation,
+            courseUnits: orderBy(
+              organisation.courseUnits,
+              ...orderByArgs.courseUnits,
+            ),
+          })),
+          ...orderByArgs.organisations,
+        ),
+        (org) => (org.feedbackCount ? 0 : 1),
+      )
+    : sortBy(organisations, (organisation) =>
+        organisation.feedbackCount ? 0 : 1,
+      )
 }
 
 export const useOpenAccordions = (organisations) => {
@@ -210,6 +246,7 @@ export const useOpenAccordions = (organisations) => {
 
 export const useAggregatedOrganisationSummaries = ({
   orderBy,
+  facultyCode,
   keyword,
   includeOpenUniCourseUnits,
   dateRange,
@@ -227,9 +264,14 @@ export const useAggregatedOrganisationSummaries = ({
     [organisationSummaries?.organisations, keyword],
   )
 
+  const facultyOrganisations = useMemo(
+    () => filterByFaculty(filteredOrganisations, facultyCode),
+    [filteredOrganisations, facultyCode],
+  )
+
   const sortedOrganisations = useMemo(
-    () => orderByCriteria(filteredOrganisations, orderBy),
-    [filteredOrganisations, orderBy],
+    () => orderByCriteria(facultyOrganisations, orderBy),
+    [facultyOrganisations, orderBy],
   )
 
   return {

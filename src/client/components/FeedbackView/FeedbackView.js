@@ -37,6 +37,7 @@ import {
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
+import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 
 const tada = keyframes({
   from: {
@@ -168,6 +169,8 @@ const FeedbackView = () => {
     skipCache: true,
   })
 
+  const orgAccess = useOrganisationAccess(feedbackTarget)
+
   if (isLoading) {
     return <LoadingProgress />
   }
@@ -179,11 +182,13 @@ const FeedbackView = () => {
   const { accessStatus, opensAt, closesAt, feedback } = feedbackTarget
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
+  const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const showForm = isTeacher || isOpen || isEnded
-  const formIsDisabled = !isOpen || isTeacher || isOutsider
-  const showToolbar = isTeacher && !isOpen && !isEnded
+  const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
+  const formIsDisabled =
+    !isOpen || isTeacher || isOutsider || isOrganisationAdmin
+  const showToolbar = (isOrganisationAdmin || isTeacher) && !isOpen && !isEnded
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)

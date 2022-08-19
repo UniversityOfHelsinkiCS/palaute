@@ -10,9 +10,9 @@ const {
   kosuIamToFaculties,
   dekaaniIamToFaculty,
   opetusVaradekaani,
-} = require('../../../config/IAMConfig')
-const { data } = require('../../../config/data')
-const { mapToDegreeCode } = require('../../../config/common')
+} = require('../../config/IAMConfig')
+const { data } = require('../../config/data')
+const { mapToDegreeCode } = require('../../config/common')
 
 /**
  * Return given access to all programmes where predicate is true
@@ -175,6 +175,7 @@ const getProgrammeAdminAccess = (hyGroups) => {
 }
 
 /**
+ * UPDATE: nobody gets this. Kept here for documentation and consistency with other Toska software
  * Grant write and read access if the user belongs to employees group and studyprogramme's manager group
  * @param {string[]} hyGroups
  */
@@ -226,7 +227,7 @@ const getIAMRights = (hyGroups) => {
     getDoctoralAccess,
     getDoctoralSchoolAccess,
     getProgrammeReadAccess,
-    getProgrammeWriteAccess,
+    // getProgrammeWriteAccess,
     getProgrammeAdminAccess,
     getFacultyAdminRights,
     getAdmin,

@@ -13,7 +13,7 @@ const {
   sendReminderToGiveFeedbackToStudents,
 } = require('./pate')
 
-module.exports = {
+const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
@@ -24,3 +24,5 @@ module.exports = {
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
 }
+
+module.exports = { mailer }

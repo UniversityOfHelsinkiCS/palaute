@@ -10,6 +10,7 @@ export default {
     validationErrors: {
       required: 'Tämä kenttä vaaditaan',
       wrongDate: 'Kysely sulkeutuu ennen sen avautumista',
+      invalidDate: 'Virheellinen päivämäärä',
     },
     unknownError: 'Jotain meni pieleen',
     choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
@@ -33,7 +34,7 @@ export default {
     feedback: 'Palaute',
     feedbackGiven: 'Annettu',
     feedbackNotGiven: 'Ei annettu',
-    exportCSV: 'Vie CSV-muodossa',
+    exportCSV: 'Lataa CSV-muodossa',
     combineCSV: 'Yhdistä Sisu-CSV:n kanssa',
     downloadCSV: 'Lataa tiedosto',
     dropZoneInfo1: 'Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.',
@@ -158,8 +159,9 @@ export default {
     showPreviewConfirmation:
       'Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.',
     translationLanguage: 'Käännösten kieli',
-    warningAboutOpeningCourse:
-      'HUOM! Kyselyn tietoja ei voi muokata palautteen avautumisen jälkeen. Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo>, jos haluat tehdä muutoksia jälkeenpäin. Palautteen tulee olla auki vähintään yhden vuorokauden ajan',
+    warningAboutOpeningCourse: `HUOM! Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.
+      Palautteen tulee olla auki vähintään yhden vuorokauden ajan.
+      Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo> mikäli ongelmia ilmenee.`,
     noUnsavedChanges: 'Ei tallentamattomia muutoksia',
     openImmediately: 'Avaa palaute heti',
     copyFromCourseDialogTitle: 'Kopioi kysymykset toiselta kurssilta',
@@ -179,6 +181,7 @@ export default {
     openFeedbackImmediatelyDialogCancel: 'Peruuta',
     openFeedbackImmediatelyDialogConfirm: 'Avaa palaute',
     opensAtInPastError: 'Aloituspäiväämärä ei voi olla menneisyydessä',
+    closesAtInPastError: 'Sulkeutumispäivämäärä ei voi olla menneisyydessä',
     closesAtBeforeOpensAtError:
       'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',
     tooShortFeedbackPeriodError:
@@ -312,6 +315,8 @@ export default {
     courseOngoing: 'Kurssi on vielä käynnissä',
     programmePage: 'Koulutusohjelman sivu',
     courseRealisation: 'Kurssitoteutus',
+    facultyLabel: 'Tiedekunta',
+    allFaculties: 'Kaikki tiedekunnat',
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',

@@ -80,8 +80,10 @@ const start = async () => {
 }
 /* eslint-enable */
 
-module.exports = {
+const updater = {
   start,
   run,
   checkStatusOnStartup,
 }
+
+module.exports = { updater }

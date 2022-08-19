@@ -36,7 +36,9 @@ const StudentsWithFeedback = () => {
   return (
     <>
       {students.length === 0 && noFeedbackALert}
-      {students.length > 0 && <StudentTable students={students} />}
+      {students.length > 0 && (
+        <StudentTable students={students} feedbackTarget={feedbackTarget} />
+      )}
     </>
   )
 }

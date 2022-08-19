@@ -32,11 +32,7 @@ const {
   createFeedbackTargetSurveyLog,
   createFeedbackTargetLog,
 } = require('../../util/auditLog')
-const {
-  sendEmailToStudentsWhenOpeningImmediately,
-  sendFeedbackReminderToStudents,
-  sendFeedbackSummaryReminderToStudents,
-} = require('../../util/email')
+const { mailer } = require('../../util/mailer')
 const {
   JWT_KEY,
   STUDENT_LIST_BY_COURSE_ENABLED,
@@ -479,10 +475,14 @@ const update = async (req, res) => {
     ? await FeedbackTarget.findByPk(feedbackTargetId)
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
-  if (
-    !isAdmin &&
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER'
-  )
+  const isTeacher =
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
+
+  const isOrganisationAdmin = (
+    await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
+  )?.admin
+
+  if (!isAdmin && !isTeacher && !isOrganisationAdmin)
     throw new ApplicationError('Forbidden', 403)
 
   const updates = _.pick(req.body, [
@@ -822,25 +822,26 @@ const getStudentsWithFeedback = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  let feedbackTarget
-  if (isAdmin) {
-    feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  } else {
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  if (!isAdmin) {
     const userFeedbackTarget = await UserFeedbackTarget.findOne({
       where: {
         userId: user.id,
         feedbackTargetId,
       },
-      include: 'feedbackTarget',
     })
 
-    if (!userFeedbackTarget?.hasTeacherAccess()) {
+    if (
+      !userFeedbackTarget?.hasTeacherAccess() &&
+      !(await user.getOrganisationAccessByCourseUnitId(
+        feedbackTarget?.courseUnitId,
+      ))
+    ) {
       throw new ApplicationError(
         'User is not authorized to view students with feedback',
         403,
       )
     }
-    feedbackTarget = userFeedbackTarget.feedbackTarget
   }
 
   if (!feedbackTarget) {
@@ -935,7 +936,7 @@ const updateFeedbackResponse = async (req, res) => {
     relevantFeedbackTarget.feedbackResponseEmailSent
 
   if (feedbackResponseEmailSent) {
-    await sendFeedbackSummaryReminderToStudents(
+    await mailer.sendFeedbackSummaryReminderToStudents(
       relevantFeedbackTarget,
       feedbackResponse,
     )
@@ -968,7 +969,7 @@ const remindStudentsOnFeedback = async (req, res) => {
 
   const { reminder } = req.body.data
 
-  await sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
+  await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
 
   return res.send({
     feedbackReminderLastSentAt:
@@ -1002,7 +1003,7 @@ const openFeedbackImmediately = async (req, res) => {
   }
 
   if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
-    sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+    mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 
   feedbackTarget.opensAt = req.body.opensAt

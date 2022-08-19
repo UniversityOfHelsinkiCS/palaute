@@ -15,34 +15,6 @@ const styles = {
   },
 }
 
-const getColor = (mean) => {
-  if (!mean) {
-    return 'missing'
-  }
-
-  if (mean >= 4.5) {
-    return 'excellent'
-  }
-
-  if (mean >= 3.5) {
-    return 'good'
-  }
-
-  if (mean >= 2.5) {
-    return 'ok'
-  }
-
-  if (mean >= 2) {
-    return 'poor'
-  }
-
-  if (mean < 2) {
-    return 'bad'
-  }
-
-  return 'missing'
-}
-
 const LikertResultItem = ({ mean, previous, question, ...props }) => {
   const { t, i18n } = useTranslation()
 
@@ -53,11 +25,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
   }`
 
   return (
-    <ResultItemBase
-      tooltipTitle={tooltipTitle}
-      color={getColor(mean)}
-      {...props}
-    >
+    <ResultItemBase tooltipTitle={tooltipTitle} mean={mean} {...props}>
       <div style={styles.content}>
         <Typography fontFamily="">{mean?.toFixed(2) || '–'}</Typography>
       </div>

@@ -13,6 +13,7 @@ import {
   TableContainer,
   Alert,
   Typography,
+  TextField,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -34,13 +35,20 @@ const getCourseUnitItems = (
   courseUnits,
   disabledCourseCodes,
   studentListVisibleCourseCodes,
+  query,
+  language = 'en',
 ) =>
-  (courseUnits ?? []).map(({ courseCode, name }) => ({
-    courseCode,
-    name,
-    enabledCourse: !disabledCourseCodes.includes(courseCode),
-    studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
-  }))
+  (courseUnits ?? [])
+    .filter(
+      ({ courseCode, name }) =>
+        courseCode.includes(query) || name[language].includes(query),
+    )
+    .map(({ courseCode, name }) => ({
+      courseCode,
+      name,
+      enabledCourse: !disabledCourseCodes.includes(courseCode),
+      studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
+    }))
 
 const saveChangedCourseCodes = async ({
   code,
@@ -109,11 +117,17 @@ const CourseUnitItem = ({
   )
 }
 
-const CourseSettingsContainer = ({ organisation, courseUnits, t }) => {
+const CourseSettingsContainer = ({
+  organisation,
+  courseUnits,
+  t,
+  language,
+}) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
   const { authorizedUser } = useAuthorizedUser()
+  const [searchQuery, setSearchQuery] = useState('')
 
   const studentListVisibleFeatureEnabled =
     STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code) ||
@@ -132,6 +146,8 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t }) => {
     courseUnits,
     disabledCourseCodes,
     studentListVisibleCourseCodes,
+    searchQuery,
+    language,
   )
 
   const makeOnToggleDisabledCourses = (courseCode) => async () => {
@@ -184,6 +200,13 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t }) => {
             {t('organisationSettings:courseSettingsInfo')}
           </Alert>
         </Box>
+        <TextField
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          label={t('organisationSettings:findByCourseUnit')}
+          autoComplete="off"
+        />
+        <Box m={1} />
         <TableContainer>
           <Table stickyHeader size="small">
             <TableHead>
@@ -227,7 +250,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t }) => {
 
 const CourseSettings = () => {
   const { code } = useParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const { courseUnits, isLoading: courseUnitsIsLoading } =
     useOrganisationCourseUnits(code)
@@ -256,6 +279,7 @@ const CourseSettings = () => {
         organisation={organisation}
         courseUnits={courseUnits}
         t={t}
+        language={i18n.language}
       />
     </Box>
   )

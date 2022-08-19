@@ -20,7 +20,7 @@ const useYearSemesters = (currentStart) => {
   const now = new Date()
   const year = Math.min(
     currentStart.getFullYear(),
-    now.getFullYear() - (now.getMonth() < MONTH ? 1 : 0),
+    now.getFullYear() - (now.getMonth() + 1 < MONTH ? 1 : 0),
   )
 
   let semesters = _.range(2021, now.getFullYear() + 1)
@@ -36,8 +36,7 @@ const useYearSemesters = (currentStart) => {
     ])
     .map((s, i) => ({ ...s, spring: i % 2 === 0 }))
     .reverse()
-
-  semesters = now.getMonth() < MONTH ? semesters.slice(1) : semesters
+  semesters = now.getMonth() + 1 < MONTH ? semesters.slice(1) : semesters
 
   const currentSemester =
     semesters.find((s) => s.start <= currentStart) ||
@@ -88,7 +87,7 @@ const YearStepper = ({ value, onChange }) => {
   }
 
   const now = new Date()
-  const currentYear = now.getFullYear() + (now.getMonth() >= MONTH ? 1 : 0)
+  const currentYear = now.getFullYear() + (now.getMonth() + 1 >= MONTH ? 1 : 0)
 
   const displayValue = `${value} – ${value + 1}`
 

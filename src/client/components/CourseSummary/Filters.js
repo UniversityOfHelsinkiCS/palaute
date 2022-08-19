@@ -7,10 +7,16 @@ import {
   Box,
   FormControlLabel,
   Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
+
 import { YearSemesterSelector } from './YearSemesterSelector'
+import { data } from '../../../config/data'
 
 const styles = {
   container: {
@@ -19,20 +25,41 @@ const styles = {
 }
 
 const Filters = ({
+  facultyCode,
   keyword,
+  onFacultyChange,
   onKeywordChange,
   includeOpenUniCourseUnits,
   onIncludeOpenUniCourseUnitsChange,
   dateRange,
   onDateRangeChange,
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (
     <div css={styles.container}>
       <Box mb={3}>
         <YearSemesterSelector value={dateRange} onChange={onDateRangeChange} />
       </Box>
+      {facultyCode && (
+        <Box mb={2}>
+          <FormControl fullWidth>
+            <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
+            <Select
+              value={facultyCode}
+              onChange={(event) => onFacultyChange(event.target.value)}
+              label="Tiedekunta"
+            >
+              <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
+              {data.map((faculty) => (
+                <MenuItem key={faculty.code} value={faculty.code}>
+                  {faculty.name[i18n.language] || faculty.name.se}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
       <Box mb={2}>
         <TextField
           value={keyword}

@@ -255,7 +255,7 @@ const Filters = ({ onChange, value, t }) => {
 
   return (
     <Box position="sticky" top="0" mb={2} zIndex={1}>
-      <Accordion elevation={3} onChange={() => setOpen(!open)}>
+      <Accordion onChange={() => setOpen(!open)}>
         <AccordionSummary sx={styles.filtersHead}>
           <Box display="flex" width="100%" pl={1}>
             {t('organisationSettings:filters')}
