@@ -197,8 +197,11 @@ const FeedbackTargetView = () => {
   const showLogsTab = isAdmin
 
   const handleCopyLink = () => {
-    copyLink(`${window.location.host}/targets/${id}/feedback`)
-    enqueueSnackbar(t('feedbackTargetView:linkCopied'), { variant: 'info' })
+    const link = `https://${window.location.host}/targets/${id}/feedback`
+    copyLink(link)
+    enqueueSnackbar(`${t('feedbackTargetView:linkCopied')}: ${link}`, {
+      variant: 'info',
+    })
   }
 
   if (isDisabled && !isTeacher) {
