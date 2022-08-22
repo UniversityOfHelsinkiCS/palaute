@@ -5,9 +5,7 @@ const { Organisation, OrganisationLog, User } = require('../../models')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../util/auditLog')
-const {
-  getOpenFeedbackByOrganisation,
-} = require('./getOpenFeedbackByOrganisation')
+const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
