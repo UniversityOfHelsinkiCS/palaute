@@ -216,10 +216,14 @@ const LoginAsSelector = () => {
               {index === focusIndex && (
                 <Box display="flex" alignItems="center" justifySelf="end">
                   <Typography variant="body2" color="textSecondary">
-                    Login as
+                    Press
                   </Typography>
-                  <Box mr={1} />
-                  <KeyboardReturn />
+                  <Box mr="0.3rem" />
+                  <KeyboardReturn fontSize="small" />
+                  <Box mr="0.3rem" />
+                  <Typography variant="body2" color="textSecondary">
+                    enter to login as
+                  </Typography>
                 </Box>
               )}
             </Box>

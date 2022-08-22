@@ -1,4 +1,5 @@
 const { Op } = require('sequelize')
+const _ = require('lodash')
 
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
@@ -50,7 +51,10 @@ const getUserDetails = async (req, res) => {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
   const user = await User.findByPk(id)
-  const access = await user.getOrganisationAccess()
+  const access = _.sortBy(
+    await user.getOrganisationAccess(),
+    (access) => access.organisation.code,
+  )
   return res.send({
     ...user.dataValues,
     iamGroups: user.iamGroups,
