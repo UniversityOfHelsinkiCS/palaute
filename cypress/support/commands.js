@@ -141,3 +141,11 @@ Cypress.Commands.add('enableTestUsers', () => {
     },
   })
 })
+
+Cypress.Commands.add('refreshSummary', () => {
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/refresh-summary',
+    headers: adminUser,
+  })
+})
