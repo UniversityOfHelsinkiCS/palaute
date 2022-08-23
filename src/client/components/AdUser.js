@@ -16,7 +16,7 @@ const AdUser = () => {
   const { i18n } = useTranslation()
 
   useEffect(() => {
-    initShibbolethPinger(6000, `${window.location.origin}/ping`) // Remove this if not used behind shibboleth
+    initShibbolethPinger(60000, `${window.location.origin}/ping`) // Remove this if not used behind shibboleth
   }, [])
 
   const { authorizedUser, isLoading } = useAuthorizedUser()
