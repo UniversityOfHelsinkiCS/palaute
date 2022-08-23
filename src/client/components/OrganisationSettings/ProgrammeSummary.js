@@ -77,13 +77,13 @@ const ProgrammeTable = ({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td colSpan={99} css={styles.progressCell}>
-              <Box height="0px" position="absolute">
-                {loading && <LinearProgress />}
-              </Box>
-            </td>
-          </tr>
+          {loading && (
+            <tr>
+              <td colSpan={99} css={styles.progressCell}>
+                <LinearProgress />
+              </td>
+            </tr>
+          )}
           {organisations.map(
             ({
               code,

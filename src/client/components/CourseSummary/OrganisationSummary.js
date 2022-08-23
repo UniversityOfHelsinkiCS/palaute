@@ -9,6 +9,7 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
+  Divider,
 } from '@mui/material'
 import { SettingsOutlined } from '@mui/icons-material'
 
@@ -110,13 +111,13 @@ const OrganisationTable = ({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td colSpan={99} css={styles.progressCell}>
-              <Box height="0px" position="absolute">
-                {loading && <LinearProgress />}
-              </Box>
-            </td>
-          </tr>
+          {loading && (
+            <tr>
+              <td colSpan={99} css={styles.progressCell}>
+                <LinearProgress />
+              </td>
+            </tr>
+          )}
 
           {organisations.map(
             ({
@@ -263,20 +264,23 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         filters={
-          <Box mb={1}>
-            <Filters
-              facultyCode={isAdmin && facultyCode}
-              keyword={keyword}
-              onFacultyChange={handleFacultyChange}
-              onKeywordChange={handleKeywordChange}
-              includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-              onIncludeOpenUniCourseUnitsChange={
-                handleIncludeOpenUniCourseUnitsChange
-              }
-              dateRange={dateRange}
-              onDateRangeChange={setDateRange}
-            />
-          </Box>
+          <>
+            <Box mb={1}>
+              <Filters
+                facultyCode={isAdmin && facultyCode}
+                keyword={keyword}
+                onFacultyChange={handleFacultyChange}
+                onKeywordChange={handleKeywordChange}
+                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+                onIncludeOpenUniCourseUnitsChange={
+                  handleIncludeOpenUniCourseUnitsChange
+                }
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+              />
+            </Box>
+            <Divider />
+          </>
         }
       />
     </>
