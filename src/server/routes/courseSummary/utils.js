@@ -202,4 +202,5 @@ module.exports = {
   getResults,
   getCounts,
   getUniversityQuestions,
+  getMean,
 }
