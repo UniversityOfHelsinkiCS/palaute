@@ -8,6 +8,7 @@ const {
   Organisation,
   User,
 } = require('../../models')
+const { run } = require('../../util/courseSummaryCacheCron')
 
 const { ApplicationError } = require('../../util/customErrors')
 
@@ -112,11 +113,17 @@ const updateUser = async (req, res) => {
   return res.send(200)
 }
 
+const refreshSummary = async (req, res) => {
+  await run()
+  return res.send(200)
+}
+
 const router = Router()
 
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
 router.put('/enableCourses', enableAllCourses)
 router.put('/user/:userId', updateUser)
+router.put('/refresh-summary', refreshSummary)
 
 module.exports = router
