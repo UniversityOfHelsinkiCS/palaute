@@ -93,7 +93,7 @@ const Actions = ({ feedbackTarget }) => {
     if (
       // eslint-disable-next-line no-alert
       !window.confirm(
-        `Resend feedback response email to students of ${feedbackTarget.courseUnit.name?.fi}?`,
+        `Resend counter feedback email to students of ${feedbackTarget.courseUnit.name?.fi}?`,
       )
     )
       return
@@ -101,7 +101,7 @@ const Actions = ({ feedbackTarget }) => {
     try {
       const res = await apiClient.put(`/admin/resend-response`, body)
       enqueueSnackbar(
-        `Success, feedback response emailed to ${res.data.count} students!`,
+        `Success, counter feedback emailed to ${res.data.count} students!`,
       )
     } catch (error) {
       enqueueSnackbar(`Error: ${error.message}`)
@@ -140,7 +140,7 @@ const Actions = ({ feedbackTarget }) => {
       </MuiLink>
       {feedbackTarget.feedbackResponseEmailSent && (
         <Button onClick={resendFeedbackResponseEmail}>
-          Resend feedback response
+          Resend counter feedback
         </Button>
       )}
       <Button

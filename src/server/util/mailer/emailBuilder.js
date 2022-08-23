@@ -66,7 +66,7 @@ const buildNotificationAboutFeedbackResponseToStudents = (
   const translations = {
     text: {
       en: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to the course feedback recieved from students. \n 
-          Feedback response: ${feedbackResponse}\n
+          Counter feedback: ${feedbackResponse}\n
           You can read the course feedbacks here: <a href=${urlToSeeFeedbackSummary}>${courseName.en}</a>`,
       fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} ${dates} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n
           Vastapalaute: ${feedbackResponse}\n
@@ -127,7 +127,7 @@ const buildReminderAboutFeedbackResponseToTeachers = (
       en: `Dear teacher! <br/>
           The feedback period for the following courses has ended: <br/>
           ${courseNamesAndUrls}
-          Please give a feedback response for the students. You can give feedback response by clicking the course name. <br/>
+          Please give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>
           Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>
           Thank you! <br/>
           ${instructionsAndSupport.en}`,
@@ -148,8 +148,8 @@ const buildReminderAboutFeedbackResponseToTeachers = (
     },
     subject: {
       en: hasMultipleFeedbackTargets
-        ? `Please give feedback response for your courses`
-        : `Please give feedback response for the course ${courseName}`,
+        ? `Please give counter feedback for your courses`
+        : `Please give counter feedback for the course ${courseName}`,
       fi: hasMultipleFeedbackTargets
         ? `Annathan vastapalautetta kursseillesi`
         : `Annathan vastapalautetta kurssillesi ${courseName}`,

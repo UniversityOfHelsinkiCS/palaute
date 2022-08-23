@@ -91,7 +91,7 @@ const getCourseUnitsWithResults = (rows, questions) => {
 
   const courseUnits = Object.entries(rowsByCourseCode).map(
     ([courseCode, courseUnitRows]) => {
-      //===== get latest relevant CUR of CU to see if its feedback response is given =======//
+      //===== get latest relevant CUR of CU to see if its counter feedback is given =======//
       const rowsByCourseRealisationId = _.groupBy(
         courseUnitRows,
         (row) => row.course_realisation_id,

@@ -511,7 +511,7 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
 
   await sendEmail(
     emailsToBeSent,
-    'Remind teachers about giving feedback response',
+    'Remind teachers about giving counter feedback',
   )
 
   return emailsToBeSent

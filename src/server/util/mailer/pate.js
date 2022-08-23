@@ -145,7 +145,7 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
     return email
   })
 
-  await sendEmail(emails, 'Notify students on feedback response')
+  await sendEmail(emails, 'Notify students about counter feedback')
 
   return emails
 }

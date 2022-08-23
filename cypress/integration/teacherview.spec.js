@@ -33,13 +33,13 @@ describe('Teacher view', () => {
     const { startDate, endDate } = getDates()
     cy.contains(`${startDate} - ${endDate}`)
   })
-  it('A logged in teacher can give feedback response for an ended course', () => {
+  it('A logged in teacher can give counter feedback for an ended course', () => {
     cy.visit(`${baseUrl}/courses`)
     cy.get('[data-cy=courseUnitAccordion-TKT20002]').click()
 
     cy.visit(`${baseUrl}/targets/97/edit-feedback-response`)
 
-    cy.get('textarea').first().type('Feedback response for students to see')
+    cy.get('textarea').first().type('Counter feedback for students to see')
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
     cy.visit(`${baseUrl}/courses`)

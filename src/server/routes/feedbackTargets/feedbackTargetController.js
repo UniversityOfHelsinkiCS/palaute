@@ -916,7 +916,7 @@ const updateFeedbackResponse = async (req, res) => {
     relevantFeedbackTarget.feedbackResponseEmailSent
   )
     throw new ApplicationError(
-      'Feedback response email has already been sent',
+      'Counter feedback email has already been sent',
       400,
     ) // or 409 ?
 
@@ -927,7 +927,7 @@ const updateFeedbackResponse = async (req, res) => {
     ) > 6
   ) {
     throw new ApplicationError(
-      'Cannot send feedback response because feedback closed over 6 months ago',
+      'Cannot send counter feedback because feedback closed over 6 months ago',
       403,
     )
   }
