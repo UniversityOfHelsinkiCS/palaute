@@ -3,7 +3,7 @@ import React from 'react'
 
 const TeacherChip = ({ user, onDelete }) => (
   <Chip
-    label={`${user.firstName} ${user.lastName}`}
+    label={`${user.firstName ?? ''} ${user.lastName ?? ''}`}
     onDelete={
       onDelete &&
       ((e) => {
@@ -11,9 +11,9 @@ const TeacherChip = ({ user, onDelete }) => (
         onDelete()
       })
     }
-    clickable
+    clickable={user.email !== null}
     component="a"
-    href={`mailto:${user.email}`}
+    href={user.email ? `mailto:${user.email}` : undefined}
     size="small"
     style={{ margin: '1px' }}
   />
