@@ -22,9 +22,6 @@ const styles = {
     transform: 'translate(-50%, -50%)',
     width: '600px',
   },
-  title: {
-    marginBottom: 10,
-  },
   subtitle: {
     marginBottom: 5,
     color: '#4c4c4c',
@@ -36,7 +33,7 @@ const styles = {
   },
   textField: {
     whiteSpace: 'pre-line',
-    marginBottom: 10,
+    marginBottom: 5,
   },
 }
 
@@ -88,7 +85,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box mb={2} sx={styles.container}>
-        <Typography variant="h6" component="h2" sx={styles.title}>
+        <Typography variant="h6" component="h2">
           {t('feedbackTargetResults:modalTitle')}
         </Typography>
         <Typography variant="body2" component="p" sx={styles.subtitle}>
@@ -107,8 +104,10 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           value={reminder}
           onChange={(e) => setReminder(e.target.value)}
           fullWidth
+          multiline
+          rows={5}
         />
-        <div sx={styles.buttons}>
+        <div style={styles.buttons}>
           <TooltipButton
             onClick={sendEmail}
             color="primary"
