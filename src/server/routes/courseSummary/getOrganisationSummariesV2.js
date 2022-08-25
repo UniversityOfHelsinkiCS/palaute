@@ -6,6 +6,44 @@ const { getMean } = require('./utils')
 
 // This file name is temporary until all functions from getOrganisationSummaries are replaced
 
+const includeEmptyOrganisations = (
+  organisations,
+  organisationAccess,
+  questions,
+) => {
+  const accessibleOrganisations = organisationAccess.map(
+    ({ organisation }) => organisation,
+  )
+
+  const missingOrganisations = accessibleOrganisations.filter(
+    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
+  )
+
+  const allOrganisations = organisations.concat(
+    missingOrganisations.map((org) => ({
+      id: org.id,
+      name: org.name,
+      code: org.code,
+      courseUnits: [],
+      results: questions.map(({ id: questionId }) => ({
+        questionId,
+        mean: 0,
+        distribution: {},
+      })),
+      feedbackCount: 0,
+      studentCount: 0,
+      feedbackPercentage: 0,
+      feedbackResponsePercentage: 0,
+    })),
+  )
+
+  return _.orderBy(
+    allOrganisations,
+    [(org) => (org.courseUnits.length > 0 ? 1 : 0)],
+    ['desc'],
+  )
+}
+
 const getOrganisationSummaries = async ({
   questions,
   organisationAccess,
@@ -170,10 +208,15 @@ const getOrganisationSummaries = async ({
     },
   )
   console.timeEnd('aggregate orgs')
+  const withEmptyOrganisations = includeEmptyOrganisations(
+    summedOrganisations,
+    organisationAccess,
+    questions,
+  )
 
   console.timeEnd('getOrganisationSummaries')
 
-  return _.orderBy(summedOrganisations, 'code')
+  return _.orderBy(withEmptyOrganisations, 'code')
 }
 
 module.exports = {
