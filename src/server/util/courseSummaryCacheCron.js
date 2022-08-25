@@ -2,7 +2,7 @@ const { CronJob } = require('cron')
 const { inE2EMode, inProduction } = require('../../config')
 const {
   getAllRowsFromDb,
-} = require('../routes/courseSummary/getOrganisationSummaries')
+} = require('../routes/courseSummary/getOrganisationSummariesV2')
 const { REFRESH_VIEWS_QUERY } = require('../routes/courseSummary/sql')
 const { cacheSummary } = require('./courseSummaryCache')
 const { sequelize } = require('./dbConnection')

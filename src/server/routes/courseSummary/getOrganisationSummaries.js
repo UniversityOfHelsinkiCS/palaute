@@ -524,7 +524,7 @@ const getOrganisationSummaries = async ({
 }
 
 module.exports = {
-  getOrganisationSummaries,
+  // getOrganisationSummaries,
   getSummaryByOrganisation,
   getAllRowsFromDb,
 }

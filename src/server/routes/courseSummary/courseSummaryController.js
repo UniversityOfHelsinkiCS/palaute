@@ -1,14 +1,12 @@
 const { Router } = require('express')
-const { Op, QueryTypes } = require('sequelize')
-const _ = require('lodash')
+const { QueryTypes } = require('sequelize')
 const { addYears } = require('date-fns')
 
 const { CourseUnit, Survey, Organisation } = require('../../models')
 
-const {
-  getOrganisationSummaries,
-  getSummaryByOrganisation,
-} = require('./getOrganisationSummaries')
+const { getSummaryByOrganisation } = require('./getOrganisationSummaries')
+
+const { getOrganisationSummaries } = require('./getOrganisationSummariesV2')
 
 const getCourseRealisationSummaries = require('./getCourseRealisationSummaries')
 
@@ -57,46 +55,6 @@ const getAccessibleCourseRealisationIds = async (user) => {
   )
 
   return rows.map((row) => row.id)
-}
-
-// eslint-disable-next-line no-unused-vars
-const getAccessibleCourseCodes = async (organisationAccess) => {
-  const organisationIds = organisationAccess.map(
-    ({ organisation }) => organisation.id,
-  )
-
-  if (organisationIds.length === 0) {
-    return []
-  }
-
-  const organisations = await Organisation.findAll({
-    where: {
-      id: {
-        [Op.in]: organisationIds,
-      },
-    },
-    include: [
-      {
-        model: CourseUnit,
-        as: 'courseUnits',
-        attributes: ['courseCode'],
-        required: true,
-      },
-    ],
-    attributes: ['id', 'disabledCourseCodes'],
-  })
-
-  const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
-
-  const disabledCourseCodes = organisations.flatMap(
-    ({ disabledCourseCodes }) => disabledCourseCodes,
-  )
-
-  const courseCodes = courseUnits.flatMap(({ courseCode }) =>
-    disabledCourseCodes.includes(courseCode) ? [] : [courseCode],
-  )
-
-  return _.uniq(courseCodes)
 }
 
 const getSummaryQuestions = async () => {
@@ -165,9 +123,9 @@ const getByOrganisations = async (req, res) => {
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const parsedStartDate = startDate ? Date.parse(startDate) : null
+  const parsedStartDate = startDate ? new Date(startDate) : null
   const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
-  const parsedEndDate = endDate ? Date.parse(endDate) : defaultEndDate
+  const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
 
   const organisations = await getOrganisationSummaries({
     questions,
