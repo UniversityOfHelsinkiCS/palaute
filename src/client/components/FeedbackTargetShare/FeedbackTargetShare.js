@@ -48,8 +48,8 @@ const FeedbackTargetShare = () => {
     ? format(lastSentAt, 'dd.MM hh.mm')
     : undefined
 
-  const feedbackLink = `${window.location.host}/targets/${id}/feedback`
-  const resultsLink = `${window.location.host}/targets/${id}/results`
+  const feedbackLink = `https://${window.location.host}/targets/${id}/feedback`
+  const resultsLink = `https://${window.location.host}/targets/${id}/results`
 
   const handleCopyLink = (link) => {
     copyLink(link)
