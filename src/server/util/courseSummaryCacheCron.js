@@ -1,12 +1,7 @@
 const { CronJob } = require('cron')
 const { inE2EMode, inProduction } = require('../../config')
-const {
-  getAllRowsFromDb,
-} = require('../routes/courseSummary/getOrganisationSummariesV2')
 const { REFRESH_VIEWS_QUERY } = require('../routes/courseSummary/sql')
-const { cacheSummary } = require('./courseSummaryCache')
 const { sequelize } = require('./dbConnection')
-const logger = require('./logger')
 
 const schedule = (cronTime, func) =>
   new CronJob({
@@ -17,9 +12,6 @@ const schedule = (cronTime, func) =>
   })
 
 const run = async () => {
-  logger.info('Running OrganisationSummary caching cron')
-  const rows = await getAllRowsFromDb()
-  await cacheSummary(rows)
   console.time('Refresh views')
   await sequelize.query(REFRESH_VIEWS_QUERY)
   console.timeEnd('Refresh views')
