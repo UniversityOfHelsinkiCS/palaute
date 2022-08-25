@@ -969,7 +969,7 @@ const remindStudentsOnFeedback = async (req, res) => {
       404,
     )
 
-  const { reminder } = req.body.data
+  const { data: reminder } = req.body.data
 
   await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
 
