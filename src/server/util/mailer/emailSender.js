@@ -694,7 +694,10 @@ const sendFeedbackSummaryReminderToStudents = async (
 }
 
 const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
-  if (differenceInHours(new Date(), this.feedbackReminderLastSentAt) < 24) {
+  if (
+    differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) <
+    24
+  ) {
     throw new ApplicationError(
       'Can send only 1 feedback reminder every 24 hours',
       403,
