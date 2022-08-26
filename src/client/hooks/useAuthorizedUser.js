@@ -15,9 +15,13 @@ const useAuthorizedUser = (options = {}) => {
       refetchInterval: 2 * 60 * 1000,
       refetchIntervalInBackground: true,
       refetchOnMount: true,
-      // refetchOnWindowFocus: true,
+      refetchOnWindowFocus: true,
       refetchOnReconnect: 'always',
       cacheTime: 2 * 60 * 1000,
+      onError: (error) => {
+        if (error?.message?.toLowerCase() === 'network error')
+          window.location.reload()
+      },
       ...options,
     },
   )
