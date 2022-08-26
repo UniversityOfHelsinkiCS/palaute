@@ -9,7 +9,6 @@ const UserFeedbackTarget = require('./userFeedbackTarget')
 const Organisation = require('./organisation')
 const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
-const FeedbackSummaryCache = require('./feedbackSummaryCache')
 const NorppaFeedback = require('./norppaFeedback')
 const UpdaterStatus = require('./updaterStatus')
 const FeedbackTargetDateCheck = require('./feedbackTargetDateCheck')
@@ -145,7 +144,6 @@ module.exports = {
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
-  FeedbackSummaryCache,
   NorppaFeedback,
   UpdaterStatus,
   FeedbackTargetDateCheck,
