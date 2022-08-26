@@ -1,7 +1,6 @@
 /* eslint-disable camelcase, no-console */
 const _ = require('lodash')
 
-const { Op } = require('sequelize')
 const { subMonths } = require('date-fns')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -15,8 +14,6 @@ const {
   getCounts,
   getUniversityQuestions,
 } = require('./utils')
-const logger = require('../../util/logger')
-const { getSummaryFromCache } = require('../../util/courseSummaryCache')
 
 const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
 const ALL_OPEN_UNI_ORGANISATION_IDS = [
@@ -236,56 +233,6 @@ const getOrganisationsWithResults = (rows, questions) => {
   return organisations
 }
 
-const getOpenUniOrganisationWithResults = (rows, questions) => {
-  if (!rows || rows.length === 0) {
-    return []
-  }
-  const rowsByOrganisationId = {
-    [OPEN_UNI_ORGANISATION_ID]: rows.filter(
-      (row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID,
-    ),
-  }
-  const organisations = createOrganisations(rowsByOrganisationId, questions)
-  return organisations[0]
-}
-
-const includeEmptyOrganisations = (
-  organisations,
-  organisationAccess,
-  questions,
-) => {
-  const accessibleOrganisations = organisationAccess.map(
-    ({ organisation }) => organisation,
-  )
-
-  const missingOrganisations = accessibleOrganisations.filter(
-    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
-  )
-
-  const allOrganisations = [
-    ...organisations,
-    ...missingOrganisations.map((org) => ({
-      id: org.id,
-      courseUnits: [],
-      results: questions.map(({ id: questionId }) => ({
-        questionId,
-        mean: 0,
-        distribution: {},
-      })),
-      feedbackCount: 0,
-      studentCount: 0,
-      feedbackPercentage: 0,
-      feedbackResponsePercentage: 0,
-    })),
-  ]
-
-  return _.orderBy(
-    allOrganisations,
-    [(org) => (org.courseUnits.length > 0 ? 1 : 0)],
-    ['desc'],
-  )
-}
-
 const omitOrganisationOpenUniRows = async (rows) => {
   let courseRealisationIds = _.uniq(
     rows.map((row) => row.course_realisation_id),
@@ -335,45 +282,6 @@ const omitOrganisationOpenUniRows = async (rows) => {
   return filtered
 }
 
-const partitionOpenUniRows = (rows) => {
-  console.time('-partitionOpenUniRows')
-
-  const sortedRows = rows.sort((a, b) =>
-    a.course_realisation_id.localeCompare(b.course_realisation_id),
-  )
-
-  const openUniCourseRealisationIds = _.sortedUniq(
-    sortedRows
-      .filter((row) => row.organisation_id === OPEN_UNI_ORGANISATION_ID)
-      .map((row) => row.course_realisation_id),
-  )
-
-  const openUni = []
-  const justUni = []
-
-  let j = 0
-  for (let i = 0; i < sortedRows.length; i++) {
-    const row = sortedRows[i]
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const k = row.course_realisation_id.localeCompare(
-        openUniCourseRealisationIds[j],
-      )
-      if (k === 0) {
-        openUni.push(row)
-        break
-      } else if (k < 0) {
-        justUni.push(row)
-        break
-      }
-      j++
-    }
-  }
-  console.timeEnd('-partitionOpenUniRows')
-
-  return [justUni, openUni]
-}
-
 const getOrganisationQuestions = async (organisationCode) => {
   const programmeSurvey = await Survey.findOne({
     where: { type: 'programme', typeId: organisationCode },
@@ -385,28 +293,6 @@ const getOrganisationQuestions = async (organisationCode) => {
   const summaryQuestions = programmeQuestions.filter((q) => q.type === 'LIKERT')
 
   return summaryQuestions
-}
-
-const addOrganisationInfo = async (organisations) => {
-  console.time('-addOrganisationInfo')
-  const sorted = _.sortBy(organisations, 'id')
-
-  const orgNames = await Organisation.findAll({
-    attributes: ['id', 'name', 'code'],
-    where: {
-      id: {
-        [Op.in]: sorted.map((org) => org.id),
-      },
-    },
-    order: [['id', 'asc']],
-  })
-  const result = sorted.map((org, index) => ({
-    ...org,
-    ...orgNames[index].dataValues,
-  }))
-  const sortedResult = _.sortBy(result, 'code')
-  console.timeEnd('-addOrganisationInfo')
-  return sortedResult
 }
 
 const getSummaryByOrganisation = async ({
@@ -464,67 +350,7 @@ const getAllRowsFromDb = async () => {
   return courseRealisationRows
 }
 
-const getOrganisationSummaries = async ({
-  questions,
-  organisationAccess,
-  accessibleCourseRealisationIds,
-  includeOpenUniCourseUnits = true,
-  startDate = subMonths(Date.now(), 24),
-  endDate = Date.now(),
-}) => {
-  console.time('getOrganisationSummaries')
-
-  const organisationIds = organisationAccess.map(
-    ({ organisation }) => organisation.id,
-  )
-
-  const rows = await getSummaryFromCache(
-    organisationIds,
-    accessibleCourseRealisationIds,
-    startDate,
-    endDate,
-  )
-  if (rows.length === 0) {
-    logger.warn(
-      'Got empty array from courseSummaryCache, looks like kakku is not yet ready',
-    )
-  }
-
-  const partitionedRows = partitionOpenUniRows(rows)
-
-  const [normalizedRows, openUniRows] = !includeOpenUniCourseUnits
-    ? partitionedRows
-    : [rows, partitionedRows[1]]
-
-  const organisationsWithResults = getOrganisationsWithResults(
-    normalizedRows,
-    questions,
-  )
-
-  const openUniOrganisationWithResults = getOpenUniOrganisationWithResults(
-    openUniRows,
-    questions,
-  )
-
-  const organisationsWithMissing = includeEmptyOrganisations(
-    organisationsWithResults,
-    organisationAccess,
-    questions,
-  ).filter((org) => !ALL_OPEN_UNI_ORGANISATION_IDS.includes(org.id))
-
-  const allOrganisations = organisationsWithMissing.concat(
-    openUniOrganisationWithResults,
-  )
-
-  const result = await addOrganisationInfo(allOrganisations)
-
-  console.timeEnd('getOrganisationSummaries')
-
-  return result
-}
-
 module.exports = {
-  // getOrganisationSummaries,
   getSummaryByOrganisation,
   getAllRowsFromDb,
 }
