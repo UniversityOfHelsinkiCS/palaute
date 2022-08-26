@@ -21,6 +21,7 @@ import { data } from '../../../config/data'
 const styles = {
   container: {
     textAlign: 'left',
+    marginBottom: '1rem',
   },
 }
 

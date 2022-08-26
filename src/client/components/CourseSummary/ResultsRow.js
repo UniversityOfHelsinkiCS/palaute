@@ -15,13 +15,12 @@ import PercentageCell from './PercentageCell'
 
 const styles = {
   resultCell: {
-    padding: (theme) => theme.spacing(1),
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    minWidth: '50px',
+    minWidth: '3.5rem',
   },
   countCell: {
-    padding: (theme) => theme.spacing(1),
+    padding: '0rem 1rem 0rem 1rem',
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '100px',
@@ -249,7 +248,7 @@ const ResultsRow = ({
           />
         ))}
         <td css={styles.countCell}>
-          <Typography component="div">
+          <Typography component="div" variant="body2">
             {feedbackCount}/{studentCount}
           </Typography>
         </td>

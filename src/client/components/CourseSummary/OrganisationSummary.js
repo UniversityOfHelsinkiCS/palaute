@@ -9,7 +9,6 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
-  Divider,
 } from '@mui/material'
 import { SettingsOutlined } from '@mui/icons-material'
 
@@ -119,51 +118,52 @@ const OrganisationTable = ({
             </tr>
           )}
 
-          {organisations.map(
-            ({
-              code,
-              id,
-              name,
-              results,
-              feedbackCount,
-              courseUnits,
-              studentCount,
-              feedbackResponsePercentage,
-            }) => (
-              <Fragment key={id}>
-                <ResultsRow
-                  id={id}
-                  label={
-                    <OrganisationLabel
-                      name={getLanguageValue(name, i18n.language)}
-                      code={code}
-                    />
-                  }
-                  results={results}
-                  questions={questions}
-                  feedbackCount={feedbackCount}
-                  studentCount={studentCount}
-                  feedbackResponsePercentage={feedbackResponsePercentage}
-                  accordionEnabled={courseUnits.length > 0}
-                  accordionInitialOpen={initialOpenAccordions.includes(id)}
-                  onToggleAccordion={() => onToggleAccordion(id)}
-                  cellsAfter={
-                    <td>
-                      {hasWriteAccess(id, organisationAccess) && (
-                        <SettingsButton code={code} />
-                      )}
-                    </td>
-                  }
-                >
-                  <CourseUnitSummary
-                    courseUnits={courseUnits}
+          {!loading &&
+            organisations.map(
+              ({
+                code,
+                id,
+                name,
+                results,
+                feedbackCount,
+                courseUnits,
+                studentCount,
+                feedbackResponsePercentage,
+              }) => (
+                <Fragment key={id}>
+                  <ResultsRow
+                    id={id}
+                    label={
+                      <OrganisationLabel
+                        name={getLanguageValue(name, i18n.language)}
+                        code={code}
+                      />
+                    }
+                    results={results}
                     questions={questions}
-                  />
-                </ResultsRow>
-                <DividerRow height={1.3} />
-              </Fragment>
-            ),
-          )}
+                    feedbackCount={feedbackCount}
+                    studentCount={studentCount}
+                    feedbackResponsePercentage={feedbackResponsePercentage}
+                    accordionEnabled={courseUnits.length > 0}
+                    accordionInitialOpen={initialOpenAccordions.includes(id)}
+                    onToggleAccordion={() => onToggleAccordion(id)}
+                    cellsAfter={
+                      <td>
+                        {hasWriteAccess(id, organisationAccess) && (
+                          <SettingsButton code={code} />
+                        )}
+                      </td>
+                    }
+                  >
+                    <CourseUnitSummary
+                      courseUnits={courseUnits}
+                      questions={questions}
+                    />
+                  </ResultsRow>
+                  <DividerRow height={1.3} />
+                </Fragment>
+              ),
+            )}
         </tbody>
       </table>
     </TableContainer>
@@ -264,23 +264,18 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         filters={
-          <>
-            <Box mb={1}>
-              <Filters
-                facultyCode={isAdmin && facultyCode}
-                keyword={keyword}
-                onFacultyChange={handleFacultyChange}
-                onKeywordChange={handleKeywordChange}
-                includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-                onIncludeOpenUniCourseUnitsChange={
-                  handleIncludeOpenUniCourseUnitsChange
-                }
-                dateRange={dateRange}
-                onDateRangeChange={setDateRange}
-              />
-            </Box>
-            <Divider />
-          </>
+          <Filters
+            facultyCode={isAdmin && facultyCode}
+            keyword={keyword}
+            onFacultyChange={handleFacultyChange}
+            onKeywordChange={handleKeywordChange}
+            includeOpenUniCourseUnits={includeOpenUniCourseUnits}
+            onIncludeOpenUniCourseUnitsChange={
+              handleIncludeOpenUniCourseUnitsChange
+            }
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+          />
         }
       />
     </>
