@@ -8,7 +8,7 @@ const { connectToDatabase } = require('./util/dbConnection')
 const { redisClient } = require('./util/redisClient')
 const { updater } = require('./updater')
 const { start: startPateCron } = require('./util/pateCron')
-const { start: startCacheCron } = require('./util/courseSummaryCacheCron')
+const { start: startViewsCron } = require('./util/refreshViewsCron')
 const logger = require('./util/logger')
 
 const app = express()
@@ -30,7 +30,7 @@ const start = async () => {
   await redisClient.connect()
   await updater.checkStatusOnStartup()
   await updater.start()
-  await startCacheCron()
+  await startViewsCron()
   await startPateCron()
 
   app.listen(PORT, () => {
