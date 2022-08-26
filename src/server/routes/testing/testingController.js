@@ -8,7 +8,7 @@ const {
   Organisation,
   User,
 } = require('../../models')
-const { run } = require('../../util/courseSummaryCacheCron')
+const { run } = require('../../util/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
 
