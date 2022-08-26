@@ -32,6 +32,7 @@ router.use(accessLogger)
 router.use(iamGroupsMiddleware)
 router.use(currentUserMiddleware)
 
+router.use('/ping', (_, res) => res.sendStatus(204))
 router.use('/noad', noad)
 router.use('/', users)
 router.use('/feedbacks', feedbacks.ad)

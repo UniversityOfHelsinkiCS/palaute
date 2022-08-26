@@ -11,7 +11,15 @@ const useAuthorizedUser = (options = {}) => {
 
       return data
     },
-    options,
+    {
+      refetchInterval: 2 * 60 * 1000,
+      refetchIntervalInBackground: true,
+      refetchOnMount: true,
+      // refetchOnWindowFocus: true,
+      refetchOnReconnect: 'always',
+      cacheTime: 2 * 60 * 1000,
+      ...options,
+    },
   )
 
   return { authorizedUser, ...rest }

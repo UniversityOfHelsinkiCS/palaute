@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import * as Sentry from '@sentry/browser'
-import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@mui/material'
 
@@ -14,10 +13,6 @@ import useAuthorizedUser from '../hooks/useAuthorizedUser'
 
 const AdUser = () => {
   const { i18n } = useTranslation()
-
-  useEffect(() => {
-    initShibbolethPinger(60000, `${window.location.origin}/ping`) // Remove this if not used behind shibboleth
-  }, [])
 
   const { authorizedUser, isLoading } = useAuthorizedUser()
 

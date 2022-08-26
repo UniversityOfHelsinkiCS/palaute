@@ -14,7 +14,6 @@ const logger = require('./util/logger')
 const app = express()
 
 app.use(compression())
-app.use('/ping', (_, res) => res.sendStatus(204))
 app.use('/api', (req, res, next) => require('./routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))
 
