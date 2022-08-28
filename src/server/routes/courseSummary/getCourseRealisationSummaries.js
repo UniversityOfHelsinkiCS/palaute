@@ -33,17 +33,18 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
   const results = summaries.map((row) => {
     const questionIds = row.question_ids
 
-    const results = row.question_distribution.map((question, idx) => {
-      const distribution = _.mapValues(question, Number)
-      return {
-        questionId: questionIds[idx],
-        mean: getMean(
+    const results = row.question_distribution
+      .map((questionData, idx) => {
+        const question = questions.find((q) => q.id === questionIds[idx])
+        if (!question) return undefined
+        const distribution = _.mapValues(questionData, Number)
+        return {
+          questionId: questionIds[idx],
+          mean: getMean(distribution, question),
           distribution,
-          questions.find((q) => q.id === questionIds[idx]),
-        ),
-        distribution,
-      }
-    })
+        }
+      })
+      .filter(Boolean)
 
     const teachers = teacherData[row.feedback_target_id].map(
       (teacher) => teacher.user,
