@@ -20,7 +20,8 @@ Delete this comment if you find something better
 */
 
 const SUMMARY_VIEW_QUERY = `
-CREATE MATERIALIZED VIEW IF NOT EXISTS course_results_view AS (
+DROP MATERIALIZED VIEW course_results_view;
+CREATE MATERIALIZED VIEW course_results_view AS (
     WITH cur_results AS (
         WITH question_distributions AS (
 
@@ -32,7 +33,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS course_results_view AS (
                         SELECT questions.id
                         FROM questions, surveys
                         WHERE questions.id = ANY(surveys.question_ids)
-                        AND surveys.type = 'university'
+                        AND (surveys.type = 'university' OR surveys.type = 'programme')
                         AND (questions.type = 'LIKERT' OR questions.id = 1042)
                     ), feedbacks_1 AS (
                         SELECT 

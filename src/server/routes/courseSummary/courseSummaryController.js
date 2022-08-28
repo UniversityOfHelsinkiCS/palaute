@@ -4,8 +4,6 @@ const { addYears } = require('date-fns')
 
 const { CourseUnit, Survey, Organisation } = require('../../models')
 
-const { getSummaryByOrganisation } = require('./getOrganisationSummaries')
-
 const { getOrganisationSummaries } = require('./getOrganisationSummariesV2')
 
 const getCourseRealisationSummaries = require('./getCourseRealisationSummaries')
@@ -57,15 +55,26 @@ const getAccessibleCourseRealisationIds = async (user) => {
   return rows.map((row) => row.id)
 }
 
-const getSummaryQuestions = async () => {
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
+const getSummaryQuestions = async (organisationCode) => {
+  const [universityQuestions, programmeQuestions] = await Promise.all([
+    (async () => {
+      const universitySurvey = await Survey.findOne({
+        where: { type: 'university' },
+      })
+      await universitySurvey.populateQuestions()
+      return universitySurvey.questions
+    })(),
+    (async () => {
+      if (!organisationCode) return []
+      const programmeSurvey = await Survey.findOne({
+        where: { type: 'programme', typeId: organisationCode },
+      })
+      await programmeSurvey.populateQuestions()
+      return programmeSurvey.questions
+    })(),
+  ])
 
-  await universitySurvey.populateQuestions()
-
-  const { questions = [] } = universitySurvey
-
+  const questions = universityQuestions.concat(programmeQuestions)
   const summaryQuestions = questions.filter(
     (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
   )
@@ -210,11 +219,10 @@ const getByCourseUnit = async (req, res) => {
 
 const getByOrganisation = async (req, res) => {
   const { user } = req
+  const { code } = req.params
+  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
 
   const organisationAccess = await user.getOrganisationAccess()
-
-  const { code } = req.params
-  const { includeOpenUniCourseUnits } = req.query
 
   const access = organisationAccess.find(
     (org) => org.organisation.code === code,
@@ -224,9 +232,13 @@ const getByOrganisation = async (req, res) => {
     throw new ApplicationError('Forbidden', 403)
   }
 
-  const { organisations, questions } = await getSummaryByOrganisation({
-    organisationCode: code,
+  const questions = await getSummaryQuestions(code)
+  const organisations = await getOrganisationSummaries({
+    questions,
+    organisationAccess: [access],
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
+    startDate,
+    endDate,
   })
 
   return res.send({

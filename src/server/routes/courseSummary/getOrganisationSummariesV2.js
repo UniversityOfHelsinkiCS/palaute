@@ -47,7 +47,7 @@ const includeEmptyOrganisations = (
 const getOrganisationSummaries = async ({
   questions,
   organisationAccess,
-  accessibleCourseRealisationIds,
+  accessibleCourseRealisationIds = [],
   includeOpenUniCourseUnits = true,
   startDate = subMonths(new Date(), 24),
   endDate = new Date(),
