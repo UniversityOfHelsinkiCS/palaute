@@ -4,7 +4,7 @@ const { addYears } = require('date-fns')
 
 const { CourseUnit, Survey, Organisation } = require('../../models')
 
-const { getOrganisationSummaries } = require('./getOrganisationSummariesV2')
+const { getOrganisationSummaries } = require('./getOrganisationSummaries')
 
 const getCourseRealisationSummaries = require('./getCourseRealisationSummaries')
 

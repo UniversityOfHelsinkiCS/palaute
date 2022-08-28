@@ -1,356 +1,224 @@
-/* eslint-disable camelcase, no-console */
-const _ = require('lodash')
-
 const { subMonths } = require('date-fns')
-
+const _ = require('lodash')
 const { sequelize } = require('../../util/dbConnection')
-const { Survey, Organisation } = require('../../models')
+const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
+const { getMean } = require('./utils')
 
-const {
-  QUESTION_AVERAGES_QUERY,
-  COUNTS_QUERY,
-  getValidDataValues,
-  getResults,
-  getCounts,
-  getUniversityQuestions,
-} = require('./utils')
+// This file name is temporary until all functions from getOrganisationSummaries are replaced
 
-const OPEN_UNI_ORGANISATION_ID = 'hy-org-48645785'
-const ALL_OPEN_UNI_ORGANISATION_IDS = [
-  OPEN_UNI_ORGANISATION_ID,
-  'hy-org-48901898', // "Lukuvuosi"
-  'hy-org-48902017', // "Kesälukukausi"
-]
-
-const executeSummaryQuery = ({
-  questionIds,
-  organisationId,
-  validDataValues,
-  since = subMonths(new Date(), 24),
-}) => {
-  const query = `
-  WITH question_averages AS (
-    ${QUESTION_AVERAGES_QUERY}
-  ), feedback_counts AS (
-    ${COUNTS_QUERY}
+const includeEmptyOrganisations = (
+  organisations,
+  organisationAccess,
+  questions,
+) => {
+  const accessibleOrganisations = organisationAccess.map(
+    ({ organisation }) => organisation,
   )
-  
-  SELECT
-    question_id,
-    question_data,
-    question_data_count,
-    student_count,
-    fbt.feedback_count as feedback_count,
-    fbt.id AS feedback_target_id,
-    fbt.closes_at AS closes_at,
-    fbt.feedback_response_email_sent AS feedback_response_given,
-    cur.id AS course_realisation_id,
-    cur.start_date AS course_realisation_start_date,
-    cur.end_date AS course_realisation_end_date,
-    cu.course_code AS course_code,
-    cu.name AS course_unit_name,
-    cu.id AS course_unit_id,
-    org.id AS organisation_id
-  FROM question_averages
-    INNER JOIN feedback_targets as fbt ON question_averages.feedback_target_id = fbt.id
-    INNER JOIN course_units as cu ON fbt.course_unit_id = cu.id
-    INNER JOIN course_units_organisations as cuo ON cu.id = cuo.course_unit_id
-    INNER JOIN course_realisations as cur ON fbt.course_realisation_id = cur.id
-  
-    INNER JOIN LATERAL (
-      SELECT organisation_id FROM course_realisations_organisations WHERE course_realisation_id = cur.id
-      UNION
-      SELECT organisation_id FROM course_units_organisations WHERE course_unit_id = cu.id
-    ) organisation_access ON TRUE
-  
-    INNER JOIN organisations as org ON organisation_access.organisation_id = org.id
-    INNER JOIN feedback_counts ON feedback_counts.feedback_target_id = fbt.id
-  WHERE
-    fbt.feedback_type = 'courseRealisation'
-    AND cur.start_date < NOW()
-    AND cur.start_date > :since
-    AND NOT (cu.course_code = ANY (org.disabled_course_codes))
-    ${organisationId ? 'AND org.id = :organisationId' : ''};
-  `
-  return sequelize.query(query, {
+
+  const missingOrganisations = accessibleOrganisations.filter(
+    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
+  )
+
+  const allOrganisations = organisations.concat(
+    missingOrganisations.map((org) => ({
+      id: org.id,
+      name: org.name,
+      code: org.code,
+      courseUnits: [],
+      results: questions.map(({ id: questionId }) => ({
+        questionId,
+        mean: 0,
+        distribution: {},
+      })),
+      feedbackCount: 0,
+      studentCount: 0,
+      feedbackPercentage: 0,
+      feedbackResponsePercentage: 0,
+    })),
+  )
+
+  return _.orderBy(
+    allOrganisations,
+    [(org) => (org.courseUnits.length > 0 ? 1 : 0)],
+    ['desc'],
+  )
+}
+
+const getOrganisationSummaries = async ({
+  questions,
+  organisationAccess,
+  accessibleCourseRealisationIds = [],
+  includeOpenUniCourseUnits = true,
+  startDate = subMonths(new Date(), 24),
+  endDate = new Date(),
+}) => {
+  console.time('getOrganisationSummaries')
+  console.time('query')
+  // org ids user has org access to
+  const organisationIds = organisationAccess.map((org) => org.organisation.id)
+
+  // rows for each CU with its associated CURs in json
+  const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
     replacements: {
-      questionIds,
-      organisationId,
-      validDataValues,
-      since,
+      organisationIds: organisationIds.length === 0 ? [''] : organisationIds, // do this for sql reasons
+      courseRealisationIds:
+        accessibleCourseRealisationIds.length === 0
+          ? ['']
+          : accessibleCourseRealisationIds,
+      startDate,
+      endDate,
+      includeOpenUniCourseUnits,
     },
     type: sequelize.QueryTypes.SELECT,
   })
-}
+  console.timeEnd('query')
+  console.time('aggregate CUs')
 
-const getCourseUnitsWithResults = (rows, questions) => {
-  const rowsByCourseCode = _.groupBy(rows, (row) => row.course_code)
+  const initialResults = questions.map((q) => ({
+    questionId: q.id,
+    mean: 0,
+    distribution: {},
+  })) // results object template, array with objects for each questions distribution and mean
 
-  const courseUnits = Object.entries(rowsByCourseCode).map(
-    ([courseCode, courseUnitRows]) => {
-      //===== get latest relevant CUR of CU to see if its counter feedback is given =======//
-      const rowsByCourseRealisationId = _.groupBy(
-        courseUnitRows,
-        (row) => row.course_realisation_id,
-      )
+  // aggregate CU stats from CUR rows. Also find info about the current (latest) feedback target
+  const summedCourseUnits = rows.map((cu) => {
+    const results = JSON.parse(JSON.stringify(initialResults))
+    let feedbackCount = 0
+    let studentCount = 0
+    // current info
+    let currentFeedbackTargetId = null
+    let closesAt = null
+    let feedbackResponseGiven = false
+    // used for finding the latest fbt with the most feedbacks
+    let currentRank = -1
 
-      let feedbackCountSum = 0
-      let studentCountSum = 0
+    // sum all CURs
+    cu.courseRealisations.forEach((cur) => {
+      // iterate over each question
+      results.forEach((questionResult) => {
+        const { questionId } = questionResult
+        const indexOfQuestion = cur.questionIds.indexOf(questionId)
 
-      // find the latest cur's id with most feedbacks. Also count the sum of feedbacks and students
-      let currentId = Object.keys(rowsByCourseRealisationId)[0]
-      let currentRank = -1
-
-      Object.entries(rowsByCourseRealisationId).forEach(
-        ([courseRealisationId, courseRealisationRows]) => {
-          const { feedbackCount, studentCount } = getCounts(
-            courseRealisationRows,
+        // sum the distributions
+        if (
+          indexOfQuestion !== -1 &&
+          typeof cur.distribution[indexOfQuestion] === 'object'
+        )
+          Object.entries(cur.distribution[indexOfQuestion]).forEach(
+            ([option, count]) => {
+              questionResult.distribution[option] =
+                Number(count) + (questionResult.distribution[option] || 0)
+            },
           )
-          feedbackCountSum += feedbackCount
-          studentCountSum += studentCount
+      })
 
-          const rank =
-            Date.parse(courseRealisationRows[0].course_realisation_start_date) *
-              10_000 +
-            feedbackCount // assuming no course has over 10_000 feedbacks
-
-          if (rank > currentRank) {
-            currentRank = rank
-            currentId = courseRealisationId
-          }
-        },
-      )
-
-      const current = courseUnitRows.find(
-        (row) => row.course_realisation_id === currentId,
-      )
-
-      const results = getResults(courseUnitRows, questions)
-
-      return {
-        name: courseUnitRows[0].course_unit_name,
-        courseCode,
-        results,
-        feedbackCount: feedbackCountSum,
-        studentCount: studentCountSum,
-        feedbackPercentage: feedbackCountSum / studentCountSum,
-        feedbackResponseGiven: Boolean(current?.feedback_response_given),
-        currentFeedbackTargetId: current.feedback_target_id,
-        closesAt: current?.closes_at,
+      // check if this is more likely the latest fbt
+      const rank = Date.parse(cur.startDate) * 10_000 + cur.feedbackCount
+      if (rank > currentRank) {
+        currentFeedbackTargetId = cur.feedbackTargetId
+        closesAt = cur.closesAt
+        feedbackResponseGiven = cur.feedbackResponseGiven
+        currentRank = rank
       }
-    },
-  )
 
-  const sortedCourseUnits = _.orderBy(courseUnits, ['courseCode'], ['asc'])
+      feedbackCount += Number(cur.feedbackCount)
+      studentCount += Number(cur.studentCount)
+    }, initialResults)
 
-  return sortedCourseUnits
-}
-
-const createOrganisations = (rowsByOrganisationId, questions) => {
-  console.time('--organisationsWithCourseUnits')
-
-  const organisationsWithCourseUnits = Object.entries(rowsByOrganisationId).map(
-    ([organisationId, organisationRows]) => {
-      const courseUnits = getCourseUnitsWithResults(organisationRows, questions)
-      return {
-        id: organisationId,
-        courseUnits,
-      }
-    },
-  )
-  console.timeEnd('--organisationsWithCourseUnits')
-
-  console.time('--organisationsWithResults')
-  const organisationsWithResults = organisationsWithCourseUnits.map((org) => {
-    const { courseUnits } = org
-    const studentCount = _.sumBy(
-      courseUnits,
-      ({ studentCount }) => studentCount,
-    )
-    const feedbackCount = _.sumBy(
-      courseUnits,
-      ({ feedbackCount }) => feedbackCount,
-    )
-
-    const allResults = courseUnits.flatMap((cu) =>
-      cu.results.map((r) => ({ ...r, count: cu.feedbackCount })),
-    )
-
-    const resultsByQuestionId = _.groupBy(allResults, ({ questionId }) =>
-      questionId.toString(),
-    )
-
-    const results = questions.map(({ id: questionId }) => {
-      const questionResults = resultsByQuestionId[questionId.toString()] ?? []
-
-      const distribution = questionResults.reduce(
-        (acc, curr) =>
-          _.mergeWith({}, acc, curr.distribution, (a, b) => (a ? a + b : b)),
-        {},
+    // compute mean for each question
+    results.forEach((questionResult) => {
+      questionResult.mean = getMean(
+        questionResult.distribution,
+        questions.find((q) => q.id === questionResult.questionId),
       )
-
-      const mean =
-        questionResults.length > 0
-          ? _.round(
-              _.sumBy(questionResults, (r) => r.mean * r.count) / feedbackCount,
-              2,
-            )
-          : 0
-
-      return {
-        questionId,
-        mean,
-        distribution,
-      }
     })
 
-    const feedbackResponsePercentage =
-      _.sumBy(courseUnits, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) /
-      courseUnits.length
-
     return {
-      ...org,
-      results,
+      organisationId: cu.organisationId,
+      organisationName: cu.organisationName,
+      organisationCode: cu.organisationCode,
+      courseCode: cu.courseCode,
+      name: cu.courseUnitName,
       feedbackCount,
       studentCount,
-      feedbackPercentage: studentCount > 0 ? feedbackCount / studentCount : 0,
-      feedbackResponsePercentage,
+      results,
+      currentFeedbackTargetId,
+      closesAt,
+      feedbackResponseGiven,
+      questionIds: cu.courseRealisations[0].questionIds,
     }
   })
+  console.timeEnd('aggregate CUs')
+  console.time('aggregate orgs')
 
-  console.timeEnd('--organisationsWithResults')
+  // object with keys as org ids and values as arrays of CUs
+  const organisations = _.groupBy(summedCourseUnits, (cu) => cu.organisationId)
 
-  return organisationsWithResults
-}
+  // aggregate org stats from CUs
+  const summedOrganisations = Object.entries(organisations).map(
+    ([organisationId, courseUnits]) => {
+      const results = JSON.parse(JSON.stringify(initialResults))
+      let feedbackCount = 0
+      let studentCount = 0
 
-const getOrganisationsWithResults = (rows, questions) => {
-  console.time('-getOrganisationsWithResults')
-  const rowsByOrganisationId = _.groupBy(rows, (row) => row.organisation_id)
+      // sum all CUs
+      courseUnits.forEach((cu) => {
+        // iterate over each question
+        results.forEach((questionResult) => {
+          const { questionId } = questionResult
+          const indexOfQuestion = cu.questionIds.indexOf(questionId)
 
-  const organisations = createOrganisations(rowsByOrganisationId, questions)
+          // sum the distributions
+          if (cu.results[indexOfQuestion])
+            Object.entries(cu.results[indexOfQuestion].distribution).forEach(
+              ([option, count]) => {
+                questionResult.distribution[option] =
+                  Number(count) + (questionResult.distribution[option] || 0)
+              },
+            )
+        })
 
-  console.timeEnd('-getOrganisationsWithResults')
-  return organisations
-}
+        feedbackCount += Number(cu.feedbackCount)
+        studentCount += Number(cu.studentCount)
+      }, initialResults)
 
-const omitOrganisationOpenUniRows = async (rows) => {
-  let courseRealisationIds = _.uniq(
-    rows.map((row) => row.course_realisation_id),
-  )
-  if (!courseRealisationIds || courseRealisationIds.length === 0) {
-    courseRealisationIds = '_'
-  }
-  let courseUnitIds = _.uniq(rows.map((row) => row.course_unit_id))
-  if (!courseUnitIds || courseUnitIds.length === 0) {
-    courseUnitIds = '_'
-  }
+      // compute mean for each question
+      results.forEach((questionResult) => {
+        questionResult.mean = getMean(
+          questionResult.distribution,
+          questions.find((q) => q.id === questionResult.questionId),
+        )
+      })
 
-  const query = `
-    SELECT NULL AS course_unit_id, course_realisation_id
-    FROM course_realisations_organisations
-    WHERE organisation_id = :openUniOrganisationId
-    AND course_realisation_id IN (:courseRealisationIds)
-    UNION
-    SELECT NULL AS course_realisation_id, course_unit_id
-    FROM course_units_organisations
-    WHERE organisation_id = :openUniOrganisationId
-    AND course_unit_id IN (:courseUnitIds);
-  `
+      // compute the percentage of CUs whose latest CUR has feedback response given
+      const feedbackResponsePercentage =
+        _.sumBy(courseUnits, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) /
+        courseUnits.length
 
-  const results = await sequelize.query(query, {
-    replacements: {
-      courseRealisationIds,
-      courseUnitIds,
-      openUniOrganisationId: OPEN_UNI_ORGANISATION_ID,
+      return {
+        name: courseUnits[0].organisationName,
+        id: organisationId,
+        code: courseUnits[0].organisationCode,
+        feedbackCount,
+        studentCount,
+        results,
+        feedbackResponsePercentage,
+        courseUnits: _.orderBy(courseUnits, 'courseCode'),
+      }
     },
-    type: sequelize.QueryTypes.SELECT,
-  })
-
-  const openUniCourseRealisationIds = results
-    .map((r) => r.course_realisation_id)
-    .filter(Boolean)
-  const openUniCourseUnitIds = results
-    .map((r) => r.course_unit_id)
-    .filter(Boolean)
-
-  const filtered = rows.filter(
-    (r) =>
-      !openUniCourseRealisationIds.includes(r.course_realisation_id) &&
-      !openUniCourseUnitIds.includes(r.course_unit_id),
+  )
+  console.timeEnd('aggregate orgs')
+  const withEmptyOrganisations = includeEmptyOrganisations(
+    summedOrganisations,
+    organisationAccess,
+    questions,
   )
 
-  return filtered
-}
+  console.timeEnd('getOrganisationSummaries')
 
-const getOrganisationQuestions = async (organisationCode) => {
-  const programmeSurvey = await Survey.findOne({
-    where: { type: 'programme', typeId: organisationCode },
-  })
-
-  if (programmeSurvey) await programmeSurvey.populateQuestions()
-  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
-
-  const summaryQuestions = programmeQuestions.filter((q) => q.type === 'LIKERT')
-
-  return summaryQuestions
-}
-
-const getSummaryByOrganisation = async ({
-  organisationCode,
-  includeOpenUniCourseUnits = true,
-}) => {
-  console.time('getQuestions')
-  const universityQuestions = await getUniversityQuestions()
-  const programmeQuestions = await getOrganisationQuestions(organisationCode)
-  const questions = universityQuestions.concat(programmeQuestions)
-
-  const validDataValues = getValidDataValues(questions)
-  const questionIds = questions.map(({ id }) => id.toString())
-  console.timeEnd('getQuestions')
-
-  const organisation = await Organisation.findOne({
-    where: { code: organisationCode },
-  })
-
-  console.time('executeSummaryQuery')
-  const rows = await executeSummaryQuery({
-    questionIds,
-    organisationId: organisation.id,
-    validDataValues,
-  })
-  console.timeEnd('executeSummaryQuery')
-
-  console.time('omitOrganisationOpenUniRows')
-  const normalizedRows = !includeOpenUniCourseUnits
-    ? await omitOrganisationOpenUniRows(rows)
-    : rows
-  console.timeEnd('omitOrganisationOpenUniRows')
-
-  const results = getOrganisationsWithResults(normalizedRows, questions)
-  // must add name and code to the result json
-  results[0] = {
-    name: organisation.name,
-    code: organisation.code,
-    ...results[0],
-  }
-
-  return { organisations: results, questions }
-}
-
-const getAllRowsFromDb = async () => {
-  const questions = await getUniversityQuestions()
-  const validDataValues = getValidDataValues(questions)
-  const questionIds = questions.map(({ id }) => id.toString())
-
-  const courseRealisationRows = await executeSummaryQuery({
-    questionIds,
-    validDataValues,
-  })
-
-  return courseRealisationRows
+  return _.orderBy(withEmptyOrganisations, 'code')
 }
 
 module.exports = {
-  getSummaryByOrganisation,
-  getAllRowsFromDb,
+  getOrganisationSummaries,
 }
