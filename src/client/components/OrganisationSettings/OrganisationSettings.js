@@ -20,7 +20,6 @@ import { useTranslation } from 'react-i18next'
 
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
-import ProgrammeSummary from './ProgrammeSummary'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
@@ -30,6 +29,7 @@ import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
 import Title from '../Title'
 import { RouterTab, RouterTabs } from '../RouterTabs'
+import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
@@ -111,7 +111,7 @@ const OrganisationSettings = () => {
         </Route>
 
         <Route path={`${path}/summary`}>
-          <ProgrammeSummary />
+          <OrganisationSummary />
         </Route>
 
         <Route path={`${path}/open`}>

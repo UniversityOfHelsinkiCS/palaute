@@ -114,16 +114,20 @@ const getAccessInfo = async (req, res) => {
   })
 }
 
-const getByOrganisations = async (req, res) => {
+const getOrganisations = async (req, res) => {
   const { user } = req
-  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
+  const { code, includeOpenUniCourseUnits, startDate, endDate } = req.query
 
-  const [organisationAccess, accessibleCourseRealisationIds, questions] =
+  const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
       user.getOrganisationAccess(),
       getAccessibleCourseRealisationIds(user),
-      getSummaryQuestions(),
+      getSummaryQuestions(code),
     ])
+
+  const organisationAccess = code
+    ? fullOrganisationAccess.filter((org) => org.organisation.code === code)
+    : fullOrganisationAccess
 
   if (
     organisationAccess.length === 0 &&
@@ -249,7 +253,7 @@ const getByOrganisation = async (req, res) => {
 
 const router = Router()
 
-router.get('/organisations', getByOrganisations)
+router.get('/organisations', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/organisations/:code', getByOrganisation)
 router.get('/access', getAccessInfo)

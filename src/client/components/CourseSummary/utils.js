@@ -247,11 +247,13 @@ export const useOpenAccordions = (organisations) => {
 export const useAggregatedOrganisationSummaries = ({
   orderBy,
   facultyCode,
+  code,
   keyword,
   includeOpenUniCourseUnits,
   dateRange,
 }) => {
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
+    code,
     includeOpenUniCourseUnits,
     startDate: dateRange.start,
     endDate: dateRange.end,

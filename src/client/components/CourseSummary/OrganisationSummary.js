@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { SettingsOutlined } from '@mui/icons-material'
 
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import useOrganisations from '../../hooks/useOrganisations'
@@ -172,6 +172,7 @@ const OrganisationTable = ({
 
 const OrganisationSummary = () => {
   const { t } = useTranslation()
+  const { code } = useParams()
 
   const { authorizedUser, isLoading: authorizedUserLoading } =
     useAuthorizedUser()
@@ -204,6 +205,7 @@ const OrganisationSummary = () => {
     failureCount,
   } = useAggregatedOrganisationSummaries({
     facultyCode,
+    code,
     keyword,
     orderBy,
     includeOpenUniCourseUnits,

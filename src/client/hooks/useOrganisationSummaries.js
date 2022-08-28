@@ -6,6 +6,7 @@ const defaultCacheTime = 900000
 
 const useOrganisationSummaries = (options = {}) => {
   const {
+    code,
     includeOpenUniCourseUnits = true,
     startDate,
     endDate,
@@ -13,6 +14,7 @@ const useOrganisationSummaries = (options = {}) => {
   } = options
 
   const params = {
+    code,
     includeOpenUniCourseUnits:
       includeOpenUniCourseUnits === true ? 'true' : 'false',
     startDate,
@@ -22,7 +24,7 @@ const useOrganisationSummaries = (options = {}) => {
   const queryKey = ['organisationSummaries', params]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/course-summaries/organisations', {
+    const { data } = await apiClient.get(`/course-summaries/organisations`, {
       params,
     })
 
