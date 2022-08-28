@@ -137,7 +137,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS feedback_target_counts_view as (
 `
 
 const REFRESH_VIEWS_QUERY = `
-REFRESH MATERIALIZED VIEW course_results_view;
+${SUMMARY_VIEW_QUERY}
 REFRESH MATERIALIZED VIEW feedback_target_counts_view;
 `
 
