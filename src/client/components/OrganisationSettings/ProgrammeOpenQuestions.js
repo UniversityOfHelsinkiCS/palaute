@@ -19,8 +19,8 @@ const styles = {
     fontSize: 'large',
   },
   realisationContainer: {
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: 4,
+    marginBottom: 6,
   },
   buttonContainer: {
     display: 'flex',
@@ -30,14 +30,14 @@ const styles = {
     },
   },
   response: {
-    margin: 5,
+    margin: 2,
   },
   questionTitle: {
     fontWeight: 500,
   },
   dates: {
     color: '#646464',
-    marginBottom: 5,
+    marginBottom: 3,
   },
 }
 
@@ -106,7 +106,7 @@ const ProgrammeOpenQuestions = () => {
         </Button>
       </Box>
       {filteredCourses.map((course) => (
-        <Box key={course.code}>
+        <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
               to={`/course-summary/${course.code}`}
