@@ -134,7 +134,8 @@ const buildReminderAboutFeedbackResponseToTeachers = (
           Please give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>
           Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>
           Thank you! <br/>
-          ${instructionsAndSupport.en}`,
+          ${instructionsAndSupport.en} <br/>
+          Reminder sent to ${teachers}`,
       fi: `Hyvä opettaja! <br/> 
           Palautejakso seuraaville kursseille on päättynyt: <br/>
           ${courseNamesAndUrls}
@@ -142,14 +143,15 @@ const buildReminderAboutFeedbackResponseToTeachers = (
           Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>
           Kiitos!  <br/>
           ${instructionsAndSupport.fi} <br/>
-          Lähetetty opettajille ${teachers}`,
+          Muistutus lähetetty opettajille ${teachers}`,
       sv: `Bästa lärare! <br/>
           Responsperioden för följande kurser har tagit slut: <br/>
           ${courseNamesAndUrls}
           Ge gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>
           Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>
           Tack! <br/>
-          ${instructionsAndSupport.sv}`,
+          ${instructionsAndSupport.sv} <br/>
+          Påminnelse skickad till ${teachers}`,
     },
     subject: {
       en: hasMultipleFeedbackTargets
