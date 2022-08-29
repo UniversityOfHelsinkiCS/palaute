@@ -20,7 +20,7 @@ Delete this comment if you find something better
 */
 
 const SUMMARY_VIEW_QUERY = `
-DROP MATERIALIZED VIEW course_results_view;
+DROP MATERIALIZED VIEW IF EXISTS course_results_view;
 CREATE MATERIALIZED VIEW course_results_view AS (
     WITH cur_results AS (
         WITH question_distributions AS (
