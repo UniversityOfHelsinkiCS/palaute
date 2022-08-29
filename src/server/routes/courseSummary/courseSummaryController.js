@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { QueryTypes } = require('sequelize')
 const { addYears } = require('date-fns')
 
-const { CourseUnit, Survey, Organisation } = require('../../models')
+const { CourseUnit, Organisation } = require('../../models')
 
 const {
   getOrganisationSummaries,
@@ -12,8 +12,7 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
-
-const WORKLOAD_QUESTION_ID = 1042
+const { getSummaryQuestions } = require('../../services/questions')
 
 const INCLUDED_ORGANISATIONS_BY_USER_ID = {
   // Jussi Merenmies
@@ -54,37 +53,6 @@ const getAccessibleCourseRealisationIds = async (user) => {
   )
 
   return rows.map((row) => row.id)
-}
-
-const getSummaryQuestions = async (organisationCode) => {
-  const [universityQuestions, programmeQuestions] = await Promise.all([
-    (async () => {
-      const universitySurvey = await Survey.findOne({
-        where: { type: 'university' },
-      })
-      await universitySurvey.populateQuestions()
-      return universitySurvey.questions
-    })(),
-    (async () => {
-      if (!organisationCode) return []
-      const programmeSurvey = await Survey.findOne({
-        where: { type: 'programme', typeId: organisationCode },
-      })
-      if (!programmeSurvey) return []
-      await programmeSurvey.populateQuestions()
-      return programmeSurvey.questions
-    })(),
-  ])
-
-  const questions = universityQuestions.concat(programmeQuestions)
-  const summaryQuestions = questions.filter(
-    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
-  )
-
-  return summaryQuestions.map((question) => ({
-    ...question.toJSON(),
-    secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
-  }))
 }
 
 const getAccessInfo = async (req, res) => {
