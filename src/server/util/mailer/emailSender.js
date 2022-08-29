@@ -229,7 +229,15 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: ['id', 'username', 'email', 'language', 'secondaryEmail'],
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'language',
+          'secondaryEmail',
+          'firstName',
+          'lastName',
+        ],
         through: {
           where: {
             accessStatus: 'TEACHER',
@@ -481,24 +489,17 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
 const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
 
-  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    feedbackTargets,
-    { primaryOnly: true },
-  )
-
-  const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
-    (teacher) =>
-      emailReminderAboutFeedbackResponseToTeachers(
-        teacher,
-        teachersWithFeedbackTargets[teacher],
-      ),
+  const emailsToBeSent = feedbackTargets.flatMap((fbt) =>
+    fbt.users.map((user) =>
+      emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users),
+    ),
   )
 
   const ids = feedbackTargets.map((target) => target.id)
 
   FeedbackTarget.update(
     {
-      feedbackResponseReminderEmailSent: true,
+      feedbackResponseReminderEmailSent: false,
     },
     {
       where: {

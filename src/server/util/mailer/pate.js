@@ -234,33 +234,26 @@ const emailReminderAboutSurveyOpeningToTeachers = (
 }
 
 const emailReminderAboutFeedbackResponseToTeachers = (
-  emailAddress,
-  teacherFeedbackTargets,
+  teacher,
+  feedbackTarget,
+  allTeachers,
 ) => {
-  const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
-  const language = teacherFeedbackTargets[0].language
-    ? teacherFeedbackTargets[0].language
-    : 'en'
-  const courseName = teacherFeedbackTargets[0].name[language]
+  const { language } = teacher
 
-  let courseNamesAndUrls = ''
+  const courseName = feedbackTarget.courseUnit.name[language]
 
-  for (const feedbackTarget of teacherFeedbackTargets) {
-    const { id, name } = feedbackTarget
-
-    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/feedback-response`}>
-      ${name[language]}
-      </a> <br/>`
-  }
+  const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
+    ${feedbackTarget.courseRealisation[language]}
+    </a> <br/>`
 
   const translations = buildReminderAboutFeedbackResponseToTeachers(
     courseNamesAndUrls,
     courseName,
-    hasMultipleFeedbackTargets,
+    allTeachers,
   )
 
   const email = {
-    to: emailAddress,
+    to: teacher.email,
     subject: translations.subject[language] || translations.subject.en,
     text: translations.text[language] || translations.text.en,
   }

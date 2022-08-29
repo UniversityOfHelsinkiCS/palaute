@@ -120,30 +120,29 @@ const buildReminderToGiveFeedbackToStudents = (
 const buildReminderAboutFeedbackResponseToTeachers = (
   courseNamesAndUrls,
   courseName,
-  hasMultipleFeedbackTargets,
   receivedBy,
 ) => {
   const teachers = receivedBy
-    .map((u) => `${u.firstName} ${u.lastName}`)
-    .join(', ')
+    ?.map((u) => `${u.firstName} ${u.lastName}`)
+    ?.join(', ')
   const translations = {
     text: {
       en: `Dear teacher! <br/>
-          The feedback period for the following courses has ended: <br/>
+          The feedback period for the course has ended: <br/>
           ${courseNamesAndUrls}
           Please give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>
           Your response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>
           Thank you! <br/>
           ${instructionsAndSupport.en} <br/>
-          Reminder sent to ${teachers}`,
+          ${teachers ? `Reminder sent to ${teachers}` : ''}`,
       fi: `Hyvä opettaja! <br/> 
-          Palautejakso seuraaville kursseille on päättynyt: <br/>
+          Palautejakso kurssille on päättynyt: <br/>
           ${courseNamesAndUrls}
           Annathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä.  <br/>
           Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>
           Kiitos!  <br/>
           ${instructionsAndSupport.fi} <br/>
-          Muistutus lähetetty opettajille ${teachers}`,
+          ${teachers ? `Muistutus lähetetty opettajille ${teachers}` : ''}`,
       sv: `Bästa lärare! <br/>
           Responsperioden för följande kurser har tagit slut: <br/>
           ${courseNamesAndUrls}
@@ -151,18 +150,12 @@ const buildReminderAboutFeedbackResponseToTeachers = (
           Ditt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>
           Tack! <br/>
           ${instructionsAndSupport.sv} <br/>
-          Påminnelse skickad till ${teachers}`,
+          ${teachers ? `Påminnelse skickad till ${teachers}` : ''}`,
     },
     subject: {
-      en: hasMultipleFeedbackTargets
-        ? `Please give counter feedback for your courses`
-        : `Please give counter feedback for the course ${courseName}`,
-      fi: hasMultipleFeedbackTargets
-        ? `Annathan vastapalautetta kursseillesi`
-        : `Annathan vastapalautetta kurssillesi ${courseName}`,
-      sv: hasMultipleFeedbackTargets
-        ? `Ge gärna motrespons för dina kurser`
-        : `Ge gärna motrespons för kursen ${courseName}`,
+      en: `Please give counter feedback for the course ${courseName}`,
+      fi: `Annathan vastapalautetta kurssillesi ${courseName}`,
+      sv: `Ge gärna motrespons för kursen ${courseName}`,
     },
   }
 
