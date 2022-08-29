@@ -196,8 +196,7 @@ export default {
       'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
     notPublicInfo:
       'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
-    // publicityOfQuestions:
-    //  'The results of these questions are not visible to students',
+    // publicityOfQuestions: 'The results of these questions are not visible to students',
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
   },
@@ -254,7 +253,7 @@ export default {
   },
   userInformation: {
     // iamGroups: 'IAM-ryhmät',
-    // iamTooltip: 'Näytetään vain Norppaan vaikutavat',
+    // iamTooltip: 'Näytetään vain Norppaan vaikuttavat',
     // organisationAccess: 'Organisaatio-oikeudet',
     // organisationCode: 'Organisaatiokoodi',
     // access: 'Oikeus',
@@ -280,8 +279,7 @@ export default {
     // sendEmailOption: 'Lähetä vastapalaute sähköpostitse opiskelijoille',
     dialogSaveTitle: 'Spara svar',
     // dialogSendEmailTitle: 'Tallenna vastapalaute ja lähetä sähköposti',
-    // dialogSendEmailContent:
-    //   'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
+    // dialogSendEmailContent: 'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
     dialogSaveSubmit: 'Spara',
     dialogSendEmailSubmit: 'Skicka',
     // checkboxSendEmail: 'Send email',
@@ -416,8 +414,7 @@ export default {
     feedbackHelper: 'Ge fritt formulerad respons',
     responseWanted: 'Jag vill ha svar på responsen',
     submit: 'Skicka respons',
-    // confirm:
-    //   'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
+    // confirm: 'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
     // title: 'Give feedback to Norppa developers',
     description:
       'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',

@@ -121,7 +121,11 @@ const buildReminderAboutFeedbackResponseToTeachers = (
   courseNamesAndUrls,
   courseName,
   hasMultipleFeedbackTargets,
+  receivedBy,
 ) => {
+  const teachers = receivedBy
+    .map((u) => `${u.firstName} ${u.lastName}`)
+    .join(', ')
   const translations = {
     text: {
       en: `Dear teacher! <br/>
@@ -137,7 +141,8 @@ const buildReminderAboutFeedbackResponseToTeachers = (
           Annathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä.  <br/>
           Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>
           Kiitos!  <br/>
-          ${instructionsAndSupport.fi}`,
+          ${instructionsAndSupport.fi} <br/>
+          Lähetetty opettajille ${teachers}`,
       sv: `Bästa lärare! <br/>
           Responsperioden för följande kurser har tagit slut: <br/>
           ${courseNamesAndUrls}
