@@ -4,9 +4,10 @@ const { addYears } = require('date-fns')
 
 const { CourseUnit, Survey, Organisation } = require('../../models')
 
-const { getOrganisationSummaries } = require('./getOrganisationSummaries')
-
-const getCourseRealisationSummaries = require('./getCourseRealisationSummaries')
+const {
+  getOrganisationSummaries,
+  getCourseRealisationSummaries,
+} = require('../../services/summary')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')

@@ -1,7 +1,7 @@
 const {
   SUMMARY_VIEW_QUERY,
   COUNTS_VIEW_QUERY,
-} = require('../routes/courseSummary/sql')
+} = require('../services/summary/sql')
 
 module.exports = {
   up: async (queryInterface) => {

@@ -4,8 +4,6 @@ const { sequelize } = require('../../util/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
 const { getMean } = require('./utils')
 
-// This file name is temporary until all functions from getOrganisationSummaries are replaced
-
 const includeEmptyOrganisations = (
   organisations,
   organisationAccess,
@@ -52,8 +50,6 @@ const getOrganisationSummaries = async ({
   startDate = subMonths(new Date(), 24),
   endDate = new Date(),
 }) => {
-  console.time('getOrganisationSummaries')
-  console.time('query')
   // org ids user has org access to
   const organisationIds = organisationAccess.map((org) => org.organisation.id)
 
@@ -71,8 +67,6 @@ const getOrganisationSummaries = async ({
     },
     type: sequelize.QueryTypes.SELECT,
   })
-  console.timeEnd('query')
-  console.time('aggregate CUs')
 
   const initialResults = questions.map((q) => ({
     questionId: q.id,
@@ -148,8 +142,6 @@ const getOrganisationSummaries = async ({
       questionIds: cu.courseRealisations[0].questionIds,
     }
   })
-  console.timeEnd('aggregate CUs')
-  console.time('aggregate orgs')
 
   // object with keys as org ids and values as arrays of CUs
   const organisations = _.groupBy(summedCourseUnits, (cu) => cu.organisationId)
@@ -207,18 +199,13 @@ const getOrganisationSummaries = async ({
       }
     },
   )
-  console.timeEnd('aggregate orgs')
   const withEmptyOrganisations = includeEmptyOrganisations(
     summedOrganisations,
     organisationAccess,
     questions,
   )
 
-  console.timeEnd('getOrganisationSummaries')
-
   return _.orderBy(withEmptyOrganisations, 'code')
 }
 
-module.exports = {
-  getOrganisationSummaries,
-}
+module.exports = getOrganisationSummaries

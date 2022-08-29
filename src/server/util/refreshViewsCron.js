@@ -1,6 +1,6 @@
 const { CronJob } = require('cron')
 const { inE2EMode, inProduction } = require('../../config')
-const { REFRESH_VIEWS_QUERY } = require('../routes/courseSummary/sql')
+const { REFRESH_VIEWS_QUERY } = require('../services/summary')
 const { sequelize } = require('./dbConnection')
 
 const schedule = (cronTime, func) =>
