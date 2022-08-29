@@ -1,4 +1,7 @@
-# Palaute
+![Norppa](https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/seal_1f9ad.png)
+
+# Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/prod.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/tests.yml/badge.svg)
+
 
 Production in <https://coursefeedback.helsinki.fi>
 
