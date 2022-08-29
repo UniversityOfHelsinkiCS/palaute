@@ -17,6 +17,7 @@ const {
   User,
   UpdaterStatus,
   FeedbackTargetDateCheck,
+  Organisation,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -463,6 +464,34 @@ const solveFeedbackTargetDateCheck = async (req, res) => {
   return res.status(200).send()
 }
 
+const getFeedbackCorrespondents = async (req, res) => {
+  const users = await sequelize.query(
+    `
+    SELECT 
+      u.id, 
+      u.email, 
+      u.secondary_email as "secondaryEmail", 
+      u.employee_number as "employeeNumber",
+      u.student_number as "studentNumber",
+      u.iam_groups as "iamGroups",
+      u.degree_study_right as "degreeStudyRight",
+      u.username,
+      u.language,
+      org.name as "organisationName",
+      org.code as "organisationCode"
+
+    FROM users u
+    INNER JOIN organisations org ON org.responsible_user_id = u.id
+    ORDER BY org.code
+  `,
+    {
+      type: sequelize.QueryTypes.SELECT,
+    },
+  )
+
+  return res.send(users)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -482,4 +511,5 @@ router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
 router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
 router.get('/feedback-targets', findFeedbackTargets)
 router.put('/resend-response', resendFeedbackResponseEmail)
+router.get('/feedback-correspondents', getFeedbackCorrespondents)
 module.exports = router

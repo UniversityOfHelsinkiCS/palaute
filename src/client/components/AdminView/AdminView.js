@@ -18,6 +18,7 @@ import MiscTab from './MiscTab'
 import { ChangedClosingDates } from './ChangedClosingDates'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
+import FeedbackCorrespondents from './FeedbackCorrespondents'
 
 const styles = {
   failureIcon: {
@@ -86,6 +87,11 @@ const AdminView = () => {
             component={Link}
             to={`${url}/feedback-targets`}
           />
+          <Tab
+            label="Palautevastaavat"
+            component={Link}
+            to={`${url}/feedback-correspondents`}
+          />
           <Tab label="Updater" to={`${url}/updater`} component={Link} />
           <Tab label="Misc" component={Link} to={`${url}/misc`} />
         </RouterTabs>
@@ -98,6 +104,10 @@ const AdminView = () => {
         <Route
           path={`${path}/feedback-targets`}
           component={FeedbackTargetInspector}
+        />
+        <Route
+          path={`${path}/feedback-correspondents`}
+          component={FeedbackCorrespondents}
         />
         <Route path={`${path}/updater`} component={UpdaterView} />
         <Route path={`${path}/misc`} component={MiscTab} />

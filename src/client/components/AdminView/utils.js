@@ -45,3 +45,11 @@ export const getData = (results) => {
   ])
   return data
 }
+
+export const handleLoginAs = (user) => () => {
+  const { id, employeeNumber } = user
+
+  localStorage.setItem('adminLoggedInAs', id)
+  localStorage.setItem('employeenumber', employeeNumber ?? null)
+  window.location.reload()
+}
