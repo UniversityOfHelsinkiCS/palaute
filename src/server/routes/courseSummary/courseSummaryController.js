@@ -69,6 +69,7 @@ const getSummaryQuestions = async (organisationCode) => {
       const programmeSurvey = await Survey.findOne({
         where: { type: 'programme', typeId: organisationCode },
       })
+      if (!programmeSurvey) return []
       await programmeSurvey.populateQuestions()
       return programmeSurvey.questions
     })(),
