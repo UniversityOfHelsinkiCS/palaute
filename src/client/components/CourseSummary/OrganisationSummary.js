@@ -84,6 +84,7 @@ const OrganisationTable = ({
   onOrderByChange,
   filters,
   loading = false,
+  organisationLinks = false,
 }) => {
   const { t, i18n } = useTranslation()
 
@@ -149,9 +150,10 @@ const OrganisationTable = ({
                     onToggleAccordion={() => onToggleAccordion(id)}
                     cellsAfter={
                       <td>
-                        {hasWriteAccess(id, organisationAccess) && (
-                          <SettingsButton code={code} />
-                        )}
+                        {organisationLinks &&
+                          hasWriteAccess(id, organisationAccess) && (
+                            <SettingsButton code={code} />
+                          )}
                       </td>
                     }
                   >
@@ -265,6 +267,7 @@ const OrganisationSummary = () => {
         onToggleAccordion={toggleAccordion}
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
+        organisationLinks={!code}
         filters={
           <Filters
             facultyCode={!code && isAdmin && facultyCode}
