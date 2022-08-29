@@ -14,7 +14,6 @@ const useOrganisationSummaries = (options = {}) => {
   } = options
 
   const params = {
-    code,
     includeOpenUniCourseUnits:
       includeOpenUniCourseUnits === true ? 'true' : 'false',
     startDate,
@@ -24,9 +23,12 @@ const useOrganisationSummaries = (options = {}) => {
   const queryKey = ['organisationSummaries', params]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/course-summaries/organisations`, {
-      params,
-    })
+    const { data } = await apiClient.get(
+      `/course-summaries/organisations/${code || ''}`,
+      {
+        params,
+      },
+    )
 
     return data
   }

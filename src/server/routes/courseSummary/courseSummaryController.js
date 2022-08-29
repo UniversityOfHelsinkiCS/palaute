@@ -86,7 +86,8 @@ const getAccessInfo = async (req, res) => {
 
 const getOrganisations = async (req, res) => {
   const { user } = req
-  const { code, includeOpenUniCourseUnits, startDate, endDate } = req.query
+  const { code } = req.params
+  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
 
   const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
@@ -191,41 +192,11 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
-const getByOrganisation = async (req, res) => {
-  const { user } = req
-  const { code } = req.params
-  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
-
-  const organisationAccess = await user.getOrganisationAccess()
-
-  const access = organisationAccess.find(
-    (org) => org.organisation.code === code,
-  )
-
-  if (!access) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
-  const questions = await getSummaryQuestions(code)
-  const organisations = await getOrganisationSummaries({
-    questions,
-    organisationAccess: [access],
-    includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    startDate,
-    endDate,
-  })
-
-  return res.send({
-    organisations,
-    summaryQuestions: questions,
-  })
-}
-
 const router = Router()
 
 router.get('/organisations', getOrganisations)
+router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
-router.get('/organisations/:code', getByOrganisation)
 router.get('/access', getAccessInfo)
 
 module.exports = router
