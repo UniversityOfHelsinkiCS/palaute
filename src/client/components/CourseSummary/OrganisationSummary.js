@@ -267,7 +267,7 @@ const OrganisationSummary = () => {
         onOrderByChange={handleOrderByChange}
         filters={
           <Filters
-            facultyCode={isAdmin && facultyCode}
+            facultyCode={!code && isAdmin && facultyCode}
             keyword={keyword}
             onFacultyChange={handleFacultyChange}
             onKeywordChange={handleKeywordChange}
