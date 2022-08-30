@@ -1170,8 +1170,8 @@ adRouter.delete('/:id/user-feedback-targets/:userId', deleteUserFeedbackTarget)
 
 const noadRouter = Router()
 
-noadRouter.get(':id', getOne)
-noadRouter.get(':id/feedbacks', getFeedbacks)
+noadRouter.get('/:id', getOne)
+noadRouter.get('/:id/feedbacks', getFeedbacks)
 
 module.exports = {
   adRouter,

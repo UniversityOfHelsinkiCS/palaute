@@ -15,6 +15,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DATABASE=postgres
       - REDIS_HOST=redis
+      - JWT_KEY=minttujam
     ports:
       - 3000:3000
       - 9229:9229
@@ -24,6 +25,8 @@ services:
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
     volumes:
       - pg_data:/data
     container_name: palaute_db
