@@ -15,7 +15,6 @@ import Title from '../Title'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import { RouterTabs } from '../RouterTabs'
 import MiscTab from './MiscTab'
-import { ChangedClosingDates } from './ChangedClosingDates'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
@@ -78,11 +77,6 @@ const AdminView = () => {
             to={`${url}/statistics`}
           />
           <Tab
-            label="Changed dates"
-            component={Link}
-            to={`${url}/changed-dates`}
-          />
-          <Tab
             label="Search feedback targets"
             component={Link}
             to={`${url}/feedback-targets`}
@@ -100,7 +94,6 @@ const AdminView = () => {
         <Route path={`${path}/users`} component={UsersTab} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
-        <Route path={`${path}/changed-dates`} component={ChangedClosingDates} />
         <Route
           path={`${path}/feedback-targets`}
           component={FeedbackTargetInspector}
