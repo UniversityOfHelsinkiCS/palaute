@@ -57,10 +57,11 @@ const OrganisationSettings = () => {
     )
   }
 
+  const hasReadAccess = Boolean(organisation?.access?.read)
   const hasWriteAccess = Boolean(organisation?.access?.write)
   const hasAdminAccess = Boolean(organisation?.access?.admin)
 
-  if (!hasWriteAccess) {
+  if (!hasReadAccess) {
     return <Redirect to="/" />
   }
 

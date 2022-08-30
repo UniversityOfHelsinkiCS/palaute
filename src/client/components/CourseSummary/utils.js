@@ -73,11 +73,8 @@ export const filterByCourseCode = (organisations, keyword) => {
   )
 }
 
-export const hasWriteAccess = (organisationId, organisationAccess) =>
-  Boolean(
-    (organisationAccess ?? []).find(({ id }) => id === organisationId)?.access
-      .write,
-  )
+export const getAccess = (organisationId, organisationAccess) =>
+  (organisationAccess ?? []).find(({ id }) => id === organisationId)?.access
 
 const getInitialOpenAccordions = (organisations, history) => {
   const historyOpenAccordions = history.location.state?.openAccordions

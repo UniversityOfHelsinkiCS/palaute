@@ -10,9 +10,9 @@ import {
   Tooltip,
   LinearProgress,
 } from '@mui/material'
-import { SettingsOutlined } from '@mui/icons-material'
+import { Search, SettingsOutlined } from '@mui/icons-material'
 
-import { Redirect, Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import useOrganisations from '../../hooks/useOrganisations'
@@ -23,7 +23,7 @@ import DividerRow from './DividerRow'
 import Filters from './Filters'
 
 import {
-  hasWriteAccess,
+  getAccess,
   useOpenAccordions,
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
@@ -49,7 +49,6 @@ const styles = {
     minHeight: '12px',
   },
   settingsButton: {
-    marginX: 4,
     '&:hover': {
       color: (theme) => theme.palette.primary.light,
       background: 'transparent',
@@ -57,21 +56,34 @@ const styles = {
   },
 }
 
-const SettingsButton = ({ code }) => {
+const OrganisationButton = ({ code, access }) => {
   const { t } = useTranslation()
+  if (!access) return null
+  const { write } = access
 
   return (
-    <Tooltip title={t('courseSummary:programmePage')} placement="right">
+    <Tooltip
+      title={t(
+        write
+          ? 'courseSummary:programmeSettings'
+          : 'courseSummary:programmeSummary',
+      )}
+      placement="top"
+    >
       <IconButton
         id={`settings-button-${code}`}
         component={Link}
-        to={`/organisations/${code}/settings`}
+        to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
         size="large"
         sx={styles.settingsButton}
         color="primary"
         disableFocusRipple
       >
-        <SettingsOutlined sx={{ fontSize: '26px' }} />
+        {write ? (
+          <SettingsOutlined sx={{ fontSize: '26px' }} />
+        ) : (
+          <Search sx={{ fontSize: '24px' }} />
+        )}
       </IconButton>
     </Tooltip>
   )
@@ -151,12 +163,14 @@ const OrganisationTable = ({
                     accordionInitialOpen={initialOpenAccordions.includes(id)}
                     onToggleAccordion={() => onToggleAccordion(id)}
                     cellsAfter={
-                      <td>
-                        {organisationLinks &&
-                          hasWriteAccess(id, organisationAccess) && (
-                            <SettingsButton code={code} />
-                          )}
-                      </td>
+                      organisationLinks && (
+                        <td css={{ paddingLeft: '4rem' }}>
+                          <OrganisationButton
+                            code={code}
+                            access={getAccess(id, organisationAccess)}
+                          />
+                        </td>
+                      )
                     }
                   >
                     <CourseUnitSummary
