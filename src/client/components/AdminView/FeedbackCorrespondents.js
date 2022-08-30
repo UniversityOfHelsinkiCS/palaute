@@ -1,4 +1,4 @@
-import { Box, Link as MuiLink, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import useQuery from '../../hooks/useQuery'
 import apiClient from '../../util/apiClient'
@@ -14,7 +14,7 @@ const useFeedbackCorrespondents = () =>
   })
 
 const FeedbackCorrespondents = () => {
-  const { data: users, isLoading, ...rest } = useFeedbackCorrespondents()
+  const { data: users, isLoading } = useFeedbackCorrespondents()
 
   if (isLoading) return <LoadingProgress />
 
@@ -22,6 +22,7 @@ const FeedbackCorrespondents = () => {
     <Box mt="1rem">
       {users.map((user) => (
         <UserAccordion
+          key={user.organisationCode}
           user={user}
           handleLoginAs={handleLoginAs}
           decoration={

@@ -16,6 +16,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { format } from 'date-fns'
 import React from 'react'
 import useUserDetails from '../../hooks/useUserDetails'
@@ -130,7 +131,9 @@ const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
     key={user.id}
     TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
   >
-    <AccordionSummary style={{ cursor: 'default' }}>
+    <AccordionSummary
+      sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}
+    >
       <Box display="flex" alignItems="center" width="100%">
         <Typography>
           {user.firstName} {user.lastName}
