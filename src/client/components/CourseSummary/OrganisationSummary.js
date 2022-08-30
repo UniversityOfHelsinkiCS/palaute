@@ -275,6 +275,14 @@ const OrganisationSummary = () => {
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}
         </Typography>
+        <Box mt={1} />
+        <Typography variant="body1" component="h2">
+          {t(
+            code
+              ? 'courseSummary:programmeLevelQuestions'
+              : 'courseSummary:universityLevelQuestions',
+          )}
+        </Typography>
       </Box>
       <OrganisationTable
         organisations={aggregatedOrganisations}

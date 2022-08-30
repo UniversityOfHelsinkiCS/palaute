@@ -306,6 +306,8 @@ export default {
   },
   courseSummary: {
     heading: 'Sammandrag av kursens respons',
+    // universityLevelQuestions: 'Yliopistotason kysymykset',
+    // programmeLevelQuestions: 'Yliopisto- ja ohjelmatason kysymykset',
     noResults: 'Inga responser',
     feedbackResponse: 'Svar på responsen för den senaste kursen given',
     feedbackCount: 'Antal respons',

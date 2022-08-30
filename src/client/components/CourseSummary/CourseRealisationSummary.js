@@ -3,14 +3,7 @@ import React, { Fragment } from 'react'
 
 import { Link, useParams } from 'react-router-dom'
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  TableContainer,
-  Link as MuiLink,
-} from '@mui/material'
+import { Box, Typography, TableContainer, Link as MuiLink } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -142,7 +135,7 @@ const CourseRealisationSummary = () => {
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mb={4}>
+      <Box mb="1rem">
         <Typography variant="h4" component="h1">
           {getLanguageValue(courseUnit.name, i18n.language)},{' '}
           {courseUnit.courseCode}
@@ -158,14 +151,13 @@ const CourseRealisationSummary = () => {
           </MuiLink>
         )}
       </Box>
-      <Card>
-        <CardContent>
-          <CourseRealisationTable
-            courseRealisations={courseRealisations}
-            questions={questions}
-          />
-        </CardContent>
-      </Card>
+      <Typography variant="body1" component="h2">
+        {t('courseSummary:universityLevelQuestions')}
+      </Typography>
+      <CourseRealisationTable
+        courseRealisations={courseRealisations}
+        questions={questions}
+      />
     </>
   )
 }

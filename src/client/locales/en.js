@@ -306,6 +306,8 @@ export default {
   },
   courseSummary: {
     heading: 'Summary of course feedback',
+    universityLevelQuestions: 'University level questions',
+    programmeLevelQuestions: 'University and programme level questions',
     noResults: 'No feedback',
     clickForDetails: 'Click for details',
     feedbackResponse: 'Latest course counter feedback given',

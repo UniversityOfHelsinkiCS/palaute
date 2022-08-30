@@ -307,6 +307,8 @@ export default {
   },
   courseSummary: {
     heading: 'Kurssipalautteiden yhteenveto',
+    universityLevelQuestions: 'Yliopistotason kysymykset',
+    programmeLevelQuestions: 'Yliopisto- ja ohjelmatason kysymykset',
     noResults: 'Ei palautteita',
     feedbackResponse: 'Viimeisimmän kurssin vastapalaute annettu',
     feedbackCount: 'Palautteiden määrä',
