@@ -17,6 +17,9 @@ export default {
     choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
     fetchError:
       'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
+    // notFound: 'Sivua tai resurssia ei löydy.',
+    // noAccess: 'Sinulla ei ole pääsyä tähän resurssiin',
+    // supportContact: 'Ongelmatilanteessa ota yhteyttä tukeen: ',
     save: 'Spara',
     saveSuccess: 'Informationen har sparats',
     name: 'Namn',

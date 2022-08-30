@@ -113,16 +113,18 @@ const getOrganisationByCode = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const { organisation, access } = organisationAccess.find(
+  const theOrganisationAccess = organisationAccess.find(
     ({ organisation }) => organisation.code === code,
   )
 
-  if (!organisation) {
+  if (!theOrganisationAccess) {
     throw new ApplicationError(
-      404,
       `Organisation by code ${code} is not found or it is not accessible`,
+      404,
     )
   }
+
+  const { organisation, access } = theOrganisationAccess
 
   const publicOrganisation = {
     ...organisation.toJSON(),

@@ -20,7 +20,7 @@ const useOrganisationSummaries = (options = {}) => {
     endDate,
   }
 
-  const queryKey = ['organisationSummaries', params]
+  const queryKey = ['organisationSummaries', params, code || 'ALL']
 
   const queryFn = async () => {
     const { data } = await apiClient.get(

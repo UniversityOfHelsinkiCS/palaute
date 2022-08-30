@@ -34,6 +34,8 @@ import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { OrganisationLabel } from './Labels'
+import errors from '../../util/errorMessage'
+import ErrorView from '../ErrorView'
 
 const styles = {
   filtersCell: {
@@ -204,7 +206,8 @@ const OrganisationSummary = () => {
     aggregatedOrganisations,
     isLoading,
     isFetching,
-    failureCount,
+    isLoadingError,
+    error,
   } = useAggregatedOrganisationSummaries({
     facultyCode,
     code,
@@ -219,16 +222,16 @@ const OrganisationSummary = () => {
   )
 
   if (isLoading) {
-    return (
-      <LoadingProgress
-        isError={failureCount > 1}
-        message={t('common:fetchError')}
-      />
-    )
+    return <LoadingProgress />
   }
 
-  if (!organisationSummaries) {
-    return <Redirect to="/" />
+  if (isLoadingError && !organisationSummaries) {
+    return (
+      <ErrorView
+        message={errors.getGeneralError(error)}
+        response={error.response}
+      />
+    )
   }
 
   const { questions } = organisationSummaries

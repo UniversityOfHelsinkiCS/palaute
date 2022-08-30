@@ -30,16 +30,30 @@ import SemesterOverview from './SemesterOverview'
 import Title from '../Title'
 import { RouterTab, RouterTabs } from '../RouterTabs'
 import OrganisationSummary from '../CourseSummary/OrganisationSummary'
+import ErrorView from '../ErrorView'
+import errors from '../../util/errorMessage'
 
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
-  const { organisation, isLoading } = useOrganisation(code)
+  const { organisation, isLoading, isLoadingError, error } = useOrganisation(
+    code,
+    { retry: 2 },
+  )
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
   if (isLoading) {
     return <LoadingProgress />
+  }
+
+  if (isLoadingError && !organisation) {
+    return (
+      <ErrorView
+        message={errors.getGeneralError(error)}
+        response={error?.response}
+      />
+    )
   }
 
   const hasWriteAccess = Boolean(organisation?.access?.write)

@@ -1,4 +1,7 @@
-const generalError = (error) => {
+const getGeneralError = (error) => {
+  if (error.message.toLowerCase() === 'network error') {
+    return 'common:fetchError'
+  }
   const res = error?.response
   if (!res?.status) {
     return 'common:unknownError'
@@ -6,11 +9,17 @@ const generalError = (error) => {
   if (res.status >= 500) {
     return 'common:serverError'
   }
+  if (res.status === 404) {
+    return 'common:notFound'
+  }
+  if (res.status === 403) {
+    return 'common:noAccess'
+  }
   return null
 }
 
-export const getFeedbackTargetLoadError = (error) => {
-  const generalErrorMessage = generalError(error)
+const getFeedbackTargetError = (error) => {
+  const generalErrorMessage = getGeneralError(error)
   if (generalErrorMessage) {
     return generalErrorMessage
   }
@@ -25,3 +34,10 @@ export const getFeedbackTargetLoadError = (error) => {
   }
   return 'common:unknownError'
 }
+
+const errors = {
+  getFeedbackTargetError,
+  getGeneralError,
+}
+
+export default errors

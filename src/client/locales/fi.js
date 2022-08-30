@@ -18,6 +18,9 @@ export default {
       'Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.',
     serverError:
       'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.',
+    notFound: 'Sivua tai resurssia ei löydy.',
+    noAccess: 'Sinulla ei ole pääsyä tähän resurssiin',
+    supportContact: 'Ongelmatilanteessa ota yhteyttä tukeen: ',
     save: 'Tallenna',
     saveSuccess: 'Tiedot tallennettiin onnistuneesti',
     name: 'Nimi',

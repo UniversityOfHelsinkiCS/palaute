@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Link, Redirect, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import {
   Box,
@@ -24,6 +24,8 @@ import { LoadingProgress } from '../LoadingProgress'
 import Title from '../Title'
 import { CourseRealisationLabel } from './Labels'
 import useOrganisations from '../../hooks/useOrganisations'
+import ErrorView from '../ErrorView'
+import errors from '../../util/errorMessage'
 
 const styles = {
   realisationHeading: {
@@ -105,21 +107,29 @@ const CourseRealisationSummary = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
-  const { organisations, isLoading: organisationsLoading } = useOrganisations()
-  const { courseRealisationSummaries, isLoading, failureCount } =
-    useCourseRealisationSummaries(code)
+  const {
+    organisations,
+    isLoading: organisationsLoading,
+    isLoadingError: orgError,
+  } = useOrganisations({ retry: 2 })
+  const {
+    courseRealisationSummaries,
+    isLoading,
+    isLoadingError: summaryError,
+    error,
+  } = useCourseRealisationSummaries(code, { retry: 1 })
 
   if (isLoading) {
-    return (
-      <LoadingProgress
-        isError={failureCount > 1}
-        message={t('common:fetchError')}
-      />
-    )
+    return <LoadingProgress />
   }
 
-  if (!courseRealisationSummaries) {
-    return <Redirect to="/" />
+  if ((summaryError || orgError) && !courseRealisationSummaries) {
+    return (
+      <ErrorView
+        message={errors.getGeneralError(error)}
+        response={error?.response}
+      />
+    )
   }
 
   const { questions, courseRealisations, courseUnit } =

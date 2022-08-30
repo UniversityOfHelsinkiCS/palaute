@@ -56,7 +56,7 @@ import FeedbackTargetSettings from '../FeedbackTargetSettings'
 import FeedbackTargetLogs from '../FeedbackTargetLogs'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../ErrorView'
-import { getFeedbackTargetLoadError } from '../../util/errorMessage'
+import errors from '../../util/errorMessage'
 import TeacherChip from '../TeacherChip'
 import useOrganisations from '../../hooks/useOrganisations'
 
@@ -154,7 +154,7 @@ const FeedbackTargetView = () => {
   }
 
   if (isLoadingError || !feedbackTarget) {
-    return <ErrorView message={getFeedbackTargetLoadError(error)} />
+    return <ErrorView message={errors.getFeedbackTargetLoadError(error)} />
   }
 
   const {

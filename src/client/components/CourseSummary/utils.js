@@ -258,6 +258,7 @@ export const useAggregatedOrganisationSummaries = ({
     startDate: dateRange.start,
     endDate: dateRange.end,
     keepPreviousData: true,
+    retry: 2,
   })
 
   const filteredOrganisations = useMemo(

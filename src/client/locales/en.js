@@ -14,9 +14,13 @@ export default {
     },
     unknownError: 'Something went wrong',
     choiceQuestionError: 'Choice questions require answer options',
-    fetchError: 'Error while fetching data. Refreshing the page may help.',
+    fetchError: 'Error while fetching data. Refreshing the page may fix this.',
     serverError:
       'Oops, something broke on our end, we will try to fix it ASAP. Apologies.',
+    notFound: 'Page or resource not found, sorry.',
+    noAccess: 'Sorry but you have no access to this resource.',
+    supportContact:
+      'If you are not able to resolve this issue, please contact support: ',
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',
