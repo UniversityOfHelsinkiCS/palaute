@@ -1,7 +1,7 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useCourseSummaryAccessInfo = () => {
+const useCourseSummaryAccessInfo = (options = {}) => {
   const queryKey = 'courseSummaryAccessInfo'
 
   const queryFn = async () => {
@@ -10,7 +10,11 @@ const useCourseSummaryAccessInfo = () => {
     return data
   }
 
-  const { data: courseSummaryAccessInfo, ...rest } = useQuery(queryKey, queryFn)
+  const { data: courseSummaryAccessInfo, ...rest } = useQuery(
+    queryKey,
+    queryFn,
+    options,
+  )
 
   return { courseSummaryAccessInfo, ...rest }
 }

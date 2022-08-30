@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import GuestFooter from './GuestUser/GuestFooter'
-import GuestNavBar from './GuestUser/GuestNavBar'
 import GuestRouter from './GuestUser/GuestRouter'
+import NavBar from './NavBar'
 
 /* eslint-disable */
 const GuestUser = () => {
@@ -13,7 +13,7 @@ const GuestUser = () => {
       height="100vh"
       sx={{ overflowX: 'hidden' }}
     >
-      <GuestNavBar />
+      <NavBar guest />
       <GuestRouter />
       <GuestFooter />
     </Box>

@@ -113,11 +113,13 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
   )
 })
 
-const NavBar = () => {
+const NavBar = ({ guest = false }) => {
   const { pathname } = useLocation()
-  const { feedbackTargets } = useFeedbackTargetsForStudent()
-  const { authorizedUser } = useAuthorizedUser()
-  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo()
+  const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
+  const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
+  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
+    enabled: !guest,
+  })
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -262,13 +264,17 @@ const NavBar = () => {
         language={i18n.language}
         onLanguageChange={changeLanguage}
       />
-      <Divider component="li" sx={styles.languageMenuDivider} />
-      {isMobile && mobileMenuLinks}
-      <MenuItem onClick={() => setPermissionsWindowOpen(true)}>
-        {t('navBar:userInformation')}
-      </MenuItem>
-      <Divider component="li" sx={styles.languageMenuDivider} />
-      <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+      {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
+      {!guest && isMobile && mobileMenuLinks}
+      {!guest && (
+        <MenuItem onClick={() => setPermissionsWindowOpen(true)}>
+          {t('navBar:userInformation')}
+        </MenuItem>
+      )}
+      {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
+      {!guest && (
+        <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
+      )}
     </Menu>
   )
 

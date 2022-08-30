@@ -8,10 +8,14 @@ const queryFn = async () => {
   return data
 }
 
-const useFeedbackTargetsForStudent = () => {
+const useFeedbackTargetsForStudent = (options = {}) => {
   const queryKey = 'feedbackTargetsForStudent'
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn)
+  const { data: feedbackTargets, ...rest } = useQuery(
+    queryKey,
+    queryFn,
+    options,
+  )
 
   return { feedbackTargets, ...rest }
 }
