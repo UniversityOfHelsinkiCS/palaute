@@ -50,10 +50,7 @@ const Router = () => (
       <Route path="/feedbacks" component={UserFeedbacks} exact />
       <Route path="/courses" component={TeacherView} exact />
       <Route path="/targets/:id" component={FeedbackTargetView} />
-      <Route
-        path="/organisations/:code/settings"
-        component={OrganisationSettings}
-      />
+      <Route path="/organisations/:code" component={OrganisationSettings} />
       <Route path="/course-summary" component={CourseSummary} />
       <Route path="/cur/:id" component={CourseRealisationFeedback} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />

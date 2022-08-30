@@ -11,13 +11,13 @@ import {
 
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import apiClient from '../../util/apiClient'
-import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../LoadingProgress'
 import FeedbackCorrespondent from './FeedbackCorrespondent'
 import CourseSettings from './CourseSettings'
+import useOrganisation from '../../hooks/useOrganisation'
 
 const saveGeneralSettings = async ({ code, studentListVisible }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -73,7 +73,7 @@ const GeneralSettingsContainer = ({ organisation }) => {
 const GeneralSettings = () => {
   const { code } = useParams()
 
-  const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
+  const { organisation, isLoading } = useOrganisation(code)
 
   if (isLoading) {
     return <LoadingProgress />

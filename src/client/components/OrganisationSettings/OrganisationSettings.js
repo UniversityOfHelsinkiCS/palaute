@@ -32,6 +32,7 @@ import { RouterTab, RouterTabs } from '../RouterTabs'
 import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../ErrorView'
 import errors from '../../util/errorMessage'
+import ProtectedRoute from '../ProtectedRoute'
 
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
@@ -84,14 +85,16 @@ const OrganisationSettings = () => {
           <RouterTab
             label={t('organisationSettings:settingsTab')}
             icon={<SettingsOutlined />}
-            to={`${url}/general`}
+            to={`${url}/settings`}
           />
         )}
-        <RouterTab
-          label={t('organisationSettings:surveyTab')}
-          icon={<LiveHelpOutlined />}
-          to={`${url}/survey`}
-        />
+        {hasWriteAccess && (
+          <RouterTab
+            label={t('organisationSettings:surveyTab')}
+            icon={<LiveHelpOutlined />}
+            to={`${url}/survey`}
+          />
+        )}
         <RouterTab
           label={t('organisationSettings:overviewTab')}
           to={`${url}/upcoming`}
@@ -112,8 +115,13 @@ const OrganisationSettings = () => {
         {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
       </RouterTabs>
       <Switch>
-        <Route path={`${path}/general`}>
-          <GeneralSettings />
+        <Route path={`${path}/settings`}>
+          <ProtectedRoute
+            hasAccess={hasAdminAccess}
+            redirect={`${url}/summary`}
+          >
+            <GeneralSettings />
+          </ProtectedRoute>
         </Route>
 
         <Route path={`${path}/upcoming`}>
@@ -121,7 +129,12 @@ const OrganisationSettings = () => {
         </Route>
 
         <Route path={`${path}/survey`}>
-          <EditSurvey />
+          <ProtectedRoute
+            hasAccess={hasWriteAccess}
+            redirect={`${url}/summary`}
+          >
+            <EditSurvey />
+          </ProtectedRoute>
         </Route>
 
         <Route path={`${path}/summary`}>
@@ -129,14 +142,21 @@ const OrganisationSettings = () => {
         </Route>
 
         <Route path={`${path}/open`}>
-          <ProgrammeOpenQuestions />
+          <ProtectedRoute
+            hasAccess={hasAdminAccess}
+            redirect={`${url}/summary`}
+          >
+            <ProgrammeOpenQuestions />
+          </ProtectedRoute>
         </Route>
 
         <Route path={`${path}/logs`}>
-          <OrganisationLogs />
+          <ProtectedRoute hasAccess={isAdmin} redirect={`${url}/summary`}>
+            <OrganisationLogs />
+          </ProtectedRoute>
         </Route>
 
-        <Redirect to={`${path}/general`} />
+        <Redirect to={`${path}/summary`} />
       </Switch>
     </>
   )

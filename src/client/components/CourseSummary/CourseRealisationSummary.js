@@ -151,7 +151,7 @@ const CourseRealisationSummary = () => {
         {organisation && (
           <MuiLink
             component={Link}
-            to={`/organisations/${organisation.code}/settings`}
+            to={`/organisations/${organisation.code}`}
             underline="hover"
           >
             {getLanguageValue(organisation.name, i18n.language)}

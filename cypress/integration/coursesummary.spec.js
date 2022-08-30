@@ -31,7 +31,7 @@ describe('Course summary view', () => {
 
     cy.contains('[data-cy=programmeQuestionsDialogConfirm]', 'Edit').click()
 
-    cy.visit(`${baseUrl}/organisations/500-K005/settings/survey`)
+    cy.visit(`${baseUrl}/organisations/500-K005/survey`)
 
     cy.contains('Test question programme level')
   })

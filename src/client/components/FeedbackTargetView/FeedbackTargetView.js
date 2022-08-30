@@ -263,7 +263,7 @@ const FeedbackTargetView = () => {
             </Typography>
             {organisation && (
               <MuiLink
-                to={`/organisations/${organisation.code}/settings`}
+                to={`/organisations/${organisation.code}`}
                 component={Link}
                 underline="hover"
               >

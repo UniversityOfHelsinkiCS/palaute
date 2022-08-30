@@ -1,8 +1,7 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
-import { useParams, Redirect } from 'react-router'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { useParams } from 'react-router'
 import useOrganisationLogs from '../../hooks/useOrganisationLogs'
 import { LoadingProgress } from '../LoadingProgress'
 
@@ -96,14 +95,9 @@ const LogItem = ({ log }) => (
 const OrganisationLogs = () => {
   const { code } = useParams()
   const { organisationLogs, isLoading } = useOrganisationLogs(code)
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
-  if (isLoading || isUserLoading) {
+  if (isLoading) {
     return <LoadingProgress />
-  }
-
-  if (!authorizedUser.isAdmin) {
-    return <Redirect to={`/organisations/${code}/settings/general`} />
   }
 
   return (
