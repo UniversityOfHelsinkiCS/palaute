@@ -154,7 +154,7 @@ const FeedbackTargetView = () => {
   }
 
   if (isLoadingError || !feedbackTarget) {
-    return <ErrorView message={errors.getFeedbackTargetLoadError(error)} />
+    return <ErrorView message={errors.getFeedbackTargetError(error)} />
   }
 
   const {
