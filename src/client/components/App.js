@@ -8,10 +8,12 @@ import LocalizationProvider from './LocalizationProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
+import usePinger from '../hooks/usePinger'
 
 /* eslint-disable */
 const App = () => {
   const theme = useTheme()
+  usePinger()
 
   return (
     <LocalizationProvider>
