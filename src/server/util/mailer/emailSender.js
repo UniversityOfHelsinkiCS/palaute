@@ -499,7 +499,7 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
 
   FeedbackTarget.update(
     {
-      feedbackResponseReminderEmailSent: false,
+      feedbackResponseReminderEmailSent: true,
     },
     {
       where: {

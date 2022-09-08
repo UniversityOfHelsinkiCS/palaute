@@ -21,6 +21,7 @@ const run = async () => {
 }
 
 const start = async () => {
+  run()
   if (!inProduction || inStaging) {
     return logger.info('Not running Pate if not in production')
   }

@@ -74,6 +74,7 @@ const sendToPate = async (options = {}) => {
 
   if (!inProduction || inStaging) {
     logger.debug('Skipped sending email in non-production environment')
+    // logger.info(JSON.stringify(options.emails, null, 2))
     return null
   }
 
@@ -240,10 +241,10 @@ const emailReminderAboutFeedbackResponseToTeachers = (
 ) => {
   const { language } = teacher
 
-  const courseName = feedbackTarget.courseUnit.name[language]
+  const courseName = feedbackTarget.courseUnit.name[language || 'en']
 
   const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
-    ${feedbackTarget.courseRealisation[language]}
+    ${feedbackTarget.courseRealisation.name[language]}
     </a> <br/>`
 
   const translations = buildReminderAboutFeedbackResponseToTeachers(
