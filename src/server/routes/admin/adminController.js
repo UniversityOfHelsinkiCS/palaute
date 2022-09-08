@@ -17,13 +17,12 @@ const {
   User,
   UpdaterStatus,
   FeedbackTargetDateCheck,
-  Organisation,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
 
-const { mailer } = require('../../util/mailer')
+const { mailer } = require('../../mailer')
 const {
   updateEnrolmentsOfCourse,
 } = require('../../updater/updateStudentFeedbackTargets')

@@ -1,6 +1,5 @@
 const { Op } = require('sequelize')
-const { addDays, subDays, format, differenceInHours } = require('date-fns')
-const _ = require('lodash')
+const { addDays, subDays } = require('date-fns')
 
 const {
   FeedbackTarget,
@@ -9,20 +8,20 @@ const {
   Organisation,
   User,
   UserFeedbackTarget,
-} = require('../../models')
+} = require('../models')
 
 const {
   notificationAboutSurveyOpeningToStudents,
   emailReminderAboutSurveyOpeningToTeachers,
   emailReminderAboutFeedbackResponseToTeachers,
-  sendEmail,
   sendNotificationAboutFeedbackResponseToStudents,
-  sendReminderToGiveFeedbackToStudents,
-} = require('./pate')
+} = require('./mails')
 
-const { ApplicationError } = require('../customErrors')
-const { sequelize } = require('../dbConnection')
-const logger = require('../logger')
+const { pate } = require('./pate')
+
+const { ApplicationError } = require('../util/customErrors')
+const { sequelize } = require('../util/dbConnection')
+const logger = require('../util/logger')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -270,87 +269,6 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   return filteredByFeedbacks
 }
 
-const getTeacherEmailCounts = async () => {
-  const teacherEmailCounts = await sequelize.query(
-    `SELECT f.opens_at, count(DISTINCT us.id) FROM feedback_targets f
-        INNER JOIN user_feedback_targets u on u.feedback_target_id = f.id
-        INNER JOIN course_realisations c on c.id = f.course_realisation_id
-        INNER JOIN users us on us.id = u.user_id
-        WHERE f.opens_at > :opensAtLow and f.opens_at < :opensAtHigh 
-          AND u.access_status = 'TEACHER' 
-          AND f.feedback_type = 'courseRealisation'
-          AND f.feedback_opening_reminder_email_sent = false
-          AND f.hidden = false
-          AND c.start_date > '2021-8-1 00:00:00+00'
-        GROUP BY f.opens_at`,
-    {
-      replacements: {
-        opensAtLow: addDays(new Date(), 6),
-        opensAtHigh: addDays(new Date(), 35),
-      },
-      type: sequelize.QueryTypes.SELECT,
-    },
-  )
-
-  const groupedEmailCounts = _.groupBy(teacherEmailCounts, (obj) =>
-    format(subDays(obj.opens_at, 7), 'dd.MM.yyyy'),
-  )
-
-  const finalEmailCounts = Object.keys(groupedEmailCounts).map((key) =>
-    groupedEmailCounts[key].length > 1
-      ? {
-          date: key,
-          count: groupedEmailCounts[key].reduce(
-            (sum, obj) => sum + parseInt(obj.count, 10),
-            0,
-          ),
-        }
-      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) },
-  )
-
-  return finalEmailCounts
-}
-
-const getStudentEmailCounts = async () => {
-  const studentEmailCounts = await sequelize.query(
-    `SELECT f.opens_at, count(DISTINCT us.id) FROM feedback_targets f
-        INNER JOIN user_feedback_targets u on u.feedback_target_id = f.id
-        INNER JOIN course_realisations c on c.id = f.course_realisation_id
-        INNER JOIN users us on us.id = u.user_id
-        WHERE f.opens_at > :opensAtLow and f.opens_at < :opensAtHigh 
-          AND u.access_status = 'STUDENT' 
-          AND f.feedback_type = 'courseRealisation'
-          AND f.hidden = false
-          AND c.start_date > '2021-8-1 00:00:00+00'
-          AND u.feedback_open_email_sent = false
-        GROUP BY f.opens_at`,
-    {
-      replacements: {
-        opensAtLow: subDays(new Date(), 1),
-        opensAtHigh: addDays(new Date(), 28),
-      },
-      type: sequelize.QueryTypes.SELECT,
-    },
-  )
-
-  const groupedEmailCounts = _.groupBy(studentEmailCounts, (obj) =>
-    format(obj.opens_at, 'dd.MM.yyyy'),
-  )
-
-  const finalEmailCounts = Object.keys(groupedEmailCounts).map((key) =>
-    groupedEmailCounts[key].length > 1
-      ? {
-          date: key,
-          count: groupedEmailCounts[key].reduce(
-            (sum, obj) => sum + parseInt(obj.count, 10),
-            0,
-          ),
-        }
-      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) },
-  )
-  return finalEmailCounts
-}
-
 const createRecipientsForFeedbackTargets = async (
   feedbackTargets,
   options = { primaryOnly: false, whereOpenEmailNotSent: false },
@@ -445,7 +363,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     },
   )
 
-  await sendEmail(emailsToBeSent, 'Notify students about feedback opening')
+  await pate.send(emailsToBeSent, 'Notify students about feedback opening')
 
   return emailsToBeSent
 }
@@ -481,107 +399,9 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
     },
   )
 
-  await sendEmail(emailsToBeSent, 'Remind teachers about feedback opening')
+  await pate.send(emailsToBeSent, 'Remind teachers about feedback opening')
 
   return emailsToBeSent
-}
-
-const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
-  const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
-
-  const emailsToBeSent = feedbackTargets.flatMap((fbt) =>
-    fbt.users.map((user) =>
-      emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users),
-    ),
-  )
-
-  const ids = feedbackTargets.map((target) => target.id)
-
-  FeedbackTarget.update(
-    {
-      feedbackResponseReminderEmailSent: true,
-    },
-    {
-      where: {
-        id: {
-          [Op.in]: ids,
-        },
-      },
-    },
-  )
-
-  await sendEmail(
-    emailsToBeSent,
-    'Remind teachers about giving counter feedback',
-  )
-
-  return emailsToBeSent
-}
-
-const returnEmailsToBeSentToday = async () => {
-  const studentFeedbackTargets = await getOpenFeedbackTargetsForStudents()
-  const teacherFeedbackTargets =
-    await getFeedbackTargetsAboutToOpenForTeachers()
-  const teacherReminderTargets =
-    await getFeedbackTargetsWithoutResponseForTeachers()
-
-  const teacherEmailCountFor7Days = await getTeacherEmailCounts()
-  const studentEmailCountFor7Days = await getStudentEmailCounts()
-
-  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    studentFeedbackTargets,
-    {
-      whereOpenEmailNotSent: true,
-    },
-  )
-
-  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    teacherFeedbackTargets,
-    { primaryOnly: true },
-  )
-
-  const teacherRemindersWithFeedbackTargets =
-    await createRecipientsForFeedbackTargets(teacherReminderTargets, {
-      primaryOnly: true,
-    })
-
-  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
-    (student) =>
-      notificationAboutSurveyOpeningToStudents(
-        student,
-        studentsWithFeedbackTargets[student],
-      ),
-  )
-
-  const teacherSurveyReminderEmails = Object.keys(
-    teachersWithFeedbackTargets,
-  ).map((teacher) =>
-    emailReminderAboutSurveyOpeningToTeachers(
-      teacher,
-      teachersWithFeedbackTargets[teacher],
-    ),
-  )
-
-  const teacherFeedbackReminderEmails = Object.keys(
-    teacherRemindersWithFeedbackTargets,
-  ).map((teacher) =>
-    emailReminderAboutFeedbackResponseToTeachers(
-      teacher,
-      teacherRemindersWithFeedbackTargets[teacher],
-    ),
-  )
-
-  const teacherEmailsToBeSent = [
-    ...teacherSurveyReminderEmails,
-    ...teacherFeedbackReminderEmails,
-  ]
-
-  return {
-    students: studentEmailsToBeSent,
-    teachers: teacherEmailsToBeSent,
-    teacherEmailCounts: teacherEmailCountFor7Days,
-    studentEmailCounts: studentEmailCountFor7Days,
-  }
 }
 
 const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
@@ -625,7 +445,7 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
     },
   )
 
-  await sendEmail(
+  await pate.send(
     studentEmailsToBeSent,
     'Notify students about feedback opening immediately',
   )
@@ -694,55 +514,18 @@ const sendFeedbackSummaryReminderToStudents = async (
   )
 }
 
-const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
-  if (
-    differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) <
-    24
-  ) {
-    throw new ApplicationError(
-      'Can send only 1 feedback reminder every 24 hours',
-      403,
-    )
-  }
-
-  const courseUnit = await CourseUnit.findByPk(feedbackTarget.courseUnitId)
-  const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
-  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback`
-  const formattedStudents = students
-    .filter((student) => student.email)
-    .map((student) => ({
-      email: student.email,
-      language: student.language || 'en',
-    }))
-
-  const formattedClosesAt = format(
-    new Date(feedbackTarget.closesAt),
-    'dd.MM.yyyy',
-  )
-
-  return (async () => {
-    const emails = await sendReminderToGiveFeedbackToStudents(
-      url,
-      formattedStudents,
-      courseUnit.name,
-      reminder,
-      formattedClosesAt,
-    )
-
-    feedbackTarget.feedbackReminderLastSentAt = new Date()
-    await feedbackTarget.save()
-
-    return emails
-  })()
-}
-
 module.exports = {
+  getOpenFeedbackTargetsForStudents,
+  getFeedbackTargetsAboutToOpenForTeachers,
+  getFeedbackTargetsWithoutResponseForTeachers,
+  createRecipientsForFeedbackTargets,
+  notificationAboutSurveyOpeningToStudents,
+  emailReminderAboutSurveyOpeningToTeachers,
+  emailReminderAboutFeedbackResponseToTeachers,
+
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailToStudentsWhenOpeningImmediately,
-  sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderOnFeedbackToStudents,
   sendFeedbackSummaryReminderToStudents,
-  sendFeedbackReminderToStudents,
-  returnEmailsToBeSentToday,
 }

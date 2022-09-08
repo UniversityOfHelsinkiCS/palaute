@@ -32,7 +32,7 @@ const {
   createFeedbackTargetSurveyLog,
   createFeedbackTargetLog,
 } = require('../../util/auditLog')
-const { mailer } = require('../../util/mailer')
+const { mailer } = require('../../mailer')
 const {
   JWT_KEY,
   STUDENT_LIST_BY_COURSE_ENABLED,
