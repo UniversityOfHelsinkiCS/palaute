@@ -116,15 +116,42 @@ Cypress.Commands.add('setUpSecondaryTeacherView', () => {
   })
 })
 
-Cypress.Commands.add('setFeedbackActive', () => {
+const setFeedbackDatesFromNow = (open, close) => {
   const date = new Date()
   cy.request({
     method: 'PUT',
     url: '/api/feedback-targets/163',
     headers: teacher,
     body: {
-      opensAt: new Date().setDate(date.getDate() - 14),
-      closesAt: new Date().setDate(date.getDate() + 14),
+      opensAt: new Date().setDate(date.getDate() + open),
+      closesAt: new Date().setDate(date.getDate() + close),
+    },
+  })
+}
+
+Cypress.Commands.add('setFeedbackActive', () => {
+  setFeedbackDatesFromNow(-14, 14)
+})
+
+Cypress.Commands.add('setFeedbackNotYetOpen', () => {
+  setFeedbackDatesFromNow(14, 28)
+})
+
+Cypress.Commands.add('setFeedbackClosed', () => {
+  setFeedbackDatesFromNow(-28, -1)
+})
+
+Cypress.Commands.add('setFeedbackOpeningSoon', () => {
+  setFeedbackDatesFromNow(6, 28)
+})
+
+Cypress.Commands.add('setFakeFeedbackCount', (feedbackCount) => {
+  cy.request({
+    method: 'PUT',
+    url: '/api/test/courseRealisation/163',
+    headers: adminUser,
+    body: {
+      feedbackCount,
     },
   })
 })

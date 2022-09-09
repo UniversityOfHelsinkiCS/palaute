@@ -75,19 +75,16 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
-    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
+  const filteredFeedbackTargets = feedbackTargets.filter((fbt) => {
+    const disabledCourseCodes = fbt.courseUnit.organisations.flatMap(
       (org) => org.disabledCourseCodes,
     )
-    return !disabledCourseCodes.includes(target.courseUnit.courseCode)
+    return !disabledCourseCodes.includes(fbt.courseUnit.courseCode)
   })
 
-  const filteredByFeedbacks = filteredFeedbackTargets.filter((target) => {
-    const found = target.userFeedbackTargets.find(
-      (u) => u.dataValues.feedback_id,
-    )
-    return !!found
-  })
+  const filteredByFeedbacks = filteredFeedbackTargets.filter(
+    (fbt) => fbt.feedbackCount,
+  )
 
   return filteredByFeedbacks
 }

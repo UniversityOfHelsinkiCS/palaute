@@ -61,7 +61,7 @@ describe('Teacher view', () => {
   it('Teacher can view survey results', () => {
     cy.loginAsSecondaryTeacher()
     cy.get('div').contains('TKT21029 Functional Programming I').click()
-    cy.get('a[href*="/targets/163"]').click()
+    cy.get('a[href*="/targets/163"]').first().click()
     cy.visit(`${baseUrl}/targets/163/results`)
     cy.contains('Feedback').click()
     cy.contains(
