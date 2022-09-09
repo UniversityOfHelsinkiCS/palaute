@@ -1,7 +1,7 @@
 const { differenceInHours, format } = require('date-fns')
 const { CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-const { pate } = require('../pate')
+const { pate } = require('../pateClient')
 
 const buildReminderToGiveFeedbackToStudents = (
   urlToGiveFeedback,

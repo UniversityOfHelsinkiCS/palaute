@@ -35,6 +35,7 @@ const sendEmailReminderOnFeedbackToStudents = async () => {
   )
 
   await Promise.all(
+    // TODO @next wtf TODO FIX
     feedbackTargets.map((fbt) => fbt.sendFeedbackReminderToStudents('')),
   )
 }

@@ -1,5 +1,5 @@
 const { format } = require('date-fns')
-const { pate } = require('../pate')
+const { pate } = require('../pateClient')
 
 const buildNotificationAboutFeedbackResponseToStudents = (
   courseName,

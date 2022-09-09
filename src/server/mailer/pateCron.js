@@ -1,8 +1,8 @@
 const { CronJob } = require('cron')
 const { inProduction, inStaging } = require('../../config')
-const logger = require('./logger')
+const logger = require('../util/logger')
 
-const { mailer } = require('../mailer')
+const { mailer } = require('.')
 
 const schedule = (cronTime, func) =>
   new CronJob({

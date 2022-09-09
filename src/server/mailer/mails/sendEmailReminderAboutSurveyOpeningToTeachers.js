@@ -7,7 +7,7 @@ const {
   Organisation,
   User,
 } = require('../../models')
-const { pate } = require('../pate')
+const { pate } = require('../pateClient')
 const {
   createRecipientsForFeedbackTargets,
   instructionsAndSupport,

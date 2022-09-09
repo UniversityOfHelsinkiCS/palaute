@@ -9,7 +9,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
-const { pate } = require('../pate')
+const { pate } = require('../pateClient')
 const { instructionsAndSupport } = require('./util')
 
 const getFeedbackTargetsWithoutResponseForTeachers = async () => {

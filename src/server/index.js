@@ -7,9 +7,9 @@ const { PORT, inProduction, inE2EMode } = require('./util/config')
 const { connectToDatabase } = require('./util/dbConnection')
 const { redisClient } = require('./util/redisClient')
 const { updater } = require('./updater')
-const { start: startPateCron } = require('./util/pateCron')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
 const logger = require('./util/logger')
+const { mailer } = require('./mailer')
 
 const app = express()
 
@@ -31,7 +31,7 @@ const start = async () => {
   await updater.checkStatusOnStartup()
   await updater.start()
   await startViewsCron()
-  await startPateCron()
+  await mailer.startCron()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
