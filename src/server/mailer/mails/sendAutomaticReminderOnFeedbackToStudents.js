@@ -1,12 +1,15 @@
 const sequelize = require('sequelize')
 const { FeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
+const {
+  sendFeedbackReminderToStudents,
+} = require('./sendFeedbackReminderToStudents')
 
 /**
  * Automatically remind students 3 days before feedback closes
  * and feedback target has student list visible (SOS-feature)
  */
-const sendEmailReminderOnFeedbackToStudents = async () => {
+const sendAutomaticReminderOnFeedbackToStudents = async () => {
   const feedbackTargets = await sequelize.query(
     `
     SELECT DISTINCT fbt.*
@@ -18,7 +21,7 @@ const sendEmailReminderOnFeedbackToStudents = async () => {
 
     WHERE cu.course_code = ANY (org.student_list_visible_course_codes)
     AND fbt.closes_at > NOW() + interval '0 days'
-    AND fbt.closes_at < NOW() + interval '30 days'
+    AND fbt.closes_at < NOW() + interval '3 days' -- 3 days before
     AND (
       fbt.feedback_reminder_last_sent_at IS NULL
       OR fbt.feedback_reminder_last_sent_at < NOW() - interval '24 hours'
@@ -35,11 +38,13 @@ const sendEmailReminderOnFeedbackToStudents = async () => {
   )
 
   await Promise.all(
-    // TODO @next wtf TODO FIX
-    feedbackTargets.map((fbt) => fbt.sendFeedbackReminderToStudents('')),
+    feedbackTargets.map((fbt) => {
+      if (!fbt) return null
+      return sendFeedbackReminderToStudents(fbt, '')
+    }),
   )
 }
 
 module.exports = {
-  sendEmailReminderOnFeedbackToStudents,
+  sendAutomaticReminderOnFeedbackToStudents,
 }

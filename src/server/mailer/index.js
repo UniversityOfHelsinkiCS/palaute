@@ -1,7 +1,7 @@
 const {
   sendFeedbackReminderToStudents,
   sendFeedbackSummaryReminderToStudents,
-  sendEmailReminderOnFeedbackToStudents,
+  sendAutomaticReminderOnFeedbackToStudents,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
@@ -15,7 +15,7 @@ const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
-  sendEmailReminderOnFeedbackToStudents,
+  sendAutomaticReminderOnFeedbackToStudents,
   sendFeedbackSummaryReminderToStudents,
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,

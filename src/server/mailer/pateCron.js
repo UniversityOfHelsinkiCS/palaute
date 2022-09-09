@@ -17,7 +17,7 @@ const run = async () => {
   await mailer.sendEmailAboutSurveyOpeningToStudents()
   await mailer.sendEmailReminderAboutSurveyOpeningToTeachers()
   await mailer.sendEmailReminderAboutFeedbackResponseToTeachers()
-  await mailer.sendEmailReminderOnFeedbackToStudents()
+  await mailer.sendAutomaticReminderOnFeedbackToStudents()
 }
 
 const start = async () => {

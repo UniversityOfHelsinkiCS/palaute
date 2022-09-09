@@ -5,8 +5,8 @@ const {
   sendFeedbackReminderToStudents,
 } = require('./sendFeedbackReminderToStudents')
 const {
-  sendEmailReminderOnFeedbackToStudents,
-} = require('./sendEmailReminderOnFeedbackToStudents')
+  sendAutomaticReminderOnFeedbackToStudents,
+} = require('./sendAutomaticReminderOnFeedbackToStudents')
 const {
   sendEmailReminderAboutFeedbackResponseToTeachers,
 } = require('./sendEmailReminderAboutFeedbackResponseToTeacher')
@@ -20,7 +20,7 @@ const {
 module.exports = {
   sendFeedbackReminderToStudents,
   sendFeedbackSummaryReminderToStudents,
-  sendEmailReminderOnFeedbackToStudents,
+  sendAutomaticReminderOnFeedbackToStudents,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
