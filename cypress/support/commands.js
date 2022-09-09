@@ -47,6 +47,12 @@ Cypress.Commands.add('loginAsTeacher', () => {
   cy.visit(baseUrl)
 })
 
+Cypress.Commands.add('loginAsAdmin', () => {
+  localStorage.setItem('fakeUser', JSON.stringify(adminUser))
+
+  cy.visit(baseUrl)
+})
+
 Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(teacher))
 
@@ -55,6 +61,7 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
 
 Cypress.Commands.add('loginAsStudent', () => {
   localStorage.setItem('fakeUser', JSON.stringify(student))
+  cy.reload(true)
   cy.visit(baseUrl)
 })
 
@@ -123,7 +130,6 @@ Cypress.Commands.add('setFeedbackActive', () => {
 })
 
 Cypress.Commands.add('enableCourses', () => {
-  cy.visit(baseUrl)
   cy.request({
     method: 'PUT',
     url: '/api/test/enableCourses',

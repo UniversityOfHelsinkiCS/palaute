@@ -17,7 +17,7 @@
 import { inE2EMode } from '../../src/config'
 import './commands'
 
-before(() => {
+beforeEach(() => {
   cy.enableCourses()
   cy.enableTestUsers()
   cy.setUpAdminTeacherView()

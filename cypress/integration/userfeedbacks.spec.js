@@ -4,10 +4,6 @@ describe('User feedbacks view', () => {
     cy.setFeedbackActive()
     cy.loginAsStudent()
     cy.contains('Functional Programming I')
-    cy.contains('Give feedback')
-  })
-  it('Student can give feedback to an active course', () => {
-    cy.loginAsStudent()
     cy.get('[data-cy=giveCourseFeedback]').click()
     cy.contains(
       'This feedback is anonymous. Fields marked with an asterisk (*) are required',

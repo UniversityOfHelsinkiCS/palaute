@@ -9,11 +9,12 @@ import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
 import usePinger from '../hooks/usePinger'
+import { inE2EMode } from '../../config'
 
 /* eslint-disable */
 const App = () => {
   const theme = useTheme()
-  usePinger()
+  usePinger({ enabled: !inE2EMode })
 
   return (
     <LocalizationProvider>
