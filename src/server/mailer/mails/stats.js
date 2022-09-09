@@ -1,16 +1,23 @@
 const { subDays, addDays, format } = require('date-fns')
-const sequelize = require('sequelize')
 const _ = require('lodash')
+const { sequelize } = require('../../util/dbConnection')
+
+const { createRecipientsForFeedbackTargets } = require('./util')
+
+const {
+  getFeedbackTargetsAboutToOpenForTeachers,
+  emailReminderAboutSurveyOpeningToTeachers,
+} = require('./sendEmailReminderAboutSurveyOpeningToTeachers')
+
+const {
+  getFeedbackTargetsWithoutResponseForTeachers,
+  emailReminderAboutFeedbackResponseToTeachers,
+} = require('./sendEmailReminderAboutFeedbackResponseToTeacher')
 
 const {
   getOpenFeedbackTargetsForStudents,
-  getFeedbackTargetsAboutToOpenForTeachers,
-  getFeedbackTargetsWithoutResponseForTeachers,
-  createRecipientsForFeedbackTargets,
   notificationAboutSurveyOpeningToStudents,
-  emailReminderAboutSurveyOpeningToTeachers,
-  emailReminderAboutFeedbackResponseToTeachers,
-} = require('./emailSender')
+} = require('./sendEmailAboutSurveyOpeningToStudents')
 
 const getStudentEmailCounts = async () => {
   const studentEmailCounts = await sequelize.query(
@@ -97,8 +104,6 @@ const returnEmailsToBeSentToday = async () => {
   const studentFeedbackTargets = await getOpenFeedbackTargetsForStudents()
   const teacherFeedbackTargets =
     await getFeedbackTargetsAboutToOpenForTeachers()
-  const teacherReminderTargets =
-    await getFeedbackTargetsWithoutResponseForTeachers()
 
   const teacherEmailCountFor7Days = await getTeacherEmailCounts()
   const studentEmailCountFor7Days = await getStudentEmailCounts()
@@ -114,11 +119,6 @@ const returnEmailsToBeSentToday = async () => {
     teacherFeedbackTargets,
     { primaryOnly: true },
   )
-
-  const teacherRemindersWithFeedbackTargets =
-    await createRecipientsForFeedbackTargets(teacherReminderTargets, {
-      primaryOnly: true,
-    })
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
     (student) =>
@@ -137,13 +137,13 @@ const returnEmailsToBeSentToday = async () => {
     ),
   )
 
-  const teacherFeedbackReminderEmails = Object.keys(
-    teacherRemindersWithFeedbackTargets,
-  ).map((teacher) =>
-    emailReminderAboutFeedbackResponseToTeachers(
-      teacher,
-      teacherRemindersWithFeedbackTargets[teacher],
-    ),
+  const teacherReminderFeedbackTargets =
+    await getFeedbackTargetsWithoutResponseForTeachers()
+  const teacherFeedbackReminderEmails = teacherReminderFeedbackTargets.flatMap(
+    (fbt) =>
+      fbt.users.map((user) =>
+        emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users),
+      ),
   )
 
   const teacherEmailsToBeSent = [

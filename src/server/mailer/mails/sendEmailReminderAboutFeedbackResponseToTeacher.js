@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const { subDays } = require('date-fns')
 const { Op } = require('sequelize')
 const {
@@ -142,8 +143,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
   allTeachers,
 ) => {
   const { language } = teacher
-
-  const courseName = feedbackTarget.courseUnit.name[language || 'en']
+  const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
   const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
       ${feedbackTarget.courseRealisation.name[language]}
@@ -197,5 +197,7 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
 }
 
 module.exports = {
+  getFeedbackTargetsWithoutResponseForTeachers, // used by stats
+  emailReminderAboutFeedbackResponseToTeachers, // used by stats
   sendEmailReminderAboutFeedbackResponseToTeachers,
 }

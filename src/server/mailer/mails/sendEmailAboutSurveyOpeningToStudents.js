@@ -198,5 +198,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
 }
 
 module.exports = {
+  getOpenFeedbackTargetsForStudents, // used by stats
+  notificationAboutSurveyOpeningToStudents, // used by stats
   sendEmailAboutSurveyOpeningToStudents,
 }

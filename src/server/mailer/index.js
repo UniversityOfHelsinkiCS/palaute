@@ -7,7 +7,7 @@ const {
   sendEmailAboutSurveyOpeningToStudents,
 } = require('./mails')
 
-const { returnEmailsToBeSentToday } = require('./stats')
+const { returnEmailsToBeSentToday } = require('./mails/stats')
 
 const mailer = {
   sendEmailAboutSurveyOpeningToStudents,

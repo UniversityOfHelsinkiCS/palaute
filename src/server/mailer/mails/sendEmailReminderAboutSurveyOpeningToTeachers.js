@@ -201,5 +201,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
 }
 
 module.exports = {
+  getFeedbackTargetsAboutToOpenForTeachers, // used by stats
+  emailReminderAboutSurveyOpeningToTeachers, // used by stats
   sendEmailReminderAboutSurveyOpeningToTeachers,
 }
