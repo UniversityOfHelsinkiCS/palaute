@@ -2,7 +2,12 @@ const { CronJob } = require('cron')
 const { inProduction, inStaging } = require('../../config')
 const logger = require('../util/logger')
 
-const { mailer } = require('.')
+const {
+  sendEmailAboutSurveyOpeningToStudents,
+  sendEmailReminderAboutSurveyOpeningToTeachers,
+  sendEmailReminderAboutFeedbackResponseToTeachers,
+  sendAutomaticReminderOnFeedbackToStudents,
+} = require('./mails')
 
 const schedule = (cronTime, func) =>
   new CronJob({
@@ -14,14 +19,14 @@ const schedule = (cronTime, func) =>
 
 const run = async () => {
   logger.info('Running pate cron')
-  await mailer.sendEmailAboutSurveyOpeningToStudents()
-  await mailer.sendEmailReminderAboutSurveyOpeningToTeachers()
-  await mailer.sendEmailReminderAboutFeedbackResponseToTeachers()
-  await mailer.sendAutomaticReminderOnFeedbackToStudents()
+  await sendEmailAboutSurveyOpeningToStudents()
+  await sendEmailReminderAboutSurveyOpeningToTeachers()
+  await sendEmailReminderAboutFeedbackResponseToTeachers()
+  await sendAutomaticReminderOnFeedbackToStudents()
 }
 
 const start = async () => {
-  // run()
+  run()
   if (!inProduction || inStaging) {
     return logger.info('Not running Pate if not in production')
   }

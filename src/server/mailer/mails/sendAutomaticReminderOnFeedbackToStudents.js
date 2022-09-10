@@ -1,4 +1,4 @@
-const sequelize = require('sequelize')
+const { sequelize } = require('../../util/dbConnection')
 const { FeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
 const {
