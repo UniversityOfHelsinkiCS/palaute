@@ -30,4 +30,10 @@ describe('Admin email stats view', () => {
     cy.contains('Tommi.testaaja@toska.fi')
     cy.contains('has ended: Functional Programming I')
   })
+  it('allows to run email cronjob and result in success', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin/misc`)
+    cy.contains('Run patecron').click()
+    cy.contains('SUCCESS')
+  })
 })
