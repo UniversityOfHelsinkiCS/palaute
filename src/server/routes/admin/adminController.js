@@ -61,6 +61,11 @@ const getUpdaterStatus = async (_, res) => {
   return res.send(status?.toPublicObject())
 }
 
+const runPate = async (_, res) => {
+  await mailer.runCron()
+  return res.sendStatus(204)
+}
+
 const findUser = async (req, res) => {
   const {
     query: { user },
@@ -503,6 +508,7 @@ router.post(
   runUpdaterForEnrolmentsOfCourse,
 )
 router.get('/updater-status', getUpdaterStatus)
+router.post('/run-pate', runPate)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)

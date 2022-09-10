@@ -9,7 +9,7 @@ const {
 
 const { returnEmailsToBeSentToday } = require('./mails/stats')
 
-const { start: startCron } = require('./pateCron')
+const { start: startCron, run: runCron } = require('./pateCron')
 
 const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
@@ -20,6 +20,7 @@ const mailer = {
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
   startCron,
+  runCron,
 }
 
 module.exports = { mailer }
