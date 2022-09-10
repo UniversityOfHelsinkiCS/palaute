@@ -34,7 +34,12 @@ const MiscTab = () => {
     <>
       <EditUniversitySurveyAccordion />
       <EmailAccordion />
-      <Button variant="contained" color="primary" onClick={runPateCron}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={runPateCron}
+        data-cy="run-pate"
+      >
         Run pateCron
       </Button>
       <Box m="1rem" />

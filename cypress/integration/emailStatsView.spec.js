@@ -33,7 +33,7 @@ describe('Admin email stats view', () => {
   it('allows to run email cronjob and result in success', () => {
     cy.loginAsAdmin()
     cy.visit(`${baseUrl}/admin/misc`)
-    cy.contains('Run patecron').click()
+    cy.get('[data-cy=run-pate]').click()
     cy.contains('SUCCESS')
   })
 })
