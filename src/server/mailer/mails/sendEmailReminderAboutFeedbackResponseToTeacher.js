@@ -143,7 +143,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
   const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
   const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
-      ${feedbackTarget.courseRealisation.name[language]}
+      ${feedbackTarget.courseUnit.name[language]}
       </a> <br/>`
 
   const translations = buildReminderAboutFeedbackResponseToTeachers(
