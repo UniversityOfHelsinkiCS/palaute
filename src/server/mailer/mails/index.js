@@ -1,6 +1,6 @@
 const {
   sendFeedbackSummaryReminderToStudents,
-} = require('./sendFeedbackReminderToStudents')
+} = require('./sendFeedbackSummaryReminderToStudents')
 const {
   sendFeedbackReminderToStudents,
 } = require('./sendFeedbackReminderToStudents')
