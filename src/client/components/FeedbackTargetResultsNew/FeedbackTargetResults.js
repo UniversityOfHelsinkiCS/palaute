@@ -2,22 +2,36 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Alert, Button } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import FeedbackSummary from '../QuestionResults/FeedbackSummary'
-import QuestionResults from '../QuestionResults'
+import FeedbackSummary from './QuestionResults/FeedbackSummary'
+import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
-import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
-import NewFeedbackTargetResults from '../FeedbackTargetResultsNew/FeedbackTargetResults'
+import FeedbackChart from './QuestionResults/FeedbackChart'
 
-const FeedbackTargetResultsView = () => {
-  const { t } = useTranslation()
+const NotEnoughFeedbacks = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning">
+      {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
+    </Alert>
+  </Box>
+)
+
+const OnlyForEnrolled = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning">
+      {t('feedbackTargetResults:onlyForEnrolledInfo')}
+    </Alert>
+  </Box>
+)
+
+const FeedbackTargetResults = () => {
+  const { t, i18n } = useTranslation()
   const { id } = useParams()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
@@ -36,8 +50,13 @@ const FeedbackTargetResultsView = () => {
     return <Redirect to="/" />
   }
 
-  const { feedbacks, feedbackVisible, userOrganisationAccess } =
-    feedbackTargetData
+  const {
+    feedbacks,
+    feedbackVisible,
+    userOrganisationAccess,
+    opensAt,
+    closesAt,
+  } = feedbackTargetData
 
   const { questions, publicQuestionIds, accessStatus, feedback } =
     feedbackTarget
@@ -55,32 +74,8 @@ const FeedbackTargetResultsView = () => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
-  const notEnoughFeedbacksAlert = (
-    <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
-      </Alert>
-    </Box>
-  )
-
-  const onlyForEnrolledAlert = (
-    <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:onlyForEnrolledInfo')}
-      </Alert>
-    </Box>
-  )
-
   return (
-    <>
-      <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
-        {feedbacks.length !== 0 && isTeacher && (
-          <ExportFeedbacksMenu
-            feedbackTarget={feedbackTarget}
-            feedbacks={feedbacks}
-          />
-        )}
-      </Box>
+    <Box>
       {feedbackHasStarted && !isOpen && (
         <Box mb={2}>
           <FeedbackResponse feedbackTarget={feedbackTarget} />
@@ -95,22 +90,18 @@ const FeedbackTargetResultsView = () => {
         </Box>
       )}
 
-      {feedbacks.length === 0 && feedbackVisible && notEnoughFeedbacksAlert}
+      {feedbacks.length === 0 &&
+        (feedbackVisible ? <NotEnoughFeedbacks /> : <OnlyForEnrolled />)}
 
-      {feedbacks.length === 0 && !feedbackVisible && onlyForEnrolledAlert}
+      <Box>
+        <FeedbackChart
+          feedbacks={feedbacks}
+          opensAt={opensAt}
+          closesAt={closesAt}
+        />
+      </Box>
 
-      {feedbacks.length !== 0 && (
-        <Box mb={2}>
-          <FeedbackSummary
-            publicQuestionIds={publicQuestionIds ?? []}
-            questions={questions}
-            feedbacks={feedbacks}
-            isTeacher={isTeacher}
-          />
-        </Box>
-      )}
-
-      {feedbacks.length !== 0 && (
+      <Box>
         <QuestionResults
           publicQuestionIds={publicQuestionIds ?? []}
           selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
@@ -119,23 +110,7 @@ const FeedbackTargetResultsView = () => {
           isTeacher={isTeacher}
           organisationAccess={!!userOrganisationAccess}
         />
-      )}
-    </>
-  )
-}
-
-const FeedbackTargetResults = () => {
-  const [useNew, setUseNew] = React.useState(true)
-  const { authorizedUser } = useAuthorizedUser()
-
-  return (
-    <Box>
-      {authorizedUser.isAdmin && (
-        <Button onClick={() => setUseNew(!useNew)}>
-          Use {useNew ? 'old' : 'new'}
-        </Button>
-      )}
-      {useNew ? <NewFeedbackTargetResults /> : <FeedbackTargetResultsView />}
+      </Box>
     </Box>
   )
 }
