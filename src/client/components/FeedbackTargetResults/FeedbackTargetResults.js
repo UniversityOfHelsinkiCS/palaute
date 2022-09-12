@@ -125,7 +125,7 @@ const FeedbackTargetResultsView = () => {
 }
 
 const FeedbackTargetResults = () => {
-  const [useNew, setUseNew] = React.useState(true)
+  const [useNew, setUseNew] = React.useState(false)
   const { authorizedUser } = useAuthorizedUser()
 
   return (
