@@ -13,7 +13,8 @@ export default {
       invalidDate: 'Ogiltigt datum',
     },
     unknownError: 'Något gick fel',
-    serverError: 'Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.',
+    serverError:
+      'Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.',
     choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
     fetchError:
       'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
@@ -38,7 +39,8 @@ export default {
     exportCSV: 'Ladda ner som CSV',
     combineCSV: 'Kombinera med Sisu CSV',
     downloadCSV: 'Ladda ner fil',
-    dropZoneInfo1: 'Dra hit en fil, eller hitta den genom att klicka på denhär rutan',
+    dropZoneInfo1:
+      'Dra hit en fil, eller hitta den genom att klicka på denhär rutan',
     dropZoneInfo2: 'En .csv fil mindre än 5MB godkänns',
     feedbackHeader: 'RESPONS',
     dirtyFormPrompt:
@@ -158,7 +160,8 @@ export default {
     showPreviewConfirmation:
       'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
     translationLanguage: 'Språkversion',
-    warningAboutOpeningCourse: 'OBS! Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.',
+    warningAboutOpeningCourse:
+      'OBS! Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.',
     opensAtIsNow:
       'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
     checkbox: 'Jag förstår',
@@ -199,7 +202,8 @@ export default {
       'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
     notPublicInfo:
       'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
-    publicityOfQuestions: 'Resultaten av dessa frågor är inte synliga för studerande',
+    publicityOfQuestions:
+      'Resultaten av dessa frågor är inte synliga för studerande',
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
   },
@@ -233,7 +237,7 @@ export default {
     sendReminder: 'Skicka påminnelse via e-post',
     sendReminderButton: 'Skicka påminnelse',
     reminderDisabled:
-     'Du har redan skickat en påminnelse under de senaste 24 timmarna',
+      'Du har redan skickat en påminnelse under de senaste 24 timmarna',
     reminderLastSent: 'Påminnelse senast skickad',
     cancelReminder: 'Avbryt',
     modalTitle: 'Skicka en påminnelse om respons via e-post',
@@ -282,7 +286,8 @@ export default {
     sendEmailOption: 'Skicka motrespons till studerande via e-post',
     dialogSaveTitle: 'Spara svar',
     dialogSendEmailTitle: 'Spara motrespons och skicka e-post',
-    dialogSendEmailContent: 'Till studerandena skickas ett e-postmeddelande med motresponsens innehåll och en länk till kursens responser. Du kan ännu redigera motresponsen efter att ha skickat e-postmeddelandet.',
+    dialogSendEmailContent:
+      'Till studerandena skickas ett e-postmeddelande med motresponsens innehåll och en länk till kursens responser. Du kan ännu redigera motresponsen efter att ha skickat e-postmeddelandet.',
     dialogSaveSubmit: 'Spara',
     dialogSendEmailSubmit: 'Skicka',
     checkboxSendEmail: 'Skicka e-post',
@@ -301,7 +306,8 @@ export default {
   feedbackTargetSettings: {
     editPeriodTitle: 'Responsperiod',
     cannotCloseImmediately: 'Responsen är ännu inte igång',
-    cannotCloseImmediatelyWhenOpen: 'Responsen har stängts eller kommer att stängas om en dag',
+    cannotCloseImmediatelyWhenOpen:
+      'Responsen har stängts eller kommer att stängas om en dag',
     cannotOpenImmediately: 'Responsen är igång eller har redan slutat',
   },
   courseSummary: {
@@ -333,6 +339,7 @@ export default {
     startDateLabel: 'Från och med',
     teachingLanguages: 'Undervisningsspråk',
     year: 'Läsår',
+    // all: 'Show all',
     semester: 'Termin',
     spring: 'Vår',
     fall: 'Höst',
@@ -370,7 +377,8 @@ export default {
     confirmSetCorrespondent: `Ange {{firstName}} {{lastName}} som korrespondet för responsen`,
     confirmResetCorrespondent: 'Ta bort korrespondenten',
     setAsCorrespondent: 'Ange som korrespondent',
-    setCorrespondentSuccess: 'Fastställandet av korrespondenten för responsen lyckades',
+    setCorrespondentSuccess:
+      'Fastställandet av korrespondenten för responsen lyckades',
     email: 'E-post',
     remove: 'Ta bort',
     feedbackEnabled: 'Respons aktiverad',
@@ -407,8 +415,10 @@ export default {
     deleteResponsibleTeacherConfirmation:
       'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
     noFeedbackResponseYet: 'Kursens lärare har inte ännu gett motrespons',
-    noAccess: 'Tyvärr har du inte tillgång till denna respons. Kontrollera att du är registrerad. Registreringar uppdateras varje kväll.',
-    notFound: 'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
+    noAccess:
+      'Tyvärr har du inte tillgång till denna respons. Kontrollera att du är registrerad. Registreringar uppdateras varje kväll.',
+    notFound:
+      'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
   },
   noadUser: {
     noUser:
@@ -420,7 +430,8 @@ export default {
     feedbackHelper: 'Ge fritt formulerad respons',
     responseWanted: 'Jag vill ha svar på responsen',
     submit: 'Skicka respons',
-    confirm: 'Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa',
+    confirm:
+      'Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa',
     title: 'Ge respons till Norppa utvecklarna',
     description:
       'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',

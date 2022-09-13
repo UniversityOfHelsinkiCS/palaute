@@ -334,6 +334,7 @@ export default {
     startDateLabel: 'Alkaen päivästä',
     teachingLanguages: 'Opetuskielet',
     year: 'Lukuvuosi',
+    all: 'Näytä kaikki',
     semester: 'Lukukausi',
     spring: 'Kevät',
     fall: 'Syksy',

@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Box, Typography, Divider, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
-import { filterCoursesWithNoResponses, formateDates } from './utils'
+import {
+  filterCoursesWithNoResponses,
+  filterCoursesByDate,
+  formateDates,
+} from './utils'
 import { LoadingProgress } from '../LoadingProgress'
+import { YearSemesterSelector } from '../CourseSummary/YearSemesterSelector'
+import useHistoryState from '../../hooks/useHistoryState'
 
 const styles = {
   courseTitle: {
@@ -81,14 +87,32 @@ const ProgrammeOpenQuestions = () => {
 
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
 
+  const [dateRange, setDateRange] = useHistoryState('dateRange', {
+    // Update to next year in November
+    start: new Date(`2021-08-01`),
+    end: new Date('2022-08-01'),
+  })
+
+  const [option, setOption] = useState('all')
+
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  const filteredCourses = filterCoursesWithNoResponses(codesWithIds)
+  let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
+
+  if (option !== 'all')
+    filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
 
   return (
     <Box>
+      <YearSemesterSelector
+        value={dateRange}
+        onChange={setDateRange}
+        option={option}
+        setOption={setOption}
+        allowAll
+      />
       <Box sx={styles.buttonContainer}>
         <Button
           color="primary"
