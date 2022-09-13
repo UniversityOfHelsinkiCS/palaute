@@ -333,6 +333,7 @@ export default {
     startDateLabel: 'Start of time period',
     teachingLanguages: 'Teaching languages',
     year: 'Year',
+    all: 'Show all',
     semester: 'Semester',
     spring: 'Spring',
     fall: 'Fall',

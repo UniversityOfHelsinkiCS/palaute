@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import useHistoryState from '../../hooks/useHistoryState'
 
 // Year starting month
 const MONTH = 8
@@ -142,10 +141,15 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
  * }} params
  * @returns
  */
-export const YearSemesterSelector = ({ value, onChange }) => {
+export const YearSemesterSelector = ({
+  value,
+  onChange,
+  option,
+  setOption,
+  allowAll,
+}) => {
   const { t } = useTranslation()
 
-  const [option, setOption] = useHistoryState('timeperiodOption', 'year')
   const { year, semesters, currentSemester } = useYearSemesters(
     value?.start ?? new Date(),
   )
@@ -177,22 +181,27 @@ export const YearSemesterSelector = ({ value, onChange }) => {
         onChange={handleOptionChange}
         color="primary"
       >
+        {allowAll && (
+          <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>
+        )}
         <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
         <ToggleButton value="semester">
           {t('courseSummary:semester')}
         </ToggleButton>
       </ToggleButtonGroup>
-      <Box>
-        {option === 'year' ? (
-          <YearStepper value={year} onChange={handleYearChange} />
-        ) : (
-          <SemesterSelector
-            value={currentSemester}
-            onChange={handleSemesterChange}
-            semesters={semesters}
-          />
-        )}
-      </Box>
+      {option !== 'all' && (
+        <Box>
+          {option === 'year' ? (
+            <YearStepper value={year} onChange={handleYearChange} />
+          ) : (
+            <SemesterSelector
+              value={currentSemester}
+              onChange={handleSemesterChange}
+              semesters={semesters}
+            />
+          )}
+        </Box>
+      )}
     </Box>
   )
 }

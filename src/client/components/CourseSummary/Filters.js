@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 
 import { YearSemesterSelector } from './YearSemesterSelector'
 import { data } from '../../../config/data'
+import useHistoryState from '../../hooks/useHistoryState'
 
 const styles = {
   container: {
@@ -36,11 +37,17 @@ const Filters = ({
   onDateRangeChange,
 }) => {
   const { t, i18n } = useTranslation()
+  const [option, setOption] = useHistoryState('timeperiodOption', 'year')
 
   return (
     <div css={styles.container}>
       <Box mb={3}>
-        <YearSemesterSelector value={dateRange} onChange={onDateRangeChange} />
+        <YearSemesterSelector
+          value={dateRange}
+          onChange={onDateRangeChange}
+          option={option}
+          setOption={setOption}
+        />
       </Box>
       {facultyCode && (
         <Box mb={2}>

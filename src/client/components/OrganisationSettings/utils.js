@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, isWithinInterval } from 'date-fns'
 import apiClient from '../../util/apiClient'
 
 export const getUpperLevelQuestions = (survey) =>
@@ -58,6 +58,21 @@ export const filterCoursesWithNoResponses = (courses) => {
   )
 
   return filteredCourses
+}
+
+export const filterCoursesByDate = (courses, dateRange) => {
+  const filteredCourses = courses.map((course) => ({
+    ...course,
+    realisations: course.realisations.filter((realisation) =>
+      isWithinInterval(parseISO(realisation.startDate), dateRange),
+    ),
+  }))
+
+  const coursesWithRealisations = filteredCourses.filter(
+    (course) => course.realisations.length > 0,
+  )
+
+  return coursesWithRealisations
 }
 
 export const formateDates = (realisation) => {
