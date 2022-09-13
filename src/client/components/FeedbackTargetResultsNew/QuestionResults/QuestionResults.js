@@ -70,10 +70,19 @@ const componentByType = {
   OPEN: OpenResults,
 }
 
-const QuestionItem = ({ question, isTeacher, t, isPublic, sx }) => {
+const QuestionItem = ({
+  question,
+  isTeacher,
+  t,
+  isPublic,
+  sx,
+  feedbackCount,
+}) => {
   const Component = componentByType[question.type]
 
-  const content = Component ? <Component question={question} /> : null
+  const content = Component ? (
+    <Component question={question} feedbackCount={feedbackCount} />
+  ) : null
 
   return (
     <Box sx={sx} m="1rem">
@@ -156,6 +165,7 @@ const QuestionResults = ({
   feedbacks,
   isTeacher,
   organisationAccess,
+  feedbackCount,
 }) => {
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
@@ -187,15 +197,18 @@ const QuestionResults = ({
                 isPublic={publicQuestionIds.includes(q.id)}
                 isTeacher={isTeacher}
                 t={t}
+                feedbackCount={feedbackCount}
               />
             </Grid>
           ))}
         </Grid>
       </QuestionSection>
       {openQuestions.map((q) => (
-        <QuestionSection title={getLanguageValue(q.data.label, i18n.language)}>
+        <QuestionSection
+          title={getLanguageValue(q.data.label, i18n.language)}
+          key={q.id}
+        >
           <QuestionItem
-            key={q.id}
             question={q}
             isPublic={publicQuestionIds.includes(q.id)}
             isTeacher={isTeacher}

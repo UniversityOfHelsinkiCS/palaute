@@ -7,9 +7,14 @@ import { getSingleChoiceChartConfig } from './utils'
 import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
-const SingleChoiceResults = ({ question }) => {
+const SingleChoiceResults = ({ question, feedbackCount }) => {
   const { t, i18n } = useTranslation()
-  const config = getSingleChoiceChartConfig(question, i18n.language, t)
+  const config = getSingleChoiceChartConfig(
+    question,
+    i18n.language,
+    t,
+    feedbackCount,
+  )
   const label = getLanguageValue(question.data?.label, i18n.language)
 
   const description = getLanguageValue(

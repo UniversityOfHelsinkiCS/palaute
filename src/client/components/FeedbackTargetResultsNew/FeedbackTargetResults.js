@@ -58,6 +58,7 @@ const FeedbackTargetResults = () => {
     accessStatus,
     feedback,
     studentCount,
+    feedbackCount,
     opensAt,
     closesAt,
   } = feedbackTarget
@@ -111,6 +112,7 @@ const FeedbackTargetResults = () => {
           feedbacks={feedbacks}
           isTeacher={isTeacher}
           organisationAccess={!!userOrganisationAccess}
+          feedbackCount={feedbackCount}
         />
       </Box>
     </Box>

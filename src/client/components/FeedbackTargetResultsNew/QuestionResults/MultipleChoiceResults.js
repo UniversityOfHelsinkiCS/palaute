@@ -7,10 +7,14 @@ import { getMultipleChoiceChartConfig } from './utils'
 import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
-const MultipleChoiceResults = ({ question }) => {
+const MultipleChoiceResults = ({ question, feedbackCount }) => {
   const { t, i18n } = useTranslation()
   const config = getMultipleChoiceChartConfig(question, i18n.language, t)
-  const label = getLanguageValue(question.data?.label, i18n.language)
+  const label = getLanguageValue(
+    question.data?.label,
+    i18n.language,
+    feedbackCount,
+  )
 
   const description = getLanguageValue(
     question.data?.description,

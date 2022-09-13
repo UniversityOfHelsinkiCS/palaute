@@ -1,7 +1,6 @@
 import groupBy from 'lodash/groupBy'
 import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
-import _ from 'lodash'
 import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -9,9 +8,9 @@ import { getColor } from '../../../util/resultColors'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
-const WORKLOAD_QUESTION_ID = 1042
+// const WORKLOAD_QUESTION_ID = 1042
 
-const getScalesConfig = (t) => ({
+const getScalesConfig = (t, max) => ({
   y: {
     title: {
       display: true,
@@ -30,12 +29,13 @@ const getScalesConfig = (t) => ({
     ticks: {
       precision: 0,
     },
+    max,
   },
 })
 
-const getOptions = (question, t, language) => ({
+const getOptions = (question, t, language, max) => ({
   indexAxis: 'y',
-  scales: getScalesConfig(t),
+  scales: getScalesConfig(t, max),
   responsive: true,
   aspectRatio: 1.5,
   plugins: {
@@ -49,7 +49,7 @@ const getOptions = (question, t, language) => ({
   },
 })
 
-export const getLikertChartConfig = (question, language, t) => {
+export const getLikertChartConfig = (question, language, t, max) => {
   const labels = [5, 4, 3, 2, 1, 0]
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
@@ -58,7 +58,7 @@ export const getLikertChartConfig = (question, language, t) => {
   const dontKnowOption = t('feedbackView:dontKnowOption')
 
   return {
-    options: getOptions(question, t, language),
+    options: getOptions(question, t, language, max),
     data: {
       labels: ['5', '4', '3', '2', '1', dontKnowOption],
       datasets: [
@@ -71,7 +71,7 @@ export const getLikertChartConfig = (question, language, t) => {
   }
 }
 
-export const getMultipleChoiceChartConfig = (question, language, t) => {
+export const getMultipleChoiceChartConfig = (question, language, t, max) => {
   const theme = useTheme()
 
   const arrayOptions = question.data?.options ?? []
@@ -85,7 +85,7 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getOptions(question, t, language),
+    options: getOptions(question, t, language, max),
     data: {
       labels,
       datasets: [
@@ -98,7 +98,7 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
   }
 }
 
-export const getSingleChoiceChartConfig = (question, language, t) => {
+export const getSingleChoiceChartConfig = (question, language, t, max) => {
   const theme = useTheme()
 
   const arrayOptions = question.data?.options ?? []
@@ -112,7 +112,7 @@ export const getSingleChoiceChartConfig = (question, language, t) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getOptions(question, t, language),
+    options: getOptions(question, t, language, max),
     data: {
       labels,
       datasets: [
