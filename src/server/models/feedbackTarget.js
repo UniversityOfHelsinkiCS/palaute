@@ -297,6 +297,12 @@ class FeedbackTarget extends Model {
     })
   }
 
+  async getStudentCount() {
+    return UserFeedbackTarget.count({
+      where: { feedbackTargetId: this.id, accessStatus: 'STUDENT' },
+    })
+  }
+
   async getTeachersForFeedbackTarget() {
     const result = User.findAll({
       attributes: ['id', 'firstName', 'lastName', 'email'],
@@ -401,11 +407,13 @@ class FeedbackTarget extends Model {
   async toPublicObject(includeSurveysAndTeachers) {
     if (!includeSurveysAndTeachers) return this.toJSON()
 
-    const [surveys, teachers, publicQuestionIds] = await Promise.all([
-      this.getSurveys(),
-      this.getTeachersForFeedbackTarget(),
-      this.getPublicQuestionIds(),
-    ])
+    const [surveys, teachers, publicQuestionIds, studentCount] =
+      await Promise.all([
+        this.getSurveys(),
+        this.getTeachersForFeedbackTarget(),
+        this.getPublicQuestionIds(),
+        this.getStudentCount(),
+      ])
     const publicityConfigurableQuestionIds =
       await this.getPublicityConfigurableQuestionIds(surveys)
 
@@ -415,6 +423,7 @@ class FeedbackTarget extends Model {
       publicQuestionIds,
       publicityConfigurableQuestionIds,
       responsibleTeachers: teachers,
+      studentCount,
     }
 
     delete feedbackTarget.userFeedbackTargets

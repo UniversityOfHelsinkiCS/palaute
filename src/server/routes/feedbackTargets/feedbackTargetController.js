@@ -112,14 +112,11 @@ const asyncFeedbackTargetsToJSON = async (
 const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
   const convertSingle = async (feedbackTarget) => {
     const publicTarget = await feedbackTarget.toPublicObject(true)
-    const responsibleTeachers =
-      await feedbackTarget.getTeachersForFeedbackTarget()
 
     return {
       ...publicTarget,
       accessStatus: 'TEACHER',
       feedback: null,
-      responsibleTeachers,
     }
   }
 

@@ -6,14 +6,17 @@ import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
 import { Box, Paper } from '@mui/material'
 
-const FeedbackChart = ({ feedbacks, opensAt, closesAt }) => {
+const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt }) => {
   const config = React.useMemo(() => {
     const data = _.sortBy(
       Object.entries(
         _.groupBy(feedbacks, (f) =>
           startOfDay(Date.parse(f.createdAt)).getTime(),
         ),
-      ).map(([date, feedbacks]) => ({ x: Number(date), y: feedbacks.length })),
+      ).map(([date, feedbacks]) => ({
+        x: Number(date),
+        y: (feedbacks.length / studentCount) * 100.0,
+      })),
       'x',
     )
 
@@ -61,6 +64,8 @@ const FeedbackChart = ({ feedbacks, opensAt, closesAt }) => {
               display: true,
               text: 'value',
             },
+            min: 0,
+            max: 100,
           },
         },
       },

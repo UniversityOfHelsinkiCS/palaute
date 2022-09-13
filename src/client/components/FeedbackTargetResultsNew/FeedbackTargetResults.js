@@ -6,7 +6,6 @@ import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import FeedbackSummary from './QuestionResults/FeedbackSummary'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
 
@@ -31,7 +30,7 @@ const OnlyForEnrolled = ({ t }) => (
 )
 
 const FeedbackTargetResults = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { id } = useParams()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
@@ -50,16 +49,18 @@ const FeedbackTargetResults = () => {
     return <Redirect to="/" />
   }
 
+  const { feedbacks, feedbackVisible, userOrganisationAccess } =
+    feedbackTargetData
+
   const {
-    feedbacks,
-    feedbackVisible,
-    userOrganisationAccess,
+    questions,
+    publicQuestionIds,
+    accessStatus,
+    feedback,
+    studentCount,
     opensAt,
     closesAt,
-  } = feedbackTargetData
-
-  const { questions, publicQuestionIds, accessStatus, feedback } =
-    feedbackTarget
+  } = feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
     ? userOrganisationAccess.admin
@@ -96,6 +97,7 @@ const FeedbackTargetResults = () => {
       <Box>
         <FeedbackChart
           feedbacks={feedbacks}
+          studentCount={studentCount}
           opensAt={opensAt}
           closesAt={closesAt}
         />
