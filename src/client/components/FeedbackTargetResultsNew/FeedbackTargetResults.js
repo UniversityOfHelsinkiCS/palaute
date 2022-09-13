@@ -101,6 +101,7 @@ const FeedbackTargetResults = () => {
           studentCount={studentCount}
           opensAt={opensAt}
           closesAt={closesAt}
+          t={t}
         />
       </Box>
 
