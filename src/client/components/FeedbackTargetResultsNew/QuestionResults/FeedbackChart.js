@@ -4,16 +4,36 @@ import React from 'react'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
-import { Box, Paper, useTheme } from '@mui/material'
+import { Box, Paper } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { fi, sv, enGB as en } from 'date-fns/locale'
 
+const getGradient = (ctx, chartArea) => {
+  if (!ctx) return 'hsl(300deg  49% 56%)'
+  const g = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+  g.addColorStop(0.0, 'hsl(261deg  63% 61%)')
+  g.addColorStop(0.07, 'hsl(300deg  49% 56%)')
+  g.addColorStop(0.16, 'hsl(326deg  79% 64%)')
+  g.addColorStop(0.26, 'hsl(343deg 100% 71%)')
+  g.addColorStop(0.37, 'hsl(  1deg 100% 75%)')
+  g.addColorStop(0.5, 'hsl( 18deg 100% 73%)')
+  g.addColorStop(0.62, 'hsl( 30deg 100% 73%)')
+  g.addColorStop(0.75, 'hsl( 41deg  91% 74%)')
+  g.addColorStop(0.88, 'hsl( 58deg  69% 76%)')
+  g.addColorStop(1.0, 'hsl( 86deg 100% 86%)')
+  return g
+}
+
+const localeForLanguage = { fi, sv, en }
+
 const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt }) => {
-  const theme = useTheme()
   const { t, i18n } = useTranslation()
-  const localeForLanguage = { fi, sv, en }
+  const chartRef = React.useRef()
 
   const config = React.useMemo(() => {
+    const chart = chartRef.current
+    const gradient = getGradient(chart?.ctx, chart?.chartArea)
+
     const data = [{ x: subDays(Date.parse(opensAt), 1), y: 0 }].concat(
       _.sortBy(
         Object.entries(
@@ -94,10 +114,12 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt }) => {
         },
         elements: {
           line: {
-            borderColor: theme.palette.success.light,
+            borderColor: gradient,
+            borderWidth: 3.5,
           },
           point: {
-            radius: 4,
+            radius: 5,
+            borderColor: gradient,
           },
         },
         interaction: {
@@ -106,7 +128,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt }) => {
       },
     }
     return config
-  }, [feedbacks])
+  }, [feedbacks, chartRef])
 
   return (
     <Paper>
@@ -120,7 +142,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt }) => {
         justifyContent="center"
       >
         <Box minWidth="80%">
-          <Line {...config} />
+          <Line {...config} ref={chartRef} />
         </Box>
       </Box>
     </Paper>
