@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -16,7 +16,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
 import NewFeedbackTargetResults from '../FeedbackTargetResultsNew/FeedbackTargetResults'
 
-const FeedbackTargetResultsView = () => {
+const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
 
@@ -72,12 +72,13 @@ const FeedbackTargetResultsView = () => {
   )
 
   return (
-    <>
+    <span ref={ref}>
       <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
             feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
+            componentRef={ref}
           />
         )}
       </Box>
@@ -120,13 +121,14 @@ const FeedbackTargetResultsView = () => {
           organisationAccess={!!userOrganisationAccess}
         />
       )}
-    </>
+    </span>
   )
-}
+})
 
 const FeedbackTargetResults = () => {
   const [useNew, setUseNew] = React.useState(false)
   const { authorizedUser } = useAuthorizedUser()
+  const componentRef = useRef()
 
   return (
     <Box>
@@ -135,7 +137,11 @@ const FeedbackTargetResults = () => {
           Use {useNew ? 'old' : 'new'}
         </Button>
       )}
-      {useNew ? <NewFeedbackTargetResults /> : <FeedbackTargetResultsView />}
+      {useNew ? (
+        <NewFeedbackTargetResults />
+      ) : (
+        <FeedbackTargetResultsView ref={componentRef} />
+      )}
     </Box>
   )
 }

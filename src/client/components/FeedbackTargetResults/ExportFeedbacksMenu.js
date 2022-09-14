@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
+import { useReactToPrint } from 'react-to-print'
 import { Button, MenuItem, Menu, Box } from '@mui/material'
 import Papa from 'papaparse'
 import * as _ from 'lodash'
@@ -114,17 +115,21 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   )
 }
 
-const ExportPdfLink = () => {
+const ExportPdfLink = ({ componentRef }) => {
   const { t } = useTranslation()
 
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
   return (
-    <Button sx={styles.button} onClick={() => window.print()}>
+    <Button sx={styles.button} onClick={handlePrint}>
       {t('feedbackTargetResults:exportPdf')}
     </Button>
   )
 }
 
-const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
+const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
@@ -168,7 +173,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks }) => {
           />
         </MenuItem>
         <MenuItem value="pdf" sx={styles.menuitem}>
-          <ExportPdfLink />
+          <ExportPdfLink componentRef={componentRef} />
         </MenuItem>
       </Menu>
     </Box>

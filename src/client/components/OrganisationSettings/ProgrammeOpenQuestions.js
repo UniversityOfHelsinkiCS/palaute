@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, forwardRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Box, Typography, Divider, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useReactToPrint } from 'react-to-print'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
 import {
@@ -80,48 +81,17 @@ const RealisationItem = ({ realisation, language }) => {
   )
 }
 
-const ProgrammeOpenQuestions = () => {
-  const { code } = useParams()
-  const { t, i18n } = useTranslation()
+const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
+  const { i18n } = useTranslation()
   const { language } = i18n
-
-  const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
-
-  const [dateRange, setDateRange] = useHistoryState('dateRange', {
-    // Update to next year in November
-    start: new Date(`2021-08-01`),
-    end: new Date('2022-08-01'),
-  })
-
-  const [option, setOption] = useState('all')
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
 
   let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
 
-  if (option !== 'all')
+  if (dateRange)
     filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
 
   return (
-    <Box>
-      <YearSemesterSelector
-        value={dateRange}
-        onChange={setDateRange}
-        option={option}
-        setOption={setOption}
-        allowAll
-      />
-      <Box sx={styles.buttonContainer}>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => window.print()}
-        >
-          {t('feedbackTargetResults:exportPdf')}
-        </Button>
-      </Box>
+    <span ref={ref}>
       {filteredCourses.map((course) => (
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
@@ -140,6 +110,53 @@ const ProgrammeOpenQuestions = () => {
           ))}
         </Box>
       ))}
+    </span>
+  )
+})
+
+const ProgrammeOpenQuestions = () => {
+  const { code } = useParams()
+  const { t } = useTranslation()
+
+  const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
+
+  const [dateRange, setDateRange] = useHistoryState('dateRange', {
+    // Update to next year in November
+    start: new Date(`2021-08-01`),
+    end: new Date('2022-08-01'),
+  })
+
+  const [option, setOption] = useState('all')
+
+  const componentRef = useRef()
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
+  if (isLoading) {
+    return <LoadingProgress />
+  }
+
+  return (
+    <Box>
+      <YearSemesterSelector
+        value={dateRange}
+        onChange={setDateRange}
+        option={option}
+        setOption={setOption}
+        allowAll
+      />
+      <Box sx={styles.buttonContainer}>
+        <Button color="primary" variant="contained" onClick={handlePrint}>
+          {t('feedbackTargetResults:exportPdf')}
+        </Button>
+      </Box>
+      <OpenQuestions
+        codesWithIds={codesWithIds}
+        dateRange={option !== 'all' && dateRange}
+        ref={componentRef}
+      />
     </Box>
   )
 }
