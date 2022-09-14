@@ -80,10 +80,42 @@ const RealisationItem = ({ realisation, language }) => {
   )
 }
 
+const OpenQuestions = ({ codesWithIds, dateRange }) => {
+  const { i18n } = useTranslation()
+  const { language } = i18n
+
+  let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
+
+  if (dateRange)
+    filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
+
+  return (
+    <span>
+      {filteredCourses.map((course) => (
+        <Box key={course.code} mb="4rem">
+          <Typography component="h6" variant="h6">
+            <Link
+              to={`/course-summary/${course.code}`}
+              sx={styles.courseTitle}
+              replace
+            >{`${course.code} - ${course.name[language]}`}</Link>
+          </Typography>
+          {course.realisations.map((realisation) => (
+            <RealisationItem
+              key={realisation.id}
+              realisation={realisation}
+              language={language}
+            />
+          ))}
+        </Box>
+      ))}
+    </span>
+  )
+}
+
 const ProgrammeOpenQuestions = () => {
   const { code } = useParams()
-  const { t, i18n } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
 
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
 
@@ -98,11 +130,6 @@ const ProgrammeOpenQuestions = () => {
   if (isLoading) {
     return <LoadingProgress />
   }
-
-  let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
-
-  if (option !== 'all')
-    filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
 
   return (
     <Box>
@@ -122,24 +149,10 @@ const ProgrammeOpenQuestions = () => {
           {t('feedbackTargetResults:exportPdf')}
         </Button>
       </Box>
-      {filteredCourses.map((course) => (
-        <Box key={course.code} mb="4rem">
-          <Typography component="h6" variant="h6">
-            <Link
-              to={`/course-summary/${course.code}`}
-              sx={styles.courseTitle}
-              replace
-            >{`${course.code} - ${course.name[language]}`}</Link>
-          </Typography>
-          {course.realisations.map((realisation) => (
-            <RealisationItem
-              key={realisation.id}
-              realisation={realisation}
-              language={language}
-            />
-          ))}
-        </Box>
-      ))}
+      <OpenQuestions
+        codesWithIds={codesWithIds}
+        dateRange={option !== 'all' && dateRange}
+      />
     </Box>
   )
 }
