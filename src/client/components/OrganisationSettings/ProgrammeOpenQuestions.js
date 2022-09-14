@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, forwardRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Box, Typography, Divider, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useReactToPrint } from 'react-to-print'
 
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
 import {
@@ -80,7 +81,7 @@ const RealisationItem = ({ realisation, language }) => {
   )
 }
 
-const OpenQuestions = ({ codesWithIds, dateRange }) => {
+const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
   const { i18n } = useTranslation()
   const { language } = i18n
 
@@ -90,7 +91,7 @@ const OpenQuestions = ({ codesWithIds, dateRange }) => {
     filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
 
   return (
-    <span>
+    <span ref={ref}>
       {filteredCourses.map((course) => (
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
@@ -111,7 +112,7 @@ const OpenQuestions = ({ codesWithIds, dateRange }) => {
       ))}
     </span>
   )
-}
+})
 
 const ProgrammeOpenQuestions = () => {
   const { code } = useParams()
@@ -127,6 +128,12 @@ const ProgrammeOpenQuestions = () => {
 
   const [option, setOption] = useState('all')
 
+  const componentRef = useRef()
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
   if (isLoading) {
     return <LoadingProgress />
   }
@@ -141,17 +148,14 @@ const ProgrammeOpenQuestions = () => {
         allowAll
       />
       <Box sx={styles.buttonContainer}>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => window.print()}
-        >
+        <Button color="primary" variant="contained" onClick={handlePrint}>
           {t('feedbackTargetResults:exportPdf')}
         </Button>
       </Box>
       <OpenQuestions
         codesWithIds={codesWithIds}
         dateRange={option !== 'all' && dateRange}
+        ref={componentRef}
       />
     </Box>
   )
