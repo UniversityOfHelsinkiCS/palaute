@@ -340,7 +340,7 @@ export default {
   },
   footer: {
     contactSupport: 'Contact support',
-    wikiLink: 'User instructions',
+    wikiLink: 'Instructions',
     accessibilityDocument: 'Accessibility document',
   },
   courseRealisationFeedback: {

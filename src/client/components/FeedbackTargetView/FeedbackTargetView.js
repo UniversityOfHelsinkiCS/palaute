@@ -45,7 +45,6 @@ import {
   feedbackTargetIsDisabled,
   copyLink,
   getFeedbackPeriod,
-  getCoursePageUrl,
   getCourseUnitSummaryPath,
   deleteResponsibleTeacher,
 } from './utils'
@@ -59,6 +58,7 @@ import ErrorView from '../ErrorView'
 import errors from '../../util/errorMessage'
 import TeacherChip from '../TeacherChip'
 import useOrganisations from '../../hooks/useOrganisations'
+import { links } from '../../util/links'
 
 const styles = {
   datesContainer: {
@@ -112,6 +112,7 @@ const styles = {
     [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
     },
+    gap: '1.5rem',
   }),
   hidePrint: {
     '@media print': {
@@ -214,7 +215,8 @@ const FeedbackTargetView = () => {
 
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
-  const coursePageUrl = getCoursePageUrl(feedbackTarget)
+  const coursePageUrl = links.getCoursePage(feedbackTarget)
+  const wikiLink = links.teacherInstructions[i18n.language]
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
 
   const courseRealisationName = getLanguageValue(
@@ -308,7 +310,12 @@ const FeedbackTargetView = () => {
                 {t('feedbackTargetView:coursePage')}
               </ExternalLink>
 
-              <Box ml={2} />
+              {isTeacher && (
+                <ExternalLink href={wikiLink}>
+                  {t('footer:wikiLink')}
+                </ExternalLink>
+              )}
+
               {isTeacher && showCourseSummaryLink && (
                 <MuiLink
                   to={courseSummaryPath}

@@ -33,6 +33,8 @@ import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../ProtectedRoute'
+import ExternalLink from '../ExternalLink'
+import { links } from '../../util/links'
 
 const OrganisationSettings = () => {
   const { path, url } = useRouteMatch()
@@ -72,14 +74,18 @@ const OrganisationSettings = () => {
   return (
     <>
       <Title>{name}</Title>
-      <Box mb="3rem" display="flex" alignItems="end">
+      <Box mb="3rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
         <Typography variant="h4" component="h1">
           {name}
         </Typography>
-        <Box mr={2} />
         <Typography variant="h5" color="textSecondary">
           {organisation.code}
         </Typography>
+        <Box ml="2rem">
+          <ExternalLink href={links.organisationInstructions[i18n.language]}>
+            {t('footer:wikiLink')}
+          </ExternalLink>
+        </Box>
       </Box>
       <RouterTabs sx={{ mb: '4rem' }} variant="scrollable" scrollButtons="auto">
         {hasAdminAccess && (
