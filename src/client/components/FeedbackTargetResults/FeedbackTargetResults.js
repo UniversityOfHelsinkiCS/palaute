@@ -125,25 +125,10 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   )
 })
 
-const FeedbackTargetResults = () => {
-  const [useNew, setUseNew] = React.useState(false)
-  const { authorizedUser } = useAuthorizedUser()
-  const componentRef = useRef()
-
-  return (
-    <Box>
-      {authorizedUser.isAdmin && (
-        <Button onClick={() => setUseNew(!useNew)}>
-          Use {useNew ? 'old' : 'new'}
-        </Button>
-      )}
-      {useNew ? (
-        <NewFeedbackTargetResults />
-      ) : (
-        <FeedbackTargetResultsView ref={componentRef} />
-      )}
-    </Box>
-  )
-}
+const FeedbackTargetResults = () => (
+  <Box>
+    <NewFeedbackTargetResults />
+  </Box>
+)
 
 export default FeedbackTargetResults
