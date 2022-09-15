@@ -204,6 +204,7 @@ export default {
       'Näiden kysymysten tulokset eivät ole julkisia opiskelijoille',
     moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',
     here: 'täältä',
+    multipleChoiceQuestions: 'Monivalintakysymykset',
   },
   feedbackSummary: {
     question: 'Kysymys',

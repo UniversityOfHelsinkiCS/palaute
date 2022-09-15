@@ -207,6 +207,7 @@ export default {
       'The results of these questions are not visible to students',
     moreInfo: 'More information about visibility can be found',
     here: 'here',
+    multipleChoiceQuestions: 'Multiple choice questions',
   },
   feedbackSummary: {
     question: 'Question',

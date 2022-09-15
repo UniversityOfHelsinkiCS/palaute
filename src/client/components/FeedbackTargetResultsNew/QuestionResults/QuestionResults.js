@@ -184,7 +184,7 @@ const QuestionResults = ({
 
   return (
     <>
-      <QuestionSection title="Valintakysymykset">
+      <QuestionSection title={t('questionResults:multipleChoiceQuestions')}>
         <Grid spacing={2} container sx={styles.displayStyle}>
           {notOpenQuestions.map((q) => (
             <Grid item key={q.id} xs={12} sm={6} lg={4} xl={3}>

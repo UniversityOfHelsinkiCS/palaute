@@ -209,6 +209,7 @@ export default {
       'Resultaten av dessa frågor är inte synliga för studerande',
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
+    multipleChoiceQuestions: 'Flervalsfrågor',
   },
   feedbackSummary: {
     question: 'Fråga',
