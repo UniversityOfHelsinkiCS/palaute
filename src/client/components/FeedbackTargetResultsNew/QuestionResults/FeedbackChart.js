@@ -1,4 +1,4 @@
-import { startOfDay, subDays } from 'date-fns'
+import { addHours, endOfDay, startOfDay, subDays } from 'date-fns'
 import _ from 'lodash'
 import React from 'react'
 import 'chart.js/auto'
@@ -64,11 +64,19 @@ const FeedbackChart = ({
     const chart = chartRef.current
     const gradient = getGradient(chart?.ctx, chart?.chartArea)
 
-    const data = [{ x: Date.parse(opensAt), y: 0 }].concat(
+    const opensAtDate = startOfDay(Date.parse(opensAt)).getTime()
+    const chartMin = Math.min(subDays(Date.now(), 1), subDays(opensAtDate, 1))
+    const firstVisibleDataPoint = Math.min(opensAtDate, Date.now())
+    const chartMax = subDays(Date.parse(closesAt), -1)
+
+    const data = [
+      { x: 0, y: 0 },
+      { x: firstVisibleDataPoint, y: 0 },
+    ].concat(
       _.sortBy(
         Object.entries(
           _.groupBy(feedbacks, (f) =>
-            startOfDay(Date.parse(f.createdAt)).getTime(),
+            addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime(),
           ),
         ).map(([date, feedbacks]) => ({
           x: Number(date),
@@ -81,20 +89,22 @@ const FeedbackChart = ({
     for (let i = 1; i < data.length; i++) {
       data[i].y += data[i - 1].y // cumsum
     }
-    data.push({
-      x: Date.now(),
-      y: data[data.length - 1].y,
-    }) // add last
+    if (Date.now() > chartMax) {
+      data.push({
+        x: Date.now(),
+        y: data[data.length - 1].y,
+      }) // add last
+    }
 
     const absoluteData = data.map((d) => Math.round(d.y * studentCount))
 
     const opensAtAnnotation = getLineAnnotation(
       t('editFeedbackTarget:opensAt'),
-      Date.parse(opensAt),
+      opensAtDate,
     )
     const closesAtAnnotation = getLineAnnotation(
       t('editFeedbackTarget:closesAt'),
-      subDays(Date.parse(closesAt), 1),
+      Date.parse(closesAt),
     )
     const reminderAnnotation = getLineAnnotation(
       t('feedbackTargetResults:reminderLastSent'),
@@ -135,8 +145,7 @@ const FeedbackChart = ({
                 borderColor: '#ffffff00',
               }),
               label: (tooltip) => {
-                if (tooltip.dataIndex === 0)
-                  return t('editFeedbackTarget:opensAt')
+                if (data[tooltip.dataIndex].x <= opensAtDate) return null
                 const current = absoluteData[tooltip.dataIndex]
                 const previous = absoluteData[tooltip.dataIndex - 1]
                 return `${tooltip.formattedValue} (+${current - previous})`
@@ -144,6 +153,8 @@ const FeedbackChart = ({
               title: ([tooltip]) => {
                 if (tooltip.dataIndex === data.length - 1)
                   return t('common:today')
+                if (data[tooltip.dataIndex].x === opensAtDate)
+                  return t('editFeedbackTarget:opensAt')
                 return tooltip.label
               },
             },
@@ -164,8 +175,8 @@ const FeedbackChart = ({
               unit: 'day',
               tooltipFormat: 'MMM d',
             },
-            min: subDays(Date.parse(opensAt), 1),
-            max: subDays(Date.parse(closesAt), -1),
+            min: chartMin,
+            max: chartMax,
             adapters: { date: { locale: localeForLanguage[i18n.language] } },
             ticks: { major: { enabled: true } },
           },
@@ -202,7 +213,7 @@ const FeedbackChart = ({
       },
     }
     return config
-  }, [feedbacks, chartRef])
+  }, [chartRef.current])
 
   return (
     <Paper>
