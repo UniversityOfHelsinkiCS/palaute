@@ -56,6 +56,8 @@ export default {
     courseSummaryPage: 'Kurssammandrag',
     norppaFeedback: 'Ge respons',
     today: 'idag',
+    public: 'Publik',
+    notPublic: 'Inte publik',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',

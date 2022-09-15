@@ -10,7 +10,6 @@ import {
   ListItem,
   ListItemText,
   Link as MuiLink,
-  Chip,
   Paper,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -22,6 +21,7 @@ import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 import AlertLink from '../../AlertLink'
 import { getLanguageValue } from '../../../util/languageUtils'
+import LinkChip from '../../LinkChip'
 
 const styles = {
   openQuestionItem: {
@@ -77,6 +77,7 @@ const QuestionItem = ({
   isPublic,
   sx,
   feedbackCount,
+  feedbackTargetId,
 }) => {
   const Component = componentByType[question.type]
 
@@ -88,15 +89,9 @@ const QuestionItem = ({
     <Box sx={sx} m="1rem">
       {isTeacher && (
         <Box my="1rem">
-          <Chip
-            variant="outlined"
-            color="primary"
-            size="small"
-            label={
-              isPublic
-                ? t('questionResults:public')
-                : t('questionresults:notPublic')
-            }
+          <LinkChip
+            label={isPublic ? t('common:public') : t('common:notPublic')}
+            to={`/targets/${feedbackTargetId}/settings#public-questions`}
           />
         </Box>
       )}
@@ -166,6 +161,7 @@ const QuestionResults = ({
   isTeacher,
   organisationAccess,
   feedbackCount,
+  feedbackTargetId,
 }) => {
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
@@ -198,6 +194,7 @@ const QuestionResults = ({
                 isTeacher={isTeacher}
                 t={t}
                 feedbackCount={feedbackCount}
+                feedbackTargetId={feedbackTargetId}
               />
             </Grid>
           ))}
@@ -214,6 +211,7 @@ const QuestionResults = ({
             isTeacher={isTeacher}
             t={t}
             sx={styles.openQuestionItem}
+            feedbackTargetId={feedbackTargetId}
           />
         </QuestionSection>
       ))}

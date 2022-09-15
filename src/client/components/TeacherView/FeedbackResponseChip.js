@@ -1,7 +1,7 @@
 import React from 'react'
-import { Chip, css, keyframes } from '@mui/material'
+import { css, keyframes } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import LinkChip from '../LinkChip'
 
 const common = {
   '&:hover': {
@@ -97,20 +97,15 @@ const FeedbackResponseChip = ({
       ? `/targets/${id}/results`
       : `/targets/${id}/edit-feedback-response`
 
-  const sx = [feedbackResponseSent ? styles.sent : notSentStyle]
+  const sx = feedbackResponseSent ? styles.sent : notSentStyle
 
   return (
-    <Link to={url} style={{ textDecoration: 'none' }}>
-      <Chip
-        onClick={undefined}
-        label={ongoing ? ongoingLabel : label}
-        sx={ongoing ? ongoingStyle : sx}
-        variant="outlined"
-        size="small"
-        href={url}
-        {...props}
-      />
-    </Link>
+    <LinkChip
+      to={url}
+      label={ongoing ? ongoingLabel : label}
+      sx={ongoing ? ongoingStyle : sx}
+      {...props}
+    />
   )
 }
 

@@ -56,6 +56,8 @@ export default {
     courseSummaryPage: 'Course summary',
     norppaFeedback: 'Give feedback to Norppa developers',
     today: 'today',
+    public: 'Public',
+    notPublic: 'Not public',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',

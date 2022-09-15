@@ -56,6 +56,8 @@ export default {
     courseSummaryPage: 'Kurssiyhteenveto',
     norppaFeedback: 'Anna palautetta',
     today: 'tänään',
+    public: 'Julkinen',
+    notPublic: 'Ei julkinen',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',

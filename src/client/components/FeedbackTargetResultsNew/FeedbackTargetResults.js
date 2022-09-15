@@ -117,6 +117,7 @@ const FeedbackTargetResults = () => {
             isTeacher={isTeacher}
             organisationAccess={!!userOrganisationAccess}
             feedbackCount={feedbackCount}
+            feedbackTargetId={id}
           />
         </Box>
       )}
