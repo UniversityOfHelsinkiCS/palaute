@@ -61,6 +61,7 @@ const FeedbackTargetResults = () => {
     feedbackCount,
     opensAt,
     closesAt,
+    feedbackReminderLastSentAt,
   } = feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
@@ -101,6 +102,7 @@ const FeedbackTargetResults = () => {
           studentCount={studentCount}
           opensAt={opensAt}
           closesAt={closesAt}
+          feedbackReminderLastSentAt={feedbackReminderLastSentAt}
           t={t}
         />
       </Box>
