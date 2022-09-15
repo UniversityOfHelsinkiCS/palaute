@@ -79,7 +79,7 @@ const FeedbackTargetResults = () => {
 
   return (
     <Box>
-      {feedbackHasStarted && !isOpen && (
+      {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
         <Box mb={2}>
           <FeedbackResponse feedbackTarget={feedbackTarget} />
         </Box>
@@ -93,9 +93,6 @@ const FeedbackTargetResults = () => {
         </Box>
       )}
 
-      {feedbacks.length === 0 &&
-        (feedbackVisible ? <NotEnoughFeedbacks /> : <OnlyForEnrolled />)}
-
       <Box>
         <FeedbackChart
           feedbacks={feedbacks}
@@ -107,17 +104,22 @@ const FeedbackTargetResults = () => {
         />
       </Box>
 
-      <Box>
-        <QuestionResults
-          publicQuestionIds={publicQuestionIds ?? []}
-          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
-          questions={questions}
-          feedbacks={feedbacks}
-          isTeacher={isTeacher}
-          organisationAccess={!!userOrganisationAccess}
-          feedbackCount={feedbackCount}
-        />
-      </Box>
+      {feedbacks.length === 0 &&
+        (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled />)}
+
+      {feedbacks.length > 0 && (
+        <Box>
+          <QuestionResults
+            publicQuestionIds={publicQuestionIds ?? []}
+            selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
+            questions={questions}
+            feedbacks={feedbacks}
+            isTeacher={isTeacher}
+            organisationAccess={!!userOrganisationAccess}
+            feedbackCount={feedbackCount}
+          />
+        </Box>
+      )}
     </Box>
   )
 }
