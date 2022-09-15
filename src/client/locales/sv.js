@@ -55,6 +55,7 @@ export default {
     teacherPage: 'Mina kurser',
     courseSummaryPage: 'Kurssammandrag',
     norppaFeedback: 'Ge respons',
+    today: 'idag',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',

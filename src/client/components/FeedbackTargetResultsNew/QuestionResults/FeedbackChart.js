@@ -1,4 +1,4 @@
-import { addHours, endOfDay, startOfDay, subDays } from 'date-fns'
+import { addHours, startOfDay, subDays } from 'date-fns'
 import _ from 'lodash'
 import React from 'react'
 import 'chart.js/auto'
@@ -33,7 +33,7 @@ const annotationLineColor = '#5f8faf'
 const labelBackgroundColor = '#0f0f0fa0'
 const labelTextColor = '#5f8fbf'
 
-const getLineAnnotation = (label, x, y) => ({
+const getLineAnnotation = (label, x) => ({
   type: 'line',
   borderColor: annotationLineColor,
   borderDash: [6, 6],
@@ -42,13 +42,218 @@ const getLineAnnotation = (label, x, y) => ({
     content: label,
     position: 'start',
     display: true,
-    backgroundColor: '#00000000',
+    backgroundColor: 'white',
     color: labelTextColor,
   },
   scaleID: 'x',
   value: x,
   yScaleID: 'y',
 })
+
+const buildChartConfig = (
+  chart,
+  feedbacks,
+  studentCount,
+  opensAt,
+  closesAt,
+  feedbackReminderLastSentAt,
+  t,
+  language,
+) => {
+  const gradient = getGradient(chart?.ctx, chart?.chartArea)
+
+  const initialData = _.sortBy(
+    Object.entries(
+      _.groupBy(feedbacks, (f) =>
+        addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime(),
+      ),
+    ).map(([date, feedbacks]) => ({
+      x: Number(date),
+      y: feedbacks.length / studentCount,
+    })),
+    'x',
+  )
+
+  const opensAtDate = startOfDay(Date.parse(opensAt)).getTime()
+  const chartMin = Math.min(
+    subDays(Date.now(), 1),
+    subDays(opensAtDate, 1),
+    subDays(initialData[0]?.x ?? Date.now(), 1),
+  )
+  const chartMax = subDays(Date.parse(closesAt), -1)
+  const firstVisibleDataPoint = Math.min(
+    opensAtDate,
+    Date.now(),
+    addHours(initialData[0]?.x ?? Date.now(), 12),
+  )
+
+  const data = [
+    { x: 0, y: 0 },
+    { x: firstVisibleDataPoint, y: 0 },
+  ].concat(initialData)
+
+  for (let i = 2; i < data.length; i++) {
+    data[i].y += data[i - 1].y // cumsum
+  }
+
+  if (Date.now() > data[data.length - 1].x) {
+    data.push({
+      x: Date.now(),
+      y: data[data.length - 1].y,
+    }) // add last
+  }
+
+  const lastDataPoint = data[data.length - 1]
+
+  const absoluteData = data.map((d) => Math.round(d.y * studentCount))
+
+  const valueFormatOptions = {
+    style: 'percent',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }
+
+  const opensAtAnnotation = getLineAnnotation(
+    t('editFeedbackTarget:opensAt'),
+    opensAtDate,
+  )
+  const closesAtAnnotation = getLineAnnotation(
+    t('editFeedbackTarget:closesAt'),
+    Date.parse(closesAt),
+  )
+  const reminderAnnotation = getLineAnnotation(
+    t('feedbackTargetResults:reminderLastSent'),
+    subDays(Date.parse(feedbackReminderLastSentAt), 1),
+  )
+  const latestValueAnnotation = {
+    type: 'line',
+    display: data.length > 2,
+    borderColor: annotationLineColor,
+    borderDash: [6, 6],
+    borderWidth: 1,
+    label: {
+      content: `${Intl.NumberFormat(
+        localeForLanguage[language].code,
+        valueFormatOptions,
+      ).format(lastDataPoint.y)} (${feedbacks.length}/${studentCount})`,
+      position: 'center',
+      yAdjust: -20,
+      xAdjust: 10,
+      display: true,
+      color: labelTextColor,
+      backgroundColor: 'white',
+    },
+    xScaleID: 'x',
+    xMin: lastDataPoint.x,
+    xMax: chartMax,
+    yScaleID: 'y',
+    yMin: lastDataPoint.y,
+    yMax: lastDataPoint.y,
+  }
+
+  const config = {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          data,
+        },
+      ],
+    },
+    options: {
+      locale: localeForLanguage[language].code,
+      responsive: true,
+      aspectRatio: 5,
+      maintainAspectRatio: false,
+      resizeDelay: 100,
+
+      layout: {
+        padding: {
+          right: 50,
+        },
+      },
+      interaction: {
+        intersect: false,
+        mode: 'nearest',
+        axis: 'x',
+      },
+      plugins: {
+        title: {
+          text: t('courseSummary:feedbackCount'),
+          display: true,
+        },
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          backgroundColor: labelBackgroundColor,
+          displayColors: false,
+          callbacks: {
+            label: (tooltip) => {
+              if (data[tooltip.dataIndex].x <= firstVisibleDataPoint)
+                return null
+              const current = absoluteData[tooltip.dataIndex]
+              const previous = absoluteData[tooltip.dataIndex - 1]
+              return `${tooltip.formattedValue} (+${current - previous})`
+            },
+            title: ([tooltip]) => {
+              if (tooltip.dataIndex === data.length - 1)
+                return t('common:today')
+              if (data[tooltip.dataIndex].x === opensAtDate)
+                return t('editFeedbackTarget:opensAt')
+              return tooltip.label
+            },
+          },
+        },
+        annotation: {
+          annotations: {
+            opensAtAnnotation,
+            closesAtAnnotation,
+            reminderAnnotation,
+            latestValueAnnotation,
+          },
+        },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            parse: false,
+            unit: 'day',
+            tooltipFormat: 'MMM d',
+          },
+          min: chartMin,
+          max: chartMax,
+          adapters: { date: { locale: localeForLanguage[language] } },
+          ticks: { major: { enabled: true } },
+        },
+        y: {
+          title: {
+            display: true,
+            text: t('courseSummary:feedbackPercentage'),
+          },
+          min: 0,
+          max: 1,
+          ticks: {
+            format: valueFormatOptions,
+            stepSize: 0.2,
+          },
+        },
+      },
+      elements: {
+        line: {
+          borderColor: gradient,
+          borderWidth: 4,
+        },
+        point: {
+          radius: 6,
+          borderColor: gradient,
+        },
+      },
+    },
+  }
+  return config
+}
 
 const FeedbackChart = ({
   feedbacks,
@@ -60,160 +265,20 @@ const FeedbackChart = ({
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
 
-  const config = React.useMemo(() => {
-    const chart = chartRef.current
-    const gradient = getGradient(chart?.ctx, chart?.chartArea)
-
-    const opensAtDate = startOfDay(Date.parse(opensAt)).getTime()
-    const chartMin = Math.min(subDays(Date.now(), 1), subDays(opensAtDate, 1))
-    const firstVisibleDataPoint = Math.min(opensAtDate, Date.now())
-    const chartMax = subDays(Date.parse(closesAt), -1)
-
-    const data = [
-      { x: 0, y: 0 },
-      { x: firstVisibleDataPoint, y: 0 },
-    ].concat(
-      _.sortBy(
-        Object.entries(
-          _.groupBy(feedbacks, (f) =>
-            addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime(),
-          ),
-        ).map(([date, feedbacks]) => ({
-          x: Number(date),
-          y: feedbacks.length / studentCount,
-        })),
-        'x',
+  const config = React.useMemo(
+    () =>
+      buildChartConfig(
+        chartRef.current,
+        feedbacks,
+        studentCount,
+        opensAt,
+        closesAt,
+        feedbackReminderLastSentAt,
+        t,
+        i18n.language,
       ),
-    )
-
-    for (let i = 1; i < data.length; i++) {
-      data[i].y += data[i - 1].y // cumsum
-    }
-    if (Date.now() > chartMax) {
-      data.push({
-        x: Date.now(),
-        y: data[data.length - 1].y,
-      }) // add last
-    }
-
-    const absoluteData = data.map((d) => Math.round(d.y * studentCount))
-
-    const opensAtAnnotation = getLineAnnotation(
-      t('editFeedbackTarget:opensAt'),
-      opensAtDate,
-    )
-    const closesAtAnnotation = getLineAnnotation(
-      t('editFeedbackTarget:closesAt'),
-      Date.parse(closesAt),
-    )
-    const reminderAnnotation = getLineAnnotation(
-      t('feedbackTargetResults:reminderLastSent'),
-      subDays(Date.parse(feedbackReminderLastSentAt), 1),
-    )
-
-    const config = {
-      type: 'line',
-      data: {
-        datasets: [
-          {
-            data,
-          },
-        ],
-      },
-      options: {
-        locale: i18n.language,
-        responsive: true,
-        aspectRatio: 5,
-        maintainAspectRatio: false,
-        resizeDelay: 100,
-
-        plugins: {
-          title: {
-            text: t('courseSummary:feedbackCount'),
-            display: true,
-          },
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            backgroundColor: labelBackgroundColor,
-            callbacks: {
-              labelColor: (tooltip) => ({
-                backgroundColor: gradient,
-                borderWidth: 0,
-                borderRadius: 5,
-                borderColor: '#ffffff00',
-              }),
-              label: (tooltip) => {
-                if (data[tooltip.dataIndex].x <= opensAtDate) return null
-                const current = absoluteData[tooltip.dataIndex]
-                const previous = absoluteData[tooltip.dataIndex - 1]
-                return `${tooltip.formattedValue} (+${current - previous})`
-              },
-              title: ([tooltip]) => {
-                if (tooltip.dataIndex === data.length - 1)
-                  return t('common:today')
-                if (data[tooltip.dataIndex].x === opensAtDate)
-                  return t('editFeedbackTarget:opensAt')
-                return tooltip.label
-              },
-            },
-          },
-          annotation: {
-            annotations: {
-              opensAtAnnotation,
-              closesAtAnnotation,
-              reminderAnnotation,
-            },
-          },
-        },
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-              parse: false,
-              unit: 'day',
-              tooltipFormat: 'MMM d',
-            },
-            min: chartMin,
-            max: chartMax,
-            adapters: { date: { locale: localeForLanguage[i18n.language] } },
-            ticks: { major: { enabled: true } },
-          },
-          y: {
-            title: {
-              display: true,
-              text: t('courseSummary:feedbackPercentage'),
-            },
-            min: 0,
-            max: 1,
-            ticks: {
-              format: {
-                style: 'percent',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              },
-              stepSize: 0.2,
-            },
-          },
-        },
-        elements: {
-          line: {
-            borderColor: gradient,
-            borderWidth: 4,
-          },
-          point: {
-            radius: 6,
-            borderColor: gradient,
-          },
-        },
-        interaction: {
-          intersect: false,
-        },
-      },
-    }
-    return config
-  }, [chartRef.current])
+    [chartRef.current],
+  )
 
   return (
     <Paper>

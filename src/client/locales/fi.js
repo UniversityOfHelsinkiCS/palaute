@@ -55,6 +55,7 @@ export default {
     teacherPage: 'Opetukseni',
     courseSummaryPage: 'Kurssiyhteenveto',
     norppaFeedback: 'Anna palautetta',
+    today: 'tänään',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',

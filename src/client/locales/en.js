@@ -55,6 +55,7 @@ export default {
     teacherPage: 'My teaching',
     courseSummaryPage: 'Course summary',
     norppaFeedback: 'Give feedback to Norppa developers',
+    today: 'today',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',
