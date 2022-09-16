@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Alert } from '@mui/material'
+import { Box, Alert, useMediaQuery } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -32,6 +32,9 @@ const OnlyForEnrolled = ({ t }) => (
 const FeedbackTargetResults = () => {
   const { t } = useTranslation()
   const { id } = useParams()
+  const isMobileChrome =
+    useMediaQuery('(max-width:500px)') &&
+    navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
@@ -93,16 +96,18 @@ const FeedbackTargetResults = () => {
         </Box>
       )}
 
-      <Box>
-        <FeedbackChart
-          feedbacks={feedbacks}
-          studentCount={studentCount}
-          opensAt={opensAt}
-          closesAt={closesAt}
-          feedbackReminderLastSentAt={feedbackReminderLastSentAt}
-          t={t}
-        />
-      </Box>
+      {!isMobileChrome && (
+        <Box>
+          <FeedbackChart
+            feedbacks={feedbacks}
+            studentCount={studentCount}
+            opensAt={opensAt}
+            closesAt={closesAt}
+            feedbackReminderLastSentAt={feedbackReminderLastSentAt}
+            t={t}
+          />
+        </Box>
+      )}
 
       {feedbacks.length === 0 &&
         (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled />)}
