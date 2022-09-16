@@ -123,8 +123,8 @@ const ARGS_BY_ORDER_BY = {
     courseUnits: [['feedbackCount'], ['desc']],
   },
   FEEDBACK_PERCENTAGE_ASC: {
-    organisations: [['feedbackCount'], ['asc']],
-    courseUnits: [['feedbackCount'], ['asc']],
+    organisations: [['feedbackPercentage'], ['asc']],
+    courseUnits: [['feedbackPercentage'], ['asc']],
   },
   FEEDBACK_PERCENTAGE_DESC: {
     organisations: [['feedbackPercentage'], ['desc']],
@@ -187,12 +187,26 @@ const formatForFeedbackResponse = (organisations) =>
     })),
   }))
 
+const formatForFeedbackPercentage = (organisations) =>
+  // Add sortable feedbackPercentage attribute to each organisation and courseUnit
+  organisations.map((organisation) => ({
+    ...organisation,
+    feedbackPercentage: organisation.feedbackCount / organisation.studentCount,
+    courseUnits: organisation.courseUnits.map((courseUnit) => ({
+      ...courseUnit,
+      feedbackPercentage: courseUnit.feedbackCount / courseUnit.studentCount,
+    })),
+  }))
+
 export const orderByCriteria = (organisations, orderByCriteria) => {
   if (organisations.length === 0) return []
   const orderByArgs = getOrderByArgs(organisations, orderByCriteria)
 
   if (orderByCriteria.includes('FEEDBACK_RESPONSE'))
     organisations = formatForFeedbackResponse(organisations)
+
+  if (orderByCriteria.includes('FEEDBACK_PERCENTAGE'))
+    organisations = formatForFeedbackPercentage(organisations)
 
   return orderByArgs
     ? sortBy(
