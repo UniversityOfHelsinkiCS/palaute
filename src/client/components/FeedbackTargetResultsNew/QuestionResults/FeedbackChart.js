@@ -33,7 +33,7 @@ const annotationLineColor = '#5f8faf'
 const labelBackgroundColor = '#0f0f0fa0'
 const labelTextColor = '#5f8fbf'
 
-const getLineAnnotation = (label, x) => ({
+const getLineAnnotation = (label, x, yAdjust = 0) => ({
   type: 'line',
   borderColor: annotationLineColor,
   borderDash: [6, 6],
@@ -44,10 +44,10 @@ const getLineAnnotation = (label, x) => ({
     display: true,
     backgroundColor: 'white',
     color: labelTextColor,
+    yAdjust,
   },
   scaleID: 'x',
   value: x,
-  yScaleID: 'y',
 })
 
 const buildChartConfig = (
@@ -84,7 +84,7 @@ const buildChartConfig = (
   const firstVisibleDataPoint = Math.min(
     opensAtDate,
     Date.now(),
-    addHours(initialData[0]?.x ?? Date.now(), 12),
+    addHours(initialData[0]?.x ?? Date.now(), -12),
   )
 
   const data = [
@@ -116,6 +116,7 @@ const buildChartConfig = (
   const opensAtAnnotation = getLineAnnotation(
     t('editFeedbackTarget:opensAt'),
     opensAtDate,
+    15,
   )
   const closesAtAnnotation = getLineAnnotation(
     t('editFeedbackTarget:closesAt'),
@@ -124,6 +125,7 @@ const buildChartConfig = (
   const reminderAnnotation = getLineAnnotation(
     t('feedbackTargetResults:reminderLastSent'),
     subDays(Date.parse(feedbackReminderLastSentAt), 1),
+    -5,
   )
   const latestValueAnnotation = {
     type: 'line',
