@@ -59,10 +59,12 @@ import errors from '../../util/errorMessage'
 import TeacherChip from '../TeacherChip'
 import useOrganisations from '../../hooks/useOrganisations'
 import { links } from '../../util/links'
+import PercentageCell from '../CourseSummary/PercentageCell'
 
 const styles = {
   datesContainer: {
     display: 'grid',
+    gridGap: '0.2rem',
     gridTemplateColumns: 'auto 1fr',
     '& dt': {
       paddingRight: 3,
@@ -74,7 +76,6 @@ const styles = {
   },
   headingContainer: (theme) => ({
     display: 'flex',
-    justifyContent: 'space-between',
     marginBottom: theme.spacing(3),
     marginTop: theme.spacing(1),
     [theme.breakpoints.down('md')]: {
@@ -139,12 +140,10 @@ const FeedbackTargetView = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading, refetch, isLoadingError, error } =
     useFeedbackTarget(id, { retry: 1 })
-  const { feedbackCount, isLoading: feedbackCountLoading } = useFeedbackCount(
-    id,
-    {
+  const { feedbackCount: cuFeedbackCount, isLoading: feedbackCountLoading } =
+    useFeedbackCount(id, {
       enabled: !isLoading && feedbackTarget?.accessStatus === 'TEACHER',
-    },
-  )
+    })
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
 
@@ -167,6 +166,8 @@ const FeedbackTargetView = () => {
     responsibleTeachers,
     feedbackResponseEmailSent,
     settingsReadByTeacher,
+    feedbackCount,
+    studentCount,
   } = feedbackTarget
 
   const { courseCode } = courseUnit
@@ -183,7 +184,7 @@ const FeedbackTargetView = () => {
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
-  const showCourseSummaryLink = !feedbackCountLoading && feedbackCount > 0
+  const showCourseSummaryLink = !feedbackCountLoading && cuFeedbackCount > 0
 
   const showFeedbacksTab =
     isOrganisationAdmin || (isTeacher && isStarted) || feedback || isEnded
@@ -286,7 +287,7 @@ const FeedbackTargetView = () => {
           )}
         </div>
         <Box sx={styles.infoContainer}>
-          <div>
+          <Box mr="auto">
             <dl css={styles.datesContainer}>
               <Typography color="textSecondary" variant="body2" component="dt">
                 {t('feedbackTargetView:coursePeriod')}:
@@ -326,7 +327,20 @@ const FeedbackTargetView = () => {
                 </MuiLink>
               )}
             </Box>
-          </div>
+          </Box>
+          {isTeacher && (
+            <Box mt="1rem" mr="3rem">
+              <Typography gutterBottom>
+                {t('feedbackTargetView:studentsWithFeedbackTab')}
+              </Typography>
+              <Box display="flex">
+                <PercentageCell
+                  label={`${feedbackCount}/${studentCount}`}
+                  percent={(feedbackCount / studentCount) * 100}
+                />
+              </Box>
+            </Box>
+          )}
           <Box mt="1rem">
             <Typography gutterBottom>
               {t('feedbackTargetView:responsibleTeachers')}

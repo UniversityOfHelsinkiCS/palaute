@@ -253,11 +253,14 @@ const ResultsRow = ({
           </Typography>
         </td>
         <td css={styles.percentCell}>
-          <PercentageCell percent={percent} />
+          <PercentageCell label={`${percent}%`} percent={percent} />
         </td>
         <td css={styles.percentCell}>
           {feedbackResponsePercentage !== undefined ? (
-            <PercentageCell percent={feedbackResponsePercent} />
+            <PercentageCell
+              label={`${feedbackResponsePercent}%`}
+              percent={feedbackResponsePercent}
+            />
           ) : (
             <FeedbackResponseIndicator
               status={feedbackResponseGiven}
