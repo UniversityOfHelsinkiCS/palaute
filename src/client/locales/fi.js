@@ -215,7 +215,7 @@ export default {
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
-      'Kyselyn tuloksia ei näytetä, sillä siinä ei ole tarpeeksi palautteita',
+      'Tuloksia ei näytetä koska palautteita ei vielä ole annettu',
     onlyForEnrolledInfo:
       'Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',

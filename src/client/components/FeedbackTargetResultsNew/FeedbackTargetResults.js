@@ -110,7 +110,11 @@ const FeedbackTargetResults = () => {
       )}
 
       {feedbacks.length === 0 &&
-        (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled />)}
+        (feedbackVisible ? (
+          <NotEnoughFeedbacks t={t} />
+        ) : (
+          <OnlyForEnrolled t={t} />
+        ))}
 
       {feedbacks.length > 0 && (
         <Box>

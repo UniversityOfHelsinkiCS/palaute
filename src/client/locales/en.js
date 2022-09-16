@@ -218,9 +218,9 @@ export default {
   },
   feedbackTargetResults: {
     notEnoughFeedbacksInfo:
-      'Survey results will not be displayed because it does not have enough feedback',
+      'Survey results are not shown because no feedback has been given yet',
     onlyForEnrolledInfo:
-      'Survey results will not be displayed because the teacher has set feedback visible only for enrolled students',
+      'Survey results are not shown because the teacher has set feedback visible only for enrolled students',
     studentsWithFeedbackHeading: 'Students who have given feedback',
     responseHeading: "Teacher's counter feedback",
     giveResponse: 'Give counter feedback',
