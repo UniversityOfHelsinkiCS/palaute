@@ -15,7 +15,7 @@ import FeedbackChart from './QuestionResults/FeedbackChart'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
-    <Alert severity="warning">
+    <Alert severity="warning" data-cy="notEnoughFeedbacks">
       {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
     </Alert>
   </Box>
