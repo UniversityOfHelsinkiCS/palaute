@@ -14,18 +14,18 @@ Chart.register(annotationPlugin)
 const localeForLanguage = { fi, sv, en }
 
 const getGradient = (ctx, chartArea) => {
-  if (!ctx) return 'hsl(300deg  49% 56%)'
+  if (!ctx) return 'hsl(300deg 49% 56%)'
   const g = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
-  g.addColorStop(0.0, 'hsl(261deg  63% 61%)')
-  g.addColorStop(0.06, 'hsl(300deg  49% 56%)')
-  g.addColorStop(0.15, 'hsl(326deg  79% 64%)')
+  g.addColorStop(0.0, 'hsl(261deg 63% 61%)')
+  g.addColorStop(0.06, 'hsl(300deg 49% 56%)')
+  g.addColorStop(0.15, 'hsl(326deg 79% 64%)')
   g.addColorStop(0.26, 'hsl(343deg 100% 71%)')
-  g.addColorStop(0.38, 'hsl(  1deg 100% 75%)')
-  g.addColorStop(0.51, 'hsl( 18deg 100% 73%)')
-  g.addColorStop(0.63, 'hsl( 30deg 100% 73%)')
-  g.addColorStop(0.76, 'hsl( 41deg  91% 74%)')
-  g.addColorStop(0.89, 'hsl( 58deg  69% 76%)')
-  g.addColorStop(1.0, 'hsl( 86deg 100% 86%)')
+  g.addColorStop(0.38, 'hsl(1deg 100% 75%)')
+  g.addColorStop(0.51, 'hsl(18deg 100% 73%)')
+  g.addColorStop(0.63, 'hsl(30deg 100% 73%)')
+  g.addColorStop(0.76, 'hsl(41deg 91% 74%)')
+  g.addColorStop(0.89, 'hsl(58deg 69% 76%)')
+  g.addColorStop(1.0, 'hsl(86deg 100% 86%)')
   return g
 }
 
