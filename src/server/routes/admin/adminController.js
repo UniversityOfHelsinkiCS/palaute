@@ -5,7 +5,6 @@ const _ = require('lodash')
 const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
-const { ADMINS } = require('../../util/config')
 const { updater } = require('../../updater')
 
 const {
@@ -26,14 +25,7 @@ const { mailer } = require('../../mailer')
 const {
   updateEnrolmentsOfCourse,
 } = require('../../updater/updateStudentFeedbackTargets')
-
-const adminAccess = (req, _, next) => {
-  const { uid: username } = req.headers
-
-  if (!ADMINS.includes(username)) throw new ApplicationError('Forbidden', 403)
-
-  return next()
-}
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
