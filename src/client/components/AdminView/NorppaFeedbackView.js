@@ -74,7 +74,9 @@ const NorppaFeedbackView = () => {
                     <Box display="flex" alignItems="center">
                       <Typography variant="body2">{created}</Typography>
                       <Box marginLeft={4}>
-                        <Typography variant="body1">{user.email}</Typography>
+                        <Typography variant="body1">
+                          {user?.email ?? 'Anonymous'}
+                        </Typography>
                       </Box>
                     </Box>
                   </Box>

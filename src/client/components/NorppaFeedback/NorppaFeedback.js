@@ -69,10 +69,10 @@ const NorppaFeedback = () => {
         {t('norppaFeedback:description')}
       </Typography>
       <Formik
-        initialValues={{ feedback: '', responseWanted: false }}
+        initialValues={{ feedback: '', anonymous: true, responseWanted: false }}
         onSubmit={handleSubmit}
       >
-        {({ values, isSubmitting }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
             <FormikTextField
               name="feedback"
@@ -83,7 +83,20 @@ const NorppaFeedback = () => {
               multiline
             />
             <FormikCheckBox
+              name="anonymous"
+              label={t('norppaFeedback:anonymous')}
+              onChange={({ target }) => {
+                // if anon is true, set responseWanted to false
+                setFieldValue(
+                  'responseWanted',
+                  values.responseWanted && !target.checked,
+                )
+                setFieldValue('anonymous', target.checked)
+              }}
+            />
+            <FormikCheckBox
               name="responseWanted"
+              disabled={values.anonymous}
               label={t('norppaFeedback:responseWanted')}
             />
             <Button
@@ -96,6 +109,17 @@ const NorppaFeedback = () => {
             >
               {t('norppaFeedback:submit')}
             </Button>
+            {values.anonymous && (
+              <Box mt="1.5rem">
+                <Typography
+                  variant="body1"
+                  component="p"
+                  sx={styles.description}
+                >
+                  {t('norppaFeedback:anonymousInfo')}
+                </Typography>
+              </Box>
+            )}
           </Form>
         )}
       </Formik>

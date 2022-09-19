@@ -444,5 +444,8 @@ export default {
     bannerTitle: 'Hej',
     feedbackBanner:
       'Vi ber dig vänligen ge respons, så att vi kan utveckla Norppa på ett användarorienterat sätt så bra som möjligt.',
+    // anonymous: 'Lähetä anonyymisti',
+    // anonymousInfo:
+    //  'Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa.',
   },
 }

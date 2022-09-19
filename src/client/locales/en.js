@@ -438,5 +438,8 @@ export default {
     bannerTitle: 'Hi',
     feedbackBanner:
       'We kindly ask that you give feedback so that we can develop Norppa based on the user feedback as best as we can.',
+    anonymous: 'Send anonymously',
+    anonymousInfo:
+      "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
   },
 }
