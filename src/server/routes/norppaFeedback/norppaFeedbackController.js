@@ -1,19 +1,19 @@
 const { Router } = require('express')
 const { NorppaFeedback, User } = require('../../models')
-const { ADMINS } = require('../../../config')
 const { ApplicationError } = require('../../util/customErrors')
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const submitFeedback = async (req, res) => {
   const { user } = req
 
   if (!user) return res.send([])
 
-  const { feedback, responseWanted } = req.body
+  const { feedback, anonymous, responseWanted } = req.body
 
   const newFeedback = await NorppaFeedback.create({
     data: feedback,
     responseWanted,
-    userId: user.id,
+    userId: anonymous ? null : user.id,
   })
 
   const feedbackUser = await User.findByPk(user.id)
@@ -36,18 +36,12 @@ const hideBanner = async (req, res) => {
 }
 
 const getFeedbacks = async (req, res) => {
-  const { user } = req
-
-  if (!user) return res.sendStatus(500)
-  if (!ADMINS.includes(user.username))
-    throw new ApplicationError('Forbidden', 403)
-
   const feedbacks = await NorppaFeedback.findAll({
     include: [
       {
         model: User,
         as: 'user',
-        required: true,
+        required: false,
       },
     ],
   })
@@ -56,12 +50,7 @@ const getFeedbacks = async (req, res) => {
 }
 
 const markAsSolved = async (req, res) => {
-  const { user } = req
   const { id } = req.params
-
-  if (!user) return res.sendStatus(500)
-  if (!ADMINS.includes(user.username))
-    throw new ApplicationError('Forbidden', 403)
 
   const { solved } = req.body
   if (typeof solved !== 'boolean')
@@ -78,13 +67,6 @@ const markAsSolved = async (req, res) => {
 }
 
 const getNorppaFeedbackCount = async (req, res) => {
-  const { user } = req
-
-  if (!user) return res.sendStatus(500)
-  if (!ADMINS.includes(user.username)) {
-    return res.send(403)
-  }
-
   const feedbacks = await NorppaFeedback.count({
     where: {
       solved: false,
@@ -97,10 +79,10 @@ const getNorppaFeedbackCount = async (req, res) => {
 
 const router = Router()
 
-router.get('/', getFeedbacks)
+router.get('/', getFeedbacks, adminAccess)
 router.post('/', submitFeedback)
 router.put('/hide', hideBanner)
-router.put('/:id', markAsSolved)
-router.get('/count', getNorppaFeedbackCount)
+router.put('/:id', markAsSolved, adminAccess)
+router.get('/count', getNorppaFeedbackCount, adminAccess)
 
 module.exports = router

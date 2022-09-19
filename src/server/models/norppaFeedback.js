@@ -22,7 +22,7 @@ NorppaFeedback.init(
     },
     userId: {
       type: STRING,
-      allowNull: false,
+      allowNull: true,
     },
     responseWanted: {
       type: BOOLEAN,
