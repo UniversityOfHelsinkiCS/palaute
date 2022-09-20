@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { useRef, forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +30,7 @@ const OnlyForEnrolled = ({ t }) => (
   </Box>
 )
 
-const FeedbackTargetResults = forwardRef((_props, ref) => {
+const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobileChrome =
@@ -146,5 +146,15 @@ const FeedbackTargetResults = forwardRef((_props, ref) => {
     </>
   )
 })
+
+const FeedbackTargetResults = () => {
+  const componentRef = useRef()
+
+  return (
+    <Box>
+      <FeedbackTargetResultsView ref={componentRef} />
+    </Box>
+  )
+}
 
 export default FeedbackTargetResults
