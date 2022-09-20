@@ -395,6 +395,7 @@ export default {
     feedbacksTab: 'Vastaukset',
     editFeedbackResponseTab: 'Anna vastapalaute',
     editSurveyTab: 'Muokkaa kyselyä',
+    continuousFeedbackTab: 'Jatkuva palaute',
     studentsWithFeedbackTab: 'Palautteenantajat',
     linkCopied: 'Linkki palautteeseen on kopioitu leikepöydälle',
     copyLink: 'Kopioi opiskelijan vastauslinkki',

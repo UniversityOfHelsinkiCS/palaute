@@ -400,6 +400,7 @@ export default {
     feedbacksTab: 'Responser',
     editFeedbackResponseTab: 'Ge motrespons',
     editSurveyTab: 'Redigera förfrågan',
+    // continuousFeedbackTab: 'Continuous feedback',
     studentsWithFeedbackTab: 'De som gett respons',
     linkCopied: 'Länken till responsen har kopierats till urklippet',
     copyLink: 'Kopiera länken',

@@ -23,6 +23,8 @@ import {
   PollOutlined,
   SettingsOutlined,
   ShareOutlined,
+  ReviewsOutlined,
+  CommentOutlined,
 } from '@mui/icons-material'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
@@ -53,6 +55,7 @@ import { LoadingProgress } from '../LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
 import FeedbackTargetLogs from '../FeedbackTargetLogs'
+import ContinuousFeedback from '../FeedbackTargetContinuousFeedback'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../ErrorView'
 import errors from '../../util/errorMessage'
@@ -188,6 +191,7 @@ const FeedbackTargetView = () => {
 
   const showFeedbacksTab =
     isOrganisationAdmin || (isTeacher && isStarted) || feedback || isEnded
+  const showContinuousFeedbackTab = isAdmin
   const showEditSurveyTab =
     isOrganisationAdmin || (isTeacher && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
@@ -385,6 +389,13 @@ const FeedbackTargetView = () => {
               to={`${url}/results`}
             />
           )}
+          {showContinuousFeedbackTab && (
+            <RouterTab
+              icon={<ReviewsOutlined />}
+              label={t('feedbackTargetView:continuousFeedbackTab')}
+              to={`${url}/continuous-feedback`}
+            />
+          )}
           {showEditFeedbackResponseTab && (
             <RouterTab
               icon={<EditOutlined />}
@@ -444,6 +455,10 @@ const FeedbackTargetView = () => {
         <Route path={`${path}/edit`} component={EditFeedbackTarget} />
         <Route path={`${path}/results`} component={FeedbackTargetResults} />
         <Route path={`${path}/feedback`} component={FeedbackView} />
+        <Route
+          path={`${path}/continuous-feedback`}
+          component={ContinuousFeedback}
+        />
         <Route
           path={`${path}/students-with-feedback`}
           component={StudentsWithFeedback}
