@@ -151,7 +151,7 @@ const getByCourseUnit = async (req, res) => {
     courseUnits[0].id,
   )
 
-  if (!organisationAccess?.read) {
+  if (!organisationAccess?.read && !user.isAdmin) {
     const hasSomeCourseRealisationAccess = (
       await sequelize.query(
         `

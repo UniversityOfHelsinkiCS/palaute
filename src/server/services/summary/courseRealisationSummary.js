@@ -46,9 +46,8 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
       })
       .filter(Boolean)
 
-    const teachers = teacherData[row.feedback_target_id].map(
-      (teacher) => teacher.user,
-    )
+    const teachers =
+      teacherData[row.feedback_target_id]?.map((teacher) => teacher.user) ?? []
 
     const teachingLanguages = (row.teaching_languages || []).map(
       (lang) => languages[lang]?.name,

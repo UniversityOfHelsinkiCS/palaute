@@ -92,6 +92,7 @@ const currentUserMiddleware = async (req, _, next) => {
   }
 
   req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)
+  req.user.isAdmin = req.isAdmin
 
   return next()
 }
