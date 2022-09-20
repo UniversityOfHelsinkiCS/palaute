@@ -24,6 +24,7 @@ const {
   User,
   Organisation,
   FeedbackTargetLog,
+  ContinuousFeedback,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -817,6 +818,22 @@ const getFeedbacks = async (req, res) => {
   })
 }
 
+const getContinuousFeedbacks = async (req, res) => {
+  const { isAdmin } = req
+
+  if (!isAdmin) throw new ApplicationError('Forbidden', 403)
+
+  const feedbackTargetId = Number(req.params.id)
+
+  const continuousFeedbacks = await ContinuousFeedback.findAll({
+    where: {
+      feedbackTargetId,
+    },
+  })
+
+  return res.send(continuousFeedbacks)
+}
+
 const getStudentsWithFeedback = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
@@ -1156,6 +1173,7 @@ adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
 adRouter.get('/:id/feedbacks', getFeedbacks)
+adRouter.get('/:id/continuous-feedbacks', getContinuousFeedbacks)
 adRouter.get('/:id/users', getUsers)
 adRouter.get('/:id/feedback-count', getFeedbackCount)
 adRouter.get('/:id/logs', getLogs)
