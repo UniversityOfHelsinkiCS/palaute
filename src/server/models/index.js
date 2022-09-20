@@ -14,6 +14,7 @@ const UpdaterStatus = require('./updaterStatus')
 const FeedbackTargetDateCheck = require('./feedbackTargetDateCheck')
 const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
+const ContinuousFeedback = require('./continuousFeedback')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -132,6 +133,20 @@ Organisation.belongsTo(User, {
   foreign_key: 'responsible_user_id',
 })
 
+ContinuousFeedback.belongsTo(FeedbackTarget, {
+  as: 'feedback_target',
+  foreign_key: 'feedback_target_id',
+})
+
+ContinuousFeedback.belongsTo(User, {
+  as: 'user',
+  foreign_key: 'user_id',
+})
+
+User.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
+
+FeedbackTarget.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
+
 module.exports = {
   Feedback,
   User,
@@ -149,4 +164,5 @@ module.exports = {
   FeedbackTargetDateCheck,
   OrganisationLog,
   FeedbackTargetLog,
+  ContinuousFeedback,
 }
