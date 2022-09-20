@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
-import _, { orderBy, sortBy } from 'lodash'
+import { orderBy, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
@@ -266,10 +266,11 @@ export const useAggregatedOrganisationSummaries = ({
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
     code,
     includeOpenUniCourseUnits,
-    startDate: dateRange.start,
-    endDate: dateRange.end,
+    startDate: dateRange?.start,
+    endDate: dateRange?.end,
     keepPreviousData: true,
     retry: 2,
+    enabled: Boolean(dateRange?.start && dateRange?.end),
   })
 
   const filteredOrganisations = useMemo(

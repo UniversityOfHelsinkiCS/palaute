@@ -13,6 +13,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
+const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 
 const INCLUDED_ORGANISATIONS_BY_USER_ID = {
   // Jussi Merenmies
@@ -69,6 +70,13 @@ const getAccessInfo = async (req, res) => {
   const accessible =
     organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
 
+  const defaultDateRange = accessible
+    ? await getSummaryDefaultDateRange({
+        user,
+        organisationAccess,
+      })
+    : null
+
   // For grafana statistics
   if (organisationAccess.length === 1) {
     const { name, code } = organisationAccess[0].organisation.dataValues
@@ -81,6 +89,7 @@ const getAccessInfo = async (req, res) => {
   return res.send({
     accessible,
     adminAccess,
+    defaultDateRange,
   })
 }
 

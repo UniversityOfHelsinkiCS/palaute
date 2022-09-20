@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { startOfStudyYear } from '../../../config/common'
 
 // Year starting month
 const MONTH = 8
@@ -19,7 +20,7 @@ const useYearSemesters = (currentStart) => {
   const now = new Date()
   const year = Math.min(
     currentStart.getFullYear(),
-    now.getFullYear() - (now.getMonth() + 1 < MONTH ? 1 : 0),
+    startOfStudyYear(now).getFullYear(),
   )
 
   let semesters = _.range(2021, now.getFullYear() + 1)
@@ -149,7 +150,6 @@ export const YearSemesterSelector = ({
   allowAll,
 }) => {
   const { t } = useTranslation()
-
   const { year, semesters, currentSemester } = useYearSemesters(
     value?.start ?? new Date(),
   )

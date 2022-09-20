@@ -33,6 +33,7 @@ import Title from '../Title'
 import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import { OrganisationLabel } from './Labels'
 import errors from '../../util/errorMessage'
 import ErrorView from '../ErrorView'
@@ -188,6 +189,17 @@ const OrganisationTable = ({
   )
 }
 
+const safelyParseDateRange = (dateRange) =>
+  dateRange?.startDate && dateRange?.endDate
+    ? {
+        start: new Date(dateRange.startDate),
+        end: new Date(dateRange.endDate),
+      }
+    : { start: null, end: null }
+
+/**
+ * Somebody PLEASE refactor this file and components @TODO
+ */
 const OrganisationSummary = () => {
   const { t } = useTranslation()
   const { code } = useParams()
@@ -203,9 +215,8 @@ const OrganisationSummary = () => {
     useHistoryState('includeOpenUniCourseUnits', false)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
-    // Update to next year in November
-    start: new Date(`2021-08-01`),
-    end: new Date('2022-08-01'),
+    start: null,
+    end: null,
   })
 
   const [orderBy, setOrderBy] = useHistoryState(
@@ -213,7 +224,19 @@ const OrganisationSummary = () => {
     ORDER_BY_OPTIONS[0].value,
   )
 
+  const {
+    courseSummaryAccessInfo,
+    isLoading: defaultDateRangeLoading,
+    isLoadingError: isDateLoadingError,
+    error: dateLoadingError,
+  } = useCourseSummaryAccessInfo()
+
   const { organisations: organisationAccess } = useOrganisations()
+
+  const resultingDateRange =
+    dateRange.start && dateRange.end
+      ? dateRange
+      : safelyParseDateRange(courseSummaryAccessInfo?.defaultDateRange)
 
   const {
     organisationSummaries,
@@ -228,17 +251,25 @@ const OrganisationSummary = () => {
     keyword,
     orderBy,
     includeOpenUniCourseUnits,
-    dateRange,
+    dateRange: resultingDateRange,
   })
 
   const { openAccordions, toggleAccordion } = useOpenAccordions(
     organisationSummaries?.organisations ?? [],
   )
 
-  if (isLoading) {
+  if (isLoading || defaultDateRangeLoading) {
     return <LoadingProgress />
   }
 
+  if (isDateLoadingError) {
+    return (
+      <ErrorView
+        message={errors.getGeneralError(dateLoadingError)}
+        response={dateLoadingError.response}
+      />
+    )
+  }
   if (isLoadingError && !organisationSummaries) {
     return (
       <ErrorView
@@ -303,7 +334,7 @@ const OrganisationSummary = () => {
             onIncludeOpenUniCourseUnitsChange={
               handleIncludeOpenUniCourseUnitsChange
             }
-            dateRange={dateRange}
+            dateRange={resultingDateRange}
             onDateRangeChange={setDateRange}
           />
         }

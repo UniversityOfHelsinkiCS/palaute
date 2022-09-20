@@ -10,6 +10,7 @@ const useOrganisationSummaries = (options = {}) => {
     includeOpenUniCourseUnits = true,
     startDate,
     endDate,
+    enabled,
     ...queryOptions
   } = options
 
@@ -36,6 +37,7 @@ const useOrganisationSummaries = (options = {}) => {
   const { data: organisationSummaries, ...rest } = useQuery(queryKey, queryFn, {
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
+    enabled,
     ...queryOptions,
   })
 
