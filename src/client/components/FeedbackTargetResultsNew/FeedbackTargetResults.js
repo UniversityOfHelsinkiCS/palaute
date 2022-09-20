@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -8,6 +8,7 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
+import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
@@ -29,7 +30,7 @@ const OnlyForEnrolled = ({ t }) => (
   </Box>
 )
 
-const FeedbackTargetResults = () => {
+const FeedbackTargetResults = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobileChrome =
@@ -81,57 +82,69 @@ const FeedbackTargetResults = () => {
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
   return (
-    <Box>
-      {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
-        <Box mb={2}>
-          <FeedbackResponse feedbackTarget={feedbackTarget} />
-        </Box>
-      )}
-
-      {isOpen && feedback && (
-        <Box mb={2}>
-          <Alert severity="info">
-            {t('feedbackTargetResults:thankYouMessage')}
-          </Alert>
-        </Box>
-      )}
-
-      {!isMobileChrome && (
-        <Box>
-          <FeedbackChart
+    <>
+      <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
+        {feedbacks.length !== 0 && isTeacher && (
+          <ExportFeedbacksMenu
+            feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}
-            studentCount={studentCount}
-            opensAt={opensAt}
-            closesAt={closesAt}
-            feedbackReminderLastSentAt={feedbackReminderLastSentAt}
-            t={t}
+            componentRef={ref}
           />
-        </Box>
-      )}
+        )}
+      </Box>
 
-      {feedbacks.length === 0 &&
-        (feedbackVisible ? (
-          <NotEnoughFeedbacks t={t} />
-        ) : (
-          <OnlyForEnrolled t={t} />
-        ))}
+      <Box ref={ref}>
+        {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
+          <Box mb={2}>
+            <FeedbackResponse feedbackTarget={feedbackTarget} />
+          </Box>
+        )}
 
-      {feedbacks.length > 0 && (
-        <Box>
-          <QuestionResults
-            publicQuestionIds={publicQuestionIds ?? []}
-            selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
-            questions={questions}
-            feedbacks={feedbacks}
-            isTeacher={isTeacher}
-            organisationAccess={!!userOrganisationAccess}
-            feedbackCount={feedbackCount}
-            feedbackTargetId={id}
-          />
-        </Box>
-      )}
-    </Box>
+        {isOpen && feedback && (
+          <Box mb={2}>
+            <Alert severity="info">
+              {t('feedbackTargetResults:thankYouMessage')}
+            </Alert>
+          </Box>
+        )}
+
+        {!isMobileChrome && (
+          <Box>
+            <FeedbackChart
+              feedbacks={feedbacks}
+              studentCount={studentCount}
+              opensAt={opensAt}
+              closesAt={closesAt}
+              feedbackReminderLastSentAt={feedbackReminderLastSentAt}
+              t={t}
+            />
+          </Box>
+        )}
+
+        {feedbacks.length === 0 &&
+          (feedbackVisible ? (
+            <NotEnoughFeedbacks t={t} />
+          ) : (
+            <OnlyForEnrolled t={t} />
+          ))}
+
+        {feedbacks.length > 0 && (
+          <Box>
+            <QuestionResults
+              publicQuestionIds={publicQuestionIds ?? []}
+              selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
+              questions={questions}
+              feedbacks={feedbacks}
+              isTeacher={isTeacher}
+              organisationAccess={!!userOrganisationAccess}
+              feedbackCount={feedbackCount}
+              feedbackTargetId={id}
+            />
+          </Box>
+        )}
+      </Box>
+    </>
   )
-}
+})
 
 export default FeedbackTargetResults

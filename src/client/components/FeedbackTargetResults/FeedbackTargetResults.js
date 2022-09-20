@@ -125,10 +125,14 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   )
 })
 
-const FeedbackTargetResults = () => (
-  <Box>
-    <NewFeedbackTargetResults />
-  </Box>
-)
+const FeedbackTargetResults = () => {
+  const componentRef = useRef()
+
+  return (
+    <Box>
+      <NewFeedbackTargetResults ref={componentRef} />
+    </Box>
+  )
+}
 
 export default FeedbackTargetResults
