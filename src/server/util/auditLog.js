@@ -155,11 +155,11 @@ const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
       // eslint-disable-next-line no-continue
       if (Object.keys(difference).length === 0) continue
 
-      const { label } = previousQuestion.data
+      const label = previousQuestion.data.label || previousQuestion.data.content
       data = {
         updateQuestion: {
           id: question.id,
-          previousLabel: label.en || label.fi || label.sv,
+          previousLabel: label && (label.en || label.fi || label.sv),
           ...difference,
         },
       }

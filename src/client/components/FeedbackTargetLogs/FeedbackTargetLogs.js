@@ -51,17 +51,19 @@ const getLogMessage = (data) => {
   }
 
   if (data.createQuestion) {
-    const { label } = data.createQuestion
-    messages = messages.concat(
-      `Added question '${label.en || label.fi || label.sv}'`,
-    )
+    const { label, content } = data.createQuestion
+    const question =
+      (label && (label.en || label.fi || label.sv)) ||
+      (content && (content.en || content.fi || content.sv))
+    messages = messages.concat(`Added question '${question}'`)
   }
 
   if (data.deleteQuestion) {
-    const { label } = data.deleteQuestion
-    messages = messages.concat(
-      `Deleted question '${label.en || label.fi || label.sv}'`,
-    )
+    const { label, content } = data.deleteQuestion
+    const question =
+      (label && (label.en || label.fi || label.sv)) ||
+      (content && (content.en || content.fi || content.sv))
+    messages = messages.concat(`Deleted question '${question}'`)
   }
 
   if (data.updateQuestion) {
