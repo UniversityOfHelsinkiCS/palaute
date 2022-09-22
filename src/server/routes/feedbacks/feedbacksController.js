@@ -5,7 +5,7 @@ const { validateFeedback } = require('../../util/feedbackValidator')
 
 const create = async (req, res) => {
   const { data, feedbackTargetId } = req.body
-  const { id: userId, degreeStudyRigth } = req.user
+  const { id: userId, degreeStudyRight } = req.user
 
   const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
 
@@ -38,7 +38,7 @@ const create = async (req, res) => {
   const newFeedback = await Feedback.create({
     data,
     userId,
-    degreeStudyRigth,
+    degreeStudyRight,
   })
 
   await feedbackTarget.increment('feedbackCount', { by: 1 })
