@@ -68,6 +68,7 @@ export default {
       'Är du säker på att du vill tömma denna respons?',
     yes: 'Ja',
     no: 'Nej',
+    // giveContinuousFeedback: 'Give continous Feedback',
     viewFeedbackSummary: 'Visa sammanfattning av responsen',
     noFeedback: 'Ingenting här. Kom tillbaka senare!',
     feedbackClosedTab: 'Responsen är stängd',

@@ -120,6 +120,21 @@ const FeedbackEndedActions = ({ viewPath }) => {
   )
 }
 
+const ContinuousFeedbackActions = ({ viewPath }) => {
+  const { t } = useTranslation()
+
+  return (
+    <ActionButton
+      color="primary"
+      variant="contained"
+      component={Link}
+      to={viewPath}
+    >
+      {t('userFeedbacks:giveContinuousFeedback')}
+    </ActionButton>
+  )
+}
+
 const FeedbackGivenChip = () => {
   const { t } = useTranslation()
 
@@ -209,6 +224,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
       <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
+        {notStarted && <ContinuousFeedbackActions viewPath={editPath} />}
         {isOpen && feedbackGiven && (
           <FeedbackGivenActions
             editPath={editPath}

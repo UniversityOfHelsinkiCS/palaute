@@ -76,6 +76,7 @@ const UserFeedbacks = () => {
         sx={styles.statusTabs}
         status={status}
         counts={{
+          ongoing: filteredFeedbackTargets.ongoing?.length,
           waiting: filteredFeedbackTargets.waiting?.length,
           given: filteredFeedbackTargets.given?.length,
           ended: filteredFeedbackTargets.ended?.length,

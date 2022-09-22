@@ -575,6 +575,9 @@ const getForStudent = async (req, res) => {
     ended: publicFeedbackTargets.filter(
       (fbt) => Date.parse(fbt.closesAt) < now,
     ),
+    ongoing: publicFeedbackTargets.filter(
+      (fbt) => Date.parse(fbt.opensAt) > now,
+    ),
   }
 
   return res.send(response)

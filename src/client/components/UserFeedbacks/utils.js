@@ -77,6 +77,7 @@ export const filterFeedbackTargets = (feedbackTargets) => {
       )
 
   return {
+    ongoing: feedbackTargets.ongoing ? filter(feedbackTargets.ongoing) : [],
     waiting: feedbackTargets.waiting ? filter(feedbackTargets.waiting) : [],
     given: feedbackTargets.given ? filter(feedbackTargets.given) : [],
     ended: feedbackTargets.ended ? filter(feedbackTargets.ended) : [],

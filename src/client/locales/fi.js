@@ -67,6 +67,7 @@ export default {
     clearConfirmationQuestion: 'Haluatko varmasti poistaa antamasi palautteen?',
     yes: 'Kyllä',
     no: 'Ei',
+    giveContinuousFeedback: 'Anna jatkuvaa palautetta',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     noFeedback: 'Täällä ei ole vielä yhtään kurssia tai kurssipalautetta',
     feedbackClosedTab: 'Päättyneet',
