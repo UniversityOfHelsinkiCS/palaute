@@ -18,6 +18,7 @@ const courseUnit = require('./courseUnits')
 const testing = require('./testing')
 const noad = require('./noad')
 const norppaFeedback = require('./norppaFeedback')
+const continuousFeedback = require('./continuousFeedback')
 const { redirectFromCoursesPage } = require('./misc/coursesPageController')
 
 const router = Router()
@@ -42,6 +43,7 @@ router.use('/course-summaries', courseSummary)
 router.use('/organisations', organisation)
 router.use('/course-units', courseUnit)
 router.use('/norppa-feedback', norppaFeedback)
+router.use('/continuous-feedback', continuousFeedback)
 router.use('/admin', admin)
 
 if (inE2EMode) {

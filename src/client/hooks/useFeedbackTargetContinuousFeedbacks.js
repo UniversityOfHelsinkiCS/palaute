@@ -5,9 +5,7 @@ const useFeedbackTargetContinuousFeedbacks = (targetId, options = {}) => {
   const queryKey = ['feedbackTargetContinuousFeedbacks', targetId]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/feedback-targets/${targetId}/continuous-feedbacks`,
-    )
+    const { data } = await apiClient.get(`/continuous-feedback/${targetId}`)
 
     return data
   }
