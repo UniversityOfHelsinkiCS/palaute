@@ -14,6 +14,9 @@ import {
 import { LoadingProgress } from '../LoadingProgress'
 import PublicQuestions from '../PublicQuestions'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
+import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
+
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const FeedbackTargetSettings = () => {
   const { id } = useParams()
@@ -26,12 +29,16 @@ const FeedbackTargetSettings = () => {
     skipCache: true,
   })
 
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
+
   useEffect(() => {
     if (isLoading || feedbackTarget.settingsReadByTeacher) return
     updateSettingsRead.mutateAsync({ id })
   }, [isLoading])
 
-  if (isLoading) {
+  if (isLoading || authorizedUserLoading) {
     return <LoadingProgress />
   }
 
@@ -73,6 +80,9 @@ const FeedbackTargetSettings = () => {
         feedbackTarget={feedbackTarget}
       />
       <PublicQuestions target={feedbackTarget} type="feedback-targets" />
+      {isAdmin && (
+        <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
+      )}
     </>
   )
 }

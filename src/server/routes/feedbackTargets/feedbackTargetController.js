@@ -491,6 +491,7 @@ const update = async (req, res) => {
     'closesAt',
     'publicQuestionIds',
     'feedbackVisibility',
+    'continuousFeedbackEnabled',
   ])
 
   const { questions, surveyId } = req.body
