@@ -535,6 +535,11 @@ FeedbackTarget.init(
     surveys: {
       type: VIRTUAL,
     },
+    continuousFeedbackEnabled: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,
