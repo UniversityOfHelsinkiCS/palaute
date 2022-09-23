@@ -171,6 +171,7 @@ const FeedbackTargetView = () => {
     settingsReadByTeacher,
     feedbackCount,
     studentCount,
+    continuousFeedbackEnabled,
   } = feedbackTarget
 
   const { courseCode } = courseUnit
@@ -191,7 +192,7 @@ const FeedbackTargetView = () => {
 
   const showFeedbacksTab =
     isOrganisationAdmin || (isTeacher && isStarted) || feedback || isEnded
-  const showContinuousFeedbackTab = isAdmin
+  const showContinuousFeedbackTab = isAdmin && continuousFeedbackEnabled
   const showEditSurveyTab =
     isOrganisationAdmin || (isTeacher && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =

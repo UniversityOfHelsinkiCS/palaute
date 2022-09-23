@@ -202,6 +202,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const notStarted = !isOpen && !isEnded
+  const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
@@ -224,7 +225,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
       <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
-        {notStarted && <ContinuousFeedbackActions viewPath={editPath} />}
+        {notStarted && continuousFeedbackEnabled && (
+          <ContinuousFeedbackActions viewPath={editPath} />
+        )}
         {isOpen && feedbackGiven && (
           <FeedbackGivenActions
             editPath={editPath}

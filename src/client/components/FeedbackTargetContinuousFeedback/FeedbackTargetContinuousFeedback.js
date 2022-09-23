@@ -1,10 +1,27 @@
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
-import { Box, Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography, Alert } from '@mui/material'
 import { format } from 'date-fns'
 
 import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { LoadingProgress } from '../LoadingProgress'
+
+const FeedbackItem = ({ feedback }) => {
+  const { id, createdAt, data } = feedback
+
+  return (
+    <Box key={id}>
+      <Paper>
+        <Box padding={2} marginBottom={2}>
+          <Typography variant="body1">{data}</Typography>
+          <Typography variant="body2">
+            {format(new Date(createdAt), 'dd.MM.yyyy')}
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
+  )
+}
 
 const FeedbackTargetContinuousFeedback = () => {
   const { id } = useParams()
@@ -26,18 +43,14 @@ const FeedbackTargetContinuousFeedback = () => {
 
   return (
     <Box margin={3}>
-      {sortedFeedbacks.map(({ id, createdAt, data }) => (
-        <Box key={id} margin={2}>
-          <Paper>
-            <Box padding={2} marginBottom={2}>
-              <Typography variant="body1">{data}</Typography>
-              <Typography variant="body2">
-                {format(new Date(createdAt), 'dd.MM.yyyy')}
-              </Typography>
-            </Box>
-          </Paper>
-        </Box>
-      ))}
+      <Typography mb={1} textTransform="uppercase">
+        Annettu jatkuva palaute
+      </Typography>
+      {sortedFeedbacks.length ? (
+        sortedFeedbacks.map((feedback) => <FeedbackItem feedback={feedback} />)
+      ) : (
+        <Alert severity="info">Jatkuvaa palautetta ei ole vielä annettu</Alert>
+      )}
     </Box>
   )
 }
