@@ -101,7 +101,8 @@ const getOrganisations = async (req, res) => {
   const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
       user.getOrganisationAccess(),
-      getAccessibleCourseRealisationIds(user),
+      // dont query users teached courses if code is defined (looking at one organisation)
+      code ? [] : getAccessibleCourseRealisationIds(user),
       getSummaryQuestions(code),
     ])
 
