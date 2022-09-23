@@ -264,7 +264,7 @@ const kojoMap = {
  * Maps kosu IAM to the name of TDKs, defined in data.js facultyMap
  */
 const kosuFacultyMap = {
-  'hy-ypa-opa-kosu-kumpula': 'matemaattis-luonnontieteellinen',
+  'hy-ypa-opa-kosu-kumpula': ['matemaattis-luonnontieteellinen'],
   'hy-ypa-opa-kosu-meilahti': ['lääketieteellinen'],
   'hy-ypa-opa-kosu-kruununhaka': [
     'oikeustieteellinen',
