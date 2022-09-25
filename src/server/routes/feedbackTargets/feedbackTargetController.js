@@ -1006,7 +1006,7 @@ const openFeedbackImmediately = async (req, res) => {
   }
 
   if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
-    mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+    await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 
   feedbackTarget.opensAt = req.body.opensAt

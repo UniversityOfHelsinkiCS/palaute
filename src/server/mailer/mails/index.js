@@ -11,6 +11,9 @@ const {
   sendEmailReminderAboutFeedbackResponseToTeachers,
 } = require('./sendEmailReminderAboutFeedbackResponseToTeacher')
 const {
+  sendEmailToStudentsWhenOpeningImmediately,
+} = require('./sendEmailToStudentsWhenOpeningImmediately')
+const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
 } = require('./sendEmailReminderAboutSurveyOpeningToTeachers')
 const {
@@ -20,6 +23,7 @@ const {
 module.exports = {
   sendFeedbackReminderToStudents,
   sendFeedbackSummaryReminderToStudents,
+  sendEmailToStudentsWhenOpeningImmediately,
   sendAutomaticReminderOnFeedbackToStudents,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendEmailReminderAboutSurveyOpeningToTeachers,
