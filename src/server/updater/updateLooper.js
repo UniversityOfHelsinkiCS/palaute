@@ -21,6 +21,7 @@ const mangleData = async (url, limit, handler) => {
     try {
       data = await getData(limit, offset, url)
     } catch (e) {
+      logger.info('[UPDATER] ERROR:')
       logger.error(e)
     }
     // eslint-disable-next-line no-continue
