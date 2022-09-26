@@ -18,6 +18,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
+import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -38,6 +39,7 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const tada = keyframes({
   from: {
@@ -171,7 +173,11 @@ const FeedbackView = () => {
 
   const orgAccess = useOrganisationAccess(feedbackTarget)
 
-  if (isLoading) {
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
+
+  if (isLoading || authorizedUserLoading) {
     return <LoadingProgress />
   }
 
@@ -272,6 +278,8 @@ const FeedbackView = () => {
         open={privacyDialogOpen}
         onClose={handleClosePrivacyDialog}
       />
+
+      {isAdmin && <ContinuousFeedback />}
 
       {!isOpen && !isEnded && closedAlert}
 

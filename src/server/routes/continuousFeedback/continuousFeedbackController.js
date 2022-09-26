@@ -16,7 +16,7 @@ const getFeedbacks = async (req, res) => {
 }
 
 const submitFeedback = async (req, res) => {
-  const { user } = req.user
+  const { user } = req
 
   if (!user) return res.send([])
 
@@ -40,6 +40,6 @@ const submitFeedback = async (req, res) => {
 const router = Router()
 
 router.get('/:id', getFeedbacks, adminAccess)
-router.post('/:id', submitFeedback)
+router.post('/:id', submitFeedback, adminAccess)
 
 module.exports = router
