@@ -76,8 +76,12 @@ export const filterFeedbackTargets = (feedbackTargets) => {
           INCLUDE_COURSES.has(target.courseRealisation.id),
       )
 
+  const continuousFeedbackEnabled = feedbackTargets.ongoing.filter(
+    (fbt) => fbt.continuousFeedbackEnabled,
+  )
+
   return {
-    ongoing: feedbackTargets.ongoing ? filter(feedbackTargets.ongoing) : [],
+    ongoing: feedbackTargets.ongoing ? filter(continuousFeedbackEnabled) : [],
     waiting: feedbackTargets.waiting ? filter(feedbackTargets.waiting) : [],
     given: feedbackTargets.given ? filter(feedbackTargets.given) : [],
     ended: feedbackTargets.ended ? filter(feedbackTargets.ended) : [],

@@ -48,7 +48,14 @@ const StatusTabs = ({ status, counts, ...props }) => {
       value={value}
       {...props}
     >
-      {isAdmin && <StatusTab label="jatkuva" status="ongoing" />}
+      {isAdmin && (
+        <StatusTab
+          label="jatkuva"
+          status="ongoing"
+          count={counts.ongoing}
+          color="primary"
+        />
+      )}
       <StatusTab
         label={t('userFeedbacks:waitingForFeedbackTab')}
         status="waiting"
