@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 const styles = {
   badge: {
     '& .MuiBadge-badge': {
-      top: 24,
-      right: 4,
+      top: 15,
+      right: 8,
     },
   },
 }
