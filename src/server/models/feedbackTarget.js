@@ -304,7 +304,7 @@ class FeedbackTarget extends Model {
   }
 
   async getTeachersForFeedbackTarget() {
-    const result = User.findAll({
+    const result = await User.findAll({
       attributes: ['id', 'firstName', 'lastName', 'email'],
       include: {
         model: UserFeedbackTarget,
@@ -316,6 +316,7 @@ class FeedbackTarget extends Model {
           feedbackTargetId: this.id,
         },
       },
+      order: [['lastName', 'asc']],
     })
     return result
   }
