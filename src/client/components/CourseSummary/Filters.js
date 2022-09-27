@@ -14,10 +14,12 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
+import _ from 'lodash'
 
 import { YearSemesterSelector } from './YearSemesterSelector'
 import { data } from '../../../config/data'
 import useHistoryState from '../../hooks/useHistoryState'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
   container: {
@@ -39,6 +41,18 @@ const Filters = ({
   const { t, i18n } = useTranslation()
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
 
+  const faculties = React.useMemo(
+    () =>
+      _.sortBy(
+        data.map((faculty) => ({
+          code: faculty.code,
+          name: faculty.name,
+        })),
+        (faculty) => getLanguageValue(faculty.name, i18n.language),
+      ),
+    [data, i18n.language],
+  )
+
   return (
     <div css={styles.container}>
       <Box mb={3}>
@@ -59,7 +73,7 @@ const Filters = ({
               label="Tiedekunta"
             >
               <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
-              {data.map((faculty) => (
+              {faculties.map((faculty) => (
                 <MenuItem key={faculty.code} value={faculty.code}>
                   {faculty.name[i18n.language] || faculty.name.se}
                 </MenuItem>
