@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-
 const styles = {
   badge: {
     '& .MuiBadge-badge': {
@@ -14,7 +12,7 @@ const styles = {
   },
 }
 
-const tabOrder = ['ongoing', 'waiting', 'given', 'ended']
+const tabOrder = ['waiting', 'given', 'ended']
 
 const StatusTab = ({ status, count, color, ...props }) => {
   const tab = (
@@ -29,11 +27,8 @@ const StatusTab = ({ status, count, color, ...props }) => {
 }
 
 const StatusTabs = ({ status, counts, ...props }) => {
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
-  // Temporary hack until feature is ready to be shown
-  if (!isAdmin && tabOrder.includes('ongoing')) tabOrder.shift()
+  if (counts.ongoing && !tabOrder.includes('ongoing'))
+    tabOrder.unshift('ongoing')
 
   const index = tabOrder.indexOf(status)
   const value = index < 0 ? 0 : index
@@ -48,7 +43,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
       value={value}
       {...props}
     >
-      {isAdmin && (
+      {counts.ongoing && (
         <StatusTab
           label="jatkuva"
           status="ongoing"
