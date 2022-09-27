@@ -294,7 +294,7 @@ const NavBar = ({ guest = false }) => {
         }}
       >
         <Toolbar sx={styles.toolbar}>
-          <Logo />
+          <Logo guest={guest} />
           {!isMobile && navBarLinks}
           {isMobile ? mobileMenuButton : desktopMenuButton}
         </Toolbar>

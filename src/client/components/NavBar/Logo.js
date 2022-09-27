@@ -16,8 +16,8 @@ const styles = {
   },
 }
 
-const Logo = () => (
-  <Link to="/" style={{ textDecoration: 'none' }}>
+const Logo = ({ guest = false }) => (
+  <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
     <Box display="inline-flex" alignItems="center" sx={styles.link}>
       <img src={hyLogo} alt="HY" css={styles.image} />
       <Box mr={1} />

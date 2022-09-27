@@ -28,6 +28,14 @@ const styles = {
   },
 }
 
+const NoOpenFeedbacks = ({ t }) => (
+  <Box my={4} sx={styles.container}>
+    <Typography variant="h6" component="h6">
+      {t('noadUser:noFeedback')}
+    </Typography>
+  </Box>
+)
+
 const GuestCourses = () => {
   const { feedbackTargets, isLoading } = useNoadfeedbackTargets()
   const { i18n, t } = useTranslation()
@@ -46,20 +54,12 @@ const GuestCourses = () => {
     )
   }
 
-  const NoOpenFeedbacks = () => (
-    <Box my={4} sx={styles.container}>
-      <Typography variant="h6" component="h6">
-        {t('noadUser:noFeedback')}
-      </Typography>
-    </Box>
-  )
-
   return (
     <Container>
       <Typography variant="h4" component="h1" sx={styles.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>
-      {!feedbackTargets.length && <NoOpenFeedbacks />}
+      {!feedbackTargets.length && <NoOpenFeedbacks t={t} />}
       {feedbackTargets.map((feedbackTarget) => {
         const { courseUnit } = feedbackTarget
         const translatedName = getLanguageValue(courseUnit.name, i18n.language)
