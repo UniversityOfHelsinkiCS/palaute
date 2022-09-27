@@ -19,7 +19,7 @@ import useUserDetails from '../../hooks/useUserDetails'
 import { LoadingProgress } from '../LoadingProgress'
 
 const UserPermissionsWindow = ({ isOpen, onClose }) => {
-  const { authorizedUser, isLoading } = useAuthorizedUser()
+  const { authorizedUser, isLoading } = useAuthorizedUser({ enabled: isOpen })
   const { user, isLoading: isUserDetailsLoading } = useUserDetails(
     authorizedUser?.id,
     { enabled: isOpen && !isLoading },
