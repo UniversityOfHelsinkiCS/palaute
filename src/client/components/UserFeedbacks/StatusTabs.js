@@ -45,7 +45,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
     >
       {counts.ongoing && (
         <StatusTab
-          label="jatkuva"
+          label={t('userFeedbacks:continuousFeedbackTab')}
           status="ongoing"
           count={counts.ongoing}
           color="primary"

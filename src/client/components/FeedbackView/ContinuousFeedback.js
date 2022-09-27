@@ -54,10 +54,10 @@ const ContinuousFeedback = () => {
   return (
     <Box mb={2}>
       <Typography variant="h4" component="h4">
-        Anna jatkuvaa palautetta
+        {t('userFeedbacks:giveContinuousFeedback')}
       </Typography>
       <Typography variant="body1" component="p" sx={styles.description}>
-        Tähän tietoa jatkuvan palautteen toiminnasta
+        {t('feedbackView:continuousFeedbackInfo')}
       </Typography>
       <Formik initialValues={{ feedback: '' }} onSubmit={handleSubmit}>
         {({ values, isSubmitting }) => (

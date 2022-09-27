@@ -71,6 +71,7 @@ export default {
     // giveContinuousFeedback: 'Give continous Feedback',
     viewFeedbackSummary: 'Visa sammanfattning av responsen',
     noFeedback: 'Ingenting här. Kom tillbaka senare!',
+    // continuousFeedbackTab: 'Continuous',
     feedbackClosedTab: 'Responsen är stängd',
     waitingForFeedbackTab: 'Väntar på respons',
     feedbackGivenTab: 'Givna',
@@ -99,6 +100,7 @@ export default {
     feedbackInfoTitle: 'Hur används mina svar och min information?',
     feedbackInfoContent:
       'Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.',
+    // continuousFeedbackInfo: 'You can give continuous feedback while the course is ongoing. This feedback is anonymous.',
   },
   teacherView: {
     mainHeading: 'Mina kurser',
@@ -413,6 +415,9 @@ export default {
     responsibleTeachers: 'Ansvariga lärare',
     shareTab: 'Dela förfrågan',
     surveySettingsTab: 'Förfrågans inställningar',
+    // activateContinuousFeedback: 'Activate continuous feedback for the course',
+    // continuousFeedbackGiven: 'Continuous feedback given',
+    // noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
     studentLinkTitle: 'Studerandelänk till översikt',
     studentResultsLinkTitle: 'Länk till svaren och motresponsen',
     studentLinkQRTitle: 'QR-kod till översikt',

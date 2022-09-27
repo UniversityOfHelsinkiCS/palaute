@@ -54,7 +54,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
       <Card>
         <CardContent>
           <Box mb={4}>
-            <Typography variant="h6">Jatkuva palaute</Typography>
+            <Typography variant="h6">
+              {t('feedbackTargetView:continuousFeedbackTab')}
+            </Typography>
           </Box>
           <FormGroup>
             <FormControlLabel
@@ -65,7 +67,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
                   color="primary"
                 />
               }
-              label="Ota jatkuva palaute käyttöön kurssilla"
+              label={t('feedbackTargetView:activateContinuousFeedback')}
             />
           </FormGroup>
         </CardContent>

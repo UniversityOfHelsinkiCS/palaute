@@ -39,6 +39,7 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const tada = keyframes({
   from: {
@@ -170,9 +171,12 @@ const FeedbackView = () => {
     skipCache: true,
   })
 
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+
   const orgAccess = useOrganisationAccess(feedbackTarget)
 
-  if (isLoading) {
+  if (isLoading || authorizedUserLoading) {
     return <LoadingProgress />
   }
 
@@ -187,12 +191,16 @@ const FeedbackView = () => {
     feedback,
     continuousFeedbackEnabled,
   } = feedbackTarget
+  const isAdmin = authorizedUser?.isAdmin
+  const isStudent = accessStatus === 'STUDENT'
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
+  const showContinuousFeedback =
+    (isStudent || isAdmin) && isOngoing && continuousFeedbackEnabled
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
   const formIsDisabled =
     !isOpen || isTeacher || isOutsider || isOrganisationAdmin
@@ -281,8 +289,7 @@ const FeedbackView = () => {
         onClose={handleClosePrivacyDialog}
       />
 
-      {isOngoing &&
-        (continuousFeedbackEnabled ? <ContinuousFeedback /> : closedAlert)}
+      {showContinuousFeedback ? <ContinuousFeedback /> : closedAlert}
 
       {isEnded && endedAlert}
 

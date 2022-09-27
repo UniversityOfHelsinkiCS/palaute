@@ -80,9 +80,7 @@ const FeedbackTargetSettings = () => {
         feedbackTarget={feedbackTarget}
       />
       <PublicQuestions target={feedbackTarget} type="feedback-targets" />
-      {isAdmin && (
-        <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
-      )}
+      <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
     </>
   )
 }

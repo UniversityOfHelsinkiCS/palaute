@@ -70,6 +70,7 @@ export default {
     giveContinuousFeedback: 'Anna jatkuvaa palautetta',
     viewFeedbackSummary: 'Näytä palautteen yhteenveto',
     noFeedback: 'Täällä ei ole vielä yhtään kurssia tai kurssipalautetta',
+    continuousFeedbackTab: 'Jatkuva',
     feedbackClosedTab: 'Päättyneet',
     waitingForFeedbackTab: 'Odottaa',
     feedbackGivenTab: 'Annetut',
@@ -98,6 +99,8 @@ export default {
       'Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille tai ilmoittautumisesi ei ole vielä päivittynyt järjestelmäämme. Ilmoittautumiset päivittyvät 24 tunnin välein.',
     feedbackClosedError: 'Palautteenanto on sulkeutunut',
     endedInfo: 'Palautteenanto on sulkeutunut. <2>Katso palautteita</2>',
+    continuousFeedbackInfo:
+      'Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti.',
   },
   teacherView: {
     mainHeading: 'Opetukseni',
@@ -408,6 +411,9 @@ export default {
     responsibleTeachers: 'Vastuuopettajat',
     shareTab: 'Jaa kysely',
     surveySettingsTab: 'Kyselyn asetukset',
+    activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',
+    continuousFeedbackGiven: 'Annettu jatkuva palaute',
+    noContinuousFeedbackGiven: 'Jatkuvaa palautetta ei ole vielä annettu',
     studentLinkTitle: 'Opiskelijan vastauslinkki',
     studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',

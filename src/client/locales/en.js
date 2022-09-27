@@ -67,9 +67,10 @@ export default {
     clearConfirmationQuestion: 'Are you sure you want to remove your feedback?',
     yes: 'Yes',
     no: 'No',
-    giveContinuousFeedback: 'Give continous Feedback',
+    giveContinuousFeedback: 'Give continuous Feedback',
     viewFeedbackSummary: 'View feedback summary',
     noFeedback: 'There are no courses or course feedbacks here yet',
+    continuousFeedbackTab: 'Continuous',
     feedbackClosedTab: 'Closed',
     waitingForFeedbackTab: 'Awaiting',
     feedbackGivenTab: 'Given',
@@ -100,6 +101,8 @@ export default {
     feedbackClosedError: 'Feedback is closed',
     endedInfo:
       'The feedback period has ended. <2>Take a look at the feedback</2>',
+    continuousFeedbackInfo:
+      'You can give continuous feedback while the course is ongoing. This feedback is anonymous.',
   },
   teacherView: {
     mainHeading: 'My teaching',
@@ -407,6 +410,9 @@ export default {
     responsibleTeachers: 'Responsible teachers',
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey settings',
+    activateContinuousFeedback: 'Activate continuous feedback for the course',
+    continuousFeedbackGiven: 'Continuous feedback given',
+    noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
     studentLinkTitle: 'Student link to survey',
     studentResultsLinkTitle: 'Link to answers and counter feedback',
     studentLinkQRTitle: 'QR-code to survey',
@@ -427,7 +433,7 @@ export default {
   },
   norppaFeedback: {
     feedback: 'Feedback',
-    feedbackHelper: 'Give a free form feedback',
+    feedbackHelper: 'Give free-form feedback',
     responseWanted: 'I want a response to my feedback',
     submit: 'Send feedback',
     confirm:

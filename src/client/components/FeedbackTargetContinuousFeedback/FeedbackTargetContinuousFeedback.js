@@ -2,20 +2,21 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { Box, Paper, Typography, Alert } from '@mui/material'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 
 import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { LoadingProgress } from '../LoadingProgress'
 
 const FeedbackItem = ({ feedback }) => {
-  const { id, createdAt, data } = feedback
+  const { createdAt, data } = feedback
 
   return (
-    <Box key={id}>
+    <Box>
       <Paper>
         <Box padding={2} marginBottom={2}>
           <Typography variant="body1">{data}</Typography>
           <Typography variant="body2">
-            {format(new Date(createdAt), 'dd.MM.yyyy')}
+            {format(new Date(createdAt), 'dd.MM.yy hh.mm')}
           </Typography>
         </Box>
       </Paper>
@@ -25,6 +26,7 @@ const FeedbackItem = ({ feedback }) => {
 
 const FeedbackTargetContinuousFeedback = () => {
   const { id } = useParams()
+  const { t } = useTranslation()
 
   const { continuousFeedbacks, isLoading } =
     useFeedbackTargetContinuousFeedbacks(id)
@@ -44,12 +46,16 @@ const FeedbackTargetContinuousFeedback = () => {
   return (
     <Box margin={3}>
       <Typography mb={1} textTransform="uppercase">
-        Annettu jatkuva palaute
+        {t('feedbackTargetView:continuousFeedbackGiven')}
       </Typography>
       {sortedFeedbacks.length ? (
-        sortedFeedbacks.map((feedback) => <FeedbackItem feedback={feedback} />)
+        sortedFeedbacks.map((feedback) => (
+          <FeedbackItem key={feedback.id} feedback={feedback} />
+        ))
       ) : (
-        <Alert severity="info">Jatkuvaa palautetta ei ole vielä annettu</Alert>
+        <Alert severity="info">
+          {t('feedbackTargetView:noContinuousFeedbackGiven')}
+        </Alert>
       )}
     </Box>
   )
