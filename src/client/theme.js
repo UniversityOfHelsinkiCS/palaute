@@ -18,7 +18,7 @@ const useTheme = () => {
             ...(mode === 'light'
               ? {
                   primary: {
-                    main: !inStaging ? '#6f80bf' : '#77dcbb',
+                    main: !inStaging ? '#7486b5' : '#77dcbb',
                   },
                   secondary: red,
                   info: {

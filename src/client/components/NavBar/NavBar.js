@@ -36,7 +36,7 @@ const styles = {
     '@media print': {
       display: 'none',
     },
-    padding: '1rem',
+    padding: '2rem 1rem 0.7rem 1rem',
   },
   link: {
     display: 'inline-flex',
@@ -124,6 +124,7 @@ const NavBar = ({ guest = false }) => {
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width:700px)')
+  // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
@@ -291,7 +292,10 @@ const NavBar = ({ guest = false }) => {
           zIndex: (theme) => theme.zIndex.drawer + 1,
           borderRadius: '0 0 0.5rem 0.5rem',
           mb: '1rem',
+          background: (theme) =>
+            `linear-gradient(-5deg, ${theme.palette.primary.main} 35%, ${theme.palette.primary.light} 110%)`,
         }}
+        // color={"inherit"}
       >
         <Toolbar sx={styles.toolbar}>
           <Logo guest={guest} />
