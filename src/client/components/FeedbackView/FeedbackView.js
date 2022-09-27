@@ -39,7 +39,6 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../LoadingProgress'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const tada = keyframes({
   from: {
@@ -171,12 +170,9 @@ const FeedbackView = () => {
     skipCache: true,
   })
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-
   const orgAccess = useOrganisationAccess(feedbackTarget)
 
-  if (isLoading || authorizedUserLoading) {
+  if (isLoading) {
     return <LoadingProgress />
   }
 
@@ -191,7 +187,6 @@ const FeedbackView = () => {
     feedback,
     continuousFeedbackEnabled,
   } = feedbackTarget
-  const isAdmin = authorizedUser?.isAdmin
   const isStudent = accessStatus === 'STUDENT'
   const isTeacher = accessStatus === 'TEACHER'
   const isOutsider = accessStatus === 'NONE'
@@ -200,7 +195,7 @@ const FeedbackView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
   const showContinuousFeedback =
-    (isStudent || isAdmin) && isOngoing && continuousFeedbackEnabled
+    isStudent && isOngoing && continuousFeedbackEnabled
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
   const formIsDisabled =
     !isOpen || isTeacher || isOutsider || isOrganisationAdmin
