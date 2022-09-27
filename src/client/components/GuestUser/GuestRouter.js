@@ -24,8 +24,8 @@ const ParseToken = () => {
   const query = useQuery()
   const userId = query.get('userId')
 
-  window.localStorage.setItem('token', token)
-  window.localStorage.setItem('tokenUser', userId)
+  window.sessionStorage.setItem('token', token)
+  window.sessionStorage.setItem('tokenUser', userId)
 
   return <Redirect to="/noad/courses" />
 }

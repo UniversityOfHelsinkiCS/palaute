@@ -8,8 +8,8 @@ const getNoadUrl = (url) => `/noad${url}`
 
 apiClient.interceptors.request.use((config) => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
-  const token = localStorage.getItem('token')
-  const tokenUser = localStorage.getItem('tokenUser')
+  const token = sessionStorage.getItem('token')
+  const tokenUser = sessionStorage.getItem('tokenUser')
   const headers = { ...defaultHeaders, token, tokenUser }
 
   const adminLoggedInAs = localStorage.getItem('adminLoggedInAs') // id

@@ -37,7 +37,7 @@ const FeedbackLinksView = () => {
             {user.firstName} {user.lastName}
           </Typography>
           <Typography variant="body2" component="p">
-            http://coursefeedback.helsinki.fi/noad/token/{user.token}
+            http://{window.location.host}/noad/token/{user.token}
           </Typography>
         </Box>
       ))}
