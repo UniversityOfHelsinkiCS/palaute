@@ -1,10 +1,26 @@
 const { Router } = require('express')
-const { ContinuousFeedback, FeedbackTarget } = require('../../models')
-const { adminAccess } = require('../../middleware/adminAccess')
+const {
+  ContinuousFeedback,
+  FeedbackTarget,
+  UserFeedbackTarget,
+} = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
 const getFeedbacks = async (req, res) => {
+  const { user, isAdmin } = req
+
   const feedbackTargetId = Number(req.params.id)
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+      accessStatus: 'TEACHER',
+    },
+  })
+
+  if (!userFeedbackTarget && !isAdmin)
+    throw new ApplicationError('Forbidden', 403)
 
   const continuousFeedbacks = await ContinuousFeedback.findAll({
     where: {
@@ -16,9 +32,7 @@ const getFeedbacks = async (req, res) => {
 }
 
 const submitFeedback = async (req, res) => {
-  const { user } = req
-
-  if (!user) return res.send([])
+  const { id: userId } = req.user
 
   const feedbackTargetId = Number(req.params.id)
   const { feedback } = req.body
@@ -28,10 +42,20 @@ const submitFeedback = async (req, res) => {
   if (!feedbackTarget.continuousFeedbackEnabled)
     throw new ApplicationError('Continuous feedback is disabled', 400)
 
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId,
+      feedbackTargetId,
+      accessStatus: 'STUDENT',
+    },
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+
   const newFeedback = await ContinuousFeedback.create({
     data: feedback,
     feedbackTargetId,
-    userId: user.id,
+    userId,
   })
 
   return res.send(newFeedback)
@@ -39,7 +63,7 @@ const submitFeedback = async (req, res) => {
 
 const router = Router()
 
-router.get('/:id', getFeedbacks, adminAccess)
-router.post('/:id', submitFeedback, adminAccess)
+router.get('/:id', getFeedbacks)
+router.post('/:id', submitFeedback)
 
 module.exports = router
