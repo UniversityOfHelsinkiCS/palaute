@@ -6,6 +6,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 import { LoadingProgress } from '../LoadingProgress'
+import useNoadUser from '../../hooks/useNoadUser'
 
 const styles = {
   heading: {
@@ -37,8 +38,14 @@ const NoOpenFeedbacks = ({ t }) => (
 )
 
 const GuestCourses = () => {
+  const { noadUser } = useNoadUser()
   const { feedbackTargets, isLoading } = useNoadfeedbackTargets()
   const { i18n, t } = useTranslation()
+
+  React.useEffect(() => {
+    if (!noadUser) return
+    i18n.changeLanguage(noadUser.language)
+  }, [noadUser])
 
   if (isLoading) {
     return <LoadingProgress />

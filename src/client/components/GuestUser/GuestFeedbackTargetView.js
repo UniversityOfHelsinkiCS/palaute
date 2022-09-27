@@ -61,6 +61,19 @@ const styles = {
   },
 }
 
+/**
+ * Sets the UI language to the feedbackTarget teaching language if it has only 1
+ * @param {FeedbackTarget} feedbackTarget
+ * @param {(language: string) => void} changeLanguage
+ */
+const useAutoselectLanguage = (feedbackTarget, changeLanguage) => {
+  React.useEffect(() => {
+    if (!feedbackTarget?.courseRealisation) return
+    if (feedbackTarget.courseRealisation.teachingLanguages.length !== 1) return
+    changeLanguage(feedbackTarget.courseRealisation.teachingLanguages[0])
+  }, [feedbackTarget])
+}
+
 const GuestFeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
@@ -68,6 +81,7 @@ const GuestFeedbackTargetView = () => {
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
+  useAutoselectLanguage(feedbackTarget, (lang) => i18n.changeLanguage(lang))
 
   if (isLoading) {
     return <LoadingProgress />
@@ -97,13 +111,13 @@ const GuestFeedbackTargetView = () => {
   return (
     <>
       <Box mb={2}>
-        <div css={styles.headingContainer}>
+        <Box sx={styles.headingContainer}>
           <Typography variant="h4" component="h1">
             {courseRealisationName}
           </Typography>
-        </div>
+        </Box>
 
-        <dl css={styles.datesContainer}>
+        <Box sx={styles.datesContainer}>
           <Typography color="textSecondary" variant="body2" component="dt">
             {t('feedbackTargetView:coursePeriod')}:
           </Typography>
@@ -119,7 +133,7 @@ const GuestFeedbackTargetView = () => {
           <Typography color="textSecondary" variant="body2" component="dd">
             {feedbackPeriod}
           </Typography>
-        </dl>
+        </Box>
 
         <ExternalLink href={coursePageUrl} sx={styles.coursePageLink}>
           {t('feedbackTargetView:coursePage')}

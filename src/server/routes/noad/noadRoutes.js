@@ -8,5 +8,6 @@ const noadRouter = Router()
 noadRouter.get('/courses', noAdUserController.getCourses)
 noadRouter.use('/feedback-targets/', feedbackTargets.noad)
 noadRouter.use('/feedbacks', feedbacks.noad)
+noadRouter.get('/user', noAdUserController.getNoadUser)
 
 module.exports = noadRouter

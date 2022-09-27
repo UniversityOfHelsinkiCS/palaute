@@ -54,4 +54,9 @@ const getCourses = async (req, res) => {
   return res.send(filteredCourses)
 }
 
-module.exports = { getCourses }
+const getNoadUser = (req, res) => {
+  const { user } = req
+  return res.send(user)
+}
+
+module.exports = { getCourses, getNoadUser }

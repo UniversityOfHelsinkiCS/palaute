@@ -2,7 +2,7 @@ import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
 const useNoadfeedbackTargets = (options = {}) => {
-  const queryKey = 'noadUser'
+  const queryKey = 'noadCourses'
 
   const queryFn = async () => {
     const { data } = await apiClient.get('/courses')
