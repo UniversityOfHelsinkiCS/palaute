@@ -69,7 +69,7 @@ const styles = {
 const useAutoselectLanguage = (feedbackTarget, changeLanguage) => {
   React.useEffect(() => {
     if (!feedbackTarget?.courseRealisation) return
-    if (feedbackTarget.courseRealisation.teachingLanguages.length !== 1) return
+    if (feedbackTarget.courseRealisation.teachingLanguages?.length !== 1) return
     changeLanguage(feedbackTarget.courseRealisation.teachingLanguages[0])
   }, [feedbackTarget])
 }
