@@ -196,6 +196,7 @@ const FeedbackView = () => {
   const isOngoing = !isOpen && !isEnded
   const showContinuousFeedback =
     isStudent && isOngoing && continuousFeedbackEnabled
+  const showClosedAlert = isOngoing && !showContinuousFeedback
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
   const formIsDisabled =
     !isOpen || isTeacher || isOutsider || isOrganisationAdmin
@@ -284,7 +285,9 @@ const FeedbackView = () => {
         onClose={handleClosePrivacyDialog}
       />
 
-      {showContinuousFeedback ? <ContinuousFeedback /> : closedAlert}
+      {showContinuousFeedback && <ContinuousFeedback />}
+
+      {showClosedAlert && closedAlert}
 
       {isEnded && endedAlert}
 
