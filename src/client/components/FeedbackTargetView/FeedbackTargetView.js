@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
-import FeedbackTargetResults from '../FeedbackTargetResultsNew'
+import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
 import EditFeedbackResponse from '../EditFeedbackResponse'

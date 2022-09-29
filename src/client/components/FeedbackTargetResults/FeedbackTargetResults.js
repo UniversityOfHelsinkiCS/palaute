@@ -2,23 +2,40 @@ import React, { useRef, forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Alert, Button } from '@mui/material'
+import { Box, Alert, useMediaQuery } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import FeedbackSummary from '../QuestionResults/FeedbackSummary'
-import QuestionResults from '../QuestionResults'
+import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
-import NewFeedbackTargetResults from '../FeedbackTargetResultsNew/FeedbackTargetResults'
+import FeedbackChart from './QuestionResults/FeedbackChart'
+
+const NotEnoughFeedbacks = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning" data-cy="notEnoughFeedbacks">
+      {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
+    </Alert>
+  </Box>
+)
+
+const OnlyForEnrolled = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning">
+      {t('feedbackTargetResults:onlyForEnrolledInfo')}
+    </Alert>
+  </Box>
+)
 
 const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
+  const isMobileChrome =
+    useMediaQuery('(max-width:500px)') &&
+    navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
@@ -39,8 +56,17 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { feedbacks, feedbackVisible, userOrganisationAccess } =
     feedbackTargetData
 
-  const { questions, publicQuestionIds, accessStatus, feedback } =
-    feedbackTarget
+  const {
+    questions,
+    publicQuestionIds,
+    accessStatus,
+    feedback,
+    studentCount,
+    feedbackCount,
+    opensAt,
+    closesAt,
+    feedbackReminderLastSentAt,
+  } = feedbackTarget
 
   const userOrganisationAdmin = userOrganisationAccess
     ? userOrganisationAccess.admin
@@ -55,24 +81,8 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
-  const notEnoughFeedbacksAlert = (
-    <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
-      </Alert>
-    </Box>
-  )
-
-  const onlyForEnrolledAlert = (
-    <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:onlyForEnrolledInfo')}
-      </Alert>
-    </Box>
-  )
-
   return (
-    <span ref={ref}>
+    <>
       <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
         {feedbacks.length !== 0 && isTeacher && (
           <ExportFeedbacksMenu
@@ -82,46 +92,58 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           />
         )}
       </Box>
-      {feedbackHasStarted && !isOpen && (
-        <Box mb={2}>
-          <FeedbackResponse feedbackTarget={feedbackTarget} />
-        </Box>
-      )}
 
-      {isOpen && feedback && (
-        <Box mb={2}>
-          <Alert severity="info">
-            {t('feedbackTargetResults:thankYouMessage')}
-          </Alert>
-        </Box>
-      )}
+      <Box ref={ref}>
+        {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
+          <Box mb={2}>
+            <FeedbackResponse feedbackTarget={feedbackTarget} />
+          </Box>
+        )}
 
-      {feedbacks.length === 0 && feedbackVisible && notEnoughFeedbacksAlert}
+        {isOpen && feedback && (
+          <Box mb={2}>
+            <Alert severity="info">
+              {t('feedbackTargetResults:thankYouMessage')}
+            </Alert>
+          </Box>
+        )}
 
-      {feedbacks.length === 0 && !feedbackVisible && onlyForEnrolledAlert}
+        {!isMobileChrome && (
+          <Box>
+            <FeedbackChart
+              feedbacks={feedbacks}
+              studentCount={studentCount}
+              opensAt={opensAt}
+              closesAt={closesAt}
+              feedbackReminderLastSentAt={feedbackReminderLastSentAt}
+              t={t}
+            />
+          </Box>
+        )}
 
-      {feedbacks.length !== 0 && (
-        <Box mb={2}>
-          <FeedbackSummary
-            publicQuestionIds={publicQuestionIds ?? []}
-            questions={questions}
-            feedbacks={feedbacks}
-            isTeacher={isTeacher}
-          />
-        </Box>
-      )}
+        {feedbacks.length === 0 &&
+          (feedbackVisible ? (
+            <NotEnoughFeedbacks t={t} />
+          ) : (
+            <OnlyForEnrolled t={t} />
+          ))}
 
-      {feedbacks.length !== 0 && (
-        <QuestionResults
-          publicQuestionIds={publicQuestionIds ?? []}
-          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
-          questions={questions}
-          feedbacks={feedbacks}
-          isTeacher={isTeacher}
-          organisationAccess={!!userOrganisationAccess}
-        />
-      )}
-    </span>
+        {feedbacks.length > 0 && (
+          <Box>
+            <QuestionResults
+              publicQuestionIds={publicQuestionIds ?? []}
+              selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
+              questions={questions}
+              feedbacks={feedbacks}
+              isTeacher={isTeacher}
+              organisationAccess={!!userOrganisationAccess}
+              feedbackCount={feedbackCount}
+              feedbackTargetId={id}
+            />
+          </Box>
+        )}
+      </Box>
+    </>
   )
 })
 
@@ -130,7 +152,7 @@ const FeedbackTargetResults = () => {
 
   return (
     <Box>
-      <NewFeedbackTargetResults ref={componentRef} />
+      <FeedbackTargetResultsView ref={componentRef} />
     </Box>
   )
 }

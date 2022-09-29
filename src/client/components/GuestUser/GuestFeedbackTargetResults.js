@@ -6,12 +6,12 @@ import { Box, Alert, useMediaQuery } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import QuestionResults from '../FeedbackTargetResultsNew/QuestionResults'
-import FeedbackResponse from '../FeedbackTargetResultsNew/FeedbackResponse'
+import QuestionResults from '../FeedbackTargetResults/QuestionResults'
+import FeedbackResponse from '../FeedbackTargetResults/FeedbackResponse'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../LoadingProgress'
-import FeedbackChart from '../FeedbackTargetResultsNew/QuestionResults/FeedbackChart'
+import FeedbackChart from '../FeedbackTargetResults/QuestionResults/FeedbackChart'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>

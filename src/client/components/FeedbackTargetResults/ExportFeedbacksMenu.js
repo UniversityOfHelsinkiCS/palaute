@@ -100,7 +100,10 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   const data = [headers, ...questions]
 
-  const parsedData = Papa.unparse(data, { delimiter: ';', quoteChar: "'" })
+  const parsedData = Papa.unparse(data, {
+    delimiter: ';',
+    quoteChar: "'",
+  }).replaceAll('\n', ' ')
 
   const filename = `${
     feedbackTarget.courseUnit.courseCode
