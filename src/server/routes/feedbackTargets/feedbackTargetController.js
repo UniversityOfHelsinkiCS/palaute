@@ -1149,6 +1149,7 @@ const getFeedbackTargetsForCourseRealisation = async (req, res) => {
 
 const adRouter = Router()
 
+// @TODO Maybe refactor these 4 routes to use query params, eg. GET /targets?course-unit=TKT1001
 adRouter.get('/for-student', getForStudent)
 adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
 adRouter.get(
@@ -1156,6 +1157,7 @@ adRouter.get(
   getFeedbackTargetsForCourseRealisation,
 )
 adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisations)
+
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
