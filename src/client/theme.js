@@ -19,7 +19,7 @@ const useTheme = () => {
               ? {
                   primary: {
                     main: !inStaging ? '#3770b3' : '#77dcbb',
-                    dark: '#1b5aa1', // Ukraine blue
+                    dark: '#14549c', // Ukraine blue
                   },
                   secondary: {
                     main: '#ffd700', // Ukraine yellow

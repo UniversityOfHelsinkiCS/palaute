@@ -17,6 +17,9 @@ const styles = {
     width: '80px',
     height: 'auto',
   },
+  norppa: {
+    height: '100px',
+  },
 }
 
 const supportEmail = 'coursefeedback@helsinki.fi'
@@ -32,18 +35,24 @@ const Footer = ({ user }) => {
   return (
     <Box marginTop="auto">
       <Divider />
-      <Container component="footer">
+      <Container component="footer" maxWidth="xl">
         <Box
-          my={2}
+          mb={1}
+          mt={2}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
         >
-          {!inProduction && (
+          {inProduction && (
             <Box>
               <Typography>DEVELOPMENT</Typography>
             </Box>
           )}
+          <img
+            src={images.norppa_viskaali}
+            css={styles.norppa}
+            alt="Norppa drawing by tttriple"
+          />
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
