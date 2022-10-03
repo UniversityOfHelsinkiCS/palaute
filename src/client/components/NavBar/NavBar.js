@@ -11,6 +11,7 @@ import {
   Divider,
   ButtonBase,
   Box,
+  Container,
 } from '@mui/material'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -36,7 +37,7 @@ const styles = {
     '@media print': {
       display: 'none',
     },
-    padding: '2rem 1rem 0.7rem 1rem',
+    padding: '0.3rem 0 0.3rem 0',
   },
   link: {
     display: 'inline-flex',
@@ -47,10 +48,10 @@ const styles = {
     fontWeight: (theme) => theme.typography.fontWeightMedium,
     padding: '6px 12px',
     backgroundColor: 'rgba(255, 255, 255, 0)',
-    transition: 'background-color 0.25s',
-    borderRadius: 1,
+    transition: 'background-color 0.15s',
+    borderRadius: 3,
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      backgroundColor: 'rgba(255, 255, 255, 0.25)',
     },
   },
   activeLink: {
@@ -61,22 +62,25 @@ const styles = {
     flexGrow: 1,
     alignItems: 'center',
   },
-  mobileMenuButton: {
+  menuButton: {
     marginLeft: 'auto',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    },
   },
   languageMenuDivider: {
     margin: (theme) => theme.spacing(1, 0),
   },
   norppaFeedback: {
-    background: (theme) => theme.palette.warning.dark,
-    color: 'white',
+    background: (theme) => theme.palette.warning.main,
+    color: 'black',
     padding: '6px 12px',
     borderRadius: 4,
     fontWeight: 'bold',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
-      background: (theme) => theme.palette.warning.main,
+      background: (theme) => theme.palette.warning.light,
     },
   },
   mailIcon: {
@@ -123,7 +127,7 @@ const NavBar = ({ guest = false }) => {
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width:700px)')
+  const isMobile = useMediaQuery('(max-width:900px)')
   // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
@@ -167,6 +171,7 @@ const NavBar = ({ guest = false }) => {
     <Button
       color="inherit"
       endIcon={<KeyboardArrowDownIcon />}
+      sx={styles.menuButton}
       {...menuButtonProps}
     >
       <PersonOutlined />
@@ -179,7 +184,7 @@ const NavBar = ({ guest = false }) => {
   const mobileMenuButton = (
     <IconButton
       color="inherit"
-      sx={styles.mobileMenuButton}
+      sx={styles.menuButton}
       aria-label={menuLabel}
       {...menuButtonProps}
       size="large"
@@ -287,21 +292,22 @@ const NavBar = ({ guest = false }) => {
       />
       {menu}
       <AppBar
+        elevation={0}
         position="static"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          borderRadius: '0 0 0.5rem 0.5rem',
-          mb: '1rem',
-          background: (theme) =>
-            `linear-gradient(-5deg, ${theme.palette.primary.main} 35%, ${theme.palette.primary.light} 110%)`,
+          background: (theme) => theme.palette.primary.dark,
+          boxShadow: (theme) =>
+            `0px 0px 12px 1px ${theme.palette.primary.dark}`,
         }}
-        // color={"inherit"}
       >
-        <Toolbar sx={styles.toolbar}>
-          <Logo guest={guest} />
-          {!isMobile && navBarLinks}
-          {isMobile ? mobileMenuButton : desktopMenuButton}
-        </Toolbar>
+        <Container maxWidth="xl">
+          <Toolbar sx={styles.toolbar} disableGutters>
+            <Logo guest={guest} />
+            {!isMobile && navBarLinks}
+            {isMobile ? mobileMenuButton : desktopMenuButton}
+          </Toolbar>
+        </Container>
       </AppBar>
       {courseSummaryIsAccessible && !norppaFeedbackGiven && (
         <NorppaFeedbackBanner />

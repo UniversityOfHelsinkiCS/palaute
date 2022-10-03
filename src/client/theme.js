@@ -18,9 +18,12 @@ const useTheme = () => {
             ...(mode === 'light'
               ? {
                   primary: {
-                    main: !inStaging ? '#7486b5' : '#77dcbb',
+                    main: !inStaging ? '#3770b3' : '#77dcbb',
+                    dark: '#1b5aa1', // Ukraine blue
                   },
-                  secondary: red,
+                  secondary: {
+                    main: '#ffd700', // Ukraine yellow
+                  },
                   info: {
                     main: lightBlue[700],
                     light: lightBlue[500],
@@ -33,6 +36,10 @@ const useTheme = () => {
                   },
                   background: {
                     default: grey[50],
+                  },
+                  warning: {
+                    main: '#bda41a',
+                    light: '#ffd700', // Ukraine yellow
                   },
                 }
               : {}),

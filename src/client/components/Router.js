@@ -22,6 +22,7 @@ const styles = {
     [theme.breakpoints.down('sm')]: {
       padding: '0.6rem',
     },
+    marginTop: '1rem',
   }),
 }
 
