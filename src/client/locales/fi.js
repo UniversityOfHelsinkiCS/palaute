@@ -78,6 +78,7 @@ export default {
     waitingForFeedbackChip: 'Palaute puuttuu',
     feedbackNotStartedChip: 'Palaute ei ole alkanut',
     feedbackEndedChip: 'Palaute on päättynyt',
+    deleted: 'Palautteesi on poistettu',
   },
   feedbackView: {
     submitButton: 'Lähetä palaute',

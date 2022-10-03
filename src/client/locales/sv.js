@@ -79,6 +79,7 @@ export default {
     waitingForFeedbackChip: 'Responsen saknas',
     feedbackNotStartedChip: 'Responsen har inte börjat',
     feedbackEndedChip: 'Responsen har avslutats',
+    // deleted: 'Palautteesi on poistettu',
   },
   feedbackView: {
     submitButton: 'Ge respons',

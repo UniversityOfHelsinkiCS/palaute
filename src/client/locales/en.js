@@ -78,6 +78,7 @@ export default {
     waitingForFeedbackChip: 'Feedback is missing',
     feedbackNotStartedChip: 'Feedback has not started',
     feedbackEndedChip: 'Feedback has ended',
+    deleted: 'Your feedback has been deleted',
   },
   feedbackView: {
     submitButton: 'Give feedback',

@@ -12,6 +12,7 @@ import {
   DialogTitle,
   ListItem,
 } from '@mui/material'
+import { useSnackbar } from 'notistack'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
@@ -22,23 +23,11 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
-const styles = {
-  listItem: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  button: {
-    margin: (theme) => theme.spacing(0.5),
-  },
-}
-
-const ActionButton = ({ ...props }) => <Button sx={styles.button} {...props} />
-
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton
+    <Button
       variant="contained"
       color="primary"
       to={editPath}
@@ -46,7 +35,7 @@ const NoFeedbackActions = ({ editPath }) => {
       data-cy="giveCourseFeedback"
     >
       {t('userFeedbacks:giveFeedbackButton')}
-    </ActionButton>
+    </Button>
   )
 }
 
@@ -68,27 +57,29 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
   }
 
   return (
-    <>
-      <ActionButton
+    <Box>
+      <Button
+        variant="outlined"
         color="primary"
-        variant="contained"
         component={Link}
         to={editPath}
+        sx={{ mr: '1rem' }}
       >
         {t('userFeedbacks:modifyFeedbackButton')}
-      </ActionButton>
+      </Button>
 
-      <ActionButton
+      <Button
+        variant="outlined"
         color="primary"
-        variant="contained"
         component={Link}
         to={viewPath}
+        sx={{ mr: '1rem' }}
       >
         {t('userFeedbacks:viewFeedbackSummary')}
-      </ActionButton>
-      <ActionButton color="primary" onClick={handleOpen}>
+      </Button>
+      <Button color="error" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
-      </ActionButton>
+      </Button>
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
@@ -101,7 +92,7 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
-    </>
+    </Box>
   )
 }
 
@@ -109,14 +100,9 @@ const FeedbackEndedActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton
-      color="primary"
-      variant="contained"
-      component={Link}
-      to={viewPath}
-    >
+    <Button color="primary" variant="outlined" component={Link} to={viewPath}>
       {t('userFeedbacks:viewFeedbackSummary')}
-    </ActionButton>
+    </Button>
   )
 }
 
@@ -124,14 +110,9 @@ const ContinuousFeedbackActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton
-      color="primary"
-      variant="contained"
-      component={Link}
-      to={viewPath}
-    >
+    <Button color="primary" variant="contained" component={Link} to={viewPath}>
       {t('userFeedbacks:giveContinuousFeedback')}
-    </ActionButton>
+    </Button>
   )
 }
 
@@ -188,6 +169,7 @@ const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const queryClient = useQueryClient()
 
@@ -207,13 +189,18 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
     queryClient.invalidateQueries('feedbackTargetsForStudent')
+    enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
 
   return (
-    <ListItem sx={styles.listItem} divider={divider} disableGutters>
+    <ListItem
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+      divider={divider}
+      disableGutters
+    >
       <ListItemText primary={periodInfo} />
 
       <Box mt={1} mb={1}>

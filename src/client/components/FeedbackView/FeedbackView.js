@@ -21,6 +21,7 @@ import { useSnackbar } from 'notistack'
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
@@ -166,6 +167,7 @@ const FeedbackView = () => {
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
+  const { authorizedUser } = useAuthorizedUser()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
@@ -296,8 +298,8 @@ const FeedbackView = () => {
           initialValues={initialValues}
           validate={validate}
           onSubmit={handleSubmit}
-          disabled={formIsDisabled}
-          showSubmitButton={!isTeacher}
+          disabled={formIsDisabled && !authorizedUser?.isAdmin}
+          showSubmitButton={!isTeacher || authorizedUser?.isAdmin}
           questions={questions}
           showCannotSubmitText={isOutsider}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
