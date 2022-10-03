@@ -22,6 +22,7 @@ import { useQueryClient } from 'react-query'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import styles from '../../util/chipStyles'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -125,6 +126,7 @@ const FeedbackGivenChip = () => {
       icon={<FeedbackGivenIcon />}
       label={t('userFeedbacks:feedbackGivenChip')}
       color="primary"
+      sx={styles.success}
     />
   )
 }
@@ -137,6 +139,7 @@ const NoFeedbackChip = () => {
       variant="outlined"
       icon={<NoFeedbackIcon />}
       label={t('userFeedbacks:waitingForFeedbackChip')}
+      sx={styles.shimmering}
     />
   )
 }
