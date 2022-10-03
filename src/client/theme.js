@@ -22,7 +22,7 @@ const useTheme = () => {
                     dark: '#14549c', // Ukraine blue
                   },
                   secondary: {
-                    main: '#ffd700', // Ukraine yellow
+                    main: '#e6c309', // Ukraine yellow
                   },
                   info: {
                     main: lightBlue[700],
@@ -38,7 +38,7 @@ const useTheme = () => {
                     default: grey[50],
                   },
                   warning: {
-                    main: '#bda41a',
+                    main: '#e6c309',
                     light: '#ffd700', // Ukraine yellow
                   },
                 }

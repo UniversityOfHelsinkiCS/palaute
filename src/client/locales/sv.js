@@ -339,6 +339,7 @@ export default {
     searchPlaceholder: 'Begränsa kurser med kurskod',
     responsibleTeachers: 'Ansvariga lärare',
     includeOpenUniCourses: 'Inkludera kurser i öppna universitetet',
+    // showHiddenOrganisations: 'Näytä piilotetut koulutusohjelmat',
     orderByLabel: 'Ordning',
     orderByCodeAsc: 'Kod i stigande ordning',
     orderByFeedbackCountAsc: 'Antal responser i stigande ordning',

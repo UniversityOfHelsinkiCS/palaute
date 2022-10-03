@@ -334,6 +334,7 @@ export default {
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',
+    showHiddenOrganisations: 'Show hidden organisations',
     orderByLabel: 'Order',
     orderByCodeAsc: 'Code ascending',
     orderByFeedbackCountAsc: 'Feedback count ascending',

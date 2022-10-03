@@ -9,8 +9,15 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material'
-import { Search, SettingsOutlined } from '@mui/icons-material'
+import {
+  Search,
+  SettingsOutlined,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material'
 
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -37,6 +44,7 @@ import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import { OrganisationLabel } from './Labels'
 import errors from '../../util/errorMessage'
 import ErrorView from '../ErrorView'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
 
 const styles = {
   filtersCell: {
@@ -90,6 +98,21 @@ const OrganisationButton = ({ code, access }) => {
   )
 }
 
+const ToggleHiddenButton = ({ isHidden, toggle }) => (
+  <IconButton
+    onClick={toggle}
+    sx={styles.settingsButton}
+    disableFocusRipple
+    color={isHidden ? 'secondary' : 'default'}
+  >
+    {isHidden ? (
+      <Visibility fontSize="small" />
+    ) : (
+      <VisibilityOff fontSize="small" />
+    )}
+  </IconButton>
+)
+
 const OrganisationTable = ({
   organisations,
   questions,
@@ -98,10 +121,35 @@ const OrganisationTable = ({
   onToggleAccordion = () => {},
   onOrderByChange,
   filters,
+  showHiddenRows,
+  setShowHiddenRows,
   loading = false,
   organisationLinks = false,
 }) => {
   const { t, i18n } = useTranslation()
+  const [hiddenRows, setHiddenRows] = useLocalStorageState('hidden-rows')
+  const showHidingButton =
+    organisationAccess?.length > 0 && organisations.length > 1
+
+  const isHidden = (code) => {
+    if (!Array.isArray(hiddenRows)) {
+      return false
+    }
+    return hiddenRows.includes(code)
+  }
+
+  const toggleRowHidden = (value) => {
+    if (!Array.isArray(hiddenRows)) {
+      setHiddenRows([value])
+      return
+    }
+
+    if (hiddenRows.includes(value)) {
+      setHiddenRows(hiddenRows.filter((r) => r !== value))
+    } else {
+      setHiddenRows(hiddenRows.concat(value))
+    }
+  }
 
   return (
     <TableContainer sx={{ overflow: 'visible' }}>
@@ -123,6 +171,27 @@ const OrganisationTable = ({
                   { id: 2, question: t('courseSummary:feedbackResponse') },
                 ])}
             />
+            <th />
+            {showHidingButton && (
+              <th>
+                <FormControlLabel
+                  sx={{
+                    marginTop: '13rem',
+                    marginLeft: '0' /* fucking weird */,
+                  }}
+                  control={
+                    <Checkbox
+                      checked={showHiddenRows}
+                      onChange={(event) => {
+                        setShowHiddenRows(event.target.checked)
+                      }}
+                      color="primary"
+                    />
+                  }
+                  label={t('courseSummary:showHiddenOrganisations')}
+                />
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -135,54 +204,68 @@ const OrganisationTable = ({
           )}
 
           {!loading &&
-            organisations.map(
-              ({
-                code,
-                id,
-                name,
-                results,
-                feedbackCount,
-                courseUnits,
-                studentCount,
-                feedbackResponsePercentage,
-              }) => (
-                <Fragment key={id}>
-                  <ResultsRow
-                    id={id}
-                    label={
-                      <OrganisationLabel
-                        name={getLanguageValue(name, i18n.language)}
-                        code={code}
-                      />
-                    }
-                    results={results}
-                    questions={questions}
-                    feedbackCount={feedbackCount}
-                    studentCount={studentCount}
-                    feedbackResponsePercentage={feedbackResponsePercentage}
-                    accordionEnabled={courseUnits.length > 0}
-                    accordionInitialOpen={initialOpenAccordions.includes(id)}
-                    onToggleAccordion={() => onToggleAccordion(id)}
-                    cellsAfter={
-                      organisationLinks && (
-                        <td css={{ paddingLeft: '4rem' }}>
-                          <OrganisationButton
-                            code={code}
-                            access={getAccess(id, organisationAccess)}
-                          />
-                        </td>
-                      )
-                    }
-                  >
-                    <CourseUnitSummary
-                      courseUnits={courseUnits}
+            organisations
+              .filter(
+                (org) => showHiddenRows || !hiddenRows?.includes(org.code),
+              )
+              .map(
+                ({
+                  code,
+                  id,
+                  name,
+                  results,
+                  feedbackCount,
+                  courseUnits,
+                  studentCount,
+                  feedbackResponsePercentage,
+                }) => (
+                  <Fragment key={id}>
+                    <ResultsRow
+                      id={id}
+                      label={
+                        <OrganisationLabel
+                          name={getLanguageValue(name, i18n.language)}
+                          code={code}
+                        />
+                      }
+                      results={results}
                       questions={questions}
-                    />
-                  </ResultsRow>
-                  <DividerRow height={1.3} />
-                </Fragment>
-              ),
-            )}
+                      feedbackCount={feedbackCount}
+                      studentCount={studentCount}
+                      feedbackResponsePercentage={feedbackResponsePercentage}
+                      accordionEnabled={courseUnits.length > 0}
+                      accordionInitialOpen={initialOpenAccordions.includes(id)}
+                      onToggleAccordion={() => onToggleAccordion(id)}
+                      cellsAfter={
+                        <>
+                          {organisationLinks && (
+                            <td css={{ paddingLeft: '4rem' }}>
+                              <OrganisationButton
+                                code={code}
+                                access={getAccess(id, organisationAccess)}
+                              />
+                            </td>
+                          )}
+                          {showHidingButton && (
+                            <td>
+                              <ToggleHiddenButton
+                                isHidden={isHidden(code)}
+                                toggle={() => toggleRowHidden(code)}
+                              />
+                            </td>
+                          )}
+                        </>
+                      }
+                    >
+                      <CourseUnitSummary
+                        courseUnits={courseUnits}
+                        questions={questions}
+                      />
+                    </ResultsRow>
+                    <DividerRow height={1.3} />
+                  </Fragment>
+                ),
+              )}
         </tbody>
       </table>
     </TableContainer>
@@ -213,6 +296,7 @@ const OrganisationSummary = () => {
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
+  const [showHiddenRows, setShowHiddenRows] = React.useState(false)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
     start: null,
@@ -281,6 +365,8 @@ const OrganisationSummary = () => {
 
   const { questions } = organisationSummaries
 
+  const hasOrganisationAccess = organisationAccess?.length > 0
+
   const handleFacultyChange = (newFaculty) => {
     setFacultyCode(newFaculty)
   }
@@ -324,6 +410,8 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
+        showHiddenRows={showHiddenRows || code || !hasOrganisationAccess}
+        setShowHiddenRows={setShowHiddenRows}
         filters={
           <Filters
             facultyCode={!code && isAdmin && facultyCode}

@@ -6,7 +6,7 @@ import { Box, Tab } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
-import { ADMINS } from '../../util/common'
+import { ADMINS, images } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
@@ -56,8 +56,15 @@ const AdminView = () => {
 
   return (
     <>
-      <h1>Admin page</h1>
       <Title>Admin</Title>
+      <Box display="flex" alignItems="end">
+        <h1>Admin page</h1>
+        <img
+          src={images.norppa_viskaali}
+          alt="Epic norppa by ttriple"
+          sx={{ height: '1vh' }}
+        />
+      </Box>
       <Box>
         <RouterTabs
           indicatorColor="primary"

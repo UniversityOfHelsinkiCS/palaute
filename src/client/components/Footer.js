@@ -43,16 +43,18 @@ const Footer = ({ user }) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          {inProduction && (
-            <Box>
-              <Typography>DEVELOPMENT</Typography>
-            </Box>
+          {!inProduction && (
+            <>
+              <Box>
+                <Typography>DEVELOPMENT</Typography>
+              </Box>
+              <img
+                src={images.norppa_viskaali}
+                css={styles.norppa}
+                alt="Norppa drawing by tttriple"
+              />
+            </>
           )}
-          <img
-            src={images.norppa_viskaali}
-            css={styles.norppa}
-            alt="Norppa drawing by tttriple"
-          />
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
