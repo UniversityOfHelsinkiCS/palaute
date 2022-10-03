@@ -37,7 +37,7 @@ const FeedbackResponseChip = ({
     <LinkChip
       to={url}
       label={ongoing ? ongoingLabel : label}
-      sx={ongoing ? ongoingStyle : sx}
+      sx={{ ...(ongoing ? ongoingStyle : sx), ...styles.interactive }}
       {...props}
     />
   )

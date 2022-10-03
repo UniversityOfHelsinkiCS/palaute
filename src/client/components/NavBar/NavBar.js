@@ -139,7 +139,6 @@ const NavBar = ({ guest = false }) => {
   const isAdminUser = authorizedUser?.isAdmin ?? false
 
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
-    refetchInterval: 60000,
     enabled: isAdminUser,
   })
 

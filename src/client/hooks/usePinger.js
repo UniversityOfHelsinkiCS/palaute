@@ -12,12 +12,12 @@ const usePinger = (options = {}) => {
       return data
     },
     {
-      refetchInterval: 5 * 60 * 1000,
+      refetchInterval: 6 * 60 * 1000,
       refetchIntervalInBackground: true,
       refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: 'always',
-      cacheTime: 2 * 60 * 1000,
+      cacheTime: 7 * 60 * 1000,
       onError: (error) => {
         if (error?.message?.toLowerCase() === 'network error')
           window.location.reload()

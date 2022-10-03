@@ -31,10 +31,12 @@ const flow = keyframes`
 `
 
 const styles = {
+  interactive: {
+    ...common,
+  },
   success: {
     borderColor: (theme) => theme.palette.success.main,
     color: (theme) => theme.palette.success.main,
-    ...common,
   },
   error: {
     borderColor: (theme) => theme.palette.error.light,
@@ -42,7 +44,6 @@ const styles = {
     animation: css`
       ${pulse} 2s 1s alternate infinite
     `,
-    ...common,
   },
   warning: {
     borderColor: (theme) => theme.palette.warning.dark,
@@ -50,7 +51,6 @@ const styles = {
     animation: css`
       ${pulse} 2.2s 0s alternate infinite
     `,
-    ...common,
   },
   shimmering: {
     background: (theme) => theme.palette.primary,
@@ -62,7 +62,6 @@ const styles = {
     `,
     color: '#09233d',
     borderColor: '#a3bed9',
-    ...common,
   },
 }
 
