@@ -16,7 +16,7 @@ import PublicQuestions from '../PublicQuestions'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 
 const FeedbackTargetSettings = () => {
   const { id } = useParams()
@@ -29,16 +29,21 @@ const FeedbackTargetSettings = () => {
     skipCache: true,
   })
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
+  const orgAccess = useOrganisationAccess(feedbackTarget)
+  const isOrganisationAdmin = orgAccess.admin
 
   useEffect(() => {
-    if (isLoading || feedbackTarget.settingsReadByTeacher) return
+    if (
+      isLoading ||
+      feedbackTarget.settingsReadByTeacher ||
+      isOrganisationAdmin
+    ) {
+      return
+    }
     updateSettingsRead.mutateAsync({ id })
   }, [isLoading])
 
-  if (isLoading || authorizedUserLoading) {
+  if (isLoading) {
     return <LoadingProgress />
   }
 
