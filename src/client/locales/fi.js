@@ -338,6 +338,8 @@ export default {
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
     showHiddenOrganisations: 'Valitse piilotetut koulutusohjelmat ({{count}})',
+    hidingInfo:
+      'Voit piilottaa itseltäsi koulutusohjelmien yhteenvetoja, jotka eivät ole sinulle kiinnostavia',
     orderByLabel: 'Järjestys',
     orderByCodeAsc: 'Koodi nousevasti',
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',

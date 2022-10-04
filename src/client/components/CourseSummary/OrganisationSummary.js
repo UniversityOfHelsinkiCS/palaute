@@ -124,18 +124,31 @@ const ToggleHiddenButton = ({ isHidden, toggle }) => {
 const HidingModeButton = ({ isHidingMode, setIsHidingMode, count }) => {
   const { t } = useTranslation()
   return (
-    <Tooltip
-      title={t('courseSummary:showHiddenOrganisations', { count })}
-      placement="right"
-    >
-      <ToggleButton
-        selected={isHidingMode}
-        onChange={() => setIsHidingMode(!isHidingMode)}
-        color="primary"
+    <Box mt="12rem" display="flex" alignItems="center">
+      <Tooltip
+        title={t('courseSummary:showHiddenOrganisations', { count })}
+        placement="top"
       >
-        {isHidingMode ? <Check /> : <Visibility />}
-      </ToggleButton>
-    </Tooltip>
+        <ToggleButton
+          selected={isHidingMode}
+          onChange={() => setIsHidingMode(!isHidingMode)}
+          color="primary"
+        >
+          {isHidingMode ? <Check /> : <Visibility />}
+        </ToggleButton>
+      </Tooltip>
+      <Box mr="1.5rem" />
+      {isHidingMode && (
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          textAlign="left"
+          lineHeight="1.5"
+        >
+          {t('courseSummary:hidingInfo')}
+        </Typography>
+      )}
+    </Box>
   )
 }
 
@@ -200,13 +213,11 @@ const OrganisationTable = ({
             <th />
             {showHidingModeButton && (
               <th>
-                <Box mt="12rem">
-                  <HidingModeButton
-                    isHidingMode={isHidingMode}
-                    setIsHidingMode={setIsHidingMode}
-                    count={hiddenRows?.length}
-                  />
-                </Box>
+                <HidingModeButton
+                  isHidingMode={isHidingMode}
+                  setIsHidingMode={setIsHidingMode}
+                  count={hiddenRows?.length}
+                />
               </th>
             )}
           </tr>
@@ -254,7 +265,7 @@ const OrganisationTable = ({
                       cellsAfter={
                         <>
                           {organisationLinks && (
-                            <td css={{ paddingLeft: '4rem' }}>
+                            <td css={{ paddingLeft: '2rem' }}>
                               <OrganisationButton
                                 code={code}
                                 access={getAccess(id, organisationAccess)}

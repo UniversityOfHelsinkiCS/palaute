@@ -342,6 +342,7 @@ export default {
     responsibleTeachers: 'Ansvariga lärare',
     includeOpenUniCourses: 'Inkludera kurser i öppna universitetet',
     // showHiddenOrganisations: 'Valitse piilotetut koulutusohjelmat ({{count}})',
+    // hidingInfo: 'Voit piilottaa itseltäsi koulutusohjelmien yhteenvetoja, jotka eivät ole sinulle kiinnostavia',
     orderByLabel: 'Ordning',
     orderByCodeAsc: 'Kod i stigande ordning',
     orderByFeedbackCountAsc: 'Antal responser i stigande ordning',
