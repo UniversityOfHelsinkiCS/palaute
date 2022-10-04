@@ -106,7 +106,25 @@ const update = async (req, res) => {
 const destroy = async (req, res) => {
   const feedback = await getFeedbackForUser(req)
 
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      feedbackId: feedback.id,
+      userId: req.user.id,
+      accessStatus: 'STUDENT',
+    },
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+
+  const feedbackTarget = await FeedbackTarget.findByPk(
+    userFeedbackTarget.feedbackTargetId,
+  )
+
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+
+  await feedbackTarget.decrement('feedbackCount', { by: 1 })
   await feedback.destroy()
+
   return res.sendStatus(200)
 }
 
