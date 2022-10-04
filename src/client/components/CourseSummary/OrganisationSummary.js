@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { Fragment } from 'react'
+import React from 'react'
 /** @jsxImportSource @emotion/react */
 
 import {
@@ -9,10 +9,10 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
-  FormControlLabel,
-  Checkbox,
+  ToggleButton,
 } from '@mui/material'
 import {
+  Check,
   Search,
   SettingsOutlined,
   Visibility,
@@ -98,20 +98,46 @@ const OrganisationButton = ({ code, access }) => {
   )
 }
 
-const ToggleHiddenButton = ({ isHidden, toggle }) => (
-  <IconButton
-    onClick={toggle}
-    sx={styles.settingsButton}
-    disableFocusRipple
-    color={isHidden ? 'secondary' : 'default'}
-  >
-    {isHidden ? (
-      <Visibility fontSize="small" />
-    ) : (
-      <VisibilityOff fontSize="small" />
-    )}
-  </IconButton>
-)
+const ToggleHiddenButton = ({ isHidden, toggle }) => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip
+      placement="right"
+      title={t(isHidden ? 'common:show' : 'common:hide')}
+    >
+      <IconButton
+        onClick={toggle}
+        sx={styles.settingsButton}
+        disableFocusRipple
+        color={isHidden ? 'secondary' : 'default'}
+      >
+        {isHidden ? (
+          <Visibility fontSize="small" />
+        ) : (
+          <VisibilityOff fontSize="small" />
+        )}
+      </IconButton>
+    </Tooltip>
+  )
+}
+
+const HidingModeButton = ({ isHidingMode, setIsHidingMode, count }) => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip
+      title={t('courseSummary:showHiddenOrganisations', { count })}
+      placement="right"
+    >
+      <ToggleButton
+        selected={isHidingMode}
+        onChange={() => setIsHidingMode(!isHidingMode)}
+        color="primary"
+      >
+        {isHidingMode ? <Check /> : <Visibility />}
+      </ToggleButton>
+    </Tooltip>
+  )
+}
 
 const OrganisationTable = ({
   organisations,
@@ -121,14 +147,14 @@ const OrganisationTable = ({
   onToggleAccordion = () => {},
   onOrderByChange,
   filters,
-  showHiddenRows,
-  setShowHiddenRows,
+  isHidingMode,
+  setIsHidingMode,
   loading = false,
   organisationLinks = false,
 }) => {
   const { t, i18n } = useTranslation()
   const [hiddenRows, setHiddenRows] = useLocalStorageState('hidden-rows')
-  const showHidingButton =
+  const showHidingModeButton =
     organisationAccess?.length > 0 && organisations.length > 1
 
   const isHidden = (code) => {
@@ -172,24 +198,15 @@ const OrganisationTable = ({
                 ])}
             />
             <th />
-            {showHidingButton && (
+            {showHidingModeButton && (
               <th>
-                <FormControlLabel
-                  sx={{
-                    marginTop: '13rem',
-                    marginLeft: '0' /* fucking weird */,
-                  }}
-                  control={
-                    <Checkbox
-                      checked={showHiddenRows}
-                      onChange={(event) => {
-                        setShowHiddenRows(event.target.checked)
-                      }}
-                      color="primary"
-                    />
-                  }
-                  label={t('courseSummary:showHiddenOrganisations')}
-                />
+                <Box mt="12rem">
+                  <HidingModeButton
+                    isHidingMode={isHidingMode}
+                    setIsHidingMode={setIsHidingMode}
+                    count={hiddenRows?.length}
+                  />
+                </Box>
               </th>
             )}
           </tr>
@@ -205,9 +222,7 @@ const OrganisationTable = ({
 
           {!loading &&
             organisations
-              .filter(
-                (org) => showHiddenRows || !hiddenRows?.includes(org.code),
-              )
+              .filter((org) => isHidingMode || !hiddenRows?.includes(org.code))
               .map(
                 ({
                   code,
@@ -219,7 +234,7 @@ const OrganisationTable = ({
                   studentCount,
                   feedbackResponsePercentage,
                 }) => (
-                  <Fragment key={id}>
+                  <React.Fragment key={id}>
                     <ResultsRow
                       id={id}
                       label={
@@ -246,7 +261,7 @@ const OrganisationTable = ({
                               />
                             </td>
                           )}
-                          {showHidingButton && (
+                          {isHidingMode && (
                             <td>
                               <ToggleHiddenButton
                                 isHidden={isHidden(code)}
@@ -263,7 +278,7 @@ const OrganisationTable = ({
                       />
                     </ResultsRow>
                     <DividerRow height={1.3} />
-                  </Fragment>
+                  </React.Fragment>
                 ),
               )}
         </tbody>
@@ -296,7 +311,7 @@ const OrganisationSummary = () => {
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
-  const [showHiddenRows, setShowHiddenRows] = React.useState(false)
+  const [isHidingMode, setIsHidingMode] = React.useState(false)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
     start: null,
@@ -365,8 +380,6 @@ const OrganisationSummary = () => {
 
   const { questions } = organisationSummaries
 
-  const hasOrganisationAccess = organisationAccess?.length > 0
-
   const handleFacultyChange = (newFaculty) => {
     setFacultyCode(newFaculty)
   }
@@ -410,8 +423,8 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
-        showHiddenRows={showHiddenRows || code || !hasOrganisationAccess}
-        setShowHiddenRows={setShowHiddenRows}
+        isHidingMode={isHidingMode}
+        setIsHidingMode={setIsHidingMode}
         filters={
           <Filters
             facultyCode={!code && isAdmin && facultyCode}

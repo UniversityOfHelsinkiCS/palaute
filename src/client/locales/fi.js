@@ -26,6 +26,7 @@ export default {
     name: 'Nimi',
     edit: 'Muokkaa',
     show: 'Näytä',
+    hide: 'Piilota',
     copyToClipBoard: 'Kopioi leikepöydälle',
     feedbackOpenPeriod:
       'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
@@ -336,7 +337,7 @@ export default {
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
-    showHiddenOrganisations: 'Näytä piilotetut koulutusohjelmat',
+    showHiddenOrganisations: 'Valitse piilotetut koulutusohjelmat ({{count}})',
     orderByLabel: 'Järjestys',
     orderByCodeAsc: 'Koodi nousevasti',
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',

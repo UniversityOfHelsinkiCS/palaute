@@ -26,6 +26,7 @@ export default {
     name: 'Name',
     edit: 'Edit',
     show: 'Show',
+    hide: 'Hide',
     copyToClipBoard: 'Copy to clipboard',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
@@ -335,7 +336,7 @@ export default {
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',
-    showHiddenOrganisations: 'Show hidden organisations',
+    showHiddenOrganisations: 'Edit hidden programmes ({{count}})',
     orderByLabel: 'Order',
     orderByCodeAsc: 'Code ascending',
     orderByFeedbackCountAsc: 'Feedback count ascending',
