@@ -421,6 +421,7 @@ export default {
     shareTab: 'Dela förfrågan',
     surveySettingsTab: 'Förfrågans inställningar',
     // activateContinuousFeedback: 'Activate continuous feedback for the course',
+    // activateContinuousFeedbackDigest: 'Send email about new continuous feedback',
     // continuousFeedbackGiven: 'Continuous feedback given',
     // noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
     studentLinkTitle: 'Studerandelänk till översikt',

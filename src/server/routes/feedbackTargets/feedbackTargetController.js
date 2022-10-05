@@ -492,6 +492,7 @@ const update = async (req, res) => {
     'publicQuestionIds',
     'feedbackVisibility',
     'continuousFeedbackEnabled',
+    'sendContinuousFeedbackDigestEmail',
   ])
 
   const { questions, surveyId } = req.body

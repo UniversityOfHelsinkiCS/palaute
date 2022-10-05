@@ -13,36 +13,60 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const updateContinuousFeedbackStatus = async ({
   id,
   continuousFeedbackEnabled,
+  sendContinuousFeedbackDigestEmail,
 }) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, {
     continuousFeedbackEnabled,
+    sendContinuousFeedbackDigestEmail,
   })
 
   return data
 }
 
 const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
-  const { continuousFeedbackEnabled, id } = feedbackTarget
+  const { id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail } =
+    feedbackTarget
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
   const mutation = useMutation(updateContinuousFeedbackStatus)
 
   const [feedbackEnabled, setFeedbackEnabled] = useState(
     continuousFeedbackEnabled,
   )
+  const [sendDigestEmail, setSendDigestEmail] = useState(
+    sendContinuousFeedbackDigestEmail,
+  )
 
-  const handleChange = async () => {
+  const handleFeedbackEnabledChange = async () => {
     try {
       await mutation.mutateAsync({
         id,
         continuousFeedbackEnabled: !feedbackEnabled,
       })
       setFeedbackEnabled(!feedbackEnabled)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
+  const handleSendDigestEmailChange = async () => {
+    try {
+      await mutation.mutateAsync({
+        id,
+        sendContinuousFeedbackDigestEmail: !sendDigestEmail,
+      })
+      setSendDigestEmail(!sendDigestEmail)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -63,12 +87,25 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
               control={
                 <Switch
                   checked={feedbackEnabled}
-                  onChange={handleChange}
+                  onChange={handleFeedbackEnabledChange}
                   color="primary"
                 />
               }
               label={t('feedbackTargetView:activateContinuousFeedback')}
             />
+            {isAdmin && (
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={sendDigestEmail}
+                    disabled={!feedbackEnabled}
+                    onChange={handleSendDigestEmailChange}
+                    color="primary"
+                  />
+                }
+                label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
+              />
+            )}
           </FormGroup>
         </CardContent>
       </Card>
