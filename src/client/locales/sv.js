@@ -121,6 +121,7 @@ export default {
     feedbackResponseGiven: 'Svar på responsen given',
     feedbackResponseNotSent: 'Motrespons har inte skickats',
     feedbackResponseMissing: 'Svar på responsen saknas',
+    // continuousFeedback: 'Continuous feedback',
     feedbackOpen: 'Responsen är öppen',
     ongoingCourses: 'Pågående kurser',
     upcomingCourses: 'Kommande kurser',

@@ -72,6 +72,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             'feedbackResponseGiven',
           ],
           'feedbackCount',
+          'continuousFeedbackEnabled',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -146,7 +147,13 @@ const getCourseUnitsForTeacher = async (req, res) => {
     ({ courseUnit }) => courseUnit.courseCode,
   )
 
-  const targetFields = ['id', 'name', 'opensAt', 'closesAt']
+  const targetFields = [
+    'id',
+    'name',
+    'opensAt',
+    'closesAt',
+    'continuousFeedbackEnabled',
+  ]
   const courseUnits = Object.entries(targetsByCourseCode).map(
     ([courseCode, unfilteredTargets]) => {
       const targets = unfilteredTargets.filter(

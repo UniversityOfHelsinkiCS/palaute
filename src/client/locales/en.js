@@ -123,6 +123,7 @@ export default {
     feedbackResponseGiven: 'Counter feedback given',
     feedbackResponseNotSent: 'Counter feedback not sent',
     feedbackResponseMissing: 'Counter feedback missing',
+    continuousFeedback: 'Continuous feedback',
     feedbackOpen: 'Feedback open',
     ongoingCourses: 'Ongoing courses',
     upcomingCourses: 'Upcoming courses',

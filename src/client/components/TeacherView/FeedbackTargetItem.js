@@ -23,16 +23,27 @@ const getChip = (feedbackTarget) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount } =
-    feedbackTarget
+  const isCurrent = !isEnded && !isOpen && !isOld
+  const {
+    id,
+    feedbackResponseSent,
+    feedbackResponseGiven,
+    feedbackCount,
+    continuousFeedbackEnabled,
+  } = feedbackTarget
 
-  if (isOpen || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
+  if (
+    isOpen ||
+    (isCurrent && continuousFeedbackEnabled) ||
+    (isEnded && (feedbackCount > 0 || feedbackResponseGiven))
+  ) {
     return (
       <FeedbackResponseChip
         id={id}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         ongoing={isOpen}
+        continuous={isCurrent && continuousFeedbackEnabled}
         data-cy={
           isOpen
             ? `feedbackOpen-${feedbackTarget.id}`

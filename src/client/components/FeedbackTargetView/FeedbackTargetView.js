@@ -24,7 +24,6 @@ import {
   SettingsOutlined,
   ShareOutlined,
   ReviewsOutlined,
-  CommentOutlined,
 } from '@mui/icons-material'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'

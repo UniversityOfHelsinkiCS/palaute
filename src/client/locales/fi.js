@@ -121,6 +121,7 @@ export default {
     feedbackResponseGiven: 'Vastapalaute annettu',
     feedbackResponseNotSent: 'Vastapalaute lähettämättä',
     feedbackResponseMissing: 'Vastapalaute puuttuu',
+    continuousFeedback: 'Jatkuva palaute',
     feedbackOpen: 'Palaute käynnissä',
     ongoingCourses: 'Käynnissä olevat kurssit',
     upcomingCourses: 'Tulevat kurssit',

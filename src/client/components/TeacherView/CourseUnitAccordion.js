@@ -42,14 +42,23 @@ const getChip = (courseRealisation, code) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
+  const isCurrent = !isEnded && !isOpen && !isOld
+  const { id: feedbackTargetId, continuousFeedbackEnabled } =
+    feedbackTarget || {}
 
-  if (isOpen || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
+  if (
+    isOpen ||
+    (isCurrent && continuousFeedbackEnabled) ||
+    (feedbackCount > 0 && isEnded) ||
+    feedbackResponseGiven
+  ) {
     return (
       <FeedbackResponseChip
-        id={feedbackTarget?.id}
+        id={feedbackTargetId}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         ongoing={isOpen}
+        continuous={isCurrent && continuousFeedbackEnabled}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
       />
     )
