@@ -541,6 +541,11 @@ FeedbackTarget.init(
       allowNull: false,
       defaultValue: false,
     },
+    sendContinuousFeedbackDigestEmail: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,

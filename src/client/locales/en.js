@@ -416,6 +416,8 @@ export default {
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey settings',
     activateContinuousFeedback: 'Activate continuous feedback for the course',
+    activateContinuousFeedbackDigest:
+      'Send email about new continuous feedback',
     continuousFeedbackGiven: 'Continuous feedback given',
     noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
     studentLinkTitle: 'Student link to survey',
