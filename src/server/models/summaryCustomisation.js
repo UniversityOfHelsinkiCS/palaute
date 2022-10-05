@@ -11,7 +11,7 @@ SummaryCustomisation.init(
       allowNull: false,
       autoIncrement: true,
     },
-    user_id: {
+    userId: {
       type: STRING,
       references: { model: 'users', key: 'id' },
       allowNull: false,

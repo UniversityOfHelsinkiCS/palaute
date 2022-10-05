@@ -14,6 +14,7 @@ const { sequelize } = require('../../util/dbConnection')
 const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
+const { updateCustomisation, getCustomisation } = require('./customisation')
 
 const INCLUDED_ORGANISATIONS_BY_USER_ID = {
   // Jussi Merenmies
@@ -59,15 +60,11 @@ const getAccessibleCourseRealisationIds = async (user) => {
 const getAccessInfo = async (req, res) => {
   const { user } = req
 
-  const [
-    organisationAccess,
-    accessibleCourseRealisationIds,
-    summaryCustomisation,
-  ] = await Promise.all([
-    user.getOrganisationAccess(),
-    getAccessibleCourseRealisationIds(user),
-    user.getSummaryCustomisation(),
-  ])
+  const [organisationAccess, accessibleCourseRealisationIds] =
+    await Promise.all([
+      user.getOrganisationAccess(),
+      getAccessibleCourseRealisationIds(user),
+    ])
 
   const adminAccess = !!organisationAccess.find((org) => org.access.admin)
 
@@ -94,7 +91,6 @@ const getAccessInfo = async (req, res) => {
     accessible,
     adminAccess,
     defaultDateRange,
-    summaryCustomisation,
   })
 }
 
@@ -127,6 +123,7 @@ const getOrganisations = async (req, res) => {
   const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
 
   const organisations = await getOrganisationSummaries({
+    user,
     questions,
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
@@ -213,5 +210,7 @@ router.get('/organisations', getOrganisations)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/access', getAccessInfo)
+router.get('/customisation', getCustomisation)
+router.put('/customisation', updateCustomisation)
 
 module.exports = router

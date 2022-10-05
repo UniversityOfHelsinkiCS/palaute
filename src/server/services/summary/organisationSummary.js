@@ -42,7 +42,13 @@ const includeEmptyOrganisations = (
   )
 }
 
+const getUserHiddenOrganisationCodes = async (user) => {
+  const customisation = await user.getSummaryCustomisation()
+  return customisation?.data?.hiddenRows ?? []
+}
+
 const getOrganisationSummaries = async ({
+  user,
   questions,
   organisationAccess,
   accessibleCourseRealisationIds = [],
@@ -50,8 +56,16 @@ const getOrganisationSummaries = async ({
   startDate = subMonths(new Date(), 24),
   endDate = new Date(),
 }) => {
+  // which ones to filter based on custom hidden rows
+  const codesToFilter =
+    organisationAccess?.length > 1
+      ? await getUserHiddenOrganisationCodes(user)
+      : []
+
   // org ids user has org access to
-  const organisationIds = organisationAccess.map((org) => org.organisation.id)
+  const organisationIds = organisationAccess
+    .filter((org) => !codesToFilter.includes(org.organisation.code))
+    .map((org) => org.organisation.id)
 
   // rows for each CU with its associated CURs in json
   const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {

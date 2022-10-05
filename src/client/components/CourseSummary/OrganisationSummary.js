@@ -41,6 +41,16 @@ const OrganisationSummary = () => {
 
   const { authorizedUser, isLoading: authorizedUserLoading } =
     useAuthorizedUser()
+
+  const {
+    courseSummaryAccessInfo,
+    isLoading: defaultDateRangeLoading,
+    isLoadingError: isDateLoadingError,
+    error: dateLoadingError,
+  } = useCourseSummaryAccessInfo()
+
+  const { organisations: organisationAccess } = useOrganisations()
+
   const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
   const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
@@ -48,7 +58,6 @@ const OrganisationSummary = () => {
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
     useHistoryState('includeOpenUniCourseUnits', false)
-  const [isHidingMode, setIsHidingMode] = React.useState(false)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
     start: null,
@@ -59,15 +68,6 @@ const OrganisationSummary = () => {
     'orderBy',
     ORDER_BY_OPTIONS[0].value,
   )
-
-  const {
-    courseSummaryAccessInfo,
-    isLoading: defaultDateRangeLoading,
-    isLoadingError: isDateLoadingError,
-    error: dateLoadingError,
-  } = useCourseSummaryAccessInfo()
-
-  const { organisations: organisationAccess } = useOrganisations()
 
   const resultingDateRange =
     dateRange.start && dateRange.end
@@ -160,8 +160,6 @@ const OrganisationSummary = () => {
         loading={isFetching}
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
-        isHidingMode={isHidingMode}
-        setIsHidingMode={setIsHidingMode}
         filters={
           <Filters
             facultyCode={!code && isAdmin && facultyCode}
