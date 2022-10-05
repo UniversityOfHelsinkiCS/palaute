@@ -59,11 +59,15 @@ const getAccessibleCourseRealisationIds = async (user) => {
 const getAccessInfo = async (req, res) => {
   const { user } = req
 
-  const [organisationAccess, accessibleCourseRealisationIds] =
-    await Promise.all([
-      user.getOrganisationAccess(),
-      getAccessibleCourseRealisationIds(user),
-    ])
+  const [
+    organisationAccess,
+    accessibleCourseRealisationIds,
+    summaryCustomisation,
+  ] = await Promise.all([
+    user.getOrganisationAccess(),
+    getAccessibleCourseRealisationIds(user),
+    user.getSummaryCustomisation(),
+  ])
 
   const adminAccess = !!organisationAccess.find((org) => org.access.admin)
 
@@ -90,6 +94,7 @@ const getAccessInfo = async (req, res) => {
     accessible,
     adminAccess,
     defaultDateRange,
+    summaryCustomisation,
   })
 }
 

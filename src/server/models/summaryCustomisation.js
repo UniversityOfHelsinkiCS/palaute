@@ -1,0 +1,31 @@
+const { Model, INTEGER, STRING, JSONB } = require('sequelize')
+const { sequelize } = require('../util/dbConnection')
+
+class SummaryCustomisation extends Model {}
+
+SummaryCustomisation.init(
+  {
+    id: {
+      type: INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    user_id: {
+      type: STRING,
+      references: { model: 'users', key: 'id' },
+      allowNull: false,
+    },
+    data: {
+      type: JSONB,
+      allowNull: false,
+    },
+  },
+  {
+    underscored: true,
+    timestamps: true,
+    sequelize,
+  },
+)
+
+module.exports = SummaryCustomisation

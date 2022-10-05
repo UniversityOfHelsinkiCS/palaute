@@ -15,6 +15,7 @@ const FeedbackTargetDateCheck = require('./feedbackTargetDateCheck')
 const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
+const SummaryCustomisation = require('./summaryCustomisation')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -147,6 +148,12 @@ User.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
 FeedbackTarget.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
+User.hasOne(SummaryCustomisation, {
+  as: 'summaryCustomisation',
+  foreignKey: 'user_id',
+})
+SummaryCustomisation.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
+
 module.exports = {
   Feedback,
   User,
@@ -165,4 +172,5 @@ module.exports = {
   OrganisationLog,
   FeedbackTargetLog,
   ContinuousFeedback,
+  SummaryCustomisation,
 }
