@@ -4,7 +4,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetLogs from '../../hooks/useFeedbackTargetLogs'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const getLogMessage = (data) => {
   let messages = []

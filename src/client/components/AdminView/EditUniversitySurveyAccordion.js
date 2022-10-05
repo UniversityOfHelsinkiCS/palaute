@@ -18,7 +18,7 @@ import QuestionEditor from '../QuestionEditor'
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
 import { getInitialValues, validate, saveValues } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const styles = {
   accordion: {

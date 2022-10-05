@@ -2,7 +2,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styles from '../../util/chipStyles'
-import LinkChip from '../LinkChip'
+import LinkChip from '../common/LinkChip'
 
 const FeedbackResponseChip = ({
   id,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Chip, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 const ResultsContent = ({ chart, children, description }) => (
   <Box>

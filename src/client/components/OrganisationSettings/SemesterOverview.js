@@ -25,9 +25,9 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { addMonths, format } from 'date-fns'
 import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
-import TeacherChip from '../TeacherChip'
+import TeacherChip from '../common/TeacherChip'
 
 const useOrganisationFeedbackTargets = ({
   code,

@@ -9,12 +9,12 @@ import { useTranslation } from 'react-i18next'
 import { differenceInHours, format } from 'date-fns'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import { copyLink } from '../FeedbackTargetView/utils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import ReminderEmailModal from './ReminderEmailModal'
-import { TooltipButton } from '../TooltipButton'
+import { TooltipButton } from '../common/TooltipButton'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>

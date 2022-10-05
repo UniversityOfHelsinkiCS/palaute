@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next'
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
-import { LoadingProgress } from '../LoadingProgress'
-import Title from '../Title'
+import { LoadingProgress } from '../common/LoadingProgress'
+import Title from '../common/Title'
 
 const TeacherView = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()

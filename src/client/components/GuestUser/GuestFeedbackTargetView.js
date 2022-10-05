@@ -13,7 +13,7 @@ import {
 import { Box, Typography, Tab } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
-import { RouterTabs } from '../RouterTabs'
+import { RouterTabs } from '../common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -21,10 +21,10 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import GuestFeedbackView from './GuestFeedbackView'
 import GuestFeedbackTargetResults from './GuestFeedbackTargetResults'
 
-import ExternalLink from '../ExternalLink'
+import ExternalLink from '../common/ExternalLink'
 
 import { getCoursePageUrl, getCoursePeriod, getFeedbackPeriod } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const styles = {
   datesContainer: {

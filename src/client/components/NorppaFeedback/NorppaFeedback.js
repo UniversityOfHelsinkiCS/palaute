@@ -6,10 +6,10 @@ import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
-import FormikTextField from '../FormikTextField'
-import FormikCheckBox from '../FormikCheckbox'
+import FormikTextField from '../common/FormikTextField'
+import FormikCheckBox from '../common/FormikCheckbox'
 import { saveValues } from './utils'
-import Title from '../Title'
+import Title from '../common/Title'
 
 const styles = {
   description: {

@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 import { saveContinuousFeedback } from './utils'
 
 const styles = {

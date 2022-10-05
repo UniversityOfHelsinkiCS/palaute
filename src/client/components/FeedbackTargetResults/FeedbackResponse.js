@@ -11,7 +11,7 @@ import {
   Alert,
 } from '@mui/material'
 
-import Markdown from '../Markdown'
+import Markdown from '../common/Markdown'
 
 const styles = {
   title: {

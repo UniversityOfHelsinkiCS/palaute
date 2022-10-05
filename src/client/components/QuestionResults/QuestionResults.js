@@ -20,7 +20,7 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
-import AlertLink from '../AlertLink'
+import AlertLink from '../common/AlertLink'
 
 const styles = {
   openQuestionItem: {

@@ -3,7 +3,7 @@ import React from 'react'
 import useQuery from '../../hooks/useQuery'
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import UserAccordion from './UserAccordion'
 import { handleLoginAs } from './utils'
 

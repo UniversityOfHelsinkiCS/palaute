@@ -9,7 +9,7 @@ import CourseRealisationItem from './CourseRealisationItem'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseRealisationsWithFeedbackTargets } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const styles = {
   courseRealisationItem: {

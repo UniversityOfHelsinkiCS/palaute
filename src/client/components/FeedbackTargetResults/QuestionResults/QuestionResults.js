@@ -19,9 +19,9 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
-import AlertLink from '../../AlertLink'
+import AlertLink from '../../common/AlertLink'
 import { getLanguageValue } from '../../../util/languageUtils'
-import LinkChip from '../../LinkChip'
+import LinkChip from '../../common/LinkChip'
 
 const styles = {
   openQuestionItem: {

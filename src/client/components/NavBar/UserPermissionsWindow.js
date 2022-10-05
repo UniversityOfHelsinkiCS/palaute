@@ -16,7 +16,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useUserDetails from '../../hooks/useUserDetails'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const UserPermissionsWindow = ({ isOpen, onClose }) => {
   const { authorizedUser, isLoading } = useAuthorizedUser({ enabled: isOpen })

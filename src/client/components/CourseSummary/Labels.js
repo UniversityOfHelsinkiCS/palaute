@@ -4,7 +4,7 @@ import { Box, Link, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../util/languageUtils'
-import TeacherChip from '../TeacherChip'
+import TeacherChip from '../common/TeacherChip'
 
 export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   const {

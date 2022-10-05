@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { Redirect, useParams } from 'react-router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetUsers from '../../hooks/useFeedbackTargetUsers'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const FeedbackLinksView = () => {
   const { id } = useParams()

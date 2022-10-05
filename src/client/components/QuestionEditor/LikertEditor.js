@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 
 const LanguageLikertEditor = ({ name, language }) => {
   const { i18n } = useTranslation()

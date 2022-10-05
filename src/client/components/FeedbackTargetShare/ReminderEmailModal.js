@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import apiClient from '../../util/apiClient'
 import { formatClosesAt } from './utils'
 import queryClient from '../../util/queryClient'
-import { TooltipButton } from '../TooltipButton'
+import { TooltipButton } from '../common/TooltipButton'
 
 const styles = {
   container: {

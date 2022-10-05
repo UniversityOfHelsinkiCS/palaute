@@ -10,7 +10,7 @@ import {
 } from './utils'
 
 import FeedbackTargetItem from './FeedbackTargetItem'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const FeedbackTargetList = ({ courseCode, group }) => {
   const { t } = useTranslation()

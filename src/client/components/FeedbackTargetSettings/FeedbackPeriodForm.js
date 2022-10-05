@@ -12,12 +12,12 @@ import {
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 
-import FormikDatePicker from '../FormikDatePicker'
+import FormikDatePicker from '../common/FormikDatePicker'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
 import { validateFeedbackPeriod, requiresSubmitConfirmation } from './utils'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { LoadingProgress } from '../LoadingProgress'
-import { TooltipButton } from '../TooltipButton'
+import { LoadingProgress } from '../common/LoadingProgress'
+import { TooltipButton } from '../common/TooltipButton'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 

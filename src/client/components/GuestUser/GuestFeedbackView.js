@@ -18,7 +18,7 @@ import FeedbackForm from '../FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import PrivacyDialog from '../FeedbackView/PrivacyDialog'
 
-import AlertLink from '../AlertLink'
+import AlertLink from '../common/AlertLink'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -32,7 +32,7 @@ import {
 } from '../FeedbackView/utils'
 
 import { saveValues } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const tada = keyframes({
   from: {

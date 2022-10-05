@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'
-import TextField from '../TextField'
+import TextField from '../common/TextField'
 
 const OpenPreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)

@@ -25,7 +25,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
-import AlertLink from '../AlertLink'
+import AlertLink from '../common/AlertLink'
 
 import {
   makeValidate,
@@ -38,7 +38,7 @@ import {
 } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 
 const tada = keyframes({

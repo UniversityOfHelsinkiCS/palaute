@@ -11,7 +11,7 @@ import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 
 const NotEnoughFeedbacks = ({ t }) => (

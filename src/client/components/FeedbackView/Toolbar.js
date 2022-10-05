@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { Box, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import FixedContainer from '../FixedContainer'
-import LanguageSelect from '../LanguageSelect'
+import FixedContainer from '../common/FixedContainer'
+import LanguageSelect from '../common/LanguageSelect'
 
 const styles = {
   container: {

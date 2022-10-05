@@ -17,13 +17,13 @@ import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { differenceInMonths } from 'date-fns'
 
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import AlertLink from '../AlertLink'
-import Markdown from '../Markdown'
+import AlertLink from '../common/AlertLink'
+import Markdown from '../common/Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 
 const getInitialValues = (feedbackTarget) => ({

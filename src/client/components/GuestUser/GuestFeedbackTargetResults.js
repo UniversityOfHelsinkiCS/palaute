@@ -10,7 +10,7 @@ import QuestionResults from '../FeedbackTargetResults/QuestionResults'
 import FeedbackResponse from '../FeedbackTargetResults/FeedbackResponse'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackChart from '../FeedbackTargetResults/QuestionResults/FeedbackChart'
 
 const NotEnoughFeedbacks = ({ t }) => (

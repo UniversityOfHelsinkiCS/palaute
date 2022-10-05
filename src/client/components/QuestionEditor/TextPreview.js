@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import Markdown from '../Markdown'
+import Markdown from '../common/Markdown'
 
 const TextPreview = ({ question, language }) => {
   const content = getLanguageValue(question.data?.content, language)

@@ -15,7 +15,7 @@ import {
 import { formatDuration, intervalToDuration } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import { inProduction } from '../../../config'
 

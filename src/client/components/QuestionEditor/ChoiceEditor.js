@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import OptionEditor from './OptionEditor'
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 
 const styles = {
   container: (theme) => ({

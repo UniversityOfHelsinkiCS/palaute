@@ -35,15 +35,15 @@ import {
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
 } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
-import Title from '../Title'
+import { LoadingProgress } from '../common/LoadingProgress'
+import Title from '../common/Title'
 import ColumnHeadings from './ColumnHeadings'
 import useHistoryState from '../../hooks/useHistoryState'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import { OrganisationLabel } from './Labels'
 import errors from '../../util/errorMessage'
-import ErrorView from '../ErrorView'
+import ErrorView from '../common/ErrorView'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 
 const styles = {

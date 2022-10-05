@@ -11,7 +11,7 @@ import {
   opensAtIsImmediately,
   saveFeedbackPeriodValues,
 } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import PublicQuestions from '../PublicQuestions'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'

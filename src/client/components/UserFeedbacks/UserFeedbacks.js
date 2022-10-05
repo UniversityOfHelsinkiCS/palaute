@@ -13,8 +13,8 @@ import {
   getCourseRealisationsWithFeedbackTargets,
   sortCourseRealisations,
 } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
-import Title from '../Title'
+import { LoadingProgress } from '../common/LoadingProgress'
+import Title from '../common/Title'
 
 const styles = {
   heading: {

@@ -9,7 +9,6 @@ import {
   Button,
   Box,
   Typography,
-  Chip,
   Alert,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
@@ -19,7 +18,7 @@ import { useParams, Redirect } from 'react-router-dom'
 import { debounce } from 'lodash'
 
 import useOrganisation from '../../hooks/useOrganisation'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import apiClient from '../../util/apiClient'
 
 const saveFeedbackCorrespondent = async ({ code, responsibleUserId }) => {

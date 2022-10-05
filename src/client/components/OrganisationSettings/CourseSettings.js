@@ -25,7 +25,7 @@ import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import {
   STUDENT_LIST_BY_COURSE_ENABLED,
   STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,

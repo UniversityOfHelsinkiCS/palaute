@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import Markdown from '../Markdown'
+import Markdown from '../common/Markdown'
 
 const Text = ({ question }) => {
   const { i18n } = useTranslation()

@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const getCourseRealisationFeedbackTarget = (feedbackTargets) =>
   (feedbackTargets ?? []).find(

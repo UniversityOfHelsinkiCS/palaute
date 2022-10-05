@@ -19,7 +19,7 @@ import {
   getUpperLevelQuestions,
 } from './utils'
 import EditProgrammeQuestionsDialog from './EditProgrammeQuestionsDialog'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const EditSurvey = () => {
   const { code } = useParams()

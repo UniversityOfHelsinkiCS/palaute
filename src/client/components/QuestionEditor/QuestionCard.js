@@ -24,7 +24,7 @@ import SingleChoicePreview from './SingleChoicePreview'
 import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
-import FormikSwitch from '../FormikSwitch'
+import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
 
 const editorComponentByType = {

@@ -3,8 +3,8 @@ import React from 'react'
 
 import { useTranslation, Trans } from 'react-i18next'
 
-import FormikTextField from '../FormikTextField'
-import AlertLink from '../AlertLink'
+import FormikTextField from '../common/FormikTextField'
+import AlertLink from '../common/AlertLink'
 
 const LanguageTextEditor = ({ name, language }) => {
   const { i18n } = useTranslation()

@@ -4,7 +4,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-import useId from '../hooks/useId'
+import useId from '../../hooks/useId'
 
 const style = {
   select: {

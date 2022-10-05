@@ -10,7 +10,7 @@ import {
   filterCoursesByDate,
   formateDates,
 } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import { YearSemesterSelector } from '../CourseSummary/YearSemesterSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 

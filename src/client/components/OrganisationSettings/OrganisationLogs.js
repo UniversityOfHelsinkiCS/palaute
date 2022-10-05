@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import React from 'react'
 import { useParams } from 'react-router'
 import useOrganisationLogs from '../../hooks/useOrganisationLogs'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const getLogMessage = (data) => {
   let messages = []

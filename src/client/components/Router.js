@@ -11,7 +11,7 @@ import CourseRealisationFeedback from './CourseRealisationFeedback'
 import OrganisationSettings from './OrganisationSettings'
 import FeedbackTargetView from './FeedbackTargetView'
 import NorppaFeedback from './NorppaFeedback'
-import { LoadingProgress } from './LoadingProgress'
+import { LoadingProgress } from './common/LoadingProgress'
 
 const styles = {
   container: (theme) => ({

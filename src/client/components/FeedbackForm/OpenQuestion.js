@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 import { getLanguageValue } from '../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 

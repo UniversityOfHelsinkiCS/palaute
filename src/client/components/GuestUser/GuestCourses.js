@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import useNoadUser from '../../hooks/useNoadUser'
 
 const styles = {

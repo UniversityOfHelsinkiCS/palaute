@@ -5,7 +5,7 @@ import { Box, Container, Divider, Link, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-import ExternalLink from '../ExternalLink'
+import ExternalLink from '../common/ExternalLink'
 
 import { images } from '../../util/common'
 

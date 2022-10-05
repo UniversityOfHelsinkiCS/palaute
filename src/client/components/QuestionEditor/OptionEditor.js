@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
 
 import { createOption } from './utils'
-import FormikTextField from '../FormikTextField'
+import FormikTextField from '../common/FormikTextField'
 
 const styles = {
   optionsContainer: {

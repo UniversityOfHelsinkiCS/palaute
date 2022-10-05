@@ -34,12 +34,12 @@ import EditFeedbackResponse from '../EditFeedbackResponse'
 import FeedbackTargetShare from '../FeedbackTargetShare'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import { RouterTab, RouterTabs, TabLabel } from '../RouterTabs'
+import { RouterTab, RouterTabs, TabLabel } from '../common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import ExternalLink from '../ExternalLink'
+import ExternalLink from '../common/ExternalLink'
 
 import {
   getCoursePeriod,
@@ -50,15 +50,15 @@ import {
   deleteResponsibleTeacher,
 } from './utils'
 
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
 import FeedbackTargetLogs from '../FeedbackTargetLogs'
 import ContinuousFeedback from '../FeedbackTargetContinuousFeedback'
 import useFeedbackCount from '../../hooks/useFeedbackCount'
-import ErrorView from '../ErrorView'
+import ErrorView from '../common/ErrorView'
 import errors from '../../util/errorMessage'
-import TeacherChip from '../TeacherChip'
+import TeacherChip from '../common/TeacherChip'
 import useOrganisations from '../../hooks/useOrganisations'
 import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'

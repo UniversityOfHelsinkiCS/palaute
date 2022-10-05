@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
 import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const FeedbackItem = ({ feedback }) => {
   const { createdAt, data } = feedback

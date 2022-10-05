@@ -23,7 +23,7 @@ import {
   feedbackTargetIsOpenOrClosed,
   validateQuestions,
 } from './utils'
-import { LoadingProgress } from '../LoadingProgress'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const styles = {
   heading: {
