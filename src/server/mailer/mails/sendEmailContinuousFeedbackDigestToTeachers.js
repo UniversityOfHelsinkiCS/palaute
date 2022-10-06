@@ -9,7 +9,6 @@ const {
   UserFeedbackTarget,
 } = require('../../models')
 const { pate } = require('../pateClient')
-const { instructionsAndSupport } = require('./util')
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({
@@ -81,6 +80,7 @@ const getTeachersWithContinuousFeedback = async () => {
     'id',
   )
 
+  // Combine related courseRealisation and continuousFeedbacks under teacher's userFeedbackTargets
   const teachersWithContinuousFeedback = teachers.map(
     ({ dataValues: teacher }) => ({
       ...teacher,
@@ -100,7 +100,20 @@ const getTeachersWithContinuousFeedback = async () => {
     }),
   )
 
-  return { teachersWithContinuousFeedback, newContinuousFeedback }
+  // Remove userFeedbackTargets without courseRealisation
+  // related to feedbackTargets with recently disabled continuous feedback or email
+  const filteredTeachersWithContinuousFeedback =
+    teachersWithContinuousFeedback.map((data) => ({
+      ...data,
+      userFeedbackTargets: data.userFeedbackTargets.filter(
+        ({ courseRealisation }) => courseRealisation,
+      ),
+    }))
+
+  return {
+    teachersWithContinuousFeedback: filteredTeachersWithContinuousFeedback,
+    newContinuousFeedback,
+  }
 }
 
 const buildContinuousFeedbackDigestToTeachers = (
@@ -112,16 +125,13 @@ const buildContinuousFeedbackDigestToTeachers = (
     text: {
       en: `Dear teacher! <br/>
       The following courses have received new continuous feedback:
-      ${courseNameLinksAndNewFeedback}
-      ${instructionsAndSupport.en}`,
+      ${courseNameLinksAndNewFeedback}`,
       fi: `Hyvä opettaja! <br/>
       Seuraaville kurseille on annettu uutta jatkuvaa palautetta:
-      ${courseNameLinksAndNewFeedback}
-      ${instructionsAndSupport.fi}`,
+      ${courseNameLinksAndNewFeedback}`,
       sv: `Dear teacher! <br/>
       The following courses have received new continuous feedback:
-      ${courseNameLinksAndNewFeedback}
-      ${instructionsAndSupport.sv}`,
+      ${courseNameLinksAndNewFeedback}`,
     },
     subject: {
       en: hasMultipleFeedbackTargets
