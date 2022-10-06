@@ -6,14 +6,10 @@ const { getMean } = require('./utils')
 
 const includeEmptyOrganisations = (
   organisations,
-  organisationAccess,
+  organisationsToShow,
   questions,
 ) => {
-  const accessibleOrganisations = organisationAccess.map(
-    ({ organisation }) => organisation,
-  )
-
-  const missingOrganisations = accessibleOrganisations.filter(
+  const missingOrganisations = organisationsToShow.filter(
     (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
   )
 
@@ -62,10 +58,12 @@ const getOrganisationSummaries = async ({
       ? await getUserHiddenOrganisationCodes(user)
       : []
 
-  // org ids user has org access to
-  const organisationIds = organisationAccess
+  // orgs user has org access to
+  const organisationsToShow = organisationAccess
     .filter((org) => !codesToFilter.includes(org.organisation.code))
-    .map((org) => org.organisation.id)
+    .map((org) => org.organisation)
+
+  const organisationIds = organisationsToShow.map((org) => org.id)
 
   // rows for each CU with its associated CURs in json
   const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
@@ -215,7 +213,7 @@ const getOrganisationSummaries = async ({
   )
   const withEmptyOrganisations = includeEmptyOrganisations(
     summedOrganisations,
-    organisationAccess,
+    organisationsToShow,
     questions,
   )
 
