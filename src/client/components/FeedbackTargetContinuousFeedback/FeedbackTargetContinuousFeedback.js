@@ -16,7 +16,7 @@ const FeedbackItem = ({ feedback }) => {
         <Box padding={2} marginBottom={2}>
           <Typography variant="body1">{data}</Typography>
           <Typography variant="body2">
-            {format(new Date(createdAt), 'dd.MM.yy hh.mm')}
+            {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
           </Typography>
         </Box>
       </Paper>
