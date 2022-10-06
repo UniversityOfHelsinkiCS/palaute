@@ -471,6 +471,7 @@ const getFeedbackCorrespondents = async (req, res) => {
       u.student_number as "studentNumber",
       u.iam_groups as "iamGroups",
       u.degree_study_right as "degreeStudyRight",
+      u.last_logged_in as "lastLoggedIn",
       u.username,
       u.language,
       org.name as "organisationName",
