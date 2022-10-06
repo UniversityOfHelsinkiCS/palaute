@@ -6,6 +6,7 @@ const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
+  sendEmailContinuousFeedbackDigestToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
 } = require('./mails')
 
@@ -22,6 +23,7 @@ const run = async () => {
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
   await sendEmailReminderAboutFeedbackResponseToTeachers()
+  // await sendEmailContinuousFeedbackDigestToTeachers()
   await sendAutomaticReminderOnFeedbackToStudents()
 }
 
