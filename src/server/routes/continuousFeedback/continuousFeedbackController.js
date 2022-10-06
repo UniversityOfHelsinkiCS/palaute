@@ -39,8 +39,18 @@ const submitFeedback = async (req, res) => {
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
-  if (!feedbackTarget.continuousFeedbackEnabled)
+  const {
+    continuousFeedbackEnabled,
+    sendContinuousFeedbackDigestEmail: sendInDigestEmail,
+  } = feedbackTarget
+
+  if (!continuousFeedbackEnabled)
     throw new ApplicationError('Continuous feedback is disabled', 400)
+
+  const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
+
+  if (feedbackCanBeGiven)
+    throw new ApplicationError('Continuous feedback is closed', 403)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {
@@ -56,6 +66,7 @@ const submitFeedback = async (req, res) => {
     data: feedback,
     feedbackTargetId,
     userId,
+    sendInDigestEmail,
   })
 
   return res.send(newFeedback)
