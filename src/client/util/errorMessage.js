@@ -19,11 +19,6 @@ const getGeneralError = (error) => {
 }
 
 const getFeedbackTargetError = (error) => {
-  const generalErrorMessage = getGeneralError(error)
-  if (generalErrorMessage) {
-    return generalErrorMessage
-  }
-
   const res = error.response
 
   if (res.status === 403) {
@@ -32,6 +27,12 @@ const getFeedbackTargetError = (error) => {
   if (res.status === 404) {
     return 'feedbackTargetView:notFound'
   }
+
+  const generalErrorMessage = getGeneralError(error)
+  if (generalErrorMessage) {
+    return generalErrorMessage
+  }
+
   return 'common:unknownError'
 }
 
