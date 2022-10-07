@@ -54,12 +54,10 @@ export const getQuestions = (feedbackTarget) => {
   const filteredUniQuestions =
     surveys?.universitySurvey?.questions.filter((q) => q.type !== 'OPEN') ?? []
 
-  const programmeSurveyQuestions = surveys.programmeSurvey
-    ? surveys.programmeSurvey.reduce(
-        (questions, survey) => questions.concat(survey.questions),
-        [],
-      )
-    : surveys.programmeSurvey[0].questions
+  const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
+    (questions, survey) => questions.concat(survey.questions),
+    [],
+  )
 
   return [
     ...filteredUniQuestions,

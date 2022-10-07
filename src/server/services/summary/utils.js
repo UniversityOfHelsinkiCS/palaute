@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { Survey } = require('../../models')
+const { getUniversitySurvey } = require('../surveys')
 
 const WORKLOAD_QUESTION_ID = 1042
 
@@ -69,11 +69,7 @@ const getValidDataValues = (questions) => {
 }
 
 const getUniversityQuestions = async () => {
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-
-  await universitySurvey.populateQuestions()
+  const universitySurvey = await getUniversitySurvey()
 
   const { questions = [] } = universitySurvey
 

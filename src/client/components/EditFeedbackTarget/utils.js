@@ -5,23 +5,21 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { copyQuestion } from '../QuestionEditor/utils'
 
 export const getUpperLevelQuestions = (feedbackTarget) => {
-  const { universitySurvey, programmeSurvey } = feedbackTarget.surveys ?? {}
+  const { universitySurvey, programmeSurveys } = feedbackTarget.surveys ?? {}
 
   return [
     ...(universitySurvey?.questions ?? []),
-    ...(programmeSurvey?.questions ?? []),
+    ...(programmeSurveys?.questions ?? []),
   ]
 }
 
 export const getQuestionsInitialValues = (feedbackTarget) => {
   const { surveys } = feedbackTarget
 
-  const programmeSurveyQuestions = surveys.programmeSurvey
-    ? surveys.programmeSurvey.reduce(
-        (questions, survey) => questions.concat(survey.questions),
-        [],
-      )
-    : surveys.programmeSurvey[0].questions
+  const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
+    (questions, survey) => questions.concat(survey.questions),
+    [],
+  )
 
   const questions = [
     ...(surveys.universitySurvey?.questions ?? []).map((question) => ({

@@ -1,23 +1,21 @@
-const { Survey } = require('../../models')
+const { getUniversitySurvey, getProgrammeSurvey } = require('../surveys')
 
 const WORKLOAD_QUESTION_ID = 1042
 
+/**
+ * @param {string} organisationCode
+ * @returns {Promise<object>} questions
+ */
 const getSummaryQuestions = async (organisationCode) => {
   const [universityQuestions, programmeQuestions] = await Promise.all([
     (async () => {
-      const universitySurvey = await Survey.findOne({
-        where: { type: 'university' },
-      })
-      await universitySurvey.populateQuestions()
+      const universitySurvey = await getUniversitySurvey()
       return universitySurvey.questions
     })(),
     (async () => {
       if (!organisationCode) return []
-      const programmeSurvey = await Survey.findOne({
-        where: { type: 'programme', typeId: organisationCode },
-      })
+      const programmeSurvey = await getProgrammeSurvey(organisationCode)
       if (!programmeSurvey) return []
-      await programmeSurvey.populateQuestions()
       return programmeSurvey.questions
     })(),
   ])

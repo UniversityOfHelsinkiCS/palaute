@@ -11,7 +11,6 @@ const {
   ARRAY,
   INTEGER,
   TEXT,
-  QueryTypes,
 } = require('sequelize')
 
 const _ = require('lodash')
@@ -21,15 +20,14 @@ const CourseRealisation = require('./courseRealisation')
 const User = require('./user')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../util/dbConnection')
-const Survey = require('./survey')
-const Question = require('./question')
+const {
+  getUniversitySurvey,
+  getProgrammeSurveysByCourseUnit,
+  getOrCreateTeacherSurvey,
+} = require('../services/surveys')
 
 const getGloballyPublicQuestionIds = async () => {
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-
-  await universitySurvey.populateQuestions()
+  const universitySurvey = await getUniversitySurvey()
 
   const numericQuestionIds = universitySurvey.questions
     .filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
@@ -38,169 +36,17 @@ const getGloballyPublicQuestionIds = async () => {
   return numericQuestionIds
 }
 
-const getClonedQuestionIds = async (previousSurvey) => {
-  if (!previousSurvey) return []
-
-  const previousQuestions = await Question.findAll({
-    where: {
-      id: previousSurvey.questionIds,
-    },
-  })
-
-  const clonedQuestions = await Question.bulkCreate(
-    previousQuestions.map(({ type, required, data }) => ({
-      type,
-      required,
-      data,
-    })),
-    { returning: true },
-  )
-
-  return clonedQuestions.map((q) => q.id)
-}
-
-const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
-  const clonedQuestionIds = await getClonedQuestionIds(previousSurvey)
-
-  const teacherSurvey = await Survey.create({
-    feedbackTargetId,
-    questionIds: clonedQuestionIds,
-  })
-
-  return teacherSurvey
-}
-
-/**
- * Gets the previous feedback target that has at least one teacher from given feedback target
- */
-const getPreviousFeedbackTarget = async (feedbackTarget) => {
-  const courseRealisation = CourseRealisation.findByPk(
-    feedbackTarget.courseRealisationId,
-    { attributes: ['start_date'] },
-  )
-
-  const currentTeachers = UserFeedbackTarget.findAll({
-    attributes: ['user_id'],
-    where: {
-      feedbackTargetId: feedbackTarget.id,
-      accessStatus: 'TEACHER',
-    },
-  })
-  /* eslint-disable-next-line no-use-before-define */
-  const allPreviousFeedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      courseUnitId: feedbackTarget.courseUnitId,
-      feedbackType: feedbackTarget.feedbackType,
-    },
-    include: [
-      {
-        model: CourseRealisation,
-        as: 'courseRealisation',
-        where: {
-          startDate: {
-            [Op.lt]: (await courseRealisation).startDate,
-          },
-        },
-      },
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        attributes: ['user_id'],
-        where: {
-          accessStatus: 'TEACHER',
-        },
-      },
-    ],
-    order: [
-      [
-        { model: CourseRealisation, as: 'courseRealisation' },
-        'startDate',
-        'DESC',
-      ],
-    ],
-  })
-  if (!allPreviousFeedbackTargets || allPreviousFeedbackTargets.length === 0)
-    return null
-
-  const currentTeacherIds = (await currentTeachers).map(
-    ({ user_id }) => user_id,
-  )
-
-  return allPreviousFeedbackTargets.find((fbt) =>
-    fbt.userFeedbackTargets.some((ufbt) =>
-      currentTeacherIds.includes(ufbt.user_id),
-    ),
-  )
-}
-
 class FeedbackTarget extends Model {
   async getSurveys() {
-    // lazily evaluate the 3 types of surveys
-    const getProgrammeSurvey = async () => {
-      const programmeSurvey = await sequelize.query(
-        `
-        SELECT s.id, s.question_ids as "questionIds"
-        FROM
-          surveys s, organisations o, course_units_organisations cu_o
-        WHERE
-          s.type = 'programme' AND
-          s.type_id = o.code AND
-          cu_o.course_unit_id = :courseUnitId AND
-          cu_o.organisation_id = o.id AND
-          ARRAY_LENGTH(s.question_ids, 1) > 0
-      `,
-        {
-          type: QueryTypes.SELECT,
-          replacements: { courseUnitId: this.courseUnitId },
-        },
-      )
-
-      for (const survey of programmeSurvey) {
-        survey.questions = await Survey.getQuestionsOfSurvey(survey)
-      }
-      return programmeSurvey
-    }
-
-    const getTeacherSurvey = async () => {
-      const previousFeedbackTarget = await getPreviousFeedbackTarget(this)
-      const previousSurvey = previousFeedbackTarget
-        ? Survey.findOne({
-            where: {
-              feedbackTargetId: previousFeedbackTarget.id,
-            },
-          })
-        : null
-
-      const existingTeacherSurvey = await Survey.findOne({
-        where: {
-          feedbackTargetId: this.id,
-        },
-      })
-
-      const teacherSurvey =
-        existingTeacherSurvey ||
-        (await createTeacherSurvey(this.id, await previousSurvey))
-      await teacherSurvey.populateQuestions()
-      return teacherSurvey
-    }
-
-    const getUniversitySurvey = async () => {
-      const universitySurvey = await Survey.findOne({
-        where: { type: 'university' },
-      })
-      await universitySurvey.populateQuestions()
-      return universitySurvey
-    }
-
-    const [programmeSurvey, teacherSurvey, universitySurvey] =
+    const [programmeSurveys, teacherSurvey, universitySurvey] =
       await Promise.all([
-        getProgrammeSurvey(),
-        getTeacherSurvey(),
+        getProgrammeSurveysByCourseUnit(this.courseUnitId),
+        getOrCreateTeacherSurvey(this),
         getUniversitySurvey(),
       ])
 
     return {
-      programmeSurvey,
+      programmeSurveys,
       teacherSurvey,
       universitySurvey,
     }
@@ -356,8 +202,8 @@ class FeedbackTarget extends Model {
   }
 
   populateQuestions(surveys) {
-    const programmeSurveyQuestions = surveys.programmeSurvey
-      ? surveys.programmeSurvey.reduce(
+    const programmeSurveyQuestions = surveys.programmeSurveys
+      ? surveys.programmeSurveys.reduce(
           (questions, survey) => questions.concat(survey.questions),
           [],
         )
@@ -452,6 +298,70 @@ class FeedbackTarget extends Model {
     const disabled = await this.isDisabled()
 
     return !disabled
+  }
+
+  /**
+   * Gets the previous feedback target that has at least one same teacher
+   * @returns {Promise<FeedbackTarget?>} its previous feedback target
+   */
+  async getPrevious() {
+    const courseRealisation = CourseRealisation.findByPk(
+      this.courseRealisationId,
+      { attributes: ['start_date'] },
+    )
+
+    const currentTeachers = UserFeedbackTarget.findAll({
+      attributes: ['userId'],
+      where: {
+        feedbackTargetId: this.id,
+        accessStatus: 'TEACHER',
+      },
+    })
+    /* eslint-disable-next-line no-use-before-define */
+    const allPreviousFeedbackTargets = await FeedbackTarget.findAll({
+      where: {
+        courseUnitId: this.courseUnitId,
+        feedbackType: this.feedbackType,
+      },
+      include: [
+        {
+          model: CourseRealisation,
+          as: 'courseRealisation',
+          where: {
+            startDate: {
+              [Op.lt]: (await courseRealisation).startDate,
+            },
+          },
+        },
+        {
+          model: UserFeedbackTarget,
+          as: 'userFeedbackTargets',
+          attributes: ['userId'],
+          where: {
+            accessStatus: 'TEACHER',
+          },
+        },
+      ],
+      order: [
+        [
+          { model: CourseRealisation, as: 'courseRealisation' },
+          'startDate',
+          'DESC',
+        ],
+      ],
+    })
+    if (!allPreviousFeedbackTargets || allPreviousFeedbackTargets.length === 0)
+      return null
+
+    const currentTeacherIds = (await currentTeachers).map(
+      ({ userId }) => userId,
+    )
+
+    return allPreviousFeedbackTargets.find((fbt) =>
+      fbt.userFeedbackTargets.some((ufbt) =>
+        currentTeacherIds.includes(ufbt.user_id),
+      ),
+    )
   }
 }
 

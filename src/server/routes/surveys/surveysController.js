@@ -2,6 +2,9 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question, Organisation } = require('../../models')
 const { createOrganisationSurveyLog } = require('../../util/auditLog')
+const {
+  getUniversitySurvey: _getUniversitySurvey,
+} = require('../../services/surveys')
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
@@ -70,15 +73,7 @@ const update = async (req, res) => {
 }
 
 const getUniversitySurvey = async (req, res) => {
-  const survey = await Survey.findOne({
-    where: {
-      type: 'university',
-    },
-  })
-
-  if (!survey) throw new ApplicationError('Not found', 404)
-
-  await survey.populateQuestions()
+  const survey = await _getUniversitySurvey()
 
   return res.send(survey)
 }
@@ -98,11 +93,7 @@ const getProgrammeSurvey = async (req, res) => {
     },
   })
 
-  const universitySurvey = await Survey.findOne({
-    where: {
-      type: 'university',
-    },
-  })
+  const universitySurvey = await _getUniversitySurvey()
 
   const organisation = await Organisation.findOne({
     where: {
@@ -111,8 +102,6 @@ const getProgrammeSurvey = async (req, res) => {
   })
 
   await survey.populateQuestions()
-
-  await universitySurvey.populateQuestions()
 
   const response = { ...survey.toJSON(), universitySurvey, organisation }
 

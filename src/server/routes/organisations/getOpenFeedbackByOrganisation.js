@@ -1,18 +1,15 @@
 const { QueryTypes } = require('sequelize')
-const { CourseUnit, Survey, Feedback } = require('../../models')
+const { CourseUnit, Feedback } = require('../../models')
+const {
+  getUniversitySurvey,
+  getProgrammeSurvey,
+} = require('../../services/surveys')
 const { sequelize } = require('../../util/dbConnection')
 
 const getOpenFeedbackByOrganisation = async (code) => {
-  const universitySurvey = await Survey.findOne({
-    where: { type: 'university' },
-  })
-  const programmeSurvey = await Survey.findOne({
-    where: { type: 'programme', typeId: code },
-  })
+  const universitySurvey = await getUniversitySurvey()
+  const programmeSurvey = await getProgrammeSurvey(code)
 
-  await universitySurvey.populateQuestions()
-
-  if (programmeSurvey) await programmeSurvey.populateQuestions()
   const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
 
   const questions = [
