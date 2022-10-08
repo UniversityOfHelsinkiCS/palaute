@@ -27,6 +27,8 @@ export default {
     edit: 'Muokkaa',
     show: 'Näytä',
     hide: 'Piilota',
+    accept: 'Hyväksy',
+    clearSelection: 'Tyhjennä valinta',
     copyToClipBoard: 'Kopioi leikepöydälle',
     feedbackOpenPeriod:
       'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
@@ -432,9 +434,9 @@ export default {
     noFeedbackResponseYet:
       'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     noAccess:
-      'Sinulla ei ole pääsyä tähän palautteeseen. Tarkista, että olet ilmoittautunut kurssille. Ilmoittautumiset päivittyvät joka yö.',
+      'Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.',
     notFound:
-      'Tätä palautetta ei löydy. Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
+      'Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
   },
 
   noadUser: {

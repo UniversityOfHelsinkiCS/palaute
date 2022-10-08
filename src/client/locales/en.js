@@ -27,6 +27,8 @@ export default {
     edit: 'Edit',
     show: 'Show',
     hide: 'Hide',
+    accept: 'Accept',
+    clearSelection: 'Clear selection',
     copyToClipBoard: 'Copy to clipboard',
     feedbackOpenPeriod:
       'Feedback can be given between {{opensAt}} and {{closesAt}}',
@@ -429,9 +431,9 @@ export default {
     noFeedbackResponseYet:
       'The teacher of the course has not yet given counter feedback',
     noAccess:
-      'Sorry, you have no access to this feedback. Make sure you are enrolled. Enrollments update every night.',
+      "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
     notFound:
-      'Cannot find this feedback! If you entered the URL manually, make sure it is correct',
+      'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
   },
   noadUser: {
     noUser:

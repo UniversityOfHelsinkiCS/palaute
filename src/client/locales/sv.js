@@ -27,6 +27,8 @@ export default {
     edit: 'Redigera',
     show: 'Visa',
     // hide: 'Piilota',
+    // accept: 'Accept',
+    // clearSelection: 'Clear selection',
     copyToClipBoard: 'Kopiera till urklipp',
     feedbackOpenPeriod: 'Respons kan ges mellan {{opensAt}} och {{closesAt}}',
     firstName: 'Förnamn',
@@ -432,8 +434,7 @@ export default {
     deleteResponsibleTeacherConfirmation:
       'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
     noFeedbackResponseYet: 'Kursens lärare har inte ännu gett motrespons',
-    noAccess:
-      'Tyvärr har du inte tillgång till denna respons. Kontrollera att du är registrerad. Registreringar uppdateras varje kväll.',
+    // noAccess: 'Sorry, we couldn\'t find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.',
     notFound:
       'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
   },
