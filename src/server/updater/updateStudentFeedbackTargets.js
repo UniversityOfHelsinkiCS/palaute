@@ -102,16 +102,28 @@ const updateStudentFeedbackTargets = async () => {
 }
 
 const updateEnrolmentsOfCourse = async (courseRealisationId) => {
-  logger.info(`[UPDATER] updating enrolments of ${courseRealisationId}`)
+  const start = Date.now()
   try {
     const { data: enrolments } = await importerClient.get(
       `palaute/updater/enrolments/${courseRealisationId}`,
     )
-    logger.info(`[UPDATER] updating ${enrolments.length} enrolments`)
     await enrolmentsHandler(enrolments)
+    const end = Date.now()
+    logger.info(
+      `[UPDATER] updated enrolments of ${courseRealisationId} (${
+        enrolments.length
+      }) - ${(end - start).toFixed(0)} ms`,
+    )
+    return 1
   } catch (error) {
     logger.error(`[UPDATER] error ${error}`)
-    throw error
+    const end = Date.now()
+    logger.info(
+      `[UPDATER] failed to update enrolments of ${courseRealisationId} - ${(
+        end - start
+      ).toFixed(0)} ms`,
+    )
+    return 0
   }
 }
 

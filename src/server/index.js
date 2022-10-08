@@ -8,6 +8,7 @@ const { connectToDatabase } = require('./util/dbConnection')
 const { redisClient } = require('./util/redisClient')
 const { updater } = require('./updater')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
+const { start: startEnrolmentsCron } = require('./util/updateEnrolmentsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 
@@ -31,6 +32,7 @@ const start = async () => {
   await updater.checkStatusOnStartup()
   await updater.start()
   await startViewsCron()
+  await startEnrolmentsCron()
   await mailer.startCron()
 
   app.listen(PORT, () => {
