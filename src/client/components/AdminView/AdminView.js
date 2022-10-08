@@ -1,10 +1,8 @@
 import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import { Route, Switch, useRouteMatch, useHistory } from 'react-router'
+import { Route, Switch, useRouteMatch } from 'react-router'
 
 import { Box, Tab } from '@mui/material'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
 import { ADMINS, images } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
@@ -12,47 +10,18 @@ import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
 import UpdaterView from './UpdaterView'
 import Title from '../common/Title'
-import useUpdaterStatus from '../../hooks/useUpdaterStatus'
 import { RouterTabs } from '../common/RouterTabs'
 import MiscTab from './MiscTab'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
 
-const styles = {
-  failureIcon: {
-    color: 'red',
-    marginLeft: 5,
-  },
-  runningIcon: {
-    color: 'orange',
-    marginLeft: 5,
-  },
-}
-
 const AdminView = () => {
   const { path, url } = useRouteMatch()
-  const history = useHistory()
 
   const { authorizedUser } = useAuthorizedUser()
 
-  const { updaterStatus } = useUpdaterStatus({
-    refetchInterval: 10_000,
-  })
-
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
-
-  const updaterIcon = (
-    <>
-      Updater
-      {updaterStatus?.status === 'RUNNING' && (
-        <AccessTimeIcon sx={styles.runningIcon} />
-      )}
-      {updaterStatus?.status === 'FAILURE' && (
-        <ErrorOutlineIcon sx={styles.failureIcon} />
-      )}
-    </>
-  )
 
   return (
     <>

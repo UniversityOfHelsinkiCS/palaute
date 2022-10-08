@@ -1,7 +1,7 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useUpdaterStatus = (options = {}) => {
+const useUpdaterStatuses = (options = {}) => {
   const queryKey = 'updaterStatus'
 
   const queryFn = async () => {
@@ -10,11 +10,11 @@ const useUpdaterStatus = (options = {}) => {
     return data
   }
 
-  const { data: updaterStatus, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: updaterStatuses, ...rest } = useQuery(queryKey, queryFn, {
     ...options,
   })
 
-  return { updaterStatus, ...rest }
+  return { updaterStatuses, ...rest }
 }
 
-export default useUpdaterStatus
+export default useUpdaterStatuses

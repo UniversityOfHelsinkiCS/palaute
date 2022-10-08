@@ -1,5 +1,5 @@
 /* eslint-disable no-alert */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   Box,
   Button,
@@ -10,74 +10,96 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Alert,
+  Chip,
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../common/LoadingProgress'
-import useUpdaterStatus from '../../hooks/useUpdaterStatus'
+import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
 import { inProduction } from '../../../config'
+import ExternalLink from '../common/ExternalLink'
 
-const StatusTable = ({ updaterStatus }) => {
-  const { startedAt, finishedAt, status } = updaterStatus
+const createGraylogLink = (updaterStatus) => {
+  const baseUrl = 'https://graylog.toska.cs.helsinki.fi'
+  const start = updaterStatus.startedAt
+  const end = updaterStatus.finishedAt || new Date()
+  return `${baseUrl}/search?q=app%3A+norppa+AND+message%3A+"%5BUPDATER%5D"&rangetype=absolute&from=${start}&to=${end}`
+}
 
-  const [endOfDuration, setEndOfDuration] = useState(Date.now())
-
-  useEffect(() => {
-    if (status === 'RUNNING') {
-      setEndOfDuration(Date.now())
-      const id = setInterval(() => setEndOfDuration(Date.now()), 1000)
-      return () => {
-        window.clearInterval(id)
-      }
-    }
-    if (finishedAt) setEndOfDuration(Date.parse(finishedAt))
-    return undefined
-  }, [status])
-
-  if (!startedAt) {
-    return (
-      <Alert severity="warning">
-        No data. Looks like updater hasn&#39;t been run yet.
-      </Alert>
-    )
+const StatusChip = ({ status }) => {
+  let color = 'default'
+  if (status === 'RUNNING') {
+    color = 'info'
+  } else if (status === 'FINISHED') {
+    color = 'success'
+  } else if (status === 'INTERRUPTED') {
+    color = 'warning'
+  } else if (status === 'FAILURE') {
+    color = 'error'
   }
+  return <Chip size="small" label={status} color={color} />
+}
 
-  const formattedStartedAt = new Date(startedAt).toLocaleString()
-  const formattedFinishedAt = finishedAt
-    ? new Date(finishedAt).toLocaleString()
-    : 'Not yet finished'
+const StatusTable = ({ updaterStatuses }) => {
+  const formattedStatuses = React.useMemo(
+    () =>
+      updaterStatuses?.map((s) => {
+        const formattedStartedAt = new Date(s.startedAt).toLocaleString()
+        const formattedFinishedAt = s.finishedAt
+          ? new Date(s.finishedAt).toLocaleString()
+          : 'Not yet finished'
 
-  const duration = intervalToDuration({
-    start: Date.parse(startedAt),
-    end: endOfDuration,
-  })
-  const formattedDuration =
-    formatDuration(duration, {
-      format: ['hours', 'minutes', 'seconds'],
-    }) || '0 seconds'
+        const duration = intervalToDuration({
+          start: Date.parse(s.startedAt),
+          end: s.finishedAt ? Date.parse(s.finishedAt) : Date.now(),
+        })
+        const formattedDuration =
+          formatDuration(duration, {
+            format: ['hours', 'minutes', 'seconds'],
+          }) || '0 seconds'
+
+        const link = createGraylogLink(s)
+
+        return {
+          ...s,
+          formattedStartedAt,
+          formattedFinishedAt,
+          formattedDuration,
+          link,
+        }
+      }),
+    [updaterStatuses],
+  )
 
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Updater status</TableCell>
+            <TableCell>Job type</TableCell>
+            <TableCell>Status</TableCell>
             <TableCell>Started at</TableCell>
             <TableCell>Finished at</TableCell>
             <TableCell>Duration</TableCell>
+            <TableCell>Logs</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key="asd">
-            <TableCell component="th" scope="row">
-              {status}
-            </TableCell>
-            <TableCell>{formattedStartedAt}</TableCell>
-            <TableCell>{formattedFinishedAt}</TableCell>
-            <TableCell>{formattedDuration}</TableCell>
-          </TableRow>
+          {formattedStatuses?.map((s) => (
+            <TableRow key={s.id}>
+              <TableCell>{s.jobType}</TableCell>
+              <TableCell>
+                <StatusChip status={s.status} />
+              </TableCell>
+              <TableCell>{s.formattedStartedAt}</TableCell>
+              <TableCell>{s.formattedFinishedAt}</TableCell>
+              <TableCell>{s.formattedDuration}</TableCell>
+              <TableCell>
+                <ExternalLink href={s.link}>Graylog</ExternalLink>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
@@ -85,7 +107,7 @@ const StatusTable = ({ updaterStatus }) => {
 }
 
 const UpdaterView = () => {
-  const { updaterStatus, isLoading, refetch } = useUpdaterStatus({
+  const { updaterStatuses, isLoading, refetch } = useUpdaterStatuses({
     refetchInterval: 10_000,
   })
 
@@ -94,7 +116,7 @@ const UpdaterView = () => {
   }
 
   const runUpdater = async () => {
-    if (updaterStatus?.status === 'RUNNING') {
+    if (updaterStatuses.some((s) => s.status === 'RUNNING')) {
       if (
         !window.confirm(
           'Updater seems to be running. Are you sure you want to start another run anyway?',
@@ -116,7 +138,7 @@ const UpdaterView = () => {
 
   return (
     <Box marginTop={4}>
-      <StatusTable updaterStatus={updaterStatus} />
+      <StatusTable updaterStatuses={updaterStatuses} />
       <Box marginTop={2}>
         <Button variant="contained" color="primary" onClick={runUpdater}>
           Run updater

@@ -2,24 +2,16 @@ const { DATE, NOW, STRING } = require('sequelize')
 const { Model } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
-class UpdaterStatus extends Model {
-  toPublicObject() {
-    return {
-      startedAt: this.started_at,
-      finishedAt: this.finished_at,
-      status: this.status,
-    }
-  }
-}
+class UpdaterStatus extends Model {}
 
 UpdaterStatus.init(
   {
-    started_at: {
+    startedAt: {
       type: DATE,
       defaultValue: NOW,
       allowNull: false,
     },
-    finished_at: {
+    finishedAt: {
       type: DATE,
       allowNull: true,
     },
@@ -27,6 +19,11 @@ UpdaterStatus.init(
       type: STRING(16),
       allowNull: false,
       defaultValue: 'IDLE',
+    },
+    jobType: {
+      type: STRING(16),
+      allowNull: true,
+      defaultValue: 'NIGHTLY',
     },
   },
   {

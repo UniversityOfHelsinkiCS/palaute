@@ -48,9 +48,11 @@ const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
   return res.send({})
 }
 
-const getUpdaterStatus = async (_, res) => {
-  const status = await UpdaterStatus.findOne()
-  return res.send(status?.toPublicObject())
+const getUpdaterStatuses = async (_, res) => {
+  const statuses = await UpdaterStatus.findAll({
+    order: [['startedAt', 'desc']],
+  })
+  return res.send(statuses)
 }
 
 const runPate = async (_, res) => {
@@ -500,7 +502,7 @@ router.post(
   '/run-updater/enrolments/:courseRealisationId',
   runUpdaterForEnrolmentsOfCourse,
 )
-router.get('/updater-status', getUpdaterStatus)
+router.get('/updater-status', getUpdaterStatuses)
 router.post('/run-pate', runPate)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)

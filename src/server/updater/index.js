@@ -10,15 +10,20 @@ const {
 } = require('./updateStudentFeedbackTargets')
 const { UpdaterStatus } = require('../models')
 
+const JOB_TYPE = 'NIGHTLY'
+
 const checkStatusOnStartup = async () => {
-  const status = await UpdaterStatus.findOne()
-  if (!status) return
-  if (status.status === 'RUNNING') {
-    status.status = 'FAILURE'
-    status.finished_at = new Date()
+  const statuses = await UpdaterStatus.findAll({
+    where: {
+      status: 'RUNNING',
+    },
+  })
+
+  for (const status of statuses) {
+    status.status = 'INTERRUPTED'
+    status.finishedAt = new Date()
     await status.save()
-    const msg =
-      'Server had a restart while updater was running, resulting in FAILURE!'
+    const msg = `Server had a restart while updater was running, interrupting ${status.jobType}`
     Sentry.captureMessage(msg)
     logger.error(`[UPDATER] ${msg}`)
   }
@@ -35,11 +40,10 @@ const runUpdater = async () => {
 const run = async () => {
   logger.info('[UPDATER] Running updater')
 
-  const [status] = await UpdaterStatus.findOrCreate({ where: { id: 1 } })
-  status.started_at = new Date()
-  status.finished_at = null
-  status.status = 'RUNNING'
-  await status.save()
+  const status = await UpdaterStatus.create({
+    status: 'RUNNING',
+    jobType: JOB_TYPE,
+  })
 
   try {
     await runUpdater()
@@ -47,13 +51,13 @@ const run = async () => {
     Sentry.captureException(error)
     Sentry.captureMessage('Updater run failed!')
     status.status = 'FAILURE'
-    status.finished_at = new Date()
+    status.finishedAt = new Date()
     await status.save()
     return logger.error('[UPDATER] finished with error', error)
   }
 
-  status.status = 'IDLE'
-  status.finished_at = new Date()
+  status.status = 'FINISHED'
+  status.finishedAt = new Date()
   await status.save()
 
   return logger.info('[UPDATER] Finished updating')
