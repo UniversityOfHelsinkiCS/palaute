@@ -61,6 +61,7 @@ export default {
     today: 'idag',
     public: 'Publik',
     notPublic: 'Inte publik',
+    // mobileNotSupported: 'Tämä näkymä ei tue mobiililaitteita.',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',

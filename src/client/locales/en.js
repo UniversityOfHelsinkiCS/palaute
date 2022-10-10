@@ -61,6 +61,7 @@ export default {
     today: 'today',
     public: 'Public',
     notPublic: 'Not public',
+    mobileNotSupported: 'Sorry, this view does not support mobile devices.',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',

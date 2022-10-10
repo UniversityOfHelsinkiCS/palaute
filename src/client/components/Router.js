@@ -12,6 +12,8 @@ import OrganisationSettings from './OrganisationSettings'
 import FeedbackTargetView from './FeedbackTargetView'
 import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from './common/LoadingProgress'
+import useIsMobile from '../hooks/useIsMobile'
+import MobileNotSupported from './common/MobileNotSupported'
 
 const styles = {
   container: (theme) => ({
@@ -29,12 +31,13 @@ const styles = {
 const Home = () => {
   const { courseSummaryAccessInfo, isLoading: accessInfoLoading } =
     useCourseSummaryAccessInfo()
+  const isMobile = useIsMobile()
 
   if (accessInfoLoading) {
     return <LoadingProgress />
   }
 
-  if (courseSummaryAccessInfo.adminAccess) {
+  if (!isMobile && courseSummaryAccessInfo.adminAccess) {
     return <Redirect to="/course-summary" />
   }
 
@@ -44,20 +47,27 @@ const Home = () => {
   return <Redirect to="/feedbacks" />
 }
 
-const Router = () => (
-  <Container sx={styles.container} maxWidth="xl">
-    <Switch>
-      <Route path="/" component={Home} exact />
-      <Route path="/feedbacks" component={UserFeedbacks} exact />
-      <Route path="/courses" component={TeacherView} exact />
-      <Route path="/targets/:id" component={FeedbackTargetView} />
-      <Route path="/organisations/:code" component={OrganisationSettings} />
-      <Route path="/course-summary" component={CourseSummary} />
-      <Route path="/cur/:id" component={CourseRealisationFeedback} />
-      <Route path="/norppa-feedback" component={NorppaFeedback} />
-      <Route path="/admin" component={AdminView} />
-    </Switch>
-  </Container>
-)
+const Router = () => {
+  const isMobile = useIsMobile()
+
+  return (
+    <Container sx={styles.container} maxWidth="xl">
+      <Switch>
+        <Route path="/" component={Home} exact />
+        <Route path="/feedbacks" component={UserFeedbacks} exact />
+        <Route path="/courses" component={TeacherView} exact />
+        <Route path="/targets/:id" component={FeedbackTargetView} />
+        <Route path="/organisations/:code" component={OrganisationSettings} />
+        <Route
+          path="/course-summary"
+          component={isMobile ? MobileNotSupported : CourseSummary}
+        />
+        <Route path="/cur/:id" component={CourseRealisationFeedback} />
+        <Route path="/norppa-feedback" component={NorppaFeedback} />
+        <Route path="/admin" component={AdminView} />
+      </Switch>
+    </Container>
+  )
+}
 
 export default Router

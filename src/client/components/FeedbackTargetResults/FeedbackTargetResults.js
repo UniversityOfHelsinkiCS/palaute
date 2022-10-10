@@ -2,7 +2,7 @@ import React, { useRef, forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Alert, useMediaQuery } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
@@ -13,6 +13,7 @@ import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -34,7 +35,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobileChrome =
-    useMediaQuery('(max-width:500px)') &&
+    useIsMobile() &&
     navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =

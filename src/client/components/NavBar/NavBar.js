@@ -6,7 +6,6 @@ import {
   Button,
   Menu,
   MenuItem,
-  useMediaQuery,
   IconButton,
   Divider,
   ButtonBase,
@@ -29,6 +28,7 @@ import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import UserPermissionsWindow from './UserPermissionsWindow'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const styles = {
   toolbar: {
@@ -127,7 +127,7 @@ const NavBar = ({ guest = false }) => {
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width:900px)')
+  const isMobile = useIsMobile()
   // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 

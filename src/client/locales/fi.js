@@ -61,6 +61,7 @@ export default {
     today: 'tänään',
     public: 'Julkinen',
     notPublic: 'Ei julkinen',
+    mobileNotSupported: 'Tämä näkymä ei tue mobiililaitteita.',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',

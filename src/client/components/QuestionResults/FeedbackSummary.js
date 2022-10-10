@@ -9,7 +9,6 @@ import {
   TableHead,
   Card,
   TableBody,
-  useMediaQuery,
 } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -20,6 +19,7 @@ import {
   countStandardDeviation,
   countMedian,
 } from './utils'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const FeedbackSummary = ({
   publicQuestionIds,
@@ -28,7 +28,7 @@ const FeedbackSummary = ({
   isTeacher,
 }) => {
   const { i18n, t } = useTranslation()
-  const isMobile = useMediaQuery('(max-width:500px)')
+  const isMobile = useIsMobile()
 
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
