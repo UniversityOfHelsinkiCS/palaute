@@ -44,6 +44,7 @@ const updateEnrolmentsOfOpenFeedbackTargets = async () => {
       } courses in ${(new Date() - now).toFixed(0)} ms`,
     )
     status.status = 'FINISHED'
+    status.finishedAt = new Date()
     await status.save()
   } catch (error) {
     Sentry.captureException(error)
