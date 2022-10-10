@@ -1,4 +1,5 @@
 const { Op } = require('sequelize')
+const { subHours } = require('date-fns')
 
 const { sequelize } = require('../util/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
@@ -47,9 +48,13 @@ const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
     }))
     .filter((target) => target.user_id && target.feedback_target_id)
 
-  await UserFeedbackTarget.bulkCreate(normalizedUserFeedbackTargets, {
-    ignoreDuplicates: true,
-  })
+  const ufbts = await UserFeedbackTarget.bulkCreate(
+    normalizedUserFeedbackTargets,
+    {
+      ignoreDuplicates: true,
+    },
+  )
+  return ufbts.length
 }
 
 const enrolmentsHandler = async (enrolments) => {
@@ -58,32 +63,38 @@ const enrolmentsHandler = async (enrolments) => {
     await promise
     userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
   }, Promise.resolve())
+  let count = 0
   try {
-    await bulkCreateUserFeedbackTargets(userFeedbackTargets)
+    count += await bulkCreateUserFeedbackTargets(userFeedbackTargets)
   } catch (err) {
-    logger.info('[UPDATER] RUNNING TARGETS ONE BY ONE')
-    userFeedbackTargets.reduce(
-      async (promise, { userId, feedbackTargetId, accessStatus }) => {
-        await promise
-        try {
-          await UserFeedbackTarget.findOrCreate({
-            where: {
-              userId,
-              feedbackTargetId,
-            },
-            defaults: {
-              user_id: userId,
-              feedback_target_id: feedbackTargetId,
-              accessStatus,
-            },
-          })
-        } catch (err) {
-          logger.error('ERR', err)
-        }
-      },
-      Promise.resolve(),
+    logger.info(
+      `[UPDATER] RUNNING ${userFeedbackTargets.length} TARGETS ONE BY ONE`,
     )
+    for (const ufbt of userFeedbackTargets) {
+      const { userId, feedbackTargetId, accessStatus } = ufbt
+      try {
+        await UserFeedbackTarget.findOrCreate({
+          where: {
+            userId,
+            feedbackTargetId,
+          },
+          defaults: {
+            user_id: userId,
+            feedback_target_id: feedbackTargetId,
+            accessStatus,
+          },
+        })
+        count += 1
+      } catch (err) {
+        if (err.name === 'SequelizeForeignKeyConstraintError') {
+          logger.info('[UPDATER] got enrolment of unknown user')
+        } else {
+          logger.error(`[UPDATER] error: ${err.message}`)
+        }
+      }
+    }
   }
+  return count
 }
 
 const updateStudentFeedbackTargets = async () => {
@@ -127,7 +138,37 @@ const updateEnrolmentsOfCourse = async (courseRealisationId) => {
   }
 }
 
+const updateNewEnrolments = async () => {
+  const start = new Date()
+  const hourAgo = subHours(start, 1)
+  try {
+    const { data: enrolments } = await importerClient.get(
+      `palaute/updater/enrolments-new?since=${hourAgo}`,
+    )
+    const count = await enrolmentsHandler(enrolments)
+    const end = Date.now()
+    logger.info(
+      `[UPDATER] updated new enrolments (${
+        enrolments.length
+      } enrolments, ${count} new user feedback targets) - ${(
+        end - start
+      ).toFixed(0)} ms`,
+    )
+    return 1
+  } catch (error) {
+    logger.error(`[UPDATER] error ${error}`)
+    const end = Date.now()
+    logger.info(
+      `[UPDATER] failed to update new enrolments - ${(end - start).toFixed(
+        0,
+      )} ms`,
+    )
+    return 0
+  }
+}
+
 module.exports = {
   updateStudentFeedbackTargets,
   updateEnrolmentsOfCourse,
+  updateNewEnrolments,
 }

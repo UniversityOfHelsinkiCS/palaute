@@ -1,6 +1,6 @@
 const { CronJob } = require('cron')
 const { inProduction, inStaging } = require('../../config')
-const updateEnrolmentsOfOpenFeedbackTargets = require('../updater/updateEnrolmentsOfOpenFeedbackTargets')
+const updateNewEnrolmentsJob = require('../updater/updateEnrolmentsOfOpenFeedbackTargets')
 const logger = require('./logger')
 
 const schedule = (cronTime, func) =>
@@ -12,7 +12,7 @@ const schedule = (cronTime, func) =>
   })
 
 const run = async () => {
-  await updateEnrolmentsOfOpenFeedbackTargets()
+  await updateNewEnrolmentsJob()
 }
 
 const start = async () => {
