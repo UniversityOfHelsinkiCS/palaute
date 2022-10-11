@@ -69,7 +69,11 @@ const NorppaFeedback = () => {
         {t('norppaFeedback:description')}
       </Typography>
       <Formik
-        initialValues={{ feedback: '', anonymous: true, responseWanted: false }}
+        initialValues={{
+          feedback: '',
+          anonymous: false,
+          responseWanted: false,
+        }}
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting, setFieldValue }) => (
