@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const updateContinuousFeedbackStatus = async ({
   id,
@@ -33,10 +32,6 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
     feedbackTarget
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
   const mutation = useMutation(updateContinuousFeedbackStatus)
 
@@ -93,19 +88,17 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
               }
               label={t('feedbackTargetView:activateContinuousFeedback')}
             />
-            {isAdmin && (
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={sendDigestEmail}
-                    disabled={!feedbackEnabled}
-                    onChange={handleSendDigestEmailChange}
-                    color="primary"
-                  />
-                }
-                label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
-              />
-            )}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={sendDigestEmail}
+                  disabled={!feedbackEnabled}
+                  onChange={handleSendDigestEmailChange}
+                  color="primary"
+                />
+              }
+              label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
+            />
           </FormGroup>
         </CardContent>
       </Card>

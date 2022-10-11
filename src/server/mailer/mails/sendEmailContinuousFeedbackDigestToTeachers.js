@@ -8,6 +8,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
+const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 
 const getTeachersWithContinuousFeedback = async () => {
@@ -194,6 +195,10 @@ const sendEmailContinuousFeedbackDigestToTeachers = async () => {
   )
 
   const continuousFeedbackIds = newContinuousFeedback.map(({ id }) => id)
+
+  logger.info(
+    `[Pate] Sending continuous feedback digests to ${teachersWithContinuousFeedback.length} teachers`,
+  )
 
   ContinuousFeedback.update(
     {

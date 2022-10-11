@@ -23,7 +23,7 @@ const run = async () => {
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
   await sendEmailReminderAboutFeedbackResponseToTeachers()
-  // await sendEmailContinuousFeedbackDigestToTeachers()
+  await sendEmailContinuousFeedbackDigestToTeachers()
   await sendAutomaticReminderOnFeedbackToStudents()
 }
 
