@@ -1,4 +1,3 @@
-const { Op } = require('sequelize')
 const Sentry = require('@sentry/node')
 const { UpdaterStatus } = require('../models')
 const logger = require('../util/logger')

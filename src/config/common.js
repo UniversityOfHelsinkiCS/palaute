@@ -1,6 +1,9 @@
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
 const normalizeOrganisationCode = (r) => {
+  if (r.startsWith('T')) {
+    return r.replace('T', '7')
+  }
   if (!r.includes('_')) {
     return r
   }

@@ -1,26 +1,9 @@
 const _ = require('lodash')
+const { normalizeOrganisationCode } = require('../../config/common')
+const { relevantOrganisations } = require('../../config/IAMConfig')
 const Organisation = require('../models/organisation')
 const { ADMINS } = require('./config')
 const { getIAMRights } = require('./IAMrights')
-
-const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
-
-const normalizeOrganisationCode = (r) => {
-  if (!r.includes('_')) {
-    return r
-  }
-
-  const [left, right] = r.split('_')
-  const prefix = [...left].filter(isNumber).join('')
-  const suffix = `${left[0]}${right}`
-  const providercode = `${prefix}0-${suffix}`
-  return providercode
-}
-
-const RELEVANT_ORGANISATION_CODES = [
-  'H906', // Kielikeskus
-  'H930', // Avoin yliopisto
-]
 
 const ORGANISATION_ACCESS_BY_IAM_GROUP = {
   'grp-kielikeskus-esihenkilot': {
@@ -60,7 +43,9 @@ const isSuperAdmin = (user) => ADMINS.includes(user.username)
 const organisationIsRelevant = (organisation) => {
   const { code } = organisation
 
-  return code.includes('-') || RELEVANT_ORGANISATION_CODES.includes(code)
+  const isRelevant = relevantOrganisations.includes(code)
+
+  return isRelevant
 }
 
 const getAccessToAll = async (accessLevel) => {

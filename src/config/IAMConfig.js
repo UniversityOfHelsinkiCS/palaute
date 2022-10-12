@@ -1,4 +1,5 @@
-const { facultyMap } = require('./data')
+const { normalizeOrganisationCode } = require('./common')
+const { facultyMap, data } = require('./data')
 
 const joryMap = {
   'hy-ttdk-tuk-jory': '100-K001',
@@ -429,6 +430,19 @@ const relevantIAMs = []
   .concat(adminGroups)
   .concat(employeeGroups)
 
+const RELEVANT_ORGANISATION_CODES = [
+  'H906', // Kielikeskus
+  'H930', // Avoin yliopisto
+]
+
+const relevantOrganisations = RELEVANT_ORGANISATION_CODES.concat(
+  data.flatMap((faculty) =>
+    faculty.programmes.map((programme) =>
+      normalizeOrganisationCode(programme.key),
+    ),
+  ),
+)
+
 module.exports = {
   isSuperAdminIam,
   isAdminIam,
@@ -442,4 +456,5 @@ module.exports = {
   opetusVaradekaani,
   getStudyLeaderGroup,
   relevantIAMs,
+  relevantOrganisations,
 }
