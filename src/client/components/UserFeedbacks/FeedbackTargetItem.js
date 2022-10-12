@@ -207,9 +207,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <ListItemText primary={periodInfo} />
 
       <Box mt={1} mb={1}>
-        {isEnded && <FeedbackEndedChip />}
+        {isEnded && !feedbackGiven && <FeedbackEndedChip />}
         {notStarted && <FeedbackNotStartedChip />}
-        {isOpen && feedbackGiven && <FeedbackGivenChip />}
+        {feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>
 
