@@ -15,7 +15,8 @@ export const courseRealisationIsMisisingFeedback = (courseRealisation) => {
 }
 
 const courseRealisationSortFn = (a, b) =>
-  new Date(b.endDate) - new Date(a.endDate)
+  new Date(b.feedbackTargets[0].closesAt) -
+  new Date(a.feedbackTargets[0].closesAt)
 
 export const sortCourseRealisations = (courseRealisations) => {
   const copy = courseRealisations ? [...courseRealisations] : []
