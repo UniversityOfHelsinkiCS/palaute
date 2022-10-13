@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next'
 import { fi, sv, enGB as en } from 'date-fns/locale'
 
 Chart.register(annotationPlugin)
-const localeForLanguage = { fi, sv, en }
+const localeForLanguage = (lang) => {
+  if (!lang) return en
+  return { fi, sv, en }[lang]
+}
 
 const getGradient = (ctx, chartArea) => {
   if (!ctx) return 'hsl(300deg 49% 56%)'
@@ -135,7 +138,7 @@ const buildChartConfig = (
     borderWidth: 1,
     label: {
       content: `${Intl.NumberFormat(
-        localeForLanguage[language].code,
+        localeForLanguage(language).code,
         valueFormatOptions,
       ).format(lastDataPoint.y)} (${feedbacks.length}/${studentCount})`,
       position: 'center',
@@ -163,7 +166,7 @@ const buildChartConfig = (
       ],
     },
     options: {
-      locale: localeForLanguage[language].code,
+      locale: localeForLanguage(language)?.code,
       responsive: true,
       aspectRatio: 5,
       maintainAspectRatio: false,
@@ -226,7 +229,7 @@ const buildChartConfig = (
           },
           min: chartMin,
           max: chartMax,
-          adapters: { date: { locale: localeForLanguage[language] } },
+          adapters: { date: { locale: localeForLanguage(language) } },
           ticks: { major: { enabled: true } },
         },
         y: {
