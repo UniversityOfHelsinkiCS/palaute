@@ -69,12 +69,8 @@ const getLomakeAccess = async (user) => {
 }
 
 const getFeedbackCorrespondentAccess = async (user) => {
-  const organisations = await Organisation.findAll({
-    attributes: ['code'],
-    where: {
-      responsibleUserId: user.id,
-    },
-  })
+  const organisations = await user.getOrganisations()
+
   if (organisations?.length > 0) {
     const access = {}
     organisations.forEach((org) => {
@@ -82,6 +78,7 @@ const getFeedbackCorrespondentAccess = async (user) => {
     })
     return access
   }
+
   return {}
 }
 

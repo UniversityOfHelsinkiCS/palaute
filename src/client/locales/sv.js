@@ -392,8 +392,6 @@ export default {
     confirmSetCorrespondent: `Ange {{firstName}} {{lastName}} som korrespondet för responsen`,
     confirmResetCorrespondent: 'Ta bort korrespondenten',
     setAsCorrespondent: 'Ange som korrespondent',
-    setCorrespondentSuccess:
-      'Fastställandet av korrespondenten för responsen lyckades',
     email: 'E-post',
     remove: 'Ta bort',
     feedbackEnabled: 'Respons aktiverad',

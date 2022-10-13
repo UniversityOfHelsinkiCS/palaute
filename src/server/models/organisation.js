@@ -66,9 +66,6 @@ Organisation.init(
       allowNull: false,
       defaultValue: [],
     },
-    responsibleUserId: {
-      type: STRING,
-    },
     publicQuestionIds: {
       type: ARRAY(INTEGER),
       allowNull: false,

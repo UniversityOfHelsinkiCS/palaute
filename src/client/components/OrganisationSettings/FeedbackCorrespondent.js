@@ -12,24 +12,34 @@ import {
   Alert,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash'
 
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../common/LoadingProgress'
 import apiClient from '../../util/apiClient'
 
-const saveFeedbackCorrespondent = async ({ code, responsibleUserId }) => {
-  const { data } = await apiClient.put(`/organisations/${code}`, {
-    responsibleUserId,
-  })
+const updateFeedbackCorrespondents =
+  (code) =>
+  async ({ userId, add }) => {
+    if (add) {
+      const { data } = await apiClient.post(
+        `/organisations/${code}/feedback-correspondents`,
+        {
+          userId,
+        },
+      )
+      return data
+    }
+    const { data } = await apiClient.delete(
+      `/organisations/${code}/feedback-correspondents/${userId}`,
+    )
+    return data
+  }
 
-  return data
-}
-
-const CorrepondentSelector = ({ handleSetAsFeedbackCorrespondent }) => {
+const CorrepondentSelector = ({ add }) => {
   const [potentialUsers, setPotentialUsers] = useState([])
   const { t } = useTranslation()
 
@@ -73,10 +83,7 @@ const CorrepondentSelector = ({ handleSetAsFeedbackCorrespondent }) => {
               </b>
             </CardContent>
             <CardActions>
-              <Button
-                onClick={handleSetAsFeedbackCorrespondent(user)}
-                variant="outlined"
-              >
+              <Button onClick={() => add(user)} variant="outlined">
                 {t('organisationSettings:setAsCorrespondent')}
               </Button>
             </CardActions>
@@ -88,10 +95,7 @@ const CorrepondentSelector = ({ handleSetAsFeedbackCorrespondent }) => {
   )
 }
 
-const FeedbackCorrespondentInfo = ({
-  correspondent,
-  handleSetAsFeedbackCorrespondent,
-}) => {
+const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
   const { t } = useTranslation()
 
   return (
@@ -112,7 +116,7 @@ const FeedbackCorrespondentInfo = ({
           <Box>
             <Button
               color="secondary"
-              onClick={handleSetAsFeedbackCorrespondent(null)}
+              onClick={() => remove(correspondent)}
               data-cy="resetCorrespondentButton"
             >
               {t('organisationSettings:remove')}
@@ -124,26 +128,42 @@ const FeedbackCorrespondentInfo = ({
   )
 }
 
-const FeedbackCorrespondentContainer = ({ organisation }) => {
-  const [correspondent, setCorrespondent] = useState(
-    organisation.responsible_user,
-  )
+const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   const { code } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const mutation = useMutation(saveFeedbackCorrespondent)
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation(updateFeedbackCorrespondents(code), {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['organisation', code], (organisation) => ({
+        ...organisation,
+        users: data,
+      }))
+    },
+    onError: () => {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    },
+  })
+
   const style = {
     display: 'flex',
     flexDirection: 'column',
     gap: 10,
   }
 
-  const confirmSetCorrespondent = (user) => {
-    if (!user) {
-      return window.confirm(t('organisationSettings:confirmResetCorrespondent'))
+  const confirmChange = (user, add = true) => {
+    const { firstName, lastName } = user
+
+    if (!add) {
+      return window.confirm(
+        t('organisationSettings:confirmResetCorrespondent', {
+          firstName,
+          lastName,
+        }),
+      )
     }
 
-    const { firstName, lastName } = user
     return window.confirm(
       t('organisationSettings:confirmSetCorrespondent', {
         firstName,
@@ -152,43 +172,35 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
     )
   }
 
-  const handleSetAsFeedbackCorrespondent = (user) => async () => {
-    if (!confirmSetCorrespondent(user)) return
+  const add = async (user) => {
+    if (!confirmChange(user, true)) return
+    await mutation.mutateAsync({ userId: user.id, add: true })
+  }
 
-    try {
-      const updatedOrganisation = await mutation.mutateAsync({
-        code,
-        responsibleUserId: user ? user.id : null,
-      })
-      setCorrespondent(updatedOrganisation.responsible_user)
-      enqueueSnackbar(t('organisationSettings:setCorrespondentSuccess'), {
-        variant: 'success',
-      })
-    } catch {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
+  const remove = async (user) => {
+    if (!confirmChange(user, false)) return
+    await mutation.mutateAsync({ userId: user.id, add: false })
   }
 
   return (
     <div style={style}>
       <Typography textTransform="uppercase">
-        {t('organisationSettings:feedbackCorrespondent')}
+        {t('organisationSettings:feedbackCorrespondent')} (
+        {feedbackCorrespondents?.length}/2)
       </Typography>
-      {correspondent ? (
-        <FeedbackCorrespondentInfo
-          correspondent={correspondent}
-          handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
-        />
-      ) : (
-        <>
-          <Alert severity="warning">
-            {t('organisationSettings:correspondentMissing')}
-          </Alert>
-          <CorrepondentSelector
-            handleSetAsFeedbackCorrespondent={handleSetAsFeedbackCorrespondent}
+      {feedbackCorrespondents?.length > 0 ? (
+        feedbackCorrespondents.map((correspondent) => (
+          <FeedbackCorrespondentInfo
+            correspondent={correspondent}
+            remove={remove}
           />
-        </>
+        ))
+      ) : (
+        <Alert severity="warning">
+          {t('organisationSettings:correspondentMissing')}
+        </Alert>
       )}
+      {feedbackCorrespondents?.length < 2 && <CorrepondentSelector add={add} />}
     </div>
   )
 }
@@ -196,17 +208,17 @@ const FeedbackCorrespondentContainer = ({ organisation }) => {
 const FeedbackCorrespondent = () => {
   const { code } = useParams()
 
-  const { organisation, isLoading } = useOrganisation(code, { skipCache: true })
+  const { organisation, isLoading } = useOrganisation(code)
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  if (!organisation.access.admin) {
-    return <Redirect to={`/organisations/${code}/settings`} />
-  }
-
-  return <FeedbackCorrespondentContainer organisation={organisation} />
+  return (
+    <FeedbackCorrespondentContainer
+      feedbackCorrespondents={organisation.users}
+    />
+  )
 }
 
 export default FeedbackCorrespondent

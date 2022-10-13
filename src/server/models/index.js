@@ -16,6 +16,7 @@ const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
 const SummaryCustomisation = require('./summaryCustomisation')
+const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorrespondent')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -129,11 +130,6 @@ User.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
 FeedbackTarget.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
-Organisation.belongsTo(User, {
-  as: 'responsible_user',
-  foreign_key: 'responsible_user_id',
-})
-
 ContinuousFeedback.belongsTo(FeedbackTarget, {
   as: 'feedback_target',
   foreign_key: 'feedback_target_id',
@@ -154,6 +150,19 @@ User.hasOne(SummaryCustomisation, {
 })
 SummaryCustomisation.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
 
+Organisation.belongsToMany(User, {
+  through: OrganisationFeedbackCorrespondent,
+  as: 'users',
+  foreignKey: 'organisation_id',
+})
+User.belongsToMany(Organisation, {
+  through: OrganisationFeedbackCorrespondent,
+  as: 'organisations',
+  foreignKey: 'user_id',
+})
+Organisation.hasMany(OrganisationFeedbackCorrespondent)
+OrganisationFeedbackCorrespondent.belongsTo(Organisation)
+
 module.exports = {
   Feedback,
   User,
@@ -173,4 +182,5 @@ module.exports = {
   FeedbackTargetLog,
   ContinuousFeedback,
   SummaryCustomisation,
+  OrganisationFeedbackCorrespondent,
 }

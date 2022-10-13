@@ -25,7 +25,7 @@ class User extends Model {
       },
       include: {
         model: User,
-        as: 'responsible_user',
+        as: 'users',
         attributes: ['id', 'firstName', 'lastName', 'email'],
       },
     })
