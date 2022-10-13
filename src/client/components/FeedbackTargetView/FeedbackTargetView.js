@@ -195,15 +195,18 @@ const FeedbackTargetView = () => {
   const showCourseSummaryLink = !feedbackCountLoading && cuFeedbackCount > 0
 
   const showFeedbacksTab =
-    isOrganisationAdmin || (isTeacher && isStarted) || feedback || isEnded
+    isAdmin ||
+    ((isOrganisationAdmin || isTeacher) && isStarted) ||
+    feedback ||
+    isEnded
   const showContinuousFeedbackTab =
     (isOrganisationAdmin || isTeacher) && continuousFeedbackEnabled
   const showEditSurveyTab =
-    isOrganisationAdmin || (isTeacher && !isOpen && !isEnded)
+    isAdmin || ((isOrganisationAdmin || isTeacher) && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
     (isOrganisationAdmin || isTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab =
-    isOrganisationAdmin || (isTeacher && (isOpen || isEnded))
+    isAdmin || ((isOrganisationAdmin || isTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = isOrganisationAdmin || isTeacher
   const showLogsTab = isAdmin

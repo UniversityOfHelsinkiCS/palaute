@@ -1,6 +1,9 @@
 const { normalizeOrganisationCode } = require('./common')
 const { facultyMap, data } = require('./data')
 
+/**
+ * Map from jory IAM to one or more programmes
+ */
 const joryMap = {
   'hy-ttdk-tuk-jory': '100-K001',
   'hy-ttdk-tum-jory': '100-M001',
@@ -131,6 +134,9 @@ const joryMap = {
   'hy-dp-docs-jory': 'T923107',
 }
 
+/**
+ * Map from jory IAM to corresponding kojo IAM
+ */
 const kojoMap = {
   'hy-ttdk-tuk-jory': 'hy-ttdk-kandi-kojot',
   'hy-ttdk-tum-jory': 'hy-ttdk-maisteri-kojot',
