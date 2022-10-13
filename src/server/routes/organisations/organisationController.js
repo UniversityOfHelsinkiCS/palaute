@@ -1,48 +1,13 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
-const {
-  Organisation,
-  OrganisationLog,
-  User,
-  OrganisationFeedbackCorrespondent,
-} = require('../../models')
+const { Organisation, OrganisationLog, User } = require('../../models')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../util/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
-
-const getAccessAndOrganisation = async (user, code, requiredAccess) => {
-  const organisationAccess = await user.getOrganisationAccess()
-
-  const { access, organisation } =
-    organisationAccess.find(({ organisation }) => organisation.code === code) ??
-    {}
-
-  const hasReadAccess = Boolean(access?.read)
-  const hasWriteAccess = Boolean(access?.write)
-  const hasAdminAccess = Boolean(access?.admin)
-
-  const missingRights = []
-  if (requiredAccess?.read && !hasReadAccess) missingRights.push('read')
-  if (requiredAccess?.write && !hasWriteAccess) missingRights.push('write')
-  if (requiredAccess?.admin && !hasAdminAccess) missingRights.push('admin')
-
-  if (missingRights.length > 0) {
-    throw new ApplicationError(
-      `User is missing rights for organisation ${code}: ${missingRights.join(
-        ', ',
-      )}`,
-    )
-  }
-
-  return {
-    organisation,
-    hasReadAccess,
-    hasWriteAccess,
-    hasAdminAccess,
-  }
-}
+const { getAccessAndOrganisation } = require('./util')
+const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
@@ -119,67 +84,6 @@ const updateOrganisation = async (req, res) => {
   const updatedOrganisation = await organisation.save()
 
   return res.send(updatedOrganisation)
-}
-
-const addOrganisationFeedbackCorrespondent = async (req, res) => {
-  const { user } = req
-  const { code } = req.params
-  const { userId } = req.body
-
-  const { organisation } = await getAccessAndOrganisation(user, code, {
-    admin: true,
-  })
-
-  const userToAdd = await User.findByPk(userId)
-  if (!userToAdd) {
-    throw new ApplicationError(`User not found`, 400)
-  }
-  if (await userToAdd.hasOrganisation(organisation)) {
-    throw new ApplicationError(
-      `User already is feedback correspondent of that organisation`,
-      400,
-    )
-  }
-
-  await OrganisationFeedbackCorrespondent.create({
-    organisationId: organisation.id,
-    userId,
-  })
-
-  const users = await organisation.getUsers()
-
-  return res.send(users)
-}
-
-const removeOrganisationFeedbackCorrespondent = async (req, res) => {
-  const { user } = req
-  const { code, userId } = req.params
-
-  const { organisation } = await getAccessAndOrganisation(user, code, {
-    admin: true,
-  })
-
-  const userToRemove = await User.findByPk(userId)
-  if (!userToRemove) {
-    throw new ApplicationError(`User ${userId} not found`, 400)
-  }
-  if (!(await userToRemove.hasOrganisation(organisation))) {
-    throw new ApplicationError(
-      'User is not feedback correspondent of that organisation',
-      400,
-    )
-  }
-
-  await OrganisationFeedbackCorrespondent.destroy({
-    where: {
-      organisationId: organisation.id,
-      userId,
-    },
-  })
-
-  const users = await organisation.getUsers()
-
-  return res.send(users)
 }
 
 const getOrganisationByCode = async (req, res) => {
@@ -265,14 +169,6 @@ router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
-
-router.post(
-  '/:code/feedback-correspondents',
-  addOrganisationFeedbackCorrespondent,
-)
-router.delete(
-  '/:code/feedback-correspondents/:userId',
-  removeOrganisationFeedbackCorrespondent,
-)
+router.use('/', feedbackCorrespondentRouter)
 
 module.exports = router
