@@ -1,4 +1,4 @@
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 const { STRING, DATE, INTEGER } = require('sequelize')
 const { Organisation } = require('../models')
 
@@ -36,13 +36,24 @@ module.exports = {
         { transaction },
       )
 
-      const organisations = await Organisation.findAll({
-        where: {
-          responsibleUserId: {
-            [Op.not]: null,
-          },
-        },
-      })
+      try {
+        console.log('CHECKING')
+        await Organisation.findOne({ attributes: ['responsibleUserId'] })
+      } catch (error) {
+        console.log(
+          'Organisations dont have responsible user id, skipping data migration',
+        )
+        return
+      }
+
+      const organisations = await queryInterface.sequelize.query(
+        `
+        SELECT id, responsible_user_id as "responsibleUserId"
+        FROM organisations
+        WHERE responsible_user_id IS NOT NULL;
+      `,
+        { type: QueryTypes.SELECT },
+      )
 
       for (const org of organisations) {
         await queryInterface.sequelize.query(
