@@ -436,9 +436,9 @@ export default {
     // noAccess: 'Sorry, we couldn\'t find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.',
     notFound:
       'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
-    // notifyOnEnrolment: 'Skickar mig ',
-    // notificationEnabled: 'Selvä, lähetämme osoitteeseen {{email}} ilmoituksen kun ilmoittautumisesi löytyy',
-    // notificationDisabled: 'Selvä, ilmoitusta ei lähetetä',
+    // notifyOnEnrolment: 'Email me when my enrolment is found',
+    // notificationEnabled: 'Ok, ilmoitamme osoitteeseen {{email}} jos ilmoittautumisesi löytyy 24h sisällä',
+    // notificationDisabled: 'Ok, ilmoitusta ei lähetetä',
   },
   noadUser: {
     noUser:

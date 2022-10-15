@@ -435,7 +435,8 @@ export default {
     notFound:
       'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
     notifyOnEnrolment: 'Email me when my enrolment is found',
-    notificationEnabled: "Ok, we'll send a notification to {{email}}",
+    notificationEnabled:
+      "Ok, we'll send a notification to {{email}} if your enrolment is found within 24h",
     notificationDisabled: "Ok, you won't be notified",
   },
   noadUser: {

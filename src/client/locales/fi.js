@@ -440,8 +440,8 @@ export default {
     notifyOnEnrolment:
       'Lähetä minulle ilmoitus heti kun ilmoittautuminen löytyy',
     notificationEnabled:
-      'Selvä, lähetämme osoitteeseen {{email}} ilmoituksen kun ilmoittautumisesi löytyy',
-    notificationDisabled: 'Selvä, ilmoitusta ei lähetetä',
+      'Ok, ilmoitamme osoitteeseen {{email}} jos ilmoittautumisesi löytyy 24h sisällä',
+    notificationDisabled: 'Ok, ilmoitusta ei lähetetä',
   },
 
   noadUser: {

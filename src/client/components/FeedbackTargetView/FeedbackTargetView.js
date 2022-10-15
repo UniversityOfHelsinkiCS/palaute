@@ -33,6 +33,7 @@ import {
   ShareOutlined,
   ReviewsOutlined,
 } from '@mui/icons-material'
+import { debounce } from 'lodash'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
@@ -166,6 +167,7 @@ const ErrorComponent = ({ error }) => {
         }`,
         { email },
       ),
+      { autoHideDuration: 10_000 },
     )
   }
 
@@ -188,7 +190,7 @@ const FeedbackTargetView = () => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading, refetch, isLoadingError, error } =
-    useFeedbackTarget(id, { retry: 1 })
+    useFeedbackTarget(id, { retry: 0 })
   const { feedbackCount: cuFeedbackCount, isLoading: feedbackCountLoading } =
     useFeedbackCount(id, {
       enabled: !isLoading && feedbackTarget?.accessStatus === 'TEACHER',
