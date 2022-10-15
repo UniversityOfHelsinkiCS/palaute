@@ -98,6 +98,13 @@ class User extends Model {
     return rows.map((row) => row.course_code)
   }
 
+  getDefaultEmail() {
+    if (this.id === this.username) {
+      return this.secondaryEmail ?? this.email
+    }
+    return this.email ?? this.secondaryEmail
+  }
+
   toJSON() {
     return _.omit(this.get(), ['iamGroups'])
   }

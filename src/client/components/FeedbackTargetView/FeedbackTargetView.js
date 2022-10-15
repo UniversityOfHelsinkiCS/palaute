@@ -10,7 +10,15 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, Link as MuiLink } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Tab,
+  Button,
+  Link as MuiLink,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -62,6 +70,7 @@ import TeacherChip from '../common/TeacherChip'
 import useOrganisations from '../../hooks/useOrganisations'
 import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
+import apiClient from '../../util/apiClient'
 
 const styles = {
   datesContainer: {
@@ -135,6 +144,44 @@ const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
   return <Box sx={styles.teacherListContainer}>{list}</Box>
 }
 
+const ErrorComponent = ({ error }) => {
+  const [enabled, setEnabled] = React.useState(
+    Boolean(error.response.data?.enabled),
+  )
+  const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+  const { id } = useParams()
+
+  const onSubmit = async () => {
+    const res = await apiClient.put(
+      `/feedback-targets/${id}/enrolment-notification`,
+      { enabled: !enabled },
+    )
+    const { enabled: newEnabled, email } = res.data
+    setEnabled(newEnabled)
+    enqueueSnackbar(
+      t(
+        `feedbackTargetView:${
+          newEnabled ? 'notificationEnabled' : 'notificationDisabled'
+        }`,
+        { email },
+      ),
+    )
+  }
+
+  return (
+    <ErrorView
+      message={errors.getFeedbackTargetError(error)}
+      response={error.response}
+    >
+      <FormControlLabel
+        control={<Checkbox checked={enabled} onChange={onSubmit} />}
+        label={t('feedbackTargetView:notifyOnEnrolment')}
+      />
+    </ErrorView>
+  )
+}
+
 const FeedbackTargetView = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
@@ -156,12 +203,7 @@ const FeedbackTargetView = () => {
   }
 
   if (isLoadingError || !feedbackTarget) {
-    return (
-      <ErrorView
-        message={errors.getFeedbackTargetError(error)}
-        response={error.response}
-      />
-    )
+    return <ErrorComponent error={error} />
   }
 
   const {

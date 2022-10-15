@@ -434,6 +434,9 @@ export default {
       "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
     notFound:
       'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
+    notifyOnEnrolment: 'Email me when my enrolment is found',
+    notificationEnabled: "Ok, we'll send a notification to {{email}}",
+    notificationDisabled: "Ok, you won't be notified",
   },
   noadUser: {
     noUser:

@@ -38,6 +38,10 @@ const {
   STUDENT_LIST_BY_COURSE_ENABLED,
   STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
 } = require('../../util/config')
+const updateEnrolmentNotification = require('./updateEnrolmentNotification')
+const {
+  getEnrolmentNotification,
+} = require('../../services/enrolmentNotices/enrolmentNotices')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -442,7 +446,11 @@ const getOne = async (req, res) => {
   )
 
   if (!feedbackTarget) {
-    throw new ApplicationError('Feedback target not found for user', 403)
+    const enabled = await getEnrolmentNotification(
+      req.user.id,
+      feedbackTargetId,
+    )
+    return res.status(403).send({ enabled })
   }
 
   const studentListVisible = feedbackTarget?.courseUnit
@@ -1173,11 +1181,13 @@ adRouter.put('/:id/remind-students', remindStudentsOnFeedback)
 adRouter.get('/:id/students-with-feedback', getStudentsWithFeedback)
 adRouter.put('/:id/open-immediately', openFeedbackImmediately)
 adRouter.delete('/:id/user-feedback-targets/:userId', deleteUserFeedbackTarget)
+adRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 
 const noadRouter = Router()
 
 noadRouter.get('/:id', getOne)
 noadRouter.get('/:id/feedbacks', getFeedbacks)
+noadRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 
 module.exports = {
   adRouter,

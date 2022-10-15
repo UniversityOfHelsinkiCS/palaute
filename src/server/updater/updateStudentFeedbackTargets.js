@@ -6,6 +6,9 @@ const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 const importerClient = require('./importerClient')
+const {
+  notifyOnEnrolmentsIfRequested,
+} = require('../services/enrolmentNotices/enrolmentNotices')
 
 const createEnrolmentTargets = async (enrolment) => {
   const {
@@ -39,62 +42,43 @@ const createEnrolmentTargets = async (enrolment) => {
   return subGroupTargets
 }
 
-const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
-  const normalizedUserFeedbackTargets = userFeedbackTargets
-    .map(({ userId, feedbackTargetId, accessStatus }) => ({
-      user_id: userId,
-      feedback_target_id: feedbackTargetId,
-      accessStatus,
-    }))
-    .filter((target) => target.user_id && target.feedback_target_id)
-
-  const ufbts = await UserFeedbackTarget.bulkCreate(
-    normalizedUserFeedbackTargets,
-    {
-      ignoreDuplicates: true,
-    },
-  )
-  return ufbts.length
-}
-
 const enrolmentsHandler = async (enrolments) => {
   const userFeedbackTargets = []
+  const newUfbts = []
   await enrolments.reduce(async (promise, enrolment) => {
     await promise
     userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
   }, Promise.resolve())
-  let count = 0
-  try {
-    count += await bulkCreateUserFeedbackTargets(userFeedbackTargets)
-  } catch (err) {
-    logger.info(
-      `[UPDATER] RUNNING ${userFeedbackTargets.length} TARGETS ONE BY ONE`,
-    )
-    for (const ufbt of userFeedbackTargets) {
-      const { userId, feedbackTargetId, accessStatus } = ufbt
-      try {
-        await UserFeedbackTarget.findOrCreate({
-          where: {
-            userId,
-            feedbackTargetId,
-          },
-          defaults: {
-            user_id: userId,
-            feedback_target_id: feedbackTargetId,
-            accessStatus,
-          },
-        })
-        count += 1
-      } catch (err) {
-        if (err.name === 'SequelizeForeignKeyConstraintError') {
-          logger.info('[UPDATER] got enrolment of unknown user')
-        } else {
-          logger.error(`[UPDATER] error: ${err.message}`)
-        }
+
+  for (const ufbt of userFeedbackTargets) {
+    const { userId, feedbackTargetId, accessStatus } = ufbt
+    try {
+      const [it, created] = await UserFeedbackTarget.findOrCreate({
+        where: {
+          userId,
+          feedbackTargetId,
+        },
+        defaults: {
+          user_id: userId,
+          feedback_target_id: feedbackTargetId,
+          accessStatus,
+        },
+      })
+
+      if (created) newUfbts.push(it)
+    } catch (err) {
+      if (err.name === 'SequelizeForeignKeyConstraintError') {
+        logger.info('[UPDATER] got enrolment of unknown user')
+      } else {
+        logger.error(`[UPDATER] error: ${err.message}`)
       }
     }
   }
-  return count
+  console.log(newUfbts.map((ufbt) => `${ufbt.userId} ${ufbt.feedbackTargetId}`))
+
+  // not super important, lets not await for this. Also it makes pate requests which may be slow
+  notifyOnEnrolmentsIfRequested(newUfbts)
+  return newUfbts.length
 }
 
 const updateStudentFeedbackTargets = async () => {

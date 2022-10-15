@@ -17,6 +17,7 @@ const redisClient = redis.createClient({
 const client = {
   get: (key) => redisClient.get(key),
   set: (key, value) => redisClient.set(key, value),
+  expire: (key, seconds) => redisClient.expire(key, seconds),
   delete: (key) => redisClient.del(key),
   flushDb: () => redisClient.flushDb(),
   connect: async () => {
@@ -41,4 +42,4 @@ const client = {
   },
 }
 
-module.exports = { redisClient: client }
+module.exports = { redis: client }

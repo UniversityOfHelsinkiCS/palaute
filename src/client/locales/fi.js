@@ -437,6 +437,11 @@ export default {
       'Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.',
     notFound:
       'Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
+    notifyOnEnrolment:
+      'Lähetä minulle ilmoitus heti kun ilmoittautuminen löytyy',
+    notificationEnabled:
+      'Selvä, lähetämme osoitteeseen {{email}} ilmoituksen kun ilmoittautumisesi löytyy',
+    notificationDisabled: 'Selvä, ilmoitusta ei lähetetä',
   },
 
   noadUser: {
