@@ -74,7 +74,6 @@ const enrolmentsHandler = async (enrolments) => {
       }
     }
   }
-  console.log(newUfbts.map((ufbt) => `${ufbt.userId} ${ufbt.feedbackTargetId}`))
 
   // not super important, lets not await for this. Also it makes pate requests which may be slow
   notifyOnEnrolmentsIfRequested(newUfbts)

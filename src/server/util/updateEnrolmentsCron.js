@@ -17,7 +17,7 @@ const run = async () => {
 
 const start = async () => {
   const cronTime = '0 * * * *'
-  run()
+  // run()
   if (!inProduction || inStaging) {
     return logger.info('Not running enrolments updater outside production')
   }
