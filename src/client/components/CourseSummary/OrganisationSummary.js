@@ -15,7 +15,6 @@ import {
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
 } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
 import Title from '../common/Title'
 import useHistoryState from '../../hooks/useHistoryState'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
@@ -34,6 +33,7 @@ const safelyParseDateRange = (dateRange) =>
 
 /**
  * Somebody PLEASE refactor this file and components @TODO
+ * update: tis better now
  */
 const OrganisationSummary = () => {
   const { t } = useTranslation()
@@ -77,7 +77,7 @@ const OrganisationSummary = () => {
   const {
     organisationSummaries,
     aggregatedOrganisations,
-    isLoading,
+    isLoading: isOrganisationsLoading,
     isFetching,
     isLoadingError,
     error,
@@ -93,10 +93,6 @@ const OrganisationSummary = () => {
   const { openAccordions, toggleAccordion } = useOpenAccordions(
     organisationSummaries?.organisations ?? [],
   )
-
-  if (isLoading || defaultDateRangeLoading) {
-    return <LoadingProgress />
-  }
 
   if (isDateLoadingError) {
     return (
@@ -115,7 +111,7 @@ const OrganisationSummary = () => {
     )
   }
 
-  const { questions } = organisationSummaries
+  const questions = organisationSummaries?.questions
 
   const handleFacultyChange = (newFaculty) => {
     setFacultyCode(newFaculty)
@@ -153,13 +149,14 @@ const OrganisationSummary = () => {
       </Box>
       <OrganisationTable
         organisations={aggregatedOrganisations}
+        isOrganisationsLoading={isOrganisationsLoading}
         questions={questions}
         organisationAccess={organisationAccess}
         initialOpenAccordions={openAccordions}
         onToggleAccordion={toggleAccordion}
-        loading={isFetching}
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
+        isRefetching={isFetching && organisationSummaries}
         filters={
           <Filters
             facultyCode={!code && isAdmin && facultyCode}
@@ -171,6 +168,7 @@ const OrganisationSummary = () => {
               handleIncludeOpenUniCourseUnitsChange
             }
             dateRange={resultingDateRange}
+            isDateRangeLoading={defaultDateRangeLoading}
             onDateRangeChange={setDateRange}
           />
         }

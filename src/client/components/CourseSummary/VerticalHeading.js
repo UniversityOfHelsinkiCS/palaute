@@ -34,6 +34,7 @@ const VerticalHeading = ({
   children,
   component: Component = 'th',
   height,
+  width,
   id,
   orderBySelection,
   setOrderBySelection,
@@ -53,7 +54,7 @@ const VerticalHeading = ({
 
   return (
     <Component>
-      <Box sx={styles.container} height={height}>
+      <Box sx={styles.container} height={height} width={width}>
         <Tooltip title={children}>
           <Box
             display="flex"

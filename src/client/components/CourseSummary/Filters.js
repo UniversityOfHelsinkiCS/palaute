@@ -23,6 +23,8 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
   container: {
+    minWidth: 500,
+    // minHeight: 300,
     textAlign: 'left',
     marginBottom: '1rem',
   },
@@ -57,7 +59,7 @@ const Filters = ({
     <div css={styles.container}>
       <Box mb={3}>
         <YearSemesterSelector
-          value={dateRange}
+          value={dateRange ?? { start: new Date(), end: new Date() }}
           onChange={onDateRangeChange}
           option={option}
           setOption={setOption}

@@ -7,6 +7,7 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
+  Box,
 } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
@@ -41,6 +42,16 @@ const styles = {
     },
   },
 }
+
+const ColumnHeadingsPlaceholder = () => (
+  <>
+    {[56, 56, 56, 56, 56, 108, 74, 74].map((w, i) => (
+      <th key={i}>
+        <Box width={w} height={250} />
+      </th>
+    ))}
+  </>
+)
 
 const OrganisationButton = ({ code, access }) => {
   const { t } = useTranslation()
@@ -77,16 +88,18 @@ const OrganisationButton = ({ code, access }) => {
 
 const OrganisationTable = ({
   organisations,
+  isOrganisationsLoading,
   questions,
   organisationAccess,
   initialOpenAccordions = [],
   onToggleAccordion = () => {},
   onOrderByChange,
   filters,
-  loading = false,
+  isRefetching = false,
   organisationLinks = false,
 }) => {
   const { t, i18n } = useTranslation()
+
   const showHidingModeButton =
     organisationAccess?.length > 1 && organisations.length > 1
 
@@ -96,20 +109,34 @@ const OrganisationTable = ({
         <thead>
           <tr>
             <th css={styles.filtersCell}>{filters}</th>
-
-            <ColumnHeadings
-              onOrderByChange={onOrderByChange}
-              questionNames={questions
-                .map(({ id, data }) => ({
-                  id,
-                  question: getLanguageValue(data?.label, i18n.language),
-                }))
-                .concat([
-                  { id: 0, question: t('courseSummary:feedbackCount') },
-                  { id: 1, question: t('courseSummary:feedbackPercentage') },
-                  { id: 2, question: t('courseSummary:feedbackResponse') },
-                ])}
-            />
+            {questions && (
+              <ColumnHeadings
+                onOrderByChange={onOrderByChange}
+                questionNames={questions
+                  .map(({ id, data }) => ({
+                    id,
+                    question: getLanguageValue(data?.label, i18n.language),
+                  }))
+                  .concat([
+                    {
+                      id: 0,
+                      question: t('courseSummary:feedbackCount'),
+                      w: 108,
+                    },
+                    {
+                      id: 1,
+                      question: t('courseSummary:feedbackPercentage'),
+                      w: 74,
+                    },
+                    {
+                      id: 2,
+                      question: t('courseSummary:feedbackResponse'),
+                      w: 74,
+                    },
+                  ])}
+              />
+            )}
+            {!questions && <ColumnHeadingsPlaceholder />}
             <th />
             {showHidingModeButton && (
               <th>
@@ -119,29 +146,32 @@ const OrganisationTable = ({
           </tr>
         </thead>
         <tbody>
-          {loading && (
+          {(isOrganisationsLoading || isRefetching) && (
             <tr>
-              <td colSpan={99} css={styles.progressCell}>
+              <td colSpan={99}>
                 <LinearProgress />
               </td>
             </tr>
           )}
 
-          {!loading &&
+          {!(isOrganisationsLoading || isRefetching) &&
             organisations.map(
-              ({
-                code,
-                id,
-                name,
-                results,
-                feedbackCount,
-                courseUnits,
-                studentCount,
-                feedbackResponsePercentage,
-              }) => (
+              (
+                {
+                  code,
+                  id,
+                  name,
+                  results,
+                  feedbackCount,
+                  courseUnits,
+                  studentCount,
+                  feedbackResponsePercentage,
+                },
+                index,
+              ) => (
                 <React.Fragment key={id}>
                   <ResultsRow
-                    id={id}
+                    index={index}
                     label={
                       <OrganisationLabel
                         name={getLanguageValue(name, i18n.language)}

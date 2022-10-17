@@ -8,10 +8,11 @@ const ColumnHeadings = ({ questionNames, onOrderByChange }) => {
 
   return (
     <>
-      {questionNames.map(({ question, id }) => (
+      {questionNames.map(({ question, id, w }) => (
         <VerticalHeading
           key={id}
           id={id}
+          width={w ?? 54}
           orderBySelection={orderBySelection}
           setOrderBySelection={setOrderBySelection}
           onOrderByChange={onOrderByChange}

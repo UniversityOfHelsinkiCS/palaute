@@ -25,7 +25,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             currentFeedbackTargetId,
             closesAt,
           },
-          i,
+          index,
         ) => {
           const feedbackResponseStatus = getFeedbackResponseGiven(
             feedbackResponseGiven,
@@ -43,6 +43,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                   />
                 }
                 level={1}
+                index={index}
                 results={results}
                 questions={questions}
                 feedbackCount={feedbackCount}
@@ -50,7 +51,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 feedbackResponseGiven={feedbackResponseStatus}
                 currentFeedbackTargetId={currentFeedbackTargetId}
               />
-              {i < courseUnits.length - 1 && <DividerRow />}
+              {index < courseUnits.length - 1 && <DividerRow />}
             </Fragment>
           )
         },

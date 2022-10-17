@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Tooltip, Typography, ButtonBase, Box } from '@mui/material'
+import { Tooltip, Typography, ButtonBase, Box, Fade } from '@mui/material'
 
 import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
@@ -168,7 +168,7 @@ const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
 }
 
 const ResultsRow = ({
-  // id,
+  index = 0,
   label,
   link,
   results,
@@ -199,77 +199,79 @@ const ResultsRow = ({
 
   return (
     <>
-      <tr>
-        <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
-          {accordionEnabled ? (
-            // eslint-disable-next-line react/button-has-type
-            <ButtonBase
-              onClick={handleToggleAccordion}
-              sx={styles.accordionButton}
-              variant="contained"
-              disableRipple
-            >
-              {label}
-              <Box sx={styles.arrowContainer}>
-                <ChevronRight
-                  sx={{
-                    ...styles.arrow,
-                    ...(accordionOpen ? styles.arrowOpen : {}),
-                  }}
-                />
-              </Box>
-            </ButtonBase>
-          ) : (
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            <>
-              {link ? (
-                <ButtonBase
-                  to={link}
-                  component={RouterLink}
-                  sx={{ ...styles.accordionButton, ...styles.link }}
-                  variant="contained"
-                >
-                  {label}
-                </ButtonBase>
-              ) : (
-                <Box paddingLeft="0.5rem">{label}</Box>
-              )}
-            </>
-          )}
-        </td>
-        {results.map(({ questionId, mean, distribution, previous }) => (
-          <ResultItem
-            key={questionId}
-            question={getQuestion(questions, questionId)}
-            mean={mean}
-            distribution={distribution}
-            previous={previous}
-            sx={styles.resultCell}
-          />
-        ))}
-        <td css={styles.countCell}>
-          <Typography component="div" variant="body2">
-            {feedbackCount}/{studentCount}
-          </Typography>
-        </td>
-        <td css={styles.percentCell}>
-          <PercentageCell label={`${percent}%`} percent={percent} />
-        </td>
-        <td css={styles.percentCell}>
-          {feedbackResponsePercentage !== undefined ? (
-            <PercentageCell
-              label={`${feedbackResponsePercent}%`}
-              percent={feedbackResponsePercent}
+      <Fade in timeout={Math.min(index * 200, 1_600)}>
+        <tr>
+          <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
+            {accordionEnabled ? (
+              // eslint-disable-next-line react/button-has-type
+              <ButtonBase
+                onClick={handleToggleAccordion}
+                sx={styles.accordionButton}
+                variant="contained"
+                disableRipple
+              >
+                {label}
+                <Box sx={styles.arrowContainer}>
+                  <ChevronRight
+                    sx={{
+                      ...styles.arrow,
+                      ...(accordionOpen ? styles.arrowOpen : {}),
+                    }}
+                  />
+                </Box>
+              </ButtonBase>
+            ) : (
+              // eslint-disable-next-line react/jsx-no-useless-fragment
+              <>
+                {link ? (
+                  <ButtonBase
+                    to={link}
+                    component={RouterLink}
+                    sx={{ ...styles.accordionButton, ...styles.link }}
+                    variant="contained"
+                  >
+                    {label}
+                  </ButtonBase>
+                ) : (
+                  <Box paddingLeft="0.5rem">{label}</Box>
+                )}
+              </>
+            )}
+          </td>
+          {results.map(({ questionId, mean, distribution, previous }) => (
+            <ResultItem
+              key={questionId}
+              question={getQuestion(questions, questionId)}
+              mean={mean}
+              distribution={distribution}
+              previous={previous}
+              sx={styles.resultCell}
             />
-          ) : (
-            <FeedbackResponseIndicator
-              status={feedbackResponseGiven}
-              currentFeedbackTargetId={currentFeedbackTargetId}
-            />
-          )}
-        </td>
-        {cellsAfter}
-      </tr>
+          ))}
+          <td css={styles.countCell}>
+            <Typography component="div" variant="body2">
+              {feedbackCount}/{studentCount}
+            </Typography>
+          </td>
+          <td css={styles.percentCell}>
+            <PercentageCell label={`${percent}%`} percent={percent} />
+          </td>
+          <td css={styles.percentCell}>
+            {feedbackResponsePercentage !== undefined ? (
+              <PercentageCell
+                label={`${feedbackResponsePercent}%`}
+                percent={feedbackResponsePercent}
+              />
+            ) : (
+              <FeedbackResponseIndicator
+                status={feedbackResponseGiven}
+                currentFeedbackTargetId={currentFeedbackTargetId}
+              />
+            )}
+          </td>
+          {cellsAfter}
+        </tr>
+      </Fade>
       {accordionEnabled && accordionOpen && children}
     </>
   )
