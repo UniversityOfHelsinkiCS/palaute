@@ -11,6 +11,7 @@ const { start: startViewsCron } = require('./util/refreshViewsCron')
 const { start: startEnrolmentsCron } = require('./util/updateEnrolmentsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
+const { seed } = require('./util/seeders')
 
 const app = express()
 
@@ -28,6 +29,7 @@ if (inProduction || inE2EMode) {
 
 const start = async () => {
   await connectToDatabase()
+  await seed()
   await redis.connect()
   await updater.checkStatusOnStartup()
   await updater.start()
