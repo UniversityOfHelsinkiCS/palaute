@@ -1,4 +1,4 @@
-const { CronJob } = require('cron')
+const cron = require('node-cron')
 const Sentry = require('@sentry/node')
 const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
@@ -63,13 +63,12 @@ const run = async () => {
   return logger.info('[UPDATER] Finished updating')
 }
 
-const schedule = (cronTime, func) =>
-  new CronJob({
-    cronTime,
-    onTick: func,
-    start: true,
-    timeZone: 'Europe/Helsinki',
+const schedule = (cronTime, job) => {
+  cron.schedule(cronTime, job, {
+    scheduled: true,
+    timezone: 'Europe/Helsinki',
   })
+}
 
 /* eslint-disable */
 const start = async () => {
