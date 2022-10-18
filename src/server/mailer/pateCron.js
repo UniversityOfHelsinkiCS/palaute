@@ -1,6 +1,6 @@
-const cron = require('node-cron')
 const { inProduction, inStaging } = require('../../config')
 const logger = require('../util/logger')
+const { schedule } = require('../util/cron')
 
 const {
   sendEmailAboutSurveyOpeningToStudents,
@@ -9,13 +9,6 @@ const {
   sendEmailContinuousFeedbackDigestToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
 } = require('./mails')
-
-const schedule = (cronTime, job) => {
-  cron.schedule(cronTime, job, {
-    scheduled: true,
-    timezone: 'Europe/Helsinki',
-  })
-}
 
 const run = async () => {
   logger.info('Running pate cron')

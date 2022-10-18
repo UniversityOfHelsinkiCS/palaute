@@ -1,14 +1,7 @@
-const cron = require('node-cron')
 const { inE2EMode, inProduction } = require('../../config')
 const { REFRESH_VIEWS_QUERY } = require('../services/summary')
 const { sequelize } = require('./dbConnection')
-
-const schedule = (cronTime, job) => {
-  cron.schedule(cronTime, job, {
-    scheduled: true,
-    timezone: 'Europe/Helsinki',
-  })
-}
+const { schedule } = require('./cron')
 
 const run = async () => {
   console.time('Refresh views')

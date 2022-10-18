@@ -1,7 +1,7 @@
-const cron = require('node-cron')
 const Sentry = require('@sentry/node')
 const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
+const { schedule } = require('../util/cron')
 const updateUsers = require('./updateUsers')
 const updateOrganisations = require('./updateOrganisations')
 const updateCoursesAndTeacherFeedbackTargets = require('./updateCoursesAndTeacherFeedbackTargets')
@@ -61,13 +61,6 @@ const run = async () => {
   await status.save()
 
   return logger.info('[UPDATER] Finished updating')
-}
-
-const schedule = (cronTime, job) => {
-  cron.schedule(cronTime, job, {
-    scheduled: true,
-    timezone: 'Europe/Helsinki',
-  })
 }
 
 /* eslint-disable */
