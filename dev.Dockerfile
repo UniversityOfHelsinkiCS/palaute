@@ -1,5 +1,7 @@
 FROM node:16
 
+ENV TZ="Europe/Helsinki"
+
 WORKDIR /usr/src/app
 
 # Setup
