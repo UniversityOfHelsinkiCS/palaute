@@ -18,7 +18,6 @@ import {
   saveSurveyValues,
   getUpperLevelQuestions,
 } from './utils'
-import EditProgrammeQuestionsDialog from './EditProgrammeQuestionsDialog'
 import { LoadingProgress } from '../common/LoadingProgress'
 
 const EditSurvey = () => {
@@ -35,20 +34,28 @@ const EditSurvey = () => {
 
   const upperLevelQuestions = getUpperLevelQuestions(survey)
 
-  const [warningDialogOpen, setWarningDialogOpen] = useState(false)
-  const handleCloseWarningDialog = () => setWarningDialogOpen(false)
-  const handleOpenWarningDialog = () => setWarningDialogOpen(true)
+  const [warningSeen, setWarningSeen] = useState(false)
 
   if (isLoading || isOrganisationLoading) {
     return <LoadingProgress />
   }
 
   const handleSubmit = async (values, actions) => {
+    const hasConfirmed =
+      warningSeen ||
+      // eslint-disable-next-line no-alert
+      window.confirm(
+        t('organisationSettings:editProgrammeQuestionsDialogContent'),
+      )
+
+    if (!hasConfirmed) return
+
+    setWarningSeen(true)
+
     try {
       await saveSurveyValues(values, surveyId)
       actions.resetForm({ values })
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-      setWarningDialogOpen(false)
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -83,24 +90,14 @@ const EditSurvey = () => {
         onSubmit={handleSubmit}
         validateOnChange={false}
       >
-        {({ handleSubmit, dirty }) => (
+        {({ handleSubmit }) => (
           <Form>
-            <QuestionEditor language={language} name="questions" />
-            <Box mt="2rem">
-              <EditProgrammeQuestionsDialog
-                open={warningDialogOpen}
-                onClose={handleCloseWarningDialog}
-                onConfirm={handleSubmit}
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                disabled={!dirty}
-                onClick={handleOpenWarningDialog}
-              >
-                {t('save')}
-              </Button>
-            </Box>
+            <QuestionEditor
+              language={language}
+              name="questions"
+              onStopEditing={handleSubmit}
+              onRemoveQuestion={handleSubmit}
+            />
           </Form>
         )}
       </Formik>

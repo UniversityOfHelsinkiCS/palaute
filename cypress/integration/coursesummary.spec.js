@@ -17,19 +17,22 @@ describe('Course summary view', () => {
 
     cy.contains('Programme survey').click()
 
+    cy.on('window:confirm', (str) => {
+      expect(str).to.eq(
+        'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?',
+      )
+    })
+
     cy.contains('Add question').click()
-    cy.get('li').contains('Textual content').click()
+    cy.get('li').contains('Textual content').click({ force: true })
 
     cy.get('textarea[id^=textual-context-text-en-questions]').type(
       'Test question programme level',
     )
 
     cy.get('[data-cy=saveQuestion]').click()
-    cy.contains('Save').click()
 
     cy.wait(1000)
-
-    cy.contains('[data-cy=programmeQuestionsDialogConfirm]', 'Edit').click()
 
     cy.visit(`${baseUrl}/organisations/500-K005/survey`)
 
