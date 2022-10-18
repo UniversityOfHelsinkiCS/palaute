@@ -76,7 +76,7 @@ const enrolmentsHandler = async (enrolments) => {
   }
 
   // not super important, lets not await for this. Also it makes pate requests which may be slow
-  notifyOnEnrolmentsIfRequested(newUfbts)
+  // skibedi skib await notifyOnEnrolmentsIfRequested(newUfbts)
   return newUfbts.length
 }
 

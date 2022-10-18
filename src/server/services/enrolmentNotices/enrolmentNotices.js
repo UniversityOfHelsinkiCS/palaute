@@ -26,6 +26,16 @@ const getEnrolmentNotification = async (userId, feedbackTargetId) => {
   return Boolean(exists)
 }
 
+const sendEmailNotifications = async (userFeedbackTargets) => {
+  mailer.sendEmailNotificationAboutEnrolments(userFeedbackTargets)
+
+  await Promise.all(
+    userFeedbackTargets.map(async (ufbt) =>
+      redis.delete(getKey(ufbt.userId, ufbt.feedbackTargetId)),
+    ),
+  )
+}
+
 const notifyOnEnrolmentsIfRequested = async (userFeedbackTargets) => {
   const expiredDate = subSeconds(new Date(), EXPIRATION_SECONDS)
 
@@ -40,13 +50,11 @@ const notifyOnEnrolmentsIfRequested = async (userFeedbackTargets) => {
   )
 
   const filtered = userFeedbackTargets.filter((_, index) => exists[index])
-  await mailer.sendEmailNotificationAboutEnrolments(filtered)
 
-  await Promise.all(
-    filtered.map(async (ufbt) =>
-      redis.delete(getKey(ufbt.userId, ufbt.feedbackTargetId)),
-    ),
-  )
+  if (filtered.length > 0) {
+    // dont await, it might be slow
+    sendEmailNotifications(filtered)
+  }
 }
 
 module.exports = {
