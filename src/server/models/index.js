@@ -17,6 +17,8 @@ const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
 const SummaryCustomisation = require('./summaryCustomisation')
 const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorrespondent')
+const Tag = require('./tag')
+const CourseRealisationsTag = require('./courseRealisationsTag')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -163,6 +165,17 @@ User.belongsToMany(Organisation, {
 Organisation.hasMany(OrganisationFeedbackCorrespondent)
 OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 
+Organisation.hasMany(Tag)
+Tag.belongsTo(Organisation)
+CourseRealisation.belongsToMany(Tag, {
+  through: CourseRealisationsTag,
+  as: 'tags',
+})
+Tag.belongsToMany(CourseRealisation, {
+  through: CourseRealisationsTag,
+  as: 'courseRealisations',
+})
+
 module.exports = {
   Feedback,
   User,
@@ -183,4 +196,6 @@ module.exports = {
   ContinuousFeedback,
   SummaryCustomisation,
   OrganisationFeedbackCorrespondent,
+  CourseRealisationsTag,
+  Tag,
 }
