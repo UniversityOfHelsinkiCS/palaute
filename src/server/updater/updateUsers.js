@@ -11,12 +11,15 @@ const usersHandler = async (users) => {
     return possibleLanguages.includes(language) ? language : fallBackLanguage
   }
 
+  const getFirstName = ({ callName, firstNames }) =>
+    callName || (firstNames ? firstNames.split(' ')[0] : null)
+
   const filteredUsers = users.map((user) => ({
     ...user,
     email: user.primaryEmail ? user.primaryEmail : user.secondaryEmail,
     secondaryEmail: user.primaryEmail ? user.secondaryEmail : null,
     language: parsePreferredLanguageUrnToLanguage(user.preferredLanguageUrn),
-    firstName: user.firstNames ? user.firstNames.split(' ')[0] : null,
+    firstName: getFirstName(user),
     username: user.eduPersonPrincipalName
       ? user.eduPersonPrincipalName.split('@')[0]
       : user.id,
