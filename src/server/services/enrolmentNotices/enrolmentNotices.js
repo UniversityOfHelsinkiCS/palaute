@@ -29,25 +29,25 @@ const getEnrolmentNotification = async (userId, feedbackTargetId) => {
 const sendEmailNotifications = async (userFeedbackTargets) => {
   mailer.sendEmailNotificationAboutEnrolments(userFeedbackTargets)
 
-  await Promise.all(
-    userFeedbackTargets.map(async (ufbt) =>
-      redis.delete(getKey(ufbt.userId, ufbt.feedbackTargetId)),
-    ),
-  )
+  for (const ufbt of userFeedbackTargets) {
+    await redis.delete(getKey(ufbt.userId, ufbt.feedbackTargetId))
+  }
 }
 
 const notifyOnEnrolmentsIfRequested = async (userFeedbackTargets) => {
   const expiredDate = subSeconds(new Date(), EXPIRATION_SECONDS)
 
-  const exists = await Promise.all(
-    userFeedbackTargets.map(async (ufbt) => {
-      if (ufbt.createdAt < expiredDate || ufbt.accessStatus !== 'STUDENT')
-        return false
-      const key = getKey(ufbt.userId, ufbt.feedbackTargetId)
-      const exists = await redis.get(key)
-      return Boolean(exists)
-    }),
-  )
+  const exists = []
+
+  for (const ufbt of userFeedbackTargets) {
+    if (ufbt.createdAt < expiredDate || ufbt.accessStatus !== 'STUDENT') {
+      exists.push(false)
+      return
+    }
+    const key = getKey(ufbt.userId, ufbt.feedbackTargetId)
+    const exist = await redis.get(key)
+    exists.push(Boolean(exist))
+  }
 
   const filtered = userFeedbackTargets.filter((_, index) => exists[index])
 

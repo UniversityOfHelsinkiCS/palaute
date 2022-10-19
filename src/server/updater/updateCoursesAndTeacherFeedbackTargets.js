@@ -242,36 +242,37 @@ const createDateCheck = async (old, updated) => {
 
 const createCourseRealisations = async (courseRealisations) => {
   // Check when course's dates have changed in sis. If that happens, create a date check.
-  await Promise.all(
-    courseRealisations.map(
-      async ({ id, name, activityPeriod, organisations, customCodeUrns }) => {
-        const newRealisation = {
-          id,
-          name,
-          ...getCourseRealisationPeriod(activityPeriod),
-          educationalInstitutionUrn:
-            getEducationalInstitutionUrn(organisations),
-          isMoocCourse: isMoocCourse(customCodeUrns),
-          teachingLanguages: getTeachingLanguages(customCodeUrns),
-        }
-        const old = await CourseRealisation.findByPk(id, {
-          attributes: ['start_date', 'end_date', 'id'],
-        })
-        if (old) {
-          // update existing
-          await createDateCheck(old, newRealisation)
+  for (const {
+    id,
+    name,
+    activityPeriod,
+    organisations,
+    customCodeUrns,
+  } of courseRealisations) {
+    const newRealisation = {
+      id,
+      name,
+      ...getCourseRealisationPeriod(activityPeriod),
+      educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
+      isMoocCourse: isMoocCourse(customCodeUrns),
+      teachingLanguages: getTeachingLanguages(customCodeUrns),
+    }
+    const old = await CourseRealisation.findByPk(id, {
+      attributes: ['start_date', 'end_date', 'id'],
+    })
+    if (old) {
+      // update existing
+      await createDateCheck(old, newRealisation)
 
-          old.name = newRealisation.name
-          old.endDate = newRealisation.endDate
-          old.startDate = newRealisation.startDate
-          old.isMoocCourse = newRealisation.isMoocCourse
-          old.teachingLanguages = newRealisation.teachingLanguages
-          return old.save()
-        }
-        return CourseRealisation.create(newRealisation)
-      },
-    ),
-  )
+      old.name = newRealisation.name
+      old.endDate = newRealisation.endDate
+      old.startDate = newRealisation.startDate
+      old.isMoocCourse = newRealisation.isMoocCourse
+      old.teachingLanguages = newRealisation.teachingLanguages
+      await old.save()
+    }
+    await CourseRealisation.create(newRealisation)
+  }
 
   const courseRealisationsOrganisations = [].concat(
     ...courseRealisations.map(({ id, organisations }) =>
