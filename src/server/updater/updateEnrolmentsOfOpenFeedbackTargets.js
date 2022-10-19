@@ -4,6 +4,15 @@ const logger = require('../util/logger')
 const { updateNewEnrolments } = require('./updateStudentFeedbackTargets')
 
 const updateNewEnrolmentsJob = async () => {
+  const running = await UpdaterStatus.findAll({
+    where: { status: 'RUNNING' },
+  })
+  if (running?.length > 0) {
+    logger.error(
+      `[UPDATER] enrolments updating skipped because another job was running`,
+    )
+    return
+  }
   const status = await UpdaterStatus.create({
     status: 'RUNNING',
     jobType: 'ENROLMENTS',

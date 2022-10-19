@@ -45,10 +45,9 @@ const createEnrolmentTargets = async (enrolment) => {
 const enrolmentsHandler = async (enrolments) => {
   const userFeedbackTargets = []
   const newUfbts = []
-  await enrolments.reduce(async (promise, enrolment) => {
-    await promise
+  for (const enrolment of enrolments) {
     userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
-  }, Promise.resolve())
+  }
 
   for (const ufbt of userFeedbackTargets) {
     const { userId, feedbackTargetId, accessStatus } = ufbt
@@ -76,7 +75,7 @@ const enrolmentsHandler = async (enrolments) => {
   }
 
   // not super important, lets not await for this. Also it makes pate requests which may be slow
-  // skibedi skib await notifyOnEnrolmentsIfRequested(newUfbts)
+  await notifyOnEnrolmentsIfRequested(newUfbts)
   return newUfbts.length
 }
 
