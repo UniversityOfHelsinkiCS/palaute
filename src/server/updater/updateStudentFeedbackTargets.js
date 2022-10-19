@@ -42,41 +42,63 @@ const createEnrolmentTargets = async (enrolment) => {
   return subGroupTargets
 }
 
+const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
+  const normalizedUserFeedbackTargets = userFeedbackTargets
+    .map(({ userId, feedbackTargetId, accessStatus }) => ({
+      user_id: userId,
+      feedback_target_id: feedbackTargetId,
+      accessStatus,
+    }))
+    .filter((target) => target.user_id && target.feedback_target_id)
+
+  const ufbts = await UserFeedbackTarget.bulkCreate(
+    normalizedUserFeedbackTargets,
+    {
+      ignoreDuplicates: true,
+    },
+  )
+  return ufbts.length
+}
+
 const enrolmentsHandler = async (enrolments) => {
   const userFeedbackTargets = []
-  const newUfbts = []
+
   for (const enrolment of enrolments) {
     userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
   }
 
-  for (const ufbt of userFeedbackTargets) {
-    const { userId, feedbackTargetId, accessStatus } = ufbt
-    try {
-      const [it, created] = await UserFeedbackTarget.findOrCreate({
-        where: {
-          userId,
-          feedbackTargetId,
-        },
-        defaults: {
-          user_id: userId,
-          feedback_target_id: feedbackTargetId,
-          accessStatus,
-        },
-      })
-
-      if (created) newUfbts.push(it)
-    } catch (err) {
-      if (err.name === 'SequelizeForeignKeyConstraintError') {
-        logger.info('[UPDATER] got enrolment of unknown user')
-      } else {
-        logger.error(`[UPDATER] error: ${err.message}`)
+  let count = 0
+  try {
+    count += await bulkCreateUserFeedbackTargets(userFeedbackTargets)
+  } catch (err) {
+    logger.info(
+      `[UPDATER] RUNNING ${userFeedbackTargets.length} TARGETS ONE BY ONE`,
+    )
+    for (const ufbt of userFeedbackTargets) {
+      const { userId, feedbackTargetId, accessStatus } = ufbt
+      try {
+        await UserFeedbackTarget.findOrCreate({
+          where: {
+            userId,
+            feedbackTargetId,
+          },
+          defaults: {
+            user_id: userId,
+            feedback_target_id: feedbackTargetId,
+            accessStatus,
+          },
+        })
+        count += 1
+      } catch (err) {
+        if (err.name === 'SequelizeForeignKeyConstraintError') {
+          logger.info('[UPDATER] got enrolment of unknown user')
+        } else {
+          logger.error(`[UPDATER] error: ${err.message}`)
+        }
       }
     }
   }
-
-  // not super important, lets not await for this. Also it makes pate requests which may be slow
-  await notifyOnEnrolmentsIfRequested(newUfbts)
-  return newUfbts.length
+  return count
 }
 
 const updateStudentFeedbackTargets = async () => {
