@@ -34,7 +34,7 @@ const start = async () => {
   await updater.checkStatusOnStartup()
   await updater.start()
   await startViewsCron()
-  await startEnrolmentsCron()
+  // await startEnrolmentsCron()
   await mailer.startCron()
 
   app.listen(PORT, () => {
