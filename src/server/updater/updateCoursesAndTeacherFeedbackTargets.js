@@ -270,8 +270,9 @@ const createCourseRealisations = async (courseRealisations) => {
       old.isMoocCourse = newRealisation.isMoocCourse
       old.teachingLanguages = newRealisation.teachingLanguages
       await old.save()
+    } else {
+      await CourseRealisation.create(newRealisation)
     }
-    await CourseRealisation.create(newRealisation)
   }
 
   const courseRealisationsOrganisations = [].concat(

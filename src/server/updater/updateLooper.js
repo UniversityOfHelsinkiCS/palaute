@@ -17,9 +17,12 @@ const mangleData = async (url, limit, handler) => {
   const start = new Date()
   // eslint-disable-next-line no-constant-condition
   while (true) {
+    let requestTime = null
     let data = null
     try {
+      const requestStart = Date.now()
       data = await getData(limit, offset, url)
+      requestTime = (Date.now() - requestStart).toFixed(0)
     } catch (e) {
       logger.info('[UPDATER] ERROR:')
       logger.error(e)
@@ -27,17 +30,25 @@ const mangleData = async (url, limit, handler) => {
     // eslint-disable-next-line no-continue
     if (data === null) continue
     if (data.length === 0) break
+
+    const processingStart = Date.now()
     await handler(data)
+    const processingTime = (Date.now() - processingStart).toFixed(0)
+
+    logger.info(`[UPDATERLOOP]`, {
+      offset,
+      items: data.length,
+      requestTime,
+      processingTime,
+    })
     count += data.length
     offset += limit
   }
+  const duration = new Date() - start
   logger.info(
-    `[UPDATER] Updated ${count} items at ${(
-      (new Date() - start) /
-      count
-    ).toFixed(4)}ms/item, total time ${((new Date() - start) / 1000).toFixed(
-      2,
-    )}s`,
+    `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
+      4,
+    )}ms/item, total time ${(duration / 1000).toFixed(2)}s`,
   )
 }
 
