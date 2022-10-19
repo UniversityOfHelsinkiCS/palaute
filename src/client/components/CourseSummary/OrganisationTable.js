@@ -7,7 +7,6 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
-  Box,
 } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
@@ -42,16 +41,6 @@ const styles = {
     },
   },
 }
-
-const ColumnHeadingsPlaceholder = () => (
-  <>
-    {[56, 56, 56, 56, 56, 108, 74, 74].map((w, i) => (
-      <th key={i}>
-        <Box width={w} height={250} />
-      </th>
-    ))}
-  </>
-)
 
 const OrganisationButton = ({ code, access }) => {
   const { t } = useTranslation()
@@ -98,7 +87,7 @@ const OrganisationTable = ({
   isRefetching = false,
   organisationLinks = false,
 }) => {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
 
   const showHidingModeButton =
     organisationAccess?.length > 1 && organisations.length > 1
@@ -109,34 +98,10 @@ const OrganisationTable = ({
         <thead>
           <tr>
             <th css={styles.filtersCell}>{filters}</th>
-            {questions && (
-              <ColumnHeadings
-                onOrderByChange={onOrderByChange}
-                questionNames={questions
-                  .map(({ id, data }) => ({
-                    id,
-                    question: getLanguageValue(data?.label, i18n.language),
-                  }))
-                  .concat([
-                    {
-                      id: 0,
-                      question: t('courseSummary:feedbackCount'),
-                      w: 108,
-                    },
-                    {
-                      id: 1,
-                      question: t('courseSummary:feedbackPercentage'),
-                      w: 74,
-                    },
-                    {
-                      id: 2,
-                      question: t('courseSummary:feedbackResponse'),
-                      w: 74,
-                    },
-                  ])}
-              />
-            )}
-            {!questions && <ColumnHeadingsPlaceholder />}
+            <ColumnHeadings
+              onOrderByChange={onOrderByChange}
+              questions={questions}
+            />
             <th />
             {showHidingModeButton && (
               <th>

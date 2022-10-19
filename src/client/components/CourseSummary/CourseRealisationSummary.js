@@ -11,7 +11,6 @@ import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSumma
 import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 import { getLanguageValue } from '../../util/languageUtils'
-import VerticalHeading from './VerticalHeading'
 import { getFeedbackResponseGiven } from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
 import Title from '../common/Title'
@@ -19,6 +18,7 @@ import { CourseRealisationLabel } from './Labels'
 import useOrganisations from '../../hooks/useOrganisations'
 import ErrorView from '../common/ErrorView'
 import errors from '../../util/errorMessage'
+import ColumnHeadings from './ColumnHeadings'
 
 const styles = {
   realisationHeading: {
@@ -45,20 +45,7 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
             <th css={styles.realisationHeading}>
               {t('courseSummary:courseRealisation')}
             </th>
-            {questions.map(({ id, data }) => (
-              <VerticalHeading key={id}>
-                {getLanguageValue(data?.label, i18n.language)}
-              </VerticalHeading>
-            ))}
-            <VerticalHeading>
-              {t('courseSummary:feedbackCount')}
-            </VerticalHeading>
-            <VerticalHeading>
-              {t('courseSummary:feedbackPercentage')}
-            </VerticalHeading>
-            <VerticalHeading>
-              {t('courseSummary:feedbackResponse')}
-            </VerticalHeading>
+            <ColumnHeadings questions={questions} />
           </tr>
         </thead>
         <tbody>

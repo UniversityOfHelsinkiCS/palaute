@@ -71,7 +71,7 @@ const VerticalHeading = ({
             </Box>
           </Box>
         </Tooltip>
-        {orderBySelection && (
+        {onOrderByChange && (
           <OrderButton
             id={id}
             orderBySelection={orderBySelection}

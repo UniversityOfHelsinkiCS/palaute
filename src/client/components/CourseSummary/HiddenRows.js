@@ -65,7 +65,7 @@ const HiddenRows = () => {
     [organisations, hiddenRows],
   )
 
-  if (isLoading || isOrganisationsLoading) return <Box>daa</Box>
+  if (isLoading || isOrganisationsLoading) return <Box />
 
   const count = hiddenRows?.length || 0
 
