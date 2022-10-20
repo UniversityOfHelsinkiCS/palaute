@@ -18,6 +18,7 @@ import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackCorrespondent from './FeedbackCorrespondent'
 import CourseSettings from './CourseSettings'
 import useOrganisation from '../../hooks/useOrganisation'
+import Tags from './Tags'
 
 const saveGeneralSettings = async ({ code, studentListVisible }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -85,6 +86,12 @@ const GeneralSettings = () => {
       <Box mb="5rem" />
       <FeedbackCorrespondent organisation={organisation} />
       <Box mb="5rem" />
+      {organisation.tags?.length > 0 && (
+        <>
+          <Tags organisation={organisation} />
+          <Box mb="5rem" />
+        </>
+      )}
       <CourseSettings />
     </Box>
   )

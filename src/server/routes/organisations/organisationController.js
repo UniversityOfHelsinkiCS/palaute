@@ -105,8 +105,11 @@ const getOrganisationByCode = async (req, res) => {
 
   const { organisation, access } = theOrganisationAccess
 
+  const tags = await organisation.getTags()
+
   const publicOrganisation = {
     ...organisation.toJSON(),
+    tags,
     access,
   }
 
