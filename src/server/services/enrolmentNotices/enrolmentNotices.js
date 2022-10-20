@@ -52,8 +52,7 @@ const notifyOnEnrolmentsIfRequested = async (userFeedbackTargets) => {
   const filtered = userFeedbackTargets.filter((_, index) => exists[index])
 
   if (filtered.length > 0) {
-    // dont await, it might be slow
-    sendEmailNotifications(filtered)
+    await sendEmailNotifications(filtered)
   }
 }
 

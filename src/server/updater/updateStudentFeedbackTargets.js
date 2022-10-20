@@ -142,6 +142,44 @@ const updateEnrolmentsOfCourse = async (courseRealisationId) => {
   }
 }
 
+const saveNewEnrolments = async (enrolments) => {
+  const userFeedbackTargets = []
+  const newUfbts = []
+
+  for (const enrolment of enrolments) {
+    userFeedbackTargets.push(...(await createEnrolmentTargets(enrolment)))
+  }
+
+  for (const ufbt of userFeedbackTargets) {
+    const { userId, feedbackTargetId, accessStatus } = ufbt
+    try {
+      const [it, created] = await UserFeedbackTarget.findOrCreate({
+        where: {
+          userId,
+          feedbackTargetId,
+        },
+        defaults: {
+          user_id: userId,
+          feedback_target_id: feedbackTargetId,
+          accessStatus,
+        },
+      })
+
+      if (created) newUfbts.push(it)
+    } catch (err) {
+      if (err.name === 'SequelizeForeignKeyConstraintError') {
+        logger.info('[UPDATER] got enrolment of unknown user')
+      } else {
+        logger.error(`[UPDATER] error: ${err.message}`)
+      }
+    }
+  }
+
+  await notifyOnEnrolmentsIfRequested(newUfbts)
+
+  return newUfbts.length
+}
+
 const updateNewEnrolments = async () => {
   const start = new Date()
   const hourAgo = subHours(start, 1)
@@ -149,7 +187,7 @@ const updateNewEnrolments = async () => {
     const { data: enrolments } = await importerClient.get(
       `palaute/updater/enrolments-new?since=${hourAgo}`,
     )
-    const count = await enrolmentsHandler(enrolments)
+    const count = await saveNewEnrolments(enrolments)
     const end = Date.now()
     logger.info(
       `[UPDATER] updated new enrolments (${
