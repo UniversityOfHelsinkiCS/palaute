@@ -24,6 +24,7 @@ const {
   User,
   Organisation,
   FeedbackTargetLog,
+  Tag,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -321,15 +322,21 @@ const getFeedbackTargetsForOrganisations = async (req, res) => {
           'teachingLanguages',
         ],
         required: true,
-        include: {
-          model: Organisation,
-          as: 'organisations',
-          attributes: [],
-          required: true,
-          where: {
-            code,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: [],
+            required: true,
+            where: {
+              code,
+            },
           },
-        },
+          {
+            model: Tag,
+            as: 'tags',
+          },
+        ],
         where: {
           startDate: {
             [Op.gte]: start,

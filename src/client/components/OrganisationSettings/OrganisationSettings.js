@@ -132,7 +132,7 @@ const OrganisationSettings = () => {
         </Route>
 
         <Route path={`${path}/upcoming`}>
-          <SemesterOverview />
+          <SemesterOverview organisation={organisation} />
         </Route>
 
         <Route path={`${path}/survey`}>

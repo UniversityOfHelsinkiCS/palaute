@@ -4,7 +4,6 @@ import {
   Box,
   Link as MuiLink,
   ButtonBase,
-  ClickAwayListener,
   Drawer,
   Paper,
   Toolbar,
@@ -17,8 +16,9 @@ import {
   AccordionDetails,
   AccordionSummary,
   Chip,
+  Button,
 } from '@mui/material'
-import { ArrowDropDown, Menu } from '@mui/icons-material'
+import { ArrowDropDown, ChevronRight, Menu } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -28,6 +28,7 @@ import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
+import MultiSelect from '../common/MultiSelect'
 
 const useOrganisationFeedbackTargets = ({
   code,
@@ -35,6 +36,7 @@ const useOrganisationFeedbackTargets = ({
   endDate,
   teacherQuery,
   courseQuery,
+  tags,
   includeWithoutTeachers,
   language,
 }) => {
@@ -57,6 +59,9 @@ const useOrganisationFeedbackTargets = ({
   const courseQueryLower = courseQuery.toLowerCase()
 
   const filterFn = (fbt) =>
+    // filter by tag
+    (!tags.length > 0 ||
+      fbt.courseRealisation.tags.some((tag) => tags.includes(tag.id))) &&
     // filter by course name
     (getLanguageValue(fbt.courseUnit.name, language)
       .toLowerCase()
@@ -95,7 +100,7 @@ const useOrganisationFeedbackTargets = ({
 
   useEffect(
     () => filter(feedbackTargets),
-    [courseQuery, teacherQuery, includeWithoutTeachers, rest.isLoading],
+    [courseQuery, teacherQuery, includeWithoutTeachers, tags, rest.isLoading],
   )
 
   return { feedbackTargets: filtered, ...rest }
@@ -131,90 +136,157 @@ const styles = {
   },
 }
 
-const FeedbackTargetDrawer = ({ feedbackTarget, onClose, language, t }) => (
-  <ClickAwayListener onClickAway={onClose}>
-    <Drawer
-      open={Boolean(feedbackTarget)}
-      onClose={onClose}
-      anchor="right"
-      variant="persistent"
-    >
-      <Toolbar />
-      {feedbackTarget && (
-        <Box mr={2} maxWidth="30rem">
-          <Box mb={2} m={3}>
-            <Box display="flex" alignItems="center">
-              <Typography variant="h6">
-                {getLanguageValue(feedbackTarget.courseUnit.name, language)}
-              </Typography>
-              <Box mr={1} />
-              <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
+const TagSelector = ({ feedbackTarget, tags, t, language }) => {
+  const originalTagIds = feedbackTarget.courseRealisation.tags.map(
+    (tag) => tag.id,
+  )
+  const [tagIds, setTagIds] = React.useState(originalTagIds)
+
+  const onSubmit = async () => {
+    console.log('not yet implemented')
+  }
+
+  return (
+    <Box display="flex" flexDirection="column" gap="1rem">
+      <MultiSelect
+        label={t('common:studyTracks')}
+        value={tagIds}
+        options={tags.map((t) => ({
+          id: t.id,
+          label: getLanguageValue(t.name, language),
+        }))}
+        onChange={setTagIds}
+      />
+      <Button onClick={onSubmit}>SAVE</Button>
+    </Box>
+  )
+}
+
+const FeedbackTargetDrawer = ({
+  feedbackTarget,
+  onClose,
+  language,
+  t,
+  organisation,
+}) => (
+  <Drawer
+    open={Boolean(feedbackTarget)}
+    onClose={onClose}
+    anchor="right"
+    variant="persistent"
+    elevation={3}
+  >
+    {feedbackTarget && (
+      <Box mr={2} width="35rem">
+        <Box display="flex">
+          <ButtonBase
+            onClick={onClose}
+            sx={{
+              height: '100vh',
+              padding: '0.5rem',
+              '&:hover': { backgroundColor: '#fafafa' },
+            }}
+            disableRipple
+          >
+            <ChevronRight color="primary" />
+          </ButtonBase>
+          <Divider orientation="vertical" flexItem />
+          <Box>
+            <Toolbar />
+            <Box mb={2} m={3}>
+              <Box display="flex" alignItems="center">
+                <Typography variant="h6">
+                  {getLanguageValue(feedbackTarget.courseUnit.name, language)}
+                </Typography>
+                <Box mr={1} />
+                <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
+              </Box>
+              <Box mb={1}>
+                <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
+                  {getLanguageValue(
+                    feedbackTarget.courseRealisation.name,
+                    language,
+                  )}
+                </MuiLink>
+              </Box>
+              {feedbackTarget.isMoocCourse && (
+                <Box>
+                  <Chip label="mooc" />
+                </Box>
+              )}
             </Box>
-            <Box mb={1}>
-              <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
-                {getLanguageValue(
-                  feedbackTarget.courseRealisation.name,
-                  language,
-                )}
-              </MuiLink>
-            </Box>
-            {feedbackTarget.isMoocCourse && (
+            <Divider />
+            <Box m={3}>
               <Box>
-                <Chip label="mooc" />
-              </Box>
-            )}
-          </Box>
-          <Divider />
-          <Box m={3}>
-            <Box>
-              <Box display="flex">
-                <Box
-                  minWidth="9rem"
-                  sx={{ color: (theme) => theme.palette.text.secondary }}
-                >
-                  {t('feedbackTargetView:coursePeriod')}:
+                <Box display="flex">
+                  <Box
+                    minWidth="9rem"
+                    sx={{ color: (theme) => theme.palette.text.secondary }}
+                  >
+                    {t('feedbackTargetView:coursePeriod')}:
+                  </Box>
+                  {new Date(
+                    feedbackTarget.courseRealisation.startDate,
+                  ).toLocaleDateString(language)}{' '}
+                  -{' '}
+                  {new Date(
+                    feedbackTarget.courseRealisation.endDate,
+                  ).toLocaleDateString(language)}
                 </Box>
-                {new Date(
-                  feedbackTarget.courseRealisation.startDate,
-                ).toLocaleDateString(language)}{' '}
-                -{' '}
-                {new Date(
-                  feedbackTarget.courseRealisation.endDate,
-                ).toLocaleDateString(language)}
-              </Box>
-              <Box display="flex" mt={0.5}>
-                <Box
-                  minWidth="9rem"
-                  sx={{ color: (theme) => theme.palette.text.secondary }}
-                >
-                  {t('feedbackTargetView:feedbackPeriod')}:
+                <Box display="flex" mt={0.5}>
+                  <Box
+                    minWidth="9rem"
+                    sx={{ color: (theme) => theme.palette.text.secondary }}
+                  >
+                    {t('feedbackTargetView:feedbackPeriod')}:
+                  </Box>
+                  {new Date(feedbackTarget.opensAt).toLocaleDateString(
+                    language,
+                  )}{' '}
+                  -{' '}
+                  {new Date(feedbackTarget.closesAt).toLocaleDateString(
+                    language,
+                  )}
                 </Box>
-                {new Date(feedbackTarget.opensAt).toLocaleDateString(language)}{' '}
-                -{' '}
-                {new Date(feedbackTarget.closesAt).toLocaleDateString(language)}
               </Box>
-            </Box>
-            <Box mt={3}>
-              <Typography variant="subtitle1">
-                {t('courseSummary:responsibleTeachers')}
-              </Typography>
-            </Box>
-            <Box mt={0.5} display="flex" flexWrap="wrap">
-              {feedbackTarget.teachers.map((teacher) => (
-                <TeacherChip user={teacher} key={teacher.id} />
-              ))}
-            </Box>
-            <Box mt={3} sx={{ color: (theme) => theme.palette.text.secondary }}>
-              {t('teacherView:feedbackCount', {
-                count: feedbackTarget.feedbackCount,
-                totalCount: feedbackTarget.studentCount,
-              })}
+              <Box mt={3}>
+                <Typography variant="subtitle1">
+                  {t('courseSummary:responsibleTeachers')}
+                </Typography>
+              </Box>
+              <Box mt={0.5} display="flex" flexWrap="wrap">
+                {feedbackTarget.teachers.map((teacher) => (
+                  <TeacherChip user={teacher} key={teacher.id} />
+                ))}
+              </Box>
+              <Box mt={3}>
+                <Typography variant="subtitle1">
+                  {t('common:studyTracks')}
+                </Typography>
+              </Box>
+              <Box mt={0.5}>
+                <TagSelector
+                  feedbackTarget={feedbackTarget}
+                  t={t}
+                  language={language}
+                  tags={organisation.tags}
+                />
+              </Box>
+              <Box
+                mt={3}
+                sx={{ color: (theme) => theme.palette.text.secondary }}
+              >
+                {t('teacherView:feedbackCount', {
+                  count: feedbackTarget.feedbackCount,
+                  totalCount: feedbackTarget.studentCount,
+                })}
+              </Box>
             </Box>
           </Box>
         </Box>
-      )}
-    </Drawer>
-  </ClickAwayListener>
+      </Box>
+    )}
+  </Drawer>
 )
 
 const FeedbackTargetItem = ({ code, name, onClick, selected, special }) => (
@@ -249,9 +321,13 @@ const FeedbackTargetItem = ({ code, name, onClick, selected, special }) => (
   </Box>
 )
 
-const Filters = ({ onChange, value, t }) => {
+const Filters = ({ onChange, value, t, language, organisation }) => {
   const [open, setOpen] = useState(false)
-  const activeCount = _.sum(Object.values(value).map((v) => (v ? 1 : 0))) - 2
+  const { tags } = organisation
+  // eslint-disable-next-line no-nested-ternary
+  const valueIsActive = (value) => value && value.length !== 0
+  const activeCount =
+    _.sum(Object.values(value).map((v) => (valueIsActive(v) ? 1 : 0))) - 2 // subtract the 2 date pickers
 
   return (
     <Box position="sticky" top="0" mb={2} zIndex={1}>
@@ -266,7 +342,14 @@ const Filters = ({ onChange, value, t }) => {
           </Box>
         </AccordionSummary>
         <AccordionDetails sx={styles.filtersContent}>
-          <Box display="flex" p={1} pb={2} alignItems="center">
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            gap={1}
+            p={1}
+            pb={2}
+            alignItems="center"
+          >
             <TextField
               type="date"
               value={format(value.startDate, 'yyyy-MM-dd')}
@@ -275,7 +358,6 @@ const Filters = ({ onChange, value, t }) => {
               }
               label={t('organisationSettings:startDate')}
             />
-            <Box m={1} />
             <TextField
               type="date"
               value={format(value.endDate, 'yyyy-MM-dd')}
@@ -284,7 +366,6 @@ const Filters = ({ onChange, value, t }) => {
               }
               label={t('organisationSettings:endDate')}
             />
-            <Box m={2} />
             <TextField
               value={value.teacherQuery}
               onChange={(e) =>
@@ -292,7 +373,6 @@ const Filters = ({ onChange, value, t }) => {
               }
               label={t('organisationSettings:findByTeacher')}
             />
-            <Box m={1} />
             <TextField
               value={value.courseQuery}
               onChange={(e) =>
@@ -300,7 +380,6 @@ const Filters = ({ onChange, value, t }) => {
               }
               label={t('organisationSettings:findByCourseUnit')}
             />
-            <Box m={2} />
             <FormControlLabel
               control={
                 <Checkbox
@@ -315,6 +394,15 @@ const Filters = ({ onChange, value, t }) => {
               }
               label={t('organisationSettings:includeWithoutTeachers')}
             />
+            <MultiSelect
+              value={value.tags}
+              onChange={(tags) => onChange({ ...value, tags })}
+              options={tags.map((tag) => ({
+                id: tag.id,
+                label: getLanguageValue(tag.name, language),
+              }))}
+              label="Opintosuunta"
+            />
           </Box>
         </AccordionDetails>
       </Accordion>
@@ -325,7 +413,8 @@ const Filters = ({ onChange, value, t }) => {
 const toMonth = (date, locale) =>
   new Date(date).toLocaleString(locale, { month: 'short' })
 
-const SemesterOverview = () => {
+const SemesterOverview = ({ organisation }) => {
+  const [opened, setOpened] = useState(null)
   const [selected, setSelected] = useState(null)
   const [filters, setFilters] = useState({
     startDate: new Date(),
@@ -333,6 +422,7 @@ const SemesterOverview = () => {
     teacherQuery: '',
     courseQuery: '',
     includeWithoutTeachers: false,
+    tags: [],
   })
 
   const { code } = useParams()
@@ -345,12 +435,19 @@ const SemesterOverview = () => {
   return (
     <Box>
       <FeedbackTargetDrawer
-        feedbackTarget={selected}
-        onClose={() => setSelected(null)}
+        organisation={organisation}
+        feedbackTarget={opened}
+        onClose={() => setOpened(null)}
         language={i18n.language}
         t={t}
       />
-      <Filters value={filters} onChange={setFilters} t={t} />
+      <Filters
+        value={filters}
+        onChange={setFilters}
+        t={t}
+        language={i18n.language}
+        organisation={organisation}
+      />
       {isLoading && <LoadingProgress />}
       {!isLoading &&
         years.map(([year, months]) => (
@@ -379,8 +476,8 @@ const SemesterOverview = () => {
                                 fbt.courseUnit.name,
                                 i18n.language,
                               )}
-                              onClick={() => setSelected(fbt)}
-                              selected={selected?.id === fbt.id}
+                              onClick={() => setOpened(fbt)}
+                              selected={opened?.id === fbt.id}
                               special={fbt.teachers.length === 0}
                             />
                           ))}
