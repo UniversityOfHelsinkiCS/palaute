@@ -49,7 +49,9 @@ const update = async (req, res) => {
 
   if (!survey) throw new ApplicationError('Not found', 404)
 
-  if (survey.type === 'university' && !isAdmin)
+  const isUniversitySurvey = survey.type === 'university'
+
+  if (isUniversitySurvey && !isAdmin)
     throw new ApplicationError('Forbidden', 403)
 
   if (survey.type === 'programme') {
@@ -59,7 +61,7 @@ const update = async (req, res) => {
 
   const { questions } = req.body
 
-  if (questions) {
+  if (questions && !isUniversitySurvey) {
     await createOrganisationSurveyLog(survey, questions, user)
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
