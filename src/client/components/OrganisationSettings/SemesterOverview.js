@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import _, { debounce } from 'lodash'
 import {
   Box,
   Link as MuiLink,
   ButtonBase,
   Drawer,
-  Paper,
   Toolbar,
   Typography,
   Divider,
@@ -17,9 +16,18 @@ import {
   AccordionSummary,
   Chip,
   Button,
+  Switch,
+  Tooltip,
+  IconButton,
+  Paper,
 } from '@mui/material'
-import { ArrowDropDown, ChevronRight, Menu } from '@mui/icons-material'
-import { useQuery } from 'react-query'
+import {
+  ArrowDropDown,
+  ChevronRight,
+  Menu,
+  SettingsBackupRestore,
+} from '@mui/icons-material'
+import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -29,6 +37,7 @@ import { LoadingProgress } from '../common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
 import MultiSelect from '../common/MultiSelect'
+import queryClient from '../../util/queryClient'
 
 const useOrganisationFeedbackTargets = ({
   code,
@@ -43,6 +52,7 @@ const useOrganisationFeedbackTargets = ({
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
   const queryFn = async () => {
+    console.log('FETCHING')
     const { data: feedbackTargets } = await apiClient.get(
       `/feedback-targets/for-organisation/${code}`,
       { params: { startDate, endDate } },
@@ -53,7 +63,7 @@ const useOrganisationFeedbackTargets = ({
 
   const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn)
 
-  const [filtered, setFiltered] = useState([])
+  const [filtered, setFiltered] = React.useState([])
 
   const [first, last] = teacherQuery.toLowerCase().split(' ')
   const courseQueryLower = courseQuery.toLowerCase()
@@ -81,7 +91,7 @@ const useOrganisationFeedbackTargets = ({
     (includeWithoutTeachers || fbt.teachers.length > 0)
 
   const filter = debounce((feedbackTargets) => {
-    if (rest.isLoading) return
+    if (rest.isLoading || rest.isFetching) return
     const filteredTargets = feedbackTargets
       .map(([d, months]) => [
         d,
@@ -96,14 +106,47 @@ const useOrganisationFeedbackTargets = ({
       ])
       .filter(([, months]) => months.length > 0)
     setFiltered(filteredTargets)
-  }, 600)
+  }, 1000)
 
-  useEffect(
+  React.useEffect(
     () => filter(feedbackTargets),
-    [courseQuery, teacherQuery, includeWithoutTeachers, tags, rest.isLoading],
+    [
+      courseQuery,
+      teacherQuery,
+      includeWithoutTeachers,
+      tags,
+      rest.dataUpdatedAt,
+    ],
   )
 
   return { feedbackTargets: filtered, ...rest }
+}
+
+const useUpdateCourseRealisationTags = () => {
+  const mutationFn = async ({
+    organisationCode,
+    courseRealisationIds,
+    tagIds,
+  }) =>
+    apiClient.put(`/tags/${organisationCode}/course-realisations`, {
+      courseRealisationIds,
+      tagIds,
+    })
+
+  const mutation = useMutation(mutationFn, {
+    onSuccess: (response, variables) => {
+      console.log('calling refetch on', [
+        'organisationFeedbackTargets',
+        variables.organisationCode,
+      ])
+      queryClient.refetchQueries([
+        'organisationFeedbackTargets',
+        variables.organisationCode,
+      ])
+    },
+  })
+
+  return mutation
 }
 
 const styles = {
@@ -117,9 +160,14 @@ const styles = {
     fontSize: '16px',
   },
   item: {
+    textTransform: 'none',
+    fontWeight: 'inherit',
+    padding: 0,
+    backgroundColor: 'white',
     borderRadius: '3px',
     '&:hover': {
       color: (theme) => theme.palette.primary.main,
+      backgroundColor: 'white',
     },
   },
   specialItem: {
@@ -127,6 +175,7 @@ const styles = {
   },
   selectedItem: {
     color: (theme) => theme.palette.primary.main,
+    outline: (theme) => `${theme.palette.info.light} solid 3px`,
   },
   filtersHead: {
     color: (theme) => theme.palette.text.secondary,
@@ -136,14 +185,24 @@ const styles = {
   },
 }
 
-const TagSelector = ({ feedbackTarget, tags, t, language }) => {
-  const originalTagIds = feedbackTarget.courseRealisation.tags.map(
-    (tag) => tag.id,
+const TagSelector = ({ organisation, selected, tags, t, language }) => {
+  const mutation = useUpdateCourseRealisationTags()
+  const [tagIds, setTagIds] = React.useState([])
+  const allOriginalTagIds = _.uniq(
+    selected.flatMap((fbt) => fbt.courseRealisation.tags.map((tag) => tag.id)),
   )
-  const [tagIds, setTagIds] = React.useState(originalTagIds)
+  const reset = () => setTagIds(allOriginalTagIds)
 
   const onSubmit = async () => {
-    console.log('not yet implemented')
+    try {
+      await mutation.mutateAsync({
+        organisationCode: organisation.code,
+        courseRealisationIds: selected.map((fbt) => fbt.courseRealisation.id),
+        tagIds,
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -157,172 +216,251 @@ const TagSelector = ({ feedbackTarget, tags, t, language }) => {
         }))}
         onChange={setTagIds}
       />
-      <Button onClick={onSubmit}>SAVE</Button>
+      <Box display="flex">
+        <Button onClick={onSubmit} variant="contained">
+          SAVE
+        </Button>
+        <IconButton onClick={reset}>
+          <SettingsBackupRestore />
+        </IconButton>
+      </Box>
     </Box>
   )
 }
 
-const FeedbackTargetDrawer = ({
+const FeedbackTargetDetails = ({
   feedbackTarget,
+  language,
+  t,
+  organisation,
+}) => (
+  <Box>
+    <Toolbar />
+    <Box mb={2} m={3}>
+      <Box display="flex" alignItems="center">
+        <Typography variant="h6">
+          {getLanguageValue(feedbackTarget.courseUnit.name, language)}
+        </Typography>
+        <Box mr={1} />
+        <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
+      </Box>
+      <Box mb={1}>
+        <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
+          {getLanguageValue(feedbackTarget.courseRealisation.name, language)}
+        </MuiLink>
+      </Box>
+      {feedbackTarget.isMoocCourse && (
+        <Box>
+          <Chip label="mooc" />
+        </Box>
+      )}
+    </Box>
+    <Divider />
+    <Box m={3}>
+      <Box>
+        <Box display="flex">
+          <Box
+            minWidth="9rem"
+            sx={{ color: (theme) => theme.palette.text.secondary }}
+          >
+            {t('feedbackTargetView:coursePeriod')}:
+          </Box>
+          {new Date(
+            feedbackTarget.courseRealisation.startDate,
+          ).toLocaleDateString(language)}{' '}
+          -{' '}
+          {new Date(
+            feedbackTarget.courseRealisation.endDate,
+          ).toLocaleDateString(language)}
+        </Box>
+        <Box display="flex" mt={0.5}>
+          <Box
+            minWidth="9rem"
+            sx={{ color: (theme) => theme.palette.text.secondary }}
+          >
+            {t('feedbackTargetView:feedbackPeriod')}:
+          </Box>
+          {new Date(feedbackTarget.opensAt).toLocaleDateString(language)} -{' '}
+          {new Date(feedbackTarget.closesAt).toLocaleDateString(language)}
+        </Box>
+      </Box>
+      <Box mt={3}>
+        <Typography variant="subtitle1">
+          {t('courseSummary:responsibleTeachers')}
+        </Typography>
+      </Box>
+      <Box mt={0.5} display="flex" flexWrap="wrap">
+        {feedbackTarget.teachers.map((teacher) => (
+          <TeacherChip user={teacher} key={teacher.id} />
+        ))}
+      </Box>
+      <Box mt={3}>
+        <Typography variant="subtitle1">{t('common:studyTracks')}</Typography>
+      </Box>
+      <Box mt={0.5}>
+        <TagSelector
+          organisation={organisation}
+          selected={[feedbackTarget]}
+          t={t}
+          language={language}
+          tags={organisation.tags}
+        />
+      </Box>
+      <Box mt={3} sx={{ color: (theme) => theme.palette.text.secondary }}>
+        {t('teacherView:feedbackCount', {
+          count: feedbackTarget.feedbackCount,
+          totalCount: feedbackTarget.studentCount,
+        })}
+      </Box>
+    </Box>
+  </Box>
+)
+
+const MultiEdit = ({ selected, language, t, organisation }) => (
+  <Box width="100%">
+    <Toolbar />
+    <Box mb={2} m={3}>
+      <Typography>
+        {t('organisationSettings:setStudyTracksForSelection')}
+      </Typography>
+      <Box m={1.5} />
+      <TagSelector
+        organisation={organisation}
+        selected={selected}
+        t={t}
+        language={language}
+        tags={organisation.tags}
+      />
+      <Box m={3} />
+      <Typography>
+        {t('organisationSettings:currentlySelected')} ({selected.length})
+      </Typography>
+      <Box m={1.5} />
+      {selected.map((fbt) => (
+        <Box key={fbt.id} my={1}>
+          <Paper>
+            <Box py={0.5}>
+              <FeedbackTargetItem
+                code={fbt.courseUnit.courseCode}
+                name={fbt.courseUnit.name}
+                tags={fbt.courseRealisation.tags}
+                selected={false}
+                language={language}
+              />
+            </Box>
+          </Paper>
+        </Box>
+      ))}
+    </Box>
+  </Box>
+)
+
+const SideDrawer = ({
+  open,
+  editMode,
+  selected,
   onClose,
   language,
   t,
   organisation,
 }) => (
   <Drawer
-    open={Boolean(feedbackTarget)}
+    open={open}
     onClose={onClose}
     anchor="right"
     variant="persistent"
     elevation={3}
   >
-    {feedbackTarget && (
-      <Box mr={2} width="35rem">
-        <Box display="flex">
-          <ButtonBase
-            onClick={onClose}
-            sx={{
-              height: '100vh',
-              padding: '0.5rem',
-              '&:hover': { backgroundColor: '#fafafa' },
-            }}
-            disableRipple
-          >
-            <ChevronRight color="primary" />
-          </ButtonBase>
-          <Divider orientation="vertical" flexItem />
-          <Box>
-            <Toolbar />
-            <Box mb={2} m={3}>
-              <Box display="flex" alignItems="center">
-                <Typography variant="h6">
-                  {getLanguageValue(feedbackTarget.courseUnit.name, language)}
-                </Typography>
-                <Box mr={1} />
-                <Typography>{feedbackTarget.courseUnit.courseCode}</Typography>
-              </Box>
-              <Box mb={1}>
-                <MuiLink component={Link} to={`/targets/${feedbackTarget.id}`}>
-                  {getLanguageValue(
-                    feedbackTarget.courseRealisation.name,
-                    language,
-                  )}
-                </MuiLink>
-              </Box>
-              {feedbackTarget.isMoocCourse && (
-                <Box>
-                  <Chip label="mooc" />
-                </Box>
-              )}
-            </Box>
-            <Divider />
-            <Box m={3}>
-              <Box>
-                <Box display="flex">
-                  <Box
-                    minWidth="9rem"
-                    sx={{ color: (theme) => theme.palette.text.secondary }}
-                  >
-                    {t('feedbackTargetView:coursePeriod')}:
-                  </Box>
-                  {new Date(
-                    feedbackTarget.courseRealisation.startDate,
-                  ).toLocaleDateString(language)}{' '}
-                  -{' '}
-                  {new Date(
-                    feedbackTarget.courseRealisation.endDate,
-                  ).toLocaleDateString(language)}
-                </Box>
-                <Box display="flex" mt={0.5}>
-                  <Box
-                    minWidth="9rem"
-                    sx={{ color: (theme) => theme.palette.text.secondary }}
-                  >
-                    {t('feedbackTargetView:feedbackPeriod')}:
-                  </Box>
-                  {new Date(feedbackTarget.opensAt).toLocaleDateString(
-                    language,
-                  )}{' '}
-                  -{' '}
-                  {new Date(feedbackTarget.closesAt).toLocaleDateString(
-                    language,
-                  )}
-                </Box>
-              </Box>
-              <Box mt={3}>
-                <Typography variant="subtitle1">
-                  {t('courseSummary:responsibleTeachers')}
-                </Typography>
-              </Box>
-              <Box mt={0.5} display="flex" flexWrap="wrap">
-                {feedbackTarget.teachers.map((teacher) => (
-                  <TeacherChip user={teacher} key={teacher.id} />
-                ))}
-              </Box>
-              <Box mt={3}>
-                <Typography variant="subtitle1">
-                  {t('common:studyTracks')}
-                </Typography>
-              </Box>
-              <Box mt={0.5}>
-                <TagSelector
-                  feedbackTarget={feedbackTarget}
-                  t={t}
-                  language={language}
-                  tags={organisation.tags}
-                />
-              </Box>
-              <Box
-                mt={3}
-                sx={{ color: (theme) => theme.palette.text.secondary }}
-              >
-                {t('teacherView:feedbackCount', {
-                  count: feedbackTarget.feedbackCount,
-                  totalCount: feedbackTarget.studentCount,
-                })}
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+    <Box mr={2} width="35rem">
+      <Box display="flex" minHeight="100vh">
+        <ButtonBase
+          onClick={onClose}
+          sx={{
+            height: 'full',
+            padding: '0.5rem',
+            '&:hover': { backgroundColor: '#fafafa' },
+          }}
+          disableRipple
+        >
+          <ChevronRight color="primary" />
+        </ButtonBase>
+        <Divider orientation="vertical" flexItem />
+        {!editMode && selected[0] ? (
+          <FeedbackTargetDetails
+            feedbackTarget={selected[0]}
+            t={t}
+            language={language}
+            organisation={organisation}
+          />
+        ) : (
+          <MultiEdit
+            organisation={organisation}
+            selected={selected}
+            t={t}
+            language={language}
+          />
+        )}
       </Box>
-    )}
+    </Box>
   </Drawer>
 )
 
-const FeedbackTargetItem = ({ code, name, onClick, selected, special }) => (
-  <Box m="0.2rem" zIndex={selected ? 1 : 0}>
-    <ButtonBase
+const FeedbackTargetButton = ({
+  code,
+  name,
+  tags,
+  onClick,
+  selected,
+  special,
+  language,
+}) => (
+  <Box m="0.3rem">
+    <Button
+      variant="contained"
+      color="inherit"
       onClick={(e) => {
         e.stopPropagation()
         onClick()
       }}
+      sx={[
+        styles.item,
+        special && styles.specialItem,
+        selected && styles.selectedItem,
+      ]}
     >
-      <Paper
-        elevation={selected ? 8 : 4}
-        sx={[
-          styles.item,
-          special && styles.specialItem,
-          selected && styles.selectedItem,
-        ]}
+      <FeedbackTargetItem
+        code={code}
+        name={name}
+        tags={tags}
+        selected={selected}
+        language={language}
+      />
+    </Button>
+  </Box>
+)
+
+const FeedbackTargetItem = ({ code, name, tags, selected, language }) => (
+  <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
+    <Typography color="textSecondary">{code}</Typography>
+    <Box mr="0.5rem" />
+    <Typography fontWeight={350}>{getLanguageValue(name, language)}</Typography>
+    <Box mr="0.3rem" />
+    {tags.length > 0 && (
+      <Tooltip
+        title={tags.map((t) => getLanguageValue(t.name, language)).join('\n')}
       >
-        <Box
-          m="0.2rem"
-          mx="0.6rem"
-          fontSize="16px"
-          display="flex"
-          alignItems="center"
-        >
-          <Typography color="textSecondary">{code}</Typography>
-          <Box mr="0.5rem" />
-          {name}
-        </Box>
-      </Paper>
-    </ButtonBase>
+        <Chip
+          label={tags.length}
+          size="small"
+          color={selected ? 'info' : 'default'}
+        />
+      </Tooltip>
+    )}
   </Box>
 )
 
 const Filters = ({ onChange, value, t, language, organisation }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = React.useState(false)
   const { tags } = organisation
   // eslint-disable-next-line no-nested-ternary
   const valueIsActive = (value) => value && value.length !== 0
@@ -414,9 +552,10 @@ const toMonth = (date, locale) =>
   new Date(date).toLocaleString(locale, { month: 'short' })
 
 const SemesterOverview = ({ organisation }) => {
-  const [opened, setOpened] = useState(null)
-  const [selected, setSelected] = useState(null)
-  const [filters, setFilters] = useState({
+  const [editMode, setEditMode] = React.useState(false)
+  const [opened, setOpened] = React.useState(null)
+  const [selected, setSelected] = React.useState([])
+  const [filters, setFilters] = React.useState({
     startDate: new Date(),
     endDate: addMonths(new Date(), 12),
     teacherQuery: '',
@@ -425,6 +564,31 @@ const SemesterOverview = ({ organisation }) => {
     tags: [],
   })
 
+  const toggleSelection = (feedbackTarget) => {
+    if (selected.includes(feedbackTarget)) {
+      setSelected(selected.filter((f) => f.id !== feedbackTarget.id))
+    } else {
+      setSelected(selected.concat(feedbackTarget))
+    }
+  }
+
+  const toggleEditMode = () => {
+    if (editMode) {
+      setSelected([])
+      setEditMode(false)
+    } else {
+      setOpened(null)
+      setEditMode(true)
+    }
+  }
+
+  const isDisplayedSelected = (fbt) => {
+    if (editMode) {
+      return selected.some((f) => f.id === fbt.id)
+    }
+    return opened?.id === fbt.id
+  }
+
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { feedbackTargets: years, isLoading } = useOrganisationFeedbackTargets({
@@ -432,12 +596,39 @@ const SemesterOverview = ({ organisation }) => {
     ...filters,
   })
 
+  // when data changes, object references in state have to be updated. Annoying.
+  React.useEffect(() => {
+    let newOpened = null
+    const newSelected = []
+    // loop through this god forsaken data structure. Time to abstract?
+    for (const year of years) {
+      for (const month of year[1]) {
+        for (const day of month[1]) {
+          for (const fbt of day[1]) {
+            if (fbt.id === opened?.id) newOpened = fbt
+            if (selected.some((f) => f.id === fbt.id)) newSelected.push(fbt)
+          }
+        }
+      }
+    }
+    setOpened(newOpened)
+    setSelected(newSelected)
+  }, [years])
+
+  console.log('render')
+
   return (
     <Box>
-      <FeedbackTargetDrawer
+      <SideDrawer
+        open={editMode || Boolean(opened)}
         organisation={organisation}
-        feedbackTarget={opened}
-        onClose={() => setOpened(null)}
+        selected={!editMode && opened ? [opened] : selected}
+        editMode={editMode}
+        onClose={() => {
+          setOpened(null)
+          setSelected([])
+          setEditMode(false)
+        }}
         language={i18n.language}
         t={t}
       />
@@ -448,48 +639,59 @@ const SemesterOverview = ({ organisation }) => {
         language={i18n.language}
         organisation={organisation}
       />
-      {isLoading && <LoadingProgress />}
-      {!isLoading &&
-        years.map(([year, months]) => (
-          <Box display="flex" key={year}>
-            <Box sx={styles.date} mt={1.5}>
-              {year}
-            </Box>
-            <Box>
-              {months.map(([firstDayOfMonth, days]) => (
-                <Box display="flex" mb={4} key={firstDayOfMonth}>
-                  <Box sx={styles.date} mt={1.5}>
-                    {toMonth(firstDayOfMonth, i18n.language)}
-                  </Box>
-                  <Box>
-                    {days.map(([startDate, feedbackTargets]) => (
-                      <Box key={startDate} display="flex" my={1.5}>
-                        <Box sx={styles.date} mr={2}>
-                          {format(Date.parse(startDate), 'dd/MM')}
+      <Box>
+        <FormControlLabel
+          control={<Switch checked={editMode} onChange={toggleEditMode} />}
+          label={t('organisationSettings:editMode')}
+        />
+      </Box>
+      <Box minWidth="35rem" maxWidth="70vw">
+        {isLoading && <LoadingProgress />}
+        {!isLoading &&
+          years.map(([year, months]) => (
+            <Box display="flex" key={year}>
+              <Box sx={styles.date} mt={1.5}>
+                {year}
+              </Box>
+              <Box>
+                {months.map(([firstDayOfMonth, days]) => (
+                  <Box display="flex" mb={4} key={firstDayOfMonth}>
+                    <Box sx={styles.date} mt={1.5}>
+                      {toMonth(firstDayOfMonth, i18n.language)}
+                    </Box>
+                    <Box>
+                      {days.map(([startDate, feedbackTargets]) => (
+                        <Box key={startDate} display="flex" my={1.5}>
+                          <Box sx={styles.date} mr={2}>
+                            {format(Date.parse(startDate), 'dd/MM')}
+                          </Box>
+                          <Box display="flex" flexWrap="wrap">
+                            {feedbackTargets.map((fbt) => (
+                              <FeedbackTargetButton
+                                key={fbt.id}
+                                code={fbt.courseUnit.courseCode}
+                                tags={fbt.courseRealisation.tags}
+                                name={fbt.courseUnit.name}
+                                onClick={() =>
+                                  editMode
+                                    ? toggleSelection(fbt)
+                                    : setOpened(fbt)
+                                }
+                                selected={isDisplayedSelected(fbt)}
+                                special={fbt.teachers.length === 0}
+                                language={i18n.language}
+                              />
+                            ))}
+                          </Box>
                         </Box>
-                        <Box display="flex" flexWrap="wrap">
-                          {feedbackTargets.map((fbt) => (
-                            <FeedbackTargetItem
-                              key={fbt.id}
-                              code={fbt.courseUnit.courseCode}
-                              name={getLanguageValue(
-                                fbt.courseUnit.name,
-                                i18n.language,
-                              )}
-                              onClick={() => setOpened(fbt)}
-                              selected={opened?.id === fbt.id}
-                              special={fbt.teachers.length === 0}
-                            />
-                          ))}
-                        </Box>
-                      </Box>
-                    ))}
+                      ))}
+                    </Box>
                   </Box>
-                </Box>
-              ))}
+                ))}
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
+      </Box>
     </Box>
   )
 }

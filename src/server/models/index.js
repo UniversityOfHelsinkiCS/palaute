@@ -165,8 +165,8 @@ User.belongsToMany(Organisation, {
 Organisation.hasMany(OrganisationFeedbackCorrespondent)
 OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 
-Organisation.hasMany(Tag)
-Tag.belongsTo(Organisation)
+Organisation.hasMany(Tag, { as: 'tags' })
+Tag.belongsTo(Organisation, { as: 'organisation' })
 CourseRealisation.belongsToMany(Tag, {
   through: CourseRealisationsTag,
   as: 'tags',
