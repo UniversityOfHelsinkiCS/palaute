@@ -9,6 +9,13 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')
 
+const checkAccess = async (user, code) => {
+  const orgAccess = await user.getOrganisationAccess()
+  if (!orgAccess.find((oac) => oac.organisation.code === code)?.access?.write) {
+    throw new ApplicationError('You dont have the required rights', 403)
+  }
+}
+
 const parseTagIds = (body) => {
   const tagIds = body?.tagIds
   if (!Array.isArray(tagIds)) {
@@ -27,6 +34,8 @@ const parseTagIds = (body) => {
 
 const updateCourseRealisationTags = async (req, res) => {
   const { organisationCode: code } = req.params
+  await checkAccess(req.user, code)
+
   const { courseRealisationIds } = req.body
   if (
     !courseRealisationIds?.length > 0 ||
