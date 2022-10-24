@@ -1,5 +1,7 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 const { getUniversitySurvey } = require('../surveys')
+const { Tag, CourseRealisationsTag } = require('../../models')
 
 const WORKLOAD_QUESTION_ID = 1042
 
@@ -191,6 +193,32 @@ const getResults = (rows, questions) => {
   return results
 }
 
+const getTags = async ({ organisationId, courseRealisations }) => {
+  if (organisationId !== 'hy-org-116715340') return []
+
+  const tagIds = (
+    await CourseRealisationsTag.findAll({
+      where: {
+        courseRealisationId: {
+          [Op.in]: courseRealisations.map(({ id }) => id),
+        },
+      },
+      attributes: ['tagId'],
+    })
+  ).map(({ tagId }) => tagId)
+
+  const tags = await Tag.findAll({
+    where: {
+      id: {
+        [Op.in]: tagIds,
+      },
+    },
+    attributes: ['id', 'name'],
+  })
+
+  return tags
+}
+
 module.exports = {
   QUESTION_AVERAGES_QUERY,
   COUNTS_QUERY,
@@ -199,4 +227,5 @@ module.exports = {
   getCounts,
   getUniversityQuestions,
   getMean,
+  getTags,
 }

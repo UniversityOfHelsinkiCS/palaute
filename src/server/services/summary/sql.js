@@ -178,9 +178,9 @@ WITH course_unit_data AS (
       cur.start_date as "startDate",
       fbtc.student_count as "studentCount",
       fbt.feedback_count as "feedbackCount",
-      cr.is_open as "isOpen"
+      cr.is_open as "isOpen",
+      cr.course_realisation_id as "id"
 
-    
     FROM course_results_view as cr
     INNER JOIN feedback_targets fbt ON fbt.course_realisation_id = cr.course_realisation_id
     INNER JOIN course_realisations cur ON cur.id = cr.course_realisation_id

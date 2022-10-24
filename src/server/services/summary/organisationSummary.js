@@ -2,7 +2,7 @@ const { subMonths } = require('date-fns')
 const _ = require('lodash')
 const { sequelize } = require('../../util/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
-const { getMean } = require('./utils')
+const { getMean, getTags } = require('./utils')
 
 const includeEmptyOrganisations = (
   organisations,
@@ -152,11 +152,20 @@ const getOrganisationSummaries = async ({
       closesAt,
       feedbackResponseGiven,
       questionIds: cu.courseRealisations[0].questionIds,
+      courseRealisations: cu.courseRealisations,
     }
   })
 
+  // get CUR tags for each kasvatustieteen kandiohjelma CU
+  const summedWithTags = await Promise.all(
+    summedCourseUnits.map(async (cu) => ({
+      ..._.omit(cu, ['courseRealisations']),
+      tags: await getTags(cu),
+    })),
+  )
+
   // object with keys as org ids and values as arrays of CUs
-  const organisations = _.groupBy(summedCourseUnits, (cu) => cu.organisationId)
+  const organisations = _.groupBy(summedWithTags, (cu) => cu.organisationId)
 
   // aggregate org stats from CUs
   const summedOrganisations = Object.entries(organisations).map(
