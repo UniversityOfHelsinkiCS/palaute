@@ -33,7 +33,6 @@ import {
   ShareOutlined,
   ReviewsOutlined,
 } from '@mui/icons-material'
-import { debounce } from 'lodash'
 
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
@@ -147,7 +146,7 @@ const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
 
 const ErrorComponent = ({ error }) => {
   const [enabled, setEnabled] = React.useState(
-    Boolean(error.response.data?.enabled),
+    Boolean(error.response?.data?.enabled),
   )
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -176,10 +175,12 @@ const ErrorComponent = ({ error }) => {
       message={errors.getFeedbackTargetError(error)}
       response={error.response}
     >
-      <FormControlLabel
-        control={<Checkbox checked={enabled} onChange={onSubmit} />}
-        label={t('feedbackTargetView:notifyOnEnrolment')}
-      />
+      {error.response?.status === 403 && (
+        <FormControlLabel
+          control={<Checkbox checked={enabled} onChange={onSubmit} />}
+          label={t('feedbackTargetView:notifyOnEnrolment')}
+        />
+      )}
     </ErrorView>
   )
 }
