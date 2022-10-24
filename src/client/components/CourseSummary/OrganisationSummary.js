@@ -49,7 +49,12 @@ const OrganisationSummary = () => {
     error: dateLoadingError,
   } = useCourseSummaryAccessInfo()
 
-  const { organisations: organisationAccess } = useOrganisations()
+  const { organisations: organisationAccess, isLoading: organisationLoading } =
+    useOrganisations()
+
+  const hasEducationBachelorAccess =
+    !organisationLoading &&
+    organisationAccess.some(({ id }) => id === 'hy-org-116715340')
 
   const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
@@ -168,8 +173,7 @@ const OrganisationSummary = () => {
             facultyCode={!code && isAdmin && facultyCode}
             keyword={keyword}
             onFacultyChange={handleFacultyChange}
-            // TODO show tag filter if access to kasvatustiede kandi
-            tagId={isAdmin && tagId}
+            tagId={hasEducationBachelorAccess && tagId}
             onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
