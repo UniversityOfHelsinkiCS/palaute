@@ -40,6 +40,7 @@ import {
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../common/LoadingProgress'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
+import SeasonalEmoji from '../common/SeasonalEmoji'
 
 const tada = keyframes({
   from: {
@@ -80,7 +81,11 @@ const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
     sx={styles.alert}
     ref={ref}
     elevation={6}
-    icon={<span css={styles.icon}>🎉</span>}
+    icon={
+      <span css={styles.icon}>
+        <SeasonalEmoji />
+      </span>
+    }
     {...props}
   >
     {children}
