@@ -341,6 +341,8 @@ export default {
     courseRealisation: 'Kursinstans',
     facultyLabel: 'Fakultet',
     allFaculties: 'Alla fakulteter',
+    // tagLabel: 'Study track',
+    // allTags: 'Show all',
     searchLabel: 'Begränsa kurser',
     searchPlaceholder: 'Begränsa kurser med kurskod',
     responsibleTeachers: 'Ansvariga lärare',

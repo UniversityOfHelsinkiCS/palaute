@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 
 import { YearSemesterSelector } from './YearSemesterSelector'
-import { data } from '../../../config/data'
+import { data, tags } from '../../../config/data' // TODO get tags from db
 import useHistoryState from '../../hooks/useHistoryState'
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -34,6 +34,8 @@ const Filters = ({
   facultyCode,
   keyword,
   onFacultyChange,
+  tagId,
+  onTagChange,
   onKeywordChange,
   includeOpenUniCourseUnits,
   onIncludeOpenUniCourseUnitsChange,
@@ -78,6 +80,25 @@ const Filters = ({
               {faculties.map((faculty) => (
                 <MenuItem key={faculty.code} value={faculty.code}>
                   {faculty.name[i18n.language] || faculty.name.se}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
+      {tagId && (
+        <Box mb={2}>
+          <FormControl fullWidth>
+            <InputLabel>{t('courseSummary:tagLabel')}</InputLabel>
+            <Select
+              value={tagId}
+              onChange={(event) => onTagChange(event.target.value)}
+              label="Opintosuunta"
+            >
+              <MenuItem value="All">{t('courseSummary:allTags')}</MenuItem>
+              {tags.map((tag, index) => (
+                <MenuItem key={index} value={index + 1}>
+                  {tag[i18n.language]}
                 </MenuItem>
               ))}
             </Select>

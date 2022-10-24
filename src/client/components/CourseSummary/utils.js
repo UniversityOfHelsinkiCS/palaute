@@ -55,6 +55,25 @@ const filterByFaculty = (organisations, facultyCode) => {
   return organisationsFilteredByFaculty
 }
 
+const filterByTag = (organisations, tagId) => {
+  if (!tagId || tagId === 'All') return organisations
+
+  const organisationsFilteredByTag = organisations.filter(({ courseUnits }) =>
+    courseUnits.some(({ tags }) => tags.some(({ id }) => id === tagId)),
+  )
+
+  const courseUnitsFiltered = organisationsFilteredByTag.map(
+    (organisation) => ({
+      ...organisation,
+      courseUnits: organisation.courseUnits.filter(({ tags }) =>
+        tags.some(({ id }) => id === tagId),
+      ),
+    }),
+  )
+
+  return courseUnitsFiltered
+}
+
 export const filterByCourseCode = (organisations, keyword) => {
   const normalizedKeyword = keyword.trim().toLowerCase()
 
@@ -261,6 +280,7 @@ export const useOpenAccordions = (organisations) => {
 export const useAggregatedOrganisationSummaries = ({
   orderBy,
   facultyCode,
+  tagId,
   code,
   keyword,
   includeOpenUniCourseUnits,
@@ -287,9 +307,14 @@ export const useAggregatedOrganisationSummaries = ({
     [filteredOrganisations, facultyCode],
   )
 
+  const filteredByTag = useMemo(
+    () => filterByTag(facultyOrganisations, tagId),
+    [facultyOrganisations, tagId],
+  )
+
   const sortedOrganisations = useMemo(
-    () => orderByCriteria(facultyOrganisations, orderBy),
-    [facultyOrganisations, orderBy],
+    () => orderByCriteria(filteredByTag, orderBy),
+    [filteredByTag, orderBy],
   )
 
   return {

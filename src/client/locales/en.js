@@ -337,6 +337,8 @@ export default {
     facultyLabel: 'Faculty',
     allFaculties: 'All faculties',
     searchLabel: 'Filter courses',
+    tagLabel: 'Study track',
+    allTags: 'Show all',
     searchPlaceholder: 'Filter courses by course code',
     responsibleTeachers: 'Responsible teachers',
     includeOpenUniCourses: 'Include open university courses',

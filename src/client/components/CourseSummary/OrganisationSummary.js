@@ -54,6 +54,7 @@ const OrganisationSummary = () => {
   const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
   const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
+  const [tagId, setTagId] = useHistoryState('tagId', 'All')
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
@@ -83,6 +84,7 @@ const OrganisationSummary = () => {
     error,
   } = useAggregatedOrganisationSummaries({
     facultyCode,
+    tagId,
     code,
     keyword,
     orderBy,
@@ -115,6 +117,10 @@ const OrganisationSummary = () => {
 
   const handleFacultyChange = (newFaculty) => {
     setFacultyCode(newFaculty)
+  }
+
+  const handleTagChange = (newTagId) => {
+    setTagId(newTagId)
   }
 
   const handleKeywordChange = (nextKeyword) => {
@@ -162,6 +168,9 @@ const OrganisationSummary = () => {
             facultyCode={!code && isAdmin && facultyCode}
             keyword={keyword}
             onFacultyChange={handleFacultyChange}
+            // TODO show tag filter if access to kasvatustiede kandi
+            tagId={isAdmin && tagId}
+            onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
             onIncludeOpenUniCourseUnitsChange={

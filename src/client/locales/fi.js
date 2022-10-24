@@ -337,6 +337,8 @@ export default {
     courseRealisation: 'Kurssitoteutus',
     facultyLabel: 'Tiedekunta',
     allFaculties: 'Kaikki tiedekunnat',
+    tagLabel: 'Opintosuunta',
+    allTags: 'Näytä kaikki',
     searchLabel: 'Rajaa kursseja',
     searchPlaceholder: 'Rajaa kursseja kurssikoodilla',
     responsibleTeachers: 'Vastuuopettajat',
