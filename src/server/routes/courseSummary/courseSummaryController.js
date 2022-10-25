@@ -61,7 +61,7 @@ const getAccessInfo = async (req, res) => {
   const { user } = req
 
   // shortcut for most students
-  if (user.iamGroups.length === 0 && !user.employeeNumber) {
+  if (user.iamGroups.length === 0 && !req.headers.employeenumber) {
     return res.send({
       accessible: false,
       adminAccess: false,
