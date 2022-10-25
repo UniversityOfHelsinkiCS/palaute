@@ -49,12 +49,7 @@ const OrganisationSummary = () => {
     error: dateLoadingError,
   } = useCourseSummaryAccessInfo()
 
-  const { organisations: organisationAccess, isLoading: organisationLoading } =
-    useOrganisations()
-
-  const hasEducationBachelorAccess =
-    !organisationLoading &&
-    organisationAccess.some(({ id }) => id === 'hy-org-116715340')
+  const { organisations: organisationAccess } = useOrganisations()
 
   const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
 
@@ -173,7 +168,7 @@ const OrganisationSummary = () => {
             facultyCode={!code && isAdmin && facultyCode}
             keyword={keyword}
             onFacultyChange={handleFacultyChange}
-            tagId={hasEducationBachelorAccess && tagId}
+            tagId={code === '600-K001' && tagId}
             onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
