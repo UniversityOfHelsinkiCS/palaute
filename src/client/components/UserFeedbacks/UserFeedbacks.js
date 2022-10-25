@@ -48,22 +48,18 @@ const UserFeedbacks = () => {
     [feedbackTargets],
   )
 
-  const statusFeedbackTargets = useMemo(
-    () => filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting,
-    [status],
+  const sortedCourseRealisations = useMemo(
+    () =>
+      sortCourseRealisations(
+        getCourseRealisationsWithFeedbackTargets(
+          filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting,
+        ),
+      ),
+    [filteredFeedbackTargets, status],
   )
 
-  const courseRealisations = useMemo(
-    () => getCourseRealisationsWithFeedbackTargets(statusFeedbackTargets),
-    [statusFeedbackTargets],
-  )
-
-  const sortedCourseRealations = useMemo(
-    () => sortCourseRealisations(courseRealisations),
-    [courseRealisations],
-  )
-
-  const showNoFeedbackAlert = !isLoading && sortedCourseRealations.length === 0
+  const showNoFeedbackAlert =
+    !isLoading && sortedCourseRealisations.length === 0
 
   return (
     <div>
@@ -85,11 +81,11 @@ const UserFeedbacks = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {showNoFeedbackAlert && sortedCourseRealations.length === 0 && (
+      {showNoFeedbackAlert && sortedCourseRealisations.length === 0 && (
         <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>
       )}
 
-      {sortedCourseRealations.map((courseRealisation) => (
+      {sortedCourseRealisations.map((courseRealisation) => (
         <Fragment key={courseRealisation.id}>
           <CourseRealisationItem
             sx={styles.courseRealisationItem}
