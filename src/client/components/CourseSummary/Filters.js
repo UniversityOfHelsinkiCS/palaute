@@ -33,6 +33,7 @@ const styles = {
 const Filters = ({
   facultyCode,
   keyword,
+  facultyAccess,
   onFacultyChange,
   tagId,
   onTagChange,
@@ -47,14 +48,16 @@ const Filters = ({
 
   const faculties = React.useMemo(
     () =>
-      _.sortBy(
-        data.map((faculty) => ({
-          code: faculty.code,
-          name: faculty.name,
-        })),
-        (faculty) => getLanguageValue(faculty.name, i18n.language),
-      ),
-    [data, i18n.language],
+      facultyAccess
+        ? _.sortBy(
+            facultyAccess.map((faculty) => ({
+              code: faculty.code,
+              name: faculty.name,
+            })),
+            (faculty) => getLanguageValue(faculty.name, i18n.language),
+          )
+        : [],
+    [facultyAccess, i18n.language],
   )
 
   return (

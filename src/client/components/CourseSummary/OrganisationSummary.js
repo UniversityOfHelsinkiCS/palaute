@@ -49,10 +49,6 @@ const OrganisationSummary = () => {
   const { organisations: organisationAccess, isLoading: organisationLoading } =
     useOrganisations()
 
-  const hasEducationBachelorAccess =
-    !organisationLoading &&
-    organisationAccess.some(({ id }) => id === 'hy-org-116715340')
-
   const facultyAccess =
     !organisationLoading && getFacultyAccess(organisationAccess)
   const hasMultipleFacultyAccess = facultyAccess.length > 1
@@ -171,6 +167,7 @@ const OrganisationSummary = () => {
           <Filters
             facultyCode={!code && hasMultipleFacultyAccess && facultyCode}
             keyword={keyword}
+            facultyAccess={facultyAccess}
             onFacultyChange={handleFacultyChange}
             tagId={code === '600-K001' && tagId}
             onTagChange={handleTagChange}
