@@ -60,6 +60,15 @@ const getAccessibleCourseRealisationIds = async (user) => {
 const getAccessInfo = async (req, res) => {
   const { user } = req
 
+  // shortcut for most students
+  if (user.iamGroups.length === 0 && !user.employeeNumber) {
+    return res.send({
+      accessible: false,
+      adminAccess: false,
+      defaultDateRange: null,
+    })
+  }
+
   const [organisationAccess, accessibleCourseRealisationIds] =
     await Promise.all([
       user.getOrganisationAccess(),

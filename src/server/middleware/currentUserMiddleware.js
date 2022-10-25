@@ -31,9 +31,7 @@ const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
 
 const getUser = async (username) => {
   const user = await User.findOne({
-    where: {
-      username,
-    },
+    where: { username },
   })
   if (!user && username === 'ohj_tosk') return createTestUser()
   if (!user) {
