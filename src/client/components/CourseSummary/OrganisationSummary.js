@@ -11,13 +11,13 @@ import useOrganisations from '../../hooks/useOrganisations'
 import Filters from './Filters'
 
 import {
+  getFacultyAccess,
   useOpenAccordions,
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
 } from './utils'
 import Title from '../common/Title'
 import useHistoryState from '../../hooks/useHistoryState'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import errors from '../../util/errorMessage'
 import ErrorView from '../common/ErrorView'
@@ -39,9 +39,6 @@ const OrganisationSummary = () => {
   const { t } = useTranslation()
   const { code } = useParams()
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-
   const {
     courseSummaryAccessInfo,
     isLoading: defaultDateRangeLoading,
@@ -49,9 +46,16 @@ const OrganisationSummary = () => {
     error: dateLoadingError,
   } = useCourseSummaryAccessInfo()
 
-  const { organisations: organisationAccess } = useOrganisations()
+  const { organisations: organisationAccess, isLoading: organisationLoading } =
+    useOrganisations()
 
-  const isAdmin = !authorizedUserLoading && authorizedUser?.isAdmin
+  const hasEducationBachelorAccess =
+    !organisationLoading &&
+    organisationAccess.some(({ id }) => id === 'hy-org-116715340')
+
+  const facultyAccess =
+    !organisationLoading && getFacultyAccess(organisationAccess)
+  const hasMultipleFacultyAccess = facultyAccess.length > 1
 
   const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
   const [tagId, setTagId] = useHistoryState('tagId', 'All')
@@ -165,7 +169,7 @@ const OrganisationSummary = () => {
         isRefetching={isFetching && organisationSummaries}
         filters={
           <Filters
-            facultyCode={!code && isAdmin && facultyCode}
+            facultyCode={!code && hasMultipleFacultyAccess && facultyCode}
             keyword={keyword}
             onFacultyChange={handleFacultyChange}
             tagId={code === '600-K001' && tagId}

@@ -39,6 +39,29 @@ const normalizeOrganisationCode = (r) => {
   return providercode
 }
 
+export const getFacultyAccess = (organisationAccess) => {
+  const organisationCodes = organisationAccess.map(({ code }) => code)
+  const faculties = data.map((data) => ({
+    ...data,
+    programmes: data.programmes.map((programme) => ({
+      ...programme,
+      key: normalizeOrganisationCode(programme.key),
+    })),
+  }))
+
+  const facultyAccess = []
+  faculties.forEach((faculty) => {
+    const programmeCodes = faculty.programmes.map(({ key }) => key)
+    const hasAccess = organisationCodes.some((code) =>
+      programmeCodes.includes(code),
+    )
+
+    if (hasAccess) facultyAccess.push(faculty)
+  })
+
+  return facultyAccess
+}
+
 const filterByFaculty = (organisations, facultyCode) => {
   if (!facultyCode) return organisations
 
