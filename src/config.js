@@ -9,11 +9,8 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
 const ADMINS = [
-  'varisleo',
   'kalleilv',
-  'jakousa',
   'mluukkai',
-  'keolli',
   'ttiittan',
   'kurhila',
   'vesuvesu',
