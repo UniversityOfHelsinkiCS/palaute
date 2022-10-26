@@ -193,9 +193,7 @@ const getResults = (rows, questions) => {
   return results
 }
 
-const getTags = async ({ organisationId, courseRealisations }) => {
-  if (organisationId !== 'hy-org-116715340') return []
-
+const getTags = async (courseRealisations) => {
   const tagIds = (
     await CourseRealisationsTag.findAll({
       where: {

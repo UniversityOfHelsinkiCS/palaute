@@ -49,6 +49,7 @@ const getOrganisationSummaries = async ({
   organisationAccess,
   accessibleCourseRealisationIds = [],
   includeOpenUniCourseUnits = true,
+  tagId,
   startDate = subMonths(new Date(), 24),
   endDate = new Date(),
 }) => {
@@ -87,7 +88,7 @@ const getOrganisationSummaries = async ({
   })) // results object template, array with objects for each questions distribution and mean
 
   // aggregate CU stats from CUR rows. Also find info about the current (latest) feedback target
-  const summedCourseUnits = rows.map((cu) => {
+  let summedCourseUnits = rows.map((cu) => {
     const results = JSON.parse(JSON.stringify(initialResults))
     let feedbackCount = 0
     let studentCount = 0
@@ -156,16 +157,30 @@ const getOrganisationSummaries = async ({
     }
   })
 
-  // get CUR tags for each kasvatustieteen kandiohjelma CU
-  const summedWithTags = await Promise.all(
-    summedCourseUnits.map(async (cu) => ({
-      ..._.omit(cu, ['courseRealisations']),
-      tags: await getTags(cu),
-    })),
-  )
+  // only filter by tags if using education bachelor summary and tag is selected
+  const filterEducationBachelorSummary =
+    organisationAccess.length === 1 &&
+    organisationAccess[0].organisation.id === 'hy-org-116715340' &&
+    tagId &&
+    tagId !== 'All'
+
+  if (filterEducationBachelorSummary) {
+    // get CUR tags for each CU
+    summedCourseUnits = await Promise.all(
+      summedCourseUnits.map(async (cu) => ({
+        ..._.omit(cu, ['courseRealisations']),
+        tags: await getTags(cu.courseRealisations),
+      })),
+    )
+
+    // Filter CUs by tag
+    summedCourseUnits = summedCourseUnits.filter((cu) =>
+      cu.tags.map(({ id }) => id).includes(Number(tagId)),
+    )
+  }
 
   // object with keys as org ids and values as arrays of CUs
-  const organisations = _.groupBy(summedWithTags, (cu) => cu.organisationId)
+  const organisations = _.groupBy(summedCourseUnits, (cu) => cu.organisationId)
 
   // aggregate org stats from CUs
   const summedOrganisations = Object.entries(organisations).map(

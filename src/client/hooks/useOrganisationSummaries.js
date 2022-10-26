@@ -8,6 +8,7 @@ const useOrganisationSummaries = (options = {}) => {
   const {
     code,
     includeOpenUniCourseUnits = true,
+    tagId,
     startDate,
     endDate,
     enabled,
@@ -17,6 +18,7 @@ const useOrganisationSummaries = (options = {}) => {
   const params = {
     includeOpenUniCourseUnits:
       includeOpenUniCourseUnits === true ? 'true' : 'false',
+    tagId,
     startDate,
     endDate,
   }

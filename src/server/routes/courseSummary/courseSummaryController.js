@@ -106,7 +106,7 @@ const getAccessInfo = async (req, res) => {
 const getOrganisations = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { includeOpenUniCourseUnits, startDate, endDate } = req.query
+  const { includeOpenUniCourseUnits, tagId, startDate, endDate } = req.query
 
   const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] =
     await Promise.all([
@@ -137,6 +137,7 @@ const getOrganisations = async (req, res) => {
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
+    tagId,
     startDate: parsedStartDate,
     endDate: parsedEndDate,
   })
