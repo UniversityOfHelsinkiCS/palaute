@@ -104,11 +104,24 @@ const updateCourseRealisationTags = async (req, res) => {
   return res.send(newTags)
 }
 
+const getTags = async (req, res) => {
+  const { organisationCode: code } = req.params
+  await checkAccess(req.user, code)
+
+  if (code !== '600-K001')
+    throw new ApplicationError('Invalid organisation code', 400)
+
+  const tags = await Tag.findAll()
+
+  return res.send(tags)
+}
+
 const router = Router()
 
 router.put(
   '/:organisationCode/course-realisations',
   updateCourseRealisationTags,
 )
+router.get('/:organisationCode', getTags)
 
 module.exports = router

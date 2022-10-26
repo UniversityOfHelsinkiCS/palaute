@@ -13,11 +13,12 @@ import {
   MenuItem,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 
 import { YearSemesterSelector } from './YearSemesterSelector'
-import { data, tags } from '../../../config/data' // TODO get tags from db
+import useOrganisationTags from '../../hooks/useOrganisationTags'
 import useHistoryState from '../../hooks/useHistoryState'
 import { getLanguageValue } from '../../util/languageUtils'
 
@@ -44,7 +45,11 @@ const Filters = ({
   onDateRangeChange,
 }) => {
   const { t, i18n } = useTranslation()
+  const { code } = useParams()
+
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
+
+  const { tags, isLoading: tagsLoading } = useOrganisationTags(code)
 
   const faculties = React.useMemo(
     () =>
@@ -89,7 +94,7 @@ const Filters = ({
           </FormControl>
         </Box>
       )}
-      {tagId && (
+      {tagId && !tagsLoading && (
         <Box mb={2}>
           <FormControl fullWidth>
             <InputLabel>{t('courseSummary:tagLabel')}</InputLabel>
@@ -99,9 +104,9 @@ const Filters = ({
               label="Opintosuunta"
             >
               <MenuItem value="All">{t('courseSummary:allTags')}</MenuItem>
-              {tags.map((tag, index) => (
-                <MenuItem key={index} value={index + 1}>
-                  {tag[i18n.language]}
+              {tags.map(({ id, name }) => (
+                <MenuItem key={id} value={id}>
+                  {name[i18n.language]}
                 </MenuItem>
               ))}
             </Select>
