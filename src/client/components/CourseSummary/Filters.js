@@ -50,6 +50,9 @@ const Filters = ({
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
 
   const { tags, isLoading: tagsLoading } = useOrganisationTags(code)
+  const sortedTags = _.sortBy(tags, (tag) =>
+    getLanguageValue(tag.name, i18n.language),
+  )
 
   const faculties = React.useMemo(
     () =>
@@ -104,7 +107,7 @@ const Filters = ({
               label="Opintosuunta"
             >
               <MenuItem value="All">{t('courseSummary:allTags')}</MenuItem>
-              {tags.map(({ id, name }) => (
+              {sortedTags.map(({ id, name }) => (
                 <MenuItem key={id} value={id}>
                   {name[i18n.language]}
                 </MenuItem>
