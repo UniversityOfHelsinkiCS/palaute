@@ -179,7 +179,9 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     ),
   )
 
-  UserFeedbackTarget.update(
+  await pate.send(emailsToBeSent, 'Notify students about feedback opening')
+
+  await UserFeedbackTarget.update(
     {
       feedbackOpenEmailSent: true,
     },
@@ -191,8 +193,6 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
       },
     },
   )
-
-  await pate.send(emailsToBeSent, 'Notify students about feedback opening')
 
   return emailsToBeSent
 }

@@ -293,7 +293,7 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   return studentListVisible ?? false
 }
 
-const getFeedbackTargetsForOrganisations = async (req, res) => {
+const getFeedbackTargetsForOrganisation = async (req, res) => {
   const { code } = req.params
   const { startDate, endDate } = req.query
   if (!code) throw new ApplicationError('Missing code', 400)
@@ -1174,7 +1174,7 @@ adRouter.get(
   '/for-course-realisation/:id',
   getFeedbackTargetsForCourseRealisation,
 )
-adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisations)
+adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
 
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
