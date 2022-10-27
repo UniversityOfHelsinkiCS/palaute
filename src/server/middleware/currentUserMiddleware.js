@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
 const { ADMINS, JWT_KEY } = require('../util/config')
-const { relevantIAMs } = require('../../config/IAMConfig')
 const { User } = require('../models')
 const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
@@ -33,17 +32,15 @@ const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
 const getUsernameFromToken = (req) => {
   const { token, tokenuser } = req.headers
 
-  try {
-    const { username } = jwt.verify(token, JWT_KEY)
+  const { username } = jwt.verify(token, JWT_KEY)
 
-    if (!username) throw new ApplicationError('Token is missing username', 403)
-
-    return username
-  } catch (err) {
+  if (!username) {
     logger.info('Token broken', { token })
     logger.info('Token user', { tokenuser })
-    throw new ApplicationError('Access token was malformed', 500)
+    throw new ApplicationError('Token is missing username', 403)
   }
+
+  return username
 }
 
 const getUsernameFromShibboHeaders = (req) => {
@@ -56,12 +53,12 @@ const getUsernameFromShibboHeaders = (req) => {
 
 const currentUserMiddleware = async (req, _, next) => {
   const isNoAdPath = req.path.startsWith('/noad')
+  req.noad = isNoAdPath
 
   const username = isNoAdPath
     ? await getUsernameFromToken(req)
     : getUsernameFromShibboHeaders(req)
 
-  if (!username) throw new ApplicationError('Missing uid header', 403)
   if (username === 'ohj_tosk') {
     req.user = await createTestUser()
   } else {
@@ -74,11 +71,6 @@ const currentUserMiddleware = async (req, _, next) => {
       req.headers['x-admin-logged-in-as'],
     )
     if (loggedInAsUser) req.user = loggedInAsUser
-  } else if (req.path.includes('login')) {
-    const iamGroups = isNoAdPath ? [] : req.iamGroups ?? []
-    req.user.iamGroups = iamGroups.filter((iam) => relevantIAMs.includes(iam))
-    req.user.lastLoggedIn = new Date()
-    await req.user.save()
   }
 
   req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)

@@ -5,11 +5,20 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User } = require('../../models')
 const { ADMINS } = require('../../../config')
+const { relevantIAMs } = require('../../../config/IAMConfig')
 
-const getUser = async (req, res) => {
+const login = async (req, res) => {
   const { user, isAdmin } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
+
+  const allIamGroups = req.noad ? [] : req.iamGroups ?? []
+  const relevantIamGroups = allIamGroups.filter((iam) =>
+    relevantIAMs.includes(iam),
+  )
+  user.iamGroups = relevantIamGroups
+  user.lastLoggedIn = new Date()
+  await user.save()
 
   const isTeacher = !!user.employeeNumber
 
@@ -74,7 +83,7 @@ const logout = async (req, res) => {
 
 const router = Router()
 
-router.get('/login', getUser)
+router.get('/login', login)
 router.get('/logout', logout)
 router.get('/users', getUserByEmail)
 router.get('/users/:id', getUserDetails)
