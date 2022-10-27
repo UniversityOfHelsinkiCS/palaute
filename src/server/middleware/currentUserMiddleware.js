@@ -7,8 +7,10 @@ const { getUserByUsername } = require('../services/users')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
-const createTestUser = async () => {
-  const testUser = await User.create({
+const getTestUser = async () => {
+  let testUser = await User.findByPk('abc1234')
+  if (testUser) return testUser
+  testUser = await User.create({
     id: 'abc1234',
     username: 'ohj_tosk',
     email: 'grp-toska@helsinki.fi',
@@ -60,7 +62,7 @@ const currentUserMiddleware = async (req, _, next) => {
     : getUsernameFromShibboHeaders(req)
 
   if (username === 'ohj_tosk') {
-    req.user = await createTestUser()
+    req.user = await getTestUser()
   } else {
     req.user = await getUserByUsername(username)
   }
