@@ -1,17 +1,21 @@
 const { normalizeOrganisationCode } = require('./common')
 const { facultyMap, data } = require('./data')
 
+const ANY = 'ANY'
+
 /**
  * Map from jory IAM to one or more programmes
  */
 const joryMap = {
+  'grp-kielikeskus-esihenkilot': 'H906', // note, all will be given kojo in kojomap
+
   'hy-ttdk-tuk-jory': '100-K001',
   'hy-ttdk-tum-jory': '100-M001',
   'hy-oiktdk-on-jory': '200-K001',
   'hy-oiktdk-otm-jory': '200-M001',
   'hy-oiktdk-ibl-jory': '200-M002',
   'hy-oiktdk-ggl-jory': '200-M003',
-  'hy-ltdk-psyk-jory': ['300-K001', '300-M004'],
+  'hy-ltdk-psyk-jory': ['300-K001', '300-M004'], // psyk and logo slightly special
   'hy-ltdk-logo-jory': ['300-K002', '300-M005'],
   'hy-ltdk-ll-jory': '300-M001',
   'hy-ltdk-tmed-jory': '300-M002',
@@ -138,6 +142,7 @@ const joryMap = {
  * Map from jory IAM to corresponding kojo IAM
  */
 const kojoMap = {
+  'grp-kielikeskus-esihenkilot': ANY, // special case, gives kojo access to all with this
   'hy-ttdk-tuk-jory': 'hy-ttdk-kandi-kojot',
   'hy-ttdk-tum-jory': 'hy-ttdk-maisteri-kojot',
   'hy-oiktdk-on-jory': 'hy-oiktdk-kandi-kojot',
@@ -401,6 +406,9 @@ const iamToDoctoralSchool = (iam) => doctoralSchoolMap[iam]
 
 const getStudyLeaderGroup = (iam) => kojoMap[iam]
 
+const isStudyLeaderGroup = (iam, allIams) =>
+  allIams.concat('ANY').includes(getStudyLeaderGroup(iam))
+
 const iamToOrganisationCode = (iam) => {
   const organisationCodes = joryMap[iam]
   if (Array.isArray(organisationCodes)) {
@@ -461,6 +469,8 @@ module.exports = {
   dekaaniIamToFaculty,
   opetusVaradekaani,
   getStudyLeaderGroup,
+  isStudyLeaderGroup,
   relevantIAMs,
   relevantOrganisations,
+  ANY,
 }

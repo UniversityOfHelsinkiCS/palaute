@@ -3,13 +3,13 @@ const {
   isAdminIam,
   isUniversityWideIam,
   isDoctoralIam,
-  getStudyLeaderGroup,
   iamToOrganisationCode,
   isEmployeeIam,
   iamToDoctoralSchool,
   kosuIamToFaculties,
   dekaaniIamToFaculty,
   opetusVaradekaani,
+  isStudyLeaderGroup,
 } = require('../../config/IAMConfig')
 const { data } = require('../../config/data')
 const { mapToDegreeCode } = require('../../config/common')
@@ -71,7 +71,11 @@ const getUniversityReadingRights = (hyGroups) => {
     return {}
   }
 
-  const access = getAllProgrammeAccess({ read: true })
+  const access = getAllProgrammeAccess({
+    read: true,
+    write: false,
+    admin: false,
+  })
   const specialGroup = { allProgrammes: true }
 
   return { access, specialGroup }
@@ -93,7 +97,7 @@ const getFacultyReadingRights = (hyGroups) => {
     const faculty = data.find((faculty) => faculty.code === fc)
     const programmeCodes = faculty.programmes.map((p) => p.key)
     programmeCodes.forEach((code) => {
-      access[code] = { read: true }
+      access[code] = { read: true, write: false, admin: false }
     })
   })
   return { access, specialGroup: {} }
@@ -127,7 +131,7 @@ const getDoctoralAccess = (hyGroups) => {
   const hasDoctoralReadingRights = hyGroups.some(isDoctoralIam)
   if (!hasDoctoralReadingRights) return {}
   const access = getAllProgrammeAccess(
-    { read: true },
+    { read: true, write: false, admin: false },
     (program) => program.level === 'doctoral',
   )
   const specialGroup = { doctoral: true }
@@ -157,7 +161,7 @@ const getDoctoralSchoolAccess = (hyGroups) => {
  */
 const getProgrammeAdminAccess = (hyGroups) => {
   const orgCodes = hyGroups
-    .filter((iam) => hyGroups.includes(getStudyLeaderGroup(iam)))
+    .filter((iam) => isStudyLeaderGroup(iam, hyGroups))
     .map((iam) => iamToOrganisationCode(iam))
     .filter(Boolean)
 
@@ -188,7 +192,7 @@ const getProgrammeWriteAccess = (hyGroups) => {
   const access = {}
   degreeCodes.forEach((code) => {
     if (!code) return
-    access[code] = { read: true, write: true }
+    access[code] = { read: true, write: true, admin: false }
   })
 
   return { access }
@@ -206,7 +210,7 @@ const getProgrammeReadAccess = (hyGroups) => {
   const access = {}
   degreeCodes.forEach((code) => {
     if (!code) return
-    access[code] = { read: true }
+    access[code] = { read: true, write: false, admin: false }
   })
 
   return { access }
