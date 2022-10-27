@@ -4,6 +4,7 @@ const { ADMINS, JWT_KEY } = require('../util/config')
 const { relevantIAMs } = require('../../config/IAMConfig')
 const { User } = require('../models')
 const logger = require('../util/logger')
+const { getUserByUsername } = require('../services/users')
 
 const isSuperAdmin = (username) => ADMINS.includes(username)
 
@@ -25,18 +26,6 @@ const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
   if (!isSuperAdmin(actualUser)) return undefined
 
   const user = await User.findOne({ where: { id: loggedInAsUser } })
-
-  return user
-}
-
-const getUser = async (username) => {
-  const user = await User.findOne({
-    where: { username },
-  })
-  if (!user && username === 'ohj_tosk') return createTestUser()
-  if (!user) {
-    throw new ApplicationError(`User with username ${username} not found`, 404)
-  }
 
   return user
 }
@@ -73,8 +62,11 @@ const currentUserMiddleware = async (req, _, next) => {
     : getUsernameFromShibboHeaders(req)
 
   if (!username) throw new ApplicationError('Missing uid header', 403)
-
-  req.user = await getUser(username)
+  if (username === 'ohj_tosk') {
+    req.user = await createTestUser()
+  } else {
+    req.user = await getUserByUsername(username)
+  }
 
   if (req.headers['x-admin-logged-in-as']) {
     const loggedInAsUser = await getLoggedInAsUser(
