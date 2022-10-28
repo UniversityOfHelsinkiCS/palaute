@@ -11,7 +11,6 @@ const {
   UserFeedbackTarget,
   Survey,
   CourseRealisationsOrganisation,
-  FeedbackTargetDateCheck,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -226,26 +225,6 @@ const getTeachingLanguages = (customCodeUrns) => {
   return languages
 }
 
-const createDateCheck = async (old, updated) => {
-  const feedbackTarget = await FeedbackTarget.findOne({
-    where: {
-      courseRealisationId: old.id,
-    },
-    attributes: ['id', 'feedback_dates_edited_by_teacher'],
-  })
-  if (!feedbackTarget?.id) return
-
-  if (old.startDate === updated.startDate && old.endDate === updated.startDate)
-    return
-
-  if (!feedbackTarget.feedbackDatesEditedByTeacher) return
-
-  logger.info(
-    '[UPDATER] FOUND A CHANGED COURSE DATE WITH TEACHER MODIFIED FEEDBACK DATES',
-  )
-  FeedbackTargetDateCheck.create({ feedback_target_id: feedbackTarget.id })
-}
-
 const createCourseRealisations = async (courseRealisations) => {
   // Check when course's dates have changed in sis. If that happens, create a date check.
   for (const {
@@ -267,9 +246,6 @@ const createCourseRealisations = async (courseRealisations) => {
       attributes: ['start_date', 'end_date', 'id'],
     })
     if (old) {
-      // update existing
-      await createDateCheck(old, newRealisation)
-
       old.name = newRealisation.name
       old.endDate = newRealisation.endDate
       old.startDate = newRealisation.startDate
@@ -278,6 +254,11 @@ const createCourseRealisations = async (courseRealisations) => {
       await old.save()
     } else {
       await CourseRealisation.create(newRealisation)
+    }
+    if (includeCurs.includes(newRealisation.id)) {
+      logger.info(
+        `[UPDATER] Created or updated hacked-in cur ${newRealisation.id}`,
+      )
     }
   }
 
