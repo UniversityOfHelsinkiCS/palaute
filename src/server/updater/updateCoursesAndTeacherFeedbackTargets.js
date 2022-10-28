@@ -29,7 +29,10 @@ const validRealisationTypes = [
 ]
 
 // hack these curs into norppa
-const includeCurs = ['otm-f7504f69-386b-4151-b2a9-17ab6e11c946']
+const includeCurs = [
+  'otm-f7504f69-386b-4151-b2a9-17ab6e11c946',
+  'otm-a994004a-534f-462d-8c09-6b30d0f35f11',
+]
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 const formatWithHours = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
