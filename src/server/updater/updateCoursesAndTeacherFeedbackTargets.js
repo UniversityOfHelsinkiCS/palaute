@@ -28,6 +28,9 @@ const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-seminar',
 ]
 
+// hack these curs into norppa
+const includeCurs = ['otm-f7504f69-386b-4151-b2a9-17ab6e11c946']
+
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 const formatWithHours = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
 
@@ -509,9 +512,10 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
 const coursesHandler = async (courses) => {
   const filteredCourses = courses.filter(
     (course) =>
-      course.courseUnits.length &&
-      validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
-      course.flowState !== 'CANCELLED',
+      includeCurs.includes(course.id) ||
+      (course.courseUnits.length &&
+        validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
+        course.flowState !== 'CANCELLED'),
   )
 
   const cancelledCourses = courses.filter(
