@@ -7,6 +7,7 @@ const ANY = 'ANY'
  * Map from jory IAM to one or more programmes
  */
 const joryMap = {
+  'grp-avoin-johto': 'H930',
   'grp-kielikeskus-esihenkilot': 'H906', // note, all will be given kojo in kojomap
 
   'hy-ttdk-tuk-jory': '100-K001',
