@@ -43,6 +43,7 @@ const updateEnrolmentNotification = require('./updateEnrolmentNotification')
 const {
   getEnrolmentNotification,
 } = require('../../services/enrolmentNotices/enrolmentNotices')
+const { getFeedbackTargetById } = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -77,15 +78,9 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
   return updatedQuestionIdsList
 }
 
-const asyncFeedbackTargetsToJSON = async (
-  feedbackTargets,
-  includeTeachers = true,
-  includeSurveys = true,
-) => {
-  const convertSingle = async (feedbackTarget) => {
-    const publicTarget = await feedbackTarget.toPublicObject(
-      includeSurveys || includeTeachers,
-    )
+const feedbackTargetsToJSON = (feedbackTargets) => {
+  const convertSingle = (feedbackTarget) => {
+    const publicTarget = feedbackTarget.toJSON()
 
     const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
       (a, b) =>
@@ -102,42 +97,7 @@ const asyncFeedbackTargetsToJSON = async (
     }
   }
 
-  const convertedFeedbackTargets = []
-
-  /* eslint-disable */
-  for (const feedbackTarget of feedbackTargets) {
-    if (feedbackTarget) {
-      convertedFeedbackTargets.push(await convertSingle(feedbackTarget))
-    }
-  }
-
-  return convertedFeedbackTargets
-}
-
-const convertFeedbackTargetForAdmin = async (feedbackTargets) => {
-  const convertSingle = async (feedbackTarget) => {
-    const publicTarget = await feedbackTarget.toPublicObject(true)
-
-    return {
-      ...publicTarget,
-      accessStatus: 'TEACHER',
-      feedback: null,
-    }
-  }
-
-  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
-
-  const responseReady = []
-
-  /* eslint-disable */
-  for (const feedbackTarget of feedbackTargets) {
-    if (feedbackTarget) {
-      responseReady.push(await convertSingle(feedbackTarget))
-    }
-  }
-  /* eslint-enable */
-
-  return responseReady
+  return feedbackTargets.map(convertSingle)
 }
 
 const getIncludes = (userId, accessStatus) => {
@@ -406,74 +366,27 @@ const getFeedbackTargetsForOrganisation = async (req, res) => {
   return res.send(yearGrouped)
 }
 
-const getOneForAdmin = async (req, res, feedbackTargetId) => {
-  const adminFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
-    include: [
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        include: [
-          {
-            model: Organisation,
-            as: 'organisations',
-            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
-            required: true,
-          },
-        ],
-      },
-      { model: CourseRealisation, as: 'courseRealisation' },
-    ],
-  })
-  if (!adminFeedbackTarget)
-    throw new ApplicationError('Feedback target not found', 404)
-
-  const responseReady = await convertFeedbackTargetForAdmin(adminFeedbackTarget)
-
-  const studentListVisible = adminFeedbackTarget?.courseUnit
-    ? await getStudentListVisibility(
-        adminFeedbackTarget.courseUnit.id,
-        req.isAdmin,
-      )
-    : false
-
-  return res.send({ ...responseReady, studentListVisible })
-}
-
 const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  if (req.isAdmin) {
-    return getOneForAdmin(req, res, feedbackTargetId)
-  }
-
-  const feedbackTarget = await getFeedbackTargetByIdForUser(
-    feedbackTargetId,
-    req.user,
-  )
-
-  if (!feedbackTarget) {
-    const enabled = await getEnrolmentNotification(
-      req.user.id,
+  try {
+    const result = await getFeedbackTargetById(
       feedbackTargetId,
+      req.user,
+      req.isAdmin,
     )
-    return res.status(403).send({ enabled })
+    return res.send(result)
+  } catch (error) {
+    if (error.status === 403) {
+      const enabled = await getEnrolmentNotification(
+        req.user.id,
+        feedbackTargetId,
+      )
+      return res.status(403).send({ enabled })
+    }
+    throw error
   }
-
-  const studentListVisible = feedbackTarget?.courseUnit
-    ? await getStudentListVisibility(feedbackTarget.courseUnit.id)
-    : false
-
-  const responseReady = await asyncFeedbackTargetsToJSON(
-    [feedbackTarget],
-    true,
-    true,
-  )
-
-  return res.send({
-    ...responseReady[0],
-    studentListVisible,
-  })
 }
 
 const update = async (req, res) => {
@@ -574,11 +487,7 @@ const getForStudent = async (req, res) => {
       ),
   )
 
-  const publicFeedbackTargets = await asyncFeedbackTargetsToJSON(
-    filteredFeedbackTargets,
-    false,
-    false,
-  )
+  const publicFeedbackTargets = feedbackTargetsToJSON(filteredFeedbackTargets)
 
   const now = Date.now()
   const response = {

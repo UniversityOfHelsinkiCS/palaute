@@ -254,13 +254,10 @@ class FeedbackTarget extends Model {
   async toPublicObject(includeSurveysAndTeachers) {
     if (!includeSurveysAndTeachers) return this.toJSON()
 
-    const [surveys, teachers, publicQuestionIds, studentCount] =
-      await Promise.all([
-        this.getSurveys(),
-        this.getTeachersForFeedbackTarget(),
-        this.getPublicQuestionIds(),
-        this.getStudentCount(),
-      ])
+    const [surveys, publicQuestionIds] = await Promise.all([
+      this.getSurveys(),
+      this.getPublicQuestionIds(),
+    ])
     const publicityConfigurableQuestionIds =
       await this.getPublicityConfigurableQuestionIds(surveys)
 
@@ -269,11 +266,7 @@ class FeedbackTarget extends Model {
       surveys,
       publicQuestionIds,
       publicityConfigurableQuestionIds,
-      responsibleTeachers: teachers,
-      studentCount,
     }
-
-    delete feedbackTarget.userFeedbackTargets
 
     return feedbackTarget
   }
@@ -407,6 +400,12 @@ FeedbackTarget.init(
       type: DATE,
     },
     questions: {
+      type: VIRTUAL,
+    },
+    responsibleTeachers: {
+      type: VIRTUAL,
+    },
+    studentCount: {
       type: VIRTUAL,
     },
     publicQuestionIds: {

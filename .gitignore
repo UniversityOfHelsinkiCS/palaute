@@ -14,3 +14,4 @@ cypress/screenshots
 cypress/videos
 temp
 tools/benchmark.mjs
+t.js

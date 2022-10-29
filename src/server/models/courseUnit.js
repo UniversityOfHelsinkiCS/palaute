@@ -1,7 +1,45 @@
 const { Model, JSONB, STRING } = require('sequelize')
+const {
+  STUDENT_LIST_BY_COURSE_ENABLED,
+  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
+} = require('../../config')
 const { sequelize } = require('../util/dbConnection')
+const logger = require('../util/logger')
 
-class CourseUnit extends Model {}
+class CourseUnit extends Model {
+  async isStudentListVisible(isAdmin) {
+    const organisationRows = await sequelize.query(
+      'SELECT O.* from organisations O, course_units_organisations C ' +
+        " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
+      {
+        replacements: {
+          cuId: this.id,
+        },
+      },
+    )
+
+    if (organisationRows.length === 0) {
+      logger.error('NO PRIMARY ORGANISATION FOR COURSE UNIT', { id: this.id })
+      return false
+    }
+
+    if (!organisationRows[0].length) return false
+
+    const {
+      code,
+      student_list_visible: studentListVisible,
+      student_list_visible_course_codes: studentListVisibleCourseCodes,
+    } = organisationRows[0][0]
+
+    if (
+      STUDENT_LIST_BY_COURSE_ENABLED.includes(code) ||
+      (STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code) && isAdmin)
+    ) {
+      if (studentListVisibleCourseCodes.includes(this.courseCode)) return true
+    }
+    return studentListVisible ?? false
+  }
+}
 
 CourseUnit.init(
   {
