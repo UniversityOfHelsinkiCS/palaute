@@ -111,12 +111,11 @@ class FeedbackTarget extends Model {
     })
   }
 
-  getPublicQuestionIds() {
+  getPublicQuestionIds(surveys) {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
-    const globallyPublicQuestionIds =
-      this.surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = this.surveys.programmeSurveys.flatMap(
+    const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(
       (s) => s.publicQuestionIds,
     )
 
@@ -129,12 +128,11 @@ class FeedbackTarget extends Model {
     return publicQuestionIds
   }
 
-  getPublicityConfigurableQuestionIds() {
-    this.populateQuestions(this.surveys)
+  getPublicityConfigurableQuestionIds(surveys) {
+    this.populateQuestions(surveys)
 
-    const globallyPublicQuestionIds =
-      this.surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = this.surveys.programmeSurveys.flatMap(
+    const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(
       (s) => s.publicQuestionIds,
     )
 
@@ -151,7 +149,7 @@ class FeedbackTarget extends Model {
 
   populateQuestions(surveys) {
     const programmeSurveyQuestions = surveys.programmeSurveys
-      ? this.surveys.programmeSurveys.reduce(
+      ? surveys.programmeSurveys.reduce(
           (questions, survey) => questions.concat(survey.questions),
           [],
         )
@@ -166,8 +164,7 @@ class FeedbackTarget extends Model {
     this.set('questions', questions)
   }
 
-  async populateSurveys() {
-    const surveys = await this.getSurveys()
+  populateSurveys(surveys) {
     this.set('surveys', surveys)
     this.populateQuestions(surveys)
   }
@@ -199,14 +196,14 @@ class FeedbackTarget extends Model {
   }
 
   async toPublicObject() {
-    await this.populateSurveys()
-    const publicQuestionIds = this.getPublicQuestionIds()
+    const surveys = await this.getSurveys()
+    const publicQuestionIds = this.getPublicQuestionIds(surveys)
     const publicityConfigurableQuestionIds =
-      this.getPublicityConfigurableQuestionIds()
+      this.getPublicityConfigurableQuestionIds(surveys)
 
     const feedbackTarget = {
       ...this.toJSON(),
-      surveys: this.surveys,
+      surveys,
       publicQuestionIds,
       publicityConfigurableQuestionIds,
     }

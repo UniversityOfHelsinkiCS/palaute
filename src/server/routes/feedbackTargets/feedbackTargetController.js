@@ -630,7 +630,8 @@ const getTargetsForCourseUnit = async (req, res) => {
     // eslint-disable-next-line
     for (const target of feedbackTargets) {
       // eslint-disable-next-line no-await-in-loop
-      await target.populateSurveys()
+      const surveys = await target.getSurveys()
+      target.populateSurveys(surveys)
     }
   }
 
