@@ -98,7 +98,7 @@ const getOne = async (id, user, isAdmin) => {
   const studentListVisible =
     await feedbackTarget.courseUnit.isStudentListVisible(isAdmin)
 
-  const publicTarget = await feedbackTarget.toPublicObject(true)
+  const publicTarget = await feedbackTarget.toPublicObject()
 
   const responseReady = {
     ...publicTarget,

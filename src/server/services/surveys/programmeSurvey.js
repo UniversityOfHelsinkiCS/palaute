@@ -13,7 +13,7 @@ const getProgrammeSurveysByCourseUnit = async (courseUnitId) => {
    */
   const programmeSurveys = await sequelize.query(
     `
-    SELECT s.*
+    SELECT s.*, o.public_question_ids as "publicQuestionIds"
     FROM
       surveys s, organisations o, course_units_organisations cu_o
     WHERE

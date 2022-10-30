@@ -62,6 +62,9 @@ Survey.init(
     questions: {
       type: VIRTUAL,
     },
+    publicQuestionIds: {
+      type: VIRTUAL,
+    },
   },
   {
     underscored: true,

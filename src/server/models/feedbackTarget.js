@@ -26,16 +26,6 @@ const {
   getOrCreateTeacherSurvey,
 } = require('../services/surveys')
 
-const getGloballyPublicQuestionIds = async () => {
-  const universitySurvey = await getUniversitySurvey()
-
-  const numericQuestionIds = universitySurvey.questions
-    .filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
-    .map(({ id }) => id)
-
-  return numericQuestionIds
-}
-
 class FeedbackTarget extends Model {
   async getSurveys() {
     const [programmeSurveys, teacherSurvey, universitySurvey] =
@@ -70,28 +60,6 @@ class FeedbackTarget extends Model {
     const now = new Date()
 
     return now > this.closesAt
-  }
-
-  async getProgrammePublicQuestionIds() {
-    const programmePublicQuestionIdsResult = await sequelize.query(
-      `
-      SELECT o.public_question_ids as "publicQuestionIds" 
-      FROM course_units_organisations cuo
-      INNER JOIN organisations o ON o.id = cuo.organisation_id
-      INNER JOIN feedback_targets fbt ON fbt.course_unit_id = cuo.course_unit_id
-      WHERE fbt.id = :id AND cuo.type = 'PRIMARY'
-      `,
-      {
-        replacements: {
-          id: this.id,
-        },
-      },
-    )
-
-    const publicQuestionIds =
-      programmePublicQuestionIdsResult[0][0]?.publicQuestionIds
-
-    return Array.isArray(publicQuestionIds) ? publicQuestionIds : []
   }
 
   async getStudentsForFeedbackTarget() {
@@ -143,36 +111,14 @@ class FeedbackTarget extends Model {
     })
   }
 
-  async getStudentCount() {
-    return UserFeedbackTarget.count({
-      where: { feedbackTargetId: this.id, accessStatus: 'STUDENT' },
-    })
-  }
-
-  async getTeachersForFeedbackTarget() {
-    const result = await User.findAll({
-      attributes: ['id', 'firstName', 'lastName', 'email'],
-      include: {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        attributes: [],
-        where: {
-          accessStatus: 'TEACHER',
-          feedbackTargetId: this.id,
-        },
-      },
-      order: [['lastName', 'asc']],
-    })
-    return result
-  }
-
-  async getPublicQuestionIds() {
+  getPublicQuestionIds() {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
-    const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
-    const programmePublicQuestionIds =
-      await this.getProgrammePublicQuestionIds()
+    const globallyPublicQuestionIds =
+      this.surveys.universitySurvey.publicQuestionIds
+    const programmePublicQuestionIds = this.surveys.programmeSurveys.flatMap(
+      (s) => s.publicQuestionIds,
+    )
 
     const publicQuestionIds = _.uniq([
       ...programmePublicQuestionIds,
@@ -183,12 +129,14 @@ class FeedbackTarget extends Model {
     return publicQuestionIds
   }
 
-  async getPublicityConfigurableQuestionIds(surveys) {
-    this.populateQuestions(surveys)
+  getPublicityConfigurableQuestionIds() {
+    this.populateQuestions(this.surveys)
 
-    const globallyPublicQuestionIds = await getGloballyPublicQuestionIds()
-    const programmePublicQuestionIds =
-      await this.getProgrammePublicQuestionIds()
+    const globallyPublicQuestionIds =
+      this.surveys.universitySurvey.publicQuestionIds
+    const programmePublicQuestionIds = this.surveys.programmeSurveys.flatMap(
+      (s) => s.publicQuestionIds,
+    )
 
     const questionIds = this.questions
       .filter(
@@ -203,7 +151,7 @@ class FeedbackTarget extends Model {
 
   populateQuestions(surveys) {
     const programmeSurveyQuestions = surveys.programmeSurveys
-      ? surveys.programmeSurveys.reduce(
+      ? this.surveys.programmeSurveys.reduce(
           (questions, survey) => questions.concat(survey.questions),
           [],
         )
@@ -220,10 +168,8 @@ class FeedbackTarget extends Model {
 
   async populateSurveys() {
     const surveys = await this.getSurveys()
-
-    this.populateQuestions(surveys)
-
     this.set('surveys', surveys)
+    this.populateQuestions(surveys)
   }
 
   async getPublicFeedbacks(
@@ -239,7 +185,8 @@ class FeedbackTarget extends Model {
       return publicFeedbacks
     }
 
-    const publicQuestionIds = await this.getPublicQuestionIds()
+    const surveys = await this.getSurveys()
+    const publicQuestionIds = this.getPublicQuestionIds(surveys)
 
     const filteredFeedbacks = publicFeedbacks.map((feedback) => ({
       ...feedback,
@@ -251,19 +198,15 @@ class FeedbackTarget extends Model {
     return filteredFeedbacks
   }
 
-  async toPublicObject(includeSurveysAndTeachers) {
-    if (!includeSurveysAndTeachers) return this.toJSON()
-
-    const [surveys, publicQuestionIds] = await Promise.all([
-      this.getSurveys(),
-      this.getPublicQuestionIds(),
-    ])
+  async toPublicObject() {
+    await this.populateSurveys()
+    const publicQuestionIds = this.getPublicQuestionIds()
     const publicityConfigurableQuestionIds =
-      await this.getPublicityConfigurableQuestionIds(surveys)
+      this.getPublicityConfigurableQuestionIds()
 
     const feedbackTarget = {
       ...this.toJSON(),
-      surveys,
+      surveys: this.surveys,
       publicQuestionIds,
       publicityConfigurableQuestionIds,
     }
@@ -399,6 +342,9 @@ FeedbackTarget.init(
     closesAt: {
       type: DATE,
     },
+    surveys: {
+      type: VIRTUAL,
+    },
     questions: {
       type: VIRTUAL,
     },
@@ -441,9 +387,6 @@ FeedbackTarget.init(
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    },
-    surveys: {
-      type: VIRTUAL,
     },
     continuousFeedbackEnabled: {
       type: BOOLEAN,
