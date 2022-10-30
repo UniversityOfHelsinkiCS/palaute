@@ -1,4 +1,5 @@
 const redis = require('redis')
+const Sentry = require('@sentry/node')
 const logger = require('./logger')
 const { REDIS_CONFIG } = require('./config')
 
@@ -32,9 +33,13 @@ const client = {
       await redisClient.del('key')
     } catch (error) {
       logger.warn('Connection to redis failed, cache not available')
+      Sentry.captureException(
+        new Error('Redis connection failed, cache not available'),
+      )
       client.get = () => Promise.resolve(null)
       client.set = () => Promise.resolve(null)
       client.flushDb = () => Promise.resolve(null)
+      client.expire = () => Promise.resolve(null)
       return
     }
 
