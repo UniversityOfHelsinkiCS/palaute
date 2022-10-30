@@ -1,5 +1,4 @@
 import React from 'react'
-/** @jsxImportSource @emotion/react */
 
 import {
   TextField,
@@ -24,8 +23,9 @@ import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
   container: {
-    minWidth: 500,
-    // minHeight: 300,
+    minWidth: (theme) => ({
+      [theme.breakpoints.up('md')]: 500,
+    }),
     textAlign: 'left',
     marginBottom: '1rem',
   },
@@ -69,7 +69,7 @@ const Filters = ({
   )
 
   return (
-    <div css={styles.container}>
+    <Box sx={styles.container}>
       <Box mb={3}>
         <YearSemesterSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
@@ -145,7 +145,7 @@ const Filters = ({
         }
         label={t('courseSummary:includeOpenUniCourses')}
       />
-    </div>
+    </Box>
   )
 }
 

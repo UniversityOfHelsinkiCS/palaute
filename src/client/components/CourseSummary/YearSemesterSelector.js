@@ -52,15 +52,17 @@ const useYearSemesters = (currentStart) => {
 const styles = {
   stepper: {
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     gap: '8px',
-    height: '70px',
+    minHeight: '70px',
   },
   stepperContainer: {
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '4px',
     paddingRight: '4px',
+    marginBottom: '4px',
   },
   selectorContainer: {
     display: 'flex',

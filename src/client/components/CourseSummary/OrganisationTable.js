@@ -26,7 +26,6 @@ import HiddenRows from './HiddenRows'
 const styles = {
   filtersCell: {
     verticalAlign: 'bottom',
-    width: '450px',
     padding: '0 1rem 1rem 1rem',
   },
   progressCell: {

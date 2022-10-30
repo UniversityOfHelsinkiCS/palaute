@@ -33,7 +33,7 @@ const styles = {
   },
   labelCell: (theme) => ({
     [theme.breakpoints.down('md')]: {
-      width: '300px',
+      width: '100px',
       height: '74px', // Sets a good height for the entire row
     },
     [theme.breakpoints.up('md')]: {

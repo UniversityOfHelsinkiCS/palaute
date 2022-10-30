@@ -140,7 +140,7 @@ const OrganisationSummary = () => {
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mt={2} mb={6}>
+      <Box mt={2} mb={6} px={1}>
         <Typography variant="h4" component="h1">
           {t('courseSummary:heading')}
         </Typography>
