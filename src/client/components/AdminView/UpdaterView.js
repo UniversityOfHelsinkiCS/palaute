@@ -11,6 +11,11 @@ import {
   TableHead,
   TableRow,
   Chip,
+  Menu,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
@@ -107,7 +112,8 @@ const StatusTable = ({ updaterStatuses }) => {
 }
 
 const UpdaterView = () => {
-  const { updaterStatuses, isLoading, refetch } = useUpdaterStatuses({
+  const [jobType, setJobType] = React.useState('ALL')
+  const { updaterStatuses, isLoading, refetch } = useUpdaterStatuses(jobType, {
     refetchInterval: 10_000,
   })
 
@@ -138,6 +144,20 @@ const UpdaterView = () => {
 
   return (
     <Box marginTop={4}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Job type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={jobType}
+          label="JOB TYPE"
+          onChange={(e) => setJobType(e.target.value)}
+        >
+          <MenuItem value={'ALL'}>ALL</MenuItem>
+          <MenuItem value={'NIGHTLY'}>NIGHTLY</MenuItem>
+          <MenuItem value={'ENROLMENTS'}>ENROLMENTS</MenuItem>
+        </Select>
+      </FormControl>
       <StatusTable updaterStatuses={updaterStatuses} />
       <Box marginTop={2}>
         <Button variant="contained" color="primary" onClick={runUpdater}>

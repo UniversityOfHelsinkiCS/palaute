@@ -12,7 +12,6 @@ const {
   UserFeedbackTarget,
   Survey,
   CourseRealisationsOrganisation,
-  FeedbackTargetDateCheck,
 } = require('../models')
 
 const logger = require('../util/logger')

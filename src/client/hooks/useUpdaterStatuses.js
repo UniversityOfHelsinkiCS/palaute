@@ -1,11 +1,13 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useUpdaterStatuses = (options = {}) => {
-  const queryKey = 'updaterStatus'
+const useUpdaterStatuses = (jobType, options = {}) => {
+  const queryKey = ['updaterStatus', jobType]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/admin/updater-status')
+    const { data } = await apiClient.get(
+      `/admin/updater-status${jobType ? `?jobType=${jobType}` : ''}`,
+    )
 
     return data
   }

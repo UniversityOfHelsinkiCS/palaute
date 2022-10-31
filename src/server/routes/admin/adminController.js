@@ -48,9 +48,12 @@ const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
   return res.send({})
 }
 
-const getUpdaterStatuses = async (_, res) => {
+const getUpdaterStatuses = async (req, res) => {
+  const { jobType } = req.query
   const statuses = await UpdaterStatus.findAll({
+    where: jobType !== 'ALL' ? { jobType } : {},
     order: [['startedAt', 'desc']],
+    limit: 50,
   })
   return res.send(statuses)
 }
