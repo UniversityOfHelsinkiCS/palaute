@@ -140,4 +140,4 @@ const getOneForUser = async (id, user, isAdmin) => {
   }
 }
 
-module.exports = { getOneForUser }
+module.exports = { getOneForUser, getAdditionalDataFromCacheOrDb }

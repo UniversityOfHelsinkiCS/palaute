@@ -353,6 +353,11 @@ FeedbackTarget.init(
     },
     studentCount: {
       type: VIRTUAL,
+      get() {
+        return this.dataValues.studentCount
+          ? Number(this.dataValues.studentCount)
+          : undefined
+      },
     },
     publicQuestionIds: {
       type: ARRAY(INTEGER),

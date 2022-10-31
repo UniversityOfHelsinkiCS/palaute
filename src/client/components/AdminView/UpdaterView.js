@@ -11,7 +11,6 @@ import {
   TableHead,
   TableRow,
   Chip,
-  Menu,
   FormControl,
   InputLabel,
   Select,
@@ -153,9 +152,9 @@ const UpdaterView = () => {
           label="JOB TYPE"
           onChange={(e) => setJobType(e.target.value)}
         >
-          <MenuItem value={'ALL'}>ALL</MenuItem>
-          <MenuItem value={'NIGHTLY'}>NIGHTLY</MenuItem>
-          <MenuItem value={'ENROLMENTS'}>ENROLMENTS</MenuItem>
+          <MenuItem value="ALL">ALL</MenuItem>
+          <MenuItem value="NIGHTLY">NIGHTLY</MenuItem>
+          <MenuItem value="ENROLMENTS">ENROLMENTS</MenuItem>
         </Select>
       </FormControl>
       <StatusTable updaterStatuses={updaterStatuses} />
