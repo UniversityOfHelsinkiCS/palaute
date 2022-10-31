@@ -1,12 +1,27 @@
 const LRUCache = require('lru-cache')
+const { Organisation, Survey } = require('../../models')
 
-const cache = new LRUCache({
+const lru = new LRUCache({
   max: 250,
 })
 
-module.exports = {
-  get: (feedbackTargetId) => cache.get(feedbackTargetId),
-  set: (id, feedbackTargetJson) => cache.set(id, feedbackTargetJson),
-  invalidate: (feedbackTargetId) => cache.delete(feedbackTargetId),
-  invalidateAll: () => cache.clear(),
+const cache = {
+  get: (feedbackTargetId) => lru.get(feedbackTargetId),
+  set: (id, feedbackTargetJson) => lru.set(id, feedbackTargetJson),
+  invalidate: (feedbackTargetId) => lru.delete(feedbackTargetId),
+  invalidateAll: () => lru.clear(),
 }
+
+Organisation.afterUpdate('invalidateFeedbackTargetCache', () => {
+  cache.invalidateAll()
+})
+
+Survey.afterUpdate('invalidateFeedbackTargetCache', (survey) => {
+  if (survey.type === 'feedbackTarget') {
+    cache.invalidate(survey.feedbackTargetId)
+  } else {
+    cache.invalidateAll()
+  }
+})
+
+module.exports = cache
