@@ -8,6 +8,7 @@ const {
   INTEGER,
 } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
+const feedbackTargetCache = require('../services/feedbackTargets/cache')
 
 class Organisation extends Model {
   async getCourseCodes() {
@@ -77,5 +78,9 @@ Organisation.init(
     sequelize,
   },
 )
+
+Organisation.afterUpdate('invalidateFeedbackTargetCache', () => {
+  feedbackTargetCache.invalidateAll()
+})
 
 module.exports = Organisation

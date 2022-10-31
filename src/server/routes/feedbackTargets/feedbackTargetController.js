@@ -43,7 +43,9 @@ const updateEnrolmentNotification = require('./updateEnrolmentNotification')
 const {
   getEnrolmentNotification,
 } = require('../../services/enrolmentNotices/enrolmentNotices')
-const { getFeedbackTargetById } = require('../../services/feedbackTargets')
+const {
+  getFeedbackTargetForUserById,
+} = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
   STUDENT: 1,
@@ -371,7 +373,7 @@ const getOne = async (req, res) => {
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   try {
-    const result = await getFeedbackTargetById(
+    const result = await getFeedbackTargetForUserById(
       feedbackTargetId,
       req.user,
       req.isAdmin,

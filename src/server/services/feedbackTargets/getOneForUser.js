@@ -9,9 +9,29 @@ const {
   User,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const cache = require('./cache')
 
+/**
+ * Expensive data of feedback targets is cached:
+ * - courseUnit
+ * - organisation
+ * - courseRealisation
+ * - studentCount
+ * - surveys
+ * - responsibleTeachers
+ * - studentListVisible
+ * @param {number} id
+ * @returns {object}
+ */
 const getFromDb = async (id) => {
   const fbt = await FeedbackTarget.findByPk(id, {
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'hidden',
+      'feedbackType',
+    ],
     include: [
       {
         model: UserFeedbackTarget,
@@ -42,37 +62,54 @@ const getFromDb = async (id) => {
   fbt.set(
     'responsibleTeachers',
     _.orderBy(
-      fbt.dataValues.userFeedbackTargets
+      fbt.userFeedbackTargets
         .filter((ufbt) => ufbt.accessStatus === 'TEACHER')
         .map((ufbt) => ufbt.user),
-      [['lastName', 'asc']],
     ),
+    [['lastName', 'desc']],
   )
   fbt.set(
     'studentCount',
-    fbt.dataValues.userFeedbackTargets.filter(
-      (ufbt) => ufbt.accessStatus === 'STUDENT',
-    ).length,
-  )
-  fbt.set(
-    'feedbackCount',
-    fbt.dataValues.userFeedbackTargets.filter((ufbt) => ufbt.feedbackId).length,
+    fbt.userFeedbackTargets.filter((ufbt) => ufbt.accessStatus === 'STUDENT')
+      .length,
   )
 
-  return fbt
+  const studentListVisible = await fbt.courseUnit.isStudentListVisible()
+  const publicTarget = await fbt.toPublicObject()
+
+  const feedbackTargetJson = {
+    ...publicTarget,
+    studentListVisible,
+  }
+
+  return feedbackTargetJson
+}
+
+const getAdditionalDataFromCacheOrDb = async (id) => {
+  let data = cache.get(id)
+  if (!data) {
+    data = await getFromDb(id)
+    cache.set(data.id, data)
+  }
+  return data
 }
 
 const getUserFeedbackTarget = (userId, feedbackTargetId) =>
   UserFeedbackTarget.findOne({
     where: { userId, feedbackTargetId },
-    include: { model: Feedback, as: 'feedback' },
+    include: [{ model: Feedback, as: 'feedback' }],
   })
 
-const getOne = async (id, user, isAdmin) => {
-  const [feedbackTarget, userFeedbackTarget] = await Promise.all([
-    getFromDb(id),
-    getUserFeedbackTarget(user.id, id),
-  ])
+const getFeedbackTarget = (feedbackTargetId) =>
+  FeedbackTarget.findByPk(feedbackTargetId)
+
+const getOneForUser = async (id, user, isAdmin) => {
+  const [additionalData, userFeedbackTarget, feedbackTarget] =
+    await Promise.all([
+      getAdditionalDataFromCacheOrDb(id),
+      getUserFeedbackTarget(user.id, id),
+      getFeedbackTarget(id),
+    ])
 
   if (!feedbackTarget) {
     throw new ApplicationError('Not found', 404)
@@ -84,7 +121,7 @@ const getOne = async (id, user, isAdmin) => {
     // User not directly associated. Lets check if they have access through organisation
     const hasOrganisationAccess = (
       await user.getOrganisationAccessByCourseUnitId(
-        feedbackTarget.courseUnitId,
+        additionalData.courseUnitId,
       )
     )?.read
 
@@ -95,18 +132,12 @@ const getOne = async (id, user, isAdmin) => {
     accessStatus = 'ORGANISATION'
   }
 
-  const studentListVisible =
-    await feedbackTarget.courseUnit.isStudentListVisible(isAdmin)
-
-  const publicTarget = await feedbackTarget.toPublicObject()
-
-  const responseReady = {
-    ...publicTarget,
+  return {
+    ...additionalData,
     accessStatus,
     feedback: userFeedbackTarget?.feedback ?? null,
+    ...feedbackTarget.toJSON(),
   }
-
-  return { ...responseReady, studentListVisible }
 }
 
-module.exports = { getOne }
+module.exports = { getOneForUser }

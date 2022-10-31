@@ -7,7 +7,7 @@ const { sequelize } = require('../util/dbConnection')
 const logger = require('../util/logger')
 
 class CourseUnit extends Model {
-  async isStudentListVisible(isAdmin) {
+  async isStudentListVisible() {
     const organisationRows = await sequelize.query(
       'SELECT O.* from organisations O, course_units_organisations C ' +
         " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
@@ -33,7 +33,7 @@ class CourseUnit extends Model {
 
     if (
       STUDENT_LIST_BY_COURSE_ENABLED.includes(code) ||
-      (STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code) && isAdmin)
+      STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code)
     ) {
       if (studentListVisibleCourseCodes.includes(this.courseCode)) return true
     }

@@ -1,5 +1,5 @@
-const { getOne } = require('./getOne')
+const { getOneForUser } = require('./getOneForUser')
 
 module.exports = {
-  getFeedbackTargetById: getOne,
+  getFeedbackTargetForUserById: getOneForUser,
 }

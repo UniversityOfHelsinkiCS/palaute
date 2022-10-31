@@ -10,6 +10,7 @@ const {
 
 const { sequelize } = require('../util/dbConnection')
 const Question = require('./question')
+const feedbackTargetCache = require('../services/feedbackTargets/cache')
 
 class Survey extends Model {
   /**
@@ -71,5 +72,13 @@ Survey.init(
     sequelize,
   },
 )
+
+Survey.afterUpdate('invalidateFeedbackTargetCache', (survey) => {
+  if (survey.type === 'feedbackTarget') {
+    feedbackTargetCache.invalidate(survey.feedbackTargetId)
+  } else {
+    feedbackTargetCache.invalidateAll()
+  }
+})
 
 module.exports = Survey

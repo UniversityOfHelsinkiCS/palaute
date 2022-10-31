@@ -240,7 +240,7 @@ class FeedbackTarget extends Model {
   async getPrevious() {
     const courseRealisation = CourseRealisation.findByPk(
       this.courseRealisationId,
-      { attributes: ['start_date'] },
+      { attributes: ['startDate'] },
     )
 
     const currentTeachers = UserFeedbackTarget.findAll({
@@ -339,12 +339,15 @@ FeedbackTarget.init(
     closesAt: {
       type: DATE,
     },
+    // potentially cached
     surveys: {
       type: VIRTUAL,
     },
+    // potentially cached
     questions: {
       type: VIRTUAL,
     },
+    // potentially cached
     responsibleTeachers: {
       type: VIRTUAL,
     },
