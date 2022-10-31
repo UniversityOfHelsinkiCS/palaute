@@ -227,26 +227,6 @@ const getTeachingLanguages = (customCodeUrns) => {
   return languages
 }
 
-const createDateCheck = async (old, updated) => {
-  const feedbackTarget = await FeedbackTarget.findOne({
-    where: {
-      courseRealisationId: old.id,
-    },
-    attributes: ['id', 'feedback_dates_edited_by_teacher'],
-  })
-  if (!feedbackTarget?.id) return
-
-  if (old.startDate === updated.startDate && old.endDate === updated.startDate)
-    return
-
-  if (!feedbackTarget.feedbackDatesEditedByTeacher) return
-
-  logger.info(
-    '[UPDATER] FOUND A CHANGED COURSE DATE WITH TEACHER MODIFIED FEEDBACK DATES',
-  )
-  FeedbackTargetDateCheck.create({ feedback_target_id: feedbackTarget.id })
-}
-
 const createCourseRealisations = async (courseRealisations) => {
   // Check when course's dates have changed in sis. If that happens, create a date check.
   for (const {
@@ -269,7 +249,6 @@ const createCourseRealisations = async (courseRealisations) => {
     })
     if (old) {
       // update existing
-      await createDateCheck(old, newRealisation)
 
       old.name = newRealisation.name
       old.endDate = newRealisation.endDate
@@ -522,9 +501,10 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
 const coursesHandler = async (courses) => {
   const filteredCourses = courses.filter(
     (course) =>
-      course.courseUnits.length &&
-      validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
-      course.flowState !== 'CANCELLED',
+      includeCurs.includes(course.id) ||
+      (course.courseUnits.length &&
+        validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
+        course.flowState !== 'CANCELLED'),
   )
 
   const cancelledCourses = courses.filter(
