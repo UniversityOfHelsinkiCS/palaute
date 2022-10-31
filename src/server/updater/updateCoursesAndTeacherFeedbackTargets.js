@@ -1,3 +1,4 @@
+const Sentry = require('@sentry/node')
 const dateFns = require('date-fns')
 const { parseFromTimeZone } = require('date-fns-timezone')
 const { Op } = require('sequelize')
@@ -418,9 +419,15 @@ const createFeedbackTargets = async (courses) => {
     )
     .filter((target) => target.user_id && target.feedback_target_id)
 
-  await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
-    ignoreDuplicates: true,
-  })
+  try {
+    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
+      ignoreDuplicates: true,
+    })
+  } catch (e) {
+    logger.error('[UPDATER] error when creating teacher feedback targets')
+    logger.error(e)
+    Sentry.captureException(e)
+  }
 }
 
 const deleteCancelledCourses = async (cancelledCourseIds) => {

@@ -1,5 +1,6 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
+const Sentry = require('@sentry/node')
 const logger = require('../util/logger')
 const importerClient = require('./importerClient')
 
@@ -51,6 +52,7 @@ const mangleData = async (url, limit, handler) => {
     } catch (e) {
       logger.info('[UPDATER] ERROR:')
       logger.error(e)
+      Sentry.captureException(e)
     }
   }
 
