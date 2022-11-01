@@ -82,6 +82,7 @@ export default {
     waitingForFeedbackChip: 'Palaute puuttuu',
     feedbackNotStartedChip: 'Palaute ei ole alkanut',
     feedbackEndedChip: 'Palaute on päättynyt',
+    continuousFeedbackChip: 'Jatkuva palaute',
     deleted: 'Palautteesi on poistettu',
   },
   feedbackView: {

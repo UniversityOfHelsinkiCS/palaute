@@ -82,6 +82,7 @@ export default {
     waitingForFeedbackChip: 'Feedback is missing',
     feedbackNotStartedChip: 'Feedback has not started',
     feedbackEndedChip: 'Feedback has ended',
+    continuousFeedbackChip: 'Continuous feedback',
     deleted: 'Your feedback has been deleted',
   },
   feedbackView: {

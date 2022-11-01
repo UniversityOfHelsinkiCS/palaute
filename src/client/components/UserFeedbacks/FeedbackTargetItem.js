@@ -168,6 +168,19 @@ const FeedbackNotStartedChip = () => {
   )
 }
 
+const ContinuousFeedbackChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<NoFeedbackIcon />}
+      label={t('userFeedbacks:continuousFeedbackChip')}
+      sx={styles.shimmeringSecondary}
+    />
+  )
+}
+
 const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
@@ -208,7 +221,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
       <Box mt={1} mb={1}>
         {isEnded && !feedbackGiven && <FeedbackEndedChip />}
-        {notStarted && <FeedbackNotStartedChip />}
+        {notStarted && !continuousFeedbackEnabled && <FeedbackNotStartedChip />}
+        {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackChip />}
         {feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
       </Box>
