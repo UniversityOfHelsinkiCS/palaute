@@ -423,7 +423,7 @@ export default {
     surveySettingsTab: 'Kyselyn asetukset',
     activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',
     activateContinuousFeedbackDigest:
-      'Lähetä sähköposti uudesta jatkuvasta palautteesta',
+      'Lähetä sähköpostiyhteenvetoja uudesta jatkuvasta palautteesta',
     continuousFeedbackGiven: 'Annettu jatkuva palaute',
     noContinuousFeedbackGiven: 'Jatkuvaa palautetta ei ole vielä annettu',
     studentLinkTitle: 'Opiskelijan vastauslinkki',

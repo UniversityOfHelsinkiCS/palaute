@@ -28,6 +28,8 @@ const FeedbackResponseChip = ({
 
   const ongoingStyle = styles.shimmering
 
+  const continuousStyle = styles.shimmeringSecondary
+
   const notSentStyle = feedbackResponseGiven ? styles.warning : styles.error
 
   const url =
@@ -44,7 +46,7 @@ const FeedbackResponseChip = ({
       to={url}
       label={continuous ? continuousLabel : ongoing ? ongoingLabel : label}
       sx={{
-        ...(ongoing || continuous ? ongoingStyle : sx),
+        ...(continuous ? continuousStyle : ongoing ? ongoingStyle : sx),
         ...styles.interactive,
       }}
       {...props}

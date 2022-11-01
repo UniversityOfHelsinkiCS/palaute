@@ -362,6 +362,26 @@ const FeedbackTargetView = () => {
               <Typography color="textSecondary" variant="body2" component="dd">
                 {feedbackPeriod}
               </Typography>
+
+              {continuousFeedbackEnabled && (
+                <>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                    component="dt"
+                  >
+                    {t('feedbackTargetView:continuousFeedbackTab')}:
+                  </Typography>
+
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                    component="dd"
+                  >
+                    {coursePeriod}
+                  </Typography>
+                </>
+              )}
             </dl>
 
             <Box sx={[styles.linkContainer, styles.hidePrint]}>
