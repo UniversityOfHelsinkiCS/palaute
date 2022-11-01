@@ -38,8 +38,9 @@ const start = async () => {
   await updater.start()
   await startViewsCron()
   await startEnrolmentsCron()
-  await mailer.startCron()
   await startPrecacheFeedbackTargetsCron()
+  await mailer.startCron()
+  await mailer.startContinuousFeedbackCron()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
