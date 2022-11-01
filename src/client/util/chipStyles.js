@@ -63,6 +63,17 @@ const styles = {
     color: '#09233d',
     borderColor: '#a3bed9',
   },
+  shimmeringSecondary: {
+    background: (theme) => theme.palette.primary,
+    backgroundImage:
+      'linear-gradient(55deg, #ccffcc 10%, #99ff99 30%, #ccffcc 50%)',
+    backgroundSize: '150px, 20px',
+    animation: css`
+      ${flow} 6.5s infinite forwards linear
+    `,
+    color: '#003300',
+    borderColor: '#33cc33',
+  },
 }
 
 export default styles
