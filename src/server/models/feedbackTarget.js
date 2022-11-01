@@ -255,6 +255,7 @@ class FeedbackTarget extends Model {
       where: {
         courseUnitId: this.courseUnitId,
         feedbackType: this.feedbackType,
+        hidden: false,
       },
       include: [
         {
@@ -283,18 +284,23 @@ class FeedbackTarget extends Model {
         ],
       ],
     })
-    if (!allPreviousFeedbackTargets || allPreviousFeedbackTargets.length === 0)
-      return null
 
     const currentTeacherIds = (await currentTeachers).map(
       ({ userId }) => userId,
     )
 
-    return allPreviousFeedbackTargets.find((fbt) =>
-      fbt.userFeedbackTargets.some((ufbt) =>
-        currentTeacherIds.includes(ufbt.user_id),
-      ),
+    const previousTargetsWithSameTeacher = allPreviousFeedbackTargets.filter(
+      (fbt) =>
+        fbt.userFeedbackTargets.some((ufbt) =>
+          currentTeacherIds.includes(ufbt.userId),
+        ),
     )
+
+    if (previousTargetsWithSameTeacher.length < 1) {
+      return null
+    }
+
+    return previousTargetsWithSameTeacher[0]
   }
 }
 
