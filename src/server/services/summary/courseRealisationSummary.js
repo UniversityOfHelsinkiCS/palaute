@@ -17,7 +17,7 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
     await UserFeedbackTarget.findAll({
       where: {
         feedbackTargetId: {
-          [Op.in]: summaries.map((r) => r.feedback_target_id),
+          [Op.in]: summaries.map((cur) => cur.feedbackTargetId),
         },
         accessStatus: 'TEACHER',
       },
@@ -30,16 +30,14 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
     (teacher) => teacher.feedbackTargetId,
   )
 
-  const results = summaries.map((row) => {
-    const questionIds = row.question_ids
-
-    const results = row.question_distribution
+  const results = summaries.map((cur) => {
+    const results = cur.questionDistribution
       .map((questionData, idx) => {
-        const question = questions.find((q) => q.id === questionIds[idx])
+        const question = questions.find((q) => q.id === cur.questionIds[idx])
         if (!question) return undefined
         const distribution = _.mapValues(questionData, Number)
         return {
-          questionId: questionIds[idx],
+          questionId: cur.questionIds[idx],
           mean: getMean(distribution, question),
           distribution,
         }
@@ -47,25 +45,17 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
       .filter(Boolean)
 
     const teachers =
-      teacherData[row.feedback_target_id]?.map((teacher) => teacher.user) ?? []
+      teacherData[cur.feedbackTargetId]?.map((teacher) => teacher.user) ?? []
 
-    const teachingLanguages = (row.teaching_languages || []).map(
+    const teachingLanguages = (cur.teachingLanguages || []).map(
       (lang) => languages[lang]?.name,
     )
 
     return {
+      ...cur,
       courseCode,
-      id: row.course_realisation_id,
-      name: row.name,
-      feedbackTargetId: row.feedback_target_id,
       results,
-      feedbackCount: row.feedback_count,
-      studentCount: row.student_count,
-      feedbackResponseGiven: row.feedback_response_given,
       teachingLanguages,
-      startDate: row.start_date,
-      endDate: row.end_date,
-      closesAt: row.closes_at,
       teachers,
     }
   })

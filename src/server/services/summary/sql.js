@@ -145,15 +145,18 @@ const COURSE_REALISATION_SUMMARY_QUERY = `
 SELECT
 DISTINCT ON (cur.id)
     cr.*,
-    fbt.id as feedback_target_id,
-    fbt.feedback_count,
-    fbtc.student_count,
-    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as feedback_response_given,
-    fbt.closes_at,
-    cur.start_date,
-    cur.end_date,
+    cr.question_ids as "questionIds",
+    cr.question_distribution as "questionDistribution",
+    cur.id as "id",
+    fbt.id as "feedbackTargetId",
+    fbt.feedback_count as "feedbackCount",
+    fbtc.student_count as "studentCount",
+    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
+    fbt.closes_at as "closesAt",
+    cur.start_date as "startDate",
+    cur.end_date as "endDate",
     cur.name,
-    cur.teaching_languages
+    cur.teaching_languages as "teachingLanguages"
 
 FROM course_results_view as cr
 INNER JOIN feedback_targets fbt ON fbt.course_realisation_id = cr.course_realisation_id
