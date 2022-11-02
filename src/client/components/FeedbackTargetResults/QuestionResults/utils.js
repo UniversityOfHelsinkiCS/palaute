@@ -10,6 +10,47 @@ const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 // const WORKLOAD_QUESTION_ID = 1042
 
+/**
+ * https://stackoverflow.com/questions/21409717/chart-js-and-long-labels
+ * Takes a string phrase and breaks it into separate phrases
+ * no bigger than 'maxwidth', breaks are made at complete words.
+ */
+const formatLabel = (str, maxwidth) => {
+  const sections = []
+  const words = str.split(' ')
+  let temp = ''
+
+  words.forEach((item, index) => {
+    if (temp.length > 0) {
+      const concat = `${temp} ${item}`
+
+      if (concat.length > maxwidth) {
+        sections.push(temp)
+        temp = ''
+      } else if (index === words.length - 1) {
+        sections.push(concat)
+        return
+      } else {
+        temp = concat
+        return
+      }
+    }
+
+    if (index === words.length - 1) {
+      sections.push(item)
+      return
+    }
+
+    if (item.length < maxwidth) {
+      temp = item
+    } else {
+      sections.push(item)
+    }
+  })
+
+  return sections
+}
+
 const getScalesConfig = (t, max) => ({
   y: {
     title: {
@@ -44,7 +85,7 @@ const getOptions = (question, t, language, max) => ({
     },
     title: {
       display: true,
-      text: getLanguageValue(question.data?.label, language),
+      text: formatLabel(getLanguageValue(question.data?.label, language), 65),
     },
   },
 })
@@ -77,7 +118,7 @@ export const getMultipleChoiceChartConfig = (question, language, t, max) => {
   const arrayOptions = question.data?.options ?? []
 
   const labels = arrayOptions.map(({ label }) =>
-    getLanguageValue(label, language),
+    formatLabel(getLanguageValue(label, language), 20),
   )
 
   const flatFeedbacks = flatMap(question.feedbacks, ({ data }) => data ?? [])
@@ -104,7 +145,7 @@ export const getSingleChoiceChartConfig = (question, language, t, max) => {
   const arrayOptions = question.data?.options ?? []
 
   const labels = arrayOptions.map(({ label }) =>
-    getLanguageValue(label, language),
+    formatLabel(getLanguageValue(label, language), 30),
   )
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
