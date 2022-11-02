@@ -132,6 +132,8 @@ const getOneForUser = async (id, user, isAdmin) => {
     accessStatus = 'ORGANISATION'
   }
 
+  feedbackTarget.set('studentCount', additionalData.studentCount)
+
   return {
     ...additionalData,
     accessStatus,
