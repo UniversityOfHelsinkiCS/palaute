@@ -1,5 +1,9 @@
 const LRUCache = require('lru-cache')
-const { Organisation, Survey, FeedbackTarget } = require('../../models')
+
+// because of dark javascript import magic, important to require them directly (or try if it works the normal way)
+const Organisation = require('../../models/organisation')
+const FeedbackTarget = require('../../models/feedbackTarget')
+const Survey = require('../../models/survey')
 
 const lru = new LRUCache({
   max: 250,
@@ -12,23 +16,39 @@ const cache = {
   invalidateAll: () => lru.clear(),
 }
 
-Organisation.afterUpdate('invalidateFeedbackTargetCache', () => {
-  cache.invalidateAll()
-})
+const onOrganisationChange = (organisationCode) => {
+  const idstoInvalidate = []
+  for (const [key, fbt] of lru.entries()) {
+    if (
+      fbt.courseUnit.organisations.some((org) => org.code === organisationCode)
+    ) {
+      idstoInvalidate.push(key)
+    }
+  }
+  idstoInvalidate.forEach(cache.invalidate)
+}
 
-Survey.afterUpdate('invalidateFeedbackTargetCache', (survey) => {
+const onFeedbackTargetChange = (feedbackTarget) => {
+  cache.invalidate(feedbackTarget.id)
+}
+
+const onSurveyChange = (survey) => {
   if (survey.type === 'feedbackTarget') {
     cache.invalidate(survey.feedbackTargetId)
+  } else if (survey.type === 'programme') {
+    onOrganisationChange(survey.typeId)
   } else {
     cache.invalidateAll()
   }
-})
+}
 
-FeedbackTarget.afterUpdate(
-  'invalidateFeedbackTargetCache',
-  (feedbackTarget) => {
-    cache.invalidate(feedbackTarget.id)
-  },
-)
+Organisation.afterUpdate(({ code }) => onOrganisationChange(code))
+Organisation.afterSave(({ code }) => onOrganisationChange(code))
+
+FeedbackTarget.afterUpdate(onFeedbackTargetChange)
+FeedbackTarget.afterSave(onFeedbackTargetChange)
+
+Survey.afterUpdate(onSurveyChange)
+Survey.afterSave(onSurveyChange)
 
 module.exports = cache

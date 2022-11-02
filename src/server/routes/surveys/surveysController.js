@@ -61,13 +61,17 @@ const update = async (req, res) => {
 
   const { questions } = req.body
 
-  if (questions && !isUniversitySurvey) {
-    await createOrganisationSurveyLog(survey, questions, user)
+  if (questions) {
+    if (!isUniversitySurvey) {
+      await createOrganisationSurveyLog(survey, questions, user)
+    }
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
   }
 
+  // Mark updatedAt as changed to force a query. Otherwise save() may not actually run a query and trigger hooks
+  survey.changed('updatedAt', true)
   const updatedSurvey = await survey.save()
   await updatedSurvey.populateQuestions()
 
