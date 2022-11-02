@@ -216,6 +216,7 @@ export default {
     moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',
     here: 'täältä',
     multipleChoiceQuestions: 'Monivalintakysymykset',
+    openQuestions: 'Avoimet kysymykset',
   },
   feedbackSummary: {
     question: 'Kysymys',

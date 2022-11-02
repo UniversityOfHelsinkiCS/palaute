@@ -220,6 +220,7 @@ export default {
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
     multipleChoiceQuestions: 'Flervalsfrågor',
+    openQuestions: 'Öppna frågor',
   },
   feedbackSummary: {
     question: 'Fråga',

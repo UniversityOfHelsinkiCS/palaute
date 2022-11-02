@@ -11,6 +11,7 @@ import {
   ListItemText,
   Link as MuiLink,
   Paper,
+  Chip,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
@@ -20,31 +21,27 @@ import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 import AlertLink from '../../common/AlertLink'
-import { getLanguageValue } from '../../../util/languageUtils'
 import LinkChip from '../../common/LinkChip'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 const styles = {
-  openQuestionItem: {
-    marginBottom: (theme) => theme.spacing(2),
-  },
-  list: {
+  list: (theme) => ({
     maxHeight: '800px',
-    overflowY: 'scroll',
+    overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: 10,
     },
     '&::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 5px grey',
       borderRadius: 10,
     },
     '&::-webkit-scrollbar-thumb': {
-      background: '#107eab',
+      background: theme.palette.primary.light,
       borderRadius: 10,
     },
     '&::-webkit-scrollbar-thumb:hover': {
-      background: '#0e6e95',
+      background: theme.palette.info.main,
     },
-  },
+  }),
   link: {
     fontWeight: (theme) => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
@@ -75,7 +72,6 @@ const QuestionItem = ({
   isTeacher,
   t,
   isPublic,
-  sx,
   feedbackCount,
   feedbackTargetId,
 }) => {
@@ -86,7 +82,7 @@ const QuestionItem = ({
   ) : null
 
   return (
-    <Box sx={sx} m="1rem">
+    <Box m="1rem" mt="3rem">
       {isTeacher && (
         <Box my="1rem">
           <LinkChip
@@ -134,7 +130,9 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
               disableGutters
               key={index}
             >
-              <ListItemText primary={question.data.label[language]} />
+              <ListItemText
+                primary={getLanguageValue(question.data.label, language)}
+              />
             </ListItem>
           ))}
         </List>
@@ -143,12 +141,13 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
   )
 }
 
-const QuestionSection = ({ title, children }) => (
+const QuestionSection = ({ title, count, children }) => (
   <Paper>
     <Box my="3rem" p="1rem">
-      <Typography component="h4" variant="h6">
-        {title}
-      </Typography>
+      <Box display="flex" gap="1rem" mb="2rem" alignItems="end">
+        <Typography component="h4">{title}</Typography>
+        <Chip label={count} variant="outlined" size="small" />
+      </Box>
       {children}
     </Box>
   </Paper>
@@ -168,7 +167,7 @@ const QuestionResults = ({
     [questions, feedbacks, publicQuestionIds],
   )
 
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const openQuestions = questionsWithFeedbacks.filter(
     (q) => q.type === 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
@@ -184,7 +183,10 @@ const QuestionResults = ({
 
   return (
     <>
-      <QuestionSection title={t('questionResults:multipleChoiceQuestions')}>
+      <QuestionSection
+        title={t('questionResults:multipleChoiceQuestions')}
+        count={notOpenQuestions.length}
+      >
         <Grid container sx={styles.displayStyle}>
           {notOpenQuestions.map((q) => (
             <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>
@@ -200,21 +202,21 @@ const QuestionResults = ({
           ))}
         </Grid>
       </QuestionSection>
-      {openQuestions.map((q) => (
-        <QuestionSection
-          title={getLanguageValue(q.data.label, i18n.language)}
-          key={q.id}
-        >
+      <QuestionSection
+        title={t('questionResults:openQuestions')}
+        count={openQuestions.length}
+      >
+        {openQuestions.map((q) => (
           <QuestionItem
+            key={q.id}
             question={q}
             isPublic={publicQuestionIds.includes(q.id)}
             isTeacher={isTeacher}
             t={t}
-            sx={styles.openQuestionItem}
             feedbackTargetId={feedbackTargetId}
           />
-        </QuestionSection>
-      ))}
+        ))}
+      </QuestionSection>
       {organisationAccess && hiddenQuestions.length > 0 && (
         <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />
       )}

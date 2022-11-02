@@ -219,6 +219,7 @@ export default {
     moreInfo: 'More information about visibility can be found',
     here: 'here',
     multipleChoiceQuestions: 'Multiple choice questions',
+    openQuestions: 'Open questions',
   },
   feedbackSummary: {
     question: 'Question',

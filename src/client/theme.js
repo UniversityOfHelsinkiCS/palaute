@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
-import { lightBlue, green, red, grey } from '@mui/material/colors'
+import { lightBlue, green, grey } from '@mui/material/colors'
 import { useMemo } from 'react'
 
 import { inStaging } from '../config'
@@ -18,6 +18,7 @@ const useTheme = () => {
             ...(mode === 'light'
               ? {
                   primary: {
+                    light: '#4f96db',
                     main: !inStaging ? '#3770b3' : '#77dcbb',
                     dark: '#14549c', // Ukraine blue
                   },
@@ -51,7 +52,17 @@ const useTheme = () => {
                   height: 100vh;
                 }
                 ::-webkit-scrollbar {
-                  display: none;
+                  width: 10,
+                }
+                ::-webkit-scrollbar-track {
+                  borderRadius: 10,
+                }
+                ::-webkit-scrollbar-thumb {
+                  background: theme.palette.primary.light,
+                  borderRadius: 10,
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                  background: theme.palette.info.main,
                 }
               `,
             },

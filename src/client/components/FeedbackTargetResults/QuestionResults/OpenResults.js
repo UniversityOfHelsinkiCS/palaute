@@ -1,34 +1,43 @@
 import React from 'react'
-import { List, ListItem, ListItemText } from '@mui/material'
+import {
+  Box,
+  Chip,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material'
+import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
 const styles = {
-  list: {
+  list: (theme) => ({
+    padding: '1rem',
     maxHeight: '800px',
-    overflowY: 'scroll',
+    overflowY: 'auto',
     '&::-webkit-scrollbar': {
-      width: 10,
+      width: 8,
     },
     '&::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 5px grey',
+      background: grey[200],
       borderRadius: 10,
     },
     '&::-webkit-scrollbar-thumb': {
-      background: '#107eab',
+      background: theme.palette.primary.light,
       borderRadius: 10,
     },
     '&::-webkit-scrollbar-thumb:hover': {
-      background: '#0e6e95',
+      background: theme.palette.info.main,
     },
     '@media print': {
       overflow: 'visible',
       maxHeight: '100%',
       height: 'auto',
     },
-  },
+  }),
 }
 
 const OpenResults = ({ question }) => {
@@ -46,7 +55,18 @@ const OpenResults = ({ question }) => {
   const filteredFeedbacks = feedbacks.filter(({ data }) => Boolean(data))
 
   return (
-    <ResultsContent title={label} description={description}>
+    <ResultsContent>
+      <Box mb={1} mt={1} display="flex" gap="1rem">
+        <Box>
+          <Typography fontWeight="medium">{label}</Typography>
+          <Typography variant="body2">{description}</Typography>
+        </Box>
+        <Chip
+          label={filteredFeedbacks.length}
+          variant="outlined"
+          size="small"
+        />
+      </Box>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
           <ListItem
@@ -54,7 +74,11 @@ const OpenResults = ({ question }) => {
             disableGutters
             key={index}
           >
-            <ListItemText primary={feedback.data} />
+            <ListItemText
+              sx={{ py: 1 }}
+              primary={feedback.data}
+              primaryTypographyProps={{ fontSize: 18 }}
+            />
           </ListItem>
         ))}
       </List>
