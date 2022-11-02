@@ -1,5 +1,5 @@
 const LRUCache = require('lru-cache')
-const { Organisation, Survey } = require('../../models')
+const { Organisation, Survey, FeedbackTarget } = require('../../models')
 
 const lru = new LRUCache({
   max: 250,
@@ -23,5 +23,12 @@ Survey.afterUpdate('invalidateFeedbackTargetCache', (survey) => {
     cache.invalidateAll()
   }
 })
+
+FeedbackTarget.afterUpdate(
+  'invalidateFeedbackTargetCache',
+  (feedbackTarget) => {
+    cache.invalidate(feedbackTarget.id)
+  },
+)
 
 module.exports = cache

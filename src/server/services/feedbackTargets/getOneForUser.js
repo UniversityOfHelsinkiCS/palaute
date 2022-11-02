@@ -101,7 +101,14 @@ const getUserFeedbackTarget = (userId, feedbackTargetId) =>
   })
 
 const getFeedbackTarget = (feedbackTargetId) =>
-  FeedbackTarget.findByPk(feedbackTargetId)
+  FeedbackTarget.findByPk(feedbackTargetId, {
+    attributes: {
+      /* These we get from cache */ exclude: [
+        'studentCount',
+        'publicQuestionIds',
+      ],
+    },
+  })
 
 const getOneForUser = async (id, user, isAdmin) => {
   const [additionalData, userFeedbackTarget, feedbackTarget] =
@@ -131,8 +138,6 @@ const getOneForUser = async (id, user, isAdmin) => {
 
     accessStatus = 'ORGANISATION'
   }
-
-  feedbackTarget.set('studentCount', additionalData.studentCount)
 
   return {
     ...additionalData,

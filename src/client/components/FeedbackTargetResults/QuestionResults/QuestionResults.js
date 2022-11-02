@@ -185,9 +185,9 @@ const QuestionResults = ({
   return (
     <>
       <QuestionSection title={t('questionResults:multipleChoiceQuestions')}>
-        <Grid spacing={2} container sx={styles.displayStyle}>
+        <Grid container sx={styles.displayStyle}>
           {notOpenQuestions.map((q) => (
-            <Grid item key={q.id} xs={12} sm={6} lg={4} xl={3}>
+            <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>
               <QuestionItem
                 question={q}
                 isPublic={publicQuestionIds.includes(q.id)}
