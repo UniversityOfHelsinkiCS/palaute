@@ -1,9 +1,8 @@
 import React from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 
-const ResultsContent = ({ chart, children, description }) => (
+const ResultsContent = ({ chart, children }) => (
   <Box>
-    {description && <Typography>{description}</Typography>}
     {chart}
     {children}
   </Box>

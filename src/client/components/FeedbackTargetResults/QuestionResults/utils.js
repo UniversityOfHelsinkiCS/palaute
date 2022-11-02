@@ -16,6 +16,7 @@ const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
  * no bigger than 'maxwidth', breaks are made at complete words.
  */
 const formatLabel = (str, maxwidth) => {
+  if (!str) return []
   const sections = []
   const words = str.split(' ')
   let temp = ''
@@ -86,6 +87,13 @@ const getOptions = (question, t, language, max) => ({
     title: {
       display: true,
       text: formatLabel(getLanguageValue(question.data?.label, language), 65),
+    },
+    subtitle: {
+      display: Boolean(question.data?.description),
+      text: formatLabel(
+        getLanguageValue(question.data?.description, language),
+        65,
+      ),
     },
   },
 })
