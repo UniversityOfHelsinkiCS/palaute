@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { CSVLink } from 'react-csv'
+import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 import { Button, MenuItem, Menu, Box } from '@mui/material'
-import Papa from 'papaparse'
 import * as _ from 'lodash'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -100,22 +99,20 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   const data = [headers, ...questions]
 
-  const parsedData = Papa.unparse(data, {
-    delimiter: ';',
-    quoteChar: "'",
-  })
-    .replaceAll('\n', ' ')
-    .replaceAll(',', '')
-
   const filename = `${
     feedbackTarget.courseUnit.courseCode
-  }_${getCourseStartDate(feedbackTarget)}.csv`
+  }_${getCourseStartDate(feedbackTarget)}`
+
+  const worksheet = utils.aoa_to_sheet(data)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, filename)
 
   return (
-    <Button sx={styles.button}>
-      <CSVLink data={parsedData} sx={styles.link} filename={filename}>
-        {t('feedbackTargetResults:exportCsv')}
-      </CSVLink>
+    <Button
+      sx={styles.button}
+      onClick={() => writeFileXLSX(workbook, `${filename}.xlsx`)}
+    >
+      {t('feedbackTargetResults:exportCsv')}
     </Button>
   )
 }
