@@ -2,8 +2,7 @@
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDropzone } from 'react-dropzone'
-import { CSVLink } from 'react-csv'
-import Papa from 'papaparse'
+import { writeFileXLSX, utils } from 'xlsx'
 
 import { Box, Button } from '@mui/material'
 
@@ -151,7 +150,10 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
   }
 
   const data = [headers.concat(t('feedbackHeader')), ...updatedRows]
-  const parsedData = Papa.unparse(data, { delimiter: ';' })
+
+  const worksheet = utils.aoa_to_sheet(data)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, filename)
 
   return (
     <Box style={{ display: 'flex', flexDirection: 'row-reverse' }}>
@@ -159,15 +161,9 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
         variant="outlined"
         color="primary"
         style={{ margin: 10, width: '170px' }}
+        onClick={() => writeFileXLSX(workbook, `${filename}_combined.xlsx`)}
       >
         {t('downloadCSV')}
-        <CSVLink
-          style={{ opacity: 0, position: 'absolute' }}
-          data={parsedData}
-          filename={`${filename}_combined.csv`}
-        >
-          {t('downloadCSV')}
-        </CSVLink>
       </Button>
     </Box>
   )

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CSVLink } from 'react-csv'
-import Papa from 'papaparse'
+import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 
 import {
@@ -36,7 +35,9 @@ const styles = {
   },
 }
 
-const ExportCsv = ({ students, t, fileName }) => {
+const ExportCsv = ({ students, fileName }) => {
+  const { t } = useTranslation()
+
   const headers = [
     t('firstName'),
     t('lastName'),
@@ -47,16 +48,20 @@ const ExportCsv = ({ students, t, fileName }) => {
   const stats = students.map((student) => [...Object.values(student)])
   const data = [headers, ...stats]
 
-  const parsedData = Papa.unparse(data, { delimiter: ';' })
+  const worksheet = utils.aoa_to_sheet(data)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, fileName)
 
   return (
-    <CSVLink
-      style={{ textDecoration: 'none' }}
-      data={parsedData}
-      filename={fileName}
+    <Button
+      sx={styles.button}
+      variant="contained"
+      color="primary"
+      disabled={!students.length}
+      onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
     >
-      <Box sx={styles.link}>{t('exportCSV')}</Box>
-    </CSVLink>
+      {t('exportCSV')}
+    </Button>
   )
 }
 
@@ -99,18 +104,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
         >
           {t('combineCSV')}
         </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!studentsCSV.length}
-          sx={styles.button}
-        >
-          {studentsCSV.length ? (
-            <ExportCsv students={studentsCSV} t={t} fileName={fileName} />
-          ) : (
-            t('exportCSV')
-          )}
-        </Button>
+        <ExportCsv students={studentsCSV} fileName={fileName} />
       </Box>
       {dropZoneVisible && <DropZone students={studentsCSV} />}
       <Table>
