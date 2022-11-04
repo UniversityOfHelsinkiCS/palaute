@@ -16,6 +16,9 @@ const {
   User,
   UpdaterStatus,
   FeedbackTargetDateCheck,
+  Organisation,
+  CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -158,18 +161,32 @@ const findFeedbackTargets = async (req, res) => {
       attributes: ['courseCode', 'name'],
       as: 'courseUnit',
       required: true,
+      include: {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseUnitsOrganisation },
+      },
     },
     {
       model: CourseRealisation,
       attributes: ['startDate', 'endDate', 'name'],
       as: 'courseRealisation',
       required: true,
+      include: {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseRealisationsOrganisation },
+      },
     },
   ]
 
+  const where = { hidden: false }
+
   const numberId = Number(id)
   if (numberId) {
-    const result = await FeedbackTarget.findByPk(numberId, { include })
+    const result = await FeedbackTarget.findByPk(numberId, { where, include })
     params.id = numberId
     return res.send({
       params,
@@ -189,6 +206,7 @@ const findFeedbackTargets = async (req, res) => {
   }
 
   const { count, rows: result } = await FeedbackTarget.findAndCountAll({
+    where,
     include,
     order: [['closesAt', 'DESC']],
     limit: 10,

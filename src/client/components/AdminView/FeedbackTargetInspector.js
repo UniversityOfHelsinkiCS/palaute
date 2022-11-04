@@ -34,6 +34,8 @@ const Details = ({ feedbackTarget: fbt }) => (
           <TableCell>CUR end date</TableCell>
           <TableCell>feedback opens</TableCell>
           <TableCell>feedback closes</TableCell>
+          <TableCell>student count</TableCell>
+          <TableCell>feedback count</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -48,6 +50,8 @@ const Details = ({ feedbackTarget: fbt }) => (
           </TableCell>
           <TableCell>{fbt.opensAt.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.closesAt.toLocaleDateString()}</TableCell>
+          <TableCell>{fbt.studentCount}</TableCell>
+          <TableCell>{fbt.feedbackCount}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -80,6 +84,58 @@ const Details = ({ feedbackTarget: fbt }) => (
           <TableCell>{fbt.name.en}</TableCell>
           <TableCell>{fbt.name.sv}</TableCell>
         </TableRow>
+      </TableBody>
+    </Table>
+    <Box m={4} />
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>openingEmail</TableCell>
+          <TableCell>responseEmail</TableCell>
+          <TableCell>responseReminderEmail</TableCell>
+          <TableCell>reminderLastSentAt</TableCell>
+          <TableCell>continuousFeedback</TableCell>
+          <TableCell>digestEmail</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>{String(fbt.feedbackOpeningReminderEmailSent)}</TableCell>
+          <TableCell>{String(fbt.feedbackResponseEmailSent)}</TableCell>
+          <TableCell>{String(fbt.feedbackResponseReminderEmailSent)}</TableCell>
+          <TableCell>{String(fbt.feedbackReminderLastSentAt)}</TableCell>
+          <TableCell>{String(fbt.continuousFeedbackEnabled)}</TableCell>
+          <TableCell>{String(fbt.sendContinuousFeedbackDigestEmail)}</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+    <Box m={4} />
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Organisation responsible for</TableCell>
+          <TableCell>ID</TableCell>
+          <TableCell>code</TableCell>
+          <TableCell>name</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {fbt.courseUnit.organisations.map((org) => (
+          <TableRow key={org.id}>
+            <TableCell>CU</TableCell>
+            <TableCell>{org.id}</TableCell>
+            <TableCell>{org.code}</TableCell>
+            <TableCell>{org.name?.fi}</TableCell>
+          </TableRow>
+        ))}
+        {fbt.courseRealisation.organisations.map((org) => (
+          <TableRow key={org.id}>
+            <TableCell>CUR</TableCell>
+            <TableCell>{org.id}</TableCell>
+            <TableCell>{org.code}</TableCell>
+            <TableCell>{org.name?.fi}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   </TableContainer>
