@@ -8,8 +8,7 @@ import {
   Alert,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { CSVLink } from 'react-csv'
-import Papa from 'papaparse'
+import { writeFileXLSX, utils } from 'xlsx'
 
 import apiClient from '../../util/apiClient'
 import { getHeaders, getData } from './utils'
@@ -34,16 +33,20 @@ const ExportCsv = ({ results }) => {
 
   const data = [headers, ...stats]
 
-  const parsedData = Papa.unparse(data, { delimiter: ';' })
+  const worksheet = utils.aoa_to_sheet(data)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, 'norppa-statistics')
 
   return (
-    <CSVLink
-      sx={styles.link}
-      data={parsedData}
-      filename="norppa-statistics.csv"
+    <Button
+      sx={styles.button}
+      variant="contained"
+      color="primary"
+      disabled={!results.length}
+      onClick={() => writeFileXLSX(workbook, 'norppa-statistics.xlsx')}
     >
       Download as CSV
-    </CSVLink>
+    </Button>
   )
 }
 
@@ -116,14 +119,7 @@ const NorppaStatisticView = () => {
           </Box>
         )}
       </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        disabled={!results.length}
-        sx={styles.button}
-      >
-        {results.length ? <ExportCsv results={results} /> : 'Download as CSV'}
-      </Button>
+      <ExportCsv results={results} />
       {!results.length && !paramsChanged && (
         <Alert marginTop={2} severity="warning">
           No data from the given period
