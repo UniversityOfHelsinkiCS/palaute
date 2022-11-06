@@ -11,7 +11,7 @@ import {
   formateDates,
 } from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
-import { YearSemesterSelector } from '../CourseSummary/YearSemesterSelector'
+import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 
 const styles = {

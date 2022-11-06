@@ -62,6 +62,9 @@ export default {
     public: 'Julkinen',
     notPublic: 'Ei julkinen',
     mobileNotSupported: 'Tämä näkymä ei tue mobiililaitteita.',
+    studyTracks: 'Opintosuunnat',
+    currentlySelected: 'Valittuna',
+    timespan: 'Aikaväli',
   },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',
@@ -404,6 +407,9 @@ export default {
     findByTeacher: 'Hae opettajaa',
     findByCourseUnit: 'Hae kurssia',
     includeWithoutTeachers: 'Näytä kurssit joilla ei ole opettajia',
+    editMode: 'Monimuokkaus',
+    setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
+    setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',

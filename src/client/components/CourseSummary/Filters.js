@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 
-import { YearSemesterSelector } from './YearSemesterSelector'
+import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useOrganisationTags from '../../hooks/useOrganisationTags'
 import useHistoryState from '../../hooks/useHistoryState'
 import { getLanguageValue } from '../../util/languageUtils'

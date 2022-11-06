@@ -62,6 +62,9 @@ export default {
     public: 'Publik',
     notPublic: 'Inte publik',
     // mobileNotSupported: 'Tämä näkymä ei tue mobiililaitteita.',
+    // studyTracks: 'Opintosuunnat',
+    // currentlySelected: 'Valittuna',
+    // timespan: 'Aikaväli',
   },
   userFeedbacks: {
     mainHeading: 'Mina responser',
@@ -406,6 +409,9 @@ export default {
     findByTeacher: 'Sök lärare',
     findByCourseUnit: 'Sök kurs',
     includeWithoutTeachers: 'Visa kurser som inte har lärare',
+    // editMode: 'Monimuokkaus',
+    // setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
+    // setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Denna respons är inte i bruk',

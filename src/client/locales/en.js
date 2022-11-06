@@ -62,6 +62,9 @@ export default {
     public: 'Public',
     notPublic: 'Not public',
     mobileNotSupported: 'Sorry, this view does not support mobile devices.',
+    studyTracks: 'Studytracks',
+    currentlySelected: 'Currently selected',
+    timespan: 'Timespan',
   },
   userFeedbacks: {
     mainHeading: 'My feedback',
@@ -401,6 +404,9 @@ export default {
     findByTeacher: 'Find by teacher',
     findByCourseUnit: 'Find by course name',
     includeWithoutTeachers: 'Show courses without teachers',
+    editMode: 'Multiedit',
+    setStudyTracks: 'Set studytracks for course realisation',
+    setStudyTracksForSelection: 'Set studytracks for course realisations',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',

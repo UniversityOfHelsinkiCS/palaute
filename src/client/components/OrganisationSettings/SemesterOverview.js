@@ -31,13 +31,16 @@ import { useMutation, useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { addMonths, format } from 'date-fns'
+import { format } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
 import MultiSelect from '../common/MultiSelect'
 import queryClient from '../../util/queryClient'
+import { YearSemesterSelector } from '../common/YearSemesterSelector'
+import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
+import useHistoryState from '../../hooks/useHistoryState'
 
 const useOrganisationFeedbackTargets = ({
   code,
@@ -48,11 +51,11 @@ const useOrganisationFeedbackTargets = ({
   tags,
   includeWithoutTeachers,
   language,
+  enabled,
 }) => {
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
   const queryFn = async () => {
-    console.log('FETCHING')
     const { data: feedbackTargets } = await apiClient.get(
       `/feedback-targets/for-organisation/${code}`,
       { params: { startDate, endDate } },
@@ -61,7 +64,9 @@ const useOrganisationFeedbackTargets = ({
     return feedbackTargets
   }
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn)
+  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
+    enabled,
+  })
 
   const [filtered, setFiltered] = React.useState([])
 
@@ -91,7 +96,7 @@ const useOrganisationFeedbackTargets = ({
     (includeWithoutTeachers || fbt.teachers.length > 0)
 
   const filter = debounce((feedbackTargets) => {
-    if (rest.isLoading || rest.isFetching) return
+    if (!feedbackTargets || rest.isLoading || rest.isFetching) return
     const filteredTargets = feedbackTargets
       .map(([d, months]) => [
         d,
@@ -135,10 +140,6 @@ const useUpdateCourseRealisationTags = () => {
 
   const mutation = useMutation(mutationFn, {
     onSuccess: (response, variables) => {
-      console.log('calling refetch on', [
-        'organisationFeedbackTargets',
-        variables.organisationCode,
-      ])
       queryClient.refetchQueries([
         'organisationFeedbackTargets',
         variables.organisationCode,
@@ -185,13 +186,24 @@ const styles = {
   },
 }
 
-const TagSelector = ({ organisation, selected, tags, t, language }) => {
+const TagSelector = ({
+  organisation,
+  selected,
+  tags,
+  t,
+  language,
+  onClose,
+}) => {
   const mutation = useUpdateCourseRealisationTags()
   const [tagIds, setTagIds] = React.useState([])
   const allOriginalTagIds = _.uniq(
     selected.flatMap((fbt) => fbt.courseRealisation.tags.map((tag) => tag.id)),
   )
   const reset = () => setTagIds(allOriginalTagIds)
+
+  React.useEffect(() => {
+    reset()
+  }, [selected])
 
   const onSubmit = async () => {
     try {
@@ -200,6 +212,7 @@ const TagSelector = ({ organisation, selected, tags, t, language }) => {
         courseRealisationIds: selected.map((fbt) => fbt.courseRealisation.id),
         tagIds,
       })
+      if (typeof onClose === 'function') onClose()
     } catch (error) {
       console.error(error)
     }
@@ -217,8 +230,13 @@ const TagSelector = ({ organisation, selected, tags, t, language }) => {
         onChange={setTagIds}
       />
       <Box display="flex">
-        <Button onClick={onSubmit} variant="contained">
-          SAVE
+        <Button
+          onClick={onSubmit}
+          variant="contained"
+          size="small"
+          disabled={!(selected?.length > 0)}
+        >
+          {t('common:accept')}
         </Button>
         <IconButton onClick={reset}>
           <SettingsBackupRestore />
@@ -233,6 +251,7 @@ const FeedbackTargetDetails = ({
   language,
   t,
   organisation,
+  onClose,
 }) => (
   <Box>
     <Toolbar />
@@ -284,33 +303,36 @@ const FeedbackTargetDetails = ({
           {new Date(feedbackTarget.closesAt).toLocaleDateString(language)}
         </Box>
       </Box>
-      <Box mt={3}>
+      <Box mt={5} sx={{ color: (theme) => theme.palette.text.secondary }}>
+        {t('teacherView:feedbackCount', {
+          count: feedbackTarget.feedbackCount,
+          totalCount: feedbackTarget.studentCount,
+        })}
+      </Box>
+      <Box mt={5}>
         <Typography variant="subtitle1">
           {t('courseSummary:responsibleTeachers')}
         </Typography>
       </Box>
-      <Box mt={0.5} display="flex" flexWrap="wrap">
+      <Box mt={1} display="flex" flexWrap="wrap">
         {feedbackTarget.teachers.map((teacher) => (
           <TeacherChip user={teacher} key={teacher.id} />
         ))}
       </Box>
-      <Box mt={3}>
-        <Typography variant="subtitle1">{t('common:studyTracks')}</Typography>
+      <Box mt={5}>
+        <Typography variant="subtitle1">
+          {t('organisationSettings:setStudyTracks')}
+        </Typography>
       </Box>
-      <Box mt={0.5}>
+      <Box mt={2}>
         <TagSelector
           organisation={organisation}
           selected={[feedbackTarget]}
           t={t}
           language={language}
           tags={organisation.tags}
+          onClose={onClose}
         />
-      </Box>
-      <Box mt={3} sx={{ color: (theme) => theme.palette.text.secondary }}>
-        {t('teacherView:feedbackCount', {
-          count: feedbackTarget.feedbackCount,
-          totalCount: feedbackTarget.studentCount,
-        })}
       </Box>
     </Box>
   </Box>
@@ -331,9 +353,9 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
         language={language}
         tags={organisation.tags}
       />
-      <Box m={3} />
+      <Box m={5} />
       <Typography>
-        {t('organisationSettings:currentlySelected')} ({selected.length})
+        {t('common:currentlySelected')} ({selected.length})
       </Typography>
       <Box m={1.5} />
       {selected.map((fbt) => (
@@ -391,6 +413,7 @@ const SideDrawer = ({
             t={t}
             language={language}
             organisation={organisation}
+            onClose={onClose}
           />
         ) : (
           <MultiEdit
@@ -398,6 +421,7 @@ const SideDrawer = ({
             selected={selected}
             t={t}
             language={language}
+            onClose={onClose}
           />
         )}
       </Box>
@@ -445,22 +469,24 @@ const FeedbackTargetItem = ({ code, name, tags, selected, language }) => (
     <Box mr="0.5rem" />
     <Typography fontWeight={350}>{getLanguageValue(name, language)}</Typography>
     <Box mr="0.3rem" />
-    {tags.length > 0 && (
-      <Tooltip
-        title={tags.map((t) => getLanguageValue(t.name, language)).join('\n')}
-      >
+    {tags.map((tag) => (
+      <Tooltip key={tag.id} title={getLanguageValue(tag.name, language)}>
         <Chip
-          label={tags.length}
+          label={getLanguageValue(tag.name, language)[0]}
           size="small"
           color={selected ? 'info' : 'default'}
         />
       </Tooltip>
-    )}
+    ))}
   </Box>
 )
 
 const Filters = ({ onChange, value, t, language, organisation }) => {
   const [open, setOpen] = React.useState(false)
+  const [timeOption, setTimeOption] = useHistoryState(
+    'overviewTimeperiodOption',
+    'year',
+  )
   const { tags } = organisation
   // eslint-disable-next-line no-nested-ternary
   const valueIsActive = (value) => value && value.length !== 0
@@ -488,22 +514,17 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
             pb={2}
             alignItems="center"
           >
-            <TextField
-              type="date"
-              value={format(value.startDate, 'yyyy-MM-dd')}
-              onChange={({ target }) =>
-                onChange({ ...value, startDate: new Date(target.value) })
-              }
-              label={t('organisationSettings:startDate')}
-            />
-            <TextField
-              type="date"
-              value={format(value.endDate, 'yyyy-MM-dd')}
-              onChange={({ target }) =>
-                onChange({ ...value, endDate: new Date(target.value) })
-              }
-              label={t('organisationSettings:endDate')}
-            />
+            <Box width="100rem" mb="1rem">
+              <Typography>{t('common:timespan')}</Typography>
+              <YearSemesterSelector
+                value={{ start: value.startDate, end: value.endDate }}
+                option={timeOption}
+                onChange={(v) =>
+                  onChange({ ...value, startDate: v.start, endDate: v.end })
+                }
+                setOption={setTimeOption}
+              />
+            </Box>
             <TextField
               value={value.teacherQuery}
               onChange={(e) =>
@@ -556,14 +577,25 @@ const SemesterOverview = ({ organisation }) => {
   const [opened, setOpened] = React.useState(null)
   const [selected, setSelected] = React.useState([])
   const [filters, setFilters] = React.useState({
-    startDate: new Date(),
-    endDate: addMonths(new Date(), 12),
+    startDate: null,
+    endDate: null,
     teacherQuery: '',
     courseQuery: '',
     includeWithoutTeachers: false,
     tags: [],
   })
-
+  const { courseSummaryAccessInfo, isLoading: defaultDatesLoading } =
+    useCourseSummaryAccessInfo()
+  React.useEffect(() => {
+    if (!courseSummaryAccessInfo?.defaultDateRange) return
+    console.log(courseSummaryAccessInfo)
+    const { startDate, endDate } = courseSummaryAccessInfo.defaultDateRange
+    setFilters({
+      ...filters,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+    })
+  }, [defaultDatesLoading])
   const toggleSelection = (feedbackTarget) => {
     if (selected.includes(feedbackTarget)) {
       setSelected(selected.filter((f) => f.id !== feedbackTarget.id))
@@ -594,6 +626,7 @@ const SemesterOverview = ({ organisation }) => {
   const { feedbackTargets: years, isLoading } = useOrganisationFeedbackTargets({
     code,
     ...filters,
+    enabled: filters.startDate !== null,
   })
 
   // when data changes, object references in state have to be updated. Annoying.
@@ -614,8 +647,6 @@ const SemesterOverview = ({ organisation }) => {
     setOpened(newOpened)
     setSelected(newSelected)
   }, [years])
-
-  console.log('render')
 
   return (
     <Box>
