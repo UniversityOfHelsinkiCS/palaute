@@ -1,14 +1,15 @@
 import React, { useRef, forwardRef } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-
-import { Box, Alert } from '@mui/material'
+import { Box, Alert, FormControlLabel, Switch } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useHistoryState from '../../hooks/useHistoryState'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
+import OldFeedbackTargetResults from '../OldFeedbackTargetResults'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../common/LoadingProgress'
@@ -43,6 +44,8 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
   const { feedbackTargetData, isLoading: feedbacksIsLoading } =
     useFeedbackTargetFeedbacks(id)
+
+  const [useLegacy, setUseLegacy] = useHistoryState('legacy', false)
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
@@ -84,16 +87,30 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
   return (
     <>
-      <Box display="flex" alignItems="flex-end" flexDirection="column" mb={2}>
-        {feedbacks.length !== 0 && isTeacher && (
-          <ExportFeedbacksMenu
-            feedbackTarget={feedbackTarget}
-            feedbacks={feedbacks}
-            componentRef={ref}
+      <Box display="flex" justifyContent="space-between">
+        {isTeacher && (
+          <FormControlLabel
+            sx={{ marginTop: 10 }}
+            control={
+              <Switch
+                checked={useLegacy}
+                onClick={() => setUseLegacy(!useLegacy)}
+              />
+            }
+            label="Käytä vanhaa palautenäkymää"
           />
         )}
-      </Box>
 
+        <Box display="flex" alignItems="flex-end" flexDirection="column">
+          {feedbacks.length !== 0 && isTeacher && (
+            <ExportFeedbacksMenu
+              feedbackTarget={feedbackTarget}
+              feedbacks={feedbacks}
+              componentRef={ref}
+            />
+          )}
+        </Box>
+      </Box>
       <Box ref={ref}>
         {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
           <Box mb={2}>
@@ -129,20 +146,23 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
             <OnlyForEnrolled t={t} />
           ))}
 
-        {feedbacks.length > 0 && (
-          <Box>
-            <QuestionResults
-              publicQuestionIds={publicQuestionIds ?? []}
-              selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
-              questions={questions}
-              feedbacks={feedbacks}
-              isTeacher={isTeacher}
-              organisationAccess={!!userOrganisationAccess}
-              feedbackCount={feedbackCount}
-              feedbackTargetId={id}
-            />
-          </Box>
-        )}
+        {feedbacks.length > 0 &&
+          (useLegacy ? (
+            <OldFeedbackTargetResults />
+          ) : (
+            <Box>
+              <QuestionResults
+                publicQuestionIds={publicQuestionIds ?? []}
+                selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
+                questions={questions}
+                feedbacks={feedbacks}
+                isTeacher={isTeacher}
+                organisationAccess={!!userOrganisationAccess}
+                feedbackCount={feedbackCount}
+                feedbackTargetId={id}
+              />
+            </Box>
+          ))}
       </Box>
     </>
   )
