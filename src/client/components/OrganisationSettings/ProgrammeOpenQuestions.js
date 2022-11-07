@@ -121,9 +121,8 @@ const ProgrammeOpenQuestions = () => {
   const { codesWithIds, isLoading } = useProgrammeOpenQuestions(code)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
-    // Update to next year in November
-    start: new Date(`2021-08-01`),
-    end: new Date('2022-08-01'),
+    start: new Date(`2022-08-01`),
+    end: new Date('2023-08-01'),
   })
 
   const [option, setOption] = useState('all')
