@@ -1,45 +1,95 @@
 const { baseUrl } = require('../support')
 
 describe('Course summary view', () => {
-  it('An user with organisation access can visit summary page', () => {
+  beforeEach(() => {
     cy.loginAsStudyCoordinator()
+  })
+
+  it('User with organisation access can visit summary page', () => {
     cy.contains('Course summary').click()
     cy.contains('Summary of course feedback')
     cy.contains(`Bachelor's Programme in Theology and Religious Studies`)
   })
 
-  it('An user with write access can edit programme level questions', () => {
-    cy.loginAsStudyCoordinator()
-    cy.contains('Course summary').click()
-
+  it('User can navigate to programme from summary', () => {
+    cy.visit(`${baseUrl}/course-summary`)
     cy.get('a[id=settings-button-500-K005]').click()
     cy.contains(`Bachelor's Programme in Computer Science`)
-
     cy.contains('Programme survey').click()
+  })
 
-    cy.on('window:confirm', (str) => {
-      expect(str).to.eq(
-        'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?',
-      )
+  describe('Programme survey', () => {
+    beforeEach(() => {
+      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.on('window:confirm', (str) => {
+        expect(str).to.eq(
+          'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?',
+        )
+      })
     })
 
-    cy.contains('Add question').click()
+    it('User with write access can ADD programme level questions', () => {
+      cy.contains('Add question').click()
 
-    // Wait for snackbar to disappear
-    cy.wait(5000)
+      // Wait for snackbar to disappear
+      cy.wait(5000)
 
-    cy.get('li').contains('Textual content').click()
+      cy.get('li').contains('Textual content').click()
 
-    cy.get('textarea[id^=textual-context-text-en-questions]').type(
-      'Test question programme level',
-    )
+      cy.get('textarea[id^=textual-context-text-en-questions]').type(
+        'Test question programme level',
+      )
 
-    cy.get('[data-cy=saveQuestion]').click()
+      cy.get('[data-cy=saveQuestion]').click()
 
-    cy.wait(1000)
+      cy.wait(1000)
 
-    cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.contains('Test question programme level')
+    })
 
-    cy.contains('Test question programme level')
+    it('New programme level question appears in feedback target survey', () => {
+      cy.visit(`${baseUrl}/targets/165`)
+      cy.contains('Test question programme level')
+    })
+
+    it('User with write access can EDIT programme level questions', () => {
+      cy.get('[data-cy=editQuestion]').first().click()
+
+      cy.get('textarea[id^=textual-context-text-en-questions]').type(
+        ' edited question',
+      )
+
+      cy.get('[data-cy=saveQuestion]').click()
+
+      cy.wait(1000)
+
+      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+
+      cy.contains('edited question')
+    })
+
+    it('Edited programme level question appears in feedback target survey', () => {
+      cy.visit(`${baseUrl}/targets/165`)
+      cy.contains('edited question')
+    })
+
+    it('New likert question appears in programmesummary', () => {
+      cy.contains('Add question').click()
+
+      // Wait for snackbar to disappear
+      cy.wait(5000)
+
+      cy.get('li').contains('Scale of values').click()
+
+      cy.get('input[id^=likert-question-en-questions]').type('LIKERT TEST')
+
+      cy.get('[data-cy=saveQuestion]').click()
+
+      cy.wait(1000)
+
+      cy.visit(`${baseUrl}/organisations/500-K005/summary`)
+      cy.contains('LIKERT TEST')
+    })
   })
 })
