@@ -4,6 +4,7 @@ const LRUCache = require('lru-cache')
 const Organisation = require('../../models/organisation')
 const FeedbackTarget = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
+const logger = require('../../util/logger')
 
 const lru = new LRUCache({
   max: 250,
@@ -12,8 +13,14 @@ const lru = new LRUCache({
 const cache = {
   get: (feedbackTargetId) => lru.get(feedbackTargetId),
   set: (id, feedbackTargetJson) => lru.set(id, feedbackTargetJson),
-  invalidate: (feedbackTargetId) => lru.delete(feedbackTargetId),
-  invalidateAll: () => lru.clear(),
+  invalidate: (feedbackTargetId) => {
+    logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
+    lru.delete(feedbackTargetId)
+  },
+  invalidateAll: () => {
+    logger.info(`[CACHE] invalidate fbt ALL`)
+    lru.clear()
+  },
 }
 
 const onOrganisationChange = (organisationCode) => {

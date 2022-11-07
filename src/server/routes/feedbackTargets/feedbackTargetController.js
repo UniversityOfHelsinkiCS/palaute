@@ -447,7 +447,8 @@ const update = async (req, res) => {
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
-
+    // force hooks
+    survey.changed('updatedAt', true)
     await survey.save()
   }
 
