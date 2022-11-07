@@ -195,7 +195,11 @@ const QuestionCard = ({
                   <Button color="primary" onClick={onCopy}>
                     {t('questionEditor:duplicate')}
                   </Button>
-                  <Button color="primary" onClick={onStartEditing}>
+                  <Button
+                    color="primary"
+                    onClick={onStartEditing}
+                    data-cy="editQuestion"
+                  >
                     {t('edit')}
                   </Button>
                 </div>

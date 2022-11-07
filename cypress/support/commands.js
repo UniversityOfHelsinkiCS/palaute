@@ -61,7 +61,7 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
 
 Cypress.Commands.add('loginAsStudent', () => {
   localStorage.setItem('fakeUser', JSON.stringify(student))
-  cy.reload(true)
+  // cy.reload(true)
   cy.visit(baseUrl)
 })
 

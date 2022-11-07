@@ -57,6 +57,21 @@ describe('Teacher view', () => {
     )
 
     cy.get('[data-cy=saveQuestion]').click()
+    cy.reload()
+    cy.contains('Test question')
+    cy.contains('Test description')
+  })
+  it('Teacher can edit a question', () => {
+    cy.visit(`${baseUrl}/targets/165/edit`)
+    cy.get('[data-cy=editQuestion]').first().click()
+    cy.get('input[id^=likert-question-en-questions]').type(' edited')
+
+    cy.get('input[id^=likert-description-en-questions]').type(' edited')
+
+    cy.get('[data-cy=saveQuestion]').click()
+    cy.reload()
+    cy.contains('Test question edited')
+    cy.contains('Test description edited')
   })
   it('Teacher can view survey results', () => {
     cy.loginAsSecondaryTeacher()

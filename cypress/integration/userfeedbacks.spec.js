@@ -1,8 +1,10 @@
 describe('User feedbacks view', () => {
-  it('A feedback is visible after teacher has set it active', () => {
+  beforeEach(() => {
     cy.loginAsSecondaryTeacher()
     cy.setFeedbackActive()
     cy.loginAsStudent()
+  })
+  it('A feedback is visible after teacher has set it active', () => {
     cy.contains('Functional Programming I')
     cy.get('[data-cy=giveCourseFeedback]').click()
     cy.contains(

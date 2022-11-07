@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, Alert } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
