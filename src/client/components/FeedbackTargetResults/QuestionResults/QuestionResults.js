@@ -69,7 +69,7 @@ const componentByType = {
 
 const QuestionItem = ({
   question,
-  isTeacher,
+  isResponsibleTeacher,
   t,
   isPublic,
   feedbackCount,
@@ -83,7 +83,7 @@ const QuestionItem = ({
 
   return (
     <Box m="1rem" mt="3rem">
-      {isTeacher && (
+      {isResponsibleTeacher && (
         <Box my="1rem">
           <LinkChip
             label={isPublic ? t('common:public') : t('common:notPublic')}
@@ -157,7 +157,7 @@ const QuestionResults = ({
   publicQuestionIds,
   questions,
   feedbacks,
-  isTeacher,
+  isResponsibleTeacher,
   organisationAccess,
   feedbackCount,
   feedbackTargetId,
@@ -170,11 +170,15 @@ const QuestionResults = ({
   const { t } = useTranslation()
 
   const openQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type === 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type === 'OPEN' &&
+      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type !== 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type !== 'OPEN' &&
+      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const hiddenQuestions = questionsWithFeedbacks.filter(
@@ -193,7 +197,7 @@ const QuestionResults = ({
               <QuestionItem
                 question={q}
                 isPublic={publicQuestionIds.includes(q.id)}
-                isTeacher={isTeacher}
+                isResponsibleTeacher={isResponsibleTeacher}
                 t={t}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={feedbackTargetId}
@@ -211,7 +215,7 @@ const QuestionResults = ({
             key={q.id}
             question={q}
             isPublic={publicQuestionIds.includes(q.id)}
-            isTeacher={isTeacher}
+            isResponsibleTeacher={isResponsibleTeacher}
             t={t}
             feedbackTargetId={feedbackTargetId}
           />

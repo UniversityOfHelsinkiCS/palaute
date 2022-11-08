@@ -174,12 +174,11 @@ class FeedbackTarget extends Model {
     { accessStatus, isAdmin, userOrganisationAccess } = {},
   ) {
     const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
-    const isTeacher =
-      accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+    const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER'
 
     const isOrganisationAdmin = Boolean(userOrganisationAccess?.admin)
 
-    if (isAdmin || isOrganisationAdmin || isTeacher) {
+    if (isAdmin || isOrganisationAdmin || isResponsibleTeacher) {
       return publicFeedbacks
     }
 
