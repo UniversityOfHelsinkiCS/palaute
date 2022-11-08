@@ -96,7 +96,8 @@ const GuestFeedbackTargetView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
-  const isTeacher = accessStatus === 'TEACHER'
+  const isTeacher =
+    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
   const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
 
   const coursePeriod = getCoursePeriod(courseRealisation)

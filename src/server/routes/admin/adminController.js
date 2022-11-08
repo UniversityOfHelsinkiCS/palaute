@@ -359,7 +359,7 @@ const resetTestCourse = async (_, res) => {
   })
   await UserFeedbackTarget.create({
     feedbackTargetId: newTarget.id,
-    accessStatus: 'TEACHER',
+    accessStatus: 'RESPONSIBLE_TEACHER',
     userId: 'hy-hlo-1441871', // mluukkai
   })
   await UserFeedbackTarget.create({
@@ -414,7 +414,7 @@ const getNorppaStatistics = async (req, res) => {
     WHERE opens_at > :opensAt
     AND closes_at < :closesAt
     AND feedback_type = 'courseRealisation'
-    AND u.access_status != 'TEACHER'
+    AND (u.access_status != 'RESPONSIBLE_TEACHER OR u.access_status != 'TEACHER)'
     GROUP BY f.id, cu.name, cu.course_code, c.start_date, c.end_date, org.id, parentorg.id;
     `,
     {

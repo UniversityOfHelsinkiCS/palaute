@@ -194,7 +194,10 @@ const FeedbackTargetView = () => {
     useFeedbackTarget(id, { retry: 0 })
   const { feedbackCount: cuFeedbackCount, isLoading: feedbackCountLoading } =
     useFeedbackCount(id, {
-      enabled: !isLoading && feedbackTarget?.accessStatus === 'TEACHER',
+      enabled:
+        !isLoading &&
+        (feedbackTarget?.accessStatus === 'RESPONSIBLE_TEACHER' ||
+          feedbackTarget?.accessStatus === 'TEACHER'),
     })
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
@@ -233,7 +236,8 @@ const FeedbackTargetView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
-  const isTeacher = accessStatus === 'TEACHER'
+  const isTeacher =
+    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 

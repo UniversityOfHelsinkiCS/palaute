@@ -19,7 +19,7 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
         feedbackTargetId: {
           [Op.in]: summaries.map((cur) => cur.feedbackTargetId),
         },
-        accessStatus: 'TEACHER',
+        accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
       },
       include: {
         model: User,

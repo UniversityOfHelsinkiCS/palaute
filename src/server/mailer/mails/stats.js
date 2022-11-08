@@ -66,7 +66,7 @@ const getTeacherEmailCounts = async () => {
         INNER JOIN course_realisations c on c.id = f.course_realisation_id
         INNER JOIN users us on us.id = u.user_id
         WHERE f.opens_at > :opensAtLow and f.opens_at < :opensAtHigh 
-          AND u.access_status = 'TEACHER' 
+          AND (u.access_status = 'RESPONSIBLE_TEACHER' OR u.access_status = 'TEACHER')
           AND f.feedback_type = 'courseRealisation'
           AND f.feedback_opening_reminder_email_sent = false
           AND f.hidden = false

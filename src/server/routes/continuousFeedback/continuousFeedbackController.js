@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const { Op } = require('sequelize')
 const {
   ContinuousFeedback,
   FeedbackTarget,
@@ -15,7 +16,7 @@ const getFeedbacks = async (req, res) => {
     where: {
       userId: user.id,
       feedbackTargetId,
-      accessStatus: 'TEACHER',
+      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
     },
   })
 

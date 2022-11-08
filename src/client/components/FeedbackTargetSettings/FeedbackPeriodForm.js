@@ -45,7 +45,9 @@ const FeedbackPeriodForm = ({
   const isOver = Date.parse(feedbackTarget.closesAt) < Date.now()
 
   const formDisabled =
-    ((feedbackTarget.accessStatus !== 'TEACHER' && !orgAccess.admin) ||
+    ((feedbackTarget.accessStatus !== 'RESPONSIBLE_TEACHER' &&
+      feedbackTarget.accessStatus !== 'TEACHER' &&
+      !orgAccess.admin) ||
       isOver) &&
     !isAdmin
 

@@ -85,7 +85,8 @@ class User extends Model {
       FROM user_feedback_targets
       INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
       INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-      WHERE user_feedback_targets.user_id = :userId AND user_feedback_targets.access_status = 'TEACHER';
+      WHERE user_feedback_targets.user_id = :userId AND
+      (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER');
     `,
       {
         replacements: {

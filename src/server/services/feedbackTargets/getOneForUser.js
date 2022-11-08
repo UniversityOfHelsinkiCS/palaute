@@ -63,7 +63,11 @@ const getFromDb = async (id) => {
     'responsibleTeachers',
     _.orderBy(
       fbt.userFeedbackTargets
-        .filter((ufbt) => ufbt.accessStatus === 'TEACHER')
+        .filter(
+          (ufbt) =>
+            ufbt.accessStatus === 'RESPONSIBLE_TEACHER' ||
+            ufbt.accessStatus === 'TEACHER',
+        )
         .map((ufbt) => ufbt.user),
     ),
     [['lastName', 'desc']],

@@ -62,7 +62,7 @@ const getTeachersWithContinuousFeedback = async () => {
         ],
         through: {
           where: {
-            accessStatus: 'TEACHER',
+            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
           },
         },
       },

@@ -195,7 +195,8 @@ const FeedbackView = () => {
     continuousFeedbackEnabled,
   } = feedbackTarget
   const isStudent = accessStatus === 'STUDENT'
-  const isTeacher = accessStatus === 'TEACHER'
+  const isTeacher =
+    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)

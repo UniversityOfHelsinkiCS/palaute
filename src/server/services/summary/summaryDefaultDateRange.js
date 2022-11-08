@@ -51,7 +51,7 @@ const getLatestDateForTeacher = async (user) => {
     attributes: ['id'],
     where: {
       userId: user.id,
-      accessStatus: 'TEACHER',
+      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
     },
     include: {
       model: FeedbackTarget,

@@ -50,6 +50,7 @@ const {
 const mapStatusToValue = {
   STUDENT: 1,
   TEACHER: 2,
+  RESPONSIBLE_TEACHER: 2,
 }
 
 // TODO refactor
@@ -338,7 +339,11 @@ const getFeedbackTargetsForOrganisation = async (req, res) => {
         ufbt.accessStatus === 'STUDENT' ? 1 : 0,
       )
       const teachers = fbt.userFeedbackTargets
-        .filter((ufbt) => ufbt.accessStatus === 'TEACHER')
+        .filter(
+          (ufbt) =>
+            ufbt.accessStatus === 'RESPONSIBLE_TEACHER' ||
+            ufbt.accessStatus === 'TEACHER',
+        )
         .map((ufbt) => ufbt.user)
 
       delete fbt.userFeedbackTargets
@@ -405,6 +410,8 @@ const update = async (req, res) => {
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   const isTeacher =
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus ===
+      'RESPONSIBLE_TEACHER' ||
     feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
 
   const isOrganisationAdmin = (
@@ -469,8 +476,12 @@ const updateSettingsReadByTeacher = async (req, res) => {
     user,
   )
 
-  if (feedbackTarget?.userFeedbackTargets[0]?.accessStatus !== 'TEACHER')
-    throw new ApplicationError('Forbidden', 403)
+  const isTeacher =
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus ===
+      'RESPONSIBLE_TEACHER' ||
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
+
+  if (!isTeacher) throw new ApplicationError('Forbidden', 403)
 
   feedbackTarget.settingsReadByTeacher = true
   await feedbackTarget.save()
@@ -585,7 +596,7 @@ const getTargetsForCourseUnit = async (req, res) => {
         required: true,
         where: {
           userId: req.user.id,
-          accessStatus: 'TEACHER',
+          accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
         },
       },
       {
@@ -703,7 +714,9 @@ const getFeedbacks = async (req, res) => {
   )
 
   const userHasOrganisationAccess = Boolean(userOrganisationAccess)
-  const isTeacher = userFeedbackTarget?.accessStatus === 'TEACHER'
+  const isTeacher =
+    userFeedbackTarget?.accessStatus === 'RESPONSIBLE_TEACHER' ||
+    userFeedbackTarget?.accessStatus === 'TEACHER'
 
   // Teacher can see feedback any time
   // Admin can see feedback any time

@@ -41,7 +41,7 @@ const getAccessibleCourseRealisationIds = async (user) => {
     INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
     INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
     WHERE user_feedback_targets.user_id = :userId
-    AND user_feedback_targets.access_status = 'TEACHER'
+    AND (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER')
     AND feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
     AND course_realisations.start_date > NOW() - interval '12 months';
@@ -184,7 +184,7 @@ const getByCourseUnit = async (req, res) => {
         feedback_targets.course_unit_id IN (:courseUnitIds)
         AND user_feedback_targets.user_id = :userId
         AND user_feedback_targets.feedback_target_id = feedback_targets.id
-        AND user_feedback_targets.access_status = 'TEACHER';
+        AND (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER');
     `,
         {
           type: QueryTypes.SELECT,

@@ -30,7 +30,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
     WHERE
       user_feedback_targets.user_id = :userId AND
-      user_feedback_targets.access_status = 'TEACHER' AND
+      (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER') AND
       course_realisations.end_date < NOW() AND
       course_realisations.end_date > :courseRealisationEndDateAfter AND
       course_units_organisations.type = 'PRIMARY' AND
@@ -53,7 +53,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
   const userTargets = await UserFeedbackTarget.findAll({
     where: {
       userId: user.id,
-      accessStatus: 'TEACHER',
+      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
     },
     attributes: ['id'],
     include: [

@@ -76,7 +76,10 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     ? userOrganisationAccess.admin
     : false
 
-  const isTeacher = accessStatus === 'TEACHER' || userOrganisationAdmin
+  const isTeacher =
+    accessStatus === 'TEACHER' ||
+    accessStatus === 'RESPONSIBLE_TEACHER' ||
+    userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {

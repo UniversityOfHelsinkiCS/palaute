@@ -24,7 +24,8 @@ const FeedbackTargetResults = ({ feedbackTarget }) => {
 
   const { accessStatus, feedbackResponse, id } = feedbackTarget
 
-  const isTeacher = accessStatus === 'TEACHER'
+  const isTeacher =
+    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
 
   return (
     <Card>

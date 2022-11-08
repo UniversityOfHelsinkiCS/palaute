@@ -174,7 +174,8 @@ class FeedbackTarget extends Model {
     { accessStatus, isAdmin, userOrganisationAccess } = {},
   ) {
     const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
-    const isTeacher = accessStatus === 'TEACHER'
+    const isTeacher =
+      accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
 
     const isOrganisationAdmin = Boolean(userOrganisationAccess?.admin)
 
@@ -247,7 +248,7 @@ class FeedbackTarget extends Model {
       attributes: ['userId'],
       where: {
         feedbackTargetId: this.id,
-        accessStatus: 'TEACHER',
+        accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
       },
     })
     /* eslint-disable-next-line no-use-before-define */
@@ -272,7 +273,7 @@ class FeedbackTarget extends Model {
           as: 'userFeedbackTargets',
           attributes: ['userId'],
           where: {
-            accessStatus: 'TEACHER',
+            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
           },
         },
       ],
