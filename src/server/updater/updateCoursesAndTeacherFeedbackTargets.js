@@ -28,6 +28,9 @@ const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-seminar',
 ]
 
+const responsibleTeacherUrn =
+  'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher'
+
 // hack these curs into norppa
 const includeCurs = [
   'otm-f7504f69-386b-4151-b2a9-17ab6e11c946',
@@ -288,7 +291,7 @@ const createFeedbackTargets = async (courses) => {
     ...courses.map((course) => {
       courseIdToPersonIds[course.id] = course.responsibilityInfos
         .filter(({ personId }) => personId)
-        .map(({ personId }) => personId)
+        .map(({ personId, roleUrn }) => ({ personId, roleUrn }))
 
       const courseUnit = course.courseUnits[0]
       const courseEndDate = new Date(course.activityPeriod.endDate)
@@ -388,11 +391,16 @@ const createFeedbackTargets = async (courses) => {
     .concat(
       ...feedbackTargetsWithIds.map(
         ({ id: feedbackTargetId, courseRealisationId }) =>
-          courseIdToPersonIds[courseRealisationId].map((userId) => ({
-            feedback_target_id: feedbackTargetId,
-            user_id: userId,
-            accessStatus: 'TEACHER',
-          })),
+          courseIdToPersonIds[courseRealisationId].map(
+            ({ personId, roleUrn }) => ({
+              feedback_target_id: feedbackTargetId,
+              user_id: personId,
+              accessStatus:
+                roleUrn === responsibleTeacherUrn
+                  ? 'RESPONSIBLE_TEACHER'
+                  : 'TEACHER',
+            }),
+          ),
       ),
     )
     .filter((target) => target.user_id && target.feedback_target_id)
@@ -561,7 +569,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   if (new Date().getDay() === 0) {
     logger.info('[UPDATER] Deleting teacher rights', {})
     await sequelize.query(
-      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND access_status = 'TEACHER' AND user_id != 'abc1234'`,
+      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND (access_status = 'RESPONSIBLE_TEACHER' OR access_status = 'TEACHER') AND user_id != 'abc1234'`,
     )
   }
 
