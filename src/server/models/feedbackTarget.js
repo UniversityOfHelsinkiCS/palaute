@@ -362,7 +362,7 @@ FeedbackTarget.init(
       get() {
         return this.dataValues.studentCount
           ? Number(this.dataValues.studentCount)
-          : undefined
+          : 0
       },
     },
     publicQuestionIds: {
