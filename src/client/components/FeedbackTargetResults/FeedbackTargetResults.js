@@ -102,7 +102,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
       <Box ref={ref}>
         {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
-          <Box mb={2}>
+          <Box mt={4} mb={2}>
             <FeedbackResponse feedbackTarget={feedbackTarget} />
           </Box>
         )}

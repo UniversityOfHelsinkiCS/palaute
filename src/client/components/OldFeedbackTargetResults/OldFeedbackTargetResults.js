@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from 'react'
+import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -8,12 +8,11 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import FeedbackSummary from '../QuestionResults/FeedbackSummary'
 import QuestionResults from '../QuestionResults'
-import FeedbackResponse from './FeedbackResponse'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../common/LoadingProgress'
 
-const FeedbackTargetResultsView = forwardRef((_props, ref) => {
+const OldFeedbackTargetResultsView = () => {
   const { t } = useTranslation()
   const { id } = useParams()
 
@@ -53,8 +52,6 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
-  const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
-
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
       <Alert severity="warning">
@@ -72,13 +69,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   )
 
   return (
-    <span ref={ref}>
-      {feedbackHasStarted && !isOpen && (
-        <Box mb={2}>
-          <FeedbackResponse feedbackTarget={feedbackTarget} />
-        </Box>
-      )}
-
+    <>
       {isOpen && feedback && (
         <Box mb={2}>
           <Alert severity="info">
@@ -112,14 +103,8 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           organisationAccess={!!userOrganisationAccess}
         />
       )}
-    </span>
+    </>
   )
-})
-
-const FeedbackTargetResults = () => {
-  const componentRef = useRef()
-
-  return <FeedbackTargetResultsView ref={componentRef} />
 }
 
-export default FeedbackTargetResults
+export default OldFeedbackTargetResultsView
