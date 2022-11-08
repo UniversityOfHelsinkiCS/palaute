@@ -305,7 +305,7 @@ export default {
     dialogCancel: 'Peruuta',
     dialogSaveSubmit: 'Tallenna',
     dialogSendEmailSubmit: 'Lähetä',
-    checkboxSendEmail: 'Lähetä sähköposti',
+    checkboxSendEmail: 'Lähetä sähköposti kaikille kurssille ilmoittautuneille',
     emailSent: 'Sähköposti lähetetty',
     formDisabled: 'Vastapalautetta voi antaa vasta palautejakson päätyttyä',
   },

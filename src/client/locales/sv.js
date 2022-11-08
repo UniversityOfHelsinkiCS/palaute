@@ -309,7 +309,7 @@ export default {
       'Till studerandena skickas ett e-postmeddelande med motresponsens innehåll och en länk till kursens responser. Du kan ännu redigera motresponsen efter att ha skickat e-postmeddelandet.',
     dialogSaveSubmit: 'Spara',
     dialogSendEmailSubmit: 'Skicka',
-    checkboxSendEmail: 'Skicka e-post',
+    // checkboxSendEmail: 'Send an email to all course participants',
     emailSent: 'E-post skickad',
     formDisabled: 'Motrespons kan ges endast när responsperioden avslutats',
   },
