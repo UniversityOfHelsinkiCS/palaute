@@ -244,6 +244,7 @@ export default {
     export: 'Download feedback',
     exportCsv: 'Download feedback as a CSV file',
     exportPdf: 'Download feedback as a PDF file',
+    useLegacyVersion: 'Use old feedback view',
     thankYouMessage:
       'Thank you for the feedback, here is a summary of the feedback so far.',
     closeImmediately: 'Close feedback immediately',

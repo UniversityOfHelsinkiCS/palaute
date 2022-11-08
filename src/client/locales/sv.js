@@ -245,6 +245,7 @@ export default {
     export: 'Exportera som',
     exportCsv: 'Exportera som csv',
     exportPdf: 'Exportera som pdf',
+    // useLegacyVersion: 'Use old feedback view',
     thankYouMessage:
       'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
     closeImmediately: 'Stäng responsen genast',

@@ -87,30 +87,16 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between">
-        {isTeacher && (
-          <FormControlLabel
-            sx={{ marginTop: 10 }}
-            control={
-              <Switch
-                checked={useLegacy}
-                onClick={() => setUseLegacy(!useLegacy)}
-              />
-            }
-            label="Käytä vanhaa palautenäkymää"
+      <Box display="flex" alignItems="flex-end" flexDirection="column">
+        {feedbacks.length !== 0 && isTeacher && (
+          <ExportFeedbacksMenu
+            feedbackTarget={feedbackTarget}
+            feedbacks={feedbacks}
+            componentRef={ref}
           />
         )}
-
-        <Box display="flex" alignItems="flex-end" flexDirection="column">
-          {feedbacks.length !== 0 && isTeacher && (
-            <ExportFeedbacksMenu
-              feedbackTarget={feedbackTarget}
-              feedbacks={feedbacks}
-              componentRef={ref}
-            />
-          )}
-        </Box>
       </Box>
+
       <Box ref={ref}>
         {feedbackHasStarted && !isOpen && feedbacks.length > 0 && (
           <Box mb={2}>
@@ -126,7 +112,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!isMobileChrome && (
+        {!isMobileChrome && !useLegacy && (
           <Box>
             <FeedbackChart
               feedbacks={feedbacks}
@@ -148,7 +134,9 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
         {feedbacks.length > 0 &&
           (useLegacy ? (
-            <OldFeedbackTargetResults />
+            <Box my="3rem">
+              <OldFeedbackTargetResults />
+            </Box>
           ) : (
             <Box>
               <QuestionResults
@@ -163,6 +151,18 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
               />
             </Box>
           ))}
+
+        {isTeacher && (
+          <FormControlLabel
+            control={
+              <Switch
+                checked={useLegacy}
+                onClick={() => setUseLegacy(!useLegacy)}
+              />
+            }
+            label={t('feedbackTargetResults:useLegacyVersion')}
+          />
+        )}
       </Box>
     </>
   )

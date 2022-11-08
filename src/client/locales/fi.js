@@ -241,6 +241,7 @@ export default {
     export: 'Lataa palaute',
     exportCsv: 'Lataa palaute CSV-tiedostona',
     exportPdf: 'Lataa palaute PDF-tiedostona',
+    useLegacyVersion: 'Käytä vanhaa palautenäkymää',
     thankYouMessage:
       'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
     closeImmediately: 'Sulje palaute heti',
