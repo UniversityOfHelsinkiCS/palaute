@@ -6,8 +6,8 @@ import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import FeedbackSummary from '../QuestionResults/FeedbackSummary'
-import QuestionResults from '../QuestionResults'
+import FeedbackSummary from './QuestionResults/FeedbackSummary'
+import QuestionResults from './QuestionResults'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../common/LoadingProgress'
@@ -43,9 +43,7 @@ const OldFeedbackTargetResultsView = () => {
     : false
 
   const isTeacher =
-    accessStatus === 'TEACHER' ||
-    accessStatus === 'RESPONSIBLE_TEACHER' ||
-    userOrganisationAdmin
+    accessStatus === 'RESPONSIBLE_TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {

@@ -11,7 +11,7 @@ import {
   TableBody,
 } from '@mui/material'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 import {
   getQuestionsWithFeedback,
@@ -19,7 +19,7 @@ import {
   countStandardDeviation,
   countMedian,
 } from './utils'
-import useIsMobile from '../../hooks/useIsMobile'
+import useIsMobile from '../../../hooks/useIsMobile'
 
 const FeedbackSummary = ({
   publicQuestionIds,

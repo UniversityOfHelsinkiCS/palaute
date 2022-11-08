@@ -3,13 +3,13 @@ import 'chart.js/auto'
 import { Bar } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 
-import { getSingleChoiceChartConfig } from './utils'
-import { getLanguageValue } from '../../util/languageUtils'
+import { getMultipleChoiceChartConfig } from './utils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
-const SingleChoiceResults = ({ question }) => {
+const MultipleChoiceResults = ({ question }) => {
   const { t, i18n } = useTranslation()
-  const config = getSingleChoiceChartConfig(question, i18n.language, t)
+  const config = getMultipleChoiceChartConfig(question, i18n.language, t)
   const label = getLanguageValue(question.data?.label, i18n.language)
 
   const description = getLanguageValue(
@@ -26,4 +26,4 @@ const SingleChoiceResults = ({ question }) => {
   )
 }
 
-export default SingleChoiceResults
+export default MultipleChoiceResults

@@ -3,7 +3,7 @@ import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
 import { useTheme } from '@mui/material'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 

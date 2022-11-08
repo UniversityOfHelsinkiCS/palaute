@@ -4,7 +4,7 @@ import { Bar } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 
 import { getLikertChartConfig } from './utils'
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
 const LikertResults = ({ question }) => {

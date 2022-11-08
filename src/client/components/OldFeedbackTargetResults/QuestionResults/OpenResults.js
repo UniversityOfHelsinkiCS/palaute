@@ -2,7 +2,7 @@ import React from 'react'
 import { List, ListItem, ListItemText } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 
 const styles = {
