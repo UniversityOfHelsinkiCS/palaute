@@ -28,8 +28,10 @@ const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-seminar',
 ]
 
-const responsibleTeacherUrn =
-  'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher'
+const responsibleTeacherUrns = [
+  'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher',
+  'urn:code:course-unit-realisation-responsibility-info-type:contact-info',
+]
 
 // hack these curs into norppa
 const includeCurs = [
@@ -395,10 +397,9 @@ const createFeedbackTargets = async (courses) => {
             ({ personId, roleUrn }) => ({
               feedback_target_id: feedbackTargetId,
               user_id: personId,
-              accessStatus:
-                roleUrn === responsibleTeacherUrn
-                  ? 'RESPONSIBLE_TEACHER'
-                  : 'TEACHER',
+              accessStatus: responsibleTeacherUrns.includes(roleUrn)
+                ? 'RESPONSIBLE_TEACHER'
+                : 'TEACHER',
             }),
           ),
       ),
@@ -566,7 +567,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   )
 
   // Delete all teacher rights once a week (saturday-sunday night)
-  if (new Date().getDay() === 0) {
+  if (true /* new Date().getDay() === 0 */) {
     logger.info('[UPDATER] Deleting teacher rights', {})
     await sequelize.query(
       `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND (access_status = 'RESPONSIBLE_TEACHER' OR access_status = 'TEACHER') AND user_id != 'abc1234'`,
