@@ -409,6 +409,8 @@ export default {
     findByCourseUnit: 'Hae kurssia',
     includeWithoutTeachers: 'Näytä kurssit joilla ei ole opettajia',
     editMode: 'Monimuokkaus',
+    calendarMode: 'Vaihda kalenterinäkymään',
+    listMode: 'Vaihda listanäkymään',
     setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
     setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },

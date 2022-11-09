@@ -406,6 +406,8 @@ export default {
     findByCourseUnit: 'Find by course name',
     includeWithoutTeachers: 'Show courses without teachers',
     editMode: 'Multiedit',
+    calendarMode: 'Switch to calendar view',
+    listMode: 'Switch to list view',
     setStudyTracks: 'Set studytracks for course realisation',
     setStudyTracksForSelection: 'Set studytracks for course realisations',
   },

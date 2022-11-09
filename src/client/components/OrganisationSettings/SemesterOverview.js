@@ -42,6 +42,51 @@ import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
 
+class FeedbackTargetGrouping {
+  years = []
+
+  constructor(yearGroupedFeedbackTargets) {
+    this.years = yearGroupedFeedbackTargets
+  }
+
+  filter(fn) {
+    const filtered = this.years
+      .map(([d, months]) => [
+        d,
+        months
+          .map(([d, days]) => [
+            d,
+            days
+              .map(([d, fbts]) => [d, fbts.filter(fn)])
+              .filter(([, fbts]) => fbts.length > 0),
+          ])
+          .filter(([, days]) => days.length > 0),
+      ])
+      .filter(([, months]) => months.length > 0)
+
+    return new FeedbackTargetGrouping(filtered)
+  }
+
+  flatMap(fn) {
+    const mapFn = typeof fn === 'function' ? fn : (x) => x
+    const mapped = []
+    this.forEach((fbt) => mapped.push(mapFn(fbt)))
+    return mapped
+  }
+
+  forEach(fn) {
+    for (const year of this.years) {
+      for (const month of year[1]) {
+        for (const day of month[1]) {
+          for (const fbt of day[1]) {
+            fn(fbt)
+          }
+        }
+      }
+    }
+  }
+}
+
 const useOrganisationFeedbackTargets = ({
   code,
   startDate,
@@ -68,7 +113,7 @@ const useOrganisationFeedbackTargets = ({
     enabled,
   })
 
-  const [filtered, setFiltered] = React.useState([])
+  const [filtered, setFiltered] = React.useState(null)
 
   const [first, last] = teacherQuery.toLowerCase().split(' ')
   const courseQueryLower = courseQuery.toLowerCase()
@@ -97,19 +142,9 @@ const useOrganisationFeedbackTargets = ({
 
   const filter = debounce((feedbackTargets) => {
     if (!feedbackTargets || rest.isLoading || rest.isFetching) return
-    const filteredTargets = feedbackTargets
-      .map(([d, months]) => [
-        d,
-        months
-          .map(([d, days]) => [
-            d,
-            days
-              .map(([d, fbts]) => [d, fbts.filter(filterFn)])
-              .filter(([, fbts]) => fbts.length > 0),
-          ])
-          .filter(([, days]) => days.length > 0),
-      ])
-      .filter(([, months]) => months.length > 0)
+    const filteredTargets = new FeedbackTargetGrouping(feedbackTargets).filter(
+      filterFn,
+    )
     setFiltered(filteredTargets)
   }, 1000)
 
@@ -474,7 +509,7 @@ const FeedbackTargetItem = ({ code, name, tags, selected, language }) => (
         <Chip
           label={getLanguageValue(tag.name, language)[0]}
           size="small"
-          color={selected ? 'info' : 'default'}
+          color={'info'}
         />
       </Tooltip>
     ))}
@@ -574,6 +609,7 @@ const toMonth = (date, locale) =>
 
 const SemesterOverview = ({ organisation }) => {
   const [editMode, setEditMode] = React.useState(false)
+  const [viewMode, setViewMode] = React.useState('list')
   const [opened, setOpened] = React.useState(null)
   const [selected, setSelected] = React.useState([])
   const [filters, setFilters] = React.useState({
@@ -588,7 +624,6 @@ const SemesterOverview = ({ organisation }) => {
     useCourseSummaryAccessInfo()
   React.useEffect(() => {
     if (!courseSummaryAccessInfo?.defaultDateRange) return
-    console.log(courseSummaryAccessInfo)
     const { startDate, endDate } = courseSummaryAccessInfo.defaultDateRange
     setFilters({
       ...filters,
@@ -614,6 +649,14 @@ const SemesterOverview = ({ organisation }) => {
     }
   }
 
+  const toggleViewMode = () => {
+    if (viewMode === 'calendar') {
+      setViewMode('list')
+    } else {
+      setViewMode('calendar')
+    }
+  }
+
   const isDisplayedSelected = (fbt) => {
     if (editMode) {
       return selected.some((f) => f.id === fbt.id)
@@ -623,7 +666,8 @@ const SemesterOverview = ({ organisation }) => {
 
   const { code } = useParams()
   const { t, i18n } = useTranslation()
-  const { feedbackTargets: years, isLoading } = useOrganisationFeedbackTargets({
+
+  const { feedbackTargets, isLoading } = useOrganisationFeedbackTargets({
     code,
     ...filters,
     enabled: filters.startDate !== null,
@@ -633,20 +677,13 @@ const SemesterOverview = ({ organisation }) => {
   React.useEffect(() => {
     let newOpened = null
     const newSelected = []
-    // loop through this god forsaken data structure. Time to abstract?
-    for (const year of years) {
-      for (const month of year[1]) {
-        for (const day of month[1]) {
-          for (const fbt of day[1]) {
-            if (fbt.id === opened?.id) newOpened = fbt
-            if (selected.some((f) => f.id === fbt.id)) newSelected.push(fbt)
-          }
-        }
-      }
-    }
+    feedbackTargets?.forEach((fbt) => {
+      if (fbt.id === opened?.id) newOpened = fbt
+      if (selected.some((f) => f.id === fbt.id)) newSelected.push(fbt)
+    })
     setOpened(newOpened)
     setSelected(newSelected)
-  }, [years])
+  }, [feedbackTargets])
 
   return (
     <Box>
@@ -670,16 +707,22 @@ const SemesterOverview = ({ organisation }) => {
         language={i18n.language}
         organisation={organisation}
       />
-      <Box>
+      <Box display="flex">
         <FormControlLabel
           control={<Switch checked={editMode} onChange={toggleEditMode} />}
           label={t('organisationSettings:editMode')}
         />
+        <Button onClick={toggleViewMode}>
+          {viewMode === 'calendar'
+            ? t('organisationSettings:listMode')
+            : t('organisationSettings:calendarMode')}
+        </Button>
       </Box>
       <Box minWidth="35rem" maxWidth="70vw">
         {isLoading && <LoadingProgress />}
         {!isLoading &&
-          years.map(([year, months]) => (
+          viewMode === 'calendar' &&
+          feedbackTargets?.years.map(([year, months]) => (
             <Box display="flex" key={year}>
               <Box sx={styles.date} mt={1.5}>
                 {year}
@@ -722,6 +765,28 @@ const SemesterOverview = ({ organisation }) => {
               </Box>
             </Box>
           ))}
+        {!isLoading && viewMode === 'list' && (
+          <Box my={1.5}>
+            {_.orderBy(
+              feedbackTargets?.flatMap(),
+              (fbt) => fbt.courseUnit.courseCode,
+            ).map((fbt) => (
+              <Box key={fbt.id} my={1}>
+                <FeedbackTargetButton
+                  code={fbt.courseUnit.courseCode}
+                  tags={fbt.courseRealisation.tags}
+                  name={fbt.courseUnit.name}
+                  onClick={() =>
+                    editMode ? toggleSelection(fbt) : setOpened(fbt)
+                  }
+                  selected={isDisplayedSelected(fbt)}
+                  special={fbt.teachers.length === 0}
+                  language={i18n.language}
+                />
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
     </Box>
   )
