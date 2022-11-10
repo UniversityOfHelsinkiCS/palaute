@@ -108,10 +108,23 @@ const getTags = async (req, res) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
-  if (code !== '600-K001')
+  if (code !== '600-K001' && code !== '600-M001')
     throw new ApplicationError('Invalid organisation code', 400)
 
-  const tags = await Tag.findAll()
+  const { id: organisationId } = await Organisation.findOne({
+    where: {
+      code,
+    },
+    attributes: ['id'],
+  })
+
+  if (!organisationId) throw new ApplicationError('Organisation not found', 404)
+
+  const tags = await Tag.findAll({
+    where: {
+      organisationId,
+    },
+  })
 
   return res.send(tags)
 }
