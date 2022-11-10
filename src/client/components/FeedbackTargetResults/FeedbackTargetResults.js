@@ -35,9 +35,7 @@ const OnlyForEnrolled = ({ t }) => (
 const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
-  const isMobileChrome =
-    useIsMobile() &&
-    navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
+  const isMobile = useIsMobile()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
     useFeedbackTarget(id)
@@ -115,7 +113,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!isMobileChrome && !useLegacy && (
+        {!isMobile && !useLegacy && (
           <Box>
             <FeedbackChart
               feedbacks={feedbacks}
