@@ -424,27 +424,32 @@ const FeedbackTargetView = () => {
               </Box>
             </Box>
           )}
-          <Box mt="1rem">
-            <Typography gutterBottom>
-              {t('feedbackTargetView:responsibleTeachers')}
-            </Typography>
-            <ResponsibleTeachersList
-              teachers={responsibleTeachers}
-              isAdmin={isAdmin}
-              onDelete={handleDeleteTeacher}
-            />
-          </Box>
 
-          <Box mt="1rem">
-            <Typography gutterBottom>
-              {t('feedbackTargetView:teachers')}
-            </Typography>
-            <ResponsibleTeachersList
-              teachers={teachers}
-              isAdmin={isAdmin}
-              onDelete={handleDeleteTeacher}
-            />
-          </Box>
+          {!!responsibleTeachers.length && (
+            <Box mt="1rem" ml="1rem">
+              <Typography gutterBottom>
+                {t('feedbackTargetView:responsibleTeachers')}
+              </Typography>
+              <ResponsibleTeachersList
+                teachers={responsibleTeachers}
+                isAdmin={isAdmin}
+                onDelete={handleDeleteTeacher}
+              />
+            </Box>
+          )}
+
+          {!!teachers.length && (
+            <Box mt="1rem" ml="1rem">
+              <Typography gutterBottom>
+                {t('feedbackTargetView:teachers')}
+              </Typography>
+              <ResponsibleTeachersList
+                teachers={teachers}
+                isAdmin={isAdmin}
+                onDelete={handleDeleteTeacher}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
 
