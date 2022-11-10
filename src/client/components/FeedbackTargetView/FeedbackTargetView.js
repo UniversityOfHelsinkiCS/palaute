@@ -293,7 +293,7 @@ const FeedbackTargetView = () => {
   const visibleCourseCode =
     courseRealisationName.indexOf(courseCode) > -1 ? '' : `, ${courseCode}`
 
-  const handleDeleteResponsibleTeacher = async (teacher) => {
+  const handleDeleteTeacher = async (teacher) => {
     const displayName = `${teacher.firstName} ${teacher.lastName}`
 
     const message = t(
@@ -431,7 +431,7 @@ const FeedbackTargetView = () => {
             <ResponsibleTeachersList
               teachers={responsibleTeachers}
               isAdmin={isAdmin}
-              onDelete={handleDeleteResponsibleTeacher}
+              onDelete={handleDeleteTeacher}
             />
           </Box>
 
@@ -442,7 +442,7 @@ const FeedbackTargetView = () => {
             <ResponsibleTeachersList
               teachers={teachers}
               isAdmin={isAdmin}
-              onDelete={handleDeleteResponsibleTeacher}
+              onDelete={handleDeleteTeacher}
             />
           </Box>
         </Box>

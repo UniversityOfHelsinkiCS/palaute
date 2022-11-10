@@ -80,8 +80,6 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     accessStatus === 'TEACHER' ||
     accessStatus === 'RESPONSIBLE_TEACHER' ||
     userOrganisationAdmin
-  const isResponsibleTeacher =
-    accessStatus === 'RESPONSIBLE_TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
@@ -149,7 +147,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
                 selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
                 questions={questions}
                 feedbacks={feedbacks}
-                isResponsibleTeacher={isResponsibleTeacher}
+                isTeacher={isTeacher}
                 organisationAccess={!!userOrganisationAccess}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={id}

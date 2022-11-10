@@ -46,8 +46,6 @@ const OldFeedbackTargetResultsView = () => {
     accessStatus === 'TEACHER' ||
     accessStatus === 'RESPONSIBLE_TEACHER' ||
     userOrganisationAdmin
-  const isResponsibleTeacher =
-    accessStatus === 'RESPONSIBLE_TEACHER' || userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
@@ -90,7 +88,7 @@ const OldFeedbackTargetResultsView = () => {
             publicQuestionIds={publicQuestionIds ?? []}
             questions={questions}
             feedbacks={feedbacks}
-            isTeacher={isResponsibleTeacher}
+            isTeacher={isTeacher}
           />
         </Box>
       )}
@@ -101,7 +99,7 @@ const OldFeedbackTargetResultsView = () => {
           selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
           questions={questions}
           feedbacks={feedbacks}
-          isTeacher={isResponsibleTeacher}
+          isTeacher={isTeacher}
           organisationAccess={!!userOrganisationAccess}
         />
       )}
