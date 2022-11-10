@@ -1,9 +1,11 @@
 const { Tag } = require('../../models')
 
 // Kasvatustieteiden kandiohjelma
-const ORGANISATION_ID = 'hy-org-116715340'
+const BACHELOR_PROGRAMME_ID = 'hy-org-116715340'
+// Kasvatustieteiden maisteriohjelma
+const MASTER_PROGRAMME_ID = 'hy-org-118077949'
 
-const tags = [
+const bachelorTags = [
   {
     fi: 'Erityispedagogiikka',
     sv: 'Specialpedagogik',
@@ -76,16 +78,92 @@ const tags = [
   },
 ]
 
+const masterTags = [
+  {
+    fi: 'Erityispedagogiikka',
+    sv: 'Specialpedagogik',
+    en: 'Special Education',
+  },
+  {
+    fi: 'Kotitalousopettaja',
+    sv: 'Lärare i huslig ekonomi',
+    en: 'Home Economics Teacher',
+  },
+  {
+    fi: 'Käsityönopettaja',
+    sv: 'Lärare i slöjd, design och teknologi',
+    en: 'Craft, Design and Technology Teacher',
+  },
+  {
+    fi: 'Luokanopettaja',
+    sv: 'Luokanopettaja',
+    en: 'Class Teacher (LO)',
+  },
+  {
+    fi: 'Varhaiskasvatuksen opettaja / Varhaiskasvatus',
+    sv: 'Varhaiskasvatuksen opettaja / Varhaiskasvatus',
+    en: 'Early Education Teacher (VO)',
+  },
+  {
+    fi: 'Yleinen ja aikuiskasvatustiede',
+    sv: 'Yleinen ja aikuiskasvatustiede',
+    en: 'General and Adult Education (YAKT)',
+  },
+  {
+    fi: 'Allmän pedagogik och vuxenpedagogik',
+    sv: 'Allmän pedagogik och vuxenpedagogik',
+    en: 'General and Adult Education (PED)',
+  },
+  {
+    fi: 'Klasslärare',
+    sv: 'Klasslärare',
+    en: 'Class Teacher (KLU)',
+  },
+  {
+    fi: 'Aineenopettajakoulutus (AO)',
+    sv: 'Aineenopettajakoulutus (AO)',
+    en: 'Subject Teacher (AO)',
+  },
+  {
+    fi: 'Ämneslärarutbildning (ÄLU)',
+    sv: 'Ämneslärarutbildning (ÄLU)',
+    en: 'Subject Teacher (ÄLU)',
+  },
+  {
+    fi: 'Subject Teacher Education Programme (STEP)',
+    sv: 'Subject Teacher Education Programme (STEP)',
+    en: 'Subject Teacher Education Programme (STEP)',
+  },
+  {
+    fi: 'Valinnaiset opinnot',
+    sv: 'Valfria studier',
+    en: 'Optional studies',
+  },
+]
+
 const seedTags = async () => {
-  for (const tagName of tags) {
+  for (const tagName of bachelorTags) {
     await Tag.findOrCreate({
       where: {
         name: tagName,
-        organisationId: ORGANISATION_ID,
+        organisationId: BACHELOR_PROGRAMME_ID,
       },
       defaults: {
         name: tagName,
-        organisationId: ORGANISATION_ID,
+        organisationId: BACHELOR_PROGRAMME_ID,
+      },
+    })
+  }
+
+  for (const tagName of masterTags) {
+    await Tag.findOrCreate({
+      where: {
+        name: tagName,
+        organisationId: MASTER_PROGRAMME_ID,
+      },
+      defaults: {
+        name: tagName,
+        organisationId: MASTER_PROGRAMME_ID,
       },
     })
   }
