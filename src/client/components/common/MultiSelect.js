@@ -11,13 +11,14 @@ import {
   Select,
 } from '@mui/material'
 import { Close } from '@mui/icons-material'
+import { generate } from '../../util/randomColor'
 
 /**
  * options must be an array of objects with id and label
  *
  *
  */
-const MultiSelect = ({ value, onChange, options, label }) => {
+const MultiSelect = ({ value, onChange, options, label, colors }) => {
   const selectedOptions = value.map((v) => options.find((o) => o.id === v))
 
   return (
@@ -30,7 +31,11 @@ const MultiSelect = ({ value, onChange, options, label }) => {
         onChange={(event) => onChange(event.target.value)}
         label={label}
         renderValue={() => (
-          <RenderValue selected={selectedOptions} onChange={onChange} />
+          <RenderValue
+            selected={selectedOptions}
+            onChange={onChange}
+            colors={colors}
+          />
         )}
         sx={{ zIndex: 0 }}
         // eslint-disable-next-line react/no-unstable-nested-components
@@ -54,7 +59,9 @@ const MultiSelect = ({ value, onChange, options, label }) => {
         {options.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             <Checkbox checked={value.includes(option.id)} />
-            <ListItemText primary={option.label} />
+            <ListItemText
+              primary={<Option option={option} colors={colors} />}
+            />
           </MenuItem>
         ))}
       </Select>
@@ -62,12 +69,19 @@ const MultiSelect = ({ value, onChange, options, label }) => {
   )
 }
 
-const RenderValue = ({ selected }) => (
+const RenderValue = ({ selected, colors }) => (
   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 }}>
     {selected.map((value) => (
-      <Chip key={value.id} label={value.label} />
+      <Option key={value.id} option={value} colors={colors} />
     ))}
   </Box>
+)
+
+const Option = ({ option, colors }) => (
+  <Chip
+    label={option.label}
+    sx={colors ? { background: generate(option.id) } : undefined}
+  />
 )
 
 export default MultiSelect

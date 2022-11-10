@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Chip, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
+import { generate } from '../../util/randomColor'
 
 const Tags = ({ organisation }) => {
   const { t, i18n } = useTranslation()
@@ -19,7 +20,7 @@ const Tags = ({ organisation }) => {
               <Box p="0.5rem">
                 <Chip
                   label={getLanguageValue(tag.name, i18n.language)}
-                  variant="outlined"
+                  sx={{ background: generate(tag.id) }}
                 />
               </Box>
             ))}

@@ -41,6 +41,7 @@ import queryClient from '../../util/queryClient'
 import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
+import { generate } from '../../util/randomColor'
 
 class FeedbackTargetGrouping {
   years = []
@@ -256,6 +257,7 @@ const TagSelector = ({
   return (
     <Box display="flex" flexDirection="column" gap="1rem">
       <MultiSelect
+        colors
         label={t('common:studyTracks')}
         value={tagIds}
         options={tags.map((t) => ({
@@ -401,7 +403,6 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
                 code={fbt.courseUnit.courseCode}
                 name={fbt.courseUnit.name}
                 tags={fbt.courseRealisation.tags}
-                selected={false}
                 language={language}
               />
             </Box>
@@ -491,27 +492,31 @@ const FeedbackTargetButton = ({
         code={code}
         name={name}
         tags={tags}
-        selected={selected}
         language={language}
       />
     </Button>
   </Box>
 )
 
-const FeedbackTargetItem = ({ code, name, tags, selected, language }) => (
+const TagChip = ({ tag, language }) => (
+  <Tooltip key={tag.id} title={getLanguageValue(tag.name, language)}>
+    <Chip
+      label={getLanguageValue(tag.name, language)[0]}
+      size="small"
+      // color="inherit"
+      sx={{ background: generate(tag.id), mx: 0.3 }}
+    />
+  </Tooltip>
+)
+
+const FeedbackTargetItem = ({ code, name, tags, language }) => (
   <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
     <Typography color="textSecondary">{code}</Typography>
     <Box mr="0.5rem" />
     <Typography fontWeight={350}>{getLanguageValue(name, language)}</Typography>
     <Box mr="0.3rem" />
     {tags.map((tag) => (
-      <Tooltip key={tag.id} title={getLanguageValue(tag.name, language)}>
-        <Chip
-          label={getLanguageValue(tag.name, language)[0]}
-          size="small"
-          color={'info'}
-        />
-      </Tooltip>
+      <TagChip key={tag.id} tag={tag} language={language} />
     ))}
   </Box>
 )
@@ -590,6 +595,7 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
             />
             <MultiSelect
               value={value.tags}
+              colors
               onChange={(tags) => onChange({ ...value, tags })}
               options={tags.map((tag) => ({
                 id: tag.id,
