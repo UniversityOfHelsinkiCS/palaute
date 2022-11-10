@@ -429,6 +429,7 @@ export default {
     feedbackPeriod: 'Palaute käynnissä',
     coursePage: 'Kurssisivu',
     courseSummary: 'Kurssin toteutusten yhteenveto',
+    teachers: 'Opettajat',
     responsibleTeachers: 'Vastuuopettajat',
     shareTab: 'Jaa kysely',
     surveySettingsTab: 'Kyselyn asetukset',

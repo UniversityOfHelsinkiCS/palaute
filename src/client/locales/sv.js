@@ -431,6 +431,7 @@ export default {
     editFeedbackTab: 'Redigera responsen',
     coursePage: 'Kurssida',
     courseSummary: 'Sammandrag av kursens genomföranden',
+    // teachers: 'Teachers',
     responsibleTeachers: 'Ansvariga lärare',
     shareTab: 'Dela förfrågan',
     surveySettingsTab: 'Förfrågans inställningar',

@@ -219,6 +219,7 @@ const FeedbackTargetView = () => {
     opensAt,
     feedback,
     responsibleTeachers,
+    teachers,
     feedbackResponseEmailSent,
     settingsReadByTeacher,
     feedbackCount,
@@ -429,6 +430,17 @@ const FeedbackTargetView = () => {
             </Typography>
             <ResponsibleTeachersList
               teachers={responsibleTeachers}
+              isAdmin={isAdmin}
+              onDelete={handleDeleteResponsibleTeacher}
+            />
+          </Box>
+
+          <Box mt="1rem">
+            <Typography gutterBottom>
+              {t('feedbackTargetView:teachers')}
+            </Typography>
+            <ResponsibleTeachersList
+              teachers={teachers}
               isAdmin={isAdmin}
               onDelete={handleDeleteResponsibleTeacher}
             />

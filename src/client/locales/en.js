@@ -427,6 +427,7 @@ export default {
     feedbackPeriod: 'Feedback open',
     coursePage: 'Course page',
     courseSummary: "Summary of course's instances",
+    teachers: 'Teachers',
     responsibleTeachers: 'Responsible teachers',
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey settings',
