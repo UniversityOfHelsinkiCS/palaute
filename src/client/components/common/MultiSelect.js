@@ -20,7 +20,6 @@ import { generate } from '../../util/randomColor'
  */
 const MultiSelect = ({ value, onChange, options, label, colors }) => {
   const selectedOptions = value.map((v) => options.find((o) => o.id === v))
-
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
@@ -80,7 +79,7 @@ const RenderValue = ({ selected, colors }) => (
 const Option = ({ option, colors }) => (
   <Chip
     label={option.label}
-    sx={colors ? { background: generate(option.id) } : undefined}
+    sx={colors ? { background: generate(option.hash ?? option.id) } : undefined}
   />
 )
 

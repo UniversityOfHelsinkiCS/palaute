@@ -36,21 +36,13 @@ const colors = [
 ]
 const N = colors.length
 
-// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-const hash = (s) =>
-  s.split('').reduce((a, b) => {
-    a = (a << 5) - a + b.charCodeAt(0)
-    return a & a
-  }, 0)
-
 /**
  *
- * @param {number | string} seed
+ * @param {number} hash
  * @return {string} color
  */
-export const generate = (seed, minShade = 1, maxShade = 3) => {
-  const h = hash(String(seed))
-  const shade = ((h % (maxShade - minShade)) + minShade) * 100
-  const hue = h % N
+export const generate = (hash, minShade = 1, maxShade = 3) => {
+  const shade = ((hash % (maxShade - minShade)) + minShade) * 100
+  const hue = hash % N
   return colors[hue][shade]
 }

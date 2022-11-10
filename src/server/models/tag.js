@@ -1,6 +1,18 @@
 const { JSONB } = require('sequelize')
+const { VIRTUAL } = require('sequelize')
 const { Model, INTEGER, STRING } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
+
+/* eslint-disable */
+// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+const hash = (s) =>
+  Math.abs(
+    s.split('').reduce((a, b) => {
+      a = (a << 5) - a + b.charCodeAt(0)
+      return a & a
+    }, 0),
+  )
+/* eslint-enable */
 
 class Tag extends Model {}
 
@@ -20,6 +32,12 @@ Tag.init(
     name: {
       type: JSONB,
       allowNull: false,
+    },
+    hash: {
+      type: VIRTUAL,
+      get() {
+        return hash(this.name.fi)
+      },
     },
   },
   {

@@ -62,7 +62,7 @@ const getFromDb = async (id) => {
         include: {
           model: Tag,
           as: 'tags',
-          attributes: ['id', 'name'],
+          attributes: ['id', 'name', 'hash'],
         },
       },
     ],

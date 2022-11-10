@@ -262,6 +262,7 @@ const TagSelector = ({
         label={t('common:studyTracks')}
         value={tagIds}
         options={tags.map((t) => ({
+          hash: t.hash,
           id: t.id,
           label: getLanguageValue(t.name, language),
         }))}
@@ -588,6 +589,7 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
               colors
               onChange={(tags) => onChange({ ...value, tags })}
               options={tags.map((tag) => ({
+                hash: tag.hash,
                 id: tag.id,
                 label: getLanguageValue(tag.name, language),
               }))}

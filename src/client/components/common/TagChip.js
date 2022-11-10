@@ -9,12 +9,12 @@ export const TagChip = ({ tag, language = 'fi', compact = false }) =>
       <Chip
         label={getLanguageValue(tag.name, language)[0]}
         size="small"
-        sx={{ background: generate(tag.id), margin: '1px' }}
+        sx={{ background: generate(tag.hash), margin: '1px' }}
       />
     </Tooltip>
   ) : (
     <Chip
       label={getLanguageValue(tag.name, language)}
-      sx={{ background: generate(tag.id), margin: '1px' }}
+      sx={{ background: generate(tag.hash), margin: '1px' }}
     />
   )
