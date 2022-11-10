@@ -12,7 +12,7 @@ const useOrganisationTags = (organisationCode) => {
   }
 
   const { data: tags, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: organisationCode === '600-K001',
+    enabled: organisationCode === '600-K001' || organisationCode === '600-M001',
   })
 
   return { tags, ...rest }

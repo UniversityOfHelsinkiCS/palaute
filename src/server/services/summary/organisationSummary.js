@@ -157,10 +157,12 @@ const getOrganisationSummaries = async ({
     }
   })
 
-  // only filter by tags if using education bachelor summary and tag is selected
+  // only filter by tags if using education bachelor or master summary and tag is selected
+  const organisationId = organisationAccess[0].organisation.id
   const filterEducationBachelorSummary =
     organisationAccess.length === 1 &&
-    organisationAccess[0].organisation.id === 'hy-org-116715340' &&
+    (organisationId === 'hy-org-116715340' ||
+      organisationId === 'hy-org-118077949') &&
     tagId &&
     tagId !== 'All'
 
