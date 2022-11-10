@@ -123,6 +123,7 @@ Organisation.hasMany(OrganisationLog, { as: 'organisationLogs' })
 FeedbackTargetLog.belongsTo(FeedbackTarget, {
   as: 'feedback_target',
   foreign_key: 'feedback_target_id',
+  onDelete: 'CASCADE',
 })
 
 FeedbackTargetLog.belongsTo(User, {
