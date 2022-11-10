@@ -42,6 +42,7 @@ import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
 import { generate } from '../../util/randomColor'
+import { TagChip } from '../common/TagChip'
 
 class FeedbackTargetGrouping {
   years = []
@@ -498,17 +499,6 @@ const FeedbackTargetButton = ({
   </Box>
 )
 
-const TagChip = ({ tag, language }) => (
-  <Tooltip key={tag.id} title={getLanguageValue(tag.name, language)}>
-    <Chip
-      label={getLanguageValue(tag.name, language)[0]}
-      size="small"
-      // color="inherit"
-      sx={{ background: generate(tag.id), mx: 0.3 }}
-    />
-  </Tooltip>
-)
-
 const FeedbackTargetItem = ({ code, name, tags, language }) => (
   <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
     <Typography color="textSecondary">{code}</Typography>
@@ -516,7 +506,7 @@ const FeedbackTargetItem = ({ code, name, tags, language }) => (
     <Typography fontWeight={350}>{getLanguageValue(name, language)}</Typography>
     <Box mr="0.3rem" />
     {tags.map((tag) => (
-      <TagChip key={tag.id} tag={tag} language={language} />
+      <TagChip key={tag.id} tag={tag} language={language} compact />
     ))}
   </Box>
 )

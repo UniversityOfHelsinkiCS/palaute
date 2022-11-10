@@ -71,6 +71,7 @@ import useOrganisations from '../../hooks/useOrganisations'
 import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import apiClient from '../../util/apiClient'
+import { TagChip } from '../common/TagChip'
 
 const styles = {
   datesContainer: {
@@ -133,16 +134,17 @@ const styles = {
   },
 }
 
-const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => {
-  const list = teachers.map((teacher) => (
-    <TeacherChip
-      key={teacher.id}
-      user={teacher}
-      onDelete={isAdmin ? () => onDelete(teacher) : undefined}
-    />
-  ))
-  return <Box sx={styles.teacherListContainer}>{list}</Box>
-}
+const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => (
+  <Box sx={styles.teacherListContainer}>
+    {teachers.map((teacher) => (
+      <TeacherChip
+        key={teacher.id}
+        user={teacher}
+        onDelete={isAdmin ? () => onDelete(teacher) : undefined}
+      />
+    ))}
+  </Box>
+)
 
 const ErrorComponent = ({ error }) => {
   const [enabled, setEnabled] = React.useState(
@@ -238,7 +240,9 @@ const FeedbackTargetView = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
   const isTeacher =
-    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+    accessStatus === 'TEACHER' ||
+    accessStatus === 'RESPONSIBLE_TEACHER' ||
+    isAdmin
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
@@ -260,6 +264,7 @@ const FeedbackTargetView = () => {
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = isOrganisationAdmin || isTeacher
   const showLogsTab = isAdmin
+  const showTags = feedbackTarget?.courseRealisation?.tags?.length > 0
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${id}/feedback`
@@ -421,6 +426,21 @@ const FeedbackTargetView = () => {
                   label={`${feedbackCount}/${studentCount}`}
                   percent={(feedbackCount / studentCount) * 100}
                 />
+              </Box>
+            </Box>
+          )}
+          {showTags && (
+            <Box mt="1rem">
+              <Typography gutterBottom>{t('common:studyTracks')}</Typography>
+              <Box
+                display="flex"
+                flexDirection="row"
+                flexWrap="wrap"
+                width="20rem"
+              >
+                {feedbackTarget.courseRealisation.tags.map((tag) => (
+                  <TagChip key={tag.id} tag={tag} language={i18n.language} />
+                ))}
               </Box>
             </Box>
           )}

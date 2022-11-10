@@ -1,8 +1,7 @@
-import { Box, Card, CardContent, Chip, Typography } from '@mui/material'
+import { Box, Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { getLanguageValue } from '../../util/languageUtils'
-import { generate } from '../../util/randomColor'
+import { TagChip } from '../common/TagChip'
 
 const Tags = ({ organisation }) => {
   const { t, i18n } = useTranslation()
@@ -17,12 +16,7 @@ const Tags = ({ organisation }) => {
         <CardContent>
           <Box display="flex" flexWrap="wrap">
             {tags?.map((tag) => (
-              <Box p="0.5rem">
-                <Chip
-                  label={getLanguageValue(tag.name, i18n.language)}
-                  sx={{ background: generate(tag.id) }}
-                />
-              </Box>
+              <TagChip key={tag.id} tag={tag} language={i18n.language} />
             ))}
           </Box>
         </CardContent>

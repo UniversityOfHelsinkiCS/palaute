@@ -105,7 +105,7 @@ const getOrganisationByCode = async (req, res) => {
 
   const { organisation, access } = theOrganisationAccess
 
-  const tags = await organisation.getTags()
+  const tags = _.orderBy(await organisation.getTags(), (tag) => tag.name?.fi)
 
   const publicOrganisation = {
     ...organisation.toJSON(),

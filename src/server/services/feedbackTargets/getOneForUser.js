@@ -7,6 +7,7 @@ const {
   UserFeedbackTarget,
   Feedback,
   User,
+  Tag,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
@@ -55,7 +56,15 @@ const getFromDb = async (id) => {
           },
         ],
       },
-      { model: CourseRealisation, as: 'courseRealisation' },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        include: {
+          model: Tag,
+          as: 'tags',
+          attributes: ['id', 'name'],
+        },
+      },
     ],
   })
 

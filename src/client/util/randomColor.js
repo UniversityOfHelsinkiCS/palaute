@@ -48,7 +48,7 @@ const hash = (s) =>
  * @param {number | string} seed
  * @return {string} color
  */
-export const generate = (seed, minShade = 1, maxShade = 4) => {
+export const generate = (seed, minShade = 1, maxShade = 3) => {
   const h = hash(String(seed))
   const shade = ((h % (maxShade - minShade)) + minShade) * 100
   const hue = h % N

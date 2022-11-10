@@ -5,6 +5,7 @@ const Organisation = require('../../models/organisation')
 const FeedbackTarget = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
 const logger = require('../../util/logger')
+const { CourseRealisationsTag, CourseRealisation } = require('../../models')
 
 const lru = new LRUCache({
   max: 250,
@@ -49,6 +50,19 @@ const onSurveyChange = (survey) => {
   }
 }
 
+const onTagChange = async (curTag) => {
+  const fbts = await FeedbackTarget.findAll({
+    attributes: ['id'],
+    where: { hidden: false },
+    include: {
+      model: CourseRealisation,
+      required: true,
+      where: { id: curTag.courseRealisationId },
+    },
+  })
+  fbts.map(({ id }) => id).forEach(cache.invalidate)
+}
+
 Organisation.afterUpdate(({ code }) => onOrganisationChange(code))
 Organisation.afterSave(({ code }) => onOrganisationChange(code))
 
@@ -57,5 +71,8 @@ FeedbackTarget.afterSave(onFeedbackTargetChange)
 
 Survey.afterUpdate(onSurveyChange)
 Survey.afterSave(onSurveyChange)
+
+CourseRealisationsTag.afterCreate(onTagChange)
+CourseRealisationsTag.beforeDestroy(onTagChange)
 
 module.exports = cache
