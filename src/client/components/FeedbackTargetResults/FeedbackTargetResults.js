@@ -1,10 +1,9 @@
-import React, { useRef, forwardRef } from 'react'
+import React, { useRef, forwardRef, useState } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, FormControlLabel, Switch } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import useHistoryState from '../../hooks/useHistoryState'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
@@ -43,7 +42,9 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { feedbackTargetData, isLoading: feedbacksIsLoading } =
     useFeedbackTargetFeedbacks(id)
 
-  const [useLegacy, setUseLegacy] = useHistoryState('legacy', false)
+  const [useLegacy, setUseLegacy] = useState(
+    JSON.parse(localStorage.getItem('legacy')) || false,
+  )
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
@@ -79,6 +80,11 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     accessStatus === 'RESPONSIBLE_TEACHER' ||
     userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+
+  const saveLegacySetting = (value) => {
+    setUseLegacy(value)
+    localStorage.setItem('legacy', JSON.stringify(value))
+  }
 
   if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
@@ -158,7 +164,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
             control={
               <Switch
                 checked={useLegacy}
-                onClick={() => setUseLegacy(!useLegacy)}
+                onClick={() => saveLegacySetting(!useLegacy)}
               />
             }
             label={t('feedbackTargetResults:useLegacyVersion')}
