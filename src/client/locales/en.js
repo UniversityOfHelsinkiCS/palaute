@@ -263,6 +263,10 @@ export default {
     modalSubtitle:
       'Students who have already given feedback wont receive this email',
     emailSent: 'Reminder email sent',
+    setHidden: 'Hide this feedback',
+    setVisible: 'Unhide',
+    hiddenInfo:
+      'This feedback is hidden and is visible only to the teachers and programme administrators',
   },
   navBar: {
     myFeedbacks: 'My feedback',

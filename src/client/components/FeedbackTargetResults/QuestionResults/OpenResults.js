@@ -82,9 +82,9 @@ const useUpdateOpenFeedbackVisibility = ({ feedbackTargetId }) => {
   return mutation
 }
 
-const OpenFeedback = ({ feedback, canHide }) => {
+const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
   const mutation = useUpdateOpenFeedbackVisibility({
-    feedbackTargetId: 19331492,
+    feedbackTargetId,
   })
   const onVisibilityToggle = async () => {
     try {
@@ -99,7 +99,7 @@ const OpenFeedback = ({ feedback, canHide }) => {
   }
 
   const secondaryText = feedback.hidden
-    ? 'Tämä palaute on piilotettu, ja se näkyy vain opettajalle tai koulutusohjelman hallintohenkilöille'
+    ? t('feedbackTargetResults:hiddenInfo')
     : ''
   return (
     <ListItem
@@ -107,7 +107,13 @@ const OpenFeedback = ({ feedback, canHide }) => {
       sx={feedback.hidden ? styles.hiddenListItem : {}}
       secondaryAction={
         canHide && (
-          <Tooltip>
+          <Tooltip
+            title={t(
+              feedback.hidden
+                ? 'feedbackTargetResults:setVisible'
+                : 'feedbackTargetResults:setHidden',
+            )}
+          >
             <IconButton onClick={onVisibilityToggle}>
               {feedback.hidden ? <VisibilityOff /> : <Visibility />}
             </IconButton>
@@ -126,9 +132,10 @@ const OpenFeedback = ({ feedback, canHide }) => {
 }
 
 const OpenResults = ({ question }) => {
-  const { i18n } = useTranslation()
-  const { isTeacher } = React.useContext(FeedbackTargetViewContext)
-
+  const { t, i18n } = useTranslation()
+  const { feedbackTargetId, isTeacher, isOrganisationAdmin } = React.useContext(
+    FeedbackTargetViewContext,
+  )
   const label = getLanguageValue(question.data?.label, i18n.language)
 
   const description = getLanguageValue(
@@ -155,7 +162,13 @@ const OpenResults = ({ question }) => {
       </Box>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
-          <OpenFeedback key={index} feedback={feedback} canHide={isTeacher} />
+          <OpenFeedback
+            key={index}
+            feedback={feedback}
+            canHide={isTeacher || isOrganisationAdmin}
+            feedbackTargetId={feedbackTargetId}
+            t={t}
+          />
         ))}
       </List>
     </ResultsContent>

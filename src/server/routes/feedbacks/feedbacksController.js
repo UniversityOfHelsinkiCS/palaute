@@ -154,7 +154,7 @@ const updateAnswerHidden = async (req, res) => {
   const { feedbackTarget } = feedback.userFeedbackTarget
 
   // check access
-  if (!req.isAdmin && !(await req.user.isTeacherOn(feedbackTarget))) {
+  if (!req.isAdmin && !(await req.user.getTeacherAssociation(feedbackTarget))) {
     const organisationAccess =
       await req.user.getOrganisationAccessByCourseUnitId(
         feedbackTarget.courseUnitId,

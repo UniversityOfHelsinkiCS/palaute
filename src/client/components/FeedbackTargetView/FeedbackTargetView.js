@@ -229,7 +229,7 @@ const FeedbackTargetView = () => {
       isOrganisationAdmin,
       isAdmin,
     }),
-    [id, isTeacher, isAdmin],
+    [id, isTeacher, isAdmin, isOrganisationAdmin],
   )
 
   if (isLoading) {

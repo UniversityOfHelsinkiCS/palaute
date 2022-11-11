@@ -261,6 +261,10 @@ export default {
     modalSubtitle:
       'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
     emailSent: 'Muistutusviesti lähetetty',
+    setHidden: 'Piilota näkyvistä',
+    setVisible: 'Poista piilotus',
+    hiddenInfo:
+      'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

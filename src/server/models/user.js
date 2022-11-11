@@ -102,13 +102,16 @@ class User extends Model {
 
   /**
    *
-   * @param {number} feedbackTargetId
+   * @param {FeedbackTarget | number} feedbackTarget
    * @returns {UserFeedbackTarget}
    */
-  async isTeacherOn(feedbackTargetId) {
+  async getTeacherAssociation(feedbackTarget) {
     return UserFeedbackTarget.findOne({
       where: {
-        feedbackTargetId,
+        feedbackTargetId:
+          typeof feedbackTarget === 'number'
+            ? feedbackTarget
+            : feedbackTarget.id,
         userId: this.id,
         [Op.or]: [
           { accessStatus: 'RESPONSIBLE_TEACHER' },

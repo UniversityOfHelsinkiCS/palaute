@@ -266,6 +266,9 @@ export default {
     modalSubtitle:
       'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
     emailSent: 'Påminnelse skickad',
+    // setHidden: 'Piilota näkyvistä',
+    // setVisible: 'Poista piilotus',
+    // hiddenInfo: 'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
