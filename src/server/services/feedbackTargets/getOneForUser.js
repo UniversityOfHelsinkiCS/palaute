@@ -32,6 +32,7 @@ const getFromDb = async (id) => {
       'courseRealisationId',
       'hidden',
       'feedbackType',
+      'publicQuestionIds',
     ],
     include: [
       {

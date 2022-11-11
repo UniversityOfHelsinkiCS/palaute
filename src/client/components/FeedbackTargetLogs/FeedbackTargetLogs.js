@@ -7,6 +7,10 @@ import useFeedbackTargetLogs from '../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../common/LoadingProgress'
 
 const getLogMessage = (data) => {
+  if (!data) {
+    return 'Unknown action wtf'
+  }
+
   let messages = []
   if (data.opensAt) {
     messages = messages.concat(
@@ -37,8 +41,8 @@ const getLogMessage = (data) => {
   if (data.enabledPublicQuestions) {
     messages = messages.concat(
       data.enabledPublicQuestions.length > 0
-        ? `Set answers visible for question '${data.enabledPublicQuestions[0].data.label.en}'`
-        : `Set answers hidden for question '${data.disabledPublicQuestions[0].data.label.en}'`,
+        ? `Set answers visible for question '${data.enabledPublicQuestions[0]?.data?.label?.en}'`
+        : `Set answers hidden for question '${data.disabledPublicQuestions[0]?.data?.label?.en}'`,
     )
   }
 
