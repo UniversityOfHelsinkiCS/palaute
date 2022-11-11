@@ -36,6 +36,12 @@ FeedbackTarget.hasMany(UserFeedbackTarget, { as: 'userFeedbackTargets' })
 
 UserFeedbackTarget.belongsTo(Feedback, {
   as: 'feedback',
+  foreignKey: 'feedbackId',
+})
+
+Feedback.hasOne(UserFeedbackTarget, {
+  as: 'userFeedbackTarget',
+  foreignKey: 'feedbackId',
 })
 
 UserFeedbackTarget.belongsTo(User, {

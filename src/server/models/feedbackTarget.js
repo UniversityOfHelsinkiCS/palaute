@@ -186,14 +186,15 @@ class FeedbackTarget extends Model {
     const surveys = await this.getSurveys()
     const publicQuestionIds = this.getPublicQuestionIds(surveys)
 
-    const filteredFeedbacks = publicFeedbacks.map((feedback) => ({
+    const censoredFeedbacks = publicFeedbacks.map((feedback) => ({
       ...feedback,
-      data: feedback.data.filter((question) =>
-        publicQuestionIds.includes(question.questionId),
+      data: feedback.data.filter(
+        (answer) =>
+          !answer.hidden && publicQuestionIds.includes(answer.questionId),
       ),
     }))
 
-    return filteredFeedbacks
+    return censoredFeedbacks
   }
 
   async toPublicObject() {

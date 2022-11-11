@@ -12,6 +12,7 @@ const _ = require('lodash')
 const { sequelize } = require('../util/dbConnection')
 const Organisation = require('./organisation')
 const { getOrganisationAccess } = require('../util/organisationAccess')
+const UserFeedbackTarget = require('./userFeedbackTarget')
 
 class User extends Model {
   async getOrganisationAccess() {
@@ -97,6 +98,24 @@ class User extends Model {
     )
 
     return rows.map((row) => row.course_code)
+  }
+
+  /**
+   *
+   * @param {number} feedbackTargetId
+   * @returns {UserFeedbackTarget}
+   */
+  async isTeacherOn(feedbackTargetId) {
+    return UserFeedbackTarget.findOne({
+      where: {
+        feedbackTargetId,
+        userId: this.id,
+        [Op.or]: [
+          { accessStatus: 'RESPONSIBLE_TEACHER' },
+          { accessStatus: 'TEACHER' },
+        ],
+      },
+    })
   }
 
   getDefaultEmail() {

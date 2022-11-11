@@ -185,7 +185,9 @@ export const getQuestionsWithFeedback = (questions, feedbacks) => {
     .reduce(
       (acc, feedback) => [
         ...acc,
-        ...(Array.isArray(feedback.data) ? feedback.data : []),
+        ...(Array.isArray(feedback.data)
+          ? feedback.data.map((d) => ({ ...d, feedbackId: feedback.id }))
+          : []),
       ],
       [],
     ) // filter short answers which are not a number

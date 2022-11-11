@@ -72,6 +72,7 @@ import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import apiClient from '../../util/apiClient'
 import { TagChip } from '../common/TagChip'
+import { FeedbackTargetViewContext } from './FeedbackTargetViewContext'
 
 const styles = {
   datesContainer: {
@@ -201,10 +202,35 @@ const FeedbackTargetView = () => {
         (feedbackTarget?.accessStatus === 'RESPONSIBLE_TEACHER' ||
           feedbackTarget?.accessStatus === 'TEACHER'),
     })
+
+  const courseUnit = feedbackTarget?.courseUnit
+  const accessStatus = feedbackTarget?.accessStatus
+
   const { authorizedUser } = useAuthorizedUser()
   const isAdmin = authorizedUser?.isAdmin ?? false
 
+  const isTeacher =
+    (!isLoading &&
+      (accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER')) ||
+    isAdmin
+
   const { organisations, isLoading: organisationsLoading } = useOrganisations()
+  const organisation =
+    isLoading || organisationsLoading
+      ? null
+      : organisations.find((org) => courseUnit.organisations[0].id === org.id)
+
+  const isOrganisationAdmin = organisation?.access?.admin || isAdmin
+
+  const context = React.useMemo(
+    () => ({
+      feedbackTargetId: id,
+      isTeacher,
+      isOrganisationAdmin,
+      isAdmin,
+    }),
+    [id, isTeacher, isAdmin],
+  )
 
   if (isLoading) {
     return <LoadingProgress />
@@ -215,9 +241,7 @@ const FeedbackTargetView = () => {
   }
 
   const {
-    accessStatus,
     courseRealisation,
-    courseUnit,
     opensAt,
     feedback,
     responsibleTeachers,
@@ -230,19 +254,10 @@ const FeedbackTargetView = () => {
   } = feedbackTarget
 
   const { courseCode } = courseUnit
-  const organisation = organisationsLoading
-    ? null
-    : organisations.find((org) => courseUnit.organisations[0].id === org.id)
-
-  const isOrganisationAdmin = organisation?.access?.admin || isAdmin
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
-  const isTeacher =
-    accessStatus === 'TEACHER' ||
-    accessStatus === 'RESPONSIBLE_TEACHER' ||
-    isAdmin
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
@@ -320,7 +335,7 @@ const FeedbackTargetView = () => {
   }
 
   return (
-    <>
+    <FeedbackTargetViewContext.Provider value={context}>
       <Box mb={3}>
         <div css={styles.headingContainer}>
           <Box display="flex" flexDirection="column">
@@ -588,7 +603,7 @@ const FeedbackTargetView = () => {
         <Route path={`${path}/logs`} component={FeedbackTargetLogs} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
-    </>
+    </FeedbackTargetViewContext.Provider>
   )
 }
 

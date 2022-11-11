@@ -128,12 +128,68 @@ const destroy = async (req, res) => {
   return res.sendStatus(200)
 }
 
+const updateAnswerHidden = async (req, res) => {
+  const { id: feedbackId, questionId } = req.params
+  const { hidden } = req.body
+  if (typeof hidden !== 'boolean') {
+    throw new ApplicationError('Invalid value for hidden', 400)
+  }
+
+  // find feedback
+  const feedback = await Feedback.findByPk(feedbackId, {
+    include: {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTarget',
+      include: {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+      },
+    },
+  })
+
+  if (!feedback) {
+    throw new ApplicationError('Feedback not found', 404)
+  }
+
+  const { feedbackTarget } = feedback.userFeedbackTarget
+
+  // check access
+  if (!req.isAdmin && !(await req.user.isTeacherOn(feedbackTarget))) {
+    const organisationAccess =
+      await req.user.getOrganisationAccessByCourseUnitId(
+        feedbackTarget.courseUnitId,
+      )
+    if (!organisationAccess.admin) {
+      throw new ApplicationError('Admin or teacher access required', 403)
+    }
+  }
+
+  // find and update question
+  let updated = false
+  feedback.data = feedback.data.map((answer) => {
+    if (answer.questionId === Number(questionId)) {
+      updated = true
+      return { ...answer, hidden }
+    }
+    return answer
+  })
+
+  if (!updated) {
+    throw new ApplicationError('Question not found on feedback', 404)
+  }
+
+  await feedback.save()
+
+  return res.send({ hidden })
+}
+
 const adRouter = Router()
 
 adRouter.post('/', create)
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.delete('/:id', destroy)
+adRouter.put('/:id/question/:questionId', updateAnswerHidden)
 
 const noadRouter = Router()
 
