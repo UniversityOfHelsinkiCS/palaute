@@ -16,9 +16,12 @@ const login = async (req, res) => {
   const relevantIamGroups = allIamGroups.filter((iam) =>
     relevantIAMs.includes(iam),
   )
-  user.iamGroups = relevantIamGroups
-  user.lastLoggedIn = new Date()
-  await user.save()
+
+  if (!req.loginAs) {
+    user.iamGroups = relevantIamGroups
+    user.lastLoggedIn = new Date()
+    await user.save()
+  }
 
   const isTeacher = !!user.employeeNumber
 
