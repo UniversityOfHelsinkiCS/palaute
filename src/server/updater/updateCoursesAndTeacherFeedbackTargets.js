@@ -296,11 +296,13 @@ const createFeedbackTargets = async (courses) => {
         .map(({ personId, roleUrn }) => ({ personId, roleUrn }))
 
       const courseUnit = course.courseUnits[0]
-      const courseEndDate = new Date(course.activityPeriod.endDate)
+      const courseEndDate = dateFns.endOfDay(
+        new Date(course.activityPeriod.endDate),
+      )
 
       const opensAt = formatDate(courseEndDate)
       const closesAtWithoutTimeZone = formatWithHours(
-        dateFns.add(courseEndDate, { days: 14, hours: 23, minutes: 59 }),
+        dateFns.endOfDay(dateFns.addDays(courseEndDate, 14)),
       )
 
       const closesAt = parseFromTimeZone(closesAtWithoutTimeZone, {

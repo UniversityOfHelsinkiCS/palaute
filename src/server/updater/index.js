@@ -63,10 +63,10 @@ const run = async () => {
   return logger.info('[UPDATER] Finished updating')
 }
 
-/* eslint-disable */
 const start = async () => {
   if (!inProduction || inStaging) {
-    return logger.info('Not running updater outside production')
+    logger.info('Not running updater outside production')
+    return
   }
   logger.info('Setup cron job')
   const cronTime = '30 1 * * *' // Every night at 01:30 in production
@@ -74,7 +74,6 @@ const start = async () => {
 
   logger.info('Running updater according to cron', { cron: cronTime })
 }
-/* eslint-enable */
 
 const updater = {
   start,
