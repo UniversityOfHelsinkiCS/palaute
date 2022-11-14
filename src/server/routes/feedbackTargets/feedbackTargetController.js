@@ -8,9 +8,12 @@ const {
   subDays,
   getDate,
   compareAsc,
+  startOfDay,
+  endOfDay,
 } = require('date-fns')
 
 const { Router } = require('express')
+const { parseFromTimeZone } = require('date-fns-timezone')
 const { ApplicationError } = require('../../util/customErrors')
 
 const {
@@ -396,6 +399,35 @@ const getOne = async (req, res) => {
   }
 }
 
+const parseUpdates = (body) => {
+  const {
+    name,
+    hidden,
+    opensAt,
+    closesAt,
+    publicQuestionIds,
+    feedbackVisibility,
+    continuousFeedbackEnabled,
+    sendContinuousFeedbackDigestEmail,
+  } = body
+  const parseDate = (d) =>
+    parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+
+  const updates = _.pickBy({
+    // cweate obwect fwom only twe twuthy values :3
+    name,
+    hidden,
+    opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
+    closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
+    publicQuestionIds,
+    feedbackVisibility,
+    continuousFeedbackEnabled,
+    sendContinuousFeedbackDigestEmail,
+  })
+
+  return updates
+}
+
 const update = async (req, res) => {
   const { isAdmin, user } = req
 
@@ -421,16 +453,7 @@ const update = async (req, res) => {
   if (!isAdmin && !isTeacher && !isOrganisationAdmin)
     throw new ApplicationError('Forbidden', 403)
 
-  const updates = _.pick(req.body, [
-    'name',
-    'hidden',
-    'opensAt',
-    'closesAt',
-    'publicQuestionIds',
-    'feedbackVisibility',
-    'continuousFeedbackEnabled',
-    'sendContinuousFeedbackDigestEmail',
-  ])
+  const updates = parseUpdates(req.body)
 
   const { questions, surveyId } = req.body
 
@@ -454,10 +477,11 @@ const update = async (req, res) => {
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
-    // force hooks
-    survey.changed('updatedAt', true)
     await survey.save()
   }
+
+  // force hooks
+  feedbackTarget.changed('updatedAt', true)
 
   await feedbackTarget.save()
 
