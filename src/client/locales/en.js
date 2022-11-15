@@ -445,6 +445,8 @@ export default {
     continuousFeedbackResponse: 'Response',
     sendContinuousFeedbackResponse: 'Send',
     continuousFeedbackResponseInfo: 'Respond to continuous feedback',
+    editContinuousFeedbackResponse: 'Edit',
+    continuousFeedbackResponseSuccessAlert: 'Response sent succesfully',
     studentLinkTitle: 'Student link to survey',
     studentResultsLinkTitle: 'Link to answers and counter feedback',
     studentLinkQRTitle: 'QR-code to survey',

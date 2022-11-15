@@ -21,7 +21,7 @@ const styles = {
   },
 }
 
-const ResponseForm = ({ feedbackId, setShowResponse, refetch }) => {
+const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
 
@@ -37,13 +37,16 @@ const ResponseForm = ({ feedbackId, setShowResponse, refetch }) => {
 
       await sendContinuousFeedbackResponse(values, id, feedbackId)
 
-      setShowResponse(false)
+      setShow(false)
       refetch()
 
-      enqueueSnackbar(t('norppaFeedback:successAlert'), {
-        variant: 'success',
-        autoHideDuration: 6000,
-      })
+      enqueueSnackbar(
+        t('feedbackTargetView:continuousFeedbackResponseSuccessAlert'),
+        {
+          variant: 'success',
+          autoHideDuration: 6000,
+        },
+      )
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -51,7 +54,7 @@ const ResponseForm = ({ feedbackId, setShowResponse, refetch }) => {
 
   return (
     <Box mb={3}>
-      <Formik initialValues={{ response: '' }} onSubmit={handleSubmit}>
+      <Formik initialValues={{ response }} onSubmit={handleSubmit}>
         {({ values, isSubmitting }) => (
           <Form sx={styles.container}>
             <FormikTextField
@@ -76,6 +79,40 @@ const ResponseForm = ({ feedbackId, setShowResponse, refetch }) => {
           </Form>
         )}
       </Formik>
+    </Box>
+  )
+}
+
+const ResponseItem = ({ feedbackId, response, refetch }) => {
+  const { t } = useTranslation()
+
+  const [showEdit, setShowEdit] = useState(false)
+
+  return (
+    <Box ml={2} mt={-1} mb={2}>
+      <Paper>
+        <Box padding={2} marginBottom={2}>
+          <Typography variant="body2">
+            {t('feedbackTargetView:continuousFeedbackResponse')}
+          </Typography>
+          <Typography variant="body1">{response}</Typography>
+          <Box display="flex" justifyContent="flex-end" mt={-2}>
+            <Button onClick={() => setShowEdit(!showEdit)}>
+              {showEdit
+                ? t('feedbackTargetView:closeRespondContinuousFeedback')
+                : t('feedbackTargetView:editContinuousFeedbackResponse')}
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+      {showEdit && (
+        <ResponseForm
+          feedbackId={feedbackId}
+          setShow={setShowEdit}
+          refetch={refetch}
+          response={response}
+        />
+      )}
     </Box>
   )
 }
@@ -107,21 +144,12 @@ const FeedbackItem = ({ feedback, refetch }) => {
         </Box>
       </Paper>
       {response && (
-        <Box ml={2} mt={-1} mb={2}>
-          <Paper>
-            <Box padding={2} marginBottom={2}>
-              <Typography variant="body2">
-                {t('feedbackTargetView:continuousFeedbackResponse')}
-              </Typography>
-              <Typography variant="body1">{response}</Typography>
-            </Box>
-          </Paper>
-        </Box>
+        <ResponseItem feedbackId={id} response={response} refetch={refetch} />
       )}
       {showResponse && (
         <ResponseForm
           feedbackId={id}
-          setShowResponse={setShowResponse}
+          setShow={setShowResponse}
           refetch={refetch}
         />
       )}

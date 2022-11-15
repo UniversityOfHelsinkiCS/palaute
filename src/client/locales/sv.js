@@ -447,6 +447,8 @@ export default {
     // continuousFeedbackResponse: 'Response',
     // sendContinuousFeedbackResponse: 'Send',
     // continuousFeedbackResponseInfo: 'Respond to continuous feedback',
+    // editContinuousFeedbackResponse: 'Edit',
+    // continuousFeedbackResponseSuccessAlert: 'Response sent succesfully',
     studentLinkTitle: 'Studerandelänk till översikt',
     studentResultsLinkTitle: 'Länk till svaren och motresponsen',
     studentLinkQRTitle: 'QR-kod till översikt',

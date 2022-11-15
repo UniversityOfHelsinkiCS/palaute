@@ -447,6 +447,8 @@ export default {
     continuousFeedbackResponse: 'Vastaus',
     sendContinuousFeedbackResponse: 'Lähetä',
     continuousFeedbackResponseInfo: 'Vastaa jatkuvaan palautteeseen',
+    editContinuousFeedbackResponse: 'Muokkaa',
+    continuousFeedbackResponseSuccessAlert: 'Vastaus lähetetty onnistuneesti',
     studentLinkTitle: 'Opiskelijan vastauslinkki',
     studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',
