@@ -21,7 +21,7 @@ const styles = {
   },
 }
 
-const ResponseForm = ({ feedbackId, setShowResponse }) => {
+const ResponseForm = ({ feedbackId, setShowResponse, refetch }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
 
@@ -36,7 +36,9 @@ const ResponseForm = ({ feedbackId, setShowResponse }) => {
       }
 
       await sendContinuousFeedbackResponse(values, id, feedbackId)
+
       setShowResponse(false)
+      refetch()
 
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',
@@ -78,10 +80,10 @@ const ResponseForm = ({ feedbackId, setShowResponse }) => {
   )
 }
 
-const FeedbackItem = ({ feedback }) => {
+const FeedbackItem = ({ feedback, refetch }) => {
   const { t } = useTranslation()
 
-  const { id, createdAt, data } = feedback
+  const { id, createdAt, data, response } = feedback
 
   const [showResponse, setShowResponse] = useState(false)
 
@@ -94,16 +96,34 @@ const FeedbackItem = ({ feedback }) => {
             <Typography variant="body2" alignSelf="flex-end">
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
-            <Button onClick={() => setShowResponse(!showResponse)}>
-              {showResponse
-                ? t('feedbackTargetView:closeRespondContinuousFeedback')
-                : t('feedbackTargetView:respondContinuousFeedback')}
-            </Button>
+            {!response && (
+              <Button onClick={() => setShowResponse(!showResponse)}>
+                {showResponse
+                  ? t('feedbackTargetView:closeRespondContinuousFeedback')
+                  : t('feedbackTargetView:respondContinuousFeedback')}
+              </Button>
+            )}
           </Box>
         </Box>
       </Paper>
+      {response && (
+        <Box ml={2} mt={-1} mb={2}>
+          <Paper>
+            <Box padding={2} marginBottom={2}>
+              <Typography variant="body2">
+                {t('feedbackTargetView:continuousFeedbackResponse')}
+              </Typography>
+              <Typography variant="body1">{response}</Typography>
+            </Box>
+          </Paper>
+        </Box>
+      )}
       {showResponse && (
-        <ResponseForm feedbackId={id} setShowResponse={setShowResponse} />
+        <ResponseForm
+          feedbackId={id}
+          setShowResponse={setShowResponse}
+          refetch={refetch}
+        />
       )}
     </Box>
   )
@@ -113,7 +133,7 @@ const FeedbackTargetContinuousFeedback = () => {
   const { id } = useParams()
   const { t } = useTranslation()
 
-  const { continuousFeedbacks, isLoading } =
+  const { continuousFeedbacks, isLoading, refetch } =
     useFeedbackTargetContinuousFeedbacks(id)
 
   if (isLoading) {
@@ -135,7 +155,11 @@ const FeedbackTargetContinuousFeedback = () => {
       </Typography>
       {sortedFeedbacks.length ? (
         sortedFeedbacks.map((feedback) => (
-          <FeedbackItem key={feedback.id} feedback={feedback} />
+          <FeedbackItem
+            key={feedback.id}
+            feedback={feedback}
+            refetch={refetch}
+          />
         ))
       ) : (
         <Alert severity="info">
