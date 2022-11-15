@@ -40,7 +40,7 @@ const ContinuousFeedback = () => {
       }
       await saveContinuousFeedback(values, id)
 
-      history.push('/feedbacks?status=ongoing')
+      history.push(`/targets/${id}/continuous-feedback`)
 
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',

@@ -442,6 +442,8 @@ export default {
     // activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     // continuousFeedbackGiven: 'Continuous feedback given',
     // noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
+    // continuousFeedbackStudentInfo:
+    //  'Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy kurssin järjestäjille.',
     // respondContinuousFeedback: 'Respond',
     // closeRespondContinuousFeedback: 'Close',
     // continuousFeedbackResponse: 'Response',

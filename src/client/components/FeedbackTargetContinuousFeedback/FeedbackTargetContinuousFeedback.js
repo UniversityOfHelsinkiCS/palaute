@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, Redirect, Link } from 'react-router-dom'
 import { Box, Paper, Typography, Alert, Button } from '@mui/material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
 import ResponseForm from './ResponseForm'
 import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../common/LoadingProgress'
 
-const ResponseItem = ({ feedbackId, response, refetch }) => {
+const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
 
   const [showEdit, setShowEdit] = useState(false)
@@ -21,13 +23,15 @@ const ResponseItem = ({ feedbackId, response, refetch }) => {
             {t('feedbackTargetView:continuousFeedbackResponse')}
           </Typography>
           <Typography variant="body1">{response}</Typography>
-          <Box display="flex" justifyContent="flex-end" mt={-2}>
-            <Button onClick={() => setShowEdit(!showEdit)}>
-              {showEdit
-                ? t('feedbackTargetView:closeRespondContinuousFeedback')
-                : t('feedbackTargetView:editContinuousFeedbackResponse')}
-            </Button>
-          </Box>
+          {isTeacher && (
+            <Box display="flex" justifyContent="flex-end" mt={-2}>
+              <Button onClick={() => setShowEdit(!showEdit)}>
+                {showEdit
+                  ? t('feedbackTargetView:closeRespondContinuousFeedback')
+                  : t('feedbackTargetView:editContinuousFeedbackResponse')}
+              </Button>
+            </Box>
+          )}
         </Box>
       </Paper>
       {showEdit && (
@@ -42,7 +46,7 @@ const ResponseItem = ({ feedbackId, response, refetch }) => {
   )
 }
 
-const FeedbackItem = ({ feedback, refetch }) => {
+const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
@@ -58,7 +62,7 @@ const FeedbackItem = ({ feedback, refetch }) => {
             <Typography variant="body2" alignSelf="flex-end">
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
-            {!response && (
+            {isTeacher && !response && (
               <Button onClick={() => setShowResponse(!showResponse)}>
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
@@ -69,7 +73,12 @@ const FeedbackItem = ({ feedback, refetch }) => {
         </Box>
       </Paper>
       {response && (
-        <ResponseItem feedbackId={id} response={response} refetch={refetch} />
+        <ResponseItem
+          feedbackId={id}
+          response={response}
+          isTeacher={isTeacher}
+          refetch={refetch}
+        />
       )}
       {showResponse && (
         <ResponseForm
@@ -89,13 +98,28 @@ const FeedbackTargetContinuousFeedback = () => {
   const { continuousFeedbacks, isLoading, refetch } =
     useFeedbackTargetContinuousFeedbacks(id)
 
-  if (isLoading) {
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
+    useFeedbackTarget(id)
+
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+
+  if (isLoading || feedbackTargetIsLoading || authorizedUserLoading) {
     return <LoadingProgress />
   }
 
   if (!continuousFeedbacks) {
     return <Redirect to="/" />
   }
+
+  const { accessStatus } = feedbackTarget
+
+  const isAdmin = authorizedUser?.isAdmin ?? false
+  const isTeacher =
+    accessStatus === 'RESPONSIBLE_TEACHER' ||
+    accessStatus === 'TEACHER' ||
+    isAdmin
+  const isStudent = accessStatus === 'STUDENT'
 
   const sortedFeedbacks = continuousFeedbacks.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
@@ -106,18 +130,40 @@ const FeedbackTargetContinuousFeedback = () => {
       <Typography mb={1} textTransform="uppercase">
         {t('feedbackTargetView:continuousFeedbackGiven')}
       </Typography>
-      {sortedFeedbacks.length ? (
+
+      {isStudent && (
+        <Box mb={2}>
+          <Alert severity="info">
+            {t('feedbackTargetView:continuousFeedbackStudentInfo')}
+          </Alert>
+        </Box>
+      )}
+
+      {isTeacher && !sortedFeedbacks.length && (
+        <Alert severity="info">
+          {t('feedbackTargetView:noContinuousFeedbackGiven')}
+        </Alert>
+      )}
+
+      {!!sortedFeedbacks.length &&
         sortedFeedbacks.map((feedback) => (
           <FeedbackItem
             key={feedback.id}
             feedback={feedback}
+            isTeacher={isTeacher}
             refetch={refetch}
           />
-        ))
-      ) : (
-        <Alert severity="info">
-          {t('feedbackTargetView:noContinuousFeedbackGiven')}
-        </Alert>
+        ))}
+
+      {isStudent && (
+        <Button
+          color="primary"
+          variant="contained"
+          component={Link}
+          to={`/targets/${id}/feedback`}
+        >
+          {t('userFeedbacks:giveContinuousFeedback')}
+        </Button>
       )}
     </Box>
   )
