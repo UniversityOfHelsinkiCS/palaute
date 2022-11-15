@@ -185,33 +185,36 @@ export const YearSemesterSelector = ({
   }
 
   return (
-    <Box sx={styles.stepper}>
-      <ToggleButtonGroup
-        value={option}
-        onChange={handleOptionChange}
-        color="primary"
-      >
-        {allowAll && (
-          <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>
-        )}
-        <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
-        <ToggleButton value="semester">
-          {t('courseSummary:semester')}
-        </ToggleButton>
-      </ToggleButtonGroup>
-      {option !== 'all' && (
-        <Box>
-          {option === 'year' ? (
-            <YearStepper value={year} onChange={handleYearChange} />
-          ) : (
-            <SemesterSelector
-              value={currentSemester}
-              onChange={handleSemesterChange}
-              semesters={semesters}
-            />
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div onClick={(event) => event.stopPropagation()}>
+      <Box sx={styles.stepper}>
+        <ToggleButtonGroup
+          value={option}
+          onChange={handleOptionChange}
+          color="primary"
+        >
+          {allowAll && (
+            <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>
           )}
-        </Box>
-      )}
-    </Box>
+          <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
+          <ToggleButton value="semester">
+            {t('courseSummary:semester')}
+          </ToggleButton>
+        </ToggleButtonGroup>
+        {option !== 'all' && (
+          <Box>
+            {option === 'year' ? (
+              <YearStepper value={year} onChange={handleYearChange} />
+            ) : (
+              <SemesterSelector
+                value={currentSemester}
+                onChange={handleSemesterChange}
+                semesters={semesters}
+              />
+            )}
+          </Box>
+        )}
+      </Box>
+    </div>
   )
 }
