@@ -75,7 +75,8 @@ const submitFeedback = async (req, res) => {
   if (!continuousFeedbackEnabled)
     throw new ApplicationError('Continuous feedback is disabled', 400)
 
-  const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
+  const feedbackCanBeGiven =
+    (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
 
   if (feedbackCanBeGiven)
     throw new ApplicationError('Continuous feedback is closed', 403)

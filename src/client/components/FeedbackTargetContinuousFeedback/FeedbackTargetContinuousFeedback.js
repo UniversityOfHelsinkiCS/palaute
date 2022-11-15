@@ -9,6 +9,7 @@ import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetC
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../common/LoadingProgress'
+import { feedbackTargetIsOngoing } from './utils'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -121,6 +122,8 @@ const FeedbackTargetContinuousFeedback = () => {
     isAdmin
   const isStudent = accessStatus === 'STUDENT'
 
+  const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
+
   const sortedFeedbacks = continuousFeedbacks.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   )
@@ -155,7 +158,7 @@ const FeedbackTargetContinuousFeedback = () => {
           />
         ))}
 
-      {isStudent && (
+      {isStudent && isOngoing && (
         <Button
           color="primary"
           variant="contained"
