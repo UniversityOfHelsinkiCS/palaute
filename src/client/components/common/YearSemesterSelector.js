@@ -73,6 +73,14 @@ const styles = {
     whiteSpace: 'nowrap',
     userSelect: 'none',
   },
+  button: {
+    '&:hover': {
+      background: 0,
+      color: (theme) => theme.palette.info.light,
+      boxShadow: 'rgba(99, 99, 255, 0.2) 0px 2px 7px 0px',
+    },
+    marginX: '0.4rem',
+  },
   disabledButton: {
     opacity: '0.0',
     zIndex: -10,
@@ -101,18 +109,18 @@ const YearStepper = ({ value, onChange }) => {
       <IconButton
         onClick={handleDecrease}
         disabled={!canDecrease}
-        sx={!canDecrease ? styles.disabledButton : {}}
-        size="large"
+        sx={[!canDecrease ? styles.disabledButton : {}, styles.button]}
+        size="small"
       >
-        <ChevronLeft />
+        <ChevronLeft fontSize="large" />
       </IconButton>
       <Typography sx={styles.stepperValue}>{displayValue}</Typography>
       <IconButton
         onClick={handleIncrease}
-        sx={!canIncrease ? styles.disabledButton : {}}
-        size="large"
+        sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
+        size="small"
       >
-        <ChevronRight />
+        <ChevronRight fontSize="large" />
       </IconButton>
     </Box>
   )

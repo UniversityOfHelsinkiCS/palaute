@@ -17,7 +17,6 @@ import {
   Chip,
   Button,
   Switch,
-  Tooltip,
   IconButton,
   Paper,
 } from '@mui/material'
@@ -41,7 +40,6 @@ import queryClient from '../../util/queryClient'
 import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
-import { generate } from '../../util/randomColor'
 import { TagChip } from '../common/TagChip'
 
 class FeedbackTargetGrouping {
@@ -526,13 +524,21 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
 
   return (
     <Box position="sticky" top="0" mb={2} zIndex={1}>
-      <Accordion onChange={() => setOpen(!open)}>
+      <Accordion onChange={() => setOpen(!open)} disableGutters>
         <AccordionSummary sx={styles.filtersHead}>
-          <Box display="flex" width="100%" pl={1}>
+          <Box display="flex" width="100%" alignItems="center" pl={1}>
             {t('organisationSettings:filters')}
-            <Box ml={1}>
+            <Box mx={2}>
               {activeCount > 0 ? <Chip label={activeCount} size="small" /> : ''}
             </Box>
+            <YearSemesterSelector
+              value={{ start: value.startDate, end: value.endDate }}
+              option={timeOption}
+              onChange={(v) =>
+                onChange({ ...value, startDate: v.start, endDate: v.end })
+              }
+              setOption={setTimeOption}
+            />
             <Box ml="auto">{open ? <ArrowDropDown /> : <Menu />}</Box>
           </Box>
         </AccordionSummary>
@@ -545,17 +551,6 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
             pb={2}
             alignItems="center"
           >
-            <Box width="100rem" mb="1rem">
-              <Typography>{t('common:timespan')}</Typography>
-              <YearSemesterSelector
-                value={{ start: value.startDate, end: value.endDate }}
-                option={timeOption}
-                onChange={(v) =>
-                  onChange({ ...value, startDate: v.start, endDate: v.end })
-                }
-                setOption={setTimeOption}
-              />
-            </Box>
             <TextField
               value={value.teacherQuery}
               onChange={(e) =>
