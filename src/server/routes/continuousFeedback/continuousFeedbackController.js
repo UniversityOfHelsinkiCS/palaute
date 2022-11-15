@@ -7,6 +7,27 @@ const {
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
+const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId: user.id,
+      feedbackTargetId,
+      accessStatus: { [Op.in]: ['STUDENT'] },
+    },
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Forbidden', 403)
+
+  const continuousFeedbacks = await ContinuousFeedback.findAll({
+    where: {
+      feedbackTargetId,
+      userId: user.id,
+    },
+  })
+
+  return continuousFeedbacks
+}
+
 const getFeedbacks = async (req, res) => {
   const { user, isAdmin } = req
 
@@ -20,8 +41,14 @@ const getFeedbacks = async (req, res) => {
     },
   })
 
-  if (!userFeedbackTarget && !isAdmin)
-    throw new ApplicationError('Forbidden', 403)
+  if (!userFeedbackTarget && !isAdmin) {
+    const continuousFeedbacks = await getStudentContinuousFeedbacks(
+      user,
+      feedbackTargetId,
+    )
+
+    return res.send(continuousFeedbacks)
+  }
 
   const continuousFeedbacks = await ContinuousFeedback.findAll({
     where: {
