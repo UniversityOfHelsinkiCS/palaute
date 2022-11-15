@@ -1,4 +1,4 @@
-const { Model, INTEGER, STRING, JSONB, BOOLEAN } = require('sequelize')
+const { Model, INTEGER, STRING, JSONB, BOOLEAN, TEXT } = require('sequelize')
 const { sequelize } = require('../util/dbConnection')
 
 class ContinuousFeedback extends Model {}
@@ -27,6 +27,9 @@ ContinuousFeedback.init(
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    response: {
+      type: TEXT,
     },
   },
   {
