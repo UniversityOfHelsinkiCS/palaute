@@ -6,8 +6,9 @@ import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 import { getFeedbackResponseGiven } from './utils'
 import { CourseUnitLabel } from './Labels'
+import CensoredCount from './CensoredCount'
 
-const CourseUnitSummary = ({ courseUnits, questions }) => {
+const CourseUnitSummary = ({ courseUnits, questions, access }) => {
   const { i18n } = useTranslation()
 
   return (
@@ -24,6 +25,7 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
             feedbackResponseGiven,
             currentFeedbackTargetId,
             closesAt,
+            hiddenCount,
           },
           index,
         ) => {
@@ -50,6 +52,17 @@ const CourseUnitSummary = ({ courseUnits, questions }) => {
                 studentCount={studentCount}
                 feedbackResponseGiven={feedbackResponseStatus}
                 currentFeedbackTargetId={currentFeedbackTargetId}
+                cellsAfter={
+                  access?.admin &&
+                  !!hiddenCount && (
+                    <>
+                      <td />
+                      <td>
+                        <CensoredCount count={hiddenCount} />
+                      </td>
+                    </>
+                  )
+                }
               />
               {index < courseUnits.length - 1 && <DividerRow />}
             </Fragment>

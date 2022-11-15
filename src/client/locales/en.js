@@ -336,6 +336,7 @@ export default {
     clickForDetails: 'Click for details',
     feedbackResponse: 'Latest course counter feedback given',
     feedbackCount: 'Feedback count',
+    censoredCount: 'Manually hidden feedbacks',
     feedbackPercentage: 'Feedback percentage',
     feedbackResponseGiven: 'Counter feedback has been given',
     feedbackResponseNotGiven: 'Counter feedback has not been given',

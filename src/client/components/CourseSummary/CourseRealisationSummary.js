@@ -19,6 +19,7 @@ import useOrganisations from '../../hooks/useOrganisations'
 import ErrorView from '../common/ErrorView'
 import errors from '../../util/errorMessage'
 import ColumnHeadings from './ColumnHeadings'
+import CensoredCount from './CensoredCount'
 
 const styles = {
   realisationHeading: {
@@ -34,7 +35,7 @@ const styles = {
   },
 }
 
-const CourseRealisationTable = ({ courseRealisations, questions }) => {
+const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
   const { t, i18n } = useTranslation()
 
   return (
@@ -72,6 +73,19 @@ const CourseRealisationTable = ({ courseRealisations, questions }) => {
                   feedbackResponseGiven={feedbackResponseGiven}
                   currentFeedbackTargetId={courseRealisation.feedbackTargetId}
                   accordionCellEnabled={false}
+                  cellsAfter={
+                    access?.admin &&
+                    !!courseRealisation.hiddenCount && (
+                      <>
+                        <td />
+                        <td>
+                          <CensoredCount
+                            count={courseRealisation.hiddenCount}
+                          />
+                        </td>
+                      </>
+                    )
+                  }
                 />
                 <DividerRow height={1.3} />
               </Fragment>
@@ -144,6 +158,7 @@ const CourseRealisationSummary = () => {
       <CourseRealisationTable
         courseRealisations={courseRealisations}
         questions={questions}
+        access={organisation?.access}
       />
     </>
   )

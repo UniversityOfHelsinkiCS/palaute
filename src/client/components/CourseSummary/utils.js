@@ -289,6 +289,7 @@ export const useAggregatedOrganisationSummaries = ({
   keyword,
   includeOpenUniCourseUnits,
   dateRange,
+  organisationAccess,
 }) => {
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
     code,
@@ -301,10 +302,18 @@ export const useAggregatedOrganisationSummaries = ({
     enabled: Boolean(dateRange?.start && dateRange?.end),
   })
 
-  const filteredOrganisations = useMemo(
+  const withAccess = useMemo(
     () =>
-      filterByCourseCode(organisationSummaries?.organisations ?? [], keyword),
-    [organisationSummaries?.organisations, keyword],
+      organisationSummaries?.organisations?.map((org) => ({
+        ...org,
+        access: getAccess(org.id, organisationAccess),
+      })) ?? [],
+    [organisationSummaries?.organisations, organisationAccess],
+  )
+
+  const filteredOrganisations = useMemo(
+    () => filterByCourseCode(withAccess, keyword),
+    [withAccess, keyword],
   )
 
   const facultyOrganisations = useMemo(

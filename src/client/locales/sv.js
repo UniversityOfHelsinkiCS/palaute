@@ -339,6 +339,7 @@ export default {
     noResults: 'Inga responser',
     feedbackResponse: 'Svar på responsen för den senaste kursen given',
     feedbackCount: 'Antal respons',
+    // censoredCount: 'Piilotettuja palautteita',
     feedbackPercentage: 'Responsprocent',
     clickForDetails: 'Klicka för att se detaljer',
     feedbackResponseGiven: 'Svar på responsen given',

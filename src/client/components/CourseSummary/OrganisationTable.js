@@ -22,6 +22,7 @@ import { getAccess } from './utils'
 import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
+import CensoredCount from './CensoredCount'
 
 const styles = {
   filtersCell: {
@@ -129,7 +130,9 @@ const OrganisationTable = ({
                   feedbackCount,
                   courseUnits,
                   studentCount,
+                  hiddenCount,
                   feedbackResponsePercentage,
+                  access,
                 },
                 index,
               ) => (
@@ -152,18 +155,23 @@ const OrganisationTable = ({
                     onToggleAccordion={() => onToggleAccordion(id)}
                     cellsAfter={
                       organisationLinks && (
-                        <td css={{ paddingLeft: '2rem' }}>
-                          <OrganisationButton
-                            code={code}
-                            access={getAccess(id, organisationAccess)}
-                          />
-                        </td>
+                        <>
+                          <td css={{ paddingLeft: '2rem' }}>
+                            <OrganisationButton code={code} access={access} />
+                          </td>
+                          {access?.admin && !!hiddenCount && (
+                            <td>
+                              <CensoredCount count={hiddenCount} />
+                            </td>
+                          )}
+                        </>
                       )
                     }
                   >
                     <CourseUnitSummary
                       courseUnits={courseUnits}
                       questions={questions}
+                      access={access}
                     />
                   </ResultsRow>
                   <DividerRow height={1.3} />
