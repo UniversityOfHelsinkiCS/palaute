@@ -111,7 +111,13 @@ const ContinuousFeedbackActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button color="primary" variant="contained" component={Link} to={viewPath}>
+    <Button
+      color="primary"
+      variant="contained"
+      component={Link}
+      to={viewPath}
+      data-cy="giveContinuousFeedback"
+    >
       {t('userFeedbacks:giveContinuousFeedback')}
     </Button>
   )

@@ -49,6 +49,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
           status="ongoing"
           count={counts.ongoing}
           color="primary"
+          data-cy="continuousTab"
         />
       )}
       <StatusTab

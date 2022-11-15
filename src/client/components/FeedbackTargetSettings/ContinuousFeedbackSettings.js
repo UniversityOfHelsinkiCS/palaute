@@ -84,6 +84,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
                   checked={feedbackEnabled}
                   onChange={handleFeedbackEnabledChange}
                   color="primary"
+                  data-cy="activateContinuousFeedback"
                 />
               }
               label={t('feedbackTargetView:activateContinuousFeedback')}
