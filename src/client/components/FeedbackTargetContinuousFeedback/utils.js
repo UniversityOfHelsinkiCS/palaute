@@ -1,4 +1,6 @@
 import apiClient from '../../util/apiClient'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 
 export const sendContinuousFeedbackResponse = async (
   values,
@@ -16,3 +18,7 @@ export const sendContinuousFeedbackResponse = async (
 
   return data
 }
+
+export const feedbackTargetIsOngoing = (feedbackTarget) =>
+  !feedbackTargetIsOpen(feedbackTarget) &&
+  !feedbackTargetIsEnded(feedbackTarget)

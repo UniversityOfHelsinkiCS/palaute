@@ -268,8 +268,7 @@ const FeedbackTargetView = () => {
     ((isOrganisationAdmin || isTeacher) && isStarted) ||
     feedback ||
     isEnded
-  const showContinuousFeedbackTab =
-    (isOrganisationAdmin || isTeacher) && continuousFeedbackEnabled
+  const showContinuousFeedbackTab = continuousFeedbackEnabled
   const showEditSurveyTab =
     isAdmin || ((isOrganisationAdmin || isTeacher) && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
