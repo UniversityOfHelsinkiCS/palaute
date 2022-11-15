@@ -178,6 +178,7 @@ const updateAnswerHidden = async (req, res) => {
     throw new ApplicationError('Question not found on feedback', 404)
   }
 
+  await feedbackTarget.increment({ hiddenCount: hidden ? 1 : -1 })
   await feedback.save()
 
   return res.send({ hidden })

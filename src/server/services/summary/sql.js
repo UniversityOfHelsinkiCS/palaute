@@ -25,7 +25,7 @@ CREATE MATERIALIZED VIEW course_results_view AS (
     WITH cur_results AS (
         WITH question_distributions AS (
 
-            WITH course_unit_results AS (
+            WITH course_realisation_results AS (
 
                 WITH answers AS (
 
@@ -87,7 +87,7 @@ CREATE MATERIALIZED VIEW course_results_view AS (
                     array_agg(answer)::text[], -- keys
                     array_agg(count)::text[] -- values
                 ) as distribution -- https://www.postgresql.org/docs/current/functions-json.html#FUNCTIONS-JSON-CREATION-TABLE
-            FROM course_unit_results
+            FROM course_realisation_results
             GROUP BY organisation_id, course_code, course_realisation_id, question_id
         )
 
@@ -144,13 +144,17 @@ REFRESH MATERIALIZED VIEW feedback_target_counts_view;
 const COURSE_REALISATION_SUMMARY_QUERY = `
 SELECT
 DISTINCT ON (cur.id)
-    cr.*,
+    cr.course_realisation_id as "courseRealisationId",
+    cr.course_code as "courseCode",
+    cr.organisation_id as "organisationId",
+    cr.is_open as "isOpen",
     cr.question_ids as "questionIds",
     cr.question_distribution as "questionDistribution",
     cur.id as "id",
     fbt.id as "feedbackTargetId",
     fbt.feedback_count as "feedbackCount",
     fbtc.student_count as "studentCount",
+    fbt.hidden_count as "hiddenCount",
     LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
     fbt.closes_at as "closesAt",
     cur.start_date as "startDate",
@@ -181,6 +185,7 @@ WITH course_unit_data AS (
       cur.start_date as "startDate",
       fbtc.student_count as "studentCount",
       fbt.feedback_count as "feedbackCount",
+      fbt.hidden_count as "hiddenCount",
       cr.is_open as "isOpen",
       cr.course_realisation_id as "id"
 

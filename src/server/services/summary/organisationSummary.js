@@ -55,7 +55,7 @@ const getOrganisationSummaries = async ({
 }) => {
   // which ones to filter based on custom hidden rows
   const codesToFilter =
-    organisationAccess?.length > 1
+    organisationAccess?.length > 1 // the filtering feature is only available to users with >1 orgs
       ? await getUserHiddenOrganisationCodes(user)
       : []
 
@@ -92,6 +92,7 @@ const getOrganisationSummaries = async ({
     const results = JSON.parse(JSON.stringify(initialResults))
     let feedbackCount = 0
     let studentCount = 0
+    let hiddenCount = 0
     // current info
     let currentFeedbackTargetId = null
     let closesAt = null
@@ -130,6 +131,7 @@ const getOrganisationSummaries = async ({
 
       feedbackCount += Number(cur.feedbackCount)
       studentCount += Number(cur.studentCount)
+      hiddenCount += Number(cur.hiddenCount)
     }, initialResults)
 
     // compute mean for each question
@@ -147,6 +149,7 @@ const getOrganisationSummaries = async ({
       courseCode: cu.courseCode,
       name: cu.courseUnitName,
       feedbackCount,
+      hiddenCount,
       studentCount,
       results,
       currentFeedbackTargetId,
@@ -190,6 +193,7 @@ const getOrganisationSummaries = async ({
       const results = JSON.parse(JSON.stringify(initialResults))
       let feedbackCount = 0
       let studentCount = 0
+      let hiddenCount = 0
 
       // sum all CUs
       courseUnits.forEach((cu) => {
@@ -210,6 +214,7 @@ const getOrganisationSummaries = async ({
 
         feedbackCount += Number(cu.feedbackCount)
         studentCount += Number(cu.studentCount)
+        hiddenCount += Number(cu.hiddenCount)
       }, initialResults)
 
       // compute mean for each question
@@ -231,6 +236,7 @@ const getOrganisationSummaries = async ({
         code: courseUnits[0].organisationCode,
         feedbackCount,
         studentCount,
+        hiddenCount,
         results,
         feedbackResponsePercentage,
         courseUnits: _.orderBy(courseUnits, 'courseCode'),

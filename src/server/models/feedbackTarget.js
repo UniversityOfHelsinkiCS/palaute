@@ -341,6 +341,11 @@ FeedbackTarget.init(
       defaultValue: 0,
       allowNull: false,
     },
+    hiddenCount: {
+      type: INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
     opensAt: {
       type: DATE,
     },

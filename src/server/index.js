@@ -41,7 +41,6 @@ const start = async () => {
   await startPrecacheFeedbackTargetsCron()
   await mailer.startCron()
   await mailer.startContinuousFeedbackCron()
-
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
   })

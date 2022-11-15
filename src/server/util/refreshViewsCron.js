@@ -12,7 +12,7 @@ const run = async () => {
 const start = async () => {
   const cronTime = '30 6 * * *' // 6:30 am
   if (inE2EMode || inProduction) run()
-  // run()
+  run()
   return schedule(cronTime, run)
 }
 

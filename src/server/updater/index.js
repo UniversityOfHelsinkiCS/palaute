@@ -9,6 +9,7 @@ const {
   updateStudentFeedbackTargets,
 } = require('./updateStudentFeedbackTargets')
 const { UpdaterStatus } = require('../models')
+const { updateFeedbackTargetCounts } = require('./updateFeedbackTargetCounts')
 
 const JOB_TYPE = 'NIGHTLY'
 
@@ -35,6 +36,7 @@ const runUpdater = async () => {
   await updateOrganisations()
   await updateCoursesAndTeacherFeedbackTargets()
   await updateStudentFeedbackTargets()
+  await updateFeedbackTargetCounts()
 }
 
 const run = async () => {
