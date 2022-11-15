@@ -73,9 +73,41 @@ const submitFeedback = async (req, res) => {
   return res.send(newFeedback)
 }
 
+const respondToFeedback = async (req, res) => {
+  const { id: userId } = req.user
+
+  const feedbackTargetId = Number(req.params.id)
+  const continuousFeedbackId = Number(req.params.continuousFeedbackId)
+  const { response } = req.body
+
+  if (!response) {
+    throw new ApplicationError('Response missing', 404)
+  }
+
+  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+    where: {
+      userId,
+      feedbackTargetId,
+      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+    },
+  })
+
+  if (!userFeedbackTarget) throw new ApplicationError('Forbidden', 403)
+
+  const continuousFeedback = await ContinuousFeedback.findByPk(
+    continuousFeedbackId,
+  )
+
+  continuousFeedback.response = response
+  await continuousFeedback.save()
+
+  return res.send(continuousFeedback)
+}
+
 const router = Router()
 
 router.get('/:id', getFeedbacks)
 router.post('/:id', submitFeedback)
+router.post('/:id/response/:continuousFeedbackId', respondToFeedback)
 
 module.exports = router
