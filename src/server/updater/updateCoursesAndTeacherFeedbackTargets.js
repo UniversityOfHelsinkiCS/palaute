@@ -286,6 +286,10 @@ const createCourseRealisations = async (courseRealisations) => {
   )
 }
 
+const sortAccessStatus = (a, b) =>
+  // eslint-disable-next-line no-nested-ternary
+  a.accessStatus < b.accessStatus ? -1 : a.accessStatus > b.accessStatus ? 1 : 0
+
 const createFeedbackTargets = async (courses) => {
   const courseIdToPersonIds = {}
 
@@ -407,6 +411,7 @@ const createFeedbackTargets = async (courses) => {
       ),
     )
     .filter((target) => target.user_id && target.feedback_target_id)
+    .sort(sortAccessStatus)
 
   try {
     await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
