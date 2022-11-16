@@ -1,5 +1,5 @@
 const { inProduction, inStaging } = require('../../config')
-const updateNewEnrolmentsJob = require('../updater/updateEnrolmentsOfOpenFeedbackTargets')
+const updateNewEnrolmentsJob = require('../updater/updateNewEnrolments')
 const logger = require('./logger')
 const { schedule } = require('./cron')
 

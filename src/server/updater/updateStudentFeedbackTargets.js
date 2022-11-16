@@ -182,10 +182,10 @@ const saveNewEnrolments = async (enrolments) => {
 
 const updateNewEnrolments = async () => {
   const start = new Date()
-  const hourAgo = subHours(start, 1)
+  const twoHoursAgo = subHours(start, 2)
   try {
     const { data: enrolments } = await importerClient.get(
-      `palaute/updater/enrolments-new?since=${hourAgo}`,
+      `palaute/updater/enrolments-new?since=${twoHoursAgo}`,
     )
     const count = await saveNewEnrolments(enrolments)
     const end = Date.now()
