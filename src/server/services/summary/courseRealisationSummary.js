@@ -7,11 +7,25 @@ const languages = require('../../util/languages.json')
 const { COURSE_REALISATION_SUMMARY_QUERY } = require('./sql')
 const { getMean } = require('./utils')
 
-const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
-  const summaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
-    replacements: { courseCode },
-    type: QueryTypes.SELECT,
-  })
+const getCourseRealisationSummaries = async ({
+  courseCode,
+  questions,
+  accessibleCourseRealisationIds,
+  organisationAccess,
+}) => {
+  const allCuSummaries = await sequelize.query(
+    COURSE_REALISATION_SUMMARY_QUERY,
+    {
+      replacements: { courseCode },
+      type: QueryTypes.SELECT,
+    },
+  )
+
+  const summaries = organisationAccess
+    ? allCuSummaries
+    : allCuSummaries.filter((cur) =>
+        accessibleCourseRealisationIds.includes(cur.id),
+      )
 
   const teacherData = _.groupBy(
     await UserFeedbackTarget.findAll({
@@ -59,12 +73,12 @@ const getCourseRealisationSummaries = async ({ courseCode, questions }) => {
       teachers,
     }
   })
+
   const orderedResults = _.orderBy(
     results,
     ['startDate', 'feedbackCount'],
     ['desc', 'desc'],
   )
-  // console.log(JSON.stringify(orderedResults, null, 2))
 
   return orderedResults
 }

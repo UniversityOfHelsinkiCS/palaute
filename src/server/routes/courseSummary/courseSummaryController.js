@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const { QueryTypes } = require('sequelize')
 const { addYears } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
@@ -44,7 +43,7 @@ const getAccessibleCourseRealisationIds = async (user) => {
     AND (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER')
     AND feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > NOW() - interval '12 months';
+    AND course_realisations.start_date > NOW() - interval '16 months';
   `,
     {
       replacements: {
@@ -169,43 +168,26 @@ const getByCourseUnit = async (req, res) => {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
-  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
-    courseUnits[0].id,
-  )
+  const [organisationAccess, accessibleCourseRealisationIds, questions] =
+    await Promise.all([
+      user.isAdmin ||
+        (
+          await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id)
+        )?.read,
+      getAccessibleCourseRealisationIds(user),
+      getSummaryQuestions(code),
+    ])
 
-  if (!organisationAccess?.read && !user.isAdmin) {
-    const hasSomeCourseRealisationAccess = (
-      await sequelize.query(
-        `
-      SELECT COUNT(*) > 0 as "hasAccess"
-      FROM
-        user_feedback_targets, feedback_targets
-      WHERE
-        feedback_targets.course_unit_id IN (:courseUnitIds)
-        AND user_feedback_targets.user_id = :userId
-        AND user_feedback_targets.feedback_target_id = feedback_targets.id
-        AND (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER');
-    `,
-        {
-          type: QueryTypes.SELECT,
-          replacements: {
-            userId: user.id,
-            courseUnitIds: courseUnits.map((cu) => cu.id),
-          },
-        },
-      )
-    )[0]?.hasAccess
-
-    if (!hasSomeCourseRealisationAccess) {
-      throw new ApplicationError('Forbidden', 403)
-    }
-  }
-
-  const questions = await getSummaryQuestions()
   const courseRealisations = await getCourseRealisationSummaries({
+    accessibleCourseRealisationIds,
+    organisationAccess,
     courseCode: code,
     questions,
   })
+
+  if (courseRealisations.length === 0) {
+    throw new ApplicationError('Forbidden', 403)
+  }
 
   return res.send({
     questions,
