@@ -17,8 +17,6 @@ describe('Continuous feedback', () => {
 
     cy.visit(`${baseUrl}`)
 
-    // cy.reload()
-
     cy.get('[data-cy=continuousTab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
 

@@ -24,7 +24,7 @@ const {
 } = require('./sendEmailContinuousFeedbackDigestToTeachers')
 const {
   sendEmailContinuousFeedbackResponsesToStudents,
-} = require('./sendContinousFeedbackResponsesToStudents')
+} = require('./sendContinuousFeedbackResponsesToStudents')
 const {
   sendEmailNotificationAboutEnrolments,
 } = require('./sendEmailNotificationAboutEnrolments')
