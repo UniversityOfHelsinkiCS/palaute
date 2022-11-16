@@ -23,6 +23,9 @@ const {
   sendEmailContinuousFeedbackDigestToTeachers,
 } = require('./sendEmailContinuousFeedbackDigestToTeachers')
 const {
+  sendEmailContinuousFeedbackResponsesToStudents,
+} = require('./sendContinousFeedbackResponsesToStudents')
+const {
   sendEmailNotificationAboutEnrolments,
 } = require('./sendEmailNotificationAboutEnrolments')
 
@@ -35,5 +38,6 @@ module.exports = {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
+  sendEmailContinuousFeedbackResponsesToStudents,
   sendEmailNotificationAboutEnrolments,
 }

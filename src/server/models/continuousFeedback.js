@@ -31,6 +31,11 @@ ContinuousFeedback.init(
     response: {
       type: TEXT,
     },
+    responseEmailSent: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,
