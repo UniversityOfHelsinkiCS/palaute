@@ -42,6 +42,7 @@ import EditFeedbackResponse from '../EditFeedbackResponse'
 import FeedbackTargetShare from '../FeedbackTargetShare'
 import FeedbackLinksView from '../FeedbackLinksView'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 import { RouterTab, RouterTabs, TabLabel } from '../common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -63,7 +64,6 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import FeedbackTargetSettings from '../FeedbackTargetSettings'
 import FeedbackTargetLogs from '../FeedbackTargetLogs'
 import ContinuousFeedback from '../FeedbackTargetContinuousFeedback'
-import useFeedbackCount from '../../hooks/useFeedbackCount'
 import ErrorView from '../common/ErrorView'
 import errors from '../../util/errorMessage'
 import TeacherChip from '../common/TeacherChip'
@@ -195,8 +195,10 @@ const FeedbackTargetView = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading, refetch, isLoadingError, error } =
     useFeedbackTarget(id, { retry: 0 })
-  const { feedbackCount: cuFeedbackCount, isLoading: feedbackCountLoading } =
-    useFeedbackCount(id, {
+  // If should not be shown, gets empty response when failSilentry: true
+  const { courseRealisationSummaries: showCourseSummaryLink } =
+    useCourseRealisationSummaries(feedbackTarget?.courseUnit?.courseCode, {
+      failSilently: true,
       enabled:
         !isLoading &&
         (feedbackTarget?.accessStatus === 'RESPONSIBLE_TEACHER' ||
@@ -260,8 +262,6 @@ const FeedbackTargetView = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-
-  const showCourseSummaryLink = !feedbackCountLoading && cuFeedbackCount > 0
 
   const showFeedbacksTab =
     isAdmin ||

@@ -134,34 +134,6 @@ const getIncludes = (userId, accessStatus) => {
   ]
 }
 
-const getFeedbackCount = async (req, res) => {
-  const feedbackTargetId = Number(req?.params?.id)
-  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
-
-  const feedbackCount = await sequelize.query(
-    `
-    SELECT SUM(feedback_count) as "feedbackCount"
-    FROM feedback_targets
-    WHERE feedback_targets.course_unit_id IN (
-      SELECT cu.id as ids
-      FROM course_units as cu, feedback_targets as fbt 
-      WHERE fbt.id = :feedbackTargetId
-    
-      AND cu.course_code IN (
-        SELECT course_code FROM course_units WHERE id = fbt.course_unit_id
-      )
-    );
-  `,
-    { replacements: { feedbackTargetId } },
-  )
-
-  if (feedbackCount.length < 1 || feedbackCount[0] < 1) {
-    return res.send({ feedbackCount: 0 })
-  }
-
-  return res.send({ feedbackCount: Number(feedbackCount[0][0].feedbackCount) })
-}
-
 const getFeedbackTargetByOrganisationAccess = async (
   feedbackTargetId,
   user,
@@ -1131,7 +1103,6 @@ adRouter.put('/:id', update)
 adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
 adRouter.get('/:id/feedbacks', getFeedbacks)
 adRouter.get('/:id/users', getUsers)
-adRouter.get('/:id/feedback-count', getFeedbackCount)
 adRouter.get('/:id/logs', getLogs)
 adRouter.put('/:id/response', updateFeedbackResponse)
 adRouter.put('/:id/remind-students', remindStudentsOnFeedback)

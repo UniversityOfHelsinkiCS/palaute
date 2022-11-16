@@ -149,7 +149,7 @@ const getOrganisations = async (req, res) => {
 
 const getByCourseUnit = async (req, res) => {
   const { user } = req
-
+  const { silent } = req.query
   const { code } = req.params
 
   const courseUnits = await CourseUnit.findAll({
@@ -186,7 +186,11 @@ const getByCourseUnit = async (req, res) => {
   })
 
   if (courseRealisations.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
+    if (silent !== 'true') {
+      throw new ApplicationError('Forbidden', 403)
+    } else {
+      return res.send(null)
+    }
   }
 
   return res.send({
