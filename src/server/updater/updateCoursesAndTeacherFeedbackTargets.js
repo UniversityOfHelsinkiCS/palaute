@@ -9,6 +9,7 @@ const {
   CourseUnitsOrganisation,
   CourseRealisation,
   FeedbackTarget,
+  FeedbackTargetLog,
   UserFeedbackTarget,
   Survey,
   CourseRealisationsOrganisation,
@@ -478,6 +479,16 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
   })
 
   logger.info(`Destroyed ${destroyedSurveys} surveys`)
+
+  const destroyedFeedbackTargetLogs = await FeedbackTargetLog.destroy({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+  })
+
+  logger.info(`Destroyed ${destroyedFeedbackTargetLogs} logs`)
 
   const destroyedFeedbackTargets = await FeedbackTarget.destroy({
     where: {
