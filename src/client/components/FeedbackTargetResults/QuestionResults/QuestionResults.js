@@ -181,6 +181,7 @@ const QuestionResults = ({
   publicityConfigurableQuestionIds,
   publicQuestionIds,
   questions,
+  questionOrder,
   feedbacks,
   isTeacher,
   organisationAccess,
@@ -188,7 +189,7 @@ const QuestionResults = ({
   feedbackTargetId,
 }) => {
   const questionsWithFeedbacks = useMemo(
-    () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
+    () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
     [questions, feedbacks, publicQuestionIds],
   )
 

@@ -14,7 +14,8 @@ export const getUpperLevelQuestions = (feedbackTarget) => {
 }
 
 export const getQuestionsInitialValues = (feedbackTarget) => {
-  const { surveys } = feedbackTarget
+  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds } =
+    feedbackTarget
 
   const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
     (questions, survey) => questions.concat(survey.questions),
@@ -25,16 +26,28 @@ export const getQuestionsInitialValues = (feedbackTarget) => {
     ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
       ...question,
       editable: false,
+      public: publicQuestionIds.includes(question.id),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(
+        question.id,
+      ),
       chip: 'questionEditor:universityQuestion',
     })),
     ...(programmeSurveyQuestions ?? []).map((question) => ({
       ...question,
       editable: false,
+      public: publicQuestionIds.includes(question.id),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(
+        question.id,
+      ),
       chip: 'questionEditor:programmeQuestion',
     })),
     ...(surveys.teacherSurvey?.questions ?? []).map((question) => ({
       ...question,
       editable: true,
+      public: publicQuestionIds.includes(question.id),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(
+        question.id,
+      ),
     })),
   ]
 
@@ -72,7 +85,6 @@ export const saveQuestionsValues = async (values, feedbackTarget) => {
     surveyId,
     questions: editableQuestions,
   }
-
   const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
 
   return data

@@ -371,6 +371,26 @@ const getOne = async (req, res) => {
   }
 }
 
+const parseUpdatedQuestionIds = (
+  updatedPublicQuestionIds,
+  questions,
+  publicQuestionIds,
+) => {
+  let currentIds = updatedPublicQuestionIds ?? publicQuestionIds
+  const configurable = questions.filter((q) => q.publicityConfigurable)
+  // remove nonpublic
+  currentIds = _.difference(
+    currentIds,
+    configurable.filter((q) => !q.public).map((q) => q.id),
+  )
+  // add public
+  currentIds = currentIds.concat(
+    configurable.filter((q) => q.public).map((q) => q.id),
+  )
+
+  return _.uniq(currentIds)
+}
+
 const parseUpdates = (body) => {
   const {
     name,
@@ -431,6 +451,14 @@ const update = async (req, res) => {
 
   if (updates.opensAt || updates.closesAt) {
     feedbackTarget.feedbackDatesEditedByTeacher = true
+  }
+
+  if (Array.isArray(questions)) {
+    updates.publicQuestionIds = parseUpdatedQuestionIds(
+      updates.publicQuestionIds,
+      questions,
+      feedbackTarget.publicQuestionIds,
+    )
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)

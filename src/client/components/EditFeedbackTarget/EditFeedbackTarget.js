@@ -79,7 +79,7 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
   )
 }
 
-const QuestionEditorContainer = ({ onSave, language }) => {
+const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
   const [savePending, setSavePending] = useState(false)
   const { values } = useFormikContext()
 
@@ -91,7 +91,7 @@ const QuestionEditorContainer = ({ onSave, language }) => {
     }
   }, [values, savePending])
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSavePending(true)
   }
 
@@ -103,6 +103,10 @@ const QuestionEditorContainer = ({ onSave, language }) => {
       onRemoveQuestion={handleSave}
       onCopyQuestion={handleSave}
       actions={<QuestionEditorActions onCopy={handleSave} />}
+      publicQuestionIds={feedbackTarget?.publicQuestionIds}
+      publicityConfigurableQuestionIds={
+        feedbackTarget?.publicityConfigurableQuestionIds
+      }
     />
   )
 }
@@ -178,6 +182,7 @@ const EditFeedbackTarget = () => {
           <QuestionEditorContainer
             onSave={handleSaveQuestions}
             language={language}
+            feedbackTarget={feedbackTarget}
           />
         )}
       </Formik>

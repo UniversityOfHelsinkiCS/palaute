@@ -59,6 +59,8 @@ const QuestionEditor = ({
   onCopyQuestion = () => {},
   editable = true,
   actions,
+  publicQuestionIds,
+  publicityConfigurableQuestionIds,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
@@ -109,6 +111,10 @@ const QuestionEditor = ({
                 setEditingQuestionId(getQuestionId(question))
               }
               editable={editable}
+              publicQuestionIds={publicQuestionIds}
+              publicityConfigurableQuestionIds={
+                publicityConfigurableQuestionIds
+              }
             />
           ))}
 

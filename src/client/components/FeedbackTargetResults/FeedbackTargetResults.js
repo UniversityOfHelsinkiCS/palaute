@@ -61,6 +61,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
   const {
     questions,
+    questionOrder,
     publicQuestionIds,
     publicityConfigurableQuestionIds,
     accessStatus,
@@ -154,6 +155,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
                 publicQuestionIds={publicQuestionIds ?? []}
                 selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
                 questions={questions}
+                questionOrder={questionOrder}
                 feedbacks={feedbacks}
                 isTeacher={isTeacher}
                 organisationAccess={!!userOrganisationAccess}

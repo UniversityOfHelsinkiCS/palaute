@@ -9,6 +9,7 @@ import {
   Chip,
   Divider,
   Button,
+  Grid,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -26,6 +27,7 @@ import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
+import QuestionPublicityToggle from '../PublicQuestions/QuestionPublicityToggle'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -87,6 +89,7 @@ const EditActions = ({
 
   return (
     <>
+      <FormikSwitch label={t('public')} name={`${name}.public`} />
       <FormikSwitch label={t('required')} name={`${name}.required`} />
 
       <OrderButtons
@@ -145,18 +148,33 @@ const QuestionCard = ({
   return (
     <Card sx={sx}>
       <CardContent>
-        <Box display="flex" justifyContent="space-between" mb="1.5rem">
-          <Chip label={title} variant="outlined" />
-          {question.chip && (
-            <Tooltip title={t('questionEditor:uneditableTooltip')}>
-              <Chip
-                label={t(question.chip)}
-                variant="outlined"
-                color="primary"
-              />
-            </Tooltip>
-          )}
-        </Box>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          mb="1.5rem"
+        >
+          <Grid item xs={4}>
+            <Chip label={title} variant="outlined" />
+          </Grid>
+          <Grid item xs={4} display="flex" justifyContent="center">
+            <Chip
+              label={t(question.public ? 'common:public' : 'common:notPublic')}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={4} display="flex" justifyContent="end">
+            {question.chip && (
+              <Tooltip title={t('questionEditor:uneditableTooltip')}>
+                <Chip
+                  label={t(question.chip)}
+                  variant="outlined"
+                  color="primary"
+                />
+              </Tooltip>
+            )}
+          </Grid>
+        </Grid>
         {isEditing ? (
           <>
             <Box mb={2}>

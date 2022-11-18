@@ -149,10 +149,7 @@ class FeedbackTarget extends Model {
 
   populateQuestions(surveys) {
     const programmeSurveyQuestions = surveys.programmeSurveys
-      ? surveys.programmeSurveys.reduce(
-          (questions, survey) => questions.concat(survey.questions),
-          [],
-        )
+      ? surveys.programmeSurveys.flatMap((s) => s.questions)
       : null
 
     const questions = [
@@ -162,6 +159,10 @@ class FeedbackTarget extends Model {
     ]
 
     this.set('questions', questions)
+    this.set(
+      'questionOrder',
+      questions.map((q) => q.id),
+    )
   }
 
   populateSurveys(surveys) {
@@ -358,6 +359,10 @@ FeedbackTarget.init(
     },
     // potentially cached
     questions: {
+      type: VIRTUAL,
+    },
+    // potentially cached
+    questionOrder: {
       type: VIRTUAL,
     },
     // potentially cached

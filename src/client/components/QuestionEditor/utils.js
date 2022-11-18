@@ -48,6 +48,8 @@ export const createQuestion = (type) => {
     data,
     required: false,
     editable: true,
+    public: true,
+    publicityConfigurable: true,
   }
 }
 

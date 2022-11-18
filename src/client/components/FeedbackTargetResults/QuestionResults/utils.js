@@ -174,7 +174,11 @@ export const getSingleChoiceChartConfig = (question, language, t, max) => {
   }
 }
 
-export const getQuestionsWithFeedback = (questions, feedbacks) => {
+export const getQuestionsWithFeedback = (
+  questions,
+  questionOrder,
+  feedbacks,
+) => {
   if (!questions) {
     return []
   }
@@ -200,8 +204,9 @@ export const getQuestionsWithFeedback = (questions, feedbacks) => {
     ({ questionId }) => questionId ?? '_',
   )
 
-  return questions
-    .filter((q) => INCLUDED_TYPES.includes(q.type))
+  return questionOrder
+    .map((id) => questions.find((q) => q.id === id))
+    .filter((q) => INCLUDED_TYPES.includes(q?.type))
     .map((q) => ({
       ...q,
       feedbacks: feedbackDataByQuestionId[q.id] ?? [],
