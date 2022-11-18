@@ -223,6 +223,8 @@ export default {
     here: 'here',
     multipleChoiceQuestions: 'Multiple choice questions',
     openQuestions: 'Open questions',
+    multipleChoiceScale:
+      '1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer',
   },
   feedbackSummary: {
     question: 'Question',

@@ -168,7 +168,7 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
 const QuestionSection = ({ title, count, children }) => (
   <Paper>
     <Box my="3rem" p="1rem">
-      <Box display="flex" gap="1rem" mb="2rem" alignItems="end">
+      <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
         <Typography component="h4">{title}</Typography>
         <Chip label={count} variant="outlined" size="small" />
       </Box>
@@ -212,6 +212,10 @@ const QuestionResults = ({
         title={t('questionResults:multipleChoiceQuestions')}
         count={notOpenQuestions.length}
       >
+        <Typography variant="body2">
+          {t('questionResults:multipleChoiceScale')}
+        </Typography>
+
         <Grid container sx={styles.displayStyle}>
           {notOpenQuestions.map((q) => (
             <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>

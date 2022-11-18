@@ -224,6 +224,8 @@ export default {
     here: 'här',
     multipleChoiceQuestions: 'Flervalsfrågor',
     openQuestions: 'Öppna frågor',
+    multipleChoiceScale:
+      '1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen uppgift',
   },
   feedbackSummary: {
     question: 'Fråga',
