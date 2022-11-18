@@ -14,6 +14,8 @@ import {
   Chip,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
+import _ from 'lodash'
 
 import { getQuestionsWithFeedback } from './utils'
 import LikertResults from './LikertResults'
@@ -21,8 +23,9 @@ import MultipleChoiceResults from './MultipleChoiceResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import OpenResults from './OpenResults'
 import AlertLink from '../../common/AlertLink'
-import LinkChip from '../../common/LinkChip'
 import { getLanguageValue } from '../../../util/languageUtils'
+import QuestionPublicityToggle from '../../PublicQuestions/QuestionPublicityToggle'
+import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
 
 const styles = {
   list: (theme) => ({
@@ -71,25 +74,46 @@ const QuestionItem = ({
   question,
   isTeacher,
   t,
-  isPublic,
+  publicQuestionIds,
   feedbackCount,
+  disabled,
   feedbackTargetId,
 }) => {
+  const isPublic = publicQuestionIds.includes(question.id)
+
   const Component = componentByType[question.type]
 
   const content = Component ? (
     <Component question={question} feedbackCount={feedbackCount} />
   ) : null
 
+  const { enqueueSnackbar } = useSnackbar()
+  const mutation = useQuestionPublicityMutation({
+    resource: 'feedbackTarget',
+    resourceId: feedbackTargetId,
+  })
+
+  const onPublicityToggle = async (isPublic) => {
+    const newPublicQuestionIds = isPublic
+      ? _.uniq(publicQuestionIds.concat(question.id))
+      : publicQuestionIds.filter((id) => id !== question.id)
+
+    try {
+      await mutation.mutateAsync(newPublicQuestionIds)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
   return (
     <Box m="1rem" mt="3rem">
       {isTeacher && (
-        <Box my="1rem">
-          <LinkChip
-            label={isPublic ? t('common:public') : t('common:notPublic')}
-            to={`/targets/${feedbackTargetId}/settings#public-questions`}
-          />
-        </Box>
+        <QuestionPublicityToggle
+          checked={isPublic}
+          disabled={disabled}
+          onChange={() => onPublicityToggle(!isPublic)}
+        />
       )}
       <Box>{content}</Box>
     </Box>
@@ -154,6 +178,7 @@ const QuestionSection = ({ title, count, children }) => (
 )
 
 const QuestionResults = ({
+  publicityConfigurableQuestionIds,
   publicQuestionIds,
   questions,
   feedbacks,
@@ -192,11 +217,12 @@ const QuestionResults = ({
             <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>
               <QuestionItem
                 question={q}
-                isPublic={publicQuestionIds.includes(q.id)}
+                publicQuestionIds={publicQuestionIds}
+                disabled={!publicityConfigurableQuestionIds.includes(q.id)}
                 isTeacher={isTeacher}
-                t={t}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={feedbackTargetId}
+                t={t}
               />
             </Grid>
           ))}
@@ -210,10 +236,11 @@ const QuestionResults = ({
           <QuestionItem
             key={q.id}
             question={q}
-            isPublic={publicQuestionIds.includes(q.id)}
+            publicQuestionIds={publicQuestionIds}
+            disabled={!publicityConfigurableQuestionIds.includes(q.id)}
             isTeacher={isTeacher}
-            t={t}
             feedbackTargetId={feedbackTargetId}
+            t={t}
           />
         ))}
       </QuestionSection>

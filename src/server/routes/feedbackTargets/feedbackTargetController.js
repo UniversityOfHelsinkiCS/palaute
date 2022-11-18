@@ -457,7 +457,7 @@ const update = async (req, res) => {
 
   await feedbackTarget.save()
 
-  return res.sendStatus(200)
+  return res.send(updates)
 }
 
 const updateSettingsReadByTeacher = async (req, res) => {
