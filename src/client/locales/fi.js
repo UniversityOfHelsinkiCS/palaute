@@ -220,6 +220,8 @@ export default {
     here: 'täältä',
     multipleChoiceQuestions: 'Monivalintakysymykset',
     openQuestions: 'Avoimet kysymykset',
+    multipleChoiceScale:
+      '1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa',
   },
   feedbackSummary: {
     question: 'Kysymys',
