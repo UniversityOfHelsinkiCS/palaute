@@ -13,7 +13,7 @@ const useQuestionPublicityMutation = ({ resource, resourceId }) => {
   }
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: (publicQuestionIds, _variables) => {
+    onSuccess: (publicQuestionIds) => {
       const queryKey = [resource, String(resourceId)]
       queryClient.setQueryData(queryKey, (resource) => ({
         ...resource,

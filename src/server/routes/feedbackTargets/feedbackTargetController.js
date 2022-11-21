@@ -388,7 +388,7 @@ const parseUpdatedQuestionIds = (
     configurable.filter((q) => q.public).map((q) => q.id),
   )
 
-  return _.uniq(currentIds)
+  return _.uniq(currentIds).filter(Number)
 }
 
 const parseUpdates = (body) => {
@@ -411,7 +411,7 @@ const parseUpdates = (body) => {
     hidden,
     opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
     closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-    publicQuestionIds,
+    publicQuestionIds: publicQuestionIds?.filter((id) => !!Number(id)),
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
@@ -422,7 +422,6 @@ const parseUpdates = (body) => {
 
 const update = async (req, res) => {
   const { isAdmin, user } = req
-
   const feedbackTargetId = Number(req.params?.id)
 
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
@@ -461,10 +460,6 @@ const update = async (req, res) => {
     )
   }
 
-  await createFeedbackTargetLog(feedbackTarget, updates, user)
-
-  Object.assign(feedbackTarget, updates)
-
   if (questions && surveyId) {
     const survey = await Survey.findOne({
       where: {
@@ -474,16 +469,35 @@ const update = async (req, res) => {
     })
     if (!survey) throw new ApplicationError('Not found', 404)
     await createFeedbackTargetSurveyLog(surveyId, questions, user)
+    const oldIds = survey.questionIds
     survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
       questions,
     )
+    // assuming there is only 1 new. Find whether its going to be public, and update publicQuestionIds
+    const newIds = _.difference(survey.questionIds, oldIds)
+    if (newIds.length === 1) {
+      const newQuestion = questions.find((q) => q.id === undefined)
+      if (newQuestion?.public) {
+        updates.publicQuestionIds.push(newIds[0])
+      }
+    }
+    // remove the deleted question id
+    const removedIds = _.difference(oldIds, survey.questionIds)
+    updates.publicQuestionIds = updates.publicQuestionIds.filter(
+      (id) => !removedIds.includes(id),
+    )
+
+    updates.questions = questions
     await survey.save()
   }
+
+  Object.assign(feedbackTarget, updates)
 
   // force hooks
   feedbackTarget.changed('updatedAt', true)
 
   await feedbackTarget.save()
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   return res.send(updates)
 }

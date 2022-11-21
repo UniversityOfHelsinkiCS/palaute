@@ -72,9 +72,10 @@ const QuestionEditor = ({
   const [editingQuestionId, setEditingQuestionId] = useState()
 
   const handleStopEditing = async () => {
-    setEditingQuestionId(null)
-
-    onStopEditing()
+    if (editingQuestionId) {
+      setEditingQuestionId(null)
+      onStopEditing()
+    }
   }
 
   const handlePublicityToggle = (question) => (isPublic) => {

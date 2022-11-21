@@ -2,6 +2,7 @@ import { startOfDay, endOfDay } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import queryClient from '../../util/queryClient'
 import { copyQuestion } from '../QuestionEditor/utils'
 
 export const getUpperLevelQuestions = (feedbackTarget) => {
@@ -86,6 +87,17 @@ export const saveQuestionsValues = async (values, feedbackTarget) => {
     questions: editableQuestions,
   }
   const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
+
+  const { questions: updatedQuestions } = data
+  if (
+    updatedQuestions &&
+    Array.isArray(updatedQuestions) &&
+    updatedQuestions.length > 0
+  ) {
+    console.log(updatedQuestions)
+    // update cache
+    queryClient.refetchQueries(['feedbackTarget', String(id)])
+  }
 
   return data
 }
