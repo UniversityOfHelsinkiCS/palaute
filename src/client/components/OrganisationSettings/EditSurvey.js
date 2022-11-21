@@ -61,10 +61,21 @@ const EditSurvey = () => {
     }
   }
 
-  const initialValues = getSurveyInitialValues(survey)
+  const { universitySurvey } = survey
+  const allQuestions = universitySurvey.questions.concat(survey.questions)
+  const allQuestionIds = allQuestions.map(({ id }) => id)
+  const publicQuestionIds = universitySurvey.publicQuestionIds.concat(
+    organisation.publicQuestionIds,
+  )
+  const publicityConfigurableQuestionIds = allQuestionIds.filter(
+    (id) => !universitySurvey.publicQuestionIds.includes(id),
+  )
 
-  const questions = survey.universitySurvey.questions.concat(survey.questions)
-  const publicityConfigurableQuestionIds = survey.questions.map(({ id }) => id)
+  const initialValues = getSurveyInitialValues(
+    survey,
+    publicQuestionIds,
+    publicityConfigurableQuestionIds,
+  )
 
   return (
     <>
@@ -80,8 +91,8 @@ const EditSurvey = () => {
         target={{
           id: organisation.code,
           feedbackVisibility: null,
-          publicQuestionIds: organisation.publicQuestionIds,
-          questions,
+          publicQuestionIds,
+          questions: allQuestions,
           publicityConfigurableQuestionIds,
         }}
       />
@@ -97,6 +108,10 @@ const EditSurvey = () => {
               name="questions"
               onStopEditing={handleSubmit}
               onRemoveQuestion={handleSubmit}
+              publicQuestionIds={publicQuestionIds}
+              publicityConfigurableQuestionIds={
+                publicityConfigurableQuestionIds
+              }
             />
           </Form>
         )}

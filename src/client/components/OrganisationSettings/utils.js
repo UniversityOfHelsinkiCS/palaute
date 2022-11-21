@@ -4,7 +4,11 @@ import apiClient from '../../util/apiClient'
 export const getUpperLevelQuestions = (survey) =>
   (survey?.universitySurvey?.questions ?? []).filter((q) => q.type !== 'TEXT')
 
-export const getSurveyInitialValues = (survey) => {
+export const getSurveyInitialValues = (
+  survey,
+  publicQuestionIds,
+  publicityConfigurableQuestionIds,
+) => {
   const questions = [
     ...(survey.universitySurvey?.questions ?? []).map((question) => ({
       ...question,
@@ -15,7 +19,11 @@ export const getSurveyInitialValues = (survey) => {
       ...question,
       editable: true,
     })),
-  ]
+  ].map((q) => ({
+    ...q,
+    public: publicQuestionIds.includes(q.id),
+    publicityConfigurable: publicityConfigurableQuestionIds.includes(q.id),
+  }))
   return {
     questions,
   }
