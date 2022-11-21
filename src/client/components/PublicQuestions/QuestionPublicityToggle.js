@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import styles from '../../util/chipStyles'
 
 const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -21,6 +22,7 @@ const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
         onClick={(e) => !disabled && setAnchorEl(e.target)}
         variant="outlined"
         color={disabled ? 'default' : 'primary'}
+        sx={!disabled ? styles.interactive : {}}
       />
       <Popover
         open={Boolean(anchorEl)}

@@ -124,6 +124,7 @@ const QuestionCard = ({
   moveUpDisabled = false,
   moveDownDisabled = false,
   editable,
+  onPublicityToggle,
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
@@ -158,19 +159,18 @@ const QuestionCard = ({
             <Chip label={title} variant="outlined" />
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
-            <Chip
-              label={t(question.public ? 'common:public' : 'common:notPublic')}
-              variant="outlined"
-            />
+            {question.type !== 'TEXT' && (
+              <QuestionPublicityToggle
+                checked={question.public}
+                disabled={!question.publicityConfigurable || isEditing}
+                onChange={onPublicityToggle}
+              />
+            )}
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="end">
             {question.chip && (
               <Tooltip title={t('questionEditor:uneditableTooltip')}>
-                <Chip
-                  label={t(question.chip)}
-                  variant="outlined"
-                  color="primary"
-                />
+                <Chip label={t(question.chip)} variant="outlined" />
               </Tooltip>
             )}
           </Grid>

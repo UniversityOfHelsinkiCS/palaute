@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import _ from 'lodash'
 import { Box, Alert } from '@mui/material'
 
 import { Formik, Form } from 'formik'
@@ -19,6 +20,7 @@ import {
   getUpperLevelQuestions,
 } from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
+import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 
 const EditSurvey = () => {
   const { code } = useParams()
@@ -35,6 +37,11 @@ const EditSurvey = () => {
   const upperLevelQuestions = getUpperLevelQuestions(survey)
 
   const [warningSeen, setWarningSeen] = useState(false)
+
+  const mutation = useQuestionPublicityMutation({
+    resource: 'organisation',
+    resourceId: code,
+  })
 
   if (isLoading || isOrganisationLoading) {
     return <LoadingProgress />
@@ -57,6 +64,19 @@ const EditSurvey = () => {
       actions.resetForm({ values })
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (e) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
+  const onPublicityToggle = async (question, isPublic) => {
+    const newPublicQuestionIds = isPublic
+      ? _.uniq(organisation.publicQuestionIds.concat(question.id))
+      : organisation.publicQuestionIds.filter((id) => id !== question.id)
+
+    try {
+      await mutation.mutateAsync(newPublicQuestionIds)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+    } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
@@ -112,6 +132,7 @@ const EditSurvey = () => {
               publicityConfigurableQuestionIds={
                 publicityConfigurableQuestionIds
               }
+              onPublicityToggle={onPublicityToggle}
             />
           </Form>
         )}

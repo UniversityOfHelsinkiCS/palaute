@@ -61,6 +61,7 @@ const QuestionEditor = ({
   actions,
   publicQuestionIds,
   publicityConfigurableQuestionIds,
+  onPublicityToggle,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
@@ -74,6 +75,10 @@ const QuestionEditor = ({
     setEditingQuestionId(null)
 
     onStopEditing()
+  }
+
+  const handlePublicityToggle = (question) => (isPublic) => {
+    onPublicityToggle(question, isPublic)
   }
 
   return (
@@ -115,6 +120,7 @@ const QuestionEditor = ({
               publicityConfigurableQuestionIds={
                 publicityConfigurableQuestionIds
               }
+              onPublicityToggle={handlePublicityToggle(question)}
             />
           ))}
 

@@ -6,6 +6,7 @@ import { Divider, Box, Button, Alert } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'
 import { useSnackbar } from 'notistack'
+import _ from 'lodash'
 
 import QuestionEditor from '../QuestionEditor'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
@@ -24,6 +25,7 @@ import {
   validateQuestions,
 } from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
+import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 
 const styles = {
   heading: {
@@ -80,6 +82,8 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
 }
 
 const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
+  const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
   const [savePending, setSavePending] = useState(false)
   const { values } = useFormikContext()
 
@@ -95,6 +99,23 @@ const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
     setSavePending(true)
   }
 
+  const mutation = useQuestionPublicityMutation({
+    resource: 'feedbackTarget',
+    resourceId: feedbackTarget.id,
+  })
+  const onPublicityToggle = async (question, isPublic) => {
+    const newPublicQuestionIds = isPublic
+      ? _.uniq(feedbackTarget.publicQuestionIds.concat(question.id))
+      : feedbackTarget.publicQuestionIds.filter((id) => id !== question.id)
+
+    try {
+      await mutation.mutateAsync(newPublicQuestionIds)
+      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+    }
+  }
+
   return (
     <QuestionEditor
       language={language}
@@ -107,6 +128,7 @@ const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
       publicityConfigurableQuestionIds={
         feedbackTarget?.publicityConfigurableQuestionIds
       }
+      onPublicityToggle={onPublicityToggle}
     />
   )
 }
@@ -177,7 +199,11 @@ const EditFeedbackTarget = () => {
         </Box>
       )}
 
-      <Formik initialValues={questionsInitialValues} validateOnChange={false}>
+      <Formik
+        initialValues={questionsInitialValues}
+        enableReinitialize
+        validateOnChange={false}
+      >
         {() => (
           <QuestionEditorContainer
             onSave={handleSaveQuestions}
