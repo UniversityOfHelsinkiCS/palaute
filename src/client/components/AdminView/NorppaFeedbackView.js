@@ -69,7 +69,9 @@ const NorppaFeedbackView = () => {
                     padding={2}
                   >
                     <Box marginBottom={2}>
-                      <Typography variant="body1">{data}</Typography>
+                      <Typography whiteSpace="pre-line" variant="body1">
+                        {data}
+                      </Typography>
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Typography variant="body2">{created}</Typography>

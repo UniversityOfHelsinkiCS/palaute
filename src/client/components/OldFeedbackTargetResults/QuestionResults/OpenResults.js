@@ -54,7 +54,10 @@ const OpenResults = ({ question }) => {
             disableGutters
             key={index}
           >
-            <ListItemText primary={feedback.data} />
+            <ListItemText
+              primary={feedback.data}
+              primaryTypographyProps={{ whiteSpace: 'pre-line' }}
+            />
           </ListItem>
         ))}
       </List>

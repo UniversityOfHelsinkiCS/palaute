@@ -124,7 +124,7 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
       <ListItemText
         sx={{ py: 1 }}
         primary={feedback.data}
-        primaryTypographyProps={{ fontSize: 18 }}
+        primaryTypographyProps={{ fontSize: 18, whiteSpace: 'pre-line' }}
         secondary={secondaryText}
       />
     </ListItem>
