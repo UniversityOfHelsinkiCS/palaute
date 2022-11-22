@@ -205,12 +205,19 @@ export const getQuestionsWithFeedback = (
   )
 
   return questionOrder
-    .map((id) => questions.find((q) => q.id === id))
-    .filter((q) => INCLUDED_TYPES.includes(q?.type))
-    .map((q) => ({
-      ...q,
-      feedbacks: feedbackDataByQuestionId[q.id] ?? [],
-    }))
+    ? questionOrder
+        .map((id) => questions.find((q) => q.id === id))
+        .filter((q) => INCLUDED_TYPES.includes(q?.type))
+        .map((q) => ({
+          ...q,
+          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
+        }))
+    : questions
+        .filter((q) => INCLUDED_TYPES.includes(q?.type))
+        .map((q) => ({
+          ...q,
+          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
+        }))
 }
 
 const feedbacksNoZero = (feedbacks) =>
