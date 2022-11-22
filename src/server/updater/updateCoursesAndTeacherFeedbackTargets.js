@@ -280,6 +280,28 @@ const createCourseRealisations = async (courseRealisations) => {
     ),
   )
 
+  // Remove course realisations organisation with 0% share already in db
+  // Needs to be run only once
+  const relationsToRemove = courseRealisations.map(({ id, organisations }) =>
+    organisations
+      .filter(({ share }) => share === 0)
+      .map((organisation) => ({ ...organisation, courseRealisationId: id })),
+  )
+
+  const destroyedRelations = await CourseRealisationsOrganisation.destroy({
+    where: {
+      courseRealisationId: {
+        [Op.in]: relationsToRemove
+          .flat()
+          .map(({ courseRealisationId }) => courseRealisationId),
+      },
+    },
+  })
+
+  logger.info(
+    `Destroyed ${destroyedRelations} course realisations organisations`,
+  )
+
   const filteredCourseRealisationOrganisations =
     courseRealisationsOrganisations.filter((c) => c.organisationId !== null)
 
