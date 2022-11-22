@@ -111,6 +111,7 @@ const createCourseUnits = async (courseUnits) => {
       .filter(({ code }) => !code.startsWith('AY'))
       .map(({ id: courseUnitId, organisations }) =>
         organisations
+          .filter(({ share }) => share !== 0)
           .sort((a, b) => b.share - a.share)
           .map(({ organisationId }, index) => ({
             type: index === 0 ? 'PRIMARY' : 'DIRECT',
@@ -269,6 +270,7 @@ const createCourseRealisations = async (courseRealisations) => {
   const courseRealisationsOrganisations = [].concat(
     ...courseRealisations.map(({ id, organisations }) =>
       organisations
+        .filter(({ share }) => share !== 0)
         .sort((a, b) => b.share - a.share)
         .map(({ organisationId }, index) => ({
           type: index === 0 ? 'PRIMARY' : 'DIRECT',
