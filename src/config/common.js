@@ -17,6 +17,12 @@ const normalizeOrganisationCode = (r) => {
 
 const mapToDegreeCode = (organisationCode) => {
   if (!organisationCode) return ''
+
+  const isKielikeskusOrAvoin = ['H906', 'H930'].includes(organisationCode)
+  if (isKielikeskusOrAvoin) {
+    return organisationCode
+  }
+
   if (organisationCode.length < 7) return ''
   const doctoral = organisationCode[0] === 'T'
   if (doctoral) {

@@ -76,6 +76,11 @@ const bachelorTags = [
     sv: 'Flerform: Lärare inom småbarnspedagogik',
     en: 'Early education teacher line for multiform learning (SBP)',
   },
+  {
+    fi: 'Valinnaiset opinnot',
+    sv: 'Valfria studier',
+    en: 'Optional studies',
+  },
 ]
 
 const masterTags = [
