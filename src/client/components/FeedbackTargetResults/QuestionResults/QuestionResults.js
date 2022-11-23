@@ -223,7 +223,7 @@ const QuestionResults = ({
               <QuestionItem
                 question={q}
                 publicQuestionIds={publicQuestionIds}
-                disabled={!publicityConfigurableQuestionIds.includes(q.id)}
+                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
                 isTeacher={isTeacher}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={feedbackTargetId}
@@ -242,7 +242,7 @@ const QuestionResults = ({
             key={q.id}
             question={q}
             publicQuestionIds={publicQuestionIds}
-            disabled={!publicityConfigurableQuestionIds.includes(q.id)}
+            disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
             isTeacher={isTeacher}
             feedbackTargetId={feedbackTargetId}
             t={t}
