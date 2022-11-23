@@ -314,7 +314,7 @@ const FeedbackTargetInspector = () => {
               </Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails style={{ backgroundColor: 'Background' }}>
+          <AccordionDetails style={{ backgroundColor: 'ghostwhite' }}>
             <Details feedbackTarget={feedbackTarget} />
           </AccordionDetails>
           <AccordionActions>
