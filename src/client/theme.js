@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@mui/material'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { lightBlue, green, grey } from '@mui/material/colors'
 import { useMemo } from 'react'
@@ -13,6 +12,21 @@ const useTheme = () => {
     () =>
       responsiveFontSizes(
         createTheme({
+          typography: {
+            fontFamily: [
+              '"Open Sans"',
+              '"Helvetica"',
+              '"Arial"',
+              '"sans-serif"',
+              '"Apple Color Emoji"',
+              '"Segoe UI Emoji"',
+              '"Segoe UI Symbol"',
+            ].join(','),
+            fontWeightLight: 400,
+            fontWeightRegular: 500,
+            fontWeightMedium: 700,
+            fontWeightBold: 800,
+          },
           palette: {
             mode,
             ...(mode === 'light'
@@ -20,7 +34,7 @@ const useTheme = () => {
                   primary: {
                     light: '#4f96db',
                     main: !inStaging ? '#3770b3' : '#77dcbb',
-                    dark: '#14549c', // Ukraine blue
+                    dark: '#124c8c', // Ukraine blue
                   },
                   secondary: {
                     main: '#e6c309', // Ukraine yellow

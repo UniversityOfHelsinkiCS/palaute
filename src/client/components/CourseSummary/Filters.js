@@ -27,7 +27,8 @@ const styles = {
       [theme.breakpoints.up('md')]: 500,
     }),
     textAlign: 'left',
-    marginBottom: '1rem',
+    marginBottom: '0rem',
+    padding: '1rem',
   },
 }
 

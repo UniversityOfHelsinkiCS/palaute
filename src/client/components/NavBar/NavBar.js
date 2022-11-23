@@ -37,7 +37,7 @@ const styles = {
     '@media print': {
       display: 'none',
     },
-    padding: '0.3rem 0 0.3rem 0',
+    padding: '0.2rem 0 0.2rem 0',
   },
   link: {
     display: 'inline-flex',
@@ -46,16 +46,16 @@ const styles = {
     textDecoration: 'none',
     marginRight: 1,
     fontWeight: (theme) => theme.typography.fontWeightMedium,
-    padding: '6px 12px',
+    padding: '5px 12px',
     backgroundColor: 'rgba(255, 255, 255, 0)',
-    transition: 'background-color 0.15s',
+    transition: 'background-color 0.1s',
     borderRadius: 3,
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.25)',
+      backgroundColor: 'rgba(255, 255, 255, 0.22)',
     },
   },
   activeLink: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
   },
   linkContainer: {
     display: 'flex',
@@ -65,7 +65,7 @@ const styles = {
   menuButton: {
     marginLeft: 'auto',
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.25)',
+      backgroundColor: 'rgba(255, 255, 255, 0.22)',
     },
   },
   languageMenuDivider: {
@@ -292,12 +292,12 @@ const NavBar = ({ guest = false }) => {
       {menu}
       <AppBar
         elevation={0}
-        position="static"
+        position="relative"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
           background: (theme) => theme.palette.primary.dark,
           boxShadow: (theme) =>
-            `0px 0px 12px 1px ${theme.palette.primary.dark}`,
+            `0px 0px 10px 1px ${theme.palette.primary.main}`,
         }}
       >
         <Container maxWidth="xl">

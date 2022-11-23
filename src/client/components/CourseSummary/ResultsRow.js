@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Tooltip, Typography, ButtonBase, Box, Fade } from '@mui/material'
+import {
+  Tooltip,
+  Typography,
+  ButtonBase,
+  Box,
+  Fade,
+  TableRow,
+  Slide,
+  Zoom,
+} from '@mui/material'
 
 import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
@@ -26,7 +35,6 @@ const styles = {
     minWidth: '100px',
   },
   percentCell: {
-    paddingRight: '1rem',
     whiteSpace: 'nowrap',
     textAlign: 'right',
     minWidth: '60px',
@@ -44,9 +52,9 @@ const styles = {
     },
     paddingRight: '1rem',
   }),
-  innerLabelCell: (theme) => ({
-    paddingLeft: theme.spacing(1),
-  }),
+  innerLabelCell: {
+    paddingLeft: '1.3rem',
+  },
   accordionButton: {
     width: '100%',
     height: '100%',
@@ -159,16 +167,15 @@ const FeedbackOpenIcon = ({ link }) => {
 const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
   const link = `/targets/${currentFeedbackTargetId}`
   return (
-    <>
+    <Box display="flex" justifyContent="center">
       {status === 'GIVEN' && <ResponseGivenIcon link={link} />}
       {status === 'NONE' && <ResponseNotGivenIcon link={link} />}
       {status === 'OPEN' && <FeedbackOpenIcon link={link} />}
-    </>
+    </Box>
   )
 }
 
 const ResultsRow = ({
-  index = 0,
   label,
   link,
   results,
@@ -199,79 +206,77 @@ const ResultsRow = ({
 
   return (
     <>
-      <Fade in timeout={Math.min(index * 200, 1_600)}>
-        <tr>
-          <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
-            {accordionEnabled ? (
-              // eslint-disable-next-line react/button-has-type
-              <ButtonBase
-                onClick={handleToggleAccordion}
-                sx={styles.accordionButton}
-                variant="contained"
-                disableRipple
-              >
-                {label}
-                <Box sx={styles.arrowContainer}>
-                  <ChevronRight
-                    sx={{
-                      ...styles.arrow,
-                      ...(accordionOpen ? styles.arrowOpen : {}),
-                    }}
-                  />
-                </Box>
-              </ButtonBase>
-            ) : (
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              <>
-                {link ? (
-                  <ButtonBase
-                    to={link}
-                    component={RouterLink}
-                    sx={{ ...styles.accordionButton, ...styles.link }}
-                    variant="contained"
-                  >
-                    {label}
-                  </ButtonBase>
-                ) : (
-                  <Box paddingLeft="0.5rem">{label}</Box>
-                )}
-              </>
-            )}
-          </td>
-          {results.map(({ questionId, mean, distribution, previous }) => (
-            <ResultItem
-              key={questionId}
-              question={getQuestion(questions, questionId)}
-              mean={mean}
-              distribution={distribution}
-              previous={previous}
-              sx={styles.resultCell}
+      <TableRow>
+        <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
+          {accordionEnabled ? (
+            // eslint-disable-next-line react/button-has-type
+            <ButtonBase
+              onClick={handleToggleAccordion}
+              sx={styles.accordionButton}
+              variant="contained"
+              disableRipple
+            >
+              {label}
+              <Box sx={styles.arrowContainer}>
+                <ChevronRight
+                  sx={{
+                    ...styles.arrow,
+                    ...(accordionOpen ? styles.arrowOpen : {}),
+                  }}
+                />
+              </Box>
+            </ButtonBase>
+          ) : (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <>
+              {link ? (
+                <ButtonBase
+                  to={link}
+                  component={RouterLink}
+                  sx={{ ...styles.accordionButton, ...styles.link }}
+                  variant="contained"
+                >
+                  {label}
+                </ButtonBase>
+              ) : (
+                <Box paddingLeft="0.5rem">{label}</Box>
+              )}
+            </>
+          )}
+        </td>
+        {results.map(({ questionId, mean, distribution, previous }) => (
+          <ResultItem
+            key={questionId}
+            question={getQuestion(questions, questionId)}
+            mean={mean}
+            distribution={distribution}
+            previous={previous}
+            sx={styles.resultCell}
+          />
+        ))}
+        <td css={styles.countCell}>
+          <Typography component="div" variant="body2">
+            {feedbackCount}/{studentCount}
+          </Typography>
+        </td>
+        <td css={styles.percentCell}>
+          <PercentageCell label={`${percent}%`} percent={percent} />
+        </td>
+        <td css={styles.percentCell}>
+          {feedbackResponsePercentage !== undefined ? (
+            <PercentageCell
+              label={`${feedbackResponsePercent}%`}
+              percent={feedbackResponsePercent}
             />
-          ))}
-          <td css={styles.countCell}>
-            <Typography component="div" variant="body2">
-              {feedbackCount}/{studentCount}
-            </Typography>
-          </td>
-          <td css={styles.percentCell}>
-            <PercentageCell label={`${percent}%`} percent={percent} />
-          </td>
-          <td css={styles.percentCell}>
-            {feedbackResponsePercentage !== undefined ? (
-              <PercentageCell
-                label={`${feedbackResponsePercent}%`}
-                percent={feedbackResponsePercent}
-              />
-            ) : (
-              <FeedbackResponseIndicator
-                status={feedbackResponseGiven}
-                currentFeedbackTargetId={currentFeedbackTargetId}
-              />
-            )}
-          </td>
-          {cellsAfter}
-        </tr>
-      </Fade>
+          ) : (
+            <FeedbackResponseIndicator
+              status={feedbackResponseGiven}
+              currentFeedbackTargetId={currentFeedbackTargetId}
+            />
+          )}
+        </td>
+        {cellsAfter}
+      </TableRow>
       {accordionEnabled && accordionOpen && children}
     </>
   )

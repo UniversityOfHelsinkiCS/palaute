@@ -94,7 +94,6 @@ export const saveQuestionsValues = async (values, feedbackTarget) => {
     Array.isArray(updatedQuestions) &&
     updatedQuestions.length > 0
   ) {
-    console.log(updatedQuestions)
     // update cache
     queryClient.refetchQueries(['feedbackTarget', String(id)])
   }

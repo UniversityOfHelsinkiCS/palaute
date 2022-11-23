@@ -1,5 +1,12 @@
-import { Chip } from '@mui/material'
+import { Box, Chip } from '@mui/material'
 import React from 'react'
+
+const styles = {
+  cell: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}
 
 /**
  * Give percent as 0-100
@@ -13,12 +20,14 @@ const PercentageCell = ({ label, percent }) => {
   hex = hex.padStart(2, '0')
 
   return (
-    <Chip
-      label={label}
-      sx={{
-        background: (theme) => `${theme.palette.info.light}${hex}`,
-      }}
-    />
+    <Box sx={styles.cell}>
+      <Chip
+        label={label}
+        sx={{
+          background: (theme) => `${theme.palette.info.light}${hex}`,
+        }}
+      />
+    </Box>
   )
 }
 export default PercentageCell

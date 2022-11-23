@@ -22,6 +22,9 @@ import ColumnHeadings from './ColumnHeadings'
 import CensoredCount from './CensoredCount'
 
 const styles = {
+  table: {
+    borderSpacing: '2px 0.8rem',
+  },
   realisationHeading: {
     textAlign: 'left',
     verticalAlign: 'Bottom',
@@ -40,7 +43,7 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
 
   return (
     <TableContainer sx={{ p: 1, pt: 5 }}>
-      <table>
+      <table css={styles.table}>
         <thead>
           <tr>
             <th css={styles.realisationHeading}>

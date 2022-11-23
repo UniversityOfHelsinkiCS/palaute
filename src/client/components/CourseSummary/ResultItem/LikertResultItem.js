@@ -27,7 +27,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
   return (
     <ResultItemBase tooltipTitle={tooltipTitle} mean={mean} {...props}>
       <div style={styles.content}>
-        <Typography fontFamily="">{mean?.toFixed(2) || '–'}</Typography>
+        <Typography fontWeight="500">{mean?.toFixed(2) || '–'}</Typography>
       </div>
     </ResultItemBase>
   )

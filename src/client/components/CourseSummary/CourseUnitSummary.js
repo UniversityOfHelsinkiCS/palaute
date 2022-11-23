@@ -13,22 +13,18 @@ const CourseUnitSummary = ({ courseUnits, questions, access }) => {
 
   return (
     <>
-      <DividerRow />
       {courseUnits.map(
-        (
-          {
-            courseCode,
-            name,
-            results,
-            feedbackCount,
-            studentCount,
-            feedbackResponseGiven,
-            currentFeedbackTargetId,
-            closesAt,
-            hiddenCount,
-          },
-          index,
-        ) => {
+        ({
+          courseCode,
+          name,
+          results,
+          feedbackCount,
+          studentCount,
+          feedbackResponseGiven,
+          currentFeedbackTargetId,
+          closesAt,
+          hiddenCount,
+        }) => {
           const feedbackResponseStatus = getFeedbackResponseGiven(
             feedbackResponseGiven,
             closesAt,
@@ -45,7 +41,6 @@ const CourseUnitSummary = ({ courseUnits, questions, access }) => {
                   />
                 }
                 level={1}
-                index={index}
                 results={results}
                 questions={questions}
                 feedbackCount={feedbackCount}
@@ -64,11 +59,11 @@ const CourseUnitSummary = ({ courseUnits, questions, access }) => {
                   )
                 }
               />
-              {index < courseUnits.length - 1 && <DividerRow />}
             </Fragment>
           )
         },
       )}
+      <DividerRow />
     </>
   )
 }

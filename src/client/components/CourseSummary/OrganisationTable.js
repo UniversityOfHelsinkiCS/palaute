@@ -16,18 +16,18 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
-import DividerRow from './DividerRow'
 
-import { getAccess } from './utils'
 import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
 import CensoredCount from './CensoredCount'
 
 const styles = {
+  table: {
+    borderSpacing: '2px 0.8rem',
+  },
   filtersCell: {
     verticalAlign: 'bottom',
-    padding: '0 1rem 1rem 1rem',
   },
   progressCell: {
     paddingTop: '1rem',
@@ -94,7 +94,7 @@ const OrganisationTable = ({
 
   return (
     <TableContainer sx={{ overflow: 'visible' }}>
-      <table>
+      <table css={styles.table}>
         <thead>
           <tr>
             <th css={styles.filtersCell}>{filters}</th>
@@ -121,24 +121,20 @@ const OrganisationTable = ({
 
           {!(isOrganisationsLoading || isRefetching) &&
             organisations.map(
-              (
-                {
-                  code,
-                  id,
-                  name,
-                  results,
-                  feedbackCount,
-                  courseUnits,
-                  studentCount,
-                  hiddenCount,
-                  feedbackResponsePercentage,
-                  access,
-                },
-                index,
-              ) => (
+              ({
+                code,
+                id,
+                name,
+                results,
+                feedbackCount,
+                courseUnits,
+                studentCount,
+                hiddenCount,
+                feedbackResponsePercentage,
+                access,
+              }) => (
                 <React.Fragment key={id}>
                   <ResultsRow
-                    index={index}
                     label={
                       <OrganisationLabel
                         name={getLanguageValue(name, i18n.language)}
@@ -174,7 +170,6 @@ const OrganisationTable = ({
                       access={access}
                     />
                   </ResultsRow>
-                  <DividerRow height={1.3} />
                 </React.Fragment>
               ),
             )}
