@@ -390,6 +390,7 @@ export default {
     generalSettings: 'General settings',
     courseSettings: 'Course settings',
     feedbackCorrespondent: 'Feedback correspondent',
+    feedbackCorrespondents: 'Feedback correspondents',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
     overviewTab: 'Upcoming courses',

@@ -185,8 +185,8 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   return (
     <div style={style}>
       <Typography textTransform="uppercase">
-        {t('organisationSettings:feedbackCorrespondent')} (
-        {feedbackCorrespondents?.length}/2)
+        {t('organisationSettings:feedbackCorrespondents')} (
+        {feedbackCorrespondents?.length})
       </Typography>
       {feedbackCorrespondents?.length > 0 ? (
         feedbackCorrespondents.map((correspondent) => (
@@ -200,7 +200,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
           {t('organisationSettings:correspondentMissing')}
         </Alert>
       )}
-      {feedbackCorrespondents?.length < 2 && <CorrepondentSelector add={add} />}
+      <CorrepondentSelector add={add} />
     </div>
   )
 }

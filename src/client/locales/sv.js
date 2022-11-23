@@ -395,6 +395,7 @@ export default {
     generalSettings: 'Allmänna inställningar',
     courseSettings: 'Kursinställningar',
     feedbackCorrespondent: 'Korrespondent för responsen',
+    feedbackCorrespondents: 'Korrespondenter för responsen',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
     overviewTab: 'Kommande kurser',

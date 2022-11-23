@@ -393,6 +393,7 @@ export default {
     generalSettings: 'Yleiset asetukset',
     courseSettings: 'Kurssikohtaiset asetukset',
     feedbackCorrespondent: 'Palautevastaava',
+    feedbackCorrespondents: 'Palautevastaavat',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
     overviewTab: 'Tulevat kurssit',
