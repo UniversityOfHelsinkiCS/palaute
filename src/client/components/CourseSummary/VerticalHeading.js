@@ -23,7 +23,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'end',
-    minHeight: '250px',
+    minHeight: '300px',
   },
   icon: {
     margin: '-8px',
