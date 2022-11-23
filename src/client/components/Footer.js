@@ -4,12 +4,14 @@ import React from 'react'
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
+import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
 import { images } from '../util/common'
 
 import { inProduction } from '../../config'
+import { localeForLanguage } from '../util/languageUtils'
 
 const styles = {
   logo: {
@@ -30,7 +32,16 @@ const dataProtectionNotice =
   'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991'
 
 const Footer = ({ user }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const duration = Date.parse(user?.lastRestart)
+    ? formatDuration(
+        intervalToDuration({
+          start: Date.parse(user?.lastRestart),
+          end: Date.now(),
+        }),
+        { locale: localeForLanguage(i18n.language) },
+      )
+    : ''
 
   return (
     <Box marginTop="auto">
@@ -78,15 +89,26 @@ const Footer = ({ user }) => {
               </Typography>
             )}
           </div>
-
-          <Link
-            href="https://toska.dev"
-            target="_blank"
-            rel="noopener"
-            underline="hover"
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            rowGap="1rem"
           >
-            <img src={images.toska_color} css={styles.logo} alt="Toska" />
-          </Link>
+            <Link
+              href="https://toska.dev"
+              target="_blank"
+              rel="noopener"
+              underline="hover"
+            >
+              <img src={images.toska_color} css={styles.logo} alt="Toska" />
+            </Link>
+            {duration && (
+              <Typography variant="subtitle1" fontSize={14}>
+                {t('footer:lastUpdate', { duration })}
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Container>
     </Box>

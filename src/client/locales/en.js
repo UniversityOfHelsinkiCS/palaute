@@ -376,6 +376,7 @@ export default {
     contactSupport: 'Contact support',
     wikiLink: 'Instructions',
     accessibilityDocument: 'Accessibility document',
+    lastUpdate: 'Latest release {{duration}} ago',
   },
   courseRealisationFeedback: {
     noFeedbackTarget: 'This course does not have a feedback available to you',

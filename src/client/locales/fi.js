@@ -378,6 +378,7 @@ export default {
     contactSupport: 'Ota yhteyttä tukeen',
     wikiLink: 'Käyttöohje',
     accessibilityDocument: 'Saavutettavuusseloste',
+    lastUpdate: 'Viimeisin julkaisu {{duration}} sitten',
   },
   courseRealisationFeedback: {
     noFeedbackTarget:

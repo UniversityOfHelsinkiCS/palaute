@@ -15,6 +15,7 @@ const {
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { seed } = require('./util/seeders')
+const { updateLastRestart } = require('./util/lastRestart')
 
 const app = express()
 
@@ -34,6 +35,7 @@ const start = async () => {
   await connectToDatabase()
   await seed()
   await redis.connect()
+  await updateLastRestart()
   await updater.checkStatusOnStartup()
   await updater.start()
   await startViewsCron()

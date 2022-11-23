@@ -380,6 +380,7 @@ export default {
     contactSupport: 'Kontakta stödet',
     wikiLink: 'Användarinstruktioner',
     accessibilityDocument: 'Tillgänglighetsutlåtande',
+    // lastUpdate: 'Latest release {{duration}} ago',
   },
   courseRealisationFeedback: {
     noFeedbackTarget:

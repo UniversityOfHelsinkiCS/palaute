@@ -21,16 +21,15 @@ const client = {
   expire: (key, seconds) => redisClient.expire(key, seconds),
   delete: (key) => redisClient.del(key),
   flushDb: () => redisClient.flushDb(),
-  connect: async () => {
-    redisClient.on('error', (err) => logger.error('Redis Client Error', err))
-    logger.info('Connecting to redis...', REDIS_CONFIG)
 
+  async testConnection() {
     try {
       await redisClient.connect(reconnectStrategy)
 
       await redisClient.set('key', 'value')
       await redisClient.get('key')
       await redisClient.del('key')
+      logger.info('Redis client connected')
     } catch (error) {
       logger.warn('Connection to redis failed, cache not available')
       Sentry.captureException(
@@ -40,10 +39,13 @@ const client = {
       client.set = () => Promise.resolve(null)
       client.flushDb = () => Promise.resolve(null)
       client.expire = () => Promise.resolve(null)
-      return
     }
+  },
 
-    logger.info('Redis client connected')
+  async connect() {
+    redisClient.on('error', (err) => logger.error('Redis Client Error', err))
+    logger.info('Connecting to redis...', REDIS_CONFIG)
+    await this.testConnection()
   },
 }
 

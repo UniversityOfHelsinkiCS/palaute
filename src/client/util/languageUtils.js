@@ -1,3 +1,5 @@
+import { fi, sv, enGB as en } from 'date-fns/locale'
+
 export const getLanguageValue = (values, preferred) => {
   if (!values) {
     return null
@@ -13,4 +15,9 @@ export const getLanguageValue = (values, preferred) => {
   }
 
   return null
+}
+
+export const localeForLanguage = (lang) => {
+  if (!lang) return en
+  return { fi, sv, en }[lang]
 }

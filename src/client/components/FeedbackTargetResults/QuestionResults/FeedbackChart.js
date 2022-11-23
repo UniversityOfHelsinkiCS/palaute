@@ -8,13 +8,9 @@ import { Chart } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { Box, Paper } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { fi, sv, enGB as en } from 'date-fns/locale'
+import { localeForLanguage } from '../../../util/languageUtils'
 
 Chart.register(annotationPlugin)
-const localeForLanguage = (lang) => {
-  if (!lang) return en
-  return { fi, sv, en }[lang]
-}
 
 const getGradient = (ctx, chartArea) => {
   if (!ctx) return 'hsl(300deg 49% 56%)'

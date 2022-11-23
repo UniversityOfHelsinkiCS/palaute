@@ -6,6 +6,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { User } = require('../../models')
 const { ADMINS } = require('../../../config')
 const { relevantIAMs } = require('../../../config/IAMConfig')
+const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {
   const { user, isAdmin } = req
@@ -23,6 +24,8 @@ const login = async (req, res) => {
     await user.save()
   }
 
+  const lastRestart = await getLastRestart()
+
   const isTeacher = !!user.employeeNumber
 
   return res.send({
@@ -30,6 +33,7 @@ const login = async (req, res) => {
     isTeacher,
     iamGroups: user.iamGroups ?? [],
     isAdmin,
+    lastRestart,
   })
 }
 
