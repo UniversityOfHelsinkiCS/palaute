@@ -6,6 +6,9 @@ const {
   UserFeedbackTarget,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const {
+  sendEmailContinuousFeedbackResponseToStudent,
+} = require('../../mailer/mails/index')
 
 const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
@@ -128,6 +131,11 @@ const respondToFeedback = async (req, res) => {
 
   continuousFeedback.response = response
   await continuousFeedback.save()
+
+  const { id, responseEmailSent } = continuousFeedback
+  if (!responseEmailSent) {
+    sendEmailContinuousFeedbackResponseToStudent(id)
+  }
 
   return res.send(continuousFeedback)
 }

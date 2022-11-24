@@ -10,40 +10,45 @@ const {
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 
-const getStudentsWithContinuousFeedbackResponses = async () => {
-  const continuousFeedbacks = await ContinuousFeedback.findAll({
-    where: {
-      response: {
-        [Op.ne]: null,
+const getStudentWithContinuousFeedbackResponse = async (
+  continuousFeedbackId,
+) => {
+  const continuousFeedback = await ContinuousFeedback.findByPk(
+    continuousFeedbackId,
+    {
+      where: {
+        response: {
+          [Op.ne]: null,
+        },
+        responseEmailSent: false,
       },
-      responseEmailSent: false,
+      attributes: ['id', 'response'],
+      include: [
+        {
+          model: FeedbackTarget,
+          as: 'feedback_target',
+          attributes: ['id'],
+          required: true,
+          include: [
+            {
+              model: CourseRealisation,
+              as: 'courseRealisation',
+              attributes: ['id', 'name', 'startDate', 'endDate'],
+              required: true,
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'secondaryEmail', 'language'],
+          required: true,
+        },
+      ],
     },
-    attributes: ['id', 'response'],
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedback_target',
-        attributes: ['id'],
-        required: true,
-        include: [
-          {
-            model: CourseRealisation,
-            as: 'courseRealisation',
-            attributes: ['id', 'name', 'startDate', 'endDate'],
-            required: true,
-          },
-        ],
-      },
-      {
-        model: User,
-        as: 'user',
-        attributes: ['id', 'email', 'secondaryEmail', 'language'],
-        required: true,
-      },
-    ],
-  })
+  )
 
-  return continuousFeedbacks
+  return continuousFeedback
 }
 
 const buildContinuousFeedbackResponsesToStudents = (
@@ -74,7 +79,7 @@ const buildContinuousFeedbackResponsesToStudents = (
   return translations
 }
 
-const emailContinuousFeedbackResponsesToStudents = (continuousFeedback) => {
+const emailContinuousFeedbackResponseToStudent = (continuousFeedback) => {
   const { response, user, feedback_target: feedbackTarget } = continuousFeedback
   const { language, email: studentEmail } = user
   const { name, startDate, endDate } = feedbackTarget.courseRealisation
@@ -102,18 +107,15 @@ const emailContinuousFeedbackResponsesToStudents = (continuousFeedback) => {
   return email
 }
 
-const sendEmailContinuousFeedbackResponsesToStudents = async () => {
-  const continuousFeedbacks = await getStudentsWithContinuousFeedbackResponses()
-
-  const emailsToBeSent = continuousFeedbacks.map((continuousFeedback) =>
-    emailContinuousFeedbackResponsesToStudents(continuousFeedback),
+const sendEmailContinuousFeedbackResponseToStudent = async (
+  continuousFeedbackId,
+) => {
+  const continuousFeedback = await getStudentWithContinuousFeedbackResponse(
+    continuousFeedbackId,
   )
 
-  const continuousFeedbackIds = continuousFeedbacks.map(({ id }) => id)
-
-  logger.info(
-    `[Pate] Sending continuous feedback responses to ${continuousFeedbacks.length} students`,
-  )
+  const emailToBeSent =
+    emailContinuousFeedbackResponseToStudent(continuousFeedback)
 
   ContinuousFeedback.update(
     {
@@ -121,19 +123,17 @@ const sendEmailContinuousFeedbackResponsesToStudents = async () => {
     },
     {
       where: {
-        id: {
-          [Op.in]: continuousFeedbackIds,
-        },
+        id: continuousFeedbackId,
       },
     },
   )
 
   await pate.send(
-    emailsToBeSent,
-    'Send continuous feedback responses to students',
+    [emailToBeSent],
+    'Send continuous feedback response to student',
   )
 
-  return emailsToBeSent
+  return emailToBeSent
 }
 
-module.exports = { sendEmailContinuousFeedbackResponsesToStudents }
+module.exports = { sendEmailContinuousFeedbackResponseToStudent }
