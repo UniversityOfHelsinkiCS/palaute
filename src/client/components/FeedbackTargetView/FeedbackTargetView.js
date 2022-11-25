@@ -218,9 +218,9 @@ const FeedbackTargetView = () => {
 
   const { organisations, isLoading: organisationsLoading } = useOrganisations()
   const organisation =
-    isLoading || organisationsLoading
+    isLoading || organisationsLoading || !courseUnit
       ? null
-      : organisations.find((org) => courseUnit.organisations[0].id === org.id)
+      : organisations?.find((org) => courseUnit.organisations[0].id === org.id)
 
   const isOrganisationAdmin = organisation?.access?.admin || isAdmin
 
