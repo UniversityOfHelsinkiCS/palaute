@@ -6,7 +6,6 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
-  sendEmailContinuousFeedbackResponsesToStudents,
   sendEmailNotificationAboutEnrolments,
 } = require('./mails')
 
@@ -23,7 +22,6 @@ const mailer = {
   sendEmailToStudentsWhenOpeningImmediately,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
-  sendEmailContinuousFeedbackResponsesToStudents,
   sendAutomaticReminderOnFeedbackToStudents,
   sendFeedbackSummaryReminderToStudents,
   sendEmailNotificationAboutEnrolments,
