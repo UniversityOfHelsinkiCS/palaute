@@ -19,6 +19,7 @@ const {
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  Banner,
 } = require('../../models')
 
 const { sequelize } = require('../../util/dbConnection')
@@ -483,6 +484,34 @@ const solveFeedbackTargetDateCheck = async (req, res) => {
   return res.status(200).send()
 }
 
+const createBanner = async (req, res) => {
+  const { body } = req
+
+  const banner = Banner.build({
+    data: { text: body.data.text, color: body.data.color },
+    accessGroup: body.accessGroup,
+    startDate: new Date(body.startDate),
+    endDate: new Date(body.endDate),
+  })
+
+  try {
+    await banner.save()
+  } catch (err) {
+    throw new ApplicationError('Fakd', 400)
+  }
+
+  return res.send(banner)
+}
+
+const deleteBanner = async (req, res) => {
+  const { id } = req.params
+  const destroyed = await Banner.destroy({ where: { id } })
+  if (!destroyed) {
+    throw new ApplicationError('Not found', 404)
+  }
+  return res.send(200)
+}
+
 const getFeedbackCorrespondents = async (req, res) => {
   const users = await sequelize.query(
     `
@@ -534,4 +563,6 @@ router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
 router.get('/feedback-targets', findFeedbackTargets)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
+router.post('/banners', createBanner)
+router.delete('/banners/:id', deleteBanner)
 module.exports = router

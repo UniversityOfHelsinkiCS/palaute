@@ -195,7 +195,7 @@ const FeedbackTargetView = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isLoading, refetch, isLoadingError, error } =
     useFeedbackTarget(id, { retry: 0 })
-  // If should not be shown, gets empty response when failSilentry: true
+  // If link to cur summary should not be shown, gets empty response when failSilentry: true
   const { courseRealisationSummaries: showCourseSummaryLink } =
     useCourseRealisationSummaries(feedbackTarget?.courseUnit?.courseCode, {
       failSilently: true,

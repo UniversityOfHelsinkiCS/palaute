@@ -15,6 +15,7 @@ import MiscTab from './MiscTab'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
+import BannerView from './BannersView'
 
 const AdminView = () => {
   const { path, url } = useRouteMatch()
@@ -62,6 +63,7 @@ const AdminView = () => {
             component={Link}
             to={`${url}/feedback-correspondents`}
           />
+          <Tab label="Banners" component={Link} to={`${url}/banners`} />
           <Tab label="Updater" to={`${url}/updater`} component={Link} />
           <Tab label="Misc" component={Link} to={`${url}/misc`} />
         </RouterTabs>
@@ -78,6 +80,7 @@ const AdminView = () => {
           path={`${path}/feedback-correspondents`}
           component={FeedbackCorrespondents}
         />
+        <Route path={`${path}/banners`} component={BannerView} />
         <Route path={`${path}/updater`} component={UpdaterView} />
         <Route path={`${path}/misc`} component={MiscTab} />
       </Switch>

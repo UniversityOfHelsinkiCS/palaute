@@ -37,6 +37,17 @@ class User extends Model {
     }))
   }
 
+  async isTeacher() {
+    const teachings = await UserFeedbackTarget.findAll({
+      where: {
+        userId: this.id,
+        accessStatus: { [Op.in]: ['TEACHER', 'RESPONSIBLE_TEACHER'] },
+      },
+    })
+
+    return teachings?.length > 0
+  }
+
   async getOrganisationAccessByCourseUnitId(courseUnitId) {
     const organisations = await this.getOrganisationAccess()
 

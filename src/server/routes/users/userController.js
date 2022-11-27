@@ -3,13 +3,13 @@ const _ = require('lodash')
 
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
-const { User } = require('../../models')
+const { User, Banner } = require('../../models')
 const { ADMINS } = require('../../../config')
 const { relevantIAMs } = require('../../../config/IAMConfig')
 const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {
-  const { user, isAdmin } = req
+  const { user, isAdmin, loginAs } = req
 
   if (!user) throw new ApplicationError('Not found', 404)
 
@@ -18,13 +18,14 @@ const login = async (req, res) => {
     relevantIAMs.includes(iam),
   )
 
-  if (!req.loginAs) {
+  if (!loginAs) {
     user.iamGroups = relevantIamGroups
     user.lastLoggedIn = new Date()
     await user.save()
   }
 
   const lastRestart = await getLastRestart()
+  const banners = isAdmin || loginAs ? await Banner.getForUser(user) : []
 
   const isTeacher = !!user.employeeNumber
 
@@ -34,6 +35,7 @@ const login = async (req, res) => {
     iamGroups: user.iamGroups ?? [],
     isAdmin,
     lastRestart,
+    banners,
   })
 }
 
