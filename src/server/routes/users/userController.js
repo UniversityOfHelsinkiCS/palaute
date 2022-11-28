@@ -80,6 +80,38 @@ const getUserDetails = async (req, res) => {
   })
 }
 
+const getAllUserAccess = async (req, res) => {
+  if (!ADMINS.includes(req.user.username))
+    throw new ApplicationError('Forbidden', 403)
+
+  const users = await User.findAll({
+    where: {
+      iamGroups: {
+        [Op.ne]: [],
+      },
+    },
+  })
+
+  const usersWithAccess = []
+  for (const user of users) {
+    const access = _.sortBy(
+      await user.getOrganisationAccess(),
+      (access) => access.organisation.code,
+    )
+
+    // eslint-disable-next-line no-continue
+    if (!access.length) continue
+
+    usersWithAccess.push({
+      ...user.dataValues,
+      iamGroups: user.iamGroups,
+      access,
+    })
+  }
+
+  return res.send(usersWithAccess)
+}
+
 const logout = async (req, res) => {
   const {
     headers: { shib_logout_url: shibLogoutUrl },
@@ -95,6 +127,7 @@ const router = Router()
 router.get('/login', login)
 router.get('/logout', logout)
 router.get('/users', getUserByEmail)
+router.get('/users/access', getAllUserAccess)
 router.get('/users/:id', getUserDetails)
 
 module.exports = router

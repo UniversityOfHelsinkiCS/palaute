@@ -1,4 +1,6 @@
 import apiClient from '../../util/apiClient'
+import { data } from '../../../config/data'
+import { normalizeOrganisationCode } from '../CourseSummary/utils'
 
 export const getInitialValues = (survey) => {
   const questions = survey?.questions ?? []
@@ -52,4 +54,55 @@ export const handleLoginAs = (user) => () => {
   localStorage.setItem('adminLoggedInAs', id)
   localStorage.setItem('employeenumber', employeeNumber ?? null)
   window.location.reload()
+}
+
+export const getFaculties = () => {
+  const faculties = data.map(({ code, name }) => ({ code, name }))
+
+  return faculties
+}
+
+const getProgrammeAccess = (users, key) => {
+  const usersWithAccessToProgramme = users
+    .map((user) => ({
+      ...user,
+      access: user.access.filter(
+        ({ organisation }) => organisation.code === key,
+      ),
+    }))
+    .filter(({ access }) => access.length)
+
+  return usersWithAccessToProgramme
+}
+
+export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode) => {
+  const faculty = data.find(({ code }) => code === facultyCode)
+
+  const programmes = faculty
+    ? faculty.programmes.map(({ key, name }) => ({
+        key: normalizeOrganisationCode(key),
+        name,
+      }))
+    : data
+        .flatMap(({ programmes }) => programmes)
+        .map(({ key, name }) => ({ name, key: normalizeOrganisationCode(key) }))
+
+  const programmeCodes = programmes.map(({ key }) => key)
+
+  const usersWithAccessToFaculty = usersWithAccess
+    .map((user) => ({
+      ...user,
+      access: user.access.filter(({ organisation }) =>
+        programmeCodes.includes(organisation.code),
+      ),
+    }))
+    .filter(({ access }) => access.length)
+
+  const programmesWithAccess = programmes.map(({ key, name }) => ({
+    key,
+    name,
+    access: getProgrammeAccess(usersWithAccessToFaculty, key),
+  }))
+
+  return programmesWithAccess
 }

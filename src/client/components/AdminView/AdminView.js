@@ -14,6 +14,7 @@ import { RouterTabs } from '../common/RouterTabs'
 import MiscTab from './MiscTab'
 import FeedbackTargetInspector from './FeedbackTargetInspector'
 import UsersTab from './UsersTab'
+import AccessTab from './AccessTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
 import BannerView from './BannersView'
 
@@ -44,6 +45,11 @@ const AdminView = () => {
         >
           <Tab label="Users" component={Link} to={`${url}/users`} />
           <Tab
+            label="Organisation Access"
+            component={Link}
+            to={`${url}/access`}
+          />
+          <Tab
             label="Norppa feedback"
             component={Link}
             to={`${url}/feedback`}
@@ -70,6 +76,7 @@ const AdminView = () => {
       </Box>
       <Switch>
         <Route path={`${path}/users`} component={UsersTab} />
+        <Route path={`${path}/access`} component={AccessTab} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route
