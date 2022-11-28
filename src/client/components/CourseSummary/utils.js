@@ -24,7 +24,7 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
 
 const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
 
-const normalizeOrganisationCode = (r) => {
+export const normalizeOrganisationCode = (r) => {
   if (r.startsWith('T')) {
     return r.replace('T', '7')
   }

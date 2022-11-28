@@ -1,5 +1,6 @@
 import apiClient from '../../util/apiClient'
 import { data } from '../../../config/data'
+import { normalizeOrganisationCode } from '../CourseSummary/utils'
 
 export const getInitialValues = (survey) => {
   const questions = survey?.questions ?? []
@@ -55,30 +56,13 @@ export const handleLoginAs = (user) => () => {
   window.location.reload()
 }
 
-const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
-
-const normalizeOrganisationCode = (r) => {
-  if (r.startsWith('T')) {
-    return r.replace('T', '7')
-  }
-  if (!r.includes('_')) {
-    return r
-  }
-
-  const [left, right] = r.split('_')
-  const prefix = [...left].filter(isNumber).join('')
-  const suffix = `${left[0]}${right}`
-  const providercode = `${prefix}0-${suffix}`
-  return providercode
-}
-
 export const getFaculties = () => {
   const faculties = data.map(({ code, name }) => ({ code, name }))
 
   return faculties
 }
 
-const getAccessToProgramme = (users, key) => {
+const getProgrammeAccess = (users, key) => {
   const usersWithAccessToProgramme = users
     .map((user) => ({
       ...user,
@@ -117,7 +101,7 @@ export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode) => {
   const programmesWithAccess = programmes.map(({ key, name }) => ({
     key,
     name,
-    access: getAccessToProgramme(usersWithAccessToFaculty, key),
+    access: getProgrammeAccess(usersWithAccessToFaculty, key),
   }))
 
   return programmesWithAccess
