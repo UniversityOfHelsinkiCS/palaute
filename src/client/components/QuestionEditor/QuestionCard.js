@@ -28,6 +28,7 @@ import TextPreview from './TextPreview'
 import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
 import QuestionPublicityToggle from '../PublicQuestions/QuestionPublicityToggle'
+import FormikRadioButtons from '../common/FormikRadioButtons'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -89,7 +90,15 @@ const EditActions = ({
 
   return (
     <>
-      <FormikSwitch label={t('public')} name={`${name}.public`} />
+      <FormikRadioButtons
+        name={`${name}.public`}
+        options={[
+          { label: t('common:publicInfo'), value: true },
+          { label: t('common:notPublicInfo'), value: false },
+        ]}
+        valueMapper={(value) => value === 'true'}
+      />
+      <Box mr="4rem" />
       <FormikSwitch label={t('required')} name={`${name}.required`} />
 
       <OrderButtons
@@ -159,10 +168,10 @@ const QuestionCard = ({
             <Chip label={title} variant="outlined" />
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
-            {question.type !== 'TEXT' && (
+            {question.type !== 'TEXT' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
-                disabled={!question.publicityConfigurable || isEditing}
+                disabled={!question.publicityConfigurable}
                 onChange={onPublicityToggle}
               />
             )}
@@ -181,19 +190,18 @@ const QuestionCard = ({
               <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
             </Box>
             <ActionsContainer>
-              {canEdit && (
-                <div>
+              <div
+                style={{ display: 'flex', alignItems: 'end', width: '100%' }}
+              >
+                <Box mr="auto">
                   <Button
-                    style={{ display: 'flex' }}
                     color="primary"
                     onClick={onStopEditing}
                     data-cy="saveQuestion"
                   >
                     {t('questionEditor:done')}
                   </Button>
-                </div>
-              )}
-              <div style={{ display: 'flex' }}>
+                </Box>
                 <EditActions
                   {...orderButtonsProps}
                   onRemove={onRemove}
