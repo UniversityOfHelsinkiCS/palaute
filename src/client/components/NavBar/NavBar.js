@@ -26,7 +26,6 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
-import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
@@ -148,7 +147,6 @@ const NavBar = ({ guest = false }) => {
   })
 
   const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
-  const norppaFeedbackGiven = authorizedUser?.norppaFeedbackGiven ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -328,9 +326,6 @@ const NavBar = ({ guest = false }) => {
             onClose={handleBannerClose}
           />
         ))}
-      {courseSummaryIsAccessible && !norppaFeedbackGiven && (
-        <NorppaFeedbackBanner />
-      )}
     </>
   )
 }
