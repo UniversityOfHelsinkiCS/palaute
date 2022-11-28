@@ -137,9 +137,16 @@ const AccessTab = () => {
         </FormControl>
       </Box>
 
-      {access.map(({ key, name, access }) => (
-        <ProgrammeAccordion key={key} code={key} name={name} access={access} />
-      ))}
+      {access
+        .sort((a, b) => a.name.fi > b.name.fi)
+        .map(({ key, name, access }) => (
+          <ProgrammeAccordion
+            key={key}
+            code={key}
+            name={name}
+            access={access}
+          />
+        ))}
     </Box>
   )
 }
