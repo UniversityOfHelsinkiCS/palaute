@@ -1,4 +1,5 @@
 import apiClient from '../../util/apiClient'
+import { data } from '../../../config/data'
 
 export const getInitialValues = (survey) => {
   const questions = survey?.questions ?? []
@@ -52,4 +53,68 @@ export const handleLoginAs = (user) => () => {
   localStorage.setItem('adminLoggedInAs', id)
   localStorage.setItem('employeenumber', employeeNumber ?? null)
   window.location.reload()
+}
+
+const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+
+const normalizeOrganisationCode = (r) => {
+  if (r.startsWith('T')) {
+    return r.replace('T', '7')
+  }
+  if (!r.includes('_')) {
+    return r
+  }
+
+  const [left, right] = r.split('_')
+  const prefix = [...left].filter(isNumber).join('')
+  const suffix = `${left[0]}${right}`
+  const providercode = `${prefix}0-${suffix}`
+  return providercode
+}
+
+export const getFaculties = () => {
+  const faculties = data.map(({ code, name }) => ({ code, name }))
+
+  return faculties
+}
+
+const getAccessToProgramme = (users, key) => {
+  const usersWithAccessToProgramme = users
+    .map((user) => ({
+      ...user,
+      access: user.access.filter(
+        ({ organisation }) => organisation.code === key,
+      ),
+    }))
+    .filter(({ access }) => access.length)
+
+  return usersWithAccessToProgramme
+}
+
+export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode) => {
+  const faculty = data.find(({ code }) => code === facultyCode)
+
+  const programmes = faculty.programmes.map(({ key, name }) => ({
+    key: normalizeOrganisationCode(key),
+    name,
+  }))
+
+  const programmeCodes = programmes.map(({ key }) => key)
+
+  const usersWithAccessToFaculty = usersWithAccess
+    .map((user) => ({
+      ...user,
+      access: user.access.filter(({ organisation }) =>
+        programmeCodes.includes(organisation.code),
+      ),
+    }))
+    .filter(({ access }) => access.length)
+
+  const programmesWithAccess = programmes.map(({ key, name }) => ({
+    key,
+    name,
+    access: getAccessToProgramme(usersWithAccessToFaculty, key),
+  }))
+
+  return programmesWithAccess
 }
