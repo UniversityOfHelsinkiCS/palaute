@@ -29,26 +29,18 @@ const styles = {
   }),
 }
 
-const Banner = ({ banner, language, canClose = true }) => {
-  const [visible, setVisible] = React.useState(true)
-  return (
-    visible && (
-      <Box width="100vw">
-        <Paper
-          sx={styles.container(banner.data?.color ?? '#fff')}
-          elevation={0}
-        >
-          <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
-          <Button
-            onClick={() => setVisible(!canClose)}
-            sx={styles.close(banner.data?.color ?? '#fff')}
-          >
-            <Close />
-          </Button>
-        </Paper>
-      </Box>
-    )
-  )
-}
+const Banner = ({ banner, language, onClose = () => {}, canClose = true }) => (
+  <Box width="100vw">
+    <Paper sx={styles.container(banner.data?.color ?? '#fff')} elevation={0}>
+      <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
+      <Button
+        onClick={() => onClose(banner.id)}
+        sx={styles.close(banner.data?.color ?? '#fff')}
+      >
+        <Close />
+      </Button>
+    </Paper>
+  </Box>
+)
 
 export default Banner

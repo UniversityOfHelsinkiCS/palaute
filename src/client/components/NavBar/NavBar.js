@@ -12,6 +12,7 @@ import {
   Box,
   Container,
 } from '@mui/material'
+import _ from 'lodash'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -27,8 +28,10 @@ import { handleLogout } from './utils'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import NorppaFeedbackBanner from './NorppaFeedbackBanner'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
+import Banner from '../common/Banner'
 
 const styles = {
   toolbar: {
@@ -124,6 +127,8 @@ const NavBar = ({ guest = false }) => {
   const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
     enabled: !guest,
   })
+  const [seenBannerIds, setSeenBannerIds] =
+    useLocalStorageState('seen-banner-ids')
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -151,6 +156,11 @@ const NavBar = ({ guest = false }) => {
 
   const handleOpenMenu = () => {
     setMenuOpen(true)
+  }
+
+  const handleBannerClose = (id) => {
+    const newIds = _.uniq((seenBannerIds ?? []).concat(id))
+    setSeenBannerIds(newIds)
   }
 
   const fullName = [authorizedUser?.firstName, authorizedUser?.lastName]
@@ -308,6 +318,16 @@ const NavBar = ({ guest = false }) => {
           </Toolbar>
         </Container>
       </AppBar>
+      {authorizedUser?.banners
+        ?.filter((banner) => !seenBannerIds?.includes(banner.id))
+        ?.map((banner) => (
+          <Banner
+            banner={banner}
+            language={i18n.language}
+            key={banner.id}
+            onClose={handleBannerClose}
+          />
+        ))}
       {courseSummaryIsAccessible && !norppaFeedbackGiven && (
         <NorppaFeedbackBanner />
       )}
