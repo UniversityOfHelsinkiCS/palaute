@@ -23,35 +23,53 @@ import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
 import { LoadingProgress } from '../common/LoadingProgress'
 
-const AccessTable = ({ access }) => (
-  <TableContainer>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>Read</TableCell>
-          <TableCell>Write</TableCell>
-          <TableCell>Admin</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {access.map((user) => {
-          const { firstName, lastName, access } = user
-          const { read, write, admin } = access[0].access
+const AccessTable = ({ access }) => {
+  const sortByAccess = ({ access: a }, { access: b }) => {
+    const SORT_VALUES = {
+      read: 1,
+      write: 2,
+      admin: 3,
+    }
 
-          return (
-            <TableRow>
-              <TableCell>{`${firstName} ${lastName}`}</TableCell>
-              <TableCell>{read ? 'true' : 'false'}</TableCell>
-              <TableCell>{write ? 'true' : 'false'}</TableCell>
-              <TableCell>{admin ? 'true' : 'false'}</TableCell>
-            </TableRow>
-          )
-        })}
-      </TableBody>
-    </Table>
-  </TableContainer>
-)
+    a = Object.keys(a[0].access).filter((key) => a[0].access[key])
+    b = Object.keys(b[0].access).filter((key) => b[0].access[key])
+
+    return (
+      b.reduce((sum, b) => sum + SORT_VALUES[b], 0) -
+      a.reduce((sum, a) => sum + SORT_VALUES[a], 0)
+    )
+  }
+
+  return (
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Read</TableCell>
+            <TableCell>Write</TableCell>
+            <TableCell>Admin</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {access.sort(sortByAccess).map((user) => {
+            const { id, firstName, lastName, access } = user
+            const { read, write, admin } = access[0].access
+
+            return (
+              <TableRow key={id}>
+                <TableCell>{`${firstName} ${lastName}`}</TableCell>
+                <TableCell>{read ? 'true' : 'false'}</TableCell>
+                <TableCell>{write ? 'true' : 'false'}</TableCell>
+                <TableCell>{admin ? 'true' : 'false'}</TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
+}
 
 const ProgrammeAccordion = ({ code, name, access }) => (
   <Accordion
@@ -116,7 +134,7 @@ const AccessTab = () => {
       </Box>
 
       {access.map(({ key, name, access }) => (
-        <ProgrammeAccordion code={key} name={name} access={access} />
+        <ProgrammeAccordion key={key} code={key} name={name} access={access} />
       ))}
     </Box>
   )
