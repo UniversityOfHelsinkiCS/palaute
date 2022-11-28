@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
+import useHistoryState from '../../hooks/useHistoryState'
 import { LoadingProgress } from '../common/LoadingProgress'
 
 const AccessTable = ({ access }) => {
@@ -92,8 +93,11 @@ const ProgrammeAccordion = ({ code, name, access }) => (
 )
 
 const AccessTab = () => {
-  const [facultyCode, setFaculty] = useState('H50')
   const [access, setAccess] = useState([])
+  const [facultyCode, setFaculty] = useHistoryState(
+    'organisationAccessFaculty',
+    'All',
+  )
 
   const { t } = useTranslation()
 
@@ -107,7 +111,7 @@ const AccessTab = () => {
       facultyCode,
     )
     setAccess(programmeAccess)
-  }, [facultyCode])
+  }, [facultyCode, isLoading])
 
   if (isLoading) return <LoadingProgress />
 
