@@ -137,7 +137,7 @@ const BannerForm = ({ onSubmit }) => {
   return (
     <div>
       <Button variant="outlined" onClick={() => setOpen(true)}>
-        Open form dialog
+        Create new banner
       </Button>
       <Formik
         onSubmit={async (values) => {
@@ -256,7 +256,7 @@ const BannerView = () => {
               <Banner
                 banner={banner}
                 language={authorizedUser.language}
-                canClose={false}
+                disabled
               />
               <Box display="flex" columnGap={2}>
                 <div>Color: {banner.color}</div>

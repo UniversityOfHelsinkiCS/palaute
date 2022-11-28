@@ -28,9 +28,11 @@ const H4 = (props) => (
   <GutterTypography variant="h6" component="h4" {...props} />
 )
 
+const A = (props) => <Link color="inherit" {...props} />
+
 const defaultComponents = {
   p: GutterTypography,
-  a: Link,
+  a: A,
   h1: H1,
   h2: H2,
   h3: H3,
