@@ -1,25 +1,57 @@
 import React, { useState, useEffect } from 'react'
 import {
   Box,
-  Tabs,
-  Tab,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
+import { useTranslation } from 'react-i18next'
 
+import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
-import {
-  getFaculties,
-  getProgrammeAccessByFaculty,
-  handleLoginAs,
-} from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
 
-import UserAccordion from './UserAccordion'
+const AccessTable = ({ access }) => (
+  <TableContainer>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>Read</TableCell>
+          <TableCell>Write</TableCell>
+          <TableCell>Admin</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {access.map((user) => {
+          const { firstName, lastName, access } = user
+          const { read, write, admin } = access[0].access
+
+          return (
+            <TableRow>
+              <TableCell>{`${firstName} ${lastName}`}</TableCell>
+              <TableCell>{read ? 'true' : 'false'}</TableCell>
+              <TableCell>{write ? 'true' : 'false'}</TableCell>
+              <TableCell>{admin ? 'true' : 'false'}</TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
+  </TableContainer>
+)
 
 const ProgrammeAccordion = ({ code, name, access }) => (
   <Accordion
@@ -36,26 +68,7 @@ const ProgrammeAccordion = ({ code, name, access }) => (
       </Box>
     </AccordionSummary>
     <AccordionDetails>
-      {access.map((user) => (
-        <UserAccordion
-          key={user.employeeNumber}
-          user={user}
-          handleLoginAs={handleLoginAs}
-          decoration={
-            <Box>
-              {user.access.map(({ organisation: org, access }) => (
-                <Tooltip key={org.id} title={org.name.fi}>
-                  <Box fontFamily="monospace" fontSize={14}>
-                    {access.read ? 'r' : '-'}
-                    {access.write ? 'w' : '-'}
-                    {access.admin ? 'a' : '-'}
-                  </Box>
-                </Tooltip>
-              ))}
-            </Box>
-          }
-        />
-      ))}
+      <AccessTable access={access} />
     </AccordionDetails>
   </Accordion>
 )
@@ -63,6 +76,8 @@ const ProgrammeAccordion = ({ code, name, access }) => (
 const AccessTab = () => {
   const [facultyCode, setFaculty] = useState('H50')
   const [access, setAccess] = useState([])
+
+  const { t } = useTranslation()
 
   const { usersWithAccess, isLoading } = getAllUserAccess()
 
@@ -82,11 +97,24 @@ const AccessTab = () => {
 
   return (
     <Box>
-      <Tabs value={facultyCode} onChange={(_, value) => setFaculty(value)}>
-        {faculties.map(({ code, name }) => (
-          <Tab key={code} value={code} label={name.fi} />
-        ))}
-      </Tabs>
+      <Box mt={2} mb={2} width={400}>
+        <FormControl fullWidth>
+          <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
+          <Select
+            value={facultyCode}
+            onChange={({ target }) => setFaculty(target.value)}
+            label="Tiedekunta"
+          >
+            <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
+            {faculties.map((faculty) => (
+              <MenuItem key={faculty.code} value={faculty.code}>
+                {faculty.name.fi}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+
       {access.map(({ key, name, access }) => (
         <ProgrammeAccordion code={key} name={name} access={access} />
       ))}

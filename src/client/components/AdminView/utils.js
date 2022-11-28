@@ -94,10 +94,14 @@ const getAccessToProgramme = (users, key) => {
 export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode) => {
   const faculty = data.find(({ code }) => code === facultyCode)
 
-  const programmes = faculty.programmes.map(({ key, name }) => ({
-    key: normalizeOrganisationCode(key),
-    name,
-  }))
+  const programmes = faculty
+    ? faculty.programmes.map(({ key, name }) => ({
+        key: normalizeOrganisationCode(key),
+        name,
+      }))
+    : data
+        .flatMap(({ programmes }) => programmes)
+        .map(({ key, name }) => ({ name, key: normalizeOrganisationCode(key) }))
 
   const programmeCodes = programmes.map(({ key }) => key)
 
