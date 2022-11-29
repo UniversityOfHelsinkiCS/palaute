@@ -18,6 +18,7 @@ import {
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
 
 import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
@@ -50,11 +51,12 @@ const AccessTable = ({ access }) => {
             <TableCell>Read</TableCell>
             <TableCell>Write</TableCell>
             <TableCell>Admin</TableCell>
+            <TableCell>Last login</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {access.sort(sortByAccess).map((user) => {
-            const { id, firstName, lastName, access } = user
+            const { id, firstName, lastName, access, lastLoggedIn } = user
             const { read, write, admin } = access[0].access
 
             return (
@@ -63,6 +65,11 @@ const AccessTable = ({ access }) => {
                 <TableCell>{read ? 'true' : 'false'}</TableCell>
                 <TableCell>{write ? 'true' : 'false'}</TableCell>
                 <TableCell>{admin ? 'true' : 'false'}</TableCell>
+                <TableCell>
+                  {lastLoggedIn
+                    ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy HH.mm')
+                    : 'Not since 10.6.22'}
+                </TableCell>
               </TableRow>
             )
           })}
