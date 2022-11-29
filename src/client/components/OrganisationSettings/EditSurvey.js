@@ -107,10 +107,8 @@ const EditSurvey = () => {
         </Alert>
       </Box>
       <PublicQuestions
-        type="organisations"
-        target={{
+        organisation={{
           id: organisation.code,
-          feedbackVisibility: null,
           publicQuestionIds,
           questions: allQuestions,
           publicityConfigurableQuestionIds,

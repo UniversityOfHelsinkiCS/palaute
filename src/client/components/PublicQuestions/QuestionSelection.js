@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react'
-
 import {
   List,
   ListItem,
@@ -7,7 +6,6 @@ import {
   ListItemText,
   Switch,
 } from '@mui/material'
-
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
@@ -30,8 +28,8 @@ const getQuestionItems = (target) => {
     }))
 }
 
-const updatePublicQuestionIds = async ({ resource, id, publicQuestionIds }) => {
-  const { data } = await apiClient.put(`/${resource}/${id}`, {
+const updatePublicQuestionIds = async ({ id, publicQuestionIds }) => {
+  const { data } = await apiClient.put(`/organisations/${id}`, {
     publicQuestionIds,
   })
 
@@ -60,16 +58,19 @@ const QuestionItem = ({ id, label, checked, onChange, disabled }) => {
   )
 }
 
-const QuestionSelection = ({ resource, target, visibility }) => {
+const QuestionSelection = ({ organisation }) => {
   const { t } = useTranslation()
   const mutation = useMutation(updatePublicQuestionIds)
   const { enqueueSnackbar } = useSnackbar()
 
   const [publicQuestionIds, setPublicQuestionIds] = useState(
-    target.publicQuestionIds ?? [],
+    organisation.publicQuestionIds ?? [],
   )
 
-  const questionItems = useMemo(() => getQuestionItems(target), [target])
+  const questionItems = useMemo(
+    () => getQuestionItems(organisation),
+    [organisation],
+  )
 
   const makeOnToggle = (id) => async () => {
     const checked = publicQuestionIds.includes(id)
@@ -80,8 +81,7 @@ const QuestionSelection = ({ resource, target, visibility }) => {
 
     try {
       await mutation.mutateAsync({
-        resource,
-        id: target.id,
+        id: organisation.id,
         publicQuestionIds: updatedQuestionIds,
       })
 
@@ -101,7 +101,7 @@ const QuestionSelection = ({ resource, target, visibility }) => {
           key={q.id}
           checked={publicQuestionIds.includes(q.id)}
           onChange={makeOnToggle(q.id, publicQuestionIds, setPublicQuestionIds)}
-          disabled={q.disabled || visibility === 'NONE' || mutation.isLoading}
+          disabled={q.disabled || mutation.isLoading}
         />
       ))}
     </List>

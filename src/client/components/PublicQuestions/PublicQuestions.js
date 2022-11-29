@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from 'react'
-
+import React from 'react'
 import { Card, CardContent, Box, Typography, Alert } from '@mui/material'
-
 import { Redirect } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 
 import QuestionSelection from './QuestionSelection'
-import PublicitySelection from './PublicitySelection'
 
-const PublicQuestions = ({ type = 'feedback-targets', target }) => {
-  const [visibility, setVisibility] = useState('ALL')
+const PublicQuestions = ({ organisation }) => {
   const { t } = useTranslation()
 
-  useEffect(() => {
-    setVisibility(target.feedbackVisibility)
-  }, [])
-
-  if (!target) {
+  if (!organisation) {
     return <Redirect to="/" />
   }
 
@@ -35,17 +27,7 @@ const PublicQuestions = ({ type = 'feedback-targets', target }) => {
               </Trans>
             </Alert>
           </Box>
-          {target.feedbackVisibility && (
-            <PublicitySelection
-              visibility={visibility}
-              setVisibility={setVisibility}
-            />
-          )}
-          <QuestionSelection
-            resource={type}
-            target={target}
-            visibility={visibility}
-          />
+          <QuestionSelection organisation={organisation} />
         </CardContent>
       </Card>
     </Box>
