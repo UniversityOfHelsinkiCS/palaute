@@ -72,22 +72,10 @@ const componentByType = {
   OPEN: OpenResults,
 }
 
-const QuestionItem = ({
-  question,
-  isTeacher,
-  selectPublicQuestionsLink,
-  isPublic,
-  sx,
-}) => {
+const QuestionItem = ({ question, isTeacher, isPublic, sx }) => {
   const Component = componentByType[question.type]
 
   const content = Component ? <Component question={question} /> : null
-
-  const selectLink = (
-    <AlertLink component={Link} to={selectPublicQuestionsLink}>
-      Select public questions
-    </AlertLink>
-  )
 
   return (
     <Card sx={sx}>
@@ -98,12 +86,10 @@ const QuestionItem = ({
               {isPublic ? (
                 <Trans i18nKey="questionResults:publicInfo">
                   The results from this question are visibile to students.{' '}
-                  {selectLink}
                 </Trans>
               ) : (
                 <Trans i18nKey="questionResults:notPublicInfo">
                   The results from this question are not visibile to students.{' '}
-                  {selectLink}
                 </Trans>
               )}
             </Alert>
@@ -163,7 +149,6 @@ const QuestionResults = ({
   questions,
   feedbacks,
   isTeacher,
-  selectPublicQuestionsLink,
   organisationAccess,
 }) => {
   const questionsWithFeedbacks = useMemo(
@@ -192,7 +177,6 @@ const QuestionResults = ({
             question={q}
             isPublic={publicQuestionIds.includes(q.id)}
             isTeacher={isTeacher}
-            selectPublicQuestionsLink={selectPublicQuestionsLink}
             sx={styles.openQuestionItem}
           />
         ))}
@@ -207,7 +191,6 @@ const QuestionResults = ({
               question={q}
               isPublic={publicQuestionIds.includes(q.id)}
               isTeacher={isTeacher}
-              selectPublicQuestionsLink={selectPublicQuestionsLink}
             />
           </Grid>
         ))}

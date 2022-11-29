@@ -114,7 +114,6 @@ const FeedbackTargetResultsView = () => {
         <Box>
           <QuestionResults
             publicQuestionIds={publicQuestionIds ?? []}
-            selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
             questions={questions}
             feedbacks={feedbacks}
             isTeacher={false}

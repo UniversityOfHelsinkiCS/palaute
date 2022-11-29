@@ -214,10 +214,9 @@ export default {
   questionResults: {
     answerCount: 'Vastausten määrä',
     answerOption: 'Vastausvaihtoehto',
-    publicInfo:
-      'Tämän kysymyksen tulokset ovat julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
+    publicInfo: 'Tämän kysymyksen tulokset ovat julkisia opiskelijoille.',
     notPublicInfo:
-      'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille. <2>Valitse julkiset kysymykset</2>',
+      'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille.',
     publicityOfQuestions:
       'Näiden kysymysten tulokset eivät ole julkisia opiskelijoille',
     moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',

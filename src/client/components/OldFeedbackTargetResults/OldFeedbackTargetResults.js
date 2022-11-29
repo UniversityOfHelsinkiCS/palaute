@@ -96,7 +96,6 @@ const OldFeedbackTargetResultsView = () => {
       {feedbacks.length !== 0 && (
         <QuestionResults
           publicQuestionIds={publicQuestionIds ?? []}
-          selectPublicQuestionsLink={`/targets/${feedbackTarget.id}/settings`}
           questions={questions}
           feedbacks={feedbacks}
           isTeacher={isTeacher}
