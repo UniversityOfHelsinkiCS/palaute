@@ -9,9 +9,10 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../util/dbConnection')
 
-const checkAccess = async (user, code) => {
+const checkAccess = async (user, code, level = 'read') => {
   const orgAccess = await user.getOrganisationAccess()
-  if (!orgAccess.find((oac) => oac.organisation.code === code)?.access?.write) {
+  const relevantOrg = orgAccess.find((oac) => oac.organisation.code === code)
+  if (!relevantOrg || !relevantOrg.access[level]) {
     throw new ApplicationError('You dont have the required rights', 403)
   }
 }
