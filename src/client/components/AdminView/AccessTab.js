@@ -15,6 +15,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
@@ -24,8 +26,9 @@ import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
 import useHistoryState from '../../hooks/useHistoryState'
 import { LoadingProgress } from '../common/LoadingProgress'
+import { ADMINS } from '../../../config'
 
-const AccessTable = ({ access }) => {
+const AccessTable = ({ access, filterAdmins }) => {
   const sortByAccess = ({ access: a }, { access: b }) => {
     const SORT_VALUES = {
       read: 1,
@@ -41,6 +44,9 @@ const AccessTable = ({ access }) => {
       a.reduce((sum, a) => sum + SORT_VALUES[a], 0)
     )
   }
+
+  if (filterAdmins)
+    access = access.filter(({ username }) => !ADMINS.includes(username))
 
   return (
     <TableContainer>
@@ -79,7 +85,7 @@ const AccessTable = ({ access }) => {
   )
 }
 
-const ProgrammeAccordion = ({ code, name, access }) => (
+const ProgrammeAccordion = ({ code, name, access, filterAdmins }) => (
   <Accordion
     key={code}
     TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
@@ -94,13 +100,14 @@ const ProgrammeAccordion = ({ code, name, access }) => (
       </Box>
     </AccordionSummary>
     <AccordionDetails>
-      <AccessTable access={access} />
+      <AccessTable access={access} filterAdmins={filterAdmins} />
     </AccordionDetails>
   </Accordion>
 )
 
 const AccessTab = () => {
   const [access, setAccess] = useState([])
+  const [filterAdmins, setFilterAdmins] = useState(true)
   const [facultyCode, setFaculty] = useHistoryState(
     'organisationAccessFaculty',
     'All',
@@ -126,22 +133,34 @@ const AccessTab = () => {
 
   return (
     <Box>
-      <Box mt={2} mb={2} width={400}>
-        <FormControl fullWidth>
-          <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
-          <Select
-            value={facultyCode}
-            onChange={({ target }) => setFaculty(target.value)}
-            label="Tiedekunta"
-          >
-            <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
-            {faculties.map((faculty) => (
-              <MenuItem key={faculty.code} value={faculty.code}>
-                {faculty.name.fi}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <Box mt={2} mb={2} display="flex" flexDirection="row">
+        <Box width={400} mr={2}>
+          <FormControl fullWidth>
+            <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
+            <Select
+              value={facultyCode}
+              onChange={({ target }) => setFaculty(target.value)}
+              label="Tiedekunta"
+            >
+              <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
+              {faculties.map((faculty) => (
+                <MenuItem key={faculty.code} value={faculty.code}>
+                  {faculty.name.fi}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={filterAdmins}
+              onClick={() => setFilterAdmins(!filterAdmins)}
+            />
+          }
+          label="Filter Norppa admins"
+        />
       </Box>
 
       {access
@@ -152,6 +171,7 @@ const AccessTab = () => {
             code={key}
             name={name}
             access={access}
+            filterAdmins={filterAdmins}
           />
         ))}
     </Box>
