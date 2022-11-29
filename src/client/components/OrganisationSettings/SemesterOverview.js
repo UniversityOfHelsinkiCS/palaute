@@ -19,6 +19,7 @@ import {
   Switch,
   IconButton,
   Paper,
+  Tooltip,
 } from '@mui/material'
 import {
   ArrowDropDown,
@@ -401,7 +402,8 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
             <Box py={0.5}>
               <FeedbackTargetItem
                 code={fbt.courseUnit.courseCode}
-                name={fbt.courseUnit.name}
+                cuName={fbt.courseUnit.name}
+                curName={fbt.courseRealisation.name}
                 tags={fbt.courseRealisation.tags}
                 language={language}
               />
@@ -467,7 +469,8 @@ const SideDrawer = ({
 
 const FeedbackTargetButton = ({
   code,
-  name,
+  cuName,
+  curName,
   tags,
   onClick,
   selected,
@@ -490,7 +493,8 @@ const FeedbackTargetButton = ({
     >
       <FeedbackTargetItem
         code={code}
-        name={name}
+        cuName={cuName}
+        curName={curName}
         tags={tags}
         language={language}
       />
@@ -498,16 +502,30 @@ const FeedbackTargetButton = ({
   </Box>
 )
 
-const FeedbackTargetItem = ({ code, name, tags, language }) => (
-  <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
-    <Typography color="textSecondary">{code}</Typography>
-    <Box mr="0.5rem" />
-    <Typography fontWeight={350}>{getLanguageValue(name, language)}</Typography>
-    <Box mr="0.3rem" />
-    {tags.map((tag) => (
-      <TagChip key={tag.id} tag={tag} language={language} compact />
-    ))}
-  </Box>
+const FeedbackTargetItem = ({ code, cuName, curName, tags, language }) => (
+  <Tooltip
+    title={getLanguageValue(curName, language)}
+    placement="top"
+    disableInteractive
+  >
+    <Box
+      m="0.3rem"
+      mx="0.6rem"
+      fontSize="16px"
+      display="flex"
+      alignItems="start"
+    >
+      <Typography color="textSecondary">{code}</Typography>
+      <Box mr="0.5rem" />
+      <Typography fontWeight={350}>
+        {getLanguageValue(cuName, language)}
+      </Typography>
+      <Box mr="0.3rem" />
+      {tags.map((tag) => (
+        <TagChip key={tag.id} tag={tag} language={language} compact />
+      ))}
+    </Box>
+  </Tooltip>
 )
 
 const Filters = ({ onChange, value, t, language, organisation }) => {
@@ -738,7 +756,8 @@ const SemesterOverview = ({ organisation }) => {
                                 key={fbt.id}
                                 code={fbt.courseUnit.courseCode}
                                 tags={fbt.courseRealisation.tags}
-                                name={fbt.courseUnit.name}
+                                cuName={fbt.courseUnit.name}
+                                curName={fbt.courseRealisation.name}
                                 onClick={() =>
                                   editMode
                                     ? toggleSelection(fbt)
@@ -768,7 +787,8 @@ const SemesterOverview = ({ organisation }) => {
                 <FeedbackTargetButton
                   code={fbt.courseUnit.courseCode}
                   tags={fbt.courseRealisation.tags}
-                  name={fbt.courseUnit.name}
+                  cuName={fbt.courseUnit.name}
+                  curName={fbt.courseRealisation.name}
                   onClick={() =>
                     editMode ? toggleSelection(fbt) : setOpened(fbt)
                   }
