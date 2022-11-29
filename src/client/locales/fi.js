@@ -62,8 +62,9 @@ export default {
     public: 'Julkinen',
     notPublic: 'Ei julkinen',
     changePublicity: 'Muuta näkyvyyttä',
-    notPublicInfo: 'Näkyy vain kurssin opettajille ja ohjelman hallinnoijille',
-    publicInfo: 'Näkyy ilmoittautuneille opiskelijoille',
+    notPublicInfo:
+      'Vastaukset näkyvät vain kurssin opettajille ja ohjelman hallinnoijille',
+    publicInfo: 'Vastaukset näkyvät ilmoittautuneille opiskelijoille',
     mobileNotSupported: 'Tämä näkymä ei tue mobiililaitteita.',
     studyTracks: 'Opintosuunnat',
     currentlySelected: 'Valittuna',

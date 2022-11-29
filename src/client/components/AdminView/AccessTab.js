@@ -73,7 +73,7 @@ const AccessTable = ({ access, filterAdmins }) => {
                 <TableCell>{admin ? 'true' : 'false'}</TableCell>
                 <TableCell>
                   {lastLoggedIn
-                    ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy HH.mm')
+                    ? format(Date.parse(lastLoggedIn), 'dd/MM/yyyy HH.mm')
                     : 'Not since 10.6.22'}
                 </TableCell>
               </TableRow>
