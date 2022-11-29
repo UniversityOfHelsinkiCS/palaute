@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
-
-import { Divider, Box, Button, Alert } from '@mui/material'
-
+import {
+  Divider,
+  Box,
+  Button,
+  Alert,
+  Card,
+  CardContent,
+  Typography,
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -181,49 +187,56 @@ const EditFeedbackTarget = () => {
   const questionsInitialValues = getQuestionsInitialValues(feedbackTarget)
 
   const organisationNames = getOrganisationNames(feedbackTarget, language)
+
   return (
-    <>
-      {upperLevelQuestions.length > 0 && (
-        <Box mb={2}>
-          <Alert severity="info">
-            {organisationNames.primaryOrganisation
-              ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
-                  count: upperLevelQuestions.length,
-                  primaryOrganisation: organisationNames.primaryOrganisation,
-                })
-              : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
-                  count: upperLevelQuestions.length,
-                  organisations: organisationNames.allOrganisations,
-                })}
-          </Alert>
-        </Box>
-      )}
+    <Card>
+      <CardContent>
+        <Typography mb={4} variant="h6">
+          {t('feedbackTargetView:editSurveyTab')}
+        </Typography>
 
-      <Formik
-        initialValues={questionsInitialValues}
-        enableReinitialize
-        validateOnChange={false}
-      >
-        {() => (
-          <QuestionEditorContainer
-            onSave={handleSaveQuestions}
-            language={language}
-            feedbackTarget={feedbackTarget}
-          />
+        {upperLevelQuestions.length > 0 && (
+          <Box mb={2}>
+            <Alert severity="info">
+              {organisationNames.primaryOrganisation
+                ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
+                    count: upperLevelQuestions.length,
+                    primaryOrganisation: organisationNames.primaryOrganisation,
+                  })
+                : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
+                    count: upperLevelQuestions.length,
+                    organisations: organisationNames.allOrganisations,
+                  })}
+            </Alert>
+          </Box>
         )}
-      </Formik>
 
-      <Divider sx={styles.toolbarDivider} />
+        <Formik
+          initialValues={questionsInitialValues}
+          enableReinitialize
+          validateOnChange={false}
+        >
+          {() => (
+            <QuestionEditorContainer
+              onSave={handleSaveQuestions}
+              language={language}
+              feedbackTarget={feedbackTarget}
+            />
+          )}
+        </Formik>
 
-      <Toolbar
-        onSave={() => {}}
-        previewLink={`/targets/${id}/feedback`}
-        language={language}
-        onLanguageChange={(newLanguage) => {
-          i18n.changeLanguage(newLanguage)
-        }}
-      />
-    </>
+        <Divider sx={styles.toolbarDivider} />
+
+        <Toolbar
+          onSave={() => {}}
+          previewLink={`/targets/${id}/feedback`}
+          language={language}
+          onLanguageChange={(newLanguage) => {
+            i18n.changeLanguage(newLanguage)
+          }}
+        />
+      </CardContent>
+    </Card>
   )
 }
 

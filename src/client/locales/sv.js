@@ -445,7 +445,7 @@ export default {
     // teachers: 'Teachers',
     responsibleTeachers: 'Ansvariga lärare',
     shareTab: 'Dela förfrågan',
-    surveySettingsTab: 'Förfrågans inställningar',
+    // surveySettingsTab: 'Survey editing',
     // activateContinuousFeedback: 'Activate continuous feedback for the course',
     // activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     // continuousFeedbackGiven: 'Continuous feedback given',

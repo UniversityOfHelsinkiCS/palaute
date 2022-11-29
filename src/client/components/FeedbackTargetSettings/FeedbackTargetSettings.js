@@ -1,8 +1,9 @@
 import { useSnackbar } from 'notistack'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from 'react-query'
 import { useHistory, useParams } from 'react-router'
+
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 import {
@@ -12,10 +13,10 @@ import {
   saveFeedbackPeriodValues,
 } from './utils'
 import { LoadingProgress } from '../common/LoadingProgress'
-import PublicQuestions from '../PublicQuestions'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
-
+import PublicitySelection from './PublicitySelection'
+import EditFeedbackTarget from '../EditFeedbackTarget'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 
 const FeedbackTargetSettings = () => {
@@ -46,6 +47,10 @@ const FeedbackTargetSettings = () => {
   if (isLoading) {
     return <LoadingProgress />
   }
+
+  const [visibility, setVisibility] = useState(
+    feedbackTarget.feedbackVisibility,
+  )
 
   const handleOpenFeedbackImmediately = async () => {
     try {
@@ -84,8 +89,12 @@ const FeedbackTargetSettings = () => {
         onOpenImmediately={handleOpenFeedbackImmediately}
         feedbackTarget={feedbackTarget}
       />
-      <PublicQuestions target={feedbackTarget} type="feedback-targets" />
       <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
+      <PublicitySelection
+        visibility={visibility}
+        setVisibility={setVisibility}
+      />
+      <EditFeedbackTarget />
     </>
   )
 }

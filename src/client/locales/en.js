@@ -442,7 +442,7 @@ export default {
     teachers: 'Teachers',
     responsibleTeachers: 'Responsible teachers',
     shareTab: 'Share survey',
-    surveySettingsTab: 'Survey settings',
+    surveySettingsTab: 'Survey editing',
     activateContinuousFeedback: 'Activate continuous feedback for the course',
     activateContinuousFeedbackDigest:
       'Send a daily email digest about new continuous feedback',

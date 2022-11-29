@@ -29,12 +29,10 @@ import {
   LiveHelpOutlined,
   PeopleOutlined,
   PollOutlined,
-  SettingsOutlined,
   ShareOutlined,
   ReviewsOutlined,
 } from '@mui/icons-material'
 
-import EditFeedbackTarget from '../EditFeedbackTarget'
 import FeedbackTargetResults from '../FeedbackTargetResults'
 import FeedbackView from '../FeedbackView'
 import StudentsWithFeedback from '../StudentsWithFeedback'
@@ -269,8 +267,6 @@ const FeedbackTargetView = () => {
     feedback ||
     isEnded
   const showContinuousFeedbackTab = continuousFeedbackEnabled
-  const showEditSurveyTab =
-    isAdmin || ((isOrganisationAdmin || isTeacher) && !isOpen && !isEnded)
   const showEditFeedbackResponseTab =
     (isOrganisationAdmin || isTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab =
@@ -533,12 +529,12 @@ const FeedbackTargetView = () => {
               badge={!feedbackResponseEmailSent}
             />
           )}
-          {showEditSurveyTab && (
+          {showSettingsTab && (
             <RouterTab
               icon={<EditOutlined />}
-              label={t('feedbackTargetView:editSurveyTab')}
+              label={t('feedbackTargetView:surveySettingsTab')}
               to={`${url}/edit`}
-              data-cy="giveCounterFeedback"
+              badge={!settingsReadByTeacher}
             />
           )}
           {showLinksTab && (
@@ -546,14 +542,6 @@ const FeedbackTargetView = () => {
               icon={<ShareOutlined />}
               label={t('feedbackTargetView:shareTab')}
               to={`${url}/share`}
-            />
-          )}
-          {showSettingsTab && (
-            <RouterTab
-              icon={<SettingsOutlined />}
-              label={t('feedbackTargetView:surveySettingsTab')}
-              to={`${url}/settings`}
-              badge={!settingsReadByTeacher}
             />
           )}
           {showStudentsWithFeedbackTab && (
@@ -581,7 +569,7 @@ const FeedbackTargetView = () => {
       </Box>
 
       <Switch>
-        <Route path={`${path}/edit`} component={EditFeedbackTarget} />
+        <Route path={`${path}/edit`} component={FeedbackTargetSettings} />
         <Route path={`${path}/results`} component={FeedbackTargetResults} />
         <Route path={`${path}/feedback`} component={FeedbackView} />
         <Route
@@ -598,7 +586,6 @@ const FeedbackTargetView = () => {
           path={`${path}/edit-feedback-response`}
           component={EditFeedbackResponse}
         />
-        <Route path={`${path}/settings`} component={FeedbackTargetSettings} />
         <Route path={`${path}/logs`} component={FeedbackTargetLogs} />
         <Redirect to={`${path}/feedback`} />
       </Switch>

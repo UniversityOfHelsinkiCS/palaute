@@ -445,7 +445,7 @@ export default {
     teachers: 'Opettajat',
     responsibleTeachers: 'Vastuuopettajat',
     shareTab: 'Jaa kysely',
-    surveySettingsTab: 'Kyselyn asetukset',
+    surveySettingsTab: 'Kyselyn muokkaus',
     activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',
     activateContinuousFeedbackDigest:
       'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
