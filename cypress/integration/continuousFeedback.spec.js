@@ -4,7 +4,7 @@ describe('Continuous feedback', () => {
   it('Teacher can set continuous feedback active', () => {
     cy.setUpSecondaryTeacherView()
     cy.loginAsSecondaryTeacher()
-    cy.visit(`${baseUrl}/targets/163/settings`)
+    cy.visit(`${baseUrl}/targets/163/edit`)
 
     cy.get('[data-cy=activateContinuousFeedback]').click()
 
