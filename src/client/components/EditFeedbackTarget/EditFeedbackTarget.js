@@ -158,12 +158,11 @@ const EditFeedbackTarget = () => {
     return <LoadingProgress />
   }
 
-  if (!feedbackTarget) {
-    return <Redirect to="/" />
-  }
-
-  if (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser) {
-    return <Redirect to={`/targets/${id}/feedback`} />
+  if (
+    !feedbackTarget ||
+    (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser)
+  ) {
+    return null
   }
 
   const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(
