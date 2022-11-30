@@ -15,7 +15,7 @@ const mangleData = async (url, limit, handler) => {
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const start = new Date()
   let requestStart = null
-  let loopStart = null
+  let loopStart = Date.now()
 
   let offset = 0
   let count = 0

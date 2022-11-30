@@ -18,6 +18,7 @@ const {
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 const { sequelize } = require('../util/dbConnection')
+const { safeBulkCreate } = require('./util')
 
 const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-lab',
@@ -102,48 +103,44 @@ const createCourseUnits = async (courseUnits) => {
       validityPeriod,
     }))
 
-  await CourseUnit.bulkCreate(filteredCourseUnits, {
-    updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
+  await safeBulkCreate({
+    entityName: 'CourseUnit',
+    entities: filteredCourseUnits,
+    bulkCreate: async (entities) =>
+      CourseUnit.bulkCreate(entities, {
+        updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
+      }),
+    fallbackCreate: async (entity) =>
+      CourseUnit.create(entity, {
+        updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
+      }),
   })
 
-  const courseUnitsOrganisations = [].concat(
-    ...courseUnits
-      .filter(({ code }) => !code.startsWith('AY'))
-      .map(({ id: courseUnitId, organisations }) =>
-        organisations
-          .filter(({ share }) => share !== 0)
-          .sort((a, b) => b.share - a.share)
-          .map(({ organisationId }, index) => ({
-            type: index === 0 ? 'PRIMARY' : 'DIRECT',
-            courseUnitId,
-            organisationId,
-          })),
-      ),
-  )
-
-  try {
-    await CourseUnitsOrganisation.bulkCreate(courseUnitsOrganisations, {
-      ignoreDuplicates: true,
-    })
-  } catch (error) {
-    Sentry.captureException(error)
-    logger.error(
-      '[UPDATER] CourseUnitsOrganisation.bulkCreate failed, reason: ',
-      error,
+  const courseUnitsOrganisations = courseUnits
+    .filter(({ code }) => !code.startsWith('AY'))
+    .flatMap(({ id: courseUnitId, organisations }) =>
+      organisations
+        .filter(({ share, organisationId }) => share !== 0 && organisationId)
+        .sort((a, b) => b.share - a.share)
+        .map(({ organisationId }, index) => ({
+          type: index === 0 ? 'PRIMARY' : 'DIRECT',
+          courseUnitId,
+          organisationId,
+        })),
     )
-    logger.info('[UPDATER] Creating CourseUnitsOrganisations one by one')
-    for (const cuo of courseUnitsOrganisations) {
-      try {
-        await CourseUnitsOrganisation.create(cuo, { ignoreDuplicates: true })
-      } catch (error) {
-        Sentry.captureException(error)
-        logger.error(
-          '[UPDATER] Could not create CourseUnitsOrganisation, reason: ',
-          error,
-        )
-      }
-    }
-  }
+
+  await safeBulkCreate({
+    entityName: 'CourseUnitsOrganisation',
+    entities: courseUnitsOrganisations,
+    bulkCreate: async (entities) =>
+      CourseUnitsOrganisation.bulkCreate(entities, {
+        ignoreDuplicates: true,
+      }),
+    fallbackCreate: async (entity) =>
+      CourseUnitsOrganisation.create(entity, {
+        ignoreDuplicates: true,
+      }),
+  })
 
   const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
   const openCourseUnitsOrganisations = []
@@ -586,6 +583,9 @@ const openCourseUnitHandler = async (courseRealisations) => {
   )
 }
 
+// default 1000, set to 10 for example when debugging
+const SPEED = 1000
+
 const updateCoursesAndTeacherFeedbackTargets = async () => {
   // This will become absolute mayhem because of open uni.
   // What we have to do
@@ -595,14 +595,17 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   // 2. Go through all open course_units
   // 3. Go through all course_units and only then create realisations.
   // For each batch we ignore courses where code matches "[0-9]+" or "AY[0-9]+".
+
+  // HOW ITS DONE HERE SUCKS LOL. Everything is fetched 3 times, literally torturing importer. FIX PLS
+
   await mangleData(
     'course_unit_realisations_with_course_units',
-    1000,
+    SPEED,
     courseUnitHandler,
   )
   await mangleData(
     'course_unit_realisations_with_course_units',
-    1000,
+    SPEED,
     openCourseUnitHandler,
   )
 
@@ -616,7 +619,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
 
   await mangleData(
     'course_unit_realisations_with_course_units',
-    1000,
+    SPEED,
     coursesHandler,
   )
 }
