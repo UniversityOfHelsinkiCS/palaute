@@ -121,9 +121,29 @@ const createCourseUnits = async (courseUnits) => {
       ),
   )
 
-  await CourseUnitsOrganisation.bulkCreate(courseUnitsOrganisations, {
-    ignoreDuplicates: true,
-  })
+  try {
+    await CourseUnitsOrganisation.bulkCreate(courseUnitsOrganisations, {
+      ignoreDuplicates: true,
+    })
+  } catch (error) {
+    Sentry.captureException(error)
+    logger.error(
+      '[UPDATER] CourseUnitsOrganisation.bulkCreate failed, reason: ',
+      error,
+    )
+    logger.info('[UPDATER] Creating CourseUnitsOrganisations one by one')
+    for (const cuo of courseUnitsOrganisations) {
+      try {
+        await CourseUnitsOrganisation.create(cuo, { ignoreDuplicates: true })
+      } catch (error) {
+        Sentry.captureException(error)
+        logger.error(
+          '[UPDATER] Could not create CourseUnitsOrganisation, reason: ',
+          error,
+        )
+      }
+    }
+  }
 
   const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
   const openCourseUnitsOrganisations = []
