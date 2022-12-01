@@ -82,6 +82,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     accessStatus === 'RESPONSIBLE_TEACHER' ||
     userOrganisationAdmin
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const enoughFeedbacks = feedbacks?.length > 4 // backend should send 0 when less than 5, but sanity checking
 
   const saveLegacySetting = (value) => {
     setUseLegacy(value)
@@ -134,14 +135,14 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {feedbacks.length === 0 &&
+        {!enoughFeedbacks &&
           (feedbackVisible ? (
             <NotEnoughFeedbacks t={t} />
           ) : (
             <OnlyForEnrolled t={t} />
           ))}
 
-        {feedbacks.length > 0 &&
+        {enoughFeedbacks &&
           (useLegacy ? (
             <Box my="3rem">
               <OldFeedbackTargetResults />
