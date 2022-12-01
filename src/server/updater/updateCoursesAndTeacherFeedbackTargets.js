@@ -1,4 +1,3 @@
-const Sentry = require('@sentry/node')
 const dateFns = require('date-fns')
 const { parseFromTimeZone } = require('date-fns-timezone')
 const { Op } = require('sequelize')
@@ -59,7 +58,6 @@ const combineStudyGroupName = (firstPart, secondPart) => ({
     firstPart.sv && secondPart.sv ? `${firstPart.sv}: ${secondPart.sv}` : null,
 })
 
-// eslint-disable-next-line no-unused-vars
 const findMatchingCourseUnit = async (course) => {
   try {
     const nonOpenCourse = await CourseUnit.findOne({
@@ -106,14 +104,11 @@ const createCourseUnits = async (courseUnits) => {
   await safeBulkCreate({
     entityName: 'CourseUnit',
     entities: filteredCourseUnits,
-    bulkCreate: async (entities) =>
-      CourseUnit.bulkCreate(entities, {
-        updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
-      }),
-    fallbackCreate: async (entity) =>
-      CourseUnit.create(entity, {
-        updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
-      }),
+    bulkCreate: async (e, opt) => CourseUnit.bulkCreate(e, opt),
+    fallbackCreate: async (e, opt) => CourseUnit.create(e, opt),
+    options: {
+      updateOnDuplicate: ['name', 'courseCode', 'validityPeriod'],
+    },
   })
 
   const courseUnitsOrganisations = courseUnits
@@ -132,14 +127,11 @@ const createCourseUnits = async (courseUnits) => {
   await safeBulkCreate({
     entityName: 'CourseUnitsOrganisation',
     entities: courseUnitsOrganisations,
-    bulkCreate: async (entities) =>
-      CourseUnitsOrganisation.bulkCreate(entities, {
-        ignoreDuplicates: true,
-      }),
-    fallbackCreate: async (entity) =>
-      CourseUnitsOrganisation.create(entity, {
-        ignoreDuplicates: true,
-      }),
+    bulkCreate: async (entities, opt) =>
+      CourseUnitsOrganisation.bulkCreate(entities, opt),
+    fallbackCreate: async (entity, opt) =>
+      CourseUnitsOrganisation.create(entity, opt),
+    options: { ignoreDuplicates: true },
   })
 
   const openUniCourses = courseUnits.filter(({ code }) => code.startsWith('AY'))
@@ -182,8 +174,14 @@ const createCourseUnits = async (courseUnits) => {
     }
   }, Promise.resolve())
 
-  await CourseUnitsOrganisation.bulkCreate(openCourseUnitsOrganisations, {
-    ignoreDuplicates: true,
+  await safeBulkCreate({
+    entityName: 'CourseUnitOrganisation',
+    entities: openCourseUnitsOrganisations,
+    bulkCreate: async (entities, opt) =>
+      CourseUnitsOrganisation.bulkCreate(entities, opt),
+    fallbackCreate: async (entity, opt) =>
+      CourseUnitsOrganisation.create(entity, opt),
+    options: { ignoreDuplicates: true },
   })
 }
 
@@ -300,10 +298,15 @@ const createCourseRealisations = async (courseRealisations) => {
   const filteredCourseRealisationOrganisations =
     courseRealisationsOrganisations.filter((c) => c.organisationId !== null)
 
-  await CourseRealisationsOrganisation.bulkCreate(
-    filteredCourseRealisationOrganisations,
-    { ignoreDuplicates: true },
-  )
+  await safeBulkCreate({
+    entityName: 'CourseRealisationsOrganisation',
+    entities: filteredCourseRealisationOrganisations,
+    bulkCreate: async (entities, opt) =>
+      CourseRealisationsOrganisation.bulkCreate(entities, opt),
+    fallbackCreate: async (entity, opt) =>
+      CourseRealisationsOrganisation.create(entity, opt),
+    options: { ignoreDuplicates: true },
+  })
 }
 
 const sortAccessStatus = (a, b) =>
@@ -395,21 +398,27 @@ const createFeedbackTargets = async (courses) => {
       feedbackTargetsWithEditedDatesTypeIds.includes(fbt.typeId),
     )
 
-  const feedbackTargetsWithEditedWithIds = await FeedbackTarget.bulkCreate(
-    feedbackTargetsWithEditedDates,
-    {
+  const feedbackTargetsWithEditedWithIds = await safeBulkCreate({
+    entityName: 'FeedbackTarget',
+    entities: feedbackTargetsWithEditedDates,
+    bulkCreate: async (e, opts) => FeedbackTarget.bulkCreate(e, opts),
+    fallbackCreate: async (e, opts) => FeedbackTarget.create(e, opts),
+    options: {
       updateOnDuplicate: ['feedbackType', 'typeId'],
       returning: ['id'],
     },
-  )
+  })
 
-  const feedbackTargetsWithoutEditedWithIds = await FeedbackTarget.bulkCreate(
-    feedbackTargetsWithoutEditedDates,
-    {
+  const feedbackTargetsWithoutEditedWithIds = await safeBulkCreate({
+    entityName: 'FeedbackTarget',
+    entities: feedbackTargetsWithoutEditedDates,
+    bulkCreate: async (e, opts) => FeedbackTarget.bulkCreate(e, opts),
+    fallbackCreate: async (e, opts) => FeedbackTarget.create(e, opts),
+    options: {
       updateOnDuplicate: ['feedbackType', 'typeId', 'opensAt', 'closesAt'],
       returning: ['id'],
     },
-  )
+  })
 
   const feedbackTargetsWithIds = feedbackTargetsWithEditedWithIds.concat(
     feedbackTargetsWithoutEditedWithIds,
@@ -433,15 +442,13 @@ const createFeedbackTargets = async (courses) => {
     .filter((target) => target.user_id && target.feedback_target_id)
     .sort(sortAccessStatus)
 
-  try {
-    await UserFeedbackTarget.bulkCreate(userFeedbackTargets, {
-      ignoreDuplicates: true,
-    })
-  } catch (e) {
-    logger.error('[UPDATER] error when creating teacher feedback targets')
-    logger.error(e)
-    Sentry.captureException(e)
-  }
+  await safeBulkCreate({
+    entityName: 'UserFeedbackTarget',
+    entities: userFeedbackTargets,
+    bulkCreate: async (e, opts) => UserFeedbackTarget.bulkCreate(e, opts),
+    fallbackCreate: async (e, opts) => UserFeedbackTarget.create(e, opts),
+    options: { ignoreDuplicates: true },
+  })
 }
 
 const deleteCancelledCourses = async (cancelledCourseIds) => {

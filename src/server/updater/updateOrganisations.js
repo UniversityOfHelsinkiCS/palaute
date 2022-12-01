@@ -1,5 +1,6 @@
 const { Organisation } = require('../models')
 const mangleData = require('./updateLooper')
+const { safeBulkCreate } = require('./util')
 
 const organisationsHandler = async (organisations) => {
   const ids = new Set() // TODO fix
@@ -10,8 +11,13 @@ const organisationsHandler = async (organisations) => {
     }
     return false
   })
-  await Organisation.bulkCreate(uniqueOrganisations, {
-    updateOnDuplicate: ['name', 'code', 'parentId'],
+
+  await safeBulkCreate({
+    entityName: 'Organisation',
+    entities: uniqueOrganisations,
+    bulkCreate: async (e, opt) => Organisation.bulkCreate(e, opt),
+    fallbackCreate: async (e, opt) => Organisation.create(e, opt),
+    options: { updateOnDuplicate: ['name', 'code', 'parentId'] },
   })
 }
 

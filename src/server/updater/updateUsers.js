@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const mangleData = require('./updateLooper')
+const { safeBulkCreate } = require('./util')
 
 const usersHandler = async (users) => {
   const parsePreferredLanguageUrnToLanguage = (urn) => {
@@ -27,18 +28,24 @@ const usersHandler = async (users) => {
   }))
 
   // By default updates all fields on duplicate id
-  await User.bulkCreate(filteredUsers, {
-    updateOnDuplicate: [
-      'firstName',
-      'username',
-      'lastName',
-      'studentNumber',
-      'employeeNumber',
-      'language',
-      'email',
-      'degreeStudyRight',
-      'secondaryEmail',
-    ],
+  await safeBulkCreate({
+    entityName: 'User',
+    entities: filteredUsers,
+    bulkCreate: async (e, opt) => User.bulkCreate(e, opt),
+    fallbackCreate: async (e, opt) => User.create(e, opt),
+    options: {
+      updateOnDuplicate: [
+        'firstName',
+        'username',
+        'lastName',
+        'studentNumber',
+        'employeeNumber',
+        'language',
+        'email',
+        'degreeStudyRight',
+        'secondaryEmail',
+      ],
+    },
   })
 }
 

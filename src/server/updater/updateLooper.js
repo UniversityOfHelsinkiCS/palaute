@@ -40,6 +40,7 @@ const mangleData = async (url, limit, handler) => {
         const totalTime = (Date.now() - loopStart).toFixed(0)
         loopStart = Date.now()
         logger.info(`[UPDATERLOOP]`, {
+          url,
           offset,
           items: currentData.length,
           requestTime,
