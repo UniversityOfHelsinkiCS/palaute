@@ -98,7 +98,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   return (
     <>
       <Box display="flex" alignItems="flex-end" flexDirection="column">
-        {feedbacks.length !== 0 && isTeacher && (
+        {enoughFeedbacks && isTeacher && (
           <ExportFeedbacksMenu
             feedbackTarget={feedbackTarget}
             feedbacks={feedbacks}

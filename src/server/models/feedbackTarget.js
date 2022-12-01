@@ -174,8 +174,12 @@ class FeedbackTarget extends Model {
     feedbacks,
     { accessStatus, isAdmin, userOrganisationAccess } = {},
   ) {
-    const publicFeedbacks =
-      feedbacks.length > 4 ? feedbacks.map((f) => f.toPublicObject()) : []
+    const publicFeedbacks = feedbacks.map(
+      feedbacks.length > 4
+        ? (f) => f.toPublicObject()
+        : (f) => f.toTimestampOnlyObject(),
+    )
+
     const isTeacher =
       accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'
 

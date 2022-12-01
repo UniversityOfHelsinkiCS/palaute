@@ -761,12 +761,11 @@ const getFeedbacks = async (req, res) => {
   // Hallinto people can see feedback any time
   // Outsider, not in the course should only be shown if feedback is public to all
   if (
-    feedbackTarget.feedbackCount < 5 ||
-    (!isAdmin &&
-      !userHasOrganisationAccess &&
-      !isTeacher &&
-      !userFeedbackTarget &&
-      feedbackTarget.feedbackVisibility !== 'ALL')
+    !isAdmin &&
+    !userHasOrganisationAccess &&
+    !isTeacher &&
+    !userFeedbackTarget &&
+    feedbackTarget.feedbackVisibility !== 'ALL'
   ) {
     return res.send({
       feedbacks: [],
