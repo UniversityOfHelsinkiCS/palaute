@@ -134,7 +134,7 @@ const buildChartConfig = (
     borderWidth: 1,
     label: {
       content: `${Intl.NumberFormat(
-        localeForLanguage(language).code,
+        localeForLanguage(language)?.code,
         valueFormatOptions,
       ).format(lastDataPoint.y)} (${feedbacks.length}/${studentCount})`,
       position: 'center',
