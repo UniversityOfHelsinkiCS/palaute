@@ -1,5 +1,5 @@
 const { Model, INTEGER, STRING, JSONB } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class SummaryCustomisation extends Model {}
 

@@ -9,7 +9,7 @@ const {
 } = require('sequelize')
 const _ = require('lodash')
 
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const Organisation = require('./organisation')
 const { getOrganisationAccess } = require('../util/organisationAccess')
 const UserFeedbackTarget = require('./userFeedbackTarget')
@@ -88,27 +88,6 @@ class User extends Model {
       .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
 
     return organisationAccess ?? null
-  }
-
-  async getResponsibleCourseCodes() {
-    const rows = await sequelize.query(
-      `
-      SELECT DISTINCT ON (course_units.course_code) course_units.course_code
-      FROM user_feedback_targets
-      INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
-      INNER JOIN course_units ON feedback_targets.course_unit_id = course_units.id
-      WHERE user_feedback_targets.user_id = :userId AND
-      (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER');
-    `,
-      {
-        replacements: {
-          userId: this.id,
-        },
-        type: sequelize.QueryTypes.SELECT,
-      },
-    )
-
-    return rows.map((row) => row.course_code)
   }
 
   /**

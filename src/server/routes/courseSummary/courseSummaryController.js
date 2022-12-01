@@ -9,7 +9,7 @@ const {
 } = require('../../services/summary')
 
 const { ApplicationError } = require('../../util/customErrors')
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
@@ -40,7 +40,7 @@ const getAccessibleCourseRealisationIds = async (user) => {
     INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
     INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
     WHERE user_feedback_targets.user_id = :userId
-    AND (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER')
+    AND is_teacher(user_feedback_targets.access_status)
     AND feedback_targets.feedback_type = 'courseRealisation'
     AND course_realisations.start_date < NOW()
     AND course_realisations.start_date > NOW() - interval '16 months';

@@ -16,7 +16,7 @@ const {
 
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const { safeBulkCreate } = require('./util')
 
 const validRealisationTypes = [
@@ -606,7 +606,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   if (new Date().getDay() === 0) {
     logger.info('[UPDATER] Deleting teacher rights', {})
     await sequelize.query(
-      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND (access_status = 'RESPONSIBLE_TEACHER' OR access_status = 'TEACHER') AND user_id != 'abc1234'`,
+      `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL AND is_teacher(access_status) AND user_id != 'abc1234'`,
     )
   }
 

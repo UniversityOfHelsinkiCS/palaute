@@ -1,5 +1,5 @@
 const { STRING, INTEGER, Model, BOOLEAN } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class UserFeedbackTarget extends Model {
   hasTeacherAccess() {

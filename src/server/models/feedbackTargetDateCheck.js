@@ -1,6 +1,6 @@
 const { INTEGER, BOOLEAN } = require('sequelize')
 const { Model } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class FeedbackTargetDateCheck extends Model {}
 

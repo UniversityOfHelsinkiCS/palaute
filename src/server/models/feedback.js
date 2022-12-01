@@ -2,7 +2,7 @@ const { STRING } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
 const { BOOLEAN } = require('sequelize')
 const UserFeedbackTarget = require('./userFeedbackTarget')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class Feedback extends Model {
   toPublicObject() {

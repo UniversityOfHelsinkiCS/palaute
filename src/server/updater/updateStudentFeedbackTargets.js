@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const { subHours } = require('date-fns')
 
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')

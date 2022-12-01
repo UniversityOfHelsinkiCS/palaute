@@ -1,6 +1,6 @@
 const { QueryTypes } = require('sequelize')
 const Survey = require('../../models/survey')
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 
 /**
  *

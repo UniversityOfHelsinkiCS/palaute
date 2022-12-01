@@ -1,5 +1,5 @@
 const { Model, JSONB, STRING, BOOLEAN } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class Question extends Model {}
 

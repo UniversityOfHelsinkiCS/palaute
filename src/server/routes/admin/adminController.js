@@ -22,7 +22,7 @@ const {
   Banner,
 } = require('../../models')
 
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')

@@ -8,7 +8,7 @@ const {
   VIRTUAL,
 } = require('sequelize')
 
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const Question = require('./question')
 
 class Survey extends Model {

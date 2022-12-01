@@ -1,7 +1,7 @@
 const { STRING } = require('sequelize')
 const { BOOLEAN } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class NorppaFeedback extends Model {
   toPublicObject() {

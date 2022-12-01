@@ -4,7 +4,7 @@ const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const { PORT, inProduction, inE2EMode } = require('./util/config')
-const { connectToDatabase } = require('./util/dbConnection')
+const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
 const { updater } = require('./updater')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
@@ -14,8 +14,9 @@ const {
 } = require('./util/precacheFeedbackTargetsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
-const { seed } = require('./util/seeders')
+const { seed } = require('./db/seeders')
 const { updateLastRestart } = require('./util/lastRestart')
+const { initializeFunctions } = require('./db/postgresFunctions')
 
 const app = express()
 
@@ -33,6 +34,7 @@ if (inProduction || inE2EMode) {
 
 const start = async () => {
   await connectToDatabase()
+  await initializeFunctions()
   await seed()
   await redis.connect()
   await updateLastRestart()

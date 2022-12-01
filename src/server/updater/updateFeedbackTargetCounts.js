@@ -1,7 +1,7 @@
 const Sentry = require('@sentry/node')
 const { QueryTypes } = require('sequelize')
 const { FeedbackTarget } = require('../models')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const logger = require('../util/logger')
 
 const logOperation = async (func, message) => {

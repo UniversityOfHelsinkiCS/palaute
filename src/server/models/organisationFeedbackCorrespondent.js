@@ -1,5 +1,5 @@
 const { STRING, INTEGER, Model } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class OrganisationFeedbackCorrespondent extends Model {}
 

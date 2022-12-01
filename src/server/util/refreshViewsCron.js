@@ -1,6 +1,6 @@
 const { inE2EMode, inProduction } = require('../../config')
 const { REFRESH_VIEWS_QUERY } = require('../services/summary')
-const { sequelize } = require('./dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const { schedule } = require('./cron')
 
 const run = async () => {

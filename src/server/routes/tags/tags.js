@@ -7,7 +7,7 @@ const {
   CourseRealisationsTag,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 
 const checkAccess = async (user, code, level = 'read') => {
   const orgAccess = await user.getOrganisationAccess()

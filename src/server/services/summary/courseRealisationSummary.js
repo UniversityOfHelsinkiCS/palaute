@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { Op, QueryTypes } = require('sequelize')
 
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User } = require('../../models')
 const languages = require('../../util/languages.json')
 const { COURSE_REALISATION_SUMMARY_QUERY } = require('./sql')

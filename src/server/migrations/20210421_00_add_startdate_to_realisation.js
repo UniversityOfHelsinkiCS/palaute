@@ -1,5 +1,5 @@
 const { DATE } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 module.exports = {
   up: async (queryInterface) => {

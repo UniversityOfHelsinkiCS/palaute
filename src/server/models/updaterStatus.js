@@ -1,6 +1,6 @@
 const { DATE, NOW, STRING } = require('sequelize')
 const { Model } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class UpdaterStatus extends Model {}
 

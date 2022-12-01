@@ -7,7 +7,7 @@ const {
   TEXT,
   INTEGER,
 } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class Organisation extends Model {
   async getCourseCodes() {

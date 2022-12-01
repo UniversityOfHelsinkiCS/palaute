@@ -19,7 +19,7 @@ const Organisation = require('./organisation')
 const CourseRealisation = require('./courseRealisation')
 const User = require('./user')
 const UserFeedbackTarget = require('./userFeedbackTarget')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const {
   getUniversitySurvey,
   getProgrammeSurveysByCourseUnit,

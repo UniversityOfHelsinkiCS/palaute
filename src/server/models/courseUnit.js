@@ -3,7 +3,7 @@ const {
   STUDENT_LIST_BY_COURSE_ENABLED,
   STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
 } = require('../../config')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 const logger = require('../util/logger')
 
 class CourseUnit extends Model {

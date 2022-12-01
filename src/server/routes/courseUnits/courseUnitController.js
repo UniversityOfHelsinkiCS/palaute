@@ -11,7 +11,7 @@ const {
   Organisation,
 } = require('../../models')
 
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 
 const getCourseUnitsForTeacher = async (req, res) => {
   const { user } = req
@@ -30,7 +30,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     INNER JOIN organisations ON course_units_organisations.organisation_id = organisations.id
     WHERE
       user_feedback_targets.user_id = :userId AND
-      (user_feedback_targets.access_status = 'RESPONSIBLE_TEACHER' OR user_feedback_targets.access_status = 'TEACHER') AND
+      is_teacher(user_feedback_targets.access_status) AND
       course_realisations.end_date < NOW() AND
       course_realisations.end_date > :courseRealisationEndDateAfter AND
       course_units_organisations.type = 'PRIMARY' AND

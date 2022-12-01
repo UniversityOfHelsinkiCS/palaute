@@ -1,6 +1,6 @@
 const { subMonths } = require('date-fns')
 const _ = require('lodash')
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
 const { getMean, getTags } = require('./utils')
 

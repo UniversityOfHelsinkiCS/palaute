@@ -3,7 +3,7 @@ const { DATE } = require('sequelize')
 const { Op } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
 const { ADMINS } = require('../../config')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class Banner extends Model {
   static async getForUser(user) {

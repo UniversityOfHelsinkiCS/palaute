@@ -4,7 +4,7 @@ const {
   getUniversitySurvey,
   getProgrammeSurvey,
 } = require('../../services/surveys')
-const { sequelize } = require('../../util/dbConnection')
+const { sequelize } = require('../../db/dbConnection')
 
 const getOpenFeedbackByOrganisation = async (code) => {
   const universitySurvey = await getUniversitySurvey()

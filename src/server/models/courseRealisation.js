@@ -1,6 +1,6 @@
 const { STRING, BOOLEAN } = require('sequelize')
 const { Model, JSONB, DATE } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 class CourseRealisation extends Model {}
 

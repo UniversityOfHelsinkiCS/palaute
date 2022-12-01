@@ -1,7 +1,7 @@
 const { JSONB } = require('sequelize')
 const { VIRTUAL } = require('sequelize')
 const { Model, INTEGER, STRING } = require('sequelize')
-const { sequelize } = require('../util/dbConnection')
+const { sequelize } = require('../db/dbConnection')
 
 /* eslint-disable */
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
