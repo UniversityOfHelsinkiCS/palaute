@@ -39,6 +39,7 @@ const includeCurs = [
   'otm-f7504f69-386b-4151-b2a9-17ab6e11c946',
   'otm-a994004a-534f-462d-8c09-6b30d0f35f11',
 ]
+const includeCus = ['hy-CU-132990749-2020-08-01', 'hy-CU-117909534-2020-08-01']
 
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 const formatWithHours = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
@@ -554,6 +555,7 @@ const coursesHandler = async (courses) => {
   const filteredCourses = courses.filter(
     (course) =>
       includeCurs.includes(course.id) ||
+      course.courseUnits?.some((cu) => includeCus.includes(cu.id)) ||
       (course.courseUnits.length &&
         validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
         course.flowState !== 'CANCELLED'),
