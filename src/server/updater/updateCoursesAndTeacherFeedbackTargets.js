@@ -250,7 +250,6 @@ const getTeachingLanguages = (customCodeUrns) => {
 }
 
 const createCourseRealisations = async (courseRealisations) => {
-  // Check when course's dates have changed in sis. If that happens, create a date check.
   for (const {
     id,
     name,
@@ -258,29 +257,14 @@ const createCourseRealisations = async (courseRealisations) => {
     organisations,
     customCodeUrns,
   } of courseRealisations) {
-    const newRealisation = {
+    await CourseRealisation.upsert({
       id,
       name,
       ...getCourseRealisationPeriod(activityPeriod),
       educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
       isMoocCourse: isMoocCourse(customCodeUrns),
       teachingLanguages: getTeachingLanguages(customCodeUrns),
-    }
-    const old = await CourseRealisation.findByPk(id, {
-      attributes: ['start_date', 'end_date', 'id'],
     })
-    if (old) {
-      // update existing
-
-      old.name = newRealisation.name
-      old.endDate = newRealisation.endDate
-      old.startDate = newRealisation.startDate
-      old.isMoocCourse = newRealisation.isMoocCourse
-      old.teachingLanguages = newRealisation.teachingLanguages
-      await old.save()
-    } else {
-      await CourseRealisation.create(newRealisation)
-    }
   }
 
   const courseRealisationsOrganisations = [].concat(
