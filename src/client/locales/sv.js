@@ -375,7 +375,7 @@ export default {
     semester: 'Termin',
     spring: 'Vår',
     fall: 'Höst',
-    // export: 'Download',
+    // export: 'Download summary',
     // exportPdf: 'Download as a PDF file',
     // exportCsv: 'Download as a CSV file',
     // programme: 'Programme',

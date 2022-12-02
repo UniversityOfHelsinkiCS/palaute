@@ -22,6 +22,7 @@ import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import errors from '../../util/errorMessage'
 import ErrorView from '../common/ErrorView'
 import OrganisationTable from './OrganisationTable'
+import ExportOrganisations from './ExportOrganisations'
 
 const safelyParseDateRange = (dateRange) =>
   dateRange?.startDate && dateRange?.endDate
@@ -190,6 +191,15 @@ const OrganisationSummary = () => {
               !isOrganisationsLoading ? aggregatedOrganisations : []
             }
             questions={questions || []}
+          />
+        }
+        exports={
+          <ExportOrganisations
+            organisations={
+              !isOrganisationsLoading ? aggregatedOrganisations : []
+            }
+            questions={questions || []}
+            componentRef={componentRef}
           />
         }
       />

@@ -18,9 +18,7 @@ import _ from 'lodash'
 import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useOrganisationTags from '../../hooks/useOrganisationTags'
 import useHistoryState from '../../hooks/useHistoryState'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
-import ExportOrganisations from './ExportOrganisations'
 
 const styles = {
   container: {
@@ -45,9 +43,6 @@ const Filters = ({
   onIncludeOpenUniCourseUnitsChange,
   dateRange,
   onDateRangeChange,
-  componentRef,
-  organisations,
-  questions,
 }) => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
@@ -58,11 +53,6 @@ const Filters = ({
   const sortedTags = _.sortBy(tags, (tag) =>
     getLanguageValue(tag.name, i18n.language),
   )
-
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-
-  const isAdmin = authorizedUser?.isAdmin ?? false
 
   const faculties = React.useMemo(
     () =>
@@ -155,13 +145,6 @@ const Filters = ({
         }
         label={t('courseSummary:includeOpenUniCourses')}
       />
-      {isAdmin && (
-        <ExportOrganisations
-          organisations={organisations}
-          questions={questions}
-          componentRef={componentRef}
-        />
-      )}
     </Box>
   )
 }

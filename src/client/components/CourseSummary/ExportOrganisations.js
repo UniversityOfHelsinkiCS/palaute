@@ -29,7 +29,8 @@ const styles = {
     minWidth: 175,
   },
   container: {
-    float: 'right',
+    paddingLeft: '1rem',
+    textAlign: 'left',
     '@media print': {
       display: 'none',
     },

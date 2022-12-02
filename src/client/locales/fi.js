@@ -373,7 +373,7 @@ export default {
     semester: 'Lukukausi',
     spring: 'Kevät',
     fall: 'Syksy',
-    export: 'Lataa tiedot',
+    export: 'Lataa yhteenveto',
     exportPdf: 'Lataa PDF-tiedostona',
     exportCsv: 'Lataa CSV-tiedostona',
     programme: 'Ohjelma',

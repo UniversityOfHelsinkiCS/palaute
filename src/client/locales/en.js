@@ -371,7 +371,7 @@ export default {
     semester: 'Semester',
     spring: 'Spring',
     fall: 'Fall',
-    export: 'Download',
+    export: 'Download summary',
     exportPdf: 'Download as a PDF file',
     exportCsv: 'Download as a CSV file',
     programme: 'Programme',

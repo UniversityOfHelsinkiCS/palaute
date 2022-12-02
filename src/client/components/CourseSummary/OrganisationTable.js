@@ -17,6 +17,8 @@ import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
 
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+
 import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
@@ -86,12 +88,16 @@ const OrganisationTable = forwardRef(
       onToggleAccordion = () => {},
       onOrderByChange,
       filters,
+      exports,
       isRefetching = false,
       organisationLinks = false,
     },
     ref,
   ) => {
     const { i18n } = useTranslation()
+
+    const { authorizedUser } = useAuthorizedUser()
+    const isAdmin = authorizedUser?.isAdmin ?? false
 
     const showHidingModeButton =
       organisationAccess?.length > 1 && organisations.length > 1
@@ -101,7 +107,10 @@ const OrganisationTable = forwardRef(
         <table css={styles.table}>
           <thead>
             <tr>
-              <th css={styles.filtersCell}>{filters}</th>
+              <th css={styles.filtersCell}>
+                {isAdmin && exports}
+                {filters}
+              </th>
               <ColumnHeadings
                 onOrderByChange={onOrderByChange}
                 questions={questions}
