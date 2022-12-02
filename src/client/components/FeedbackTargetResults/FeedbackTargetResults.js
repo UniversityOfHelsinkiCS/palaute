@@ -72,12 +72,15 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     feedbackReminderLastSentAt,
   } = feedbackTarget
 
+  const isAdmin = accessStatus === 'ADMIN'
   const isOrganisationAdmin = accessStatus === 'ORGANISATION_ADMIN'
   const isOrganisationUser =
     isOrganisationAdmin || accessStatus === 'ORGANISATION'
 
   const isTeacher =
-    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+    isAdmin ||
+    accessStatus === 'TEACHER' ||
+    accessStatus === 'RESPONSIBLE_TEACHER'
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbacks?.length > 0
