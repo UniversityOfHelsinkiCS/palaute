@@ -9,18 +9,18 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useReactToPrint } from 'react-to-print'
 import _ from 'lodash'
 
 import { YearSemesterSelector } from '../common/YearSemesterSelector'
 import useOrganisationTags from '../../hooks/useOrganisationTags'
 import useHistoryState from '../../hooks/useHistoryState'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
+import ExportOrganisations from './ExportOrganisations'
 
 const styles = {
   container: {
@@ -46,6 +46,8 @@ const Filters = ({
   dateRange,
   onDateRangeChange,
   componentRef,
+  organisations,
+  questions,
 }) => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
@@ -57,9 +59,10 @@ const Filters = ({
     getLanguageValue(tag.name, i18n.language),
   )
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  })
+  const { authorizedUser, isLoading: authorizedUserLoading } =
+    useAuthorizedUser()
+
+  const isAdmin = authorizedUser?.isAdmin ?? false
 
   const faculties = React.useMemo(
     () =>
@@ -152,7 +155,13 @@ const Filters = ({
         }
         label={t('courseSummary:includeOpenUniCourses')}
       />
-      <Button onClick={handlePrint}>Lataa PDF</Button>
+      {isAdmin && (
+        <ExportOrganisations
+          organisations={organisations}
+          questions={questions}
+          componentRef={componentRef}
+        />
+      )}
     </Box>
   )
 }

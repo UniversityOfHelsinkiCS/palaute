@@ -373,6 +373,11 @@ export default {
     semester: 'Lukukausi',
     spring: 'Kevät',
     fall: 'Syksy',
+    export: 'Lataa tiedot',
+    exportPdf: 'Lataa PDF-tiedostona',
+    exportCsv: 'Lataa CSV-tiedostona',
+    programme: 'Ohjelma',
+    code: 'Koodi',
   },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',

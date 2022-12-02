@@ -186,6 +186,10 @@ const OrganisationSummary = () => {
             isDateRangeLoading={defaultDateRangeLoading}
             onDateRangeChange={setDateRange}
             componentRef={componentRef}
+            organisations={
+              !isOrganisationsLoading ? aggregatedOrganisations : []
+            }
+            questions={questions || []}
           />
         }
       />

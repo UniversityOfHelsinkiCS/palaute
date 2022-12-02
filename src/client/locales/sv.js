@@ -375,6 +375,11 @@ export default {
     semester: 'Termin',
     spring: 'Vår',
     fall: 'Höst',
+    // export: 'Download',
+    // exportPdf: 'Download as a PDF file',
+    // exportCsv: 'Download as a CSV file',
+    // programme: 'Programme',
+    // code: 'Code',
   },
   footer: {
     contactSupport: 'Kontakta stödet',
