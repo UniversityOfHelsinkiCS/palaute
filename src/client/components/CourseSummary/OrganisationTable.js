@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react'
+import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import {
@@ -75,108 +75,113 @@ const OrganisationButton = ({ code, access }) => {
   )
 }
 
-const OrganisationTable = ({
-  organisations,
-  isOrganisationsLoading,
-  questions,
-  organisationAccess,
-  initialOpenAccordions = [],
-  onToggleAccordion = () => {},
-  onOrderByChange,
-  filters,
-  isRefetching = false,
-  organisationLinks = false,
-}) => {
-  const { i18n } = useTranslation()
+const OrganisationTable = forwardRef(
+  (
+    {
+      organisations,
+      isOrganisationsLoading,
+      questions,
+      organisationAccess,
+      initialOpenAccordions = [],
+      onToggleAccordion = () => {},
+      onOrderByChange,
+      filters,
+      isRefetching = false,
+      organisationLinks = false,
+    },
+    ref,
+  ) => {
+    const { i18n } = useTranslation()
 
-  const showHidingModeButton =
-    organisationAccess?.length > 1 && organisations.length > 1
+    const showHidingModeButton =
+      organisationAccess?.length > 1 && organisations.length > 1
 
-  return (
-    <TableContainer sx={{ overflow: 'visible' }}>
-      <table css={styles.table}>
-        <thead>
-          <tr>
-            <th css={styles.filtersCell}>{filters}</th>
-            <ColumnHeadings
-              onOrderByChange={onOrderByChange}
-              questions={questions}
-            />
-            <th />
-            {showHidingModeButton && (
-              <th>
-                <HiddenRows />
-              </th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {(isOrganisationsLoading || isRefetching) && (
+    return (
+      <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
+        <table css={styles.table}>
+          <thead>
             <tr>
-              <td colSpan={99}>
-                <LinearProgress />
-              </td>
+              <th css={styles.filtersCell}>{filters}</th>
+              <ColumnHeadings
+                onOrderByChange={onOrderByChange}
+                questions={questions}
+              />
+              <th />
+              {showHidingModeButton && (
+                <th>
+                  <HiddenRows />
+                </th>
+              )}
             </tr>
-          )}
-
-          {!(isOrganisationsLoading || isRefetching) &&
-            organisations.map(
-              ({
-                code,
-                id,
-                name,
-                results,
-                feedbackCount,
-                courseUnits,
-                studentCount,
-                hiddenCount,
-                feedbackResponsePercentage,
-                access,
-              }) => (
-                <React.Fragment key={id}>
-                  <ResultsRow
-                    label={
-                      <OrganisationLabel
-                        name={getLanguageValue(name, i18n.language)}
-                        code={code}
-                      />
-                    }
-                    results={results}
-                    questions={questions}
-                    feedbackCount={feedbackCount}
-                    studentCount={studentCount}
-                    feedbackResponsePercentage={feedbackResponsePercentage}
-                    accordionEnabled={courseUnits.length > 0}
-                    accordionInitialOpen={initialOpenAccordions.includes(id)}
-                    onToggleAccordion={() => onToggleAccordion(id)}
-                    cellsAfter={
-                      organisationLinks && (
-                        <>
-                          <td css={{ paddingLeft: '2rem' }}>
-                            <OrganisationButton code={code} access={access} />
-                          </td>
-                          {access?.admin && !!hiddenCount && (
-                            <td>
-                              <CensoredCount count={hiddenCount} />
-                            </td>
-                          )}
-                        </>
-                      )
-                    }
-                  >
-                    <CourseUnitSummary
-                      courseUnits={courseUnits}
-                      questions={questions}
-                      access={access}
-                    />
-                  </ResultsRow>
-                </React.Fragment>
-              ),
+          </thead>
+          <tbody>
+            {(isOrganisationsLoading || isRefetching) && (
+              <tr>
+                <td colSpan={99}>
+                  <LinearProgress />
+                </td>
+              </tr>
             )}
-        </tbody>
-      </table>
-    </TableContainer>
-  )
-}
+
+            {!(isOrganisationsLoading || isRefetching) &&
+              organisations.map(
+                ({
+                  code,
+                  id,
+                  name,
+                  results,
+                  feedbackCount,
+                  courseUnits,
+                  studentCount,
+                  hiddenCount,
+                  feedbackResponsePercentage,
+                  access,
+                }) => (
+                  <React.Fragment key={id}>
+                    <ResultsRow
+                      label={
+                        <OrganisationLabel
+                          name={getLanguageValue(name, i18n.language)}
+                          code={code}
+                        />
+                      }
+                      results={results}
+                      questions={questions}
+                      feedbackCount={feedbackCount}
+                      studentCount={studentCount}
+                      feedbackResponsePercentage={feedbackResponsePercentage}
+                      accordionEnabled={courseUnits.length > 0}
+                      accordionInitialOpen={initialOpenAccordions.includes(id)}
+                      onToggleAccordion={() => onToggleAccordion(id)}
+                      cellsAfter={
+                        organisationLinks && (
+                          <>
+                            <td css={{ paddingLeft: '2rem' }}>
+                              <OrganisationButton code={code} access={access} />
+                            </td>
+                            {access?.admin && !!hiddenCount && (
+                              <td>
+                                <CensoredCount count={hiddenCount} />
+                              </td>
+                            )}
+                          </>
+                        )
+                      }
+                    >
+                      <CourseUnitSummary
+                        courseUnits={courseUnits}
+                        questions={questions}
+                        access={access}
+                      />
+                    </ResultsRow>
+                  </React.Fragment>
+                ),
+              )}
+          </tbody>
+        </table>
+      </TableContainer>
+    )
+  },
+)
 
 export default OrganisationTable

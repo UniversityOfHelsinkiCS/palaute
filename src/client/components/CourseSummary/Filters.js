@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
   TextField,
   InputAdornment,
@@ -10,10 +9,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Button,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useReactToPrint } from 'react-to-print'
 import _ from 'lodash'
 
 import { YearSemesterSelector } from '../common/YearSemesterSelector'
@@ -44,6 +45,7 @@ const Filters = ({
   onIncludeOpenUniCourseUnitsChange,
   dateRange,
   onDateRangeChange,
+  componentRef,
 }) => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
@@ -54,6 +56,10 @@ const Filters = ({
   const sortedTags = _.sortBy(tags, (tag) =>
     getLanguageValue(tag.name, i18n.language),
   )
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
 
   const faculties = React.useMemo(
     () =>
@@ -146,6 +152,7 @@ const Filters = ({
         }
         label={t('courseSummary:includeOpenUniCourses')}
       />
+      <Button onClick={handlePrint}>Lataa PDF</Button>
     </Box>
   )
 }

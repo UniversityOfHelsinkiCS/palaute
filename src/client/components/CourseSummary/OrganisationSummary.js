@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react'
+import React, { useRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import { Box, Typography } from '@mui/material'
@@ -140,6 +140,8 @@ const OrganisationSummary = () => {
     setOrderBy(nextOrderBy)
   }
 
+  const componentRef = useRef()
+
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
@@ -166,6 +168,7 @@ const OrganisationSummary = () => {
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
         isRefetching={isFetching && organisationSummaries}
+        ref={componentRef}
         filters={
           <Filters
             facultyCode={!code && hasMultipleFacultyAccess && facultyCode}
@@ -182,6 +185,7 @@ const OrganisationSummary = () => {
             dateRange={resultingDateRange}
             isDateRangeLoading={defaultDateRangeLoading}
             onDateRangeChange={setDateRange}
+            componentRef={componentRef}
           />
         }
       />
