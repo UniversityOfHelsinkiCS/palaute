@@ -48,6 +48,7 @@ const {
 } = require('../../services/enrolmentNotices/enrolmentNotices')
 const {
   getFeedbackTargetForUserById,
+  getFeedbacksForUserById,
 } = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
@@ -727,80 +728,13 @@ const getFeedbacks = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
-  })
-
-  const feedbackTarget = userFeedbackTarget
-    ? userFeedbackTarget.feedbackTarget
-    : await FeedbackTarget.findByPk(feedbackTargetId)
-
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-
-  const courseUnit = await CourseUnit.findOne({
-    where: {
-      id: feedbackTarget.courseUnitId,
-    },
-  })
-
-  const userOrganisationAccess = await user.getOrganisationAccessByCourseUnitId(
-    courseUnit.id,
+  const feedbackData = await getFeedbacksForUserById(
+    feedbackTargetId,
+    user,
+    isAdmin,
   )
 
-  const userHasOrganisationAccess = Boolean(userOrganisationAccess)
-  const isTeacher =
-    userFeedbackTarget?.accessStatus === 'RESPONSIBLE_TEACHER' ||
-    userFeedbackTarget?.accessStatus === 'TEACHER'
-
-  // Teacher can see feedback any time
-  // Admin can see feedback any time
-  // Hallinto people can see feedback any time
-  // Outsider, not in the course should only be shown if feedback is public to all
-  if (
-    !isAdmin &&
-    !userHasOrganisationAccess &&
-    !isTeacher &&
-    !userFeedbackTarget &&
-    feedbackTarget.feedbackVisibility !== 'ALL'
-  ) {
-    return res.send({
-      feedbacks: [],
-      feedbackVisible: false,
-      userOrganisationAccess,
-    })
-  }
-
-  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      feedbackTargetId,
-      accessStatus: 'STUDENT',
-    },
-    include: {
-      model: Feedback,
-      required: true,
-      as: 'feedback',
-    },
-  })
-
-  const feedbacks = studentFeedbackTargets.map((t) => t.feedback)
-
-  const accessStatus = userFeedbackTarget?.accessStatus ?? 'STUDENT'
-
-  const publicFeedbacks = await feedbackTarget.getPublicFeedbacks(feedbacks, {
-    accessStatus,
-    isAdmin,
-    userOrganisationAccess,
-  })
-
-  return res.send({
-    feedbacks: publicFeedbacks,
-    feedbackVisible: true,
-    userOrganisationAccess,
-  })
+  return res.send(feedbackData)
 }
 
 const getStudentsWithFeedback = async (req, res) => {

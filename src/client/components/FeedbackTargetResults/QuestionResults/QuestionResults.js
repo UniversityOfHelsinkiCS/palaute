@@ -184,7 +184,7 @@ const QuestionResults = ({
   questionOrder,
   feedbacks,
   isTeacher,
-  organisationAccess,
+  isOrganisationUser,
   feedbackCount,
   feedbackTargetId,
 }) => {
@@ -196,11 +196,15 @@ const QuestionResults = ({
   const { t } = useTranslation()
 
   const openQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type === 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type === 'OPEN' &&
+      (isOrganisationUser || isTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type !== 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type !== 'OPEN' &&
+      (isOrganisationUser || isTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const hiddenQuestions = questionsWithFeedbacks.filter(
@@ -249,7 +253,7 @@ const QuestionResults = ({
           />
         ))}
       </QuestionSection>
-      {organisationAccess && hiddenQuestions.length > 0 && (
+      {isOrganisationUser && hiddenQuestions.length > 0 && (
         <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />
       )}
     </>

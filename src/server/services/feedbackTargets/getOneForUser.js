@@ -11,6 +11,7 @@ const {
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
+const { getAccessStatus } = require('./getAccessStatus')
 
 /**
  * Expensive data of feedback targets is cached:
@@ -141,21 +142,14 @@ const getOneForUser = async (id, user, isAdmin) => {
     throw new ApplicationError('Not found', 404)
   }
 
-  let accessStatus = isAdmin ? 'ADMIN' : userFeedbackTarget?.accessStatus
-
-  if (!userFeedbackTarget && !isAdmin) {
-    // User not directly associated. Lets check if they have access through organisation
-    const hasOrganisationAccess = (
-      await user.getOrganisationAccessByCourseUnitId(
-        additionalData.courseUnitId,
-      )
-    )?.read
-
-    if (!hasOrganisationAccess) {
-      throw new ApplicationError('No enrolment', 403)
-    }
-
-    accessStatus = 'ORGANISATION'
+  const accessStatus = await getAccessStatus(
+    userFeedbackTarget,
+    user,
+    feedbackTarget,
+    isAdmin,
+  )
+  if (!accessStatus) {
+    throw new ApplicationError('No access', 403)
   }
 
   return {

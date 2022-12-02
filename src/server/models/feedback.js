@@ -13,13 +13,6 @@ class Feedback extends Model {
       data: this.data,
     }
   }
-
-  toTimestampOnlyObject() {
-    return {
-      id: this.id,
-      createdAt: this.createdAt,
-    }
-  }
 }
 
 Feedback.init(

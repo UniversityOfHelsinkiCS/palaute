@@ -56,8 +56,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     return <Redirect to="/" />
   }
 
-  const { feedbacks, feedbackVisible, userOrganisationAccess } =
-    feedbackTargetData
+  const { feedbacks, feedbackVisible } = feedbackTargetData
 
   const {
     questions,
@@ -73,14 +72,13 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     feedbackReminderLastSentAt,
   } = feedbackTarget
 
-  const userOrganisationAdmin = userOrganisationAccess
-    ? userOrganisationAccess.admin
-    : false
+  const isOrganisationAdmin = accessStatus === 'ORGANISATION_ADMIN'
+  const isOrganisationUser =
+    isOrganisationAdmin || accessStatus === 'ORGANISATION'
 
   const isTeacher =
-    accessStatus === 'TEACHER' ||
-    accessStatus === 'RESPONSIBLE_TEACHER' ||
-    userOrganisationAdmin
+    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbacks?.length > 0
 
@@ -89,7 +87,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     localStorage.setItem('legacy', JSON.stringify(value))
   }
 
-  if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
+  if (isOpen && !feedback && !isOrganisationUser && !isTeacher) {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
@@ -158,7 +156,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
                 questionOrder={questionOrder}
                 feedbacks={feedbacks}
                 isTeacher={isTeacher}
-                organisationAccess={!!userOrganisationAccess}
+                isOrganisationUser={isOrganisationUser}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={id}
               />
