@@ -25,7 +25,6 @@ const {
   getProgrammeSurveysByCourseUnit,
   getOrCreateTeacherSurvey,
 } = require('../services/surveys')
-const { inE2EMode } = require('../../config')
 
 class FeedbackTarget extends Model {
   async getSurveys() {
@@ -175,12 +174,7 @@ class FeedbackTarget extends Model {
     feedbacks,
     { accessStatus, isAdmin, userOrganisationAccess } = {},
   ) {
-    const enoughFeedbacks = feedbacks.length > 4 || inE2EMode
-    const publicFeedbacks = feedbacks.map(
-      enoughFeedbacks
-        ? (f) => f.toPublicObject()
-        : (f) => f.toTimestampOnlyObject(),
-    )
+    const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
 
     const isTeacher =
       accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'

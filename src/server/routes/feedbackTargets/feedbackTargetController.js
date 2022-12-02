@@ -859,14 +859,14 @@ const getStudentsWithFeedback = async (req, res) => {
     ],
   })
 
-  if (studentFeedbackTargets.length < 5) {
-    return res.send([])
-  }
-
   const users = studentFeedbackTargets.map((target) => ({
     ...target.user.dataValues,
     feedbackGiven: Boolean(target.feedback),
   }))
+
+  if (users.filter((u) => u.feedbackGiven).length < 5) {
+    return res.send([])
+  }
 
   return res.send(users)
 }
