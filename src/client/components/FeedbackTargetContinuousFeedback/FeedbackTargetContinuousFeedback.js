@@ -10,6 +10,7 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { feedbackTargetIsOngoing } from './utils'
+import Markdown from '../common/Markdown'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -23,8 +24,8 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
           <Typography variant="body2">
             {t('feedbackTargetView:continuousFeedbackResponse')}
           </Typography>
-          <Typography whiteSpace="pre-line" variant="body1">
-            {response}
+          <Typography variant="body1">
+            <Markdown>{response}</Markdown>
           </Typography>
           {isTeacher && (
             <Box display="flex" justifyContent="flex-end" mt={-2}>
@@ -60,8 +61,8 @@ const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
     <Box>
       <Paper>
         <Box padding={2} marginBottom={2}>
-          <Typography whiteSpace="pre-line" variant="body1">
-            {data}
+          <Typography variant="body1">
+            <Markdown>{data}</Markdown>
           </Typography>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="body2" alignSelf="flex-end">
