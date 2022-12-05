@@ -17,8 +17,6 @@ import { getLanguageValue } from '../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
 
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-
 import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
@@ -96,9 +94,6 @@ const OrganisationTable = forwardRef(
   ) => {
     const { i18n } = useTranslation()
 
-    const { authorizedUser } = useAuthorizedUser()
-    const isAdmin = authorizedUser?.isAdmin ?? false
-
     const showHidingModeButton =
       organisationAccess?.length > 1 && organisations.length > 1
 
@@ -108,7 +103,7 @@ const OrganisationTable = forwardRef(
           <thead>
             <tr>
               <th css={styles.filtersCell}>
-                {isAdmin && exports}
+                {exports}
                 {filters}
               </th>
               <ColumnHeadings

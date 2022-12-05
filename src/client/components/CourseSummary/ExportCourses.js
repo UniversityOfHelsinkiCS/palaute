@@ -53,33 +53,48 @@ const getHeaders = (questions, language, t) => {
       t('courseSummary:feedbackResponse'),
     ])
 
-  return [t('courseSummary:programme'), t('courseSummary:code'), ...labels]
+  return [t('courseSummary:name'), t('courseSummary:code'), ...labels]
 }
 
-const getData = (organisations, language) => {
-  const organisationNames = organisations.map(({ name, code }) => [
+const getFeedbackResponseData = (
+  feedbackResponsePercentage,
+  feedbackResponseGiven,
+  t,
+) => {
+  if (typeof feedbackResponsePercentage !== 'number')
+    return feedbackResponseGiven
+      ? t('courseSummary:given')
+      : t('courseSummary:notGiven')
+
+  return Math.round(feedbackResponsePercentage * 100) / 100
+}
+
+const getData = (data, language, t) => {
+  const names = data.map(({ name, code, courseCode }) => [
     name[language],
-    code,
+    code || courseCode,
   ])
 
-  const means = organisations.map(({ results }) =>
-    results.map(({ mean }) => mean),
-  )
+  const means = data.map(({ results }) => results.map(({ mean }) => mean))
 
-  const others = organisations.map(
-    ({ feedbackCount, studentCount, feedbackResponsePercentage }) => [
+  const others = data.map(
+    ({
+      feedbackCount,
+      studentCount,
+      feedbackResponsePercentage,
+      feedbackResponseGiven,
+    }) => [
       feedbackCount,
       studentCount ? Math.round((feedbackCount / studentCount) * 100) / 100 : 0,
-      Math.round(feedbackResponsePercentage * 100) / 100,
+      getFeedbackResponseData(
+        feedbackResponsePercentage,
+        feedbackResponseGiven,
+        t,
+      ),
     ],
   )
 
-  const data = organisationNames.map(([name, code], i) => [
-    name,
-    code,
-    ...means[i],
-    ...others[i],
-  ])
+  data = names.map(([name, code], i) => [name, code, ...means[i], ...others[i]])
 
   return data
 }
@@ -88,16 +103,23 @@ const ExportCsvLink = ({ organisations, questions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
+  const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
+
   const headers = getHeaders(questions, language, t)
-  const results = getData(organisations, language)
 
-  const data = [headers, ...results]
+  const courseResults = getData(courseUnits, language, t)
+  const organisationResults = getData(organisations, language, t)
 
-  const filename = `organisation-summary_${format(new Date(), 'yyyy-MM-dd')}`
+  const courseData = [headers, ...courseResults]
+  const organisationData = [headers, ...organisationResults]
 
-  const worksheet = utils.aoa_to_sheet(data)
+  const filename = `course-summary_${format(new Date(), 'yyyy-MM-dd')}`
+
+  const courseSheet = utils.aoa_to_sheet(courseData)
+  const organisationSheet = utils.aoa_to_sheet(organisationData)
   const workbook = utils.book_new()
-  utils.book_append_sheet(workbook, worksheet, filename)
+  utils.book_append_sheet(workbook, courseSheet, 'courses')
+  utils.book_append_sheet(workbook, organisationSheet, 'organisations')
 
   return (
     <Button
@@ -123,7 +145,7 @@ const ExportPdfLink = ({ componentRef }) => {
   )
 }
 
-const ExportOrganisations = ({ organisations, questions, componentRef }) => {
+const ExportCourses = ({ organisations, questions, componentRef }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
@@ -170,4 +192,4 @@ const ExportOrganisations = ({ organisations, questions, componentRef }) => {
   )
 }
 
-export default ExportOrganisations
+export default ExportCourses

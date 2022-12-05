@@ -376,8 +376,10 @@ export default {
     export: 'Lataa yhteenveto',
     exportPdf: 'Lataa PDF-tiedostona',
     exportCsv: 'Lataa CSV-tiedostona',
-    programme: 'Ohjelma',
+    name: 'Nimi',
     code: 'Koodi',
+    given: 'annettu',
+    notGiven: 'ei annettu',
   },
   footer: {
     contactSupport: 'Ota yhteyttä tukeen',

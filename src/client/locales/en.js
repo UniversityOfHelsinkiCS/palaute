@@ -374,8 +374,10 @@ export default {
     export: 'Download summary',
     exportPdf: 'Download as a PDF file',
     exportCsv: 'Download as a CSV file',
-    programme: 'Programme',
+    name: 'Name',
     code: 'Code',
+    given: 'given',
+    notGiven: 'not given',
   },
   footer: {
     contactSupport: 'Contact support',
