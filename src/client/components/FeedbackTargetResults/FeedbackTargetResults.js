@@ -15,6 +15,14 @@ import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useIsMobile from '../../hooks/useIsMobile'
 
+const styles = {
+  legacySwitch: {
+    '@media print': {
+      display: 'none',
+    },
+  },
+}
+
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
     <Alert severity="warning" data-cy="notEnoughFeedbacks">
@@ -168,6 +176,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
         {isTeacher && (
           <FormControlLabel
+            sx={styles.legacySwitch}
             control={
               <Switch
                 checked={useLegacy}
