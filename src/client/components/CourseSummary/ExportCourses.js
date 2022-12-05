@@ -99,10 +99,7 @@ const getData = (data, language, t) => {
   return data
 }
 
-const ExportCsvLink = ({ organisations, questions }) => {
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
-
+const exportCsv = (organisations, questions, language, t) => {
   const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
 
   const headers = getHeaders(questions, language, t)
@@ -121,10 +118,17 @@ const ExportCsvLink = ({ organisations, questions }) => {
   utils.book_append_sheet(workbook, courseSheet, 'courses')
   utils.book_append_sheet(workbook, organisationSheet, 'organisations')
 
+  writeFileXLSX(workbook, `${filename}.xlsx`)
+}
+
+const ExportCsvLink = ({ organisations, questions }) => {
+  const { t, i18n } = useTranslation()
+  const { language } = i18n
+
   return (
     <Button
       sx={styles.button}
-      onClick={() => writeFileXLSX(workbook, `${filename}.xlsx`)}
+      onClick={() => exportCsv(organisations, questions, language, t)}
     >
       {t('courseSummary:exportCsv')}
     </Button>
