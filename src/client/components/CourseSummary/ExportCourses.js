@@ -130,7 +130,7 @@ const ExportCsvLink = ({ organisations, questions }) => {
       sx={styles.button}
       onClick={() => exportCsv(organisations, questions, language, t)}
     >
-      {t('courseSummary:exportCsv')}
+      {t('common:exportCsv')}
     </Button>
   )
 }
@@ -144,7 +144,7 @@ const ExportPdfLink = ({ componentRef }) => {
 
   return (
     <Button sx={styles.button} onClick={handlePrint}>
-      {t('courseSummary:exportPdf')}
+      {t('common:exportPdf')}
     </Button>
   )
 }
@@ -169,7 +169,7 @@ const ExportCourses = ({ organisations, questions, componentRef }) => {
         color="primary"
         onClick={handleClick}
       >
-        {t('courseSummary:export')}
+        {t('common:export')}
       </Button>
       <Menu
         anchorEl={anchorEl}

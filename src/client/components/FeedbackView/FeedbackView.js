@@ -215,10 +215,6 @@ const FeedbackView = () => {
   const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
 
   if (isDisabled && !isTeacher) {
-    enqueueSnackbar(t('feedbackView:feedbackDisabled'), {
-      variant: 'error',
-    })
-
     return <Redirect to="/" />
   }
 

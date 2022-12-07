@@ -60,7 +60,7 @@ const ExportCsv = ({ students, fileName }) => {
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
     >
-      {t('exportCSV')}
+      {t('exportCsv')}
     </Button>
   )
 }

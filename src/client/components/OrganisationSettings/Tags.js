@@ -10,7 +10,7 @@ const Tags = ({ organisation }) => {
   return (
     <Box>
       <Typography textTransform="uppercase">
-        {t('organisationSettings:studyTracks')} ({tags.length})
+        {t('common:studyTracks')} ({tags.length})
       </Typography>
       <Card>
         <CardContent>
