@@ -31,6 +31,7 @@ const validRealisationTypes = [
 
 const responsibleTeacherUrns = [
   'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher',
+  'urn:code:course-unit-realisation-responsibility-info-type:administrative-person',
   'urn:code:course-unit-realisation-responsibility-info-type:contact-info',
 ]
 
