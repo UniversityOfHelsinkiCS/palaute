@@ -259,7 +259,7 @@ export default {
     modalTitle: 'Lähetä muistutus palautteesta sähköpostilla',
     writeAMessage: 'Kirjoita viesti opiskelijoille',
     emailMessage:
-      'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. \n << Kirjoittamasi viesti tulee tähän >>',
+      'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>',
     modalSubtitle:
       'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
     emailSent: 'Muistutusviesti lähetetty',

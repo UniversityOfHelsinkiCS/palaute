@@ -13,15 +13,15 @@ const buildReminderToGiveFeedbackToStudents = (
     text: {
       en: `Dear student!\n 
           Please give feedback for the course <a href=${urlToGiveFeedback}>${courseName.en}</a>. 
-          The feedback period ends on ${closesAt}. \n
+          The feedback period ends on ${closesAt}. Thank you!\n
           ${reminder}`,
       fi: `Hyvä opiskelija!\n 
           Vastaathan kurssin <a href=${urlToGiveFeedback}>${courseName.fi}</a> palautteeseen.
-          Palautejakso päättyy ${closesAt}. \n 
+          Palautejakso päättyy ${closesAt}. Kiitos!\n 
           ${reminder}`,
       sv: `Bästa studerande!\n
           Ge gärna respons på kursen <a href=${urlToGiveFeedback}>${courseName.sv}</a>. 
-          Responsperioden tar slut ${closesAt}. \n
+          Responsperioden tar slut ${closesAt}. Tack!\n
           ${reminder}`,
     },
     subject: {

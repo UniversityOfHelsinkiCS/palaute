@@ -264,7 +264,7 @@ export default {
     modalTitle: 'Skicka en påminnelse om respons via e-post',
     writeAMessage: 'Skriv ett meddelande till studerande',
     emailMessage:
-      'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. \n << Meddelandet du skriver kommer synas här >>',
+      'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. Tack!\n << Meddelandet du skriver kommer synas här >>',
     modalSubtitle:
       'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
     emailSent: 'Påminnelse skickad',
