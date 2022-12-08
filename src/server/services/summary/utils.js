@@ -217,6 +217,59 @@ const getTags = async (courseRealisations) => {
   return tags
 }
 
+/**
+ * Computes the average of results
+ * @param {*} rows
+ */
+const getRowAverage = (rows, resultsTemplate, questions) => {
+  const results = JSON.parse(JSON.stringify(resultsTemplate))
+  let feedbackCount = 0
+  let studentCount = 0
+  let hiddenCount = 0
+
+  rows.forEach((row) => {
+    // iterate over each question
+    results.forEach((questionResult) => {
+      const { questionId } = questionResult
+      const indexOfQuestion = row.questionIds.indexOf(questionId)
+
+      // sum the distributions
+      if (row.results[indexOfQuestion])
+        Object.entries(row.results[indexOfQuestion].distribution).forEach(
+          ([option, count]) => {
+            questionResult.distribution[option] =
+              Number(count) + (questionResult.distribution[option] || 0)
+          },
+        )
+    })
+
+    feedbackCount += Number(row.feedbackCount)
+    studentCount += Number(row.studentCount)
+    hiddenCount += Number(row.hiddenCount)
+  }, resultsTemplate)
+
+  // compute mean for each question
+  results.forEach((questionResult) => {
+    questionResult.mean = getMean(
+      questionResult.distribution,
+      questions.find((q) => q.id === questionResult.questionId),
+    )
+  })
+
+  // compute the percentage of CUs whose latest CUR has feedback response given
+  const feedbackResponsePercentage =
+    _.sumBy(rows, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) / rows.length
+
+  return {
+    feedbackCount,
+    studentCount,
+    hiddenCount,
+    results,
+    feedbackResponsePercentage,
+    questionIds: rows[0].questionIds,
+  }
+}
+
 module.exports = {
   QUESTION_AVERAGES_QUERY,
   COUNTS_QUERY,
@@ -226,4 +279,5 @@ module.exports = {
   getUniversityQuestions,
   getMean,
   getTags,
+  getRowAverage,
 }

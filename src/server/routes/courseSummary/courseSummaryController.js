@@ -130,7 +130,7 @@ const getOrganisations = async (req, res) => {
   const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
   const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
 
-  const organisations = await getOrganisationSummaries({
+  const { averageRow, organisations } = await getOrganisationSummaries({
     user,
     questions,
     organisationAccess: filterOrganisationAccess(organisationAccess, user),
@@ -144,6 +144,7 @@ const getOrganisations = async (req, res) => {
   return res.send({
     questions,
     organisations,
+    averageRow,
   })
 }
 

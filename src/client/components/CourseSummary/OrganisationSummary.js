@@ -160,6 +160,7 @@ const OrganisationSummary = () => {
         </Typography>
       </Box>
       <OrganisationTable
+        average={organisationSummaries?.averageRow}
         organisations={aggregatedOrganisations}
         isOrganisationsLoading={isOrganisationsLoading}
         questions={questions}

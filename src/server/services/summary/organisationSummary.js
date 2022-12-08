@@ -2,7 +2,7 @@ const { subMonths } = require('date-fns')
 const _ = require('lodash')
 const { sequelize } = require('../../db/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
-const { getMean, getTags } = require('./utils')
+const { getMean, getTags, getRowAverage } = require('./utils')
 
 const includeEmptyOrganisations = (
   organisations,
@@ -189,67 +189,35 @@ const getOrganisationSummaries = async ({
 
   // aggregate org stats from CUs
   const summedOrganisations = Object.entries(organisations).map(
-    ([organisationId, courseUnits]) => {
-      const results = JSON.parse(JSON.stringify(initialResults))
-      let feedbackCount = 0
-      let studentCount = 0
-      let hiddenCount = 0
-
-      // sum all CUs
-      courseUnits.forEach((cu) => {
-        // iterate over each question
-        results.forEach((questionResult) => {
-          const { questionId } = questionResult
-          const indexOfQuestion = cu.questionIds.indexOf(questionId)
-
-          // sum the distributions
-          if (cu.results[indexOfQuestion])
-            Object.entries(cu.results[indexOfQuestion].distribution).forEach(
-              ([option, count]) => {
-                questionResult.distribution[option] =
-                  Number(count) + (questionResult.distribution[option] || 0)
-              },
-            )
-        })
-
-        feedbackCount += Number(cu.feedbackCount)
-        studentCount += Number(cu.studentCount)
-        hiddenCount += Number(cu.hiddenCount)
-      }, initialResults)
-
-      // compute mean for each question
-      results.forEach((questionResult) => {
-        questionResult.mean = getMean(
-          questionResult.distribution,
-          questions.find((q) => q.id === questionResult.questionId),
-        )
-      })
-
-      // compute the percentage of CUs whose latest CUR has feedback response given
-      const feedbackResponsePercentage =
-        _.sumBy(courseUnits, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) /
-        courseUnits.length
-
-      return {
-        name: courseUnits[0].organisationName,
-        id: organisationId,
-        code: courseUnits[0].organisationCode,
-        feedbackCount,
-        studentCount,
-        hiddenCount,
-        results,
-        feedbackResponsePercentage,
-        courseUnits: _.orderBy(courseUnits, 'courseCode'),
-      }
-    },
+    ([organisationId, courseUnits]) => ({
+      name: courseUnits[0].organisationName,
+      id: organisationId,
+      code: courseUnits[0].organisationCode,
+      courseUnits: _.orderBy(courseUnits, 'courseCode'),
+      ...getRowAverage(courseUnits, initialResults, questions),
+    }),
   )
+
+  let averageRow
+  if (summedOrganisations.length > 1) {
+    averageRow = {
+      name: { fi: 'Keskiarvo', en: 'Average' },
+      id: 1,
+      code: 1,
+      ...getRowAverage(summedOrganisations, initialResults, questions),
+    }
+  }
+
   const withEmptyOrganisations = includeEmptyOrganisations(
     summedOrganisations,
     organisationsToShow,
     questions,
   )
 
-  return _.orderBy(withEmptyOrganisations, 'code')
+  return {
+    averageRow,
+    organisations: _.orderBy(withEmptyOrganisations, 'code'),
+  }
 }
 
 module.exports = getOrganisationSummaries

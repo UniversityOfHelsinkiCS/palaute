@@ -78,6 +78,7 @@ const OrganisationButton = ({ code, access }) => {
 const OrganisationTable = forwardRef(
   (
     {
+      average,
       organisations,
       isOrganisationsLoading,
       questions,
@@ -127,60 +128,80 @@ const OrganisationTable = forwardRef(
               </tr>
             )}
 
-            {!(isOrganisationsLoading || isRefetching) &&
-              organisations.map(
-                ({
-                  code,
-                  id,
-                  name,
-                  results,
-                  feedbackCount,
-                  courseUnits,
-                  studentCount,
-                  hiddenCount,
-                  feedbackResponsePercentage,
-                  access,
-                }) => (
-                  <React.Fragment key={id}>
-                    <ResultsRow
-                      label={
-                        <OrganisationLabel
-                          name={getLanguageValue(name, i18n.language)}
-                          code={code}
-                        />
-                      }
-                      results={results}
-                      questions={questions}
-                      feedbackCount={feedbackCount}
-                      studentCount={studentCount}
-                      feedbackResponsePercentage={feedbackResponsePercentage}
-                      accordionEnabled={courseUnits.length > 0}
-                      accordionInitialOpen={initialOpenAccordions.includes(id)}
-                      onToggleAccordion={() => onToggleAccordion(id)}
-                      cellsAfter={
-                        organisationLinks && (
-                          <>
-                            <td css={{ paddingLeft: '2rem' }}>
-                              <OrganisationButton code={code} access={access} />
-                            </td>
-                            {access?.admin && !!hiddenCount && (
-                              <td>
-                                <CensoredCount count={hiddenCount} />
-                              </td>
-                            )}
-                          </>
-                        )
-                      }
-                    >
-                      <CourseUnitSummary
-                        courseUnits={courseUnits}
+            {!(isOrganisationsLoading || isRefetching) && (
+              <>
+                {average && (
+                  <ResultsRow
+                    label={getLanguageValue(average.name, i18n.language)}
+                    results={average.results}
+                    questions={questions}
+                    feedbackCount={average.feedbackCount}
+                    studentCount={average.studentCount}
+                    feedbackResponsePercentage={
+                      average.feedbackResponsePercentage
+                    }
+                  />
+                )}
+                {organisations.map(
+                  ({
+                    code,
+                    id,
+                    name,
+                    results,
+                    feedbackCount,
+                    courseUnits,
+                    studentCount,
+                    hiddenCount,
+                    feedbackResponsePercentage,
+                    access,
+                  }) => (
+                    <React.Fragment key={id}>
+                      <ResultsRow
+                        label={
+                          <OrganisationLabel
+                            name={getLanguageValue(name, i18n.language)}
+                            code={code}
+                          />
+                        }
+                        results={results}
                         questions={questions}
-                        access={access}
-                      />
-                    </ResultsRow>
-                  </React.Fragment>
-                ),
-              )}
+                        feedbackCount={feedbackCount}
+                        studentCount={studentCount}
+                        feedbackResponsePercentage={feedbackResponsePercentage}
+                        accordionEnabled={courseUnits.length > 0}
+                        accordionInitialOpen={initialOpenAccordions.includes(
+                          id,
+                        )}
+                        onToggleAccordion={() => onToggleAccordion(id)}
+                        cellsAfter={
+                          organisationLinks && (
+                            <>
+                              <td css={{ paddingLeft: '2rem' }}>
+                                <OrganisationButton
+                                  code={code}
+                                  access={access}
+                                />
+                              </td>
+                              {access?.admin && !!hiddenCount && (
+                                <td>
+                                  <CensoredCount count={hiddenCount} />
+                                </td>
+                              )}
+                            </>
+                          )
+                        }
+                      >
+                        <CourseUnitSummary
+                          courseUnits={courseUnits}
+                          questions={questions}
+                          access={access}
+                        />
+                      </ResultsRow>
+                    </React.Fragment>
+                  ),
+                )}
+              </>
+            )}
           </tbody>
         </table>
       </TableContainer>
