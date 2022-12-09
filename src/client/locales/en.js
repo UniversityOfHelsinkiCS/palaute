@@ -494,5 +494,6 @@ export default {
     successAlert: 'Feedback has been sent succesfully',
     anonymousInfo:
       "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
+    anonymous: 'Send anonymously',
   },
 }

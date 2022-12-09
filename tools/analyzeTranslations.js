@@ -43,7 +43,7 @@ const TRANSLATION_KEY_REFERENCE_MATCHER = new RegExp(
 )
 // matches t('asd'
 const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
-  /t\(['"`]\w+(?::\w+)*['"`]/,
+  /\bt\(['"`]\w+(?::\w+)*['"`]/,
   'g',
 )
 

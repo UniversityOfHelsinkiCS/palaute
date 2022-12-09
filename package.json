@@ -19,7 +19,7 @@
     "format": "prettier --write 'src/**/*.js'",
     "lint": "eslint 'src/**/*.js'",
     "prepare": "husky install",
-    "tira2": "docker exec -it palaute node src/server/util/tira2util.js"
+    "translations": "node ./tools/analyzeTranslations.js"
   },
   "lint-staged": {
     "src/**/*.js": "eslint",
