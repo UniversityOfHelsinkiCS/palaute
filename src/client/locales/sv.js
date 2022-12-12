@@ -271,6 +271,8 @@ export default {
     // setHidden: 'Piilota näkyvistä',
     // setVisible: 'Poista piilotus',
     // hiddenInfo: 'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
+    // hidingFeatureInfoTitle: 'Tietoa vastausten piilotuksesta',
+    // hidingFeatureInfo: 'Voit piilottaa yksittäisiä vastauksia kysymyksiin, joiden vastaukset muuten näkyvät opiskelijoille, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.'
   },
   navBar: {
     myFeedbacks: 'Mina responser',

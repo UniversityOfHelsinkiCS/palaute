@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Alert,
   Box,
   Chip,
   IconButton,
@@ -9,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { InfoOutlined, Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -131,6 +132,25 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
   )
 }
 
+const HidingInfo = ({ t, alert }) => (
+  <Tooltip
+    arrow
+    title={
+      <Typography sx={{ p: 1 }}>
+        {t('feedbackTargetResults:hidingFeatureInfo')}
+      </Typography>
+    }
+  >
+    <Alert
+      severity={alert ? 'error' : 'info'}
+      icon={<InfoOutlined />}
+      sx={{ cursor: 'pointer' }}
+    >
+      {t('feedbackTargetResults:hidingFeatureInfoTitle')}
+    </Alert>
+  </Tooltip>
+)
+
 const OpenResults = ({ question }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTargetId, isTeacher, isOrganisationAdmin } = React.useContext(
@@ -147,9 +167,13 @@ const OpenResults = ({ question }) => {
 
   const filteredFeedbacks = feedbacks.filter(({ data }) => Boolean(data))
 
+  const canHide = isTeacher || isOrganisationAdmin
+
+  const hidingInfoAlert = feedbacks.some((f) => f.hidden)
+
   return (
     <ResultsContent>
-      <Box mb={1} mt={1} display="flex" gap="1rem">
+      <Box mt={1} display="flex" gap="1rem" alignItems="center">
         <Box>
           <Typography fontWeight="medium">{label}</Typography>
           <Typography variant="body2">{description}</Typography>
@@ -159,13 +183,18 @@ const OpenResults = ({ question }) => {
           variant="outlined"
           size="small"
         />
+        {canHide && (
+          <Box ml="auto" mr={5}>
+            <HidingInfo t={t} alert={hidingInfoAlert} />
+          </Box>
+        )}
       </Box>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
           <OpenFeedback
             key={index}
             feedback={feedback}
-            canHide={isTeacher || isOrganisationAdmin}
+            canHide={canHide}
             feedbackTargetId={feedbackTargetId}
             t={t}
           />

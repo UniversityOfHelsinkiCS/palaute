@@ -64,8 +64,8 @@ export default {
     public: 'Public',
     notPublic: 'Not public',
     changePublicity: 'Change publicity',
-    notPublicInfo: 'Responses visible only to teachers and programme admins',
-    publicInfo: 'Responses visible to enrolled students',
+    notPublicInfo: 'Answers visible only to teachers and programme admins',
+    publicInfo: 'Answers visible to enrolled students',
     studyTracks: 'Studytracks',
     currentlySelected: 'Currently selected',
   },
@@ -265,10 +265,13 @@ export default {
     modalSubtitle:
       'Students who have already given feedback wont receive this email',
     emailSent: 'Reminder email sent',
-    setHidden: 'Hide this feedback',
+    setHidden: 'Hide this answer',
     setVisible: 'Unhide',
     hiddenInfo:
-      'This feedback is hidden and is visible only to the teachers and programme administrators',
+      'This answer is hidden and is visible only to the teachers and programme administrators',
+    hidingFeatureInfoTitle: 'Info about hiding answers',
+    hidingFeatureInfo:
+      "You can hide individual answers from a question that has its results otherwise visible to students, to censor inappropriate or sensitive content. Hiding has no effect if the question is not visible to students.\nTo prevent misuse, the number of hidden answers is visible to programme's administrative personnel in course summary.",
   },
   navBar: {
     myFeedbacks: 'My feedback',
