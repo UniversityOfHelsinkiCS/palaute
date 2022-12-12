@@ -23,7 +23,7 @@ describe('User feedbacks view', () => {
     cy.loginAsSecondaryTeacher()
     cy.visit(`${baseUrl}/targets/163/results`)
     cy.get('[data-testid="VisibilityIcon"]').click()
-    cy.contains('This feedback is hidden')
+    cy.contains('This answer is hidden')
 
     // it is now hidden from student
     cy.loginAsStudent()
