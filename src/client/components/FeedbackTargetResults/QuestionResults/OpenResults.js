@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Alert,
   Box,
   Chip,
   IconButton,
@@ -10,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { InfoOutlined, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
@@ -20,6 +19,7 @@ import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
 import { FeedbackTargetViewContext } from '../../FeedbackTargetView/FeedbackTargetViewContext'
+import InfoBox from '../../common/InfoBox'
 
 const styles = {
   list: (theme) => ({
@@ -132,25 +132,6 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
   )
 }
 
-const HidingInfo = ({ t, alert }) => (
-  <Tooltip
-    arrow
-    title={
-      <Typography sx={{ p: 1 }}>
-        {t('feedbackTargetResults:hidingFeatureInfo')}
-      </Typography>
-    }
-  >
-    <Alert
-      severity={alert ? 'error' : 'info'}
-      icon={<InfoOutlined />}
-      sx={{ cursor: 'pointer' }}
-    >
-      {t('feedbackTargetResults:hidingFeatureInfoTitle')}
-    </Alert>
-  </Tooltip>
-)
-
 const OpenResults = ({ question }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTargetId, isTeacher, isOrganisationAdmin } = React.useContext(
@@ -169,8 +150,6 @@ const OpenResults = ({ question }) => {
 
   const canHide = isTeacher || isOrganisationAdmin
 
-  const hidingInfoAlert = feedbacks.some((f) => f.hidden)
-
   return (
     <ResultsContent>
       <Box mt={1} display="flex" gap="1rem" alignItems="center">
@@ -185,7 +164,10 @@ const OpenResults = ({ question }) => {
         />
         {canHide && (
           <Box ml="auto" mr={5}>
-            <HidingInfo t={t} alert={hidingInfoAlert} />
+            <InfoBox
+              label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
+              content={t('feedbackTargetResults:hidingFeatureInfo')}
+            />
           </Box>
         )}
       </Box>
