@@ -257,8 +257,15 @@ const getRowAverage = (rows, resultsTemplate, questions) => {
   })
 
   // compute the percentage of CUs whose latest CUR has feedback response given
+  // or the aggregated average of programmes weighted by their cu count
   const feedbackResponsePercentage =
-    _.sumBy(rows, (cu) => (cu.feedbackResponseGiven ? 1 : 0)) / rows.length
+    // are we dealing with CURs?
+    rows[0].feedbackResponseGiven !== undefined
+      ? // then use feedbackResponseGiven
+        _.meanBy(rows, (row) => (row.feedbackResponseGiven ? 1 : 0))
+      : // otherwise use feedbackResponsePercentage weighted by n
+        _.sumBy(rows, (row) => row.feedbackResponsePercentage * row.n) /
+        _.sumBy(rows, (row) => row.n)
 
   return {
     feedbackCount,
@@ -267,6 +274,7 @@ const getRowAverage = (rows, resultsTemplate, questions) => {
     results,
     feedbackResponsePercentage,
     questionIds: rows[0].questionIds,
+    n: rows.length,
   }
 }
 

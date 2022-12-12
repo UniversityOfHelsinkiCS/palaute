@@ -201,7 +201,7 @@ const getOrganisationSummaries = async ({
   let averageRow
   if (summedOrganisations.length > 1) {
     averageRow = {
-      name: { fi: 'Keskiarvo', en: 'Average' },
+      name: { fi: 'Keskiarvo', en: 'Average', sv: 'Medel' },
       id: 1,
       code: 1,
       ...getRowAverage(summedOrganisations, initialResults, questions),
