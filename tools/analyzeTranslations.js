@@ -1,6 +1,9 @@
 /* eslint-disable */
 const fs = require('fs/promises')
 const path = require('path')
+const minimist = require('minimist')
+
+const args = minimist(process.argv.slice(2))
 
 /**
  * Console colors
@@ -46,32 +49,6 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
   /\bt\(['"`]\w+(?::\w+)*['"`]/,
   'g',
 )
-
-/**
- * Recursive filewalk
- * @param {} dir
- */
-async function* walk(dir) {
-  for await (const d of await fs.opendir(dir)) {
-    const entry = path.join(dir, d.name)
-    if (d.isDirectory() && d.name !== LOCALES_DIR_NAME) yield* walk(entry)
-    else if (d.isFile() && EXTENSION_MATCHER.test(d.name)) yield entry
-  }
-}
-
-/**
- * A line location in file
- */
-class Location {
-  constructor(file, line) {
-    this.file = file
-    this.line = line
-  }
-
-  toString() {
-    return `${this.file}:${this.line}`
-  }
-}
 
 /**
  * Main
@@ -155,6 +132,11 @@ class Location {
     `${Underscore}Listing references with missing translations${Reset}\n`,
   )
 
+  let longestKey = 0
+  translationKeyReferences.forEach((v, k) => {
+    if (k.length > longestKey) longestKey = k.length
+  })
+
   translationKeyReferences.forEach((v, k) => {
     const missing = []
     const parts = k.split(':')
@@ -172,16 +154,46 @@ class Location {
       }
     })
 
-    if (missing.length > 0) {
-      console.log(
-        `${Underscore}${k} (${v.length} refs)${Reset}\n${FgCyan}${v.join(
-          '\n',
-        )}`,
-      )
-      console.log(FgRed, `Missing: ${missing.join(', ')}`)
-      console.log(Reset, '')
-    }
+    printMissing(k, v, missing, longestKey)
   })
+
+  printUnused(translationsNotUsed, numberOfTranslations)
+})()
+
+const printMissing = (
+  translationKey,
+  referenceLocations,
+  missingLangs,
+  longestKey,
+) => {
+  if (
+    missingLangs.length > 0 &&
+    (!args.lang || missingLangs.some((l) => args.lang.includes(l)))
+  ) {
+    let msg = translationKey
+    // add padding
+    for (let i = 0; i < longestKey - translationKey.length; i++) {
+      msg += ' '
+    }
+
+    msg += ['fi', 'en', 'sv']
+      .map((l) =>
+        missingLangs.includes(l)
+          ? `${FgRed}${l}${Reset}`
+          : `${FgGreen}${l}${Reset}`,
+      )
+      .join(', ')
+
+    if (args.detailed) {
+      msg += `\n${FgCyan}${referenceLocations.join('\n')}\n`
+    }
+
+    console.log(msg, Reset)
+  }
+}
+
+const printUnused = (translationsNotUsed, numberOfTranslations) => {
+  if (!args.unused) return
 
   console.log(
     `${Underscore}Potentially unused translations (${translationsNotUsed.size}/${numberOfTranslations}): ${Reset}`,
@@ -192,4 +204,30 @@ class Location {
   translationsNotUsed.forEach((t) =>
     console.log(`  ${t.split(':').join(`${FgMagenta}:${Reset}`)}`),
   )
-})()
+}
+
+/**
+ * Recursive filewalk
+ * @param {} dir
+ */
+async function* walk(dir) {
+  for await (const d of await fs.opendir(dir)) {
+    const entry = path.join(dir, d.name)
+    if (d.isDirectory() && d.name !== LOCALES_DIR_NAME) yield* walk(entry)
+    else if (d.isFile() && EXTENSION_MATCHER.test(d.name)) yield entry
+  }
+}
+
+/**
+ * A line location in file
+ */
+class Location {
+  constructor(file, line) {
+    this.file = file
+    this.line = line
+  }
+
+  toString() {
+    return `${this.file}:${this.line}`
+  }
+}
