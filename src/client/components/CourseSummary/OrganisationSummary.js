@@ -147,9 +147,18 @@ const OrganisationSummary = () => {
     <>
       <Title>{t('courseSummaryPage')}</Title>
       <Box mb={6} px={1}>
-        <Typography variant="h4" component="h1">
-          {t('courseSummary:heading')}
-        </Typography>
+        <Box display="flex" gap="1rem" alignItems="end">
+          <Typography variant="h4" component="h1">
+            {t('courseSummary:heading')}
+          </Typography>
+          <ExportCourses
+            organisations={
+              !isOrganisationsLoading ? aggregatedOrganisations : []
+            }
+            questions={questions || []}
+            componentRef={componentRef}
+          />
+        </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">
           {t(
@@ -192,15 +201,6 @@ const OrganisationSummary = () => {
               !isOrganisationsLoading ? aggregatedOrganisations : []
             }
             questions={questions || []}
-          />
-        }
-        exports={
-          <ExportCourses
-            organisations={
-              !isOrganisationsLoading ? aggregatedOrganisations : []
-            }
-            questions={questions || []}
-            componentRef={componentRef}
           />
         }
       />

@@ -3,6 +3,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 import { Button, MenuItem, Menu, Box } from '@mui/material'
+import { Download } from '@mui/icons-material'
 import { format } from 'date-fns'
 
 import { getLanguageValue } from '../../util/languageUtils'
@@ -168,6 +169,7 @@ const ExportCourses = ({ organisations, questions, componentRef }) => {
         aria-haspopup="true"
         color="primary"
         onClick={handleClick}
+        endIcon={<Download />}
       >
         {t('common:export')}
       </Button>

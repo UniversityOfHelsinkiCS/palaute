@@ -87,7 +87,6 @@ const OrganisationTable = forwardRef(
       onToggleAccordion = () => {},
       onOrderByChange,
       filters,
-      exports,
       isRefetching = false,
       organisationLinks = false,
     },
@@ -103,10 +102,7 @@ const OrganisationTable = forwardRef(
         <table css={styles.table}>
           <thead>
             <tr>
-              <th css={styles.filtersCell}>
-                {exports}
-                {filters}
-              </th>
+              <th css={styles.filtersCell}>{filters}</th>
               <ColumnHeadings
                 onOrderByChange={onOrderByChange}
                 questions={questions}
