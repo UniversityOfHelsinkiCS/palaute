@@ -210,13 +210,17 @@ const CourseSettingsContainer = ({
         <TableContainer>
           <Table stickyHeader size="small">
             <TableHead>
-              <TableCell>{t('organisationSettings:course')}</TableCell>
-              <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
-              {studentListVisibleFeatureEnabled && (
+              <TableRow>
+                <TableCell>{t('organisationSettings:course')}</TableCell>
                 <TableCell>
-                  {t('organisationSettings:courseStudentListVisible')}
+                  {t('organisationSettings:feedbackEnabled')}
                 </TableCell>
-              )}
+                {studentListVisibleFeatureEnabled && (
+                  <TableCell>
+                    {t('organisationSettings:courseStudentListVisible')}
+                  </TableCell>
+                )}
+              </TableRow>
             </TableHead>
             <TableBody>
               {courseUnitItems.map(
