@@ -13,6 +13,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 
 import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
@@ -134,9 +135,11 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
 
 const OpenResults = ({ question }) => {
   const { t, i18n } = useTranslation()
-  const { feedbackTargetId, isTeacher, isOrganisationAdmin } = React.useContext(
-    FeedbackTargetViewContext,
-  )
+  const { id } = useParams()
+
+  const { isTeacher, isOrganisationAdmin } =
+    React.useContext(FeedbackTargetViewContext) || {}
+
   const label = getLanguageValue(question.data?.label, i18n.language)
 
   const description = getLanguageValue(
@@ -177,7 +180,7 @@ const OpenResults = ({ question }) => {
             key={index}
             feedback={feedback}
             canHide={canHide}
-            feedbackTargetId={feedbackTargetId}
+            feedbackTargetId={id}
             t={t}
           />
         ))}
