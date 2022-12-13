@@ -58,11 +58,10 @@ const getFeedbacks = async (id, user, isAdmin) => {
     getAdditionalDataFromCacheOrDb(id),
   ])
 
-  if (!feedbackTarget) {
-    throw new ApplicationError('Not found', 404)
-  }
+  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
+  const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
+  const userFeedbackTarget = userFeedbackTargets[0]
 
   const accessStatus = await getAccessStatus(
     userFeedbackTarget,
@@ -71,7 +70,7 @@ const getFeedbacks = async (id, user, isAdmin) => {
     isAdmin,
   )
 
-  if (!accessStatus && feedbackTarget.feedbackVisibility !== 'ALL') {
+  if (!accessStatus && feedbackVisibility !== 'ALL') {
     return {
       feedbacks: [],
       feedbackVisible: false,
@@ -81,12 +80,8 @@ const getFeedbacks = async (id, user, isAdmin) => {
 
   const allStudentFeedbacks = await getStudentFeedbacks(id)
 
-  if (
-    accessStatus === 'RESPONSIBLE_TEACHER' ||
-    accessStatus === 'TEACHER' ||
-    accessStatus === 'ADMIN' ||
-    accessStatus === 'ORGANISATION_ADMIN'
-  ) {
+  const allowed = ['RESPONSIBLE_TEACHER', 'ADMIN', 'ORGANISATION_ADMIN']
+  if (allowed.includes(accessStatus)) {
     return {
       feedbacks: allStudentFeedbacks,
       feedbackVisible: true,
