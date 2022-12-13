@@ -72,7 +72,7 @@ const componentByType = {
 
 const QuestionItem = ({
   question,
-  isTeacher,
+  isResponsibleTeacher,
   t,
   publicQuestionIds,
   feedbackCount,
@@ -108,7 +108,7 @@ const QuestionItem = ({
 
   return (
     <Box m="1rem" mt="3rem">
-      {isTeacher && (
+      {isResponsibleTeacher && (
         <QuestionPublicityToggle
           checked={isPublic}
           disabled={disabled}
@@ -183,7 +183,7 @@ const QuestionResults = ({
   questions,
   questionOrder,
   feedbacks,
-  isTeacher,
+  isResponsibleTeacher,
   isOrganisationUser,
   feedbackCount,
   feedbackTargetId,
@@ -198,13 +198,17 @@ const QuestionResults = ({
   const openQuestions = questionsWithFeedbacks.filter(
     (q) =>
       q.type === 'OPEN' &&
-      (isOrganisationUser || isTeacher || publicQuestionIds.includes(q.id)),
+      (isOrganisationUser ||
+        isResponsibleTeacher ||
+        publicQuestionIds.includes(q.id)),
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
     (q) =>
       q.type !== 'OPEN' &&
-      (isOrganisationUser || isTeacher || publicQuestionIds.includes(q.id)),
+      (isOrganisationUser ||
+        isResponsibleTeacher ||
+        publicQuestionIds.includes(q.id)),
   )
 
   const hiddenQuestions = questionsWithFeedbacks.filter(
@@ -228,7 +232,7 @@ const QuestionResults = ({
                 question={q}
                 publicQuestionIds={publicQuestionIds}
                 disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                isTeacher={isTeacher}
+                isResponsibleTeacher={isResponsibleTeacher}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={feedbackTargetId}
                 t={t}
@@ -247,7 +251,7 @@ const QuestionResults = ({
             question={q}
             publicQuestionIds={publicQuestionIds}
             disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-            isTeacher={isTeacher}
+            isResponsibleTeacher={isResponsibleTeacher}
             feedbackTargetId={feedbackTargetId}
             t={t}
           />

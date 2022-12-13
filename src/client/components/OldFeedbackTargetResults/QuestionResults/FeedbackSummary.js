@@ -25,7 +25,7 @@ const FeedbackSummary = ({
   publicQuestionIds,
   questions,
   feedbacks,
-  isTeacher,
+  isResponsibleTeacher,
 }) => {
   const { i18n, t } = useTranslation()
   const isMobile = useIsMobile()
@@ -37,7 +37,8 @@ const FeedbackSummary = ({
 
   const summaryQuestions = questionsWithFeedbacks.filter(
     (q) =>
-      q.type === 'LIKERT' && (isTeacher || publicQuestionIds.includes(q.id)),
+      q.type === 'LIKERT' &&
+      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
   )
 
   return (
