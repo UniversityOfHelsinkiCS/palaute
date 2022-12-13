@@ -71,10 +71,13 @@ const getFeedbackResponseData = (
 }
 
 const getData = (data, language, t) => {
-  const names = data.map(({ name, code, courseCode }) => [
-    name[language],
-    code || courseCode,
-  ])
+  const identifiers = data.map(
+    ({ name, code, courseCode, organisationCode }) => ({
+      name: name[language],
+      code: code || courseCode,
+      organisationCode,
+    }),
+  )
 
   const means = data.map(({ results }) => results.map(({ mean }) => mean))
 
@@ -95,7 +98,13 @@ const getData = (data, language, t) => {
     ],
   )
 
-  data = names.map(([name, code], i) => [name, code, ...means[i], ...others[i]])
+  data = identifiers.map(({ name, code, organisationCode }, i) => [
+    name,
+    code,
+    ...means[i],
+    ...others[i],
+    organisationCode,
+  ])
 
   return data
 }
@@ -108,7 +117,10 @@ const exportCsv = (organisations, questions, language, t) => {
   const courseResults = getData(courseUnits, language, t)
   const organisationResults = getData(organisations, language, t)
 
-  const courseData = [headers, ...courseResults]
+  const courseData = [
+    headers.concat(t('courseSummary:organisationCode')),
+    ...courseResults,
+  ]
   const organisationData = [headers, ...organisationResults]
 
   const filename = `course-summary_${format(new Date(), 'yyyy-MM-dd')}`
