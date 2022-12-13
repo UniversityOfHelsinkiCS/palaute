@@ -109,18 +109,18 @@ const getData = (data, language, t) => {
   return data
 }
 
-const exportCsv = (organisations, questions, language, t) => {
+const exportCsv = (average, organisations, questions, language, t) => {
   const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
 
+  organisations = average ? [average].concat(organisations) : organisations
+
   const headers = getHeaders(questions, language, t)
+  const courseHeaders = headers.concat(t('courseSummary:organisationCode'))
 
   const courseResults = getData(courseUnits, language, t)
   const organisationResults = getData(organisations, language, t)
 
-  const courseData = [
-    headers.concat(t('courseSummary:organisationCode')),
-    ...courseResults,
-  ]
+  const courseData = [courseHeaders, ...courseResults]
   const organisationData = [headers, ...organisationResults]
 
   const filename = `course-summary_${format(new Date(), 'yyyy-MM-dd')}`
@@ -134,14 +134,14 @@ const exportCsv = (organisations, questions, language, t) => {
   writeFileXLSX(workbook, `${filename}.xlsx`)
 }
 
-const ExportCsvLink = ({ organisations, questions }) => {
+const ExportCsvLink = ({ average, organisations, questions }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
 
   return (
     <Button
       sx={styles.button}
-      onClick={() => exportCsv(organisations, questions, language, t)}
+      onClick={() => exportCsv(average, organisations, questions, language, t)}
     >
       {t('common:exportCsv')}
     </Button>
@@ -162,7 +162,7 @@ const ExportPdfLink = ({ componentRef }) => {
   )
 }
 
-const ExportCourses = ({ organisations, questions, componentRef }) => {
+const ExportCourses = ({ average, organisations, questions, componentRef }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
@@ -200,7 +200,11 @@ const ExportCourses = ({ organisations, questions, componentRef }) => {
         }}
       >
         <MenuItem value="csv" sx={styles.menuitem}>
-          <ExportCsvLink organisations={organisations} questions={questions} />
+          <ExportCsvLink
+            average={average}
+            organisations={organisations}
+            questions={questions}
+          />
         </MenuItem>
         <MenuItem value="pdf" sx={styles.menuitem}>
           <ExportPdfLink componentRef={componentRef} />

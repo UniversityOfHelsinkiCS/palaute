@@ -152,6 +152,7 @@ const OrganisationSummary = () => {
             {t('courseSummary:heading')}
           </Typography>
           <ExportCourses
+            average={organisationSummaries?.averageRow}
             organisations={
               !isOrganisationsLoading ? aggregatedOrganisations : []
             }
