@@ -1,18 +1,30 @@
-const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
+const {
+  UserFeedbackTarget,
+  FeedbackTarget,
+  Feedback,
+  CourseRealisation,
+} = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessStatus } = require('./getAccessStatus')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
 
 const getFeedbackTarget = (id, userId) =>
   FeedbackTarget.findByPk(id, {
-    include: {
-      model: UserFeedbackTarget,
-      as: 'userFeedbackTargets',
-      where: {
-        userId,
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        where: {
+          userId,
+        },
+        required: false,
       },
-      required: false,
-    },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+    ],
   })
 
 const getStudentFeedbacks = async (feedbackTargetId) => {

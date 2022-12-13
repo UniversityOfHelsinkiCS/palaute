@@ -128,6 +128,7 @@ const getFeedbackTarget = (feedbackTargetId) =>
         'publicQuestionIds',
       ],
     },
+    include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })
 
 const getOneForUser = async (id, user, isAdmin) => {
