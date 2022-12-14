@@ -116,7 +116,7 @@ const FeedbackTargetResultsView = () => {
             publicQuestionIds={publicQuestionIds ?? []}
             questions={questions}
             feedbacks={feedbacks}
-            isTeacher={false}
+            isResponsibleTeacher={false}
             organisationAccess={false}
             feedbackCount={feedbackCount}
             feedbackTargetId={id}

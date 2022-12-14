@@ -72,7 +72,7 @@ const componentByType = {
   OPEN: OpenResults,
 }
 
-const QuestionItem = ({ question, isTeacher, isPublic, sx }) => {
+const QuestionItem = ({ question, isResponsibleTeacher, isPublic, sx }) => {
   const Component = componentByType[question.type]
 
   const content = Component ? <Component question={question} /> : null
@@ -80,7 +80,7 @@ const QuestionItem = ({ question, isTeacher, isPublic, sx }) => {
   return (
     <Card sx={sx}>
       <CardContent>
-        {isTeacher && (
+        {isResponsibleTeacher && (
           <Box mb={2} sx={styles.hidePrint}>
             <Alert severity="info">
               {isPublic ? (
@@ -148,7 +148,7 @@ const QuestionResults = ({
   publicQuestionIds,
   questions,
   feedbacks,
-  isTeacher,
+  isResponsibleTeacher,
   organisationAccess,
 }) => {
   const questionsWithFeedbacks = useMemo(
@@ -157,11 +157,15 @@ const QuestionResults = ({
   )
 
   const openQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type === 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type === 'OPEN' &&
+      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
-    (q) => q.type !== 'OPEN' && (isTeacher || publicQuestionIds.includes(q.id)),
+    (q) =>
+      q.type !== 'OPEN' &&
+      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
   )
 
   const hiddenQuestions = questionsWithFeedbacks.filter(
@@ -176,7 +180,7 @@ const QuestionResults = ({
             key={q.id}
             question={q}
             isPublic={publicQuestionIds.includes(q.id)}
-            isTeacher={isTeacher}
+            isResponsibleTeacher={isResponsibleTeacher}
             sx={styles.openQuestionItem}
           />
         ))}
@@ -190,7 +194,7 @@ const QuestionResults = ({
             <QuestionItem
               question={q}
               isPublic={publicQuestionIds.includes(q.id)}
-              isTeacher={isTeacher}
+              isResponsibleTeacher={isResponsibleTeacher}
             />
           </Grid>
         ))}

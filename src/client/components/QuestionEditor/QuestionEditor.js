@@ -79,6 +79,8 @@ const QuestionEditor = ({
   }
 
   const handlePublicityToggle = (question) => (isPublic) => {
+    if (typeof isPublic === 'string') isPublic = isPublic === 'true'
+
     onPublicityToggle(question, isPublic)
   }
 

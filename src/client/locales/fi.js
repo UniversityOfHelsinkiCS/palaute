@@ -373,6 +373,7 @@ export default {
     fall: 'Syksy',
     name: 'Nimi',
     code: 'Koodi',
+    organisationCode: 'Organisaatiokoodi',
     given: 'annettu',
     notGiven: 'ei annettu',
   },

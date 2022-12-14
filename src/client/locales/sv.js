@@ -374,6 +374,7 @@ export default {
     fall: 'Höst',
     // name: 'Name',
     // code: 'Code',
+    // organisationCode: 'Organisation code',
     // given: 'given',
     // notGiven: 'not given',
   },

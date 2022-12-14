@@ -20,9 +20,9 @@ const FeedbackCorrespondents = () => {
 
   return (
     <Box mt="1rem">
-      {users.map((user) => (
+      {users.map((user, i) => (
         <UserAccordion
-          key={user.organisationCode}
+          key={`${user.id}-${i}`}
           user={user}
           handleLoginAs={handleLoginAs}
           decoration={

@@ -24,9 +24,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
           <Typography variant="body2">
             {t('feedbackTargetView:continuousFeedbackResponse')}
           </Typography>
-          <Typography variant="body1">
-            <Markdown>{response}</Markdown>
-          </Typography>
+          <Markdown>{response}</Markdown>
           {isTeacher && (
             <Box display="flex" justifyContent="flex-end" mt={-2}>
               <Button onClick={() => setShowEdit(!showEdit)}>
@@ -61,9 +59,7 @@ const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
     <Box>
       <Paper>
         <Box padding={2} marginBottom={2}>
-          <Typography variant="body1">
-            <Markdown>{data}</Markdown>
-          </Typography>
+          <Markdown>{data}</Markdown>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="body2" alignSelf="flex-end">
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}

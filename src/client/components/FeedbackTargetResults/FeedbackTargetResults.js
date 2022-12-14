@@ -85,10 +85,8 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const isOrganisationUser =
     isOrganisationAdmin || accessStatus === 'ORGANISATION'
 
-  const isTeacher =
-    isAdmin ||
-    accessStatus === 'TEACHER' ||
-    accessStatus === 'RESPONSIBLE_TEACHER'
+  const isResponsibleTeacher = isAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isTeacher = isResponsibleTeacher || accessStatus === 'TEACHER'
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbacks?.length > 0
@@ -166,7 +164,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
                 questions={questions}
                 questionOrder={questionOrder}
                 feedbacks={feedbacks}
-                isTeacher={isTeacher}
+                isResponsibleTeacher={isResponsibleTeacher}
                 isOrganisationUser={isOrganisationUser}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={id}
