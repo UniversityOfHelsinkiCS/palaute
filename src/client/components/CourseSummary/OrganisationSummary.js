@@ -73,6 +73,8 @@ const OrganisationSummary = () => {
     ORDER_BY_OPTIONS[0].value,
   )
 
+  const componentRef = useRef()
+
   const resultingDateRange =
     dateRange.start && dateRange.end
       ? dateRange
@@ -140,8 +142,6 @@ const OrganisationSummary = () => {
   const handleOrderByChange = (nextOrderBy) => {
     setOrderBy(nextOrderBy)
   }
-
-  const componentRef = useRef()
 
   return (
     <>

@@ -452,6 +452,8 @@ const RELEVANT_ORGANISATION_CODES = [
 ]
 
 const relevantOrganisations = RELEVANT_ORGANISATION_CODES.concat(
+  data.map((faculty) => faculty.code),
+).concat(
   data.flatMap((faculty) =>
     faculty.programmes.map((programme) =>
       normalizeOrganisationCode(programme.key),
