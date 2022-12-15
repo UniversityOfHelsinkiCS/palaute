@@ -19,6 +19,7 @@ const {
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  InactiveCourseRealisation,
   Banner,
 } = require('../../models')
 
@@ -542,6 +543,30 @@ const getFeedbackCorrespondents = async (req, res) => {
   return res.send(users)
 }
 
+const getInactiveCourseRealisations = async (req, res) => {
+  const inactiveCourseRealisations = await InactiveCourseRealisation.findAll()
+
+  return res.send(inactiveCourseRealisations)
+}
+
+const updateInactiveCourseRealisation = async (req, res) => {
+  const { id } = req.params
+  const { manuallyEnabled } = req.body
+
+  const inactiveCourse = await InactiveCourseRealisation.findByPk(id)
+
+  if (!inactiveCourse) throw new ApplicationError('Not found', 404)
+
+  await inactiveCourse.update(
+    {
+      manuallyEnabled,
+    },
+    { where: { id } },
+  )
+
+  return res.send(inactiveCourse)
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -563,6 +588,8 @@ router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
 router.get('/feedback-targets', findFeedbackTargets)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
+router.get('/inactive-course-realisations', getInactiveCourseRealisations)
+router.put('/inactive-course-realisations/:id', updateInactiveCourseRealisation)
 router.post('/banners', createBanner)
 router.delete('/banners/:id', deleteBanner)
 module.exports = router

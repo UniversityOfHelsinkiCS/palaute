@@ -306,6 +306,7 @@ const createInactiveCourseRealisations = async (inactiveCourseRealisations) => {
     activityPeriod,
     organisations,
     customCodeUrns,
+    courseUnits,
   } of inactiveCourseRealisations) {
     await InactiveCourseRealisation.upsert({
       id,
@@ -314,6 +315,9 @@ const createInactiveCourseRealisations = async (inactiveCourseRealisations) => {
       educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
       isMoocCourse: isMoocCourse(customCodeUrns),
       teachingLanguages: getTeachingLanguages(customCodeUrns),
+      manuallyEnabled:
+        includeCurs.includes(id) ||
+        courseUnits?.some((cu) => includeCus.includes(cu.id)),
     })
   }
 }

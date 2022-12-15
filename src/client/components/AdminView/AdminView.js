@@ -17,6 +17,7 @@ import UsersTab from './UsersTab'
 import AccessTab from './AccessTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
 import BannerView from './BannersView'
+import EnableCourses from './EnableCourses'
 
 const AdminView = () => {
   const { path, url } = useRouteMatch()
@@ -44,6 +45,7 @@ const AdminView = () => {
           scrollButtons="auto"
         >
           <Tab label="Users" component={Link} to={`${url}/users`} />
+          <Tab label="Enable courses" component={Link} to={`${url}/enable`} />
           <Tab
             label="Organisation Access"
             component={Link}
@@ -76,6 +78,7 @@ const AdminView = () => {
       </Box>
       <Switch>
         <Route path={`${path}/users`} component={UsersTab} />
+        <Route path={`${path}/enable`} component={EnableCourses} />
         <Route path={`${path}/access`} component={AccessTab} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
