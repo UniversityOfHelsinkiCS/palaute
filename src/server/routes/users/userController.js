@@ -25,7 +25,7 @@ const login = async (req, res) => {
   }
 
   const lastRestart = await getLastRestart()
-  const banners = isAdmin || loginAs ? await Banner.getForUser(user) : []
+  const banners = await Banner.getForUser(user)
 
   const isTeacher = !!user.employeeNumber
 
