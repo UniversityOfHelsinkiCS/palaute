@@ -22,6 +22,7 @@ const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorresp
 const Tag = require('./tag')
 const CourseRealisationsTag = require('./courseRealisationsTag')
 const Banner = require('./banner')
+const InactiveCourseRealisation = require('./inactiveCourseRealisation')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -206,6 +207,7 @@ module.exports = {
   SummaryCustomisation,
   OrganisationFeedbackCorrespondent,
   CourseRealisationsTag,
+  InactiveCourseRealisation,
   Banner,
   Tag,
 }
