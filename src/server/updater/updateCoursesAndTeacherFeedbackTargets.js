@@ -12,6 +12,7 @@ const {
   UserFeedbackTarget,
   Survey,
   CourseRealisationsOrganisation,
+  InactiveCourseRealisation,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -28,6 +29,9 @@ const validRealisationTypes = [
   'urn:code:course-unit-realisation-type:teaching-participation-small-group',
   'urn:code:course-unit-realisation-type:teaching-participation-seminar',
 ]
+
+const independentWorkUrn =
+  'urn:code:course-unit-realisation-type:independent-work-project'
 
 const responsibleTeacherUrns = [
   'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher',
@@ -295,6 +299,25 @@ const createCourseRealisations = async (courseRealisations) => {
   })
 }
 
+const createInactiveCourseRealisations = async (inactiveCourseRealisations) => {
+  for (const {
+    id,
+    name,
+    activityPeriod,
+    organisations,
+    customCodeUrns,
+  } of inactiveCourseRealisations) {
+    await InactiveCourseRealisation.upsert({
+      id,
+      name,
+      ...getCourseRealisationPeriod(activityPeriod),
+      educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
+      isMoocCourse: isMoocCourse(customCodeUrns),
+      teachingLanguages: getTeachingLanguages(customCodeUrns),
+    })
+  }
+}
+
 const sortAccessStatus = (a, b) =>
   // eslint-disable-next-line no-nested-ternary
   a.accessStatus < b.accessStatus ? -1 : a.accessStatus > b.accessStatus ? 1 : 0
@@ -559,6 +582,15 @@ const coursesHandler = async (courses) => {
   if (cancelledCourseIds.length > 0) {
     await deleteCancelledCourses(cancelledCourseIds)
   }
+
+  const independentWorkCourses = courses.filter(
+    (course) =>
+      course.courseUnits.length &&
+      course.courseUnitRealisationTypeUrn === independentWorkUrn &&
+      course.flowState !== 'CANCELLED',
+  )
+
+  await createInactiveCourseRealisations(independentWorkCourses)
 }
 
 const courseUnitHandler = async (courseRealisations) => {
