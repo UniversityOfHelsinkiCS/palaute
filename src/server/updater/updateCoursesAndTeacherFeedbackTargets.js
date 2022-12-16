@@ -39,13 +39,6 @@ const responsibleTeacherUrns = [
   'urn:code:course-unit-realisation-responsibility-info-type:contact-info',
 ]
 
-// hack these curs into norppa
-const includeCurs = [
-  'otm-f7504f69-386b-4151-b2a9-17ab6e11c946',
-  'otm-a994004a-534f-462d-8c09-6b30d0f35f11',
-]
-const includeCus = ['hy-CU-132990749-2020-08-01', 'hy-CU-117909534-2020-08-01']
-
 const formatDate = (date) => dateFns.format(date, 'yyyy-MM-dd')
 const formatWithHours = (date) => dateFns.format(date, 'yyyy-MM-dd HH:mm:ss')
 
@@ -306,7 +299,6 @@ const createInactiveCourseRealisations = async (inactiveCourseRealisations) => {
     activityPeriod,
     organisations,
     customCodeUrns,
-    courseUnits,
   } of inactiveCourseRealisations) {
     await InactiveCourseRealisation.upsert({
       id,
@@ -315,11 +307,19 @@ const createInactiveCourseRealisations = async (inactiveCourseRealisations) => {
       educationalInstitutionUrn: getEducationalInstitutionUrn(organisations),
       isMoocCourse: isMoocCourse(customCodeUrns),
       teachingLanguages: getTeachingLanguages(customCodeUrns),
-      manuallyEnabled:
-        includeCurs.includes(id) ||
-        courseUnits?.some((cu) => includeCus.includes(cu.id)),
     })
   }
+}
+
+const getIncludeCurs = async () => {
+  const includeCurs = await InactiveCourseRealisation.findAll({
+    where: {
+      manuallyEnabled: true,
+    },
+    attributes: ['id'],
+  })
+
+  return includeCurs.map(({ id }) => id)
 }
 
 const sortAccessStatus = (a, b) =>
@@ -564,10 +564,11 @@ const deleteCancelledCourses = async (cancelledCourseIds) => {
 }
 
 const coursesHandler = async (courses) => {
+  const includeCurs = await getIncludeCurs()
+
   const filteredCourses = courses.filter(
     (course) =>
       includeCurs.includes(course.id) ||
-      course.courseUnits?.some((cu) => includeCus.includes(cu.id)) ||
       (course.courseUnits.length &&
         validRealisationTypes.includes(course.courseUnitRealisationTypeUrn) &&
         course.flowState !== 'CANCELLED'),
