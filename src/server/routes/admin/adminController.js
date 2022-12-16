@@ -6,6 +6,9 @@ const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { updater } = require('../../updater')
+const {
+  deleteCancelledCourses,
+} = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
 
 const {
   FeedbackTarget,
@@ -563,6 +566,8 @@ const updateInactiveCourseRealisation = async (req, res) => {
     },
     { where: { id } },
   )
+
+  if (!manuallyEnabled) deleteCancelledCourses([id])
 
   return res.send(inactiveCourse)
 }

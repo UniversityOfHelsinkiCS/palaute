@@ -7,6 +7,7 @@ import {
   Switch,
   Paper,
   TextField,
+  Alert,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
@@ -18,6 +19,14 @@ const Enable = ({ cur, active, setActive }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const handleSetActive = async () => {
+    const confirm = () =>
+      // eslint-disable-next-line no-alert
+      window.confirm(
+        'Are you sure? Course realisation and associated feedback targets will be deleted immediately.',
+      )
+
+    if (active && !confirm()) return
+
     try {
       await apiClient.put(`/admin/inactive-course-realisations/${cur.id}`, {
         manuallyEnabled: !active,
@@ -36,14 +45,9 @@ const Enable = ({ cur, active, setActive }) => {
     <Box sx={{ margin: 'auto 0 auto auto' }}>
       <FormGroup>
         <FormControlLabel
-          control={
-            <Switch
-              checked={active}
-              disabled={active}
-              onClick={handleSetActive}
-            />
-          }
-          label="Enable course realisation"
+          control={<Switch checked={active} onClick={handleSetActive} />}
+          label={active ? 'Enabled' : 'Disabled'}
+          labelPlacement="start"
         />
       </FormGroup>
     </Box>
@@ -69,7 +73,6 @@ const CourseAccordion = ({ cur }) => {
           {new Date(cur.endDate).toLocaleDateString()}
         </Typography>
         <Box m={2} />
-        <Typography>{active ? 'active' : 'inactive'}</Typography>
         <Enable cur={cur} active={active} setActive={setActive} />
       </Box>
     </Paper>
@@ -93,13 +96,16 @@ const EnableCourses = () => {
 
   return (
     <Box mt="1rem">
-      <Box m="1rem">
+      <Box m="1rem" display="flex" flexDirection="row">
         <TextField
-          sx={{ width: '50ch' }}
+          sx={{ width: '50ch', marginRight: '1rem' }}
           label="Search by course realisation name or id"
           variant="outlined"
           onChange={({ target }) => setSearch(target.value)}
         />
+        <Alert sx={{ width: '60ch' }} severity="info">
+          Enabled courses will activate during next Updater cycle
+        </Alert>
       </Box>
 
       {filteredInactiveCourseRealisations.map((cur) => (

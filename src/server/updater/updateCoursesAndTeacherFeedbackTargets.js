@@ -655,4 +655,7 @@ const updateCoursesAndTeacherFeedbackTargets = async () => {
   )
 }
 
-module.exports = updateCoursesAndTeacherFeedbackTargets
+module.exports = {
+  updateCoursesAndTeacherFeedbackTargets,
+  deleteCancelledCourses,
+}
