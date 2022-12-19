@@ -2,7 +2,7 @@ const _ = require('lodash')
 const { normalizeOrganisationCode } = require('../../config/common')
 const { relevantOrganisations } = require('../../config/IAMConfig')
 const Organisation = require('../models/organisation')
-const { ADMINS } = require('./config')
+const { ADMINS, inProduction } = require('./config')
 const { getIAMRights } = require('./IAMrights')
 const jamiClient = require('./jamiClient')
 
@@ -31,6 +31,7 @@ const getAccessFromIAMs = async (user) => {
   const { data: iamAccess } = await jamiClient.post('/', {
     userId: user.id,
     iamGroups: user.iamGroups,
+    noLogging: !inProduction,
   })
 
   if (!_.isObject(iamAccess)) return access
