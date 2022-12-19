@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
@@ -16,6 +16,7 @@ import {
   Box,
 } from '@mui/material'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
+import _ from 'lodash'
 
 import { sortTable } from '../../util/tableUtils'
 import DropZone from './DropZone'
@@ -68,7 +69,7 @@ const ExportCsv = ({ students, fileName }) => {
 const StudentTable = ({ students, feedbackTarget }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
-  const [orderBy, setOrderBy] = useState('firstName')
+  const [orderBy, setOrderBy] = useState('lastName')
   const { t } = useTranslation()
 
   const handleRequestSort = (e, property) => {
@@ -77,14 +78,20 @@ const StudentTable = ({ students, feedbackTarget }) => {
     setOrderBy(property)
   }
 
-  const studentsCSV = students.map(
-    ({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
-      firstName,
-      lastName,
-      studentNumber,
-      email,
-      feedbackGiven: feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'),
-    }),
+  const studentsCSV = useMemo(
+    () =>
+      _.orderBy(students, 'lastName').map(
+        ({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
+          firstName,
+          lastName,
+          studentNumber,
+          email,
+          feedbackGiven: feedbackGiven
+            ? t('feedbackGiven')
+            : t('feedbackNotGiven'),
+        }),
+      ),
+    [students],
   )
 
   const fileName = `${feedbackTarget.courseUnit.courseCode}_${format(
