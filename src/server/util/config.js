@@ -26,6 +26,8 @@ const { API_TOKEN, JWT_KEY } = process.env
 
 const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
 
+const IAM_SERVICE_URL = 'https://importer.cs.helsinki.fi/api/auth'
+
 const useOldImporter = false
 
 module.exports = {
@@ -35,6 +37,7 @@ module.exports = {
   PORT,
   API_TOKEN,
   IMPORTER_API_URL,
+  IAM_SERVICE_URL,
   JWT_KEY,
   useOldImporter,
 }

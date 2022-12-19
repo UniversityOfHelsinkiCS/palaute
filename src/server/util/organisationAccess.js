@@ -4,6 +4,7 @@ const { relevantOrganisations } = require('../../config/IAMConfig')
 const Organisation = require('../models/organisation')
 const { ADMINS } = require('./config')
 const { getIAMRights } = require('./IAMrights')
+const jamiClient = require('./jamiClient')
 
 const isSuperAdmin = (user) => ADMINS.includes(user.username)
 
@@ -24,9 +25,13 @@ const getAccessToAll = async (accessLevel) => {
   return access
 }
 
-const getAccessFromIAMs = (user) => {
+const getAccessFromIAMs = async (user) => {
   const access = {}
-  const { access: iamAccess } = getIAMRights(user.iamGroups)
+
+  const { data: iamAccess } = await jamiClient.post('/', {
+    userId: user.id,
+    iamGroups: user.iamGroups,
+  })
 
   if (!_.isObject(iamAccess)) return access
   Object.keys(iamAccess).forEach((code) => {
@@ -55,7 +60,7 @@ const getOrganisationAccess = async (user) => {
   }
 
   const access = {
-    ...getAccessFromIAMs(user),
+    ...(await getAccessFromIAMs(user)),
     ...(await getFeedbackCorrespondentAccess(user)),
   }
 
