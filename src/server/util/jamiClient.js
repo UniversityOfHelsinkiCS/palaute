@@ -1,13 +1,26 @@
 const axios = require('axios')
 
-const { IAM_SERVICE_URL, API_TOKEN, inProduction } = require('./config')
+const { JAMI_URL, API_TOKEN, inProduction } = require('./config')
+const logger = require('./logger')
 
 const jamiClient = axios.create({
-  baseURL: IAM_SERVICE_URL,
+  baseURL: JAMI_URL,
   params: {
     token: API_TOKEN,
     noLogging: !inProduction,
   },
 })
+
+const testJami = async () => {
+  try {
+    await jamiClient.get('/ping', { timeout: 4000 })
+    logger.info('JAMI connected')
+  } catch (error) {
+    logger.error(error)
+    logger.warn('JAMI not responding :(')
+  }
+}
+
+testJami()
 
 module.exports = jamiClient

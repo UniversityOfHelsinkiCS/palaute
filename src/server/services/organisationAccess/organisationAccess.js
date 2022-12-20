@@ -28,7 +28,7 @@ const getAccessToAll = async (accessLevel) => {
 }
 
 const getIAMAccessFromJami = async (user, attempt = 1) => {
-  if (inE2EMode || user.iamGroups.length === 0) return {}
+  if (user.iamGroups.length === 0) return {}
 
   const { userId, iamGroups } = user
 

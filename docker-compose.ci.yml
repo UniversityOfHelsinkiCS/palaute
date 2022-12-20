@@ -12,6 +12,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DATABASE=postgres
+      - JAMI_HOST=jami
+      - JAMI_PORT=3003
     ports:
       - 8000:8000
     container_name: palaute_app_test
@@ -21,3 +23,12 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: palaute_test_db
+  
+  jami:
+    image: toska/jami:latest
+    environment:
+      - PORT=3003
+      - NODE_ENV=dev
+    ports:
+      - 3003:3003
+    container_name: jami

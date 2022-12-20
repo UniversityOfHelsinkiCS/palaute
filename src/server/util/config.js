@@ -16,17 +16,19 @@ const DB_CONFIG = {
   logging: false,
 }
 
+const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT } = process.env
+
 const REDIS_CONFIG = {
-  url: `redis://default:redis@${process.env.REDIS_HOST}:6379`,
+  url: `redis://default:redis@${REDIS_HOST}:6379`,
 }
 
 const PORT = process.env.PORT || 8000
 
-const { API_TOKEN, JWT_KEY } = process.env
-
 const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
 
-const IAM_SERVICE_URL = 'https://importer.cs.helsinki.fi/api/auth'
+const JAMI_URL = common.inProduction
+  ? 'https://importer.cs.helsinki.fi/api/auth'
+  : `http://${JAMI_HOST}:${JAMI_PORT}`
 
 const useOldImporter = false
 
@@ -37,7 +39,7 @@ module.exports = {
   PORT,
   API_TOKEN,
   IMPORTER_API_URL,
-  IAM_SERVICE_URL,
+  JAMI_URL,
   JWT_KEY,
   useOldImporter,
 }
