@@ -11,7 +11,7 @@ const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
 const Organisation = require('./organisation')
-const { getOrganisationAccess } = require('../util/organisationAccess')
+const { getOrganisationAccess } = require('../services/organisationAccess')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 
 class User extends Model {

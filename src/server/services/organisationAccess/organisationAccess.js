@@ -1,13 +1,12 @@
 const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
-const { normalizeOrganisationCode } = require('../../config/common')
-const { relevantOrganisations } = require('../../config/IAMConfig')
-const Organisation = require('../models/organisation')
-const { ADMINS, inE2EMode } = require('./config')
-const { getIAMRights } = require('./IAMrights')
-const jamiClient = require('./jamiClient')
-const logger = require('./logger')
+const { normalizeOrganisationCode } = require('../../../config/common')
+const { relevantOrganisations } = require('../../../config/IAMConfig')
+const Organisation = require('../../models/organisation')
+const { ADMINS, inE2EMode } = require('../../util/config')
+const jamiClient = require('../../util/jamiClient')
+const logger = require('../../util/logger')
 
 const isSuperAdmin = (user) => ADMINS.includes(user.username)
 
