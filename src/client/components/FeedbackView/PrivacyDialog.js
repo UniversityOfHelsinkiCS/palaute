@@ -30,7 +30,7 @@ const PrivacyDialog = ({ open, onClose }) => {
           {t('feedbackView:feedbackInfoContent')}
           <br />
           <Link
-            href="https://wiki.helsinki.fi/display/CF/Data+protection+notice"
+            href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991"
             underline="hover"
           >
             {t('feedbackView:dataProtectionNotice')}
