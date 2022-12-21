@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
-const { normalizeOrganisationCode } = require('../../../config/common')
+const { normalizeOrganisationCode } = require('../../util/common')
 const { ADMINS, inE2EMode } = require('../../util/config')
 const jamiClient = require('../../util/jamiClient')
 const logger = require('../../util/logger')

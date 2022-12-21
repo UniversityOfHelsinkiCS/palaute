@@ -5,7 +5,7 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
 const { ADMINS } = require('../../../config')
-const { relevantIAMs } = require('../../../config/IAMConfig')
+const relevantIAMs = require('../../util/relevantIAMs')
 const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {

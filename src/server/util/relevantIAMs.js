@@ -1,6 +1,3 @@
-const { normalizeOrganisationCode } = require('./common')
-const { facultyMap, data } = require('./data')
-
 const ANY = 'ANY'
 
 /**
@@ -394,44 +391,6 @@ const adminGroups = ['grp-ospa']
 
 const employeeGroups = ['hy-employees']
 
-const isSuperAdminIam = (iam) => superAdminGroups.includes(iam)
-
-const isAdminIam = (iam) => adminGroups.includes(iam)
-
-const isUniversityWideIam = (iam) => universityWideGroups.includes(iam)
-
-const isDoctoralIam = (iam) => doctoralIams.includes(iam)
-
-const isEmployeeIam = (iam) => employeeGroups.includes(iam)
-
-const iamToDoctoralSchool = (iam) => doctoralSchoolMap[iam]
-
-const getStudyLeaderGroup = (iam) => kojoMap[iam]
-
-const isStudyLeaderGroup = (iam, allIams) =>
-  allIams.concat('ANY').includes(getStudyLeaderGroup(iam))
-
-const iamToOrganisationCode = (iam) => {
-  const organisationCodes = joryMap[iam]
-  if (Array.isArray(organisationCodes)) {
-    return organisationCodes
-  }
-  return [organisationCodes]
-}
-
-const kosuIamToFaculties = (iam) => {
-  const faculties = kosuFacultyMap[iam]
-  if (!faculties?.length > 0) return []
-
-  return faculties.map((f) => facultyMap[f])
-}
-
-const dekaaniIamToFaculty = (iam) => {
-  const faculty = dekaaniFacultyMap[iam]
-  if (!faculty) return null
-  return facultyMap[faculty]
-}
-
 const relevantIAMs = []
   .concat(Object.keys(joryMap))
   .concat(Object.keys(kojoMap))
@@ -446,35 +405,4 @@ const relevantIAMs = []
   .concat(adminGroups)
   .concat(employeeGroups)
 
-const RELEVANT_ORGANISATION_CODES = [
-  'H906', // Kielikeskus
-  'H930', // Avoin yliopisto
-]
-
-const relevantOrganisations = RELEVANT_ORGANISATION_CODES.concat(
-  data.map((faculty) => faculty.code),
-).concat(
-  data.flatMap((faculty) =>
-    faculty.programmes.map((programme) =>
-      normalizeOrganisationCode(programme.key),
-    ),
-  ),
-)
-
-module.exports = {
-  isSuperAdminIam,
-  isAdminIam,
-  isUniversityWideIam,
-  isDoctoralIam,
-  isEmployeeIam,
-  iamToDoctoralSchool,
-  iamToOrganisationCode,
-  kosuIamToFaculties,
-  dekaaniIamToFaculty,
-  opetusVaradekaani,
-  getStudyLeaderGroup,
-  isStudyLeaderGroup,
-  relevantIAMs,
-  relevantOrganisations,
-  ANY,
-}
+module.exports = relevantIAMs

@@ -1,6 +1,6 @@
 const { addYears } = require('date-fns')
 const { Op, literal } = require('sequelize')
-const { startOfStudyYear } = require('../../../config/common')
+const { startOfStudyYear } = require('../../util/common')
 const {
   FeedbackTarget,
   UserFeedbackTarget,

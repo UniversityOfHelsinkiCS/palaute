@@ -1,5 +1,5 @@
 const { QueryTypes } = require('sequelize')
-const { relevantIAMs } = require('../../config/IAMConfig')
+const relevantIAMs = require('../util/relevantIAMs')
 const { User } = require('../models')
 
 module.exports = {
