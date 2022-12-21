@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from 'react-query'
-import { useHistory, useParams, Redirect } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
@@ -48,15 +48,9 @@ const FeedbackTargetSettings = () => {
     return <LoadingProgress />
   }
 
-  const { accessStatus, feedbackVisibility } = feedbackTarget
-  const isTeacher =
-    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
-
-  if (!isTeacher && !isOrganisationAdmin) {
-    return <Redirect to="/" />
-  }
-
-  const [visibility, setVisibility] = useState(feedbackVisibility)
+  const [visibility, setVisibility] = useState(
+    feedbackTarget.feedbackVisibility,
+  )
 
   const handleOpenFeedbackImmediately = async () => {
     try {

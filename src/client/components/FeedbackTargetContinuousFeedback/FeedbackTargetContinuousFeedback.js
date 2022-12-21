@@ -110,7 +110,11 @@ const FeedbackTargetContinuousFeedback = () => {
     return <LoadingProgress />
   }
 
-  const { accessStatus, continuousFeedbackEnabled } = feedbackTarget
+  if (!continuousFeedbacks) {
+    return <Redirect to="/" />
+  }
+
+  const { accessStatus } = feedbackTarget
 
   const isAdmin = authorizedUser?.isAdmin ?? false
   const isTeacher =
@@ -118,10 +122,6 @@ const FeedbackTargetContinuousFeedback = () => {
     accessStatus === 'TEACHER' ||
     isAdmin
   const isStudent = accessStatus === 'STUDENT'
-
-  if (!continuousFeedbacks || (!isAdmin && !continuousFeedbackEnabled)) {
-    return <Redirect to="/" />
-  }
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
