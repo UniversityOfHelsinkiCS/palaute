@@ -8,6 +8,7 @@ const { createOrganisationLog } = require('../../util/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
 const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
+const jamiClient = require('../../util/jamiClient')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
@@ -34,6 +35,12 @@ const getOrganisations = async (req, res) => {
   }))
 
   return res.send(organisations)
+}
+
+const getOrganisationData = async (req, res) => {
+  const { data } = await jamiClient.get('/organisation-data')
+
+  return res.send(data)
 }
 
 const updateOrganisation = async (req, res) => {
@@ -168,6 +175,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
 const router = Router()
 
 router.get('/', getOrganisations)
+router.get('/data', getOrganisationData)
 router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)

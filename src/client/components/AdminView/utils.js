@@ -1,5 +1,4 @@
 import apiClient from '../../util/apiClient'
-import { data } from '../../../config/data'
 import { normalizeOrganisationCode } from '../CourseSummary/utils'
 
 export const getInitialValues = (survey) => {
@@ -56,7 +55,7 @@ export const handleLoginAs = (user) => () => {
   window.location.reload()
 }
 
-export const getFaculties = () => {
+export const getFaculties = (data) => {
   const faculties = data.map(({ code, name }) => ({ code, name }))
 
   return faculties
@@ -75,7 +74,11 @@ const getProgrammeAccess = (users, key) => {
   return usersWithAccessToProgramme
 }
 
-export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode) => {
+export const getProgrammeAccessByFaculty = (
+  usersWithAccess,
+  facultyCode,
+  data,
+) => {
   const faculty = data.find(({ code }) => code === facultyCode)
 
   const programmes = faculty

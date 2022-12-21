@@ -4,7 +4,6 @@ import { orderBy, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
-import { data } from '../../../config/data'
 
 const courseCodeMatches = (courseCode, keyword) => {
   if (!keyword) {
@@ -39,7 +38,7 @@ export const normalizeOrganisationCode = (r) => {
   return providercode
 }
 
-export const getFacultyAccess = (organisationAccess) => {
+export const getFacultyAccess = (organisationAccess, data) => {
   const organisationCodes = organisationAccess.map(({ code }) => code)
   const faculties = data.map((data) => ({
     ...data,
@@ -62,7 +61,7 @@ export const getFacultyAccess = (organisationAccess) => {
   return facultyAccess
 }
 
-const filterByFaculty = (organisations, facultyCode) => {
+const filterByFaculty = (organisations, facultyCode, data) => {
   if (!facultyCode) return organisations
 
   const facultyProgrammeCodes = data
@@ -290,6 +289,7 @@ export const useAggregatedOrganisationSummaries = ({
   includeOpenUniCourseUnits,
   dateRange,
   organisationAccess,
+  organisationData,
 }) => {
   const { organisationSummaries, ...rest } = useOrganisationSummaries({
     code,
@@ -317,7 +317,7 @@ export const useAggregatedOrganisationSummaries = ({
   )
 
   const facultyOrganisations = useMemo(
-    () => filterByFaculty(filteredOrganisations, facultyCode),
+    () => filterByFaculty(filteredOrganisations, facultyCode, organisationData),
     [filteredOrganisations, facultyCode],
   )
 

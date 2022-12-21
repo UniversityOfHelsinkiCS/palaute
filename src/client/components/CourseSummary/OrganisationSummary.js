@@ -19,6 +19,7 @@ import {
 import Title from '../common/Title'
 import useHistoryState from '../../hooks/useHistoryState'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
+import useOrganisationData from '../../hooks/useOrganisationData'
 import errors from '../../util/errorMessage'
 import ErrorView from '../common/ErrorView'
 import OrganisationTable from './OrganisationTable'
@@ -50,8 +51,12 @@ const OrganisationSummary = () => {
   const { organisations: organisationAccess, isLoading: organisationLoading } =
     useOrganisations()
 
+  const { data } = useOrganisationData()
+  const organisationData = data || []
+
   const facultyAccess =
-    !organisationLoading && getFacultyAccess(organisationAccess)
+    !organisationLoading &&
+    getFacultyAccess(organisationAccess, organisationData)
   const hasMultipleFacultyAccess = facultyAccess.length > 1
 
   const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
@@ -96,6 +101,7 @@ const OrganisationSummary = () => {
     includeOpenUniCourseUnits,
     dateRange: resultingDateRange,
     organisationAccess,
+    organisationData,
   })
 
   const { openAccordions, toggleAccordion } = useOpenAccordions(

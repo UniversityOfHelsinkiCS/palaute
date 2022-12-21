@@ -24,6 +24,7 @@ import { format } from 'date-fns'
 
 import { getFaculties, getProgrammeAccessByFaculty } from './utils'
 import getAllUserAccess from '../../hooks/useAllUserAccess'
+import useOrganisationData from '../../hooks/useOrganisationData'
 import useHistoryState from '../../hooks/useHistoryState'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { ADMINS } from '../../../config'
@@ -116,20 +117,22 @@ const AccessTab = () => {
   const { t } = useTranslation()
 
   const { usersWithAccess, isLoading } = getAllUserAccess()
+  const { data, isLoading: dataIsLoading } = useOrganisationData()
 
   useEffect(() => {
-    if (isLoading) return
+    if (isLoading || dataIsLoading) return
 
     const programmeAccess = getProgrammeAccessByFaculty(
       usersWithAccess,
       facultyCode,
+      data,
     )
     setAccess(programmeAccess)
   }, [facultyCode, isLoading])
 
   if (isLoading) return <LoadingProgress />
 
-  const faculties = getFaculties()
+  const faculties = getFaculties(data || [])
 
   return (
     <Box>
