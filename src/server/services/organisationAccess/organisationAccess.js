@@ -2,28 +2,15 @@ const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
 const { normalizeOrganisationCode } = require('../../../config/common')
-const { relevantOrganisations } = require('../../../config/IAMConfig')
-const Organisation = require('../../models/organisation')
 const { ADMINS, inE2EMode } = require('../../util/config')
 const jamiClient = require('../../util/jamiClient')
 const logger = require('../../util/logger')
 
 const isSuperAdmin = (user) => ADMINS.includes(user.username)
 
-const organisationIsRelevant = (organisation) => {
-  const { code } = organisation
+const getAccessToAll = async () => {
+  const { data: access } = await jamiClient.get('/access-to-all')
 
-  const isRelevant = relevantOrganisations.includes(code)
-
-  return isRelevant
-}
-
-const getAccessToAll = async (accessLevel) => {
-  const access = {}
-  const allOrganisations = await Organisation.findAll({ attributes: ['code'] })
-  allOrganisations.filter(organisationIsRelevant).forEach(({ code }) => {
-    access[code] = accessLevel
-  })
   return access
 }
 
@@ -81,7 +68,7 @@ const getFeedbackCorrespondentAccess = async (user) => {
 
 const getOrganisationAccess = async (user) => {
   if (isSuperAdmin(user)) {
-    return getAccessToAll({ read: true, write: true, admin: true })
+    return getAccessToAll()
   }
 
   const access = {
