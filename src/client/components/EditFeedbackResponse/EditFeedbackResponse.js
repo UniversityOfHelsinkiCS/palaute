@@ -53,14 +53,17 @@ const EditFeedbackResponse = () => {
     return <LoadingProgress />
   }
 
-  if (!feedbackTarget) {
+  const { closesAt, accessStatus } = feedbackTarget
+
+  const hasAccess = ['RESPONSIBLE_TEACHER', 'TEACHER', 'ADMIN'].includes(
+    accessStatus,
+  )
+  if (!feedbackTarget || !hasAccess) {
     return <Redirect to="/" />
   }
 
   const initialValues = getInitialValues(feedbackTarget)
   const isSent = feedbackTarget.feedbackResponseEmailSent
-
-  const { closesAt } = feedbackTarget
 
   const now = Date.now()
   const closeTime = Date.parse(closesAt)

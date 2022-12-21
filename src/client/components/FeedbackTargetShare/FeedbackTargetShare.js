@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 
 import { Box, Button, Chip, Paper, Typography, Alert } from '@mui/material'
@@ -40,6 +40,10 @@ const FeedbackTargetShare = () => {
 
   if (isLoading) {
     return <LoadingProgress />
+  }
+
+  if (feedbackTarget.accessStatus === 'STUDENT') {
+    return <Redirect to="/" />
   }
 
   const lastSentAt = Date.parse(feedbackTarget.feedbackReminderLastSentAt)
