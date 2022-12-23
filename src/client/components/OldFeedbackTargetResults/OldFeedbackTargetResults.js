@@ -6,6 +6,7 @@ import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
+import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 import FeedbackSummary from './QuestionResults/FeedbackSummary'
 import QuestionResults from './QuestionResults'
 
@@ -32,15 +33,14 @@ const OldFeedbackTargetResultsView = () => {
     return <Redirect to="/" />
   }
 
-  const { feedbacks, feedbackVisible, userOrganisationAccess } =
-    feedbackTargetData
+  const orgAccess = useOrganisationAccess(feedbackTarget)
+
+  const { feedbacks, feedbackVisible } = feedbackTargetData
 
   const { questions, publicQuestionIds, accessStatus, feedback } =
     feedbackTarget
 
-  const userOrganisationAdmin = userOrganisationAccess
-    ? userOrganisationAccess.admin
-    : false
+  const userOrganisationAdmin = orgAccess?.admin ? orgAccess.admin : false
 
   const isResponsibleTeacher =
     userOrganisationAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
@@ -48,7 +48,7 @@ const OldFeedbackTargetResultsView = () => {
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
-  if (isOpen && !feedback && !userOrganisationAccess && !isTeacher) {
+  if (isOpen && !feedback && !orgAccess.read && !isTeacher) {
     return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
@@ -99,7 +99,7 @@ const OldFeedbackTargetResultsView = () => {
           questions={questions}
           feedbacks={feedbacks}
           isResponsibleTeacher={isResponsibleTeacher}
-          organisationAccess={!!userOrganisationAccess}
+          organisationAccess={orgAccess.read}
         />
       )}
     </>
