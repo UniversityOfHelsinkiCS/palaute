@@ -11,8 +11,6 @@ const { getLastRestart } = require('../../util/lastRestart')
 const login = async (req, res) => {
   const { user, isAdmin, loginAs } = req
 
-  if (!user) throw new ApplicationError('Not found', 404)
-
   const allIamGroups = req.noad ? [] : req.iamGroups ?? []
   const relevantIamGroups = allIamGroups.filter((iam) =>
     relevantIAMs.includes(iam),

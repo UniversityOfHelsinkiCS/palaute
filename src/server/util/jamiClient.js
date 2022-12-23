@@ -18,6 +18,7 @@ const testJami = async () => {
   } catch (error) {
     logger.error(error)
     logger.warn('JAMI not responding :(')
+    logger.info('Are you sure you are using the latest JAMI image?')
   }
 }
 

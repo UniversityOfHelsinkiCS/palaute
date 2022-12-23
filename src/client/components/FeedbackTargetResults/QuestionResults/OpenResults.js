@@ -19,8 +19,8 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
-import { FeedbackTargetViewContext } from '../../FeedbackTargetView/FeedbackTargetViewContext'
 import InfoBox from '../../common/InfoBox'
+import { useFeedbackTargetContext } from '../../FeedbackTargetView/FeedbackTargetContext'
 
 const styles = {
   list: (theme) => ({
@@ -137,8 +137,7 @@ const OpenResults = ({ question }) => {
   const { t, i18n } = useTranslation()
   const { id } = useParams()
 
-  const { isTeacher, isOrganisationAdmin } =
-    React.useContext(FeedbackTargetViewContext) || {}
+  const { isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
 
   const label = getLanguageValue(question.data?.label, i18n.language)
 

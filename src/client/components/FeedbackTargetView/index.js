@@ -1,1 +1,3 @@
-export { default } from './FeedbackTargetView'
+import FeedbackTargetView from './FeedbackTargetView'
+
+export default FeedbackTargetView
