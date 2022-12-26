@@ -38,9 +38,11 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
   )
 
   await Promise.all(
-    feedbackTargets.map((fbt) => {
-      if (!fbt) return null
-      return sendFeedbackReminderToStudents(fbt, '')
+    feedbackTargets.map(async (fbt) => {
+      if (await fbt?.feedbackCanBeGiven()) {
+        return sendFeedbackReminderToStudents(fbt, '')
+      }
+      return null
     }),
   )
 }
