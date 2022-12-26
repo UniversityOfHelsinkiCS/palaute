@@ -2,15 +2,6 @@ import { parseISO, format } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 
-export const feedbackTargetIsDisabled = (feedbackTarget) => {
-  const { courseUnit } = feedbackTarget
-  const organisations = courseUnit?.organisations ?? []
-
-  return organisations.some(({ disabledCourseCodes }) =>
-    disabledCourseCodes.includes(courseUnit.courseCode),
-  )
-}
-
 export const getCoursePeriod = (courseRealisation) => {
   if (!courseRealisation) {
     return null

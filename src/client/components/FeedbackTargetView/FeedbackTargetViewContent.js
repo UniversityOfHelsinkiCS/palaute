@@ -10,7 +10,14 @@ import {
   Link,
 } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, Link as MuiLink } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Tab,
+  Button,
+  Link as MuiLink,
+  Alert,
+} from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -41,7 +48,6 @@ import ExternalLink from '../common/ExternalLink'
 
 import {
   getCoursePeriod,
-  feedbackTargetIsDisabled,
   copyLink,
   getFeedbackPeriod,
   getCourseUnitSummaryPath,
@@ -56,6 +62,7 @@ import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import { TagChip } from '../common/TagChip'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
+import ErrorView from '../common/ErrorView'
 
 const styles = {
   datesContainer: {
@@ -182,12 +189,12 @@ const FeedbackTargetViewContent = () => {
     feedbackCount,
     studentCount,
     continuousFeedbackEnabled,
+    feedbackCanBeGiven,
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
-  const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
   const showFeedbacksTab =
@@ -220,12 +227,8 @@ const FeedbackTargetViewContent = () => {
       ? ''
       : `, ${courseUnit?.courseCode}`
 
-  if (isDisabled && !isTeacher) {
-    enqueueSnackbar(t('feedbackTargetView:feedbackDisabled'), {
-      variant: 'error',
-    })
-
-    return <Redirect to="/" />
+  if (!feedbackCanBeGiven && !isTeacher) {
+    return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
   }
 
   const handleCopyLink = () => {
@@ -239,6 +242,11 @@ const FeedbackTargetViewContent = () => {
   return (
     <>
       <Box mb={3}>
+        {!feedbackCanBeGiven && (
+          <Alert severity="error">
+            {t('feedbackTargetView:feedbackDisabled')}
+          </Alert>
+        )}
         <div css={styles.headingContainer}>
           <Box display="flex" flexDirection="column">
             <Typography variant="h4" component="h1">

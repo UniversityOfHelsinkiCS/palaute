@@ -7,6 +7,7 @@ const getAccessStatus = async (
   let accessStatus = isAdmin ? 'ADMIN' : userFeedbackTarget?.accessStatus
 
   const { courseUnitId, courseRealisation } = feedbackTarget
+
   const startDate = new Date(courseRealisation.startDate)
 
   // Feedback visibility restricted to only responsible teachers

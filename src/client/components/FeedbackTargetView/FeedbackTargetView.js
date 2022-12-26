@@ -23,6 +23,7 @@ const ErrorComponent = ({ error }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { id } = useParams()
 
+  // todo refactor into mutation
   const onSubmit = async () => {
     const res = await apiClient.put(
       `/feedback-targets/${id}/enrolment-notification`,

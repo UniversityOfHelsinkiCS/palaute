@@ -96,10 +96,12 @@ const getFromDb = async (id) => {
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
   const publicTarget = await fbt.toPublicObject()
+  const feedbackCanBeGiven = await fbt.feedbackCanBeGiven()
 
   const feedbackTargetJson = {
     ...publicTarget,
     studentListVisible,
+    feedbackCanBeGiven,
   }
 
   return feedbackTargetJson
