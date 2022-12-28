@@ -12,7 +12,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useOrganisations from '../../hooks/useOrganisations'
 import { LoadingProgress } from '../common/LoadingProgress'
-import { FeedbackTargetContextProvider } from './FeedbackTargetContext'
+import { FeedbackTargetContextProvider } from '../../contexts/FeedbackTargetContext'
 import FeedbackTargetViewContent from './FeedbackTargetViewContent'
 
 const ErrorComponent = ({ error }) => {

@@ -61,7 +61,7 @@ import TeacherChip from '../common/TeacherChip'
 import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import { TagChip } from '../common/TagChip'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../contexts/FeedbackTargetContext'
 import ErrorView from '../common/ErrorView'
 
 const styles = {
