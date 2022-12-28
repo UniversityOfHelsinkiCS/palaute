@@ -10,7 +10,7 @@ import { differenceInHours, format } from 'date-fns'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import { LoadingProgress } from '../common/LoadingProgress'
-import { copyLink } from '../FeedbackTargetView/utils'
+import { copyLink } from '../../pages/AdUser/FeedbackTarget/utils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import ReminderEmailModal from './ReminderEmailModal'

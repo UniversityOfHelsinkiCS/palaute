@@ -1,6 +1,6 @@
 import { parseISO, format } from 'date-fns'
 
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../util/apiClient'
 
 export const getCoursePeriod = (courseRealisation) => {
   if (!courseRealisation) {

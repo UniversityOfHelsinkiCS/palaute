@@ -2,17 +2,17 @@ import { Container } from '@mui/material'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import UserFeedbacks from './UserFeedbacks'
-import AdminView from './AdminView'
-import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
-import CourseSummary from './CourseSummary'
-import TeacherView from './TeacherView'
-import CourseRealisationFeedback from './CourseRealisationFeedback'
-import OrganisationSettings from './OrganisationSettings'
-import FeedbackTargetView from './FeedbackTargetView'
-import NorppaFeedback from './NorppaFeedback'
-import { LoadingProgress } from './common/LoadingProgress'
-import useIsMobile from '../hooks/useIsMobile'
+import UserFeedbacks from '../../components/UserFeedbacks'
+import AdminView from '../../components/AdminView'
+import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
+import CourseSummary from '../../components/CourseSummary'
+import TeacherView from '../../components/TeacherView'
+import CourseRealisationFeedback from '../../components/CourseRealisationFeedback'
+import OrganisationSettings from '../../components/OrganisationSettings'
+import FeedbackTarget from './FeedbackTarget/FeedbackTarget'
+import NorppaFeedback from '../../components/NorppaFeedback'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const styles = {
   container: (theme) => ({
@@ -52,7 +52,7 @@ const Router = () => (
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={UserFeedbacks} exact />
       <Route path="/courses" component={TeacherView} exact />
-      <Route path="/targets/:id" component={FeedbackTargetView} />
+      <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={OrganisationSettings} />
       <Route path="/course-summary" component={CourseSummary} />
       <Route path="/cur/:id" component={CourseRealisationFeedback} />

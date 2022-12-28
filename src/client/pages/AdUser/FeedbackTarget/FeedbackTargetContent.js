@@ -32,19 +32,23 @@ import {
   ReviewsOutlined,
 } from '@mui/icons-material'
 
-import FeedbackTargetResults from '../FeedbackTargetResults'
-import FeedbackView from '../FeedbackView'
-import StudentsWithFeedback from '../StudentsWithFeedback'
-import EditFeedbackResponse from '../EditFeedbackResponse'
-import FeedbackTargetShare from '../FeedbackTargetShare'
-import FeedbackLinksView from '../FeedbackLinksView'
-import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
-import { RouterTab, RouterTabs, TabLabel } from '../common/RouterTabs'
-import { getLanguageValue } from '../../util/languageUtils'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import ExternalLink from '../common/ExternalLink'
+import FeedbackTargetResults from '../../../components/FeedbackTargetResults'
+import FeedbackView from '../../../components/FeedbackView'
+import StudentsWithFeedback from '../../../components/StudentsWithFeedback'
+import EditFeedbackResponse from '../../../components/EditFeedbackResponse'
+import FeedbackTargetShare from '../../../components/FeedbackTargetShare'
+import FeedbackLinksView from '../../../components/FeedbackLinksView'
+import useCourseRealisationSummaries from '../../../hooks/useCourseRealisationSummaries'
+import {
+  RouterTab,
+  RouterTabs,
+  TabLabel,
+} from '../../../components/common/RouterTabs'
+import { getLanguageValue } from '../../../util/languageUtils'
+import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
+import ExternalLink from '../../../components/common/ExternalLink'
 
 import {
   getCoursePeriod,
@@ -54,15 +58,15 @@ import {
   deleteResponsibleTeacher,
 } from './utils'
 
-import FeedbackTargetSettings from '../FeedbackTargetSettings'
-import FeedbackTargetLogs from '../FeedbackTargetLogs'
-import ContinuousFeedback from '../FeedbackTargetContinuousFeedback'
-import TeacherChip from '../common/TeacherChip'
-import { links } from '../../util/links'
-import PercentageCell from '../CourseSummary/PercentageCell'
-import { TagChip } from '../common/TagChip'
-import { useFeedbackTargetContext } from '../../contexts/FeedbackTargetContext'
-import ErrorView from '../common/ErrorView'
+import FeedbackTargetSettings from '../../../components/FeedbackTargetSettings'
+import FeedbackTargetLogs from '../../../components/FeedbackTargetLogs'
+import ContinuousFeedback from '../../../components/FeedbackTargetContinuousFeedback'
+import TeacherChip from '../../../components/common/TeacherChip'
+import { links } from '../../../util/links'
+import PercentageCell from '../../../components/CourseSummary/PercentageCell'
+import { TagChip } from '../../../components/common/TagChip'
+import { useFeedbackTargetContext } from './FeedbackTargetContext'
+import ErrorView from '../../../components/common/ErrorView'
 
 const styles = {
   datesContainer: {
@@ -156,7 +160,7 @@ const handleDeleteTeacher = (feedbackTarget, t) => async (teacher) => {
   }
 }
 
-const FeedbackTargetViewContent = () => {
+const FeedbackTargetContent = () => {
   const { path, url } = useRouteMatch()
   const { id } = useParams()
   const { t, i18n } = useTranslation()
@@ -508,4 +512,4 @@ const FeedbackTargetViewContent = () => {
   )
 }
 
-export default FeedbackTargetViewContent
+export default FeedbackTargetContent

@@ -7,7 +7,7 @@ import { Box } from '@mui/material'
 import NavBar from '../../components/NavBar'
 import Footer from '../../components/Footer'
 import DevTools from '../../components/DevTools'
-import Router from '../../components/Router'
+import Router from './Router'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const AdUser = () => {

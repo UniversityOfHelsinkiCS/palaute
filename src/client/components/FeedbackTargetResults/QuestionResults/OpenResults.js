@@ -20,7 +20,7 @@ import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
 import InfoBox from '../../common/InfoBox'
-import { useFeedbackTargetContext } from '../../../contexts/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
   list: (theme) => ({
