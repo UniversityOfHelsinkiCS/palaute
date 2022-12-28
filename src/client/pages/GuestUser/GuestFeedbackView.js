@@ -14,11 +14,11 @@ import {
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import FeedbackForm from '../FeedbackForm'
+import FeedbackForm from '../../components/FeedbackForm'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import PrivacyDialog from '../FeedbackView/PrivacyDialog'
+import PrivacyDialog from '../../components/FeedbackView/PrivacyDialog'
 
-import AlertLink from '../common/AlertLink'
+import AlertLink from '../../components/common/AlertLink'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -29,10 +29,10 @@ import {
   getQuestions,
   formatDate,
   checkIsFeedbackOpen,
-} from '../FeedbackView/utils'
+} from '../../components/FeedbackView/utils'
 
 import { saveValues } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 const tada = keyframes({
   from: {

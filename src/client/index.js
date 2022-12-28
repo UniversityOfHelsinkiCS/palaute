@@ -8,7 +8,7 @@ import { QueryClientProvider } from 'react-query'
 
 import { inProduction, basePath } from './util/common'
 import { getHeaders, setHeaders } from './util/mockHeaders'
-import App from './components/App'
+import App from './pages/App'
 import ErrorBoundary from './components/ErrorBoundary'
 import initializeSentry from './util/sentry'
 import initializeI18n from './util/i18n'

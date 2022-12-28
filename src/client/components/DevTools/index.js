@@ -2,11 +2,17 @@ import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { inProduction } from '../../util/common'
+import AdminLoggedInAsBanner from '../AdminView/AdminLoggedInAsBanner'
 
 const DevTools = () => {
   if (inProduction) return null
 
-  return <ReactQueryDevtools position="bottom-right" />
+  return (
+    <>
+      <ReactQueryDevtools position="bottom-right" />
+      <AdminLoggedInAsBanner />
+    </>
+  )
 }
 
 export default DevTools
