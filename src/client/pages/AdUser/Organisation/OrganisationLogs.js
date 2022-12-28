@@ -2,8 +2,8 @@ import { Box, Paper, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
 import { useParams } from 'react-router'
-import useOrganisationLogs from '../../hooks/useOrganisationLogs'
-import { LoadingProgress } from '../common/LoadingProgress'
+import useOrganisationLogs from '../../../hooks/useOrganisationLogs'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 const getLogMessage = (data) => {
   let messages = []

@@ -17,9 +17,9 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash'
 
-import useOrganisation from '../../hooks/useOrganisation'
-import { LoadingProgress } from '../common/LoadingProgress'
-import apiClient from '../../util/apiClient'
+import useOrganisation from '../../../hooks/useOrganisation'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import apiClient from '../../../util/apiClient'
 
 const updateFeedbackCorrespondents =
   (code) =>

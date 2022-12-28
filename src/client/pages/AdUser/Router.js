@@ -8,8 +8,8 @@ import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from '../../components/CourseSummary'
 import TeacherView from '../../components/TeacherView'
 import CourseRealisationFeedback from '../../components/CourseRealisationFeedback'
-import OrganisationSettings from '../../components/OrganisationSettings'
-import FeedbackTarget from './FeedbackTarget/FeedbackTarget'
+import Organisation from './Organisation'
+import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from '../../components/NorppaFeedback'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useIsMobile from '../../hooks/useIsMobile'
@@ -53,7 +53,7 @@ const Router = () => (
       <Route path="/feedbacks" component={UserFeedbacks} exact />
       <Route path="/courses" component={TeacherView} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
-      <Route path="/organisations/:code" component={OrganisationSettings} />
+      <Route path="/organisations/:code" component={Organisation} />
       <Route path="/course-summary" component={CourseSummary} />
       <Route path="/cur/:id" component={CourseRealisationFeedback} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />

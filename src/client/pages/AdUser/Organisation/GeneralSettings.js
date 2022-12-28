@@ -13,11 +13,11 @@ import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
-import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../common/LoadingProgress'
+import apiClient from '../../../util/apiClient'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import FeedbackCorrespondent from './FeedbackCorrespondent'
 import CourseSettings from './CourseSettings'
-import useOrganisation from '../../hooks/useOrganisation'
+import useOrganisation from '../../../hooks/useOrganisation'
 import Tags from './Tags'
 
 const saveGeneralSettings = async ({ code, studentListVisible }) => {

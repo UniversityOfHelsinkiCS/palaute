@@ -8,19 +8,19 @@ import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
-import QuestionEditor from '../QuestionEditor'
-import PublicQuestions from '../PublicQuestions'
+import QuestionEditor from '../../../components/QuestionEditor'
+import PublicQuestions from '../../../components/PublicQuestions'
 
-import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
-import useOrganisation from '../../hooks/useOrganisation'
+import useProgrammeSurvey from '../../../hooks/useProgrammeSurvey'
+import useOrganisation from '../../../hooks/useOrganisation'
 
 import {
   getSurveyInitialValues,
   saveSurveyValues,
   getUpperLevelQuestions,
 } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
-import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
 
 const EditSurvey = () => {
   const { code } = useParams()

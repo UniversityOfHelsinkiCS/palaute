@@ -21,22 +21,22 @@ import { useTranslation } from 'react-i18next'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
-import useOrganisation from '../../hooks/useOrganisation'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { getLanguageValue } from '../../util/languageUtils'
-import { LoadingProgress } from '../common/LoadingProgress'
+import useOrganisation from '../../../hooks/useOrganisation'
+import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
-import Title from '../common/Title'
-import { RouterTab, RouterTabs } from '../common/RouterTabs'
-import OrganisationSummary from '../CourseSummary/OrganisationSummary'
-import ErrorView from '../common/ErrorView'
-import errors from '../../util/errorMessage'
-import ProtectedRoute from '../common/ProtectedRoute'
-import ExternalLink from '../common/ExternalLink'
-import { links } from '../../util/links'
+import Title from '../../../components/common/Title'
+import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
+import OrganisationSummary from '../../../components/CourseSummary/OrganisationSummary'
+import ErrorView from '../../../components/common/ErrorView'
+import errors from '../../../util/errorMessage'
+import ProtectedRoute from '../../../components/common/ProtectedRoute'
+import ExternalLink from '../../../components/common/ExternalLink'
+import { links } from '../../../util/links'
 
-const OrganisationSettings = () => {
+const Organisation = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
@@ -169,4 +169,4 @@ const OrganisationSettings = () => {
   )
 }
 
-export default OrganisationSettings
+export default Organisation

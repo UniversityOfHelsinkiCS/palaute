@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { TagChip } from '../common/TagChip'
+import { TagChip } from '../../../components/common/TagChip'
 
 const Tags = ({ organisation }) => {
   const { t, i18n } = useTranslation()

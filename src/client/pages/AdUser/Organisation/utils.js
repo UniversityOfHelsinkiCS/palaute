@@ -1,5 +1,5 @@
 import { format, parseISO, isWithinInterval } from 'date-fns'
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../util/apiClient'
 
 export const getUpperLevelQuestions = (survey) =>
   (survey?.universitySurvey?.questions ?? []).filter((q) => q.type !== 'TEXT')

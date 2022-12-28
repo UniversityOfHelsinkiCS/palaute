@@ -4,15 +4,15 @@ import { Box, Typography, Divider, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 
-import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
+import useProgrammeOpenQuestions from '../../../hooks/useProgrammeOpenQuestions'
 import {
   filterCoursesWithNoResponses,
   filterCoursesByDate,
   formateDates,
 } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
-import { YearSemesterSelector } from '../common/YearSemesterSelector'
-import useHistoryState from '../../hooks/useHistoryState'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
+import useHistoryState from '../../../hooks/useHistoryState'
 
 const styles = {
   courseTitle: {
