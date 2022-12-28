@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
-import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
+import useFeedbackTargetsForStudent from '../../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
 import StatusTabs from './StatusTabs'
 
@@ -13,8 +13,8 @@ import {
   getCourseRealisationsWithFeedbackTargets,
   sortCourseRealisations,
 } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
-import Title from '../common/Title'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import Title from '../../../components/common/Title'
 
 const styles = {
   heading: {
@@ -33,7 +33,7 @@ const styles = {
   },
 }
 
-const UserFeedbacks = () => {
+const MyFeedbacks = () => {
   const location = useLocation()
 
   const { status = 'waiting' } = qs.parse(location.search, {
@@ -97,4 +97,4 @@ const UserFeedbacks = () => {
   )
 }
 
-export default UserFeedbacks
+export default MyFeedbacks

@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, List } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import FeedbackTargetItem from './FeedbackTargetItem'
 
 const CourseRealisationItem = ({ courseRealisation, sx }) => {

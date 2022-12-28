@@ -2,7 +2,6 @@ import { Container } from '@mui/material'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import UserFeedbacks from '../../components/UserFeedbacks'
 import AdminView from '../../components/AdminView'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from '../../components/CourseSummary'
@@ -13,6 +12,7 @@ import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from '../../components/NorppaFeedback'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useIsMobile from '../../hooks/useIsMobile'
+import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
 
 const styles = {
   container: (theme) => ({
@@ -50,7 +50,7 @@ const Router = () => (
   <Container sx={styles.container} maxWidth="xl">
     <Switch>
       <Route path="/" component={Home} exact />
-      <Route path="/feedbacks" component={UserFeedbacks} exact />
+      <Route path="/feedbacks" component={MyFeedbacks} exact />
       <Route path="/courses" component={TeacherView} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
