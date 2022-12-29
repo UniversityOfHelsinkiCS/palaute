@@ -20,8 +20,8 @@ import {
 import { debounce } from 'lodash'
 import { useSnackbar } from 'notistack'
 
-import apiClient from '../../util/apiClient'
-import useHistoryState from '../../hooks/useHistoryState'
+import apiClient from '../../../util/apiClient'
+import useHistoryState from '../../../hooks/useHistoryState'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>

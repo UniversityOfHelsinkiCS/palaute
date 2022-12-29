@@ -10,7 +10,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { writeFileXLSX, utils } from 'xlsx'
 
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../util/apiClient'
 import { getHeaders, getData } from './utils'
 
 const styles = {

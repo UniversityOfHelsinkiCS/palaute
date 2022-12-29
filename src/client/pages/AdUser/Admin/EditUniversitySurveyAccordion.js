@@ -14,11 +14,11 @@ import { useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 
-import QuestionEditor from '../QuestionEditor'
-import useUniversitySurvey from '../../hooks/useUniversitySurvey'
+import QuestionEditor from '../../../components/QuestionEditor'
+import useUniversitySurvey from '../../../hooks/useUniversitySurvey'
 import { getInitialValues, validate, saveValues } from './utils'
-import { getLanguageValue } from '../../util/languageUtils'
-import { LoadingProgress } from '../common/LoadingProgress'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 const styles = {
   accordion: {

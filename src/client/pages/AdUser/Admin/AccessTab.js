@@ -23,11 +23,11 @@ import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 
 import { getFaculties, getProgrammeAccessByFaculty } from './utils'
-import getAllUserAccess from '../../hooks/useAllUserAccess'
-import useOrganisationData from '../../hooks/useOrganisationData'
-import useHistoryState from '../../hooks/useHistoryState'
-import { LoadingProgress } from '../common/LoadingProgress'
-import { ADMINS } from '../../../config'
+import getAllUserAccess from '../../../hooks/useAllUserAccess'
+import useOrganisationData from '../../../hooks/useOrganisationData'
+import useHistoryState from '../../../hooks/useHistoryState'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import { ADMINS } from '../../../../config'
 
 const AccessTable = ({ access, filterAdmins }) => {
   const sortByAccess = ({ access: a }, { access: b }) => {

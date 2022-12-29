@@ -2,7 +2,7 @@ import { Container } from '@mui/material'
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import AdminView from '../../components/AdminView'
+import Admin from './Admin'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from '../../components/CourseSummary'
 import MyTeaching from './MyTeaching'
@@ -57,7 +57,7 @@ const Router = () => (
       <Route path="/course-summary" component={CourseSummary} />
       <Route path="/cur/:id" component={CourseRealisationFeedback} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />
-      <Route path="/admin" component={AdminView} />
+      <Route path="/admin" component={Admin} />
     </Switch>
   </Container>
 )

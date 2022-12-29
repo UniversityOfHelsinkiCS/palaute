@@ -18,11 +18,11 @@ import {
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
-import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../common/LoadingProgress'
-import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
-import { inProduction } from '../../../config'
-import ExternalLink from '../common/ExternalLink'
+import apiClient from '../../../util/apiClient'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import useUpdaterStatuses from '../../../hooks/useUpdaterStatuses'
+import { inProduction } from '../../../../config'
+import ExternalLink from '../../../components/common/ExternalLink'
 
 const createGraylogLink = (updaterStatus) => {
   const baseUrl = 'https://graylog.toska.cs.helsinki.fi'

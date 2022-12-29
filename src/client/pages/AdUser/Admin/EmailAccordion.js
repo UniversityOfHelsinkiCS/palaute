@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import useEmailsToBeSent from '../../hooks/useEmailsToBeSent'
+import useEmailsToBeSent from '../../../hooks/useEmailsToBeSent'
 
 const styles = {
   details: {

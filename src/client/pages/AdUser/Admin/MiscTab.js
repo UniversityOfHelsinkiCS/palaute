@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 
 import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
 import EmailAccordion from './EmailAccordion'
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../util/apiClient'
 
 const MiscTab = () => {
   const { enqueueSnackbar } = useSnackbar()

@@ -19,7 +19,7 @@ import {
 import { grey } from '@mui/material/colors'
 import { format } from 'date-fns'
 import React from 'react'
-import useUserDetails from '../../hooks/useUserDetails'
+import useUserDetails from '../../../hooks/useUserDetails'
 
 const Details = ({ user }) => {
   const { user: userDetails, isLoading } = useUserDetails(user.id)

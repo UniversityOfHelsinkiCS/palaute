@@ -2,7 +2,7 @@ import React from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { inProduction } from '../../util/common'
-import AdminLoggedInAsBanner from '../AdminView/AdminLoggedInAsBanner'
+import AdminLoggedInAsBanner from './AdminLoggedInAsBanner'
 
 const DevTools = () => {
   if (inProduction) return null

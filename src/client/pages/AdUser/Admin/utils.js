@@ -1,5 +1,5 @@
-import apiClient from '../../util/apiClient'
-import { normalizeOrganisationCode } from '../CourseSummary/utils'
+import apiClient from '../../../util/apiClient'
+import { normalizeOrganisationCode } from '../../../components/CourseSummary/utils'
 
 export const getInitialValues = (survey) => {
   const questions = survey?.questions ?? []

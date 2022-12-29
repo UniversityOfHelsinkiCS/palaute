@@ -11,9 +11,9 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
-import apiClient from '../../util/apiClient'
-import useInactiveCourseRealisations from '../../hooks/useInactiveCourseRealisations'
-import { LoadingProgress } from '../common/LoadingProgress'
+import apiClient from '../../../util/apiClient'
+import useInactiveCourseRealisations from '../../../hooks/useInactiveCourseRealisations'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 const Enable = ({ cur, active, setActive }) => {
   const { enqueueSnackbar } = useSnackbar()
