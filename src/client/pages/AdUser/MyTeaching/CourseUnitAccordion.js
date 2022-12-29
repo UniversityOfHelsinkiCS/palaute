@@ -10,13 +10,13 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import FeedbackTargetList from './FeedbackTargetList'
 import { getRelevantCourseRealisation } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 
 const styles = {
   accordion: {

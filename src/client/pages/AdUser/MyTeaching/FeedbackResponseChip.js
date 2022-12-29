@@ -1,8 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import styles from '../../util/chipStyles'
-import LinkChip from '../common/LinkChip'
+import styles from '../../../util/chipStyles'
+import LinkChip from '../../../components/common/LinkChip'
 
 const FeedbackResponseChip = ({
   id,

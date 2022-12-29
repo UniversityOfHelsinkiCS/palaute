@@ -11,11 +11,11 @@ import {
   Tooltip,
 } from '@mui/material'
 
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 import { formatDate, getFeedbackPercentageString } from './utils'
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
 

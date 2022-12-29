@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import AdminView from '../../components/AdminView'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from '../../components/CourseSummary'
-import TeacherView from '../../components/TeacherView'
+import MyTeaching from './MyTeaching'
 import CourseRealisationFeedback from '../../components/CourseRealisationFeedback'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
@@ -51,7 +51,7 @@ const Router = () => (
     <Switch>
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={MyFeedbacks} exact />
-      <Route path="/courses" component={TeacherView} exact />
+      <Route path="/courses" component={MyTeaching} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
       <Route path="/course-summary" component={CourseSummary} />

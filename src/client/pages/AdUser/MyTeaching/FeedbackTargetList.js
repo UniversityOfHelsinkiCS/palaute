@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Box, List, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
+import useCourseUnitFeedbackTargets from '../../../hooks/useCourseUnitFeedbackTargets'
 
 import {
   getRelevantFeedbackTargets,
@@ -10,7 +10,7 @@ import {
 } from './utils'
 
 import FeedbackTargetItem from './FeedbackTargetItem'
-import { LoadingProgress } from '../common/LoadingProgress'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 const FeedbackTargetList = ({ courseCode, group }) => {
   const { t } = useTranslation()

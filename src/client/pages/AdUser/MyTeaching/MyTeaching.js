@@ -6,13 +6,13 @@ import UpcomingIcon from '@mui/icons-material/Event'
 import EndedIcon from '@mui/icons-material/Done'
 import { useTranslation } from 'react-i18next'
 
-import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
+import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
 import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
-import { LoadingProgress } from '../common/LoadingProgress'
-import Title from '../common/Title'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import Title from '../../../components/common/Title'
 
-const TeacherView = () => {
+const MyTeaching = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
   const { t } = useTranslation()
 
@@ -63,4 +63,4 @@ const TeacherView = () => {
   )
 }
 
-export default TeacherView
+export default MyTeaching
