@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import DividerRow from './DividerRow'
 import { getFeedbackResponseGiven } from './utils'

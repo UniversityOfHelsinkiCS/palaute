@@ -1,6 +1,6 @@
 const { useMutation, useQuery } = require('react-query')
-const { default: apiClient } = require('../../util/apiClient')
-const { default: queryClient } = require('../../util/queryClient')
+const { default: apiClient } = require('../../../util/apiClient')
+const { default: queryClient } = require('../../../util/queryClient')
 
 const useSummaryCustomisation = () => {
   const queryKey = ['summaryCustomisation']

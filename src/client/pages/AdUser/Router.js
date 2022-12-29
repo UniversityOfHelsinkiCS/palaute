@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Admin from './Admin'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
-import CourseSummary from '../../components/CourseSummary'
+import CourseSummary from './CourseSummary'
 import MyTeaching from './MyTeaching'
 import CourseRealisationFeedback from '../../components/CourseRealisationFeedback'
 import Organisation from './Organisation'

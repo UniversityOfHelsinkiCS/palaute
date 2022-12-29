@@ -15,9 +15,9 @@ import { Check, ClearAll, Visibility, VisibilityOff } from '@mui/icons-material'
 import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import useSummaryCustomisation from './useSummaryCustomisation'
-import useOrganisations from '../../hooks/useOrganisations'
-import { getLanguageValue } from '../../util/languageUtils'
-import { TooltipButton } from '../common/TooltipButton'
+import useOrganisations from '../../../hooks/useOrganisations'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { TooltipButton } from '../../../components/common/TooltipButton'
 
 const HidingModeButton = ({ value, onClick, count }) => {
   const { t } = useTranslation()

@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { startOfStudyYear } from '../CourseSummary/utils'
+import { startOfStudyYear } from '../../util/startOfStudyYear'
 
 // Year starting month
 const MONTH = 8

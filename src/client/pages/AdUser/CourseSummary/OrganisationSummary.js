@@ -7,7 +7,7 @@ import { Box, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import useOrganisations from '../../hooks/useOrganisations'
+import useOrganisations from '../../../hooks/useOrganisations'
 import Filters from './Filters'
 
 import {
@@ -16,12 +16,12 @@ import {
   useAggregatedOrganisationSummaries,
   ORDER_BY_OPTIONS,
 } from './utils'
-import Title from '../common/Title'
-import useHistoryState from '../../hooks/useHistoryState'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
-import useOrganisationData from '../../hooks/useOrganisationData'
-import errors from '../../util/errorMessage'
-import ErrorView from '../common/ErrorView'
+import Title from '../../../components/common/Title'
+import useHistoryState from '../../../hooks/useHistoryState'
+import useCourseSummaryAccessInfo from '../../../hooks/useCourseSummaryAccessInfo'
+import useOrganisationData from '../../../hooks/useOrganisationData'
+import errors from '../../../util/errorMessage'
+import ErrorView from '../../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
 

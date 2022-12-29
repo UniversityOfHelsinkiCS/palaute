@@ -6,7 +6,7 @@ import { Button, MenuItem, Menu, Box } from '@mui/material'
 import { Download } from '@mui/icons-material'
 import { format } from 'date-fns'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 const styles = {
   link: {

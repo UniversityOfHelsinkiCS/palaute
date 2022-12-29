@@ -13,7 +13,7 @@ import { Search, SettingsOutlined } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsRow from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
 
