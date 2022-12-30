@@ -1,20 +1,12 @@
 import { React } from 'react'
 
 import { Box, Typography } from '@mui/material'
-import { Redirect, useParams } from 'react-router'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { useParams } from 'react-router'
 import useFeedbackTargetUsers from '../../hooks/useFeedbackTargetUsers'
 import { LoadingProgress } from '../common/LoadingProgress'
 
 const FeedbackLinksView = () => {
   const { id } = useParams()
-
-  const { authorizedUser } = useAuthorizedUser()
-  const isAdminUser = authorizedUser?.isAdmin ?? false
-
-  if (!isAdminUser) {
-    return <Redirect to="/" />
-  }
 
   const { isLoading, users } = useFeedbackTargetUsers(id)
 

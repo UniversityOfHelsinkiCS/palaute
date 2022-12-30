@@ -500,7 +500,11 @@ const FeedbackTargetContent = () => {
           component={FeedbackTargetResults}
           hasAccess={showFeedbacksTab}
         />
-        <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} />
+        <ProtectedRoute
+          path={`${path}/feedback`}
+          component={FeedbackView}
+          hasAccess
+        />
         <ProtectedRoute
           path={`${path}/continuous-feedback`}
           component={ContinuousFeedback}

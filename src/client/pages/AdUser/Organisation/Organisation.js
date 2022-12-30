@@ -126,9 +126,8 @@ const Organisation = () => {
           <ProtectedRoute
             hasAccess={hasAdminAccess}
             redirect={`${url}/summary`}
-          >
-            <GeneralSettings />
-          </ProtectedRoute>
+            component={GeneralSettings}
+          />
         </Route>
 
         <Route path={`${path}/upcoming`}>
@@ -139,9 +138,8 @@ const Organisation = () => {
           <ProtectedRoute
             hasAccess={hasWriteAccess}
             redirect={`${url}/summary`}
-          >
-            <EditSurvey />
-          </ProtectedRoute>
+            component={EditSurvey}
+          />
         </Route>
 
         <Route path={`${path}/summary`}>
@@ -152,15 +150,16 @@ const Organisation = () => {
           <ProtectedRoute
             hasAccess={hasAdminAccess}
             redirect={`${url}/summary`}
-          >
-            <ProgrammeOpenQuestions />
-          </ProtectedRoute>
+            component={ProgrammeOpenQuestions}
+          />
         </Route>
 
         <Route path={`${path}/logs`}>
-          <ProtectedRoute hasAccess={isAdmin} redirect={`${url}/summary`}>
-            <OrganisationLogs />
-          </ProtectedRoute>
+          <ProtectedRoute
+            hasAccess={isAdmin}
+            redirect={`${url}/summary`}
+            component={OrganisationLogs}
+          />
         </Route>
 
         <Redirect to={`${path}/summary`} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
 import {
@@ -18,13 +18,12 @@ import { useSnackbar } from 'notistack'
 import { differenceInMonths } from 'date-fns'
 
 import FormikTextField from '../common/FormikTextField'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import AlertLink from '../common/AlertLink'
 import Markdown from '../common/Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
-import { LoadingProgress } from '../common/LoadingProgress'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
+import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const getInitialValues = (feedbackTarget) => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -44,18 +43,8 @@ const EditFeedbackResponse = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
+  const { feedbackTarget } = useFeedbackTargetContext()
   const updateFeedbackResponse = useUpdateFeedbackResponse()
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
-
-  if (!feedbackTarget) {
-    return <Redirect to="/" />
-  }
 
   const initialValues = getInitialValues(feedbackTarget)
   const isSent = feedbackTarget.feedbackResponseEmailSent

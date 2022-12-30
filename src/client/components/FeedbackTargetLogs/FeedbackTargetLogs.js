@@ -1,8 +1,7 @@
 import { Alert, Box, Paper, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
-import { useParams, Redirect } from 'react-router'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { useParams } from 'react-router'
 import useFeedbackTargetLogs from '../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../common/LoadingProgress'
 
@@ -104,14 +103,9 @@ const LogItem = ({ log }) => (
 const FeedbackTargetLogs = () => {
   const { id } = useParams()
   const { feedbackTargetLogs, isLoading } = useFeedbackTargetLogs(id)
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
-  if (isLoading || isUserLoading) {
+  if (isLoading) {
     return <LoadingProgress />
-  }
-
-  if (!authorizedUser.isAdmin) {
-    return <Redirect to={`/targets/${id}/feedback`} />
   }
 
   return (
