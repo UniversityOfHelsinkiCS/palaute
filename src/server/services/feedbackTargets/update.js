@@ -136,6 +136,12 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
   const { questions, surveyId } = body
 
   if (updates.opensAt || updates.closesAt) {
+    if (
+      (updates.opensAt ?? feedbackTarget.opensAt) >
+      (updates.closesAt ?? feedbackTarget.closesAt)
+    ) {
+      throw new ApplicationError('ClosesAt cannot be before opensAt', 400)
+    }
     updates.feedbackDatesEditedByTeacher = true
   }
 
@@ -176,7 +182,7 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
   await feedbackTarget.save()
   await createFeedbackTargetLog(feedbackTarget, updates, user)
 
-  return updates
+  return feedbackTarget
 }
 
 module.exports = {

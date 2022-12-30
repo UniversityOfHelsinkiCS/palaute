@@ -179,14 +179,14 @@ const update = async (req, res) => {
 
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const updates = await updateFeedbackTarget({
+  const updatedFeedbackTarget = await updateFeedbackTarget({
     feedbackTargetId,
     user,
     isAdmin,
     body: req.body,
   })
 
-  return res.send(updates)
+  return res.send(updatedFeedbackTarget)
 }
 
 const getForStudent = async (req, res) => {
@@ -394,40 +394,24 @@ const remindStudentsOnFeedback = async (req, res) => {
 
 const openFeedbackImmediately = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
+  const { user, isAdmin, body } = req
 
-  const { user, isAdmin } = req
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-    },
-    include: 'feedbackTarget',
+  const updatedFeedbackTarget = await updateFeedbackTarget({
+    feedbackTargetId,
+    user,
+    isAdmin,
+    body: { feedbackOpeningReminderEmailSent: true, ...body },
   })
 
-  if (!isAdmin && !userFeedbackTarget?.hasTeacherAccess()) {
-    throw new ApplicationError('User is not authorized', 403)
-  }
-
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-
-  if (req.body.opensAt <= feedbackTarget.closesAt) {
-    throw new ApplicationError(
-      'Survey can not open after its closing date',
-      400,
-    )
-  }
-
-  if (!feedbackTarget.feedbackOpeningReminderEmailSent) {
+  if (!updatedFeedbackTarget.feedbackOpeningReminderEmailSent) {
     await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 
-  feedbackTarget.opensAt = req.body.opensAt
-  feedbackTarget.feedbackDatesEditedByTeacher = true
-  feedbackTarget.feedbackOpeningReminderEmailSent = true
-
-  await createFeedbackTargetLog(feedbackTarget, { openImmediately: true }, user)
-
-  await feedbackTarget.save()
+  await createFeedbackTargetLog(
+    updatedFeedbackTarget,
+    { openImmediately: true },
+    user,
+  )
 
   return res.sendStatus(200)
 }
