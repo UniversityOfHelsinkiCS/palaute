@@ -9,6 +9,7 @@ const { updateFeedbackResponse } = require('./updateFeedbackResponse')
 
 const { update } = require('./update')
 const { getStudents } = require('./getStudents')
+const { getForStudent } = require('./getForStudent')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -17,4 +18,5 @@ module.exports = {
   updateFeedbackResponse,
   updateFeedbackTarget: update,
   getStudentsForFeedbackTarget: getStudents,
+  getFeedbackTargetsForStudent: getForStudent,
 }

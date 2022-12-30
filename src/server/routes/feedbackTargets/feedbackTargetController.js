@@ -37,35 +37,8 @@ const {
   updateFeedbackResponse,
   updateFeedbackTarget,
   getStudentsForFeedbackTarget,
+  getFeedbackTargetsForStudent,
 } = require('../../services/feedbackTargets')
-
-const mapStatusToValue = {
-  STUDENT: 1,
-  TEACHER: 2,
-  RESPONSIBLE_TEACHER: 2,
-}
-
-const feedbackTargetsToJSON = (feedbackTargets) => {
-  const convertSingle = (feedbackTarget) => {
-    const publicTarget = feedbackTarget.toJSON()
-
-    const sortedUserFeedbackTargets = feedbackTarget.userFeedbackTargets.sort(
-      (a, b) =>
-        mapStatusToValue[b.accessStatus] - mapStatusToValue[a.accessStatus],
-      // this is intentionally b - a, because we want the max value first
-    )
-
-    const relevantUserFeedbackTarget = sortedUserFeedbackTargets[0]
-
-    return {
-      ...publicTarget,
-      accessStatus: relevantUserFeedbackTarget?.accessStatus ?? 'NONE',
-      feedback: relevantUserFeedbackTarget?.feedback ?? null,
-    }
-  }
-
-  return feedbackTargets.map(convertSingle)
-}
 
 const getIncludes = (userId, accessStatus) => {
   // where parameter cant have undefined values
@@ -142,16 +115,6 @@ const getFeedbackTargetByIdForUser = async (feedbackTargetId, user) => {
   }
 
   return feedbackTarget
-}
-
-const getFeedbackTargetsForStudent = async (userId) => {
-  const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      hidden: false,
-    },
-    include: getIncludes(userId, 'STUDENT'),
-  })
-  return feedbackTargets
 }
 
 const getStudentListVisibility = async (courseUnitId, isAdmin) => {
@@ -332,7 +295,6 @@ const getOne = async (req, res) => {
   }
 }
 
-// TODO refactor to services
 const update = async (req, res) => {
   const { isAdmin, user } = req
   const feedbackTargetId = Number(req.params?.id)
@@ -375,37 +337,9 @@ const updateSettingsReadByTeacher = async (req, res) => {
 }
 
 const getForStudent = async (req, res) => {
-  const userId = req.user?.id
-  const feedbackTargets = await getFeedbackTargetsForStudent(userId)
-
-  const filteredFeedbackTargets = feedbackTargets.filter(
-    ({ courseUnit }) =>
-      courseUnit &&
-      !courseUnit.organisations.some(({ disabledCourseCodes }) =>
-        disabledCourseCodes.includes(courseUnit.courseCode),
-      ),
-  )
-
-  const publicFeedbackTargets = feedbackTargetsToJSON(filteredFeedbackTargets)
-
-  const now = Date.now()
-  const response = {
-    waiting: publicFeedbackTargets.filter(
-      (fbt) =>
-        Date.parse(fbt.opensAt) < now &&
-        Date.parse(fbt.closesAt) > now &&
-        !fbt.feedback,
-    ),
-    given: publicFeedbackTargets.filter((fbt) => fbt.feedback),
-    ended: publicFeedbackTargets.filter(
-      (fbt) => Date.parse(fbt.closesAt) < now,
-    ),
-    ongoing: publicFeedbackTargets.filter(
-      (fbt) => Date.parse(fbt.opensAt) > now,
-    ),
-  }
-
-  return res.send(response)
+  const { user } = req
+  const feedbackTargets = await getFeedbackTargetsForStudent({ user })
+  return res.send(feedbackTargets)
 }
 
 const getTargetsForCourseUnit = async (req, res) => {
