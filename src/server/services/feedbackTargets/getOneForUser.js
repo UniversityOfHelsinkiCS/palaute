@@ -11,7 +11,7 @@ const {
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
-const { getAccessStatus } = require('./getAccessStatus')
+const { getAccess } = require('./getAccess')
 
 /**
  * Expensive data of feedback targets is cached:
@@ -145,19 +145,19 @@ const getOneForUser = async (id, user, isAdmin) => {
     throw new ApplicationError('Not found', 404)
   }
 
-  const accessStatus = await getAccessStatus(
+  const access = await getAccess(
     userFeedbackTarget,
     user,
     feedbackTarget,
     isAdmin,
   )
-  if (!accessStatus) {
+  if (!access) {
     throw new ApplicationError('No access', 403)
   }
 
   return {
     ...additionalData,
-    accessStatus,
+    accessStatus: access,
     feedback: userFeedbackTarget?.feedback ?? null,
     ...feedbackTarget.toJSON(),
   }

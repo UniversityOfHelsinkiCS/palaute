@@ -810,6 +810,7 @@ const getStudentsWithFeedback = async (req, res) => {
 }
 
 // This is the ideal controller function: only dep is service function, zero business logic
+// Next step would be to just pass the anon func straight to router instead of assigning to a variable
 // One day, all will be like this... I hope
 const putFeedbackResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
@@ -817,8 +818,9 @@ const putFeedbackResponse = async (req, res) => {
   const { user, isAdmin } = req
 
   const updatedFeedbackTarget = await updateFeedbackResponse({
+    // Named parameters: GOOD
     feedbackTargetId,
-    isAdmin,
+    isAdmin, // TODO get rid of isAdmins, instead include it in the user object
     responseText: feedbackResponse,
     sendEmail: feedbackResponseEmailSent,
     user,

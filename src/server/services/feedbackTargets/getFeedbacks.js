@@ -5,7 +5,7 @@ const {
   CourseRealisation,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-const { getAccessStatus } = require('./getAccessStatus')
+const { getAccess } = require('./getAccess')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
 
 const getFeedbackTarget = (id, userId) =>
@@ -63,14 +63,14 @@ const getFeedbacks = async (id, user, isAdmin) => {
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]
 
-  const accessStatus = await getAccessStatus(
+  const access = await getAccess(
     userFeedbackTarget,
     user,
     feedbackTarget,
     isAdmin,
   )
 
-  if (!accessStatus && feedbackVisibility !== 'ALL') {
+  if (!access?.canSeeAllFeedbacks() && feedbackVisibility !== 'ALL') {
     return {
       feedbacks: [],
       feedbackVisible: false,
@@ -80,12 +80,11 @@ const getFeedbacks = async (id, user, isAdmin) => {
 
   const allStudentFeedbacks = await getStudentFeedbacks(id)
 
-  const allowed = ['RESPONSIBLE_TEACHER', 'ADMIN', 'ORGANISATION_ADMIN']
-  if (allowed.includes(accessStatus)) {
+  if (access.canSeeAllFeedbacks()) {
     return {
       feedbacks: allStudentFeedbacks,
       feedbackVisible: true,
-      accessStatus,
+      accessStatus: access,
     }
   }
 
@@ -98,7 +97,7 @@ const getFeedbacks = async (id, user, isAdmin) => {
   return {
     feedbacks: publicFeedbacks,
     feedbackVisible: true,
-    accessStatus,
+    accessStatus: access,
   }
 }
 
