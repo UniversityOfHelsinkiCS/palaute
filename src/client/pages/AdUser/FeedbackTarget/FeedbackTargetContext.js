@@ -17,12 +17,14 @@ export const FeedbackTargetContextProvider = ({
       accessStatus === 'RESPONSIBLE_TEACHER' || isAdmin
     const isTeacher =
       accessStatus === 'TEACHER' || isResponsibleTeacher || isAdmin
+    const isStudent = accessStatus === 'STUDENT'
     const isOrganisationAdmin = orgAccess?.admin || isAdmin
     const isOrganisationReader = orgAccess?.read || isAdmin
 
     return {
       isResponsibleTeacher,
       isTeacher,
+      isStudent,
       isAdmin,
       isOrganisationAdmin,
       isOrganisationReader,
@@ -43,6 +45,7 @@ export const useFeedbackTargetContext = () => {
   const {
     isResponsibleTeacher,
     isTeacher,
+    isStudent,
     isAdmin,
     isOrganisationAdmin,
     isOrganisationReader,
@@ -53,6 +56,7 @@ export const useFeedbackTargetContext = () => {
   return {
     isResponsibleTeacher,
     isTeacher,
+    isStudent,
     isAdmin,
     isOrganisationAdmin,
     isOrganisationReader,
