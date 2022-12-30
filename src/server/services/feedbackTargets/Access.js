@@ -4,10 +4,27 @@ const UPDATE_RESPONSE = 1
 const ALL_FEEDBACKS = 2
 const PUBLIC_FEEDBACKS = 3
 const STUDENTS = 4
+const CONTINUOUS_FEEDBACKS = 5
+const CONTINUOUS_FEEDBACK_RESPONSE = 6
+const GIVE_CONTINUOUS_FEEDBACK = 7
 
 const RIGHTS = {
-  ADMIN: [UPDATE, UPDATE_RESPONSE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, STUDENTS],
-  ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS],
+  ADMIN: [
+    UPDATE,
+    UPDATE_RESPONSE,
+    ALL_FEEDBACKS,
+    PUBLIC_FEEDBACKS,
+    STUDENTS,
+    CONTINUOUS_FEEDBACKS,
+    CONTINUOUS_FEEDBACK_RESPONSE,
+    GIVE_CONTINUOUS_FEEDBACK,
+  ],
+  ORGANISATION_ADMIN: [
+    UPDATE,
+    ALL_FEEDBACKS,
+    PUBLIC_FEEDBACKS,
+    CONTINUOUS_FEEDBACKS,
+  ],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
   RESPONSIBLE_TEACHER: [
     UPDATE,
@@ -15,9 +32,11 @@ const RIGHTS = {
     ALL_FEEDBACKS,
     PUBLIC_FEEDBACKS,
     STUDENTS,
+    CONTINUOUS_FEEDBACKS,
+    CONTINUOUS_FEEDBACK_RESPONSE,
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
-  STUDENT: [PUBLIC_FEEDBACKS],
+  STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK],
   NONE: [],
 }
 
@@ -50,6 +69,18 @@ class Access {
 
   canSeeStudents() {
     return hasRight(this.accessStatus, STUDENTS)
+  }
+
+  canSeeContinuousFeedbacks() {
+    return hasRight(this.accessStatus, CONTINUOUS_FEEDBACKS)
+  }
+
+  canRespondToContinuousFeedback() {
+    return hasRight(this.accessStatus, CONTINUOUS_FEEDBACK_RESPONSE)
+  }
+
+  canGiveContinuousFeedback() {
+    return hasRight(this.accessStatus, GIVE_CONTINUOUS_FEEDBACK)
   }
 
   // Role enum
@@ -89,7 +120,7 @@ class Access {
   }
 }
 
-// Important!
+// Important! Dont let anyone mess with this object
 Object.freeze(Access)
 
 module.exports = {

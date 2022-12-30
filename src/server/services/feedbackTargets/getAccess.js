@@ -1,4 +1,6 @@
+const { ApplicationError } = require('../../util/customErrors')
 const { Access } = require('./Access')
+const { getFeedbackTarget } = require('./util')
 
 const getAccess = async ({
   userFeedbackTarget,
@@ -38,4 +40,19 @@ const getAccess = async ({
   return Access.ORGANISATION_READ
 }
 
-module.exports = { getAccess }
+const getAccessForUserById = async ({ feedbackTargetId, user, isAdmin }) => {
+  const feedbackTarget = await getFeedbackTarget(user.id, feedbackTargetId)
+  if (!feedbackTarget) ApplicationError.NotFound('Feedback target not found')
+
+  const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
+  const access = await getAccess({
+    userFeedbackTarget,
+    user,
+    feedbackTarget,
+    isAdmin,
+  })
+
+  return access
+}
+
+module.exports = { getAccess, getAccessForUserById }

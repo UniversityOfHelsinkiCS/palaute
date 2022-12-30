@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const { Op } = require('sequelize')
 const {
   ContinuousFeedback,
   FeedbackTarget,
@@ -8,18 +7,20 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const {
   sendEmailContinuousFeedbackResponseToStudent,
-} = require('../../mailer/mails/index')
+} = require('../../mailer/mails')
+const { getFeedbackTargetAccess } = require('../../services/feedbackTargets')
 
 const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-      accessStatus: { [Op.in]: ['STUDENT'] },
+  const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne(
+    {
+      where: {
+        userId: user.id,
+        feedbackTargetId,
+      },
     },
-  })
+  )
 
-  if (!userFeedbackTarget) throw new ApplicationError('Forbidden', 403)
+  if (!userFeedbackTarget) ApplicationError.Forbidden()
 
   const continuousFeedbacks = await ContinuousFeedback.findAll({
     where: {
@@ -36,15 +37,13 @@ const getFeedbacks = async (req, res) => {
 
   const feedbackTargetId = Number(req.params.id)
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId: user.id,
-      feedbackTargetId,
-      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-    },
+  const access = await getFeedbackTargetAccess({
+    feedbackTargetId,
+    user,
+    isAdmin,
   })
 
-  if (!userFeedbackTarget && !isAdmin) {
+  if (!access?.canSeeContinuousFeedbacks()) {
     const continuousFeedbacks = await getStudentContinuousFeedbacks(
       user,
       feedbackTargetId,
@@ -76,23 +75,24 @@ const submitFeedback = async (req, res) => {
   } = feedbackTarget
 
   if (!continuousFeedbackEnabled)
-    throw new ApplicationError('Continuous feedback is disabled', 400)
+    ApplicationError.Forbidden('Continuous feedback is disabled')
 
-  const feedbackCanBeGiven =
+  const continuousFeedbackCanBeGiven =
     (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
 
-  if (feedbackCanBeGiven)
-    throw new ApplicationError('Continuous feedback is closed', 403)
+  if (!continuousFeedbackCanBeGiven)
+    ApplicationError.Forbidden('Continuous feedback is closed')
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId,
-      feedbackTargetId,
-      accessStatus: 'STUDENT',
+  const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne(
+    {
+      where: {
+        userId,
+        feedbackTargetId,
+      },
     },
-  })
+  )
 
-  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!userFeedbackTarget) ApplicationError.Forbidden()
 
   const newFeedback = await ContinuousFeedback.create({
     data: feedback,
@@ -105,25 +105,23 @@ const submitFeedback = async (req, res) => {
 }
 
 const respondToFeedback = async (req, res) => {
-  const { id: userId } = req.user
+  const { user, isAdmin } = req
 
   const feedbackTargetId = Number(req.params.id)
   const continuousFeedbackId = Number(req.params.continuousFeedbackId)
   const { response } = req.body
 
   if (!response) {
-    throw new ApplicationError('Response missing', 404)
+    throw new ApplicationError('Response missing', 400)
   }
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId,
-      feedbackTargetId,
-      accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-    },
+  const access = await getFeedbackTargetAccess({
+    feedbackTargetId,
+    user,
+    isAdmin,
   })
 
-  if (!userFeedbackTarget) throw new ApplicationError('Forbidden', 403)
+  if (!access?.canRespondToContinuousFeedback()) ApplicationError.Forbidden()
 
   const continuousFeedback = await ContinuousFeedback.findByPk(
     continuousFeedbackId,
