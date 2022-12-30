@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { Redirect } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 
-const ProtectedRoute = ({ component, hasAccess, redirectPath = '/' }) => {
-  if (!hasAccess) {
-    return <Redirect to={redirectPath} replace />
-  }
+const ProtectedRoute = ({ path, component, hasAccess, redirectPath = '/' }) => {
+  const componentToRender = hasAccess
+    ? component
+    : () => <Redirect to={redirectPath} />
 
-  return component()
+  return <Route path={path} component={componentToRender} />
 }
 
 export default ProtectedRoute

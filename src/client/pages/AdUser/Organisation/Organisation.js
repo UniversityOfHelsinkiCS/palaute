@@ -122,45 +122,41 @@ const Organisation = () => {
         {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
       </RouterTabs>
       <Switch>
-        <Route path={`${path}/settings`}>
-          <ProtectedRoute
-            hasAccess={hasAdminAccess}
-            redirect={`${url}/summary`}
-            component={GeneralSettings}
-          />
-        </Route>
+        <ProtectedRoute
+          path={`${path}/settings`}
+          hasAccess={hasAdminAccess}
+          redirect={`${url}/summary`}
+          component={GeneralSettings}
+        />
 
         <Route path={`${path}/upcoming`}>
           <SemesterOverview organisation={organisation} />
         </Route>
 
-        <Route path={`${path}/survey`}>
-          <ProtectedRoute
-            hasAccess={hasWriteAccess}
-            redirect={`${url}/summary`}
-            component={EditSurvey}
-          />
-        </Route>
+        <ProtectedRoute
+          path={`${path}/survey`}
+          hasAccess={hasWriteAccess}
+          redirect={`${url}/summary`}
+          component={EditSurvey}
+        />
 
         <Route path={`${path}/summary`}>
           <OrganisationSummary />
         </Route>
 
-        <Route path={`${path}/open`}>
-          <ProtectedRoute
-            hasAccess={hasAdminAccess}
-            redirect={`${url}/summary`}
-            component={ProgrammeOpenQuestions}
-          />
-        </Route>
+        <ProtectedRoute
+          path={`${path}/open`}
+          hasAccess={hasAdminAccess}
+          redirect={`${url}/summary`}
+          component={ProgrammeOpenQuestions}
+        />
 
-        <Route path={`${path}/logs`}>
-          <ProtectedRoute
-            hasAccess={isAdmin}
-            redirect={`${url}/summary`}
-            component={OrganisationLogs}
-          />
-        </Route>
+        <ProtectedRoute
+          path={`${path}/logs`}
+          hasAccess={isAdmin}
+          redirect={`${url}/summary`}
+          component={OrganisationLogs}
+        />
 
         <Redirect to={`${path}/summary`} />
       </Switch>
