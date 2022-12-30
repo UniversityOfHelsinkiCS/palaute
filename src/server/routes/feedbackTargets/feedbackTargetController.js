@@ -1,18 +1,9 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
-const {
-  addMonths,
-  getYear,
-  subDays,
-  getDate,
-  compareAsc,
-  startOfDay,
-  endOfDay,
-} = require('date-fns')
+const { addMonths, getYear, subDays, getDate, compareAsc } = require('date-fns')
 
 const { Router } = require('express')
-const { parseFromTimeZone } = require('date-fns-timezone')
 const { ApplicationError } = require('../../util/customErrors')
 
 const {
@@ -21,8 +12,6 @@ const {
   CourseUnit,
   CourseRealisation,
   Feedback,
-  Survey,
-  Question,
   User,
   Organisation,
   FeedbackTargetLog,
@@ -31,10 +20,7 @@ const {
 
 const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
-const {
-  createFeedbackTargetSurveyLog,
-  createFeedbackTargetLog,
-} = require('../../util/auditLog')
+const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
 const {
   JWT_KEY,
@@ -49,40 +35,13 @@ const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
   updateFeedbackResponse,
+  updateFeedbackTarget,
 } = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
   STUDENT: 1,
   TEACHER: 2,
   RESPONSIBLE_TEACHER: 2,
-}
-
-// TODO refactor
-const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
-  const updatedQuestionIdsList = []
-
-  /* eslint-disable */
-  for (const question of questions) {
-    let updatedQuestion
-    if (question.id) {
-      const [_, updatedQuestions] = await Question.update(
-        {
-          ...question,
-        },
-        { where: { id: question.id }, returning: true },
-      )
-      updatedQuestion = updatedQuestions[0]
-    } else {
-      updatedQuestion = await Question.create({
-        ...question,
-      })
-    }
-
-    updatedQuestionIdsList.push(updatedQuestion.id)
-  }
-  /* eslint-enable */
-
-  return updatedQuestionIdsList
 }
 
 const feedbackTargetsToJSON = (feedbackTargets) => {
@@ -372,55 +331,6 @@ const getOne = async (req, res) => {
   }
 }
 
-const parseUpdatedQuestionIds = (
-  updatedPublicQuestionIds,
-  questions,
-  publicQuestionIds,
-) => {
-  let currentIds = updatedPublicQuestionIds ?? publicQuestionIds
-  const configurable = questions.filter((q) => q.publicityConfigurable)
-  // remove nonpublic
-  currentIds = _.difference(
-    currentIds,
-    configurable.filter((q) => !q.public).map((q) => q.id),
-  )
-  // add public
-  currentIds = currentIds.concat(
-    configurable.filter((q) => q.public).map((q) => q.id),
-  )
-
-  return _.uniq(currentIds).filter(Number)
-}
-
-const parseUpdates = (body) => {
-  const {
-    name,
-    hidden,
-    opensAt,
-    closesAt,
-    publicQuestionIds,
-    feedbackVisibility,
-    continuousFeedbackEnabled,
-    sendContinuousFeedbackDigestEmail,
-  } = body
-  const parseDate = (d) =>
-    parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
-
-  const updates = _.pickBy({
-    // cweate obwect fwom only twe twuthy values :3
-    name,
-    hidden,
-    opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
-    closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-    publicQuestionIds: publicQuestionIds?.filter((id) => !!Number(id)),
-    feedbackVisibility,
-    continuousFeedbackEnabled,
-    sendContinuousFeedbackDigestEmail,
-  })
-
-  return updates
-}
-
 // TODO refactor to services
 const update = async (req, res) => {
   const { isAdmin, user } = req
@@ -428,81 +338,12 @@ const update = async (req, res) => {
 
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const feedbackTarget = isAdmin
-    ? await FeedbackTarget.findByPk(feedbackTargetId, {
-        include: { model: UserFeedbackTarget, as: 'userFeedbackTargets' },
-      })
-    : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
-
-  const isTeacher =
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
-  const isResponsibleTeacher =
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus ===
-      'RESPONSIBLE_TEACHER' ||
-    (isTeacher &&
-      feedbackTarget.courseRealisation.startDate < new Date('2023-01-01'))
-
-  const isOrganisationAdmin = (
-    await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
-  )?.admin
-
-  if (!isAdmin && !isResponsibleTeacher && !isOrganisationAdmin)
-    throw new ApplicationError('Forbidden', 403)
-
-  const updates = parseUpdates(req.body)
-
-  const { questions, surveyId } = req.body
-
-  if (updates.opensAt || updates.closesAt) {
-    feedbackTarget.feedbackDatesEditedByTeacher = true
-  }
-
-  if (Array.isArray(questions)) {
-    updates.publicQuestionIds = parseUpdatedQuestionIds(
-      updates.publicQuestionIds,
-      questions,
-      feedbackTarget.publicQuestionIds,
-    )
-  }
-
-  if (questions && surveyId) {
-    const survey = await Survey.findOne({
-      where: {
-        id: surveyId,
-        feedbackTargetId: feedbackTarget.id,
-      },
-    })
-    if (!survey) throw new ApplicationError('Not found', 404)
-    await createFeedbackTargetSurveyLog(surveyId, questions, user)
-    const oldIds = survey.questionIds
-    survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
-      questions,
-    )
-    // assuming there is only 1 new. Find whether its going to be public, and update publicQuestionIds
-    const newIds = _.difference(survey.questionIds, oldIds)
-    if (newIds.length === 1) {
-      const newQuestion = questions.find((q) => q.id === undefined)
-      if (newQuestion?.public) {
-        updates.publicQuestionIds.push(newIds[0])
-      }
-    }
-    // remove the deleted question id
-    const removedIds = _.difference(oldIds, survey.questionIds)
-    updates.publicQuestionIds = updates.publicQuestionIds.filter(
-      (id) => !removedIds.includes(id),
-    )
-
-    updates.questions = questions
-    await survey.save()
-  }
-
-  Object.assign(feedbackTarget, updates)
-
-  // force hooks
-  feedbackTarget.changed('updatedAt', true)
-
-  await feedbackTarget.save()
-  await createFeedbackTargetLog(feedbackTarget, updates, user)
+  const updates = await updateFeedbackTarget({
+    feedbackTargetId,
+    user,
+    isAdmin,
+    body: req.body,
+  })
 
   return res.send(updates)
 }
