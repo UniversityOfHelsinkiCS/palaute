@@ -15,7 +15,6 @@ import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import PublicitySelection from './PublicitySelection'
 import EditFeedbackTarget from '../EditFeedbackTarget'
-import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const FeedbackTargetSettings = () => {
@@ -25,13 +24,15 @@ const FeedbackTargetSettings = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const updateSettingsRead = useUpdateSettingsRead()
-  const { feedbackTarget } = useFeedbackTargetContext()
-
-  const orgAccess = useOrganisationAccess(feedbackTarget)
-  const isOrganisationAdmin = orgAccess.admin
+  const { feedbackTarget, isResponsibleTeacher, isAdmin } =
+    useFeedbackTargetContext()
 
   useEffect(() => {
-    if (feedbackTarget.settingsReadByTeacher || isOrganisationAdmin) {
+    if (
+      feedbackTarget.settingsReadByTeacher ||
+      !isResponsibleTeacher ||
+      isAdmin
+    ) {
       return
     }
     updateSettingsRead.mutateAsync({ id })

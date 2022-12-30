@@ -20,6 +20,7 @@ const parseUpdates = (body) => {
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
+    settingsReadByTeacher,
   } = body
   const parseDate = (d) =>
     parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
@@ -34,6 +35,7 @@ const parseUpdates = (body) => {
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
+    settingsReadByTeacher,
   })
 
   return updates
@@ -173,6 +175,8 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
 
   await feedbackTarget.save()
   await createFeedbackTargetLog(feedbackTarget, updates, user)
+
+  return updates
 }
 
 module.exports = {

@@ -4,7 +4,7 @@ import queryClient from '../../util/queryClient'
 
 const useUpdateSettingsRead = () => {
   const mutationFn = async ({ id }) =>
-    apiClient.put(`/feedback-targets/${id}/read-settings`)
+    apiClient.put(`/feedback-targets/${id}`, { settingsReadByTeacher: true })
 
   const mutation = useMutation(mutationFn, {
     onSuccess: (response, variables) => {

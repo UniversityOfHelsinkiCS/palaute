@@ -31,7 +31,7 @@ export const FeedbackTargetContextProvider = ({
       organisation,
       feedbackTarget,
     }
-  }, [id])
+  }, [id, feedbackTarget])
 
   return (
     <FeedbackTargetContext.Provider value={context}>

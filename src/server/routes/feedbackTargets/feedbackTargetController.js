@@ -11,14 +11,12 @@ const {
   FeedbackTarget,
   CourseUnit,
   CourseRealisation,
-  Feedback,
   User,
   Organisation,
   FeedbackTargetLog,
   Tag,
 } = require('../../models')
 
-const { sequelize } = require('../../db/dbConnection')
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
 const { JWT_KEY } = require('../../util/config')
@@ -34,83 +32,6 @@ const {
   getStudentsForFeedbackTarget,
   getFeedbackTargetsForStudent,
 } = require('../../services/feedbackTargets')
-
-const getIncludes = (userId, accessStatus) => {
-  // where parameter cant have undefined values
-  const where = accessStatus ? { userId, accessStatus } : { userId }
-  return [
-    {
-      model: UserFeedbackTarget,
-      as: 'userFeedbackTargets',
-      required: true,
-      where,
-      include: { model: Feedback, as: 'feedback' },
-    },
-    {
-      model: CourseUnit,
-      as: 'courseUnit',
-      required: true,
-      include: [
-        {
-          model: Organisation,
-          as: 'organisations',
-          through: { attributes: ['type'], as: 'courseUnitOrganisation' },
-          required: true,
-        },
-      ],
-    },
-    { model: CourseRealisation, as: 'courseRealisation' },
-  ]
-}
-
-const getFeedbackTargetByOrganisationAccess = async (
-  feedbackTargetId,
-  user,
-) => {
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
-    include: [
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        required: true,
-        include: [
-          {
-            model: Organisation,
-            as: 'organisations',
-            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
-            required: true,
-          },
-        ],
-      },
-      { model: CourseRealisation, as: 'courseRealisation' },
-    ],
-  })
-  if (!feedbackTarget)
-    throw new ApplicationError(
-      `Feedback target with id ${feedbackTargetId} not found`,
-      404,
-    )
-
-  feedbackTarget.userFeedbackTargets = []
-  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
-    feedbackTarget.courseUnitId,
-  )
-  if (organisationAccess?.read) {
-    return feedbackTarget
-  }
-  return null
-}
-
-const getFeedbackTargetByIdForUser = async (feedbackTargetId, user) => {
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
-    include: getIncludes(user.id),
-  })
-  if (!feedbackTarget) {
-    return getFeedbackTargetByOrganisationAccess(feedbackTargetId, user)
-  }
-
-  return feedbackTarget
-}
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
   const { code } = req.params
@@ -268,31 +189,6 @@ const update = async (req, res) => {
   return res.send(updates)
 }
 
-const updateSettingsReadByTeacher = async (req, res) => {
-  const { user } = req
-
-  const feedbackTargetId = Number(req.params?.id)
-
-  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
-
-  const feedbackTarget = await getFeedbackTargetByIdForUser(
-    feedbackTargetId,
-    user,
-  )
-
-  const isTeacher =
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus ===
-      'RESPONSIBLE_TEACHER' ||
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
-
-  if (!isTeacher) throw new ApplicationError('Forbidden', 403)
-
-  feedbackTarget.settingsReadByTeacher = true
-  await feedbackTarget.save()
-
-  return res.send({ settingsReadByTeacher: true })
-}
-
 const getForStudent = async (req, res) => {
   const { user } = req
   const feedbackTargets = await getFeedbackTargetsForStudent({ user })
@@ -364,7 +260,7 @@ const getTargetsForCourseUnit = async (req, res) => {
       {
         model: UserFeedbackTarget.scope('students'),
         as: 'students',
-        required: true,
+        required: false,
       },
       {
         model: CourseUnit,
@@ -676,7 +572,6 @@ adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
 
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
-adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
 adRouter.get('/:id/feedbacks', getFeedbacks)
 adRouter.get('/:id/users', getUsers)
 adRouter.get('/:id/logs', getLogs)
