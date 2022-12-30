@@ -145,12 +145,12 @@ const getOneForUser = async (id, user, isAdmin) => {
     throw new ApplicationError('Not found', 404)
   }
 
-  const access = await getAccess(
+  const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
     isAdmin,
-  )
+  })
   if (!access) {
     throw new ApplicationError('No access', 403)
   }

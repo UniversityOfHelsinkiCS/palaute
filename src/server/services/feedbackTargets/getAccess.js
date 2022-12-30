@@ -1,6 +1,11 @@
 const { Access } = require('./Access')
 
-const getAccess = async (userFeedbackTarget, user, feedbackTarget, isAdmin) => {
+const getAccess = async ({
+  userFeedbackTarget,
+  user,
+  feedbackTarget,
+  isAdmin,
+}) => {
   if (isAdmin) return Access.ADMIN
 
   const accessStatus = userFeedbackTarget?.accessStatus

@@ -19,12 +19,12 @@ const updateFeedbackResponse = async ({
     ApplicationError.NotFound('Feedbacktarget for response not found')
 
   const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
-  const access = await getAccess(
+  const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
     isAdmin,
-  )
+  })
 
   if (!access.canUpdateResponse()) {
     ApplicationError.Forbidden('No rights to update feedback response')

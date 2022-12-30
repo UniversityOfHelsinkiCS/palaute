@@ -36,6 +36,7 @@ const {
   getFeedbacksForUserById,
   updateFeedbackResponse,
   updateFeedbackTarget,
+  getStudentsForFeedbackTarget,
 } = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
@@ -586,80 +587,21 @@ const getStudentsWithFeedback = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  if (!isAdmin) {
-    const userFeedbackTarget = await UserFeedbackTarget.findOne({
-      where: {
-        userId: user.id,
-        feedbackTargetId,
-      },
-    })
-
-    if (
-      !userFeedbackTarget?.hasTeacherAccess() &&
-      !(await user.getOrganisationAccessByCourseUnitId(
-        feedbackTarget?.courseUnitId,
-      ))
-    ) {
-      throw new ApplicationError(
-        'User is not authorized to view students with feedback',
-        403,
-      )
-    }
-  }
-
-  if (!feedbackTarget) {
-    return res.send([])
-  }
-
-  const studentListVisible = await getStudentListVisibility(
-    feedbackTarget.courseUnitId,
+  const students = await getStudentsForFeedbackTarget({
+    feedbackTargetId,
+    user,
     isAdmin,
-  )
-
-  if (!studentListVisible) {
-    return res.send([])
-  }
-
-  const studentFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      feedbackTargetId,
-      accessStatus: 'STUDENT',
-    },
-    include: [
-      {
-        model: User,
-        as: 'user',
-      },
-      {
-        model: Feedback,
-        as: 'feedback',
-      },
-    ],
   })
 
-  const users = studentFeedbackTargets.map((target) => ({
-    ...target.user.dataValues,
-    feedbackGiven: Boolean(target.feedback),
-  }))
-
-  if (users.filter((u) => u.feedbackGiven).length < 5) {
-    return res.send([])
-  }
-
-  return res.send(users)
+  return res.send(students)
 }
 
-// This is the ideal controller function: only dep is service function, zero business logic
-// Next step would be to just pass the anon func straight to router instead of assigning to a variable
-// One day, all will be like this... I hope
 const putFeedbackResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
   const { user, isAdmin } = req
 
   const updatedFeedbackTarget = await updateFeedbackResponse({
-    // Named parameters: GOOD
     feedbackTargetId,
     isAdmin, // TODO get rid of isAdmins, instead include it in the user object
     responseText: feedbackResponse,

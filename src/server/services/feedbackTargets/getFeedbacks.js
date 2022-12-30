@@ -63,12 +63,12 @@ const getFeedbacks = async (id, user, isAdmin) => {
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]
 
-  const access = await getAccess(
+  const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
     isAdmin,
-  )
+  })
 
   if (!access?.canSeeAllFeedbacks() && feedbackVisibility !== 'ALL') {
     return {
