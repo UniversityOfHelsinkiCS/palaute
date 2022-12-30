@@ -2,7 +2,6 @@ const _ = require('lodash')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
 const {
-  differenceInMonths,
   addMonths,
   getYear,
   subDays,
@@ -49,6 +48,7 @@ const {
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
+  updateFeedbackResponse,
 } = require('../../services/feedbackTargets')
 
 const mapStatusToValue = {
@@ -421,6 +421,7 @@ const parseUpdates = (body) => {
   return updates
 }
 
+// TODO refactor to services
 const update = async (req, res) => {
   const { isAdmin, user } = req
   const feedbackTargetId = Number(req.params?.id)
@@ -434,15 +435,18 @@ const update = async (req, res) => {
     : await getFeedbackTargetByIdForUser(feedbackTargetId, req.user)
 
   const isTeacher =
+    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
+  const isResponsibleTeacher =
     feedbackTarget?.userFeedbackTargets[0]?.accessStatus ===
       'RESPONSIBLE_TEACHER' ||
-    feedbackTarget?.userFeedbackTargets[0]?.accessStatus === 'TEACHER'
+    (isTeacher &&
+      feedbackTarget.courseRealisation.startDate < new Date('2023-01-01'))
 
   const isOrganisationAdmin = (
     await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
   )?.admin
 
-  if (!isAdmin && !isTeacher && !isOrganisationAdmin)
+  if (!isAdmin && !isResponsibleTeacher && !isOrganisationAdmin)
     throw new ApplicationError('Forbidden', 403)
 
   const updates = parseUpdates(req.body)
@@ -805,64 +809,22 @@ const getStudentsWithFeedback = async (req, res) => {
   return res.send(users)
 }
 
-const updateFeedbackResponse = async (req, res) => {
+// This is the ideal controller function: only dep is service function, zero business logic
+// One day, all will be like this... I hope
+const putFeedbackResponse = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
-
-  let relevantFeedbackTarget
-  if (req.isAdmin) {
-    relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  } else {
-    const feedbackTargetsUserIsTeacherTo =
-      await req.user.feedbackTargetsHasTeacherAccessTo()
-
-    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
-      (target) => target.id === feedbackTargetId,
-    )
-  }
-
-  if (!relevantFeedbackTarget)
-    throw new ApplicationError(
-      `No feedback target found with id ${feedbackTargetId} for user`,
-      404,
-    )
-
   const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
+  const { user, isAdmin } = req
 
-  if (
-    feedbackResponseEmailSent &&
-    relevantFeedbackTarget.feedbackResponseEmailSent
-  )
-    throw new ApplicationError(
-      'Counter feedback email has already been sent',
-      400,
-    ) // or 409 ?
+  const updatedFeedbackTarget = await updateFeedbackResponse({
+    feedbackTargetId,
+    isAdmin,
+    responseText: feedbackResponse,
+    sendEmail: feedbackResponseEmailSent,
+    user,
+  })
 
-  if (
-    differenceInMonths(
-      Date.now(),
-      Date.parse(relevantFeedbackTarget.closesAt),
-    ) > 6
-  ) {
-    throw new ApplicationError(
-      'Cannot send counter feedback because feedback closed over 6 months ago',
-      403,
-    )
-  }
-
-  relevantFeedbackTarget.feedbackResponse = feedbackResponse
-  relevantFeedbackTarget.feedbackResponseEmailSent =
-    Boolean(feedbackResponseEmailSent) ||
-    relevantFeedbackTarget.feedbackResponseEmailSent
-
-  if (feedbackResponseEmailSent) {
-    await mailer.sendFeedbackSummaryReminderToStudents(
-      relevantFeedbackTarget,
-      feedbackResponse,
-    )
-  }
-  await relevantFeedbackTarget.save()
-
-  return res.send(relevantFeedbackTarget.toJSON())
+  return res.send(updatedFeedbackTarget)
 }
 
 const remindStudentsOnFeedback = async (req, res) => {
@@ -1080,7 +1042,7 @@ adRouter.put('/:id/read-settings', updateSettingsReadByTeacher)
 adRouter.get('/:id/feedbacks', getFeedbacks)
 adRouter.get('/:id/users', getUsers)
 adRouter.get('/:id/logs', getLogs)
-adRouter.put('/:id/response', updateFeedbackResponse)
+adRouter.put('/:id/response', putFeedbackResponse)
 adRouter.put('/:id/remind-students', remindStudentsOnFeedback)
 adRouter.get('/:id/students-with-feedback', getStudentsWithFeedback)
 adRouter.put('/:id/open-immediately', openFeedbackImmediately)

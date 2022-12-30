@@ -18,6 +18,24 @@ class ApplicationError extends Error {
       error: this.message,
     }
   }
+
+  /**
+   *
+   * @param {string} msg
+   * @throws {ApplicationError}
+   */
+  static NotFound(msg = 'Not found') {
+    throw new ApplicationError(msg, 404)
+  }
+
+  /**
+   *
+   * @param {string} msg
+   * @throws {ApplicationError}
+   */
+  static Forbidden(msg = 'Forbidden') {
+    throw new ApplicationError(msg, 403)
+  }
 }
 
 module.exports = {
