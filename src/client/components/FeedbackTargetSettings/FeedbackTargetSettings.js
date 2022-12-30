@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useQueryClient } from 'react-query'
 import { useHistory, useParams } from 'react-router'
 
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 import {
   getFeedbackPeriodInitialValues,
@@ -12,12 +11,12 @@ import {
   opensAtIsImmediately,
   saveFeedbackPeriodValues,
 } from './utils'
-import { LoadingProgress } from '../common/LoadingProgress'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import PublicitySelection from './PublicitySelection'
 import EditFeedbackTarget from '../EditFeedbackTarget'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
+import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const FeedbackTargetSettings = () => {
   const { id } = useParams()
@@ -26,27 +25,17 @@ const FeedbackTargetSettings = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const updateSettingsRead = useUpdateSettingsRead()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
+  const { feedbackTarget } = useFeedbackTargetContext()
 
   const orgAccess = useOrganisationAccess(feedbackTarget)
   const isOrganisationAdmin = orgAccess.admin
 
   useEffect(() => {
-    if (
-      isLoading ||
-      feedbackTarget.settingsReadByTeacher ||
-      isOrganisationAdmin
-    ) {
+    if (feedbackTarget.settingsReadByTeacher || isOrganisationAdmin) {
       return
     }
     updateSettingsRead.mutateAsync({ id })
-  }, [isLoading])
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
+  }, [])
 
   const [visibility, setVisibility] = useState(
     feedbackTarget.feedbackVisibility,
