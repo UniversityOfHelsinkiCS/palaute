@@ -1,30 +1,23 @@
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Alert } from '@mui/material'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
 import { LoadingProgress } from '../common/LoadingProgress'
+import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const StudentsWithFeedback = () => {
   const { t } = useTranslation()
   const { id } = useParams()
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
+  const { feedbackTarget } = useFeedbackTargetContext()
 
-  const { students, isLoading: studentsIsLoading } = useStudentsWithFeedback(id)
-
-  const isLoading = feedbackTargetIsLoading || studentsIsLoading
+  const { students, isLoading } = useStudentsWithFeedback(id)
 
   if (isLoading) {
     return <LoadingProgress />
-  }
-
-  if (!feedbackTarget || !students) {
-    return <Redirect to="/" />
   }
 
   const noFeedbackALert = (
