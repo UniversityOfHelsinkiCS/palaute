@@ -62,7 +62,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const {
     id,
     feedbackCount,
-    enrolledCount,
+    studentCount,
     courseRealisation,
     opensAt,
     closesAt,
@@ -111,7 +111,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
                 <>
                   {t('teacherView:feedbackCount', {
                     count: feedbackCount,
-                    totalCount: enrolledCount,
+                    totalCount: studentCount,
                   })}{' '}
                   ({feedbackPercentage})
                 </>

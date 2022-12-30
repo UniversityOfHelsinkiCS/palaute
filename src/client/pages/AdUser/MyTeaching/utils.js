@@ -84,11 +84,11 @@ export const getFeedbackTargetQueryOptions = (group) => {
 }
 
 export const getFeedbackPercentageString = (feedbackTarget) => {
-  const { feedbackCount, enrolledCount } = feedbackTarget
+  const { feedbackCount, studentCount } = feedbackTarget
 
-  if (!feedbackCount || !enrolledCount) {
+  if (!feedbackCount || !studentCount) {
     return '0%'
   }
 
-  return `${Math.round((feedbackCount / enrolledCount) * 100)}%`
+  return `${Math.round((feedbackCount / studentCount) * 100)}%`
 }

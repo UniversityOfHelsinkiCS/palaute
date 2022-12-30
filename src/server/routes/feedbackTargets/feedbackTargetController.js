@@ -19,14 +19,9 @@ const {
 } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
-const logger = require('../../util/logger')
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
-const {
-  JWT_KEY,
-  STUDENT_LIST_BY_COURSE_ENABLED,
-  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
-} = require('../../util/config')
+const { JWT_KEY } = require('../../util/config')
 const updateEnrolmentNotification = require('./updateEnrolmentNotification')
 const {
   getEnrolmentNotification,
@@ -115,44 +110,6 @@ const getFeedbackTargetByIdForUser = async (feedbackTargetId, user) => {
   }
 
   return feedbackTarget
-}
-
-const getStudentListVisibility = async (courseUnitId, isAdmin) => {
-  const organisationRows = await sequelize.query(
-    'SELECT O.* from organisations O, course_units_organisations C ' +
-      " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
-    {
-      replacements: {
-        cuId: courseUnitId,
-      },
-    },
-  )
-
-  if (organisationRows.length === 0) {
-    logger.error('NO PRIMARY ORGANISATION FOR COURSE', { courseUnitId })
-    return false
-  }
-
-  if (!organisationRows[0].length) return false
-
-  const {
-    code,
-    student_list_visible: studentListVisible,
-    student_list_visible_course_codes: studentListVisibleCourseCodes,
-  } = organisationRows[0][0]
-
-  if (
-    STUDENT_LIST_BY_COURSE_ENABLED.includes(code) ||
-    (STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code) && isAdmin)
-  ) {
-    const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
-      attributes: ['courseCode'],
-    })
-
-    if (studentListVisibleCourseCodes.includes(courseCode)) return true
-  }
-
-  return studentListVisible ?? false
 }
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -344,6 +301,7 @@ const getForStudent = async (req, res) => {
 
 const getTargetsForCourseUnit = async (req, res) => {
   const courseCode = req.params.code
+  const { user } = req
 
   const {
     courseRealisationStartDateAfter,
@@ -379,16 +337,14 @@ const getTargetsForCourseUnit = async (req, res) => {
     ].filter(Boolean),
   }
 
-  const targetWhere = {
-    [Op.and]: [
-      feedbackType && {
-        feedbackType,
-      },
-    ].filter(Boolean),
-  }
-
   const feedbackTargets = await FeedbackTarget.findAll({
-    where: targetWhere,
+    where: {
+      [Op.and]: [
+        feedbackType && {
+          feedbackType,
+        },
+      ].filter(Boolean),
+    },
     order: [
       [
         { model: CourseRealisation, as: 'courseRealisation' },
@@ -396,27 +352,19 @@ const getTargetsForCourseUnit = async (req, res) => {
         'DESC',
       ],
     ],
-    attributes: [
-      'id',
-      'name',
-      'feedbackResponse',
-      'feedbackResponseEmailSent',
-      'continuousFeedbackEnabled',
-      'courseUnitId',
-      'courseRealisationId',
-      'feedbackType',
-      'opensAt',
-      'closesAt',
-    ],
     include: [
       {
-        model: UserFeedbackTarget,
+        model: UserFeedbackTarget.scope('teachers'),
         as: 'userFeedbackTargets',
         required: true,
         where: {
-          userId: req.user.id,
-          accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+          userId: user.id,
         },
+      },
+      {
+        model: UserFeedbackTarget.scope('students'),
+        as: 'students',
+        required: true,
       },
       {
         model: CourseUnit,
@@ -430,7 +378,7 @@ const getTargetsForCourseUnit = async (req, res) => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-        where: { ...courseRealisationWhere },
+        where: courseRealisationWhere,
       },
     ],
   })
@@ -439,62 +387,33 @@ const getTargetsForCourseUnit = async (req, res) => {
     return res.send([])
   }
 
-  const counts = await sequelize.query(
-    `
-    SELECT feedback_target_id, COUNT(*) AS enrolled_count, COUNT(feedback_id) AS feedback_count
-    FROM user_feedback_targets
-    WHERE feedback_target_id IN (:feedbackTargetIds) AND access_status = 'STUDENT'
-    GROUP BY (feedback_target_id)
-  `,
-    {
-      replacements: {
-        feedbackTargetIds: feedbackTargets.map(({ id }) => id),
-      },
-      type: sequelize.QueryTypes.SELECT,
-    },
-  )
-
-  const studentListVisible = await getStudentListVisibility(
-    feedbackTargets[0].courseUnitId,
-    req.isAdmin,
-  )
-
   if (includeSurveys === 'true') {
-    // eslint-disable-next-line
     for (const target of feedbackTargets) {
-      // eslint-disable-next-line no-await-in-loop
       const surveys = await target.getSurveys()
       target.populateSurveys(surveys)
     }
   }
 
   const formattedFeedbackTargets = feedbackTargets
-    .map((target) => {
-      const targetCounts = counts.find(
-        (row) => parseInt(row.feedback_target_id, 10) === target.id,
-      )
-
-      return {
-        ..._.pick(target.toJSON(), [
-          'id',
-          'name',
-          'opensAt',
-          'closesAt',
-          'feedbackType',
-          'courseRealisation',
-          'courseUnit',
-          'feedbackResponse',
-          'continuousFeedbackEnabled',
-          'questions',
-          'surveys',
-        ]),
-        feedbackCount: parseInt(targetCounts?.feedback_count ?? 0, 10),
-        enrolledCount: parseInt(targetCounts?.enrolled_count ?? 0, 10),
-        feedbackResponseGiven: target.feedbackResponse?.length > 3,
-        feedbackResponseSent: target.feedbackResponseEmailSent,
-        studentListVisible,
-      }
-    })
+    .map((target) => ({
+      ..._.pick(target.toJSON(), [
+        'id',
+        'name',
+        'opensAt',
+        'closesAt',
+        'feedbackType',
+        'courseRealisation',
+        'courseUnit',
+        'feedbackResponse',
+        'continuousFeedbackEnabled',
+        'questions',
+        'surveys',
+        'feedbackCount',
+      ]),
+      studentCount: target.students.length,
+      feedbackResponseGiven: target.feedbackResponse?.length > 3,
+      feedbackResponseSent: target.feedbackResponseEmailSent,
+    }))
     .filter(
       (fbt) =>
         fbt.feedbackCount > 0 ||

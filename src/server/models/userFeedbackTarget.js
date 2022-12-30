@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { STRING, INTEGER, Model, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
@@ -44,6 +45,19 @@ UserFeedbackTarget.init(
   {
     underscored: true,
     sequelize,
+
+    scopes: {
+      students: {
+        where: {
+          accessStatus: 'STUDENT',
+        },
+      },
+      teachers: {
+        where: {
+          accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+        },
+      },
+    },
   },
 )
 
