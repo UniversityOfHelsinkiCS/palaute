@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { useParams, Redirect, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Box, Paper, Typography, Alert, Button } from '@mui/material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
 import ResponseForm from './ResponseForm'
 import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { feedbackTargetIsOngoing } from './utils'
 import Markdown from '../common/Markdown'
+import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import ErrorView from '../common/ErrorView'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -48,7 +48,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   )
 }
 
-const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
+const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
@@ -64,7 +64,7 @@ const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
             <Typography variant="body2" alignSelf="flex-end">
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
-            {isTeacher && !response && (
+            {isResponsibleTeacher && !response && (
               <Button onClick={() => setShowResponse(!showResponse)}>
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
@@ -78,7 +78,7 @@ const FeedbackItem = ({ feedback, isTeacher, refetch }) => {
         <ResponseItem
           feedbackId={id}
           response={response}
-          isTeacher={isTeacher}
+          isTeacher={isResponsibleTeacher}
           refetch={refetch}
         />
       )}
@@ -100,28 +100,16 @@ const FeedbackTargetContinuousFeedback = () => {
   const { continuousFeedbacks, isLoading, refetch } =
     useFeedbackTargetContinuousFeedbacks(id)
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
+  const { feedbackTarget, isTeacher, isResponsibleTeacher, isStudent } =
+    useFeedbackTargetContext()
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
-
-  if (isLoading || feedbackTargetIsLoading || authorizedUserLoading) {
+  if (isLoading) {
     return <LoadingProgress />
   }
 
   if (!continuousFeedbacks) {
-    return <Redirect to="/" />
+    return <ErrorView returnTo={`/targets/${id}`} />
   }
-
-  const { accessStatus } = feedbackTarget
-
-  const isAdmin = authorizedUser?.isAdmin ?? false
-  const isTeacher =
-    accessStatus === 'RESPONSIBLE_TEACHER' ||
-    accessStatus === 'TEACHER' ||
-    isAdmin
-  const isStudent = accessStatus === 'STUDENT'
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
@@ -143,7 +131,7 @@ const FeedbackTargetContinuousFeedback = () => {
         </Box>
       )}
 
-      {isTeacher && !sortedFeedbacks.length && (
+      {(isTeacher || isResponsibleTeacher) && !sortedFeedbacks.length && (
         <Alert severity="info">
           {t('feedbackTargetView:noContinuousFeedbackGiven')}
         </Alert>
@@ -154,7 +142,7 @@ const FeedbackTargetContinuousFeedback = () => {
           <FeedbackItem
             key={feedback.id}
             feedback={feedback}
-            isTeacher={isTeacher}
+            isResponsibleTeacher={isResponsibleTeacher}
             refetch={refetch}
           />
         ))}

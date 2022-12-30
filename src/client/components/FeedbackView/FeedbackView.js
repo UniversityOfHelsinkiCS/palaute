@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 
 import {
   Typography,
@@ -34,7 +34,6 @@ import {
   getQuestions,
   formatDate,
   checkIsFeedbackOpen,
-  feedbackTargetIsDisabled,
 } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -183,10 +182,6 @@ const FeedbackView = () => {
     return <LoadingProgress />
   }
 
-  if (!feedbackTarget) {
-    return <Redirect to="/" />
-  }
-
   const {
     accessStatus,
     opensAt,
@@ -194,6 +189,7 @@ const FeedbackView = () => {
     feedback,
     continuousFeedbackEnabled,
   } = feedbackTarget
+  // TODO clean up this shit again
   const isStudent = accessStatus === 'STUDENT'
   const isTeacher =
     accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
@@ -212,11 +208,6 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
-  const isDisabled = feedbackTargetIsDisabled(feedbackTarget)
-
-  if (isDisabled && !isTeacher) {
-    return <Redirect to="/" />
-  }
 
   const handleSubmit = async (values) => {
     try {

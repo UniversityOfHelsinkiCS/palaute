@@ -80,11 +80,11 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     feedbackReminderLastSentAt,
   } = feedbackTarget
 
+  // TODO this shit is gonna be cleaned up someday
   const isAdmin = accessStatus === 'ADMIN'
   const isOrganisationAdmin = accessStatus === 'ORGANISATION_ADMIN'
   const isOrganisationUser =
     isOrganisationAdmin || accessStatus === 'ORGANISATION'
-
   const isResponsibleTeacher = isAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
   const isTeacher = isResponsibleTeacher || accessStatus === 'TEACHER'
 
@@ -94,10 +94,6 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const saveLegacySetting = (value) => {
     setUseLegacy(value)
     localStorage.setItem('legacy', JSON.stringify(value))
-  }
-
-  if (isOpen && !feedback && !isOrganisationUser && !isTeacher) {
-    return <Redirect to={`/targets/${feedbackTarget.id}/feedback`} />
   }
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
