@@ -15,9 +15,7 @@ const styles = {
 const tabOrder = ['waiting', 'given', 'ended']
 
 const StatusTab = ({ status, count, color, ...props }) => {
-  const tab = (
-    <Tab component={Link} to={{ search: `?status=${status}` }} {...props} />
-  )
+  const tab = <Tab component={Link} to={{ search: `?status=${status}` }} {...props} />
 
   return (
     <Badge sx={styles.badge} badgeContent={count} color={color}>
@@ -27,8 +25,7 @@ const StatusTab = ({ status, count, color, ...props }) => {
 }
 
 const StatusTabs = ({ status, counts, ...props }) => {
-  if (counts.ongoing && !tabOrder.includes('ongoing'))
-    tabOrder.unshift('ongoing')
+  if (counts.ongoing && !tabOrder.includes('ongoing')) tabOrder.unshift('ongoing')
 
   const index = tabOrder.indexOf(status)
   const value = index < 0 ? 0 : index

@@ -22,9 +22,7 @@ const descendingComparator = (a, b, orderBy) => {
 
 const getComparator = (order, orderBy) => {
   const comparator =
-    order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy)
+    order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy)
   return comparator
 }
 
@@ -36,5 +34,5 @@ export const sortTable = (array, order, orderBy) => {
     if (order !== 0) return order
     return a[1] - b[1]
   })
-  return stabilizedArray.map((array) => array[0])
+  return stabilizedArray.map(array => array[0])
 }

@@ -2,21 +2,17 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question, Organisation } = require('../../models')
 const { createOrganisationSurveyLog } = require('../../util/auditLog')
-const {
-  getUniversitySurvey: _getUniversitySurvey,
-} = require('../../services/surveys')
+const { getUniversitySurvey: _getUniversitySurvey } = require('../../services/surveys')
 
 const checkUserWriteAccess = async (survey, user) => {
   const organisationAccess = await user.getOrganisationAccess()
 
-  const organisation = organisationAccess.find(
-    ({ organisation }) => organisation.code === survey.typeId,
-  )
+  const organisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
 
   return organisation?.access?.write ?? false
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
+const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   const updatedQuestionIdsList = []
 
   /* eslint-disable */
@@ -27,7 +23,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
         {
           ...question,
         },
-        { where: { id: question.id }, returning: true },
+        { where: { id: question.id }, returning: true }
       )
       updatedQuestion = updatedQuestions[0]
     } else {
@@ -51,8 +47,7 @@ const update = async (req, res) => {
 
   const isUniversitySurvey = survey.type === 'university'
 
-  if (isUniversitySurvey && !isAdmin)
-    throw new ApplicationError('Forbidden', 403)
+  if (isUniversitySurvey && !isAdmin) throw new ApplicationError('Forbidden', 403)
 
   if (survey.type === 'programme') {
     const writeAccess = await checkUserWriteAccess(survey, user)
@@ -65,9 +60,7 @@ const update = async (req, res) => {
     if (!isUniversitySurvey) {
       await createOrganisationSurveyLog(survey, questions, user)
     }
-    survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(
-      questions,
-    )
+    survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
   }
 
   // Mark updatedAt as changed to force a query. Otherwise save() may not actually run a query and trigger hooks

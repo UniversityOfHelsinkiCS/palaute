@@ -13,11 +13,9 @@ export default {
       invalidDate: 'Ogiltigt datum',
     },
     unknownError: 'Något gick fel',
-    serverError:
-      'Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.',
+    serverError: 'Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.',
     choiceQuestionError: 'Flervalsfrågor kräver svarsalternativ',
-    fetchError:
-      'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
+    fetchError: 'Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.',
     notFound: 'Sidan eller resursen hittas inte.',
     noAccess: 'Du har inte tillgång till denna resurs',
     supportContact: 'Vid problemfall, kontakta supporten: ',
@@ -39,12 +37,10 @@ export default {
     feedback: 'Respons',
     feedbackGiven: 'Given',
     feedbackNotGiven: 'Inte given',
-    dropZoneInfo1:
-      'Dra hit en fil, eller hitta den genom att klicka på denhär rutan',
+    dropZoneInfo1: 'Dra hit en fil, eller hitta den genom att klicka på denhär rutan',
     dropZoneInfo2: 'En .csv fil mindre än 5MB godkänns',
     feedbackHeader: 'RESPONS',
-    dirtyFormPrompt:
-      'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
+    dirtyFormPrompt: 'Sidan har osparade ändringar. Är du säker att du vill lämna sidan?',
     actions: 'Handlingar',
     close: 'Stäng',
     required: 'Krävs',
@@ -74,8 +70,7 @@ export default {
     giveFeedbackButton: 'Ge respons',
     modifyFeedbackButton: 'Redigera responsen',
     clearFeedbackButton: 'Töm responsen',
-    clearConfirmationQuestion:
-      'Är du säker på att du vill tömma denna respons?',
+    clearConfirmationQuestion: 'Är du säker på att du vill tömma denna respons?',
     yes: 'Ja',
     no: 'Nej',
     giveContinuousFeedback: 'Ge kontinuerlig respons',
@@ -95,11 +90,9 @@ export default {
   feedbackView: {
     submitButton: 'Ge respons',
     successAlert: 'Responsen är given',
-    feedbackInfo:
-      'Denna respons är anonym. Fälten märkta med en asterisk (*) krävs',
+    feedbackInfo: 'Denna respons är anonym. Fälten märkta med en asterisk (*) krävs',
     feedbackInfoLink: 'Läs mera om hur informationen och svar används',
-    closedInfo:
-      'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
+    closedInfo: 'Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}',
     dataProtectionNotice: 'Dataskyddsbeskrivning',
     dontKnowOption: 'Ingen uppgift',
     editSurvey: 'Redigera förfrågan',
@@ -156,10 +149,8 @@ export default {
     removeOptionConfirmation: 'Är du säker, att du vill radera alternativet?',
     description: 'Beskrivning',
     done: 'Spara',
-    languageInfo:
-      'Då håller för tillfället på att redigera språkversionen "{{language}}" av frågan',
-    descriptionHelper:
-      'Frivillig beskrivning som förser frågan med tilläggsinformation',
+    languageInfo: 'Då håller för tillfället på att redigera språkversionen "{{language}}" av frågan',
+    descriptionHelper: 'Frivillig beskrivning som förser frågan med tilläggsinformation',
     universityQuestion: 'Universitetsnivå',
     programmeQuestion: 'Utbildningsprogramsnivå',
     uneditableTooltip:
@@ -173,13 +164,11 @@ export default {
     upperLevelQuestionsInfo:
       'Förfrågan har redan {{count}} frågor på universitets- och avdelningsnivå, men du kan lägga till frågor. Du kan trycka på knappen "Visa förfrågans förhandsvisning" för att se hur förfrågan ser ut med alla frågorna',
     showPreview: 'Visa förfrågans förhandsvisning',
-    showPreviewConfirmation:
-      'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
+    showPreviewConfirmation: 'Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.',
     translationLanguage: 'Språkversion',
     warningAboutOpeningCourse:
       'OBS! Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.',
-    opensAtIsNow:
-      'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
+    opensAtIsNow: 'Förfrågan är inställd att öppnas genast! När förfrågan öppnas kan den inte längre redigeras',
     checkbox: 'Jag förstår',
     noUnsavedChanges: 'Inga osparade ändringar',
     openImmediately: 'Öppna responsen genast',
@@ -206,20 +195,15 @@ export default {
     openFeedbackImmediatelyDialogConfirm: 'Öppna respons',
     closesAtInPastError: 'Stängningsdatumet kan inte vara i det förflutna',
     opensAtInPastError: 'Öppningsdatumet får inte vara i det förflutna',
-    closesAtBeforeOpensAtError:
-      'Stängningsdatumet måste vara efter öppningsdatumet',
-    tooShortFeedbackPeriodError:
-      'Responsen måste vara öppen åtminstone ett dygn',
+    closesAtBeforeOpensAtError: 'Stängningsdatumet måste vara efter öppningsdatumet',
+    tooShortFeedbackPeriodError: 'Responsen måste vara öppen åtminstone ett dygn',
   },
   questionResults: {
     answerCount: 'Antalet svar',
     answerOption: 'Svarsalternativ',
-    publicInfo:
-      'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
-    notPublicInfo:
-      'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
-    publicityOfQuestions:
-      'Resultaten av dessa frågor är inte synliga för studerande',
+    publicInfo: 'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
+    notPublicInfo: 'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
+    publicityOfQuestions: 'Resultaten av dessa frågor är inte synliga för studerande',
     moreInfo: 'Mer information om frågornas synlighet finns',
     here: 'här',
     multipleChoiceQuestions: 'Flervalsfrågor',
@@ -235,8 +219,7 @@ export default {
     answers: 'Svar',
   },
   feedbackTargetResults: {
-    notEnoughFeedbacksInfo:
-      'Förfrågans resultat visas inte på grund av för få responser',
+    notEnoughFeedbacksInfo: 'Förfrågans resultat visas inte på grund av för få responser',
     onlyForEnrolledInfo:
       'Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare',
     studentsWithFeedbackHeading: 'Studeranden som givit respons',
@@ -246,8 +229,7 @@ export default {
     noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
     export: 'Exportera resultat',
     useLegacyVersion: 'Använd gamla responsvyn',
-    thankYouMessage:
-      'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
+    thankYouMessage: 'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
     closeImmediately: 'Stäng responsen genast',
     closeImmediatelyConfirm:
       'Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
@@ -255,22 +237,22 @@ export default {
       'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
     sendReminder: 'Skicka påminnelse via e-post',
     sendReminderButton: 'Skicka påminnelse',
-    reminderDisabled:
-      'Du har redan skickat en påminnelse under de senaste 24 timmarna',
+    reminderDisabled: 'Du har redan skickat en påminnelse under de senaste 24 timmarna',
     reminderLastSent: 'Påminnelse senast skickad',
     cancelReminder: 'Avbryt',
     modalTitle: 'Skicka en påminnelse om respons via e-post',
     writeAMessage: 'Skriv ett meddelande till studerande',
     emailMessage:
       'Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. Tack!\n << Meddelandet du skriver kommer synas här >>',
-    modalSubtitle:
-      'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
+    modalSubtitle: 'Studeranden som har redan gett respons får inte påminnelsemeddelandet',
     emailSent: 'Påminnelse skickad',
     setHidden: 'Göm',
     setVisible: 'Visa',
-    hiddenInfo: 'Den här responsen är gömd. Den är synlig endast för lärare eller utbildningsprogrammets administratörer.',
+    hiddenInfo:
+      'Den här responsen är gömd. Den är synlig endast för lärare eller utbildningsprogrammets administratörer.',
     hidingFeatureInfoTitle: 'Information om att gömma svaren',
-    hidingFeatureInfo: 'Du kan gömma individuella svar till frågor vars svar annars är synliga för studerande, ifall svaret är olämpligt eller innehåller känslig information. Att gömma svar har ingen inverkan om svaren inte annars är synliga för studerande. För att förhindra missbruk, visas antalet gömda svar för utbildningsprogrammets administratörer i kurssammandraget.'
+    hidingFeatureInfo:
+      'Du kan gömma individuella svar till frågor vars svar annars är synliga för studerande, ifall svaret är olämpligt eller innehåller känslig information. Att gömma svar har ingen inverkan om svaren inte annars är synliga för studerande. För att förhindra missbruk, visas antalet gömda svar för utbildningsprogrammets administratörer i kurssammandraget.',
   },
   navBar: {
     myFeedbacks: 'Mina responser',
@@ -320,8 +302,7 @@ export default {
   },
   publicQuestions: {
     title: 'Svarens synlighet',
-    publicInfo:
-      'Responsen gällande offentligtgjorda frågor visas för studeranden på responssidan',
+    publicInfo: 'Responsen gällande offentligtgjorda frågor visas för studeranden på responssidan',
     selectVisibility: 'Välj användare som ser de offentliga frågorna',
     none: 'Endast personal på utbildningsprogrammet',
     enrolled: 'Studerande på kursen',
@@ -330,8 +311,7 @@ export default {
   feedbackTargetSettings: {
     editPeriodTitle: 'Responsperiod',
     cannotCloseImmediately: 'Responsen är ännu inte igång',
-    cannotCloseImmediatelyWhenOpen:
-      'Responsen har stängts eller kommer att stängas om en dag',
+    cannotCloseImmediatelyWhenOpen: 'Responsen har stängts eller kommer att stängas om en dag',
     cannotOpenImmediately: 'Responsen är igång eller har redan slutat',
   },
   courseSummary: {
@@ -385,14 +365,12 @@ export default {
     lastUpdate: 'Senaste versionen {{duration}} sedan',
   },
   courseRealisationFeedback: {
-    noFeedbackTarget:
-      'Det finns ingen respons tillgänglig för dig på denna kurs',
+    noFeedbackTarget: 'Det finns ingen respons tillgänglig för dig på denna kurs',
   },
   organisationSettings: {
     surveyInfo:
       'Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
-    studentListVisible:
-      'Visa studerandena som har gett respons till kursens lärare',
+    studentListVisible: 'Visa studerandena som har gett respons till kursens lärare',
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
     settingsTab: 'Inställningar',
     generalSettings: 'Allmänna inställningar',
@@ -453,7 +431,7 @@ export default {
     continuousFeedbackGiven: 'Given kontinuerlig respons',
     noContinuousFeedbackGiven: 'Ingen kontinuerlig respons har ännu getts',
     continuousFeedbackStudentInfo:
-     'Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.',
+      'Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.',
     respondContinuousFeedback: 'Svara',
     closeRespondContinuousFeedback: 'Stäng',
     continuousFeedbackResponse: 'Svar',
@@ -464,14 +442,12 @@ export default {
     studentLinkTitle: 'Studerandelänk till översikt',
     studentResultsLinkTitle: 'Länk till svaren och motresponsen',
     studentLinkQRTitle: 'QR-kod till översikt',
-    qrCodeHelpText:
-      'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
-    deleteResponsibleTeacherConfirmation:
-      'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
+    qrCodeHelpText: 'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
+    deleteResponsibleTeacherConfirmation: 'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
     noFeedbackResponseYet: 'Kursens lärare har inte ännu gett motrespons',
-    noAccess: 'Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.',
-    notFound:
-      'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
+    noAccess:
+      'Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.',
+    notFound: 'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
     notifyOnEnrolment: 'Skicka e-post till mig när min anmälan har hittats',
     notificationEnabled: 'Ok, ett meddelande skickas till adressen {{email}}, om din anmälan hittas inom 24h',
     notificationDisabled: 'Ok, ett meddelande skickas inte',
@@ -486,15 +462,13 @@ export default {
     feedbackHelper: 'Ge fritt formulerad respons',
     responseWanted: 'Jag vill ha svar på responsen',
     submit: 'Skicka respons',
-    confirm:
-      'Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa',
+    confirm: 'Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa',
     title: 'Ge respons till Norppa utvecklarna',
     description:
       'Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.',
     feedbackLengthError: 'Minimilängden på responsen är ett tecken',
     successAlert: 'Responsen har skickats!',
     anonymous: 'Lähetä anonyymisti Skicka anonymt',
-    anonymousInfo:
-     'Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet.',
+    anonymousInfo: 'Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet.',
   },
 }

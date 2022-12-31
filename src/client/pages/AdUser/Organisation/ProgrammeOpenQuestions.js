@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 
 import useProgrammeOpenQuestions from '../../../hooks/useProgrammeOpenQuestions'
-import {
-  filterCoursesWithNoResponses,
-  filterCoursesByDate,
-  formateDates,
-} from './utils'
+import { filterCoursesWithNoResponses, filterCoursesByDate, formateDates } from './utils'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 import useHistoryState from '../../../hooks/useHistoryState'
@@ -87,12 +83,11 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
 
   let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
 
-  if (dateRange)
-    filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
+  if (dateRange) filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
 
   return (
     <span ref={ref}>
-      {filteredCourses.map((course) => (
+      {filteredCourses.map(course => (
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
@@ -101,12 +96,8 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
               replace
             >{`${course.code} - ${course.name[language]}`}</Link>
           </Typography>
-          {course.realisations.map((realisation) => (
-            <RealisationItem
-              key={realisation.id}
-              realisation={realisation}
-              language={language}
-            />
+          {course.realisations.map(realisation => (
+            <RealisationItem key={realisation.id} realisation={realisation} language={language} />
           ))}
         </Box>
       ))}
@@ -139,23 +130,13 @@ const ProgrammeOpenQuestions = () => {
 
   return (
     <Box>
-      <YearSemesterSelector
-        value={dateRange}
-        onChange={setDateRange}
-        option={option}
-        setOption={setOption}
-        allowAll
-      />
+      <YearSemesterSelector value={dateRange} onChange={setDateRange} option={option} setOption={setOption} allowAll />
       <Box sx={styles.buttonContainer}>
         <Button color="primary" variant="contained" onClick={handlePrint}>
           {t('feedbackTargetResults:exportPdf')}
         </Button>
       </Box>
-      <OpenQuestions
-        codesWithIds={codesWithIds}
-        dateRange={option !== 'all' && dateRange}
-        ref={componentRef}
-      />
+      <OpenQuestions codesWithIds={codesWithIds} dateRange={option !== 'all' && dateRange} ref={componentRef} />
     </Box>
   )
 }

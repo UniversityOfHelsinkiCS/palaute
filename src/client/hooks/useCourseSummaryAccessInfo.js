@@ -10,11 +10,7 @@ const useCourseSummaryAccessInfo = (options = {}) => {
     return data
   }
 
-  const { data: courseSummaryAccessInfo, ...rest } = useQuery(
-    queryKey,
-    queryFn,
-    options,
-  )
+  const { data: courseSummaryAccessInfo, ...rest } = useQuery(queryKey, queryFn, options)
 
   return { courseSummaryAccessInfo, ...rest }
 }

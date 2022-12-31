@@ -42,7 +42,7 @@ CourseRealisation.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = CourseRealisation

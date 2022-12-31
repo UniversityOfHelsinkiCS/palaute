@@ -12,8 +12,7 @@ const OpenQuestion = ({ question, name }) => {
   const { required } = question
   const labelId = `${question.id}-label`
 
-  const description =
-    getLanguageValue(question.data?.description, language) ?? ''
+  const description = getLanguageValue(question.data?.description, language) ?? ''
 
   return (
     <QuestionBase

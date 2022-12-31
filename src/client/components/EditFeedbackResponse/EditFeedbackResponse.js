@@ -2,16 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
-import {
-  Card,
-  CardContent,
-  Box,
-  Typography,
-  Divider,
-  FormControlLabel,
-  Checkbox,
-  Alert,
-} from '@mui/material'
+import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -25,7 +16,7 @@ import InstructionAccordion from './InstructionAccordion'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
-const getInitialValues = (feedbackTarget) => ({
+const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
 })
 
@@ -53,10 +44,9 @@ const EditFeedbackResponse = () => {
 
   const now = Date.now()
   const closeTime = Date.parse(closesAt)
-  const feedbackResponseFormDisabled =
-    now < closeTime || differenceInMonths(now, closeTime) > 6
+  const feedbackResponseFormDisabled = now < closeTime || differenceInMonths(now, closeTime) > 6
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       await updateFeedbackResponse.mutateAsync({
         id,
@@ -83,14 +73,9 @@ const EditFeedbackResponse = () => {
             </Trans>
           </Alert>
         </Box>
-        <Formik
-          initialValues={initialValues}
-          validateOnChange={false}
-          onSubmit={handleSubmit}
-        >
+        <Formik initialValues={initialValues} validateOnChange={false} onSubmit={handleSubmit}>
           {({ isSubmitting, values }) => {
-            const edited =
-              values.feedbackResponse !== feedbackTarget.feedbackResponse
+            const edited = values.feedbackResponse !== feedbackTarget.feedbackResponse
             return (
               <Form id="feedback-response-form">
                 <FormikTextField
@@ -109,10 +94,7 @@ const EditFeedbackResponse = () => {
                   <ResponseEmailButton
                     sendEmail={!isSent && sendEmail}
                     disabled={
-                      (!edited && !sendEmail) ||
-                      (!edited && isSent) ||
-                      isSubmitting ||
-                      !values.feedbackResponse
+                      (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
                     }
                     onSubmit={() =>
                       handleSubmit({
@@ -130,20 +112,14 @@ const EditFeedbackResponse = () => {
                         onChange={({ target }) => setSendEmail(target.checked)}
                       />
                     }
-                    label={
-                      isSent
-                        ? t('feedbackResponse:emailSent')
-                        : t('feedbackResponse:checkboxSendEmail')
-                    }
+                    label={isSent ? t('feedbackResponse:emailSent') : t('feedbackResponse:checkboxSendEmail')}
                   />
                 </Box>
                 <Box my={2}>
                   <Divider />
                 </Box>
                 <Box mb={2}>
-                  <Typography color="textSecondary">
-                    {t('feedbackResponse:previewLabel')}
-                  </Typography>
+                  <Typography color="textSecondary">{t('feedbackResponse:previewLabel')}</Typography>
                 </Box>
                 <MarkdownPreview />
               </Form>

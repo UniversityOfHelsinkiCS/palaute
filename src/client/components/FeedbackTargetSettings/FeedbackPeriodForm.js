@@ -1,14 +1,5 @@
 import React, { useState, useRef } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Tooltip,
-  Typography,
-  Link,
-  Alert,
-} from '@mui/material'
+import { Box, Button, Card, CardContent, Tooltip, Typography, Link, Alert } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 
@@ -21,12 +12,7 @@ import { TooltipButton } from '../common/TooltipButton'
 import useOrganisationAccess from '../../hooks/useOrganisationAccess'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
-const FeedbackPeriodForm = ({
-  onSubmit = () => {},
-  onOpenImmediately = () => {},
-  initialValues,
-  feedbackTarget,
-}) => {
+const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {}, initialValues, feedbackTarget }) => {
   const { t } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
   const orgAccess = useOrganisationAccess(feedbackTarget)
@@ -53,9 +39,7 @@ const FeedbackPeriodForm = ({
 
   const openImmediatelyEnabled = !(isOpen || isOver)
 
-  const cannotOpenImmediatelyMessage = t(
-    'feedbackTargetSettings:cannotOpenImmediately',
-  )
+  const cannotOpenImmediatelyMessage = t('feedbackTargetSettings:cannotOpenImmediately')
 
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
@@ -96,17 +80,14 @@ const FeedbackPeriodForm = ({
     handleOpenWarningDialog()
   }
 
-  const submitButtonTooltip = (errors) =>
-    Object.values(errors).map(t).join('\n')
+  const submitButtonTooltip = errors => Object.values(errors).map(t).join('\n')
 
   return (
     <Box mb={5}>
       <Card>
         <CardContent>
           <Box mb={4}>
-            <Typography variant="h6">
-              {t('feedbackTargetSettings:editPeriodTitle')}
-            </Typography>
+            <Typography variant="h6">{t('feedbackTargetSettings:editPeriodTitle')}</Typography>
           </Box>
           <OpenFeedbackImmediatelyDialog
             open={warningDialogOpen}
@@ -125,12 +106,7 @@ const FeedbackPeriodForm = ({
                     i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
                     values={{ supportEmail }}
                     components={{
-                      mailTo: (
-                        <Link
-                          href={`mailto:${supportEmail}`}
-                          underline="hover"
-                        />
-                      ),
+                      mailTo: <Link href={`mailto:${supportEmail}`} underline="hover" />,
                     }}
                   />
                 </Alert>
@@ -158,9 +134,7 @@ const FeedbackPeriodForm = ({
                           variant="contained"
                           color="primary"
                           type="submit"
-                          disabled={
-                            !dirty || formDisabled || (!isValid && !isAdmin)
-                          }
+                          disabled={!dirty || formDisabled || (!isValid && !isAdmin)}
                         >
                           {t('save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                         </Button>

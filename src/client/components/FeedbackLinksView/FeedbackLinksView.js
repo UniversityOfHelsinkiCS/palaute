@@ -14,16 +14,12 @@ const FeedbackLinksView = () => {
     return <LoadingProgress />
   }
 
-  const sortedUsers = users.sort((a, b) =>
-    a.firstName.localeCompare(b.firstName),
-  )
+  const sortedUsers = users.sort((a, b) => a.firstName.localeCompare(b.firstName))
 
   return (
     <Box>
-      <Typography variant="h6">
-        Students and their respective feedback links
-      </Typography>
-      {sortedUsers.map((user) => (
+      <Typography variant="h6">Students and their respective feedback links</Typography>
+      {sortedUsers.map(user => (
         <Box key={user.studentNumber} style={{ marginTop: 5 }}>
           <Typography variant="body1" component="p">
             {user.firstName} {user.lastName}

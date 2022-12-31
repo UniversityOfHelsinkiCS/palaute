@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Button,
-  Paper,
-  Typography,
-  IconButton,
-  FormControlLabel,
-  Checkbox,
-  Alert,
-} from '@mui/material'
+import { Box, Button, Paper, Typography, IconButton, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { AddAlertOutlined, Undo } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
@@ -29,7 +20,7 @@ const NorppaFeedbackView = () => {
   }
 
   const sortedFeedbacks = feedbacks
-    .filter((f) => !filterActionRequired || !f.solved)
+    .filter(f => !filterActionRequired || !f.solved)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   const handleMarkAsSolved = async (id, solved) => {
@@ -55,79 +46,59 @@ const NorppaFeedbackView = () => {
           label="Show only unsolved"
         />
       </Box>
-      {sortedFeedbacks.map(
-        ({ id, createdAt, data, responseWanted, solved, user }) => {
-          const created = format(new Date(createdAt), 'dd.MM.yyyy')
-          return (
-            <Box key={id} margin={2}>
-              <Paper>
-                <Box display="flex">
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    flexGrow={1}
-                    padding={2}
-                  >
-                    <Box marginBottom={2}>
-                      <Typography whiteSpace="pre-line" variant="body1">
-                        {data}
-                      </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      <Typography variant="body2">{created}</Typography>
-                      <Box marginLeft={4}>
-                        <Typography variant="body1">
-                          {user?.email ?? 'Anonymous'}
-                        </Typography>
-                      </Box>
-                    </Box>
+      {sortedFeedbacks.map(({ id, createdAt, data, responseWanted, solved, user }) => {
+        const created = format(new Date(createdAt), 'dd.MM.yyyy')
+        return (
+          <Box key={id} margin={2}>
+            <Paper>
+              <Box display="flex">
+                <Box display="flex" flexDirection="column" flexGrow={1} padding={2}>
+                  <Box marginBottom={2}>
+                    <Typography whiteSpace="pre-line" variant="body1">
+                      {data}
+                    </Typography>
                   </Box>
-                  <Box display="flex" flexDirection="column" padding={2}>
-                    {!solved && (
-                      <Box width="140px" paddingTop={1}>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          onClick={() => handleMarkAsSolved(id, true)}
-                        >
-                          <Typography variant="button" noWrap>
-                            Mark solved
-                          </Typography>
-                        </Button>
-                      </Box>
-                    )}
-                    {solved && responseWanted && (
-                      <Box display="flex" width="140px">
-                        <Alert>Solved!</Alert>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleMarkAsSolved(id, false)}
-                        >
-                          <Undo />
-                        </IconButton>
-                      </Box>
-                    )}
-                    {!solved && responseWanted && (
-                      <Box marginTop={2}>
-                        <Alert severity="warning">Response wanted!</Alert>
-                      </Box>
-                    )}
-                    {solved && !responseWanted && (
-                      <IconButton
-                        color="primary"
-                        onClick={() => handleMarkAsSolved(id, false)}
-                        size="large"
-                      >
-                        <AddAlertOutlined />
-                      </IconButton>
-                    )}
+                  <Box display="flex" alignItems="center">
+                    <Typography variant="body2">{created}</Typography>
+                    <Box marginLeft={4}>
+                      <Typography variant="body1">{user?.email ?? 'Anonymous'}</Typography>
+                    </Box>
                   </Box>
                 </Box>
-              </Paper>
-            </Box>
-          )
-        },
-      )}
+                <Box display="flex" flexDirection="column" padding={2}>
+                  {!solved && (
+                    <Box width="140px" paddingTop={1}>
+                      <Button color="primary" variant="contained" onClick={() => handleMarkAsSolved(id, true)}>
+                        <Typography variant="button" noWrap>
+                          Mark solved
+                        </Typography>
+                      </Button>
+                    </Box>
+                  )}
+                  {solved && responseWanted && (
+                    <Box display="flex" width="140px">
+                      <Alert>Solved!</Alert>
+                      <IconButton size="small" onClick={() => handleMarkAsSolved(id, false)}>
+                        <Undo />
+                      </IconButton>
+                    </Box>
+                  )}
+                  {!solved && responseWanted && (
+                    <Box marginTop={2}>
+                      <Alert severity="warning">Response wanted!</Alert>
+                    </Box>
+                  )}
+                  {solved && !responseWanted && (
+                    <IconButton color="primary" onClick={() => handleMarkAsSolved(id, false)} size="large">
+                      <AddAlertOutlined />
+                    </IconButton>
+                  )}
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
+        )
+      })}
     </Box>
   )
 }

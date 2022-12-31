@@ -7,14 +7,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import TeacherChip from '../../../components/common/TeacherChip'
 
 export const CourseRealisationLabel = ({ courseRealisation, language }) => {
-  const {
-    startDate,
-    endDate,
-    feedbackTargetId,
-    teachers,
-    name,
-    teachingLanguages,
-  } = courseRealisation
+  const { startDate, endDate, feedbackTargetId, teachers, name, teachingLanguages } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
@@ -23,20 +16,14 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTargetId ? (
-    <Link
-      component={RouterLink}
-      to={`/targets/${feedbackTargetId}/results`}
-      underline="hover"
-    >
+    <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`} underline="hover">
       {translatedName}
     </Link>
   ) : (
     translatedName
   )
 
-  const languagesString = teachingLanguages
-    .map((teachingLanguage) => teachingLanguage[language])
-    .join(', ')
+  const languagesString = teachingLanguages.map(teachingLanguage => teachingLanguage[language]).join(', ')
 
   return (
     <>
@@ -51,7 +38,7 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
         </Typography>
       </Box>
       <Box display="flex" flexWrap="wrap" maxWidth="100rem">
-        {teachers.map((t) => (
+        {teachers.map(t => (
           <TeacherChip key={t.id} user={t} />
         ))}
       </Box>

@@ -1,14 +1,9 @@
 const { addYears } = require('date-fns')
 const { Op, literal } = require('sequelize')
 const { startOfStudyYear } = require('../../util/common')
-const {
-  FeedbackTarget,
-  UserFeedbackTarget,
-  CourseRealisation,
-  Organisation,
-} = require('../../models')
+const { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Organisation } = require('../../models')
 
-const getYearRange = (date) => {
+const getYearRange = date => {
   const startDate = startOfStudyYear(date)
   return {
     startDate,
@@ -16,7 +11,7 @@ const getYearRange = (date) => {
   }
 }
 
-const getLatestDateForOrganisations = async (organisationIds) => {
+const getLatestDateForOrganisations = async organisationIds => {
   const latestFeedbackTargetWithFeedbacks = await FeedbackTarget.findOne({
     attributes: ['id'],
     where: {
@@ -46,7 +41,7 @@ const getLatestDateForOrganisations = async (organisationIds) => {
   return latestFeedbackTargetWithFeedbacks?.courseRealisation?.startDate
 }
 
-const getLatestDateForTeacher = async (user) => {
+const getLatestDateForTeacher = async user => {
   const latestFeedbackTargetWithFeedbacks = await UserFeedbackTarget.findOne({
     attributes: ['id'],
     where: {
@@ -79,8 +74,7 @@ const getLatestDateForTeacher = async (user) => {
     limit: 1,
   })
 
-  return latestFeedbackTargetWithFeedbacks?.feedbackTarget?.courseRealisation
-    ?.startDate
+  return latestFeedbackTargetWithFeedbacks?.feedbackTarget?.courseRealisation?.startDate
 }
 
 /**
@@ -90,10 +84,8 @@ const getLatestDateForTeacher = async (user) => {
  * and the last year is determined.
  */
 const getSummaryDefaultDateRange = async ({ user, organisationAccess }) => {
-  if (organisationAccess.some((org) => org.access.read)) {
-    const startDate = await getLatestDateForOrganisations(
-      organisationAccess.map((org) => org.organisation.id),
-    )
+  if (organisationAccess.some(org => org.access.read)) {
+    const startDate = await getLatestDateForOrganisations(organisationAccess.map(org => org.organisation.id))
     if (!startDate) {
       return getYearRange(Date.now())
     }

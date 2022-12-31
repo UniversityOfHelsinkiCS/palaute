@@ -5,12 +5,7 @@ import UpIcon from '@mui/icons-material/KeyboardArrowUp'
 import DownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTranslation } from 'react-i18next'
 
-const OrderButtons = ({
-  onMoveUp,
-  onMoveDown,
-  moveUpDisabled,
-  moveDownDisabled,
-}) => {
+const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled }) => {
   const { t } = useTranslation()
 
   return (
@@ -25,11 +20,7 @@ const OrderButtons = ({
 
       <Tooltip title={t('questionEditor:moveDown')}>
         <div>
-          <IconButton
-            disabled={moveDownDisabled}
-            onClick={onMoveDown}
-            size="large"
-          >
+          <IconButton disabled={moveDownDisabled} onClick={onMoveDown} size="large">
             <DownIcon />
           </IconButton>
         </div>

@@ -1,13 +1,6 @@
 import React from 'react'
 
-import {
-  Typography,
-  Button,
-  Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from '@mui/material'
+import { Typography, Button, Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { useTranslation } from 'react-i18next'
@@ -25,10 +18,10 @@ const styles = {
     marginTop: 10,
   },
   heading: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   progressContainer: {
-    padding: (theme) => theme.spacing(4, 0),
+    padding: theme => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
@@ -47,7 +40,7 @@ const EditUniversitySurveyAccordion = () => {
     return <LoadingProgress />
   }
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       await saveValues(values, survey)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
@@ -62,11 +55,7 @@ const EditUniversitySurveyAccordion = () => {
   return (
     <Box mt={2}>
       <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
           <Typography>Edit university survey</Typography>
         </AccordionSummary>
 
@@ -75,12 +64,7 @@ const EditUniversitySurveyAccordion = () => {
             {name}
           </Typography>
 
-          <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validate={validate}
-            validateOnChange={false}
-          >
+          <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validate} validateOnChange={false}>
             <Form>
               <QuestionEditor language={language} name="questions" highLevel />
 

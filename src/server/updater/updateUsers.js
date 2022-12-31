@@ -2,8 +2,8 @@ const { User } = require('../models')
 const mangleData = require('./updateLooper')
 const { safeBulkCreate } = require('./util')
 
-const usersHandler = async (users) => {
-  const parsePreferredLanguageUrnToLanguage = (urn) => {
+const usersHandler = async users => {
+  const parsePreferredLanguageUrnToLanguage = urn => {
     const fallBackLanguage = 'en'
     if (!urn) return fallBackLanguage
     const possibleLanguages = ['fi', 'en', 'sv']
@@ -12,18 +12,15 @@ const usersHandler = async (users) => {
     return possibleLanguages.includes(language) ? language : fallBackLanguage
   }
 
-  const getFirstName = ({ callName, firstNames }) =>
-    callName || (firstNames ? firstNames.split(' ')[0] : null)
+  const getFirstName = ({ callName, firstNames }) => callName || (firstNames ? firstNames.split(' ')[0] : null)
 
-  const filteredUsers = users.map((user) => ({
+  const filteredUsers = users.map(user => ({
     ...user,
     email: user.primaryEmail ? user.primaryEmail : user.secondaryEmail,
     secondaryEmail: user.primaryEmail ? user.secondaryEmail : null,
     language: parsePreferredLanguageUrnToLanguage(user.preferredLanguageUrn),
     firstName: getFirstName(user),
-    username: user.eduPersonPrincipalName
-      ? user.eduPersonPrincipalName.split('@')[0]
-      : user.id,
+    username: user.eduPersonPrincipalName ? user.eduPersonPrincipalName.split('@')[0] : user.id,
     degreeStudyRight: user.has_study_right,
   }))
 

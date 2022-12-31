@@ -101,9 +101,9 @@ const useTheme = () => {
               },
             },
           },
-        }),
+        })
       ),
-    [mode],
+    [mode]
   )
 
   return theme

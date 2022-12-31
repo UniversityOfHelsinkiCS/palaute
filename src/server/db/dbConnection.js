@@ -24,7 +24,7 @@ const runMigrations = async () => {
   })
   const migrations = await migrator.up()
   logger.info('Migrations up to date', {
-    files: migrations.map((mig) => mig.file),
+    files: migrations.map(mig => mig.file),
   })
 }
 
@@ -34,7 +34,7 @@ const testConnection = async () => {
 }
 
 // eslint-disable-next-line no-promise-executor-return
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const connectToDatabase = async (attempt = 0) => {
   try {
@@ -46,9 +46,7 @@ const connectToDatabase = async (attempt = 0) => {
       })
       return process.exit(1)
     }
-    logger.info(
-      `Connection to database failed! Attempt ${attempt} of ${DB_CONNECTION_RETRY_LIMIT}`,
-    )
+    logger.info(`Connection to database failed! Attempt ${attempt} of ${DB_CONNECTION_RETRY_LIMIT}`)
     console.log(err)
     await sleep(5000)
     return connectToDatabase(attempt + 1)

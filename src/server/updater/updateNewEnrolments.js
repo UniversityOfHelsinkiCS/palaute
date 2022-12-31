@@ -8,9 +8,7 @@ const updateNewEnrolmentsJob = async () => {
     where: { status: 'RUNNING' },
   })
   if (running?.length > 0) {
-    logger.error(
-      `[UPDATER] enrolments updating skipped because another job was running`,
-    )
+    logger.error(`[UPDATER] enrolments updating skipped because another job was running`)
     return
   }
   const status = await UpdaterStatus.create({

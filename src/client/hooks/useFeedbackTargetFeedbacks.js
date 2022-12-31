@@ -5,9 +5,7 @@ const useFeedbackTargetFeedbacks = (targetId, options = {}) => {
   const queryKey = ['feedbackTargetFeedbacks', targetId]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/feedback-targets/${targetId}/feedbacks`,
-    )
+    const { data } = await apiClient.get(`/feedback-targets/${targetId}/feedbacks`)
 
     return data
   }

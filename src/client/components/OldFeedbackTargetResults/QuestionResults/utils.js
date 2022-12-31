@@ -9,7 +9,7 @@ const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 const WORKLOAD_QUESTION_ID = 1042
 
-const getScalesConfig = (t) => ({
+const getScalesConfig = t => ({
   y: {
     title: {
       display: true,
@@ -33,7 +33,7 @@ export const getLikertChartConfig = (question, language, t) => {
   const labels = [1, 2, 3, 4, 5, 0]
 
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
-  const data = labels.map((l) => countByLabel[l] ?? 0)
+  const data = labels.map(l => countByLabel[l] ?? 0)
 
   const dontKnowOption = t('feedbackView:dontKnowOption')
 
@@ -63,12 +63,10 @@ export const getMultipleChoiceChartConfig = (question, language, t) => {
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) =>
-    getLanguageValue(label, language),
-  )
+  const labels = arrayOptions.map(({ label }) => getLanguageValue(label, language))
 
   const flatFeedbacks = flatMap(question.feedbacks, ({ data }) => data ?? [])
-  const countByOptionId = countBy(flatFeedbacks, (option) => option)
+  const countByOptionId = countBy(flatFeedbacks, option => option)
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
@@ -97,9 +95,7 @@ export const getSingleChoiceChartConfig = (question, language, t) => {
 
   const arrayOptions = question.data?.options ?? []
 
-  let labels = arrayOptions.map(({ label }) =>
-    getLanguageValue(label, language),
-  )
+  let labels = arrayOptions.map(({ label }) => getLanguageValue(label, language))
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
 
@@ -139,34 +135,22 @@ export const getQuestionsWithFeedback = (questions, feedbacks) => {
   const feedbacksArray = feedbacks ?? []
 
   const feedbackData = feedbacksArray
-    .reduce(
-      (acc, feedback) => [
-        ...acc,
-        ...(Array.isArray(feedback.data) ? feedback.data : []),
-      ],
-      [],
-    ) // filter short answers which are not a number
-    .filter(
-      (answer) => answer.data?.length > 1 === Number.isNaN(Number(answer.data)),
-    )
+    .reduce((acc, feedback) => [...acc, ...(Array.isArray(feedback.data) ? feedback.data : [])], []) // filter short answers which are not a number
+    .filter(answer => answer.data?.length > 1 === Number.isNaN(Number(answer.data)))
 
-  const feedbackDataByQuestionId = groupBy(
-    feedbackData,
-    ({ questionId }) => questionId ?? '_',
-  )
+  const feedbackDataByQuestionId = groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
 
   return questions
-    .filter((q) => INCLUDED_TYPES.includes(q.type))
-    .map((q) => ({
+    .filter(q => INCLUDED_TYPES.includes(q.type))
+    .map(q => ({
       ...q,
       feedbacks: feedbackDataByQuestionId[q.id] ?? [],
     }))
 }
 
-const feedbacksNoZero = (feedbacks) =>
-  feedbacks.filter((feedback) => parseInt(feedback.data, 10) > 0)
+const feedbacksNoZero = feedbacks => feedbacks.filter(feedback => parseInt(feedback.data, 10) > 0)
 
-export const countAverage = (feedbacks) => {
+export const countAverage = feedbacks => {
   const filteredFeedbacks = feedbacksNoZero(feedbacks)
 
   if (filteredFeedbacks.length === 0) {
@@ -177,21 +161,17 @@ export const countAverage = (feedbacks) => {
   return (sum / filteredFeedbacks.length).toFixed(2)
 }
 
-export const countStandardDeviation = (feedbacks) => {
+export const countStandardDeviation = feedbacks => {
   const filteredFeedbacks = feedbacksNoZero(feedbacks)
   const n = filteredFeedbacks.length
   const avg = countAverage(filteredFeedbacks)
 
   if (filteredFeedbacks.length === 0) return 0
 
-  return Math.sqrt(
-    filteredFeedbacks
-      .map((f) => (parseInt(f.data, 10) - avg) ** 2)
-      .reduce((a, b) => a + b) / n,
-  ).toFixed(2)
+  return Math.sqrt(filteredFeedbacks.map(f => (parseInt(f.data, 10) - avg) ** 2).reduce((a, b) => a + b) / n).toFixed(2)
 }
 
-export const countMedian = (feedbacks) => {
+export const countMedian = feedbacks => {
   const filteredFeedbacks = feedbacksNoZero(feedbacks)
   if (filteredFeedbacks.length === 0) return 0
 
@@ -201,9 +181,5 @@ export const countMedian = (feedbacks) => {
 
   if (filteredFeedbacks.length % 2) return filteredFeedbacks[half].data
 
-  return (
-    (parseInt(filteredFeedbacks[half - 1].data, 10) +
-      parseInt(filteredFeedbacks[half].data, 10)) /
-    2.0
-  )
+  return (parseInt(filteredFeedbacks[half - 1].data, 10) + parseInt(filteredFeedbacks[half].data, 10)) / 2.0
 }

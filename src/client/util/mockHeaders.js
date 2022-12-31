@@ -15,8 +15,8 @@ export const possibleUsers = [
   },
 ]
 
-export const setHeaders = (uid) => {
-  const user = possibleUsers.find((u) => u.uid === uid)
+export const setHeaders = uid => {
+  const user = possibleUsers.find(u => u.uid === uid)
   if (!user) return
 
   localStorage.setItem(ITEM_NAME, JSON.stringify(user))

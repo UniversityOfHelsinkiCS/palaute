@@ -1,14 +1,7 @@
 import React from 'react'
 /** @jcssImportSource @emotion/react */
 
-import {
-  Route,
-  Switch,
-  useRouteMatch,
-  useParams,
-  Redirect,
-  Link,
-} from 'react-router-dom'
+import { Route, Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
 
 import { Box, Typography, Tab } from '@mui/material'
 
@@ -32,14 +25,14 @@ const styles = {
     gridTemplateColumns: 'auto 1fr',
     margin: '0px',
     '& dt': {
-      paddingRight: (theme) => theme.spacing(1),
+      paddingRight: theme => theme.spacing(1),
       gridColumn: 1,
     },
     '& dd': {
       gridColumn: 2,
     },
   },
-  headingContainer: (theme) => ({
+  headingContainer: theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
@@ -48,7 +41,7 @@ const styles = {
       justifyContent: 'flex-start',
     },
   }),
-  copyLinkButtonContainer: (theme) => ({
+  copyLinkButtonContainer: theme => ({
     paddingLeft: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
@@ -57,7 +50,7 @@ const styles = {
   }),
   coursePageLink: {
     display: 'inline-block',
-    marginTop: (theme) => theme.spacing(1),
+    marginTop: theme => theme.spacing(1),
   },
 }
 
@@ -81,7 +74,7 @@ const GuestFeedbackTargetView = () => {
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
-  useAutoselectLanguage(feedbackTarget, (lang) => i18n.changeLanguage(lang))
+  useAutoselectLanguage(feedbackTarget, lang => i18n.changeLanguage(lang))
 
   if (isLoading) {
     return <LoadingProgress />
@@ -96,18 +89,14 @@ const GuestFeedbackTargetView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isStarted = new Date() >= new Date(opensAt)
-  const isTeacher =
-    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isTeacher = accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
   const showFeedbacksTab = (isTeacher && isStarted) || feedback || isEnded
 
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = getCoursePageUrl(feedbackTarget)
 
-  const courseRealisationName = getLanguageValue(
-    courseRealisation?.name,
-    i18n.language,
-  )
+  const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
 
   return (
     <>
@@ -141,36 +130,20 @@ const GuestFeedbackTargetView = () => {
         </ExternalLink>
       </Box>
       <Box mb={2}>
-        <RouterTabs
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-        >
+        <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
           <Tab
-            label={
-              feedback && isOpen
-                ? t('feedbackTargetView:editFeedbackTab')
-                : t('feedbackTargetView:surveyTab')
-            }
+            label={feedback && isOpen ? t('feedbackTargetView:editFeedbackTab') : t('feedbackTargetView:surveyTab')}
             component={Link}
             to={`${url}/feedback`}
           />
           {showFeedbacksTab && (
-            <Tab
-              label={t('feedbackTargetView:feedbacksTab')}
-              component={Link}
-              to={`${url}/results`}
-            />
+            <Tab label={t('feedbackTargetView:feedbacksTab')} component={Link} to={`${url}/results`} />
           )}
         </RouterTabs>
       </Box>
       <Switch>
         <Route path={`${path}/feedback`} component={GuestFeedbackView} />
-        <Route
-          path={`${path}/results`}
-          component={GuestFeedbackTargetResults}
-        />
+        <Route path={`${path}/results`} component={GuestFeedbackTargetResults} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

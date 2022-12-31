@@ -24,7 +24,7 @@ const PercentageCell = ({ label, percent }) => {
       <Chip
         label={label}
         sx={{
-          background: (theme) => `${theme.palette.info.light}${hex}`,
+          background: theme => `${theme.palette.info.light}${hex}`,
         }}
       />
     </Box>

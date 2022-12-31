@@ -4,7 +4,7 @@ const common = {
   '&:hover': {
     borderRadius: '3px',
   },
-  transition: (theme) =>
+  transition: theme =>
     theme.transitions.create(['border-radius'], {
       easing: 'ease-out',
       duration: '0.2s',
@@ -35,27 +35,26 @@ const styles = {
     ...common,
   },
   success: {
-    borderColor: (theme) => theme.palette.success.main,
-    color: (theme) => theme.palette.success.main,
+    borderColor: theme => theme.palette.success.main,
+    color: theme => theme.palette.success.main,
   },
   error: {
-    borderColor: (theme) => theme.palette.error.light,
-    color: (theme) => theme.palette.error.light,
+    borderColor: theme => theme.palette.error.light,
+    color: theme => theme.palette.error.light,
     animation: css`
       ${pulse} 2s 1s alternate infinite
     `,
   },
   warning: {
-    borderColor: (theme) => theme.palette.warning.dark,
-    color: (theme) => theme.palette.warning.dark,
+    borderColor: theme => theme.palette.warning.dark,
+    color: theme => theme.palette.warning.dark,
     animation: css`
       ${pulse} 2.2s 0s alternate infinite
     `,
   },
   shimmering: {
-    background: (theme) => theme.palette.primary,
-    backgroundImage:
-      'linear-gradient(55deg, #edf7ff 10%, #d2e7fc 30%, #edf7ff 50%)',
+    background: theme => theme.palette.primary,
+    backgroundImage: 'linear-gradient(55deg, #edf7ff 10%, #d2e7fc 30%, #edf7ff 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
       ${flow} 6.5s infinite forwards linear
@@ -64,9 +63,8 @@ const styles = {
     borderColor: '#a3bed9',
   },
   shimmeringSecondary: {
-    background: (theme) => theme.palette.primary,
-    backgroundImage:
-      'linear-gradient(55deg, #ccffcc 10%, #99ff99 30%, #ccffcc 50%)',
+    background: theme => theme.palette.primary,
+    backgroundImage: 'linear-gradient(55deg, #ccffcc 10%, #99ff99 30%, #ccffcc 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
       ${flow} 6.5s infinite forwards linear

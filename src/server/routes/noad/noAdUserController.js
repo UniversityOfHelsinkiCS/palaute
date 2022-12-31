@@ -47,9 +47,7 @@ const getCourses = async (req, res) => {
     include: getFeedbackTargetsIncludes(user.id, 'STUDENT'),
   })
 
-  const filteredCourses = feedbackTargets.filter((feedbackTarget) =>
-    feedbackTarget.isOpen(),
-  )
+  const filteredCourses = feedbackTargets.filter(feedbackTarget => feedbackTarget.isOpen())
 
   return res.send(filteredCourses)
 }

@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import useCourseUnitFeedbackTargets from '../../../hooks/useCourseUnitFeedbackTargets'
 
-import {
-  getRelevantFeedbackTargets,
-  getFeedbackTargetQueryOptions,
-} from './utils'
+import { getRelevantFeedbackTargets, getFeedbackTargetQueryOptions } from './utils'
 
 import FeedbackTargetItem from './FeedbackTargetItem'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
@@ -15,15 +12,9 @@ import { LoadingProgress } from '../../../components/common/LoadingProgress'
 const FeedbackTargetList = ({ courseCode, group }) => {
   const { t } = useTranslation()
 
-  const { feedbackTargets, isLoading } = useCourseUnitFeedbackTargets(
-    courseCode,
-    getFeedbackTargetQueryOptions(group),
-  )
+  const { feedbackTargets, isLoading } = useCourseUnitFeedbackTargets(courseCode, getFeedbackTargetQueryOptions(group))
 
-  const targets = useMemo(
-    () => getRelevantFeedbackTargets(feedbackTargets ?? []),
-    [feedbackTargets],
-  )
+  const targets = useMemo(() => getRelevantFeedbackTargets(feedbackTargets ?? []), [feedbackTargets])
 
   if (isLoading) {
     return <LoadingProgress />
@@ -42,11 +33,7 @@ const FeedbackTargetList = ({ courseCode, group }) => {
   return (
     <List>
       {targets.map((target, i) => (
-        <FeedbackTargetItem
-          key={target.id}
-          feedbackTarget={target}
-          divider={i < targets.length - 1}
-        />
+        <FeedbackTargetItem key={target.id} feedbackTarget={target} divider={i < targets.length - 1} />
       ))}
     </List>
   )

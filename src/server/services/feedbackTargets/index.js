@@ -1,7 +1,4 @@
-const {
-  getOneForUser,
-  getAdditionalDataFromCacheOrDb,
-} = require('./getOneForUser')
+const { getOneForUser, getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
 
 const { getFeedbacks } = require('./getFeedbacks')
 

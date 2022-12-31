@@ -17,10 +17,7 @@ const addOrganisationFeedbackCorrespondent = async (req, res) => {
     throw new ApplicationError(`User not found`, 400)
   }
   if (await userToAdd.hasOrganisation(organisation)) {
-    throw new ApplicationError(
-      `User already is feedback correspondent of that organisation`,
-      400,
-    )
+    throw new ApplicationError(`User already is feedback correspondent of that organisation`, 400)
   }
 
   await OrganisationFeedbackCorrespondent.create({
@@ -46,10 +43,7 @@ const removeOrganisationFeedbackCorrespondent = async (req, res) => {
     throw new ApplicationError(`User ${userId} not found`, 400)
   }
   if (!(await userToRemove.hasOrganisation(organisation))) {
-    throw new ApplicationError(
-      'User is not feedback correspondent of that organisation',
-      400,
-    )
+    throw new ApplicationError('User is not feedback correspondent of that organisation', 400)
   }
 
   await OrganisationFeedbackCorrespondent.destroy({
@@ -66,13 +60,7 @@ const removeOrganisationFeedbackCorrespondent = async (req, res) => {
 
 const router = Router()
 
-router.post(
-  '/:code/feedback-correspondents',
-  addOrganisationFeedbackCorrespondent,
-)
-router.delete(
-  '/:code/feedback-correspondents/:userId',
-  removeOrganisationFeedbackCorrespondent,
-)
+router.post('/:code/feedback-correspondents', addOrganisationFeedbackCorrespondent)
+router.delete('/:code/feedback-correspondents/:userId', removeOrganisationFeedbackCorrespondent)
 
 module.exports = router

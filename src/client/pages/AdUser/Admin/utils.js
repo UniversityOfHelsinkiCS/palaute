@@ -1,7 +1,7 @@
 import apiClient from '../../../util/apiClient'
 import { normalizeOrganisationCode } from '../CourseSummary/utils'
 
-export const getInitialValues = (survey) => {
+export const getInitialValues = survey => {
   const questions = survey?.questions ?? []
 
   return {
@@ -39,15 +39,15 @@ export const getHeaders = () => [
   'Palaute %',
 ]
 
-export const getData = (results) => {
-  const data = results.map((r) => [
+export const getData = results => {
+  const data = results.map(r => [
     ...Object.values(r),
     ((r.feedbacks / r.ufbts) * 100).toFixed(2).toString().replace('.', ','),
   ])
   return data
 }
 
-export const handleLoginAs = (user) => () => {
+export const handleLoginAs = user => () => {
   const { id, employeeNumber } = user
 
   localStorage.setItem('adminLoggedInAs', id)
@@ -55,7 +55,7 @@ export const handleLoginAs = (user) => () => {
   window.location.reload()
 }
 
-export const getFaculties = (data) => {
+export const getFaculties = data => {
   const faculties = data.map(({ code, name }) => ({ code, name }))
 
   return faculties
@@ -63,22 +63,16 @@ export const getFaculties = (data) => {
 
 const getProgrammeAccess = (users, key) => {
   const usersWithAccessToProgramme = users
-    .map((user) => ({
+    .map(user => ({
       ...user,
-      access: user.access.filter(
-        ({ organisation }) => organisation.code === key,
-      ),
+      access: user.access.filter(({ organisation }) => organisation.code === key),
     }))
     .filter(({ access }) => access.length)
 
   return usersWithAccessToProgramme
 }
 
-export const getProgrammeAccessByFaculty = (
-  usersWithAccess,
-  facultyCode,
-  data,
-) => {
+export const getProgrammeAccessByFaculty = (usersWithAccess, facultyCode, data) => {
   const faculty = data.find(({ code }) => code === facultyCode)
 
   const programmes = faculty
@@ -93,11 +87,9 @@ export const getProgrammeAccessByFaculty = (
   const programmeCodes = programmes.map(({ key }) => key)
 
   const usersWithAccessToFaculty = usersWithAccess
-    .map((user) => ({
+    .map(user => ({
       ...user,
-      access: user.access.filter(({ organisation }) =>
-        programmeCodes.includes(organisation.code),
-      ),
+      access: user.access.filter(({ organisation }) => programmeCodes.includes(organisation.code)),
     }))
     .filter(({ access }) => access.length)
 

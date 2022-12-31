@@ -5,9 +5,7 @@ const useUpdaterStatuses = (jobType, options = {}) => {
   const queryKey = ['updaterStatus', jobType]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/admin/updater-status${jobType ? `?jobType=${jobType}` : ''}`,
-    )
+    const { data } = await apiClient.get(`/admin/updater-status${jobType ? `?jobType=${jobType}` : ''}`)
 
     return data
   }

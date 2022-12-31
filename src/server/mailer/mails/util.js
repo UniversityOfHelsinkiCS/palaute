@@ -19,9 +19,8 @@ const getNoAdUrl = (username, userId, days) => {
   return `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
 }
 
-const getFeedbackTargetLink = (feedbackTarget) => {
-  const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } =
-    feedbackTarget
+const getFeedbackTargetLink = feedbackTarget => {
+  const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } = feedbackTarget
   const language = feedbackTarget.language ? feedbackTarget.language : 'en'
 
   const closeDate = new Date(closesAt)
@@ -80,37 +79,27 @@ const getFeedbackTargetLink = (feedbackTarget) => {
 
 const createRecipientsForFeedbackTargets = async (
   feedbackTargets,
-  options = { primaryOnly: false, whereOpenEmailNotSent: false },
+  options = { primaryOnly: false, whereOpenEmailNotSent: false }
 ) => {
   // Leo if you are reading this you are allowed to refactor :)
   // Too late 😤
 
   const emails = {}
 
-  feedbackTargets.forEach((feedbackTarget) => {
+  feedbackTargets.forEach(feedbackTarget => {
     feedbackTarget.users
-      .filter(
-        options.whereOpenEmailNotSent
-          ? (u) => !u.UserFeedbackTarget.feedbackOpenEmailSent
-          : () => true,
-      )
-      .forEach((user) => {
+      .filter(options.whereOpenEmailNotSent ? u => !u.UserFeedbackTarget.feedbackOpenEmailSent : () => true)
+      .forEach(user => {
         const certainlyNoAdUser = user.username === user.id
-        const possiblyNoAdUser =
-          feedbackTarget.courseRealisation.isMoocCourse &&
-          !user.degreeStudyright
+        const possiblyNoAdUser = feedbackTarget.courseRealisation.isMoocCourse && !user.degreeStudyright
 
-        const sendToBothEmails =
-          !options.primaryOnly && (certainlyNoAdUser || possiblyNoAdUser)
+        const sendToBothEmails = !options.primaryOnly && (certainlyNoAdUser || possiblyNoAdUser)
 
-        const userEmails = [
-          user.email,
-          sendToBothEmails ? user.secondaryEmail : false,
-        ]
+        const userEmails = [user.email, sendToBothEmails ? user.secondaryEmail : false]
         // for some users, email === secondaryEmail. In that case, use only primary.
         userEmails[1] = userEmails[0] === userEmails[1] ? false : userEmails[1]
 
-        userEmails.filter(Boolean).forEach((email) => {
+        userEmails.filter(Boolean).forEach(email => {
           emails[email] = (emails[email] ? emails[email] : []).concat([
             {
               id: feedbackTarget.id,

@@ -58,15 +58,14 @@ const mangleData = async (url, limit, handler) => {
 
     // If a single update category takes over an hour, something is probably wrong
     // Stop Updater from running indefinitely, crashing Norppa and messing up logs
-    if (new Date() - start > 3_600_000)
-      throw new Error('Updater time limit exceeded!')
+    if (new Date() - start > 3_600_000) throw new Error('Updater time limit exceeded!')
   }
 
   const duration = new Date() - start
   logger.info(
-    `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
-      4,
-    )}ms/item, total time ${(duration / 1000).toFixed(2)}s`,
+    `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(4)}ms/item, total time ${(
+      duration / 1000
+    ).toFixed(2)}s`
   )
 }
 

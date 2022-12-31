@@ -1,11 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Switch,
-} from '@mui/material'
+import { List, ListItem, ListItemIcon, ListItemText, Switch } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
@@ -13,15 +7,14 @@ import { useSnackbar } from 'notistack'
 import { getLanguageValue } from '../../util/languageUtils'
 import apiClient from '../../util/apiClient'
 
-const getQuestionItems = (target) => {
+const getQuestionItems = target => {
   const questions = target.questions ?? []
 
-  const publicityConfigurableQuestionIds =
-    target.publicityConfigurableQuestionIds ?? []
+  const publicityConfigurableQuestionIds = target.publicityConfigurableQuestionIds ?? []
 
   return questions
-    .filter((q) => q.type !== 'TEXT')
-    .map((q) => ({
+    .filter(q => q.type !== 'TEXT')
+    .map(q => ({
       id: q.id,
       label: q.data?.label,
       disabled: !publicityConfigurableQuestionIds.includes(q.id),
@@ -63,21 +56,14 @@ const QuestionSelection = ({ organisation }) => {
   const mutation = useMutation(updatePublicQuestionIds)
   const { enqueueSnackbar } = useSnackbar()
 
-  const [publicQuestionIds, setPublicQuestionIds] = useState(
-    organisation.publicQuestionIds ?? [],
-  )
+  const [publicQuestionIds, setPublicQuestionIds] = useState(organisation.publicQuestionIds ?? [])
 
-  const questionItems = useMemo(
-    () => getQuestionItems(organisation),
-    [organisation],
-  )
+  const questionItems = useMemo(() => getQuestionItems(organisation), [organisation])
 
-  const makeOnToggle = (id) => async () => {
+  const makeOnToggle = id => async () => {
     const checked = publicQuestionIds.includes(id)
 
-    const updatedQuestionIds = checked
-      ? publicQuestionIds.filter((qId) => qId !== id)
-      : [...publicQuestionIds, id]
+    const updatedQuestionIds = checked ? publicQuestionIds.filter(qId => qId !== id) : [...publicQuestionIds, id]
 
     try {
       await mutation.mutateAsync({
@@ -94,7 +80,7 @@ const QuestionSelection = ({ organisation }) => {
 
   return (
     <List>
-      {questionItems.map((q) => (
+      {questionItems.map(q => (
         <QuestionItem
           label={q.label}
           id={q.id}

@@ -26,23 +26,11 @@ import apiClient from '../../../util/apiClient'
 import useOrganisation from '../../../hooks/useOrganisation'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
-import {
-  STUDENT_LIST_BY_COURSE_ENABLED,
-  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
-} from '../../../../config'
+import { STUDENT_LIST_BY_COURSE_ENABLED, STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN } from '../../../../config'
 
-const getCourseUnitItems = (
-  courseUnits,
-  disabledCourseCodes,
-  studentListVisibleCourseCodes,
-  query,
-  language = 'en',
-) =>
+const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, query, language = 'en') =>
   (courseUnits ?? [])
-    .filter(
-      ({ courseCode, name }) =>
-        courseCode.includes(query) || name[language].includes(query),
-    )
+    .filter(({ courseCode, name }) => courseCode.includes(query) || name[language].includes(query))
     .map(({ courseCode, name }) => ({
       courseCode,
       name,
@@ -50,11 +38,7 @@ const getCourseUnitItems = (
       studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
     }))
 
-const saveChangedCourseCodes = async ({
-  code,
-  disabledCourseCodes,
-  studentListVisibleCourseCodes,
-}) => {
+const saveChangedCourseCodes = async ({ code, disabledCourseCodes, studentListVisibleCourseCodes }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     disabledCourseCodes,
     studentListVisibleCourseCodes,
@@ -76,15 +60,10 @@ const CourseUnitItem = ({
   const { i18n } = useTranslation()
   const labelId = `courseUnitItem-${courseCode}`
 
-  const translatedLabel = `${getLanguageValue(
-    name,
-    i18n.language,
-  )} (${courseCode})`
+  const translatedLabel = `${getLanguageValue(name, i18n.language)} (${courseCode})`
 
   return (
-    <TableRow
-      sx={{ '&:hover': { background: (theme) => theme.palette.action.hover } }}
-    >
+    <TableRow sx={{ '&:hover': { background: theme => theme.palette.action.hover } }}>
       <TableCell>{translatedLabel}</TableCell>
       <TableCell>
         <Switch
@@ -117,12 +96,7 @@ const CourseUnitItem = ({
   )
 }
 
-const CourseSettingsContainer = ({
-  organisation,
-  courseUnits,
-  t,
-  language,
-}) => {
+const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
@@ -131,30 +105,27 @@ const CourseSettingsContainer = ({
 
   const studentListVisibleFeatureEnabled =
     STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code) ||
-    ((STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(organisation.code) &&
-      authorizedUser?.isAdmin) ??
-      false)
+    ((STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(organisation.code) && authorizedUser?.isAdmin) ?? false)
 
-  const [disabledCourseCodes, setDisabledCourseCodes] = useState(
-    organisation.disabledCourseCodes ?? [],
+  const [disabledCourseCodes, setDisabledCourseCodes] = useState(organisation.disabledCourseCodes ?? [])
+
+  const [studentListVisibleCourseCodes, setStudentListVisibleCourseCodes] = useState(
+    organisation.studentListVisibleCourseCodes ?? []
   )
-
-  const [studentListVisibleCourseCodes, setStudentListVisibleCourseCodes] =
-    useState(organisation.studentListVisibleCourseCodes ?? [])
 
   const courseUnitItems = getCourseUnitItems(
     courseUnits,
     disabledCourseCodes,
     studentListVisibleCourseCodes,
     searchQuery,
-    language,
+    language
   )
 
-  const makeOnToggleDisabledCourses = (courseCode) => async () => {
+  const makeOnToggleDisabledCourses = courseCode => async () => {
     const checked = disabledCourseCodes.includes(courseCode)
 
     const updatedDisabledCourseCodes = checked
-      ? disabledCourseCodes.filter((c) => c !== courseCode)
+      ? disabledCourseCodes.filter(c => c !== courseCode)
       : [...disabledCourseCodes, courseCode]
 
     try {
@@ -170,11 +141,11 @@ const CourseSettingsContainer = ({
     }
   }
 
-  const makeOnToggleStudentListVisible = (courseCode) => async () => {
+  const makeOnToggleStudentListVisible = courseCode => async () => {
     const checked = studentListVisibleCourseCodes.includes(courseCode)
 
     const updatedStudentListVisibleCourseCodes = checked
-      ? studentListVisibleCourseCodes.filter((c) => c !== courseCode)
+      ? studentListVisibleCourseCodes.filter(c => c !== courseCode)
       : [...studentListVisibleCourseCodes, courseCode]
 
     try {
@@ -183,9 +154,7 @@ const CourseSettingsContainer = ({
         studentListVisibleCourseCodes: updatedStudentListVisibleCourseCodes,
       })
 
-      setStudentListVisibleCourseCodes(
-        updatedOrganisation.studentListVisibleCourseCodes,
-      )
+      setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
       enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
@@ -196,13 +165,11 @@ const CourseSettingsContainer = ({
     <Card>
       <CardContent>
         <Box mb={2}>
-          <Alert severity="info">
-            {t('organisationSettings:courseSettingsInfo')}
-          </Alert>
+          <Alert severity="info">{t('organisationSettings:courseSettingsInfo')}</Alert>
         </Box>
         <TextField
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
           label={t('organisationSettings:findByCourseUnit')}
           autoComplete="off"
         />
@@ -212,38 +179,26 @@ const CourseSettingsContainer = ({
             <TableHead>
               <TableRow>
                 <TableCell>{t('organisationSettings:course')}</TableCell>
-                <TableCell>
-                  {t('organisationSettings:feedbackEnabled')}
-                </TableCell>
+                <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
                 {studentListVisibleFeatureEnabled && (
-                  <TableCell>
-                    {t('organisationSettings:courseStudentListVisible')}
-                  </TableCell>
+                  <TableCell>{t('organisationSettings:courseStudentListVisible')}</TableCell>
                 )}
               </TableRow>
             </TableHead>
             <TableBody>
-              {courseUnitItems.map(
-                ({ courseCode, name, enabledCourse, studentListVisible }) => (
-                  <CourseUnitItem
-                    name={name}
-                    courseCode={courseCode}
-                    key={courseCode}
-                    enabledCourse={enabledCourse}
-                    studentListVisible={studentListVisible}
-                    onChangeDisabledCourses={makeOnToggleDisabledCourses(
-                      courseCode,
-                    )}
-                    onChangeStudentList={makeOnToggleStudentListVisible(
-                      courseCode,
-                    )}
-                    disabled={mutation.isLoading}
-                    studentListVisibleFeatureEnabled={
-                      studentListVisibleFeatureEnabled
-                    }
-                  />
-                ),
-              )}
+              {courseUnitItems.map(({ courseCode, name, enabledCourse, studentListVisible }) => (
+                <CourseUnitItem
+                  name={name}
+                  courseCode={courseCode}
+                  key={courseCode}
+                  enabledCourse={enabledCourse}
+                  studentListVisible={studentListVisible}
+                  onChangeDisabledCourses={makeOnToggleDisabledCourses(courseCode)}
+                  onChangeStudentList={makeOnToggleStudentListVisible(courseCode)}
+                  disabled={mutation.isLoading}
+                  studentListVisibleFeatureEnabled={studentListVisibleFeatureEnabled}
+                />
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -256,13 +211,9 @@ const CourseSettings = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
-  const { courseUnits, isLoading: courseUnitsIsLoading } =
-    useOrganisationCourseUnits(code)
+  const { courseUnits, isLoading: courseUnitsIsLoading } = useOrganisationCourseUnits(code)
 
-  const { organisation, isLoading: organisationIsLoading } = useOrganisation(
-    code,
-    { skipCache: true },
-  )
+  const { organisation, isLoading: organisationIsLoading } = useOrganisation(code, { skipCache: true })
 
   const isLoading = courseUnitsIsLoading || organisationIsLoading
 
@@ -276,15 +227,8 @@ const CourseSettings = () => {
 
   return (
     <Box>
-      <Typography textTransform="uppercase">
-        {t('organisationSettings:courseSettings')}
-      </Typography>
-      <CourseSettingsContainer
-        organisation={organisation}
-        courseUnits={courseUnits}
-        t={t}
-        language={i18n.language}
-      />
+      <Typography textTransform="uppercase">{t('organisationSettings:courseSettings')}</Typography>
+      <CourseSettingsContainer organisation={organisation} courseUnits={courseUnits} t={t} language={i18n.language} />
     </Box>
   )
 }

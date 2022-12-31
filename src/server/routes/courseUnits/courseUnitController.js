@@ -3,13 +3,7 @@ const { Op } = require('sequelize')
 const _ = require('lodash')
 const { INCLUDE_COURSES } = require('../../../config')
 
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-} = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
 
@@ -43,12 +37,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
         courseRealisationEndDateAfter: new Date(2021, 3, 1),
       },
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
-  const latestEndedCourseRealisationIds = latestEndedCourseRealisationsRows.map(
-    (row) => row.course_realisation_id,
-  )
+  const latestEndedCourseRealisationIds = latestEndedCourseRealisationsRows.map(row => row.course_realisation_id)
 
   const userTargets = await UserFeedbackTarget.findAll({
     where: {
@@ -67,10 +59,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'opensAt',
           'closesAt',
           ['feedback_response_email_sent', 'feedbackResponseSent'],
-          [
-            sequelize.literal(`length(feedback_response) > 3`),
-            'feedbackResponseGiven',
-          ],
+          [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
           'feedbackCount',
           'continuousFeedbackEnabled',
         ],
@@ -129,9 +118,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
     .map(({ feedbackTarget }) => feedbackTarget)
     .filter(
       ({ courseUnit }) =>
-        !courseUnit.organisations.some(({ disabledCourseCodes }) =>
-          disabledCourseCodes.includes(courseUnit.courseCode),
-        ),
+        !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
     )
 
   const courseUnitByCourseCode = targets.reduce(
@@ -139,88 +126,60 @@ const getCourseUnitsForTeacher = async (req, res) => {
       ...acc,
       [courseUnit.courseCode]: courseUnit,
     }),
-    {},
+    {}
   )
 
-  const targetsByCourseCode = _.groupBy(
-    targets,
-    ({ courseUnit }) => courseUnit.courseCode,
-  )
+  const targetsByCourseCode = _.groupBy(targets, ({ courseUnit }) => courseUnit.courseCode)
 
-  const targetFields = [
-    'id',
-    'name',
-    'opensAt',
-    'closesAt',
-    'continuousFeedbackEnabled',
-  ]
-  const courseUnits = Object.entries(targetsByCourseCode).map(
-    ([courseCode, unfilteredTargets]) => {
-      const targets = unfilteredTargets.filter(
-        (target) =>
-          target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
-          (target.courseRealisation.startDate >= new Date(2021, 7, 15) &&
-            target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
-          INCLUDE_COURSES.has(target.courseRealisation.id),
-      )
+  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled']
+  const courseUnits = Object.entries(targetsByCourseCode).map(([courseCode, unfilteredTargets]) => {
+    const targets = unfilteredTargets.filter(
+      target =>
+        target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
+        (target.courseRealisation.startDate >= new Date(2021, 7, 15) &&
+          target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
+        INCLUDE_COURSES.has(target.courseRealisation.id)
+    )
 
-      const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), [
-        'courseCode',
-        'name',
-      ])
+    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
 
-      const ongoingTargets = targets.filter(
-        ({ courseRealisation }) =>
-          courseRealisation.startDate <= new Date() &&
-          courseRealisation.endDate >= new Date(),
-      )
+    const ongoingTargets = targets.filter(
+      ({ courseRealisation }) => courseRealisation.startDate <= new Date() && courseRealisation.endDate >= new Date()
+    )
 
-      const feedbackOpenOngoingTarget = ongoingTargets.find((target) =>
-        target.isOpen(),
-      )
+    const feedbackOpenOngoingTarget = ongoingTargets.find(target => target.isOpen())
 
-      const ongoingTarget =
-        feedbackOpenOngoingTarget ??
-        _.maxBy(
-          ongoingTargets,
-          ({ courseRealisation }) => courseRealisation.startDate,
-        )
+    const ongoingTarget =
+      feedbackOpenOngoingTarget ?? _.maxBy(ongoingTargets, ({ courseRealisation }) => courseRealisation.startDate)
 
-      const upcomingTarget = _.minBy(
-        targets.filter(
-          ({ courseRealisation }) => courseRealisation.startDate > new Date(),
-        ),
-        ({ courseRealisation }) => courseRealisation.startDate,
-      )
+    const upcomingTarget = _.minBy(
+      targets.filter(({ courseRealisation }) => courseRealisation.startDate > new Date()),
+      ({ courseRealisation }) => courseRealisation.startDate
+    )
 
-      const endedTarget = _.maxBy(
-        targets.filter(
-          ({ courseRealisation }) => courseRealisation.endDate < new Date(),
-        ),
-        ({ courseRealisation }) => courseRealisation.startDate,
-      )
+    const endedTarget = _.maxBy(
+      targets.filter(({ courseRealisation }) => courseRealisation.endDate < new Date()),
+      ({ courseRealisation }) => courseRealisation.startDate
+    )
 
-      const makeTargetObject = (feedbackTarget) =>
-        feedbackTarget
-          ? {
-              ...feedbackTarget.courseRealisation.toJSON(),
-              feedbackResponseGiven:
-                feedbackTarget.dataValues.feedbackResponseGiven,
-              feedbackResponseSent:
-                feedbackTarget.dataValues.feedbackResponseSent,
-              feedbackCount: Number(feedbackTarget.dataValues.feedbackCount),
-              feedbackTarget: _.pick(feedbackTarget, targetFields),
-            }
-          : null
+    const makeTargetObject = feedbackTarget =>
+      feedbackTarget
+        ? {
+            ...feedbackTarget.courseRealisation.toJSON(),
+            feedbackResponseGiven: feedbackTarget.dataValues.feedbackResponseGiven,
+            feedbackResponseSent: feedbackTarget.dataValues.feedbackResponseSent,
+            feedbackCount: Number(feedbackTarget.dataValues.feedbackCount),
+            feedbackTarget: _.pick(feedbackTarget, targetFields),
+          }
+        : null
 
-      return {
-        ...courseUnit,
-        ongoingCourseRealisation: makeTargetObject(ongoingTarget),
-        upcomingCourseRealisation: makeTargetObject(upcomingTarget),
-        endedCourseRealisation: makeTargetObject(endedTarget),
-      }
-    },
-  )
+    return {
+      ...courseUnit,
+      ongoingCourseRealisation: makeTargetObject(ongoingTarget),
+      upcomingCourseRealisation: makeTargetObject(upcomingTarget),
+      endedCourseRealisation: makeTargetObject(endedTarget),
+    }
+  })
 
   return res.send(courseUnits)
 }
@@ -246,12 +205,12 @@ const getCourseUnitsByOrganisation = async (req, res) => {
         organisationCode: code,
       },
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
   const courseUnits = courseUnitRows
-    .filter((row) => !row.course_code.startsWith('AY'))
-    .map((row) => ({
+    .filter(row => !row.course_code.startsWith('AY'))
+    .map(row => ({
       name: row.course_unit_name,
       id: row.course_unit_id,
       courseCode: row.course_code,

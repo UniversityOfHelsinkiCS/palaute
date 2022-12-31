@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Switch,
-  Paper,
-  TextField,
-  Alert,
-} from '@mui/material'
+import { Box, Typography, FormGroup, FormControlLabel, Switch, Paper, TextField, Alert } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../util/apiClient'
@@ -21,9 +12,7 @@ const Enable = ({ cur, active, setActive }) => {
   const handleSetActive = async () => {
     const confirm = () =>
       // eslint-disable-next-line no-alert
-      window.confirm(
-        'Are you sure? Course realisation and associated feedback targets will be deleted immediately.',
-      )
+      window.confirm('Are you sure? Course realisation and associated feedback targets will be deleted immediately.')
 
     if (active && !confirm()) return
 
@@ -64,13 +53,10 @@ const CourseAccordion = ({ cur }) => {
           {cur.id}
         </Typography>
         <Box m={2} />
-        <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>
-          {cur.name?.fi}
-        </Typography>
+        <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{cur.name?.fi}</Typography>
         <Box m={2} />
         <Typography variant="body2">
-          {new Date(cur.startDate).toLocaleDateString()} -{' '}
-          {new Date(cur.endDate).toLocaleDateString()}
+          {new Date(cur.startDate).toLocaleDateString()} - {new Date(cur.endDate).toLocaleDateString()}
         </Typography>
         <Box m={2} />
         <Enable cur={cur} active={active} setActive={setActive} />
@@ -82,16 +68,12 @@ const CourseAccordion = ({ cur }) => {
 const EnableCourses = () => {
   const [search, setSearch] = useState('')
 
-  const { inactiveCourseRealisations, isLoading } =
-    useInactiveCourseRealisations()
+  const { inactiveCourseRealisations, isLoading } = useInactiveCourseRealisations()
 
   if (isLoading) return <LoadingProgress />
 
   const filteredInactiveCourseRealisations = inactiveCourseRealisations.filter(
-    (cur) =>
-      cur.id.startsWith(search) ||
-      cur.name.fi.includes(search) ||
-      cur.name.en.includes(search),
+    cur => cur.id.startsWith(search) || cur.name.fi.includes(search) || cur.name.en.includes(search)
   )
 
   return (
@@ -108,7 +90,7 @@ const EnableCourses = () => {
         </Alert>
       </Box>
 
-      {filteredInactiveCourseRealisations.map((cur) => (
+      {filteredInactiveCourseRealisations.map(cur => (
         <CourseAccordion key={cur.id} cur={cur} />
       ))}
     </Box>

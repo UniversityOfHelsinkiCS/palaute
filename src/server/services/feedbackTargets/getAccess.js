@@ -2,12 +2,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { Access } = require('./Access')
 const { getFeedbackTarget } = require('./util')
 
-const getAccess = async ({
-  userFeedbackTarget,
-  user,
-  feedbackTarget,
-  isAdmin,
-}) => {
+const getAccess = async ({ userFeedbackTarget, user, feedbackTarget, isAdmin }) => {
   if (isAdmin) return Access.ADMIN
 
   const accessStatus = userFeedbackTarget?.accessStatus
@@ -25,9 +20,7 @@ const getAccess = async ({
   }
 
   // User not directly associated. Lets check if they have access through organisation
-  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(
-    courseUnitId,
-  )
+  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(courseUnitId)
 
   if (!organisationAccess) {
     return null

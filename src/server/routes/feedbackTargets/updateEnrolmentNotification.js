@@ -1,7 +1,5 @@
 const { FeedbackTarget } = require('../../models')
-const {
-  requestEnrolmentNotification,
-} = require('../../services/enrolmentNotices/enrolmentNotices')
+const { requestEnrolmentNotification } = require('../../services/enrolmentNotices/enrolmentNotices')
 const { ApplicationError } = require('../../util/customErrors')
 
 const updateEnrolmentNotification = async (req, res) => {

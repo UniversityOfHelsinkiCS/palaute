@@ -46,29 +46,22 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
       <table css={styles.table}>
         <thead>
           <tr>
-            <th css={styles.realisationHeading}>
-              {t('courseSummary:courseRealisation')}
-            </th>
+            <th css={styles.realisationHeading}>{t('courseSummary:courseRealisation')}</th>
             <ColumnHeadings questions={questions} />
           </tr>
         </thead>
         <tbody>
-          {courseRealisations.map((courseRealisation) => {
+          {courseRealisations.map(courseRealisation => {
             const feedbackResponseGiven = getFeedbackResponseGiven(
               courseRealisation.feedbackResponseGiven,
-              courseRealisation.closesAt,
+              courseRealisation.closesAt
             )
 
             return (
               <Fragment key={courseRealisation.id}>
                 <ResultsRow
                   key={courseRealisation.id}
-                  label={
-                    <CourseRealisationLabel
-                      courseRealisation={courseRealisation}
-                      language={i18n.language}
-                    />
-                  }
+                  label={<CourseRealisationLabel courseRealisation={courseRealisation} language={i18n.language} />}
                   results={courseRealisation.results}
                   questions={questions}
                   feedbackCount={courseRealisation.feedbackCount}
@@ -82,9 +75,7 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
                       <>
                         <td />
                         <td>
-                          <CensoredCount
-                            count={courseRealisation.hiddenCount}
-                          />
+                          <CensoredCount count={courseRealisation.hiddenCount} />
                         </td>
                       </>
                     )
@@ -104,11 +95,7 @@ const CourseRealisationSummary = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
-  const {
-    organisations,
-    isLoading: organisationsLoading,
-    isLoadingError: orgError,
-  } = useOrganisations({ retry: 2 })
+  const { organisations, isLoading: organisationsLoading, isLoadingError: orgError } = useOrganisations({ retry: 2 })
   const {
     courseRealisationSummaries,
     isLoading,
@@ -121,36 +108,25 @@ const CourseRealisationSummary = () => {
   }
 
   if ((summaryError || orgError) && !courseRealisationSummaries) {
-    return (
-      <ErrorView
-        message={errors.getGeneralError(error)}
-        response={error?.response}
-      />
-    )
+    return <ErrorView message={errors.getGeneralError(error)} response={error?.response} />
   }
 
-  const { questions, courseRealisations, courseUnit } =
-    courseRealisationSummaries
+  const { questions, courseRealisations, courseUnit } = courseRealisationSummaries
 
   const organisation = organisationsLoading
     ? null
-    : organisations.find((org) => org.id === courseUnit.organisations[0]?.id)
+    : organisations.find(org => org.id === courseUnit.organisations[0]?.id)
 
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
       <Box mb="1rem">
         <Typography variant="h4" component="h1">
-          {getLanguageValue(courseUnit.name, i18n.language)},{' '}
-          {courseUnit.courseCode}
+          {getLanguageValue(courseUnit.name, i18n.language)}, {courseUnit.courseCode}
         </Typography>
         <Box mb={1} />
         {organisation && (
-          <MuiLink
-            component={Link}
-            to={`/organisations/${organisation.code}`}
-            underline="hover"
-          >
+          <MuiLink component={Link} to={`/organisations/${organisation.code}`} underline="hover">
             {getLanguageValue(organisation.name, i18n.language)}
           </MuiLink>
         )}

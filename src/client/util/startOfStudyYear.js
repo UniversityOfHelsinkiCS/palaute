@@ -3,7 +3,7 @@
  * @param {Date | string | number} date
  * @return {Date} first day of study year
  */
-export const startOfStudyYear = (date) => {
+export const startOfStudyYear = date => {
   // Year starting month
   const MONTH = 8
 

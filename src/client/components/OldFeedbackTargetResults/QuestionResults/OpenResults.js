@@ -36,10 +36,7 @@ const OpenResults = ({ question }) => {
 
   const label = getLanguageValue(question.data?.label, i18n.language)
 
-  const description = getLanguageValue(
-    question.data?.description,
-    i18n.language,
-  )
+  const description = getLanguageValue(question.data?.description, i18n.language)
 
   const feedbacks = question.feedbacks ?? []
 
@@ -49,15 +46,8 @@ const OpenResults = ({ question }) => {
     <ResultsContent title={label} description={description}>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
-          <ListItem
-            divider={index < filteredFeedbacks.length - 1}
-            disableGutters
-            key={index}
-          >
-            <ListItemText
-              primary={feedback.data}
-              primaryTypographyProps={{ whiteSpace: 'pre-line' }}
-            />
+          <ListItem divider={index < filteredFeedbacks.length - 1} disableGutters key={index}>
+            <ListItemText primary={feedback.data} primaryTypographyProps={{ whiteSpace: 'pre-line' }} />
           </ListItem>
         ))}
       </List>

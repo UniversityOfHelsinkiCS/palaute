@@ -11,9 +11,7 @@ const run = async () => {
 
 const start = async () => {
   if (!inProduction || inStaging) {
-    return logger.info(
-      'Not running continuous feedback cron if not in production',
-    )
+    return logger.info('Not running continuous feedback cron if not in production')
   }
   logger.info('Setup continuous feedback cron')
   const cronTime = '0 8 * * *' // Daily at 8:00

@@ -18,20 +18,14 @@ const LanguageSelect = ({ value, onChange, label }) => {
   const id = useId()
   const labelId = `languageSelect-${id}`
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     onChange(event.target.value)
   }
 
   return (
     <FormControl variant="outlined">
       <InputLabel id={labelId}>{label}</InputLabel>
-      <Select
-        labelId={labelId}
-        sx={style.select}
-        onChange={handleChange}
-        value={value}
-        label={label}
-      >
+      <Select labelId={labelId} sx={style.select} onChange={handleChange} value={value} label={label}>
         <MenuItem value="fi">{t('languages.fi')}</MenuItem>
         <MenuItem value="sv">{t('languages.sv')}</MenuItem>
         <MenuItem value="en">{t('languages.en')}</MenuItem>

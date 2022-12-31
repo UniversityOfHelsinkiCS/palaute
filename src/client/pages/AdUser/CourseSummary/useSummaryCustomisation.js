@@ -15,7 +15,7 @@ const useSummaryCustomisation = () => {
     refetchOnWindowFocus: false,
   })
 
-  const mutationFn = async (customisation) => {
+  const mutationFn = async customisation => {
     const res = await apiClient.put(`/course-summaries/customisation`, {
       customisation,
     })
@@ -23,7 +23,7 @@ const useSummaryCustomisation = () => {
   }
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: (response) => {
+    onSuccess: response => {
       const { data } = response
       if (data) {
         queryClient.setQueryData(queryKey, data)

@@ -20,14 +20,13 @@ import { LoadingProgress } from '../common/LoadingProgress'
 
 const UserPermissionsWindow = ({ isOpen, onClose }) => {
   const { authorizedUser, isLoading } = useAuthorizedUser({ enabled: isOpen })
-  const { user, isLoading: isUserDetailsLoading } = useUserDetails(
-    authorizedUser?.id,
-    { enabled: isOpen && !isLoading },
-  )
+  const { user, isLoading: isUserDetailsLoading } = useUserDetails(authorizedUser?.id, {
+    enabled: isOpen && !isLoading,
+  })
 
   const { t } = useTranslation()
 
-  const getAccess = (access) => {
+  const getAccess = access => {
     if (access.admin) {
       return 'Admin'
     }
@@ -56,7 +55,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {user?.iamGroups.map((iam) => (
+              {user?.iamGroups.map(iam => (
                 <Box key={iam} fontFamily="monospace" fontSize={12}>
                   {iam}
                 </Box>
@@ -68,17 +67,13 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
               )}
             </Box>
             <Box>
-              <Typography variant="button">
-                {t('userInformation:organisationAccess')}
-              </Typography>
+              <Typography variant="button">{t('userInformation:organisationAccess')}</Typography>
               <Box mb={1} />
               <TableContainer>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>
-                        {t('userInformation:organisationCode')}
-                      </TableCell>
+                      <TableCell>{t('userInformation:organisationCode')}</TableCell>
                       <TableCell>{t('userInformation:access')}</TableCell>
                     </TableRow>
                   </TableHead>

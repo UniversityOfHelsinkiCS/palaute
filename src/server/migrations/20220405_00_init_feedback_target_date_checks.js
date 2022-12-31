@@ -1,7 +1,7 @@
 const { DATE, INTEGER, NOW, STRING, BOOLEAN } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.createTable('feedback_target_date_checks', {
       id: {
         type: INTEGER,
@@ -30,7 +30,7 @@ module.exports = {
       },
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.dropTable('feedback_target_date_checks')
   },
 }

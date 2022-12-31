@@ -15,7 +15,7 @@ const Tags = ({ organisation }) => {
       <Card>
         <CardContent>
           <Box display="flex" flexWrap="wrap">
-            {tags?.map((tag) => (
+            {tags?.map(tag => (
               <TagChip key={tag.id} tag={tag} language={i18n.language} />
             ))}
           </Box>

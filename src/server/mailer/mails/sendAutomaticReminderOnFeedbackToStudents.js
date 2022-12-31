@@ -1,9 +1,7 @@
 const { sequelize } = require('../../db/dbConnection')
 const { FeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
-const {
-  sendFeedbackReminderToStudents,
-} = require('./sendFeedbackReminderToStudents')
+const { sendFeedbackReminderToStudents } = require('./sendFeedbackReminderToStudents')
 
 /**
  * Automatically remind students 3 days before feedback closes
@@ -30,20 +28,18 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
     {
       model: FeedbackTarget,
       mapToModel: true,
-    },
+    }
   )
 
-  logger.info(
-    `[Pate] Sending automatic reminder for ${feedbackTargets.length} feedback targets`,
-  )
+  logger.info(`[Pate] Sending automatic reminder for ${feedbackTargets.length} feedback targets`)
 
   await Promise.all(
-    feedbackTargets.map(async (fbt) => {
+    feedbackTargets.map(async fbt => {
       if (await fbt?.feedbackCanBeGiven()) {
         return sendFeedbackReminderToStudents(fbt, '')
       }
       return null
-    }),
+    })
   )
 }
 

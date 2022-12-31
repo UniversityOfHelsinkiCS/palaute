@@ -24,7 +24,7 @@ import useUpdaterStatuses from '../../../hooks/useUpdaterStatuses'
 import { inProduction } from '../../../../config'
 import ExternalLink from '../../../components/common/ExternalLink'
 
-const createGraylogLink = (updaterStatus) => {
+const createGraylogLink = updaterStatus => {
   const baseUrl = 'https://graylog.toska.cs.helsinki.fi'
   const start = updaterStatus.startedAt
   const end = updaterStatus.finishedAt || new Date()
@@ -48,11 +48,9 @@ const StatusChip = ({ status }) => {
 const StatusTable = ({ updaterStatuses }) => {
   const formattedStatuses = React.useMemo(
     () =>
-      updaterStatuses?.map((s) => {
+      updaterStatuses?.map(s => {
         const formattedStartedAt = new Date(s.startedAt).toLocaleString()
-        const formattedFinishedAt = s.finishedAt
-          ? new Date(s.finishedAt).toLocaleString()
-          : 'Not yet finished'
+        const formattedFinishedAt = s.finishedAt ? new Date(s.finishedAt).toLocaleString() : 'Not yet finished'
 
         const duration = intervalToDuration({
           start: Date.parse(s.startedAt),
@@ -73,7 +71,7 @@ const StatusTable = ({ updaterStatuses }) => {
           link,
         }
       }),
-    [updaterStatuses],
+    [updaterStatuses]
   )
 
   return (
@@ -90,7 +88,7 @@ const StatusTable = ({ updaterStatuses }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {formattedStatuses?.map((s) => (
+          {formattedStatuses?.map(s => (
             <TableRow key={s.id}>
               <TableCell>{s.jobType}</TableCell>
               <TableCell>
@@ -121,21 +119,11 @@ const UpdaterView = () => {
   }
 
   const runUpdater = async () => {
-    if (updaterStatuses.some((s) => s.status === 'RUNNING')) {
-      if (
-        !window.confirm(
-          'Updater seems to be running. Are you sure you want to start another run anyway?',
-        )
-      )
-        return
+    if (updaterStatuses.some(s => s.status === 'RUNNING')) {
+      if (!window.confirm('Updater seems to be running. Are you sure you want to start another run anyway?')) return
     }
     if (inProduction) {
-      if (
-        !window.confirm(
-          'You are in production. Please confirm that you want to run the full updater cycle.',
-        )
-      )
-        return
+      if (!window.confirm('You are in production. Please confirm that you want to run the full updater cycle.')) return
     }
     await apiClient.post('/admin/run-updater', {})
     setTimeout(refetch, 1000)
@@ -150,7 +138,7 @@ const UpdaterView = () => {
           id="demo-simple-select"
           value={jobType}
           label="JOB TYPE"
-          onChange={(e) => setJobType(e.target.value)}
+          onChange={e => setJobType(e.target.value)}
         >
           <MenuItem value="ALL">ALL</MenuItem>
           <MenuItem value="NIGHTLY">NIGHTLY</MenuItem>

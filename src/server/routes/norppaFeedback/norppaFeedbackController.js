@@ -53,11 +53,7 @@ const markAsSolved = async (req, res) => {
   const { id } = req.params
 
   const { solved } = req.body
-  if (typeof solved !== 'boolean')
-    throw new ApplicationError(
-      'Invalid data: missing "solved" boolean field',
-      400,
-    )
+  if (typeof solved !== 'boolean') throw new ApplicationError('Invalid data: missing "solved" boolean field', 400)
 
   const feedback = await NorppaFeedback.findByPk(id)
   feedback.solved = solved

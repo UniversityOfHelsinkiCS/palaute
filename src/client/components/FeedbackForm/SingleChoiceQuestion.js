@@ -1,12 +1,6 @@
 import React from 'react'
 
-import {
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  FormHelperText,
-} from '@mui/material'
+import { FormControl, RadioGroup, FormControlLabel, Radio, FormHelperText } from '@mui/material'
 
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -21,8 +15,7 @@ const SingleChoiceQuestion = ({ question, name }) => {
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
-  const description =
-    getLanguageValue(question.data?.description, language) ?? ''
+  const description = getLanguageValue(question.data?.description, language) ?? ''
 
   const value = answer ?? ''
   const options = question.data?.options ?? []
@@ -32,22 +25,17 @@ const SingleChoiceQuestion = ({ question, name }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <QuestionBase
-          label={label}
-          required={required}
-          description={description}
-          labelProps={{ component: 'legend' }}
-        >
+        <QuestionBase label={label} required={required} description={description} labelProps={{ component: 'legend' }}>
           <RadioGroup
             aria-label={label}
             value={value}
-            onChange={(event) => {
+            onChange={event => {
               helpers.setValue(event.target.value)
             }}
             onBlur={() => helpers.setTouched(true)}
             sx={{ paddingLeft: '0.8rem' }}
           >
-            {options.map((option) => (
+            {options.map(option => (
               <FormControlLabel
                 value={option.id}
                 control={<Radio color="primary" />}

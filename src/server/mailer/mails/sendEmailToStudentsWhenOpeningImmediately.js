@@ -8,12 +8,10 @@ const {
   User,
 } = require('../../models')
 const { pate } = require('../pateClient')
-const {
-  notificationAboutSurveyOpeningToStudents,
-} = require('./sendEmailAboutSurveyOpeningToStudents')
+const { notificationAboutSurveyOpeningToStudents } = require('./sendEmailAboutSurveyOpeningToStudents')
 const { createRecipientsForFeedbackTargets } = require('./util')
 
-const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
+const getFeedbackTargetOpeningImmediately = async feedbackTargetId => {
   const feedbackTarget = await FeedbackTarget.findOne({
     where: {
       id: feedbackTargetId,
@@ -52,29 +50,18 @@ const getFeedbackTargetOpeningImmediately = async (feedbackTargetId) => {
   return feedbackTarget
 }
 
-const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
-  const feedbackTarget = await getFeedbackTargetOpeningImmediately(
-    feedbackTargetId,
+const sendEmailToStudentsWhenOpeningImmediately = async feedbackTargetId => {
+  const feedbackTarget = await getFeedbackTargetOpeningImmediately(feedbackTargetId)
+
+  const studentsWithFeedbackTarget = await createRecipientsForFeedbackTargets([feedbackTarget], {
+    whereOpenEmailNotSent: true,
+  })
+
+  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(student =>
+    notificationAboutSurveyOpeningToStudents(student, studentsWithFeedbackTarget[student])
   )
 
-  const studentsWithFeedbackTarget = await createRecipientsForFeedbackTargets(
-    [feedbackTarget],
-    {
-      whereOpenEmailNotSent: true,
-    },
-  )
-
-  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(
-    (student) =>
-      notificationAboutSurveyOpeningToStudents(
-        student,
-        studentsWithFeedbackTarget[student],
-      ),
-  )
-
-  const ids = Object.values(studentsWithFeedbackTarget).flatMap((fbts) =>
-    fbts.map((fbt) => fbt.userFeedbackTargetId),
-  )
+  const ids = Object.values(studentsWithFeedbackTarget).flatMap(fbts => fbts.map(fbt => fbt.userFeedbackTargetId))
 
   await UserFeedbackTarget.update(
     {
@@ -86,13 +73,10 @@ const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId) => {
           [Op.in]: ids,
         },
       },
-    },
+    }
   )
 
-  await pate.send(
-    studentEmailsToBeSent,
-    'Notify students about feedback opening immediately',
-  )
+  await pate.send(studentEmailsToBeSent, 'Notify students about feedback opening immediately')
 
   return studentEmailsToBeSent
 }

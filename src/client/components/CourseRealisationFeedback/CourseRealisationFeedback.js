@@ -6,10 +6,8 @@ import { useTranslation } from 'react-i18next'
 import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
 import { LoadingProgress } from '../common/LoadingProgress'
 
-const getCourseRealisationFeedbackTarget = (feedbackTargets) =>
-  (feedbackTargets ?? []).find(
-    ({ feedbackType }) => feedbackType === 'courseRealisation',
-  )
+const getCourseRealisationFeedbackTarget = feedbackTargets =>
+  (feedbackTargets ?? []).find(({ feedbackType }) => feedbackType === 'courseRealisation')
 
 const CourseRealisationFeedback = () => {
   const { id } = useParams()
@@ -21,8 +19,7 @@ const CourseRealisationFeedback = () => {
     return <LoadingProgress />
   }
 
-  const courseRealisationFeedbackTarget =
-    getCourseRealisationFeedbackTarget(feedbackTargets)
+  const courseRealisationFeedbackTarget = getCourseRealisationFeedbackTarget(feedbackTargets)
 
   if (!courseRealisationFeedbackTarget) {
     enqueueSnackbar(t('courseRealisationFeedback:noFeedbackTarget'), {
@@ -32,9 +29,7 @@ const CourseRealisationFeedback = () => {
     return <Redirect to="/" />
   }
 
-  return (
-    <Redirect to={`/targets/${courseRealisationFeedbackTarget.id}/feedback`} />
-  )
+  return <Redirect to={`/targets/${courseRealisationFeedbackTarget.id}/feedback`} />
 }
 
 export default CourseRealisationFeedback

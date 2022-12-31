@@ -28,7 +28,7 @@ FeedbackTargetDateCheck.init(
     underscored: true,
     sequelize,
     timestamps: true,
-  },
+  }
 )
 
 module.exports = FeedbackTargetDateCheck

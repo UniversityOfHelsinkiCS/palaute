@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText,
-} from '@mui/material'
+import { Box, Card, CardContent, Typography, Select, MenuItem, FormControl, FormHelperText } from '@mui/material'
 
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +23,7 @@ const PublicitySelection = ({ visibility, setVisibility }) => {
 
   const mutation = useMutation(updateFeedbackPublicity)
 
-  const handleChange = async (e) => {
+  const handleChange = async e => {
     try {
       await mutation.mutateAsync({
         id,
@@ -54,14 +45,10 @@ const PublicitySelection = ({ visibility, setVisibility }) => {
           </Box>
           <FormControl>
             <Select value={visibility} onChange={handleChange}>
-              <MenuItem value="ENROLLED">
-                {t('publicQuestions:enrolled')}
-              </MenuItem>
+              <MenuItem value="ENROLLED">{t('publicQuestions:enrolled')}</MenuItem>
               <MenuItem value="ALL">{t('publicQuestions:everyone')}</MenuItem>
             </Select>
-            <FormHelperText>
-              {t('publicQuestions:selectVisibility')}
-            </FormHelperText>
+            <FormHelperText>{t('publicQuestions:selectVisibility')}</FormHelperText>
           </FormControl>
         </CardContent>
       </Card>

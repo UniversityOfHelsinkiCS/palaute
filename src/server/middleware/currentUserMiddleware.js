@@ -5,7 +5,7 @@ const { User } = require('../models')
 const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 
-const isSuperAdmin = (username) => ADMINS.includes(username)
+const isSuperAdmin = username => ADMINS.includes(username)
 
 const getTestUser = async () => {
   let testUser = await User.findByPk('abc1234')
@@ -31,7 +31,7 @@ const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
   return user
 }
 
-const getUsernameFromToken = (req) => {
+const getUsernameFromToken = req => {
   const { token, tokenuser } = req.headers
 
   const { username } = jwt.verify(token, JWT_KEY)
@@ -45,7 +45,7 @@ const getUsernameFromToken = (req) => {
   return username
 }
 
-const getUsernameFromShibboHeaders = (req) => {
+const getUsernameFromShibboHeaders = req => {
   const { uid: username } = req.headers
 
   if (!username) throw new ApplicationError('Missing uid header', 403)
@@ -57,9 +57,7 @@ const currentUserMiddleware = async (req, _, next) => {
   const isNoAdPath = req.path.startsWith('/noad')
   req.noad = isNoAdPath
 
-  const username = isNoAdPath
-    ? await getUsernameFromToken(req)
-    : getUsernameFromShibboHeaders(req)
+  const username = isNoAdPath ? await getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
 
   if (username === 'ohj_tosk') {
     req.user = await getTestUser()
@@ -68,10 +66,7 @@ const currentUserMiddleware = async (req, _, next) => {
   }
 
   if (req.headers['x-admin-logged-in-as']) {
-    const loggedInAsUser = await getLoggedInAsUser(
-      username,
-      req.headers['x-admin-logged-in-as'],
-    )
+    const loggedInAsUser = await getLoggedInAsUser(username, req.headers['x-admin-logged-in-as'])
     if (loggedInAsUser) {
       req.user = loggedInAsUser
       req.loginAs = true

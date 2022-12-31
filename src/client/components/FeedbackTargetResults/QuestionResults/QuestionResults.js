@@ -28,7 +28,7 @@ import QuestionPublicityToggle from '../../PublicQuestions/QuestionPublicityTogg
 import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
 
 const styles = {
-  list: (theme) => ({
+  list: theme => ({
     maxHeight: '800px',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
@@ -46,7 +46,7 @@ const styles = {
     },
   }),
   link: {
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    fontWeight: theme => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
     color: 'black',
   },
@@ -83,9 +83,7 @@ const QuestionItem = ({
 
   const Component = componentByType[question.type]
 
-  const content = Component ? (
-    <Component question={question} feedbackCount={feedbackCount} />
-  ) : null
+  const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
 
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useQuestionPublicityMutation({
@@ -93,10 +91,10 @@ const QuestionItem = ({
     resourceId: feedbackTargetId,
   })
 
-  const onPublicityToggle = async (isPublic) => {
+  const onPublicityToggle = async isPublic => {
     const newPublicQuestionIds = isPublic
       ? _.uniq(publicQuestionIds.concat(question.id))
-      : publicQuestionIds.filter((id) => id !== question.id)
+      : publicQuestionIds.filter(id => id !== question.id)
 
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
@@ -109,11 +107,7 @@ const QuestionItem = ({
   return (
     <Box m="1rem" mt="3rem">
       {isResponsibleTeacher && (
-        <QuestionPublicityToggle
-          checked={isPublic}
-          disabled={disabled}
-          onChange={() => onPublicityToggle(!isPublic)}
-        />
+        <QuestionPublicityToggle checked={isPublic} disabled={disabled} onChange={() => onPublicityToggle(!isPublic)} />
       )}
       <Box>{content}</Box>
     </Box>
@@ -123,17 +117,10 @@ const QuestionItem = ({
 const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
-  const infoSite =
-    'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
+  const infoSite = 'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
 
   const infoLink = (
-    <AlertLink
-      sx={styles.link}
-      component={MuiLink}
-      href={infoSite}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <AlertLink sx={styles.link} component={MuiLink} href={infoSite} target="_blank" rel="noreferrer">
       {t('questionResults:here')}
     </AlertLink>
   )
@@ -149,14 +136,8 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
         </Typography>
         <List sx={styles.list}>
           {hiddenQuestions.map((question, index) => (
-            <ListItem
-              divider={index < hiddenQuestions.length - 1}
-              disableGutters
-              key={index}
-            >
-              <ListItemText
-                primary={getLanguageValue(question.data.label, language)}
-              />
+            <ListItem divider={index < hiddenQuestions.length - 1} disableGutters key={index}>
+              <ListItemText primary={getLanguageValue(question.data.label, language)} />
             </ListItem>
           ))}
         </List>
@@ -190,43 +171,28 @@ const QuestionResults = ({
 }) => {
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
-    [questions, feedbacks, publicQuestionIds],
+    [questions, feedbacks, publicQuestionIds]
   )
 
   const { t } = useTranslation()
 
   const openQuestions = questionsWithFeedbacks.filter(
-    (q) =>
-      q.type === 'OPEN' &&
-      (isOrganisationUser ||
-        isResponsibleTeacher ||
-        publicQuestionIds.includes(q.id)),
+    q => q.type === 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
-    (q) =>
-      q.type !== 'OPEN' &&
-      (isOrganisationUser ||
-        isResponsibleTeacher ||
-        publicQuestionIds.includes(q.id)),
+    q => q.type !== 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
   )
 
-  const hiddenQuestions = questionsWithFeedbacks.filter(
-    (q) => !publicQuestionIds.includes(q.id),
-  )
+  const hiddenQuestions = questionsWithFeedbacks.filter(q => !publicQuestionIds.includes(q.id))
 
   return (
     <>
-      <QuestionSection
-        title={t('questionResults:multipleChoiceQuestions')}
-        count={notOpenQuestions.length}
-      >
-        <Typography variant="body2">
-          {t('questionResults:multipleChoiceScale')}
-        </Typography>
+      <QuestionSection title={t('questionResults:multipleChoiceQuestions')} count={notOpenQuestions.length}>
+        <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
 
         <Grid container sx={styles.displayStyle}>
-          {notOpenQuestions.map((q) => (
+          {notOpenQuestions.map(q => (
             <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>
               <QuestionItem
                 question={q}
@@ -241,11 +207,8 @@ const QuestionResults = ({
           ))}
         </Grid>
       </QuestionSection>
-      <QuestionSection
-        title={t('questionResults:openQuestions')}
-        count={openQuestions.length}
-      >
-        {openQuestions.map((q) => (
+      <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
+        {openQuestions.map(q => (
           <QuestionItem
             key={q.id}
             question={q}
@@ -257,9 +220,7 @@ const QuestionResults = ({
           />
         ))}
       </QuestionSection>
-      {isOrganisationUser && hiddenQuestions.length > 0 && (
-        <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />
-      )}
+      {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
     </>
   )
 }

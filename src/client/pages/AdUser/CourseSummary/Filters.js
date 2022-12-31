@@ -22,7 +22,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 
 const styles = {
   container: {
-    minWidth: (theme) => ({
+    minWidth: theme => ({
       [theme.breakpoints.up('md')]: 500,
     }),
     textAlign: 'left',
@@ -50,22 +50,20 @@ const Filters = ({
   const [option, setOption] = useHistoryState('timeperiodOption', 'year')
 
   const { tags, isLoading: tagsLoading } = useOrganisationTags(code)
-  const sortedTags = _.sortBy(tags, (tag) =>
-    getLanguageValue(tag.name, i18n.language),
-  )
+  const sortedTags = _.sortBy(tags, tag => getLanguageValue(tag.name, i18n.language))
 
   const faculties = React.useMemo(
     () =>
       facultyAccess
         ? _.sortBy(
-            facultyAccess.map((faculty) => ({
+            facultyAccess.map(faculty => ({
               code: faculty.code,
               name: faculty.name,
             })),
-            (faculty) => getLanguageValue(faculty.name, i18n.language),
+            faculty => getLanguageValue(faculty.name, i18n.language)
           )
         : [],
-    [facultyAccess, i18n.language],
+    [facultyAccess, i18n.language]
   )
 
   return (
@@ -82,13 +80,9 @@ const Filters = ({
         <Box mb={2}>
           <FormControl fullWidth>
             <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
-            <Select
-              value={facultyCode}
-              onChange={(event) => onFacultyChange(event.target.value)}
-              label="Tiedekunta"
-            >
+            <Select value={facultyCode} onChange={event => onFacultyChange(event.target.value)} label="Tiedekunta">
               <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
-              {faculties.map((faculty) => (
+              {faculties.map(faculty => (
                 <MenuItem key={faculty.code} value={faculty.code}>
                   {faculty.name[i18n.language] || faculty.name.se}
                 </MenuItem>
@@ -101,11 +95,7 @@ const Filters = ({
         <Box mb={2}>
           <FormControl fullWidth>
             <InputLabel>{t('courseSummary:tagLabel')}</InputLabel>
-            <Select
-              value={tagId}
-              onChange={(event) => onTagChange(event.target.value)}
-              label="Opintosuunta"
-            >
+            <Select value={tagId} onChange={event => onTagChange(event.target.value)} label="Opintosuunta">
               <MenuItem value="All">{t('courseSummary:allTags')}</MenuItem>
               {sortedTags.map(({ id, name }) => (
                 <MenuItem key={id} value={id}>
@@ -119,7 +109,7 @@ const Filters = ({
       <Box mb={2}>
         <TextField
           value={keyword}
-          onChange={(event) => onKeywordChange(event.target.value)}
+          onChange={event => onKeywordChange(event.target.value)}
           variant="outlined"
           placeholder={t('courseSummary:searchPlaceholder')}
           label={t('courseSummary:searchLabel')}
@@ -137,7 +127,7 @@ const Filters = ({
         control={
           <Switch
             checked={includeOpenUniCourseUnits}
-            onChange={(event) => {
+            onChange={event => {
               onIncludeOpenUniCourseUnitsChange(event.target.checked)
             }}
             color="primary"

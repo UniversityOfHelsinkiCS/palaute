@@ -13,8 +13,7 @@ const create = async (req, res) => {
 
   const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
 
-  if (!feedbackCanBeGiven)
-    throw new ApplicationError('Feedback is not open', 403)
+  if (!feedbackCanBeGiven) throw new ApplicationError('Feedback is not open', 403)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
     where: {
@@ -29,11 +28,10 @@ const create = async (req, res) => {
   if (userFeedbackTarget.feedbackId)
     throw new ApplicationError(
       'Attempt to create new feedback where one already exists. Use PUT to update the old',
-      400,
+      400
     )
 
-  if (!(await validateFeedback(data, feedbackTarget)))
-    throw new ApplicationError('Form data not valid', 400)
+  if (!(await validateFeedback(data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
 
   const newFeedback = await Feedback.create({
     data,
@@ -49,7 +47,7 @@ const create = async (req, res) => {
   return res.send(newFeedback)
 }
 
-const getFeedbackForUser = async (req) => {
+const getFeedbackForUser = async req => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
   if (!feedback) throw new ApplicationError('Not found', 404)
 
@@ -84,17 +82,13 @@ const update = async (req, res) => {
 
   if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
 
-  const feedbackTarget = await FeedbackTarget.findByPk(
-    userFeedbackTarget.feedbackTargetId,
-  )
+  const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  if (!feedbackTarget.isOpen())
-    throw new ApplicationError('Feedback is not open', 403)
+  if (!feedbackTarget.isOpen()) throw new ApplicationError('Feedback is not open', 403)
 
-  if (!(await validateFeedback(req.body.data, feedbackTarget)))
-    throw new ApplicationError('Form data not valid', 400)
+  if (!(await validateFeedback(req.body.data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
 
   feedback.data = req.body.data
 
@@ -116,9 +110,7 @@ const destroy = async (req, res) => {
 
   if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
 
-  const feedbackTarget = await FeedbackTarget.findByPk(
-    userFeedbackTarget.feedbackTargetId,
-  )
+  const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
@@ -155,10 +147,7 @@ const updateAnswerHidden = async (req, res) => {
 
   // check access
   if (!req.isAdmin && !(await req.user.getTeacherAssociation(feedbackTarget))) {
-    const organisationAccess =
-      await req.user.getOrganisationAccessByCourseUnitId(
-        feedbackTarget.courseUnitId,
-      )
+    const organisationAccess = await req.user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
     if (!organisationAccess.admin) {
       throw new ApplicationError('Admin or teacher access required', 403)
     }
@@ -166,7 +155,7 @@ const updateAnswerHidden = async (req, res) => {
 
   // find and update question
   let updated = false
-  feedback.data = feedback.data.map((answer) => {
+  feedback.data = feedback.data.map(answer => {
     if (answer.questionId === Number(questionId)) {
       updated = true
       return { ...answer, hidden }

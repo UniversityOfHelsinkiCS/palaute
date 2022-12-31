@@ -1,14 +1,6 @@
 import React from 'react'
 
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-  Link,
-} from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Link } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -22,17 +14,12 @@ const PrivacyDialog = ({ open, onClose }) => {
       aria-labelledby="feedback-privacy-dialog-title"
       aria-describedby="feedback-privacy-dialog-description"
     >
-      <DialogTitle id="feedback-privacy-dialog-title">
-        {t('feedbackView:feedbackInfoTitle')}
-      </DialogTitle>
+      <DialogTitle id="feedback-privacy-dialog-title">{t('feedbackView:feedbackInfoTitle')}</DialogTitle>
       <DialogContent>
         <DialogContentText id="feedback-privacy-dialog-description">
           {t('feedbackView:feedbackInfoContent')}
           <br />
-          <Link
-            href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991"
-            underline="hover"
-          >
+          <Link href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991" underline="hover">
             {t('feedbackView:dataProtectionNotice')}
           </Link>
         </DialogContentText>

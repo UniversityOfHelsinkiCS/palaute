@@ -3,8 +3,8 @@ const { JSONB } = require('sequelize')
 const { DATE, INTEGER } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.sequelize.transaction(async (transaction) => {
+  up: async queryInterface => {
+    await queryInterface.sequelize.transaction(async transaction => {
       await queryInterface.createTable(
         'banners',
         {
@@ -39,11 +39,11 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction },
+        { transaction }
       )
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.dropTable('tags')
   },
 }

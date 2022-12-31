@@ -12,9 +12,7 @@ const login = async (req, res) => {
   const { user, isAdmin, loginAs } = req
 
   const allIamGroups = req.noad ? [] : req.iamGroups ?? []
-  const relevantIamGroups = allIamGroups.filter((iam) =>
-    relevantIAMs.includes(iam),
-  )
+  const relevantIamGroups = allIamGroups.filter(iam => relevantIAMs.includes(iam))
 
   if (!loginAs) {
     user.iamGroups = relevantIamGroups
@@ -67,10 +65,7 @@ const getUserDetails = async (req, res) => {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
   const user = await User.findByPk(id)
-  const access = _.sortBy(
-    await user.getOrganisationAccess(),
-    (access) => access.organisation.code,
-  )
+  const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
   return res.send({
     ...user.dataValues,
     iamGroups: user.iamGroups,
@@ -79,8 +74,7 @@ const getUserDetails = async (req, res) => {
 }
 
 const getAllUserAccess = async (req, res) => {
-  if (!ADMINS.includes(req.user.username))
-    throw new ApplicationError('Forbidden', 403)
+  if (!ADMINS.includes(req.user.username)) throw new ApplicationError('Forbidden', 403)
 
   const users = await User.findAll({
     where: {
@@ -92,10 +86,7 @@ const getAllUserAccess = async (req, res) => {
 
   const usersWithAccess = []
   for (const user of users) {
-    const access = _.sortBy(
-      await user.getOrganisationAccess(),
-      (access) => access.organisation.code,
-    )
+    const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
 
     // eslint-disable-next-line no-continue
     if (!access.length) continue

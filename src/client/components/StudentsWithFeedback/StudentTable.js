@@ -39,14 +39,8 @@ const styles = {
 const ExportCsv = ({ students, fileName }) => {
   const { t } = useTranslation()
 
-  const headers = [
-    t('firstName'),
-    t('lastName'),
-    t('studentNumber'),
-    t('email'),
-    t('feedback'),
-  ]
-  const stats = students.map((student) => [...Object.values(student)])
+  const headers = [t('firstName'), t('lastName'), t('studentNumber'), t('email'), t('feedback')]
+  const stats = students.map(student => [...Object.values(student)])
   const data = [headers, ...stats]
 
   const worksheet = utils.aoa_to_sheet(data)
@@ -80,23 +74,19 @@ const StudentTable = ({ students, feedbackTarget }) => {
 
   const studentsCSV = useMemo(
     () =>
-      _.orderBy(students, 'lastName').map(
-        ({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
-          firstName,
-          lastName,
-          studentNumber,
-          email,
-          feedbackGiven: feedbackGiven
-            ? t('feedbackGiven')
-            : t('feedbackNotGiven'),
-        }),
-      ),
-    [students],
+      _.orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
+        firstName,
+        lastName,
+        studentNumber,
+        email,
+        feedbackGiven: feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'),
+      })),
+    [students]
   )
 
   const fileName = `${feedbackTarget.courseUnit.courseCode}_${format(
     parseISO(feedbackTarget.courseRealisation.startDate),
-    'yyyy-MM-dd',
+    'yyyy-MM-dd'
   )}_students`
 
   return (
@@ -156,26 +146,15 @@ const StudentTable = ({ students, feedbackTarget }) => {
         </TableHead>
         <TableBody>
           {sortTable(students, order, orderBy).map(
-            ({
-              id,
-              firstName,
-              lastName,
-              studentNumber,
-              email,
-              feedbackGiven,
-            }) => (
+            ({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
               <TableRow key={id}>
                 <TableCell>{firstName}</TableCell>
                 <TableCell>{lastName}</TableCell>
                 <TableCell>{studentNumber}</TableCell>
                 <TableCell>{email}</TableCell>
-                <TableCell>
-                  {String(
-                    feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'),
-                  )}
-                </TableCell>
+                <TableCell>{String(feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'))}</TableCell>
               </TableRow>
-            ),
+            )
           )}
         </TableBody>
       </Table>
@@ -184,7 +163,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
 }
 
 const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
-  const createSortHandler = (property) => (e) => {
+  const createSortHandler = property => e => {
     onRequestSort(e, property)
   }
 

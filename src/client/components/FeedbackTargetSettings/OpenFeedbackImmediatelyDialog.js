@@ -1,30 +1,16 @@
 import React from 'react'
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-const OpenFeedbackImmediatelyDialog = ({
-  open = false,
-  onClose,
-  onConfirm,
-}) => {
+const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm }) => {
   const { t } = useTranslation()
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>
-        {t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}
-      </DialogTitle>
-      <DialogContent>
-        {t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}
-      </DialogContent>
+      <DialogTitle>{t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}</DialogTitle>
+      <DialogContent>{t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}</DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
           {t('editFeedbackTarget:openFeedbackImmediatelyDialogCancel')}

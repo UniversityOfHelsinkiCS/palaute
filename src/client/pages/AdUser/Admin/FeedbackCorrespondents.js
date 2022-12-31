@@ -27,9 +27,7 @@ const FeedbackCorrespondents = () => {
           handleLoginAs={handleLoginAs}
           decoration={
             <>
-              <Typography color="textSecondary">
-                {user.organisationCode}
-              </Typography>
+              <Typography color="textSecondary">{user.organisationCode}</Typography>
               <Box mr="1rem" />
               {getLanguageValue(user.organisationName, 'fi')}
             </>

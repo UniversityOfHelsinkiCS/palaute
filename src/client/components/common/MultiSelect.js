@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Checkbox,
-  Chip,
-  FormControl,
-  IconButton,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  Select,
-} from '@mui/material'
+import { Box, Checkbox, Chip, FormControl, IconButton, InputLabel, ListItemText, MenuItem, Select } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import { generate } from '../../util/randomColor'
 
@@ -19,23 +9,17 @@ import { generate } from '../../util/randomColor'
  *
  */
 const MultiSelect = ({ value, onChange, options, label, colors }) => {
-  const selectedOptions = value.map((v) => options.find((o) => o.id === v))
+  const selectedOptions = value.map(v => options.find(o => o.id === v))
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
         multiple
-        onClick={(event) => event.stopPropagation()}
+        onClick={event => event.stopPropagation()}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={event => onChange(event.target.value)}
         label={label}
-        renderValue={() => (
-          <RenderValue
-            selected={selectedOptions}
-            onChange={onChange}
-            colors={colors}
-          />
-        )}
+        renderValue={() => <RenderValue selected={selectedOptions} onChange={onChange} colors={colors} />}
         sx={{ zIndex: 0 }}
         // eslint-disable-next-line react/no-unstable-nested-components
         IconComponent={() => <div />}
@@ -55,12 +39,10 @@ const MultiSelect = ({ value, onChange, options, label, colors }) => {
           },
         }}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <MenuItem key={option.id} value={option.id}>
             <Checkbox checked={value.includes(option.id)} />
-            <ListItemText
-              primary={<Option option={option} colors={colors} />}
-            />
+            <ListItemText primary={<Option option={option} colors={colors} />} />
           </MenuItem>
         ))}
       </Select>
@@ -70,17 +52,14 @@ const MultiSelect = ({ value, onChange, options, label, colors }) => {
 
 const RenderValue = ({ selected, colors }) => (
   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 }}>
-    {selected.map((value) => (
+    {selected.map(value => (
       <Option key={value.id} option={value} colors={colors} />
     ))}
   </Box>
 )
 
 const Option = ({ option, colors }) => (
-  <Chip
-    label={option.label}
-    sx={colors ? { background: generate(option.hash ?? option.id) } : undefined}
-  />
+  <Chip label={option.label} sx={colors ? { background: generate(option.hash ?? option.id) } : undefined} />
 )
 
 export default MultiSelect

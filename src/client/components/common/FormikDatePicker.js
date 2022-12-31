@@ -16,17 +16,11 @@ const FormikDatePicker = ({ name, ...props }) => {
       inputFormat="dd/MM/yyyy"
       id={name}
       value={field.value ?? ''}
-      onChange={(value) => {
+      onChange={value => {
         setFieldValue(name, value, true)
       }}
-      renderInput={(props) => (
-        <TextField
-          fullWidth
-          margin="normal"
-          {...props}
-          helperText={t(meta.error)}
-          error={showError}
-        />
+      renderInput={props => (
+        <TextField fullWidth margin="normal" {...props} helperText={t(meta.error)} error={showError} />
       )}
       error={showError}
       KeyboardButtonProps={{

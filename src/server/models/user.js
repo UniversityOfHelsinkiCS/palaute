@@ -1,12 +1,4 @@
-const {
-  Model,
-  STRING,
-  Op,
-  BOOLEAN,
-  ARRAY,
-  DATE,
-  QueryTypes,
-} = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, ARRAY, DATE, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
@@ -31,7 +23,7 @@ class User extends Model {
       },
     })
 
-    return organisations.map((org) => ({
+    return organisations.map(org => ({
       access: organisationAccess[org.code],
       organisation: org,
     }))
@@ -78,10 +70,10 @@ class User extends Model {
         replacements: {
           courseUnitId,
         },
-      },
+      }
     )
 
-    const organisationIds = rows.flatMap((row) => Object.values(row))
+    const organisationIds = rows.flatMap(row => Object.values(row))
 
     const organisationAccess = organisations
       .filter(({ organisation }) => organisationIds.includes(organisation.id))
@@ -98,15 +90,9 @@ class User extends Model {
   async getTeacherAssociation(feedbackTarget) {
     return UserFeedbackTarget.findOne({
       where: {
-        feedbackTargetId:
-          typeof feedbackTarget === 'number'
-            ? feedbackTarget
-            : feedbackTarget.id,
+        feedbackTargetId: typeof feedbackTarget === 'number' ? feedbackTarget : feedbackTarget.id,
         userId: this.id,
-        [Op.or]: [
-          { accessStatus: 'RESPONSIBLE_TEACHER' },
-          { accessStatus: 'TEACHER' },
-        ],
+        [Op.or]: [{ accessStatus: 'RESPONSIBLE_TEACHER' }, { accessStatus: 'TEACHER' }],
       },
     })
   }
@@ -177,7 +163,7 @@ User.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = User

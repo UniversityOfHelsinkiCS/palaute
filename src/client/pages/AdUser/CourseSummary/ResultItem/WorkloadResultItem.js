@@ -7,13 +7,13 @@ import { sumBy, isEmpty, round } from 'lodash'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
 
-const normalizeMean = (mean) => {
+const normalizeMean = mean => {
   const diff = Math.abs(mean - 3)
 
   return diff / 2
 }
 
-const getArrow = (mean) => {
+const getArrow = mean => {
   const normalizedMean = normalizeMean(mean)
 
   const angle = mean < 3 ? -(normalizedMean * 90) : normalizedMean * 90
@@ -27,7 +27,7 @@ const getTooltipData = (distribution, question) => {
       ...acc,
       [curr.id]: curr.label,
     }),
-    {},
+    {}
   )
 
   const entries = Object.entries(distribution)
@@ -40,13 +40,7 @@ const getTooltipData = (distribution, question) => {
   }))
 }
 
-const WorkloadResultItem = ({
-  mean,
-  distribution,
-  previous,
-  question,
-  ...props
-}) => {
+const WorkloadResultItem = ({ mean, distribution, previous, question, ...props }) => {
   const { t, i18n } = useTranslation()
 
   const hasValue = !isEmpty(distribution)
@@ -61,8 +55,7 @@ const WorkloadResultItem = ({
       {tooltipData ? (
         tooltipData.map(({ id, label, percentage }) => (
           <div key={id}>
-            {getLanguageValue(label, i18n.language) ?? '-'}:{' '}
-            {round(percentage * 100, 0)}%
+            {getLanguageValue(label, i18n.language) ?? '-'}: {round(percentage * 100, 0)}%
           </div>
         ))
       ) : (
@@ -72,11 +65,7 @@ const WorkloadResultItem = ({
   )
 
   return (
-    <ResultItemBase
-      mean={5.0 - Math.abs((mean - 3) * 2.0)}
-      tooltipTitle={tooltipTitle}
-      {...props}
-    >
+    <ResultItemBase mean={5.0 - Math.abs((mean - 3) * 2.0)} tooltipTitle={tooltipTitle} {...props}>
       {hasValue ? getArrow(mean) : '–'}
     </ResultItemBase>
   )

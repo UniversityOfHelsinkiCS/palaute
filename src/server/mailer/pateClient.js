@@ -26,13 +26,13 @@ const pateClient = axios.create({
   },
 })
 
-const sleep = (time) =>
+const sleep = time =>
   // eslint-disable-next-line no-promise-executor-return
-  new Promise((resolve) => setTimeout(() => resolve(), time))
+  new Promise(resolve => setTimeout(() => resolve(), time))
 
-const sizeOf = (object) => Buffer.byteLength(JSON.stringify(object), 'utf-8')
+const sizeOf = object => Buffer.byteLength(JSON.stringify(object), 'utf-8')
 
-const calculateGoodChunkSize = (emails) => {
+const calculateGoodChunkSize = emails => {
   const safeByteLength = 8000 * 10 // kind of arbitrary. It also may go over this slightly but it shouldn't matter because this limit is so small
   const bytes = sizeOf(emails)
 
@@ -48,17 +48,15 @@ const sendToPate = async (options = {}) => {
     return options
   }
   const chunkSize = calculateGoodChunkSize(options.emails)
-  const chunkedEmails = _.chunk(options.emails, chunkSize).map((emails) => ({
+  const chunkedEmails = _.chunk(options.emails, chunkSize).map(emails => ({
     emails,
     settings: options.settings,
     template: options.template,
   }))
   logger.info(
-    `[Pate] sending ${options.emails.length} emails (${sizeOf(
-      options.emails,
-    )} bytes), in ${chunkedEmails.length} chunks of size ${chunkSize} (${sizeOf(
-      chunkedEmails[0],
-    )} bytes)`,
+    `[Pate] sending ${options.emails.length} emails (${sizeOf(options.emails)} bytes), in ${
+      chunkedEmails.length
+    } chunks of size ${chunkSize} (${sizeOf(chunkedEmails[0])} bytes)`
   )
   sleep(5000)
 
@@ -68,7 +66,7 @@ const sendToPate = async (options = {}) => {
     return null
   }
 
-  const sendChunkedMail = async (chunk) => {
+  const sendChunkedMail = async chunk => {
     try {
       await pateClient.post('/', chunk)
     } catch (error) {
@@ -96,9 +94,7 @@ const sendToPate = async (options = {}) => {
 }
 
 const sendEmail = async (listOfEmails, emailType = '') => {
-  logger.info(
-    `Sending email to ${listOfEmails.length} recipients, type = '${emailType}'`,
-  )
+  logger.info(`Sending email to ${listOfEmails.length} recipients, type = '${emailType}'`)
   const options = {
     template: {
       ...template,

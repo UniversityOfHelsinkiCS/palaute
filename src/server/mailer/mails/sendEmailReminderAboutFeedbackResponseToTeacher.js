@@ -51,15 +51,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: [
-          'id',
-          'username',
-          'email',
-          'language',
-          'secondaryEmail',
-          'firstName',
-          'lastName',
-        ],
+        attributes: ['id', 'username', 'email', 'language', 'secondaryEmail', 'firstName', 'lastName'],
         through: {
           where: {
             accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
@@ -75,28 +67,18 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter((fbt) => {
-    const disabledCourseCodes = fbt.courseUnit.organisations.flatMap(
-      (org) => org.disabledCourseCodes,
-    )
+  const filteredFeedbackTargets = feedbackTargets.filter(fbt => {
+    const disabledCourseCodes = fbt.courseUnit.organisations.flatMap(org => org.disabledCourseCodes)
     return !disabledCourseCodes.includes(fbt.courseUnit.courseCode)
   })
 
-  const filteredByFeedbacks = filteredFeedbackTargets.filter(
-    (fbt) => fbt.feedbackCount,
-  )
+  const filteredByFeedbacks = filteredFeedbackTargets.filter(fbt => fbt.feedbackCount)
 
   return filteredByFeedbacks
 }
 
-const buildReminderAboutFeedbackResponseToTeachers = (
-  courseNamesAndUrls,
-  courseName,
-  receivedBy,
-) => {
-  const teachers = receivedBy
-    ?.map((u) => `${u.firstName} ${u.lastName}`)
-    ?.join(', ')
+const buildReminderAboutFeedbackResponseToTeachers = (courseNamesAndUrls, courseName, receivedBy) => {
+  const teachers = receivedBy?.map(u => `${u.firstName} ${u.lastName}`)?.join(', ')
   const translations = {
     text: {
       en: `Dear teacher! <br/>
@@ -134,11 +116,7 @@ const buildReminderAboutFeedbackResponseToTeachers = (
   return translations
 }
 
-const emailReminderAboutFeedbackResponseToTeachers = (
-  teacher,
-  feedbackTarget,
-  allTeachers,
-) => {
+const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, allTeachers) => {
   const { language } = teacher
   const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
@@ -146,11 +124,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (
       ${feedbackTarget.courseUnit.name[language]}
       </a> <br/>`
 
-  const translations = buildReminderAboutFeedbackResponseToTeachers(
-    courseNamesAndUrls,
-    courseName,
-    allTeachers,
-  )
+  const translations = buildReminderAboutFeedbackResponseToTeachers(courseNamesAndUrls, courseName, allTeachers)
 
   const email = {
     to: teacher.email,
@@ -164,13 +138,11 @@ const emailReminderAboutFeedbackResponseToTeachers = (
 const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
 
-  const emailsToBeSent = feedbackTargets.flatMap((fbt) =>
-    fbt.users.map((user) =>
-      emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users),
-    ),
+  const emailsToBeSent = feedbackTargets.flatMap(fbt =>
+    fbt.users.map(user => emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users))
   )
 
-  const ids = feedbackTargets.map((target) => target.id)
+  const ids = feedbackTargets.map(target => target.id)
 
   FeedbackTarget.update(
     {
@@ -182,13 +154,10 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
           [Op.in]: ids,
         },
       },
-    },
+    }
   )
 
-  await pate.send(
-    emailsToBeSent,
-    'Remind teachers about giving counter feedback',
-  )
+  await pate.send(emailsToBeSent, 'Remind teachers about giving counter feedback')
 
   return emailsToBeSent
 }

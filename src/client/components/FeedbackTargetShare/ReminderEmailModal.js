@@ -14,9 +14,9 @@ import { TooltipButton } from '../common/TooltipButton'
 const styles = {
   container: {
     position: 'absolute',
-    backgroundColor: (theme) => theme.palette.background.paper,
-    boxShadow: (theme) => theme.shadows[5],
-    padding: (theme) => theme.spacing(4, 5, 3),
+    backgroundColor: theme => theme.palette.background.paper,
+    boxShadow: theme => theme.shadows[5],
+    padding: theme => theme.spacing(4, 5, 3),
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
@@ -45,10 +45,10 @@ const useSendReminderEmail = () => {
 
   const mutation = useMutation(mutationFn, {
     onSuccess: (response, variables) => {
-      queryClient.setQueryData(
-        ['feedbackTarget', String(variables.id)],
-        (feedbackTarget) => ({ ...feedbackTarget, ...response.data }),
-      )
+      queryClient.setQueryData(['feedbackTarget', String(variables.id)], feedbackTarget => ({
+        ...feedbackTarget,
+        ...response.data,
+      }))
     },
   })
 
@@ -102,7 +102,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
           value={reminder}
-          onChange={(e) => setReminder(e.target.value)}
+          onChange={e => setReminder(e.target.value)}
           fullWidth
           multiline
           rows={5}

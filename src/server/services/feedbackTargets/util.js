@@ -1,8 +1,4 @@
-const {
-  FeedbackTarget,
-  UserFeedbackTarget,
-  CourseRealisation,
-} = require('../../models')
+const { FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 
 const getFeedbackTarget = (id, userId) =>
   FeedbackTarget.findByPk(id, {

@@ -4,10 +4,7 @@ const { sequelize } = require('../db/dbConnection')
 
 class UserFeedbackTarget extends Model {
   hasTeacherAccess() {
-    return (
-      this.accessStatus === 'RESPONSIBLE_TEACHER' ||
-      this.accessStatus === 'TEACHER'
-    )
+    return this.accessStatus === 'RESPONSIBLE_TEACHER' || this.accessStatus === 'TEACHER'
   }
 
   hasStudentAccess() {
@@ -58,7 +55,7 @@ UserFeedbackTarget.init(
         },
       },
     },
-  },
+  }
 )
 
 module.exports = UserFeedbackTarget

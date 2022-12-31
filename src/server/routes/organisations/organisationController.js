@@ -13,9 +13,7 @@ const jamiClient = require('../../util/jamiClient')
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
 
-  return _.uniq(
-    updatedCourseCodes.filter((c) => organisationCourseCodes.includes(c)),
-  )
+  return _.uniq(updatedCourseCodes.filter(c => organisationCourseCodes.includes(c)))
 }
 
 const getOrganisations = async (req, res) => {
@@ -47,11 +45,7 @@ const updateOrganisation = async (req, res) => {
   const { user, body } = req
   const { code } = req.params
 
-  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(
-    user,
-    code,
-    { write: true },
-  )
+  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, { write: true })
 
   const updates = _.pick(body, [
     'studentListVisible',
@@ -60,27 +54,18 @@ const updateOrganisation = async (req, res) => {
     'publicQuestionIds',
   ])
 
-  if (
-    !hasAdminAccess &&
-    (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)
-  ) {
-    throw new ApplicationError(
-      403,
-      'Course codes can only be updated by organisation admins',
-    )
+  if (!hasAdminAccess && (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)) {
+    throw new ApplicationError(403, 'Course codes can only be updated by organisation admins')
   }
 
   if (updates.disabledCourseCodes) {
-    updates.disabledCourseCodes = await getUpdatedCourseCodes(
-      updates.disabledCourseCodes,
-      organisation,
-    )
+    updates.disabledCourseCodes = await getUpdatedCourseCodes(updates.disabledCourseCodes, organisation)
   }
 
   if (updates.studentListVisibleCourseCodes) {
     updates.studentListVisibleCourseCodes = await getUpdatedCourseCodes(
       updates.studentListVisibleCourseCodes,
-      organisation,
+      organisation
     )
   }
 
@@ -99,20 +84,15 @@ const getOrganisationByCode = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const theOrganisationAccess = organisationAccess.find(
-    ({ organisation }) => organisation.code === code,
-  )
+  const theOrganisationAccess = organisationAccess.find(({ organisation }) => organisation.code === code)
 
   if (!theOrganisationAccess) {
-    throw new ApplicationError(
-      `Organisation by code ${code} is not found or it is not accessible`,
-      404,
-    )
+    throw new ApplicationError(`Organisation by code ${code} is not found or it is not accessible`, 404)
   }
 
   const { organisation, access } = theOrganisationAccess
 
-  const tags = _.orderBy(await organisation.getTags(), (tag) => tag.name?.fi)
+  const tags = _.orderBy(await organisation.getTags(), tag => tag.name?.fi)
 
   const publicOrganisation = {
     ...organisation.toJSON(),
@@ -136,9 +116,7 @@ const getOrganisationLogs = async (req, res) => {
       code,
     },
     attributes: [],
-    order: [
-      [{ model: OrganisationLog, as: 'organisationLogs' }, 'createdAt', 'DESC'],
-    ],
+    order: [[{ model: OrganisationLog, as: 'organisationLogs' }, 'createdAt', 'DESC']],
     include: {
       model: OrganisationLog,
       as: 'organisationLogs',
@@ -159,9 +137,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const access = organisationAccess.filter(
-    (org) => org.organisation.code === code,
-  )
+  const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
     throw new ApplicationError('Forbidden', 403)

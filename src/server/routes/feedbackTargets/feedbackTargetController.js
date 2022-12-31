@@ -21,9 +21,7 @@ const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
 const { JWT_KEY } = require('../../util/config')
 const updateEnrolmentNotification = require('./updateEnrolmentNotification')
-const {
-  getEnrolmentNotification,
-} = require('../../services/enrolmentNotices/enrolmentNotices')
+const { getEnrolmentNotification } = require('../../services/enrolmentNotices/enrolmentNotices')
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -41,26 +39,12 @@ const getFeedbackTargetsForOrganisation = async (req, res) => {
   const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
   const feedbackTargets = await FeedbackTarget.findAll({
-    attributes: [
-      'id',
-      'name',
-      'feedbackCount',
-      'opensAt',
-      'closesAt',
-      'feedbackResponseEmailSent',
-    ],
+    attributes: ['id', 'name', 'feedbackCount', 'opensAt', 'closesAt', 'feedbackResponseEmailSent'],
     include: [
       {
         model: CourseRealisation,
         as: 'courseRealisation',
-        attributes: [
-          'id',
-          'name',
-          'startDate',
-          'endDate',
-          'isMoocCourse',
-          'teachingLanguages',
-        ],
+        attributes: ['id', 'name', 'startDate', 'endDate', 'isMoocCourse', 'teachingLanguages'],
         required: true,
         include: [
           {
@@ -104,24 +88,15 @@ const getFeedbackTargetsForOrganisation = async (req, res) => {
     ],
   })
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(
-    feedbackTargets,
-    (fbt) => fbt.dataValues.courseRealisation.id,
-  )
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.courseRealisation.id)
 
   const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
-    .map((fbt) => fbt.toJSON())
-    .map((fbt) => {
-      const studentCount = _.sumBy(fbt.userFeedbackTargets, (ufbt) =>
-        ufbt.accessStatus === 'STUDENT' ? 1 : 0,
-      )
+    .map(fbt => fbt.toJSON())
+    .map(fbt => {
+      const studentCount = _.sumBy(fbt.userFeedbackTargets, ufbt => (ufbt.accessStatus === 'STUDENT' ? 1 : 0))
       const teachers = fbt.userFeedbackTargets
-        .filter(
-          (ufbt) =>
-            ufbt.accessStatus === 'RESPONSIBLE_TEACHER' ||
-            ufbt.accessStatus === 'TEACHER',
-        )
-        .map((ufbt) => ufbt.user)
+        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' || ufbt.accessStatus === 'TEACHER')
+        .map(ufbt => ufbt.user)
 
       delete fbt.userFeedbackTargets
       return {
@@ -132,20 +107,20 @@ const getFeedbackTargetsForOrganisation = async (req, res) => {
       }
     })
 
-  const dateGrouped = Object.entries(
-    _.groupBy(feedbackTargetsWithStudentCounts, (fbt) => fbt.startDate),
-  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
+  const dateGrouped = Object.entries(_.groupBy(feedbackTargetsWithStudentCounts, fbt => fbt.startDate)).sort(
+    ([a], [b]) => compareAsc(Date.parse(a), Date.parse(b))
+  )
 
   const monthGrouped = Object.entries(
     _.groupBy(dateGrouped, ([date]) => {
       const d = Date.parse(date)
       return subDays(d, getDate(d) - 1) // first day of month
-    }),
+    })
   ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
 
-  const yearGrouped = Object.entries(
-    _.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date))),
-  ).sort(([a], [b]) => a.localeCompare(b))
+  const yearGrouped = Object.entries(_.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date)))).sort(([a], [b]) =>
+    a.localeCompare(b)
+  )
 
   return res.send(yearGrouped)
 }
@@ -155,18 +130,11 @@ const getOne = async (req, res) => {
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
   try {
-    const result = await getFeedbackTargetForUserById(
-      feedbackTargetId,
-      req.user,
-      req.isAdmin,
-    )
+    const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.isAdmin)
     return res.send(result)
   } catch (error) {
     if (error.status === 403) {
-      const enabled = await getEnrolmentNotification(
-        req.user.id,
-        feedbackTargetId,
-      )
+      const enabled = await getEnrolmentNotification(req.user.id, feedbackTargetId)
       return res.status(403).send({ enabled })
     }
     throw error
@@ -241,13 +209,7 @@ const getTargetsForCourseUnit = async (req, res) => {
         },
       ].filter(Boolean),
     },
-    order: [
-      [
-        { model: CourseRealisation, as: 'courseRealisation' },
-        'startDate',
-        'DESC',
-      ],
-    ],
+    order: [[{ model: CourseRealisation, as: 'courseRealisation' }, 'startDate', 'DESC']],
     include: [
       {
         model: UserFeedbackTarget.scope('teachers'),
@@ -291,7 +253,7 @@ const getTargetsForCourseUnit = async (req, res) => {
   }
 
   const formattedFeedbackTargets = feedbackTargets
-    .map((target) => ({
+    .map(target => ({
       ..._.pick(target.toJSON(), [
         'id',
         'name',
@@ -310,11 +272,7 @@ const getTargetsForCourseUnit = async (req, res) => {
       feedbackResponseGiven: target.feedbackResponse?.length > 3,
       feedbackResponseSent: target.feedbackResponseEmailSent,
     }))
-    .filter(
-      (fbt) =>
-        fbt.feedbackCount > 0 ||
-        Date.parse(fbt.courseRealisation.endDate) > new Date('2021-09-01'),
-    )
+    .filter(fbt => fbt.feedbackCount > 0 || Date.parse(fbt.courseRealisation.endDate) > new Date('2021-09-01'))
 
   return res.send(formattedFeedbackTargets)
 }
@@ -323,11 +281,7 @@ const getFeedbacks = async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
-  const feedbackData = await getFeedbacksForUserById(
-    feedbackTargetId,
-    user,
-    isAdmin,
-  )
+  const feedbackData = await getFeedbacksForUserById(feedbackTargetId, user, isAdmin)
 
   return res.send(feedbackData)
 }
@@ -368,27 +322,20 @@ const remindStudentsOnFeedback = async (req, res) => {
   if (req.isAdmin) {
     relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
   } else {
-    const feedbackTargetsUserIsTeacherTo =
-      await req.user.feedbackTargetsHasTeacherAccessTo()
+    const feedbackTargetsUserIsTeacherTo = await req.user.feedbackTargetsHasTeacherAccessTo()
 
-    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(
-      (target) => target.id === feedbackTargetId,
-    )
+    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(target => target.id === feedbackTargetId)
   }
 
   if (!relevantFeedbackTarget)
-    throw new ApplicationError(
-      `No feedback target found with id ${feedbackTargetId} for user`,
-      404,
-    )
+    throw new ApplicationError(`No feedback target found with id ${feedbackTargetId} for user`, 404)
 
   const { data: reminder } = req.body.data
 
   await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
 
   return res.send({
-    feedbackReminderLastSentAt:
-      relevantFeedbackTarget.feedbackReminderLastSentAt,
+    feedbackReminderLastSentAt: relevantFeedbackTarget.feedbackReminderLastSentAt,
   })
 }
 
@@ -407,11 +354,7 @@ const openFeedbackImmediately = async (req, res) => {
     await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
   }
 
-  await createFeedbackTargetLog(
-    updatedFeedbackTarget,
-    { openImmediately: true },
-    user,
-  )
+  await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
   return res.sendStatus(200)
 }
@@ -482,28 +425,19 @@ const getLogs = async (req, res) => {
     throw new ApplicationError('User is not authorized', 403)
   }
 
-  const { feedbackTargetLogs } = await FeedbackTarget.findByPk(
-    feedbackTargetId,
-    {
-      attributes: [],
-      order: [
-        [
-          { model: FeedbackTargetLog, as: 'feedbackTargetLogs' },
-          'createdAt',
-          'DESC',
-        ],
-      ],
+  const { feedbackTargetLogs } = await FeedbackTarget.findByPk(feedbackTargetId, {
+    attributes: [],
+    order: [[{ model: FeedbackTargetLog, as: 'feedbackTargetLogs' }, 'createdAt', 'DESC']],
+    include: {
+      model: FeedbackTargetLog,
+      as: 'feedbackTargetLogs',
+      attributes: ['data', 'createdAt'],
       include: {
-        model: FeedbackTargetLog,
-        as: 'feedbackTargetLogs',
-        attributes: ['data', 'createdAt'],
-        include: {
-          model: User,
-          as: 'user',
-        },
+        model: User,
+        as: 'user',
       },
     },
-  )
+  })
 
   return res.send(feedbackTargetLogs)
 }
@@ -548,10 +482,7 @@ const adRouter = Router()
 // @TODO Maybe refactor these 4 routes to use query params, eg. GET /targets?course-unit=TKT1001
 adRouter.get('/for-student', getForStudent)
 adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
-adRouter.get(
-  '/for-course-realisation/:id',
-  getFeedbackTargetsForCourseRealisation,
-)
+adRouter.get('/for-course-realisation/:id', getFeedbackTargetsForCourseRealisation)
 adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
 
 adRouter.get('/:id', getOne)

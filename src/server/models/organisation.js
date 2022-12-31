@@ -1,12 +1,4 @@
-const {
-  Model,
-  JSONB,
-  STRING,
-  BOOLEAN,
-  ARRAY,
-  TEXT,
-  INTEGER,
-} = require('sequelize')
+const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT, INTEGER } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 class Organisation extends Model {
@@ -26,10 +18,10 @@ class Organisation extends Model {
           organisationId: this.id,
         },
         type: sequelize.QueryTypes.SELECT,
-      },
+      }
     )
 
-    const courseCodes = courseUnitRows.map((row) => row.course_code)
+    const courseCodes = courseUnitRows.map(row => row.course_code)
 
     return courseCodes
   }
@@ -75,7 +67,7 @@ Organisation.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = Organisation

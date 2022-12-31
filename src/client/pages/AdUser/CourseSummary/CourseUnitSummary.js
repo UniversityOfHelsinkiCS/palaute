@@ -25,21 +25,13 @@ const CourseUnitSummary = ({ courseUnits, questions, access }) => {
           closesAt,
           hiddenCount,
         }) => {
-          const feedbackResponseStatus = getFeedbackResponseGiven(
-            feedbackResponseGiven,
-            closesAt,
-          )
+          const feedbackResponseStatus = getFeedbackResponseGiven(feedbackResponseGiven, closesAt)
 
           return (
             <Fragment key={courseCode}>
               <ResultsRow
                 link={`/course-summary/${courseCode}`}
-                label={
-                  <CourseUnitLabel
-                    name={getLanguageValue(name, i18n.language)}
-                    code={courseCode}
-                  />
-                }
+                label={<CourseUnitLabel name={getLanguageValue(name, i18n.language)} code={courseCode} />}
                 level={1}
                 results={results}
                 questions={questions}
@@ -61,7 +53,7 @@ const CourseUnitSummary = ({ courseUnits, questions, access }) => {
               />
             </Fragment>
           )
-        },
+        }
       )}
       <DividerRow />
     </>

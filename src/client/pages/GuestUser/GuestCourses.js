@@ -10,18 +10,18 @@ import useNoadUser from '../../hooks/useNoadUser'
 
 const styles = {
   heading: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   statusTabs: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   progressContainer: {
-    padding: (theme) => theme.spacing(4, 0),
+    padding: theme => theme.spacing(4, 0),
     display: 'table',
     justifyContent: 'center',
   },
   courseRealisationItem: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   container: {
     display: 'flex',
@@ -67,7 +67,7 @@ const GuestCourses = () => {
         {t('userFeedbacks:mainHeading')}
       </Typography>
       {!feedbackTargets.length && <NoOpenFeedbacks t={t} />}
-      {feedbackTargets.map((feedbackTarget) => {
+      {feedbackTargets.map(feedbackTarget => {
         const { courseUnit } = feedbackTarget
         const translatedName = getLanguageValue(courseUnit.name, i18n.language)
 
@@ -77,10 +77,7 @@ const GuestCourses = () => {
               <Typography variant="h6" component="h2">
                 {translatedName}
               </Typography>
-              <GuestFeedbackTargetItem
-                feedbackTarget={feedbackTarget}
-                key={feedbackTarget.id}
-              />
+              <GuestFeedbackTargetItem feedbackTarget={feedbackTarget} key={feedbackTarget.id} />
             </CardContent>
           </Card>
         )

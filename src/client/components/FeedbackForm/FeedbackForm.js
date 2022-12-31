@@ -35,7 +35,7 @@ const QuestionItem = ({ question, name }) => {
 
 const FeedbackForm = ({ questions = [], name = 'answers' }) => (
   <div>
-    {questions.map((question) => (
+    {questions.map(question => (
       <QuestionItem
         name={`${name}.${question.id.toString()}`}
         type={question.type}

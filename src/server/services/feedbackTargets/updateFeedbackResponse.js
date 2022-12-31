@@ -4,19 +4,11 @@ const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { getFeedbackTarget } = require('./util')
 
-const isTooOld = (feedbackTarget) =>
-  differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
+const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
-const updateFeedbackResponse = async ({
-  feedbackTargetId,
-  user,
-  isAdmin,
-  responseText,
-  sendEmail,
-}) => {
+const updateFeedbackResponse = async ({ feedbackTargetId, user, isAdmin, responseText, sendEmail }) => {
   const feedbackTarget = await getFeedbackTarget(feedbackTargetId, user.id)
-  if (!feedbackTarget)
-    ApplicationError.NotFound('Feedbacktarget for response not found')
+  if (!feedbackTarget) ApplicationError.NotFound('Feedbacktarget for response not found')
 
   const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
   const access = await getAccess({
@@ -31,27 +23,18 @@ const updateFeedbackResponse = async ({
   }
 
   if (sendEmail && feedbackTarget.feedbackResponseEmailSent) {
-    throw new ApplicationError(
-      'Counter feedback email has already been sent',
-      400,
-    )
+    throw new ApplicationError('Counter feedback email has already been sent', 400)
   }
 
   if (isTooOld(feedbackTarget)) {
-    ApplicationError.Forbidden(
-      'Cannot send counter feedback because feedback closed over 6 months ago',
-    )
+    ApplicationError.Forbidden('Cannot send counter feedback because feedback closed over 6 months ago')
   }
 
   feedbackTarget.feedbackResponse = responseText
-  feedbackTarget.feedbackResponseEmailSent =
-    sendEmail || feedbackTarget.feedbackResponseEmailSent
+  feedbackTarget.feedbackResponseEmailSent = sendEmail || feedbackTarget.feedbackResponseEmailSent
 
   if (sendEmail) {
-    await mailer.sendFeedbackSummaryReminderToStudents(
-      feedbackTarget,
-      responseText,
-    )
+    await mailer.sendFeedbackSummaryReminderToStudents(feedbackTarget, responseText)
   }
 
   await feedbackTarget.save()

@@ -39,13 +39,7 @@ const styles = {
 const EmailAccordion = () => {
   const [emailData, getTheEmails] = useEmailsToBeSent()
 
-  const {
-    emails,
-    studentEmails,
-    teacherEmails,
-    teacherEmailCounts,
-    studentEmailCounts,
-  } = emailData
+  const { emails, studentEmails, teacherEmails, teacherEmailCounts, studentEmailCounts } = emailData
 
   return (
     <Box mb={2} mt={2}>
@@ -60,18 +54,12 @@ const EmailAccordion = () => {
         </AccordionSummary>
         <AccordionDetails sx={styles.details}>
           <div css={styles.emailCounts}>
-            <Typography sx={styles.count}>
-              Student emails TODAY: {studentEmails}
-            </Typography>
-            <Typography sx={styles.count}>
-              Teacher emails TODAY: {teacherEmails}
-            </Typography>
+            <Typography sx={styles.count}>Student emails TODAY: {studentEmails}</Typography>
+            <Typography sx={styles.count}>Teacher emails TODAY: {teacherEmails}</Typography>
           </div>
           <div css={styles.emailCounts}>
             <div css={styles.container}>
-              <Typography>
-                Approximate teacher emails this week (~ +5-10%)
-              </Typography>
+              <Typography>Approximate teacher emails this week (~ +5-10%)</Typography>
               {teacherEmailCounts.map((row, index) => (
                 <Typography key={index}>
                   {row.date}: {row.count}
@@ -79,9 +67,7 @@ const EmailAccordion = () => {
               ))}
             </div>
             <div css={styles.container}>
-              <Typography>
-                Approximate student emails this week (~ +5-10%)
-              </Typography>
+              <Typography>Approximate student emails this week (~ +5-10%)</Typography>
               {studentEmailCounts.map((row, index) => (
                 <Typography key={index}>
                   {row.date}: {row.count}
@@ -98,7 +84,7 @@ const EmailAccordion = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {emails.map((email) => (
+              {emails.map(email => (
                 <TableRow key={email.to}>
                   <TableCell>{email.to}</TableCell>
                   <TableCell>{email.subject}</TableCell>

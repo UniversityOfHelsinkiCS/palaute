@@ -7,12 +7,12 @@ import PreviewBase from './PreviewBase'
 
 const styles = {
   optionLabel: {
-    marginLeft: (theme) => theme.spacing(0.5),
-    marginRight: (theme) => theme.spacing(0.5),
+    marginLeft: theme => theme.spacing(0.5),
+    marginRight: theme => theme.spacing(0.5),
   },
   dontKnowLabel: {
-    marginLeft: (theme) => theme.spacing(2),
-    marginRight: (theme) => theme.spacing(0.5),
+    marginLeft: theme => theme.spacing(2),
+    marginRight: theme => theme.spacing(0.5),
   },
 }
 
@@ -23,7 +23,7 @@ const LikertPreview = ({ question, language }) => {
   const description = getLanguageValue(question.data?.description, language)
   const required = question.required ?? false
 
-  const parseOption = (option) => {
+  const parseOption = option => {
     if (option !== 0) return option.toString()
 
     if (language === 'fi') return 'eos'
@@ -33,7 +33,7 @@ const LikertPreview = ({ question, language }) => {
   return (
     <PreviewBase label={label} description={description} required={required}>
       <RadioGroup row>
-        {options.map((option) => (
+        {options.map(option => (
           <FormControlLabel
             labelPlacement="top"
             value={option.toString()}

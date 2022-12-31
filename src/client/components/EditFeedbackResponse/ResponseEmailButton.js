@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-} from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -16,9 +9,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{t('feedbackResponse:dialogSendEmailTitle')}</DialogTitle>
-      <DialogContent>
-        {t('feedbackResponse:dialogSendEmailContent')}
-      </DialogContent>
+      <DialogContent>{t('feedbackResponse:dialogSendEmailContent')}</DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
           {t('feedbackResponse:dialogCancel')}
@@ -56,11 +47,7 @@ const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
 
   return (
     <>
-      <SubmitResponseDialog
-        open={submitDialogOpen}
-        onClose={handleCloseSubmitDialog}
-        onSubmit={handleSubmit}
-      />
+      <SubmitResponseDialog open={submitDialogOpen} onClose={handleCloseSubmitDialog} onSubmit={handleSubmit} />
       <Box display="flex" mr={2}>
         <Button
           disabled={disabled}
@@ -71,9 +58,7 @@ const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
           style={{ width: 130 }}
           data-cy="openFeedbackResponseSubmitDialog"
         >
-          {sendEmail
-            ? t('feedbackResponse:dialogSendEmailSubmit')
-            : t('feedbackResponse:dialogSaveSubmit')}
+          {sendEmail ? t('feedbackResponse:dialogSendEmailSubmit') : t('feedbackResponse:dialogSaveSubmit')}
         </Button>
       </Box>
     </>

@@ -1,24 +1,12 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Switch,
-  FormGroup,
-  FormControlLabel,
-} from '@mui/material'
+import { Box, Typography, Card, CardContent, Switch, FormGroup, FormControlLabel } from '@mui/material'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
 
-const updateContinuousFeedbackStatus = async ({
-  id,
-  continuousFeedbackEnabled,
-  sendContinuousFeedbackDigestEmail,
-}) => {
+const updateContinuousFeedbackStatus = async ({ id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail }) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, {
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
@@ -28,19 +16,14 @@ const updateContinuousFeedbackStatus = async ({
 }
 
 const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
-  const { id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail } =
-    feedbackTarget
+  const { id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail } = feedbackTarget
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
   const mutation = useMutation(updateContinuousFeedbackStatus)
 
-  const [feedbackEnabled, setFeedbackEnabled] = useState(
-    continuousFeedbackEnabled,
-  )
-  const [sendDigestEmail, setSendDigestEmail] = useState(
-    sendContinuousFeedbackDigestEmail,
-  )
+  const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
+  const [sendDigestEmail, setSendDigestEmail] = useState(sendContinuousFeedbackDigestEmail)
 
   const handleFeedbackEnabledChange = async () => {
     try {
@@ -73,9 +56,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
       <Card>
         <CardContent>
           <Box mb={4}>
-            <Typography variant="h6">
-              {t('feedbackTargetView:continuousFeedbackTab')}
-            </Typography>
+            <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackTab')}</Typography>
           </Box>
           <FormGroup>
             <FormControlLabel

@@ -8,37 +8,23 @@ import apiClient from '../../../util/apiClient'
 import errors from '../../../util/errorMessage'
 
 const Error = ({ error }) => {
-  const [enabled, setEnabled] = React.useState(
-    Boolean(error.response?.data?.enabled),
-  )
+  const [enabled, setEnabled] = React.useState(Boolean(error.response?.data?.enabled))
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { id } = useParams()
 
   // todo refactor into mutation
   const onSubmit = async () => {
-    const res = await apiClient.put(
-      `/feedback-targets/${id}/enrolment-notification`,
-      { enabled: !enabled },
-    )
+    const res = await apiClient.put(`/feedback-targets/${id}/enrolment-notification`, { enabled: !enabled })
     const { enabled: newEnabled, email } = res.data
     setEnabled(newEnabled)
-    enqueueSnackbar(
-      t(
-        `feedbackTargetView:${
-          newEnabled ? 'notificationEnabled' : 'notificationDisabled'
-        }`,
-        { email },
-      ),
-      { autoHideDuration: 10_000 },
-    )
+    enqueueSnackbar(t(`feedbackTargetView:${newEnabled ? 'notificationEnabled' : 'notificationDisabled'}`, { email }), {
+      autoHideDuration: 10_000,
+    })
   }
 
   return (
-    <ErrorView
-      message={errors.getFeedbackTargetError(error)}
-      response={error.response}
-    >
+    <ErrorView message={errors.getFeedbackTargetError(error)} response={error.response}>
       {error.response?.status === 403 && (
         <FormControlLabel
           control={<Checkbox checked={enabled} onChange={onSubmit} />}

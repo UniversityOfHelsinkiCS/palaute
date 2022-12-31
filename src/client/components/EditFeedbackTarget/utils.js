@@ -5,50 +5,40 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import queryClient from '../../util/queryClient'
 import { copyQuestion } from '../QuestionEditor/utils'
 
-export const getUpperLevelQuestions = (feedbackTarget) => {
+export const getUpperLevelQuestions = feedbackTarget => {
   const { universitySurvey, programmeSurveys } = feedbackTarget.surveys ?? {}
 
-  return [
-    ...(universitySurvey?.questions ?? []),
-    ...(programmeSurveys?.questions ?? []),
-  ]
+  return [...(universitySurvey?.questions ?? []), ...(programmeSurveys?.questions ?? [])]
 }
 
-export const getQuestionsInitialValues = (feedbackTarget) => {
-  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds } =
-    feedbackTarget
+export const getQuestionsInitialValues = feedbackTarget => {
+  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds } = feedbackTarget
 
   const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
     (questions, survey) => questions.concat(survey.questions),
-    [],
+    []
   )
 
   const questions = [
-    ...(surveys.universitySurvey?.questions ?? []).map((question) => ({
+    ...(surveys.universitySurvey?.questions ?? []).map(question => ({
       ...question,
       editable: false,
       public: publicQuestionIds.includes(question.id),
-      publicityConfigurable: publicityConfigurableQuestionIds.includes(
-        question.id,
-      ),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(question.id),
       chip: 'questionEditor:universityQuestion',
     })),
-    ...(programmeSurveyQuestions ?? []).map((question) => ({
+    ...(programmeSurveyQuestions ?? []).map(question => ({
       ...question,
       editable: false,
       public: publicQuestionIds.includes(question.id),
-      publicityConfigurable: publicityConfigurableQuestionIds.includes(
-        question.id,
-      ),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(question.id),
       chip: 'questionEditor:programmeQuestion',
     })),
-    ...(surveys.teacherSurvey?.questions ?? []).map((question) => ({
+    ...(surveys.teacherSurvey?.questions ?? []).map(question => ({
       ...question,
       editable: true,
       public: publicQuestionIds.includes(question.id),
-      publicityConfigurable: publicityConfigurableQuestionIds.includes(
-        question.id,
-      ),
+      publicityConfigurable: publicityConfigurableQuestionIds.includes(question.id),
     })),
   ]
 
@@ -89,11 +79,7 @@ export const saveQuestionsValues = async (values, feedbackTarget) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
 
   const { questions: updatedQuestions } = data
-  if (
-    updatedQuestions &&
-    Array.isArray(updatedQuestions) &&
-    updatedQuestions.length > 0
-  ) {
+  if (updatedQuestions && Array.isArray(updatedQuestions) && updatedQuestions.length > 0) {
     // update cache
     queryClient.refetchQueries(['feedbackTarget', String(id)])
   }
@@ -101,16 +87,16 @@ export const saveQuestionsValues = async (values, feedbackTarget) => {
   return data
 }
 
-export const copyQuestionsFromFeedbackTarget = (feedbackTarget) => {
+export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
   const questions = feedbackTarget.surveys?.teacherSurvey?.questions ?? []
 
-  return questions.map((q) => ({
+  return questions.map(q => ({
     ...copyQuestion(q),
     editable: true,
   }))
 }
 
-export const feedbackTargetIsOpenOrClosed = (feedbackTarget) => {
+export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
   const closesAt = new Date(feedbackTarget.closesAt)
 
   return new Date() > closesAt || feedbackTargetIsOpen(feedbackTarget)
@@ -138,18 +124,14 @@ export const getOrganisationNames = (feedbackTarget, language) => {
   }
 }
 
-export const validateQuestions = (values) => {
+export const validateQuestions = values => {
   const { questions } = values
 
   const editableQuestions = questions.filter(({ editable }) => editable)
 
   for (const question of editableQuestions) {
-    if (
-      question.type === 'SINGLE_CHOICE' ||
-      question.type === 'MULTIPLE_CHOICE'
-    ) {
-      if (!question.data.options || question.data.options.length < 1)
-        return false
+    if (question.type === 'SINGLE_CHOICE' || question.type === 'MULTIPLE_CHOICE') {
+      if (!question.data.options || question.data.options.length < 1) return false
     }
   }
   return true

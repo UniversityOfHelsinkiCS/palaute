@@ -1,14 +1,7 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const {
-  Survey,
-  Question,
-  Organisation,
-  OrganisationLog,
-  FeedbackTargetLog,
-  User,
-} = require('../models')
+const { Survey, Question, Organisation, OrganisationLog, FeedbackTargetLog, User } = require('../models')
 
 const createOrganisationSurveyLog = async (survey, questions, user) => {
   let previousQuestions = await Question.findAll({
@@ -17,7 +10,7 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
     },
     attributes: ['id', 'type', 'data', 'required'],
   })
-  previousQuestions = previousQuestions.map((question) => question.dataValues)
+  previousQuestions = previousQuestions.map(question => question.dataValues)
 
   questions = questions.map(({ id, type, data, required }) => ({
     id,
@@ -33,9 +26,7 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
     attributes: ['id'],
   })
 
-  const deletedQuestions = previousQuestions.filter(
-    (question) => !questions.find((q) => q.id === question.id),
-  )
+  const deletedQuestions = previousQuestions.filter(question => !questions.find(q => q.id === question.id))
 
   for (const question of deletedQuestions) {
     const data = {
@@ -56,17 +47,9 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
   for (const question of questions) {
     let data
     if (question.id) {
-      const previousQuestion = previousQuestions.find(
-        (q) => q.id === question.id,
-      )
+      const previousQuestion = previousQuestions.find(q => q.id === question.id)
       // Get the changed values of the question
-      const difference = _.fromPairs(
-        _.differenceWith(
-          _.toPairs(question),
-          _.toPairs(previousQuestion),
-          _.isEqual,
-        ),
-      )
+      const difference = _.fromPairs(_.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), _.isEqual))
       // eslint-disable-next-line no-continue
       if (Object.keys(difference).length === 0) continue
 
@@ -108,7 +91,7 @@ const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
     },
     attributes: ['id', 'type', 'data', 'required'],
   })
-  previousQuestions = previousQuestions.map((question) => question.dataValues)
+  previousQuestions = previousQuestions.map(question => question.dataValues)
 
   questions = questions.map(({ id, type, data, required }) => ({
     id,
@@ -117,9 +100,7 @@ const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
     required,
   }))
 
-  const deletedQuestions = previousQuestions.filter(
-    (question) => !questions.find((q) => q.id === question.id),
-  )
+  const deletedQuestions = previousQuestions.filter(question => !questions.find(q => q.id === question.id))
 
   for (const question of deletedQuestions) {
     const data = {
@@ -140,17 +121,9 @@ const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
   for (const question of questions) {
     let data
     if (question.id) {
-      const previousQuestion = previousQuestions.find(
-        (q) => q.id === question.id,
-      )
+      const previousQuestion = previousQuestions.find(q => q.id === question.id)
       // Get the changed values of the question
-      const difference = _.fromPairs(
-        _.differenceWith(
-          _.toPairs(question),
-          _.toPairs(previousQuestion),
-          _.isEqual,
-        ),
-      )
+      const difference = _.fromPairs(_.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), _.isEqual))
 
       // eslint-disable-next-line no-continue
       if (Object.keys(difference).length === 0) continue
@@ -186,48 +159,32 @@ const createOrganisationLog = async (organisation, updates, user) => {
   const data = {}
 
   if (Array.isArray(updates.disabledCourseCodes)) {
-    data.disabledCourseCodes = _.difference(
-      updates.disabledCourseCodes,
-      organisation.disabledCourseCodes,
-    )
-    data.enabledCourseCodes = _.difference(
-      organisation.disabledCourseCodes,
-      updates.disabledCourseCodes,
-    )
+    data.disabledCourseCodes = _.difference(updates.disabledCourseCodes, organisation.disabledCourseCodes)
+    data.enabledCourseCodes = _.difference(organisation.disabledCourseCodes, updates.disabledCourseCodes)
   }
 
   if (Array.isArray(updates.studentListVisibleCourseCodes)) {
     data.enabledStudentList = _.difference(
       updates.studentListVisibleCourseCodes,
-      organisation.studentListVisibleCourseCodes,
+      organisation.studentListVisibleCourseCodes
     )
     data.disabledStudentList = _.difference(
       organisation.studentListVisibleCourseCodes,
-      updates.studentListVisibleCourseCodes,
+      updates.studentListVisibleCourseCodes
     )
   }
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    data.addedPublicQuestionIds = _.difference(
-      updates.publicQuestionIds,
-      organisation.publicQuestionIds,
-    )
-    data.removedPublicQuestionIds = _.difference(
-      organisation.publicQuestionIds,
-      updates.publicQuestionIds,
-    )
+    data.addedPublicQuestionIds = _.difference(updates.publicQuestionIds, organisation.publicQuestionIds)
+    data.removedPublicQuestionIds = _.difference(organisation.publicQuestionIds, updates.publicQuestionIds)
   }
 
-  if (updates.studentListVisible !== undefined)
-    data.studentListVisible = Boolean(updates.studentListVisible)
+  if (updates.studentListVisible !== undefined) data.studentListVisible = Boolean(updates.studentListVisible)
 
   if (updates.responsibleUserId !== undefined) {
-    data.newFeedbackCorrespondent = await User.findByPk(
-      updates.responsibleUserId,
-      {
-        attributes: ['id', 'firstName', 'lastName'],
-      },
-    )
+    data.newFeedbackCorrespondent = await User.findByPk(updates.responsibleUserId, {
+      attributes: ['id', 'firstName', 'lastName'],
+    })
   }
 
   await OrganisationLog.create({
@@ -241,14 +198,8 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
   const data = {}
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    const enabledPublicQuestionIds = _.difference(
-      updates.publicQuestionIds,
-      feedbackTarget.publicQuestionIds,
-    )
-    const disabledPublicQuestionIds = _.difference(
-      feedbackTarget.publicQuestionIds,
-      updates.publicQuestionIds,
-    )
+    const enabledPublicQuestionIds = _.difference(updates.publicQuestionIds, feedbackTarget.publicQuestionIds)
+    const disabledPublicQuestionIds = _.difference(feedbackTarget.publicQuestionIds, updates.publicQuestionIds)
 
     data.enabledPublicQuestions = await Question.findAll({
       where: { id: enabledPublicQuestionIds },
@@ -260,19 +211,11 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
     })
   }
 
-  if (
-    updates.opensAt &&
-    new Date(updates.opensAt).toDateString() !==
-      feedbackTarget.opensAt.toDateString()
-  ) {
+  if (updates.opensAt && new Date(updates.opensAt).toDateString() !== feedbackTarget.opensAt.toDateString()) {
     data.opensAt = updates.opensAt
   }
 
-  if (
-    updates.closesAt &&
-    new Date(updates.closesAt).toDateString() !==
-      feedbackTarget.closesAt.toDateString()
-  ) {
+  if (updates.closesAt && new Date(updates.closesAt).toDateString() !== feedbackTarget.closesAt.toDateString()) {
     data.closesAt = updates.closesAt
   }
 

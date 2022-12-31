@@ -1,17 +1,6 @@
 import React, { useRef, useState, forwardRef } from 'react'
 
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Menu,
-  MenuItem,
-  IconButton,
-  Divider,
-  ButtonBase,
-  Box,
-  Container,
-} from '@mui/material'
+import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Divider, ButtonBase, Box, Container } from '@mui/material'
 import _ from 'lodash'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -47,7 +36,7 @@ const styles = {
     color: 'inherit',
     textDecoration: 'none',
     marginRight: 1,
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    fontWeight: theme => theme.typography.fontWeightMedium,
     padding: '5px 12px',
     backgroundColor: 'rgba(255, 255, 255, 0)',
     transition: 'background-color 0.1s',
@@ -71,10 +60,10 @@ const styles = {
     },
   },
   languageMenuDivider: {
-    margin: (theme) => theme.spacing(1, 0),
+    margin: theme => theme.spacing(1, 0),
   },
   norppaFeedback: {
-    background: (theme) => theme.palette.warning.main,
+    background: theme => theme.palette.warning.main,
     color: 'black',
     padding: '6px 12px',
     borderRadius: 4,
@@ -82,7 +71,7 @@ const styles = {
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
-      background: (theme) => theme.palette.warning.light,
+      background: theme => theme.palette.warning.light,
     },
   },
   mailIcon: {
@@ -96,8 +85,8 @@ const styles = {
     justifyContent: 'center',
   },
   activeItem: {
-    color: (theme) => theme.palette.primary.main,
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    color: theme => theme.palette.primary.main,
+    fontWeight: theme => theme.typography.fontWeightMedium,
   },
 }
 
@@ -106,12 +95,8 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
 
   return (
     <Box sx={styles.container} ref={ref}>
-      {languages.map((l) => (
-        <MenuItem
-          key={l}
-          sx={[styles.item, language === l && styles.activeItem]}
-          onClick={() => onLanguageChange(l)}
-        >
+      {languages.map(l => (
+        <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
           {l.toUpperCase()}
         </MenuItem>
       ))}
@@ -126,8 +111,7 @@ const NavBar = ({ guest = false }) => {
   const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
     enabled: !guest,
   })
-  const [seenBannerIds, setSeenBannerIds] =
-    useLocalStorageState('seen-banner-ids')
+  const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -136,9 +120,7 @@ const NavBar = ({ guest = false }) => {
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
-    feedbackTargets?.waiting?.length ||
-      feedbackTargets?.given?.length ||
-      feedbackTargets?.ended?.length,
+    feedbackTargets?.waiting?.length || feedbackTargets?.given?.length || feedbackTargets?.ended?.length
   )
   const isAdminUser = authorizedUser?.isAdmin ?? false
 
@@ -156,14 +138,12 @@ const NavBar = ({ guest = false }) => {
     setMenuOpen(true)
   }
 
-  const handleBannerClose = (id) => {
+  const handleBannerClose = id => {
     const newIds = _.uniq((seenBannerIds ?? []).concat(id))
     setSeenBannerIds(newIds)
   }
 
-  const fullName = [authorizedUser?.firstName, authorizedUser?.lastName]
-    .filter(Boolean)
-    .join(' ')
+  const fullName = [authorizedUser?.firstName, authorizedUser?.lastName].filter(Boolean).join(' ')
 
   const menuLabel = fullName || t('navBar:nameFallback')
 
@@ -175,12 +155,7 @@ const NavBar = ({ guest = false }) => {
   }
 
   const desktopMenuButton = (
-    <Button
-      color="inherit"
-      endIcon={<KeyboardArrowDownIcon />}
-      sx={styles.menuButton}
-      {...menuButtonProps}
-    >
+    <Button color="inherit" endIcon={<KeyboardArrowDownIcon />} sx={styles.menuButton} {...menuButtonProps}>
       <PersonOutlined />
       <Box fontSize={14} ml={1}>
         {menuLabel}
@@ -189,13 +164,7 @@ const NavBar = ({ guest = false }) => {
   )
 
   const mobileMenuButton = (
-    <IconButton
-      color="inherit"
-      sx={styles.menuButton}
-      aria-label={menuLabel}
-      {...menuButtonProps}
-      size="large"
-    >
+    <IconButton color="inherit" sx={styles.menuButton} aria-label={menuLabel} {...menuButtonProps} size="large">
       <MenuIcon />
     </IconButton>
   )
@@ -223,7 +192,7 @@ const NavBar = ({ guest = false }) => {
     },
   ]
     .filter(Boolean)
-    .map((link) => ({
+    .map(link => ({
       ...link,
       active: matchPath(pathname, { path: link.to }),
     }))
@@ -231,13 +200,7 @@ const NavBar = ({ guest = false }) => {
   const navBarLinks = (
     <Box sx={styles.linkContainer}>
       {links.map(({ label, to, active }, index) => (
-        <ButtonBase
-          component={Link}
-          key={index}
-          sx={[styles.link, active && styles.activeLink]}
-          to={to}
-          focusRipple
-        >
+        <ButtonBase component={Link} key={index} sx={[styles.link, active && styles.activeLink]} to={to} focusRipple>
           <Box fontWeight="fontWeightMedium" fontSize={15} mx={1}>
             {label}
           </Box>
@@ -260,52 +223,33 @@ const NavBar = ({ guest = false }) => {
     </MenuItem>
   ))
 
-  const changeLanguage = (lang) => {
+  const changeLanguage = lang => {
     i18n.changeLanguage(lang)
     handleCloseMenu()
   }
 
   const menu = (
-    <Menu
-      id="navBarMenu"
-      anchorEl={menuButtonRef.current}
-      keepMounted
-      open={menuOpen}
-      onClose={handleCloseMenu}
-    >
-      <LanguageMenu
-        language={i18n.language}
-        onLanguageChange={changeLanguage}
-      />
+    <Menu id="navBarMenu" anchorEl={menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
+      <LanguageMenu language={i18n.language} onLanguageChange={changeLanguage} />
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
       {!guest && isMobile && mobileMenuLinks}
-      {!guest && (
-        <MenuItem onClick={() => setPermissionsWindowOpen(true)}>
-          {t('navBar:userInformation')}
-        </MenuItem>
-      )}
+      {!guest && <MenuItem onClick={() => setPermissionsWindowOpen(true)}>{t('navBar:userInformation')}</MenuItem>}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
-      {!guest && (
-        <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>
-      )}
+      {!guest && <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>}
     </Menu>
   )
 
   return (
     <>
-      <UserPermissionsWindow
-        isOpen={permissionsWindowOpen}
-        onClose={() => setPermissionsWindowOpen(false)}
-      />
+      <UserPermissionsWindow isOpen={permissionsWindowOpen} onClose={() => setPermissionsWindowOpen(false)} />
       {menu}
       <AppBar
         elevation={0}
         position="relative"
         sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          background: (theme) => theme.palette.primary.dark,
-          boxShadow: (theme) =>
-            `0px 0px 10px 1px ${theme.palette.primary.main}`,
+          zIndex: theme => theme.zIndex.drawer + 1,
+          background: theme => theme.palette.primary.dark,
+          boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
         }}
       >
         <Container maxWidth="xl">
@@ -317,14 +261,9 @@ const NavBar = ({ guest = false }) => {
         </Container>
       </AppBar>
       {authorizedUser?.banners
-        ?.filter((banner) => !seenBannerIds?.includes(banner.id))
-        ?.map((banner) => (
-          <Banner
-            banner={banner}
-            language={i18n.language}
-            key={banner.id}
-            onClose={handleBannerClose}
-          />
+        ?.filter(banner => !seenBannerIds?.includes(banner.id))
+        ?.map(banner => (
+          <Banner banner={banner} language={i18n.language} key={banner.id} onClose={handleBannerClose} />
         ))}
     </>
   )

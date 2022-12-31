@@ -8,12 +8,7 @@ import ResultsContent from './ResultsContent'
 
 const SingleChoiceResults = ({ question, feedbackCount }) => {
   const { t, i18n } = useTranslation()
-  const config = getSingleChoiceChartConfig(
-    question,
-    i18n.language,
-    t,
-    feedbackCount,
-  )
+  const config = getSingleChoiceChartConfig(question, i18n.language, t, feedbackCount)
 
   return <ResultsContent chart={<Bar {...config} />} />
 }

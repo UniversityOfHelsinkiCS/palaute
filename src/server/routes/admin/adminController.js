@@ -6,9 +6,7 @@ const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { updater } = require('../../updater')
-const {
-  deleteCancelledCourses,
-} = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
+const { deleteCancelledCourses } = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
 
 const {
   FeedbackTarget,
@@ -30,9 +28,7 @@ const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
-const {
-  updateEnrolmentsOfCourse,
-} = require('../../updater/updateStudentFeedbackTargets')
+const { updateEnrolmentsOfCourse } = require('../../updater/updateStudentFeedbackTargets')
 const { adminAccess } = require('../../middleware/adminAccess')
 
 const runUpdater = async (_, res) => {
@@ -93,13 +89,9 @@ const findUser = async (req, res) => {
     }
   } else {
     const isEmail = user.includes('.') || user.includes('@')
-    const isEmployeeNumber =
-      !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
+    const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
     const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
-    const isSisuId =
-      !isEmployeeNumber &&
-      !isStudentNumber &&
-      !Number.isNaN(Number(user[user.length - 1]))
+    const isSisuId = !isEmployeeNumber && !isStudentNumber && !Number.isNaN(Number(user[user.length - 1]))
     const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
 
     if (isEmail) {
@@ -136,18 +128,13 @@ const findUser = async (req, res) => {
     limit: 20,
     attributes: {
       exclude: ['iamGroups'],
-      include: [
-        [
-          sequelize.literal(`'hy-employees' = ANY (iam_groups)`),
-          'hasEmployeeIam',
-        ],
-      ],
+      include: [[sequelize.literal(`'hy-employees' = ANY (iam_groups)`), 'hasEmployeeIam']],
     },
   })
 
   return res.send({
     params,
-    persons: persons.map((person) => ({
+    persons: persons.map(person => ({
       ...person.dataValues,
     })),
     count,
@@ -219,7 +206,7 @@ const findFeedbackTargets = async (req, res) => {
   return res.send({
     params,
     count,
-    feedbackTargets: result.map((r) => r.toJSON()),
+    feedbackTargets: result.map(r => r.toJSON()),
   })
 }
 
@@ -231,14 +218,13 @@ const resendFeedbackResponseEmail = async (req, res) => {
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
   const emailsSentTo = await mailer.sendFeedbackSummaryReminderToStudents(
     feedbackTarget,
-    feedbackTarget.feedbackResponse,
+    feedbackTarget.feedbackResponse
   )
   return res.send({ count: emailsSentTo.length })
 }
 
-const formatFeedbackTargets = async (feedbackTargets) => {
-  const convertSingle = async (feedbackTarget) =>
-    feedbackTarget.toPublicObject()
+const formatFeedbackTargets = async feedbackTargets => {
+  const convertSingle = async feedbackTarget => feedbackTarget.toPublicObject()
 
   if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
 
@@ -289,22 +275,17 @@ const getFeedbackTargets = async (req, res) => {
       },
     },
     group: ['feedbackTargetId'],
-    attributes: [
-      'feedbackTargetId',
-      [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount'],
-    ],
+    attributes: ['feedbackTargetId', [sequelize.fn('COUNT', 'feedbackTargetId'), 'feedbackCount']],
   })
 
   const feedbackCountByFeedbackTargetId = _.zipObject(
-    studentFeedbackTargets.map((target) => target.get('feedbackTargetId')),
-    studentFeedbackTargets.map((target) =>
-      parseInt(target.get('feedbackCount'), 10),
-    ),
+    studentFeedbackTargets.map(target => target.get('feedbackTargetId')),
+    studentFeedbackTargets.map(target => parseInt(target.get('feedbackCount'), 10))
   )
 
   const formattedFeedbackTargets = await formatFeedbackTargets(feedbackTargets)
 
-  const feedbackTargetsWithCount = formattedFeedbackTargets.map((target) => ({
+  const feedbackTargetsWithCount = formattedFeedbackTargets.map(target => ({
     ...target,
     feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
   }))
@@ -376,8 +357,7 @@ const resetTestCourse = async (_, res) => {
 }
 
 const findEmailsForToday = async (_, res) => {
-  const { students, teachers, teacherEmailCounts, studentEmailCounts } =
-    await mailer.returnEmailsToBeSentToday()
+  const { students, teachers, teacherEmailCounts, studentEmailCounts } = await mailer.returnEmailsToBeSentToday()
 
   const emails = students.concat(teachers)
   return res.send({
@@ -429,10 +409,10 @@ const getNorppaStatistics = async (req, res) => {
       },
 
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
-  const resultsWithBetterNames = results.map((r) => ({
+  const resultsWithBetterNames = results.map(r => ({
     ...r,
     start_date: format(r.start_date, 'dd.MM.yyyy'),
     end_date: format(r.end_date, 'dd.MM.yyyy'),
@@ -441,33 +421,30 @@ const getNorppaStatistics = async (req, res) => {
     name: r.name.en ? r.name.en : r.name[0],
   }))
 
-  const resultsWithBetterAvoin = resultsWithBetterNames.filter(
-    (r) => r.organisation_name !== 'Lukuvuosi',
-  )
+  const resultsWithBetterAvoin = resultsWithBetterNames.filter(r => r.organisation_name !== 'Lukuvuosi')
 
   return res.send(resultsWithBetterAvoin)
 }
 
 const getFeedbackTargetsToCheck = async (req, res) => {
-  const relevantFeedbackTargetDateChecks =
-    await FeedbackTargetDateCheck.findAll({
-      where: {},
-      attributes: ['is_solved', 'created_at'],
-      include: [
-        {
-          model: FeedbackTarget,
-          attributes: ['id', 'opens_at', 'closes_at'],
-          as: 'feedback_target',
-          include: [
-            {
-              model: CourseRealisation,
-              attributes: ['name', 'start_date', 'end_date'],
-              as: 'courseRealisation',
-            },
-          ],
-        },
-      ],
-    })
+  const relevantFeedbackTargetDateChecks = await FeedbackTargetDateCheck.findAll({
+    where: {},
+    attributes: ['is_solved', 'created_at'],
+    include: [
+      {
+        model: FeedbackTarget,
+        attributes: ['id', 'opens_at', 'closes_at'],
+        as: 'feedback_target',
+        include: [
+          {
+            model: CourseRealisation,
+            attributes: ['name', 'start_date', 'end_date'],
+            as: 'courseRealisation',
+          },
+        ],
+      },
+    ],
+  })
 
   return res.send(relevantFeedbackTargetDateChecks)
 }
@@ -480,10 +457,7 @@ const solveFeedbackTargetDateCheck = async (req, res) => {
 
   if (!id) return res.status(400)
 
-  await FeedbackTargetDateCheck.update(
-    { is_solved: isSolved },
-    { where: { feedback_target_id: id } },
-  )
+  await FeedbackTargetDateCheck.update({ is_solved: isSolved }, { where: { feedback_target_id: id } })
 
   return res.status(200).send()
 }
@@ -540,7 +514,7 @@ const getFeedbackCorrespondents = async (req, res) => {
   `,
     {
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
   return res.send(users)
@@ -564,7 +538,7 @@ const updateInactiveCourseRealisation = async (req, res) => {
     {
       manuallyEnabled,
     },
-    { where: { id } },
+    { where: { id } }
   )
 
   if (!manuallyEnabled) deleteCancelledCourses([id])
@@ -579,10 +553,7 @@ router.use(adminAccess)
 router.get('/users', findUser)
 router.get('/feedback-targets-data', getFeedbackTargets)
 router.post('/run-updater', runUpdater)
-router.post(
-  '/run-updater/enrolments/:courseRealisationId',
-  runUpdaterForEnrolmentsOfCourse,
-)
+router.post('/run-updater/enrolments/:courseRealisationId', runUpdaterForEnrolmentsOfCourse)
 router.get('/updater-status', getUpdaterStatuses)
 router.post('/run-pate', runPate)
 router.post('/reset-course', resetTestCourse)

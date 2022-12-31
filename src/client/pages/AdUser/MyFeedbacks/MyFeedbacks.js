@@ -8,11 +8,7 @@ import useFeedbackTargetsForStudent from '../../../hooks/useFeedbackTargetsForSt
 import CourseRealisationItem from './CourseRealisationItem'
 import StatusTabs from './StatusTabs'
 
-import {
-  filterFeedbackTargets,
-  getCourseRealisationsWithFeedbackTargets,
-  sortCourseRealisations,
-} from './utils'
+import { filterFeedbackTargets, getCourseRealisationsWithFeedbackTargets, sortCourseRealisations } from './utils'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import Title from '../../../components/common/Title'
 
@@ -27,7 +23,7 @@ const styles = {
     marginBottom: 3,
   },
   progressContainer: {
-    padding: (theme) => theme.spacing(4, 0),
+    padding: theme => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
@@ -43,23 +39,17 @@ const MyFeedbacks = () => {
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()
 
-  const filteredFeedbackTargets = useMemo(
-    () => filterFeedbackTargets(feedbackTargets),
-    [feedbackTargets],
-  )
+  const filteredFeedbackTargets = useMemo(() => filterFeedbackTargets(feedbackTargets), [feedbackTargets])
 
   const sortedCourseRealisations = useMemo(
     () =>
       sortCourseRealisations(
-        getCourseRealisationsWithFeedbackTargets(
-          filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting,
-        ),
+        getCourseRealisationsWithFeedbackTargets(filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting)
       ),
-    [filteredFeedbackTargets, status],
+    [filteredFeedbackTargets, status]
   )
 
-  const showNoFeedbackAlert =
-    !isLoading && sortedCourseRealisations.length === 0
+  const showNoFeedbackAlert = !isLoading && sortedCourseRealisations.length === 0
 
   return (
     <div>
@@ -85,12 +75,9 @@ const MyFeedbacks = () => {
         <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>
       )}
 
-      {sortedCourseRealisations.map((courseRealisation) => (
+      {sortedCourseRealisations.map(courseRealisation => (
         <Fragment key={courseRealisation.id}>
-          <CourseRealisationItem
-            sx={styles.courseRealisationItem}
-            courseRealisation={courseRealisation}
-          />
+          <CourseRealisationItem sx={styles.courseRealisationItem} courseRealisation={courseRealisation} />
         </Fragment>
       ))}
     </div>

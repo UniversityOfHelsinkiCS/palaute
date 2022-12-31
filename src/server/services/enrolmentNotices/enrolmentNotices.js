@@ -6,11 +6,7 @@ const EXPIRATION_SECONDS = 24 * 3600
 
 const getKey = (userId, feedbackTargetId) => `${feedbackTargetId}#${userId}`
 
-const requestEnrolmentNotification = async (
-  userId,
-  feedbackTargetId,
-  enable,
-) => {
+const requestEnrolmentNotification = async (userId, feedbackTargetId, enable) => {
   const key = getKey(userId, feedbackTargetId)
   if (enable) {
     await redis.set(key, 'true')
@@ -26,7 +22,7 @@ const getEnrolmentNotification = async (userId, feedbackTargetId) => {
   return Boolean(exists)
 }
 
-const sendEmailNotifications = async (userFeedbackTargets) => {
+const sendEmailNotifications = async userFeedbackTargets => {
   mailer.sendEmailNotificationAboutEnrolments(userFeedbackTargets)
 
   for (const ufbt of userFeedbackTargets) {
@@ -34,7 +30,7 @@ const sendEmailNotifications = async (userFeedbackTargets) => {
   }
 }
 
-const notifyOnEnrolmentsIfRequested = async (userFeedbackTargets) => {
+const notifyOnEnrolmentsIfRequested = async userFeedbackTargets => {
   const expiredDate = subSeconds(new Date(), EXPIRATION_SECONDS)
 
   const exists = []

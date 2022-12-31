@@ -1,7 +1,7 @@
 const { STRING } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.addColumn('users', 'username', {
       type: STRING,
       allowNull: false,
@@ -13,7 +13,7 @@ module.exports = {
       allowNull: false,
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.removeColumn('users', 'username')
   },
 }

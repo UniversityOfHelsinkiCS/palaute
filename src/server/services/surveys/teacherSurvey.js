@@ -6,7 +6,7 @@ const Survey = require('../../models/survey')
  * @param {Survey} previousSurvey
  * @returns {Promise<number[]>} questionIds
  */
-const getClonedQuestionIds = async (previousSurvey) => {
+const getClonedQuestionIds = async previousSurvey => {
   if (!previousSurvey) return []
 
   const previousQuestions = await Question.findAll({
@@ -21,10 +21,10 @@ const getClonedQuestionIds = async (previousSurvey) => {
       required,
       data,
     })),
-    { returning: true },
+    { returning: true }
   )
 
-  return clonedQuestions.map((q) => q.id)
+  return clonedQuestions.map(q => q.id)
 }
 
 /**
@@ -49,7 +49,7 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
  * @param {FeedbackTarget} feedbackTarget
  * @returns {Promise<Survey>} teacher survey
  */
-const getOrCreateTeacherSurvey = async (feedbackTarget) => {
+const getOrCreateTeacherSurvey = async feedbackTarget => {
   const previousFeedbackTarget = await feedbackTarget.getPrevious()
   const previousSurvey = previousFeedbackTarget
     ? Survey.findOne({
@@ -65,9 +65,7 @@ const getOrCreateTeacherSurvey = async (feedbackTarget) => {
     },
   })
 
-  const teacherSurvey =
-    existingTeacherSurvey ||
-    (await createTeacherSurvey(feedbackTarget.id, await previousSurvey))
+  const teacherSurvey = existingTeacherSurvey || (await createTeacherSurvey(feedbackTarget.id, await previousSurvey))
   await teacherSurvey.populateQuestions()
   return teacherSurvey
 }

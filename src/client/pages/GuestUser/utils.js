@@ -2,7 +2,7 @@ import { parseISO, format } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
 
-export const getCoursePeriod = (courseRealisation) => {
+export const getCoursePeriod = courseRealisation => {
   if (!courseRealisation) {
     return null
   }
@@ -13,14 +13,14 @@ export const getCoursePeriod = (courseRealisation) => {
   return `${startDate} - ${endDate}`
 }
 
-export const getFeedbackPeriod = (feedbackTarget) => {
+export const getFeedbackPeriod = feedbackTarget => {
   const opensAt = format(parseISO(feedbackTarget.opensAt), 'dd.MM.yyyy')
   const closesAt = format(parseISO(feedbackTarget.closesAt), 'dd.MM.yyyy')
 
   return `${opensAt} - ${closesAt}`
 }
 
-export const getCoursePageUrl = (feedbackTarget) =>
+export const getCoursePageUrl = feedbackTarget =>
   `https://studies.helsinki.fi/opintotarjonta/cur/${feedbackTarget.courseRealisation.id}`
 
 export const saveValues = async (values, feedbackTarget) => {

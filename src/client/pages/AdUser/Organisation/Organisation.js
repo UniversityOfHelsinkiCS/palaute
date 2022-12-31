@@ -1,12 +1,6 @@
 import React from 'react'
 
-import {
-  Route,
-  Switch,
-  useRouteMatch,
-  useParams,
-  Redirect,
-} from 'react-router-dom'
+import { Route, Switch, useRouteMatch, useParams, Redirect } from 'react-router-dom'
 
 import { Box, Typography } from '@mui/material'
 import {
@@ -40,10 +34,7 @@ const Organisation = () => {
   const { path, url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
-  const { organisation, isLoading, isLoadingError, error } = useOrganisation(
-    code,
-    { retry: 2 },
-  )
+  const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
   if (isLoading) {
@@ -51,12 +42,7 @@ const Organisation = () => {
   }
 
   if (isLoadingError && !organisation) {
-    return (
-      <ErrorView
-        message={errors.getGeneralError(error)}
-        response={error?.response}
-      />
-    )
+    return <ErrorView message={errors.getGeneralError(error)} response={error?.response} />
   }
 
   const hasReadAccess = Boolean(organisation?.access?.read)
@@ -82,42 +68,24 @@ const Organisation = () => {
           {organisation.code}
         </Typography>
         <Box ml="2rem">
-          <ExternalLink href={links.organisationInstructions[i18n.language]}>
-            {t('footer:wikiLink')}
-          </ExternalLink>
+          <ExternalLink href={links.organisationInstructions[i18n.language]}>{t('footer:wikiLink')}</ExternalLink>
         </Box>
       </Box>
       <RouterTabs sx={{ mb: '4rem' }} variant="scrollable" scrollButtons="auto">
         {hasAdminAccess && (
-          <RouterTab
-            label={t('organisationSettings:settingsTab')}
-            icon={<SettingsOutlined />}
-            to={`${url}/settings`}
-          />
+          <RouterTab label={t('organisationSettings:settingsTab')} icon={<SettingsOutlined />} to={`${url}/settings`} />
         )}
         {hasWriteAccess && (
-          <RouterTab
-            label={t('organisationSettings:surveyTab')}
-            icon={<LiveHelpOutlined />}
-            to={`${url}/survey`}
-          />
+          <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
         )}
         <RouterTab
           label={t('organisationSettings:overviewTab')}
           to={`${url}/upcoming`}
           icon={<CalendarTodayOutlined />}
         />
-        <RouterTab
-          label={t('organisationSettings:summaryTab')}
-          to={`${url}/summary`}
-          icon={<PollOutlined />}
-        />
+        <RouterTab label={t('organisationSettings:summaryTab')} to={`${url}/summary`} icon={<PollOutlined />} />
         {hasAdminAccess && (
-          <RouterTab
-            label={t('organisationSettings:openQuestionsTab')}
-            to={`${url}/open`}
-            icon={<CommentOutlined />}
-          />
+          <RouterTab label={t('organisationSettings:openQuestionsTab')} to={`${url}/open`} icon={<CommentOutlined />} />
         )}
         {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
       </RouterTabs>

@@ -24,23 +24,16 @@ const FeedbackTargetSettings = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const updateSettingsRead = useUpdateSettingsRead()
-  const { feedbackTarget, isResponsibleTeacher, isAdmin } =
-    useFeedbackTargetContext()
+  const { feedbackTarget, isResponsibleTeacher, isAdmin } = useFeedbackTargetContext()
 
   useEffect(() => {
-    if (
-      feedbackTarget.settingsReadByTeacher ||
-      !isResponsibleTeacher ||
-      isAdmin
-    ) {
+    if (feedbackTarget.settingsReadByTeacher || !isResponsibleTeacher || isAdmin) {
       return
     }
     updateSettingsRead.mutateAsync({ id })
   }, [])
 
-  const [visibility, setVisibility] = useState(
-    feedbackTarget.feedbackVisibility,
-  )
+  const [visibility, setVisibility] = useState(feedbackTarget.feedbackVisibility)
 
   const handleOpenFeedbackImmediately = async () => {
     try {
@@ -52,7 +45,7 @@ const FeedbackTargetSettings = () => {
     }
   }
 
-  const handleSubmitFeedbackPeriod = async (values) => {
+  const handleSubmitFeedbackPeriod = async values => {
     try {
       await saveFeedbackPeriodValues(values, feedbackTarget)
 
@@ -68,8 +61,7 @@ const FeedbackTargetSettings = () => {
     }
   }
 
-  const feedbackPeriodInitialValues =
-    getFeedbackPeriodInitialValues(feedbackTarget)
+  const feedbackPeriodInitialValues = getFeedbackPeriodInitialValues(feedbackTarget)
 
   return (
     <>
@@ -80,10 +72,7 @@ const FeedbackTargetSettings = () => {
         feedbackTarget={feedbackTarget}
       />
       <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
-      <PublicitySelection
-        visibility={visibility}
-        setVisibility={setVisibility}
-      />
+      <PublicitySelection visibility={visibility} setVisibility={setVisibility} />
       <EditFeedbackTarget />
     </>
   )

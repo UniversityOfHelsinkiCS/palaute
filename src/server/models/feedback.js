@@ -33,15 +33,15 @@ Feedback.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
-Feedback.beforeDestroy(async (feedback) => {
+Feedback.beforeDestroy(async feedback => {
   await UserFeedbackTarget.update(
     {
       feedbackId: null,
     },
-    { where: { feedbackId: feedback.id } },
+    { where: { feedbackId: feedback.id } }
   )
 })
 

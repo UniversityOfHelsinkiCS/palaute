@@ -3,7 +3,7 @@ import React from 'react'
 
 const DividerRow = ({ height = 0.4 }) => (
   <tr
-    css={(theme) => ({
+    css={theme => ({
       display: 'block',
       height: theme.spacing(height),
     })}

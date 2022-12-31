@@ -6,7 +6,7 @@ const WORKLOAD_QUESTION_ID = 1042
  * @param {string} organisationCode
  * @returns {Promise<object>} questions
  */
-const getSummaryQuestions = async (organisationCode) => {
+const getSummaryQuestions = async organisationCode => {
   const [universityQuestions, programmeQuestions] = await Promise.all([
     (async () => {
       const universitySurvey = await getUniversitySurvey()
@@ -21,11 +21,9 @@ const getSummaryQuestions = async (organisationCode) => {
   ])
 
   const questions = universityQuestions.concat(programmeQuestions)
-  const summaryQuestions = questions.filter(
-    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
-  )
+  const summaryQuestions = questions.filter(q => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
 
-  return summaryQuestions.map((question) => ({
+  return summaryQuestions.map(question => ({
     ...question.toJSON(),
     secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
   }))

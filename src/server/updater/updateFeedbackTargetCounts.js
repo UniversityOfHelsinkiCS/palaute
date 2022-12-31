@@ -35,7 +35,7 @@ const updateHiddenCount = async () => {
     WHERE (f.data->>'hidden')::BOOLEAN
     GROUP BY ufbt.feedback_target_id
   `,
-    { type: QueryTypes.SELECT },
+    { type: QueryTypes.SELECT }
   )
 
   if (Array.isArray(countsById)) {
@@ -44,7 +44,7 @@ const updateHiddenCount = async () => {
         {
           hiddenCount: count,
         },
-        { where: { id } },
+        { where: { id } }
       )
     }
   }
@@ -60,7 +60,7 @@ const updateFeedbackCount = async () => {
     WHERE feedback_id IS NOT NULL
     GROUP BY feedback_target_id
   `,
-    { type: QueryTypes.SELECT },
+    { type: QueryTypes.SELECT }
   )
 
   if (Array.isArray(countsById)) {
@@ -69,7 +69,7 @@ const updateFeedbackCount = async () => {
         {
           feedbackCount: count,
         },
-        { where: { id } },
+        { where: { id } }
       )
     }
   }
@@ -79,14 +79,8 @@ const updateFeedbackCount = async () => {
 
 const updateFeedbackTargetCounts = async () => {
   logger.info('[UPDATER] starting to update feedbackTargetCounts')
-  await logOperation(
-    updateHiddenCount,
-    '[UPDATER][feedbackTargetCounts] updated hiddenCounts',
-  )
-  await logOperation(
-    updateFeedbackCount,
-    '[UPDATER][feedbackTargetCounts] updated feedbackCounts',
-  )
+  await logOperation(updateHiddenCount, '[UPDATER][feedbackTargetCounts] updated hiddenCounts')
+  await logOperation(updateFeedbackCount, '[UPDATER][feedbackTargetCounts] updated feedbackCounts')
 }
 
 module.exports = {

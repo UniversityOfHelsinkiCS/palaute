@@ -38,23 +38,18 @@ const getStudentEmailCounts = async () => {
         opensAtHigh: addDays(new Date(), 28),
       },
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
-  const groupedEmailCounts = _.groupBy(studentEmailCounts, (obj) =>
-    format(obj.opens_at, 'dd.MM.yyyy'),
-  )
+  const groupedEmailCounts = _.groupBy(studentEmailCounts, obj => format(obj.opens_at, 'dd.MM.yyyy'))
 
-  const finalEmailCounts = Object.keys(groupedEmailCounts).map((key) =>
+  const finalEmailCounts = Object.keys(groupedEmailCounts).map(key =>
     groupedEmailCounts[key].length > 1
       ? {
           date: key,
-          count: groupedEmailCounts[key].reduce(
-            (sum, obj) => sum + parseInt(obj.count, 10),
-            0,
-          ),
+          count: groupedEmailCounts[key].reduce((sum, obj) => sum + parseInt(obj.count, 10), 0),
         }
-      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) },
+      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) }
   )
   return finalEmailCounts
 }
@@ -78,23 +73,18 @@ const getTeacherEmailCounts = async () => {
         opensAtHigh: addDays(new Date(), 35),
       },
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
-  const groupedEmailCounts = _.groupBy(teacherEmailCounts, (obj) =>
-    format(subDays(obj.opens_at, 7), 'dd.MM.yyyy'),
-  )
+  const groupedEmailCounts = _.groupBy(teacherEmailCounts, obj => format(subDays(obj.opens_at, 7), 'dd.MM.yyyy'))
 
-  const finalEmailCounts = Object.keys(groupedEmailCounts).map((key) =>
+  const finalEmailCounts = Object.keys(groupedEmailCounts).map(key =>
     groupedEmailCounts[key].length > 1
       ? {
           date: key,
-          count: groupedEmailCounts[key].reduce(
-            (sum, obj) => sum + parseInt(obj.count, 10),
-            0,
-          ),
+          count: groupedEmailCounts[key].reduce((sum, obj) => sum + parseInt(obj.count, 10), 0),
         }
-      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) },
+      : { date: key, count: parseInt(groupedEmailCounts[key][0].count, 10) }
   )
 
   return finalEmailCounts
@@ -102,54 +92,33 @@ const getTeacherEmailCounts = async () => {
 
 const returnEmailsToBeSentToday = async () => {
   const studentFeedbackTargets = await getOpenFeedbackTargetsForStudents()
-  const teacherFeedbackTargets =
-    await getFeedbackTargetsAboutToOpenForTeachers()
+  const teacherFeedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
   const teacherEmailCountFor7Days = await getTeacherEmailCounts()
   const studentEmailCountFor7Days = await getStudentEmailCounts()
 
-  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    studentFeedbackTargets,
-    {
-      whereOpenEmailNotSent: true,
-    },
+  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(studentFeedbackTargets, {
+    whereOpenEmailNotSent: true,
+  })
+
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(teacherFeedbackTargets, {
+    primaryOnly: true,
+  })
+
+  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(student =>
+    notificationAboutSurveyOpeningToStudents(student, studentsWithFeedbackTargets[student])
   )
 
-  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    teacherFeedbackTargets,
-    { primaryOnly: true },
+  const teacherSurveyReminderEmails = Object.keys(teachersWithFeedbackTargets).map(teacher =>
+    emailReminderAboutSurveyOpeningToTeachers(teacher, teachersWithFeedbackTargets[teacher])
   )
 
-  const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
-    (student) =>
-      notificationAboutSurveyOpeningToStudents(
-        student,
-        studentsWithFeedbackTargets[student],
-      ),
+  const teacherReminderFeedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
+  const teacherFeedbackReminderEmails = teacherReminderFeedbackTargets.flatMap(fbt =>
+    fbt.users.map(user => emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users))
   )
 
-  const teacherSurveyReminderEmails = Object.keys(
-    teachersWithFeedbackTargets,
-  ).map((teacher) =>
-    emailReminderAboutSurveyOpeningToTeachers(
-      teacher,
-      teachersWithFeedbackTargets[teacher],
-    ),
-  )
-
-  const teacherReminderFeedbackTargets =
-    await getFeedbackTargetsWithoutResponseForTeachers()
-  const teacherFeedbackReminderEmails = teacherReminderFeedbackTargets.flatMap(
-    (fbt) =>
-      fbt.users.map((user) =>
-        emailReminderAboutFeedbackResponseToTeachers(user, fbt, fbt.users),
-      ),
-  )
-
-  const teacherEmailsToBeSent = [
-    ...teacherSurveyReminderEmails,
-    ...teacherFeedbackReminderEmails,
-  ]
+  const teacherEmailsToBeSent = [...teacherSurveyReminderEmails, ...teacherFeedbackReminderEmails]
 
   return {
     students: studentEmailsToBeSent,

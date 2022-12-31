@@ -2,12 +2,7 @@ const Router = require('express')
 
 const _ = require('lodash')
 
-const {
-  FeedbackTarget,
-  CourseRealisation,
-  Organisation,
-  User,
-} = require('../../models')
+const { FeedbackTarget, CourseRealisation, Organisation, User } = require('../../models')
 const { run } = require('../../util/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
@@ -21,15 +16,11 @@ const updateCourseRealisation = async (req, res) => {
 
   const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
 
-  if (!feedbackTarget)
-    throw new ApplicationError('Feedback target not found', 404)
+  if (!feedbackTarget) throw new ApplicationError('Feedback target not found', 404)
 
-  const courseRealisation = await CourseRealisation.findByPk(
-    feedbackTarget.courseRealisationId,
-  )
+  const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
 
-  if (!courseRealisation)
-    throw new ApplicationError('Course realisation not found', 404)
+  if (!courseRealisation) throw new ApplicationError('Course realisation not found', 404)
 
   const updates = _.pick(req.body, ['startDate', 'endDate'])
 
@@ -40,9 +31,7 @@ const updateCourseRealisation = async (req, res) => {
   const { feedbackResponse, feedbackResponseEmailSent } = req.body
 
   let feedbackCount = Number(req.body?.feedbackCount)
-  feedbackCount = Number.isNaN(feedbackCount)
-    ? feedbackTarget.feedbackCount
-    : feedbackCount
+  feedbackCount = Number.isNaN(feedbackCount) ? feedbackTarget.feedbackCount : feedbackCount
 
   Object.assign(feedbackTarget, {
     feedbackCount,
@@ -70,15 +59,11 @@ const updateManyCourseRealisations = async (req, res) => {
   for (const id of feedbackTargetIds) {
     const feedbackTarget = await FeedbackTarget.findByPk(Number(id))
 
-    if (!feedbackTarget)
-      throw new ApplicationError('Feedback target not found', 404)
+    if (!feedbackTarget) throw new ApplicationError('Feedback target not found', 404)
 
-    const courseRealisation = await CourseRealisation.findByPk(
-      feedbackTarget.courseRealisationId,
-    )
+    const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
 
-    if (!courseRealisation)
-      throw new ApplicationError('Course realisation not found', 404)
+    if (!courseRealisation) throw new ApplicationError('Course realisation not found', 404)
 
     Object.assign(courseRealisation, updates)
 
@@ -94,7 +79,7 @@ const enableAllCourses = async (_, res) => {
     {
       disabledCourseCodes: [],
     },
-    { where: {} },
+    { where: {} }
   )
   return res.send(200)
 }
@@ -106,11 +91,7 @@ const updateUser = async (req, res) => {
 
   if (!user) throw new ApplicationError('User not found', 404)
 
-  const updates = _.pick(req.body, [
-    'employeeNumber',
-    'studentNumber',
-    'username',
-  ])
+  const updates = _.pick(req.body, ['employeeNumber', 'studentNumber', 'username'])
 
   Object.assign(user, updates)
 

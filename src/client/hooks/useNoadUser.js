@@ -11,7 +11,7 @@ const useNoadUser = (options = {}) => {
 
       return data
     },
-    options,
+    options
   )
 
   return { noadUser, ...rest }

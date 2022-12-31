@@ -1,11 +1,6 @@
 import React from 'react'
 
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
@@ -33,25 +28,14 @@ const styles = {
 }
 
 const getChip = (courseRealisation, code) => {
-  const {
-    feedbackResponseGiven,
-    feedbackResponseSent,
-    feedbackTarget,
-    feedbackCount,
-  } = courseRealisation
+  const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isCurrent = !isEnded && !isOpen && !isOld
-  const { id: feedbackTargetId, continuousFeedbackEnabled } =
-    feedbackTarget || {}
+  const { id: feedbackTargetId, continuousFeedbackEnabled } = feedbackTarget || {}
 
-  if (
-    isOpen ||
-    (isCurrent && continuousFeedbackEnabled) ||
-    (feedbackCount > 0 && isEnded) ||
-    feedbackResponseGiven
-  ) {
+  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
         id={feedbackTargetId}
@@ -80,10 +64,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="courseUnitItem"
     >
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        data-cy={`courseUnitAccordion-${courseCode}`}
-      >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`courseUnitAccordion-${courseCode}`}>
         <div>
           <Typography>
             {courseCode} {getLanguageValue(name, i18n.language)}

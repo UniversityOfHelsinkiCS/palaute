@@ -1,16 +1,10 @@
-import {
-  isAfter,
-  differenceInDays,
-  startOfDay,
-  endOfDay,
-  format,
-} from 'date-fns'
+import { isAfter, differenceInDays, startOfDay, endOfDay, format } from 'date-fns'
 import _ from 'lodash'
 
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
-export const openFeedbackImmediately = async (feedbackTarget) => {
+export const openFeedbackImmediately = async feedbackTarget => {
   const { id } = feedbackTarget
   const opensAt = new Date()
 
@@ -18,15 +12,12 @@ export const openFeedbackImmediately = async (feedbackTarget) => {
     opensAt,
   }
 
-  const { data } = await apiClient.put(
-    `/feedback-targets/${id}/open-immediately`,
-    payload,
-  )
+  const { data } = await apiClient.put(`/feedback-targets/${id}/open-immediately`, payload)
 
   return data
 }
 
-export const validateFeedbackPeriod = (isOpen, isOver) => (values) => {
+export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   const { closesAt, opensAt } = values
 
   const errors = {}
@@ -58,27 +49,22 @@ export const validateFeedbackPeriod = (isOpen, isOver) => (values) => {
     errors.closesAt = 'editFeedbackTarget:opensAtInPastError'
   }
 
-  if (
-    opensAt &&
-    closesAt &&
-    Math.abs(differenceInDays(opensAt, closesAt)) < 1
-  ) {
+  if (opensAt && closesAt && Math.abs(differenceInDays(opensAt, closesAt)) < 1) {
     errors.closesAt = 'editFeedbackTarget:tooShortFeedbackPeriodError'
   }
 
   return errors
 }
 
-export const opensAtIsImmediately = (values) => {
+export const opensAtIsImmediately = values => {
   const { opensAt } = values
 
   return startOfDay(opensAt).getTime() === startOfDay(new Date()).getTime()
 }
 
-export const requiresSubmitConfirmation = (values) =>
-  opensAtIsImmediately(values)
+export const requiresSubmitConfirmation = values => opensAtIsImmediately(values)
 
-export const getFeedbackPeriodInitialValues = (feedbackTarget) => {
+export const getFeedbackPeriodInitialValues = feedbackTarget => {
   const { closesAt, opensAt } = feedbackTarget
 
   return {
@@ -105,11 +91,10 @@ export const saveFeedbackPeriodValues = async (values, feedbackTarget) => {
   return data
 }
 
-export const feedbackTargetIsOpenOrClosed = (feedbackTarget) => {
+export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
   const closesAt = new Date(feedbackTarget.closesAt)
 
   return new Date() > closesAt || feedbackTargetIsOpen(feedbackTarget)
 }
 
-export const formatClosesAt = (closesAt) =>
-  format(new Date(closesAt), 'dd.MM.yyyy')
+export const formatClosesAt = closesAt => format(new Date(closesAt), 'dd.MM.yyyy')

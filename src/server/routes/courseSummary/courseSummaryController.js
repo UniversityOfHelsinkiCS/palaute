@@ -3,10 +3,7 @@ const { addYears } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
 
-const {
-  getOrganisationSummaries,
-  getCourseRealisationSummaries,
-} = require('../../services/summary')
+const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../../services/summary')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
@@ -27,12 +24,10 @@ const filterOrganisationAccess = (organisationAccess, user) => {
     return organisationAccess
   }
 
-  return organisationAccess.filter(({ organisation }) =>
-    includedOrganisationCodes.includes(organisation.code),
-  )
+  return organisationAccess.filter(({ organisation }) => includedOrganisationCodes.includes(organisation.code))
 }
 
-const getAccessibleCourseRealisationIds = async (user) => {
+const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
     `
     SELECT DISTINCT ON (course_realisations.id) course_realisations.id
@@ -50,10 +45,10 @@ const getAccessibleCourseRealisationIds = async (user) => {
         userId: user.id,
       },
       type: sequelize.QueryTypes.SELECT,
-    },
+    }
   )
 
-  return rows.map((row) => row.id)
+  return rows.map(row => row.id)
 }
 
 const getAccessInfo = async (req, res) => {
@@ -68,16 +63,14 @@ const getAccessInfo = async (req, res) => {
     })
   }
 
-  const [organisationAccess, accessibleCourseRealisationIds] =
-    await Promise.all([
-      user.getOrganisationAccess(),
-      getAccessibleCourseRealisationIds(user),
-    ])
+  const [organisationAccess, accessibleCourseRealisationIds] = await Promise.all([
+    user.getOrganisationAccess(),
+    getAccessibleCourseRealisationIds(user),
+  ])
 
-  const adminAccess = !!organisationAccess.find((org) => org.access.admin)
+  const adminAccess = !!organisationAccess.find(org => org.access.admin)
 
-  const accessible =
-    organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
+  const accessible = organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
 
   const defaultDateRange = accessible
     ? await getSummaryDefaultDateRange({
@@ -107,22 +100,18 @@ const getOrganisations = async (req, res) => {
   const { code } = req.params
   const { includeOpenUniCourseUnits, tagId, startDate, endDate } = req.query
 
-  const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] =
-    await Promise.all([
-      user.getOrganisationAccess(),
-      // dont query users teached courses if code is defined (looking at one organisation)
-      code ? [] : getAccessibleCourseRealisationIds(user),
-      getSummaryQuestions(code),
-    ])
+  const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
+    user.getOrganisationAccess(),
+    // dont query users teached courses if code is defined (looking at one organisation)
+    code ? [] : getAccessibleCourseRealisationIds(user),
+    getSummaryQuestions(code),
+  ])
 
   const organisationAccess = code
-    ? fullOrganisationAccess.filter((org) => org.organisation.code === code)
+    ? fullOrganisationAccess.filter(org => org.organisation.code === code)
     : fullOrganisationAccess
 
-  if (
-    organisationAccess.length === 0 &&
-    accessibleCourseRealisationIds.length === 0
-  ) {
+  if (organisationAccess.length === 0 && accessibleCourseRealisationIds.length === 0) {
     throw new ApplicationError('Forbidden', 403)
   }
 
@@ -169,15 +158,11 @@ const getByCourseUnit = async (req, res) => {
     throw new ApplicationError('Course unit is not found', 404)
   }
 
-  const [organisationAccess, accessibleCourseRealisationIds, questions] =
-    await Promise.all([
-      user.isAdmin ||
-        (
-          await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id)
-        )?.read,
-      getAccessibleCourseRealisationIds(user),
-      getSummaryQuestions(code),
-    ])
+  const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
+    user.isAdmin || (await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id))?.read,
+    getAccessibleCourseRealisationIds(user),
+    getSummaryQuestions(code),
+  ])
 
   const courseRealisations = await getCourseRealisationSummaries({
     accessibleCourseRealisationIds,

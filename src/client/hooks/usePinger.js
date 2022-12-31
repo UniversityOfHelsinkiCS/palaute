@@ -18,12 +18,11 @@ const usePinger = (options = {}) => {
       refetchOnWindowFocus: true,
       refetchOnReconnect: 'always',
       cacheTime: 7 * 60 * 1000,
-      onError: (error) => {
-        if (error?.message?.toLowerCase() === 'network error')
-          window.location.reload()
+      onError: error => {
+        if (error?.message?.toLowerCase() === 'network error') window.location.reload()
       },
       ...options,
-    },
+    }
   )
 
   return result

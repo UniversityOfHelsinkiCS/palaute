@@ -7,7 +7,7 @@ const {
   CourseRealisation,
 } = require('../../models')
 
-const feedbackTargetToJSON = (feedbackTarget) => {
+const feedbackTargetToJSON = feedbackTarget => {
   const publicTarget = feedbackTarget.toJSON()
 
   return {
@@ -17,7 +17,7 @@ const feedbackTargetToJSON = (feedbackTarget) => {
   }
 }
 
-const getFeedbackTargetsForStudent = async (userId) => {
+const getFeedbackTargetsForStudent = async userId => {
   const feedbackTargets = await FeedbackTarget.findAll({
     attributes: {
       exclude: ['feedbackResponse'], // Not needed
@@ -53,9 +53,7 @@ const getFeedbackTargetsForStudent = async (userId) => {
   const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
       courseUnit &&
-      !courseUnit.organisations.some(({ disabledCourseCodes }) =>
-        disabledCourseCodes.includes(courseUnit.courseCode),
-      ),
+      !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   )
 
   return filteredFeedbackTargets.map(feedbackTargetToJSON)
@@ -67,14 +65,11 @@ const getForStudent = async ({ user }) => {
   const now = Date.now()
   const grouped = {
     waiting: feedbackTargets.filter(
-      (fbt) =>
-        Date.parse(fbt.opensAt) < now &&
-        Date.parse(fbt.closesAt) > now &&
-        !fbt.feedback,
+      fbt => Date.parse(fbt.opensAt) < now && Date.parse(fbt.closesAt) > now && !fbt.feedback
     ),
-    given: feedbackTargets.filter((fbt) => fbt.feedback),
-    ended: feedbackTargets.filter((fbt) => Date.parse(fbt.closesAt) < now),
-    ongoing: feedbackTargets.filter((fbt) => Date.parse(fbt.opensAt) > now),
+    given: feedbackTargets.filter(fbt => fbt.feedback),
+    ended: feedbackTargets.filter(fbt => Date.parse(fbt.closesAt) < now),
+    ongoing: feedbackTargets.filter(fbt => Date.parse(fbt.opensAt) > now),
   }
 
   return grouped

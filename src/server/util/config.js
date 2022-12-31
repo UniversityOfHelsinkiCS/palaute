@@ -26,9 +26,7 @@ const PORT = process.env.PORT || 8000
 
 const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
 
-const JAMI_URL = common.inProduction
-  ? 'https://importer.cs.helsinki.fi/api/auth'
-  : `http://${JAMI_HOST}:${JAMI_PORT}`
+const JAMI_URL = common.inProduction ? 'https://importer.cs.helsinki.fi/api/auth' : `http://${JAMI_HOST}:${JAMI_PORT}`
 
 const useOldImporter = false
 

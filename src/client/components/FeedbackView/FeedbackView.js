@@ -3,16 +3,7 @@ import React, { useState, forwardRef } from 'react'
 
 import { useParams, useHistory, Link } from 'react-router-dom'
 
-import {
-  Typography,
-  Button,
-  Box,
-  Card,
-  CardContent,
-  Alert,
-  keyframes,
-  css,
-} from '@mui/material'
+import { Typography, Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -27,14 +18,7 @@ import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
 import AlertLink from '../common/AlertLink'
 
-import {
-  makeValidate,
-  getInitialValues,
-  saveValues,
-  getQuestions,
-  formatDate,
-  checkIsFeedbackOpen,
-} from './utils'
+import { makeValidate, getInitialValues, saveValues, getQuestions, formatDate, checkIsFeedbackOpen } from './utils'
 
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../common/LoadingProgress'
@@ -65,7 +49,7 @@ const tada = keyframes({
 const styles = {
   alert: {
     fontSize: '1.1rem',
-    fontWeight: (theme) => theme.typography.fontWeightBold,
+    fontWeight: theme => theme.typography.fontWeightBold,
   },
   icon: css`
     animation: ${tada} 2500ms;
@@ -105,12 +89,7 @@ const FormContainer = ({
   const { t } = useTranslation()
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validate={validate}
-      validateOnChange={false}
-    >
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} validateOnChange={false}>
       {({ isSubmitting }) => {
         const disabled = isSubmitting || disabledProp
 
@@ -121,10 +100,7 @@ const FormContainer = ({
                 <Box mb={2}>
                   <Alert severity="info">
                     {t('feedbackView:feedbackInfo')}{' '}
-                    <AlertLink
-                      href="#feedback-privacy-dialog-title"
-                      onClick={onOpenPrivacyDialog}
-                    >
+                    <AlertLink href="#feedback-privacy-dialog-title" onClick={onOpenPrivacyDialog}>
                       {t('feedbackView:feedbackInfoLink')}
                     </AlertLink>
                   </Alert>
@@ -143,15 +119,11 @@ const FormContainer = ({
                   type="submit"
                   data-cy="submitFeedbackButton"
                 >
-                  {isEdit
-                    ? t('feedbackView:editButton')
-                    : t('feedbackView:submitButton')}
+                  {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </Button>
                 {showCannotSubmitText && (
                   <Box mt={1}>
-                    <Typography color="textSecondary">
-                      {t('feedbackView:cannotSubmitText')}
-                    </Typography>
+                    <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
                   </Box>
                 )}
               </Box>
@@ -182,34 +154,25 @@ const FeedbackView = () => {
     return <LoadingProgress />
   }
 
-  const {
-    accessStatus,
-    opensAt,
-    closesAt,
-    feedback,
-    continuousFeedbackEnabled,
-  } = feedbackTarget
+  const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
   // TODO clean up this shit again
   const isStudent = accessStatus === 'STUDENT'
-  const isTeacher =
-    accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isTeacher = accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
   const isOutsider = accessStatus === 'NONE'
   const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
-  const showContinuousFeedback =
-    isStudent && isOngoing && continuousFeedbackEnabled
+  const showContinuousFeedback = isStudent && isOngoing && continuousFeedbackEnabled
   const showClosedAlert = isOngoing && !showContinuousFeedback
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
-  const formIsDisabled =
-    !isOpen || isTeacher || isOutsider || isOrganisationAdmin
+  const formIsDisabled = !isOpen || isTeacher || isOutsider || isOrganisationAdmin
   const showToolbar = (isOrganisationAdmin || isTeacher) && !isOpen && !isEnded
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (checkIsFeedbackOpen(closesAt)) {
         enqueueSnackbar(t('feedbackView:feedbackClosedError'), {
@@ -223,9 +186,7 @@ const FeedbackView = () => {
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 6000,
-          content: (key, message) => (
-            <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
-          ),
+          content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
         })
       }
     } catch (e) {
@@ -249,10 +210,7 @@ const FeedbackView = () => {
       <Alert severity="info">
         <Trans i18nKey="feedbackView:endedInfo">
           The feedback period has ended.{' '}
-          <AlertLink
-            component={Link}
-            to={`/targets/${feedbackTarget.id}/results`}
-          >
+          <AlertLink component={Link} to={`/targets/${feedbackTarget.id}/results`}>
             Take a look at the feedbacks
           </AlertLink>
         </Trans>
@@ -264,21 +222,18 @@ const FeedbackView = () => {
     setPrivacyDialogOpen(false)
   }
 
-  const handleOpenPrivacyDialog = (event) => {
+  const handleOpenPrivacyDialog = event => {
     event.preventDefault()
     setPrivacyDialogOpen(true)
   }
 
-  const handleLanguageChange = (language) => {
+  const handleLanguageChange = language => {
     i18n.changeLanguage(language)
   }
 
   return (
     <>
-      <PrivacyDialog
-        open={privacyDialogOpen}
-        onClose={handleClosePrivacyDialog}
-      />
+      <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
       {showContinuousFeedback && <ContinuousFeedback />}
 

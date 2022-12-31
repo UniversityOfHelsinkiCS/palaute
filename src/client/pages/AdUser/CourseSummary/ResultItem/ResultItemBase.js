@@ -12,14 +12,7 @@ const styles = {
   },
 }
 
-const ResultItemBase = ({
-  children,
-  sx,
-  tooltipTitle = '',
-  component: Component = 'td',
-  mean,
-  ...props
-}) => {
+const ResultItemBase = ({ children, sx, tooltipTitle = '', component: Component = 'td', mean, ...props }) => {
   const style = {
     ...sx,
     ...styles.item,

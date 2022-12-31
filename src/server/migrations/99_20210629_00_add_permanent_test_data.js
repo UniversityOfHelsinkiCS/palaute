@@ -1,11 +1,6 @@
 // This file contains all the data that will not be changed when resetting course data.
 // This includes the test organisation, course_units_organisations, course unit and course unit realisation.
-const {
-  Organisation,
-  CourseUnit,
-  CourseUnitsOrganisation,
-  CourseRealisation,
-} = require('../models')
+const { Organisation, CourseUnit, CourseUnitsOrganisation, CourseRealisation } = require('../models')
 
 module.exports = {
   up: async () => {

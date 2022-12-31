@@ -5,12 +5,9 @@ const { getFeedbackTarget } = require('./util')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { Survey, Question } = require('../../models')
-const {
-  createFeedbackTargetSurveyLog,
-  createFeedbackTargetLog,
-} = require('../../util/auditLog')
+const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
 
-const parseUpdates = (body) => {
+const parseUpdates = body => {
   const {
     name,
     hidden,
@@ -22,8 +19,7 @@ const parseUpdates = (body) => {
     sendContinuousFeedbackDigestEmail,
     settingsReadByTeacher,
   } = body
-  const parseDate = (d) =>
-    parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+  const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
 
   const updates = _.pickBy({
     // cweate obwect fwom only twe twuthy values :3
@@ -31,7 +27,7 @@ const parseUpdates = (body) => {
     hidden,
     opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
     closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-    publicQuestionIds: publicQuestionIds?.filter((id) => !!Number(id)),
+    publicQuestionIds: publicQuestionIds?.filter(id => !!Number(id)),
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
@@ -41,27 +37,21 @@ const parseUpdates = (body) => {
   return updates
 }
 
-const parseUpdatedQuestionIds = (
-  updatedPublicQuestionIds,
-  questions,
-  publicQuestionIds,
-) => {
+const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQuestionIds) => {
   let currentIds = updatedPublicQuestionIds ?? publicQuestionIds
-  const configurable = questions.filter((q) => q.publicityConfigurable)
+  const configurable = questions.filter(q => q.publicityConfigurable)
   // remove nonpublic
   currentIds = _.difference(
     currentIds,
-    configurable.filter((q) => !q.public).map((q) => q.id),
+    configurable.filter(q => !q.public).map(q => q.id)
   )
   // add public
-  currentIds = currentIds.concat(
-    configurable.filter((q) => q.public).map((q) => q.id),
-  )
+  currentIds = currentIds.concat(configurable.filter(q => q.public).map(q => q.id))
 
   return _.uniq(currentIds).filter(Number)
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
+const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   const updatedQuestionIdsList = []
 
   for (const question of questions) {
@@ -71,7 +61,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async (questions) => {
         {
           ...question,
         },
-        { where: { id: question.id }, returning: true },
+        { where: { id: question.id }, returning: true }
       )
       // eslint-disable-next-line prefer-destructuring
       updatedQuestion = updatedQuestions[0]
@@ -117,8 +107,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 
 const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
   const feedbackTarget = await getFeedbackTarget(feedbackTargetId, user.id)
-  if (!feedbackTarget)
-    ApplicationError.NotFound('Feedbacktarget to update not found')
+  if (!feedbackTarget) ApplicationError.NotFound('Feedbacktarget to update not found')
 
   const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
   const access = await getAccess({
@@ -136,10 +125,7 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
   const { questions, surveyId } = body
 
   if (updates.opensAt || updates.closesAt) {
-    if (
-      (updates.opensAt ?? feedbackTarget.opensAt) >
-      (updates.closesAt ?? feedbackTarget.closesAt)
-    ) {
+    if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
       throw new ApplicationError('ClosesAt cannot be before opensAt', 400)
     }
     updates.feedbackDatesEditedByTeacher = true
@@ -149,7 +135,7 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
     updates.publicQuestionIds = parseUpdatedQuestionIds(
       updates.publicQuestionIds,
       questions,
-      feedbackTarget.publicQuestionIds,
+      feedbackTarget.publicQuestionIds
     )
   }
 
@@ -161,15 +147,13 @@ const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
     } = await updateSurvey(feedbackTarget, user, surveyId, questions)
 
     if (newIds.length === 1) {
-      const newQuestion = questions.find((q) => q.id === undefined)
+      const newQuestion = questions.find(q => q.id === undefined)
       if (newQuestion?.public) {
         updates.publicQuestionIds.push(newIds[0])
       }
     }
 
-    updates.publicQuestionIds = updates.publicQuestionIds.filter(
-      (id) => !removedIds.includes(id),
-    )
+    updates.publicQuestionIds = updates.publicQuestionIds.filter(id => !removedIds.includes(id))
 
     updates.questions = updatedQuestions
   }

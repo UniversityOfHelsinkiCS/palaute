@@ -2,15 +2,7 @@ import React, { useState, forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import {
-  Button,
-  Box,
-  Card,
-  CardContent,
-  Alert,
-  keyframes,
-  css,
-} from '@mui/material'
+import { Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -58,7 +50,7 @@ const tada = keyframes({
 const styles = {
   alert: {
     fontSize: '1.1rem',
-    fontWeight: (theme) => theme.typography.fontWeightBold,
+    fontWeight: theme => theme.typography.fontWeightBold,
   },
   icon: css`
     animation: ${tada} 2500ms;
@@ -92,12 +84,7 @@ const FormContainer = ({
   const { t } = useTranslation()
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validate={validate}
-      validateOnChange={false}
-    >
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} validateOnChange={false}>
       {({ isSubmitting }) => {
         const disabled = isSubmitting || disabledProp
 
@@ -108,10 +95,7 @@ const FormContainer = ({
                 <Box mb={2}>
                   <Alert severity="info">
                     {t('feedbackView:feedbackInfo')}{' '}
-                    <AlertLink
-                      href="#feedback-privacy-dialog-title"
-                      onClick={onOpenPrivacyDialog}
-                    >
+                    <AlertLink href="#feedback-privacy-dialog-title" onClick={onOpenPrivacyDialog}>
                       {t('feedbackView:feedbackInfoLink')}
                     </AlertLink>
                   </Alert>
@@ -122,15 +106,8 @@ const FormContainer = ({
             </Card>
 
             <Box mt={2}>
-              <Button
-                disabled={disabled}
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
-                {isEdit
-                  ? t('feedbackView:editButton')
-                  : t('feedbackView:submitButton')}
+              <Button disabled={disabled} color="primary" variant="contained" type="submit">
+                {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
               </Button>
             </Box>
           </Form>
@@ -169,7 +146,7 @@ const GuestFeedbackView = () => {
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (checkIsFeedbackOpen(closesAt)) {
         enqueueSnackbar(t('feedbackView:feedbackClosedError'), {
@@ -183,9 +160,7 @@ const GuestFeedbackView = () => {
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 5999,
-          content: (key, message) => (
-            <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
-          ),
+          content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
         })
       }
     } catch (e) {
@@ -209,10 +184,7 @@ const GuestFeedbackView = () => {
       <Alert severity="info">
         <Trans i18nKey="feedbackView:endedInfo">
           The feedback period has ended.{' '}
-          <AlertLink
-            component={Link}
-            to={`/noad/targets/${feedbackTarget.id}/results`}
-          >
+          <AlertLink component={Link} to={`/noad/targets/${feedbackTarget.id}/results`}>
             Take a look at the feedbacks
           </AlertLink>
         </Trans>
@@ -224,17 +196,14 @@ const GuestFeedbackView = () => {
     setPrivacyDialogOpen(false)
   }
 
-  const handleOpenPrivacyDialog = (event) => {
+  const handleOpenPrivacyDialog = event => {
     event.preventDefault()
     setPrivacyDialogOpen(true)
   }
 
   return (
     <>
-      <PrivacyDialog
-        open={privacyDialogOpen}
-        onClose={handleClosePrivacyDialog}
-      />
+      <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
       {!isOpen && !isEnded && closedAlert}
 

@@ -27,7 +27,7 @@ CourseUnitsOrganisation.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = CourseUnitsOrganisation

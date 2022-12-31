@@ -10,12 +10,7 @@ import { useTranslation } from 'react-i18next'
 import useOrganisations from '../../../hooks/useOrganisations'
 import Filters from './Filters'
 
-import {
-  getFacultyAccess,
-  useOpenAccordions,
-  useAggregatedOrganisationSummaries,
-  ORDER_BY_OPTIONS,
-} from './utils'
+import { getFacultyAccess, useOpenAccordions, useAggregatedOrganisationSummaries, ORDER_BY_OPTIONS } from './utils'
 import Title from '../../../components/common/Title'
 import useHistoryState from '../../../hooks/useHistoryState'
 import useCourseSummaryAccessInfo from '../../../hooks/useCourseSummaryAccessInfo'
@@ -25,7 +20,7 @@ import ErrorView from '../../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
 
-const safelyParseDateRange = (dateRange) =>
+const safelyParseDateRange = dateRange =>
   dateRange?.startDate && dateRange?.endDate
     ? {
         start: new Date(dateRange.startDate),
@@ -48,15 +43,12 @@ const OrganisationSummary = () => {
     error: dateLoadingError,
   } = useCourseSummaryAccessInfo()
 
-  const { organisations: organisationAccess, isLoading: organisationLoading } =
-    useOrganisations()
+  const { organisations: organisationAccess, isLoading: organisationLoading } = useOrganisations()
 
   const { data } = useOrganisationData()
   const organisationData = data || []
 
-  const facultyAccess =
-    !organisationLoading &&
-    getFacultyAccess(organisationAccess, organisationData)
+  const facultyAccess = !organisationLoading && getFacultyAccess(organisationAccess, organisationData)
   const hasMultipleFacultyAccess = facultyAccess.length > 1
 
   const [facultyCode, setFacultyCode] = useHistoryState('facultyCode', 'All')
@@ -65,25 +57,19 @@ const OrganisationSummary = () => {
 
   const isEducationBachelorOrMaster = code === '600-K001' || code === '600-M001'
 
-  const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] =
-    useHistoryState('includeOpenUniCourseUnits', false)
+  const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useHistoryState('includeOpenUniCourseUnits', false)
 
   const [dateRange, setDateRange] = useHistoryState('dateRange', {
     start: null,
     end: null,
   })
 
-  const [orderBy, setOrderBy] = useHistoryState(
-    'orderBy',
-    ORDER_BY_OPTIONS[0].value,
-  )
+  const [orderBy, setOrderBy] = useHistoryState('orderBy', ORDER_BY_OPTIONS[0].value)
 
   const componentRef = useRef()
 
   const resultingDateRange =
-    dateRange.start && dateRange.end
-      ? dateRange
-      : safelyParseDateRange(courseSummaryAccessInfo?.defaultDateRange)
+    dateRange.start && dateRange.end ? dateRange : safelyParseDateRange(courseSummaryAccessInfo?.defaultDateRange)
 
   const {
     organisationSummaries,
@@ -104,48 +90,34 @@ const OrganisationSummary = () => {
     organisationData,
   })
 
-  const { openAccordions, toggleAccordion } = useOpenAccordions(
-    organisationSummaries?.organisations ?? [],
-  )
+  const { openAccordions, toggleAccordion } = useOpenAccordions(organisationSummaries?.organisations ?? [])
 
   if (isDateLoadingError) {
-    return (
-      <ErrorView
-        message={errors.getGeneralError(dateLoadingError)}
-        response={dateLoadingError.response}
-      />
-    )
+    return <ErrorView message={errors.getGeneralError(dateLoadingError)} response={dateLoadingError.response} />
   }
   if (isLoadingError && !organisationSummaries) {
-    return (
-      <ErrorView
-        message={errors.getGeneralError(error)}
-        response={error.response}
-      />
-    )
+    return <ErrorView message={errors.getGeneralError(error)} response={error.response} />
   }
 
   const questions = organisationSummaries?.questions
 
-  const handleFacultyChange = (newFaculty) => {
+  const handleFacultyChange = newFaculty => {
     setFacultyCode(newFaculty)
   }
 
-  const handleTagChange = (newTagId) => {
+  const handleTagChange = newTagId => {
     setTagId(newTagId)
   }
 
-  const handleKeywordChange = (nextKeyword) => {
+  const handleKeywordChange = nextKeyword => {
     setKeyword(nextKeyword)
   }
 
-  const handleIncludeOpenUniCourseUnitsChange = (
-    nextIncludeOpenUniCourseUnits,
-  ) => {
+  const handleIncludeOpenUniCourseUnitsChange = nextIncludeOpenUniCourseUnits => {
     setIncludeOpenUniCourseUnits(nextIncludeOpenUniCourseUnits)
   }
 
-  const handleOrderByChange = (nextOrderBy) => {
+  const handleOrderByChange = nextOrderBy => {
     setOrderBy(nextOrderBy)
   }
 
@@ -159,20 +131,14 @@ const OrganisationSummary = () => {
           </Typography>
           <ExportCourses
             average={organisationSummaries?.averageRow}
-            organisations={
-              !isOrganisationsLoading ? aggregatedOrganisations : []
-            }
+            organisations={!isOrganisationsLoading ? aggregatedOrganisations : []}
             questions={questions || []}
             componentRef={componentRef}
           />
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">
-          {t(
-            code
-              ? 'courseSummary:programmeLevelQuestions'
-              : 'courseSummary:universityLevelQuestions',
-          )}
+          {t(code ? 'courseSummary:programmeLevelQuestions' : 'courseSummary:universityLevelQuestions')}
         </Typography>
       </Box>
       <OrganisationTable
@@ -197,16 +163,12 @@ const OrganisationSummary = () => {
             onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
-            onIncludeOpenUniCourseUnitsChange={
-              handleIncludeOpenUniCourseUnitsChange
-            }
+            onIncludeOpenUniCourseUnitsChange={handleIncludeOpenUniCourseUnitsChange}
             dateRange={resultingDateRange}
             isDateRangeLoading={defaultDateRangeLoading}
             onDateRangeChange={setDateRange}
             componentRef={componentRef}
-            organisations={
-              !isOrganisationsLoading ? aggregatedOrganisations : []
-            }
+            organisations={!isOrganisationsLoading ? aggregatedOrganisations : []}
             questions={questions || []}
           />
         }

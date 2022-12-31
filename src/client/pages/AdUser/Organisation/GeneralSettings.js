@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Switch,
-  FormControlLabel,
-  Box,
-  Typography,
-} from '@mui/material'
+import { Card, CardContent, Switch, FormControlLabel, Box, Typography } from '@mui/material'
 
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -32,13 +25,11 @@ const GeneralSettingsContainer = ({ organisation }) => {
   const { t } = useTranslation()
   const { code } = organisation
 
-  const [studentListVisible, setStudentListVisible] = useState(
-    organisation?.studentListVisible ?? false,
-  )
+  const [studentListVisible, setStudentListVisible] = useState(organisation?.studentListVisible ?? false)
 
   const mutation = useMutation(saveGeneralSettings)
 
-  const handleStudentListVisibleChange = async (event) => {
+  const handleStudentListVisibleChange = async event => {
     const updatedOrganisation = await mutation.mutateAsync({
       code,
       studentListVisible: event.target.checked,
@@ -49,19 +40,11 @@ const GeneralSettingsContainer = ({ organisation }) => {
 
   return (
     <Box>
-      <Typography textTransform="uppercase">
-        {t('organisationSettings:generalSettings')}
-      </Typography>
+      <Typography textTransform="uppercase">{t('organisationSettings:generalSettings')}</Typography>
       <Card>
         <CardContent>
           <FormControlLabel
-            control={
-              <Switch
-                checked={studentListVisible}
-                onChange={handleStudentListVisibleChange}
-                color="primary"
-              />
-            }
+            control={<Switch checked={studentListVisible} onChange={handleStudentListVisibleChange} color="primary" />}
             disabled={mutation.isLoading}
             label={t('organisationSettings:studentListVisible')}
           />

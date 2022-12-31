@@ -6,7 +6,7 @@ const useHistoryState = (key, initialValue) => {
 
   const historyState = history.location.state ?? {}
 
-  const replaceHistoryState = (update) => {
+  const replaceHistoryState = update => {
     history.replace({
       state: { ...historyState, ...update },
     })
@@ -14,7 +14,7 @@ const useHistoryState = (key, initialValue) => {
 
   const [state, setState] = useState(historyState[key] ?? initialValue)
 
-  const handleSetState = (nextState) => {
+  const handleSetState = nextState => {
     setState(nextState)
     replaceHistoryState({ [key]: nextState })
   }

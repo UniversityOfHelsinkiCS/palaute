@@ -7,7 +7,7 @@ const TeacherChip = ({ user, onDelete }) => (
       label={`${user.firstName ?? ''} ${user.lastName ?? ''}`}
       onDelete={
         onDelete &&
-        ((e) => {
+        (e => {
           e?.preventDefault()
           onDelete()
         })

@@ -45,21 +45,11 @@ const BannerPreview = ({ values }) => {
 
   return (
     <Box position="absolute" top={0} left={0} zIndex={theme.zIndex.modal + 1}>
-      <Banner
-        banner={formValuesToBannerData(theme, values)}
-        language={l}
-        canClose={false}
-      />
-      <Box
-        m={1}
-        display="flex"
-        flexDirection="column"
-        rowGap={1}
-        alignItems="start"
-      >
+      <Banner banner={formValuesToBannerData(theme, values)} language={l} canClose={false} />
+      <Box m={1} display="flex" flexDirection="column" rowGap={1} alignItems="start">
         <Alert severity="info">Preview</Alert>
         <Paper elevation={0}>
-          <LanguageSelect value={l} onChange={(v) => setL(v)} />
+          <LanguageSelect value={l} onChange={v => setL(v)} />
         </Paper>
       </Box>
     </Box>
@@ -140,7 +130,7 @@ const BannerForm = ({ onSubmit }) => {
         Create new banner
       </Button>
       <Formik
-        onSubmit={async (values) => {
+        onSubmit={async values => {
           await onSubmit(values)
           setOpen(false)
         }}
@@ -157,43 +147,20 @@ const BannerForm = ({ onSubmit }) => {
       >
         {({ values, handleSubmit }) => (
           <>
-            <Dialog
-              open={open}
-              onClose={() => setOpen(false)}
-              sx={{ maxHeight: '75vh', top: '20vh' }}
-            >
+            <Dialog open={open} onClose={() => setOpen(false)} sx={{ maxHeight: '75vh', top: '20vh' }}>
               <DialogTitle>Create new banner</DialogTitle>
               <DialogContent>
                 <Box my={2}>
-                  <FormikTextField
-                    name="textFi"
-                    label="Markdown content (FI)"
-                    multiline
-                    fullWidth
-                  />
+                  <FormikTextField name="textFi" label="Markdown content (FI)" multiline fullWidth />
                 </Box>
-                <FormikTextField
-                  name="textSv"
-                  label="Markdown content (SV)"
-                  multiline
-                  fullWidth
-                />
+                <FormikTextField name="textSv" label="Markdown content (SV)" multiline fullWidth />
                 <Box m={2} />
-                <FormikTextField
-                  name="textEn"
-                  label="Markdown content (EN)"
-                  multiline
-                  fullWidth
-                />
+                <FormikTextField name="textEn" label="Markdown content (EN)" multiline fullWidth />
                 <Box my={3}>
                   <Divider />
                 </Box>
                 <FormikSelect name="hue" label="Hue" options={hueOptions} />
-                <FormikSelect
-                  name="lightness"
-                  label="Lightness"
-                  options={lightnessOptions}
-                />
+                <FormikSelect name="lightness" label="Lightness" options={lightnessOptions} />
                 <Box my={3}>
                   <Divider />
                 </Box>
@@ -202,11 +169,7 @@ const BannerForm = ({ onSubmit }) => {
                 <Box my={3}>
                   <Divider />
                 </Box>
-                <FormikSelect
-                  name="accessGroup"
-                  label="Target group"
-                  options={accessGroupOptions}
-                />
+                <FormikSelect name="accessGroup" label="Target group" options={accessGroupOptions} />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleSubmit}>Create</Button>
@@ -224,19 +187,16 @@ const BannerView = () => {
   const { authorizedUser } = useAuthorizedUser()
   const theme = useTheme()
 
-  const handleSubmit = async (bannerValues) => {
+  const handleSubmit = async bannerValues => {
     try {
-      await apiClient.post(
-        '/admin/banners',
-        formValuesToBannerData(theme, bannerValues),
-      )
+      await apiClient.post('/admin/banners', formValuesToBannerData(theme, bannerValues))
       queryClient.refetchQueries(['authorizedUser'])
     } catch (error) {
       console.log('SOMETHING WENT WRONG')
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     if (!window.confirm('Delete this banner for good?')) return
     try {
       await apiClient.delete(`/admin/banners/${id}`)
@@ -249,26 +209,18 @@ const BannerView = () => {
   return (
     <div>
       <BannerForm onSubmit={handleSubmit} />
-      {authorizedUser?.banners.map((banner) => (
+      {authorizedUser?.banners.map(banner => (
         <Box m={2} key={banner.id}>
           <Paper variant="outlined">
             <Box padding={2}>
-              <Banner
-                banner={banner}
-                language={authorizedUser.language}
-                disabled
-              />
+              <Banner banner={banner} language={authorizedUser.language} disabled />
               <Box display="flex" columnGap={2}>
                 <div>Color: {banner.color}</div>
                 <div>Start date: {banner.startDate}</div>
                 <div>End date: {banner.endDate}</div>
                 <div>Access group: {banner.accessGroup}</div>
                 <Box ml="auto">
-                  <Button
-                    variant="text"
-                    color="error"
-                    onClick={() => handleDelete(banner.id)}
-                  >
+                  <Button variant="text" color="error" onClick={() => handleDelete(banner.id)}>
                     DELETE
                   </Button>
                 </Box>

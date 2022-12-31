@@ -5,17 +5,11 @@ import { useTranslation } from 'react-i18next'
 
 import QuestionCard from './QuestionCard'
 
-import {
-  createQuestion,
-  getQuestionId,
-  copyQuestion,
-  questionCanMoveUp,
-  questionCanMoveDown,
-} from './utils'
+import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 
 const styles = {
   questionCard: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
     marginTop: '1.5rem',
     padding: '0.5rem',
   },
@@ -25,28 +19,20 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
-  const handleChooseType = (type) => {
+  const handleChooseType = type => {
     onClose()
     onChooseType(type)
   }
 
   return (
     <Menu anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <MenuItem onClick={() => handleChooseType('LIKERT')}>
-        {t('questionEditor:likertQuestion')}
-      </MenuItem>
-      <MenuItem onClick={() => handleChooseType('OPEN')}>
-        {t('questionEditor:openQuestion')}
-      </MenuItem>
-      <MenuItem onClick={() => handleChooseType('SINGLE_CHOICE')}>
-        {t('questionEditor:singleChoiceQuestion')}
-      </MenuItem>
+      <MenuItem onClick={() => handleChooseType('LIKERT')}>{t('questionEditor:likertQuestion')}</MenuItem>
+      <MenuItem onClick={() => handleChooseType('OPEN')}>{t('questionEditor:openQuestion')}</MenuItem>
+      <MenuItem onClick={() => handleChooseType('SINGLE_CHOICE')}>{t('questionEditor:singleChoiceQuestion')}</MenuItem>
       <MenuItem onClick={() => handleChooseType('MULTIPLE_CHOICE')}>
         {t('questionEditor:multipleChoiceQuestion')}
       </MenuItem>
-      <MenuItem onClick={() => handleChooseType('TEXT')}>
-        {t('questionEditor:textualContent')}
-      </MenuItem>
+      <MenuItem onClick={() => handleChooseType('TEXT')}>{t('questionEditor:textualContent')}</MenuItem>
     </Menu>
   )
 }
@@ -78,7 +64,7 @@ const QuestionEditor = ({
     }
   }
 
-  const handlePublicityToggle = (question) => (isPublic) => {
+  const handlePublicityToggle = question => isPublic => {
     if (typeof isPublic === 'string') isPublic = isPublic === 'true'
 
     onPublicityToggle(question, isPublic)
@@ -87,7 +73,7 @@ const QuestionEditor = ({
   return (
     <FieldArray
       name={name}
-      render={(arrayHelpers) => (
+      render={arrayHelpers => (
         <div>
           {questions.map((question, index) => (
             <QuestionCard
@@ -115,14 +101,10 @@ const QuestionEditor = ({
               sx={styles.questionCard}
               isEditing={editingQuestionId === getQuestionId(question)}
               onStopEditing={() => handleStopEditing()}
-              onStartEditing={() =>
-                setEditingQuestionId(getQuestionId(question))
-              }
+              onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
               editable={editable}
               publicQuestionIds={publicQuestionIds}
-              publicityConfigurableQuestionIds={
-                publicityConfigurableQuestionIds
-              }
+              publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
               onPublicityToggle={handlePublicityToggle(question)}
             />
           ))}
@@ -131,7 +113,7 @@ const QuestionEditor = ({
             open={menuOpen}
             anchorEl={addButtonRef.current}
             onClose={() => setMenuOpen(false)}
-            onChooseType={(type) => {
+            onChooseType={type => {
               const newQuestion = createQuestion(type)
               arrayHelpers.push(newQuestion)
               setEditingQuestionId(getQuestionId(newQuestion))

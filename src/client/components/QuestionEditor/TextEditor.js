@@ -36,7 +36,7 @@ const LanguageTextEditor = ({ name, language }) => {
 
 const TextEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
   <Grid spacing={4} container>
-    {languages.map((language) => (
+    {languages.map(language => (
       <Grid md={4} sm={12} xs={12} item key={language}>
         <Box mb={2}>
           <Typography variant="h6" component="h2">

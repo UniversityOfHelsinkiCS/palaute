@@ -24,24 +24,18 @@ const NotEnoughFeedbacks = ({ t }) => (
 
 const OnlyForEnrolled = ({ t }) => (
   <Box mb={2}>
-    <Alert severity="warning">
-      {t('feedbackTargetResults:onlyForEnrolledInfo')}
-    </Alert>
+    <Alert severity="warning">{t('feedbackTargetResults:onlyForEnrolledInfo')}</Alert>
   </Box>
 )
 
 const FeedbackTargetResultsView = () => {
   const { t } = useTranslation()
   const { id } = useParams()
-  const isMobileChrome =
-    useIsMobile() &&
-    navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
+  const isMobileChrome = useIsMobile() && navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
 
-  const { feedbackTargetData, isLoading: feedbacksIsLoading } =
-    useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData, isLoading: feedbacksIsLoading } = useFeedbackTargetFeedbacks(id)
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
@@ -84,9 +78,7 @@ const FeedbackTargetResultsView = () => {
 
       {isOpen && feedback && (
         <Box mb={2}>
-          <Alert severity="info">
-            {t('feedbackTargetResults:thankYouMessage')}
-          </Alert>
+          <Alert severity="info">{t('feedbackTargetResults:thankYouMessage')}</Alert>
         </Box>
       )}
 
@@ -103,12 +95,7 @@ const FeedbackTargetResultsView = () => {
         </Box>
       )}
 
-      {feedbacks.length === 0 &&
-        (feedbackVisible ? (
-          <NotEnoughFeedbacks t={t} />
-        ) : (
-          <OnlyForEnrolled t={t} />
-        ))}
+      {feedbacks.length === 0 && (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled t={t} />)}
 
       {feedbacks.length > 0 && (
         <Box>

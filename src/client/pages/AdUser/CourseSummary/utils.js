@@ -21,9 +21,9 @@ export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
   return feedbackResponseGiven ? 'GIVEN' : 'NONE'
 }
 
-const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+const isNumber = value => !Number.isNaN(parseInt(value, 10))
 
-export const normalizeOrganisationCode = (r) => {
+export const normalizeOrganisationCode = r => {
   if (r.startsWith('T')) {
     return r.replace('T', '7')
   }
@@ -40,20 +40,18 @@ export const normalizeOrganisationCode = (r) => {
 
 export const getFacultyAccess = (organisationAccess, data) => {
   const organisationCodes = organisationAccess.map(({ code }) => code)
-  const faculties = data.map((data) => ({
+  const faculties = data.map(data => ({
     ...data,
-    programmes: data.programmes.map((programme) => ({
+    programmes: data.programmes.map(programme => ({
       ...programme,
       key: normalizeOrganisationCode(programme.key),
     })),
   }))
 
   const facultyAccess = []
-  faculties.forEach((faculty) => {
+  faculties.forEach(faculty => {
     const programmeCodes = faculty.programmes.map(({ key }) => key)
-    const hasAccess = organisationCodes.some((code) =>
-      programmeCodes.includes(code),
-    )
+    const hasAccess = organisationCodes.some(code => programmeCodes.includes(code))
 
     if (hasAccess) facultyAccess.push(faculty)
   })
@@ -65,13 +63,13 @@ const filterByFaculty = (organisations, facultyCode, data) => {
   if (!facultyCode) return organisations
 
   const facultyProgrammeCodes = data
-    .find((faculty) => faculty.code === facultyCode)
-    ?.programmes.map((programme) => normalizeOrganisationCode(programme.key))
+    .find(faculty => faculty.code === facultyCode)
+    ?.programmes.map(programme => normalizeOrganisationCode(programme.key))
 
   if (!facultyProgrammeCodes) return organisations
 
-  const organisationsFilteredByFaculty = organisations.filter((organisation) =>
-    facultyProgrammeCodes.includes(organisation.code),
+  const organisationsFilteredByFaculty = organisations.filter(organisation =>
+    facultyProgrammeCodes.includes(organisation.code)
   )
 
   return organisationsFilteredByFaculty
@@ -84,18 +82,12 @@ export const filterByCourseCode = (organisations, keyword) => {
     return organisations
   }
 
-  const organisationsWithFilteredCourseUnits = organisations.map(
-    ({ courseUnits, ...org }) => ({
-      courseUnits: (courseUnits ?? []).filter(({ courseCode }) =>
-        courseCodeMatches(courseCode, normalizedKeyword),
-      ),
-      ...org,
-    }),
-  )
+  const organisationsWithFilteredCourseUnits = organisations.map(({ courseUnits, ...org }) => ({
+    courseUnits: (courseUnits ?? []).filter(({ courseCode }) => courseCodeMatches(courseCode, normalizedKeyword)),
+    ...org,
+  }))
 
-  return organisationsWithFilteredCourseUnits.filter(
-    ({ courseUnits }) => courseUnits.length > 0,
-  )
+  return organisationsWithFilteredCourseUnits.filter(({ courseUnits }) => courseUnits.length > 0)
 }
 
 export const getAccess = (organisationId, organisationAccess) =>
@@ -171,19 +163,11 @@ const getOrderByArgs = (organisations, orderByCriteria) => {
     const id = Number(orderByData[2])
     const sortOrder = orderByData[3].toLowerCase()
 
-    const index = organisations[0].results.indexOf(
-      organisations[0].results.find((result) => result.questionId === id),
-    )
+    const index = organisations[0].results.indexOf(organisations[0].results.find(result => result.questionId === id))
 
     return {
-      organisations: [
-        [(organisation) => organisation.results[index].mean],
-        [sortOrder],
-      ],
-      courseUnits: [
-        [(courseUnit) => courseUnit.results[index].mean],
-        [[sortOrder]],
-      ],
+      organisations: [[organisation => organisation.results[index].mean], [sortOrder]],
+      courseUnits: [[courseUnit => courseUnit.results[index].mean], [[sortOrder]]],
     }
   }
 
@@ -196,28 +180,23 @@ const SORTABLE_FEEDBACK_RESPONSE = {
   GIVEN: 3,
 }
 
-const formatForFeedbackResponse = (organisations) =>
+const formatForFeedbackResponse = organisations =>
   // Add sortable feedbackResponse attribute to each courseUnit
-  organisations.map((organisation) => ({
+  organisations.map(organisation => ({
     ...organisation,
-    courseUnits: organisation.courseUnits.map((courseUnit) => ({
+    courseUnits: organisation.courseUnits.map(courseUnit => ({
       ...courseUnit,
       feedbackResponse:
-        SORTABLE_FEEDBACK_RESPONSE[
-          getFeedbackResponseGiven(
-            courseUnit.feedbackResponseGiven,
-            courseUnit.closesAt,
-          )
-        ],
+        SORTABLE_FEEDBACK_RESPONSE[getFeedbackResponseGiven(courseUnit.feedbackResponseGiven, courseUnit.closesAt)],
     })),
   }))
 
-const formatForFeedbackPercentage = (organisations) =>
+const formatForFeedbackPercentage = organisations =>
   // Add sortable feedbackPercentage attribute to each organisation and courseUnit
-  organisations.map((organisation) => ({
+  organisations.map(organisation => ({
     ...organisation,
     feedbackPercentage: organisation.feedbackCount / organisation.studentCount,
-    courseUnits: organisation.courseUnits.map((courseUnit) => ({
+    courseUnits: organisation.courseUnits.map(courseUnit => ({
       ...courseUnit,
       feedbackPercentage: courseUnit.feedbackCount / courseUnit.studentCount,
     })),
@@ -227,37 +206,30 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
   if (organisations.length === 0) return []
   const orderByArgs = getOrderByArgs(organisations, orderByCriteria)
 
-  if (orderByCriteria.includes('FEEDBACK_RESPONSE'))
-    organisations = formatForFeedbackResponse(organisations)
+  if (orderByCriteria.includes('FEEDBACK_RESPONSE')) organisations = formatForFeedbackResponse(organisations)
 
-  if (orderByCriteria.includes('FEEDBACK_PERCENTAGE'))
-    organisations = formatForFeedbackPercentage(organisations)
+  if (orderByCriteria.includes('FEEDBACK_PERCENTAGE')) organisations = formatForFeedbackPercentage(organisations)
 
   return orderByArgs
     ? sortBy(
         orderBy(
-          organisations.map((organisation) => ({
+          organisations.map(organisation => ({
             ...organisation,
-            courseUnits: orderBy(
-              organisation.courseUnits,
-              ...orderByArgs.courseUnits,
-            ),
+            courseUnits: orderBy(organisation.courseUnits, ...orderByArgs.courseUnits),
           })),
-          ...orderByArgs.organisations,
+          ...orderByArgs.organisations
         ),
-        (org) => (org.feedbackCount ? 0 : 1),
+        org => (org.feedbackCount ? 0 : 1)
       )
-    : sortBy(organisations, (organisation) =>
-        organisation.feedbackCount ? 0 : 1,
-      )
+    : sortBy(organisations, organisation => (organisation.feedbackCount ? 0 : 1))
 }
 
-export const useOpenAccordions = (organisations) => {
+export const useOpenAccordions = organisations => {
   const history = useHistory()
 
   const historyState = history.location.state ?? {}
 
-  const replaceHistoryState = (update) => {
+  const replaceHistoryState = update => {
     history.replace({
       state: { ...historyState, ...update },
     })
@@ -265,11 +237,11 @@ export const useOpenAccordions = (organisations) => {
 
   const openAccordions = getInitialOpenAccordions(organisations, history)
 
-  const toggleAccordion = (id) => {
+  const toggleAccordion = id => {
     let nextOpenAccordions = openAccordions
 
     if (openAccordions.includes(id)) {
-      nextOpenAccordions = openAccordions.filter((a) => a !== id)
+      nextOpenAccordions = openAccordions.filter(a => a !== id)
     } else {
       nextOpenAccordions = openAccordions.concat(id)
     }
@@ -304,26 +276,23 @@ export const useAggregatedOrganisationSummaries = ({
 
   const withAccess = useMemo(
     () =>
-      organisationSummaries?.organisations?.map((org) => ({
+      organisationSummaries?.organisations?.map(org => ({
         ...org,
         access: getAccess(org.id, organisationAccess),
       })) ?? [],
-    [organisationSummaries?.organisations, organisationAccess],
+    [organisationSummaries?.organisations, organisationAccess]
   )
 
-  const filteredOrganisations = useMemo(
-    () => filterByCourseCode(withAccess, keyword),
-    [withAccess, keyword],
-  )
+  const filteredOrganisations = useMemo(() => filterByCourseCode(withAccess, keyword), [withAccess, keyword])
 
   const facultyOrganisations = useMemo(
     () => filterByFaculty(filteredOrganisations, facultyCode, organisationData),
-    [filteredOrganisations, facultyCode],
+    [filteredOrganisations, facultyCode]
   )
 
   const sortedOrganisations = useMemo(
     () => orderByCriteria(facultyOrganisations, orderBy),
-    [facultyOrganisations, orderBy],
+    [facultyOrganisations, orderBy]
   )
 
   return {

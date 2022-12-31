@@ -1,17 +1,15 @@
 const { QueryTypes } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.sequelize.transaction(async (transaction) => {
+  up: async queryInterface => {
+    await queryInterface.sequelize.transaction(async transaction => {
       try {
         console.log('CHECKING')
         await queryInterface.sequelize.query(`
           SELECT responsible_user_id FROM organisations LIMIT 1;
         `)
       } catch (error) {
-        console.log(
-          'Organisations dont have responsible user id, skipping data migration',
-        )
+        console.log('Organisations dont have responsible user id, skipping data migration')
         return
       }
 
@@ -21,7 +19,7 @@ module.exports = {
         FROM organisations
         WHERE responsible_user_id IS NOT NULL;
       `,
-        { type: QueryTypes.SELECT },
+        { type: QueryTypes.SELECT }
       )
 
       for (const org of organisations) {
@@ -31,10 +29,10 @@ module.exports = {
           SELECT user_id as "userId" FROM organisation_feedback_correspondents
           WHERE organisation_id = :organisationId;
         `,
-          { type: QueryTypes.SELECT, replacements: { organisationId: org.id } },
+          { type: QueryTypes.SELECT, replacements: { organisationId: org.id } }
         )
 
-        if (users.map((u) => u.userId).includes(org.responsibleUserId)) continue
+        if (users.map(u => u.userId).includes(org.responsibleUserId)) continue
 
         await queryInterface.sequelize.query(
           `
@@ -51,12 +49,12 @@ module.exports = {
               updatedAt: new Date(),
             },
             transaction,
-          },
+          }
         )
       }
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.dropTable('organisation_feedback_correspondents')
   },
 }

@@ -37,17 +37,13 @@ const AccessTable = ({ access, filterAdmins }) => {
       admin: 3,
     }
 
-    a = Object.keys(a[0].access).filter((key) => a[0].access[key])
-    b = Object.keys(b[0].access).filter((key) => b[0].access[key])
+    a = Object.keys(a[0].access).filter(key => a[0].access[key])
+    b = Object.keys(b[0].access).filter(key => b[0].access[key])
 
-    return (
-      b.reduce((sum, b) => sum + SORT_VALUES[b], 0) -
-      a.reduce((sum, a) => sum + SORT_VALUES[a], 0)
-    )
+    return b.reduce((sum, b) => sum + SORT_VALUES[b], 0) - a.reduce((sum, a) => sum + SORT_VALUES[a], 0)
   }
 
-  if (filterAdmins)
-    access = access.filter(({ username }) => !ADMINS.includes(username))
+  if (filterAdmins) access = access.filter(({ username }) => !ADMINS.includes(username))
 
   return (
     <TableContainer>
@@ -62,7 +58,7 @@ const AccessTable = ({ access, filterAdmins }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {access.sort(sortByAccess).map((user) => {
+          {access.sort(sortByAccess).map(user => {
             const { id, firstName, lastName, access, lastLoggedIn } = user
             const { read, write, admin } = access[0].access
 
@@ -73,9 +69,7 @@ const AccessTable = ({ access, filterAdmins }) => {
                 <TableCell>{write ? 'true' : 'false'}</TableCell>
                 <TableCell>{admin ? 'true' : 'false'}</TableCell>
                 <TableCell>
-                  {lastLoggedIn
-                    ? format(Date.parse(lastLoggedIn), 'dd/MM/yyyy HH.mm')
-                    : 'Not since 10.6.22'}
+                  {lastLoggedIn ? format(Date.parse(lastLoggedIn), 'dd/MM/yyyy HH.mm') : 'Not since 10.6.22'}
                 </TableCell>
               </TableRow>
             )
@@ -87,13 +81,8 @@ const AccessTable = ({ access, filterAdmins }) => {
 }
 
 const ProgrammeAccordion = ({ code, name, access, filterAdmins }) => (
-  <Accordion
-    key={code}
-    TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
-  >
-    <AccordionSummary
-      sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}
-    >
+  <Accordion key={code} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>
+    <AccordionSummary sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}>
       <Box display="flex" alignItems="center" width="100%">
         <Typography>{name.fi}</Typography>
         <Box mr={2} />
@@ -109,10 +98,7 @@ const ProgrammeAccordion = ({ code, name, access, filterAdmins }) => (
 const AccessTab = () => {
   const [access, setAccess] = useState([])
   const [filterAdmins, setFilterAdmins] = useState(true)
-  const [facultyCode, setFaculty] = useHistoryState(
-    'organisationAccessFaculty',
-    'All',
-  )
+  const [facultyCode, setFaculty] = useHistoryState('organisationAccessFaculty', 'All')
 
   const { t } = useTranslation()
 
@@ -122,11 +108,7 @@ const AccessTab = () => {
   useEffect(() => {
     if (isLoading || dataIsLoading) return
 
-    const programmeAccess = getProgrammeAccessByFaculty(
-      usersWithAccess,
-      facultyCode,
-      data,
-    )
+    const programmeAccess = getProgrammeAccessByFaculty(usersWithAccess, facultyCode, data)
     setAccess(programmeAccess)
   }, [facultyCode, isLoading])
 
@@ -140,13 +122,9 @@ const AccessTab = () => {
         <Box width={400} mr={2}>
           <FormControl fullWidth>
             <InputLabel>{t('courseSummary:facultyLabel')}</InputLabel>
-            <Select
-              value={facultyCode}
-              onChange={({ target }) => setFaculty(target.value)}
-              label="Tiedekunta"
-            >
+            <Select value={facultyCode} onChange={({ target }) => setFaculty(target.value)} label="Tiedekunta">
               <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
-              {faculties.map((faculty) => (
+              {faculties.map(faculty => (
                 <MenuItem key={faculty.code} value={faculty.code}>
                   {faculty.name.fi}
                 </MenuItem>
@@ -156,12 +134,7 @@ const AccessTab = () => {
         </Box>
 
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={filterAdmins}
-              onClick={() => setFilterAdmins(!filterAdmins)}
-            />
-          }
+          control={<Checkbox checked={filterAdmins} onClick={() => setFilterAdmins(!filterAdmins)} />}
           label="Filter Norppa admins"
         />
       </Box>
@@ -169,13 +142,7 @@ const AccessTab = () => {
       {access
         .sort((a, b) => a.name.fi > b.name.fi)
         .map(({ key, name, access }) => (
-          <ProgrammeAccordion
-            key={key}
-            code={key}
-            name={name}
-            access={access}
-            filterAdmins={filterAdmins}
-          />
+          <ProgrammeAccordion key={key} code={key} name={name} access={access} filterAdmins={filterAdmins} />
         ))}
     </Box>
   )

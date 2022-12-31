@@ -8,8 +8,8 @@ export const RouterTabs = ({ children, ...props }) => {
   const { pathname } = useLocation()
 
   const activeIndex = React.Children.toArray(children)
-    .filter((c) => React.isValidElement(c))
-    .findIndex((c) => !!matchPath(pathname, { path: get(c, 'props.to') }))
+    .filter(c => React.isValidElement(c))
+    .findIndex(c => !!matchPath(pathname, { path: get(c, 'props.to') }))
 
   return (
     <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props}>
@@ -18,15 +18,7 @@ export const RouterTabs = ({ children, ...props }) => {
   )
 }
 
-export const RouterTab = ({
-  icon,
-  label,
-  to,
-  disabled,
-  disabledTooltip,
-  badge,
-  ...props
-}) => {
+export const RouterTab = ({ icon, label, to, disabled, disabledTooltip, badge, ...props }) => {
   let content = icon ? (
     <Box display="flex" alignItems="center">
       {icon}
@@ -45,15 +37,7 @@ export const RouterTab = ({
     )
   }
 
-  const tab = (
-    <Tab
-      label={content}
-      component={Link}
-      to={to}
-      disabled={disabled}
-      {...props}
-    />
-  )
+  const tab = <Tab label={content} component={Link} to={to} disabled={disabled} {...props} />
   if (disabled)
     return (
       <Tooltip title={disabledTooltip} placement="top">

@@ -31,7 +31,7 @@ const ContinuousFeedback = () => {
 
   const { id } = useParams()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (!values.feedback.length) {
         enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {

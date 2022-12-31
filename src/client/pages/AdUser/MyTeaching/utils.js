@@ -1,41 +1,23 @@
 import { orderBy } from 'lodash'
 import { lightFormat, startOfHour } from 'date-fns'
 
-export const getGroupedCourseUnits = (courseUnits) => {
+export const getGroupedCourseUnits = courseUnits => {
   const normalizedCourseUnits = courseUnits ?? []
 
-  const ongoing = normalizedCourseUnits.filter(
-    ({ ongoingCourseRealisation }) => ongoingCourseRealisation,
-  )
+  const ongoing = normalizedCourseUnits.filter(({ ongoingCourseRealisation }) => ongoingCourseRealisation)
 
-  const upcoming = normalizedCourseUnits.filter(
-    ({ upcomingCourseRealisation }) => upcomingCourseRealisation,
-  )
+  const upcoming = normalizedCourseUnits.filter(({ upcomingCourseRealisation }) => upcomingCourseRealisation)
 
-  const ended = normalizedCourseUnits.filter(
-    ({ endedCourseRealisation }) => endedCourseRealisation,
-  )
+  const ended = normalizedCourseUnits.filter(({ endedCourseRealisation }) => endedCourseRealisation)
 
   return {
-    ongoing: orderBy(
-      ongoing,
-      [({ ongoingCourseRealisation }) => ongoingCourseRealisation.startDate],
-      ['desc'],
-    ),
-    upcoming: orderBy(
-      upcoming,
-      [({ upcomingCourseRealisation }) => upcomingCourseRealisation.startDate],
-      ['asc'],
-    ),
-    ended: orderBy(
-      ended,
-      [({ endedCourseRealisation }) => endedCourseRealisation.startDate],
-      ['desc'],
-    ),
+    ongoing: orderBy(ongoing, [({ ongoingCourseRealisation }) => ongoingCourseRealisation.startDate], ['desc']),
+    upcoming: orderBy(upcoming, [({ upcomingCourseRealisation }) => upcomingCourseRealisation.startDate], ['asc']),
+    ended: orderBy(ended, [({ endedCourseRealisation }) => endedCourseRealisation.startDate], ['desc']),
   }
 }
 
-export const formatDate = (date) => lightFormat(new Date(date), 'dd.MM.yyyy')
+export const formatDate = date => lightFormat(new Date(date), 'dd.MM.yyyy')
 
 export const getRelevantCourseRealisation = (courseUnit, group) => {
   switch (group) {
@@ -50,19 +32,13 @@ export const getRelevantCourseRealisation = (courseUnit, group) => {
   }
 }
 
-export const getRelevantFeedbackTargets = (feedbackTargets) => {
-  const courseRealisationTargets = feedbackTargets.filter(
-    ({ feedbackType }) => feedbackType === 'courseRealisation',
-  )
+export const getRelevantFeedbackTargets = feedbackTargets => {
+  const courseRealisationTargets = feedbackTargets.filter(({ feedbackType }) => feedbackType === 'courseRealisation')
 
-  return orderBy(
-    courseRealisationTargets,
-    [({ courseRealisation }) => courseRealisation.startDate],
-    ['desc'],
-  )
+  return orderBy(courseRealisationTargets, [({ courseRealisation }) => courseRealisation.startDate], ['desc'])
 }
 
-export const getFeedbackTargetQueryOptions = (group) => {
+export const getFeedbackTargetQueryOptions = group => {
   switch (group) {
     case 'ONGOING':
       return {
@@ -83,7 +59,7 @@ export const getFeedbackTargetQueryOptions = (group) => {
   }
 }
 
-export const getFeedbackPercentageString = (feedbackTarget) => {
+export const getFeedbackPercentageString = feedbackTarget => {
   const { feedbackCount, studentCount } = feedbackTarget
 
   if (!feedbackCount || !studentCount) {

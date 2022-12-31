@@ -6,9 +6,7 @@ const useOrganisationCourseUnits = (code, options = {}) => {
   const queryKey = ['organisationCourseUnits', code]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/course-units/for-organisation/${code}`,
-    )
+    const { data } = await apiClient.get(`/course-units/for-organisation/${code}`)
 
     return data
   }

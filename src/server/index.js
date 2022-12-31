@@ -9,9 +9,7 @@ const { redis } = require('./util/redisClient')
 const { updater } = require('./updater')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
 const { start: startEnrolmentsCron } = require('./util/updateEnrolmentsCron')
-const {
-  start: startPrecacheFeedbackTargetsCron,
-} = require('./util/precacheFeedbackTargetsCron')
+const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { seed } = require('./db/seeders')

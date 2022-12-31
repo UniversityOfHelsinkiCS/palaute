@@ -32,7 +32,7 @@ const NorppaFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (!values.feedback.length) {
         enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {
@@ -52,7 +52,7 @@ const NorppaFeedback = () => {
     }
   }
 
-  const confirmSubmit = (event) => {
+  const confirmSubmit = event => {
     if (
       // eslint-disable-next-line no-alert
       !window.confirm(t('norppaFeedback:confirm'))
@@ -91,10 +91,7 @@ const NorppaFeedback = () => {
               label={t('norppaFeedback:anonymous')}
               onChange={({ target }) => {
                 // if anon is true, set responseWanted to false
-                setFieldValue(
-                  'responseWanted',
-                  values.responseWanted && !target.checked,
-                )
+                setFieldValue('responseWanted', values.responseWanted && !target.checked)
                 setFieldValue('anonymous', target.checked)
               }}
             />
@@ -115,11 +112,7 @@ const NorppaFeedback = () => {
             </Button>
             {values.anonymous && (
               <Box mt="1.5rem">
-                <Typography
-                  variant="body1"
-                  component="p"
-                  sx={styles.description}
-                >
+                <Typography variant="body1" component="p" sx={styles.description}>
                   {t('norppaFeedback:anonymousInfo')}
                 </Typography>
               </Box>

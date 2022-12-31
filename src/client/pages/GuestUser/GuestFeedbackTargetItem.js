@@ -3,15 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
 
-import {
-  Box,
-  Button,
-  ListItemText,
-  Chip,
-  Dialog,
-  DialogTitle,
-  ListItem,
-} from '@mui/material'
+import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
@@ -25,7 +17,7 @@ const styles = {
     alignItems: 'flex-start',
   },
   button: {
-    margin: (theme) => theme.spacing(0.5),
+    margin: theme => theme.spacing(0.5),
   },
 }
 
@@ -35,12 +27,7 @@ const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton
-      variant="contained"
-      color="primary"
-      to={editPath}
-      component={Link}
-    >
+    <ActionButton variant="contained" color="primary" to={editPath} component={Link}>
       {t('userFeedbacks:giveFeedbackButton')}
     </ActionButton>
   )
@@ -65,21 +52,11 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <>
-      <ActionButton
-        color="primary"
-        variant="contained"
-        component={Link}
-        to={editPath}
-      >
+      <ActionButton color="primary" variant="contained" component={Link} to={editPath}>
         {t('userFeedbacks:modifyFeedbackButton')}
       </ActionButton>
 
-      <ActionButton
-        color="primary"
-        variant="contained"
-        component={Link}
-        to={viewPath}
-      >
+      <ActionButton color="primary" variant="contained" component={Link} to={viewPath}>
         {t('userFeedbacks:viewFeedbackSummary')}
       </ActionButton>
       <ActionButton color="primary" onClick={handleOpen}>
@@ -87,9 +64,7 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       </ActionButton>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {t('userFeedbacks:clearConfirmationQuestion')}
-        </DialogTitle>
+        <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
         <Button onClick={handleClose} color="primary">
           {t('userFeedbacks:no')}
         </Button>
@@ -117,16 +92,10 @@ const FeedbackGivenChip = () => {
 const NoFeedbackChip = () => {
   const { t } = useTranslation()
 
-  return (
-    <Chip
-      variant="outlined"
-      icon={<NoFeedbackIcon />}
-      label={t('userFeedbacks:waitingForFeedbackChip')}
-    />
-  )
+  return <Chip variant="outlined" icon={<NoFeedbackIcon />} label={t('userFeedbacks:waitingForFeedbackChip')} />
 }
 
-const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
+const formatDate = date => lightFormat(date, 'd.M.yyyy')
 
 const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
@@ -162,11 +131,7 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
 
       <Box m={-0.5}>
         {isOpen && feedbackGiven && (
-          <FeedbackGivenActions
-            editPath={editPath}
-            onDelete={onDelete}
-            viewPath={viewPath}
-          />
+          <FeedbackGivenActions editPath={editPath} onDelete={onDelete} viewPath={viewPath} />
         )}
         {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
       </Box>

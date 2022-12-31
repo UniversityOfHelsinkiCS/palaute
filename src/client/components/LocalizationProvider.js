@@ -10,17 +10,11 @@ const localeMap = {
   sv: svLocale,
 }
 
-const LocalizationProvider = (props) => {
+const LocalizationProvider = props => {
   const { i18n } = useTranslation()
   const locale = localeMap[i18n.language]
 
-  return (
-    <MuiLocalizationProvider
-      dateAdapter={AdapterDateFns}
-      adapterLocale={locale}
-      {...props}
-    />
-  )
+  return <MuiLocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locale} {...props} />
 }
 
 export default LocalizationProvider

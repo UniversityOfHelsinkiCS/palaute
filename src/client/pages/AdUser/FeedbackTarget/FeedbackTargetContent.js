@@ -1,22 +1,9 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import {
-  Switch,
-  useRouteMatch,
-  useParams,
-  Redirect,
-  Link,
-} from 'react-router-dom'
+import { Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
 
-import {
-  Box,
-  Typography,
-  Tab,
-  Button,
-  Link as MuiLink,
-  Alert,
-} from '@mui/material'
+import { Box, Typography, Tab, Button, Link as MuiLink, Alert } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -38,11 +25,7 @@ import EditFeedbackResponse from '../../../components/EditFeedbackResponse'
 import FeedbackTargetShare from '../../../components/FeedbackTargetShare'
 import FeedbackLinksView from '../../../components/FeedbackLinksView'
 import useCourseRealisationSummaries from '../../../hooks/useCourseRealisationSummaries'
-import {
-  RouterTab,
-  RouterTabs,
-  TabLabel,
-} from '../../../components/common/RouterTabs'
+import { RouterTab, RouterTabs, TabLabel } from '../../../components/common/RouterTabs'
 import { getLanguageValue } from '../../../util/languageUtils'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
@@ -81,7 +64,7 @@ const styles = {
       gridColumn: 2,
     },
   },
-  headingContainer: (theme) => ({
+  headingContainer: theme => ({
     display: 'flex',
     marginBottom: theme.spacing(3),
     marginTop: theme.spacing(1),
@@ -90,7 +73,7 @@ const styles = {
       justifyContent: 'flex-start',
     },
   }),
-  copyLinkButtonContainer: (theme) => ({
+  copyLinkButtonContainer: theme => ({
     paddingLeft: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
       paddingLeft: 0,
@@ -100,21 +83,21 @@ const styles = {
       display: 'none',
     },
   }),
-  infoContainer: (theme) => ({
+  infoContainer: theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
     },
   }),
-  teacherListContainer: (theme) => ({
+  teacherListContainer: theme => ({
     display: 'flex',
     flexDirection: 'column',
     [theme.breakpoints.down('md')]: {
       flexDirection: 'row',
     },
   }),
-  linkContainer: (theme) => ({
+  linkContainer: theme => ({
     display: 'flex',
     flexDirection: 'row',
     [theme.breakpoints.down('md')]: {
@@ -131,18 +114,14 @@ const styles = {
 
 const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => (
   <Box sx={styles.teacherListContainer}>
-    {teachers.map((teacher) => (
-      <TeacherChip
-        key={teacher.id}
-        user={teacher}
-        onDelete={isAdmin ? () => onDelete(teacher) : undefined}
-      />
+    {teachers.map(teacher => (
+      <TeacherChip key={teacher.id} user={teacher} onDelete={isAdmin ? () => onDelete(teacher) : undefined} />
     ))}
   </Box>
 )
 
 // TODO rewrite this shit as mutation
-const handleDeleteTeacher = (feedbackTarget, t) => async (teacher) => {
+const handleDeleteTeacher = (feedbackTarget, t) => async teacher => {
   const displayName = `${teacher.firstName} ${teacher.lastName}`
 
   const message = t('feedbackTargetView:deleteResponsibleTeacherConfirmation', {
@@ -165,21 +144,17 @@ const FeedbackTargetContent = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const {
-    feedbackTarget,
-    organisation,
-    isTeacher,
-    isAdmin,
-    isOrganisationAdmin,
-    isResponsibleTeacher,
-  } = useFeedbackTargetContext()
+  const { feedbackTarget, organisation, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
+    useFeedbackTargetContext()
 
   // If link to cur summary should not be shown, gets empty response when failSilentry: true
-  const { courseRealisationSummaries: showCourseSummaryLink } =
-    useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
+  const { courseRealisationSummaries: showCourseSummaryLink } = useCourseRealisationSummaries(
+    feedbackTarget.courseUnit.courseCode,
+    {
       failSilently: true,
       enabled: isTeacher,
-    })
+    }
+  )
 
   const {
     courseUnit,
@@ -201,17 +176,10 @@ const FeedbackTargetContent = () => {
   const isStarted = new Date() >= new Date(opensAt)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
-  const showFeedbacksTab =
-    isAdmin ||
-    ((isOrganisationAdmin || isTeacher) && isStarted) ||
-    feedback ||
-    isEnded
+  const showFeedbacksTab = isAdmin || ((isOrganisationAdmin || isTeacher) && isStarted) || feedback || isEnded
   const showContinuousFeedbackTab = continuousFeedbackEnabled
-  const showEditFeedbackResponseTab =
-    (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
-  const showStudentsWithFeedbackTab =
-    isAdmin ||
-    ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
+  const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
+  const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = isOrganisationAdmin || isResponsibleTeacher
   const showTogen = isAdmin
@@ -223,15 +191,10 @@ const FeedbackTargetContent = () => {
   const coursePageUrl = links.getCoursePage(feedbackTarget)
   const wikiLink = links.teacherInstructions[i18n.language]
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
-  const courseRealisationName = getLanguageValue(
-    courseRealisation?.name,
-    i18n.language,
-  )
+  const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
   const visibleCourseCode =
-    courseRealisationName.indexOf(courseUnit?.courseCode) > -1
-      ? ''
-      : `, ${courseUnit?.courseCode}`
+    courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : `, ${courseUnit?.courseCode}`
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
@@ -248,11 +211,7 @@ const FeedbackTargetContent = () => {
   return (
     <>
       <Box mb={3}>
-        {!feedbackCanBeGiven && (
-          <Alert severity="error">
-            {t('feedbackTargetView:feedbackDisabled')}
-          </Alert>
-        )}
+        {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>
           <Box display="flex" flexDirection="column">
             <Typography variant="h4" component="h1">
@@ -264,22 +223,14 @@ const FeedbackTargetContent = () => {
               {courseRealisationName}
             </Typography>
             {organisation && (
-              <MuiLink
-                to={`/organisations/${organisation.code}`}
-                component={Link}
-                underline="hover"
-              >
+              <MuiLink to={`/organisations/${organisation.code}`} component={Link} underline="hover">
                 {getLanguageValue(organisation.name, i18n.language)}
               </MuiLink>
             )}
           </Box>
           {isTeacher && (
             <div css={styles.copyLinkButtonContainer}>
-              <Button
-                startIcon={<CopyIcon />}
-                color="primary"
-                onClick={handleCopyLink}
-              >
+              <Button startIcon={<CopyIcon />} color="primary" onClick={handleCopyLink}>
                 {t('feedbackTargetView:copyLink')}
               </Button>
             </div>
@@ -306,19 +257,11 @@ const FeedbackTargetContent = () => {
 
               {continuousFeedbackEnabled && (
                 <>
-                  <Typography
-                    color="textSecondary"
-                    variant="body2"
-                    component="dt"
-                  >
+                  <Typography color="textSecondary" variant="body2" component="dt">
                     {t('feedbackTargetView:continuousFeedbackTab')}:
                   </Typography>
 
-                  <Typography
-                    color="textSecondary"
-                    variant="body2"
-                    component="dd"
-                  >
+                  <Typography color="textSecondary" variant="body2" component="dd">
                     {coursePeriod}
                   </Typography>
                 </>
@@ -326,22 +269,12 @@ const FeedbackTargetContent = () => {
             </dl>
 
             <Box sx={[styles.linkContainer, styles.hidePrint]}>
-              <ExternalLink href={coursePageUrl}>
-                {t('feedbackTargetView:coursePage')}
-              </ExternalLink>
+              <ExternalLink href={coursePageUrl}>{t('feedbackTargetView:coursePage')}</ExternalLink>
 
-              {isTeacher && (
-                <ExternalLink href={wikiLink}>
-                  {t('footer:wikiLink')}
-                </ExternalLink>
-              )}
+              {isTeacher && <ExternalLink href={wikiLink}>{t('footer:wikiLink')}</ExternalLink>}
 
               {isTeacher && showCourseSummaryLink && (
-                <MuiLink
-                  to={courseSummaryPath}
-                  component={Link}
-                  underline="hover"
-                >
+                <MuiLink to={courseSummaryPath} component={Link} underline="hover">
                   {t('feedbackTargetView:courseSummary')}
                 </MuiLink>
               )}
@@ -349,9 +282,7 @@ const FeedbackTargetContent = () => {
           </Box>
           {isResponsibleTeacher && (
             <Box mt="1rem" mr="3rem">
-              <Typography gutterBottom>
-                {t('feedbackTargetView:studentsWithFeedbackTab')}
-              </Typography>
+              <Typography gutterBottom>{t('feedbackTargetView:studentsWithFeedbackTab')}</Typography>
               <Box display="flex">
                 <PercentageCell
                   label={`${feedbackCount}/${studentCount}`}
@@ -363,13 +294,8 @@ const FeedbackTargetContent = () => {
           {showTags && (
             <Box mt="1rem">
               <Typography gutterBottom>{t('common:studyTracks')}</Typography>
-              <Box
-                display="flex"
-                flexDirection="row"
-                flexWrap="wrap"
-                width="20rem"
-              >
-                {feedbackTarget.courseRealisation.tags.map((tag) => (
+              <Box display="flex" flexDirection="row" flexWrap="wrap" width="20rem">
+                {feedbackTarget.courseRealisation.tags.map(tag => (
                   <TagChip key={tag.id} tag={tag} language={i18n.language} />
                 ))}
               </Box>
@@ -378,9 +304,7 @@ const FeedbackTargetContent = () => {
 
           {!!responsibleTeachers.length && (
             <Box mt="1rem" ml="1rem">
-              <Typography gutterBottom>
-                {t('feedbackTargetView:responsibleTeachers')}
-              </Typography>
+              <Typography gutterBottom>{t('feedbackTargetView:responsibleTeachers')}</Typography>
               <ResponsibleTeachersList
                 teachers={responsibleTeachers}
                 isAdmin={isAdmin}
@@ -391,9 +315,7 @@ const FeedbackTargetContent = () => {
 
           {!!teachers.length && (
             <Box mt="1rem" ml="1rem">
-              <Typography gutterBottom>
-                {t('feedbackTargetView:teachers')}
-              </Typography>
+              <Typography gutterBottom>{t('feedbackTargetView:teachers')}</Typography>
               <ResponsibleTeachersList
                 teachers={teachers}
                 isAdmin={isAdmin}
@@ -405,35 +327,20 @@ const FeedbackTargetContent = () => {
       </Box>
 
       <Box mb={2} sx={styles.hidePrint}>
-        <RouterTabs
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-        >
+        <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
           <Tab
             label={
               feedback && isOpen ? (
-                <TabLabel
-                  icon={<EditOutlined />}
-                  text={t('feedbackTargetView:editFeedbackTab')}
-                />
+                <TabLabel icon={<EditOutlined />} text={t('feedbackTargetView:editFeedbackTab')} />
               ) : (
-                <TabLabel
-                  icon={<LiveHelpOutlined />}
-                  text={t('feedbackTargetView:surveyTab')}
-                />
+                <TabLabel icon={<LiveHelpOutlined />} text={t('feedbackTargetView:surveyTab')} />
               )
             }
             component={Link}
             to={`${url}/feedback`}
           />
           {showFeedbacksTab && (
-            <RouterTab
-              icon={<PollOutlined />}
-              label={t('feedbackTargetView:feedbacksTab')}
-              to={`${url}/results`}
-            />
+            <RouterTab icon={<PollOutlined />} label={t('feedbackTargetView:feedbacksTab')} to={`${url}/results`} />
           )}
           {showContinuousFeedbackTab && (
             <RouterTab
@@ -459,11 +366,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showLinksTab && (
-            <RouterTab
-              icon={<ShareOutlined />}
-              label={t('feedbackTargetView:shareTab')}
-              to={`${url}/share`}
-            />
+            <RouterTab icon={<ShareOutlined />} label={t('feedbackTargetView:shareTab')} to={`${url}/share`} />
           )}
           {showStudentsWithFeedbackTab && (
             <RouterTab
@@ -472,39 +375,15 @@ const FeedbackTargetContent = () => {
               to={`${url}/students-with-feedback`}
             />
           )}
-          {showTogen && (
-            <RouterTab
-              icon={<ListOutlined />}
-              label="Togen"
-              to={`${url}/togen`}
-            />
-          )}
-          {showLogsTab && (
-            <RouterTab
-              icon={<ListOutlined />}
-              label="Logs"
-              to={`${url}/logs`}
-            />
-          )}
+          {showTogen && <RouterTab icon={<ListOutlined />} label="Togen" to={`${url}/togen`} />}
+          {showLogsTab && <RouterTab icon={<ListOutlined />} label="Logs" to={`${url}/logs`} />}
         </RouterTabs>
       </Box>
 
       <Switch>
-        <ProtectedRoute
-          path={`${path}/edit`}
-          component={FeedbackTargetSettings}
-          hasAccess={showSettingsTab}
-        />
-        <ProtectedRoute
-          path={`${path}/results`}
-          component={FeedbackTargetResults}
-          hasAccess={showFeedbacksTab}
-        />
-        <ProtectedRoute
-          path={`${path}/feedback`}
-          component={FeedbackView}
-          hasAccess
-        />
+        <ProtectedRoute path={`${path}/edit`} component={FeedbackTargetSettings} hasAccess={showSettingsTab} />
+        <ProtectedRoute path={`${path}/results`} component={FeedbackTargetResults} hasAccess={showFeedbacksTab} />
+        <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} hasAccess />
         <ProtectedRoute
           path={`${path}/continuous-feedback`}
           component={ContinuousFeedback}
@@ -515,26 +394,14 @@ const FeedbackTargetContent = () => {
           component={StudentsWithFeedback}
           hasAccess={showStudentsWithFeedbackTab}
         />
-        <ProtectedRoute
-          path={`${path}/share`}
-          component={FeedbackTargetShare}
-          hasAccess={showLinksTab}
-        />
-        <ProtectedRoute
-          path={`${path}/togen`}
-          component={FeedbackLinksView}
-          hasAccess={showTogen}
-        />
+        <ProtectedRoute path={`${path}/share`} component={FeedbackTargetShare} hasAccess={showLinksTab} />
+        <ProtectedRoute path={`${path}/togen`} component={FeedbackLinksView} hasAccess={showTogen} />
         <ProtectedRoute
           path={`${path}/edit-feedback-response`}
           component={EditFeedbackResponse}
           hasAccess={showEditFeedbackResponseTab}
         />
-        <ProtectedRoute
-          path={`${path}/logs`}
-          component={FeedbackTargetLogs}
-          hasAccess={showLogsTab}
-        />
+        <ProtectedRoute path={`${path}/logs`} component={FeedbackTargetLogs} hasAccess={showLogsTab} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

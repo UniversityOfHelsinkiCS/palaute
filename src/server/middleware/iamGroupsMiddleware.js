@@ -1,4 +1,4 @@
-const parse = (groupString) => {
+const parse = groupString => {
   if (!groupString) {
     return []
   }

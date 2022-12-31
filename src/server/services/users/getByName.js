@@ -6,7 +6,7 @@ const cache = new LRU({
   max: 250,
 })
 
-const getByUsername = async (username) => {
+const getByUsername = async username => {
   let user = cache.get(username)
 
   if (!user) {
@@ -15,10 +15,7 @@ const getByUsername = async (username) => {
     })
 
     if (!user) {
-      throw new ApplicationError(
-        `User with username ${username} not found`,
-        404,
-      )
+      throw new ApplicationError(`User with username ${username} not found`, 404)
     }
 
     cache.set(username, user)

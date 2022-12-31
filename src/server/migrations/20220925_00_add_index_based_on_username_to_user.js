@@ -1,10 +1,10 @@
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.addIndex('users', {
       fields: ['username'],
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.dropIndex('users', ['usernamne'])
   },
 }

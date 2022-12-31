@@ -57,46 +57,27 @@ const getHeaders = (questions, language, t) => {
   return [t('courseSummary:name'), t('courseSummary:code'), ...labels]
 }
 
-const getFeedbackResponseData = (
-  feedbackResponsePercentage,
-  feedbackResponseGiven,
-  t,
-) => {
+const getFeedbackResponseData = (feedbackResponsePercentage, feedbackResponseGiven, t) => {
   if (typeof feedbackResponsePercentage !== 'number')
-    return feedbackResponseGiven
-      ? t('courseSummary:given')
-      : t('courseSummary:notGiven')
+    return feedbackResponseGiven ? t('courseSummary:given') : t('courseSummary:notGiven')
 
   return Math.round(feedbackResponsePercentage * 100) / 100
 }
 
 const getData = (data, language, t) => {
-  const identifiers = data.map(
-    ({ name, code, courseCode, organisationCode }) => ({
-      name: name[language],
-      code: code || courseCode,
-      organisationCode,
-    }),
-  )
+  const identifiers = data.map(({ name, code, courseCode, organisationCode }) => ({
+    name: name[language],
+    code: code || courseCode,
+    organisationCode,
+  }))
 
   const means = data.map(({ results }) => results.map(({ mean }) => mean))
 
-  const others = data.map(
-    ({
-      feedbackCount,
-      studentCount,
-      feedbackResponsePercentage,
-      feedbackResponseGiven,
-    }) => [
-      feedbackCount,
-      studentCount ? Math.round((feedbackCount / studentCount) * 100) / 100 : 0,
-      getFeedbackResponseData(
-        feedbackResponsePercentage,
-        feedbackResponseGiven,
-        t,
-      ),
-    ],
-  )
+  const others = data.map(({ feedbackCount, studentCount, feedbackResponsePercentage, feedbackResponseGiven }) => [
+    feedbackCount,
+    studentCount ? Math.round((feedbackCount / studentCount) * 100) / 100 : 0,
+    getFeedbackResponseData(feedbackResponsePercentage, feedbackResponseGiven, t),
+  ])
 
   data = identifiers.map(({ name, code, organisationCode }, i) => [
     name,
@@ -139,10 +120,7 @@ const ExportCsvLink = ({ average, organisations, questions }) => {
   const { language } = i18n
 
   return (
-    <Button
-      sx={styles.button}
-      onClick={() => exportCsv(average, organisations, questions, language, t)}
-    >
+    <Button sx={styles.button} onClick={() => exportCsv(average, organisations, questions, language, t)}>
       {t('common:exportCsv')}
     </Button>
   )
@@ -166,7 +144,7 @@ const ExportCourses = ({ average, organisations, questions, componentRef }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     setAnchorEl(e.currentTarget)
   }
 
@@ -200,11 +178,7 @@ const ExportCourses = ({ average, organisations, questions, componentRef }) => {
         }}
       >
         <MenuItem value="csv" sx={styles.menuitem}>
-          <ExportCsvLink
-            average={average}
-            organisations={organisations}
-            questions={questions}
-          />
+          <ExportCsvLink average={average} organisations={organisations} questions={questions} />
         </MenuItem>
         <MenuItem value="pdf" sx={styles.menuitem}>
           <ExportPdfLink componentRef={componentRef} />

@@ -5,19 +5,10 @@ import apiClient from '../util/apiClient'
 const defaultCacheTime = 900000
 
 const useOrganisationSummaries = (options = {}) => {
-  const {
-    code,
-    includeOpenUniCourseUnits = true,
-    tagId,
-    startDate,
-    endDate,
-    enabled,
-    ...queryOptions
-  } = options
+  const { code, includeOpenUniCourseUnits = true, tagId, startDate, endDate, enabled, ...queryOptions } = options
 
   const params = {
-    includeOpenUniCourseUnits:
-      includeOpenUniCourseUnits === true ? 'true' : 'false',
+    includeOpenUniCourseUnits: includeOpenUniCourseUnits === true ? 'true' : 'false',
     tagId,
     startDate,
     endDate,
@@ -26,12 +17,9 @@ const useOrganisationSummaries = (options = {}) => {
   const queryKey = ['organisationSummaries', params, code || 'ALL']
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/course-summaries/organisations/${code || ''}`,
-      {
-        params,
-      },
-    )
+    const { data } = await apiClient.get(`/course-summaries/organisations/${code || ''}`, {
+      params,
+    })
 
     return data
   }

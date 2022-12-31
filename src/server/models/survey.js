@@ -1,12 +1,4 @@
-const {
-  Op,
-  Model,
-  STRING,
-  INTEGER,
-  ARRAY,
-  ENUM,
-  VIRTUAL,
-} = require('sequelize')
+const { Op, Model, STRING, INTEGER, ARRAY, ENUM, VIRTUAL } = require('sequelize')
 
 const { sequelize } = require('../db/dbConnection')
 const Question = require('./question')
@@ -16,7 +8,7 @@ class Survey extends Model {
    * @param {Survey} survey
    * @returns {Promise<Question[]>}
    */
-  static getQuestionsOfSurvey = async (survey) => {
+  static getQuestionsOfSurvey = async survey => {
     const questions = await Question.findAll({
       where: {
         id: {
@@ -69,7 +61,7 @@ Survey.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = Survey

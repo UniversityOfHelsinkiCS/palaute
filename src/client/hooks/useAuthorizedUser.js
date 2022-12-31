@@ -11,7 +11,7 @@ const useAuthorizedUser = (options = {}) => {
 
       return data
     },
-    options,
+    options
   )
 
   return { authorizedUser, ...rest }

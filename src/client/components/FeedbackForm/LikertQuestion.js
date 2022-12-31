@@ -1,12 +1,6 @@
 import React from 'react'
 
-import {
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  FormHelperText,
-} from '@mui/material'
+import { FormControl, RadioGroup, FormControlLabel, Radio, FormHelperText } from '@mui/material'
 
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -17,12 +11,12 @@ import { getDontKnowOption } from './utils'
 
 const styles = {
   optionLabel: {
-    marginLeft: (theme) => theme.spacing(0.2),
-    marginRight: (theme) => theme.spacing(0.2),
+    marginLeft: theme => theme.spacing(0.2),
+    marginRight: theme => theme.spacing(0.2),
   },
   dontKnowLabel: {
-    marginLeft: (theme) => theme.spacing(1),
-    marginRight: (theme) => theme.spacing(0.5),
+    marginLeft: theme => theme.spacing(1),
+    marginRight: theme => theme.spacing(0.5),
   },
 }
 
@@ -35,14 +29,13 @@ const LikertQuestion = ({ question, name }) => {
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
-  const description =
-    getLanguageValue(question.data?.description, language) ?? ''
+  const description = getLanguageValue(question.data?.description, language) ?? ''
 
   const showError = meta.error && meta.touched
   const { required } = question
   const value = answer ?? ''
 
-  const parseOption = (option) => {
+  const parseOption = option => {
     if (option !== 0) return option.toString()
 
     return getDontKnowOption(question.data.label, language)
@@ -51,22 +44,17 @@ const LikertQuestion = ({ question, name }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <QuestionBase
-          label={label}
-          required={required}
-          description={description}
-          labelProps={{ component: 'legend' }}
-        >
+        <QuestionBase label={label} required={required} description={description} labelProps={{ component: 'legend' }}>
           <RadioGroup
             aria-label={label}
             value={value}
-            onChange={(event) => {
+            onChange={event => {
               helpers.setValue(event.target.value)
             }}
             onBlur={() => helpers.setTouched(true)}
             row
           >
-            {options.map((option) => (
+            {options.map(option => (
               <FormControlLabel
                 labelPlacement="top"
                 value={option.toString()}

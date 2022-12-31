@@ -1,17 +1,8 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
-const {
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-  User,
-} = require('../../models')
+const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
 const { pate } = require('../pateClient')
-const {
-  createRecipientsForFeedbackTargets,
-  instructionsAndSupport,
-} = require('./util')
+const { createRecipientsForFeedbackTargets, instructionsAndSupport } = require('./util')
 
 const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -61,21 +52,15 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
     ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
-    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
-      (org) => org.disabledCourseCodes,
-    )
+  const filteredFeedbackTargets = feedbackTargets.filter(target => {
+    const disabledCourseCodes = target.courseUnit.organisations.flatMap(org => org.disabledCourseCodes)
     return !disabledCourseCodes.includes(target.courseUnit.courseCode)
   })
 
   return filteredFeedbackTargets
 }
 
-const buildReminderAboutSurveyOpeningToTeachers = (
-  courseNamesAndUrls,
-  courseName,
-  hasMultipleFeedbackTargets,
-) => {
+const buildReminderAboutSurveyOpeningToTeachers = (courseNamesAndUrls, courseName, hasMultipleFeedbackTargets) => {
   const translations = {
     text: {
       en: `Dear teacher! <br/>
@@ -110,22 +95,15 @@ const buildReminderAboutSurveyOpeningToTeachers = (
   return translations
 }
 
-const emailReminderAboutSurveyOpeningToTeachers = (
-  emailAddress,
-  teacherFeedbackTargets,
-) => {
+const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedbackTargets) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
-  const language = teacherFeedbackTargets[0].language
-    ? teacherFeedbackTargets[0].language
-    : 'en'
+  const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
   const courseName = teacherFeedbackTargets[0].name[language]
 
   let courseNamesAndUrls = ''
 
   // Sort them so they come neatly in order in the email
-  teacherFeedbackTargets.sort((a, b) =>
-    a.name[language]?.localeCompare(b.name[language]),
-  )
+  teacherFeedbackTargets.sort((a, b) => a.name[language]?.localeCompare(b.name[language]))
 
   for (const feedbackTarget of teacherFeedbackTargets) {
     const { id, name, opensAt, closesAt } = feedbackTarget
@@ -152,7 +130,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (
   const translations = buildReminderAboutSurveyOpeningToTeachers(
     courseNamesAndUrls,
     courseName,
-    hasMultipleFeedbackTargets,
+    hasMultipleFeedbackTargets
   )
 
   const email = {
@@ -167,20 +145,13 @@ const emailReminderAboutSurveyOpeningToTeachers = (
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    feedbackTargets,
-    { primaryOnly: true },
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, { primaryOnly: true })
+
+  const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(teacher =>
+    emailReminderAboutSurveyOpeningToTeachers(teacher, teachersWithFeedbackTargets[teacher])
   )
 
-  const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(
-    (teacher) =>
-      emailReminderAboutSurveyOpeningToTeachers(
-        teacher,
-        teachersWithFeedbackTargets[teacher],
-      ),
-  )
-
-  const ids = feedbackTargets.map((target) => target.id)
+  const ids = feedbackTargets.map(target => target.id)
 
   FeedbackTarget.update(
     {
@@ -192,7 +163,7 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
           [Op.in]: ids,
         },
       },
-    },
+    }
   )
 
   await pate.send(emailsToBeSent, 'Remind teachers about feedback opening')

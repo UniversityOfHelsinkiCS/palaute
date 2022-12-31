@@ -15,7 +15,7 @@ const useTeacherCourseUnits = (options = {}) => {
   const queryFn = async () => {
     const { data } = await apiClient.get('/course-units/responsible')
 
-    return _.sortBy(data, (cu) => getLanguageValue(cu.name, i18n.language))
+    return _.sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
   const { data: courseUnits, ...rest } = useQuery(queryKey, queryFn, {

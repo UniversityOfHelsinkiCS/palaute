@@ -11,8 +11,7 @@ import Error from './Error'
 
 const FeedbackTarget = () => {
   const { id } = useParams()
-  const { feedbackTarget, isLoading, isLoadingError, error } =
-    useFeedbackTarget(id, { retry: 0 })
+  const { feedbackTarget, isLoading, isLoadingError, error } = useFeedbackTarget(id, { retry: 0 })
   const courseUnit = feedbackTarget?.courseUnit
 
   const { authorizedUser } = useAuthorizedUser()
@@ -21,7 +20,7 @@ const FeedbackTarget = () => {
   const organisation =
     isLoading || organisationsLoading || !courseUnit
       ? null
-      : organisations?.find((org) => courseUnit.organisations[0].id === org.id)
+      : organisations?.find(org => courseUnit.organisations[0].id === org.id)
 
   if (isLoading) {
     return <LoadingProgress />

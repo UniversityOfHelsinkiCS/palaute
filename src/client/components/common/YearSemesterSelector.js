@@ -1,14 +1,6 @@
 import React from 'react'
 import * as _ from 'lodash'
-import {
-  Box,
-  IconButton,
-  MenuItem,
-  Select,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton, MenuItem, Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { startOfStudyYear } from '../../util/startOfStudyYear'
@@ -16,15 +8,12 @@ import { startOfStudyYear } from '../../util/startOfStudyYear'
 // Year starting month
 const MONTH = 8
 
-const useYearSemesters = (currentStart) => {
+const useYearSemesters = currentStart => {
   const now = new Date()
-  const year = Math.min(
-    currentStart.getFullYear(),
-    startOfStudyYear(now).getFullYear(),
-  )
+  const year = Math.min(currentStart.getFullYear(), startOfStudyYear(now).getFullYear())
 
   let semesters = _.range(2021, now.getFullYear() + 1)
-    .flatMap((year) => [
+    .flatMap(year => [
       {
         start: new Date(`${year}-01-01`),
         end: new Date(`${year}-0${MONTH}-01`),
@@ -38,9 +27,7 @@ const useYearSemesters = (currentStart) => {
     .reverse()
   semesters = now.getMonth() + 1 < MONTH ? semesters.slice(1) : semesters
 
-  const currentSemester =
-    semesters.find((s) => s.start <= currentStart) ||
-    semesters.find((s) => s.start <= now)
+  const currentSemester = semesters.find(s => s.start <= currentStart) || semesters.find(s => s.start <= now)
 
   return {
     year,
@@ -76,7 +63,7 @@ const styles = {
   button: {
     '&:hover': {
       background: 0,
-      color: (theme) => theme.palette.info.light,
+      color: theme => theme.palette.info.light,
       boxShadow: 'rgba(99, 99, 255, 0.2) 0px 2px 7px 0px',
     },
     marginX: '0.4rem',
@@ -115,11 +102,7 @@ const YearStepper = ({ value, onChange }) => {
         <ChevronLeft fontSize="large" />
       </IconButton>
       <Typography sx={styles.stepperValue}>{displayValue}</Typography>
-      <IconButton
-        onClick={handleIncrease}
-        sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
-        size="small"
-      >
+      <IconButton onClick={handleIncrease} sx={[!canIncrease ? styles.disabledButton : {}, styles.button]} size="small">
         <ChevronRight fontSize="large" />
       </IconButton>
     </Box>
@@ -131,12 +114,10 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
 
   return (
     <Box sx={styles.selectorContainer}>
-      <Select value={value} onChange={(event) => onChange(event.target.value)}>
-        {semesters.map((s) => (
+      <Select value={value} onChange={event => onChange(event.target.value)}>
+        {semesters.map(s => (
           <MenuItem value={s} key={s.start}>
-            {`${s.start.getFullYear()} ${
-              s.spring ? t('courseSummary:spring') : t('courseSummary:fall')
-            }`}
+            {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
           </MenuItem>
         ))}
       </Select>
@@ -152,19 +133,11 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
  * }} params
  * @returns
  */
-export const YearSemesterSelector = ({
-  value,
-  onChange,
-  option,
-  setOption,
-  allowAll,
-}) => {
+export const YearSemesterSelector = ({ value, onChange, option, setOption, allowAll }) => {
   const { t } = useTranslation()
-  const { year, semesters, currentSemester } = useYearSemesters(
-    value?.start ?? new Date(),
-  )
+  const { year, semesters, currentSemester } = useYearSemesters(value?.start ?? new Date())
 
-  const handleYearChange = (year) => {
+  const handleYearChange = year => {
     onChange({
       start: new Date(`${year}-0${MONTH}-01`),
       end: new Date(`${year + 1}-0${MONTH}-01`),
@@ -175,7 +148,7 @@ export const YearSemesterSelector = ({
     onChange({ start, end })
   }
 
-  const handleOptionChange = (event) => {
+  const handleOptionChange = event => {
     if (event.target.value === 'year') {
       handleYearChange(year)
     } else {
@@ -186,31 +159,19 @@ export const YearSemesterSelector = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div onClick={(event) => event.stopPropagation()}>
+    <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.stepper}>
-        <ToggleButtonGroup
-          value={option}
-          onChange={handleOptionChange}
-          color="primary"
-        >
-          {allowAll && (
-            <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>
-          )}
+        <ToggleButtonGroup value={option} onChange={handleOptionChange} color="primary">
+          {allowAll && <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>}
           <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
-          <ToggleButton value="semester">
-            {t('courseSummary:semester')}
-          </ToggleButton>
+          <ToggleButton value="semester">{t('courseSummary:semester')}</ToggleButton>
         </ToggleButtonGroup>
         {option !== 'all' && (
           <Box>
             {option === 'year' ? (
               <YearStepper value={year} onChange={handleYearChange} />
             ) : (
-              <SemesterSelector
-                value={currentSemester}
-                onChange={handleSemesterChange}
-                semesters={semesters}
-              />
+              <SemesterSelector value={currentSemester} onChange={handleSemesterChange} semesters={semesters} />
             )}
           </Box>
         )}

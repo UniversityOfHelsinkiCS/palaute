@@ -1,10 +1,10 @@
 const { DATE, STRING, JSONB } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.dropTable('assessment_items')
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.createTable('assessment_items', {
       id: {
         type: STRING,

@@ -37,7 +37,7 @@ NorppaFeedback.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = NorppaFeedback

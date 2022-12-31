@@ -7,7 +7,7 @@ import OptionEditor from './OptionEditor'
 import FormikTextField from '../common/FormikTextField'
 
 const styles = {
-  container: (theme) => ({
+  container: theme => ({
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 64px)',
     },
@@ -49,7 +49,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
     <>
       <Box sx={styles.container}>
         <Grid spacing={4} container>
-          {languages.map((language) => (
+          {languages.map(language => (
             <Grid md={4} sm={12} xs={12} item key={language}>
               <Box mb={2}>
                 <Typography variant="h6" component="h2">
@@ -66,7 +66,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
       <Box sx={styles.container}>
         <Box mb={2}>
           <Grid spacing={4} container>
-            {languages.map((language) => {
+            {languages.map(language => {
               const languageT = i18n.getFixedT(language)
 
               return (

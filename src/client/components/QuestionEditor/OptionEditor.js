@@ -12,7 +12,7 @@ import FormikTextField from '../common/FormikTextField'
 const styles = {
   optionsContainer: {
     '& > *': {
-      marginBottom: (theme) => theme.spacing(2),
+      marginBottom: theme => theme.spacing(2),
     },
   },
 }
@@ -22,9 +22,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
-    const hasConfirmed = window.confirm(
-      t('questionEditor:removeOptionConfirmation'),
-    )
+    const hasConfirmed = window.confirm(t('questionEditor:removeOptionConfirmation'))
 
     if (hasConfirmed) {
       onRemove()
@@ -35,7 +33,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
     <Box display="flex">
       <Box flexGrow={1}>
         <Grid spacing={4} container>
-          {languages.map((language) => {
+          {languages.map(language => {
             const languageT = i18n.getFixedT(language)
 
             return (
@@ -74,7 +72,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
   return (
     <FieldArray
       name={name}
-      render={(arrayHelpers) => (
+      render={arrayHelpers => (
         <>
           <Box sx={styles.optionsContainer}>
             {options.map((option, index) => (
@@ -88,10 +86,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             ))}
           </Box>
 
-          <Button
-            color="primary"
-            onClick={() => arrayHelpers.push(createOption())}
-          >
+          <Button color="primary" onClick={() => arrayHelpers.push(createOption())}>
             {t('questionEditor:addOption')}
           </Button>
         </>

@@ -15,12 +15,10 @@ export default {
     unknownError: 'Something went wrong',
     choiceQuestionError: 'Choice questions require answer options',
     fetchError: 'Error while fetching data. Refreshing the page may fix this.',
-    serverError:
-      'Oops, something broke on our end, we will try to fix it ASAP. Apologies.',
+    serverError: 'Oops, something broke on our end, we will try to fix it ASAP. Apologies.',
     notFound: 'Page or resource not found, sorry.',
     noAccess: 'Sorry but you have no access to this resource.',
-    supportContact:
-      'If you are not able to resolve this issue, please contact support: ',
+    supportContact: 'If you are not able to resolve this issue, please contact support: ',
     save: 'Save',
     saveSuccess: 'Information has been saved',
     name: 'Name',
@@ -30,8 +28,7 @@ export default {
     accept: 'Accept',
     clearSelection: 'Clear selection',
     copyToClipBoard: 'Copy to clipboard',
-    feedbackOpenPeriod:
-      'Feedback can be given between {{opensAt}} and {{closesAt}}',
+    feedbackOpenPeriod: 'Feedback can be given between {{opensAt}} and {{closesAt}}',
     firstName: 'First name',
     lastName: 'Last name',
     username: 'Username',
@@ -48,8 +45,7 @@ export default {
     dropZoneInfo1: 'Drag a file here, or find it by clicking this box.',
     dropZoneInfo2: 'One .csv-ended file, under 5MB is accepted',
     feedbackHeader: 'FEEDBACK',
-    dirtyFormPrompt:
-      'The page has unsaved changes. Are you sure want to leave the page?',
+    dirtyFormPrompt: 'The page has unsaved changes. Are you sure want to leave the page?',
     actions: 'Actions',
     close: 'Close',
     required: 'Required',
@@ -95,12 +91,9 @@ export default {
     submitButton: 'Give feedback',
     editButton: 'Edit feedback',
     successAlert: 'Feedback has been given. Thank you for your feedback!',
-    feedbackInfo:
-      'This feedback is anonymous. Fields marked with an asterisk (*) are required',
-    feedbackInfoLink:
-      'Read more, how your information and answers are being used',
-    closedInfo:
-      'This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}',
+    feedbackInfo: 'This feedback is anonymous. Fields marked with an asterisk (*) are required',
+    feedbackInfoLink: 'Read more, how your information and answers are being used',
+    closedInfo: 'This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}',
     feedbackInfoTitle: 'How are my answers used?',
     feedbackInfoContent:
       'The answers to the feedback are used for the improvement of courses and teaching. Your answers for the feedback may be shown to other students. The answers are always processed and shown anonymously, the teacher cannot see which student has given a certain feedback.\n The user information is used to show correct feedback surveys by using enrolment information.',
@@ -111,10 +104,8 @@ export default {
     cannotSubmitText:
       'You cannot submit because you are not enrolled in this course or your enrollment has not updated to our system yet. Enrollments update every 24 hours.',
     feedbackClosedError: 'Feedback is closed',
-    endedInfo:
-      'The feedback period has ended. <2>Take a look at the feedback</2>',
-    continuousFeedbackInfo:
-      'You can give continuous feedback while the course is ongoing. This feedback is anonymous.',
+    endedInfo: 'The feedback period has ended. <2>Take a look at the feedback</2>',
+    continuousFeedbackInfo: 'You can give continuous feedback while the course is ongoing. This feedback is anonymous.',
   },
   teacherView: {
     mainHeading: 'My teaching',
@@ -154,19 +145,15 @@ export default {
     removeOption: 'Remove option',
     label: 'Question',
     content: 'Content',
-    removeQuestionConfirmation:
-      'Are you sure you want to remove this question?',
+    removeQuestionConfirmation: 'Are you sure you want to remove this question?',
     removeOptionConfirmation: 'Are you sure you want to remove this option?',
     description: 'Description',
     done: 'Save',
-    languageInfo:
-      'Your are currently editing the "{{language}}" translation of this question',
-    descriptionHelper:
-      'Optional description that provides additional information about the question',
+    languageInfo: 'Your are currently editing the "{{language}}" translation of this question',
+    descriptionHelper: 'Optional description that provides additional information about the question',
     universityQuestion: 'University level',
     programmeQuestion: 'Programme level',
-    uneditableTooltip:
-      'This is predefined and automatically added to the survey and it can not be edited or removed',
+    uneditableTooltip: 'This is predefined and automatically added to the survey and it can not be edited or removed',
     duplicate: 'Duplicate',
   },
   editFeedbackTarget: {
@@ -180,8 +167,7 @@ export default {
     upperLevelQuestionsInfoMany:
       'Survey already has {{count}} university and programme level questions, but you can add additional questions. You can click the "Show survey preview" button to see what the survey looks like with all the questions.\n Programme level questions come from the responsible organisations, which are {{organisations}}.',
     showPreview: 'Show survey preview',
-    showPreviewConfirmation:
-      'Are you sure you want to preview? Unsaved changes will be lost.',
+    showPreviewConfirmation: 'Are you sure you want to preview? Unsaved changes will be lost.',
     translationLanguage: 'Translation language',
     warningAboutOpeningCourse:
       'NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.',
@@ -196,8 +182,7 @@ export default {
     copyFromCourseInfoAlert:
       'You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions',
     copyFromCourseChooseCourse: 'Choose a course to see its realisations',
-    copyFromCourseNoQuestions:
-      'None of the realisations on the course have any questions',
+    copyFromCourseNoQuestions: 'None of the realisations on the course have any questions',
     copyFromCourseQuestionCount: '{{count}} questions',
     copyFromCourseSearchLabel: 'Course',
     openFeedbackImmediatelyDialogTitle: 'Warning!',
@@ -213,12 +198,9 @@ export default {
   questionResults: {
     answerCount: 'Answer count',
     answerOption: 'Answer option',
-    publicInfo:
-      'The results from these questions are visible to students. <2>Select public questions</2>',
-    notPublicInfo:
-      'The results from these questions are not visible to students. <2>Select public questions</2>',
-    publicityOfQuestions:
-      'The results of these questions are not visible to students',
+    publicInfo: 'The results from these questions are visible to students. <2>Select public questions</2>',
+    notPublicInfo: 'The results from these questions are not visible to students. <2>Select public questions</2>',
+    publicityOfQuestions: 'The results of these questions are not visible to students',
     moreInfo: 'More information about visibility can be found',
     here: 'here',
     multipleChoiceQuestions: 'Multiple choice questions',
@@ -234,8 +216,7 @@ export default {
     answers: 'Answers',
   },
   feedbackTargetResults: {
-    notEnoughFeedbacksInfo:
-      'Survey results are not shown because no feedback has been given yet',
+    notEnoughFeedbacksInfo: 'Survey results are not shown because no feedback has been given yet',
     onlyForEnrolledInfo:
       'Survey results are not shown because the teacher has set feedback visible only for enrolled students',
     studentsWithFeedbackHeading: 'Students who have given feedback',
@@ -245,28 +226,24 @@ export default {
     noResponseInfo: "The course's teacher has not given a counter feedback yet",
     export: 'Download feedback',
     useLegacyVersion: 'Use old feedback view',
-    thankYouMessage:
-      'Thank you for the feedback, here is a summary of the feedback so far.',
+    thankYouMessage: 'Thank you for the feedback, here is a summary of the feedback so far.',
     closeImmediately: 'Close feedback immediately',
     closeImmediatelyConfirm: `Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     sendReminder: 'Send reminder email',
     sendReminderButton: 'Send reminder',
-    reminderDisabled:
-      'You have already sent a reminder email less than 24 hours ago',
+    reminderDisabled: 'You have already sent a reminder email less than 24 hours ago',
     reminderLastSent: 'Reminder last sent',
     cancelReminder: 'Cancel',
     modalTitle: 'Send a reminder about feedback via email',
     writeAMessage: 'Write a message to students',
     emailMessage:
       'Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>',
-    modalSubtitle:
-      'Students who have already given feedback wont receive this email',
+    modalSubtitle: 'Students who have already given feedback wont receive this email',
     emailSent: 'Reminder email sent',
     setHidden: 'Hide this answer',
     setVisible: 'Unhide',
-    hiddenInfo:
-      'This answer is hidden and is visible only to the teachers and programme administrators',
+    hiddenInfo: 'This answer is hidden and is visible only to the teachers and programme administrators',
     hidingFeatureInfoTitle: 'Info about hiding answers',
     hidingFeatureInfo:
       "You can hide individual answers from a question that has its results otherwise visible to students, to censor inappropriate or sensitive content. Hiding has no effect if the question is not visible to students.\nTo prevent misuse, the number of hidden answers is visible to programme's administrative personnel in course summary.",
@@ -327,8 +304,7 @@ export default {
   feedbackTargetSettings: {
     editPeriodTitle: 'Feedback period',
     cannotCloseImmediately: 'Feedback is not yet open',
-    cannotCloseImmediatelyWhenOpen:
-      'Feedback either closes within a day or has already ended',
+    cannotCloseImmediatelyWhenOpen: 'Feedback either closes within a day or has already ended',
     cannotOpenImmediately: 'Feedback is already open or has ended',
   },
   courseSummary: {
@@ -447,8 +423,7 @@ export default {
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey editing',
     activateContinuousFeedback: 'Activate continuous feedback for the course',
-    activateContinuousFeedbackDigest:
-      'Send a daily email digest about new continuous feedback',
+    activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     continuousFeedbackGiven: 'Continuous feedback given',
     noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
     continuousFeedbackStudentInfo:
@@ -464,17 +439,13 @@ export default {
     studentResultsLinkTitle: 'Link to answers and counter feedback',
     studentLinkQRTitle: 'QR-code to survey',
     qrCodeHelpText: 'Easiest way to share the QR-code is by screenshotting it',
-    deleteResponsibleTeacherConfirmation:
-      'Delete teacher {{name}} from responsible teachers?',
-    noFeedbackResponseYet:
-      'The teacher of the course has not yet given counter feedback',
+    deleteResponsibleTeacherConfirmation: 'Delete teacher {{name}} from responsible teachers?',
+    noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback',
     noAccess:
       "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
-    notFound:
-      'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
+    notFound: 'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
     notifyOnEnrolment: 'Email me when my enrolment is found',
-    notificationEnabled:
-      "Ok, we'll send a notification to {{email}} if your enrolment is found within 24h",
+    notificationEnabled: "Ok, we'll send a notification to {{email}} if your enrolment is found within 24h",
     notificationDisabled: "Ok, you won't be notified",
   },
   noadUser: {
@@ -487,15 +458,13 @@ export default {
     feedbackHelper: 'Give free-form feedback',
     responseWanted: 'I want a response to my feedback',
     submit: 'Send feedback',
-    confirm:
-      'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
+    confirm: 'I understand that this is not counter feedback for students but feedback for the developers of Norppa',
     title: 'Give feedback to Norppa developers',
     description:
       'Norppa is being developed based on the user feedback recieved. With this form you can submit feedback to the developers.',
     feedbackLengthError: 'The minimum length of the feedback is one symbol',
     successAlert: 'Feedback has been sent succesfully',
-    anonymousInfo:
-      "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
+    anonymousInfo: "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
     anonymous: 'Send anonymously',
   },
 }

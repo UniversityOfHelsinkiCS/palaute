@@ -1,16 +1,6 @@
 import React from 'react'
 
-import {
-  Card,
-  CardContent,
-  IconButton,
-  Tooltip,
-  Box,
-  Chip,
-  Divider,
-  Button,
-  Grid,
-} from '@mui/material'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useField } from 'formik'
@@ -67,21 +57,12 @@ const ActionsContainer = ({ children }) => (
   </div>
 )
 
-const EditActions = ({
-  onMoveUp,
-  onMoveDown,
-  onRemove,
-  moveUpDisabled,
-  moveDownDisabled,
-  name,
-}) => {
+const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownDisabled, name }) => {
   const { t } = useTranslation()
 
   const handleRemove = () => {
     // eslint-disable-next-line no-alert
-    const hasConfirmed = window.confirm(
-      t('questionEditor:removeQuestionConfirmation'),
-    )
+    const hasConfirmed = window.confirm(t('questionEditor:removeQuestionConfirmation'))
 
     if (hasConfirmed) {
       onRemove()
@@ -96,7 +77,7 @@ const EditActions = ({
           { label: t('common:publicInfo'), value: true },
           { label: t('common:notPublicInfo'), value: false },
         ]}
-        valueMapper={(value) => value === 'true'}
+        valueMapper={value => value === 'true'}
       />
       <Box mr="4rem" />
       <FormikSwitch label={t('required')} name={`${name}.required`} />
@@ -158,12 +139,7 @@ const QuestionCard = ({
   return (
     <Card sx={sx}>
       <CardContent>
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          mb="1.5rem"
-        >
+        <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
           <Grid item xs={4}>
             <Chip label={title} variant="outlined" />
           </Grid>
@@ -190,23 +166,13 @@ const QuestionCard = ({
               <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
             </Box>
             <ActionsContainer>
-              <div
-                style={{ display: 'flex', alignItems: 'end', width: '100%' }}
-              >
+              <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button
-                    color="primary"
-                    onClick={onStopEditing}
-                    data-cy="saveQuestion"
-                  >
+                  <Button color="primary" onClick={onStopEditing} data-cy="saveQuestion">
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
-                <EditActions
-                  {...orderButtonsProps}
-                  onRemove={onRemove}
-                  name={name}
-                />
+                <EditActions {...orderButtonsProps} onRemove={onRemove} name={name} />
               </div>
             </ActionsContainer>
           </>
@@ -221,11 +187,7 @@ const QuestionCard = ({
                   <Button color="primary" onClick={onCopy}>
                     {t('questionEditor:duplicate')}
                   </Button>
-                  <Button
-                    color="primary"
-                    onClick={onStartEditing}
-                    data-cy="editQuestion"
-                  >
+                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
                     {t('edit')}
                   </Button>
                 </div>

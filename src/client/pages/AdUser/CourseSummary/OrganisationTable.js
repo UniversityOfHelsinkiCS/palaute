@@ -2,12 +2,7 @@
 import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import {
-  TableContainer,
-  IconButton,
-  Tooltip,
-  LinearProgress,
-} from '@mui/material'
+import { TableContainer, IconButton, Tooltip, LinearProgress } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
 import { Link } from 'react-router-dom'
@@ -36,7 +31,7 @@ const styles = {
   },
   settingsButton: {
     '&:hover': {
-      color: (theme) => theme.palette.primary.light,
+      color: theme => theme.palette.primary.light,
       background: 'transparent',
     },
   },
@@ -48,14 +43,7 @@ const OrganisationButton = ({ code, access }) => {
   const { write } = access
 
   return (
-    <Tooltip
-      title={t(
-        write
-          ? 'courseSummary:programmeSettings'
-          : 'courseSummary:programmeSummary',
-      )}
-      placement="top"
-    >
+    <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
       <IconButton
         id={`settings-button-${code}`}
         component={Link}
@@ -65,11 +53,7 @@ const OrganisationButton = ({ code, access }) => {
         color="primary"
         disableFocusRipple
       >
-        {write ? (
-          <SettingsOutlined sx={{ fontSize: '26px' }} />
-        ) : (
-          <Search sx={{ fontSize: '24px' }} />
-        )}
+        {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
       </IconButton>
     </Tooltip>
   )
@@ -90,12 +74,11 @@ const OrganisationTable = forwardRef(
       isRefetching = false,
       organisationLinks = false,
     },
-    ref,
+    ref
   ) => {
     const { i18n } = useTranslation()
 
-    const showHidingModeButton =
-      organisationAccess?.length > 1 && organisations.length > 1
+    const showHidingModeButton = organisationAccess?.length > 1 && organisations.length > 1
 
     return (
       <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
@@ -103,10 +86,7 @@ const OrganisationTable = forwardRef(
           <thead>
             <tr>
               <th css={styles.filtersCell}>{filters}</th>
-              <ColumnHeadings
-                onOrderByChange={onOrderByChange}
-                questions={questions}
-              />
+              <ColumnHeadings onOrderByChange={onOrderByChange} questions={questions} />
               <th />
               {showHidingModeButton && (
                 <th>
@@ -133,9 +113,7 @@ const OrganisationTable = forwardRef(
                     questions={questions}
                     feedbackCount={average.feedbackCount}
                     studentCount={average.studentCount}
-                    feedbackResponsePercentage={
-                      average.feedbackResponsePercentage
-                    }
+                    feedbackResponsePercentage={average.feedbackResponsePercentage}
                   />
                 )}
                 {organisations.map(
@@ -153,30 +131,20 @@ const OrganisationTable = forwardRef(
                   }) => (
                     <React.Fragment key={id}>
                       <ResultsRow
-                        label={
-                          <OrganisationLabel
-                            name={getLanguageValue(name, i18n.language)}
-                            code={code}
-                          />
-                        }
+                        label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
                         results={results}
                         questions={questions}
                         feedbackCount={feedbackCount}
                         studentCount={studentCount}
                         feedbackResponsePercentage={feedbackResponsePercentage}
                         accordionEnabled={courseUnits.length > 0}
-                        accordionInitialOpen={initialOpenAccordions.includes(
-                          id,
-                        )}
+                        accordionInitialOpen={initialOpenAccordions.includes(id)}
                         onToggleAccordion={() => onToggleAccordion(id)}
                         cellsAfter={
                           organisationLinks && (
                             <>
                               <td css={{ paddingLeft: '2rem' }}>
-                                <OrganisationButton
-                                  code={code}
-                                  access={access}
-                                />
+                                <OrganisationButton code={code} access={access} />
                               </td>
                               {access?.admin && !!hiddenCount && (
                                 <td>
@@ -187,14 +155,10 @@ const OrganisationTable = forwardRef(
                           )
                         }
                       >
-                        <CourseUnitSummary
-                          courseUnits={courseUnits}
-                          questions={questions}
-                          access={access}
-                        />
+                        <CourseUnitSummary courseUnits={courseUnits} questions={questions} access={access} />
                       </ResultsRow>
                     </React.Fragment>
-                  ),
+                  )
                 )}
               </>
             )}
@@ -202,7 +166,7 @@ const OrganisationTable = forwardRef(
         </table>
       </TableContainer>
     )
-  },
+  }
 )
 
 export default OrganisationTable

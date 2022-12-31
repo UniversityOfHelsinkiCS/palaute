@@ -1,16 +1,7 @@
 /* eslint-disable no-alert */
 import React, { useState } from 'react'
 
-import {
-  TextField,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Box,
-  Typography,
-  Alert,
-} from '@mui/material'
+import { TextField, Card, CardContent, CardActions, Button, Box, Typography, Alert } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -22,20 +13,15 @@ import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import apiClient from '../../../util/apiClient'
 
 const updateFeedbackCorrespondents =
-  (code) =>
+  code =>
   async ({ userId, add }) => {
     if (add) {
-      const { data } = await apiClient.post(
-        `/organisations/${code}/feedback-correspondents`,
-        {
-          userId,
-        },
-      )
+      const { data } = await apiClient.post(`/organisations/${code}/feedback-correspondents`, {
+        userId,
+      })
       return data
     }
-    const { data } = await apiClient.delete(
-      `/organisations/${code}/feedback-correspondents/${userId}`,
-    )
+    const { data } = await apiClient.delete(`/organisations/${code}/feedback-correspondents/${userId}`)
     return data
   }
 
@@ -61,9 +47,7 @@ const CorrepondentSelector = ({ add }) => {
     <Box>
       <Card>
         <CardContent>
-          <Typography variant="body1">
-            {t('organisationSettings:newCorrespondent')}
-          </Typography>
+          <Typography variant="body1">{t('organisationSettings:newCorrespondent')}</Typography>
           <Box mb={2} />
           <TextField
             style={{ width: '30em', paddingBottom: 10 }}
@@ -74,7 +58,7 @@ const CorrepondentSelector = ({ add }) => {
         </CardContent>
       </Card>
       <Box my={1} />
-      {potentialUsers.map((user) => (
+      {potentialUsers.map(user => (
         <>
           <Card key={user.id}>
             <CardContent>
@@ -101,12 +85,7 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
   return (
     <Card>
       <CardContent>
-        <Box
-          display="flex"
-          width="100%"
-          justifyContent="space-between"
-          alignItems="flex-end"
-        >
+        <Box display="flex" width="100%" justifyContent="space-between" alignItems="flex-end">
           <Box m={1}>
             <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
@@ -114,11 +93,7 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
             <Typography>{correspondent.email.toLowerCase()}</Typography>
           </Box>
           <Box>
-            <Button
-              color="secondary"
-              onClick={() => remove(correspondent)}
-              data-cy="resetCorrespondentButton"
-            >
+            <Button color="secondary" onClick={() => remove(correspondent)} data-cy="resetCorrespondentButton">
               {t('organisationSettings:remove')}
             </Button>
           </Box>
@@ -135,8 +110,8 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation(updateFeedbackCorrespondents(code), {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['organisation', code], (organisation) => ({
+    onSuccess: data => {
+      queryClient.setQueryData(['organisation', code], organisation => ({
         ...organisation,
         users: data,
       }))
@@ -160,7 +135,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
         t('organisationSettings:confirmResetCorrespondent', {
           firstName,
           lastName,
-        }),
+        })
       )
     }
 
@@ -168,16 +143,16 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
       t('organisationSettings:confirmSetCorrespondent', {
         firstName,
         lastName,
-      }),
+      })
     )
   }
 
-  const add = async (user) => {
+  const add = async user => {
     if (!confirmChange(user, true)) return
     await mutation.mutateAsync({ userId: user.id, add: true })
   }
 
-  const remove = async (user) => {
+  const remove = async user => {
     if (!confirmChange(user, false)) return
     await mutation.mutateAsync({ userId: user.id, add: false })
   }
@@ -185,20 +160,14 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   return (
     <div style={style}>
       <Typography textTransform="uppercase">
-        {t('organisationSettings:feedbackCorrespondents')} (
-        {feedbackCorrespondents?.length})
+        {t('organisationSettings:feedbackCorrespondents')} ({feedbackCorrespondents?.length})
       </Typography>
       {feedbackCorrespondents?.length > 0 ? (
-        feedbackCorrespondents.map((correspondent) => (
-          <FeedbackCorrespondentInfo
-            correspondent={correspondent}
-            remove={remove}
-          />
+        feedbackCorrespondents.map(correspondent => (
+          <FeedbackCorrespondentInfo correspondent={correspondent} remove={remove} />
         ))
       ) : (
-        <Alert severity="warning">
-          {t('organisationSettings:correspondentMissing')}
-        </Alert>
+        <Alert severity="warning">{t('organisationSettings:correspondentMissing')}</Alert>
       )}
       <CorrepondentSelector add={add} />
     </div>
@@ -214,11 +183,7 @@ const FeedbackCorrespondent = () => {
     return <LoadingProgress />
   }
 
-  return (
-    <FeedbackCorrespondentContainer
-      feedbackCorrespondents={organisation.users}
-    />
-  )
+  return <FeedbackCorrespondentContainer feedbackCorrespondents={organisation.users} />
 }
 
 export default FeedbackCorrespondent

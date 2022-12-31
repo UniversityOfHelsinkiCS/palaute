@@ -42,12 +42,8 @@ const Details = ({ feedbackTarget: fbt }) => (
         <TableRow>
           <TableCell>{fbt.id}</TableCell>
           <TableCell>{fbt.courseUnit.courseCode}</TableCell>
-          <TableCell>
-            {fbt.courseRealisation.startDate.toLocaleDateString()}
-          </TableCell>
-          <TableCell>
-            {fbt.courseRealisation.endDate.toLocaleDateString()}
-          </TableCell>
+          <TableCell>{fbt.courseRealisation.startDate.toLocaleDateString()}</TableCell>
+          <TableCell>{fbt.courseRealisation.endDate.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.opensAt.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.closesAt.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.studentCount}</TableCell>
@@ -120,7 +116,7 @@ const Details = ({ feedbackTarget: fbt }) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {fbt.courseUnit.organisations.map((org) => (
+        {fbt.courseUnit.organisations.map(org => (
           <TableRow key={org.id}>
             <TableCell>CU</TableCell>
             <TableCell>{org.id}</TableCell>
@@ -128,7 +124,7 @@ const Details = ({ feedbackTarget: fbt }) => (
             <TableCell>{org.name?.fi}</TableCell>
           </TableRow>
         ))}
-        {fbt.courseRealisation.organisations.map((org) => (
+        {fbt.courseRealisation.organisations.map(org => (
           <TableRow key={org.id}>
             <TableCell>CUR</TableCell>
             <TableCell>{org.id}</TableCell>
@@ -148,34 +144,26 @@ const Actions = ({ feedbackTarget }) => {
   const resendFeedbackResponseEmail = async () => {
     if (
       // eslint-disable-next-line no-alert
-      !window.confirm(
-        `Resend counter feedback email to students of ${feedbackTarget.courseUnit.name?.fi}?`,
-      )
+      !window.confirm(`Resend counter feedback email to students of ${feedbackTarget.courseUnit.name?.fi}?`)
     )
       return
     const body = { id: feedbackTarget.id }
     try {
       const res = await apiClient.put(`/admin/resend-response`, body)
-      enqueueSnackbar(
-        `Success, counter feedback emailed to ${res.data.count} students!`,
-      )
+      enqueueSnackbar(`Success, counter feedback emailed to ${res.data.count} students!`)
     } catch (error) {
       enqueueSnackbar(`Error: ${error.message}`)
     }
   }
 
-  const handleRunUpdater = (feedbackTarget) => async () => {
+  const handleRunUpdater = feedbackTarget => async () => {
     if (
       // eslint-disable-next-line no-alert
-      !window.confirm(
-        `Update enrollments of ${feedbackTarget.courseUnit.name?.fi}?`,
-      )
+      !window.confirm(`Update enrollments of ${feedbackTarget.courseUnit.name?.fi}?`)
     )
       return
     try {
-      const req = apiClient.post(
-        `/admin/run-updater/enrolments/${feedbackTarget?.courseRealisationId}`,
-      )
+      const req = apiClient.post(`/admin/run-updater/enrolments/${feedbackTarget?.courseRealisationId}`)
       setUpdaterRunning(true)
       await req
       enqueueSnackbar('Enrolments updated', { variant: 'success' })
@@ -187,22 +175,13 @@ const Actions = ({ feedbackTarget }) => {
 
   return (
     <>
-      <MuiLink
-        to={`/targets/${feedbackTarget.id}`}
-        component={Link}
-        underline="hover"
-      >
+      <MuiLink to={`/targets/${feedbackTarget.id}`} component={Link} underline="hover">
         Go to feedback view
       </MuiLink>
       {feedbackTarget.feedbackResponseEmailSent && (
-        <Button onClick={resendFeedbackResponseEmail}>
-          Resend counter feedback
-        </Button>
+        <Button onClick={resendFeedbackResponseEmail}>Resend counter feedback</Button>
       )}
-      <Button
-        onClick={handleRunUpdater(feedbackTarget)}
-        style={{ width: '300px' }}
-      >
+      <Button onClick={handleRunUpdater(feedbackTarget)} style={{ width: '300px' }}>
         {!updaterRunning ? 'Run updater for enrollments' : 'Working on it...'}
       </Button>
     </>
@@ -210,8 +189,7 @@ const Actions = ({ feedbackTarget }) => {
 }
 
 const FeedbackTargetInspector = () => {
-  const [potentialFeedbackTargets, setPotentialFeedbackTargets] =
-    useHistoryState('potentialFeedbacktargets', [])
+  const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])
   const [count, setCount] = useHistoryState('potentialFeedbackTargetCount', 0)
 
   const [query, setQuery] = useHistoryState('feedback-target_query', {
@@ -221,12 +199,12 @@ const FeedbackTargetInspector = () => {
     language: 'fi',
   })
 
-  const runQuery = debounce(async (params) => {
+  const runQuery = debounce(async params => {
     const { data } = await apiClient.get('/admin/feedback-targets', { params })
     const { feedbackTargets, count } = data
 
     setPotentialFeedbackTargets(
-      feedbackTargets.map((fbt) => ({
+      feedbackTargets.map(fbt => ({
         ...fbt,
         opensAt: new Date(fbt.opensAt),
         closesAt: new Date(fbt.closesAt),
@@ -235,12 +213,12 @@ const FeedbackTargetInspector = () => {
           startDate: new Date(fbt.courseRealisation.startDate),
           endDate: new Date(fbt.courseRealisation.endDate),
         },
-      })),
+      }))
     )
     setCount(count)
   }, 600)
 
-  const handleChange = (values) => {
+  const handleChange = values => {
     const newQuery = { ...query, ...values }
     setQuery(newQuery)
     runQuery(newQuery)
@@ -253,7 +231,7 @@ const FeedbackTargetInspector = () => {
           variant="outlined"
           label="id"
           value={query.id}
-          onChange={(e) => handleChange({ ...query, id: e.target.value })}
+          onChange={e => handleChange({ ...query, id: e.target.value })}
         />
         <Box m={1} />
         <TextField
@@ -261,7 +239,7 @@ const FeedbackTargetInspector = () => {
           label="course code"
           value={query.code}
           onFocus={() => setQuery({ ...query, id: '' })}
-          onChange={(e) => handleChange({ ...query, code: e.target.value })}
+          onChange={e => handleChange({ ...query, code: e.target.value })}
         />
         <Box m={1} />
         <TextField
@@ -269,7 +247,7 @@ const FeedbackTargetInspector = () => {
           label="CU name"
           value={query.name}
           onFocus={() => setQuery({ ...query, id: '' })}
-          onChange={(e) => handleChange({ ...query, name: e.target.value })}
+          onChange={e => handleChange({ ...query, name: e.target.value })}
         />
         <Box m={1} />
         <Button
@@ -292,25 +270,20 @@ const FeedbackTargetInspector = () => {
         Showing {potentialFeedbackTargets.length}/{count} results
       </Typography>
       <Box m={2} />
-      {potentialFeedbackTargets.map((feedbackTarget) => (
+      {potentialFeedbackTargets.map(feedbackTarget => (
         <Accordion key={feedbackTarget.id}>
           <AccordionSummary>
             <Box display="flex" width="100%">
-              <Typography style={{ flexShrink: 0, flexBasis: '15%' }}>
-                {feedbackTarget.id}
-              </Typography>
+              <Typography style={{ flexShrink: 0, flexBasis: '15%' }}>{feedbackTarget.id}</Typography>
               <Box m={2} />
               <Typography style={{ flexShrink: 0, flexBasis: '16%' }}>
                 {feedbackTarget.courseUnit.courseCode}
               </Typography>
               <Box m={2} />
-              <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>
-                {feedbackTarget.courseUnit.name?.fi}
-              </Typography>
+              <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{feedbackTarget.courseUnit.name?.fi}</Typography>
               <Box m={2} />
               <Typography variant="body2">
-                {feedbackTarget.opensAt.toLocaleDateString()} -{' '}
-                {feedbackTarget.closesAt.toLocaleDateString()}
+                {feedbackTarget.opensAt.toLocaleDateString()} - {feedbackTarget.closesAt.toLocaleDateString()}
               </Typography>
             </Box>
           </AccordionSummary>

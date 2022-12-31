@@ -36,26 +36,17 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
 
-  const periodInfo = `${formatDate(courseRealisation.startDate)} - ${formatDate(
-    courseRealisation.endDate,
-  )}`
+  const periodInfo = `${formatDate(courseRealisation.startDate)} - ${formatDate(courseRealisation.endDate)}`
 
   const questions = surveys?.teacherSurvey?.questions ?? []
 
-  const questionNames = questions
-    .map(({ data }) => getLanguageValue(data?.label, i18n.language))
-    .filter(Boolean)
+  const questionNames = questions.map(({ data }) => getLanguageValue(data?.label, i18n.language)).filter(Boolean)
 
   return (
     <ListItem divider={divider} sx={styles.listItem} disableGutters>
       <ListItemText
         primary={
-          <Link
-            href={`/targets/${feedbackTarget.id}`}
-            target="_blank"
-            rel="noopener"
-            underline="hover"
-          >
+          <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
             {getLanguageValue(courseRealisation?.name, i18n.language)}
           </Link>
         }
@@ -102,44 +93,30 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const options = courseUnits ?? []
 
-  const { feedbackTargets, isLoading: feedbackTargetsIsLoading } =
-    useCourseUnitFeedbackTargets(value?.courseCode, {
-      feedbackType: 'courseRealisation',
-      includeSurveys: true,
-    })
+  const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
+    feedbackType: 'courseRealisation',
+    includeSurveys: true,
+  })
 
-  const getOptionLabel = (option) =>
-    `${option.courseCode} ${getLanguageValue(option.name, i18n.language)}`
+  const getOptionLabel = option => `${option.courseCode} ${getLanguageValue(option.name, i18n.language)}`
 
-  const renderInput = (params) => (
-    <TextField {...params} label="Kurssi" variant="outlined" />
-  )
+  const renderInput = params => <TextField {...params} label="Kurssi" variant="outlined" />
 
   const handleValueChange = (event, newValue) => setValue(newValue)
 
   const feedbackTargetsWithQuestions = useMemo(
-    () =>
-      (feedbackTargets ?? [])
-        .filter((t) => t.surveys?.teacherSurvey?.questions?.length > 0)
-        .slice(0, 10),
-    [feedbackTargets],
+    () => (feedbackTargets ?? []).filter(t => t.surveys?.teacherSurvey?.questions?.length > 0).slice(0, 10),
+    [feedbackTargets]
   )
 
-  const noQuestions =
-    value &&
-    !feedbackTargetsIsLoading &&
-    feedbackTargetsWithQuestions.length === 0
+  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions.length === 0
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>
-        {t('editFeedbackTarget:copyFromCourseDialogTitle')}
-      </DialogTitle>
+      <DialogTitle>{t('editFeedbackTarget:copyFromCourseDialogTitle')}</DialogTitle>
       <DialogContent>
         <Box mb={2}>
-          <Alert severity="info">
-            {t('editFeedbackTarget:copyFromCourseInfoAlert')}
-          </Alert>
+          <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
         </Box>
         <Box mb={2}>
           <Autocomplete
@@ -157,10 +134,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         )}
         {feedbackTargetsIsLoading && <LoadingProgress />}
         {feedbackTargetsWithQuestions?.length > 0 && (
-          <FeedbackTargetList
-            feedbackTargets={feedbackTargetsWithQuestions}
-            onCopy={onCopy}
-          />
+          <FeedbackTargetList feedbackTargets={feedbackTargetsWithQuestions} onCopy={onCopy} />
         )}
         {noQuestions && (
           <Typography color="textSecondary" align="center">

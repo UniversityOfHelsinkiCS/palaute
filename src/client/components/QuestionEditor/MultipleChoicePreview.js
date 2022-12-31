@@ -13,7 +13,7 @@ const MultipleChoicePreview = ({ question, language }) => {
   return (
     <PreviewBase label={label} description={description} required={required}>
       <FormGroup>
-        {options.map((option) => (
+        {options.map(option => (
           <FormControlLabel
             value={option.id}
             control={<Checkbox color="primary" name={option.id} />}

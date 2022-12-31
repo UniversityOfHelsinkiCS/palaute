@@ -1,6 +1,6 @@
 import { parseISO, getYear } from 'date-fns'
 
-const feedbackTargetIsEnded = (feedbackTarget) => {
+const feedbackTargetIsEnded = feedbackTarget => {
   if (!feedbackTarget?.closesAt) {
     return true
   }

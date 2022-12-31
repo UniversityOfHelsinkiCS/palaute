@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-  TextField,
-  Alert,
-} from '@mui/material'
+import { Box, Button, CircularProgress, Typography, TextField, Alert } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { writeFileXLSX, utils } from 'xlsx'
 
@@ -70,11 +63,11 @@ const NorppaStatisticView = () => {
     setParamsChanged(false)
   }
 
-  const handleOpensAtChange = (newValue) => {
+  const handleOpensAtChange = newValue => {
     setParamsChanged(opensAt !== newValue)
     setOpensAt(newValue)
   }
-  const handleClosesAtChange = (newValue) => {
+  const handleClosesAtChange = newValue => {
     setParamsChanged(closesAt !== newValue)
     setClosesAt(newValue)
   }
@@ -91,7 +84,7 @@ const NorppaStatisticView = () => {
           disableFuture
           disableToolbar
           value={opensAt}
-          renderInput={(props) => <TextField margin="normal" {...props} />}
+          renderInput={props => <TextField margin="normal" {...props} />}
           onChange={handleOpensAtChange}
           sx={styles.datePicker}
         />
@@ -100,18 +93,12 @@ const NorppaStatisticView = () => {
           inputFormat="dd/MM/yyyy"
           disableToolbar
           value={closesAt}
-          renderInput={(props) => <TextField margin="normal" {...props} />}
+          renderInput={props => <TextField margin="normal" {...props} />}
           onChange={handleClosesAtChange}
           sx={styles.datePicker}
         />
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={getStatistics}
-        sx={styles.button}
-        disabled={!paramsChanged}
-      >
+      <Button variant="contained" color="primary" onClick={getStatistics} sx={styles.button} disabled={!paramsChanged}>
         {!loading && <span>Fetch statistics</span>}
         {loading && (
           <Box display="flex" alignContent="space-between">

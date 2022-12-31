@@ -30,7 +30,7 @@ const styles = {
     textAlign: 'right',
     minWidth: '60px',
   },
-  labelCell: (theme) => ({
+  labelCell: theme => ({
     [theme.breakpoints.down('md')]: {
       width: '100px',
       height: '74px', // Sets a good height for the entire row
@@ -59,11 +59,11 @@ const styles = {
     textAlign: 'left',
     textTransform: 'none',
     '&:hover': {
-      background: (theme) => theme.palette.action.hover,
+      background: theme => theme.palette.action.hover,
     },
   },
   link: {
-    color: (theme) => theme.palette.primary.main,
+    color: theme => theme.palette.primary.main,
   },
   arrowContainer: {
     position: 'absolute',
@@ -74,9 +74,9 @@ const styles = {
     alignItems: 'center',
     paddingRight: '0.7rem',
     '&:hover': {
-      color: (theme) => theme.palette.text.primary,
+      color: theme => theme.palette.text.primary,
     },
-    color: (theme) => theme.palette.info.main,
+    color: theme => theme.palette.info.main,
   },
   arrow: {
     transition: 'transform 0.2s ease-out',
@@ -85,35 +85,32 @@ const styles = {
     transform: 'rotate(90deg)',
   },
   given: {
-    color: (theme) => theme.palette.success.main,
+    color: theme => theme.palette.success.main,
     '&:hover': {
-      color: (theme) => theme.palette.success.light,
+      color: theme => theme.palette.success.light,
     },
   },
   notGiven: {
-    color: (theme) => theme.palette.error.main,
+    color: theme => theme.palette.error.main,
     '&:hover': {
-      color: (theme) => theme.palette.error.light,
+      color: theme => theme.palette.error.light,
     },
   },
   feedbackOpen: {
-    color: (theme) => theme.palette.primary.main,
+    color: theme => theme.palette.primary.main,
     '&:hover': {
-      color: (theme) => theme.palette.primary.light,
+      color: theme => theme.palette.primary.light,
     },
   },
 }
 
-const getQuestion = (questions, questionId) =>
-  questions.find((q) => q.id === questionId)
+const getQuestion = (questions, questionId) => questions.find(q => q.id === questionId)
 
 const ResponseGivenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
     <Tooltip
-      title={`${t('courseSummary:feedbackResponseGiven')}.\n${t(
-        'courseSummary:clickForDetails',
-      )}`}
+      title={`${t('courseSummary:feedbackResponseGiven')}.\n${t('courseSummary:clickForDetails')}`}
       placement="right"
     >
       <Link to={link}>
@@ -127,9 +124,7 @@ const ResponseNotGivenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
     <Tooltip
-      title={`${t('courseSummary:feedbackResponseNotGiven')}.\n${t(
-        'courseSummary:clickForDetails',
-      )}`}
+      title={`${t('courseSummary:feedbackResponseNotGiven')}.\n${t('courseSummary:clickForDetails')}`}
       placement="right"
     >
       <Link to={link}>
@@ -143,9 +138,7 @@ const FeedbackOpenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
     <Tooltip
-      title={`${t('courseSummary:feedbackStillOpen')}.\n${t(
-        'courseSummary:clickForDetails',
-      )}`}
+      title={`${t('courseSummary:feedbackStillOpen')}.\n${t('courseSummary:clickForDetails')}`}
       placement="right"
     >
       <Link to={link}>
@@ -186,12 +179,11 @@ const ResultsRow = ({
   const [accordionOpen, setAccordionOpen] = useState(accordionInitialOpen)
 
   const handleToggleAccordion = () => {
-    setAccordionOpen((previousOpen) => !previousOpen)
+    setAccordionOpen(previousOpen => !previousOpen)
     onToggleAccordion()
   }
 
-  const percent =
-    studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
+  const percent = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
 
   const feedbackResponsePercent = (feedbackResponsePercentage * 100).toFixed(0)
 
@@ -201,12 +193,7 @@ const ResultsRow = ({
         <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
           {accordionEnabled ? (
             // eslint-disable-next-line react/button-has-type
-            <ButtonBase
-              onClick={handleToggleAccordion}
-              sx={styles.accordionButton}
-              variant="contained"
-              disableRipple
-            >
+            <ButtonBase onClick={handleToggleAccordion} sx={styles.accordionButton} variant="contained" disableRipple>
               {label}
               <Box sx={styles.arrowContainer}>
                 <ChevronRight
@@ -255,10 +242,7 @@ const ResultsRow = ({
         </td>
         <td css={styles.percentCell}>
           {feedbackResponsePercentage !== undefined ? (
-            <PercentageCell
-              label={`${feedbackResponsePercent}%`}
-              percent={feedbackResponsePercent}
-            />
+            <PercentageCell label={`${feedbackResponsePercent}%`} percent={feedbackResponsePercent} />
           ) : (
             <FeedbackResponseIndicator
               status={feedbackResponseGiven}

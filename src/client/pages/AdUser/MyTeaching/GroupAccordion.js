@@ -1,13 +1,6 @@
 import React, { Fragment } from 'react'
 
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  Box,
-  Divider,
-} from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Divider } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -18,14 +11,14 @@ import CourseUnitAccordion from './CourseUnitAccordion'
 const styles = {
   title: {
     fontSize: '1.1rem',
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    fontWeight: theme => theme.typography.fontWeightMedium,
   },
   details: {
     flexDirection: 'column',
     padding: 0,
   },
   icon: {
-    marginRight: (theme) => theme.spacing(1),
+    marginRight: theme => theme.spacing(1),
   },
 }
 

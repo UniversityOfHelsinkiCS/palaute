@@ -1,5 +1,5 @@
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.sequelize.query(`
       WITH feedback_counts as (
         SELECT feedback_target_id as id, count(*) as c

@@ -5,7 +5,7 @@ import queryClient from '../util/queryClient'
 
 const useQuestionPublicityMutation = ({ resource, resourceId }) => {
   const resourcePathName = _.kebabCase(resource)
-  const mutationFn = async (publicQuestionIds) => {
+  const mutationFn = async publicQuestionIds => {
     const res = await apiClient.put(`/${resourcePathName}s/${resourceId}`, {
       publicQuestionIds,
     })
@@ -13,9 +13,9 @@ const useQuestionPublicityMutation = ({ resource, resourceId }) => {
   }
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: (publicQuestionIds) => {
+    onSuccess: publicQuestionIds => {
       const queryKey = [resource, String(resourceId)]
-      queryClient.setQueryData(queryKey, (resource) => ({
+      queryClient.setQueryData(queryKey, resource => ({
         ...resource,
         publicQuestionIds,
       }))

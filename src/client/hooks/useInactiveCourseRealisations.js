@@ -11,10 +11,7 @@ const useInactiveCourseRealisations = () => {
     return data
   }
 
-  const { data: inactiveCourseRealisations, ...rest } = useQuery(
-    queryKey,
-    queryFn,
-  )
+  const { data: inactiveCourseRealisations, ...rest } = useQuery(queryKey, queryFn)
 
   return { inactiveCourseRealisations, ...rest }
 }

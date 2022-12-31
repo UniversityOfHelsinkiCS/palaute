@@ -5,11 +5,11 @@ import Markdown from './Markdown'
 import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
-  container: (color) => ({
+  container: color => ({
     width: '100%',
-    zIndex: (theme) => theme.zIndex.drawer + 2,
+    zIndex: theme => theme.zIndex.drawer + 2,
     background: color,
-    color: (theme) => theme.palette.getContrastText(color),
+    color: theme => theme.palette.getContrastText(color),
     padding: '0.3rem',
     paddingLeft: '2rem',
     paddingRight: '2rem',
@@ -21,8 +21,8 @@ const styles = {
   button: {
     marginTop: 1,
   },
-  close: (color) => ({
-    color: (theme) => theme.palette.getContrastText(color),
+  close: color => ({
+    color: theme => theme.palette.getContrastText(color),
     marginLeft: '1rem',
     justifySelf: 'end',
     minWidth: 50,

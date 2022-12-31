@@ -343,23 +343,8 @@ const doctoralSchoolMap = {
     'T921108',
     'T921109',
   ],
-  'hy-tutkijakoulut-yeb-jory': [
-    'T922101',
-    'T922102',
-    'T922103',
-    'T922104',
-    'T922105',
-    'T922106',
-  ],
-  'hy-tutkijakoulut-donasci-jory': [
-    'T923101',
-    'T923102',
-    'T923103',
-    'T923104',
-    'T923105',
-    'T923106',
-    'T923107',
-  ],
+  'hy-tutkijakoulut-yeb-jory': ['T922101', 'T922102', 'T922103', 'T922104', 'T922105', 'T922106'],
+  'hy-tutkijakoulut-donasci-jory': ['T923101', 'T923102', 'T923103', 'T923104', 'T923105', 'T923106', 'T923107'],
 }
 
 const opetusVaradekaani = 'hy-varadekaanit-opetus'
@@ -379,11 +364,7 @@ const dekaaniFacultyMap = {
   'hy-eltdk-dekanaatti': 'eläinlääketieteellinen',
 }
 
-const universityWideGroups = [
-  'hy-ypa-opa-opintoasiainpaallikot',
-  'hy-ypa-opa-ospa',
-  'hy-rehtoraatti',
-]
+const universityWideGroups = ['hy-ypa-opa-opintoasiainpaallikot', 'hy-ypa-opa-ospa', 'hy-rehtoraatti']
 
 const superAdminGroups = ['grp-toska']
 

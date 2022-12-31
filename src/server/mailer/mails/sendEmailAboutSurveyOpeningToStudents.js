@@ -8,10 +8,7 @@ const {
   User,
 } = require('../../models')
 const { pate } = require('../pateClient')
-const {
-  createRecipientsForFeedbackTargets,
-  getFeedbackTargetLink,
-} = require('./util')
+const { createRecipientsForFeedbackTargets, getFeedbackTargetLink } = require('./util')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -52,14 +49,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
         model: User,
         as: 'users',
         required: true,
-        attributes: [
-          'id',
-          'username',
-          'email',
-          'language',
-          'degreeStudyRight',
-          'secondaryEmail',
-        ],
+        attributes: ['id', 'username', 'email', 'language', 'degreeStudyRight', 'secondaryEmail'],
         through: {
           where: {
             accessStatus: 'STUDENT',
@@ -69,10 +59,8 @@ const getOpenFeedbackTargetsForStudents = async () => {
     ],
   })
 
-  const filteredFeedbackTargets = feedbackTargets.filter((target) => {
-    const disabledCourseCodes = target.courseUnit.organisations.flatMap(
-      (org) => org.disabledCourseCodes,
-    )
+  const filteredFeedbackTargets = feedbackTargets.filter(target => {
+    const disabledCourseCodes = target.courseUnit.organisations.flatMap(org => org.disabledCourseCodes)
 
     if (!target.isOpen()) return false
 
@@ -82,11 +70,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
   return filteredFeedbackTargets
 }
 
-const buildNotificationAboutSurveyOpeningToStudents = (
-  courseNamesAndUrls,
-  courseName,
-  hasMultipleFeedbackTargets,
-) => {
+const buildNotificationAboutSurveyOpeningToStudents = (courseNamesAndUrls, courseName, hasMultipleFeedbackTargets) => {
   const translations = {
     text: {
       en: `Dear student, <br/>
@@ -121,31 +105,24 @@ const buildNotificationAboutSurveyOpeningToStudents = (
   return translations
 }
 
-const notificationAboutSurveyOpeningToStudents = (
-  emailAddress,
-  studentFeedbackTargets,
-) => {
+const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackTargets) => {
   const { language, name } = studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
 
   const emailLanguage = !language ? 'en' : language
 
-  const courseName = name[emailLanguage]
-    ? name[emailLanguage]
-    : Object.values(name)[0]
+  const courseName = name[emailLanguage] ? name[emailLanguage] : Object.values(name)[0]
 
   let courseNamesAndUrls = ''
 
   for (const feedbackTarget of studentFeedbackTargets) {
-    courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(
-      feedbackTarget,
-    )}`
+    courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(feedbackTarget)}`
   }
 
   const translations = buildNotificationAboutSurveyOpeningToStudents(
     courseNamesAndUrls,
     courseName,
-    hasMultipleFeedbackTargets,
+    hasMultipleFeedbackTargets
   )
 
   const email = {
@@ -160,23 +137,16 @@ const notificationAboutSurveyOpeningToStudents = (
 const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
 
-  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(
-    feedbackTargets,
-    { whereOpenEmailNotSent: true },
+  const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, {
+    whereOpenEmailNotSent: true,
+  })
+
+  const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(student =>
+    notificationAboutSurveyOpeningToStudents(student, studentsWithFeedbackTargets[student])
   )
 
-  const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(
-    (student) =>
-      notificationAboutSurveyOpeningToStudents(
-        student,
-        studentsWithFeedbackTargets[student],
-      ),
-  )
-
-  const ids = Object.keys(studentsWithFeedbackTargets).flatMap((key) =>
-    studentsWithFeedbackTargets[key].map(
-      (course) => course.userFeedbackTargetId,
-    ),
+  const ids = Object.keys(studentsWithFeedbackTargets).flatMap(key =>
+    studentsWithFeedbackTargets[key].map(course => course.userFeedbackTargetId)
   )
 
   await pate.send(emailsToBeSent, 'Notify students about feedback opening')
@@ -191,7 +161,7 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
           [Op.in]: ids,
         },
       },
-    },
+    }
   )
 
   return emailsToBeSent

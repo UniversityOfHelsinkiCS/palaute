@@ -15,7 +15,7 @@ import useIsMobile from '../../hooks/useIsMobile'
 import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
 
 const styles = {
-  container: (theme) => ({
+  container: theme => ({
     padding: '2rem',
     [theme.breakpoints.down('md')]: {
       padding: '1rem',
@@ -28,8 +28,7 @@ const styles = {
 }
 
 const Home = () => {
-  const { courseSummaryAccessInfo, isLoading: accessInfoLoading } =
-    useCourseSummaryAccessInfo()
+  const { courseSummaryAccessInfo, isLoading: accessInfoLoading } = useCourseSummaryAccessInfo()
   const isMobile = useIsMobile()
 
   if (accessInfoLoading) {

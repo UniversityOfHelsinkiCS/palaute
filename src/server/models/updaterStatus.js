@@ -30,7 +30,7 @@ UpdaterStatus.init(
     underscored: true,
     timestamps: false,
     sequelize,
-  },
+  }
 )
 
 module.exports = UpdaterStatus

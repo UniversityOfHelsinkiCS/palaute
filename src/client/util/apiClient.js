@@ -4,9 +4,9 @@ import { basePath, inProduction, inE2EMode } from './common'
 
 const apiClient = axios.create({ baseURL: `${basePath}/api` })
 
-const getNoadUrl = (url) => `/noad${url}`
+const getNoadUrl = url => `/noad${url}`
 
-apiClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use(config => {
   const defaultHeaders = inProduction && !inE2EMode ? {} : getHeaders()
   const token = sessionStorage.getItem('token')
   const tokenUser = sessionStorage.getItem('tokenUser')

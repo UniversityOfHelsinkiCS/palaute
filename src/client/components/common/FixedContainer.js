@@ -7,7 +7,7 @@ const styles = {
     position: 'fixed',
     width: '100%',
     left: '0px',
-    padding: (theme) => theme.spacing(2, 0),
+    padding: theme => theme.spacing(2, 0),
     zIndex: 999,
   },
 }

@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  Divider,
-  Box,
-  Button,
-  Alert,
-  Card,
-  CardContent,
-  Typography,
-} from '@mui/material'
+import { Divider, Box, Button, Alert, Card, CardContent, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Formik, useField, useFormikContext } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -35,15 +27,15 @@ import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutati
 
 const styles = {
   heading: {
-    marginBottom: (theme) => theme.spacing(1),
+    marginBottom: theme => theme.spacing(1),
   },
   progressContainer: {
-    padding: (theme) => theme.spacing(4, 0),
+    padding: theme => theme.spacing(4, 0),
     display: 'flex',
     justifyContent: 'center',
   },
   toolbarDivider: {
-    margin: (theme) => theme.spacing(2, 0),
+    margin: theme => theme.spacing(2, 0),
   },
 }
 
@@ -57,13 +49,10 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
 
   const handleOpenDialog = () => setDialogOpen(true)
 
-  const handleCopy = (feedbackTarget) => {
+  const handleCopy = feedbackTarget => {
     handleCloseDialog()
 
-    helpers.setValue([
-      ...meta.value,
-      ...copyQuestionsFromFeedbackTarget(feedbackTarget),
-    ])
+    helpers.setValue([...meta.value, ...copyQuestionsFromFeedbackTarget(feedbackTarget)])
 
     enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
       variant: 'info',
@@ -74,11 +63,7 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
 
   return (
     <>
-      <CopyFromCourseDialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        onCopy={handleCopy}
-      />
+      <CopyFromCourseDialog open={dialogOpen} onClose={handleCloseDialog} onCopy={handleCopy} />
 
       <Button color="primary" onClick={handleOpenDialog}>
         {t('editFeedbackTarget:copyFromCourseButton')}
@@ -112,7 +97,7 @@ const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
       ? _.uniq(feedbackTarget.publicQuestionIds.concat(question.id))
-      : feedbackTarget.publicQuestionIds.filter((id) => id !== question.id)
+      : feedbackTarget.publicQuestionIds.filter(id => id !== question.id)
 
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
@@ -131,9 +116,7 @@ const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
       onCopyQuestion={handleSave}
       actions={<QuestionEditorActions onCopy={handleSave} />}
       publicQuestionIds={feedbackTarget?.publicQuestionIds}
-      publicityConfigurableQuestionIds={
-        feedbackTarget?.publicityConfigurableQuestionIds
-      }
+      publicityConfigurableQuestionIds={feedbackTarget?.publicityConfigurableQuestionIds}
       onPublicityToggle={onPublicityToggle}
     />
   )
@@ -145,8 +128,7 @@ const EditFeedbackTarget = () => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
-  const { authorizedUser, isLoading: authorizedUserLoading } =
-    useAuthorizedUser()
+  const { authorizedUser, isLoading: authorizedUserLoading } = useAuthorizedUser()
 
   const isAdminUser = authorizedUser?.isAdmin ?? false
 
@@ -158,18 +140,13 @@ const EditFeedbackTarget = () => {
     return <LoadingProgress />
   }
 
-  if (
-    !feedbackTarget ||
-    (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser)
-  ) {
+  if (!feedbackTarget || (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser)) {
     return null
   }
 
-  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(
-    (q) => q.type !== 'TEXT',
-  )
+  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(q => q.type !== 'TEXT')
 
-  const handleSaveQuestions = async (values) => {
+  const handleSaveQuestions = async values => {
     try {
       if (!validateQuestions(values)) {
         enqueueSnackbar(t('choiceQuestionError'), { variant: 'error' })
@@ -210,17 +187,9 @@ const EditFeedbackTarget = () => {
           </Box>
         )}
 
-        <Formik
-          initialValues={questionsInitialValues}
-          enableReinitialize
-          validateOnChange={false}
-        >
+        <Formik initialValues={questionsInitialValues} enableReinitialize validateOnChange={false}>
           {() => (
-            <QuestionEditorContainer
-              onSave={handleSaveQuestions}
-              language={language}
-              feedbackTarget={feedbackTarget}
-            />
+            <QuestionEditorContainer onSave={handleSaveQuestions} language={language} feedbackTarget={feedbackTarget} />
           )}
         </Formik>
 
@@ -230,7 +199,7 @@ const EditFeedbackTarget = () => {
           onSave={() => {}}
           previewLink={`/targets/${id}/feedback`}
           language={language}
-          onLanguageChange={(newLanguage) => {
+          onLanguageChange={newLanguage => {
             i18n.changeLanguage(newLanguage)
           }}
         />

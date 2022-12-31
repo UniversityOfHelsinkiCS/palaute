@@ -61,7 +61,7 @@ Banner.init(
     underscored: true,
     timestamps: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = Banner

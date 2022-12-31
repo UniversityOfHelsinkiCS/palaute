@@ -8,12 +8,7 @@ import ResultsContent from './ResultsContent'
 
 const MultipleChoiceResults = ({ question, feedbackCount }) => {
   const { t, i18n } = useTranslation()
-  const config = getMultipleChoiceChartConfig(
-    question,
-    i18n.language,
-    t,
-    feedbackCount,
-  )
+  const config = getMultipleChoiceChartConfig(question, i18n.language, t, feedbackCount)
 
   return <ResultsContent chart={<Bar {...config} />} />
 }

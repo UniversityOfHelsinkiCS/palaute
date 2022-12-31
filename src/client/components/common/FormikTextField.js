@@ -10,7 +10,7 @@ const FormikTextField = ({ name, helperText, onBlur, ...props }) => {
 
   const showError = meta.error && meta.touched
 
-  const handleBlur = (e) => {
+  const handleBlur = e => {
     helpers.setTouched(true)
 
     if (typeof onBlur === 'function') {
@@ -21,7 +21,7 @@ const FormikTextField = ({ name, helperText, onBlur, ...props }) => {
   return (
     <TextField
       value={field.value ?? ''}
-      onChange={(event) => helpers.setValue(event.target.value)}
+      onChange={event => helpers.setValue(event.target.value)}
       onBlur={handleBlur}
       error={showError}
       helperText={showError ? t(meta.error) : helperText}

@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  DesktopDatePicker,
-  DatePicker as MuiDatePicker,
-} from '@mui/x-date-pickers'
+import { DesktopDatePicker, DatePicker as MuiDatePicker } from '@mui/x-date-pickers'
 import { TextField } from '@mui/material'
 
 export const KeyboardDatePicker = ({ value, onChange, ...props }) => (
@@ -16,7 +13,7 @@ export const KeyboardDatePicker = ({ value, onChange, ...props }) => (
     inputVariant="outlined"
     disableToolbar
     maxDate={new Date('2300-01-01')}
-    renderInput={(props) => <TextField margin="normal" {...props} />}
+    renderInput={props => <TextField margin="normal" {...props} />}
     {...props}
   />
 )
@@ -30,7 +27,7 @@ export const DatePicker = ({ value, onChange, ...props }) => (
     inputVariant="outlined"
     disableToolbar
     maxDate={new Date('2300-01-01')}
-    renderInput={(props) => <TextField margin="normal" {...props} />}
+    renderInput={props => <TextField margin="normal" {...props} />}
     {...props}
   />
 )

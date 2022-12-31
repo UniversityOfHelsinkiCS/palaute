@@ -7,7 +7,7 @@ const { sequelize } = require('../../db/dbConnection')
  * @param {string} courseUnitId
  * @returns {Promise<Survey[]>} programme surveys for course unit
  */
-const getProgrammeSurveysByCourseUnit = async (courseUnitId) => {
+const getProgrammeSurveysByCourseUnit = async courseUnitId => {
   /**
    * @type {Survey[]}
    */
@@ -28,7 +28,7 @@ const getProgrammeSurveysByCourseUnit = async (courseUnitId) => {
       replacements: { courseUnitId },
       model: Survey,
       mapToModel: true,
-    },
+    }
   )
 
   for (const survey of programmeSurveys) {
@@ -42,7 +42,7 @@ const getProgrammeSurveysByCourseUnit = async (courseUnitId) => {
  * @param {string} code
  * @returns {Promise<Survey>} programme survey
  */
-const getProgrammeSurvey = async (code) => {
+const getProgrammeSurvey = async code => {
   const survey = await Survey.findOne({
     where: { type: 'programme', typeId: code },
   })

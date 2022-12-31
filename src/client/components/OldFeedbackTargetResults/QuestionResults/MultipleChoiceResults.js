@@ -12,18 +12,9 @@ const MultipleChoiceResults = ({ question }) => {
   const config = getMultipleChoiceChartConfig(question, i18n.language, t)
   const label = getLanguageValue(question.data?.label, i18n.language)
 
-  const description = getLanguageValue(
-    question.data?.description,
-    i18n.language,
-  )
+  const description = getLanguageValue(question.data?.description, i18n.language)
 
-  return (
-    <ResultsContent
-      title={label}
-      description={description}
-      chart={<Bar {...config} />}
-    />
-  )
+  return <ResultsContent title={label} description={description} chart={<Bar {...config} />} />
 }
 
 export default MultipleChoiceResults

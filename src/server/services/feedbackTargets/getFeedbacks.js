@@ -1,9 +1,4 @@
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  Feedback,
-  CourseRealisation,
-} = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
@@ -27,7 +22,7 @@ const getFeedbackTarget = (id, userId) =>
     ],
   })
 
-const getStudentFeedbacks = async (feedbackTargetId) => {
+const getStudentFeedbacks = async feedbackTargetId => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -40,16 +35,13 @@ const getStudentFeedbacks = async (feedbackTargetId) => {
     },
   })
 
-  return studentFeedbackTargets.map((t) => t.feedback.toPublicObject())
+  return studentFeedbackTargets.map(t => t.feedback.toPublicObject())
 }
 
 const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
-  allFeedbacks.map((feedback) => ({
+  allFeedbacks.map(feedback => ({
     ...feedback,
-    data: feedback.data.filter(
-      (answer) =>
-        !answer.hidden && publicQuestionIds.includes(answer.questionId),
-    ),
+    data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
 
 const getFeedbacks = async (id, user, isAdmin) => {
@@ -89,10 +81,7 @@ const getFeedbacks = async (id, user, isAdmin) => {
   }
 
   const { publicQuestionIds } = additionalData
-  const publicFeedbacks = getPublicFeedbacks(
-    allStudentFeedbacks,
-    publicQuestionIds,
-  )
+  const publicFeedbacks = getPublicFeedbacks(allStudentFeedbacks, publicQuestionIds)
 
   return {
     feedbacks: publicFeedbacks,

@@ -4,17 +4,13 @@ const { sequelize } = require('../../db/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
 const { getMean, getTags, getRowAverage } = require('./utils')
 
-const includeEmptyOrganisations = (
-  organisations,
-  organisationsToShow,
-  questions,
-) => {
+const includeEmptyOrganisations = (organisations, organisationsToShow, questions) => {
   const missingOrganisations = organisationsToShow.filter(
-    (org) => !organisations.find((otherOrg) => org.id === otherOrg.id),
+    org => !organisations.find(otherOrg => org.id === otherOrg.id)
   )
 
   const allOrganisations = organisations.concat(
-    missingOrganisations.map((org) => ({
+    missingOrganisations.map(org => ({
       id: org.id,
       name: org.name,
       code: org.code,
@@ -28,17 +24,13 @@ const includeEmptyOrganisations = (
       studentCount: 0,
       feedbackPercentage: 0,
       feedbackResponsePercentage: 0,
-    })),
+    }))
   )
 
-  return _.orderBy(
-    allOrganisations,
-    [(org) => (org.courseUnits.length > 0 ? 1 : 0)],
-    ['desc'],
-  )
+  return _.orderBy(allOrganisations, [org => (org.courseUnits.length > 0 ? 1 : 0)], ['desc'])
 }
 
-const getUserHiddenOrganisationCodes = async (user) => {
+const getUserHiddenOrganisationCodes = async user => {
   const customisation = await user.getSummaryCustomisation()
   return customisation?.data?.hiddenRows ?? []
 }
@@ -61,19 +53,16 @@ const getOrganisationSummaries = async ({
 
   // orgs user has org access to
   const organisationsToShow = organisationAccess
-    .filter((org) => !codesToFilter.includes(org.organisation.code))
-    .map((org) => org.organisation)
+    .filter(org => !codesToFilter.includes(org.organisation.code))
+    .map(org => org.organisation)
 
-  const organisationIds = organisationsToShow.map((org) => org.id)
+  const organisationIds = organisationsToShow.map(org => org.id)
 
   // rows for each CU with its associated CURs in json
   const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
     replacements: {
       organisationIds: organisationIds.length === 0 ? [''] : organisationIds, // do this for sql reasons
-      courseRealisationIds:
-        accessibleCourseRealisationIds.length === 0
-          ? ['']
-          : accessibleCourseRealisationIds,
+      courseRealisationIds: accessibleCourseRealisationIds.length === 0 ? [''] : accessibleCourseRealisationIds,
       startDate,
       endDate,
       includeOpenUniCourseUnits,
@@ -81,14 +70,14 @@ const getOrganisationSummaries = async ({
     type: sequelize.QueryTypes.SELECT,
   })
 
-  const initialResults = questions.map((q) => ({
+  const initialResults = questions.map(q => ({
     questionId: q.id,
     mean: 0,
     distribution: {},
   })) // results object template, array with objects for each questions distribution and mean
 
   // aggregate CU stats from CUR rows. Also find info about the current (latest) feedback target
-  let summedCourseUnits = rows.map((cu) => {
+  let summedCourseUnits = rows.map(cu => {
     const results = JSON.parse(JSON.stringify(initialResults))
     let feedbackCount = 0
     let studentCount = 0
@@ -101,23 +90,17 @@ const getOrganisationSummaries = async ({
     let currentRank = -1
 
     // sum all CURs
-    cu.courseRealisations.forEach((cur) => {
+    cu.courseRealisations.forEach(cur => {
       // iterate over each question
-      results.forEach((questionResult) => {
+      results.forEach(questionResult => {
         const { questionId } = questionResult
         const indexOfQuestion = cur.questionIds.indexOf(questionId)
 
         // sum the distributions
-        if (
-          indexOfQuestion !== -1 &&
-          typeof cur.distribution[indexOfQuestion] === 'object'
-        )
-          Object.entries(cur.distribution[indexOfQuestion]).forEach(
-            ([option, count]) => {
-              questionResult.distribution[option] =
-                Number(count) + (questionResult.distribution[option] || 0)
-            },
-          )
+        if (indexOfQuestion !== -1 && typeof cur.distribution[indexOfQuestion] === 'object')
+          Object.entries(cur.distribution[indexOfQuestion]).forEach(([option, count]) => {
+            questionResult.distribution[option] = Number(count) + (questionResult.distribution[option] || 0)
+          })
       })
 
       // check if this is more likely the latest fbt
@@ -135,10 +118,10 @@ const getOrganisationSummaries = async ({
     }, initialResults)
 
     // compute mean for each question
-    results.forEach((questionResult) => {
+    results.forEach(questionResult => {
       questionResult.mean = getMean(
         questionResult.distribution,
-        questions.find((q) => q.id === questionResult.questionId),
+        questions.find(q => q.id === questionResult.questionId)
       )
     })
 
@@ -164,39 +147,34 @@ const getOrganisationSummaries = async ({
   const organisationId = organisationAccess[0]?.organisation?.id
   const filterEducationBachelorSummary =
     organisationAccess.length === 1 &&
-    (organisationId === 'hy-org-116715340' ||
-      organisationId === 'hy-org-118077949') &&
+    (organisationId === 'hy-org-116715340' || organisationId === 'hy-org-118077949') &&
     tagId &&
     tagId !== 'All'
 
   if (filterEducationBachelorSummary) {
     // get CUR tags for each CU
     summedCourseUnits = await Promise.all(
-      summedCourseUnits.map(async (cu) => ({
+      summedCourseUnits.map(async cu => ({
         ..._.omit(cu, ['courseRealisations']),
         tags: await getTags(cu.courseRealisations),
-      })),
+      }))
     )
 
     // Filter CUs by tag
-    summedCourseUnits = summedCourseUnits.filter((cu) =>
-      cu.tags.map(({ id }) => id).includes(Number(tagId)),
-    )
+    summedCourseUnits = summedCourseUnits.filter(cu => cu.tags.map(({ id }) => id).includes(Number(tagId)))
   }
 
   // object with keys as org ids and values as arrays of CUs
-  const organisations = _.groupBy(summedCourseUnits, (cu) => cu.organisationId)
+  const organisations = _.groupBy(summedCourseUnits, cu => cu.organisationId)
 
   // aggregate org stats from CUs
-  const summedOrganisations = Object.entries(organisations).map(
-    ([organisationId, courseUnits]) => ({
-      name: courseUnits[0].organisationName,
-      id: organisationId,
-      code: courseUnits[0].organisationCode,
-      courseUnits: _.orderBy(courseUnits, 'courseCode'),
-      ...getRowAverage(courseUnits, initialResults, questions),
-    }),
-  )
+  const summedOrganisations = Object.entries(organisations).map(([organisationId, courseUnits]) => ({
+    name: courseUnits[0].organisationName,
+    id: organisationId,
+    code: courseUnits[0].organisationCode,
+    courseUnits: _.orderBy(courseUnits, 'courseCode'),
+    ...getRowAverage(courseUnits, initialResults, questions),
+  }))
 
   let averageRow
   if (summedOrganisations.length > 1) {
@@ -208,11 +186,7 @@ const getOrganisationSummaries = async ({
     }
   }
 
-  const withEmptyOrganisations = includeEmptyOrganisations(
-    summedOrganisations,
-    organisationsToShow,
-    questions,
-  )
+  const withEmptyOrganisations = includeEmptyOrganisations(summedOrganisations, organisationsToShow, questions)
 
   return {
     averageRow,

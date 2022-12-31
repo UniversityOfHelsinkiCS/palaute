@@ -24,7 +24,7 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
 
   const { id } = useParams()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (!values.response.length) {
         enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {
@@ -37,13 +37,10 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
       setShow(false)
       refetch()
 
-      enqueueSnackbar(
-        t('feedbackTargetView:continuousFeedbackResponseSuccessAlert'),
-        {
-          variant: 'success',
-          autoHideDuration: 6000,
-        },
-      )
+      enqueueSnackbar(t('feedbackTargetView:continuousFeedbackResponseSuccessAlert'), {
+        variant: 'success',
+        autoHideDuration: 6000,
+      })
     } catch (e) {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
@@ -57,9 +54,7 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
             <FormikTextField
               name="response"
               label={t('feedbackTargetView:continuousFeedbackResponse')}
-              helperText={t(
-                'feedbackTargetView:continuousFeedbackResponseInfo',
-              )}
+              helperText={t('feedbackTargetView:continuousFeedbackResponseInfo')}
               fullWidth
               minRows={4}
               multiline

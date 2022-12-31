@@ -1,6 +1,6 @@
-const isNumber = (value) => !Number.isNaN(parseInt(value, 10))
+const isNumber = value => !Number.isNaN(parseInt(value, 10))
 
-const normalizeOrganisationCode = (r) => {
+const normalizeOrganisationCode = r => {
   if (r.startsWith('T')) {
     return r.replace('T', '7')
   }
@@ -15,7 +15,7 @@ const normalizeOrganisationCode = (r) => {
   return providercode
 }
 
-const mapToDegreeCode = (organisationCode) => {
+const mapToDegreeCode = organisationCode => {
   if (!organisationCode) return ''
 
   const isKielikeskusOrAvoin = ['H906', 'H930'].includes(organisationCode)
@@ -45,7 +45,7 @@ const MONTH = 8
  * @param {Date | string | number} date
  * @return {Date} first day of study year
  */
-const startOfStudyYear = (date) => {
+const startOfStudyYear = date => {
   let d = null
   if (typeof date !== 'object') {
     d = new Date(date)

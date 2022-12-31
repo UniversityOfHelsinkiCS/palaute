@@ -14,10 +14,8 @@ export default {
     },
     unknownError: 'Jotain meni pieleen',
     choiceQuestionError: 'Valintakysymykset tarvitsevat vastausvaihtoehtoja',
-    fetchError:
-      'Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.',
-    serverError:
-      'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.',
+    fetchError: 'Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.',
+    serverError: 'Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.',
     notFound: 'Sivua tai resurssia ei löydy.',
     noAccess: 'Sinulla ei ole pääsyä tähän resurssiin',
     supportContact: 'Ongelmatilanteessa ota yhteyttä tukeen: ',
@@ -30,8 +28,7 @@ export default {
     accept: 'Hyväksy',
     clearSelection: 'Tyhjennä valinta',
     copyToClipBoard: 'Kopioi leikepöydälle',
-    feedbackOpenPeriod:
-      'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
+    feedbackOpenPeriod: 'Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}',
     firstName: 'Etunimi',
     lastName: 'Sukunimi',
     username: 'Käyttäjätunnus',
@@ -43,8 +40,7 @@ export default {
     dropZoneInfo1: 'Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.',
     dropZoneInfo2: 'Alle 5MB .csv-päätteinen tiedosto hyväksytään.',
     feedbackHeader: 'PALAUTE',
-    dirtyFormPrompt:
-      'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
+    dirtyFormPrompt: 'Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?',
     actions: 'Toiminnot',
     close: 'Sulje',
     required: 'Pakollinen',
@@ -64,8 +60,7 @@ export default {
     combineCSV: 'Yhdistä Sisu-CSV:n kanssa',
     downloadCSV: 'Lataa tiedosto',
     changePublicity: 'Muuta näkyvyyttä',
-    notPublicInfo:
-      'Vastaukset näkyvät vain kurssin opettajille ja ohjelman hallinnoijille',
+    notPublicInfo: 'Vastaukset näkyvät vain kurssin opettajille ja ohjelman hallinnoijille',
     publicInfo: 'Vastaukset näkyvät ilmoittautuneille opiskelijoille',
     studyTracks: 'Opintosuunnat',
     currentlySelected: 'Valittuna',
@@ -96,11 +91,9 @@ export default {
     submitButton: 'Lähetä palaute',
     editButton: 'Muokkaa palautetta',
     successAlert: 'Palaute on annettu. Kiitos palautteestasi!',
-    feedbackInfo:
-      'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
+    feedbackInfo: 'Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.',
     feedbackInfoLink: 'Lue lisää, miten vastauksiasi ja tietojasi käytetään',
-    closedInfo:
-      'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
+    closedInfo: 'Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}',
     feedbackInfoTitle: 'Miten vastauksiani ja tietojani käytetään?',
     feedbackInfoContent:
       'Vastauksia kurssipalautteeseen käytetään kurssien sisällön ja opetuksen kehittämiseen. Vastauksia kurssipalautteen kysymyksiin saatetaan näyttää muille kurssin opiskelijoille. Vastauksia käsitellään ja ne näytetään aina anonyymisti, opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin. \n Kirjautumistietoja käytetään siihen, että opiskelijalla näytetään oikeat palautteet.',
@@ -158,8 +151,7 @@ export default {
     description: 'Kuvaus',
     done: 'Tallenna',
     languageInfo: 'Muokkaat tällä hetkellä kysymyksen "{{language}}" käännöstä',
-    descriptionHelper:
-      'Vapaaehtoinen kysymystä kuvaileva tai tarkentava tekstikappale',
+    descriptionHelper: 'Vapaaehtoinen kysymystä kuvaileva tai tarkentava tekstikappale',
     universityQuestion: 'Yliopistotaso',
     programmeQuestion: 'Koulutusohjelmataso',
     uneditableTooltip:
@@ -177,8 +169,7 @@ export default {
     upperLevelQuestionsInfoMany:
       'Kyselyllä on jo {{count}} yliopisto- ja koulutusohjelmatason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. "Esikatsele kyselyä"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.\n Koulutusohjelmatason kysymykset tulevat vastuuorganisaatioilta, jotka ovat {{organisations}}.',
     showPreview: 'Esikatsele kyselyä',
-    showPreviewConfirmation:
-      'Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.',
+    showPreviewConfirmation: 'Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.',
     translationLanguage: 'Käännösten kieli',
     warningAboutOpeningCourse: `HUOM! Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.
       Palautteen tulee olla auki vähintään yhden vuorokauden ajan.
@@ -192,8 +183,7 @@ export default {
     copyFromCourseInfoAlert:
       'Voit kopioida kysymyksiä opettamiltasi kursseilta. Valitse ensin kurssi ja sen jälkeen toteutus, jonka kysymykset haluat kopioida',
     copyFromCourseChooseCourse: 'Valitse kurssi nähdäksesi sen toteutukset',
-    copyFromCourseNoQuestions:
-      'Millään kurssin toteutuksella ei ole omia kysymyksiä',
+    copyFromCourseNoQuestions: 'Millään kurssin toteutuksella ei ole omia kysymyksiä',
     copyFromCourseQuestionCount: '{{count}} kysymystä',
     copyFromCourseSearchLabel: 'Kurssi',
     openFeedbackImmediatelyDialogTitle: 'Varoitus!',
@@ -203,19 +193,15 @@ export default {
     openFeedbackImmediatelyDialogConfirm: 'Avaa palaute',
     opensAtInPastError: 'Aloituspäiväämärä ei voi olla menneisyydessä',
     closesAtInPastError: 'Sulkeutumispäivämäärä ei voi olla menneisyydessä',
-    closesAtBeforeOpensAtError:
-      'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',
-    tooShortFeedbackPeriodError:
-      'Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
+    closesAtBeforeOpensAtError: 'Sulkeutumispäivämäärän tulee olla aloituspäivämäärän jälkeen',
+    tooShortFeedbackPeriodError: 'Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
   },
   questionResults: {
     answerCount: 'Vastausten määrä',
     answerOption: 'Vastausvaihtoehto',
     publicInfo: 'Tämän kysymyksen tulokset ovat julkisia opiskelijoille.',
-    notPublicInfo:
-      'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille.',
-    publicityOfQuestions:
-      'Näiden kysymysten tulokset eivät ole julkisia opiskelijoille',
+    notPublicInfo: 'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille.',
+    publicityOfQuestions: 'Näiden kysymysten tulokset eivät ole julkisia opiskelijoille',
     moreInfo: 'Lisää tietoa kysymysten näkyvyydestä löytyy',
     here: 'täältä',
     multipleChoiceQuestions: 'Monivalintakysymykset',
@@ -231,8 +217,7 @@ export default {
     answers: 'Vastanneita',
   },
   feedbackTargetResults: {
-    notEnoughFeedbacksInfo:
-      'Tuloksia ei näytetä koska palautteita ei vielä ole annettu',
+    notEnoughFeedbacksInfo: 'Tuloksia ei näytetä koska palautteita ei vielä ole annettu',
     onlyForEnrolledInfo:
       'Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille',
     studentsWithFeedbackHeading: 'Opiskelijat, jotka ovat antaneet palautetta',
@@ -242,29 +227,25 @@ export default {
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     export: 'Lataa palaute',
     useLegacyVersion: 'Käytä vanhaa palautenäkymää',
-    thankYouMessage:
-      'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
+    thankYouMessage: 'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',
     closeImmediately: 'Sulje palaute heti',
     closeImmediatelyConfirm:
       'Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?',
     closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
     sendReminder: 'Lähetä muistutusviesti',
     sendReminderButton: 'Lähetä muistutus',
-    reminderDisabled:
-      'Olet jo lähettänyt muistutusviestin viimeisen 24 tunnin aikana',
+    reminderDisabled: 'Olet jo lähettänyt muistutusviestin viimeisen 24 tunnin aikana',
     reminderLastSent: 'Muistutus viimeksi lähetetty',
     cancelReminder: 'Peruuta',
     modalTitle: 'Lähetä muistutus palautteesta sähköpostilla',
     writeAMessage: 'Kirjoita viesti opiskelijoille',
     emailMessage:
       'Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>',
-    modalSubtitle:
-      'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
+    modalSubtitle: 'Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä',
     emailSent: 'Muistutusviesti lähetetty',
     setHidden: 'Piilota näkyvistä',
     setVisible: 'Poista piilotus',
-    hiddenInfo:
-      'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
+    hiddenInfo: 'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
     hidingFeatureInfoTitle: 'Tietoa vastausten piilotuksesta',
     hidingFeatureInfo:
       'Voit piilottaa yksittäisiä vastauksia kysymyksiin, joiden vastaukset muuten näkyvät opiskelijoille, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.',
@@ -296,8 +277,7 @@ export default {
     responseLabel: 'Vastapalaute',
     responseInfo: 'Tämä kenttä tukee <2>Markdown</2>-sisältöä',
     previewLabel: 'Esikatselu',
-    sendEmail:
-      'Tallenna vastapalaute ja ilmoita opiskelijoille vastapalautteesta sähköpostitse',
+    sendEmail: 'Tallenna vastapalaute ja ilmoita opiskelijoille vastapalautteesta sähköpostitse',
     instructionTitle: 'Ohjeita vastapalautteen kirjoittamiseen',
     responseInstruction:
       'Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi kurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille kurssin opiskelijoille. \n Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin.',
@@ -305,8 +285,7 @@ export default {
       'Opettajan vastauksen pituus voi vaihdella. Asioita joita voit esimerkiksi sisällyttää vastaukseesi on: opiskelijoiden kiittäminen annetusta palautteesta (ja kurssille osallistumisesta), läpikatsaus annetusta palautteesta, valinta palautteen osa-alueista joihin koet olevan tärkeää vastata sekä reaktiosi ja selvennyksesi niihin. Vastauksessa olevat konkreettiset toimet opetuksen ja kurssien sisällön muokkaukseen vastineena opiskelijoiden palautteeseen ovat ensiarvoisen tärkeitä.',
     sendEmailOption: 'Lähetä vastapalaute sähköpostitse opiskelijoille',
     dialogSendEmailTitle: 'Tallenna vastapalaute ja lähetä sähköposti',
-    dialogSaveContent:
-      'Kurssin opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.',
+    dialogSaveContent: 'Kurssin opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.',
     dialogSendEmailContent:
       'Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki kurssin palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.',
     dialogCancel: 'Peruuta',
@@ -328,8 +307,7 @@ export default {
   feedbackTargetSettings: {
     editPeriodTitle: 'Palautteen käynnissäoloaika',
     cannotCloseImmediately: 'Palaute ei vielä ole käynnissä',
-    cannotCloseImmediatelyWhenOpen:
-      'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
+    cannotCloseImmediatelyWhenOpen: 'Palaute on sulkeutunut tai sulkeutuu päivän kuluttua',
     cannotOpenImmediately: 'Palaute on jo käynnissä tai loppunut',
   },
   courseSummary: {
@@ -358,8 +336,7 @@ export default {
     responsibleTeachers: 'Vastuuopettajat',
     includeOpenUniCourses: 'Sisällytä avoimen yliopiston kurssit',
     showHiddenOrganisations: 'Valitse piilotetut koulutusohjelmat ({{count}})',
-    hidingInfo:
-      'Voit piilottaa itseltäsi koulutusohjelmien yhteenvetoja, jotka eivät ole sinulle kiinnostavia',
+    hidingInfo: 'Voit piilottaa itseltäsi koulutusohjelmien yhteenvetoja, jotka eivät ole sinulle kiinnostavia',
     orderByLabel: 'Järjestys',
     orderByCodeAsc: 'Koodi nousevasti',
     orderByFeedbackCountAsc: 'Palautteiden määrä nousevasti',
@@ -384,8 +361,7 @@ export default {
     lastUpdate: 'Viimeisin julkaisu {{duration}} sitten',
   },
   courseRealisationFeedback: {
-    noFeedbackTarget:
-      'Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta',
+    noFeedbackTarget: 'Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta',
   },
   organisationSettings: {
     surveyInfo:
@@ -449,8 +425,7 @@ export default {
     shareTab: 'Jaa kysely',
     surveySettingsTab: 'Kyselyn muokkaus',
     activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',
-    activateContinuousFeedbackDigest:
-      'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
+    activateContinuousFeedbackDigest: 'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
     continuousFeedbackGiven: 'Annettu jatkuva palaute',
     noContinuousFeedbackGiven: 'Jatkuvaa palautetta ei ole vielä annettu',
     continuousFeedbackStudentInfo:
@@ -465,43 +440,34 @@ export default {
     studentLinkTitle: 'Opiskelijan vastauslinkki',
     studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',
-    qrCodeHelpText:
-      'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
-    deleteResponsibleTeacherConfirmation:
-      'Poista opettaja {{name}} vastuuopettajien joukosta?',
-    noFeedbackResponseYet:
-      'Kurssin opettaja ei ole vielä antanut vastapalautetta',
+    qrCodeHelpText: 'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
+    deleteResponsibleTeacherConfirmation: 'Poista opettaja {{name}} vastuuopettajien joukosta?',
+    noFeedbackResponseYet: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     noAccess:
       'Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.',
-    notFound:
-      'Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
-    notifyOnEnrolment:
-      'Lähetä minulle ilmoitus heti kun ilmoittautuminen löytyy',
-    notificationEnabled:
-      'Ok, ilmoitamme osoitteeseen {{email}} jos ilmoittautumisesi löytyy 24h sisällä',
+    notFound: 'Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
+    notifyOnEnrolment: 'Lähetä minulle ilmoitus heti kun ilmoittautuminen löytyy',
+    notificationEnabled: 'Ok, ilmoitamme osoitteeseen {{email}} jos ilmoittautumisesi löytyy 24h sisällä',
     notificationDisabled: 'Ok, ilmoitusta ei lähetetä',
   },
 
   noadUser: {
     noUser:
       'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
-    noFeedback:
-      'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
+    noFeedback: 'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
   },
   norppaFeedback: {
     feedback: 'Palaute',
     feedbackHelper: 'Anna vapaamuotoista palautetta',
     responseWanted: 'Haluan vastauksen palautteeseen',
     submit: 'Lähetä palaute',
-    confirm:
-      'Ymmärrän että tämä ei ole kurssin vastapalaute opiskelijoille vaan palaute Norpan kehittäjille',
+    confirm: 'Ymmärrän että tämä ei ole kurssin vastapalaute opiskelijoille vaan palaute Norpan kehittäjille',
     title: 'Anna palautetta Norpan kehittäjille',
     description:
       'Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää palautetta kehittäjille',
     feedbackLengthError: 'Palautteen vähimmäispituus on yksi merkki',
     successAlert: 'Palaute lähetetty onnistuneesti!',
     anonymous: 'Lähetä anonyymisti',
-    anonymousInfo:
-      'Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa.',
+    anonymousInfo: 'Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa.',
   },
 }

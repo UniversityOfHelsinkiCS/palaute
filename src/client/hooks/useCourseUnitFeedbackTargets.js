@@ -25,20 +25,16 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
 
   const params = {
     ...(courseRealisationStartDateAfter && {
-      courseRealisationStartDateAfter:
-        courseRealisationStartDateAfter.toISOString(),
+      courseRealisationStartDateAfter: courseRealisationStartDateAfter.toISOString(),
     }),
     ...(courseRealisationStartDateBefore && {
-      courseRealisationStartDateBefore:
-        courseRealisationStartDateBefore.toISOString(),
+      courseRealisationStartDateBefore: courseRealisationStartDateBefore.toISOString(),
     }),
     ...(courseRealisationEndDateAfter && {
-      courseRealisationEndDateAfter:
-        courseRealisationEndDateAfter.toISOString(),
+      courseRealisationEndDateAfter: courseRealisationEndDateAfter.toISOString(),
     }),
     ...(courseRealisationEndDateBefore && {
-      courseRealisationEndDateBefore:
-        courseRealisationEndDateBefore.toISOString(),
+      courseRealisationEndDateBefore: courseRealisationEndDateBefore.toISOString(),
     }),
     ...(feedbackType && { feedbackType }),
     ...(includeSurveys && {
@@ -47,12 +43,9 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
   }
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/feedback-targets/for-course-unit/${code}`,
-      {
-        params,
-      },
-    )
+    const { data } = await apiClient.get(`/feedback-targets/for-course-unit/${code}`, {
+      params,
+    })
 
     return data
   }

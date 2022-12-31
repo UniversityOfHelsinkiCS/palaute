@@ -24,7 +24,7 @@ CourseRealisationsTag.init(
     underscored: true,
     timestamps: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = CourseRealisationsTag

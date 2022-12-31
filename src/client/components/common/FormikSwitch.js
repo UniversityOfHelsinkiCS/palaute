@@ -10,7 +10,7 @@ const FormikSwitch = ({ name, label, ...props }) => {
       control={
         <Switch
           checked={field.value}
-          onChange={(event) => {
+          onChange={event => {
             helpers.setValue(event.target.checked)
           }}
           onBlur={() => helpers.setTouched(true)}

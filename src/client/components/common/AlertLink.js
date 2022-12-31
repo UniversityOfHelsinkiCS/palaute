@@ -3,18 +3,13 @@ import { Link } from '@mui/material'
 
 const styles = {
   alertLink: {
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    fontWeight: theme => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
   },
 }
 
 const AlertLink = ({ sx, ...props }) => (
-  <Link
-    color="inherit"
-    sx={[sx, styles.alertLink]}
-    {...props}
-    underline="hover"
-  />
+  <Link color="inherit" sx={[sx, styles.alertLink]} {...props} underline="hover" />
 )
 
 export default AlertLink

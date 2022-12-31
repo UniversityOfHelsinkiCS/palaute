@@ -1,14 +1,6 @@
-const {
-  STUDENT_LIST_BY_COURSE_ENABLED,
-  STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN,
-} = require('../../../config')
+const { STUDENT_LIST_BY_COURSE_ENABLED, STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN } = require('../../../config')
 const { sequelize } = require('../../db/dbConnection')
-const {
-  UserFeedbackTarget,
-  User,
-  Feedback,
-  CourseUnit,
-} = require('../../models')
+const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
 const { getAccess } = require('./getAccess')
@@ -22,7 +14,7 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
       replacements: {
         cuId: courseUnitId,
       },
-    },
+    }
   )
 
   if (organisationRows.length === 0) {
@@ -67,10 +59,7 @@ const getStudents = async ({ feedbackTargetId, user, isAdmin }) => {
     ApplicationError.Forbidden()
   }
 
-  const studentListVisible = await getStudentListVisibility(
-    feedbackTarget.courseUnitId,
-    isAdmin,
-  )
+  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId, isAdmin)
 
   if (!studentListVisible) {
     return []
@@ -93,12 +82,12 @@ const getStudents = async ({ feedbackTargetId, user, isAdmin }) => {
     ],
   })
 
-  const users = studentFeedbackTargets.map((target) => ({
+  const users = studentFeedbackTargets.map(target => ({
     ...target.user.dataValues,
     feedbackGiven: Boolean(target.feedback),
   }))
 
-  if (users.filter((u) => u.feedbackGiven).length < 5) {
+  if (users.filter(u => u.feedbackGiven).length < 5) {
     return []
   }
 

@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-const useOrganisationTags = (organisationCode) => {
+const useOrganisationTags = organisationCode => {
   const queryKey = ['organisationTags']
 
   const queryFn = async () => {

@@ -42,7 +42,7 @@ const DropZone = ({ students }) => {
 
   const { t } = useTranslation()
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = acceptedFiles => {
     const reader = new FileReader()
 
     reader.onabort = () => alert('file reading was aborted')
@@ -52,21 +52,15 @@ const DropZone = ({ students }) => {
       const re2 = /["\r]/gm
       const fileString = reader.result
       let rows = fileString.trim().split('\n')
-      rows = rows.map((row) => row.replaceAll(re2, '').split(re))
+      rows = rows.map(row => row.replaceAll(re2, '').split(re))
 
       setData(rows)
       setFilename(acceptedFiles[0].name.slice(0, -4))
     }
-    acceptedFiles.forEach((file) => reader.readAsText(file))
+    acceptedFiles.forEach(file => reader.readAsText(file))
   }
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-    isDragAccept,
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, isDragReject, isDragAccept } = useDropzone({
     onDrop,
     multiple: false,
     maxSize: 5000000,
@@ -80,7 +74,7 @@ const DropZone = ({ students }) => {
       ...(isDragAccept ? acceptStyle : {}),
       ...(isDragReject ? rejectStyle : {}),
     }),
-    [isDragActive, isDragReject],
+    [isDragActive, isDragReject]
   )
 
   return (
@@ -93,12 +87,7 @@ const DropZone = ({ students }) => {
             <p>{t('dropZoneInfo2')}</p>
           </div>
         </div>
-        <ExportCsv
-          headers={data[0]}
-          rows={data.slice(1)}
-          students={students}
-          filename={filename}
-        />
+        <ExportCsv headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
       </Box>
     </Box>
   )
@@ -107,7 +96,7 @@ const DropZone = ({ students }) => {
 const ExportCsv = ({ headers, rows, students, filename }) => {
   const { t } = useTranslation()
 
-  const isStudentNumber = (value) => {
+  const isStudentNumber = value => {
     value = Number(value)
     if (Number.isNaN(value)) return false
     if (String(value).length !== 8) return false
@@ -122,30 +111,17 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
 
   const updatedRows = []
   for (const row of rows) {
-    const student = students.find(
-      (student) => Number(student.studentNumber) === Number(row[index]),
-    )
+    const student = students.find(student => Number(student.studentNumber) === Number(row[index]))
     const newRow = [...row, student ? student.feedbackGiven : '']
     updatedRows.push(newRow)
   }
 
-  const studentNumbers = updatedRows.map((row) => Number(row[index]))
-  const missingStudents = students.filter(
-    (student) => !studentNumbers.includes(Number(student.studentNumber)),
-  )
+  const studentNumbers = updatedRows.map(row => Number(row[index]))
+  const missingStudents = students.filter(student => !studentNumbers.includes(Number(student.studentNumber)))
 
   for (const student of missingStudents) {
-    const [firstName, lastName, studentNumber, email, feedbackGiven] = [
-      ...Object.values(student),
-    ]
-    const newRow = [
-      lastName,
-      firstName,
-      studentNumber,
-      email,
-      ...new Array(headers.length - 4).fill(''),
-      feedbackGiven,
-    ]
+    const [firstName, lastName, studentNumber, email, feedbackGiven] = [...Object.values(student)]
+    const newRow = [lastName, firstName, studentNumber, email, ...new Array(headers.length - 4).fill(''), feedbackGiven]
     updatedRows.push(newRow)
   }
 

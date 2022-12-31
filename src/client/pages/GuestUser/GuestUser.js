@@ -5,12 +5,7 @@ import GuestRouter from './GuestRouter'
 import NavBar from '../../components/NavBar'
 
 const GuestUser = () => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    height="100vh"
-    sx={{ overflowX: 'hidden' }}
-  >
+  <Box display="flex" flexDirection="column" height="100vh" sx={{ overflowX: 'hidden' }}>
     <NavBar guest />
     <GuestRouter />
     <GuestFooter />

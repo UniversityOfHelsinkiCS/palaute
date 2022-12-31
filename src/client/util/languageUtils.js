@@ -17,7 +17,7 @@ export const getLanguageValue = (values, preferred) => {
   return null
 }
 
-export const localeForLanguage = (lang) => {
+export const localeForLanguage = lang => {
   if (!lang) return en
   return { fi, sv, en }[lang]
 }

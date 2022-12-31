@@ -2,7 +2,7 @@ import { useQuery as useBaseQuery } from 'react-query'
 
 import useId from './useId'
 
-const normalizeQueryKey = (key) => (Array.isArray(key) ? key : [key])
+const normalizeQueryKey = key => (Array.isArray(key) ? key : [key])
 
 const useQuery = (queryKey, queryFn, options = {}) => {
   const { skipCache = false, ...restOptions } = options

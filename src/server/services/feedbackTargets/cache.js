@@ -12,9 +12,9 @@ const lru = new LRUCache({
 })
 
 const cache = {
-  get: (feedbackTargetId) => lru.get(feedbackTargetId),
+  get: feedbackTargetId => lru.get(feedbackTargetId),
   set: (id, feedbackTargetJson) => lru.set(id, feedbackTargetJson),
-  invalidate: (feedbackTargetId) => {
+  invalidate: feedbackTargetId => {
     logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
     lru.delete(feedbackTargetId)
   },
@@ -24,23 +24,21 @@ const cache = {
   },
 }
 
-const onOrganisationChange = (organisationCode) => {
+const onOrganisationChange = organisationCode => {
   const idstoInvalidate = []
   for (const [key, fbt] of lru.entries()) {
-    if (
-      fbt.courseUnit.organisations.some((org) => org.code === organisationCode)
-    ) {
+    if (fbt.courseUnit.organisations.some(org => org.code === organisationCode)) {
       idstoInvalidate.push(key)
     }
   }
   idstoInvalidate.forEach(cache.invalidate)
 }
 
-const onFeedbackTargetChange = (feedbackTarget) => {
+const onFeedbackTargetChange = feedbackTarget => {
   cache.invalidate(feedbackTarget.id)
 }
 
-const onSurveyChange = (survey) => {
+const onSurveyChange = survey => {
   if (survey.type === 'feedbackTarget') {
     cache.invalidate(survey.feedbackTargetId)
   } else if (survey.type === 'programme') {
@@ -50,7 +48,7 @@ const onSurveyChange = (survey) => {
   }
 }
 
-const onTagChange = async (curTag) => {
+const onTagChange = async curTag => {
   const fbts = await FeedbackTarget.findAll({
     attributes: ['id'],
     where: { hidden: false },

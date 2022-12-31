@@ -6,9 +6,7 @@ const useCourseRealisationFeedbackTargets = (id, options = {}) => {
   const queryKey = ['courseRealisationFeedbackTargets', id]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/feedback-targets/for-course-realisation/${id}`,
-    )
+    const { data } = await apiClient.get(`/feedback-targets/for-course-realisation/${id}`)
 
     return data
   }

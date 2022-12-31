@@ -13,8 +13,8 @@ const LoginAsSelector = () => {
   const [focusIndex, setFocusIndex] = useState(0)
   const [lastQuery, setLastQuery] = useState({})
 
-  const transformUsers = (users) =>
-    users.map((u) => ({
+  const transformUsers = users =>
+    users.map(u => ({
       ...u,
       probablyStaff: u.hasEmployeeIam && u.employeeNumber,
       possiblyStaff: Boolean(u.employeeNumber),
@@ -33,14 +33,11 @@ const LoginAsSelector = () => {
 
     setLastQuery(queried)
     setPotentialUsers(transformUsers(persons))
-    setFocusIndex(
-      Math.min(focusIndex, persons.length > 0 ? persons.length - 1 : 0),
-    )
+    setFocusIndex(Math.min(focusIndex, persons.length > 0 ? persons.length - 1 : 0))
   }, 400)
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && potentialUsers.length > 0)
-      handleLoginAs(potentialUsers[focusIndex])()
+  const handleKeyPress = event => {
+    if (event.key === 'Enter' && potentialUsers.length > 0) handleLoginAs(potentialUsers[focusIndex])()
     if (event.key === 'ArrowDown') {
       setFocusIndex(Math.min(focusIndex + 1, potentialUsers.length - 1))
       event.preventDefault()
@@ -70,12 +67,7 @@ const LoginAsSelector = () => {
       </div>
 
       {potentialUsers.map((user, index) => (
-        <UserAccordion
-          key={user.id}
-          user={user}
-          handleLoginAs={handleLoginAs}
-          isFocused={index === focusIndex}
-        />
+        <UserAccordion key={user.id} user={user} handleLoginAs={handleLoginAs} isFocused={index === focusIndex} />
       ))}
     </Box>
   )

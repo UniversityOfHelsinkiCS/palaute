@@ -17,11 +17,9 @@ const OldFeedbackTargetResultsView = () => {
   const { t } = useTranslation()
   const { id } = useParams()
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
 
-  const { feedbackTargetData, isLoading: feedbacksIsLoading } =
-    useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData, isLoading: feedbacksIsLoading } = useFeedbackTargetFeedbacks(id)
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
@@ -37,13 +35,11 @@ const OldFeedbackTargetResultsView = () => {
 
   const { feedbacks, feedbackVisible } = feedbackTargetData
 
-  const { questions, publicQuestionIds, accessStatus, feedback } =
-    feedbackTarget
+  const { questions, publicQuestionIds, accessStatus, feedback } = feedbackTarget
 
   const userOrganisationAdmin = orgAccess?.admin ? orgAccess.admin : false
 
-  const isResponsibleTeacher =
-    userOrganisationAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isResponsibleTeacher = userOrganisationAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
   const isTeacher = isResponsibleTeacher || accessStatus === 'TEACHER'
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -54,17 +50,13 @@ const OldFeedbackTargetResultsView = () => {
 
   const notEnoughFeedbacksAlert = (
     <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
-      </Alert>
+      <Alert severity="warning">{t('feedbackTargetResults:notEnoughFeedbacksInfo')}</Alert>
     </Box>
   )
 
   const onlyForEnrolledAlert = (
     <Box mb={2}>
-      <Alert severity="warning">
-        {t('feedbackTargetResults:onlyForEnrolledInfo')}
-      </Alert>
+      <Alert severity="warning">{t('feedbackTargetResults:onlyForEnrolledInfo')}</Alert>
     </Box>
   )
 
@@ -72,9 +64,7 @@ const OldFeedbackTargetResultsView = () => {
     <>
       {isOpen && feedback && (
         <Box mb={2}>
-          <Alert severity="info">
-            {t('feedbackTargetResults:thankYouMessage')}
-          </Alert>
+          <Alert severity="info">{t('feedbackTargetResults:thankYouMessage')}</Alert>
         </Box>
       )}
 

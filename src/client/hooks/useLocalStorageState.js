@@ -1,6 +1,6 @@
 import React from 'react'
 
-const useLocalStorageState = (key) => {
+const useLocalStorageState = key => {
   const initial = React.useMemo(() => {
     const str = localStorage.getItem(key)
     if (typeof str === 'string') {

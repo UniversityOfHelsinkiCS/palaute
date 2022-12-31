@@ -58,11 +58,11 @@ GROUP BY
   feedback_target_id
 `
 
-const getValidDataValues = (questions) => {
+const getValidDataValues = questions => {
   const singleChoiceValues = questions
-    .filter((q) => q.type === 'SINGLE_CHOICE')
-    .flatMap((q) => q.data?.options ?? [])
-    .map((o) => o.id)
+    .filter(q => q.type === 'SINGLE_CHOICE')
+    .flatMap(q => q.data?.options ?? [])
+    .map(o => o.id)
     .filter(Boolean)
 
   const likertValues = ['0', '1', '2', '3', '4', '5']
@@ -75,25 +75,21 @@ const getUniversityQuestions = async () => {
 
   const { questions = [] } = universitySurvey
 
-  const summaryQuestions = questions.filter(
-    (q) => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID,
-  )
+  const summaryQuestions = questions.filter(q => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
 
-  return summaryQuestions.map((question) => ({
+  return summaryQuestions.map(question => ({
     ...question.toJSON(),
     secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
   }))
 }
 
-const getFeedbackDistribution = (rows) => {
-  const grouped = _.groupBy(rows, (row) => row.question_data)
+const getFeedbackDistribution = rows => {
+  const grouped = _.groupBy(rows, row => row.question_data)
 
-  return _.mapValues(grouped, (rows) =>
-    _.sumBy(rows, (row) => parseInt(row.question_data_count, 10)),
-  )
+  return _.mapValues(grouped, rows => _.sumBy(rows, row => parseInt(row.question_data_count, 10)))
 }
 
-const getLikertMean = (distribution) => {
+const getLikertMean = distribution => {
   const entries = [
     distribution['1'] || 0,
     distribution['2'] || 0,
@@ -103,13 +99,7 @@ const getLikertMean = (distribution) => {
   ]
 
   // hack to convert possible strings to numbers when doing math
-  const totalCount = -(
-    -entries[0] -
-    entries[1] -
-    entries[2] -
-    entries[3] -
-    entries[4]
-  )
+  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
 
   if (totalCount === 0) return 0
 
@@ -132,13 +122,7 @@ const getSingleChoiceMean = (distribution, question) => {
   }
 
   // hack to convert possible strings to numbers when doing math
-  const totalCount = -(
-    -entries[0] -
-    entries[1] -
-    entries[2] -
-    entries[3] -
-    entries[4]
-  )
+  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
 
   if (totalCount === 0) return 0
 
@@ -163,23 +147,19 @@ const getMean = (distribution, question) => {
   }
 }
 
-const getCounts = (rows) => {
-  const uniqueFeedbackTargets = _.uniqBy(rows, (row) => row.feedback_target_id)
+const getCounts = rows => {
+  const uniqueFeedbackTargets = _.uniqBy(rows, row => row.feedback_target_id)
 
   return {
-    feedbackCount: _.sumBy(uniqueFeedbackTargets, (row) =>
-      parseInt(row.feedback_count, 10),
-    ),
-    studentCount: _.sumBy(uniqueFeedbackTargets, (row) =>
-      parseInt(row.student_count, 10),
-    ),
+    feedbackCount: _.sumBy(uniqueFeedbackTargets, row => parseInt(row.feedback_count, 10)),
+    studentCount: _.sumBy(uniqueFeedbackTargets, row => parseInt(row.student_count, 10)),
   }
 }
 
 const getResults = (rows, questions) => {
-  const rowsByQuestionId = _.groupBy(rows, (row) => row.question_id.toString())
+  const rowsByQuestionId = _.groupBy(rows, row => row.question_id.toString())
 
-  const results = questions.map((question) => {
+  const results = questions.map(question => {
     const questionRows = rowsByQuestionId[question.id.toString()] ?? []
     const distribution = getFeedbackDistribution(questionRows)
 
@@ -193,7 +173,7 @@ const getResults = (rows, questions) => {
   return results
 }
 
-const getTags = async (courseRealisations) => {
+const getTags = async courseRealisations => {
   const tagIds = (
     await CourseRealisationsTag.findAll({
       where: {
@@ -227,20 +207,17 @@ const getRowAverage = (rows, resultsTemplate, questions) => {
   let studentCount = 0
   let hiddenCount = 0
 
-  rows.forEach((row) => {
+  rows.forEach(row => {
     // iterate over each question
-    results.forEach((questionResult) => {
+    results.forEach(questionResult => {
       const { questionId } = questionResult
       const indexOfQuestion = row.questionIds.indexOf(questionId)
 
       // sum the distributions
       if (row.results[indexOfQuestion])
-        Object.entries(row.results[indexOfQuestion].distribution).forEach(
-          ([option, count]) => {
-            questionResult.distribution[option] =
-              Number(count) + (questionResult.distribution[option] || 0)
-          },
-        )
+        Object.entries(row.results[indexOfQuestion].distribution).forEach(([option, count]) => {
+          questionResult.distribution[option] = Number(count) + (questionResult.distribution[option] || 0)
+        })
     })
 
     feedbackCount += Number(row.feedbackCount)
@@ -249,10 +226,10 @@ const getRowAverage = (rows, resultsTemplate, questions) => {
   }, resultsTemplate)
 
   // compute mean for each question
-  results.forEach((questionResult) => {
+  results.forEach(questionResult => {
     questionResult.mean = getMean(
       questionResult.distribution,
-      questions.find((q) => q.id === questionResult.questionId),
+      questions.find(q => q.id === questionResult.questionId)
     )
   })
 
@@ -262,10 +239,9 @@ const getRowAverage = (rows, resultsTemplate, questions) => {
     // are we dealing with CURs?
     rows[0].feedbackResponseGiven !== undefined
       ? // then use feedbackResponseGiven
-        _.meanBy(rows, (row) => (row.feedbackResponseGiven ? 1 : 0))
+        _.meanBy(rows, row => (row.feedbackResponseGiven ? 1 : 0))
       : // otherwise use feedbackResponsePercentage weighted by n
-        _.sumBy(rows, (row) => row.feedbackResponsePercentage * row.n) /
-        _.sumBy(rows, (row) => row.n)
+        _.sumBy(rows, row => row.feedbackResponsePercentage * row.n) / _.sumBy(rows, row => row.n)
 
   return {
     feedbackCount,

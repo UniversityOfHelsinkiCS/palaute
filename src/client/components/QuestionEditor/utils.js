@@ -8,7 +8,7 @@ const createTranslationObject = () => ({
   en: '',
 })
 
-const createQuestionData = (type) => {
+const createQuestionData = type => {
   switch (type) {
     case 'LIKERT':
       return {
@@ -37,9 +37,9 @@ const createQuestionData = (type) => {
   }
 }
 
-export const getQuestionId = (question) => question.id ?? question[TEMP_ID]
+export const getQuestionId = question => question.id ?? question[TEMP_ID]
 
-export const createQuestion = (type) => {
+export const createQuestion = type => {
   const data = createQuestionData(type)
 
   return {
@@ -53,7 +53,7 @@ export const createQuestion = (type) => {
   }
 }
 
-export const copyQuestion = (question) => {
+export const copyQuestion = question => {
   const { id, ...rest } = question
 
   return {

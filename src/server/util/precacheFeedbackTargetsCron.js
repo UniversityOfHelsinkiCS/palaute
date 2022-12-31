@@ -11,10 +11,7 @@ const run = async () => {
   const start = Date.now()
 
   const feedbackTargetsOpeningToday = await FeedbackTarget.findAll({
-    attributes: [
-      'id',
-      [fn('COUNT', col('userFeedbackTargets.id')), 'studentCount'],
-    ],
+    attributes: ['id', [fn('COUNT', col('userFeedbackTargets.id')), 'studentCount']],
     where: {
       opensAt: {
         [Op.between]: [subDays(new Date(), 1), new Date()],
@@ -33,9 +30,7 @@ const run = async () => {
 
   // cache 200 of the biggest courses.
   // Put biggest to cache last so it stays there the longest.
-  const ordered = _.orderBy(feedbackTargetsOpeningToday, [
-    ['studentCount', 'desc'],
-  ])
+  const ordered = _.orderBy(feedbackTargetsOpeningToday, [['studentCount', 'desc']])
 
   for (const fbt of _.reverse(_.take(ordered, 200))) {
     await cacheFeedbackTargetById(fbt.id)
@@ -44,7 +39,7 @@ const run = async () => {
   logger.info(`
     Precached ${ordered.length} feedback targets with a total of ${_.sumBy(
     ordered,
-    'studentCount',
+    'studentCount'
   )} students, total time ${((Date.now() - start) / 1000).toFixed()}s`)
 }
 

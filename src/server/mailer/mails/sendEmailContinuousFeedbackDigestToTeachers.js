@@ -1,13 +1,7 @@
 const _ = require('lodash')
 const { subDays } = require('date-fns')
 const { Op } = require('sequelize')
-const {
-  ContinuousFeedback,
-  FeedbackTarget,
-  CourseRealisation,
-  User,
-  UserFeedbackTarget,
-} = require('../../models')
+const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 
@@ -22,9 +16,7 @@ const getTeachersWithContinuousFeedback = async () => {
     attributes: ['id', 'data', 'feedbackTargetId'],
   })
 
-  const feedbackTargetIds = newContinuousFeedback.map(
-    ({ feedbackTargetId }) => feedbackTargetId,
-  )
+  const feedbackTargetIds = newContinuousFeedback.map(({ feedbackTargetId }) => feedbackTargetId)
 
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
@@ -69,47 +61,34 @@ const getTeachersWithContinuousFeedback = async () => {
     ],
   })
 
-  const courseRealisations = feedbackTargets.map(
-    ({ id, courseRealisation }) => ({
-      ...courseRealisation.dataValues,
-      feedbackTargetId: id,
-    }),
-  )
+  const courseRealisations = feedbackTargets.map(({ id, courseRealisation }) => ({
+    ...courseRealisation.dataValues,
+    feedbackTargetId: id,
+  }))
 
   const teachers = _.uniqBy(
     feedbackTargets.flatMap(({ users }) => users),
-    'id',
+    'id'
   )
 
   // Combine related courseRealisation and continuousFeedbacks under teacher's userFeedbackTargets
-  const teachersWithContinuousFeedback = teachers.map(
-    ({ dataValues: teacher }) => ({
-      ...teacher,
-      userFeedbackTargets: teacher.userFeedbackTargets.map(
-        ({ dataValues: ufbt }) => ({
-          ...ufbt,
-          courseRealisation: courseRealisations.find(
-            ({ feedbackTargetId }) =>
-              feedbackTargetId === ufbt.feedbackTargetId,
-          ),
-          continuousFeedback: newContinuousFeedback.filter(
-            ({ feedbackTargetId }) =>
-              feedbackTargetId === ufbt.feedbackTargetId,
-          ),
-        }),
+  const teachersWithContinuousFeedback = teachers.map(({ dataValues: teacher }) => ({
+    ...teacher,
+    userFeedbackTargets: teacher.userFeedbackTargets.map(({ dataValues: ufbt }) => ({
+      ...ufbt,
+      courseRealisation: courseRealisations.find(({ feedbackTargetId }) => feedbackTargetId === ufbt.feedbackTargetId),
+      continuousFeedback: newContinuousFeedback.filter(
+        ({ feedbackTargetId }) => feedbackTargetId === ufbt.feedbackTargetId
       ),
-    }),
-  )
+    })),
+  }))
 
   // Remove userFeedbackTargets without courseRealisation
   // related to feedbackTargets with recently disabled continuous feedback or email
-  const filteredTeachersWithContinuousFeedback =
-    teachersWithContinuousFeedback.map((data) => ({
-      ...data,
-      userFeedbackTargets: data.userFeedbackTargets.filter(
-        ({ courseRealisation }) => courseRealisation,
-      ),
-    }))
+  const filteredTeachersWithContinuousFeedback = teachersWithContinuousFeedback.map(data => ({
+    ...data,
+    userFeedbackTargets: data.userFeedbackTargets.filter(({ courseRealisation }) => courseRealisation),
+  }))
 
   return {
     teachersWithContinuousFeedback: filteredTeachersWithContinuousFeedback,
@@ -120,7 +99,7 @@ const getTeachersWithContinuousFeedback = async () => {
 const buildContinuousFeedbackDigestToTeachers = (
   courseNameLinksAndNewFeedback,
   courseName,
-  hasMultipleFeedbackTargets,
+  hasMultipleFeedbackTargets
 ) => {
   const translations = {
     text: {
@@ -150,7 +129,7 @@ const buildContinuousFeedbackDigestToTeachers = (
   return translations
 }
 
-const emailContinuousFeedbackDigestToTeachers = (teacher) => {
+const emailContinuousFeedbackDigestToTeachers = teacher => {
   const { language, userFeedbackTargets, email: teacherEmail } = teacher
 
   const hasMultipleFeedbackTargets = userFeedbackTargets.length > 1
@@ -165,16 +144,14 @@ const emailContinuousFeedbackDigestToTeachers = (teacher) => {
     courseNameLinksAndNewFeedback = `${courseNameLinksAndNewFeedback}
     <a href=${`https://coursefeedback.helsinki.fi/targets/${id}/continuous-feedback`}>${name}</a>
     <ul>
-    ${userFeedbackTarget.continuousFeedback
-      .map(({ data }) => `<li>${data}</li>`)
-      .join('')}
+    ${userFeedbackTarget.continuousFeedback.map(({ data }) => `<li>${data}</li>`).join('')}
     </ul>`
   }
 
   const translations = buildContinuousFeedbackDigestToTeachers(
     courseNameLinksAndNewFeedback,
     courseName,
-    hasMultipleFeedbackTargets,
+    hasMultipleFeedbackTargets
   )
 
   const email = {
@@ -187,18 +164,13 @@ const emailContinuousFeedbackDigestToTeachers = (teacher) => {
 }
 
 const sendEmailContinuousFeedbackDigestToTeachers = async () => {
-  const { teachersWithContinuousFeedback, newContinuousFeedback } =
-    await getTeachersWithContinuousFeedback()
+  const { teachersWithContinuousFeedback, newContinuousFeedback } = await getTeachersWithContinuousFeedback()
 
-  const emailsToBeSent = teachersWithContinuousFeedback.map((teacher) =>
-    emailContinuousFeedbackDigestToTeachers(teacher),
-  )
+  const emailsToBeSent = teachersWithContinuousFeedback.map(teacher => emailContinuousFeedbackDigestToTeachers(teacher))
 
   const continuousFeedbackIds = newContinuousFeedback.map(({ id }) => id)
 
-  logger.info(
-    `[Pate] Sending continuous feedback digests to ${teachersWithContinuousFeedback.length} teachers`,
-  )
+  logger.info(`[Pate] Sending continuous feedback digests to ${teachersWithContinuousFeedback.length} teachers`)
 
   ContinuousFeedback.update(
     {
@@ -210,7 +182,7 @@ const sendEmailContinuousFeedbackDigestToTeachers = async () => {
           [Op.in]: continuousFeedbackIds,
         },
       },
-    },
+    }
   )
 
   await pate.send(emailsToBeSent, 'Send continuous feedback digest to teachers')

@@ -13,10 +13,8 @@ export const FeedbackTargetContextProvider = ({
   const context = React.useMemo(() => {
     const orgAccess = organisation?.access
 
-    const isResponsibleTeacher =
-      accessStatus === 'RESPONSIBLE_TEACHER' || isAdmin
-    const isTeacher =
-      accessStatus === 'TEACHER' || isResponsibleTeacher || isAdmin
+    const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || isAdmin
+    const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher || isAdmin
     const isStudent = accessStatus === 'STUDENT'
     const isOrganisationAdmin = orgAccess?.admin || isAdmin
     const isOrganisationReader = orgAccess?.read || isAdmin
@@ -33,11 +31,7 @@ export const FeedbackTargetContextProvider = ({
     }
   }, [id, feedbackTarget])
 
-  return (
-    <FeedbackTargetContext.Provider value={context}>
-      {children}
-    </FeedbackTargetContext.Provider>
-  )
+  return <FeedbackTargetContext.Provider value={context}>{children}</FeedbackTargetContext.Provider>
 }
 
 export const useFeedbackTargetContext = () => {

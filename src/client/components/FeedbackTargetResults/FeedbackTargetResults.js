@@ -33,9 +33,7 @@ const NotEnoughFeedbacks = ({ t }) => (
 
 const OnlyForEnrolled = ({ t }) => (
   <Box mb={2}>
-    <Alert severity="warning">
-      {t('feedbackTargetResults:onlyForEnrolledInfo')}
-    </Alert>
+    <Alert severity="warning">{t('feedbackTargetResults:onlyForEnrolledInfo')}</Alert>
   </Box>
 )
 
@@ -44,15 +42,11 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { id } = useParams()
   const isMobile = useIsMobile()
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } =
-    useFeedbackTarget(id)
+  const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
 
-  const { feedbackTargetData, isLoading: feedbacksIsLoading } =
-    useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData, isLoading: feedbacksIsLoading } = useFeedbackTargetFeedbacks(id)
 
-  const [useLegacy, setUseLegacy] = useState(
-    JSON.parse(localStorage.getItem('legacy')) || false,
-  )
+  const [useLegacy, setUseLegacy] = useState(JSON.parse(localStorage.getItem('legacy')) || false)
 
   const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
 
@@ -83,15 +77,14 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   // TODO this shit is gonna be cleaned up someday
   const isAdmin = accessStatus === 'ADMIN'
   const isOrganisationAdmin = accessStatus === 'ORGANISATION_ADMIN'
-  const isOrganisationUser =
-    isOrganisationAdmin || accessStatus === 'ORGANISATION'
+  const isOrganisationUser = isOrganisationAdmin || accessStatus === 'ORGANISATION'
   const isResponsibleTeacher = isAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
   const isTeacher = isResponsibleTeacher || accessStatus === 'TEACHER'
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbacks?.length > 0
 
-  const saveLegacySetting = (value) => {
+  const saveLegacySetting = value => {
     setUseLegacy(value)
     localStorage.setItem('legacy', JSON.stringify(value))
   }
@@ -102,11 +95,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
     <>
       <Box display="flex" alignItems="flex-end" flexDirection="column">
         {enoughFeedbacks && isTeacher && (
-          <ExportFeedbacksMenu
-            feedbackTarget={feedbackTarget}
-            feedbacks={feedbacks}
-            componentRef={ref}
-          />
+          <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={ref} />
         )}
       </Box>
 
@@ -119,9 +108,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
 
         {isOpen && feedback && (
           <Box mb={2}>
-            <Alert severity="info">
-              {t('feedbackTargetResults:thankYouMessage')}
-            </Alert>
+            <Alert severity="info">{t('feedbackTargetResults:thankYouMessage')}</Alert>
           </Box>
         )}
 
@@ -138,12 +125,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!enoughFeedbacks &&
-          (feedbackVisible ? (
-            <NotEnoughFeedbacks t={t} />
-          ) : (
-            <OnlyForEnrolled t={t} />
-          ))}
+        {!enoughFeedbacks && (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled t={t} />)}
 
         {enoughFeedbacks &&
           (useLegacy ? (
@@ -153,9 +135,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           ) : (
             <Box>
               <QuestionResults
-                publicityConfigurableQuestionIds={
-                  publicityConfigurableQuestionIds
-                }
+                publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
                 publicQuestionIds={publicQuestionIds ?? []}
                 questions={questions}
                 questionOrder={questionOrder}
@@ -171,12 +151,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
         {isTeacher && (
           <FormControlLabel
             sx={styles.legacySwitch}
-            control={
-              <Switch
-                checked={useLegacy}
-                onClick={() => saveLegacySetting(!useLegacy)}
-              />
-            }
+            control={<Switch checked={useLegacy} onClick={() => saveLegacySetting(!useLegacy)} />}
             label={t('feedbackTargetResults:useLegacyVersion')}
           />
         )}

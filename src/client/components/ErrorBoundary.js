@@ -16,7 +16,7 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    Sentry.withScope((scope) => {
+    Sentry.withScope(scope => {
       scope.setExtras(errorInfo)
       const eventId = Sentry.captureException(error)
       this.setState({ hasError: true, eventId })
@@ -31,15 +31,8 @@ export default class ErrorBoundary extends Component {
     return (
       <Container style={{ padding: '5em' }}>
         <h1>Something bad happened and we have been notified</h1>
-        <p>
-          You can speed up the fixes by filling the form that opens from the
-          following button:
-        </p>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => Sentry.showReportDialog({ eventId })}
-        >
+        <p>You can speed up the fixes by filling the form that opens from the following button:</p>
+        <Button variant="contained" color="primary" onClick={() => Sentry.showReportDialog({ eventId })}>
           Report error
         </Button>
       </Container>

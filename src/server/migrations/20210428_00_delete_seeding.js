@@ -5,10 +5,7 @@ const questions = [
     'TEXT',
     `{ "content": { "fi": "1 = Täysin eri mieltä, 2 = Jokseenkin eri mieltä, 3 = Siltä väliltä, 4 = Jokseenkin samaa mieltä, 5 = Täysin samaa mieltä" } }`,
   ],
-  [
-    'OPEN',
-    `{ "label": { "fi": "Miten opintojaksoa tulisi mielestäsi kehittää?" } }`,
-  ],
+  ['OPEN', `{ "label": { "fi": "Miten opintojaksoa tulisi mielestäsi kehittää?" } }`],
   [
     'SINGLE_CHOICE',
     `{ "label": { "fi": "Haluaisitko että kurssilla olisi enemmän ohjausta?" }, "options": [ { "id": "a", "label": { "fi": "Kyllä" } }, { "id": "b", "label": { "fi": "Ei" } } ] }`,
@@ -20,41 +17,33 @@ const questions = [
 ]
 
 module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.sequelize.query(
-      `DELETE FROM surveys WHERE type = 'university'`,
-    )
+  up: async queryInterface => {
+    await queryInterface.sequelize.query(`DELETE FROM surveys WHERE type = 'university'`)
 
     await queryInterface.sequelize.query(
-      `INSERT INTO surveys (type, type_id, question_ids, created_at, updated_at) VALUES ('university', 'HY', '{}', NOW(), NOW())`,
+      `INSERT INTO surveys (type, type_id, question_ids, created_at, updated_at) VALUES ('university', 'HY', '{}', NOW(), NOW())`
     )
 
     for (const [_, question] of questions) {
-      await queryInterface.sequelize.query(
-        `DELETE FROM questions where data = '${question}'`,
-      )
+      await queryInterface.sequelize.query(`DELETE FROM questions where data = '${question}'`)
     }
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     const ids = []
     for (const [type, question] of questions) {
       await queryInterface.sequelize.query(
-        `INSERT INTO questions (type, data, created_at, updated_at) VALUES ('${type}', '${question}', NOW(), NOW())`,
+        `INSERT INTO questions (type, data, created_at, updated_at) VALUES ('${type}', '${question}', NOW(), NOW())`
       )
-      const [[{ id }]] = await queryInterface.sequelize.query(
-        `SELECT id FROM questions where data = '${question}'`,
-      )
+      const [[{ id }]] = await queryInterface.sequelize.query(`SELECT id FROM questions where data = '${question}'`)
       ids.push(id)
     }
 
-    await queryInterface.sequelize.query(
-      `DELETE FROM surveys WHERE type = 'university'`,
-    )
+    await queryInterface.sequelize.query(`DELETE FROM surveys WHERE type = 'university'`)
 
     await queryInterface.sequelize.query(
       `INSERT INTO surveys (type, type_id, question_ids, created_at, updated_at) VALUES ('university', 'HY', '{${ids.join(
-        ',',
-      )}}', NOW(), NOW())`,
+        ','
+      )}}', NOW(), NOW())`
     )
   },
 }

@@ -38,5 +38,5 @@ root.render(
         <App />
       </ErrorBoundary>
     </QueryClientProvider>
-  </BrowserRouter>,
+  </BrowserRouter>
 )

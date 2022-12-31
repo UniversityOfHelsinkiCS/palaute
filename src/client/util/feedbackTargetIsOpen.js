@@ -1,4 +1,4 @@
-const feedbackTargetIsOpen = (feedbackTarget) => {
+const feedbackTargetIsOpen = feedbackTarget => {
   if (!feedbackTarget?.opensAt || !feedbackTarget?.closesAt) {
     return true
   }

@@ -11,9 +11,7 @@ const {
 
 const { returnEmailsToBeSentToday } = require('./mails/stats')
 
-const {
-  start: startContinuousFeedbackCron,
-} = require('./continuousFeedbackCron')
+const { start: startContinuousFeedbackCron } = require('./continuousFeedbackCron')
 
 const { start: startCron, run: runCron } = require('./pateCron')
 

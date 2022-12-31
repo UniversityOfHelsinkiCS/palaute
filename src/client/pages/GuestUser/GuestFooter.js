@@ -11,7 +11,7 @@ import { images } from '../../util/common'
 
 const styles = {
   logo: {
-    marginLeft: (theme) => theme.spacing(2),
+    marginLeft: theme => theme.spacing(2),
     width: '80px',
     height: 'auto',
   },
@@ -20,8 +20,7 @@ const styles = {
 const supportEmail = 'coursefeedback@helsinki.fi'
 const accessibilityDocument =
   'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md'
-const dataProtectionNotice =
-  'https://wiki.helsinki.fi/display/CF/Data+protection+notice'
+const dataProtectionNotice = 'https://wiki.helsinki.fi/display/CF/Data+protection+notice'
 
 const GuestFooter = () => {
   const { t } = useTranslation()
@@ -30,12 +29,7 @@ const GuestFooter = () => {
     <Box marginTop="auto">
       <Divider />
       <Container component="footer">
-        <Box
-          my={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Box my={2} display="flex" justifyContent="space-between" alignItems="center">
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
@@ -43,22 +37,13 @@ const GuestFooter = () => {
                 {supportEmail}
               </Link>
             </Typography>
-            <ExternalLink href={accessibilityDocument}>
-              {t('footer:accessibilityDocument')}
-            </ExternalLink>
+            <ExternalLink href={accessibilityDocument}>{t('footer:accessibilityDocument')}</ExternalLink>
             <Typography>
-              <ExternalLink href={dataProtectionNotice}>
-                {t('feedbackView:dataProtectionNotice')}
-              </ExternalLink>
+              <ExternalLink href={dataProtectionNotice}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
             </Typography>
           </div>
 
-          <Link
-            href="https://toska.dev"
-            target="_blank"
-            rel="noopener"
-            underline="hover"
-          >
+          <Link href="https://toska.dev" target="_blank" rel="noopener" underline="hover">
             <img src={images.toska_color} css={styles.logo} alt="Toska" />
           </Link>
         </Box>

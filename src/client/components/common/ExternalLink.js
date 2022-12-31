@@ -4,7 +4,7 @@ import ExternalLinkIcon from '@mui/icons-material/OpenInNew'
 
 const styles = {
   icon: {
-    marginLeft: (theme) => theme.spacing(0.5),
+    marginLeft: theme => theme.spacing(0.5),
     fontSize: '1em',
   },
 }

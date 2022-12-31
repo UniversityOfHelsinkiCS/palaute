@@ -1,7 +1,7 @@
 const { SummaryCustomisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
-const parseBody = (body) => {
+const parseBody = body => {
   const { customisation } = body
   if (!customisation) {
     throw new ApplicationError('Body is missing customisation', 400)

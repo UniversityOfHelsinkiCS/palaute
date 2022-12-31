@@ -3,7 +3,7 @@ const Sentry = require('@sentry/node')
 const logger = require('./logger')
 const { REDIS_CONFIG } = require('./config')
 
-const reconnectStrategy = (attempts) => {
+const reconnectStrategy = attempts => {
   if (attempts > 0) throw Error('Connection failed')
   return 0 // Time to next reconnect attempt in milliseconds
 }
@@ -16,10 +16,10 @@ const redisClient = redis.createClient({
 })
 
 const client = {
-  get: (key) => redisClient.get(key),
+  get: key => redisClient.get(key),
   set: (key, value) => redisClient.set(key, value),
   expire: (key, seconds) => redisClient.expire(key, seconds),
-  delete: (key) => redisClient.del(key),
+  delete: key => redisClient.del(key),
   flushDb: () => redisClient.flushDb(),
 
   async testConnection() {
@@ -32,9 +32,7 @@ const client = {
       logger.info('Redis client connected')
     } catch (error) {
       logger.warn('Connection to redis failed, cache not available')
-      Sentry.captureException(
-        new Error('Redis connection failed, cache not available'),
-      )
+      Sentry.captureException(new Error('Redis connection failed, cache not available'))
       client.get = () => Promise.resolve(null)
       client.set = () => Promise.resolve(null)
       client.flushDb = () => Promise.resolve(null)
@@ -43,7 +41,7 @@ const client = {
   },
 
   async connect() {
-    redisClient.on('error', (err) => logger.error('Redis Client Error', err))
+    redisClient.on('error', err => logger.error('Redis Client Error', err))
     logger.info('Connecting to redis...', REDIS_CONFIG)
     await this.testConnection()
   },

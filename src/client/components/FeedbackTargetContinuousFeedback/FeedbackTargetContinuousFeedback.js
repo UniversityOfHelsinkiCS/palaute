@@ -21,9 +21,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
     <Box ml={2} mt={-1} mb={2}>
       <Paper>
         <Box padding={2} marginBottom={2}>
-          <Typography variant="body2">
-            {t('feedbackTargetView:continuousFeedbackResponse')}
-          </Typography>
+          <Typography variant="body2">{t('feedbackTargetView:continuousFeedbackResponse')}</Typography>
           <Markdown>{response}</Markdown>
           {isTeacher && (
             <Box display="flex" justifyContent="flex-end" mt={-2}>
@@ -36,14 +34,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
           )}
         </Box>
       </Paper>
-      {showEdit && (
-        <ResponseForm
-          feedbackId={feedbackId}
-          setShow={setShowEdit}
-          refetch={refetch}
-          response={response}
-        />
-      )}
+      {showEdit && <ResponseForm feedbackId={feedbackId} setShow={setShowEdit} refetch={refetch} response={response} />}
     </Box>
   )
 }
@@ -75,20 +66,9 @@ const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
         </Box>
       </Paper>
       {response && (
-        <ResponseItem
-          feedbackId={id}
-          response={response}
-          isTeacher={isResponsibleTeacher}
-          refetch={refetch}
-        />
+        <ResponseItem feedbackId={id} response={response} isTeacher={isResponsibleTeacher} refetch={refetch} />
       )}
-      {showResponse && (
-        <ResponseForm
-          feedbackId={id}
-          setShow={setShowResponse}
-          refetch={refetch}
-        />
-      )}
+      {showResponse && <ResponseForm feedbackId={id} setShow={setShowResponse} refetch={refetch} />}
     </Box>
   )
 }
@@ -97,11 +77,9 @@ const FeedbackTargetContinuousFeedback = () => {
   const { id } = useParams()
   const { t } = useTranslation()
 
-  const { continuousFeedbacks, isLoading, refetch } =
-    useFeedbackTargetContinuousFeedbacks(id)
+  const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
 
-  const { feedbackTarget, isTeacher, isResponsibleTeacher, isStudent } =
-    useFeedbackTargetContext()
+  const { feedbackTarget, isTeacher, isResponsibleTeacher, isStudent } = useFeedbackTargetContext()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -113,9 +91,7 @@ const FeedbackTargetContinuousFeedback = () => {
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
-  const sortedFeedbacks = continuousFeedbacks.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-  )
+  const sortedFeedbacks = continuousFeedbacks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   return (
     <Box margin={3}>
@@ -125,20 +101,16 @@ const FeedbackTargetContinuousFeedback = () => {
 
       {isStudent && (
         <Box mb={2}>
-          <Alert severity="info">
-            {t('feedbackTargetView:continuousFeedbackStudentInfo')}
-          </Alert>
+          <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
         </Box>
       )}
 
       {(isTeacher || isResponsibleTeacher) && !sortedFeedbacks.length && (
-        <Alert severity="info">
-          {t('feedbackTargetView:noContinuousFeedbackGiven')}
-        </Alert>
+        <Alert severity="info">{t('feedbackTargetView:noContinuousFeedbackGiven')}</Alert>
       )}
 
       {!!sortedFeedbacks.length &&
-        sortedFeedbacks.map((feedback) => (
+        sortedFeedbacks.map(feedback => (
           <FeedbackItem
             key={feedback.id}
             feedback={feedback}
@@ -148,12 +120,7 @@ const FeedbackTargetContinuousFeedback = () => {
         ))}
 
       {isStudent && isOngoing && (
-        <Button
-          color="primary"
-          variant="contained"
-          component={Link}
-          to={`/targets/${id}/feedback`}
-        >
+        <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
           {t('userFeedbacks:giveContinuousFeedback')}
         </Button>
       )}

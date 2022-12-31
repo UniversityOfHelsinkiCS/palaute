@@ -20,9 +20,7 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
 
   const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
 
-  const tooltipTitle = `${questionLabel}: ${
-    mean || t('courseSummary:noResults')
-  }`
+  const tooltipTitle = `${questionLabel}: ${mean || t('courseSummary:noResults')}`
 
   return (
     <ResultItemBase tooltipTitle={tooltipTitle} mean={mean} {...props}>

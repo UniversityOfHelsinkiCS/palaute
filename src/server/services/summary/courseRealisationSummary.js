@@ -13,25 +13,20 @@ const getCourseRealisationSummaries = async ({
   accessibleCourseRealisationIds,
   organisationAccess,
 }) => {
-  const allCuSummaries = await sequelize.query(
-    COURSE_REALISATION_SUMMARY_QUERY,
-    {
-      replacements: { courseCode },
-      type: QueryTypes.SELECT,
-    },
-  )
+  const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
+    replacements: { courseCode },
+    type: QueryTypes.SELECT,
+  })
 
   const summaries = organisationAccess
     ? allCuSummaries
-    : allCuSummaries.filter((cur) =>
-        accessibleCourseRealisationIds.includes(cur.id),
-      )
+    : allCuSummaries.filter(cur => accessibleCourseRealisationIds.includes(cur.id))
 
   const teacherData = _.groupBy(
     await UserFeedbackTarget.findAll({
       where: {
         feedbackTargetId: {
-          [Op.in]: summaries.map((cur) => cur.feedbackTargetId),
+          [Op.in]: summaries.map(cur => cur.feedbackTargetId),
         },
         accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
       },
@@ -41,13 +36,13 @@ const getCourseRealisationSummaries = async ({
         attributes: ['id', 'firstName', 'lastName', 'email'],
       },
     }),
-    (teacher) => teacher.feedbackTargetId,
+    teacher => teacher.feedbackTargetId
   )
 
-  const results = summaries.map((cur) => {
+  const results = summaries.map(cur => {
     const results = cur.questionDistribution
       .map((questionData, idx) => {
-        const question = questions.find((q) => q.id === cur.questionIds[idx])
+        const question = questions.find(q => q.id === cur.questionIds[idx])
         if (!question) return undefined
         const distribution = _.mapValues(questionData, Number)
         return {
@@ -58,12 +53,9 @@ const getCourseRealisationSummaries = async ({
       })
       .filter(Boolean)
 
-    const teachers =
-      teacherData[cur.feedbackTargetId]?.map((teacher) => teacher.user) ?? []
+    const teachers = teacherData[cur.feedbackTargetId]?.map(teacher => teacher.user) ?? []
 
-    const teachingLanguages = (cur.teachingLanguages || []).map(
-      (lang) => languages[lang]?.name,
-    )
+    const teachingLanguages = (cur.teachingLanguages || []).map(lang => languages[lang]?.name)
 
     return {
       ...cur,
@@ -74,11 +66,7 @@ const getCourseRealisationSummaries = async ({
     }
   })
 
-  const orderedResults = _.orderBy(
-    results,
-    ['startDate', 'feedbackCount'],
-    ['desc', 'desc'],
-  )
+  const orderedResults = _.orderBy(results, ['startDate', 'feedbackCount'], ['desc', 'desc'])
 
   return orderedResults
 }

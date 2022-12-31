@@ -8,6 +8,6 @@ export const links = {
     fi: 'https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje',
     en: 'https://wiki.helsinki.fi/display/CF/4.+Degree+programme%27s+guide',
   },
-  getCoursePage: (feedbackTarget) =>
+  getCoursePage: feedbackTarget =>
     `https://studies.helsinki.fi/opintotarjonta/cur/${feedbackTarget.courseRealisation.id}`,
 }

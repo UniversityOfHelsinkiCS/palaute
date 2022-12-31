@@ -22,8 +22,8 @@ const PublicQuestions = ({ organisation }) => {
           <Box mb={2}>
             <Alert severity="info">
               <Trans i18nKey="publicQuestions:publicInfo">
-                Feedback related to public questions is visible to students on
-                the feedback page once the feedback period has ended
+                Feedback related to public questions is visible to students on the feedback page once the feedback
+                period has ended
               </Trans>
             </Alert>
           </Box>

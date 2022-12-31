@@ -15,9 +15,7 @@ const MiscTab = () => {
   const runPateCron = async () => {
     if (
       // eslint-disable-next-line no-alert
-      window.confirm(
-        'Will send all emails for today that have not yet been sent.',
-      )
+      window.confirm('Will send all emails for today that have not yet been sent.')
     ) {
       try {
         await apiClient.post('/admin/run-pate', {})
@@ -34,12 +32,7 @@ const MiscTab = () => {
     <>
       <EditUniversitySurveyAccordion />
       <EmailAccordion />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={runPateCron}
-        data-cy="run-pate"
-      >
+      <Button variant="contained" color="primary" onClick={runPateCron} data-cy="run-pate">
         Run pateCron
       </Button>
       <Box m="1rem" />

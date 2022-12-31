@@ -19,12 +19,7 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACK_RESPONSE,
     GIVE_CONTINUOUS_FEEDBACK,
   ],
-  ORGANISATION_ADMIN: [
-    UPDATE,
-    ALL_FEEDBACKS,
-    PUBLIC_FEEDBACKS,
-    CONTINUOUS_FEEDBACKS,
-  ],
+  ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
   RESPONSIBLE_TEACHER: [
     UPDATE,
@@ -43,8 +38,7 @@ const RIGHTS = {
 // peace of mind
 Object.freeze(RIGHTS)
 
-const hasRight = (accessStatus, right) =>
-  (RIGHTS[accessStatus] ?? []).includes(right)
+const hasRight = (accessStatus, right) => (RIGHTS[accessStatus] ?? []).includes(right)
 
 class Access {
   constructor(accessStatus) {
@@ -108,7 +102,7 @@ class Access {
         this.ORGANISATION_ADMIN,
         this.ORGANISATION_READ,
         this.STUDENT,
-      ].find((a) => a.accessStatus === accessStatus) ?? this.NONE
+      ].find(a => a.accessStatus === accessStatus) ?? this.NONE
     )
   }
 

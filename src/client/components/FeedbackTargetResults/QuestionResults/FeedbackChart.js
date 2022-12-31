@@ -57,34 +57,28 @@ const buildChartConfig = (
   closesAt,
   feedbackReminderLastSentAt,
   t,
-  language,
+  language
 ) => {
   const gradient = getGradient(chart?.ctx, chart?.chartArea)
 
   const initialData = _.sortBy(
-    Object.entries(
-      _.groupBy(feedbacks, (f) =>
-        addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime(),
-      ),
-    ).map(([date, feedbacks]) => ({
-      x: Number(date),
-      y: feedbacks.length / studentCount,
-    })),
-    'x',
+    Object.entries(_.groupBy(feedbacks, f => addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime())).map(
+      ([date, feedbacks]) => ({
+        x: Number(date),
+        y: feedbacks.length / studentCount,
+      })
+    ),
+    'x'
   )
 
   const opensAtDate = startOfDay(Date.parse(opensAt)).getTime()
   const chartMin = Math.min(
     subDays(Date.now(), 1),
     subDays(opensAtDate, 1),
-    subDays(initialData[0]?.x ?? Date.now(), 1),
+    subDays(initialData[0]?.x ?? Date.now(), 1)
   )
   const chartMax = subDays(Date.parse(closesAt), -1)
-  const firstVisibleDataPoint = Math.min(
-    opensAtDate,
-    Date.now(),
-    addHours(initialData[0]?.x ?? Date.now(), -12),
-  )
+  const firstVisibleDataPoint = Math.min(opensAtDate, Date.now(), addHours(initialData[0]?.x ?? Date.now(), -12))
 
   const data = [
     { x: 0, y: 0 },
@@ -104,7 +98,7 @@ const buildChartConfig = (
 
   const lastDataPoint = data[data.length - 1]
 
-  const absoluteData = data.map((d) => Math.round(d.y * studentCount))
+  const absoluteData = data.map(d => Math.round(d.y * studentCount))
 
   const valueFormatOptions = {
     style: 'percent',
@@ -112,19 +106,12 @@ const buildChartConfig = (
     maximumFractionDigits: 0,
   }
 
-  const opensAtAnnotation = getLineAnnotation(
-    t('editFeedbackTarget:opensAt'),
-    opensAtDate,
-    15,
-  )
-  const closesAtAnnotation = getLineAnnotation(
-    t('editFeedbackTarget:closesAt'),
-    Date.parse(closesAt),
-  )
+  const opensAtAnnotation = getLineAnnotation(t('editFeedbackTarget:opensAt'), opensAtDate, 15)
+  const closesAtAnnotation = getLineAnnotation(t('editFeedbackTarget:closesAt'), Date.parse(closesAt))
   const reminderAnnotation = getLineAnnotation(
     t('feedbackTargetResults:reminderLastSent'),
     subDays(Date.parse(feedbackReminderLastSentAt), 1),
-    -5,
+    -5
   )
   const latestValueAnnotation = {
     type: 'line',
@@ -133,10 +120,9 @@ const buildChartConfig = (
     borderDash: [6, 6],
     borderWidth: 1,
     label: {
-      content: `${Intl.NumberFormat(
-        localeForLanguage(language)?.code,
-        valueFormatOptions,
-      ).format(lastDataPoint.y)} (${feedbacks.length}/${studentCount})`,
+      content: `${Intl.NumberFormat(localeForLanguage(language)?.code, valueFormatOptions).format(lastDataPoint.y)} (${
+        feedbacks.length
+      }/${studentCount})`,
       position: 'center',
       yAdjust: -20,
       xAdjust: 10,
@@ -190,18 +176,15 @@ const buildChartConfig = (
           backgroundColor: labelBackgroundColor,
           displayColors: false,
           callbacks: {
-            label: (tooltip) => {
-              if (data[tooltip.dataIndex].x <= firstVisibleDataPoint)
-                return null
+            label: tooltip => {
+              if (data[tooltip.dataIndex].x <= firstVisibleDataPoint) return null
               const current = absoluteData[tooltip.dataIndex]
               const previous = absoluteData[tooltip.dataIndex - 1]
               return `${tooltip.formattedValue} (+${current - previous})`
             },
             title: ([tooltip]) => {
-              if (tooltip.dataIndex === data.length - 1)
-                return t('common:today')
-              if (data[tooltip.dataIndex].x === opensAtDate)
-                return t('editFeedbackTarget:opensAt')
+              if (tooltip.dataIndex === data.length - 1) return t('common:today')
+              if (data[tooltip.dataIndex].x === opensAtDate) return t('editFeedbackTarget:opensAt')
               return tooltip.label
             },
           },
@@ -256,13 +239,7 @@ const buildChartConfig = (
   return config
 }
 
-const FeedbackChart = ({
-  feedbacks,
-  studentCount,
-  opensAt,
-  closesAt,
-  feedbackReminderLastSentAt,
-}) => {
+const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt }) => {
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
 
@@ -276,22 +253,14 @@ const FeedbackChart = ({
         closesAt,
         feedbackReminderLastSentAt,
         t,
-        i18n.language,
+        i18n.language
       ),
-    [chartRef.current],
+    [chartRef.current]
   )
 
   return (
     <Paper>
-      <Box
-        height="25rem"
-        width="100%"
-        my="2rem"
-        px="2rem"
-        py="1.5rem"
-        display="flex"
-        justifyContent="center"
-      >
+      <Box height="25rem" width="100%" my="2rem" px="2rem" py="1.5rem" display="flex" justifyContent="center">
         <Box minWidth="80%">
           <Line {...config} ref={chartRef} />
         </Box>

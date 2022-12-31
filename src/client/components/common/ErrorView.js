@@ -9,12 +9,7 @@ import { Link } from 'react-router-dom'
  * when a component cannot be shown
  * because of a request error
  */
-const ErrorView = ({
-  children,
-  message,
-  response,
-  returnTo = '/feedbacks',
-}) => {
+const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => {
   const { t } = useTranslation()
 
   const supportEmail = 'coursefeedback@helsinki.fi'

@@ -25,16 +25,9 @@ const { getAccess } = require('./getAccess')
  * @param {number} id
  * @returns {object}
  */
-const getFromDb = async (id) => {
+const getFromDb = async id => {
   const fbt = await FeedbackTarget.findByPk(id, {
-    attributes: [
-      'id',
-      'courseUnitId',
-      'courseRealisationId',
-      'hidden',
-      'feedbackType',
-      'publicQuestionIds',
-    ],
+    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'hidden', 'feedbackType', 'publicQuestionIds'],
     include: [
       {
         model: UserFeedbackTarget,
@@ -73,26 +66,16 @@ const getFromDb = async (id) => {
   fbt.set(
     'responsibleTeachers',
     _.orderBy(
-      fbt.userFeedbackTargets
-        .filter((ufbt) => ufbt.accessStatus === 'RESPONSIBLE_TEACHER')
-        .map((ufbt) => ufbt.user),
+      fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER').map(ufbt => ufbt.user)
     ),
-    [['lastName', 'desc']],
+    [['lastName', 'desc']]
   )
   fbt.set(
     'teachers',
-    _.orderBy(
-      fbt.userFeedbackTargets
-        .filter((ufbt) => ufbt.accessStatus === 'TEACHER')
-        .map((ufbt) => ufbt.user),
-    ),
-    [['lastName', 'desc']],
+    _.orderBy(fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(ufbt => ufbt.user)),
+    [['lastName', 'desc']]
   )
-  fbt.set(
-    'studentCount',
-    fbt.userFeedbackTargets.filter((ufbt) => ufbt.accessStatus === 'STUDENT')
-      .length,
-  )
+  fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
   const publicTarget = await fbt.toPublicObject()
@@ -107,7 +90,7 @@ const getFromDb = async (id) => {
   return feedbackTargetJson
 }
 
-const getAdditionalDataFromCacheOrDb = async (id) => {
+const getAdditionalDataFromCacheOrDb = async id => {
   let data = cache.get(id)
   if (!data) {
     data = await getFromDb(id)
@@ -122,24 +105,20 @@ const getUserFeedbackTarget = (userId, feedbackTargetId) =>
     include: [{ model: Feedback, as: 'feedback' }],
   })
 
-const getFeedbackTarget = (feedbackTargetId) =>
+const getFeedbackTarget = feedbackTargetId =>
   FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: {
-      /* These we get from cache */ exclude: [
-        'studentCount',
-        'publicQuestionIds',
-      ],
+      /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds'],
     },
     include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })
 
 const getOneForUser = async (id, user, isAdmin) => {
-  const [additionalData, userFeedbackTarget, feedbackTarget] =
-    await Promise.all([
-      getAdditionalDataFromCacheOrDb(id),
-      getUserFeedbackTarget(user.id, id),
-      getFeedbackTarget(id),
-    ])
+  const [additionalData, userFeedbackTarget, feedbackTarget] = await Promise.all([
+    getAdditionalDataFromCacheOrDb(id),
+    getUserFeedbackTarget(user.id, id),
+    getFeedbackTarget(id),
+  ])
 
   if (!feedbackTarget) {
     throw new ApplicationError('Not found', 404)

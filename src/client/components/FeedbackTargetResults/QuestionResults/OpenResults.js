@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Chip,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Box, Chip, IconButton, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +14,7 @@ import InfoBox from '../../common/InfoBox'
 import { useFeedbackTargetContext } from '../../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
-  list: (theme) => ({
+  list: theme => ({
     padding: '1rem',
     maxHeight: '800px',
     overflowY: 'auto',
@@ -47,7 +38,7 @@ const styles = {
       height: 'auto',
     },
   }),
-  hiddenListItem: (theme) => ({
+  hiddenListItem: theme => ({
     color: theme.palette.error.light,
   }),
 }
@@ -60,24 +51,19 @@ const useUpdateOpenFeedbackVisibility = ({ feedbackTargetId }) => {
     onSuccess: (response, { feedbackId, questionId }) => {
       const { hidden } = response.data
 
-      queryClient.setQueryData(
-        ['feedbackTargetFeedbacks', String(feedbackTargetId)],
-        (data) => {
-          const { feedbacks } = data
-          const updatedFeedbacks = feedbacks.map((f) =>
-            f.id === feedbackId
-              ? {
-                  ...f,
-                  data: f.data.map((q) =>
-                    q.questionId === questionId ? { ...q, hidden } : q,
-                  ),
-                }
-              : f,
-          )
+      queryClient.setQueryData(['feedbackTargetFeedbacks', String(feedbackTargetId)], data => {
+        const { feedbacks } = data
+        const updatedFeedbacks = feedbacks.map(f =>
+          f.id === feedbackId
+            ? {
+                ...f,
+                data: f.data.map(q => (q.questionId === questionId ? { ...q, hidden } : q)),
+              }
+            : f
+        )
 
-          return { ...data, feedbacks: updatedFeedbacks }
-        },
-      )
+        return { ...data, feedbacks: updatedFeedbacks }
+      })
     },
   })
 
@@ -100,25 +86,15 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
     }
   }
 
-  const secondaryText = feedback.hidden
-    ? t('feedbackTargetResults:hiddenInfo')
-    : ''
+  const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
   return (
     <ListItem
       divider
       sx={feedback.hidden ? styles.hiddenListItem : {}}
       secondaryAction={
         canHide && (
-          <Tooltip
-            title={t(
-              feedback.hidden
-                ? 'feedbackTargetResults:setVisible'
-                : 'feedbackTargetResults:setHidden',
-            )}
-          >
-            <IconButton onClick={onVisibilityToggle}>
-              {feedback.hidden ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
+          <Tooltip title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}>
+            <IconButton onClick={onVisibilityToggle}>{feedback.hidden ? <VisibilityOff /> : <Visibility />}</IconButton>
           </Tooltip>
         )
       }
@@ -141,10 +117,7 @@ const OpenResults = ({ question }) => {
 
   const label = getLanguageValue(question.data?.label, i18n.language)
 
-  const description = getLanguageValue(
-    question.data?.description,
-    i18n.language,
-  )
+  const description = getLanguageValue(question.data?.description, i18n.language)
 
   const feedbacks = question.feedbacks ?? []
 
@@ -159,11 +132,7 @@ const OpenResults = ({ question }) => {
           <Typography fontWeight="medium">{label}</Typography>
           <Typography variant="body2">{description}</Typography>
         </Box>
-        <Chip
-          label={filteredFeedbacks.length}
-          variant="outlined"
-          size="small"
-        />
+        <Chip label={filteredFeedbacks.length} variant="outlined" size="small" />
         {canHide && (
           <Box ml="auto" mr={5}>
             <InfoBox
@@ -175,13 +144,7 @@ const OpenResults = ({ question }) => {
       </Box>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
-          <OpenFeedback
-            key={index}
-            feedback={feedback}
-            canHide={canHide}
-            feedbackTargetId={id}
-            t={t}
-          />
+          <OpenFeedback key={index} feedback={feedback} canHide={canHide} feedbackTargetId={id} t={t} />
         ))}
       </List>
     </ResultsContent>

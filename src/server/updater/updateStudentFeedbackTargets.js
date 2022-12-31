@@ -6,18 +6,12 @@ const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
 const mangleData = require('./updateLooper')
 const importerClient = require('./importerClient')
-const {
-  notifyOnEnrolmentsIfRequested,
-} = require('../services/enrolmentNotices/enrolmentNotices')
+const { notifyOnEnrolmentsIfRequested } = require('../services/enrolmentNotices/enrolmentNotices')
 
-const createEnrolmentTargets = async (enrolment) => {
-  const {
-    personId: userId,
-    courseUnitRealisationId,
-    studySubGroups,
-  } = enrolment
+const createEnrolmentTargets = async enrolment => {
+  const { personId: userId, courseUnitRealisationId, studySubGroups } = enrolment
 
-  const subGroupIds = studySubGroups.map((group) => group.studySubGroupId)
+  const subGroupIds = studySubGroups.map(group => group.studySubGroupId)
   const subGroupFeedbackTargets = await FeedbackTarget.findAll({
     where: {
       [Op.or]: [
@@ -34,7 +28,7 @@ const createEnrolmentTargets = async (enrolment) => {
       ],
     },
   })
-  const subGroupTargets = subGroupFeedbackTargets.map((feedbackTarget) => ({
+  const subGroupTargets = subGroupFeedbackTargets.map(feedbackTarget => ({
     accessStatus: 'STUDENT',
     userId,
     feedbackTargetId: feedbackTarget.id,
@@ -42,25 +36,22 @@ const createEnrolmentTargets = async (enrolment) => {
   return subGroupTargets
 }
 
-const bulkCreateUserFeedbackTargets = async (userFeedbackTargets) => {
+const bulkCreateUserFeedbackTargets = async userFeedbackTargets => {
   const normalizedUserFeedbackTargets = userFeedbackTargets
     .map(({ userId, feedbackTargetId, accessStatus }) => ({
       user_id: userId,
       feedback_target_id: feedbackTargetId,
       accessStatus,
     }))
-    .filter((target) => target.user_id && target.feedback_target_id)
+    .filter(target => target.user_id && target.feedback_target_id)
 
-  const ufbts = await UserFeedbackTarget.bulkCreate(
-    normalizedUserFeedbackTargets,
-    {
-      ignoreDuplicates: true,
-    },
-  )
+  const ufbts = await UserFeedbackTarget.bulkCreate(normalizedUserFeedbackTargets, {
+    ignoreDuplicates: true,
+  })
   return ufbts.length
 }
 
-const enrolmentsHandler = async (enrolments) => {
+const enrolmentsHandler = async enrolments => {
   const userFeedbackTargets = []
 
   for (const enrolment of enrolments) {
@@ -71,9 +62,7 @@ const enrolmentsHandler = async (enrolments) => {
   try {
     count += await bulkCreateUserFeedbackTargets(userFeedbackTargets)
   } catch (err) {
-    logger.info(
-      `[UPDATER] RUNNING ${userFeedbackTargets.length} TARGETS ONE BY ONE`,
-    )
+    logger.info(`[UPDATER] RUNNING ${userFeedbackTargets.length} TARGETS ONE BY ONE`)
     for (const ufbt of userFeedbackTargets) {
       const { userId, feedbackTargetId, accessStatus } = ufbt
       try {
@@ -109,40 +98,32 @@ const updateStudentFeedbackTargets = async () => {
     await sequelize.query(
       `DELETE FROM user_feedback_targets WHERE feedback_id IS NULL
        AND access_status = 'STUDENT'
-       AND feedback_open_email_sent = false`,
+       AND feedback_open_email_sent = false`
     )
   }
 
   await mangleData('enrolments', 3000, enrolmentsHandler)
 }
 
-const updateEnrolmentsOfCourse = async (courseRealisationId) => {
+const updateEnrolmentsOfCourse = async courseRealisationId => {
   const start = Date.now()
   try {
-    const { data: enrolments } = await importerClient.get(
-      `palaute/updater/enrolments/${courseRealisationId}`,
-    )
+    const { data: enrolments } = await importerClient.get(`palaute/updater/enrolments/${courseRealisationId}`)
     await enrolmentsHandler(enrolments)
     const end = Date.now()
     logger.info(
-      `[UPDATER] updated enrolments of ${courseRealisationId} (${
-        enrolments.length
-      }) - ${(end - start).toFixed(0)} ms`,
+      `[UPDATER] updated enrolments of ${courseRealisationId} (${enrolments.length}) - ${(end - start).toFixed(0)} ms`
     )
     return 1
   } catch (error) {
     logger.error(`[UPDATER] error ${error}`)
     const end = Date.now()
-    logger.info(
-      `[UPDATER] failed to update enrolments of ${courseRealisationId} - ${(
-        end - start
-      ).toFixed(0)} ms`,
-    )
+    logger.info(`[UPDATER] failed to update enrolments of ${courseRealisationId} - ${(end - start).toFixed(0)} ms`)
     return 0
   }
 }
 
-const saveNewEnrolments = async (enrolments) => {
+const saveNewEnrolments = async enrolments => {
   const userFeedbackTargets = []
   const newUfbts = []
 
@@ -184,27 +165,19 @@ const updateNewEnrolments = async () => {
   const start = new Date()
   const twoHoursAgo = subHours(start, 2)
   try {
-    const { data: enrolments } = await importerClient.get(
-      `palaute/updater/enrolments-new?since=${twoHoursAgo}`,
-    )
+    const { data: enrolments } = await importerClient.get(`palaute/updater/enrolments-new?since=${twoHoursAgo}`)
     const count = await saveNewEnrolments(enrolments)
     const end = Date.now()
     logger.info(
-      `[UPDATER] updated new enrolments (${
-        enrolments.length
-      } enrolments, ${count} new user feedback targets) - ${(
+      `[UPDATER] updated new enrolments (${enrolments.length} enrolments, ${count} new user feedback targets) - ${(
         end - start
-      ).toFixed(0)} ms`,
+      ).toFixed(0)} ms`
     )
     return 1
   } catch (error) {
     logger.error(`[UPDATER] error ${error}`)
     const end = Date.now()
-    logger.info(
-      `[UPDATER] failed to update new enrolments - ${(end - start).toFixed(
-        0,
-      )} ms`,
-    )
+    logger.info(`[UPDATER] failed to update new enrolments - ${(end - start).toFixed(0)} ms`)
     return 0
   }
 }

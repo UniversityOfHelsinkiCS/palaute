@@ -1,17 +1,5 @@
 /* eslint-disable camelcase */
-const {
-  Op,
-  DATE,
-  ENUM,
-  STRING,
-  Model,
-  JSONB,
-  BOOLEAN,
-  VIRTUAL,
-  ARRAY,
-  INTEGER,
-  TEXT,
-} = require('sequelize')
+const { Op, DATE, ENUM, STRING, Model, JSONB, BOOLEAN, VIRTUAL, ARRAY, INTEGER, TEXT } = require('sequelize')
 
 const _ = require('lodash')
 
@@ -28,12 +16,11 @@ const {
 
 class FeedbackTarget extends Model {
   async getSurveys() {
-    const [programmeSurveys, teacherSurvey, universitySurvey] =
-      await Promise.all([
-        getProgrammeSurveysByCourseUnit(this.courseUnitId),
-        getOrCreateTeacherSurvey(this),
-        getUniversitySurvey(),
-      ])
+    const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
+      getProgrammeSurveysByCourseUnit(this.courseUnitId),
+      getOrCreateTeacherSurvey(this),
+      getUniversitySurvey(),
+    ])
 
     return {
       programmeSurveys,
@@ -115,9 +102,7 @@ class FeedbackTarget extends Model {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(
-      (s) => s.publicQuestionIds,
-    )
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(s => s.publicQuestionIds)
 
     const publicQuestionIds = _.uniq([
       ...programmePublicQuestionIds,
@@ -132,16 +117,10 @@ class FeedbackTarget extends Model {
     this.populateQuestions(surveys)
 
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(
-      (s) => s.publicQuestionIds,
-    )
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(s => s.publicQuestionIds)
 
     const questionIds = this.questions
-      .filter(
-        ({ id }) =>
-          !globallyPublicQuestionIds?.includes(id) &&
-          !programmePublicQuestionIds?.includes(id),
-      )
+      .filter(({ id }) => !globallyPublicQuestionIds?.includes(id) && !programmePublicQuestionIds?.includes(id))
       .map(({ id }) => id)
 
     return questionIds
@@ -149,7 +128,7 @@ class FeedbackTarget extends Model {
 
   populateQuestions(surveys) {
     const programmeSurveyQuestions = surveys.programmeSurveys
-      ? surveys.programmeSurveys.flatMap((s) => s.questions)
+      ? surveys.programmeSurveys.flatMap(s => s.questions)
       : null
 
     const questions = [
@@ -161,7 +140,7 @@ class FeedbackTarget extends Model {
     this.set('questions', questions)
     this.set(
       'questionOrder',
-      questions.map((q) => q.id),
+      questions.map(q => q.id)
     )
   }
 
@@ -170,14 +149,10 @@ class FeedbackTarget extends Model {
     this.populateQuestions(surveys)
   }
 
-  async getPublicFeedbacks(
-    feedbacks,
-    { accessStatus, isAdmin, userOrganisationAccess } = {},
-  ) {
-    const publicFeedbacks = feedbacks.map((f) => f.toPublicObject())
+  async getPublicFeedbacks(feedbacks, { accessStatus, isAdmin, userOrganisationAccess } = {}) {
+    const publicFeedbacks = feedbacks.map(f => f.toPublicObject())
 
-    const isTeacher =
-      accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'
+    const isTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'
 
     const isOrganisationAdmin = Boolean(userOrganisationAccess?.admin)
 
@@ -188,12 +163,9 @@ class FeedbackTarget extends Model {
     const surveys = await this.getSurveys()
     const publicQuestionIds = this.getPublicQuestionIds(surveys)
 
-    const censoredFeedbacks = publicFeedbacks.map((feedback) => ({
+    const censoredFeedbacks = publicFeedbacks.map(feedback => ({
       ...feedback,
-      data: feedback.data.filter(
-        (answer) =>
-          !answer.hidden && publicQuestionIds.includes(answer.questionId),
-      ),
+      data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
     }))
 
     return censoredFeedbacks
@@ -202,8 +174,7 @@ class FeedbackTarget extends Model {
   async toPublicObject() {
     const surveys = await this.getSurveys()
     const publicQuestionIds = this.getPublicQuestionIds(surveys)
-    const publicityConfigurableQuestionIds =
-      this.getPublicityConfigurableQuestionIds(surveys)
+    const publicityConfigurableQuestionIds = this.getPublicityConfigurableQuestionIds(surveys)
 
     const feedbackTarget = {
       ...this.toJSON(),
@@ -222,9 +193,7 @@ class FeedbackTarget extends Model {
 
     const { organisations } = courseUnit
 
-    return organisations.some(({ disabledCourseCodes }) =>
-      disabledCourseCodes.includes(courseUnit.courseCode),
-    )
+    return organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   }
 
   async feedbackCanBeGiven() {
@@ -242,10 +211,7 @@ class FeedbackTarget extends Model {
    * @returns {Promise<FeedbackTarget?>} its previous feedback target
    */
   async getPrevious() {
-    const courseRealisation = CourseRealisation.findByPk(
-      this.courseRealisationId,
-      { attributes: ['startDate'] },
-    )
+    const courseRealisation = CourseRealisation.findByPk(this.courseRealisationId, { attributes: ['startDate'] })
 
     const currentTeachers = UserFeedbackTarget.findAll({
       attributes: ['userId'],
@@ -280,24 +246,13 @@ class FeedbackTarget extends Model {
           },
         },
       ],
-      order: [
-        [
-          { model: CourseRealisation, as: 'courseRealisation' },
-          'startDate',
-          'DESC',
-        ],
-      ],
+      order: [[{ model: CourseRealisation, as: 'courseRealisation' }, 'startDate', 'DESC']],
     })
 
-    const currentTeacherIds = (await currentTeachers).map(
-      ({ userId }) => userId,
-    )
+    const currentTeacherIds = (await currentTeachers).map(({ userId }) => userId)
 
-    const previousTargetsWithSameTeacher = allPreviousFeedbackTargets.filter(
-      (fbt) =>
-        fbt.userFeedbackTargets.some((ufbt) =>
-          currentTeacherIds.includes(ufbt.userId),
-        ),
+    const previousTargetsWithSameTeacher = allPreviousFeedbackTargets.filter(fbt =>
+      fbt.userFeedbackTargets.some(ufbt => currentTeacherIds.includes(ufbt.userId))
     )
 
     if (previousTargetsWithSameTeacher.length < 1) {
@@ -377,9 +332,7 @@ FeedbackTarget.init(
     studentCount: {
       type: VIRTUAL,
       get() {
-        return this.dataValues.studentCount
-          ? Number(this.dataValues.studentCount)
-          : 0
+        return this.dataValues.studentCount ? Number(this.dataValues.studentCount) : 0
       },
     },
     publicQuestionIds: {
@@ -430,7 +383,7 @@ FeedbackTarget.init(
   {
     underscored: true,
     sequelize,
-  },
+  }
 )
 
 module.exports = FeedbackTarget

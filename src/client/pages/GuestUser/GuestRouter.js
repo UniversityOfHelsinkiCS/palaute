@@ -8,8 +8,8 @@ import GuestFeedbackTargetView from './GuestFeedbackTargetView'
 
 const styles = {
   container: {
-    paddingTop: (theme) => theme.spacing(2),
-    paddingBottom: (theme) => theme.spacing(2),
+    paddingTop: theme => theme.spacing(2),
+    paddingBottom: theme => theme.spacing(2),
   },
 }
 

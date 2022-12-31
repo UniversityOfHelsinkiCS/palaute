@@ -1,11 +1,7 @@
 const { format } = require('date-fns')
 const { pate } = require('../pateClient')
 
-const buildNotificationAboutEnrolment = (
-  urlToGiveFeedback,
-  courseName,
-  closesAt,
-) => {
+const buildNotificationAboutEnrolment = (urlToGiveFeedback, courseName, closesAt) => {
   const translations = {
     text: {
       en: `Dear student!\n 
@@ -28,7 +24,7 @@ const buildNotificationAboutEnrolment = (
   return translations
 }
 
-const sendEmailNotificationAboutEnrolments = async (userFeedbackTargets) => {
+const sendEmailNotificationAboutEnrolments = async userFeedbackTargets => {
   const emails = []
 
   for (const userFeedbackTarget of userFeedbackTargets) {
@@ -42,21 +38,13 @@ const sendEmailNotificationAboutEnrolments = async (userFeedbackTargets) => {
     const courseUnit = await feedbackTarget.getCourseUnit()
     const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback`
 
-    const formattedClosesAt = format(
-      new Date(feedbackTarget.closesAt),
-      'dd.MM.yyyy',
-    )
+    const formattedClosesAt = format(new Date(feedbackTarget.closesAt), 'dd.MM.yyyy')
 
-    const translations = buildNotificationAboutEnrolment(
-      url,
-      courseUnit.name,
-      formattedClosesAt,
-    )
+    const translations = buildNotificationAboutEnrolment(url, courseUnit.name, formattedClosesAt)
 
     const email = {
       to: student.getDefaultEmail(),
-      subject:
-        translations.subject[student.language] || translations.subject.en,
+      subject: translations.subject[student.language] || translations.subject.en,
       text: translations.text[student.language] || translations.text.en,
     }
 

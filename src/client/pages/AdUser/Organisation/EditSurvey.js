@@ -14,18 +14,13 @@ import PublicQuestions from '../../../components/PublicQuestions'
 import useProgrammeSurvey from '../../../hooks/useProgrammeSurvey'
 import useOrganisation from '../../../hooks/useOrganisation'
 
-import {
-  getSurveyInitialValues,
-  saveSurveyValues,
-  getUpperLevelQuestions,
-} from './utils'
+import { getSurveyInitialValues, saveSurveyValues, getUpperLevelQuestions } from './utils'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
 
 const EditSurvey = () => {
   const { code } = useParams()
-  const { organisation, isLoading: isOrganisationLoading } =
-    useOrganisation(code)
+  const { organisation, isLoading: isOrganisationLoading } = useOrganisation(code)
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { language } = i18n
@@ -51,9 +46,7 @@ const EditSurvey = () => {
     const hasConfirmed =
       warningSeen ||
       // eslint-disable-next-line no-alert
-      window.confirm(
-        t('organisationSettings:editProgrammeQuestionsDialogContent'),
-      )
+      window.confirm(t('organisationSettings:editProgrammeQuestionsDialogContent'))
 
     if (!hasConfirmed) return
 
@@ -71,7 +64,7 @@ const EditSurvey = () => {
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
       ? _.uniq(organisation.publicQuestionIds.concat(question.id))
-      : organisation.publicQuestionIds.filter((id) => id !== question.id)
+      : organisation.publicQuestionIds.filter(id => id !== question.id)
 
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
@@ -84,18 +77,10 @@ const EditSurvey = () => {
   const { universitySurvey } = survey
   const allQuestions = universitySurvey.questions.concat(survey.questions)
   const allQuestionIds = allQuestions.map(({ id }) => id)
-  const publicQuestionIds = universitySurvey.publicQuestionIds.concat(
-    organisation.publicQuestionIds,
-  )
-  const publicityConfigurableQuestionIds = allQuestionIds.filter(
-    (id) => !universitySurvey.publicQuestionIds.includes(id),
-  )
+  const publicQuestionIds = universitySurvey.publicQuestionIds.concat(organisation.publicQuestionIds)
+  const publicityConfigurableQuestionIds = allQuestionIds.filter(id => !universitySurvey.publicQuestionIds.includes(id))
 
-  const initialValues = getSurveyInitialValues(
-    survey,
-    publicQuestionIds,
-    publicityConfigurableQuestionIds,
-  )
+  const initialValues = getSurveyInitialValues(survey, publicQuestionIds, publicityConfigurableQuestionIds)
 
   return (
     <>
@@ -114,11 +99,7 @@ const EditSurvey = () => {
           publicityConfigurableQuestionIds,
         }}
       />
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validateOnChange={false}
-      >
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
         {({ handleSubmit }) => (
           <Form>
             <QuestionEditor
@@ -127,9 +108,7 @@ const EditSurvey = () => {
               onStopEditing={handleSubmit}
               onRemoveQuestion={handleSubmit}
               publicQuestionIds={publicQuestionIds}
-              publicityConfigurableQuestionIds={
-                publicityConfigurableQuestionIds
-              }
+              publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
               onPublicityToggle={onPublicityToggle}
             />
           </Form>

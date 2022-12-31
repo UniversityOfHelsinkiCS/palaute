@@ -33,13 +33,7 @@ const Logo = ({ guest = false }) => (
   <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
     <Box display="inline-flex" alignItems="end" sx={styles.link}>
       <img src={hyLogo} alt="HY" css={styles.image} />
-      <Box
-        ml="1rem"
-        pb="0.2rem"
-        textTransform="uppercase"
-        fontWeight={700}
-        fontSize={18}
-      >
+      <Box ml="1rem" pb="0.2rem" textTransform="uppercase" fontWeight={700} fontSize={18}>
         Norppa
       </Box>
     </Box>

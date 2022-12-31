@@ -24,10 +24,10 @@ import AlertLink from '../../common/AlertLink'
 
 const styles = {
   openQuestionItem: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   container: {
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: theme => theme.spacing(2),
   },
   list: {
     maxHeight: '800px',
@@ -48,7 +48,7 @@ const styles = {
     },
   },
   link: {
-    fontWeight: (theme) => theme.typography.fontWeightMedium,
+    fontWeight: theme => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
     color: 'black',
   },
@@ -104,17 +104,10 @@ const QuestionItem = ({ question, isResponsibleTeacher, isPublic, sx }) => {
 const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
-  const infoSite =
-    'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
+  const infoSite = 'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
 
   const infoLink = (
-    <AlertLink
-      sx={styles.link}
-      component={MuiLink}
-      href={infoSite}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <AlertLink sx={styles.link} component={MuiLink} href={infoSite} target="_blank" rel="noreferrer">
       {t('questionResults:here')}
     </AlertLink>
   )
@@ -130,11 +123,7 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
         </Typography>
         <List sx={styles.list}>
           {hiddenQuestions.map((question, index) => (
-            <ListItem
-              divider={index < hiddenQuestions.length - 1}
-              disableGutters
-              key={index}
-            >
+            <ListItem divider={index < hiddenQuestions.length - 1} disableGutters key={index}>
               <ListItemText primary={question.data.label[language]} />
             </ListItem>
           ))}
@@ -144,38 +133,26 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
   )
 }
 
-const QuestionResults = ({
-  publicQuestionIds,
-  questions,
-  feedbacks,
-  isResponsibleTeacher,
-  organisationAccess,
-}) => {
+const QuestionResults = ({ publicQuestionIds, questions, feedbacks, isResponsibleTeacher, organisationAccess }) => {
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, feedbacks, publicQuestionIds),
-    [questions, feedbacks, publicQuestionIds],
+    [questions, feedbacks, publicQuestionIds]
   )
 
   const openQuestions = questionsWithFeedbacks.filter(
-    (q) =>
-      q.type === 'OPEN' &&
-      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
+    q => q.type === 'OPEN' && (isResponsibleTeacher || publicQuestionIds.includes(q.id))
   )
 
   const notOpenQuestions = questionsWithFeedbacks.filter(
-    (q) =>
-      q.type !== 'OPEN' &&
-      (isResponsibleTeacher || publicQuestionIds.includes(q.id)),
+    q => q.type !== 'OPEN' && (isResponsibleTeacher || publicQuestionIds.includes(q.id))
   )
 
-  const hiddenQuestions = questionsWithFeedbacks.filter(
-    (q) => !publicQuestionIds.includes(q.id),
-  )
+  const hiddenQuestions = questionsWithFeedbacks.filter(q => !publicQuestionIds.includes(q.id))
 
   return (
     <>
       <div>
-        {openQuestions.map((q) => (
+        {openQuestions.map(q => (
           <QuestionItem
             key={q.id}
             question={q}
@@ -185,11 +162,9 @@ const QuestionResults = ({
           />
         ))}
       </div>
-      {organisationAccess && hiddenQuestions.length > 0 && (
-        <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />
-      )}
+      {organisationAccess && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
       <Grid spacing={2} container sx={styles.displayStyle}>
-        {notOpenQuestions.map((q) => (
+        {notOpenQuestions.map(q => (
           <Grid key={q.id} xs={12} sm={12} md={6} item>
             <QuestionItem
               question={q}

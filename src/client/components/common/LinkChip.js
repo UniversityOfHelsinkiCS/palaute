@@ -6,7 +6,7 @@ const common = {
   '&:hover': {
     borderRadius: '3px',
   },
-  transition: (theme) =>
+  transition: theme =>
     theme.transitions.create(['border-radius'], {
       easing: 'ease-out',
       duration: '0.2s',
@@ -16,15 +16,7 @@ const common = {
 
 const LinkChip = ({ to, label, sx, ...props }) => (
   <Link to={to} style={{ textDecoration: 'none' }}>
-    <Chip
-      onClick={undefined}
-      label={label}
-      sx={[common, sx]}
-      variant="outlined"
-      size="small"
-      href={to}
-      {...props}
-    />
+    <Chip onClick={undefined} label={label} sx={[common, sx]} variant="outlined" size="small" href={to} {...props} />
   </Link>
 )
 

@@ -2,7 +2,7 @@ import { parseISO, format } from 'date-fns'
 
 import apiClient from '../../../util/apiClient'
 
-export const getCoursePeriod = (courseRealisation) => {
+export const getCoursePeriod = courseRealisation => {
   if (!courseRealisation) {
     return null
   }
@@ -13,22 +13,19 @@ export const getCoursePeriod = (courseRealisation) => {
   return `${startDate} - ${endDate}`
 }
 
-export const getFeedbackPeriod = (feedbackTarget) => {
+export const getFeedbackPeriod = feedbackTarget => {
   const opensAt = format(parseISO(feedbackTarget.opensAt), 'dd.MM.yyyy')
   const closesAt = format(parseISO(feedbackTarget.closesAt), 'dd.MM.yyyy')
 
   return `${opensAt} - ${closesAt}`
 }
 
-export const copyLink = (link) => {
+export const copyLink = link => {
   navigator.clipboard.writeText(link)
 }
 
-export const getCourseUnitSummaryPath = (feedbackTarget) =>
-  `/course-summary/${feedbackTarget.courseUnit.courseCode}`
+export const getCourseUnitSummaryPath = feedbackTarget => `/course-summary/${feedbackTarget.courseUnit.courseCode}`
 
 export const deleteResponsibleTeacher = async (feedbackTarget, teacher) => {
-  await apiClient.delete(
-    `/feedback-targets/${feedbackTarget.id}/user-feedback-targets/${teacher.id}`,
-  )
+  await apiClient.delete(`/feedback-targets/${feedbackTarget.id}/user-feedback-targets/${teacher.id}`)
 }

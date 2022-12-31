@@ -11,7 +11,7 @@ const validateLikertQuestion = (data, question) => {
 const validateSingleChoice = (data, question) => {
   try {
     if (!question.required && data === '') return true
-    return question.data.options.map((opt) => opt.id).includes(data)
+    return question.data.options.map(opt => opt.id).includes(data)
   } catch (_) {
     return false
   }
@@ -21,8 +21,8 @@ const validateMultiChoice = (data, question) => {
   try {
     if (!question.required && data === []) return true
     let valid = true
-    const ids = question.data.options.map((opt) => opt.id)
-    data.forEach((id) => {
+    const ids = question.data.options.map(opt => opt.id)
+    data.forEach(id => {
       valid = valid && ids.includes(id)
     })
     return valid
@@ -42,12 +42,12 @@ const validateFeedback = async (data, feedbackTarget) => {
     const surveys = await feedbackTarget.getSurveys()
     feedbackTarget.populateQuestions(surveys)
     const idToQuestion = {}
-    feedbackTarget.questions.forEach((q) => {
+    feedbackTarget.questions.forEach(q => {
       idToQuestion[q.id] = q
     })
     let valid = true
     const answerIds = new Set()
-    data.forEach((answer) => {
+    data.forEach(answer => {
       const question = idToQuestion[answer.questionId]
       const validator = mapTypeToValidator[question.type]
       if (!validator) return
@@ -56,7 +56,7 @@ const validateFeedback = async (data, feedbackTarget) => {
         valid = false
       }
     })
-    feedbackTarget.questions.forEach((q) => {
+    feedbackTarget.questions.forEach(q => {
       if (q.required && mapTypeToValidator[q.type] && !answerIds.has(q.id)) {
         valid = false
       }

@@ -6,12 +6,9 @@ const buildNotificationAboutFeedbackResponseToStudents = (
   startDate,
   endDate,
   urlToSeeFeedbackSummary,
-  feedbackResponse,
+  feedbackResponse
 ) => {
-  const dates = `(${format(startDate, 'dd.MM')} - ${format(
-    endDate,
-    'dd.MM.yyyy',
-  )})`
+  const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
   const translations = {
     text: {
       en: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to the course feedback recieved from students. \n 
@@ -41,21 +38,20 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   courseName,
   startDate,
   endDate,
-  feedbackResponse,
+  feedbackResponse
 ) => {
   const translations = buildNotificationAboutFeedbackResponseToStudents(
     courseName,
     startDate,
     endDate,
     urlToSeeFeedbackSummary,
-    feedbackResponse,
+    feedbackResponse
   )
 
-  const emails = students.map((student) => {
+  const emails = students.map(student => {
     const email = {
       to: student.email,
-      subject:
-        translations.subject[student.language] || translations.subject.en,
+      subject: translations.subject[student.language] || translations.subject.en,
       text: translations.text[student.language] || translations.text.en,
     }
     return email
@@ -66,17 +62,14 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   return emails
 }
 
-const sendFeedbackSummaryReminderToStudents = async (
-  feedbackTarget,
-  feedbackResponse,
-) => {
+const sendFeedbackSummaryReminderToStudents = async (feedbackTarget, feedbackResponse) => {
   const courseUnit = await feedbackTarget.getCourseUnit()
   const cr = await feedbackTarget.getCourseRealisation()
   const students = await feedbackTarget.getStudentsForFeedbackTarget()
   const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/results`
   const formattedStudents = students
-    .filter((student) => student.email)
-    .map((student) => ({
+    .filter(student => student.email)
+    .map(student => ({
       email: student.email,
       language: student.language || 'en',
     }))
@@ -86,7 +79,7 @@ const sendFeedbackSummaryReminderToStudents = async (
     courseUnit.name,
     cr.startDate,
     cr.endDate,
-    feedbackResponse,
+    feedbackResponse
   )
 }
 

@@ -8,7 +8,7 @@ import LanguageSelect from '../common/LanguageSelect'
 
 const styles = {
   saveButton: {
-    marginRight: (theme) => theme.spacing(1),
+    marginRight: theme => theme.spacing(1),
   },
   container: {
     display: 'flex',
@@ -21,12 +21,10 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
   const history = useHistory()
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     e.preventDefault()
     // eslint-disable-next-line no-alert
-    const redirect = window.confirm(
-      t('editFeedbackTarget:showPreviewConfirmation'),
-    )
+    const redirect = window.confirm(t('editFeedbackTarget:showPreviewConfirmation'))
     if (redirect) {
       history.push(previewLink)
     }

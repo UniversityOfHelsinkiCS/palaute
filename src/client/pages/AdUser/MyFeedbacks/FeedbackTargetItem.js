@@ -3,15 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
 
-import {
-  Box,
-  Button,
-  ListItemText,
-  Chip,
-  Dialog,
-  DialogTitle,
-  ListItem,
-} from '@mui/material'
+import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
@@ -28,13 +20,7 @@ const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button
-      variant="contained"
-      color="primary"
-      to={editPath}
-      component={Link}
-      data-cy="giveCourseFeedback"
-    >
+    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="giveCourseFeedback">
       {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
@@ -59,23 +45,11 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <Box>
-      <Button
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={editPath}
-        sx={{ mr: '1rem' }}
-      >
+      <Button variant="outlined" color="primary" component={Link} to={editPath} sx={{ mr: '1rem' }}>
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
 
-      <Button
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={viewPath}
-        sx={{ mr: '1rem' }}
-      >
+      <Button variant="outlined" color="primary" component={Link} to={viewPath} sx={{ mr: '1rem' }}>
         {t('userFeedbacks:viewFeedbackSummary')}
       </Button>
       <Button color="error" onClick={handleOpen}>
@@ -83,9 +57,7 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       </Button>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {t('userFeedbacks:clearConfirmationQuestion')}
-        </DialogTitle>
+        <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
         <Button onClick={handleClose} color="primary">
           {t('userFeedbacks:no')}
         </Button>
@@ -111,13 +83,7 @@ const ContinuousFeedbackActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button
-      color="primary"
-      variant="contained"
-      component={Link}
-      to={viewPath}
-      data-cy="giveContinuousFeedback"
-    >
+    <Button color="primary" variant="contained" component={Link} to={viewPath} data-cy="giveContinuousFeedback">
       {t('userFeedbacks:giveContinuousFeedback')}
     </Button>
   )
@@ -153,25 +119,13 @@ const NoFeedbackChip = () => {
 const FeedbackEndedChip = () => {
   const { t } = useTranslation()
 
-  return (
-    <Chip
-      variant="outlined"
-      icon={<FeedbackClosedIcon />}
-      label={t('userFeedbacks:feedbackEndedChip')}
-    />
-  )
+  return <Chip variant="outlined" icon={<FeedbackClosedIcon />} label={t('userFeedbacks:feedbackEndedChip')} />
 }
 
 const FeedbackNotStartedChip = () => {
   const { t } = useTranslation()
 
-  return (
-    <Chip
-      variant="outlined"
-      icon={<FeedbackClosedIcon />}
-      label={t('userFeedbacks:feedbackNotStartedChip')}
-    />
-  )
+  return <Chip variant="outlined" icon={<FeedbackClosedIcon />} label={t('userFeedbacks:feedbackNotStartedChip')} />
 }
 
 const ContinuousFeedbackChip = () => {
@@ -187,7 +141,7 @@ const ContinuousFeedbackChip = () => {
   )
 }
 
-const formatDate = (date) => lightFormat(date, 'd.M.yyyy')
+const formatDate = date => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t } = useTranslation()
@@ -218,11 +172,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const viewPath = `/targets/${id}/results`
 
   return (
-    <ListItem
-      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
-      divider={divider}
-      disableGutters
-    >
+    <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
 
       <Box mt={1} mb={1}>
@@ -235,15 +185,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
       <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
-        {notStarted && continuousFeedbackEnabled && (
-          <ContinuousFeedbackActions viewPath={editPath} />
-        )}
+        {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackActions viewPath={editPath} />}
         {isOpen && feedbackGiven && (
-          <FeedbackGivenActions
-            editPath={editPath}
-            onDelete={onDelete}
-            viewPath={viewPath}
-          />
+          <FeedbackGivenActions editPath={editPath} onDelete={onDelete} viewPath={viewPath} />
         )}
         {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
       </Box>

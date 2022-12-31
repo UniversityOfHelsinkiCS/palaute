@@ -3,9 +3,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const getAccessAndOrganisation = async (user, code, requiredAccess) => {
   const organisationAccess = await user.getOrganisationAccess()
 
-  const { access, organisation } =
-    organisationAccess.find(({ organisation }) => organisation.code === code) ??
-    {}
+  const { access, organisation } = organisationAccess.find(({ organisation }) => organisation.code === code) ?? {}
 
   const hasReadAccess = Boolean(access?.read)
   const hasWriteAccess = Boolean(access?.write)
@@ -17,11 +15,7 @@ const getAccessAndOrganisation = async (user, code, requiredAccess) => {
   if (requiredAccess?.admin && !hasAdminAccess) missingRights.push('admin')
 
   if (missingRights.length > 0) {
-    throw new ApplicationError(
-      `User is missing rights for organisation ${code}: ${missingRights.join(
-        ', ',
-      )}`,
-    )
+    throw new ApplicationError(`User is missing rights for organisation ${code}: ${missingRights.join(', ')}`)
   }
 
   return {

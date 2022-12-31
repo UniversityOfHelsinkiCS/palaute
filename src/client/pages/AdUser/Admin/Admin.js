@@ -31,46 +31,17 @@ const AdminView = () => {
       <Title>Admin</Title>
       <Box display="flex" alignItems="end">
         <h1>Admin page</h1>
-        <img
-          src={images.norppa_viskaali}
-          alt="Epic norppa by ttriple"
-          sx={{ height: '1vh' }}
-        />
+        <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" sx={{ height: '1vh' }} />
       </Box>
       <Box>
-        <RouterTabs
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-        >
+        <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
           <Tab label="Users" component={Link} to={`${url}/users`} />
           <Tab label="Enable courses" component={Link} to={`${url}/enable`} />
-          <Tab
-            label="Organisation Access"
-            component={Link}
-            to={`${url}/access`}
-          />
-          <Tab
-            label="Norppa feedback"
-            component={Link}
-            to={`${url}/feedback`}
-          />
-          <Tab
-            label="Norppa statistics"
-            component={Link}
-            to={`${url}/statistics`}
-          />
-          <Tab
-            label="Search feedback targets"
-            component={Link}
-            to={`${url}/feedback-targets`}
-          />
-          <Tab
-            label="Palautevastaavat"
-            component={Link}
-            to={`${url}/feedback-correspondents`}
-          />
+          <Tab label="Organisation Access" component={Link} to={`${url}/access`} />
+          <Tab label="Norppa feedback" component={Link} to={`${url}/feedback`} />
+          <Tab label="Norppa statistics" component={Link} to={`${url}/statistics`} />
+          <Tab label="Search feedback targets" component={Link} to={`${url}/feedback-targets`} />
+          <Tab label="Palautevastaavat" component={Link} to={`${url}/feedback-correspondents`} />
           <Tab label="Banners" component={Link} to={`${url}/banners`} />
           <Tab label="Updater" to={`${url}/updater`} component={Link} />
           <Tab label="Misc" component={Link} to={`${url}/misc`} />
@@ -82,14 +53,8 @@ const AdminView = () => {
         <Route path={`${path}/access`} component={AccessTab} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
-        <Route
-          path={`${path}/feedback-targets`}
-          component={FeedbackTargetInspector}
-        />
-        <Route
-          path={`${path}/feedback-correspondents`}
-          component={FeedbackCorrespondents}
-        />
+        <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />
+        <Route path={`${path}/feedback-correspondents`} component={FeedbackCorrespondents} />
         <Route path={`${path}/banners`} component={BannerView} />
         <Route path={`${path}/updater`} component={UpdaterView} />
         <Route path={`${path}/misc`} component={MiscTab} />

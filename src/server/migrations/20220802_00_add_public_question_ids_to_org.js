@@ -1,7 +1,7 @@
 const { ARRAY, INTEGER } = require('sequelize')
 
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.addColumn('organisations', 'public_question_ids', {
       type: ARRAY(INTEGER),
       allowNull: true,
@@ -16,7 +16,7 @@ module.exports = {
       ALTER TABLE organisations ALTER COLUMN public_question_ids SET NOT NULL;
     `)
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.removeColumn('organisations', 'public_question_ids')
   },
 }

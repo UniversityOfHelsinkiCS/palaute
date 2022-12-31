@@ -3,13 +3,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { parseISO } from 'date-fns'
 
-import {
-  ListItemText,
-  ListItem,
-  Typography,
-  Link,
-  Tooltip,
-} from '@mui/material'
+import { ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
 
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
@@ -19,24 +13,14 @@ import { getLanguageValue } from '../../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
 
-const getChip = (feedbackTarget) => {
+const getChip = feedbackTarget => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isCurrent = !isEnded && !isOpen && !isOld
-  const {
-    id,
-    feedbackResponseSent,
-    feedbackResponseGiven,
-    feedbackCount,
-    continuousFeedbackEnabled,
-  } = feedbackTarget
+  const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount, continuousFeedbackEnabled } = feedbackTarget
 
-  if (
-    isOpen ||
-    (isCurrent && continuousFeedbackEnabled) ||
-    (isEnded && (feedbackCount > 0 || feedbackResponseGiven))
-  ) {
+  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
     return (
       <FeedbackResponseChip
         id={id}
@@ -59,14 +43,7 @@ const getChip = (feedbackTarget) => {
 const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const { i18n, t } = useTranslation()
 
-  const {
-    id,
-    feedbackCount,
-    studentCount,
-    courseRealisation,
-    opensAt,
-    closesAt,
-  } = feedbackTarget
+  const { id, feedbackCount, studentCount, courseRealisation, opensAt, closesAt } = feedbackTarget
 
   const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
 
@@ -80,8 +57,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
       })}
     >
       <Typography>
-        {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} -{' '}
-        {formatDate(endDate)}
+        {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
     </Tooltip>
   )
@@ -94,11 +70,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
         disableTypography
         primary={
           <>
-            <Link
-              component={RouterLink}
-              to={`/targets/${id}`}
-              underline="hover"
-            >
+            <Link component={RouterLink} to={`/targets/${id}`} underline="hover">
               {getLanguageValue(name, i18n.language)}{' '}
             </Link>
             {periodInfo}

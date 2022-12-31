@@ -47,35 +47,31 @@ const styles = {
 }
 
 const getHeaders = (questions, feedbacks, language) => {
-  const orderOfIds = feedbacks[0].data.map((f) => f.questionId)
-  const sortedQuestions = questions.sort(
-    (a, b) => orderOfIds.indexOf(a.id) - orderOfIds.indexOf(b.id),
-  )
+  const orderOfIds = feedbacks[0].data.map(f => f.questionId)
+  const sortedQuestions = questions.sort((a, b) => orderOfIds.indexOf(a.id) - orderOfIds.indexOf(b.id))
 
   const headers = sortedQuestions
-    .filter((q) => {
+    .filter(q => {
       if (!q.data.label) return false
       return true
     })
-    .map((q) => getLanguageValue(q.data.label, language))
+    .map(q => getLanguageValue(q.data.label, language))
 
   return headers
 }
 
 const getData = (questions, feedbacks, language) => {
-  const options = _.flatMap(questions, (q) =>
-    ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)
-      ? q.data?.options ?? []
-      : [],
+  const options = _.flatMap(questions, q =>
+    ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type) ? q.data?.options ?? [] : []
   )
 
   const optionById = _.keyBy(options, ({ id }) => id)
 
-  const data = feedbacks.map((f) => {
+  const data = feedbacks.map(f => {
     const feedback = f.data
-      .filter((d) => questions.find((q) => q.id === d.questionId))
-      .map((d) => {
-        const q = questions.find((q) => q.id === d.questionId)
+      .filter(d => questions.find(q => q.id === d.questionId))
+      .map(d => {
+        const q = questions.find(q => q.id === d.questionId)
 
         if (['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)) {
           const option = optionById[d.data]
@@ -99,19 +95,14 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   const data = [headers, ...questions]
 
-  const filename = `${
-    feedbackTarget.courseUnit.courseCode
-  }_${getCourseStartDate(feedbackTarget)}`
+  const filename = `${feedbackTarget.courseUnit.courseCode}_${getCourseStartDate(feedbackTarget)}`
 
   const worksheet = utils.aoa_to_sheet(data)
   const workbook = utils.book_new()
   utils.book_append_sheet(workbook, worksheet, filename)
 
   return (
-    <Button
-      sx={styles.button}
-      onClick={() => writeFileXLSX(workbook, `${filename}.xlsx`)}
-    >
+    <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, `${filename}.xlsx`)}>
       {t('exportCsv')}
     </Button>
   )
@@ -135,7 +126,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     setAnchorEl(e.currentTarget)
   }
 
@@ -169,10 +160,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
         }}
       >
         <MenuItem value="csv" sx={styles.menuitem}>
-          <ExportCsvLink
-            feedbackTarget={feedbackTarget}
-            feedbacks={feedbacks}
-          />
+          <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />
         </MenuItem>
         <MenuItem value="pdf" sx={styles.menuitem}>
           <ExportPdfLink componentRef={componentRef} />

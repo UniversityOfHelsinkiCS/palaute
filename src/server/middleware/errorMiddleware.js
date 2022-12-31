@@ -11,10 +11,7 @@ const errorHandler = (error, req, res, next) => {
     return next(error)
   }
 
-  const normalizedError =
-    error instanceof ApplicationError
-      ? error
-      : new ApplicationError(error.message)
+  const normalizedError = error instanceof ApplicationError ? error : new ApplicationError(error.message)
 
   return res.status(normalizedError.status).json(normalizedError)
 }

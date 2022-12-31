@@ -4,23 +4,14 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../../util/chipStyles'
 import LinkChip from '../../../components/common/LinkChip'
 
-const FeedbackResponseChip = ({
-  id,
-  feedbackResponseGiven,
-  feedbackResponseSent,
-  ongoing,
-  continuous,
-  ...props
-}) => {
+const FeedbackResponseChip = ({ id, feedbackResponseGiven, feedbackResponseSent, ongoing, continuous, ...props }) => {
   const { t } = useTranslation()
 
   const notSentLabel = feedbackResponseGiven
     ? t('teacherView:feedbackResponseNotSent')
     : t('teacherView:feedbackResponseMissing')
 
-  const label = feedbackResponseSent
-    ? t('teacherView:feedbackResponseGiven')
-    : notSentLabel
+  const label = feedbackResponseSent ? t('teacherView:feedbackResponseGiven') : notSentLabel
 
   const continuousLabel = t('teacherView:continuousFeedback')
 

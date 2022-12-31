@@ -49,9 +49,7 @@ const Details = ({ user }) => {
             <TableCell>{String(user.degreeStudyRight)}</TableCell>
             <TableCell>{user.language}</TableCell>
             <TableCell>
-              {user.lastLoggedIn
-                ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy HH.mm')
-                : 'Not since 10.6.22'}
+              {user.lastLoggedIn ? format(Date.parse(user.lastLoggedIn), 'dd/MM/yyyy HH.mm') : 'Not since 10.6.22'}
             </TableCell>
           </TableRow>
         </TableBody>
@@ -71,7 +69,7 @@ const Details = ({ user }) => {
               mb={4}
               style={{ columnGap: '20px' }}
             >
-              {userDetails.iamGroups.map((iam) => (
+              {userDetails.iamGroups.map(iam => (
                 <Box key={iam} fontFamily="monospace" fontSize={14}>
                   {iam}
                 </Box>
@@ -117,23 +115,14 @@ const Details = ({ user }) => {
 
 const StaffChip = ({ user }) => (
   <>
-    {user.possiblyStaff && !user.probablyStaff && (
-      <Chip label="Possibly staff" variant="outlined" />
-    )}
-    {user.probablyStaff && (
-      <Chip label="Definitely staff" color="primary" variant="outlined" />
-    )}
+    {user.possiblyStaff && !user.probablyStaff && <Chip label="Possibly staff" variant="outlined" />}
+    {user.probablyStaff && <Chip label="Definitely staff" color="primary" variant="outlined" />}
   </>
 )
 
 const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
-  <Accordion
-    key={user.id}
-    TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
-  >
-    <AccordionSummary
-      sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}
-    >
+  <Accordion key={user.id} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>
+    <AccordionSummary sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}>
       <Box display="flex" alignItems="center" width="100%">
         <Typography>
           {user.firstName} {user.lastName}
@@ -165,11 +154,7 @@ const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
     </AccordionDetails>
     <AccordionActions>
       {typeof handleLoginAs === 'function' && (
-        <Button
-          onClick={handleLoginAs(user)}
-          variant="outlined"
-          color="primary"
-        >
+        <Button onClick={handleLoginAs(user)} variant="outlined" color="primary">
           Login as
         </Button>
       )}

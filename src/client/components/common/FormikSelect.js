@@ -13,7 +13,7 @@ const FormikSelect = ({ name, label, options, ...props }) => {
         variant="outlined"
         id={name}
         value={field.value}
-        onChange={(event) => {
+        onChange={event => {
           helpers.setValue(event.target.value)
         }}
         onBlur={() => helpers.setTouched(true)}

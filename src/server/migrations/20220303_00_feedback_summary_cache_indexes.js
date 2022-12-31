@@ -1,5 +1,5 @@
 module.exports = {
-  up: async (queryInterface) => {
+  up: async queryInterface => {
     await queryInterface.addIndex('feedback_summary_cache', {
       fields: ['organisation_id'],
       name: 'feedback_summary_cache_organisation_id',
@@ -9,10 +9,8 @@ module.exports = {
       name: 'feedback_summary_cache_course_realisation_id',
     })
   },
-  down: async (queryInterface) => {
+  down: async queryInterface => {
     await queryInterface.removeIndex('feedback_summary_cache_organisation_id')
-    await queryInterface.removeIndex(
-      'feedback_summary_cache_course_realisation_id',
-    )
+    await queryInterface.removeIndex('feedback_summary_cache_course_realisation_id')
   },
 }

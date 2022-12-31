@@ -20,20 +20,11 @@ const Toolbar = ({ editLink, language, onLanguageChange }) => {
   return (
     <FixedContainer>
       <Box sx={styles.container}>
-        <Button
-          color="primary"
-          variant="contained"
-          component={Link}
-          to={editLink}
-        >
+        <Button color="primary" variant="contained" component={Link} to={editLink}>
           {t('feedbackView:editSurvey')}
         </Button>
 
-        <LanguageSelect
-          value={language}
-          onChange={onLanguageChange}
-          label={t('feedbackView:translationLanguage')}
-        />
+        <LanguageSelect value={language} onChange={onLanguageChange} label={t('feedbackView:translationLanguage')} />
       </Box>
     </FixedContainer>
   )

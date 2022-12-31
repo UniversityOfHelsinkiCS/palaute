@@ -1,4 +1,4 @@
-const getGeneralError = (error) => {
+const getGeneralError = error => {
   if (error.message.toLowerCase() === 'network error') {
     return 'common:fetchError'
   }
@@ -18,7 +18,7 @@ const getGeneralError = (error) => {
   return null
 }
 
-const getFeedbackTargetError = (error) => {
+const getFeedbackTargetError = error => {
   const res = error.response
 
   if (res.status === 403) {

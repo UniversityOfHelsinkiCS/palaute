@@ -24,10 +24,7 @@ const HidingModeButton = ({ value, onClick, count }) => {
 
   return (
     <Box mt="12rem">
-      <Tooltip
-        title={t('courseSummary:showHiddenOrganisations', { count })}
-        placement="top"
-      >
+      <Tooltip title={t('courseSummary:showHiddenOrganisations', { count })} placement="top">
         <ToggleButton value={value} onChange={onClick} color="primary">
           <Visibility />
         </ToggleButton>
@@ -41,8 +38,7 @@ const HiddenRows = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [hiddenRows, setHiddenRows] = React.useState([])
   const { customisation, mutation, isLoading } = useSummaryCustomisation()
-  const { organisations, isLoading: isOrganisationsLoading } =
-    useOrganisations()
+  const { organisations, isLoading: isOrganisationsLoading } = useOrganisations()
   const { t, i18n } = useTranslation()
 
   React.useEffect(() => {
@@ -55,21 +51,21 @@ const HiddenRows = () => {
     () =>
       !isOrganisationsLoading
         ? _.orderBy(
-            organisations.map((org) => ({
+            organisations.map(org => ({
               ...org,
               isHidden: hiddenRows.includes(org.code),
             })),
-            ['code'],
+            ['code']
           )
         : [],
-    [organisations, hiddenRows],
+    [organisations, hiddenRows]
   )
 
   if (isLoading || isOrganisationsLoading) return <Box />
 
   const count = hiddenRows?.length || 0
 
-  const handleOpen = (target) => {
+  const handleOpen = target => {
     setAnchorEl(target)
     setIsHidingMode(true)
   }
@@ -79,7 +75,7 @@ const HiddenRows = () => {
     setIsHidingMode(false)
   }
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     if (isHidingMode) {
       handleClose()
     } else {
@@ -99,9 +95,9 @@ const HiddenRows = () => {
     setHiddenRows([])
   }
 
-  const toggleHidden = (code) => {
+  const toggleHidden = code => {
     if (hiddenRows.includes(code)) {
-      setHiddenRows(hiddenRows.filter((c) => c !== code))
+      setHiddenRows(hiddenRows.filter(c => c !== code))
     } else {
       setHiddenRows(hiddenRows.concat(code))
     }
@@ -114,11 +110,7 @@ const HiddenRows = () => {
 
   return (
     <>
-      <HidingModeButton
-        value={isHidingMode}
-        onClick={handleClick}
-        count={count}
-      />
+      <HidingModeButton value={isHidingMode} onClick={handleClick} count={count} />
       <Popover
         id={isHidingMode ? 'hidden-rows-popover' : undefined}
         open={isHidingMode}
@@ -140,16 +132,9 @@ const HiddenRows = () => {
             zIndex={10}
             bgcolor="#ffffff"
           >
-            <Typography fontWeight={500}>
-              {t('courseSummary:showHiddenOrganisations', { count })}
-            </Typography>
+            <Typography fontWeight={500}>{t('courseSummary:showHiddenOrganisations', { count })}</Typography>
             <Box mr="auto" />
-            <TooltipButton
-              onClick={handleClear}
-              variant="outlined"
-              tooltip={t('common:clearSelection')}
-              always
-            >
+            <TooltipButton onClick={handleClear} variant="outlined" tooltip={t('common:clearSelection')} always>
               <ClearAll fontSize="small" />
             </TooltipButton>
             <Box mr="1rem" />
@@ -165,17 +150,13 @@ const HiddenRows = () => {
             </TooltipButton>
           </Box>
           <Box px="1rem">
-            <Typography
-              variant="subtitle1"
-              color="textSecondary"
-              textAlign="left"
-            >
+            <Typography variant="subtitle1" color="textSecondary" textAlign="left">
               {t('courseSummary:hidingInfo')}
             </Typography>
           </Box>
           <Box>
             <List>
-              {sortedOrganisations.map((org) => (
+              {sortedOrganisations.map(org => (
                 <ListItem disablePadding key={org.code}>
                   <ListItemButton onClick={() => toggleHidden(org.code)}>
                     <ListItemText
@@ -184,13 +165,7 @@ const HiddenRows = () => {
                       }}
                       primary={getLanguageValue(org.name, i18n.language)}
                     />
-                    <ListItemIcon>
-                      {org.isHidden ? (
-                        <VisibilityOff color="disabled" />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </ListItemIcon>
+                    <ListItemIcon>{org.isHidden ? <VisibilityOff color="disabled" /> : <Visibility />}</ListItemIcon>
                   </ListItemButton>
                 </ListItem>
               ))}

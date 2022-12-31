@@ -13,7 +13,7 @@ const SingleChoicePreview = ({ question, language }) => {
   return (
     <PreviewBase label={label} description={description} required={required}>
       <RadioGroup>
-        {options.map((option) => (
+        {options.map(option => (
           <FormControlLabel
             value={option.id}
             control={<Radio color="primary" />}
