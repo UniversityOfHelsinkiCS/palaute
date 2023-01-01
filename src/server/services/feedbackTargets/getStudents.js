@@ -45,7 +45,7 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
 }
 
 const getStudents = async ({ feedbackTargetId, user, isAdmin }) => {
-  const feedbackTarget = await getFeedbackTarget(feedbackTargetId, user.id)
+  const feedbackTarget = await getFeedbackTarget({ feedbackTargetId, user })
   if (!feedbackTarget) ApplicationError.NotFound()
 
   const access = await getAccess({

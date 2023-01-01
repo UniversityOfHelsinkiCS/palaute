@@ -1,12 +1,12 @@
 const { FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 
-const getFeedbackTarget = (id, userId) =>
-  FeedbackTarget.findByPk(id, {
+const getFeedbackTarget = ({ feedbackTargetId, user }) =>
+  FeedbackTarget.findByPk(feedbackTargetId, {
     include: [
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
-        where: { userId },
+        where: { userId: user.id },
         limit: 1,
         required: false,
       },

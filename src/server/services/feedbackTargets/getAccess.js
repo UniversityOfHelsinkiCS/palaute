@@ -34,7 +34,7 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget, isAdmin }) 
 }
 
 const getAccessForUserById = async ({ feedbackTargetId, user, isAdmin }) => {
-  const feedbackTarget = await getFeedbackTarget(user.id, feedbackTargetId)
+  const feedbackTarget = await getFeedbackTarget({ feedbackTargetId, user })
   if (!feedbackTarget) ApplicationError.NotFound('Feedback target not found')
 
   const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
