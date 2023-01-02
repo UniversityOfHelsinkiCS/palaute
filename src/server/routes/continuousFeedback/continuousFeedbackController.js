@@ -62,9 +62,9 @@ const submitFeedback = async (req, res) => {
 
   if (!continuousFeedbackEnabled) ApplicationError.Forbidden('Continuous feedback is disabled')
 
-  const continuousFeedbackCanBeGiven = (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
+  const continuousFeedbackIsOver = (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
 
-  if (!continuousFeedbackCanBeGiven) ApplicationError.Forbidden('Continuous feedback is closed')
+  if (continuousFeedbackIsOver) ApplicationError.Forbidden('Continuous feedback is closed')
 
   const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({
     where: {
