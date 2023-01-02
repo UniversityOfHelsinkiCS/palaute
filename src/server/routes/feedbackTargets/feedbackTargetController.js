@@ -29,6 +29,7 @@ const {
   updateFeedbackTarget,
   getStudentsForFeedbackTarget,
   getFeedbackTargetsForStudent,
+  getFeedbackTargetsForCourseRealisation,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -442,39 +443,14 @@ const getLogs = async (req, res) => {
   return res.send(feedbackTargetLogs)
 }
 
-const getFeedbackTargetsForCourseRealisation = async (req, res) => {
-  const { user, isAdmin } = req
+const getForCourseRealisation = async (req, res) => {
   const { id } = req.params
 
-  if (isAdmin) {
-    const feedbackTargets = await FeedbackTarget.findAll({
-      where: {
-        courseRealisationId: id,
-      },
-    })
-
-    return res.send(feedbackTargets)
-  }
-
-  const userTargets = await UserFeedbackTarget.findAll({
-    where: {
-      userId: user.id,
-    },
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-        required: true,
-        where: {
-          courseRealisationId: id,
-        },
-      },
-    ],
+  const feedbackTargets = await getFeedbackTargetsForCourseRealisation({
+    courseRealisationId: id,
   })
 
-  const targets = userTargets.map(({ feedbackTarget }) => feedbackTarget)
-
-  return res.send(targets)
+  return res.send(feedbackTargets)
 }
 
 const adRouter = Router()
@@ -482,7 +458,7 @@ const adRouter = Router()
 // @TODO Maybe refactor these 4 routes to use query params, eg. GET /targets?course-unit=TKT1001
 adRouter.get('/for-student', getForStudent)
 adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
-adRouter.get('/for-course-realisation/:id', getFeedbackTargetsForCourseRealisation)
+adRouter.get('/for-course-realisation/:id', getForCourseRealisation)
 adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
 
 adRouter.get('/:id', getOne)

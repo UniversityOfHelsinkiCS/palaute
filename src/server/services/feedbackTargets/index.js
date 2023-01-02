@@ -8,6 +8,7 @@ const { update } = require('./update')
 const { getStudents } = require('./getStudents')
 const { getForStudent } = require('./getForStudent')
 const { getAccessForUserById } = require('./getAccess')
+const { getForCourseRealisation } = require('./getForCourseRealisation')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -18,4 +19,5 @@ module.exports = {
   getStudentsForFeedbackTarget: getStudents,
   getFeedbackTargetsForStudent: getForStudent,
   getFeedbackTargetAccess: getAccessForUserById,
+  getFeedbackTargetsForCourseRealisation: getForCourseRealisation,
 }

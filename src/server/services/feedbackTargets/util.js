@@ -6,9 +6,9 @@ const getFeedbackTarget = ({ feedbackTargetId, user }) =>
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
-        where: { userId: user.id },
+        where: { userId: user.id, hidden: false },
         limit: 1,
-        required: false,
+        required: false, // If user enrolled/teacher, userfeedback is included. Otherwise not.
       },
       { model: CourseRealisation, as: 'courseRealisation' },
     ],
