@@ -31,6 +31,7 @@ const {
   deleteTeacher,
   getStudentTokensForFeedbackTarget,
   remindStudentsOnFeedback,
+  getFeedbackTargetsForCourseUnit,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -170,113 +171,26 @@ const getTargetsForCourseUnit = async (req, res) => {
   const { user } = req
 
   const {
-    courseRealisationStartDateAfter,
-    courseRealisationStartDateBefore,
-    courseRealisationEndDateAfter,
-    courseRealisationEndDateBefore,
+    courseRealisationStartDateAfter: startDateAfter,
+    courseRealisationStartDateBefore: startDateBefore,
+    courseRealisationEndDateAfter: endDateAfter,
+    courseRealisationEndDateBefore: endDateBefore,
     feedbackType,
     includeSurveys,
   } = req.query
 
-  const courseRealisationWhere = {
-    [Op.and]: [
-      courseRealisationStartDateAfter && {
-        startDate: {
-          [Op.gt]: new Date(courseRealisationStartDateAfter),
-        },
-      },
-      courseRealisationStartDateBefore && {
-        startDate: {
-          [Op.lt]: new Date(courseRealisationStartDateBefore),
-        },
-      },
-      courseRealisationEndDateAfter && {
-        endDate: {
-          [Op.gt]: new Date(courseRealisationEndDateAfter),
-        },
-      },
-      courseRealisationEndDateBefore && {
-        endDate: {
-          [Op.lt]: new Date(courseRealisationEndDateBefore),
-        },
-      },
-    ].filter(Boolean),
-  }
-
-  const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      [Op.and]: [
-        feedbackType && {
-          feedbackType,
-        },
-      ].filter(Boolean),
-    },
-    order: [[{ model: CourseRealisation, as: 'courseRealisation' }, 'startDate', 'DESC']],
-    include: [
-      {
-        model: UserFeedbackTarget.scope('teachers'),
-        as: 'userFeedbackTargets',
-        required: true,
-        where: {
-          userId: user.id,
-        },
-      },
-      {
-        model: UserFeedbackTarget.scope('students'),
-        as: 'students',
-        required: false,
-      },
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        required: true,
-        where: {
-          courseCode,
-        },
-      },
-      {
-        model: CourseRealisation,
-        as: 'courseRealisation',
-        required: true,
-        where: courseRealisationWhere,
-      },
-    ],
+  const feedbackTargets = await getFeedbackTargetsForCourseUnit({
+    user,
+    courseCode,
+    startDateAfter,
+    startDateBefore,
+    endDateAfter,
+    endDateBefore,
+    feedbackType,
+    includeSurveys,
   })
 
-  if (feedbackTargets.length === 0) {
-    return res.send([])
-  }
-
-  if (includeSurveys === 'true') {
-    for (const target of feedbackTargets) {
-      const surveys = await target.getSurveys()
-      target.populateSurveys(surveys)
-    }
-  }
-
-  const formattedFeedbackTargets = feedbackTargets
-    .map(target => ({
-      ..._.pick(target.toJSON(), [
-        'id',
-        'name',
-        'opensAt',
-        'closesAt',
-        'feedbackType',
-        'courseRealisation',
-        'courseUnit',
-        'feedbackResponse',
-        'continuousFeedbackEnabled',
-        'questions',
-        'surveys',
-        'feedbackCount',
-      ]),
-      studentCount: target.students.length,
-      feedbackResponseGiven: target.feedbackResponse?.length > 3,
-      feedbackResponseSent: target.feedbackResponseEmailSent,
-    }))
-    .filter(fbt => fbt.feedbackCount > 0 || Date.parse(fbt.courseRealisation.endDate) > new Date('2021-09-01'))
-
-  return res.send(formattedFeedbackTargets)
+  return res.send(feedbackTargets)
 }
 
 const getFeedbacks = async (req, res) => {
