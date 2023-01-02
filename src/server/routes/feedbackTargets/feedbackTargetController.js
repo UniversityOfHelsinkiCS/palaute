@@ -30,6 +30,7 @@ const {
   getFeedbackTargetLogs,
   deleteTeacher,
   getStudentTokensForFeedbackTarget,
+  remindStudentsOnFeedback,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -316,27 +317,20 @@ const putFeedbackResponse = async (req, res) => {
   return res.send(updatedFeedbackTarget)
 }
 
-const remindStudentsOnFeedback = async (req, res) => {
+const sendReminderOnFeedback = async (req, res) => {
+  const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
+  const { data: reminderText } = req.body.data
 
-  let relevantFeedbackTarget
-  if (req.isAdmin) {
-    relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  } else {
-    const feedbackTargetsUserIsTeacherTo = await req.user.feedbackTargetsHasTeacherAccessTo()
-
-    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(target => target.id === feedbackTargetId)
-  }
-
-  if (!relevantFeedbackTarget)
-    throw new ApplicationError(`No feedback target found with id ${feedbackTargetId} for user`, 404)
-
-  const { data: reminder } = req.body.data
-
-  await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminder)
+  const feedbackTarget = await remindStudentsOnFeedback({
+    feedbackTargetId,
+    reminderText,
+    user,
+    isAdmin,
+  })
 
   return res.send({
-    feedbackReminderLastSentAt: relevantFeedbackTarget.feedbackReminderLastSentAt,
+    feedbackReminderLastSentAt: feedbackTarget.feedbackReminderLastSentAt,
   })
 }
 
@@ -422,7 +416,7 @@ adRouter.get('/:id/feedbacks', getFeedbacks)
 adRouter.get('/:id/users', getStudentTokens)
 adRouter.get('/:id/logs', getLogs)
 adRouter.put('/:id/response', putFeedbackResponse)
-adRouter.put('/:id/remind-students', remindStudentsOnFeedback)
+adRouter.put('/:id/remind-students', sendReminderOnFeedback)
 adRouter.get('/:id/students-with-feedback', getStudentsWithFeedback)
 adRouter.put('/:id/open-immediately', openFeedbackImmediately)
 adRouter.delete('/:id/user-feedback-targets/:userId', deleteUserFeedbackTarget)

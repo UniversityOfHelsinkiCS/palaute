@@ -12,6 +12,7 @@ const { getForCourseRealisation } = require('./getForCourseRealisation')
 const { getLogs } = require('./getLogs')
 const { deleteTeacher } = require('./deleteTeacher')
 const { getStudentTokens } = require('./getStudentTokens')
+const { remindStudentsOnFeedback } = require('./remindStudentsOnFeedback')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -26,4 +27,5 @@ module.exports = {
   getFeedbackTargetsForCourseRealisation: getForCourseRealisation,
   getFeedbackTargetLogs: getLogs,
   getStudentTokensForFeedbackTarget: getStudentTokens,
+  remindStudentsOnFeedback,
 }
