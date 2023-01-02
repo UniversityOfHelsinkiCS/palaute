@@ -1,9 +1,8 @@
 const _ = require('lodash')
 const { startOfDay, endOfDay } = require('date-fns')
 const { parseFromTimeZone } = require('date-fns-timezone')
-const { getFeedbackTarget } = require('./util')
+const { getFeedbackTargetContext } = require('./util')
 const { ApplicationError } = require('../../util/customErrors')
-const { getAccess } = require('./getAccess')
 const { Survey, Question } = require('../../models')
 const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
 
@@ -57,7 +56,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   for (const question of questions) {
     let updatedQuestion
     if (question.id) {
-      const [_, updatedQuestions] = await Question.update(
+      const [, updatedQuestions] = await Question.update(
         {
           ...question,
         },
@@ -106,13 +105,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 }
 
 const update = async ({ feedbackTargetId, user, body }) => {
-  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
-
-  const access = await getAccess({
-    userFeedbackTarget,
-    user,
-    feedbackTarget,
-  })
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access.canUpdate()) {
     ApplicationError.Forbidden('No rights to update feedback target')

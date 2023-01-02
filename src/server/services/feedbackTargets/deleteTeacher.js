@@ -1,28 +1,28 @@
 const { UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
-const { getAccessForUserById } = require('./getAccess')
+const { getFeedbackTargetContext } = require('./getAccess')
 
 const deleteTeacher = async ({ feedbackTargetId, teacherId, user }) => {
-  const access = await getAccessForUserById({
+  const { access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
   })
 
   if (!access?.canDeleteTeacher()) ApplicationError.Forbidden()
 
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
+  const userFeedbackTargetToDelete = await UserFeedbackTarget.findOne({
     where: {
       feedbackTargetId,
       userId: teacherId,
     },
   })
 
-  if (!userFeedbackTarget) {
+  if (!userFeedbackTargetToDelete) {
     ApplicationError.NotFound(`Teacher ${teacherId} not found on target ${feedbackTargetId}`, 404)
   }
 
-  await userFeedbackTarget.destroy()
+  await userFeedbackTargetToDelete.destroy()
 
   cache.invalidate(feedbackTargetId)
 }

@@ -3,8 +3,7 @@ const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
-const { getAccess } = require('./getAccess')
-const { getFeedbackTarget } = require('./util')
+const { getFeedbackTargetContext } = require('./util')
 
 const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   const organisationRows = await sequelize.query(
@@ -45,13 +44,7 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
 }
 
 const getStudents = async ({ feedbackTargetId, user }) => {
-  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
-
-  const access = await getAccess({
-    userFeedbackTarget,
-    feedbackTarget,
-    user,
-  })
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canSeeStudents()) {
     ApplicationError.Forbidden()

@@ -1,7 +1,14 @@
 const { FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const { getAccess } = require('./getAccess')
 
-const getFeedbackTarget = async ({ feedbackTargetId, user }) => {
+/**
+ * Fetch fbt, ufbt and compute access object.
+ * Useful for all things that consider an action on a single feedback target,
+ * where action is either viewing or mutating.
+ * Throws 404 when id does not match anything.
+ */
+const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
     where: { hidden: false },
     include: [
@@ -18,12 +25,21 @@ const getFeedbackTarget = async ({ feedbackTargetId, user }) => {
 
   if (!feedbackTarget) ApplicationError.NotFound(`FeedbackTarget with id ${feedbackTargetId} not found`)
 
+  const userFeedbackTarget = feedbackTarget.userFeedbackTargets ? feedbackTarget.userFeedbackTargets[0] : null
+
+  const access = await getAccess({
+    userFeedbackTarget,
+    feedbackTarget,
+    user,
+  })
+
   return {
     feedbackTarget,
-    userFeedbackTarget: feedbackTarget.userFeedbackTargets ? feedbackTarget.userFeedbackTargets[0] : null,
+    userFeedbackTarget,
+    access,
   }
 }
 
 module.exports = {
-  getFeedbackTarget,
+  getFeedbackTargetContext,
 }

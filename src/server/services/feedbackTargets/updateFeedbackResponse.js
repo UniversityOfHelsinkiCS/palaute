@@ -1,19 +1,12 @@
 const { differenceInMonths } = require('date-fns')
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
-const { getAccess } = require('./getAccess')
-const { getFeedbackTarget } = require('./util')
+const { getFeedbackTargetContext } = require('./util')
 
 const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
 const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
-  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
-
-  const access = await getAccess({
-    userFeedbackTarget,
-    user,
-    feedbackTarget,
-  })
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access.canUpdateResponse()) {
     ApplicationError.Forbidden('No rights to update feedback response')

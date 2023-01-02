@@ -1,4 +1,4 @@
-// Actions 'enum'
+// Actions 'enum'. Cant think of a better way to do this currently
 const UPDATE = 0
 const UPDATE_RESPONSE = 1
 const ALL_FEEDBACKS = 2
@@ -11,6 +11,9 @@ const LOGS = 8
 const DELETE_TEACHER = 9
 const TOKENS = 9
 
+/**
+ * Describes what actions are allowed, given some access status
+ */
 const RIGHTS = {
   ADMIN: [
     UPDATE,
@@ -44,7 +47,10 @@ const RIGHTS = {
 // peace of mind
 Object.freeze(RIGHTS)
 
-const hasRight = (accessStatus, right) => (RIGHTS[accessStatus] ?? []).includes(right)
+/**
+ * Checks whether given access status allows given action
+ */
+const hasRight = (accessStatus, action) => (RIGHTS[accessStatus] ?? []).includes(action)
 
 class Access {
   constructor(accessStatus) {
