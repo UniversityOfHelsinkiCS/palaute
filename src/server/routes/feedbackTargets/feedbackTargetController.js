@@ -21,7 +21,10 @@ const {
   getFeedbackTargetsForOrganisation,
 } = require('../../services/feedbackTargets')
 
-const getForOrganisation = async (req, res) => {
+const adRouter = Router()
+const noadRouter = Router()
+
+adRouter.get('/for-organisation/:code', async (req, res) => {
   const { user } = req
   const { code } = req.params
   const { startDate, endDate } = req.query
@@ -35,7 +38,7 @@ const getForOrganisation = async (req, res) => {
   })
 
   return res.send(feedbackTargets)
-}
+})
 
 const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
@@ -52,8 +55,10 @@ const getOne = async (req, res) => {
     throw error
   }
 }
+adRouter.get('/:id', getOne)
+noadRouter.get('/:id', getOne)
 
-const update = async (req, res) => {
+adRouter.put('/:id', async (req, res) => {
   const { isAdmin, user } = req
   const feedbackTargetId = Number(req.params?.id)
 
@@ -67,15 +72,15 @@ const update = async (req, res) => {
   })
 
   return res.send(updatedFeedbackTarget)
-}
+})
 
-const getForStudent = async (req, res) => {
+adRouter.get('/for-student', async (req, res) => {
   const { user } = req
   const feedbackTargets = await getFeedbackTargetsForStudent({ user })
   return res.send(feedbackTargets)
-}
+})
 
-const getTargetsForCourseUnit = async (req, res) => {
+adRouter.get('/for-course-unit/:code', async (req, res) => {
   const courseCode = req.params.code
   const { user } = req
 
@@ -100,7 +105,7 @@ const getTargetsForCourseUnit = async (req, res) => {
   })
 
   return res.send(feedbackTargets)
-}
+})
 
 const getFeedbacks = async (req, res) => {
   const { user, isAdmin } = req
@@ -110,8 +115,10 @@ const getFeedbacks = async (req, res) => {
 
   return res.send(feedbackData)
 }
+adRouter.get('/:id/feedbacks', getFeedbacks)
+noadRouter.get('/:id/feedbacks', getFeedbacks)
 
-const getStudentsWithFeedback = async (req, res) => {
+adRouter.get('/:id/students-with-feedback', async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
 
@@ -122,9 +129,9 @@ const getStudentsWithFeedback = async (req, res) => {
   })
 
   return res.send(students)
-}
+})
 
-const putFeedbackResponse = async (req, res) => {
+adRouter.put('/:id/response', async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   const { feedbackResponse, feedbackResponseEmailSent } = req.body.data
   const { user, isAdmin } = req
@@ -138,9 +145,9 @@ const putFeedbackResponse = async (req, res) => {
   })
 
   return res.send(updatedFeedbackTarget)
-}
+})
 
-const sendReminderOnFeedback = async (req, res) => {
+adRouter.put('/:id/remind-students', async (req, res) => {
   const { user, isAdmin } = req
   const feedbackTargetId = Number(req.params.id)
   const { data: reminderText } = req.body.data
@@ -155,9 +162,9 @@ const sendReminderOnFeedback = async (req, res) => {
   return res.send({
     feedbackReminderLastSentAt: feedbackTarget.feedbackReminderLastSentAt,
   })
-}
+})
 
-const openFeedbackImmediately = async (req, res) => {
+adRouter.put('/:id/open-immediately', async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   const { user, isAdmin, body } = req
 
@@ -175,9 +182,9 @@ const openFeedbackImmediately = async (req, res) => {
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
   return res.sendStatus(200)
-}
+})
 
-const getStudentTokens = async (req, res) => {
+adRouter.get('/:id/users', async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
 
   const { user, isAdmin } = req
@@ -189,9 +196,9 @@ const getStudentTokens = async (req, res) => {
   })
 
   return res.send(users)
-}
+})
 
-const deleteUserFeedbackTarget = async (req, res) => {
+adRouter.delete('/:id/user-feedback-targets/:userId', async (req, res) => {
   const { user, isAdmin } = req
   const { userId: teacherId } = req.params
   const feedbackTargetId = Number(req.params.id)
@@ -204,18 +211,18 @@ const deleteUserFeedbackTarget = async (req, res) => {
   })
 
   return res.sendStatus(200)
-}
+})
 
-const getLogs = async (req, res) => {
+adRouter.get('/:id/logs', async (req, res) => {
   const { user, isAdmin } = req
   const { id: feedbackTargetId } = req.params
 
   const logs = await getFeedbackTargetLogs({ feedbackTargetId, user, isAdmin })
 
   return res.send(logs)
-}
+})
 
-const getForCourseRealisation = async (req, res) => {
+adRouter.get('/for-course-realisation/:id', async (req, res) => {
   const { id: courseRealisationId } = req.params
 
   const feedbackTargets = await getFeedbackTargetsForCourseRealisation({
@@ -223,32 +230,9 @@ const getForCourseRealisation = async (req, res) => {
   })
 
   return res.send(feedbackTargets)
-}
+})
 
-const adRouter = Router()
-
-// @TODO Maybe refactor these 4 routes to use query params, eg. GET /targets?course-unit=TKT1001
-adRouter.get('/for-student', getForStudent)
-adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
-adRouter.get('/for-course-realisation/:id', getForCourseRealisation)
-adRouter.get('/for-organisation/:code', getForOrganisation)
-
-adRouter.get('/:id', getOne)
-adRouter.put('/:id', update)
-adRouter.get('/:id/feedbacks', getFeedbacks)
-adRouter.get('/:id/users', getStudentTokens)
-adRouter.get('/:id/logs', getLogs)
-adRouter.put('/:id/response', putFeedbackResponse)
-adRouter.put('/:id/remind-students', sendReminderOnFeedback)
-adRouter.get('/:id/students-with-feedback', getStudentsWithFeedback)
-adRouter.put('/:id/open-immediately', openFeedbackImmediately)
-adRouter.delete('/:id/user-feedback-targets/:userId', deleteUserFeedbackTarget)
 adRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
-
-const noadRouter = Router()
-
-noadRouter.get('/:id', getOne)
-noadRouter.get('/:id/feedbacks', getFeedbacks)
 noadRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 
 module.exports = {
