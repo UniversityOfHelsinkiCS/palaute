@@ -30,6 +30,7 @@ const {
   getFeedbackTargetsForStudent,
   getFeedbackTargetsForCourseRealisation,
   getFeedbackTargetLogs,
+  deleteTeacher,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -393,27 +394,15 @@ const getUsers = async (req, res) => {
 }
 
 const deleteUserFeedbackTarget = async (req, res) => {
-  const { isAdmin } = req
+  const { user, isAdmin } = req
+  const { id: feedbackTargetId, userId: teacherId } = req.params
 
-  if (!isAdmin) {
-    throw new ApplicationError('User is not authorized', 403)
-  }
-
-  const feedbackTargetId = Number(req.params.id)
-  const { userId } = req.params
-
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      feedbackTargetId,
-      userId,
-    },
+  await deleteTeacher({
+    feedbackTargetId,
+    teacherId,
+    user,
+    isAdmin,
   })
-
-  if (!userFeedbackTarget) {
-    throw new ApplicationError('User feedback target is not found', 404)
-  }
-
-  await userFeedbackTarget.destroy()
 
   return res.sendStatus(200)
 }

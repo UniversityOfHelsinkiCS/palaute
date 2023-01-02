@@ -10,6 +10,7 @@ const { getForStudent } = require('./getForStudent')
 const { getAccessForUserById } = require('./getAccess')
 const { getForCourseRealisation } = require('./getForCourseRealisation')
 const { getLogs } = require('./getLogs')
+const { deleteTeacher } = require('./deleteTeacher')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -17,6 +18,7 @@ module.exports = {
   cacheFeedbackTargetById: getAdditionalDataFromCacheOrDb,
   updateFeedbackResponse,
   updateFeedbackTarget: update,
+  deleteTeacher,
   getStudentsForFeedbackTarget: getStudents,
   getFeedbackTargetsForStudent: getForStudent,
   getFeedbackTargetAccess: getAccessForUserById,

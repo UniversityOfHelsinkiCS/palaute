@@ -8,6 +8,7 @@ const CONTINUOUS_FEEDBACKS = 5
 const CONTINUOUS_FEEDBACK_RESPONSE = 6
 const GIVE_CONTINUOUS_FEEDBACK = 7
 const LOGS = 8
+const DELETE_TEACHER = 9
 
 const RIGHTS = {
   ADMIN: [
@@ -20,6 +21,7 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACK_RESPONSE,
     GIVE_CONTINUOUS_FEEDBACK,
     LOGS,
+    DELETE_TEACHER,
   ],
   ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
@@ -81,6 +83,10 @@ class Access {
 
   canSeeLogs() {
     return hasRight(this.accessStatus, LOGS)
+  }
+
+  canDeleteTeacher() {
+    return hasRight(this.accessStatus, DELETE_TEACHER)
   }
 
   // Role enum
