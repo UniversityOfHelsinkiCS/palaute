@@ -222,6 +222,7 @@ export default {
     notEnoughFeedbacksInfo: 'Förfrågans resultat visas inte på grund av för få responser',
     onlyForEnrolledInfo:
       'Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare',
+    // teacherAccessInfo: 'Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.',
     studentsWithFeedbackHeading: 'Studeranden som givit respons',
     responseHeading: 'Lärarens svar på responsen',
     giveResponse: 'Ge svar på responsen',

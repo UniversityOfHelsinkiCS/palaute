@@ -219,6 +219,8 @@ export default {
     notEnoughFeedbacksInfo: 'Survey results are not shown because no feedback has been given yet',
     onlyForEnrolledInfo:
       'Survey results are not shown because the teacher has set feedback visible only for enrolled students',
+    teacherAccessInfo:
+      'You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.',
     studentsWithFeedbackHeading: 'Students who have given feedback',
     responseHeading: "Teacher's counter feedback",
     giveResponse: 'Give counter feedback',

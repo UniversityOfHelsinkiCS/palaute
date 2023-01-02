@@ -37,6 +37,12 @@ const OnlyForEnrolled = ({ t }) => (
   </Box>
 )
 
+const OnlyTeacherAccess = ({ t }) => (
+  <Box mt={2}>
+    <Alert severity="info">{t('feedbackTargetResults:teacherAccessInfo')}</Alert>
+  </Box>
+)
+
 const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
@@ -98,6 +104,8 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
           <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={ref} />
         )}
       </Box>
+
+      {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
 
       <Box ref={ref}>
         {feedbackHasStarted && !isOpen && enoughFeedbacks && (

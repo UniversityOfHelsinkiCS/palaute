@@ -32,7 +32,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
-    marginTop: 10,
     '@media print': {
       display: 'none',
     },
