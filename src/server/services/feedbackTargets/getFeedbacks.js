@@ -62,7 +62,7 @@ const getFeedbacks = async (id, user, isAdmin) => {
     isAdmin,
   })
 
-  if (!access?.canSeeAllFeedbacks() && feedbackVisibility !== 'ALL') {
+  if (!access?.canSeePublicFeedbacks() && feedbackVisibility !== 'ALL') {
     return {
       feedbacks: [],
       feedbackVisible: false,
