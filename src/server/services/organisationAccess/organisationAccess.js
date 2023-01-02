@@ -17,11 +17,11 @@ const getAccessToAll = async () => {
 const getIAMAccessFromJami = async (user, attempt = 1) => {
   if (user.iamGroups.length === 0) return {}
 
-  const { userId, iamGroups } = user
+  const { id, iamGroups } = user
 
   try {
     const { data: iamAccess } = await jamiClient.post('/', {
-      userId,
+      userId: id,
       iamGroups,
     })
 
