@@ -1,8 +1,8 @@
 const { Access } = require('./Access')
 const { getFeedbackTarget } = require('./util')
 
-const getAccess = async ({ userFeedbackTarget, user, feedbackTarget, isAdmin }) => {
-  if (isAdmin) return Access.ADMIN
+const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
+  if (user.dataValues.isAdmin) return Access.ADMIN
 
   const accessStatus = userFeedbackTarget?.accessStatus
   const { courseUnitId, courseRealisation } = feedbackTarget
@@ -32,14 +32,12 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget, isAdmin }) 
   return Access.ORGANISATION_READ
 }
 
-const getAccessForUserById = async ({ feedbackTargetId, user, isAdmin }) => {
+const getAccessForUserById = async ({ feedbackTargetId, user }) => {
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
-
   const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
-    isAdmin,
   })
 
   return access

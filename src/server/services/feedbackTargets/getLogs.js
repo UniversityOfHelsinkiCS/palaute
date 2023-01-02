@@ -3,13 +3,13 @@ const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { getFeedbackTarget } = require('./util')
 
-const getLogs = async ({ feedbackTargetId, user, isAdmin }) => {
+const getLogs = async ({ feedbackTargetId, user }) => {
   const { feedbackTarget, userFeedbackTarget } = getFeedbackTarget({
     feedbackTargetId,
     user,
   })
 
-  const access = await getAccess({ userFeedbackTarget, user, feedbackTarget, isAdmin })
+  const access = await getAccess({ userFeedbackTarget, user, feedbackTarget })
 
   if (!access.canSeeLogs()) {
     ApplicationError.Forbidden()

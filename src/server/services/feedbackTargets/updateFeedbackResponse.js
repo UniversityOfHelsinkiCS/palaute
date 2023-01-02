@@ -6,14 +6,13 @@ const { getFeedbackTarget } = require('./util')
 
 const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
-const updateFeedbackResponse = async ({ feedbackTargetId, user, isAdmin, responseText, sendEmail }) => {
+const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
   const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
-    isAdmin,
   })
 
   if (!access.canUpdateResponse()) {

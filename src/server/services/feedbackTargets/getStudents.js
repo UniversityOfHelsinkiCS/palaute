@@ -44,21 +44,20 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   return studentListVisible ?? false
 }
 
-const getStudents = async ({ feedbackTargetId, user, isAdmin }) => {
+const getStudents = async ({ feedbackTargetId, user }) => {
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
   const access = await getAccess({
     userFeedbackTarget,
     feedbackTarget,
     user,
-    isAdmin,
   })
 
   if (!access?.canSeeStudents()) {
     ApplicationError.Forbidden()
   }
 
-  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId, isAdmin)
+  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId, user.dataValues.isAdmin)
 
   if (!studentListVisible) {
     return []

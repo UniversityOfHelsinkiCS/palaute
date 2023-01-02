@@ -2,9 +2,9 @@ const { mailer } = require('../../mailer')
 const { FeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
-const remindStudentsOnFeedback = async ({ feedbackTargetId, reminderText, user, isAdmin }) => {
+const remindStudentsOnFeedback = async ({ feedbackTargetId, reminderText, user }) => {
   let relevantFeedbackTarget
-  if (isAdmin) {
+  if (user.dataValues.isAdmin) {
     relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
   } else {
     const feedbackTargetsUserIsTeacherTo = await user.feedbackTargetsHasTeacherAccessTo()

@@ -1,10 +1,11 @@
-const { Model, STRING, Op, BOOLEAN, ARRAY, DATE, QueryTypes } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, ARRAY, DATE, QueryTypes, VIRTUAL } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
 const Organisation = require('./organisation')
 const { getOrganisationAccess } = require('../services/organisationAccess')
 const UserFeedbackTarget = require('./userFeedbackTarget')
+const { ADMINS } = require('../../config')
 
 class User extends Model {
   async getOrganisationAccess() {
@@ -158,6 +159,12 @@ User.init(
     lastLoggedIn: {
       type: DATE,
       allowNull: true,
+    },
+    isAdmin: {
+      type: VIRTUAL,
+      get() {
+        ADMINS.includes(this.username)
+      },
     },
   },
   {

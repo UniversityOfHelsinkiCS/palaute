@@ -5,11 +5,10 @@ const { JWT_KEY } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessForUserById } = require('./getAccess')
 
-const getStudentTokens = async ({ feedbackTargetId, user, isAdmin }) => {
+const getStudentTokens = async ({ feedbackTargetId, user }) => {
   const access = await getAccessForUserById({
     feedbackTargetId,
     user,
-    isAdmin,
   })
 
   if (!access?.canSeeTokens()) ApplicationError.Forbidden()

@@ -113,7 +113,7 @@ const getFeedbackTarget = feedbackTargetId =>
     include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })
 
-const getOneForUser = async (id, user, isAdmin) => {
+const getOneForUser = async (id, user) => {
   const [additionalData, userFeedbackTarget, feedbackTarget] = await Promise.all([
     getAdditionalDataFromCacheOrDb(id),
     getUserFeedbackTarget(user.id, id),
@@ -128,7 +128,6 @@ const getOneForUser = async (id, user, isAdmin) => {
     userFeedbackTarget,
     user,
     feedbackTarget,
-    isAdmin,
   })
   if (!access) {
     throw new ApplicationError('No access', 403)

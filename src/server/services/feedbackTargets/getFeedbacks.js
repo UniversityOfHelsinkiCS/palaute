@@ -44,7 +44,7 @@ const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
     data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
 
-const getFeedbacks = async (id, user, isAdmin) => {
+const getFeedbacks = async (id, user) => {
   const [feedbackTarget, additionalData] = await Promise.all([
     getFeedbackTarget(id, user.id),
     getAdditionalDataFromCacheOrDb(id),
@@ -59,7 +59,6 @@ const getFeedbacks = async (id, user, isAdmin) => {
     userFeedbackTarget,
     user,
     feedbackTarget,
-    isAdmin,
   })
 
   if (!access?.canSeePublicFeedbacks() && feedbackVisibility !== 'ALL') {

@@ -105,14 +105,13 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
   return updates
 }
 
-const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
+const update = async ({ feedbackTargetId, user, body }) => {
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
   const access = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
-    isAdmin,
   })
 
   if (!access.canUpdate()) {
