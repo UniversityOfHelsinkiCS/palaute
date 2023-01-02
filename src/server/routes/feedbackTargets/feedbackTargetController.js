@@ -1,19 +1,5 @@
-const _ = require('lodash')
-const { Op } = require('sequelize')
-const { addMonths, getYear, subDays, getDate, compareAsc } = require('date-fns')
-
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
-
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseUnit,
-  CourseRealisation,
-  User,
-  Organisation,
-  Tag,
-} = require('../../models')
 
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
@@ -32,100 +18,23 @@ const {
   getStudentTokensForFeedbackTarget,
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit,
+  getFeedbackTargetsForOrganisation,
 } = require('../../services/feedbackTargets')
 
-const getFeedbackTargetsForOrganisation = async (req, res) => {
+const getForOrganisation = async (req, res) => {
+  const { user } = req
   const { code } = req.params
   const { startDate, endDate } = req.query
   if (!code) throw new ApplicationError('Missing code', 400)
-  const start = startDate ? new Date(startDate) : new Date()
-  const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
-  const feedbackTargets = await FeedbackTarget.findAll({
-    attributes: ['id', 'name', 'feedbackCount', 'opensAt', 'closesAt', 'feedbackResponseEmailSent'],
-    include: [
-      {
-        model: CourseRealisation,
-        as: 'courseRealisation',
-        attributes: ['id', 'name', 'startDate', 'endDate', 'isMoocCourse', 'teachingLanguages'],
-        required: true,
-        include: [
-          {
-            model: Organisation,
-            as: 'organisations',
-            attributes: [],
-            required: true,
-            where: {
-              code,
-            },
-          },
-          {
-            model: Tag,
-            as: 'tags',
-          },
-        ],
-        where: {
-          startDate: {
-            [Op.gte]: start,
-          },
-          endDate: {
-            [Op.lte]: end,
-          },
-        },
-      },
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        attributes: ['id', 'name', 'courseCode'],
-      },
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        attributes: ['accessStatus'],
-        include: {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'firstName', 'lastName', 'email'],
-        },
-      },
-    ],
+  const feedbackTargets = await getFeedbackTargetsForOrganisation({
+    organisationCode: code,
+    startDate,
+    endDate,
+    user,
   })
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.courseRealisation.id)
-
-  const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
-    .map(fbt => fbt.toJSON())
-    .map(fbt => {
-      const studentCount = _.sumBy(fbt.userFeedbackTargets, ufbt => (ufbt.accessStatus === 'STUDENT' ? 1 : 0))
-      const teachers = fbt.userFeedbackTargets
-        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' || ufbt.accessStatus === 'TEACHER')
-        .map(ufbt => ufbt.user)
-
-      delete fbt.userFeedbackTargets
-      return {
-        ...fbt,
-        startDate: fbt.courseRealisation.startDate,
-        studentCount,
-        teachers,
-      }
-    })
-
-  const dateGrouped = Object.entries(_.groupBy(feedbackTargetsWithStudentCounts, fbt => fbt.startDate)).sort(
-    ([a], [b]) => compareAsc(Date.parse(a), Date.parse(b))
-  )
-
-  const monthGrouped = Object.entries(
-    _.groupBy(dateGrouped, ([date]) => {
-      const d = Date.parse(date)
-      return subDays(d, getDate(d) - 1) // first day of month
-    })
-  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
-
-  const yearGrouped = Object.entries(_.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date)))).sort(([a], [b]) =>
-    a.localeCompare(b)
-  )
-
-  return res.send(yearGrouped)
+  return res.send(feedbackTargets)
 }
 
 const getOne = async (req, res) => {
@@ -322,7 +231,7 @@ const adRouter = Router()
 adRouter.get('/for-student', getForStudent)
 adRouter.get('/for-course-unit/:code', getTargetsForCourseUnit)
 adRouter.get('/for-course-realisation/:id', getForCourseRealisation)
-adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
+adRouter.get('/for-organisation/:code', getForOrganisation)
 
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)

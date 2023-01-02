@@ -14,6 +14,7 @@ const { deleteTeacher } = require('./deleteTeacher')
 const { getStudentTokens } = require('./getStudentTokens')
 const { remindStudentsOnFeedback } = require('./remindStudentsOnFeedback')
 const { getForCourseUnit } = require('./getForCourseUnit')
+const { getByOrganisation } = require('./getByOrganisation')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -30,4 +31,5 @@ module.exports = {
   getStudentTokensForFeedbackTarget: getStudentTokens,
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit: getForCourseUnit,
+  getFeedbackTargetsForOrganisation: getByOrganisation,
 }
