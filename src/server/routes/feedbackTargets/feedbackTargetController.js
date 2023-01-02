@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
-const jwt = require('jsonwebtoken')
 const { addMonths, getYear, subDays, getDate, compareAsc } = require('date-fns')
 
 const { Router } = require('express')
@@ -18,7 +17,6 @@ const {
 
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
-const { JWT_KEY } = require('../../util/config')
 const updateEnrolmentNotification = require('./updateEnrolmentNotification')
 const { getEnrolmentNotification } = require('../../services/enrolmentNotices/enrolmentNotices')
 const {
@@ -31,6 +29,7 @@ const {
   getFeedbackTargetsForCourseRealisation,
   getFeedbackTargetLogs,
   deleteTeacher,
+  getStudentTokensForFeedbackTarget,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -361,34 +360,16 @@ const openFeedbackImmediately = async (req, res) => {
   return res.sendStatus(200)
 }
 
-const getUsers = async (req, res) => {
+const getStudentTokens = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
 
-  const { isAdmin } = req
+  const { user, isAdmin } = req
 
-  if (!isAdmin) {
-    throw new ApplicationError('User is not authorized', 403)
-  }
-
-  const userFeedbackTargets = await UserFeedbackTarget.findAll({
-    where: {
-      feedbackTargetId,
-    },
-    include: [
-      {
-        model: User,
-        as: 'user',
-        required: true,
-      },
-    ],
+  const users = await getStudentTokensForFeedbackTarget({
+    feedbackTargetId,
+    user,
+    isAdmin,
   })
-
-  const users = userFeedbackTargets.map(({ user }) => ({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    studentNumber: user.studentNumber,
-    token: jwt.sign({ username: user.username }, JWT_KEY),
-  }))
 
   return res.send(users)
 }
@@ -438,7 +419,7 @@ adRouter.get('/for-organisation/:code', getFeedbackTargetsForOrganisation)
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.get('/:id/feedbacks', getFeedbacks)
-adRouter.get('/:id/users', getUsers)
+adRouter.get('/:id/users', getStudentTokens)
 adRouter.get('/:id/logs', getLogs)
 adRouter.put('/:id/response', putFeedbackResponse)
 adRouter.put('/:id/remind-students', remindStudentsOnFeedback)
