@@ -13,7 +13,6 @@ const {
   CourseRealisation,
   User,
   Organisation,
-  FeedbackTargetLog,
   Tag,
 } = require('../../models')
 
@@ -30,6 +29,7 @@ const {
   getStudentsForFeedbackTarget,
   getFeedbackTargetsForStudent,
   getFeedbackTargetsForCourseRealisation,
+  getFeedbackTargetLogs,
 } = require('../../services/feedbackTargets')
 
 const getFeedbackTargetsForOrganisation = async (req, res) => {
@@ -419,35 +419,19 @@ const deleteUserFeedbackTarget = async (req, res) => {
 }
 
 const getLogs = async (req, res) => {
-  const { isAdmin } = req
-  const feedbackTargetId = req.params.id
+  const { user, isAdmin } = req
+  const { id: feedbackTargetId } = req.params
 
-  if (!isAdmin) {
-    throw new ApplicationError('User is not authorized', 403)
-  }
+  const logs = await getFeedbackTargetLogs({ feedbackTargetId, user, isAdmin })
 
-  const { feedbackTargetLogs } = await FeedbackTarget.findByPk(feedbackTargetId, {
-    attributes: [],
-    order: [[{ model: FeedbackTargetLog, as: 'feedbackTargetLogs' }, 'createdAt', 'DESC']],
-    include: {
-      model: FeedbackTargetLog,
-      as: 'feedbackTargetLogs',
-      attributes: ['data', 'createdAt'],
-      include: {
-        model: User,
-        as: 'user',
-      },
-    },
-  })
-
-  return res.send(feedbackTargetLogs)
+  return res.send(logs)
 }
 
 const getForCourseRealisation = async (req, res) => {
-  const { id } = req.params
+  const { id: courseRealisationId } = req.params
 
   const feedbackTargets = await getFeedbackTargetsForCourseRealisation({
-    courseRealisationId: id,
+    courseRealisationId,
   })
 
   return res.send(feedbackTargets)

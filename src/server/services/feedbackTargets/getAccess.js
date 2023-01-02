@@ -1,4 +1,3 @@
-const { ApplicationError } = require('../../util/customErrors')
 const { Access } = require('./Access')
 const { getFeedbackTarget } = require('./util')
 
@@ -34,10 +33,8 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget, isAdmin }) 
 }
 
 const getAccessForUserById = async ({ feedbackTargetId, user, isAdmin }) => {
-  const feedbackTarget = await getFeedbackTarget({ feedbackTargetId, user })
-  if (!feedbackTarget) ApplicationError.NotFound('Feedback target not found')
+  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
-  const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
   const access = await getAccess({
     userFeedbackTarget,
     user,

@@ -50,7 +50,7 @@ const getFeedbacks = async (id, user, isAdmin) => {
     getAdditionalDataFromCacheOrDb(id),
   ])
 
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!feedbackTarget) ApplicationError.NotFound()
 
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]

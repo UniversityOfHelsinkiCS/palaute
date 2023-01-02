@@ -7,6 +7,7 @@ const STUDENTS = 4
 const CONTINUOUS_FEEDBACKS = 5
 const CONTINUOUS_FEEDBACK_RESPONSE = 6
 const GIVE_CONTINUOUS_FEEDBACK = 7
+const LOGS = 8
 
 const RIGHTS = {
   ADMIN: [
@@ -18,6 +19,7 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACKS,
     CONTINUOUS_FEEDBACK_RESPONSE,
     GIVE_CONTINUOUS_FEEDBACK,
+    LOGS,
   ],
   ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
@@ -77,6 +79,10 @@ class Access {
     return hasRight(this.accessStatus, GIVE_CONTINUOUS_FEEDBACK)
   }
 
+  canSeeLogs() {
+    return hasRight(this.accessStatus, LOGS)
+  }
+
   // Role enum
 
   static ADMIN = new Access('ADMIN')
@@ -107,7 +113,7 @@ class Access {
   }
 
   /*
-   * Can be sent to client as is
+   * Can be sent to client as is. Serializes to the accessStatus
    */
   toJSON() {
     return this.accessStatus

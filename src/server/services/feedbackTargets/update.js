@@ -106,10 +106,8 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 }
 
 const update = async ({ feedbackTargetId, user, isAdmin, body }) => {
-  const feedbackTarget = await getFeedbackTarget({ feedbackTargetId, user })
-  if (!feedbackTarget) ApplicationError.NotFound('Feedbacktarget to update not found')
+  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
-  const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
   const access = await getAccess({
     userFeedbackTarget,
     user,

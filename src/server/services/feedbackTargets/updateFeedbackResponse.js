@@ -7,10 +7,8 @@ const { getFeedbackTarget } = require('./util')
 const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
 const updateFeedbackResponse = async ({ feedbackTargetId, user, isAdmin, responseText, sendEmail }) => {
-  const feedbackTarget = await getFeedbackTarget({ feedbackTargetId, user })
-  if (!feedbackTarget) ApplicationError.NotFound('Feedbacktarget for response not found')
+  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
 
-  const userFeedbackTarget = feedbackTarget.userFeedbackTargets[0]
   const access = await getAccess({
     userFeedbackTarget,
     user,
