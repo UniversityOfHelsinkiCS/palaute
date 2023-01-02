@@ -395,7 +395,8 @@ const getUsers = async (req, res) => {
 
 const deleteUserFeedbackTarget = async (req, res) => {
   const { user, isAdmin } = req
-  const { id: feedbackTargetId, userId: teacherId } = req.params
+  const { userId: teacherId } = req.params
+  const feedbackTargetId = Number(req.params.id)
 
   await deleteTeacher({
     feedbackTargetId,

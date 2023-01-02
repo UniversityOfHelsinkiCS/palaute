@@ -15,8 +15,9 @@ const cache = {
   get: feedbackTargetId => lru.get(feedbackTargetId),
   set: (id, feedbackTargetJson) => lru.set(id, feedbackTargetJson),
   invalidate: feedbackTargetId => {
-    logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
-    lru.delete(feedbackTargetId)
+    if (lru.delete(feedbackTargetId)) {
+      logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
+    }
   },
   invalidateAll: () => {
     logger.info(`[CACHE] invalidate fbt ALL`)

@@ -1,5 +1,6 @@
 const { UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const cache = require('./cache')
 const { getAccessForUserById } = require('./getAccess')
 
 const deleteTeacher = async ({ feedbackTargetId, teacherId, user, isAdmin }) => {
@@ -23,6 +24,8 @@ const deleteTeacher = async ({ feedbackTargetId, teacherId, user, isAdmin }) => 
   }
 
   await userFeedbackTarget.destroy()
+
+  cache.invalidate(feedbackTargetId)
 }
 
 module.exports = {
