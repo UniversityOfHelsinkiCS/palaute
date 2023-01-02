@@ -60,7 +60,7 @@ export default {
     combineCSV: 'Yhdistä Sisu-CSV:n kanssa',
     downloadCSV: 'Lataa tiedosto',
     changePublicity: 'Muuta näkyvyyttä',
-    notPublicInfo: 'Vastaukset näkyvät vain kurssin opettajille ja ohjelman hallinnoijille',
+    notPublicInfo: 'Vastaukset näkyvät vain kurssin vastuuopettajille ja ohjelman hallinnoijille',
     publicInfo: 'Vastaukset näkyvät ilmoittautuneille opiskelijoille',
     studyTracks: 'Opintosuunnat',
     currentlySelected: 'Valittuna',
@@ -247,7 +247,8 @@ export default {
     emailSent: 'Muistutusviesti lähetetty',
     setHidden: 'Piilota näkyvistä',
     setVisible: 'Poista piilotus',
-    hiddenInfo: 'Tämä palaute on piilotettu, ja se näkyy vain opettajille tai koulutusohjelman hallintohenkilöille',
+    hiddenInfo:
+      'Tämä palaute on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille',
     hidingFeatureInfoTitle: 'Tietoa vastausten piilotuksesta',
     hidingFeatureInfo:
       'Voit piilottaa yksittäisiä vastauksia kysymyksiin, joiden vastaukset muuten näkyvät opiskelijoille, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.',
@@ -369,7 +370,7 @@ export default {
     surveyInfo:
       'Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.',
     studentListVisible:
-      'Näytä palautetta antaneet opiskelijat kurssin opettajalle, jos palautetta antaneita opiskelijoita on vähintään viisi',
+      'Näytä palautetta antaneet opiskelijat kurssin vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi',
     courseSettingsInfo: 'Palautetta kerätään vain aktivoiduilla kursseilla',
     settingsTab: 'Asetukset',
     generalSettings: 'Yleiset asetukset',
@@ -455,7 +456,7 @@ export default {
 
   noadUser: {
     noUser:
-      'Jotain meni pieleen, et ole tällä hektellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
+      'Jotain meni pieleen, et ole tällä hetkellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan',
     noFeedback: 'Tällä hetkellä ei ole kurssipalautteita joiden palautejakso olisi käynnissä',
   },
   norppaFeedback: {

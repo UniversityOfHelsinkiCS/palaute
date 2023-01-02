@@ -250,7 +250,7 @@ export default {
     setHidden: 'Göm',
     setVisible: 'Visa',
     hiddenInfo:
-      'Den här responsen är gömd. Den är synlig endast för lärare eller utbildningsprogrammets administratörer.',
+      'Den här responsen är gömd. Den är synlig endast för ansvariga lärare eller utbildningsprogrammets administratörer.',
     hidingFeatureInfoTitle: 'Information om att gömma svaren',
     hidingFeatureInfo:
       'Du kan gömma individuella svar till frågor vars svar annars är synliga för studerande, ifall svaret är olämpligt eller innehåller känslig information. Att gömma svar har ingen inverkan om svaren inte annars är synliga för studerande. För att förhindra missbruk, visas antalet gömda svar för utbildningsprogrammets administratörer i kurssammandraget.',
@@ -371,7 +371,7 @@ export default {
   organisationSettings: {
     surveyInfo:
       'Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.',
-    studentListVisible: 'Visa studerandena som har gett respons till kursens lärare',
+    studentListVisible: 'Visa studerandena som har gett respons till kursens ansvariga lärare',
     courseSettingsInfo: 'Respons samlas endast in för aktiverade kurser',
     settingsTab: 'Inställningar',
     generalSettings: 'Allmänna inställningar',
