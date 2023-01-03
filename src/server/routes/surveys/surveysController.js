@@ -45,6 +45,8 @@ const update = async (req, res) => {
 
   if (!survey) throw new ApplicationError('Not found', 404)
 
+  if (survey.type === 'feedbackTarget') ApplicationError.Forbidden('Wrong endpoint to update fbt survey', 403)
+
   const isUniversitySurvey = survey.type === 'university'
 
   if (isUniversitySurvey && !isAdmin) throw new ApplicationError('Forbidden', 403)
