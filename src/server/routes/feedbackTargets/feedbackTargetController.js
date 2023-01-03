@@ -3,8 +3,10 @@ const { ApplicationError } = require('../../util/customErrors')
 
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
-const updateEnrolmentNotification = require('./updateEnrolmentNotification')
-const { getEnrolmentNotification } = require('../../services/enrolmentNotices/enrolmentNotices')
+const {
+  getEnrolmentNotification,
+  requestEnrolmentNotification,
+} = require('../../services/enrolmentNotices/enrolmentNotices')
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -225,6 +227,17 @@ adRouter.get('/:id/logs', async (req, res) => {
   return res.send(logs)
 })
 
+const updateEnrolmentNotification = async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { enabled: enabledRaw } = req.body
+  const enabled = Boolean(enabledRaw)
+
+  // Could check if enrolment already exists, but it doesnt really matter... the notification will just expire anyways.
+  await requestEnrolmentNotification(user.id, feedbackTargetId, enabled)
+
+  return res.send({ enabled, email: user.getDefaultEmail() })
+}
 adRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 noadRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 

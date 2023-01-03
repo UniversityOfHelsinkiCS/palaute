@@ -1,12 +1,16 @@
 const { subSeconds } = require('date-fns')
 const { redis } = require('../../util/redisClient')
 const { mailer } = require('../../mailer')
+const { FeedbackTarget } = require('../../models')
+const { ApplicationError } = require('../../util/customErrors')
 
 const EXPIRATION_SECONDS = 24 * 3600
 
 const getKey = (userId, feedbackTargetId) => `${feedbackTargetId}#${userId}`
 
 const requestEnrolmentNotification = async (userId, feedbackTargetId, enable) => {
+  if (!(await FeedbackTarget.findByPk(feedbackTargetId))) ApplicationError.NotFound()
+
   const key = getKey(userId, feedbackTargetId)
   if (enable) {
     await redis.set(key, 'true')

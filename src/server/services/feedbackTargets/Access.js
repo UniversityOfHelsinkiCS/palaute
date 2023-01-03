@@ -1,4 +1,4 @@
-// Actions 'enum'. Cant think of a better way to do this currently
+// Actions 'enum'
 const UPDATE = 0
 const UPDATE_RESPONSE = 1
 const ALL_FEEDBACKS = 2
