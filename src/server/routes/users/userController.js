@@ -5,17 +5,14 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
 const { ADMINS } = require('../../../config')
-const relevantIAMs = require('../../util/relevantIAMs')
+const { getUserIams } = require('../../util/jami')
 const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {
   const { user, isAdmin, loginAs } = req
-
-  const allIamGroups = req.noad ? [] : req.iamGroups ?? []
-  const relevantIamGroups = allIamGroups.filter(iam => relevantIAMs.includes(iam))
+  const iamGroups = req.noad ? [] : req.iamGroups ?? []
 
   if (!loginAs) {
-    user.iamGroups = relevantIamGroups
     user.lastLoggedIn = new Date()
     await user.save()
   }
@@ -28,7 +25,7 @@ const login = async (req, res) => {
   return res.send({
     ...user.toJSON(),
     isTeacher,
-    iamGroups: user.iamGroups ?? [],
+    iamGroups,
     isAdmin,
     lastRestart,
     banners,
@@ -64,11 +61,14 @@ const getUserDetails = async (req, res) => {
   if (id !== req.user.id && !ADMINS.includes(req.user.username)) {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
+
   const user = await User.findByPk(id)
+  const iamGroups = await getUserIams(id)
   const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
+
   return res.send({
     ...user.dataValues,
-    iamGroups: user.iamGroups,
+    iamGroups,
     access,
   })
 }

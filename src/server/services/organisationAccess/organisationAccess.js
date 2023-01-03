@@ -1,49 +1,17 @@
 const _ = require('lodash')
-const Sentry = require('@sentry/node')
 
 const { normalizeOrganisationCode } = require('../../util/common')
 const { ADMINS, inE2EMode } = require('../../util/config')
-const jamiClient = require('../../util/jamiClient')
-const logger = require('../../util/logger')
+const { getUserIamAccess, getAccessToAll } = require('../../util/jami')
 
 const isSuperAdmin = user => ADMINS.includes(user.username)
-
-const getAccessToAll = async () => {
-  const { data: access } = await jamiClient.get('/access-to-all')
-
-  return access
-}
-
-const getIAMAccessFromJami = async (user, attempt = 1) => {
-  if (user.iamGroups.length === 0) return {}
-
-  const { id, iamGroups } = user
-
-  try {
-    const { data: iamAccess } = await jamiClient.post('/', {
-      userId: id,
-      iamGroups,
-    })
-
-    return iamAccess
-  } catch (error) {
-    if (attempt > 3) {
-      logger.error(error)
-      Sentry.captureException(error)
-
-      return {}
-    }
-
-    return getIAMAccessFromJami(user, attempt + 1)
-  }
-}
 
 const getAccessFromIAMs = async user => {
   if (inE2EMode) return {}
 
   const access = {}
 
-  const iamAccess = await getIAMAccessFromJami(user)
+  const iamAccess = await getUserIamAccess(user)
 
   if (!_.isObject(iamAccess)) return access
   Object.keys(iamAccess).forEach(code => {
