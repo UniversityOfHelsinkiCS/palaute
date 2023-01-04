@@ -63,6 +63,12 @@ const getUserIams = async userId => {
   }
 }
 
+const getAllUserAccess = async () => {
+  const { data } = await jamiClient.get('/all-access')
+
+  return data
+}
+
 const testJami = async () => {
   try {
     await jamiClient.get('/ping', { timeout: 4000 })
@@ -76,4 +82,4 @@ const testJami = async () => {
 
 testJami()
 
-module.exports = { getUserIamAccess, getAccessToAll, getOrganisationData, getUserIams }
+module.exports = { getUserIamAccess, getAccessToAll, getOrganisationData, getUserIams, getAllUserAccess }

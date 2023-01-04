@@ -6,6 +6,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
 const { ADMINS } = require('../../../config')
 const { getUserIams } = require('../../util/jami')
+const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {
@@ -76,27 +77,7 @@ const getUserDetails = async (req, res) => {
 const getAllUserAccess = async (req, res) => {
   if (!ADMINS.includes(req.user.username)) throw new ApplicationError('Forbidden', 403)
 
-  const users = await User.findAll({
-    where: {
-      iamGroups: {
-        [Op.ne]: [],
-      },
-    },
-  })
-
-  const usersWithAccess = []
-  for (const user of users) {
-    const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
-
-    // eslint-disable-next-line no-continue
-    if (!access.length) continue
-
-    usersWithAccess.push({
-      ...user.dataValues,
-      iamGroups: user.iamGroups,
-      access,
-    })
-  }
+  const usersWithAccess = await getAllOrganisationAccess()
 
   return res.send(usersWithAccess)
 }
