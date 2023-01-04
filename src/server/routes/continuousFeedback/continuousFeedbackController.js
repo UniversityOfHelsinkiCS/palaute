@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { ContinuousFeedback, FeedbackTarget, UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { sendEmailContinuousFeedbackResponseToStudent } = require('../../mailer/mails')
-const { getFeedbackTargetAccess } = require('../../services/feedbackTargets')
+const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
 
 const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
   const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({
@@ -25,14 +25,13 @@ const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
 }
 
 const getFeedbacks = async (req, res) => {
-  const { user, isAdmin } = req
+  const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
 
-  const access = await getFeedbackTargetAccess({
+  const { access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
-    isAdmin,
   })
 
   if (!access?.canSeeContinuousFeedbacks()) {
@@ -86,7 +85,7 @@ const submitFeedback = async (req, res) => {
 }
 
 const respondToFeedback = async (req, res) => {
-  const { user, isAdmin } = req
+  const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
   const continuousFeedbackId = Number(req.params.continuousFeedbackId)
@@ -96,10 +95,9 @@ const respondToFeedback = async (req, res) => {
     throw new ApplicationError('Response missing', 400)
   }
 
-  const access = await getFeedbackTargetAccess({
+  const { access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
-    isAdmin,
   })
 
   if (!access?.canRespondToContinuousFeedback()) ApplicationError.Forbidden()
