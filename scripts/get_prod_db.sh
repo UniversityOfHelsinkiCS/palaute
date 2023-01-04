@@ -4,9 +4,15 @@ CONTAINER=palaute_db
 SERVICE_NAME=db
 DB_NAME=postgres
 
+JAMI_DB=jami-db
+
+PALAUTE_FILE_NAME=palaute.sql.gz
+JAMI_FILE_NAME=jami.sql.gz
+
 SERVER=toska.cs.helsinki.fi
-SERVER_FILE_NAME=palaute.sql.gz
-SERVER_FILE="/home/toska_user/most_recent_backup_store/${SERVER_FILE_NAME}"
+SERVER_PATH=/home/toska_user/most_recent_backup_store/
+
+SERVER_FILE=${SERVER_PATH}{${PALAUTE_FILE_NAME},${JAMI_FILE_NAME}}
 
 PROJECT_ROOT=$(dirname $(dirname $(realpath "$0")))
 BACKUPS=$PROJECT_ROOT/backups/
@@ -53,9 +59,14 @@ echo "Removing database and related volume"
 docker-compose -f $DOCKER_COMPOSE down -v
 
 echo "Starting postgres in the background"
-docker-compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME
+docker-compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME $JAMI_DB
 
 retry docker-compose -f $DOCKER_COMPOSE exec $SERVICE_NAME pg_isready --dbname=$DB_NAME
 
-echo "Populating"
-docker exec -i $CONTAINER /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${SERVER_FILE_NAME}
+echo "Populating Norppa"
+docker exec -i $CONTAINER /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${PALAUTE_FILE_NAME}
+
+retry docker-compose -f $DOCKER_COMPOSE exec $JAMI_DB pg_isready --dbname=$JAMI_DB
+
+echo "Populating Jami"
+docker exec -i $JAMI_DB /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${JAMI_FILE_NAME}
