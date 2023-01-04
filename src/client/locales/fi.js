@@ -445,7 +445,7 @@ export default {
     studentResultsLinkTitle: 'Linkki vastauksiin ja vastapalautteeseen',
     studentLinkQRTitle: 'Vastauslinkin QR-koodi',
     qrCodeHelpText: 'Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen',
-    deleteResponsibleTeacherConfirmation: 'Poista opettaja {{name}} vastuuopettajien joukosta?',
+    deleteTeacherConfirmation: 'Poista {{name}} opettajien joukosta?',
     noFeedbackResponseYet: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
     noAccess:
       'Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.',

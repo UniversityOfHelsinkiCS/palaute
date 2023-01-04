@@ -442,7 +442,7 @@ export default {
     studentResultsLinkTitle: 'Link to answers and counter feedback',
     studentLinkQRTitle: 'QR-code to survey',
     qrCodeHelpText: 'Easiest way to share the QR-code is by screenshotting it',
-    deleteResponsibleTeacherConfirmation: 'Delete teacher {{name}} from responsible teachers?',
+    deleteTeacherConfirmation: 'Delete {{name}} from teachers?',
     noFeedbackResponseYet: 'The teacher of the course has not yet given counter feedback',
     noAccess:
       "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",

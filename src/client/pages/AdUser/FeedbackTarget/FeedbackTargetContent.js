@@ -3,7 +3,7 @@ import React from 'react'
 
 import { Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, Link as MuiLink, Alert } from '@mui/material'
+import { Box, Typography, Tab, Button, Link as MuiLink, Alert, List, ListItem } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -90,13 +90,11 @@ const styles = {
       flexDirection: 'column',
     },
   }),
-  teacherListContainer: theme => ({
-    display: 'flex',
-    flexDirection: 'column',
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'row',
-    },
-  }),
+  teacherListContainer: {
+    overflow: 'auto',
+    maxHeight: '100px',
+    padding: 0,
+  },
   linkContainer: theme => ({
     display: 'flex',
     flexDirection: 'row',
@@ -113,18 +111,20 @@ const styles = {
 }
 
 const TeachersList = ({ teachers, isAdmin, onDelete }) => (
-  <Box sx={styles.teacherListContainer}>
+  <List sx={styles.teacherListContainer}>
     {teachers.map(teacher => (
-      <TeacherChip key={teacher.id} user={teacher} onDelete={isAdmin ? () => onDelete(teacher) : undefined} />
+      <ListItem key={teacher.id} disablePadding>
+        <TeacherChip user={teacher} onDelete={isAdmin ? () => onDelete(teacher) : undefined} />
+      </ListItem>
     ))}
-  </Box>
+  </List>
 )
 
 // TODO rewrite this shit as mutation
 const handleDeleteTeacher = (feedbackTarget, t) => async teacher => {
   const displayName = `${teacher.firstName} ${teacher.lastName}`
 
-  const message = t('feedbackTargetView:deleteResponsibleTeacherConfirmation', {
+  const message = t('feedbackTargetView:deleteTeacherConfirmation', {
     name: displayName,
   })
 

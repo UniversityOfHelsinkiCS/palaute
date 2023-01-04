@@ -445,7 +445,7 @@ export default {
     studentResultsLinkTitle: 'Länk till svaren och motresponsen',
     studentLinkQRTitle: 'QR-kod till översikt',
     qrCodeHelpText: 'Du får QR-koden lättast delad genom att ta en skärmdump av den.',
-    deleteResponsibleTeacherConfirmation: 'Ta bort läraren {{name}} från gruppen av ansvariga lärare?',
+    deleteTeacherConfirmation: 'Ta bort {{name}} från gruppen av lärare?',
     noFeedbackResponseYet: 'Kursens lärare har inte ännu gett motrespons',
     noAccess:
       'Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.',
