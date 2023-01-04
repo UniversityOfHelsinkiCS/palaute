@@ -53,7 +53,22 @@ const getCourseRealisationSummaries = async ({
       })
       .filter(Boolean)
 
-    const teachers = teacherData[cur.feedbackTargetId]?.map(teacher => teacher.user) ?? []
+    const allTeachers = teacherData[cur.feedbackTargetId] || []
+
+    const teachers = _.sortBy(
+      allTeachers.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(teacher => teacher.user),
+      'lastName'
+    )
+    const responsibleTeachers = _.sortBy(
+      allTeachers
+        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
+        .map(teacher => teacher.user),
+      'lastName'
+    )
+    const administrativePersons = _.sortBy(
+      allTeachers.filter(ufbt => ufbt.isAdministrativePerson).map(teacher => teacher.user),
+      'lastName'
+    )
 
     const teachingLanguages = (cur.teachingLanguages || []).map(lang => languages[lang]?.name)
 
@@ -63,6 +78,8 @@ const getCourseRealisationSummaries = async ({
       results,
       teachingLanguages,
       teachers,
+      responsibleTeachers,
+      administrativePersons,
     }
   })
 

@@ -1,4 +1,6 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { grey } from '@mui/material/colors'
 
 import { Box, Link, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
@@ -6,8 +8,33 @@ import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../../util/languageUtils'
 import TeacherChip from '../../../components/common/TeacherChip'
 
+const TeacherChips = ({ courseRealisation }) => {
+  const { t } = useTranslation()
+  const responsibleTeacher = t('courseSummary:responsibleTeacher')
+  const teacher = t('courseSummary:teacher')
+  const administrativePerson = t('courseSummary:administrativePerson')
+
+  const { teachers, responsibleTeachers, administrativePersons } = courseRealisation
+
+  return (
+    <Box display="flex" flexWrap="wrap" maxWidth="100rem">
+      {responsibleTeachers.map(t => (
+        <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} style={{ backgroundColor: grey[300] }} />
+      ))}
+
+      {teachers.map(t => (
+        <TeacherChip key={t.id} user={t} tooltip={teacher} style={{ backgroundColor: grey[200] }} />
+      ))}
+
+      {administrativePersons.map(t => (
+        <TeacherChip key={t.id} user={t} tooltip={administrativePerson} style={{ backgroundColor: grey[100] }} />
+      ))}
+    </Box>
+  )
+}
+
 export const CourseRealisationLabel = ({ courseRealisation, language }) => {
-  const { startDate, endDate, feedbackTargetId, teachers, name, teachingLanguages } = courseRealisation
+  const { startDate, endDate, feedbackTargetId, name, teachingLanguages } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
@@ -37,11 +64,7 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
           {languagesString}
         </Typography>
       </Box>
-      <Box display="flex" flexWrap="wrap" maxWidth="100rem">
-        {teachers.map(t => (
-          <TeacherChip key={t.id} user={t} />
-        ))}
-      </Box>
+      <TeacherChips courseRealisation={courseRealisation} />
     </>
   )
 }
