@@ -1,10 +1,10 @@
 const { FeedbackTargetLog, User } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
-const { getFeedbackTarget } = require('./util')
+const { getFeedbackTargetContext } = require('./util')
 
 const getLogs = async ({ feedbackTargetId, user }) => {
-  const { feedbackTarget, userFeedbackTarget } = getFeedbackTarget({
+  const { feedbackTarget, userFeedbackTarget } = getFeedbackTargetContext({
     feedbackTargetId,
     user,
   })
