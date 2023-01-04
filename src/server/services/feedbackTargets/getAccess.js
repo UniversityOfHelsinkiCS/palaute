@@ -1,5 +1,5 @@
 const { Access } = require('./Access')
-const { getFeedbackTarget } = require('./util')
+const { getFeedbackTargetContext } = require('./util')
 
 const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
   if (user.dataValues.isAdmin) return Access.ADMIN
@@ -33,7 +33,7 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
 }
 
 const getAccessForUserById = async ({ feedbackTargetId, user }) => {
-  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTarget({ feedbackTargetId, user })
+  const { feedbackTarget, userFeedbackTarget } = await getFeedbackTargetContext({ feedbackTargetId, user })
   const access = await getAccess({
     userFeedbackTarget,
     user,
