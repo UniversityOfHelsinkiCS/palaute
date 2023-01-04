@@ -425,6 +425,7 @@ export default {
     courseSummary: 'Kurssin toteutusten yhteenveto',
     teachers: 'Opettajat',
     responsibleTeachers: 'Vastuuopettajat',
+    administrativePersons: 'Hallintohenkilöt',
     shareTab: 'Jaa kysely',
     surveySettingsTab: 'Kyselyn muokkaus',
     activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',

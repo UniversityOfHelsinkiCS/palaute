@@ -329,6 +329,10 @@ FeedbackTarget.init(
     teachers: {
       type: VIRTUAL,
     },
+    // potentially cached
+    administrativePersons: {
+      type: VIRTUAL,
+    },
     studentCount: {
       type: VIRTUAL,
       get() {

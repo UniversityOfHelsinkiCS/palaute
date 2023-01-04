@@ -422,6 +422,7 @@ export default {
     courseSummary: "Summary of course's instances",
     teachers: 'Teachers',
     responsibleTeachers: 'Responsible teachers',
+    administrativePersons: 'Administrative persons',
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey editing',
     activateContinuousFeedback: 'Activate continuous feedback for the course',

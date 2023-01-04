@@ -38,6 +38,11 @@ UserFeedbackTarget.init(
       allowNull: false,
       defaultValue: false,
     },
+    isAdministrativePerson: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,

@@ -64,9 +64,16 @@ const getFromDb = async id => {
   })
 
   fbt.set(
+    'administrativePersons',
+    _.orderBy(fbt.userFeedbackTargets.filter(ufbt => ufbt.isAdministrativePerson).map(ufbt => ufbt.user)),
+    [['lastName', 'desc']]
+  )
+  fbt.set(
     'responsibleTeachers',
     _.orderBy(
-      fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER').map(ufbt => ufbt.user)
+      fbt.userFeedbackTargets
+        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
+        .map(ufbt => ufbt.user)
     ),
     [['lastName', 'desc']]
   )

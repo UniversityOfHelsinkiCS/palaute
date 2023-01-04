@@ -425,6 +425,7 @@ export default {
     courseSummary: 'Sammandrag av kursens genomföranden',
     teachers: 'Lärare',
     responsibleTeachers: 'Ansvariga lärare',
+    // administrativePersons: 'Administrative persons',
     shareTab: 'Dela förfrågan',
     surveySettingsTab: 'Enkätredigering',
     activateContinuousFeedback: 'Aktivera kontinuerlig respons för kursen',

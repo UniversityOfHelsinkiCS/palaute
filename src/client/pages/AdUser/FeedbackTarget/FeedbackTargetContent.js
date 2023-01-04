@@ -112,7 +112,7 @@ const styles = {
   },
 }
 
-const ResponsibleTeachersList = ({ teachers, isAdmin, onDelete }) => (
+const TeachersList = ({ teachers, isAdmin, onDelete }) => (
   <Box sx={styles.teacherListContainer}>
     {teachers.map(teacher => (
       <TeacherChip key={teacher.id} user={teacher} onDelete={isAdmin ? () => onDelete(teacher) : undefined} />
@@ -144,7 +144,7 @@ const FeedbackTargetContent = () => {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget, organisation, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
+  const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
     useFeedbackTargetContext()
 
   // If link to cur summary should not be shown, gets empty response when failSilentry: true
@@ -161,6 +161,7 @@ const FeedbackTargetContent = () => {
     courseRealisation,
     opensAt,
     feedback,
+    administrativePersons,
     responsibleTeachers,
     teachers,
     feedbackResponseEmailSent,
@@ -305,7 +306,7 @@ const FeedbackTargetContent = () => {
           {!!responsibleTeachers.length && (
             <Box mt="1rem" ml="1rem">
               <Typography gutterBottom>{t('feedbackTargetView:responsibleTeachers')}</Typography>
-              <ResponsibleTeachersList
+              <TeachersList
                 teachers={responsibleTeachers}
                 isAdmin={isAdmin}
                 onDelete={handleDeleteTeacher(feedbackTarget, t)}
@@ -316,8 +317,15 @@ const FeedbackTargetContent = () => {
           {!!teachers.length && (
             <Box mt="1rem" ml="1rem">
               <Typography gutterBottom>{t('feedbackTargetView:teachers')}</Typography>
-              <ResponsibleTeachersList
-                teachers={teachers}
+              <TeachersList teachers={teachers} isAdmin={isAdmin} onDelete={handleDeleteTeacher(feedbackTarget, t)} />
+            </Box>
+          )}
+
+          {!isStudent && !!administrativePersons.length && (
+            <Box mt="1rem" ml="1rem">
+              <Typography gutterBottom>{t('feedbackTargetView:administrativePersons')}</Typography>
+              <TeachersList
+                teachers={administrativePersons}
                 isAdmin={isAdmin}
                 onDelete={handleDeleteTeacher(feedbackTarget, t)}
               />

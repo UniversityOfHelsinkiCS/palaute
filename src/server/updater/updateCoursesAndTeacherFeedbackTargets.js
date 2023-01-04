@@ -32,10 +32,12 @@ const validRealisationTypes = [
 
 const independentWorkUrn = 'urn:code:course-unit-realisation-type:independent-work-project'
 
+const administrativePersonUrn = 'urn:code:course-unit-realisation-responsibility-info-type:administrative-person'
+
 const responsibleTeacherUrns = [
   'urn:code:course-unit-realisation-responsibility-info-type:responsible-teacher',
-  'urn:code:course-unit-realisation-responsibility-info-type:administrative-person',
   'urn:code:course-unit-realisation-responsibility-info-type:contact-info',
+  administrativePersonUrn,
 ]
 
 const formatDate = date => dateFns.format(date, 'yyyy-MM-dd')
@@ -404,6 +406,7 @@ const createFeedbackTargets = async courses => {
           feedback_target_id: feedbackTargetId,
           user_id: personId,
           accessStatus: responsibleTeacherUrns.includes(roleUrn) ? 'RESPONSIBLE_TEACHER' : 'TEACHER',
+          isAdministrativePerson: roleUrn === administrativePersonUrn,
         }))
       )
     )
