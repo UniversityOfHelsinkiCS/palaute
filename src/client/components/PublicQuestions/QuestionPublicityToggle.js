@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Chip, FormControl, FormControlLabel, FormLabel, Popover, Radio, RadioGroup } from '@mui/material'
+import { Box, Chip, FormControl, FormControlLabel, FormLabel, Popover, Radio, RadioGroup, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Edit } from '@mui/icons-material'
 import styles from '../../util/chipStyles'
@@ -8,17 +8,23 @@ const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const { t } = useTranslation()
 
+  const tooltipText = `${checked ? t('common:publicShortInfo') : t('common:notPublicShortInfo')}. ${
+    !disabled ? t('common:editable') : ''
+  }`
+
   return (
     <>
-      <Chip
-        icon={!disabled ? <Edit /> : null}
-        label={t(checked ? 'common:public' : 'common:notPublic')}
-        clickable={!disabled}
-        onClick={e => !disabled && setAnchorEl(e.target)}
-        variant="outlined"
-        color={disabled ? 'default' : 'primary'}
-        sx={!disabled ? styles.interactive : {}}
-      />
+      <Tooltip title={tooltipText}>
+        <Chip
+          icon={!disabled ? <Edit /> : null}
+          label={t(checked ? 'common:public' : 'common:notPublic')}
+          clickable={!disabled}
+          onClick={e => !disabled && setAnchorEl(e.target)}
+          variant="outlined"
+          color={disabled ? 'default' : 'primary'}
+          sx={!disabled ? styles.interactive : {}}
+        />
+      </Tooltip>
       <Popover
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
