@@ -7,7 +7,7 @@ import annotationPlugin from 'chartjs-plugin-annotation'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { Chart } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { Box, Card, Paper } from '@mui/material'
+import { Box, Card } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../util/languageUtils'
 

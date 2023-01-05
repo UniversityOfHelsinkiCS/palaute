@@ -123,6 +123,7 @@ const QuestionResults = ({
         <Masonry columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
           {notOpenQuestions.map(q => (
             <QuestionItem
+              key={q.id}
               question={q}
               publicQuestionIds={publicQuestionIds}
               disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
