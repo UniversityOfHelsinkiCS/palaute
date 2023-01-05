@@ -54,10 +54,6 @@ const formatLabel = (str, maxwidth) => {
 
 const getScalesConfig = (t, max) => ({
   y: {
-    title: {
-      display: true,
-      text: t('questionResults:answerOption'),
-    },
     grid: {
       display: false,
       drawBorder: false,
@@ -75,22 +71,18 @@ const getScalesConfig = (t, max) => ({
   },
 })
 
-const getOptions = (question, t, language, max) => ({
+const getChartOptions = (numberOfOptions, t, max) => ({
   indexAxis: 'y',
   scales: getScalesConfig(t, max),
   responsive: true,
-  aspectRatio: 1.5,
+  aspectRatio: 1.5 / (numberOfOptions / 6),
   plugins: {
     legend: {
       display: false,
     },
-    title: {
+    datalabels: {
       display: true,
-      text: formatLabel(getLanguageValue(question.data?.label, language), 65),
-    },
-    subtitle: {
-      display: Boolean(question.data?.description),
-      text: formatLabel(getLanguageValue(question.data?.description, language), 65),
+      color: 'black',
     },
   },
 })
@@ -104,7 +96,7 @@ export const getLikertChartConfig = (question, language, t, max) => {
   const dontKnowOption = t('feedbackView:dontKnowOption')
 
   return {
-    options: getOptions(question, t, language, max),
+    options: getChartOptions(labels.length, t, max),
     data: {
       labels: ['5', '4', '3', '2', '1', dontKnowOption],
       datasets: [
@@ -129,7 +121,7 @@ export const getMultipleChoiceChartConfig = (question, language, t, max) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getOptions(question, t, language, max),
+    options: getChartOptions(arrayOptions.length, t, max),
     data: {
       labels,
       datasets: [
@@ -154,7 +146,7 @@ export const getSingleChoiceChartConfig = (question, language, t, max) => {
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getOptions(question, t, language, max),
+    options: getChartOptions(arrayOptions.length, t, max),
     data: {
       labels,
       datasets: [

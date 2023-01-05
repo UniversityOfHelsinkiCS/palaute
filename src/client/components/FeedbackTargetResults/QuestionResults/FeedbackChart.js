@@ -4,13 +4,28 @@ import React from 'react'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
 import annotationPlugin from 'chartjs-plugin-annotation'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { Chart } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { Box, Paper } from '@mui/material'
+import { Box, Card, Paper } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../util/languageUtils'
 
 Chart.register(annotationPlugin)
+Chart.register(ChartDataLabels)
+Chart.defaults.set('font', {
+  family: 'Open Sans',
+})
+Chart.defaults.set('plugins.datalabels', {
+  color: '#ffffff',
+  font: {
+    family: 'Open Sans',
+    size: 14,
+  },
+  anchor: 'end',
+  align: 'right',
+  clamp: true,
+})
 
 const getGradient = (ctx, chartArea) => {
   if (!ctx) return 'hsl(300deg 49% 56%)'
@@ -197,6 +212,9 @@ const buildChartConfig = (
             latestValueAnnotation,
           },
         },
+        datalabels: {
+          display: false,
+        },
       },
       scales: {
         x: {
@@ -259,13 +277,13 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   )
 
   return (
-    <Paper>
-      <Box height="25rem" width="100%" my="2rem" px="2rem" py="1.5rem" display="flex" justifyContent="center">
+    <Card sx={{ borderRadius: '1rem' }}>
+      <Box height="20rem" width="100%" my="1rem" display="flex" justifyContent="center">
         <Box minWidth="80%">
           <Line {...config} ref={chartRef} />
         </Box>
       </Box>
-    </Paper>
+    </Card>
   )
 }
 

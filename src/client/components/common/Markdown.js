@@ -8,7 +8,7 @@ const styles = {
   },
 }
 
-const GutterTypography = ({ sx, ...props }) => <Typography sx={[sx, styles.gutterBottom]} {...props} />
+const GutterTypography = ({ sx, ...props }) => <Typography sx={[sx, styles.gutterBottom]} {...props} fontWeight={400} />
 
 const H1 = props => <GutterTypography variant="h3" component="h1" {...props} />
 

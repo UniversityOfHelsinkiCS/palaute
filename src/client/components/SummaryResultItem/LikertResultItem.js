@@ -2,7 +2,7 @@ import { Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../../../util/languageUtils'
+import { getLanguageValue } from '../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
 
 const styles = {

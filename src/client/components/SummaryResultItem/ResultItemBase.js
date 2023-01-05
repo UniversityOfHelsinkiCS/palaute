@@ -2,7 +2,7 @@ import React from 'react'
 /** @jsxImportSource @emotion/react */
 import { Tooltip } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { getColor } from '../../../../util/resultColors'
+import { getColor } from '../../util/resultColors'
 
 const styles = {
   item: {

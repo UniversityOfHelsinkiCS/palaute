@@ -1,12 +1,11 @@
 import React from 'react'
-import { Box, Chip, IconButton, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material'
+import { Box, IconButton, List, ListItem, ListItemText, Tooltip } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 
-import { getLanguageValue } from '../../../util/languageUtils'
 import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
@@ -38,8 +37,16 @@ const styles = {
       height: 'auto',
     },
   }),
+  listItem: {
+    backgroundColor: grey[50],
+    borderRadius: '0.8rem',
+    marginBottom: '0.4rem',
+  },
   hiddenListItem: theme => ({
     color: theme.palette.error.light,
+    backgroundColor: grey[50],
+    borderRadius: '0.8rem',
+    marginBottom: '0.4rem',
   }),
 }
 
@@ -89,20 +96,25 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
   const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
   return (
     <ListItem
-      divider
-      sx={feedback.hidden ? styles.hiddenListItem : {}}
+      sx={feedback.hidden ? styles.hiddenListItem : styles.listItem}
       secondaryAction={
         canHide && (
-          <Tooltip title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}>
-            <IconButton onClick={onVisibilityToggle}>{feedback.hidden ? <VisibilityOff /> : <Visibility />}</IconButton>
-          </Tooltip>
+          <Box display="flex" alignContent="start">
+            <Tooltip
+              title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}
+            >
+              <IconButton onClick={onVisibilityToggle} size="small">
+                {feedback.hidden ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+              </IconButton>
+            </Tooltip>
+          </Box>
         )
       }
     >
       <ListItemText
-        sx={{ py: 1 }}
+        sx={{ py: '0.2rem' }}
         primary={feedback.data}
-        primaryTypographyProps={{ fontSize: 18, whiteSpace: 'pre-line' }}
+        primaryTypographyProps={{ fontSize: 18, whiteSpace: 'pre-line', fontWeight: '400' }}
         secondary={secondaryText}
       />
     </ListItem>
@@ -110,14 +122,10 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
 }
 
 const OpenResults = ({ question }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { id } = useParams()
 
   const { isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
-
-  const label = getLanguageValue(question.data?.label, i18n.language)
-
-  const description = getLanguageValue(question.data?.description, i18n.language)
 
   const feedbacks = question.feedbacks ?? []
 
@@ -128,11 +136,6 @@ const OpenResults = ({ question }) => {
   return (
     <ResultsContent>
       <Box mt={1} display="flex" gap="1rem" alignItems="center">
-        <Box>
-          <Typography fontWeight="medium">{label}</Typography>
-          <Typography variant="body2">{description}</Typography>
-        </Box>
-        <Chip label={filteredFeedbacks.length} variant="outlined" size="small" />
         {canHide && (
           <Box ml="auto" mr={5}>
             <InfoBox

@@ -4,7 +4,7 @@ import ArrowIcon from '@mui/icons-material/TrendingFlat'
 import { useTranslation } from 'react-i18next'
 import { sumBy, isEmpty, round } from 'lodash'
 
-import { getLanguageValue } from '../../../../util/languageUtils'
+import { getLanguageValue } from '../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
 
 const normalizeMean = mean => {

@@ -10,7 +10,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { Link, Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import ResultItem from './ResultItem'
+import SummaryResultItem from '../../../components/SummaryResultItem'
 import PercentageCell from './PercentageCell'
 
 const styles = {
@@ -223,7 +223,7 @@ const ResultsRow = ({
           )}
         </td>
         {results.map(({ questionId, mean, distribution, previous }) => (
-          <ResultItem
+          <SummaryResultItem
             key={questionId}
             question={getQuestion(questions, questionId)}
             mean={mean}

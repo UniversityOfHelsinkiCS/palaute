@@ -1,31 +1,13 @@
 import React, { useMemo } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Grid,
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Link as MuiLink,
-  Paper,
-  Chip,
-} from '@mui/material'
+import { Card, CardContent, Box, Typography, List, ListItem, ListItemText, Link as MuiLink, Chip } from '@mui/material'
+import { Masonry } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
-import { useSnackbar } from 'notistack'
-import _ from 'lodash'
 
 import { getQuestionsWithFeedback } from './utils'
-import LikertResults from './LikertResults'
-import MultipleChoiceResults from './MultipleChoiceResults'
-import SingleChoiceResults from './SingleChoiceResults'
-import OpenResults from './OpenResults'
 import AlertLink from '../../common/AlertLink'
 import { getLanguageValue } from '../../../util/languageUtils'
-import QuestionPublicityToggle from '../../PublicQuestions/QuestionPublicityToggle'
-import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
+import QuestionItem from './QuestionItem'
 
 const styles = {
   list: theme => ({
@@ -63,57 +45,6 @@ const styles = {
   },
 }
 
-const componentByType = {
-  LIKERT: LikertResults,
-  MULTIPLE_CHOICE: MultipleChoiceResults,
-  SINGLE_CHOICE: SingleChoiceResults,
-  OPEN: OpenResults,
-}
-
-const QuestionItem = ({
-  question,
-  isResponsibleTeacher,
-  t,
-  publicQuestionIds,
-  feedbackCount,
-  disabled,
-  feedbackTargetId,
-}) => {
-  const isPublic = publicQuestionIds.includes(question.id)
-
-  const Component = componentByType[question.type]
-
-  const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
-
-  const { enqueueSnackbar } = useSnackbar()
-  const mutation = useQuestionPublicityMutation({
-    resource: 'feedbackTarget',
-    resourceId: feedbackTargetId,
-  })
-
-  const onPublicityToggle = async isPublic => {
-    const newPublicQuestionIds = isPublic
-      ? _.uniq(publicQuestionIds.concat(question.id))
-      : publicQuestionIds.filter(id => id !== question.id)
-
-    try {
-      await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
-
-  return (
-    <Box m="1rem" mt="3rem">
-      {isResponsibleTeacher && (
-        <QuestionPublicityToggle checked={isPublic} disabled={disabled} onChange={() => onPublicityToggle(!isPublic)} />
-      )}
-      <Box>{content}</Box>
-    </Box>
-  )
-}
-
 const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
@@ -147,15 +78,13 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
 }
 
 const QuestionSection = ({ title, count, children }) => (
-  <Paper>
-    <Box my="3rem" p="1rem">
-      <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
-        <Typography component="h4">{title}</Typography>
-        <Chip label={count} variant="outlined" size="small" />
-      </Box>
-      {children}
+  <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem">
+    <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
+      <Typography component="h4">{title}</Typography>
+      <Chip label={count} variant="outlined" size="small" />
     </Box>
-  </Paper>
+    {children}
+  </Box>
 )
 
 const QuestionResults = ({
@@ -191,21 +120,19 @@ const QuestionResults = ({
       <QuestionSection title={t('questionResults:multipleChoiceQuestions')} count={notOpenQuestions.length}>
         <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
 
-        <Grid container sx={styles.displayStyle}>
+        <Masonry columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
           {notOpenQuestions.map(q => (
-            <Grid item key={q.id} xs={12} sm={6} lg={4} xl={4}>
-              <QuestionItem
-                question={q}
-                publicQuestionIds={publicQuestionIds}
-                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                isResponsibleTeacher={isResponsibleTeacher}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={feedbackTargetId}
-                t={t}
-              />
-            </Grid>
+            <QuestionItem
+              question={q}
+              publicQuestionIds={publicQuestionIds}
+              disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+              isResponsibleTeacher={isResponsibleTeacher}
+              feedbackCount={feedbackCount}
+              feedbackTargetId={feedbackTargetId}
+              t={t}
+            />
           ))}
-        </Grid>
+        </Masonry>
       </QuestionSection>
       <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
         {openQuestions.map(q => (
