@@ -248,7 +248,7 @@ export default {
     hiddenInfo: 'This answer is hidden and is visible only to responsible teachers and programme administrators',
     hidingFeatureInfoTitle: 'Info about hiding answers',
     hidingFeatureInfo:
-      "You can hide individual answers from a question that has its results otherwise visible to students, to censor inappropriate or sensitive content. Hiding has no effect if the question is not visible to students.\nTo prevent misuse, the number of hidden answers is visible to programme's administrative personnel in course summary.",
+      "You can hide individual answers by clicking the eye-icon, to censor inappropriate or sensitive content. This only has effect if the question is visible to students.\nTo prevent misuse, the number of hidden answers is visible to programme's administrative personnel in course summary.",
   },
   navBar: {
     myFeedbacks: 'My feedback',

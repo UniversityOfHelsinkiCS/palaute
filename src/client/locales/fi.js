@@ -251,7 +251,7 @@ export default {
       'Tämä palaute on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille',
     hidingFeatureInfoTitle: 'Tietoa vastausten piilotuksesta',
     hidingFeatureInfo:
-      'Voit piilottaa yksittäisiä vastauksia kysymyksiin, joiden vastaukset muuten näkyvät opiskelijoille, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.',
+      'Voit piilottaa yksittäisiä vastauksia kysymyksiin silmäkuvakkeesta, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

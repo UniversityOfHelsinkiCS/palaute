@@ -9,7 +9,6 @@ import { useParams } from 'react-router-dom'
 import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
-import InfoBox from '../../common/InfoBox'
 import { useFeedbackTargetContext } from '../../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
@@ -135,16 +134,6 @@ const OpenResults = ({ question }) => {
 
   return (
     <ResultsContent>
-      <Box mt={1} display="flex" gap="1rem" alignItems="center">
-        {canHide && (
-          <Box ml="auto" mr={5}>
-            <InfoBox
-              label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
-              content={t('feedbackTargetResults:hidingFeatureInfo')}
-            />
-          </Box>
-        )}
-      </Box>
       <List sx={styles.list}>
         {filteredFeedbacks.map((feedback, index) => (
           <OpenFeedback key={index} feedback={feedback} canHide={canHide} feedbackTargetId={id} t={t} />

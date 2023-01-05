@@ -5,6 +5,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../util/languageUtils'
+import InfoBox from '../../common/InfoBox'
 import QuestionPublicityToggle from '../../PublicQuestions/QuestionPublicityToggle'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
@@ -66,11 +67,19 @@ const QuestionItem = ({
             <Typography variant="body2">{description}</Typography>
           </Box>
           {isResponsibleTeacher && (
-            <QuestionPublicityToggle
-              checked={isPublic}
-              disabled={disabled}
-              onChange={() => onPublicityToggle(!isPublic)}
-            />
+            <>
+              <QuestionPublicityToggle
+                checked={isPublic}
+                disabled={disabled}
+                onChange={() => onPublicityToggle(!isPublic)}
+              />
+              {question.type === 'OPEN' && (
+                <InfoBox
+                  label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
+                  content={t('feedbackTargetResults:hidingFeatureInfo')}
+                />
+              )}
+            </>
           )}
         </Box>
         <Box>{content}</Box>
