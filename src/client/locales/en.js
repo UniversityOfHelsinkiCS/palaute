@@ -199,7 +199,7 @@ export default {
     tooShortFeedbackPeriodError: 'The feedback must open at least for a day',
   },
   questionResults: {
-    answerCount: 'Answer count',
+    answerCount: 'Answer count ({{answers}}/{{feedbacks}})',
     answerOption: 'Answer option',
     publicInfo: 'The results from these questions are visible to students. <2>Select public questions</2>',
     notPublicInfo: 'The results from these questions are not visible to students. <2>Select public questions</2>',

@@ -202,7 +202,7 @@ export default {
     tooShortFeedbackPeriodError: 'Responsen måste vara öppen åtminstone ett dygn',
   },
   questionResults: {
-    answerCount: 'Antalet svar',
+    answerCount: 'Antalet svar ({{answers}}/{{feedbacks}})',
     answerOption: 'Svarsalternativ',
     publicInfo: 'Resultaten från dessa frågor är synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',
     notPublicInfo: 'Resultaten från dessa frågor är inte synliga för studerandena. <2>Välj offentligtgjorda frågor</2>',

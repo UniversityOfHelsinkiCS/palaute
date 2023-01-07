@@ -200,7 +200,7 @@ export default {
     tooShortFeedbackPeriodError: 'Palautetteen tulee olla auki vähintään yhden vuorokauden ajan',
   },
   questionResults: {
-    answerCount: 'Vastausten määrä',
+    answerCount: 'Vastausten määrä ({{answers}}/{{feedbacks}})',
     answerOption: 'Vastausvaihtoehto',
     publicInfo: 'Tämän kysymyksen tulokset ovat julkisia opiskelijoille.',
     notPublicInfo: 'Tämän kysymyksen tulokset eivät ole julkisia opiskelijoille.',
