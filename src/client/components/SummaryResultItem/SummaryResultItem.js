@@ -13,7 +13,7 @@ const SummaryResultItem = ({ question, ...props }) => {
     return <WorkloadResultItem question={question} {...props} />
   }
 
-  return <ResultItemBase>-</ResultItemBase>
+  return <ResultItemBase {...props}>-</ResultItemBase>
 }
 
 export default SummaryResultItem

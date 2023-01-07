@@ -7,6 +7,7 @@ import useQuestionPublicityMutation from '../../../hooks/useQuestionPublicityMut
 import { getLanguageValue } from '../../../util/languageUtils'
 import InfoBox from '../../common/InfoBox'
 import QuestionPublicityToggle from '../../PublicQuestions/QuestionPublicityToggle'
+import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
@@ -60,29 +61,32 @@ const QuestionItem = ({
   return (
     <Card sx={{ borderRadius: '1rem' }}>
       <CardContent>
-        <Box display="flex" justifyContent="space-between">
-          <Box>
-            <Typography variant="body1">{label}</Typography>
-            <Box mb="0.5rem" />
-            <Typography variant="body2">{description}</Typography>
-          </Box>
-          {isResponsibleTeacher && (
-            <>
+        <Box display="flex" mb="0.5rem">
+          <Box flexGrow={0} mr="auto">
+            {isResponsibleTeacher && (
               <QuestionPublicityToggle
                 checked={isPublic}
                 disabled={disabled}
                 onChange={() => onPublicityToggle(!isPublic)}
               />
-              {question.type === 'OPEN' && (
-                <InfoBox
-                  label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
-                  content={t('feedbackTargetResults:hidingFeatureInfo')}
-                />
-              )}
-            </>
+            )}
+            <Typography variant="body1">{label}</Typography>
+            <Box mb="0.5rem" />
+            <Typography variant="body2">{description}</Typography>
+          </Box>
+          {(question.type === 'LIKERT' || question.secondaryType === 'WORKLOAD') && (
+            <Box>
+              <AverageResult question={question} />
+            </Box>
+          )}
+          {isResponsibleTeacher && question.type === 'OPEN' && (
+            <InfoBox
+              label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
+              content={t('feedbackTargetResults:hidingFeatureInfo')}
+            />
           )}
         </Box>
-        <Box>{content}</Box>
+        {content}
       </CardContent>
     </Card>
   )

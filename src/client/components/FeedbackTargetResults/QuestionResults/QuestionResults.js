@@ -8,6 +8,7 @@ import { getQuestionsWithFeedback } from './utils'
 import AlertLink from '../../common/AlertLink'
 import { getLanguageValue } from '../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
+import SearchOpenResults from './SearchOpenResults'
 
 const styles = {
   list: theme => ({
@@ -135,6 +136,7 @@ const QuestionResults = ({
           ))}
         </Masonry>
       </QuestionSection>
+      {/*<SearchOpenResults questions={openQuestions}/>*/}
       <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
         {openQuestions.map(q => (
           <QuestionItem

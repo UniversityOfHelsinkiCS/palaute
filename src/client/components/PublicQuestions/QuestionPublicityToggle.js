@@ -21,6 +21,7 @@ const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
           clickable={!disabled}
           onClick={e => !disabled && setAnchorEl(e.target)}
           variant="outlined"
+          size="small"
           color={disabled ? 'default' : 'primary'}
           sx={!disabled ? styles.interactive : {}}
         />

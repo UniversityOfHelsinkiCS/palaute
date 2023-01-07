@@ -14,6 +14,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useIsMobile from '../../hooks/useIsMobile'
+import useChartConfig from './QuestionResults/useChartConfig'
 
 const styles = {
   legacySwitch: {
@@ -47,6 +48,7 @@ const FeedbackTargetResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobile = useIsMobile()
+  useChartConfig()
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
 
