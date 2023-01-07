@@ -136,7 +136,7 @@ const QuestionResults = ({
           ))}
         </Masonry>
       </QuestionSection>
-      {/*<SearchOpenResults questions={openQuestions}/>
+      {/*<SearchOpenResults questions={openQuestions}/>*/}
       <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
         {openQuestions.map(q => (
           <QuestionItem
@@ -150,7 +150,6 @@ const QuestionResults = ({
           />
         ))}
       </QuestionSection>
-      */}
       {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
     </>
   )
