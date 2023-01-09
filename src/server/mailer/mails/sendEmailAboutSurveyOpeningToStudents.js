@@ -19,7 +19,6 @@ const getOpenFeedbackTargetsForStudents = async () => {
       closesAt: {
         [Op.gte]: new Date(),
       },
-      hidden: false,
       feedbackType: 'courseRealisation',
     },
     include: [

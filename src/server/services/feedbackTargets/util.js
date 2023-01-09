@@ -10,7 +10,6 @@ const { getAccess } = require('./getAccess')
  */
 const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
-    where: { hidden: false },
     include: [
       {
         model: UserFeedbackTarget,

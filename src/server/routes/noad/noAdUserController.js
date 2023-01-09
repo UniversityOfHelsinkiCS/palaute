@@ -41,9 +41,6 @@ const getCourses = async (req, res) => {
   if (!user) return res.send([])
 
   const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      hidden: false,
-    },
     include: getFeedbackTargetsIncludes(user.id, 'STUDENT'),
   })
 

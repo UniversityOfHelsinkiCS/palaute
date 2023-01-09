@@ -22,9 +22,6 @@ const getFeedbackTargetsForStudent = async userId => {
     attributes: {
       exclude: ['feedbackResponse'], // Not needed
     },
-    where: {
-      hidden: false,
-    },
     include: [
       {
         model: UserFeedbackTarget,

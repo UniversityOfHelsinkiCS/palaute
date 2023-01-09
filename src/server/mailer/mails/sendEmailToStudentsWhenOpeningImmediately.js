@@ -15,7 +15,6 @@ const getFeedbackTargetOpeningImmediately = async feedbackTargetId => {
   const feedbackTarget = await FeedbackTarget.findOne({
     where: {
       id: feedbackTargetId,
-      hidden: false,
       feedbackType: 'courseRealisation',
     },
     include: [

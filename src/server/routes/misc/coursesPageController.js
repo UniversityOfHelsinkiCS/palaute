@@ -7,7 +7,6 @@ const redirectFromCoursesPage = async (req, res) => {
     where: {
       courseRealisationId: courseId,
       type: 'courseRealisation',
-      hidden: false,
     },
   })
 

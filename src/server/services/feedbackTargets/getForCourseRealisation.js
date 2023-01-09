@@ -12,7 +12,6 @@ const getForCourseRealisation = async ({ courseRealisationId }) => {
     where: {
       courseRealisationId,
       feedbackType: 'courseRealisation',
-      hidden: false,
     },
   })
 

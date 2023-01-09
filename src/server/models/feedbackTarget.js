@@ -225,7 +225,6 @@ class FeedbackTarget extends Model {
       where: {
         courseUnitId: this.courseUnitId,
         feedbackType: this.feedbackType,
-        hidden: false,
       },
       include: [
         {
@@ -387,6 +386,11 @@ FeedbackTarget.init(
   {
     underscored: true,
     sequelize,
+    defaultScope: {
+      where: {
+        hidden: false,
+      },
+    },
   }
 )
 

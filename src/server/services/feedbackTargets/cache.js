@@ -52,7 +52,6 @@ const onSurveyChange = survey => {
 const onTagChange = async curTag => {
   const fbts = await FeedbackTarget.findAll({
     attributes: ['id'],
-    where: { hidden: false },
     include: {
       model: CourseRealisation,
       required: true,

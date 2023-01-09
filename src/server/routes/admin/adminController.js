@@ -174,11 +174,9 @@ const findFeedbackTargets = async (req, res) => {
     },
   ]
 
-  const where = { hidden: false }
-
   const numberId = Number(id)
   if (numberId) {
-    const result = await FeedbackTarget.findByPk(numberId, { where, include })
+    const result = await FeedbackTarget.findByPk(numberId, { include })
     params.id = numberId
     return res.send({
       params,
@@ -198,7 +196,6 @@ const findFeedbackTargets = async (req, res) => {
   }
 
   const { count, rows: result } = await FeedbackTarget.findAndCountAll({
-    where,
     include,
     order: [['closesAt', 'DESC']],
     limit: 10,

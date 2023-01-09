@@ -16,7 +16,6 @@ const run = async () => {
       opensAt: {
         [Op.between]: [subDays(new Date(), 1), new Date()],
       },
-      hidden: false,
     },
     include: {
       model: UserFeedbackTarget,

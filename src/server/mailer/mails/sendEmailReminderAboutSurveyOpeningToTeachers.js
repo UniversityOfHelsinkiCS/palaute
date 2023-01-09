@@ -12,7 +12,6 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         [Op.gt]: addDays(new Date(), 6),
       },
       feedbackOpeningReminderEmailSent: false,
-      hidden: false,
       feedbackType: 'courseRealisation',
     },
     include: [

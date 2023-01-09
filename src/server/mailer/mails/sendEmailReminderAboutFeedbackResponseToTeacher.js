@@ -19,7 +19,6 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         [Op.lt]: new Date(),
         [Op.gt]: subDays(new Date(), 3),
       },
-      hidden: false,
       feedbackType: 'courseRealisation',
       feedbackResponse: null,
       feedbackResponseReminderEmailSent: false,
