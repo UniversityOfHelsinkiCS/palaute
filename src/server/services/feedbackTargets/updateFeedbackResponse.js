@@ -8,7 +8,7 @@ const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(fee
 const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
-  if (!access.canUpdateResponse()) {
+  if (!access?.canUpdateResponse()) {
     ApplicationError.Forbidden('No rights to update feedback response')
   }
 

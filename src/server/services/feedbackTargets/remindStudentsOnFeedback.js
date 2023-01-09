@@ -1,23 +1,18 @@
 const { mailer } = require('../../mailer')
-const { FeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const remindStudentsOnFeedback = async ({ feedbackTargetId, reminderText, user }) => {
-  let relevantFeedbackTarget
-  if (user.dataValues.isAdmin) {
-    relevantFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
-  } else {
-    const feedbackTargetsUserIsTeacherTo = await user.feedbackTargetsHasTeacherAccessTo()
+  const { feedbackTarget, access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
+  })
 
-    relevantFeedbackTarget = feedbackTargetsUserIsTeacherTo.find(target => target.id === feedbackTargetId)
-  }
+  if (!access?.canSendReminderEmail()) ApplicationError.Forbidden("You're not responsible teacher")
 
-  if (!relevantFeedbackTarget)
-    ApplicationError.NotFound(`No feedback target found with id ${feedbackTargetId} for user`, 404)
+  await mailer.sendFeedbackReminderToStudents(feedbackTarget, reminderText)
 
-  await mailer.sendFeedbackReminderToStudents(relevantFeedbackTarget, reminderText)
-
-  return relevantFeedbackTarget
+  return feedbackTarget
 }
 
 module.exports = {

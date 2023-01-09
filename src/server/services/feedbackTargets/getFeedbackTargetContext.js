@@ -6,7 +6,7 @@ const { getAccess } = require('./getAccess')
  * Fetch fbt, ufbt and compute access object.
  * Useful for all things that consider an action on a single feedback target,
  * where action is either viewing or mutating.
- * Throws 404 when id does not match anything.
+ * Throws 404 when id does not match anything, so you don't have to check that.
  */
 const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {

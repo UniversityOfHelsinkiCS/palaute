@@ -107,7 +107,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 const update = async ({ feedbackTargetId, user, body }) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
-  if (!access.canUpdate()) {
+  if (!access?.canUpdate()) {
     ApplicationError.Forbidden('No rights to update feedback target')
   }
 

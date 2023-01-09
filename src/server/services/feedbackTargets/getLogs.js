@@ -8,7 +8,7 @@ const getLogs = async ({ feedbackTargetId, user }) => {
     user,
   })
 
-  if (!access.canSeeLogs()) {
+  if (!access?.canSeeLogs()) {
     ApplicationError.Forbidden()
   }
 

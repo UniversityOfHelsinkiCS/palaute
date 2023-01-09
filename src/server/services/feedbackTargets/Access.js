@@ -1,4 +1,6 @@
 // Actions 'enum'
+// HEY YOU THERE if you can think of better solution, its your responsibility to implement!!!
+// gotta be very careful with these numbers
 const UPDATE = 0
 const UPDATE_RESPONSE = 1
 const ALL_FEEDBACKS = 2
@@ -9,7 +11,8 @@ const CONTINUOUS_FEEDBACK_RESPONSE = 6
 const GIVE_CONTINUOUS_FEEDBACK = 7
 const LOGS = 8
 const DELETE_TEACHER = 9
-const TOKENS = 9
+const TOKENS = 10
+const SEND_REMINDER_EMAIL = 11
 
 /**
  * Describes what actions are allowed, given some access status
@@ -27,6 +30,7 @@ const RIGHTS = {
     LOGS,
     DELETE_TEACHER,
     TOKENS,
+    SEND_REMINDER_EMAIL,
   ],
   ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS, STUDENTS],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
@@ -38,6 +42,7 @@ const RIGHTS = {
     STUDENTS,
     CONTINUOUS_FEEDBACKS,
     CONTINUOUS_FEEDBACK_RESPONSE,
+    SEND_REMINDER_EMAIL,
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
   STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK],
@@ -99,6 +104,10 @@ class Access {
 
   canSeeTokens() {
     return hasRight(this.accessStatus, TOKENS)
+  }
+
+  canSendReminderEmail() {
+    return hasRight(this.accessStatus, SEND_REMINDER_EMAIL)
   }
 
   // Role enum
