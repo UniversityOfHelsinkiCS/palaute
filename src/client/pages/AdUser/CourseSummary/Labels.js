@@ -19,7 +19,7 @@ const TeacherChips = ({ courseRealisation }) => {
   return (
     <Box display="flex" flexWrap="wrap" maxWidth="100rem">
       {responsibleTeachers.map(t => (
-        <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} style={{ backgroundColor: grey[300] }} />
+        <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} outlined style={{ backgroundColor: grey[300] }} />
       ))}
 
       {teachers.map(t => (
@@ -27,7 +27,13 @@ const TeacherChips = ({ courseRealisation }) => {
       ))}
 
       {administrativePersons.map(t => (
-        <TeacherChip key={t.id} user={t} tooltip={administrativePerson} style={{ backgroundColor: grey[100] }} />
+        <TeacherChip
+          key={t.id}
+          user={t}
+          tooltip={administrativePerson}
+          outlined
+          style={{ backgroundColor: grey[100] }}
+        />
       ))}
     </Box>
   )
