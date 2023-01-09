@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const { UserFeedbackTarget, User } = require('../../models')
 const { JWT_KEY } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
-const { getFeedbackTargetContext } = require('./util')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const getStudentTokens = async ({ feedbackTargetId, user }) => {
   const { access } = await getFeedbackTargetContext({ feedbackTargetId, user })

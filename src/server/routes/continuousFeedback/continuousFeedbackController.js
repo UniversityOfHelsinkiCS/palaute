@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { ContinuousFeedback, FeedbackTarget, UserFeedbackTarget } = require('../../models')
+const { ContinuousFeedback, UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { sendEmailContinuousFeedbackResponseToStudent } = require('../../mailer/mails')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
@@ -50,12 +50,17 @@ const getFeedbacks = async (req, res) => {
 }
 
 const submitFeedback = async (req, res) => {
-  const { id: userId } = req.user
+  const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
   const { feedback } = req.body
 
-  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  const { feedbackTarget, access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
+  })
+
+  if (!access?.canGiveContinuousFeedback()) ApplicationError.Forbidden('User not allowed to give continuous feedback')
 
   const { continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail: sendInDigestEmail } = feedbackTarget
 
@@ -65,19 +70,10 @@ const submitFeedback = async (req, res) => {
 
   if (continuousFeedbackIsOver) ApplicationError.Forbidden('Continuous feedback is closed')
 
-  const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({
-    where: {
-      userId,
-      feedbackTargetId,
-    },
-  })
-
-  if (!userFeedbackTarget) ApplicationError.Forbidden()
-
   const newFeedback = await ContinuousFeedback.create({
     data: feedback,
     feedbackTargetId,
-    userId,
+    userId: user.id,
     sendInDigestEmail,
   })
 

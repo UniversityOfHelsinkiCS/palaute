@@ -14,7 +14,7 @@ const { getStudentTokens } = require('./getStudentTokens')
 const { remindStudentsOnFeedback } = require('./remindStudentsOnFeedback')
 const { getForCourseUnit } = require('./getForCourseUnit')
 const { getByOrganisation } = require('./getByOrganisation')
-const { getFeedbackTargetContext } = require('./util')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,

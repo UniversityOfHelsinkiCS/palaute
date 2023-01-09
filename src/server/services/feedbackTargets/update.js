@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { startOfDay, endOfDay } = require('date-fns')
 const { parseFromTimeZone } = require('date-fns-timezone')
-const { getFeedbackTargetContext } = require('./util')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
 const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')

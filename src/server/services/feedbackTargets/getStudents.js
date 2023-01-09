@@ -3,7 +3,7 @@ const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
-const { getFeedbackTargetContext } = require('./util')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const getStudentListVisibility = async (courseUnitId, isAdmin) => {
   const organisationRows = await sequelize.query(

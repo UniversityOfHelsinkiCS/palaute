@@ -1,7 +1,7 @@
 const { differenceInMonths } = require('date-fns')
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
-const { getFeedbackTargetContext } = require('./util')
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
