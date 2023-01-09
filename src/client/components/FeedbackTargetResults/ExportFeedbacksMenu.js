@@ -1,17 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
-import { Button, MenuItem, Menu, Box } from '@mui/material'
+import { Button } from '@mui/material'
 import * as _ from 'lodash'
+
+import ExportButton from '../common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
-  link: {
-    textDecoration: 'none',
-    color: 'black',
-  },
   button: {
     maxHeight: 45,
     color: 'black',
@@ -23,25 +21,6 @@ const styles = {
       borderColor: 'white',
       boxShadow: 'none',
     },
-  },
-  form: {
-    width: 175,
-    minWidth: 175,
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    '@media print': {
-      display: 'none',
-    },
-  },
-  menu: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  menuitem: {
-    cursor: 'pointer',
   },
 }
 
@@ -122,50 +101,14 @@ const ExportPdfLink = ({ componentRef }) => {
 }
 
 const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
-  const handleClick = e => {
-    setAnchorEl(e.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   return (
-    <Box sx={styles.container}>
-      <Button
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        variant="contained"
-        color="primary"
-        onClick={handleClick}
-      >
-        {t('feedbackTargetResults:export')}
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <MenuItem value="csv" sx={styles.menuitem}>
-          <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />
-        </MenuItem>
-        <MenuItem value="pdf" sx={styles.menuitem}>
-          <ExportPdfLink componentRef={componentRef} />
-        </MenuItem>
-      </Menu>
-    </Box>
+    <ExportButton
+      CsvLink={<ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      PdfLink={<ExportPdfLink componentRef={componentRef} />}
+      label={t('feedbackTargetResults:export')}
+    />
   )
 }
 

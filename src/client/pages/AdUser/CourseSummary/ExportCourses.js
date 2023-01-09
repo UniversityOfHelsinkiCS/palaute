@@ -1,18 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
-import { Button, MenuItem, Menu, Box } from '@mui/material'
-import { Download } from '@mui/icons-material'
+import { Button } from '@mui/material'
 import { format } from 'date-fns'
 
+import ExportButton from '../../../components/common/ExportButton'
 import { getLanguageValue } from '../../../util/languageUtils'
 
 const styles = {
-  link: {
-    textDecoration: 'none',
-    color: 'black',
-  },
   button: {
     maxHeight: 45,
     color: 'black',
@@ -24,24 +20,6 @@ const styles = {
       borderColor: 'white',
       boxShadow: 'none',
     },
-  },
-  form: {
-    width: 175,
-    minWidth: 175,
-  },
-  container: {
-    paddingLeft: '1rem',
-    textAlign: 'left',
-    '@media print': {
-      display: 'none',
-    },
-  },
-  menu: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  menuitem: {
-    cursor: 'pointer',
   },
 }
 
@@ -141,50 +119,14 @@ const ExportPdfLink = ({ componentRef }) => {
 }
 
 const ExportCourses = ({ average, organisations, questions, componentRef }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
   const { t } = useTranslation()
 
-  const handleClick = e => {
-    setAnchorEl(e.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   return (
-    <Box sx={styles.container}>
-      <Button
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        color="primary"
-        onClick={handleClick}
-        endIcon={<Download />}
-      >
-        {t('common:export')}
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <MenuItem value="csv" sx={styles.menuitem}>
-          <ExportCsvLink average={average} organisations={organisations} questions={questions} />
-        </MenuItem>
-        <MenuItem value="pdf" sx={styles.menuitem}>
-          <ExportPdfLink componentRef={componentRef} />
-        </MenuItem>
-      </Menu>
-    </Box>
+    <ExportButton
+      CsvLink={<ExportCsvLink average={average} organisations={organisations} questions={questions} />}
+      PdfLink={<ExportPdfLink componentRef={componentRef} />}
+      label={t('common:export')}
+    />
   )
 }
 

@@ -8,6 +8,7 @@ import useProgrammeOpenQuestions from '../../../hooks/useProgrammeOpenQuestions'
 import { filterCoursesWithNoResponses, filterCoursesByDate, formateDates } from './utils'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
+import ExportButton from '../../../components/common/ExportButton'
 import useHistoryState from '../../../hooks/useHistoryState'
 
 const styles = {
@@ -40,6 +41,18 @@ const styles = {
   dates: {
     color: '#646464',
     marginBottom: 3,
+  },
+  button: {
+    maxHeight: 45,
+    color: 'black',
+    background: 'white',
+    boxShadow: 'none',
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: 'transparent',
+      borderColor: 'white',
+      boxShadow: 'none',
+    },
   },
 }
 
@@ -105,6 +118,20 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
   )
 })
 
+const ExportPdfLink = ({ componentRef }) => {
+  const { t } = useTranslation()
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
+  return (
+    <Button sx={styles.button} onClick={handlePrint}>
+      {t('exportPdf')}
+    </Button>
+  )
+}
+
 const ProgrammeOpenQuestions = () => {
   const { code } = useParams()
   const { t } = useTranslation()
@@ -120,10 +147,6 @@ const ProgrammeOpenQuestions = () => {
 
   const componentRef = useRef()
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  })
-
   if (isLoading) {
     return <LoadingProgress />
   }
@@ -132,9 +155,10 @@ const ProgrammeOpenQuestions = () => {
     <Box>
       <YearSemesterSelector value={dateRange} onChange={setDateRange} option={option} setOption={setOption} allowAll />
       <Box sx={styles.buttonContainer}>
-        <Button color="primary" variant="contained" onClick={handlePrint}>
-          {t('feedbackTargetResults:exportPdf')}
-        </Button>
+        <ExportButton
+          PdfLink={<ExportPdfLink componentRef={componentRef} />}
+          label={t('feedbackTargetResults:export')}
+        />
       </Box>
       <OpenQuestions codesWithIds={codesWithIds} dateRange={option !== 'all' && dateRange} ref={componentRef} />
     </Box>
