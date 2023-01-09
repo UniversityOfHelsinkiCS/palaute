@@ -1,6 +1,5 @@
+const { WORKLOAD_QUESTION_ID } = require('../../../config')
 const { getUniversitySurvey, getProgrammeSurvey } = require('../surveys')
-
-const WORKLOAD_QUESTION_ID = 1042
 
 /**
  * @param {string} organisationCode

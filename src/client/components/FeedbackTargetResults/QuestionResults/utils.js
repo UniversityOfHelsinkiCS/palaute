@@ -8,8 +8,6 @@ import { getColor } from '../../../util/resultColors'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
-// const WORKLOAD_QUESTION_ID = 1042
-
 /**
  * https://stackoverflow.com/questions/21409717/chart-js-and-long-labels
  * Takes a string phrase and breaks it into separate phrases

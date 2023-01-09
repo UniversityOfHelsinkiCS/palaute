@@ -2,8 +2,7 @@ const _ = require('lodash')
 const { Op } = require('sequelize')
 const { getUniversitySurvey } = require('../surveys')
 const { Tag, CourseRealisationsTag } = require('../../models')
-
-const WORKLOAD_QUESTION_ID = 1042
+const { WORKLOAD_QUESTION_ID } = require('../../../config')
 
 const QUESTION_AVERAGES_QUERY = `
 SELECT
