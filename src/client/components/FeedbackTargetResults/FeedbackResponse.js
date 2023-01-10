@@ -21,6 +21,7 @@ const styles = {
     },
     paddingTop: '2rem',
     paddingBottom: '1.5rem',
+    boxShadow: `0 2px 5px 0 rgb(0 0 0 / 7%)`,
     backgroundColor: grey[50],
     borderRadius: '0.8rem',
   }),

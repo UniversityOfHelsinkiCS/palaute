@@ -55,14 +55,16 @@ const QuestionItem = ({
     }
   }
 
+  const actualAnswers = _.sumBy(question.feedbacks, f => Boolean(f.data))
+
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)
 
   return (
-    <Card sx={{ borderRadius: '1rem' }}>
-      <CardContent>
-        <Box display="flex" mb="0.5rem">
-          <Box flexGrow={0} mr="auto">
+    <Card sx={{ height: '100%', p: '1rem' }}>
+      <Box display="flex" flexDirection="column" height="100%">
+        <Box display="flex">
+          <Box flexGrow={0} mr="auto" display="flex" flexDirection="column" rowGap="0.5rem" alignItems="start">
             {isResponsibleTeacher && (
               <QuestionPublicityToggle
                 checked={isPublic}
@@ -71,7 +73,6 @@ const QuestionItem = ({
               />
             )}
             <Typography variant="body1">{label}</Typography>
-            <Box mb="0.5rem" />
             <Typography variant="body2">{description}</Typography>
           </Box>
           {(question.type === 'LIKERT' || question.secondaryType === 'WORKLOAD') && (
@@ -86,8 +87,15 @@ const QuestionItem = ({
             />
           )}
         </Box>
-        {content}
-      </CardContent>
+        <Box display="flex" alignItems="center" flexGrow="100">
+          <Box display="flex" flexDirection="column" alignItems="center">
+            {content}
+            <Typography variant="caption" color="textSecondary">
+              {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
     </Card>
   )
 }

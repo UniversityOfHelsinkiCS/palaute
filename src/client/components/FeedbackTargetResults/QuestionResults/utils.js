@@ -50,18 +50,21 @@ const formatLabel = (str, maxwidth) => {
   return sections
 }
 
-const getScalesConfig = (t, totalFeedbacks, questionFeedbacks) => ({
+const getScalesConfig = (t, totalFeedbacks) => ({
   y: {
     grid: {
       display: false,
       drawBorder: false,
     },
+    ticks: {
+      font: {
+        size: 12,
+      },
+      display: true,
+      showLabelBackdrop: false,
+    },
   },
   x: {
-    title: {
-      display: true,
-      text: t('questionResults:answerCount', { answers: questionFeedbacks, feedbacks: totalFeedbacks }),
-    },
     ticks: {
       precision: 0,
     },
@@ -69,15 +72,23 @@ const getScalesConfig = (t, totalFeedbacks, questionFeedbacks) => ({
   },
 })
 
-const getChartOptions = (numberOfOptions, t, totalFeedbacks, questionFeedbacks) => ({
+const getAspectRatio = numberOfOptions => Math.min(1.05 / (numberOfOptions / 6), 1.2)
+
+const getChartOptions = (numberOfOptions, t, totalFeedbacks, hover) => ({
   indexAxis: 'y',
-  scales: getScalesConfig(t, totalFeedbacks, questionFeedbacks),
+  scales: getScalesConfig(t, totalFeedbacks),
   responsive: true,
-  aspectRatio: 1.5 / (numberOfOptions / 6),
+  // maintainAspectRatio: false,
+  aspectRatio: getAspectRatio(numberOfOptions),
   layout: {
     padding: {
       right: 45,
     },
+  },
+  interaction: {
+    intersect: false,
+    mode: 'nearest',
+    axis: 'y',
   },
   plugins: {
     legend: {
@@ -90,7 +101,10 @@ const getChartOptions = (numberOfOptions, t, totalFeedbacks, questionFeedbacks) 
       align: 'end',
       anchor: 'end',
       offset: 0,
-      formatter: v => `${((v / totalFeedbacks) * 100).toFixed()} %`,
+      formatter: v => `${v} (${((v / totalFeedbacks) * 100).toFixed()} %)`,
+    },
+    tooltip: {
+      enabled: hover,
     },
   },
 })
@@ -104,7 +118,7 @@ export const getLikertChartConfig = (question, language, t, numberOfFeedbacks) =
   const dontKnowOption = t('feedbackView:dontKnowOption')
 
   return {
-    options: getChartOptions(labels.length, t, numberOfFeedbacks, question.feedbacks.length),
+    options: getChartOptions(labels.length, t, numberOfFeedbacks),
     data: {
       labels: ['5', '4', '3', '2', '1', dontKnowOption],
       datasets: [
@@ -129,7 +143,7 @@ export const getMultipleChoiceChartConfig = (question, language, t, numberOfFeed
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, question.feedbacks.length),
+    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, true),
     data: {
       labels,
       datasets: [
@@ -147,14 +161,14 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 30))
+  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 20))
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
 
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, question.feedbacks.length),
+    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, true),
     data: {
       labels,
       datasets: [

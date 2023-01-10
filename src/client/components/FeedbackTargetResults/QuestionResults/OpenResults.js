@@ -13,7 +13,9 @@ import { useFeedbackTargetContext } from '../../../pages/AdUser/FeedbackTarget/F
 
 const styles = {
   list: theme => ({
+    width: '100%',
     padding: '1rem',
+    marginBottom: '1rem',
     maxHeight: '800px',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
@@ -37,15 +39,13 @@ const styles = {
     },
   }),
   listItem: {
+    boxShadow: `0 2px 4px 0 rgb(0 0 0 / 7%)`,
     backgroundColor: grey[50],
     borderRadius: '0.8rem',
-    marginBottom: '0.4rem',
+    marginBottom: '0.5rem',
   },
   hiddenListItem: theme => ({
     color: theme.palette.error.light,
-    backgroundColor: grey[50],
-    borderRadius: '0.8rem',
-    marginBottom: '0.4rem',
   }),
 }
 
@@ -95,7 +95,7 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
   const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
   return (
     <ListItem
-      sx={feedback.hidden ? styles.hiddenListItem : styles.listItem}
+      sx={[styles.listItem, feedback.hidden ? styles.hiddenListItem : {}]}
       secondaryAction={
         canHide && (
           <Box display="flex" alignContent="start">

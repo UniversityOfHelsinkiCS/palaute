@@ -17,7 +17,7 @@ const useChartConfig = () => {
       color: '#ffffff',
       font: {
         family: 'Open Sans',
-        size: 14,
+        size: 12,
       },
     })
   }, [])
