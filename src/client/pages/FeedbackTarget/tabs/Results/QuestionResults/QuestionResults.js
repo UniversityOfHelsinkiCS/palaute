@@ -21,7 +21,6 @@ import AlertLink from '../../../../../components/common/AlertLink'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
 import SearchOpenResults from './SearchOpenResults'
-import useLocalStorageState from '../../../hooks/useLocalStorageState'
 
 const styles = {
   list: theme => ({
@@ -112,8 +111,6 @@ const QuestionResults = ({
   feedbackCount,
   feedbackTargetId,
 }) => {
-  const [gridLayout, setGridLayout] = useLocalStorageState('question-results-grid')
-
   const questionsWithFeedbacks = useMemo(
     () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
     [questions, feedbacks, publicQuestionIds]
@@ -133,31 +130,13 @@ const QuestionResults = ({
 
   return (
     <>
-      <Button onClick={() => setGridLayout(!gridLayout)}>{gridLayout ? 'grid' : 'masonry'}</Button>
       <QuestionSection title={t('questionResults:multipleChoiceQuestions')} count={notOpenQuestions.length}>
         <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
 
-        {gridLayout ? (
-          <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
-            {notOpenQuestions.map(q => (
-              <Grid item key={q.id} xs={12} sm={12} md={6} lg={4} xl={3}>
-                <QuestionItem
-                  question={q}
-                  publicQuestionIds={publicQuestionIds}
-                  disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                  isResponsibleTeacher={isResponsibleTeacher}
-                  feedbackCount={feedbackCount}
-                  feedbackTargetId={feedbackTargetId}
-                  t={t}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <Masonry columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
-            {notOpenQuestions.map(q => (
+        <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
+          {notOpenQuestions.map(q => (
+            <Grid item key={q.id} xs={12} sm={12} md={6} lg={4} xl={3}>
               <QuestionItem
-                key={q.id}
                 question={q}
                 publicQuestionIds={publicQuestionIds}
                 disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
@@ -166,9 +145,9 @@ const QuestionResults = ({
                 feedbackTargetId={feedbackTargetId}
                 t={t}
               />
-            ))}
-          </Masonry>
-        )}
+            </Grid>
+          ))}
+        </Grid>
       </QuestionSection>
       {/*<SearchOpenResults questions={openQuestions}/>
      

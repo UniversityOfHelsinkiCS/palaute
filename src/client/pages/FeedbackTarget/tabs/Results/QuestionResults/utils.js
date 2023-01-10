@@ -8,6 +8,8 @@ import { getColor } from '../../../../../util/resultColors'
 
 const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
+const COMMA_REPLACE = /,/g
+
 /**
  * https://stackoverflow.com/questions/21409717/chart-js-and-long-labels
  * Takes a string phrase and breaks it into separate phrases
@@ -50,7 +52,7 @@ const formatLabel = (str, maxwidth) => {
   return sections
 }
 
-const getScalesConfig = (t, totalFeedbacks) => ({
+const getScalesConfig = (totalFeedbacks, labels) => ({
   y: {
     grid: {
       display: false,
@@ -62,6 +64,7 @@ const getScalesConfig = (t, totalFeedbacks) => ({
       },
       display: true,
       showLabelBackdrop: false,
+      callback: (_value, index, _ticks) => [labels[index][0]].concat(labels[index].length > 1 ? '...' : []),
     },
   },
   x: {
@@ -72,13 +75,12 @@ const getScalesConfig = (t, totalFeedbacks) => ({
   },
 })
 
-const getAspectRatio = numberOfOptions => Math.min(1.05 / (numberOfOptions / 6), 1.2)
+const getAspectRatio = numberOfOptions => Math.min(1.05 / (numberOfOptions / 6), 1.3)
 
-const getChartOptions = (numberOfOptions, t, totalFeedbacks, hover) => ({
+const getChartOptions = (numberOfOptions, totalFeedbacks, labels) => ({
   indexAxis: 'y',
-  scales: getScalesConfig(t, totalFeedbacks),
-  responsive: true,
-  // maintainAspectRatio: false,
+  scales: getScalesConfig(totalFeedbacks, labels),
+  maintainAspectRatio: true,
   aspectRatio: getAspectRatio(numberOfOptions),
   layout: {
     padding: {
@@ -104,23 +106,28 @@ const getChartOptions = (numberOfOptions, t, totalFeedbacks, hover) => ({
       formatter: v => `${v} (${((v / totalFeedbacks) * 100).toFixed()} %)`,
     },
     tooltip: {
-      enabled: hover,
+      callbacks: {
+        label: context => {
+          const v = context.parsed.x
+          return `${v} (${((v / totalFeedbacks) * 100).toFixed()} %)`
+        },
+        title: context => String(context[0]?.label ?? '').replace(COMMA_REPLACE, '\n'),
+      },
     },
   },
 })
 
 export const getLikertChartConfig = (question, language, t, numberOfFeedbacks) => {
   const labels = [5, 4, 3, 2, 1, 0]
-
   const countByLabel = countBy(question.feedbacks, ({ data }) => data ?? '_')
   const data = labels.map(l => countByLabel[l] ?? 0)
-
   const dontKnowOption = t('feedbackView:dontKnowOption')
+  const displayLabels = ['5', '4', '3', '2', '1', dontKnowOption].map(l => [l])
 
   return {
-    options: getChartOptions(labels.length, t, numberOfFeedbacks),
+    options: getChartOptions(labels.length, numberOfFeedbacks, displayLabels),
     data: {
-      labels: ['5', '4', '3', '2', '1', dontKnowOption],
+      labels: displayLabels,
       datasets: [
         {
           data,
@@ -143,7 +150,7 @@ export const getMultipleChoiceChartConfig = (question, language, t, numberOfFeed
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, true),
+    options: getChartOptions(arrayOptions.length, numberOfFeedbacks, labels),
     data: {
       labels,
       datasets: [
@@ -168,7 +175,7 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, t, numberOfFeedbacks, true),
+    options: getChartOptions(arrayOptions.length, numberOfFeedbacks, labels),
     data: {
       labels,
       datasets: [

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from '@mui/material'
+import { Box, Card, Typography } from '@mui/material'
 import _ from 'lodash'
 import { useSnackbar } from 'notistack'
 import React from 'react'
