@@ -1,30 +1,29 @@
 import React, { useState, forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import { Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
+import { useParams, useHistory, Link } from 'react-router-dom'
+
+import { Typography, Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
+
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import FeedbackForm from '../FeedbackTarget/tabs/FeedbackView/FeedbackForm'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 
-import AlertLink from '../../components/common/AlertLink'
+import ContinuousFeedback from './ContinuousFeedback'
+import FeedbackForm from './FeedbackForm'
+import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
+import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import PrivacyDialog from './PrivacyDialog'
+import Toolbar from './Toolbar'
+import AlertLink from '../../../../components/common/AlertLink'
 
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import { makeValidate, getInitialValues, saveValues, getQuestions, formatDate, checkIsFeedbackOpen } from './utils'
 
-import {
-  makeValidate,
-  getInitialValues,
-  getQuestions,
-  formatDate,
-  checkIsFeedbackOpen,
-} from '../FeedbackTarget/tabs/FeedbackView/utils'
-
-import { saveValues } from './utils'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import useOrganisationAccess from '../../../../hooks/useOrganisationAccess'
+import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
 
 const tada = keyframes({
   from: {
@@ -65,7 +64,11 @@ const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
     sx={styles.alert}
     ref={ref}
     elevation={6}
-    icon={<span css={styles.icon}>🎉</span>}
+    icon={
+      <span css={styles.icon}>
+        <SeasonalEmoji />
+      </span>
+    }
     {...props}
   >
     {children}
@@ -79,6 +82,8 @@ const FormContainer = ({
   validate,
   questions,
   disabled: disabledProp,
+  showCannotSubmitText = false,
+  showSubmitButton = true,
   isEdit = false,
 }) => {
   const { t } = useTranslation()
@@ -105,11 +110,24 @@ const FormContainer = ({
               </CardContent>
             </Card>
 
-            <Box mt={2}>
-              <Button disabled={disabled} color="primary" variant="contained" type="submit">
-                {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
-              </Button>
-            </Box>
+            {showSubmitButton && (
+              <Box mt={2}>
+                <Button
+                  disabled={disabled}
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  data-cy="submitFeedbackButton"
+                >
+                  {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
+                </Button>
+                {showCannotSubmitText && (
+                  <Box mt={1}>
+                    <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
+                  </Box>
+                )}
+              </Box>
+            )}
           </Form>
         )
       }}
@@ -117,31 +135,39 @@ const FormContainer = ({
   )
 }
 
-const GuestFeedbackView = () => {
+const FeedbackView = () => {
   const { id } = useParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const { language } = i18n
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
+  const { authorizedUser } = useAuthorizedUser()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
+
+  const orgAccess = useOrganisationAccess(feedbackTarget)
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  if (!feedbackTarget) {
-    return <Redirect to="/noad/courses" />
-  }
-
-  const { opensAt, closesAt, feedback } = feedbackTarget
+  const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
+  // TODO clean up this shit again
+  const isStudent = accessStatus === 'STUDENT'
+  const isTeacher = accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isOutsider = accessStatus === 'NONE'
+  const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-
-  const showForm = isOpen || isEnded
-  const formIsDisabled = !isOpen
+  const isOngoing = !isOpen && !isEnded
+  const showContinuousFeedback = isStudent && isOngoing && continuousFeedbackEnabled
+  const showClosedAlert = isOngoing && !showContinuousFeedback
+  const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
+  const formIsDisabled = !isOpen || isTeacher || isOutsider || isOrganisationAdmin
+  const showToolbar = (isOrganisationAdmin || isTeacher) && !isOpen && !isEnded
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
@@ -155,11 +181,11 @@ const GuestFeedbackView = () => {
       } else {
         await saveValues(values, feedbackTarget)
 
-        history.push(`/noad/targets/${id}/results`)
+        history.push(`/targets/${id}/results`)
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
-          autoHideDuration: 5999,
+          autoHideDuration: 6000,
           content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
         })
       }
@@ -184,7 +210,7 @@ const GuestFeedbackView = () => {
       <Alert severity="info">
         <Trans i18nKey="feedbackView:endedInfo">
           The feedback period has ended.{' '}
-          <AlertLink component={Link} to={`/noad/targets/${feedbackTarget.id}/results`}>
+          <AlertLink component={Link} to={`/targets/${feedbackTarget.id}/results`}>
             Take a look at the feedbacks
           </AlertLink>
         </Trans>
@@ -201,11 +227,17 @@ const GuestFeedbackView = () => {
     setPrivacyDialogOpen(true)
   }
 
+  const handleLanguageChange = language => {
+    i18n.changeLanguage(language)
+  }
+
   return (
     <>
       <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
-      {!isOpen && !isEnded && closedAlert}
+      {showContinuousFeedback && <ContinuousFeedback />}
+
+      {showClosedAlert && closedAlert}
 
       {isEnded && endedAlert}
 
@@ -214,14 +246,26 @@ const GuestFeedbackView = () => {
           initialValues={initialValues}
           validate={validate}
           onSubmit={handleSubmit}
-          disabled={formIsDisabled}
+          disabled={formIsDisabled && !authorizedUser?.isAdmin}
+          showSubmitButton={!isTeacher || authorizedUser?.isAdmin}
           questions={questions}
+          showCannotSubmitText={isOutsider}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
           isEdit={Boolean(feedback)}
         />
+      )}
+
+      {showToolbar && (
+        <Box mt={2}>
+          <Toolbar
+            editLink={`/targets/${feedbackTarget.id}/edit`}
+            language={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        </Box>
       )}
     </>
   )
 }
 
-export default GuestFeedbackView
+export default FeedbackView

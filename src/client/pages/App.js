@@ -5,7 +5,7 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 
 import LocalizationProvider from '../components/LocalizationProvider'
-import AdUser from './AdUser/AdUser'
+import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
 import usePinger from '../hooks/usePinger'
