@@ -188,7 +188,7 @@ const BannerForm = ({ onSubmit, selected, open, setOpen }) => (
               <FormikSelect name="accessGroup" label="Target group" options={accessGroupOptions} />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSubmit}>Create</Button>
+              <Button onClick={handleSubmit}>{selected ? 'Edit' : 'Create'}</Button>
             </DialogActions>
           </Dialog>
           {open && <BannerPreview values={values} />}
