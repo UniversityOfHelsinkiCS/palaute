@@ -59,6 +59,9 @@ const useTheme = () => {
                 }
               : {}),
           },
+          shape: {
+            borderRadius: 6,
+          },
           components: {
             MuiCssBaseline: {
               styleOverrides: `
@@ -84,20 +87,53 @@ const useTheme = () => {
               defaultProps: {
                 elevation: 2,
               },
+              styleOverrides: {
+                root: {
+                  borderRadius: '0.8rem',
+                },
+              },
             },
             MuiCard: {
               defaultProps: {
                 elevation: 2,
+              },
+              styleOverrides: {
+                root: {
+                  borderRadius: '0.8rem',
+                },
               },
             },
             MuiAccordion: {
               defaultProps: {
                 elevation: 2,
               },
+              styleOverrides: {
+                rounded: {
+                  borderRadius: '0.8rem',
+                },
+              },
             },
             MuiAlert: {
               defaultProps: {
                 elevation: 0,
+              },
+              styleOverrides: {
+                standardInfo: {
+                  boxShadow: `0 2px 8px 0 ${lightBlue[100]}`,
+                },
+              },
+            },
+            MuiButton: {
+              styleOverrides: {
+                containedPrimary: {
+                  color: 'white',
+                  background: 'rgb(8 110 221)',
+                  boxShadow: '0 4px 14px 0 rgb(0 118 255 / 39%)',
+                  '&:hover': {
+                    background: 'rgba(10,130,235,1)',
+                    boxShadow: '0 4px 14px 0 rgb(0 118 255 / 44%)',
+                  },
+                },
               },
             },
           },

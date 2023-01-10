@@ -250,6 +250,7 @@ const NavBar = ({ guest = false }) => {
           zIndex: theme => theme.zIndex.drawer + 1,
           background: theme => theme.palette.primary.dark,
           boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
+          borderRadius: 0,
         }}
       >
         <Container maxWidth="xl">
