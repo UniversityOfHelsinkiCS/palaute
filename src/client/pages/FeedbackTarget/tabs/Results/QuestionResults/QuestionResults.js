@@ -11,16 +11,13 @@ import {
   Link as MuiLink,
   Chip,
   Grid,
-  Button,
 } from '@mui/material'
-import { Masonry } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 
 import { getQuestionsWithFeedback } from './utils'
 import AlertLink from '../../../../../components/common/AlertLink'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
-import SearchOpenResults from './SearchOpenResults'
 
 const styles = {
   list: theme => ({
@@ -149,8 +146,6 @@ const QuestionResults = ({
           ))}
         </Grid>
       </QuestionSection>
-      {/*<SearchOpenResults questions={openQuestions}/>
-     
       <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
         {openQuestions.map(q => (
           <QuestionItem
@@ -165,7 +160,7 @@ const QuestionResults = ({
           />
         ))}
       </QuestionSection>
-       */}
+
       {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
     </>
   )
