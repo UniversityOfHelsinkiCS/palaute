@@ -2,6 +2,7 @@
 
 # Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/prod.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/tests.yml/badge.svg)
 
+More commonly known as **Norppa**
 
 Production in <https://coursefeedback.helsinki.fi>
 
@@ -46,7 +47,7 @@ $ npm run reset
 
 ## Documentation
 
-[Database schema](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/database_schema.png)
+[Documentation main page](https://github.com/UniversityOfHelsinkiCS/palaute/tree/master/documentation)
 
 [Testing document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/testingdocument.md)
 
@@ -54,8 +55,10 @@ $ npm run reset
 
 [Accessibility document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md)
 
-## Maintainers and Contribution
+## Maintainers and Contribution <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
 
-Toska of course.
+
+**[Toska](https://toska.dev/)**
 
 University of Helsinki.
+
