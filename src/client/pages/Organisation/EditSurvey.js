@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
 import QuestionEditor from '../../components/QuestionEditor'
-import PublicQuestions from '../../components/PublicQuestions'
+import PublicQuestions from './PublicQuestions'
 
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
 import useOrganisation from '../../hooks/useOrganisation'

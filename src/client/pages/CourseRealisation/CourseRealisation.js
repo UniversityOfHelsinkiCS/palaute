@@ -4,12 +4,12 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
-import { LoadingProgress } from '../common/LoadingProgress'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 const getCourseRealisationFeedbackTarget = feedbackTargets =>
   (feedbackTargets ?? []).find(({ feedbackType }) => feedbackType === 'courseRealisation')
 
-const CourseRealisationFeedback = () => {
+const CourseRealisation = () => {
   const { id } = useParams()
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useCourseRealisationFeedbackTargets(id)
@@ -32,4 +32,4 @@ const CourseRealisationFeedback = () => {
   return <Redirect to={`/targets/${courseRealisationFeedbackTarget.id}/feedback`} />
 }
 
-export default CourseRealisationFeedback
+export default CourseRealisation

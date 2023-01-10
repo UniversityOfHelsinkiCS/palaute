@@ -17,8 +17,8 @@ import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
 import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
-import QuestionPublicityToggle from '../PublicQuestions/QuestionPublicityToggle'
 import FormikRadioButtons from '../common/FormikRadioButtons'
+import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
