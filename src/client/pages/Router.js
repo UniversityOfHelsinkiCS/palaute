@@ -6,7 +6,7 @@ import Admin from './Admin'
 import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
 import CourseSummary from './CourseSummary'
 import MyTeaching from './MyTeaching'
-import CourseRealisationFeedback from '../components/CourseRealisationFeedback'
+import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from './NorppaFeedback'
@@ -54,7 +54,7 @@ const Router = () => (
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
       <Route path="/course-summary" component={CourseSummary} />
-      <Route path="/cur/:id" component={CourseRealisationFeedback} />
+      <Route path="/cur/:id" component={CourseRealisation} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />
       <Route path="/admin" component={Admin} />
     </Switch>

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
 
-import { getLanguageValue } from '../../util/languageUtils'
-import apiClient from '../../util/apiClient'
+import { getLanguageValue } from '../../../util/languageUtils'
+import apiClient from '../../../util/apiClient'
 
 const getQuestionItems = target => {
   const questions = target.questions ?? []
