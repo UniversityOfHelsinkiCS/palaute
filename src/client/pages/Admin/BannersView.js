@@ -39,6 +39,17 @@ const formValuesToBannerData = (theme, values) => ({
   },
 })
 
+const bannerDataToFormValues = banner => ({
+  textFi: banner ? banner.data.text.fi : '',
+  textSv: banner ? banner.data.text.sv : '',
+  textEn: banner ? banner.data.text.en : '',
+  hue: 'primary',
+  lightness: 'light',
+  accessGroup: banner ? banner.accessGroup : 'TEACHER',
+  startDate: banner ? new Date(banner.startDate) : new Date(),
+  endDate: banner ? new Date(banner.endDate) : addDays(new Date(), 7),
+})
+
 const BannerPreview = ({ values }) => {
   const [l, setL] = React.useState('fi')
   const theme = useTheme()
@@ -121,75 +132,85 @@ const accessGroupOptions = [
   },
 ]
 
-const BannerForm = ({ onSubmit }) => {
-  const [open, setOpen] = React.useState(false)
-
-  return (
-    <div>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
-        Create new banner
-      </Button>
-      <Formik
-        onSubmit={async values => {
-          await onSubmit(values)
-          setOpen(false)
-        }}
-        initialValues={{
-          textFi: '',
-          textSv: '',
-          textEn: '',
-          hue: 'primary',
-          lightness: 'light',
-          accessGroup: 'TEACHER',
-          startDate: new Date(),
-          endDate: addDays(new Date(), 7),
-        }}
-      >
-        {({ values, handleSubmit }) => (
-          <>
-            <Dialog open={open} onClose={() => setOpen(false)} sx={{ maxHeight: '75vh', top: '20vh' }}>
-              <DialogTitle>Create new banner</DialogTitle>
-              <DialogContent>
-                <Box my={2}>
-                  <FormikTextField name="textFi" label="Markdown content (FI)" multiline fullWidth />
-                </Box>
-                <FormikTextField name="textSv" label="Markdown content (SV)" multiline fullWidth />
-                <Box m={2} />
-                <FormikTextField name="textEn" label="Markdown content (EN)" multiline fullWidth />
-                <Box my={3}>
-                  <Divider />
-                </Box>
-                <FormikSelect name="hue" label="Hue" options={hueOptions} />
-                <FormikSelect name="lightness" label="Lightness" options={lightnessOptions} />
-                <Box my={3}>
-                  <Divider />
-                </Box>
-                <FormikDatePicker name="startDate" label="Start date" />
-                <FormikDatePicker name="endDate" label="End date" />
-                <Box my={3}>
-                  <Divider />
-                </Box>
-                <FormikSelect name="accessGroup" label="Target group" options={accessGroupOptions} />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleSubmit}>Create</Button>
-              </DialogActions>
-            </Dialog>
-            {open && <BannerPreview values={values} />}
-          </>
-        )}
-      </Formik>
-    </div>
-  )
+const FuckReact = ({ value, funcThing }) => {
+  React.useEffect(() => {
+    if (value) funcThing(value)
+  }, [value])
+  return <div />
 }
+
+const BannerForm = ({ onSubmit, selected, open, setOpen }) => (
+  <div>
+    <Button variant="outlined" onClick={() => setOpen(true)}>
+      Create new banner
+    </Button>
+    <Formik
+      onSubmit={async values => {
+        await onSubmit(values)
+        setOpen(false)
+      }}
+      initialValues={{
+        textFi: '',
+        textSv: '',
+        textEn: '',
+        hue: 'primary',
+        lightness: 'light',
+        accessGroup: 'TEACHER',
+        startDate: new Date(),
+        endDate: addDays(new Date(), 7),
+      }}
+    >
+      {({ setValues, values, handleSubmit }) => (
+        <>
+          <FuckReact value={selected} funcThing={v => setValues(bannerDataToFormValues(v))} />
+          <Dialog open={open} onClose={() => setOpen(false)} sx={{ maxHeight: '75vh', top: '20vh' }}>
+            <DialogTitle>Create new banner</DialogTitle>
+            <DialogContent>
+              <Box my={2}>
+                <FormikTextField name="textFi" label="Markdown content (FI)" multiline fullWidth />
+              </Box>
+              <FormikTextField name="textSv" label="Markdown content (SV)" multiline fullWidth />
+              <Box m={2} />
+              <FormikTextField name="textEn" label="Markdown content (EN)" multiline fullWidth />
+              <Box my={3}>
+                <Divider />
+              </Box>
+              <FormikSelect name="hue" label="Hue" options={hueOptions} />
+              <FormikSelect name="lightness" label="Lightness" options={lightnessOptions} />
+              <Box my={3}>
+                <Divider />
+              </Box>
+              <FormikDatePicker name="startDate" label="Start date" />
+              <FormikDatePicker name="endDate" label="End date" />
+              <Box my={3}>
+                <Divider />
+              </Box>
+              <FormikSelect name="accessGroup" label="Target group" options={accessGroupOptions} />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSubmit}>Create</Button>
+            </DialogActions>
+          </Dialog>
+          {open && <BannerPreview values={values} />}
+        </>
+      )}
+    </Formik>
+  </div>
+)
 
 const BannerView = () => {
   const { authorizedUser } = useAuthorizedUser()
+  const [selected, setSelected] = React.useState(null)
+  const [open, setOpen] = React.useState(false)
   const theme = useTheme()
 
   const handleSubmit = async bannerValues => {
     try {
-      await apiClient.post('/admin/banners', formValuesToBannerData(theme, bannerValues))
+      if (selected) {
+        await apiClient.put(`/admin/banners/${selected.id}`, formValuesToBannerData(theme, bannerValues))
+      } else {
+        await apiClient.post('/admin/banners', formValuesToBannerData(theme, bannerValues))
+      }
       queryClient.refetchQueries(['authorizedUser'])
     } catch (error) {
       console.log('SOMETHING WENT WRONG')
@@ -208,7 +229,7 @@ const BannerView = () => {
 
   return (
     <div>
-      <BannerForm onSubmit={handleSubmit} />
+      <BannerForm onSubmit={handleSubmit} selected={selected} open={open} setOpen={setOpen} />
       {authorizedUser?.banners.map(banner => (
         <Box m={2} key={banner.id}>
           <Paper variant="outlined">
@@ -220,6 +241,16 @@ const BannerView = () => {
                 <div>End date: {banner.endDate}</div>
                 <div>Access group: {banner.accessGroup}</div>
                 <Box ml="auto">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setSelected(banner)
+                      setOpen(true)
+                    }}
+                  >
+                    EDIT
+                  </Button>
                   <Button variant="text" color="error" onClick={() => handleDelete(banner.id)}>
                     DELETE
                   </Button>

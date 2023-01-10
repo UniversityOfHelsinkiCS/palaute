@@ -478,6 +478,26 @@ const createBanner = async (req, res) => {
   return res.send(banner)
 }
 
+const updateBanner = async (req, res) => {
+  const { id } = req.params
+  const { body } = req
+
+  const banner = await Banner.findByPk(id)
+  if (!banner) ApplicationError.NotFound('bannerino no existo')
+  banner.data = body.data
+  banner.accessGroup = body.accessGroup ?? body.accessGroup
+  banner.startDate = new Date(body.startDate)
+  banner.endDate = new Date(body.endDate)
+
+  try {
+    await banner.save()
+  } catch (err) {
+    throw new ApplicationError('Fakd', 400)
+  }
+
+  return res.send(banner)
+}
+
 const deleteBanner = async (req, res) => {
   const { id } = req.params
   const destroyed = await Banner.destroy({ where: { id } })
@@ -564,5 +584,6 @@ router.get('/feedback-correspondents', getFeedbackCorrespondents)
 router.get('/inactive-course-realisations', getInactiveCourseRealisations)
 router.put('/inactive-course-realisations/:id', updateInactiveCourseRealisation)
 router.post('/banners', createBanner)
+router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
 module.exports = router
