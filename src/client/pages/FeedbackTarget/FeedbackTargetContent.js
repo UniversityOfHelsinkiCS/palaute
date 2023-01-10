@@ -19,12 +19,16 @@ import {
   ReviewsOutlined,
 } from '@mui/icons-material'
 
-import FeedbackTargetResults from '../../components/FeedbackTargetResults'
-import FeedbackView from '../../components/FeedbackView'
-import StudentsWithFeedback from '../../components/StudentsWithFeedback'
-import EditFeedbackResponse from '../../components/EditFeedbackResponse'
-import FeedbackTargetShare from '../../components/FeedbackTargetShare'
-import FeedbackLinksView from '../../components/FeedbackLinksView'
+import Results from './tabs/Results'
+import FeedbackView from './tabs/FeedbackView'
+import StudentsWithFeedback from './tabs/StudentsWithFeedback'
+import EditFeedbackResponse from './tabs/EditFeedbackResponse'
+import Share from './tabs/Share'
+import Links from './tabs/Links'
+import Settings from './tabs/Settings'
+import Logs from './tabs/Logs'
+import ContinuousFeedback from './tabs/ContinuousFeedback'
+
 import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 import { RouterTab, RouterTabs, TabLabel } from '../../components/common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -41,9 +45,6 @@ import {
   deleteResponsibleTeacher,
 } from './utils'
 
-import FeedbackTargetSettings from '../../components/FeedbackTargetSettings'
-import FeedbackTargetLogs from '../../components/FeedbackTargetLogs'
-import ContinuousFeedback from '../../components/FeedbackTargetContinuousFeedback'
 import TeacherChip from '../../components/common/TeacherChip'
 import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
@@ -411,8 +412,8 @@ const FeedbackTargetContent = () => {
       </Box>
 
       <Switch>
-        <ProtectedRoute path={`${path}/edit`} component={FeedbackTargetSettings} hasAccess={showSettingsTab} />
-        <ProtectedRoute path={`${path}/results`} component={FeedbackTargetResults} hasAccess={showFeedbacksTab} />
+        <ProtectedRoute path={`${path}/edit`} component={Settings} hasAccess={showSettingsTab} />
+        <ProtectedRoute path={`${path}/results`} component={Results} hasAccess={showFeedbacksTab} />
         <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} hasAccess />
         <ProtectedRoute
           path={`${path}/continuous-feedback`}
@@ -424,14 +425,14 @@ const FeedbackTargetContent = () => {
           component={StudentsWithFeedback}
           hasAccess={showStudentsWithFeedbackTab}
         />
-        <ProtectedRoute path={`${path}/share`} component={FeedbackTargetShare} hasAccess={showLinksTab} />
-        <ProtectedRoute path={`${path}/togen`} component={FeedbackLinksView} hasAccess={showTogen} />
+        <ProtectedRoute path={`${path}/share`} component={Share} hasAccess={showLinksTab} />
+        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={showTogen} />
         <ProtectedRoute
           path={`${path}/edit-feedback-response`}
           component={EditFeedbackResponse}
           hasAccess={showEditFeedbackResponseTab}
         />
-        <ProtectedRoute path={`${path}/logs`} component={FeedbackTargetLogs} hasAccess={showLogsTab} />
+        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={showLogsTab} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>

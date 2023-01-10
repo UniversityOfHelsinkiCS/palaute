@@ -6,12 +6,12 @@ import { Box, Alert } from '@mui/material'
 
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import QuestionResults from '../../components/FeedbackTargetResults/QuestionResults'
-import FeedbackResponse from '../../components/FeedbackTargetResults/FeedbackResponse'
+import QuestionResults from '../FeedbackTarget/tabs/Results/QuestionResults'
+import FeedbackResponse from '../FeedbackTarget/tabs/Results/FeedbackResponse'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import FeedbackChart from '../../components/FeedbackTargetResults/QuestionResults/FeedbackChart'
+import FeedbackChart from '../FeedbackTarget/tabs/Results/QuestionResults/FeedbackChart'
 import useIsMobile from '../../hooks/useIsMobile'
 
 const NotEnoughFeedbacks = ({ t }) => (
