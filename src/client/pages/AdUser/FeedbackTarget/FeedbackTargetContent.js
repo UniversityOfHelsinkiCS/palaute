@@ -4,6 +4,7 @@ import React from 'react'
 import { Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
 
 import { Box, Typography, Tab, Button, Link as MuiLink, Alert, List, ListItem } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -91,9 +92,30 @@ const styles = {
     },
   }),
   teacherListContainer: {
-    overflow: 'auto',
-    maxHeight: '100px',
     padding: 0,
+    maxHeight: '100px',
+    maxWidth: '150px',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    '&::-webkit-scrollbar': {
+      width: 8,
+    },
+    '&::-webkit-scrollbar-track': {
+      background: grey[200],
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: grey[400],
+      borderRadius: 10,
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: grey[500],
+    },
+    '@media print': {
+      overflow: 'visible',
+      maxHeight: '100%',
+      height: 'auto',
+    },
   },
   linkContainer: theme => ({
     display: 'flex',

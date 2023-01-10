@@ -334,7 +334,7 @@ export default {
     programmeSettings: 'Koulutusohjelman asetukset',
     courseRealisation: 'Kurssitoteutus',
     responsibleTeacher: 'Vastuuopettaja',
-    teacher: 'opettaja',
+    teacher: 'Opettaja',
     administrativePerson: 'Hallintohenkilö',
     facultyLabel: 'Tiedekunta',
     allFaculties: 'Kaikki tiedekunnat',
