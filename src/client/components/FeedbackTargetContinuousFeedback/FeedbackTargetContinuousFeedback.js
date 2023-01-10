@@ -9,7 +9,7 @@ import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetC
 import { LoadingProgress } from '../common/LoadingProgress'
 import { feedbackTargetIsOngoing } from './utils'
 import Markdown from '../common/Markdown'
-import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import ErrorView from '../common/ErrorView'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {

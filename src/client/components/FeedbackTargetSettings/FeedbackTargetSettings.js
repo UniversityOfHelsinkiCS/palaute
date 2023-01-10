@@ -15,7 +15,7 @@ import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import PublicitySelection from './PublicitySelection'
 import EditFeedbackTarget from '../EditFeedbackTarget'
-import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const FeedbackTargetSettings = () => {
   const { id } = useParams()

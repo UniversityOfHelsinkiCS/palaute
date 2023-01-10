@@ -14,7 +14,7 @@ import Markdown from '../common/Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
 import InstructionAccordion from './InstructionAccordion'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
-import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',

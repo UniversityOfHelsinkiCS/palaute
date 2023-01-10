@@ -8,12 +8,12 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { differenceInHours, format } from 'date-fns'
 
-import { copyLink } from '../../pages/AdUser/FeedbackTarget/utils'
+import { copyLink } from '../../pages/FeedbackTarget/utils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import ReminderEmailModal from './ReminderEmailModal'
 import { TooltipButton } from '../common/TooltipButton'
-import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>

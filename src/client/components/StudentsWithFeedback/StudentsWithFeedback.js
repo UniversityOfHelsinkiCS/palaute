@@ -6,7 +6,7 @@ import { Box, Alert } from '@mui/material'
 import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../hooks/useStudentsWithFeedback'
 import { LoadingProgress } from '../common/LoadingProgress'
-import { useFeedbackTargetContext } from '../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const StudentsWithFeedback = () => {
   const { t } = useTranslation()

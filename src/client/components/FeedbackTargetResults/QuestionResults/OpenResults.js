@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import ResultsContent from './ResultsContent'
 import apiClient from '../../../util/apiClient'
 import queryClient from '../../../util/queryClient'
-import { useFeedbackTargetContext } from '../../../pages/AdUser/FeedbackTarget/FeedbackTargetContext'
+import { useFeedbackTargetContext } from '../../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
   list: theme => ({
