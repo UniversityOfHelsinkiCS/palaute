@@ -102,12 +102,13 @@ const ExportPdfLink = ({ componentRef }) => {
 
 const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const { t } = useTranslation()
+  const hasFeedbacks = feedbacks?.length > 0
 
   return (
     <ExportButton
-      disabled={!feedbacks}
-      CsvLink={feedbacks && <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
-      PdfLink={feedbacks && <ExportPdfLink componentRef={componentRef} />}
+      disabled={!hasFeedbacks}
+      CsvLink={hasFeedbacks && <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      PdfLink={hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
       label={t('feedbackTargetResults:export')}
     />
   )
