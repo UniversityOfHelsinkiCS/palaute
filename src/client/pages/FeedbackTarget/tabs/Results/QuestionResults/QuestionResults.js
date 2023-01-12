@@ -87,8 +87,8 @@ const HiddenQuestionsList = ({ hiddenQuestions }) => {
   )
 }
 
-const QuestionSection = ({ title, count, children }) => (
-  <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem">
+const QuestionSection = ({ title, count, children, ...props }) => (
+  <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem" {...props}>
     <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
       <Typography component="h4">{title}</Typography>
       <Chip label={count} variant="outlined" size="small" />
@@ -127,7 +127,11 @@ const QuestionResults = ({
 
   return (
     <>
-      <QuestionSection title={t('questionResults:multipleChoiceQuestions')} count={notOpenQuestions.length}>
+      <QuestionSection
+        title={t('questionResults:multipleChoiceQuestions')}
+        count={notOpenQuestions.length}
+        data-cy="multipleChoiceQuestions"
+      >
         <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
 
         <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
@@ -146,7 +150,7 @@ const QuestionResults = ({
           ))}
         </Grid>
       </QuestionSection>
-      <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length}>
+      <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length} data-cy="openQuestions">
         {openQuestions.map(q => (
           <QuestionItem
             key={q.id}

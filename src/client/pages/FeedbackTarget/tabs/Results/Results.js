@@ -1,9 +1,8 @@
 import React, { useRef, forwardRef, useState } from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, FormControlLabel, Switch } from '@mui/material'
 
-import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
@@ -11,7 +10,6 @@ import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import OldFeedbackTargetResults from '../../../../components/OldFeedbackTargetResults'
 
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
@@ -120,8 +118,7 @@ const ResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!enoughFeedbacks &&
-          (feedbackTargetData?.feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled t={t} />)}
+        {!enoughFeedbacks && <NotEnoughFeedbacks t={t} />}
 
         {enoughFeedbacks &&
           (useLegacy ? (

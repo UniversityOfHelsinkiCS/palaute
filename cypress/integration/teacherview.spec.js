@@ -73,6 +73,8 @@ describe('Teacher view', () => {
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('a[href*="/targets/163"]').first().click()
     cy.visit(`${baseUrl}/targets/163/results`)
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1)
     cy.get('[data-cy=notEnoughFeedbacks]')
   })
 })

@@ -20,7 +20,7 @@ describe('User feedbacks view', () => {
   it('Teacher can censor a feedback', () => {
     cy.loginAsSecondaryTeacher()
     cy.visit(`${baseUrl}/targets/163/results`)
-    cy.get('Open questions').scrollTo('top')
+    cy.get('[data-cy=openQuestions]').scrollTo('top')
     cy.get('[data-testid="VisibilityIcon"]').click()
     cy.contains('This answer is hidden')
 
