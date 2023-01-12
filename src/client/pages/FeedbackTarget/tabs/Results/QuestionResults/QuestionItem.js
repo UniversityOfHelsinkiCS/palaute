@@ -55,7 +55,7 @@ const QuestionItem = ({
     }
   }
 
-  const actualAnswers = _.sumBy(question.feedbacks, f => Boolean(f.data))
+  const actualAnswers = _.sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)
@@ -87,13 +87,11 @@ const QuestionItem = ({
             />
           )}
         </Box>
-        <Box display="flex" alignItems="center" flexGrow="100">
-          <Box display="flex" flexDirection="column" alignItems="center">
-            {content}
-            <Typography variant="caption" color="textSecondary">
-              {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
-            </Typography>
-          </Box>
+        <Box display="flex" flexDirection="column" alignItems="stretch">
+          {content}
+          <Typography variant="caption" color="textSecondary">
+            {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
+          </Typography>
         </Box>
       </Box>
     </Card>

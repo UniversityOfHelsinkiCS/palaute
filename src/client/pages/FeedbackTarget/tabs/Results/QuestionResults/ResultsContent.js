@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 
 const ResultsContent = ({ chart, children }) => (
-  <Box display="flex" flexDirection="column" alignItems="stretch">
+  <Box display="flex" flexDirection="column">
     {chart}
     {children}
   </Box>

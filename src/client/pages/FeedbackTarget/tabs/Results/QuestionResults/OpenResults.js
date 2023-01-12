@@ -1,19 +1,19 @@
 import React from 'react'
-import { Box, IconButton, List, ListItem, ListItemText, Tooltip } from '@mui/material'
+import { Box, CircularProgress, IconButton, ListItem, ListItemText, Tooltip } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
-import { useMutation } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { useInView } from 'react-intersection-observer'
 
 import ResultsContent from './ResultsContent'
-import apiClient from '../../../../../util/apiClient'
-import queryClient from '../../../../../util/queryClient'
-import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
+import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
 
 const styles = {
   list: theme => ({
-    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    flexGrow: 100,
     padding: '1rem',
     marginBottom: '1rem',
     maxHeight: '800px',
@@ -49,50 +49,11 @@ const styles = {
   }),
 }
 
-const useUpdateOpenFeedbackVisibility = ({ feedbackTargetId }) => {
-  const mutationFn = async ({ feedbackId, questionId, hidden }) =>
-    apiClient.put(`/feedbacks/${feedbackId}/question/${questionId}`, { hidden })
-
-  const mutation = useMutation(mutationFn, {
-    onSuccess: (response, { feedbackId, questionId }) => {
-      const { hidden } = response.data
-
-      queryClient.setQueryData(['feedbackTargetFeedbacks', String(feedbackTargetId)], data => {
-        const { feedbacks } = data
-        const updatedFeedbacks = feedbacks.map(f =>
-          f.id === feedbackId
-            ? {
-                ...f,
-                data: f.data.map(q => (q.questionId === questionId ? { ...q, hidden } : q)),
-              }
-            : f
-        )
-
-        return { ...data, feedbacks: updatedFeedbacks }
-      })
-    },
-  })
-
-  return mutation
-}
-
-const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
-  const mutation = useUpdateOpenFeedbackVisibility({
-    feedbackTargetId,
-  })
-  const onVisibilityToggle = async () => {
-    try {
-      await mutation.mutateAsync({
-        feedbackId: feedback.feedbackId,
-        questionId: feedback.questionId,
-        hidden: !feedback.hidden,
-      })
-    } catch (e) {
-      console.error(e.response)
-    }
-  }
-
+const OpenFeedback = ({ feedback }) => {
+  const { t } = useTranslation()
+  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
   const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
+
   return (
     <ListItem
       sx={[styles.listItem, feedback.hidden ? styles.hiddenListItem : {}]}
@@ -102,7 +63,7 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
             <Tooltip
               title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}
             >
-              <IconButton onClick={onVisibilityToggle} size="small">
+              <IconButton onClick={() => toggleVisibility(feedback)} size="small">
                 {feedback.hidden ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
               </IconButton>
             </Tooltip>
@@ -121,24 +82,24 @@ const OpenFeedback = ({ feedback, canHide, feedbackTargetId, t }) => {
 }
 
 const OpenResults = ({ question }) => {
-  const { t } = useTranslation()
-  const { id } = useParams()
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1, delay: 1000 })
 
-  const { isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
+  const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
 
-  const feedbacks = question.feedbacks ?? []
-
-  const filteredFeedbacks = feedbacks.filter(({ data }) => Boolean(data))
-
-  const canHide = isTeacher || isOrganisationAdmin
+  const largeList = feedbacks.length > 10
 
   return (
     <ResultsContent>
-      <List sx={styles.list}>
-        {filteredFeedbacks.map((feedback, index) => (
-          <OpenFeedback key={index} feedback={feedback} canHide={canHide} feedbackTargetId={id} t={t} />
-        ))}
-      </List>
+      <Box display="flex" justifyContent="center">
+        <Box sx={[styles.list, largeList ? { height: '800px' } : {}]} ref={ref}>
+          {largeList && !inView && (
+            <Box display="flex" alignSelf="stretch" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          )}
+          {(!largeList || inView) && feedbacks.map((f, index) => <OpenFeedback feedback={f} key={index} />)}
+        </Box>
+      </Box>
     </ResultsContent>
   )
 }
