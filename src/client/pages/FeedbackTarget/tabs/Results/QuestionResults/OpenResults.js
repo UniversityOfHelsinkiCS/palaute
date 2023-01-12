@@ -49,9 +49,8 @@ const styles = {
   }),
 }
 
-const OpenFeedback = ({ feedback }) => {
+const OpenFeedback = ({ feedback, toggleVisibility, canHide }) => {
   const { t } = useTranslation()
-  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
   const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
 
   return (
@@ -81,23 +80,39 @@ const OpenFeedback = ({ feedback }) => {
   )
 }
 
+const useRenderVisible = ({ threshold = 0.0, delay = 0 }) => {
+  const [render, setRender] = React.useState(false)
+  const { ref, inView } = useInView({ triggerOnce: true, threshold, delay })
+  React.useEffect(() => {
+    if (inView) {
+      React.startTransition(() => {
+        setRender(true)
+      })
+    }
+  }, [inView])
+
+  return { render, ref }
+}
+
 const OpenResults = ({ question }) => {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1, delay: 1000 })
-
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
-
-  const largeList = feedbacks.length > 10
+  const renderWhenScrolled = feedbacks.length > 10
+  const { render, ref } = useRenderVisible(!renderWhenScrolled)
+  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
 
   return (
     <ResultsContent>
       <Box display="flex" justifyContent="center">
-        <Box sx={[styles.list, largeList ? { height: '800px' } : {}]} ref={ref}>
-          {largeList && !inView && (
+        <Box sx={[styles.list, renderWhenScrolled ? { height: '800px' } : {}]} ref={ref}>
+          {renderWhenScrolled && !render && (
             <Box display="flex" alignSelf="stretch" justifyContent="center">
               <CircularProgress />
             </Box>
           )}
-          {(!largeList || inView) && feedbacks.map((f, index) => <OpenFeedback feedback={f} key={index} />)}
+          {(!renderWhenScrolled || render) &&
+            feedbacks.map((f, index) => (
+              <OpenFeedback feedback={f} key={index} canHide={canHide} toggleVisibility={toggleVisibility} />
+            ))}
         </Box>
       </Box>
     </ResultsContent>

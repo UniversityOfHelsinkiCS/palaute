@@ -15,6 +15,7 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const styles = {
   legacySwitch: {
@@ -50,30 +51,17 @@ const ResultsView = forwardRef((_props, ref) => {
   const isMobile = useIsMobile()
   useChartConfig()
 
-  const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
+  const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
 
-  const { feedbackTargetData, isLoading: feedbacksIsLoading } = useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData } = useFeedbackTargetFeedbacks(id)
 
   const [useLegacy, setUseLegacy] = useState(JSON.parse(localStorage.getItem('legacy')) || false)
-
-  const isLoading = feedbackTargetIsLoading || feedbacksIsLoading
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
-
-  if (!feedbackTarget || !feedbackTargetData) {
-    return <Redirect to="/" />
-  }
-
-  const { feedbacks, feedbackVisible } = feedbackTargetData
 
   const {
     questions,
     questionOrder,
     publicQuestionIds,
     publicityConfigurableQuestionIds,
-    accessStatus,
     feedback,
     studentCount,
     feedbackCount,
@@ -82,15 +70,8 @@ const ResultsView = forwardRef((_props, ref) => {
     feedbackReminderLastSentAt,
   } = feedbackTarget
 
-  // TODO this shit is gonna be cleaned up someday
-  const isAdmin = accessStatus === 'ADMIN'
-  const isOrganisationAdmin = accessStatus === 'ORGANISATION_ADMIN'
-  const isOrganisationUser = isOrganisationAdmin || accessStatus === 'ORGANISATION'
-  const isResponsibleTeacher = isAdmin || accessStatus === 'RESPONSIBLE_TEACHER'
-  const isTeacher = isResponsibleTeacher || accessStatus === 'TEACHER'
-
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const enoughFeedbacks = feedbacks?.length > 0
+  const enoughFeedbacks = feedbackCount > 5
 
   const saveLegacySetting = value => {
     setUseLegacy(value)
@@ -102,8 +83,12 @@ const ResultsView = forwardRef((_props, ref) => {
   return (
     <>
       <Box display="flex" alignItems="flex-end" flexDirection="column">
-        {enoughFeedbacks && isTeacher && (
-          <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={ref} />
+        {isTeacher && (
+          <ExportFeedbacksMenu
+            feedbackTarget={feedbackTarget}
+            feedbacks={feedbackTargetData?.feedbacks}
+            componentRef={ref}
+          />
         )}
       </Box>
 
@@ -125,7 +110,7 @@ const ResultsView = forwardRef((_props, ref) => {
         {!isMobile && !useLegacy && (
           <Box>
             <FeedbackChart
-              feedbacks={feedbacks}
+              feedbacks={feedbackTargetData?.feedbacks ?? []}
               studentCount={studentCount}
               opensAt={opensAt}
               closesAt={closesAt}
@@ -135,7 +120,8 @@ const ResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!enoughFeedbacks && (feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled t={t} />)}
+        {!enoughFeedbacks &&
+          (feedbackTargetData?.feedbackVisible ? <NotEnoughFeedbacks t={t} /> : <OnlyForEnrolled t={t} />)}
 
         {enoughFeedbacks &&
           (useLegacy ? (
@@ -149,9 +135,9 @@ const ResultsView = forwardRef((_props, ref) => {
                 publicQuestionIds={publicQuestionIds ?? []}
                 questions={questions}
                 questionOrder={questionOrder}
-                feedbacks={feedbacks}
+                feedbacks={feedbackTargetData?.feedbacks ?? []}
                 isResponsibleTeacher={isResponsibleTeacher}
-                isOrganisationUser={isOrganisationUser}
+                isOrganisationUser={isOrganisationReader}
                 feedbackCount={feedbackCount}
                 feedbackTargetId={id}
               />

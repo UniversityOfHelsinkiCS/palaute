@@ -15,7 +15,7 @@ const styles = {
   },
 }
 
-const ExportButton = ({ CsvLink, PdfLink, label }) => {
+const ExportButton = ({ CsvLink, PdfLink, label, disabled = false }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = e => {
@@ -34,6 +34,7 @@ const ExportButton = ({ CsvLink, PdfLink, label }) => {
         color="primary"
         onClick={handleClick}
         endIcon={<Download />}
+        disabled={disabled}
       >
         {label}
       </Button>

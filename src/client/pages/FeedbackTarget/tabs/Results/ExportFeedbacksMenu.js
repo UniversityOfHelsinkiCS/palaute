@@ -105,8 +105,9 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
 
   return (
     <ExportButton
-      CsvLink={<ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
-      PdfLink={<ExportPdfLink componentRef={componentRef} />}
+      disabled={!feedbacks}
+      CsvLink={feedbacks && <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      PdfLink={feedbacks && <ExportPdfLink componentRef={componentRef} />}
       label={t('feedbackTargetResults:export')}
     />
   )

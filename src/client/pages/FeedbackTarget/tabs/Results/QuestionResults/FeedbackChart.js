@@ -254,7 +254,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
         t,
         i18n.language
       ),
-    [chartRef.current]
+    [chartRef.current, feedbacks]
   )
 
   return (
