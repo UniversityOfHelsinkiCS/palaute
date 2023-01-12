@@ -182,7 +182,6 @@ const FeedbackTargetContent = () => {
   const {
     courseUnit,
     courseRealisation,
-    opensAt,
     feedback,
     administrativePersons,
     responsibleTeachers,
@@ -197,10 +196,9 @@ const FeedbackTargetContent = () => {
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isStarted = new Date() >= new Date(opensAt)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
-  const showFeedbacksTab = isAdmin || ((isOrganisationAdmin || isTeacher) && isStarted) || feedback || isEnded
+  const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
   const showContinuousFeedbackTab = continuousFeedbackEnabled
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
