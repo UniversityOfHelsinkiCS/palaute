@@ -253,7 +253,7 @@ const NavBar = ({ guest = false }) => {
           borderRadius: 0,
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth={false}>
           <Toolbar sx={styles.toolbar} disableGutters>
             <Logo guest={guest} />
             {!isMobile && navBarLinks}

@@ -17,6 +17,9 @@ import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
 const styles = {
   container: theme => ({
     padding: '2rem',
+    [theme.breakpoints.up('xl')]: {
+      maxWidth: '80vw',
+    },
     [theme.breakpoints.down('md')]: {
       padding: '1rem',
     },
@@ -46,7 +49,7 @@ const Home = () => {
 }
 
 const Router = () => (
-  <Container sx={styles.container} maxWidth="xl">
+  <Container sx={styles.container}>
     <Switch>
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={MyFeedbacks} exact />
