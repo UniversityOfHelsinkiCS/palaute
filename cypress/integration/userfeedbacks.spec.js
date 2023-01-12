@@ -9,10 +9,8 @@ describe('User feedbacks view', () => {
 
     cy.contains('Functional Programming I')
     cy.get('[data-cy=giveCourseFeedback]').click()
-    cy.contains(
-      'This feedback is anonymous. Fields marked with an asterisk (*) are required',
-    )
-    cy.get('input[value=1]').each(($el) => {
+    cy.contains('This feedback is anonymous. Fields marked with an asterisk (*) are required')
+    cy.get('input[value=1]').each($el => {
       cy.get($el).click()
     })
     cy.get('textarea[id=19-label]').type('Other comments and such')
@@ -22,6 +20,7 @@ describe('User feedbacks view', () => {
   it('Teacher can censor a feedback', () => {
     cy.loginAsSecondaryTeacher()
     cy.visit(`${baseUrl}/targets/163/results`)
+    cy.get('Open questions').scrollTo('top')
     cy.get('[data-testid="VisibilityIcon"]').click()
     cy.contains('This answer is hidden')
 

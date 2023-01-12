@@ -6,10 +6,7 @@ const getDates = () => {
   const date = new Date()
 
   const startDate = format(new Date().setDate(date.getDate() - 1), 'dd.MM.yyyy')
-  const endDate = format(
-    new Date().setHours(date.getHours() - 10),
-    'dd.MM.yyyy',
-  )
+  const endDate = format(new Date().setHours(date.getHours() - 10), 'dd.MM.yyyy')
 
   return { startDate, endDate }
 }
@@ -52,9 +49,7 @@ describe('Teacher view', () => {
     cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-en-questions]').type('Test question')
 
-    cy.get('input[id^=likert-description-en-questions]').type(
-      'Test description',
-    )
+    cy.get('input[id^=likert-description-en-questions]').type('Test description')
 
     cy.get('[data-cy=saveQuestion]').click()
     cy.reload()
@@ -78,7 +73,6 @@ describe('Teacher view', () => {
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('a[href*="/targets/163"]').first().click()
     cy.visit(`${baseUrl}/targets/163/results`)
-    cy.contains('Feedback').click()
     cy.get('[data-cy=notEnoughFeedbacks]')
   })
 })
