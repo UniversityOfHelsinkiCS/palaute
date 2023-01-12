@@ -8,7 +8,7 @@ import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
  * meaning it can only be used in the context
  */
 const useUpdateOpenFeedbackVisibility = () => {
-  const { feedbackTargetId, isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
+  const { feedbackTarget, isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
 
   const mutationFn = async ({ feedbackId, questionId, hidden }) =>
     apiClient.put(`/feedbacks/${feedbackId}/question/${questionId}`, { hidden })
@@ -17,7 +17,7 @@ const useUpdateOpenFeedbackVisibility = () => {
     onSuccess: (response, { feedbackId, questionId }) => {
       const { hidden } = response.data
 
-      queryClient.setQueryData(['feedbackTargetFeedbacks', String(feedbackTargetId)], data => {
+      queryClient.setQueryData(['feedbackTargetFeedbacks', String(feedbackTarget.id)], data => {
         const { feedbacks } = data
         const updatedFeedbacks = feedbacks.map(f =>
           f.id === feedbackId

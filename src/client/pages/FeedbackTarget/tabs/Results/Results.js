@@ -69,7 +69,7 @@ const ResultsView = forwardRef((_props, ref) => {
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const enoughFeedbacks = feedbackCount > 5
+  const enoughFeedbacks = feedbackCount > 0
 
   const saveLegacySetting = value => {
     setUseLegacy(value)
