@@ -74,6 +74,6 @@ describe('Teacher view', () => {
     cy.get('a[href*="/targets/163"]').first().click()
     cy.visit(`${baseUrl}/targets/163/results`)
     cy.contains('Feedback').click()
-    cy.get('[data-cy=notEnoughFeedbacks]')
+    cy.contains('Multiple choice questions')
   })
 })
