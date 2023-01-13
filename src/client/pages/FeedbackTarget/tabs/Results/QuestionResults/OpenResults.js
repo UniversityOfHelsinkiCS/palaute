@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { Box, CircularProgress, IconButton, ListItem, ListItemText, Tooltip } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
@@ -95,10 +96,13 @@ const useRenderVisible = ({ threshold = 0.0, delay = 0, initial = false }) => {
 }
 
 const OpenResults = ({ question }) => {
+  const { pathname } = useLocation()
+  const isNoad = pathname.startsWith('/noad')
+  const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
+
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
   const renderWhenScrolled = feedbacks.length > 10
   const { render, ref } = useRenderVisible({ initial: !renderWhenScrolled })
-  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
 
   return (
     <ResultsContent>
