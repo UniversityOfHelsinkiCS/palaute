@@ -1,10 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { Typography, Box, Button, Card, CardContent, Alert } from '@mui/material'
+import { Typography, Box, Button, Card, CardContent, Alert, Tooltip } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
 
 const styles = {
@@ -27,12 +29,15 @@ const styles = {
   }),
 }
 
-const FeedbackTargetResults = ({ feedbackTarget }) => {
+const FeedbackResponse = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { accessStatus, feedbackResponse, id } = feedbackTarget
+  const { isResponsibleTeacher } = useFeedbackTargetContext()
+  const { id, feedbackResponse } = feedbackTarget
 
-  const isTeacher = accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOld = feedbackTargetIsOld(feedbackTarget)
+  const canGiveFeedbackResponse = isEnded && !isOld && isResponsibleTeacher
 
   return (
     <Card sx={{ borderRadius: '1rem' }}>
@@ -48,16 +53,24 @@ const FeedbackTargetResults = ({ feedbackTarget }) => {
           </Box>
         )}
 
-        {isTeacher && !feedbackResponse && (
-          <Box mt={2}>
-            <Button variant="contained" color="primary" component={Link} to={`/targets/${id}/edit-feedback-response`}>
-              {t('feedbackTargetResults:giveResponse')}
-            </Button>
-          </Box>
+        {isResponsibleTeacher && !feedbackResponse && (
+          <Tooltip title={t('feedbackTargetResults:giveResponseInfo')}>
+            <Box mt={2} width="max-content">
+              <Button
+                disabled={!canGiveFeedbackResponse}
+                variant="contained"
+                color="primary"
+                component={Link}
+                to={`/targets/${id}/edit-feedback-response`}
+              >
+                {t('feedbackTargetResults:giveResponse')}
+              </Button>
+            </Box>
+          </Tooltip>
         )}
       </CardContent>
     </Card>
   )
 }
 
-export default FeedbackTargetResults
+export default FeedbackResponse

@@ -229,6 +229,7 @@ export default {
     giveResponse: 'Give counter feedback',
     editResponse: 'Edit counter feedback',
     noResponseInfo: "The course's teacher has not given a counter feedback yet",
+    giveResponseInfo: 'Counter feedback can be given after the response period is over',
     export: 'Download feedback',
     useLegacyVersion: 'Use old feedback view',
     thankYouMessage: 'Thank you for the feedback, here is a summary of the feedback so far.',

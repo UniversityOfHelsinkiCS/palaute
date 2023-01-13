@@ -230,6 +230,7 @@ export default {
     giveResponse: 'Anna vastapalaute',
     editResponse: 'Muokkaa vastapalautetta',
     noResponseInfo: 'Kurssin opettaja ei ole vielä antanut vastapalautetta',
+    giveResponseInfo: 'Vastapalautteen voi antaa kurssin palautteen päätyttyä',
     export: 'Lataa palaute',
     useLegacyVersion: 'Käytä vanhaa palautenäkymää',
     thankYouMessage: 'Kiitos palautteesta, tässä on yhteenveto tähän mennessä annetuista palautteista.',

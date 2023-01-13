@@ -231,6 +231,7 @@ export default {
     giveResponse: 'Ge svar på responsen',
     editResponse: 'Redigera svaret på responsen',
     noResponseInfo: 'Kursens lärare har inte ännu svarat på responsen',
+    // giveResponseInfo: 'Counter feedback can be given after the response period is over',
     export: 'Exportera resultat',
     useLegacyVersion: 'Använd gamla responsvyn',
     thankYouMessage: 'Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.',
