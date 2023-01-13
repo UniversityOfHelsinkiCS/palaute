@@ -446,7 +446,7 @@ const deleteCancelledCourses = async cancelledCourseIds => {
     return
   }
 
-  const feedbackTargets = await FeedbackTarget.findAll({
+  const feedbackTargets = await FeedbackTarget.unscoped().findAll({
     where: {
       courseRealisationId: {
         [Op.in]: courseRealisationIds,
@@ -487,7 +487,7 @@ const deleteCancelledCourses = async cancelledCourseIds => {
 
   logger.info(`Destroyed ${destroyedFeedbackTargetLogs} logs`)
 
-  const destroyedFeedbackTargets = await FeedbackTarget.destroy({
+  const destroyedFeedbackTargets = await FeedbackTarget.unscoped().destroy({
     where: {
       id: {
         [Op.in]: feedbackTargetIds,
