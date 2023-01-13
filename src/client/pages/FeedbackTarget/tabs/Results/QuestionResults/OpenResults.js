@@ -80,8 +80,8 @@ const OpenFeedback = ({ feedback, toggleVisibility, canHide }) => {
   )
 }
 
-const useRenderVisible = ({ threshold = 0.0, delay = 0 }) => {
-  const [render, setRender] = React.useState(false)
+const useRenderVisible = ({ threshold = 0.0, delay = 0, initial = false }) => {
+  const [render, setRender] = React.useState(initial)
   const { ref, inView } = useInView({ triggerOnce: true, threshold, delay })
   React.useEffect(() => {
     if (inView) {
@@ -97,7 +97,7 @@ const useRenderVisible = ({ threshold = 0.0, delay = 0 }) => {
 const OpenResults = ({ question }) => {
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
   const renderWhenScrolled = feedbacks.length > 10
-  const { render, ref } = useRenderVisible(!renderWhenScrolled)
+  const { render, ref } = useRenderVisible({ initial: !renderWhenScrolled })
   const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
 
   return (
