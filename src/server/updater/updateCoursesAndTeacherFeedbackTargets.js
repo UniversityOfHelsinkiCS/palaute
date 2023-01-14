@@ -13,6 +13,7 @@ const {
   Survey,
   CourseRealisationsOrganisation,
   InactiveCourseRealisation,
+  CourseRealisationsTag,
 } = require('../models')
 
 const logger = require('../util/logger')
@@ -506,6 +507,16 @@ const deleteCancelledCourses = async cancelledCourseIds => {
   })
 
   logger.info(`Destroyed ${destroyedCourseRealisationOrganisations} course realisation organisations`)
+
+  const destroyedCourseRealisationsTags = await CourseRealisationsTag.destroy({
+    where: {
+      courseRealisationId: {
+        [Op.in]: courseRealisationIds,
+      },
+    },
+  })
+
+  logger.info(`Destroyed ${destroyedCourseRealisationsTags} course realisations tags`)
 
   const destroyedCourseRealisations = await CourseRealisation.destroy({
     where: {
