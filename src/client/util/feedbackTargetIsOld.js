@@ -1,5 +1,5 @@
 import { differenceInMonths } from 'date-fns'
 
-const feedbackTargetIsOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
+const feedbackTargetIsOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 12
 
 export default feedbackTargetIsOld

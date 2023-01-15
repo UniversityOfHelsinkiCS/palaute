@@ -6,7 +6,6 @@ import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox
 
 import { useTranslation, Trans } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import { differenceInMonths } from 'date-fns'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
 import AlertLink from '../../../../components/common/AlertLink'
@@ -44,7 +43,7 @@ const EditFeedbackResponse = () => {
 
   const now = Date.now()
   const closeTime = Date.parse(closesAt)
-  const feedbackResponseFormDisabled = now < closeTime || differenceInMonths(now, closeTime) > 6
+  const feedbackResponseFormDisabled = now < closeTime
 
   const handleSubmit = async values => {
     try {

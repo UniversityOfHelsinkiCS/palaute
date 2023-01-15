@@ -1,9 +1,6 @@
-const { differenceInMonths } = require('date-fns')
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
-
-const isTooOld = feedbackTarget => differenceInMonths(Date.now(), Date.parse(feedbackTarget.closesAt)) > 6
 
 const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
@@ -14,10 +11,6 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
 
   if (sendEmail && feedbackTarget.feedbackResponseEmailSent) {
     throw new ApplicationError('Counter feedback email has already been sent', 400)
-  }
-
-  if (isTooOld(feedbackTarget)) {
-    ApplicationError.Forbidden('Cannot send counter feedback because feedback closed over 6 months ago')
   }
 
   feedbackTarget.feedbackResponse = responseText

@@ -5,7 +5,6 @@ import { Typography, Box, Button, Card, CardContent, Alert, Tooltip } from '@mui
 import { grey } from '@mui/material/colors'
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
 
@@ -36,8 +35,7 @@ const FeedbackResponse = ({ feedbackTarget }) => {
   const { id, feedbackResponse } = feedbackTarget
 
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isOld = feedbackTargetIsOld(feedbackTarget)
-  const canGiveFeedbackResponse = isEnded && !isOld && isResponsibleTeacher
+  const canGiveFeedbackResponse = isEnded && isResponsibleTeacher
 
   return (
     <Card sx={{ borderRadius: '1rem' }}>
