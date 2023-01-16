@@ -6,6 +6,8 @@ const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
 const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
 
+const filterUpdates = update => update !== undefined && update !== null
+
 const parseUpdates = body => {
   const {
     name,
@@ -20,18 +22,20 @@ const parseUpdates = body => {
   } = body
   const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
 
-  const updates = _.pickBy({
-    // cweate obwect fwom only twe twuthy values :3
-    name,
-    hidden,
-    opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
-    closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-    publicQuestionIds: publicQuestionIds?.filter(id => !!Number(id)),
-    feedbackVisibility,
-    continuousFeedbackEnabled,
-    sendContinuousFeedbackDigestEmail,
-    settingsReadByTeacher,
-  })
+  const updates = _.pickBy(
+    {
+      name,
+      hidden,
+      opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
+      closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
+      publicQuestionIds: publicQuestionIds?.filter(id => !!Number(id)),
+      feedbackVisibility,
+      continuousFeedbackEnabled,
+      sendContinuousFeedbackDigestEmail,
+      settingsReadByTeacher,
+    },
+    filterUpdates
+  )
 
   return updates
 }
