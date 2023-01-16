@@ -145,13 +145,24 @@ Cypress.Commands.add('setFeedbackOpeningSoon', () => {
   setFeedbackDatesFromNow(6, 28)
 })
 
-Cypress.Commands.add('setFakeFeedbackCount', (feedbackCount) => {
+Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
   cy.request({
     method: 'PUT',
     url: '/api/test/courseRealisation/163',
     headers: adminUser,
     body: {
       feedbackCount,
+    },
+  })
+})
+
+Cypress.Commands.add('setContinuousFeedbackActive', () => {
+  cy.request({
+    method: 'PUT',
+    url: '/api/feedback-targets/163',
+    headers: teacher,
+    body: {
+      continuousFeedbackEnabled: true,
     },
   })
 })

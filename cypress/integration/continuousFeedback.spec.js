@@ -1,9 +1,15 @@
 const { baseUrl } = require('../support')
 
 describe('Continuous feedback', () => {
-  it('Teacher can set continuous feedback active', () => {
+  beforeEach(() => {
+    cy.setFeedbackNotYetOpen()
+    cy.setContinuousFeedbackActive()
+  })
+
+  it('Teacher can toggle continuous feedback', () => {
     cy.setUpSecondaryTeacherView()
     cy.loginAsSecondaryTeacher()
+
     cy.visit(`${baseUrl}/targets/163/edit`)
 
     cy.get('[data-cy=activateContinuousFeedback]').click()
@@ -12,7 +18,6 @@ describe('Continuous feedback', () => {
   })
 
   it('Student can give continuous feedback', () => {
-    cy.setFeedbackNotYetOpen()
     cy.loginAsStudent()
 
     cy.visit(`${baseUrl}`)
@@ -31,6 +36,7 @@ describe('Continuous feedback', () => {
   it('Teacher can reply to continuous feedback', () => {
     cy.setUpSecondaryTeacherView()
     cy.loginAsSecondaryTeacher()
+
     cy.visit(`${baseUrl}/targets/163/continuous-feedback`)
 
     cy.contains('Giving continuous feedback')
@@ -44,7 +50,6 @@ describe('Continuous feedback', () => {
   })
 
   it('Student can see continuous feedback response', () => {
-    cy.setFeedbackNotYetOpen()
     cy.loginAsStudent()
 
     cy.visit(`${baseUrl}/targets/163/continuous-feedback`)
