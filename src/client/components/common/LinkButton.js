@@ -6,7 +6,8 @@ import { OpenInNew } from '@mui/icons-material'
 const styles = {
   button: {
     py: '0.8rem',
-    boxShadow: '0 3px 10px 1px rgb(60 130 245 / 20%)',
+    boxShadow: '0 3px 10px 0px rgb(65 135 255 / 18%)',
+    background: 'white',
   },
 }
 

@@ -123,7 +123,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: '0.8rem',
+    rowGap: '0.4rem',
+    columnGap: '0.7rem',
   },
   hidePrint: {
     '@media print': {
@@ -214,8 +215,7 @@ const FeedbackTargetContent = () => {
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
-  const visibleCourseCode =
-    courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : `, ${courseUnit?.courseCode}`
+  const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
@@ -234,24 +234,24 @@ const FeedbackTargetContent = () => {
       <Box mb={3}>
         {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>
-          <Box display="flex" flexDirection="column">
-            <Typography variant="h4" component="h1">
-              {courseUnitName}
-              {visibleCourseCode}
-            </Typography>
-            <Box mt={1} />
+          <Box display="flex" flexDirection="column" gap="1rem">
+            <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
+              <Typography variant="h4" component="h1">
+                {courseUnitName}
+              </Typography>
+              <Typography variant="h5" color="textSecondary">
+                {visibleCourseCode}
+              </Typography>
+              {isTeacher && (
+                <Button startIcon={<CopyIcon />} color="primary" onClick={handleCopyLink}>
+                  {t('feedbackTargetView:copyLink')}
+                </Button>
+              )}
+            </Box>
             <Typography variant="body1" component="h2">
               {courseRealisationName}
             </Typography>
           </Box>
-
-          {isTeacher && (
-            <div css={styles.copyLinkButtonContainer}>
-              <Button startIcon={<CopyIcon />} color="primary" onClick={handleCopyLink}>
-                {t('feedbackTargetView:copyLink')}
-              </Button>
-            </div>
-          )}
         </div>
 
         <Box sx={[styles.linkContainer, styles.hidePrint]}>

@@ -27,8 +27,8 @@ import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
-import ExternalLink from '../../components/common/ExternalLink'
 import { links } from '../../util/links'
+import LinkButton from '../../components/common/LinkButton'
 
 const Organisation = () => {
   const { path, url } = useRouteMatch()
@@ -60,16 +60,16 @@ const Organisation = () => {
   return (
     <>
       <Title>{name}</Title>
-      <Box mb="3rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
+      <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
         <Typography variant="h4" component="h1">
           {name}
         </Typography>
         <Typography variant="h5" color="textSecondary">
           {organisation.code}
         </Typography>
-        <Box ml="2rem">
-          <ExternalLink href={links.organisationInstructions[i18n.language]}>{t('footer:wikiLink')}</ExternalLink>
-        </Box>
+      </Box>
+      <Box mb={'1rem'}>
+        <LinkButton to={links.organisationInstructions[i18n.language]} title={t('footer:wikiLink')} external />
       </Box>
       <RouterTabs sx={{ mb: '4rem' }} variant="scrollable" scrollButtons="auto">
         {hasAdminAccess && (

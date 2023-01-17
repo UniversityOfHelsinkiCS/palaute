@@ -118,12 +118,17 @@ const CourseRealisationSummary = () => {
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box display="flex" flexDirection="column" gap="1rem">
-        <Typography variant="h4" component="h1">
-          {getLanguageValue(courseUnit.name, i18n.language)}, {courseUnit.courseCode}
-        </Typography>
+      <Box display="flex" flexDirection="column">
+        <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
+          <Typography variant="h4" component="h1">
+            {getLanguageValue(courseUnit.name, i18n.language)}
+          </Typography>
+          <Typography variant="h5" color="textSecondary">
+            {courseUnit.courseCode}
+          </Typography>
+        </Box>
 
-        <Box my={1} display="flex" gap="1rem">
+        <Box mb={1} display="flex" gap="0.7rem">
           {organisation && (
             <LinkButton
               to={`/organisations/${organisation.code}`}
