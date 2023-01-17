@@ -217,7 +217,7 @@ const ResultsRow = ({
                   {label}
                 </ButtonBase>
               ) : (
-                <Box paddingLeft="0.5rem">{label}</Box>
+                label
               )}
             </>
           )}

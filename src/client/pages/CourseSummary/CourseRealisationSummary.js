@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import { Box, Typography, TableContainer, Link as MuiLink } from '@mui/material'
+import { Box, Typography, TableContainer } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -20,16 +20,12 @@ import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ColumnHeadings from './ColumnHeadings'
 import CensoredCount from './CensoredCount'
+import LinkButton from '../../components/common/LinkButton'
 
 const styles = {
-  table: {
-    borderSpacing: '2px 0.8rem',
-  },
   realisationHeading: {
     textAlign: 'left',
     verticalAlign: 'Bottom',
-    paddingLeft: '0.5rem',
-    paddingBottom: '0.5rem',
   },
   languageRow: {
     display: 'flex',
@@ -42,7 +38,7 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
   const { t, i18n } = useTranslation()
 
   return (
-    <TableContainer sx={{ p: 1, pt: 5 }}>
+    <TableContainer>
       <table css={styles.table}>
         <thead>
           <tr>
@@ -117,23 +113,31 @@ const CourseRealisationSummary = () => {
     ? null
     : organisations.find(org => org.id === courseUnit.organisations[0]?.id)
 
+  const coursePageLink = `https://studies.helsinki.fi/opintotarjonta/cu/${courseUnit.id}`
+
   return (
     <>
       <Title>{t('courseSummaryPage')}</Title>
-      <Box mb="1rem">
+      <Box display="flex" flexDirection="column" gap="1rem">
         <Typography variant="h4" component="h1">
           {getLanguageValue(courseUnit.name, i18n.language)}, {courseUnit.courseCode}
         </Typography>
-        <Box mb={1} />
-        {organisation && (
-          <MuiLink component={Link} to={`/organisations/${organisation.code}`} underline="hover">
-            {getLanguageValue(organisation.name, i18n.language)}
-          </MuiLink>
-        )}
+
+        <Box my={1} display="flex" gap="2rem">
+          {organisation && (
+            <LinkButton
+              to={`/organisations/${organisation.code}`}
+              title={getLanguageValue(organisation.name, i18n.language)}
+            />
+          )}
+          <LinkButton to={coursePageLink} title={t('feedbackTargetView:coursePage')} external />
+        </Box>
+
+        <Typography variant="body1" component="h2">
+          {t('courseSummary:universityLevelQuestions')}
+        </Typography>
       </Box>
-      <Typography variant="body1" component="h2">
-        {t('courseSummary:universityLevelQuestions')}
-      </Typography>
+
       <CourseRealisationTable
         courseRealisations={courseRealisations}
         questions={questions}
