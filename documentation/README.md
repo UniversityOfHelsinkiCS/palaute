@@ -10,3 +10,4 @@ Data protection and accessibility documents are also considered.
 
 - [Entity schema](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/entity_diagram.md)
 - [Access rights (Oikeusryhmät, in Finnish)](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/oikeusryhmat.md)
+- [Norppa terminology](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/terminology.md)
