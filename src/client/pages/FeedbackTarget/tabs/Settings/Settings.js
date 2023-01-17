@@ -13,7 +13,6 @@ import {
 } from './utils'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
-import PublicitySelection from './PublicitySelection'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
@@ -32,8 +31,6 @@ const Settings = () => {
     }
     updateSettingsRead.mutateAsync({ id })
   }, [])
-
-  const [visibility, setVisibility] = useState(feedbackTarget.feedbackVisibility)
 
   const handleOpenFeedbackImmediately = async () => {
     try {
@@ -72,7 +69,6 @@ const Settings = () => {
         feedbackTarget={feedbackTarget}
       />
       <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
-      <PublicitySelection visibility={visibility} setVisibility={setVisibility} />
       <EditFeedbackTarget />
     </>
   )
