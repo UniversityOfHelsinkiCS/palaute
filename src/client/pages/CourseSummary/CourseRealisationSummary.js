@@ -123,7 +123,7 @@ const CourseRealisationSummary = () => {
           {getLanguageValue(courseUnit.name, i18n.language)}, {courseUnit.courseCode}
         </Typography>
 
-        <Box my={1} display="flex" gap="2rem">
+        <Box my={1} display="flex" gap="1rem">
           {organisation && (
             <LinkButton
               to={`/organisations/${organisation.code}`}

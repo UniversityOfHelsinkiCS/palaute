@@ -35,7 +35,6 @@ import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import ExternalLink from '../../components/common/ExternalLink'
 
 import {
   getCoursePeriod,
@@ -52,6 +51,7 @@ import { TagChip } from '../../components/common/TagChip'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
+import LinkButton from '../../components/common/LinkButton'
 
 const styles = {
   datesContainer: {
@@ -118,14 +118,13 @@ const styles = {
       height: 'auto',
     },
   },
-  linkContainer: theme => ({
+  linkContainer: {
+    pb: '0.8rem',
     display: 'flex',
     flexDirection: 'row',
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
-    },
-    gap: '1.5rem',
-  }),
+    flexWrap: 'wrap',
+    gap: '0.8rem',
+  },
   hidePrint: {
     '@media print': {
       display: 'none',
@@ -244,12 +243,8 @@ const FeedbackTargetContent = () => {
             <Typography variant="body1" component="h2">
               {courseRealisationName}
             </Typography>
-            {organisation && (
-              <MuiLink to={`/organisations/${organisation.code}`} component={Link} underline="hover">
-                {getLanguageValue(organisation.name, i18n.language)}
-              </MuiLink>
-            )}
           </Box>
+
           {isTeacher && (
             <div css={styles.copyLinkButtonContainer}>
               <Button startIcon={<CopyIcon />} color="primary" onClick={handleCopyLink}>
@@ -258,6 +253,24 @@ const FeedbackTargetContent = () => {
             </div>
           )}
         </div>
+
+        <Box sx={[styles.linkContainer, styles.hidePrint]}>
+          {organisation && (
+            <LinkButton
+              to={`/organisations/${organisation.code}`}
+              title={getLanguageValue(organisation.name, i18n.language)}
+            />
+          )}
+
+          {isTeacher && showCourseSummaryLink && (
+            <LinkButton to={courseSummaryPath} title={t('feedbackTargetView:courseSummary')} />
+          )}
+
+          <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />
+
+          {isTeacher && <LinkButton to={wikiLink} title={t('footer:wikiLink')} external />}
+        </Box>
+
         <Box sx={styles.infoContainer}>
           <Box mr="auto">
             <dl css={styles.datesContainer}>
@@ -289,18 +302,6 @@ const FeedbackTargetContent = () => {
                 </>
               )}
             </dl>
-
-            <Box sx={[styles.linkContainer, styles.hidePrint]}>
-              <ExternalLink href={coursePageUrl}>{t('feedbackTargetView:coursePage')}</ExternalLink>
-
-              {isTeacher && <ExternalLink href={wikiLink}>{t('footer:wikiLink')}</ExternalLink>}
-
-              {isTeacher && showCourseSummaryLink && (
-                <MuiLink to={courseSummaryPath} component={Link} underline="hover">
-                  {t('feedbackTargetView:courseSummary')}
-                </MuiLink>
-              )}
-            </Box>
           </Box>
           {isResponsibleTeacher && (
             <Box mt="1rem" mr="3rem">
