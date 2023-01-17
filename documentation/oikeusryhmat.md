@@ -12,7 +12,7 @@ ja ohjelmaoikeus (Norppa-slangilla organisaatio-oikeus) periytyy kaikkiin ohjelm
 | Kaikkien tohtoriohjelmien lukuoikeus | Tohtorikoulutuksen johtoryhmä ja Tine | hy-tohtorikoulutus-johtoryhma, hy-tine |
 | Tiedekuntien admin | Opetusvaradekaani | hy-varadekaanit-opetus `JA` hy-[tdk]-dekanaatti | Saa adminoikeuden* tdk:n organisaatioihin |
 | Tiedekuntien lukuoikeus | Dekanaatti | hy-[tdk]-dekanaatti | Saa lukuoikeuden tdk:n organisaatioihin |
-| Organisaation admin | Koulutusohjelmien johtajat, Palautevastaavat | Koulutusohjelman johtoryhmän IAM JA saman tdk:n ko-johtaja IAM. palautevastaava ei perustu IAMeihin | Näkee statistiikan ja kaiken palautteen organisaation kursseilta. Voi muokata kaikkia organisaatio asetuksia. |
+| Organisaation admin | Koulutusohjelmien johtajat, Palautevastaavat | Koulutusohjelman johtoryhmän IAM `JA` saman tdk:n ko-johtaja IAM. palautevastaava ei perustu IAMeihin | Näkee statistiikan ja kaiken palautteen organisaation kursseilta. Voi muokata kaikkia organisaatio asetuksia. |
 | Organisaation kirjoitusoikeus | Ei kukaan tällä hetkellä | ei ole | Voi muokata organisaation kysymyksiä ja aktivoida kursseja |  |  |
 | Organisaation lukuoikeus | Johtoryhmä | Koulutusohjelman johtoryhmän IAM `JA` henkilö on ryhmässä hy-employees | Näkee organisaation statistiikan ja kurssien julkisen palautteen |
 
