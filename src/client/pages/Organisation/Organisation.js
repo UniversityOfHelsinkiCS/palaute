@@ -68,27 +68,37 @@ const Organisation = () => {
           {organisation.code}
         </Typography>
       </Box>
-      <Box mb={'1rem'}>
+      <Box mb="1rem">
         <LinkButton to={links.organisationInstructions[i18n.language]} title={t('footer:wikiLink')} external />
       </Box>
-      <RouterTabs sx={{ mb: '4rem' }} variant="scrollable" scrollButtons="auto">
-        {hasAdminAccess && (
-          <RouterTab label={t('organisationSettings:settingsTab')} icon={<SettingsOutlined />} to={`${url}/settings`} />
-        )}
-        {hasWriteAccess && (
-          <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
-        )}
-        <RouterTab
-          label={t('organisationSettings:overviewTab')}
-          to={`${url}/upcoming`}
-          icon={<CalendarTodayOutlined />}
-        />
-        <RouterTab label={t('organisationSettings:summaryTab')} to={`${url}/summary`} icon={<PollOutlined />} />
-        {hasAdminAccess && (
-          <RouterTab label={t('organisationSettings:openQuestionsTab')} to={`${url}/open`} icon={<CommentOutlined />} />
-        )}
-        {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
-      </RouterTabs>
+      <Box mb="2rem">
+        <RouterTabs variant="scrollable" scrollButtons="auto">
+          {hasAdminAccess && (
+            <RouterTab
+              label={t('organisationSettings:settingsTab')}
+              icon={<SettingsOutlined />}
+              to={`${url}/settings`}
+            />
+          )}
+          {hasWriteAccess && (
+            <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
+          )}
+          <RouterTab
+            label={t('organisationSettings:overviewTab')}
+            to={`${url}/upcoming`}
+            icon={<CalendarTodayOutlined />}
+          />
+          <RouterTab label={t('organisationSettings:summaryTab')} to={`${url}/summary`} icon={<PollOutlined />} />
+          {hasAdminAccess && (
+            <RouterTab
+              label={t('organisationSettings:openQuestionsTab')}
+              to={`${url}/open`}
+              icon={<CommentOutlined />}
+            />
+          )}
+          {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
+        </RouterTabs>
+      </Box>
       <Switch>
         <ProtectedRoute
           path={`${path}/settings`}

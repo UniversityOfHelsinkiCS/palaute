@@ -4,6 +4,13 @@ import { Tabs, Tab, Box, Tooltip, Badge } from '@mui/material'
 
 import { get } from 'lodash'
 
+const styles = {
+  tabContainer: theme => ({
+    borderRadius: '0.6rem',
+    boxShadow: theme.shadows[2],
+  }),
+}
+
 export const RouterTabs = ({ children, ...props }) => {
   const { pathname } = useLocation()
 
@@ -12,7 +19,7 @@ export const RouterTabs = ({ children, ...props }) => {
     .findIndex(c => !!matchPath(pathname, { path: get(c, 'props.to') }))
 
   return (
-    <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props}>
+    <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props} sx={styles.tabContainer}>
       {children}
     </Tabs>
   )

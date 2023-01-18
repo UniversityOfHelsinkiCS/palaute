@@ -4,11 +4,11 @@ import { Button, Link as MuiLink } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
 
 const styles = {
-  button: {
+  button: theme => ({
     py: '0.8rem',
-    boxShadow: '0 3px 10px 0px rgb(65 135 255 / 18%)',
+    boxShadow: theme.shadows[2],
     background: 'white',
-  },
+  }),
 }
 
 const LinkButton = ({ title, to, external = false }) => {

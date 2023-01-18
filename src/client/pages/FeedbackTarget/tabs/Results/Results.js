@@ -1,13 +1,12 @@
-import React, { useRef, forwardRef, useState } from 'react'
+import React, { useRef, forwardRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Alert, FormControlLabel, Switch } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
-import OldFeedbackTargetResults from '../../../../components/OldFeedbackTargetResults'
 
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import FeedbackChart from './QuestionResults/FeedbackChart'
@@ -15,25 +14,11 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
-const styles = {
-  legacySwitch: {
-    '@media print': {
-      display: 'none',
-    },
-  },
-}
-
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
     <Alert severity="warning" data-cy="notEnoughFeedbacks">
       {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
     </Alert>
-  </Box>
-)
-
-const OnlyForEnrolled = ({ t }) => (
-  <Box mb={2}>
-    <Alert severity="warning">{t('feedbackTargetResults:onlyForEnrolledInfo')}</Alert>
   </Box>
 )
 
@@ -53,8 +38,6 @@ const ResultsView = forwardRef((_props, ref) => {
 
   const { feedbackTargetData } = useFeedbackTargetFeedbacks(id)
 
-  const [useLegacy, setUseLegacy] = useState(JSON.parse(localStorage.getItem('legacy')) || false)
-
   const {
     questions,
     questionOrder,
@@ -70,11 +53,6 @@ const ResultsView = forwardRef((_props, ref) => {
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbackCount > 0
-
-  const saveLegacySetting = value => {
-    setUseLegacy(value)
-    localStorage.setItem('legacy', JSON.stringify(value))
-  }
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
@@ -105,7 +83,7 @@ const ResultsView = forwardRef((_props, ref) => {
           </Box>
         )}
 
-        {!isMobile && !useLegacy && (
+        {!isMobile && (
           <Box>
             <FeedbackChart
               feedbacks={feedbackTargetData?.feedbacks ?? []}
@@ -120,33 +98,20 @@ const ResultsView = forwardRef((_props, ref) => {
 
         {!enoughFeedbacks && <NotEnoughFeedbacks t={t} />}
 
-        {enoughFeedbacks &&
-          (useLegacy ? (
-            <Box my="3rem">
-              <OldFeedbackTargetResults />
-            </Box>
-          ) : (
-            <Box>
-              <QuestionResults
-                publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-                publicQuestionIds={publicQuestionIds ?? []}
-                questions={questions}
-                questionOrder={questionOrder}
-                feedbacks={feedbackTargetData?.feedbacks ?? []}
-                isResponsibleTeacher={isResponsibleTeacher}
-                isOrganisationUser={isOrganisationReader}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={id}
-              />
-            </Box>
-          ))}
-
-        {isTeacher && (
-          <FormControlLabel
-            sx={styles.legacySwitch}
-            control={<Switch checked={useLegacy} onClick={() => saveLegacySetting(!useLegacy)} />}
-            label={t('feedbackTargetResults:useLegacyVersion')}
-          />
+        {enoughFeedbacks && (
+          <Box>
+            <QuestionResults
+              publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
+              publicQuestionIds={publicQuestionIds ?? []}
+              questions={questions}
+              questionOrder={questionOrder}
+              feedbacks={feedbackTargetData?.feedbacks ?? []}
+              isResponsibleTeacher={isResponsibleTeacher}
+              isOrganisationUser={isOrganisationReader}
+              feedbackCount={feedbackCount}
+              feedbackTargetId={id}
+            />
+          </Box>
         )}
       </Box>
     </>

@@ -356,7 +356,7 @@ const FeedbackTargetContent = () => {
         </Box>
       </Box>
 
-      <Box mb={2} sx={styles.hidePrint}>
+      <Box mb="2rem" sx={styles.hidePrint}>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
           <Tab
             label={
