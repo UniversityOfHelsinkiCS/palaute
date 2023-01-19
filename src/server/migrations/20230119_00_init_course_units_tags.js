@@ -12,7 +12,7 @@ module.exports = {
             allowNull: false,
             autoIncrement: true,
           },
-          course_realisation_id: {
+          course_unit_id: {
             type: STRING,
             references: { model: 'course_units', key: 'id' },
             allowNull: false,

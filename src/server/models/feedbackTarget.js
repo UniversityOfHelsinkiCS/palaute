@@ -13,6 +13,7 @@ const {
   getProgrammeSurveysByCourseUnit,
   getOrCreateTeacherSurvey,
 } = require('../services/surveys')
+const Tag = require('./tag')
 
 class FeedbackTarget extends Model {
   async getSurveys() {
@@ -330,6 +331,10 @@ FeedbackTarget.init(
     },
     // potentially cached
     administrativePersons: {
+      type: VIRTUAL,
+    },
+    // potentially cached
+    tags: {
       type: VIRTUAL,
     },
     studentCount: {

@@ -49,16 +49,24 @@ const getFromDb = async id => {
             through: { attributes: ['type'], as: 'courseUnitOrganisation' },
             required: true,
           },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id', 'name', 'hash'],
+          },
         ],
       },
       {
         model: CourseRealisation,
         as: 'courseRealisation',
-        include: {
-          model: Tag,
-          as: 'tags',
-          attributes: ['id', 'name', 'hash'],
-        },
+        required: true,
+        include: [
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id', 'name', 'hash'],
+          },
+        ],
       },
     ],
   })
@@ -88,6 +96,7 @@ const getFromDb = async id => {
     )
   )
   fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
+  fbt.set('tags', (fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []))
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
   const publicTarget = await fbt.toPublicObject()
