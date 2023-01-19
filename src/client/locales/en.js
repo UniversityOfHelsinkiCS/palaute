@@ -409,6 +409,7 @@ export default {
     calendarMode: 'Switch to calendar view',
     listMode: 'Switch to list view',
     setStudyTracks: 'Set studytracks for course realisation',
+    setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
     setStudyTracksForSelection: 'Set studytracks for course realisations',
   },
   feedbackTargetView: {

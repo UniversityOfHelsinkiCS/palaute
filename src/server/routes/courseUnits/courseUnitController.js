@@ -1,17 +1,9 @@
 const { Router } = require('express')
-const { Op, fn, col } = require('sequelize')
+const { Op } = require('sequelize')
 const _ = require('lodash')
 const { INCLUDE_COURSES } = require('../../../config')
 
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-  CourseUnitsOrganisation,
-  Tag,
-} = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, Tag } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
 

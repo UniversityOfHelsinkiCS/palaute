@@ -106,8 +106,8 @@ const updateCourseRealisationTags = async (req, res) => {
 }
 
 /**
- * Set the tags of one course unit.
- * Given tag ids, course unit id and organisation code.
+ * Set the tags of 1..n course units.
+ * Given tag ids, course unit ids and organisation code.
  * Only the tags belonging to the organisation are allowed to be set.
  * Returns the new tag objects which match the given tag ids.
  */
@@ -120,14 +120,15 @@ const updateCourseUnitTags = async (req, res) => {
     throw new ApplicationError('Invalid courseUnitId', 400)
   }
 
-  const courseUnit = await CourseUnit.findByPk(courseUnitId, {
+  const courseUnits = await CourseUnit.findAll({
+    where: { id: courseUnitId },
     include: { model: Organisation, as: 'organisations', where: { code }, include: { model: Tag, as: 'tags' } },
   })
-  if (!courseUnit) {
+  if (courseUnits.length === 0) {
     ApplicationError.NotFound()
   }
 
-  const organisation = courseUnit.organisations[0] // there can be only one, becoz code in the where param
+  const organisation = courseUnits[0].organisations[0] // there can be only one, becoz code in the where param
   const availableTagIds = organisation.tags.map(t => t.id)
 
   const tagIds = parseTagIds(req.body)
@@ -139,23 +140,25 @@ const updateCourseUnitTags = async (req, res) => {
 
   await sequelize.transaction(async transaction => {
     // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
-    await CourseUnitsTag.destroy(
-      {
-        where: {
-          tagId: { [Op.in]: availableTagIds },
-          courseUnitId: courseUnit.id,
+    for (const courseUnit of courseUnits) {
+      await CourseUnitsTag.destroy(
+        {
+          where: {
+            tagId: { [Op.in]: availableTagIds },
+            courseUnitId: courseUnit.id,
+          },
         },
-      },
-      { transaction }
-    )
+        { transaction }
+      )
 
-    await CourseRealisationsTag.bulkCreate(
-      newTags.map(t => ({
-        tagId: t.id,
-        courseUnitId: courseUnit.id,
-      })),
-      { transaction }
-    )
+      await CourseUnitsTag.bulkCreate(
+        newTags.map(t => ({
+          tagId: t.id,
+          courseUnitId: courseUnit.id,
+        })),
+        { transaction }
+      )
+    }
   })
 
   return res.send(newTags)

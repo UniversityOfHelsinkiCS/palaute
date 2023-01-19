@@ -413,6 +413,7 @@ export default {
     calendarMode: 'Vaihda kalenterinäkymään',
     listMode: 'Vaihda listanäkymään',
     setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
+    setStudyTracksForCourseUnit: 'Merkkaa kurssin {{name}} ({{code}}) opintosuunnat',
     setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },
   feedbackTargetView: {

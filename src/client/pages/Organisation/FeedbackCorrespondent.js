@@ -59,21 +59,18 @@ const CorrepondentSelector = ({ add }) => {
       </Card>
       <Box my={1} />
       {potentialUsers.map(user => (
-        <>
-          <Card key={user.id}>
-            <CardContent>
-              <b>
-                {user.firstName} {user.lastName} - {user.email}
-              </b>
-            </CardContent>
-            <CardActions>
-              <Button onClick={() => add(user)} variant="outlined">
-                {t('organisationSettings:setAsCorrespondent')}
-              </Button>
-            </CardActions>
-          </Card>
-          <Box mb={1} />
-        </>
+        <Card key={user.id}>
+          <CardContent>
+            <b>
+              {user.firstName} {user.lastName} - {user.email}
+            </b>
+          </CardContent>
+          <CardActions>
+            <Button onClick={() => add(user)} variant="outlined">
+              {t('organisationSettings:setAsCorrespondent')}
+            </Button>
+          </CardActions>
+        </Card>
       ))}
     </Box>
   )
@@ -164,7 +161,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
       </Typography>
       {feedbackCorrespondents?.length > 0 ? (
         feedbackCorrespondents.map(correspondent => (
-          <FeedbackCorrespondentInfo correspondent={correspondent} remove={remove} />
+          <FeedbackCorrespondentInfo correspondent={correspondent} remove={remove} key={correspondent.id} />
         ))
       ) : (
         <Alert severity="warning">{t('organisationSettings:correspondentMissing')}</Alert>

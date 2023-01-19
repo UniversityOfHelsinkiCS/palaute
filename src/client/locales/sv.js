@@ -413,6 +413,7 @@ export default {
     calendarMode: 'Vaihda kalenterinäkymään Ändra till kalendervy',
     listMode: 'Ändra till listvy',
     setStudyTracks: 'Markera studieinriktningarna för kursgenomförandet',
+    // setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
     setStudyTracksForSelection: 'Markera studieinriktningarna för kursgenomförandet',
   },
   feedbackTargetView: {

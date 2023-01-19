@@ -22,7 +22,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { ArrowDropDown, ChevronRight, Menu, SettingsBackupRestore } from '@mui/icons-material'
-import { useMutation, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -32,11 +32,12 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../../components/common/TeacherChip'
 import MultiSelect from '../../components/common/MultiSelect'
-import queryClient from '../../util/queryClient'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
+import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
+import TagSelector from './TagSelector'
 
 class FeedbackTargetGrouping {
   years = []
@@ -141,22 +142,6 @@ const useOrganisationFeedbackTargets = ({
   return { feedbackTargets: filtered, ...rest }
 }
 
-const useUpdateCourseRealisationTags = () => {
-  const mutationFn = async ({ organisationCode, courseRealisationIds, tagIds }) =>
-    apiClient.put(`/tags/${organisationCode}/course-realisations`, {
-      courseRealisationIds,
-      tagIds,
-    })
-
-  const mutation = useMutation(mutationFn, {
-    onSuccess: (response, variables) => {
-      queryClient.refetchQueries(['organisationFeedbackTargets', variables.organisationCode])
-    },
-  })
-
-  return mutation
-}
-
 const styles = {
   date: {
     position: 'sticky',
@@ -193,51 +178,27 @@ const styles = {
   },
 }
 
-const TagSelector = ({ organisation, selected, tags, t, language, onClose }) => {
+const CourseRealisationTagSelector = ({ feedbackTargets, organisation, onClose }) => {
   const mutation = useUpdateCourseRealisationTags()
-  const [tagIds, setTagIds] = React.useState([])
-  const allOriginalTagIds = _.uniq(selected.flatMap(fbt => fbt.courseRealisation.tags.map(tag => tag.id)))
-  const reset = () => setTagIds(allOriginalTagIds)
 
-  React.useEffect(() => {
-    reset()
-  }, [selected])
+  const courseRealisationIds = feedbackTargets.map(fbt => fbt.courseRealisation.id)
 
-  const onSubmit = async () => {
-    try {
-      await mutation.mutateAsync({
-        organisationCode: organisation.code,
-        courseRealisationIds: selected.map(fbt => fbt.courseRealisation.id),
-        tagIds,
-      })
-      if (typeof onClose === 'function') onClose()
-    } catch (error) {
-      console.error(error)
-    }
+  const onSubmit = async tagIds => {
+    await mutation.mutateAsync({
+      organisationCode: organisation.code,
+      courseRealisationIds,
+      tagIds,
+    })
   }
 
   return (
-    <Box display="flex" flexDirection="column" gap="1rem">
-      <MultiSelect
-        colors
-        label={t('common:studyTracks')}
-        value={tagIds}
-        options={tags.map(t => ({
-          hash: t.hash,
-          id: t.id,
-          label: getLanguageValue(t.name, language),
-        }))}
-        onChange={setTagIds}
-      />
-      <Box display="flex">
-        <Button onClick={onSubmit} variant="contained" size="small" disabled={!(selected?.length > 0)}>
-          {t('common:accept')}
-        </Button>
-        <IconButton onClick={reset}>
-          <SettingsBackupRestore />
-        </IconButton>
-      </Box>
-    </Box>
+    <TagSelector
+      mutation={onSubmit}
+      objectIds={courseRealisationIds}
+      originalTagIds={_.uniq(feedbackTargets.flatMap(fbt => fbt.courseRealisation.tags.map(t => t.id)))}
+      tags={organisation.tags}
+      onClose={onClose}
+    />
   )
 }
 
@@ -297,12 +258,9 @@ const FeedbackTargetDetails = ({ feedbackTarget, language, t, organisation, onCl
         <Typography variant="subtitle1">{t('organisationSettings:setStudyTracks')}</Typography>
       </Box>
       <Box mt={2}>
-        <TagSelector
+        <CourseRealisationTagSelector
           organisation={organisation}
-          selected={[feedbackTarget]}
-          t={t}
-          language={language}
-          tags={organisation.tags}
+          feedbackTargets={[feedbackTarget]}
           onClose={onClose}
         />
       </Box>
@@ -316,7 +274,7 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
     <Box mb={2} m={3}>
       <Typography>{t('organisationSettings:setStudyTracksForSelection')}</Typography>
       <Box m={1.5} />
-      <TagSelector organisation={organisation} selected={selected} t={t} language={language} tags={organisation.tags} />
+      <CourseRealisationTagSelector organisation={organisation} feedbackTargets={selected} />
       <Box m={5} />
       <Typography>
         {t('common:currentlySelected')} ({selected.length})

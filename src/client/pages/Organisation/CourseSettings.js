@@ -14,11 +14,14 @@ import {
   Alert,
   Typography,
   TextField,
+  IconButton,
+  Link as MuiLink,
 } from '@mui/material'
+import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, Redirect, Link } from 'react-router-dom'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
@@ -27,13 +30,17 @@ import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { STUDENT_LIST_BY_COURSE_ENABLED, STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN } from '../../../config'
+import { TagChip } from '../../components/common/TagChip'
+import CourseUnitTagSelector from './CourseUnitTagSelector'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, query, language = 'en') =>
   (courseUnits ?? [])
-    .filter(({ courseCode, name }) => courseCode.includes(query) || name[language].includes(query))
-    .map(({ courseCode, name }) => ({
+    .filter(({ courseCode, name }) => courseCode?.includes(query) || name[language]?.includes(query))
+    .map(({ id, courseCode, name, tags }) => ({
+      id,
       courseCode,
       name,
+      tags,
       enabledCourse: !disabledCourseCodes.includes(courseCode),
       studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
     }))
@@ -53,18 +60,38 @@ const CourseUnitItem = ({
   disabled,
   enabledCourse,
   studentListVisible,
+  organisationTags,
+  tags,
   onChangeDisabledCourses,
   onChangeStudentList,
+  onSelect,
   studentListVisibleFeatureEnabled,
 }) => {
   const { i18n } = useTranslation()
   const labelId = `courseUnitItem-${courseCode}`
 
-  const translatedLabel = `${getLanguageValue(name, i18n.language)} (${courseCode})`
+  const link = (
+    <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
+      {`${getLanguageValue(name, i18n.language)} (${courseCode})`}
+    </MuiLink>
+  )
 
   return (
-    <TableRow sx={{ '&:hover': { background: theme => theme.palette.action.hover } }}>
-      <TableCell>{translatedLabel}</TableCell>
+    <TableRow>
+      <TableCell>{link}</TableCell>
+      {organisationTags.length > 0 && (
+        <TableCell>
+          <Box display="flex" flexWrap="wrap">
+            {tags.map(tag => (
+              <TagChip tag={tag} key={tag.id} />
+            ))}
+            <IconButton onClick={onSelect}>
+              <Edit />
+            </IconButton>
+          </Box>
+        </TableCell>
+      )}
+
       <TableCell>
         <Switch
           edge="start"
@@ -101,7 +128,8 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
   const { authorizedUser } = useAuthorizedUser()
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const [selectedCourse, setSelectedCourse] = React.useState(null)
 
   const studentListVisibleFeatureEnabled =
     STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code) ||
@@ -162,48 +190,60 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Box mb={2}>
-          <Alert severity="info">{t('organisationSettings:courseSettingsInfo')}</Alert>
-        </Box>
-        <TextField
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          label={t('organisationSettings:findByCourseUnit')}
-          autoComplete="off"
-        />
-        <Box m={1} />
-        <TableContainer>
-          <Table stickyHeader size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>{t('organisationSettings:course')}</TableCell>
-                <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
-                {studentListVisibleFeatureEnabled && (
-                  <TableCell>{t('organisationSettings:courseStudentListVisible')}</TableCell>
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {courseUnitItems.map(({ courseCode, name, enabledCourse, studentListVisible }) => (
-                <CourseUnitItem
-                  name={name}
-                  courseCode={courseCode}
-                  key={courseCode}
-                  enabledCourse={enabledCourse}
-                  studentListVisible={studentListVisible}
-                  onChangeDisabledCourses={makeOnToggleDisabledCourses(courseCode)}
-                  onChangeStudentList={makeOnToggleStudentListVisible(courseCode)}
-                  disabled={mutation.isLoading}
-                  studentListVisibleFeatureEnabled={studentListVisibleFeatureEnabled}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </CardContent>
-    </Card>
+    <>
+      <CourseUnitTagSelector
+        courseUnit={selectedCourse}
+        organisation={organisation}
+        onClose={() => setSelectedCourse(null)}
+      />
+
+      <Card>
+        <CardContent>
+          <Box mb={2}>
+            <Alert severity="info">{t('organisationSettings:courseSettingsInfo')}</Alert>
+          </Box>
+          <TextField
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            label={t('organisationSettings:findByCourseUnit')}
+            autoComplete="off"
+          />
+          <Box m={1} />
+          <TableContainer>
+            <Table stickyHeader size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t('organisationSettings:course')}</TableCell>
+                  {organisation.tags.length > 0 && <TableCell>{t('common:studyTracks')}</TableCell>}
+                  <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
+                  {studentListVisibleFeatureEnabled && (
+                    <TableCell>{t('organisationSettings:courseStudentListVisible')}</TableCell>
+                  )}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {courseUnitItems.map(courseUnit => (
+                  <CourseUnitItem
+                    name={courseUnit.name}
+                    courseCode={courseUnit.courseCode}
+                    key={courseUnit.courseCode}
+                    enabledCourse={courseUnit.enabledCourse}
+                    studentListVisible={courseUnit.studentListVisible}
+                    onChangeDisabledCourses={makeOnToggleDisabledCourses(courseUnit.courseCode)}
+                    onChangeStudentList={makeOnToggleStudentListVisible(courseUnit.courseCode)}
+                    onSelect={() => setSelectedCourse(courseUnit)}
+                    organisationTags={organisation.tags}
+                    tags={courseUnit.tags}
+                    disabled={mutation.isLoading}
+                    studentListVisibleFeatureEnabled={studentListVisibleFeatureEnabled}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
+    </>
   )
 }
 
@@ -213,16 +253,12 @@ const CourseSettings = () => {
 
   const { courseUnits, isLoading: courseUnitsIsLoading } = useOrganisationCourseUnits(code)
 
-  const { organisation, isLoading: organisationIsLoading } = useOrganisation(code, { skipCache: true })
+  const { organisation, isLoading: organisationIsLoading } = useOrganisation(code)
 
   const isLoading = courseUnitsIsLoading || organisationIsLoading
 
   if (isLoading) {
     return <LoadingProgress />
-  }
-
-  if (!organisation.access.admin) {
-    return <Redirect to={`/organisations/${code}/settings`} />
   }
 
   return (
