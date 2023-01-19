@@ -1,15 +1,8 @@
 import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
-import { Tabs, Tab, Box, Tooltip, Badge } from '@mui/material'
+import { Tabs, Tab, Box, Tooltip, Badge, Paper } from '@mui/material'
 
 import { get } from 'lodash'
-
-const styles = {
-  tabContainer: theme => ({
-    borderRadius: '0.6rem',
-    boxShadow: theme.shadows[2],
-  }),
-}
 
 export const RouterTabs = ({ children, ...props }) => {
   const { pathname } = useLocation()
@@ -19,9 +12,11 @@ export const RouterTabs = ({ children, ...props }) => {
     .findIndex(c => !!matchPath(pathname, { path: get(c, 'props.to') }))
 
   return (
-    <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props} sx={styles.tabContainer}>
-      {children}
-    </Tabs>
+    <Paper>
+      <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props} sx={{ borderRadius: '0.8rem' }}>
+        {children}
+      </Tabs>
+    </Paper>
   )
 }
 
