@@ -1,9 +1,13 @@
 const { Router } = require('express')
 const { Op } = require('sequelize')
-const { CourseRealisation, Organisation, Tag, CourseRealisationsTag } = require('../../models')
+const { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
+const CourseUnitsTag = require('../../models/courseUnitsTag')
 
+/**
+ * Check whether user has access to organisation with given code
+ */
 const checkAccess = async (user, code, level = 'read') => {
   const orgAccess = await user.getOrganisationAccess()
   const relevantOrg = orgAccess.find(oac => oac.organisation.code === code)
@@ -12,6 +16,9 @@ const checkAccess = async (user, code, level = 'read') => {
   }
 }
 
+/**
+ * Get tag ids from body and make sure its an array of integers
+ */
 const parseTagIds = body => {
   const tagIds = body?.tagIds
   if (!Array.isArray(tagIds)) {
@@ -26,6 +33,12 @@ const parseTagIds = body => {
   return numberTagIds
 }
 
+/**
+ * Set the tags of 1..n course realisations.
+ * Given tag ids, course realisation ids and organisation code.
+ * Only the tags belonging to the organisation are allowed to be set.
+ * Returns the new tag objects which match the given tag ids.
+ */
 const updateCourseRealisationTags = async (req, res) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
@@ -92,6 +105,66 @@ const updateCourseRealisationTags = async (req, res) => {
   return res.send(newTags)
 }
 
+/**
+ * Set the tags of one course unit.
+ * Given tag ids, course unit id and organisation code.
+ * Only the tags belonging to the organisation are allowed to be set.
+ * Returns the new tag objects which match the given tag ids.
+ */
+const updateCourseUnitTags = async (req, res) => {
+  const { organisationCode: code } = req.params
+  await checkAccess(req.user, code)
+
+  const { courseUnitId } = req.body
+  if (!courseUnitId) {
+    throw new ApplicationError('Invalid courseUnitId', 400)
+  }
+
+  const courseUnit = await CourseUnit.findByPk(courseUnitId, {
+    include: { model: Organisation, as: 'organisations', where: { code }, include: { model: Tag, as: 'tags' } },
+  })
+  if (!courseUnit) {
+    ApplicationError.NotFound()
+  }
+
+  const organisation = courseUnit.organisations[0] // there can be only one, becoz code in the where param
+  const availableTagIds = organisation.tags.map(t => t.id)
+
+  const tagIds = parseTagIds(req.body)
+  if (tagIds.some(id => !availableTagIds.includes(id))) {
+    throw new ApplicationError('Some of the given tags are not allowed for this cur', 400)
+  }
+
+  const newTags = organisation.tags.filter(tag => tagIds.includes(tag.id))
+
+  await sequelize.transaction(async transaction => {
+    // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
+    await CourseUnitsTag.destroy(
+      {
+        where: {
+          tagId: { [Op.in]: availableTagIds },
+          courseUnitId: courseUnit.id,
+        },
+      },
+      { transaction }
+    )
+
+    await CourseRealisationsTag.bulkCreate(
+      newTags.map(t => ({
+        tagId: t.id,
+        courseUnitId: courseUnit.id,
+      })),
+      { transaction }
+    )
+  })
+
+  return res.send(newTags)
+}
+
+/**
+ * Get all tags belonging to an organisation.
+ * User must have organisation access.
+ */
 const getTags = async (req, res) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
@@ -119,6 +192,7 @@ const getTags = async (req, res) => {
 const router = Router()
 
 router.put('/:organisationCode/course-realisations', updateCourseRealisationTags)
+router.put('/:organisationCode/course-units', updateCourseUnitTags)
 router.get('/:organisationCode', getTags)
 
 module.exports = router

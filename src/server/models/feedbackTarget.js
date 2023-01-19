@@ -13,7 +13,6 @@ const {
   getProgrammeSurveysByCourseUnit,
   getOrCreateTeacherSurvey,
 } = require('../services/surveys')
-const Tag = require('./tag')
 
 class FeedbackTarget extends Model {
   async getSurveys() {
