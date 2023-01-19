@@ -23,6 +23,7 @@ const Tag = require('./tag')
 const CourseRealisationsTag = require('./courseRealisationsTag')
 const Banner = require('./banner')
 const InactiveCourseRealisation = require('./inactiveCourseRealisation')
+const CourseUnitsTag = require('./courseUnitsTag')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -185,6 +186,14 @@ CourseRealisation.belongsToMany(Tag, {
 Tag.belongsToMany(CourseRealisation, {
   through: CourseRealisationsTag,
   as: 'courseRealisations',
+})
+CourseUnit.belongsToMany(Tag, {
+  through: CourseUnitsTag,
+  as: 'tags',
+})
+Tag.belongsToMany(CourseUnit, {
+  through: CourseUnitsTag,
+  as: 'courseUnits',
 })
 
 module.exports = {
