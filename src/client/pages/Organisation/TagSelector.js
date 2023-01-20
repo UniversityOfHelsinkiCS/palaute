@@ -23,7 +23,6 @@ const TagSelector = ({ objectIds, originalTagIds, tags, onClose, mutation }) => 
       if (typeof onClose === 'function') onClose()
       enqueueSnackbar(t('common:success'), { variant: 'success' })
     } catch (error) {
-      console.error(error)
       enqueueSnackbar(t('common:unknownError'), { variant: 'failure' })
     }
   }

@@ -17,11 +17,10 @@ import {
   Chip,
   Button,
   Switch,
-  IconButton,
   Paper,
   Tooltip,
 } from '@mui/material'
-import { ArrowDropDown, ChevronRight, Menu, SettingsBackupRestore } from '@mui/icons-material'
+import { ArrowDropDown, ChevronRight, Menu } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'

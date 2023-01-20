@@ -52,6 +52,7 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
+import Title from '../../components/common/Title'
 
 const styles = {
   datesContainer: {
@@ -231,6 +232,7 @@ const FeedbackTargetContent = () => {
 
   return (
     <>
+      <Title>{courseUnitName}</Title>
       <Box mb={3}>
         {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>

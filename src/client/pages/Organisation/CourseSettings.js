@@ -21,7 +21,7 @@ import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
-import { useParams, Redirect, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
@@ -251,11 +251,9 @@ const CourseSettings = () => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
-  const { courseUnits, isLoading: courseUnitsIsLoading } = useOrganisationCourseUnits(code)
+  const { courseUnits, isLoading } = useOrganisationCourseUnits(code)
 
-  const { organisation, isLoading: organisationIsLoading } = useOrganisation(code)
-
-  const isLoading = courseUnitsIsLoading || organisationIsLoading
+  const { organisation } = useOrganisation(code)
 
   if (isLoading) {
     return <LoadingProgress />
