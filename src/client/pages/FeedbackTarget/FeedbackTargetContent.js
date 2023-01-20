@@ -208,7 +208,7 @@ const FeedbackTargetContent = () => {
   const showTogen = isAdmin
   const showLogsTab = isAdmin
 
-  const showTags = feedbackTarget.courseRealisation?.tags?.length > 0
+  const showTags = feedbackTarget?.tags?.length > 0
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = links.getCoursePage(feedbackTarget)
@@ -250,9 +250,12 @@ const FeedbackTargetContent = () => {
                 </Button>
               )}
             </Box>
-            <Typography variant="body1" component="h2">
-              {courseRealisationName}
-            </Typography>
+            <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
+              <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
+                {courseRealisationName}
+              </Typography>
+              {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
+            </Box>
           </Box>
         </div>
 
@@ -313,16 +316,6 @@ const FeedbackTargetContent = () => {
                   label={`${feedbackCount}/${studentCount}`}
                   percent={(feedbackCount / studentCount) * 100}
                 />
-              </Box>
-            </Box>
-          )}
-          {showTags && (
-            <Box mt="1rem">
-              <Typography gutterBottom>{t('common:studyTracks')}</Typography>
-              <Box display="flex" flexDirection="row" flexWrap="wrap" width="20rem">
-                {feedbackTarget.courseRealisation.tags.map(tag => (
-                  <TagChip key={tag.id} tag={tag} language={i18n.language} />
-                ))}
               </Box>
             </Box>
           )}
