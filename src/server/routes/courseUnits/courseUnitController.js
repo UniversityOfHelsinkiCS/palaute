@@ -207,14 +207,21 @@ const getCourseUnitsByOrganisation = async (req, res) => {
       {
         model: Tag,
         as: 'tags',
+        attributes: ['id', 'name', 'hash'],
+        through: { attributes: [] },
       },
     ],
-    order: [['courseCode']],
   })
 
-  const uniqueCourseUnits = _.uniqBy(courseUnits, 'courseCode')
+  // First sort by validity period start date. This ensures that when taking the uniq, the most recent CUs are preserved
+  const uniqueCourseUnits = _.uniqBy(
+    _.orderBy(courseUnits, cu => Date.parse(cu.validityPeriod?.startDate), 'desc'),
+    'courseCode'
+  )
 
-  return res.send(uniqueCourseUnits)
+  const sortedCourseUnits = _.sortBy(uniqueCourseUnits, 'courseCode')
+
+  return res.send(sortedCourseUnits)
 }
 
 const router = Router()
