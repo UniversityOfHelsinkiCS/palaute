@@ -21,7 +21,7 @@ const TagSelector = ({ objectIds, originalTagIds, tags, onClose, mutation }) => 
     try {
       await mutation(tagIds)
       if (typeof onClose === 'function') onClose()
-      enqueueSnackbar(t('common:success'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'failure' })
     }
