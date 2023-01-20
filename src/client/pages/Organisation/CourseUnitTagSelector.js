@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { Box, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import TagSelector from './TagSelector'
 import useUpdateCourseUnitTags from './useUpdateCourseUnitTags'
@@ -27,13 +27,16 @@ const CourseUnitTagSelector = ({ courseUnit, organisation, onClose }) => {
             })}
           </DialogTitle>
           <DialogContent sx={{ pt: '3rem' }}>
-            <TagSelector
-              objectIds={[courseUnit.id]}
-              originalTagIds={courseUnit.tags.map(t => t.id)}
-              tags={organisation.tags}
-              onClose={onClose}
-              mutation={handleSubmit}
-            />
+            <DialogContentText>{t('organisationSettings:courseUnitTagInfo')}</DialogContentText>
+            <Box mb="1rem" mt="2rem">
+              <TagSelector
+                objectIds={[courseUnit.id]}
+                originalTagIds={courseUnit.tags.map(t => t.id)}
+                tags={organisation.tags}
+                onClose={onClose}
+                mutation={handleSubmit}
+              />
+            </Box>
           </DialogContent>
         </>
       )}

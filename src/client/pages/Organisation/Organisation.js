@@ -84,7 +84,7 @@ const Organisation = () => {
             <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
           )}
           <RouterTab
-            label={t('organisationSettings:overviewTab')}
+            label={t('organisationSettings:courseRealisationsTab')}
             to={`${url}/upcoming`}
             icon={<CalendarTodayOutlined />}
           />

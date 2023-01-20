@@ -387,7 +387,7 @@ export default {
     feedbackCorrespondents: 'Korrespondenter för responsen',
     surveyTab: 'Utbildningsprogrammets förfrågan',
     summaryTab: 'Sammandrag',
-    overviewTab: 'Kommande kurser',
+    // courseRealisationsTab: 'Kurssitoteutukset',
     openQuestionsTab: 'Öppna frågor',
     editProgrammeQuestionsDialogTitle: 'Varning!',
     editProgrammeQuestionsDialogContent:
@@ -414,6 +414,7 @@ export default {
     listMode: 'Ändra till listvy',
     setStudyTracks: 'Markera studieinriktningarna för kursgenomförandet',
     // setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
+    // courseUnitTagInfo: 'Course\'s studytracks will be included on all its instances',
     setStudyTracksForSelection: 'Markera studieinriktningarna för kursgenomförandet',
   },
   feedbackTargetView: {

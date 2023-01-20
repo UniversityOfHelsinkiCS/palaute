@@ -382,7 +382,7 @@ export default {
     feedbackCorrespondents: 'Feedback correspondents',
     surveyTab: 'Programme survey',
     summaryTab: 'Summary',
-    overviewTab: 'Upcoming courses',
+    courseRealisationsTab: 'Course realisations',
     openQuestionsTab: 'Open questions',
     editProgrammeQuestionsDialogTitle: 'Warning!',
     editProgrammeQuestionsDialogContent:
@@ -410,6 +410,7 @@ export default {
     listMode: 'Switch to list view',
     setStudyTracks: 'Set studytracks for course realisation',
     setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
+    courseUnitTagInfo: "Course's studytracks will be included on all its instances",
     setStudyTracksForSelection: 'Set studytracks for course realisations',
   },
   feedbackTargetView: {

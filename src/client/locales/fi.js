@@ -386,7 +386,7 @@ export default {
     feedbackCorrespondents: 'Palautevastaavat',
     surveyTab: 'Koulutusohjelman kysely',
     summaryTab: 'Yhteenveto',
-    overviewTab: 'Tulevat kurssit',
+    courseRealisationsTab: 'Kurssitoteutukset',
     openQuestionsTab: 'Avoimet kysymykset',
     editProgrammeQuestionsDialogTitle: 'Varoitus!',
     editProgrammeQuestionsDialogContent:
@@ -414,6 +414,7 @@ export default {
     listMode: 'Vaihda listanäkymään',
     setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
     setStudyTracksForCourseUnit: 'Merkkaa kurssin {{name}} ({{code}}) opintosuunnat',
+    courseUnitTagInfo: 'Kurssin opintosuunnat näkyvät myös kaikilla sen toteutuksilla',
     setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },
   feedbackTargetView: {
