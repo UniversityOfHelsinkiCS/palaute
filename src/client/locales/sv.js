@@ -414,7 +414,8 @@ export default {
     listMode: 'Ändra till listvy',
     setStudyTracks: 'Markera studieinriktningarna för kursgenomförandet',
     // setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
-    // courseUnitTagInfo: 'Course\'s studytracks will be included on all its instances',
+    // courseUnitTagSettingInfo: 'Kurssin opintosuunnat näkyvät myös kaikilla sen toteutuksilla',
+    // courseUnitTagInfo: "Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle",
     setStudyTracksForSelection: 'Markera studieinriktningarna för kursgenomförandet',
   },
   feedbackTargetView: {

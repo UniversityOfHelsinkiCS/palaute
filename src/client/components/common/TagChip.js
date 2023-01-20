@@ -3,15 +3,19 @@ import { Chip, Tooltip } from '@mui/material'
 import { getLanguageValue } from '../../util/languageUtils'
 import { generate } from '../../util/randomColor'
 
-export const TagChip = ({ tag, language = 'fi', compact = false }) =>
-  compact ? (
-    <Tooltip key={tag.id} title={getLanguageValue(tag.name, language)}>
-      <Chip
-        label={getLanguageValue(tag.name, language)[0]}
-        size="small"
-        sx={{ background: generate(tag.hash), margin: '1px' }}
-      />
+export const TagChip = ({ tag, language = 'fi', compact = false, prefix = '' }) => {
+  const color = generate(tag.hash)
+
+  const style = {
+    backgroundColor: color,
+    margin: '1px',
+  }
+
+  return compact ? (
+    <Tooltip key={tag.id} title={`${prefix}${getLanguageValue(tag.name, language)}`}>
+      <Chip label={getLanguageValue(tag.name, language)[0]} size="small" sx={style} />
     </Tooltip>
   ) : (
-    <Chip label={getLanguageValue(tag.name, language)} sx={{ background: generate(tag.hash), margin: '1px' }} />
+    <Chip label={`${prefix}${getLanguageValue(tag.name, language)}`} sx={style} />
   )
+}

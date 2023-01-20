@@ -41,6 +41,8 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
           {
             model: Tag,
             as: 'tags',
+            attributes: ['id', 'name', 'hash'],
+            through: { attributes: [] },
           },
         ],
         where: {
@@ -56,6 +58,12 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
         model: CourseUnit,
         as: 'courseUnit',
         attributes: ['id', 'name', 'courseCode'],
+        include: {
+          model: Tag,
+          as: 'tags',
+          attributes: ['id', 'name', 'hash'],
+          through: { attributes: [] },
+        },
       },
       {
         model: UserFeedbackTarget,
@@ -73,7 +81,21 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
   const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.courseRealisation.id)
 
   const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
-    .map(fbt => fbt.toJSON())
+    .map(fbt => {
+      const fbtJson = fbt.toJSON()
+
+      fbtJson.tags = _.uniqBy(
+        fbt.courseRealisation.tags
+          .map(t => ({ ...t.toJSON(), from: 'courseRealisation' }))
+          .concat(fbt.courseUnit.tags.map(t => ({ ...t.toJSON(), from: 'courseUnit' }))),
+        'id'
+      )
+      delete fbtJson.courseRealisation.tags
+      delete fbtJson.courseUnit.tags
+      console.log(fbtJson.tags)
+
+      return fbtJson
+    })
     .map(fbt => {
       const studentCount = _.sumBy(fbt.userFeedbackTargets, ufbt => (ufbt.accessStatus === 'STUDENT' ? 1 : 0))
       const teachers = fbt.userFeedbackTargets

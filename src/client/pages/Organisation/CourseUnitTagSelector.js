@@ -27,7 +27,7 @@ const CourseUnitTagSelector = ({ courseUnit, organisation, onClose }) => {
             })}
           </DialogTitle>
           <DialogContent sx={{ pt: '3rem' }}>
-            <DialogContentText>{t('organisationSettings:courseUnitTagInfo')}</DialogContentText>
+            <DialogContentText>{t('organisationSettings:courseUnitTagSettingInfo')}</DialogContentText>
             <Box mb="1rem" mt="2rem">
               <TagSelector
                 objectIds={[courseUnit.id]}

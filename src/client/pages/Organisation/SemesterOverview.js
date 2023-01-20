@@ -110,7 +110,7 @@ const useOrganisationFeedbackTargets = ({
 
   const filterFn = fbt =>
     // filter by tag
-    (!tags.length > 0 || fbt.courseRealisation.tags.some(tag => tags.includes(tag.id))) &&
+    (!tags.length > 0 || fbt.tags.some(tag => tags.includes(tag.id))) &&
     // filter by course name
     (getLanguageValue(fbt.courseUnit.name, language).toLowerCase().includes(courseQueryLower) ||
       // filter by code
@@ -194,10 +194,37 @@ const CourseRealisationTagSelector = ({ feedbackTargets, organisation, onClose }
     <TagSelector
       mutation={onSubmit}
       objectIds={courseRealisationIds}
-      originalTagIds={_.uniq(feedbackTargets.flatMap(fbt => fbt.courseRealisation.tags.map(t => t.id)))}
+      originalTagIds={_.uniq(
+        feedbackTargets.flatMap(fbt => fbt.tags.filter(t => t.from === 'courseRealisation').map(t => t.id))
+      )}
       tags={organisation.tags}
       onClose={onClose}
     />
+  )
+}
+
+const CourseUnitTagInfo = ({ feedbackTarget, t, language }) => {
+  const cuTags = feedbackTarget.tags.filter(t => t.from === 'courseUnit')
+
+  return (
+    <Box mt={6}>
+      {cuTags.length > 0 && (
+        <>
+          <Typography variant="body1">
+            {t('organisationSettings:courseUnitTagInfo', {
+              count: cuTags.length,
+              code: feedbackTarget.courseUnit.courseCode,
+            })}
+            :
+          </Typography>
+          <Box mt={1} display="flex" flexWrap="wrap">
+            {cuTags.map(t => (
+              <TagChip key={t.id} tag={t} language={language} />
+            ))}
+          </Box>
+        </>
+      )}
+    </Box>
   )
 }
 
@@ -263,6 +290,7 @@ const FeedbackTargetDetails = ({ feedbackTarget, language, t, organisation, onCl
           onClose={onClose}
         />
       </Box>
+      <CourseUnitTagInfo feedbackTarget={feedbackTarget} t={t} />
     </Box>
   </Box>
 )
@@ -287,7 +315,7 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
                 code={fbt.courseUnit.courseCode}
                 cuName={fbt.courseUnit.name}
                 curName={fbt.courseRealisation.name}
-                tags={fbt.courseRealisation.tags}
+                tags={fbt.tags}
                 language={language}
               />
             </Box>
@@ -346,16 +374,23 @@ const FeedbackTargetButton = ({ code, cuName, curName, tags, onClick, selected, 
   </Box>
 )
 
-const FeedbackTargetItem = ({ code, cuName, curName, tags, language }) => (
+const FeedbackTargetItem = ({ code, cuName, curName, tags, language, t }) => (
   <Tooltip title={getLanguageValue(curName, language)} placement="top" disableInteractive>
     <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
       <Typography color="textSecondary">{code}</Typography>
       <Box mr="0.5rem" />
       <Typography fontWeight={350}>{getLanguageValue(cuName, language)}</Typography>
       <Box mr="0.3rem" />
-      {tags.map(tag => (
-        <TagChip key={tag.id} tag={tag} language={language} compact />
-      ))}
+      {tags
+        .filter(t => t.from === 'courseUnit')
+        .map(tag => (
+          <TagChip key={tag.id} tag={tag} prefix={`${code}: `} language={language} compact />
+        ))}
+      {tags
+        .filter(t => t.from === 'courseRealisation')
+        .map(tag => (
+          <TagChip key={tag.id} tag={tag} language={language} compact />
+        ))}
     </Box>
   </Tooltip>
 )
@@ -558,7 +593,7 @@ const SemesterOverview = ({ organisation }) => {
                               <FeedbackTargetButton
                                 key={fbt.id}
                                 code={fbt.courseUnit.courseCode}
-                                tags={fbt.courseRealisation.tags}
+                                tags={fbt.tags}
                                 cuName={fbt.courseUnit.name}
                                 curName={fbt.courseRealisation.name}
                                 onClick={() => (editMode ? toggleSelection(fbt) : setOpened(fbt))}
@@ -582,7 +617,7 @@ const SemesterOverview = ({ organisation }) => {
               <Box key={fbt.id} my={1}>
                 <FeedbackTargetButton
                   code={fbt.courseUnit.courseCode}
-                  tags={fbt.courseRealisation.tags}
+                  tags={fbt.tags}
                   cuName={fbt.courseUnit.name}
                   curName={fbt.courseRealisation.name}
                   onClick={() => (editMode ? toggleSelection(fbt) : setOpened(fbt))}

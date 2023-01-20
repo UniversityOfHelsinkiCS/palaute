@@ -414,7 +414,8 @@ export default {
     listMode: 'Vaihda listanäkymään',
     setStudyTracks: 'Merkkaa kurssitoteutuksen opintosuunnat',
     setStudyTracksForCourseUnit: 'Merkkaa kurssin {{name}} ({{code}}) opintosuunnat',
-    courseUnitTagInfo: 'Kurssin opintosuunnat näkyvät myös kaikilla sen toteutuksilla',
+    courseUnitTagSettingInfo: 'Kurssin opintosuunnat näkyvät myös kaikilla sen toteutuksilla',
+    courseUnitTagInfo: 'Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle',
     setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
   },
   feedbackTargetView: {

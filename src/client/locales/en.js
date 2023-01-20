@@ -410,7 +410,8 @@ export default {
     listMode: 'Switch to list view',
     setStudyTracks: 'Set studytracks for course realisation',
     setStudyTracksForCourseUnit: 'Set studytracks for course unit {{name}} ({{code}})',
-    courseUnitTagInfo: "Course's studytracks will be included on all its instances",
+    courseUnitTagSettingInfo: "Course's studytracks will be included on all its instances",
+    courseUnitTagInfo: 'Course realisation inherits {{count}} studytracks from its course unit {{code}}',
     setStudyTracksForSelection: 'Set studytracks for course realisations',
   },
   feedbackTargetView: {
