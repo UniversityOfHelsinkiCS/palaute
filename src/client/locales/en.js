@@ -414,6 +414,7 @@ export default {
     courseUnitTagInfo: 'Course realisation inherits {{count}} studytracks from its course unit {{code}}',
     setStudyTracksForSelection: 'Set studytracks for course realisations',
     noTags: 'Show only courses with no studytracks',
+    showCurName: 'Show course realisation names',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',

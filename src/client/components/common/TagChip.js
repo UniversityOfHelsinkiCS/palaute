@@ -12,7 +12,7 @@ export const TagChip = ({ tag, language = 'fi', compact = false, prefix = '' }) 
   }
 
   return compact ? (
-    <Tooltip key={tag.id} title={`${prefix}${getLanguageValue(tag.name, language)}`}>
+    <Tooltip key={tag.id} title={`${prefix}${getLanguageValue(tag.name, language)}`} arrow>
       <Chip label={getLanguageValue(tag.name, language)[0]} size="small" sx={style} />
     </Tooltip>
   ) : (

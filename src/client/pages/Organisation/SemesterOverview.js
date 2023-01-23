@@ -18,7 +18,6 @@ import {
   Button,
   Switch,
   Paper,
-  Tooltip,
 } from '@mui/material'
 import { ArrowDropDown, ChevronRight, Menu } from '@mui/icons-material'
 import { useQuery } from 'react-query'
@@ -37,6 +36,7 @@ import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
 import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
 
 const SelectionContext = React.createContext([])
 
@@ -147,6 +147,9 @@ const styles = {
     textTransform: 'capitalize',
     color: theme => theme.palette.text.secondary,
     fontSize: '16px',
+  },
+  year: {
+    color: theme => theme.palette.text.primary,
   },
   item: {
     textTransform: 'none',
@@ -324,7 +327,6 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
 )
 
 const SideDrawer = ({ open, editMode, selected, onClose, language, t, organisation }) => (
-  // console.log("sidebar renders")
   <Drawer open={open} onClose={onClose} anchor="right" variant="persistent" elevation={3}>
     <Box mr={2} width="35rem">
       <Box display="flex" minHeight="100vh">
@@ -357,18 +359,25 @@ const SideDrawer = ({ open, editMode, selected, onClose, language, t, organisati
 )
 
 /**
- * This may seem stupid, but massively improves rendering performance when selection changes,
+ * This proxy component may seem stupid, but massively improves rendering performance when selection changes,
  * by using memoized versions of unchanged list items.
  */
 const FeedbackTargetButtonProxy = ({ feedbackTarget }) => {
-  const { selection, onClick } = React.useContext(SelectionContext)
+  const { selection, onClick, showCurName } = React.useContext(SelectionContext)
 
   const selected = selection.some(fbt => fbt.id === feedbackTarget.id)
 
-  return <FeedbackTargetButton feedbackTarget={feedbackTarget} selected={selected} onClick={onClick} />
+  return (
+    <FeedbackTargetButton
+      feedbackTarget={feedbackTarget}
+      selected={selected}
+      onClick={onClick}
+      showCurName={showCurName}
+    />
+  )
 }
 
-const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected }) => {
+const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected, showCurName }) => {
   const { i18n } = useTranslation()
 
   const code = feedbackTarget.courseUnit.courseCode
@@ -376,7 +385,7 @@ const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected }) 
   const curName = feedbackTarget.courseRealisation.name
   const { tags } = feedbackTarget
   const special = feedbackTarget.teachers.length === 0
-  // console.log("Item renders")
+
   return (
     <Box m="0.3rem">
       <Button
@@ -388,36 +397,40 @@ const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected }) 
         }}
         sx={[styles.item, special && styles.specialItem, selected && styles.selectedItem]}
       >
-        <FeedbackTargetItem code={code} cuName={cuName} curName={curName} tags={tags} language={i18n.language} />
+        <FeedbackTargetItem
+          code={code}
+          cuName={cuName}
+          curName={curName}
+          showCurName={showCurName}
+          tags={tags}
+          language={i18n.language}
+        />
       </Button>
     </Box>
   )
 })
 
-const FeedbackTargetItem = ({ code, cuName, curName, tags, language }) => (
-  <Tooltip title={getLanguageValue(curName, language)} placement="top" disableInteractive>
-    <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
+const FeedbackTargetItem = ({ code, cuName, curName, tags, language, showCurName }) => (
+  <Box m="0.3rem" display="flex" flexDirection="column" alignItems="start">
+    <Box fontSize="16px" display="flex" alignItems="start" columnGap="0.5rem">
       <Typography color="textSecondary">{code}</Typography>
-      <Box mr="0.5rem" />
-      <Typography fontWeight={350}>{getLanguageValue(cuName, language)}</Typography>
-      <Box mr="0.3rem" />
-      {tags
-        .filter(t => t.from === 'courseUnit')
-        .map(tag => (
+      <Typography fontWeight={400}>{getLanguageValue(cuName, language)}</Typography>
+      <div>
+        {tags.map(tag => (
           <TagChip key={tag.id} tag={tag} prefix={`${code}: `} language={language} compact />
         ))}
-      {tags
-        .filter(t => t.from === 'courseRealisation')
-        .map(tag => (
-          <TagChip key={tag.id} tag={tag} language={language} compact />
-        ))}
+      </div>
     </Box>
-  </Tooltip>
+    {showCurName && (
+      <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
+        {getLanguageValue(curName, language)}
+      </Typography>
+    )}
+  </Box>
 )
 
 const Filters = React.memo(({ onChange, value, organisation }) => {
   const { t, i18n } = useTranslation()
-  // console.log("Filters render")
   const [open, setOpen] = React.useState(false)
   const [timeOption, setTimeOption] = useHistoryState('overviewTimeperiodOption', 'year')
 
@@ -505,12 +518,12 @@ const toMonth = (date, locale) => new Date(date).toLocaleString(locale, { month:
 
 const CalendarView = React.memo(({ feedbackTargets }) => {
   const { i18n } = useTranslation()
-  // console.log("list renders")
+
   return (
     <>
       {feedbackTargets.years.map(([year, months]) => (
         <Box display="flex" key={year}>
-          <Box sx={styles.date} mt={1.5}>
+          <Box sx={[styles.date, styles.year]} mt={1.5}>
             {year}
           </Box>
           <Box>
@@ -543,11 +556,8 @@ const CalendarView = React.memo(({ feedbackTargets }) => {
 })
 
 const ListView = React.memo(({ feedbackTargets }) => {
-  const flatFeedbackTargets = React.useMemo(
-    () => _.orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode),
-    [feedbackTargets]
-  )
-  // console.log("list renders")
+  const flatFeedbackTargets = _.orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode)
+
   return (
     <Box my={1.5}>
       {flatFeedbackTargets.map(fbt => (
@@ -561,6 +571,7 @@ const ListView = React.memo(({ feedbackTargets }) => {
 
 const SemesterOverview = ({ organisation }) => {
   const [viewMode, setViewMode] = React.useState('list')
+  const [showCurName, setShowCurName] = useLocalStorageState('show-cur-names', false)
 
   /**
    * This is a ref because we want to memoize onFeedbackTargetClick as much as possible. That way we dont need to re-render the list when the selection changes,
@@ -637,6 +648,12 @@ const SemesterOverview = ({ organisation }) => {
     })
   }
 
+  const toggleShowCurName = () => {
+    React.startTransition(() => {
+      setShowCurName(!showCurName)
+    })
+  }
+
   const onClose = React.useCallback(() => {
     React.startTransition(() => {
       selected.current = []
@@ -669,16 +686,13 @@ const SemesterOverview = ({ organisation }) => {
     setSidebarContent(newSelected)
   }, [feedbackTargets])
 
-  // console.log("SemesterOverview")
-
   const contextValue = React.useMemo(
-    () =>
-      // console.log("CONTEXT UPDATE")
-      ({
-        selection: selected.current,
-        onClick: onFeedbackTargetClick,
-      }),
-    [selected.current, onFeedbackTargetClick]
+    () => ({
+      selection: selected.current,
+      onClick: onFeedbackTargetClick,
+      showCurName,
+    }),
+    [selected.current, onFeedbackTargetClick, showCurName]
   )
 
   return (
@@ -693,7 +707,7 @@ const SemesterOverview = ({ organisation }) => {
         t={t}
       />
       <Filters value={filters} onChange={setFilters} t={t} language={i18n.language} organisation={organisation} />
-      <Box display="flex">
+      <Box display="flex" columnGap="0.5rem">
         <FormControlLabel
           control={<Switch checked={sidebarEditMode} onChange={toggleEditMode} />}
           label={t('organisationSettings:editMode')}
@@ -701,6 +715,10 @@ const SemesterOverview = ({ organisation }) => {
         <Button onClick={toggleViewMode}>
           {viewMode === 'calendar' ? t('organisationSettings:listMode') : t('organisationSettings:calendarMode')}
         </Button>
+        <FormControlLabel
+          control={<Switch checked={showCurName} onChange={toggleShowCurName} />}
+          label={t('organisationSettings:showCurName')}
+        />
       </Box>
       <Box minWidth="35rem" maxWidth="70vw">
         {isLoading && <LoadingProgress />}

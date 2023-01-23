@@ -1,12 +1,12 @@
 import React from 'react'
 
-const useLocalStorageState = key => {
+const useLocalStorageState = (key, initialValueIfNoneStored) => {
   const initial = React.useMemo(() => {
     const str = localStorage.getItem(key)
     if (typeof str === 'string') {
       return JSON.parse(str)
     }
-    return null
+    return initialValueIfNoneStored
   }, [key])
 
   const [state, setState] = React.useState(initial)
