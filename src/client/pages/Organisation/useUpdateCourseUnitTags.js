@@ -3,9 +3,9 @@ const { default: apiClient } = require('../../util/apiClient')
 const { default: queryClient } = require('../../util/queryClient')
 
 const useUpdateCourseUnitTags = () => {
-  const mutationFn = async ({ organisationCode, courseUnitId, tagIds }) =>
+  const mutationFn = async ({ organisationCode, courseCode, tagIds }) =>
     apiClient.put(`/tags/${organisationCode}/course-units`, {
-      courseUnitId,
+      courseCode,
       tagIds,
     })
 
@@ -13,7 +13,7 @@ const useUpdateCourseUnitTags = () => {
     onSuccess: (response, variables) => {
       queryClient.setQueryData(['organisationCourseUnits', variables.organisationCode], courseUnits => {
         const tags = response.data
-        return courseUnits.map(cu => (cu.id === variables.courseUnitId ? { ...cu, tags } : cu))
+        return courseUnits.map(cu => (cu.courseCode === variables.courseCode ? { ...cu, tags } : cu))
       })
     },
   })

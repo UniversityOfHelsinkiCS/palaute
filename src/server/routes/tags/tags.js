@@ -115,13 +115,13 @@ const updateCourseUnitTags = async (req, res) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
-  const { courseUnitId } = req.body
-  if (!courseUnitId) {
-    throw new ApplicationError('Invalid courseUnitId', 400)
+  const { courseCode } = req.body
+  if (!courseCode) {
+    throw new ApplicationError('Invalid courseCode', 400)
   }
 
   const courseUnits = await CourseUnit.findAll({
-    where: { id: courseUnitId },
+    where: { courseCode },
     include: { model: Organisation, as: 'organisations', where: { code }, include: { model: Tag, as: 'tags' } },
   })
   if (courseUnits.length === 0) {
@@ -140,25 +140,23 @@ const updateCourseUnitTags = async (req, res) => {
 
   await sequelize.transaction(async transaction => {
     // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
-    for (const courseUnit of courseUnits) {
-      await CourseUnitsTag.destroy(
-        {
-          where: {
-            tagId: { [Op.in]: availableTagIds },
-            courseUnitId: courseUnit.id,
-          },
+    await CourseUnitsTag.destroy(
+      {
+        where: {
+          tagId: { [Op.in]: availableTagIds },
+          courseCode,
         },
-        { transaction }
-      )
+      },
+      { transaction }
+    )
 
-      await CourseUnitsTag.bulkCreate(
-        newTags.map(t => ({
-          tagId: t.id,
-          courseUnitId: courseUnit.id,
-        })),
-        { transaction }
-      )
-    }
+    await CourseUnitsTag.bulkCreate(
+      newTags.map(t => ({
+        tagId: t.id,
+        courseCode,
+      })),
+      { transaction }
+    )
   })
 
   return res.send(newTags)

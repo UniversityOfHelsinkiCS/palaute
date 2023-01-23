@@ -186,7 +186,7 @@ const getTagIds = async courseUnit => {
     CourseUnitsTag.findAll({
       attributes: ['tagId'],
       where: {
-        courseUnitId: courseUnit.id,
+        courseCode: courseUnit.courseCode,
       },
     }),
   ])

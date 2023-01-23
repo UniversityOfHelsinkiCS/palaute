@@ -1,5 +1,6 @@
 const { Model, INTEGER, STRING } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
+const CourseUnit = require('./courseUnit')
 
 class CourseUnitsTag extends Model {}
 
@@ -11,9 +12,13 @@ CourseUnitsTag.init(
       allowNull: false,
       autoIncrement: true,
     },
-    courseUnitId: {
+    courseCode: {
       type: STRING,
       allowNull: false,
+      references: {
+        model: CourseUnit,
+        key: 'courseCode',
+      },
     },
     tagId: {
       type: INTEGER,

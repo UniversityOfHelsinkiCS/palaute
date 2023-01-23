@@ -187,14 +187,16 @@ Tag.belongsToMany(CourseRealisation, {
   through: CourseRealisationsTag,
   as: 'courseRealisations',
 })
+
+// Slightly fakd association here, as courseCode on CourseUnit is not unique constrained.
+// It works somewhat, but custom queries may sometimes be needed
 CourseUnit.belongsToMany(Tag, {
   through: CourseUnitsTag,
+  sourceKey: 'courseCode',
+  foreignKey: 'courseCode',
   as: 'tags',
 })
-Tag.belongsToMany(CourseUnit, {
-  through: CourseUnitsTag,
-  as: 'courseUnits',
-})
+Tag.hasMany(CourseUnitsTag)
 
 module.exports = {
   Feedback,

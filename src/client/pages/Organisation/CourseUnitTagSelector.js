@@ -11,7 +11,7 @@ const CourseUnitTagSelector = ({ courseUnit, organisation, onClose }) => {
   const handleSubmit = async tagIds => {
     await mutation.mutateAsync({
       organisationCode: organisation.code,
-      courseUnitId: courseUnit.id,
+      courseCode: courseUnit.courseCode,
       tagIds,
     })
   }
