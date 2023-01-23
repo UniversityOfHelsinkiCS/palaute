@@ -417,6 +417,7 @@ export default {
     courseUnitTagSettingInfo: 'Kurssin opintosuunnat näkyvät myös kaikilla sen toteutuksilla',
     courseUnitTagInfo: 'Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle',
     setStudyTracksForSelection: 'Merkkaa kurssitoteutusten opintosuunnat',
+    noTags: 'Näytä vain kurssit ilman opintosuuntia',
   },
   feedbackTargetView: {
     feedbackDisabled: 'Tämä palaute ei ole käytössä',

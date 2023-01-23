@@ -413,6 +413,7 @@ export default {
     courseUnitTagSettingInfo: "Course's studytracks will be included on all its instances",
     courseUnitTagInfo: 'Course realisation inherits {{count}} studytracks from its course unit {{code}}',
     setStudyTracksForSelection: 'Set studytracks for course realisations',
+    noTags: 'Show only courses with no studytracks',
   },
   feedbackTargetView: {
     feedbackDisabled: 'This feedback is disabled',
