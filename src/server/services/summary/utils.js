@@ -1,8 +1,9 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const { getUniversitySurvey } = require('../surveys')
-const { Tag, CourseRealisationsTag } = require('../../models')
+const { Tag, CourseRealisationsTag, CourseUnit, CourseRealisation } = require('../../models')
 const { WORKLOAD_QUESTION_ID } = require('../../../config')
+const CourseUnitsTag = require('../../models/courseUnitsTag')
 
 const QUESTION_AVERAGES_QUERY = `
 SELECT
@@ -172,28 +173,25 @@ const getResults = (rows, questions) => {
   return results
 }
 
-const getTags = async courseRealisations => {
-  const tagIds = (
-    await CourseRealisationsTag.findAll({
+const getTagIds = async courseUnit => {
+  const [curTags, cuTags] = await Promise.all([
+    CourseRealisationsTag.findAll({
+      attributes: ['tagId'],
       where: {
         courseRealisationId: {
-          [Op.in]: courseRealisations.map(({ id }) => id),
+          [Op.in]: courseUnit.courseRealisations.map(cur => cur.id),
         },
       },
+    }),
+    CourseUnitsTag.findAll({
       attributes: ['tagId'],
-    })
-  ).map(({ tagId }) => tagId)
-
-  const tags = await Tag.findAll({
-    where: {
-      id: {
-        [Op.in]: tagIds,
+      where: {
+        courseUnitId: courseUnit.id,
       },
-    },
-    attributes: ['id', 'name'],
-  })
+    }),
+  ])
 
-  return tags
+  return _.uniq(curTags.map(t => t.tagId).concat(cuTags.map(t => t.tagId)))
 }
 
 /**
@@ -261,6 +259,6 @@ module.exports = {
   getCounts,
   getUniversityQuestions,
   getMean,
-  getTags,
+  getTagIds,
   getRowAverage,
 }

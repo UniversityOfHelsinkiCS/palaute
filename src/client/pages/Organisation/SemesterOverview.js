@@ -38,7 +38,7 @@ import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 
-const SelectionContext = React.createContext([])
+const SelectionContext = React.createContext({})
 
 class FeedbackTargetGrouping {
   years = []
@@ -104,7 +104,7 @@ const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) =>
   const courseQueryLower = courseQuery.toLowerCase()
 
   const filterFn = fbt =>
-    // if no tags checked, only get stuff with no tags
+    // if noTags checked, only get stuff with no tags
     (!noTags || fbt.tags.length === 0) &&
     // filter by tag
     (noTags || !tags.length > 0 || fbt.tags.some(tag => tags.includes(tag.id))) &&
@@ -570,6 +570,9 @@ const ListView = React.memo(({ feedbackTargets }) => {
 })
 
 const SemesterOverview = ({ organisation }) => {
+  const { code } = useParams()
+  const { t, i18n } = useTranslation()
+
   const [viewMode, setViewMode] = React.useState('list')
   const [showCurName, setShowCurName] = useLocalStorageState('show-cur-names', false)
 
@@ -663,14 +666,10 @@ const SemesterOverview = ({ organisation }) => {
     })
   }, []) // And again
 
-  const { code } = useParams()
-  const { t, i18n } = useTranslation()
-
   const { feedbackTargets, isLoading: feedbackTargetsLoading } = useOrganisationFeedbackTargets({
     code,
     filters,
     enabled: filters.startDate !== null,
-    refetchOnFocus: false,
   })
 
   const isLoading = defaultDatesLoading || feedbackTargetsLoading
@@ -712,13 +711,13 @@ const SemesterOverview = ({ organisation }) => {
           control={<Switch checked={sidebarEditMode} onChange={toggleEditMode} />}
           label={t('organisationSettings:editMode')}
         />
-        <Button onClick={toggleViewMode}>
-          {viewMode === 'calendar' ? t('organisationSettings:listMode') : t('organisationSettings:calendarMode')}
-        </Button>
         <FormControlLabel
           control={<Switch checked={showCurName} onChange={toggleShowCurName} />}
           label={t('organisationSettings:showCurName')}
         />
+        <Button onClick={toggleViewMode}>
+          {viewMode === 'calendar' ? t('organisationSettings:listMode') : t('organisationSettings:calendarMode')}
+        </Button>
       </Box>
       <Box minWidth="35rem" maxWidth="70vw">
         {isLoading && <LoadingProgress />}

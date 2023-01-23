@@ -55,7 +55,7 @@ const OrganisationSummary = () => {
   const [tagId, setTagId] = useHistoryState('tagId', 'All')
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
-  const isEducationBachelorOrMaster = code === '600-K001' || code === '600-M001'
+  const isKasvis = code === '600-K001' || code === '600-M001'
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useHistoryState('includeOpenUniCourseUnits', false)
 
@@ -159,7 +159,7 @@ const OrganisationSummary = () => {
             keyword={keyword}
             facultyAccess={facultyAccess}
             onFacultyChange={handleFacultyChange}
-            tagId={isEducationBachelorOrMaster && tagId}
+            tagId={isKasvis && tagId}
             onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}

@@ -2,7 +2,7 @@ const { subMonths } = require('date-fns')
 const _ = require('lodash')
 const { sequelize } = require('../../db/dbConnection')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
-const { getMean, getTags, getRowAverage } = require('./utils')
+const { getMean, getTagIds, getRowAverage } = require('./utils')
 
 const includeEmptyOrganisations = (organisations, organisationsToShow, questions) => {
   const missingOrganisations = organisationsToShow.filter(
@@ -126,6 +126,7 @@ const getOrganisationSummaries = async ({
     })
 
     return {
+      id: cu.id,
       organisationId: cu.organisationId,
       organisationName: cu.organisationName,
       organisationCode: cu.organisationCode,
@@ -152,16 +153,16 @@ const getOrganisationSummaries = async ({
     tagId !== 'All'
 
   if (filterEducationBachelorSummary) {
-    // get CUR tags for each CU
+    // get CUR and CU tags for each CU
     summedCourseUnits = await Promise.all(
       summedCourseUnits.map(async cu => ({
         ..._.omit(cu, ['courseRealisations']),
-        tags: await getTags(cu.courseRealisations),
+        tagIds: await getTagIds(cu),
       }))
     )
 
     // Filter CUs by tag
-    summedCourseUnits = summedCourseUnits.filter(cu => cu.tags.map(({ id }) => id).includes(Number(tagId)))
+    summedCourseUnits = summedCourseUnits.filter(cu => cu.tagIds.includes(Number(tagId)))
   }
 
   // object with keys as org ids and values as arrays of CUs

@@ -217,6 +217,7 @@ WITH course_unit_data AS (
 
 SELECT
 DISTINCT ON ("organisationId", "courseCode")
+  cu.id as "id",
   "organisationId",
   "courseCode",
   cu.name as "courseUnitName",

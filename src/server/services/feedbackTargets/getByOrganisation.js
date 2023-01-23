@@ -92,7 +92,6 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
       )
       delete fbtJson.courseRealisation.tags
       delete fbtJson.courseUnit.tags
-      console.log(fbtJson.tags)
 
       return fbtJson
     })
