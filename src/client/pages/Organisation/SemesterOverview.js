@@ -1,5 +1,5 @@
 import React from 'react'
-import _, { debounce } from 'lodash'
+import _ from 'lodash'
 import {
   Box,
   Link as MuiLink,
@@ -37,6 +37,8 @@ import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
 import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
+
+const SelectionContext = React.createContext([])
 
 class FeedbackTargetGrouping {
   years = []
@@ -78,17 +80,9 @@ class FeedbackTargetGrouping {
   }
 }
 
-const useOrganisationFeedbackTargets = ({
-  code,
-  startDate,
-  endDate,
-  teacherQuery,
-  courseQuery,
-  tags,
-  includeWithoutTeachers,
-  language,
-  enabled,
-}) => {
+const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) => {
+  const { startDate, endDate, teacherQuery, courseQuery, tags, includeWithoutTeachers, noTags } = filters
+
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
   const queryFn = async () => {
@@ -101,16 +95,18 @@ const useOrganisationFeedbackTargets = ({
 
   const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
     enabled,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
-
-  const [filtered, setFiltered] = React.useState(null)
 
   const [first, last] = teacherQuery.toLowerCase().split(' ')
   const courseQueryLower = courseQuery.toLowerCase()
 
   const filterFn = fbt =>
+    // if no tags checked, only get stuff with no tags
+    (!noTags || fbt.tags.length === 0) &&
     // filter by tag
-    (!tags.length > 0 || fbt.tags.some(tag => tags.includes(tag.id))) &&
+    (noTags || !tags.length > 0 || fbt.tags.some(tag => tags.includes(tag.id))) &&
     // filter by course name
     (getLanguageValue(fbt.courseUnit.name, language).toLowerCase().includes(courseQueryLower) ||
       // filter by code
@@ -127,18 +123,18 @@ const useOrganisationFeedbackTargets = ({
     // if includeWithoutTeachers, skip checking that there are teachers
     (includeWithoutTeachers || fbt.teachers.length > 0)
 
-  const filter = debounce(feedbackTargets => {
-    if (!feedbackTargets || rest.isLoading || rest.isFetching) return
+  const filter = feedbackTargets => {
+    if (!feedbackTargets || rest.isLoading || rest.isFetching) return null
     const filteredTargets = new FeedbackTargetGrouping(feedbackTargets).filter(filterFn)
-    setFiltered(filteredTargets)
-  }, 1000)
+    return filteredTargets
+  }
 
-  React.useEffect(
+  const filteredTargets = React.useMemo(
     () => filter(feedbackTargets),
-    [courseQuery, teacherQuery, includeWithoutTeachers, tags, rest.dataUpdatedAt]
+    [courseQuery, teacherQuery, includeWithoutTeachers, noTags, tags, rest.dataUpdatedAt]
   )
 
-  return { feedbackTargets: filtered, ...rest }
+  return { feedbackTargets: filteredTargets, ...rest }
 }
 
 const styles = {
@@ -327,6 +323,7 @@ const MultiEdit = ({ selected, language, t, organisation }) => (
 )
 
 const SideDrawer = ({ open, editMode, selected, onClose, language, t, organisation }) => (
+  // console.log("sidebar renders")
   <Drawer open={open} onClose={onClose} anchor="right" variant="persistent" elevation={3}>
     <Box mr={2} width="35rem">
       <Box display="flex" minHeight="100vh">
@@ -358,23 +355,45 @@ const SideDrawer = ({ open, editMode, selected, onClose, language, t, organisati
   </Drawer>
 )
 
-const FeedbackTargetButton = ({ code, cuName, curName, tags, onClick, selected, special, language }) => (
-  <Box m="0.3rem">
-    <Button
-      variant="contained"
-      color="inherit"
-      onClick={e => {
-        e.stopPropagation()
-        onClick()
-      }}
-      sx={[styles.item, special && styles.specialItem, selected && styles.selectedItem]}
-    >
-      <FeedbackTargetItem code={code} cuName={cuName} curName={curName} tags={tags} language={language} />
-    </Button>
-  </Box>
-)
+/**
+ * This may seem stupid, but massively improves rendering performance when selection changes,
+ * by using memoized versions of unchanged list items.
+ */
+const FeedbackTargetButtonProxy = ({ feedbackTarget }) => {
+  const { selection, onClick } = React.useContext(SelectionContext)
 
-const FeedbackTargetItem = ({ code, cuName, curName, tags, language, t }) => (
+  const selected = selection.some(fbt => fbt.id === feedbackTarget.id)
+
+  return <FeedbackTargetButton feedbackTarget={feedbackTarget} selected={selected} onClick={onClick} />
+}
+
+const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected }) => {
+  const { i18n } = useTranslation()
+
+  const code = feedbackTarget.courseUnit.courseCode
+  const cuName = feedbackTarget.courseUnit.name
+  const curName = feedbackTarget.courseRealisation.name
+  const { tags } = feedbackTarget
+  const special = feedbackTarget.teachers.length === 0
+  // console.log("Item renders")
+  return (
+    <Box m="0.3rem">
+      <Button
+        variant="contained"
+        color="inherit"
+        onClick={e => {
+          e.stopPropagation()
+          onClick(feedbackTarget)
+        }}
+        sx={[styles.item, special && styles.specialItem, selected && styles.selectedItem]}
+      >
+        <FeedbackTargetItem code={code} cuName={cuName} curName={curName} tags={tags} language={i18n.language} />
+      </Button>
+    </Box>
+  )
+})
+
+const FeedbackTargetItem = ({ code, cuName, curName, tags, language }) => (
   <Tooltip title={getLanguageValue(curName, language)} placement="top" disableInteractive>
     <Box m="0.3rem" mx="0.6rem" fontSize="16px" display="flex" alignItems="start">
       <Typography color="textSecondary">{code}</Typography>
@@ -395,11 +414,18 @@ const FeedbackTargetItem = ({ code, cuName, curName, tags, language, t }) => (
   </Tooltip>
 )
 
-const Filters = ({ onChange, value, t, language, organisation }) => {
+const Filters = React.memo(({ onChange, value, organisation }) => {
+  const { t, i18n } = useTranslation()
+  // console.log("Filters render")
   const [open, setOpen] = React.useState(false)
   const [timeOption, setTimeOption] = useHistoryState('overviewTimeperiodOption', 'year')
-  const { tags } = organisation
-  // eslint-disable-next-line no-nested-ternary
+
+  const tags = organisation.tags.map(tag => ({
+    hash: tag.hash,
+    id: tag.id,
+    label: getLanguageValue(tag.name, i18n.language),
+  }))
+
   const valueIsActive = value => value && value.length !== 0
   const activeCount = _.sum(Object.values(value).map(v => (valueIsActive(v) ? 1 : 0))) - 2 // subtract the 2 date pickers
 
@@ -449,36 +475,118 @@ const Filters = ({ onChange, value, t, language, organisation }) => {
               value={value.tags}
               colors
               onChange={tags => onChange({ ...value, tags })}
-              options={tags.map(tag => ({
-                hash: tag.hash,
-                id: tag.id,
-                label: getLanguageValue(tag.name, language),
-              }))}
+              options={tags}
               label="Opintosuunta"
+              disabled={value.noTags}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={value.noTags}
+                  onChange={e =>
+                    onChange({
+                      ...value,
+                      noTags: e.target.checked,
+                    })
+                  }
+                />
+              }
+              label={t('organisationSettings:noTags')}
             />
           </Box>
         </AccordionDetails>
       </Accordion>
     </Box>
   )
-}
+})
 
 const toMonth = (date, locale) => new Date(date).toLocaleString(locale, { month: 'short' })
 
+const CalendarView = React.memo(({ feedbackTargets }) => {
+  const { i18n } = useTranslation()
+  // console.log("list renders")
+  return (
+    <>
+      {feedbackTargets.years.map(([year, months]) => (
+        <Box display="flex" key={year}>
+          <Box sx={styles.date} mt={1.5}>
+            {year}
+          </Box>
+          <Box>
+            {months.map(([firstDayOfMonth, days]) => (
+              <Box display="flex" mb={4} key={firstDayOfMonth}>
+                <Box sx={styles.date} mt={1.5}>
+                  {toMonth(firstDayOfMonth, i18n.language)}
+                </Box>
+                <Box>
+                  {days.map(([startDate, feedbackTargets]) => (
+                    <Box key={startDate} display="flex" my={1.5}>
+                      <Box sx={styles.date} mr={2}>
+                        {format(Date.parse(startDate), 'dd/MM')}
+                      </Box>
+                      <Box display="flex" flexWrap="wrap">
+                        {feedbackTargets.map(fbt => (
+                          <FeedbackTargetButtonProxy key={fbt.id} feedbackTarget={fbt} />
+                        ))}
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      ))}
+    </>
+  )
+})
+
+const ListView = React.memo(({ feedbackTargets }) => {
+  const flatFeedbackTargets = React.useMemo(
+    () => _.orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode),
+    [feedbackTargets]
+  )
+  // console.log("list renders")
+  return (
+    <Box my={1.5}>
+      {flatFeedbackTargets.map(fbt => (
+        <Box key={fbt.id} my={1}>
+          <FeedbackTargetButtonProxy feedbackTarget={fbt} />
+        </Box>
+      ))}
+    </Box>
+  )
+})
+
 const SemesterOverview = ({ organisation }) => {
-  const [editMode, setEditMode] = React.useState(false)
   const [viewMode, setViewMode] = React.useState('list')
-  const [opened, setOpened] = React.useState(null)
-  const [selected, setSelected] = React.useState([])
+
+  /**
+   * This is a ref because we want to memoize onFeedbackTargetClick as much as possible. That way we dont need to re-render the list when the selection changes,
+   * but the onClick function still works correctly
+   */
+  const selected = React.useRef([])
+  /**
+   * This state is needed to re-render the sidebar when selection changes.
+   */
+  const [sidebarContent, setSidebarContent] = React.useState([])
+
+  // Same goes here...
+  const editMode = React.useRef(false)
+  const [sidebarEditMode, setSidebarEditMode] = React.useState(false)
+
   const [filters, setFilters] = React.useState({
     startDate: null,
     endDate: null,
     teacherQuery: '',
     courseQuery: '',
     includeWithoutTeachers: false,
+    noTags: false,
     tags: [],
   })
+
   const { courseSummaryAccessInfo, isLoading: defaultDatesLoading } = useCourseSummaryAccessInfo()
+
   React.useEffect(() => {
     if (!courseSummaryAccessInfo?.defaultDateRange) return
     const { startDate, endDate } = courseSummaryAccessInfo.defaultDateRange
@@ -488,79 +596,105 @@ const SemesterOverview = ({ organisation }) => {
       endDate: new Date(endDate),
     })
   }, [defaultDatesLoading])
-  const toggleSelection = feedbackTarget => {
-    if (selected.includes(feedbackTarget)) {
-      setSelected(selected.filter(f => f.id !== feedbackTarget.id))
-    } else {
-      setSelected(selected.concat(feedbackTarget))
-    }
-  }
 
-  const toggleEditMode = () => {
-    if (editMode) {
-      setSelected([])
-      setEditMode(false)
-    } else {
-      setOpened(null)
-      setEditMode(true)
-    }
-  }
+  const onFeedbackTargetClick = React.useCallback(feedbackTarget => {
+    React.startTransition(() => {
+      if (editMode.current) {
+        if (selected.current.includes(feedbackTarget)) {
+          selected.current = selected.current.filter(f => f.id !== feedbackTarget.id)
+        } else {
+          selected.current = selected.current.concat(feedbackTarget)
+        }
+      } else {
+        selected.current = [feedbackTarget]
+      }
+      setSidebarContent(selected.current)
+    })
+  }, []) // Zero deps!
+
+  const toggleEditMode = React.useCallback(() => {
+    React.startTransition(() => {
+      if (editMode.current) {
+        selected.current = []
+        editMode.current = false
+        setSidebarEditMode(false)
+        setSidebarContent([])
+      } else {
+        editMode.current = true
+        setSidebarEditMode(true)
+      }
+    })
+  }, []) // And another one
 
   const toggleViewMode = () => {
-    if (viewMode === 'calendar') {
-      setViewMode('list')
-    } else {
-      setViewMode('calendar')
-    }
+    React.startTransition(() => {
+      if (viewMode === 'calendar') {
+        setViewMode('list')
+      } else {
+        setViewMode('calendar')
+      }
+    })
   }
 
-  const isDisplayedSelected = fbt => {
-    if (editMode) {
-      return selected.some(f => f.id === fbt.id)
-    }
-    return opened?.id === fbt.id
-  }
+  const onClose = React.useCallback(() => {
+    React.startTransition(() => {
+      selected.current = []
+      setSidebarContent([])
+      editMode.current = false
+      setSidebarEditMode(false)
+    })
+  }, []) // And again
 
   const { code } = useParams()
   const { t, i18n } = useTranslation()
 
-  const { feedbackTargets, isLoading } = useOrganisationFeedbackTargets({
+  const { feedbackTargets, isLoading: feedbackTargetsLoading } = useOrganisationFeedbackTargets({
     code,
-    ...filters,
+    filters,
     enabled: filters.startDate !== null,
+    refetchOnFocus: false,
   })
 
-  // when data changes, object references in state have to be updated. Annoying.
+  const isLoading = defaultDatesLoading || feedbackTargetsLoading
+
+  // when data changes, object references in state have to be updated. Sucx
   React.useEffect(() => {
-    let newOpened = null
+    if (!feedbackTargets) return
     const newSelected = []
-    feedbackTargets?.forEach(fbt => {
-      if (fbt.id === opened?.id) newOpened = fbt
-      if (selected.some(f => f.id === fbt.id)) newSelected.push(fbt)
+    feedbackTargets.forEach(fbt => {
+      if (selected.current.some(f => f.id === fbt.id)) newSelected.push(fbt)
     })
-    setOpened(newOpened)
-    setSelected(newSelected)
+    selected.current = newSelected
+    setSidebarContent(newSelected)
   }, [feedbackTargets])
 
+  // console.log("SemesterOverview")
+
+  const contextValue = React.useMemo(
+    () =>
+      // console.log("CONTEXT UPDATE")
+      ({
+        selection: selected.current,
+        onClick: onFeedbackTargetClick,
+      }),
+    [selected.current, onFeedbackTargetClick]
+  )
+
   return (
-    <Box>
+    <SelectionContext.Provider value={contextValue}>
       <SideDrawer
-        open={editMode || Boolean(opened)}
+        open={sidebarContent.length > 0}
         organisation={organisation}
-        selected={!editMode && opened ? [opened] : selected}
-        editMode={editMode}
-        onClose={() => {
-          setOpened(null)
-          setSelected([])
-          setEditMode(false)
-        }}
+        selected={sidebarContent}
+        editMode={sidebarEditMode}
+        onClose={onClose}
         language={i18n.language}
         t={t}
       />
       <Filters value={filters} onChange={setFilters} t={t} language={i18n.language} organisation={organisation} />
       <Box display="flex">
         <FormControlLabel
-          control={<Switch checked={editMode} onChange={toggleEditMode} />}
+          control={<Switch checked={sidebarEditMode} onChange={toggleEditMode} />}
           label={t('organisationSettings:editMode')}
         />
         <Button onClick={toggleViewMode}>
@@ -569,68 +703,14 @@ const SemesterOverview = ({ organisation }) => {
       </Box>
       <Box minWidth="35rem" maxWidth="70vw">
         {isLoading && <LoadingProgress />}
-        {!isLoading &&
-          viewMode === 'calendar' &&
-          feedbackTargets?.years.map(([year, months]) => (
-            <Box display="flex" key={year}>
-              <Box sx={styles.date} mt={1.5}>
-                {year}
-              </Box>
-              <Box>
-                {months.map(([firstDayOfMonth, days]) => (
-                  <Box display="flex" mb={4} key={firstDayOfMonth}>
-                    <Box sx={styles.date} mt={1.5}>
-                      {toMonth(firstDayOfMonth, i18n.language)}
-                    </Box>
-                    <Box>
-                      {days.map(([startDate, feedbackTargets]) => (
-                        <Box key={startDate} display="flex" my={1.5}>
-                          <Box sx={styles.date} mr={2}>
-                            {format(Date.parse(startDate), 'dd/MM')}
-                          </Box>
-                          <Box display="flex" flexWrap="wrap">
-                            {feedbackTargets.map(fbt => (
-                              <FeedbackTargetButton
-                                key={fbt.id}
-                                code={fbt.courseUnit.courseCode}
-                                tags={fbt.tags}
-                                cuName={fbt.courseUnit.name}
-                                curName={fbt.courseRealisation.name}
-                                onClick={() => (editMode ? toggleSelection(fbt) : setOpened(fbt))}
-                                selected={isDisplayedSelected(fbt)}
-                                special={fbt.teachers.length === 0}
-                                language={i18n.language}
-                              />
-                            ))}
-                          </Box>
-                        </Box>
-                      ))}
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          ))}
+        {!isLoading && viewMode === 'calendar' && (
+          <CalendarView feedbackTargets={feedbackTargets} onClick={onFeedbackTargetClick} />
+        )}
         {!isLoading && viewMode === 'list' && (
-          <Box my={1.5}>
-            {_.orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode).map(fbt => (
-              <Box key={fbt.id} my={1}>
-                <FeedbackTargetButton
-                  code={fbt.courseUnit.courseCode}
-                  tags={fbt.tags}
-                  cuName={fbt.courseUnit.name}
-                  curName={fbt.courseRealisation.name}
-                  onClick={() => (editMode ? toggleSelection(fbt) : setOpened(fbt))}
-                  selected={isDisplayedSelected(fbt)}
-                  special={fbt.teachers.length === 0}
-                  language={i18n.language}
-                />
-              </Box>
-            ))}
-          </Box>
+          <ListView feedbackTargets={feedbackTargets} onClick={onFeedbackTargetClick} />
         )}
       </Box>
-    </Box>
+    </SelectionContext.Provider>
   )
 }
 

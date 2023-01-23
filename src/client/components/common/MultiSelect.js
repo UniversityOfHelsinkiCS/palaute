@@ -8,13 +8,14 @@ import { generate } from '../../util/randomColor'
  *
  *
  */
-const MultiSelect = ({ value, onChange, options, label, colors }) => {
+const MultiSelect = ({ value, onChange, options, label, colors, disabled }) => {
   const selectedOptions = value.map(v => options.find(o => o.id === v))
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
         multiple
+        disabled={disabled}
         onClick={event => event.stopPropagation()}
         value={value}
         onChange={event => onChange(event.target.value)}

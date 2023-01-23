@@ -3,7 +3,7 @@ import React from 'react'
 
 import { Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, Link as MuiLink, Alert, List, ListItem } from '@mui/material'
+import { Box, Typography, Tab, Button, Alert, List, ListItem } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import { useTranslation } from 'react-i18next'

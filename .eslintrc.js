@@ -14,6 +14,7 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'eslintreact/jsx-props-no-spreading': 'off',
     'no-unused-vars': 'warn',
+    'arrow-body-style': 'warn',
     'no-param-reassign': 'off',
     'no-restricted-exports': 'off',
     'react/prop-types': [
