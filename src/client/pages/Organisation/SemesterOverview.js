@@ -81,7 +81,8 @@ class FeedbackTargetGrouping {
 }
 
 const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) => {
-  const { startDate, endDate, teacherQuery, courseQuery, tags, includeWithoutTeachers, noTags } = filters
+  const deferredFilters = React.useDeferredValue(filters)
+  const { startDate, endDate, teacherQuery, courseQuery, tags, includeWithoutTeachers, noTags } = deferredFilters
 
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
