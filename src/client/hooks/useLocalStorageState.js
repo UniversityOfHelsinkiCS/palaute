@@ -12,7 +12,9 @@ const useLocalStorageState = (key, initialValueIfNoneStored) => {
   const [state, setState] = React.useState(initial)
 
   React.useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state))
+    if (Boolean(state) && state === false) {
+      localStorage.setItem(key, JSON.stringify(state))
+    }
   }, [state])
 
   return [state, setState]
