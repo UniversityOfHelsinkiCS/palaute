@@ -438,6 +438,8 @@ export default {
     administrativePersons: 'Administrative persons',
     shareTab: 'Share survey',
     surveySettingsTab: 'Survey editing',
+    continuousFeedbackInfo:
+      'Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course, before the actual course feedback starts on the course end date.',
     activateContinuousFeedback: 'Activate continuous feedback for the course',
     activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     continuousFeedbackGiven: 'Continuous feedback given',

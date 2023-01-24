@@ -441,6 +441,7 @@ export default {
     // administrativePersons: 'Administrative persons',
     shareTab: 'Dela förfrågan',
     surveySettingsTab: 'Enkätredigering',
+    // continuousFeedbackInfo: 'Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.',
     activateContinuousFeedback: 'Aktivera kontinuerlig respons för kursen',
     activateContinuousFeedbackDigest: 'Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons',
     continuousFeedbackGiven: 'Given kontinuerlig respons',

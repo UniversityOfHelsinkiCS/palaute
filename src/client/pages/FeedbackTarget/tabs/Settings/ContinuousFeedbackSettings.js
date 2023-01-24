@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Typography, Card, CardContent, Switch, FormGroup, FormControlLabel } from '@mui/material'
+import { Box, Typography, Card, CardContent, Switch, FormGroup, FormControlLabel, Alert } from '@mui/material'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -57,6 +57,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         <CardContent>
           <Box mb={4}>
             <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackTab')}</Typography>
+          </Box>
+          <Box mb={2}>
+            <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
           </Box>
           <FormGroup>
             <FormControlLabel

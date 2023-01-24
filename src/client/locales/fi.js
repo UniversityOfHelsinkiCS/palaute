@@ -441,6 +441,8 @@ export default {
     administrativePersons: 'Hallintohenkilöt',
     shareTab: 'Jaa kysely',
     surveySettingsTab: 'Kyselyn muokkaus',
+    continuousFeedbackInfo:
+      'Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.',
     activateContinuousFeedback: 'Ota jatkuva palaute käyttöön kurssilla',
     activateContinuousFeedbackDigest: 'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
     continuousFeedbackGiven: 'Annettu jatkuva palaute',
