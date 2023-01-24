@@ -76,6 +76,7 @@ export default {
     clearConfirmationQuestion: 'Är du säker på att du vill tömma denna respons?',
     yes: 'Ja',
     no: 'Nej',
+    // continousFeedbackActive: 'Jatkuva palaute on käynnissä',
     giveContinuousFeedback: 'Ge kontinuerlig respons',
     viewFeedbackSummary: 'Visa sammanfattning av responsen',
     noFeedback: 'Ingenting här. Kom tillbaka senare!',

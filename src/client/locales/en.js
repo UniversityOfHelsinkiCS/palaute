@@ -76,6 +76,7 @@ export default {
     clearConfirmationQuestion: 'Are you sure you want to remove your feedback?',
     yes: 'Yes',
     no: 'No',
+    continousFeedbackActive: 'Continuous feedback is underway',
     giveContinuousFeedback: 'Give continuous Feedback',
     viewFeedbackSummary: 'View feedback summary',
     noFeedback: 'There are no courses or course feedbacks here yet',

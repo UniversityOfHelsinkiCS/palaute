@@ -174,6 +174,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   return (
     <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
       <ListItemText primary={periodInfo} />
+      {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
       <Box mt={1} mb={1}>
         {isEnded && !feedbackGiven && <FeedbackEndedChip />}
