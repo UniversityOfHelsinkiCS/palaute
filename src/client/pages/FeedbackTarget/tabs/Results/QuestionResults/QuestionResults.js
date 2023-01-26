@@ -18,6 +18,7 @@ import { getQuestionsWithFeedback } from './utils'
 import AlertLink from '../../../../../components/common/AlertLink'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
+import { RenderProfiler } from '../../../../../components/common/RenderProfiler'
 
 const styles = {
   list: theme => ({
@@ -97,77 +98,83 @@ const QuestionSection = ({ title, count, children, ...props }) => (
   </Box>
 )
 
-const QuestionResults = ({
-  publicityConfigurableQuestionIds,
-  publicQuestionIds,
-  questions,
-  questionOrder,
-  feedbacks,
-  isResponsibleTeacher,
-  isOrganisationUser,
-  feedbackCount,
-  feedbackTargetId,
-}) => {
-  const questionsWithFeedbacks = useMemo(
-    () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
-    [questions, feedbacks, publicQuestionIds]
-  )
+const QuestionResults = React.memo(
+  ({
+    publicityConfigurableQuestionIds,
+    publicQuestionIds,
+    questions,
+    questionOrder,
+    feedbacks,
+    isResponsibleTeacher,
+    isOrganisationUser,
+    feedbackCount,
+    feedbackTargetId,
+  }) => {
+    const questionsWithFeedbacks = useMemo(
+      () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
+      [questions, feedbacks, publicQuestionIds]
+    )
 
-  const { t } = useTranslation()
+    const { t } = useTranslation()
 
-  const openQuestions = questionsWithFeedbacks.filter(
-    q => q.type === 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
-  )
+    const openQuestions = questionsWithFeedbacks.filter(
+      q => q.type === 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
+    )
 
-  const notOpenQuestions = questionsWithFeedbacks.filter(
-    q => q.type !== 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
-  )
+    const notOpenQuestions = questionsWithFeedbacks.filter(
+      q => q.type !== 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
+    )
 
-  const hiddenQuestions = questionsWithFeedbacks.filter(q => !publicQuestionIds.includes(q.id))
+    const hiddenQuestions = questionsWithFeedbacks.filter(q => !publicQuestionIds.includes(q.id))
 
-  return (
-    <>
-      <QuestionSection
-        title={t('questionResults:multipleChoiceQuestions')}
-        count={notOpenQuestions.length}
-        data-cy="multipleChoiceQuestions"
-      >
-        <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
+    return (
+      <>
+        <QuestionSection
+          title={t('questionResults:multipleChoiceQuestions')}
+          count={notOpenQuestions.length}
+          data-cy="multipleChoiceQuestions"
+        >
+          <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
 
-        <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
-          {notOpenQuestions.map(q => (
-            <Grid item key={q.id} xs={12} sm={12} md={6} lg={4} xl={3}>
-              <QuestionItem
-                question={q}
-                publicQuestionIds={publicQuestionIds}
-                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                isResponsibleTeacher={isResponsibleTeacher}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={feedbackTargetId}
-                t={t}
-              />
-            </Grid>
+          <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
+            {notOpenQuestions.map(q => (
+              <Grid item key={q.id} xs={12} sm={12} md={6} lg={4} xl={3}>
+                <QuestionItem
+                  question={q}
+                  publicQuestionIds={publicQuestionIds}
+                  disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+                  isResponsibleTeacher={isResponsibleTeacher}
+                  feedbackCount={feedbackCount}
+                  feedbackTargetId={feedbackTargetId}
+                  t={t}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </QuestionSection>
+        <QuestionSection
+          title={t('questionResults:openQuestions')}
+          count={openQuestions.length}
+          data-cy="openQuestions"
+        >
+          {openQuestions.map(q => (
+            <QuestionItem
+              key={q.id}
+              question={q}
+              publicQuestionIds={publicQuestionIds}
+              disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+              isResponsibleTeacher={isResponsibleTeacher}
+              feedbackCount={feedbackCount}
+              feedbackTargetId={feedbackTargetId}
+              t={t}
+            />
           ))}
-        </Grid>
-      </QuestionSection>
-      <QuestionSection title={t('questionResults:openQuestions')} count={openQuestions.length} data-cy="openQuestions">
-        {openQuestions.map(q => (
-          <QuestionItem
-            key={q.id}
-            question={q}
-            publicQuestionIds={publicQuestionIds}
-            disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-            isResponsibleTeacher={isResponsibleTeacher}
-            feedbackCount={feedbackCount}
-            feedbackTargetId={feedbackTargetId}
-            t={t}
-          />
-        ))}
-      </QuestionSection>
+        </QuestionSection>
 
-      {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
-    </>
-  )
-}
+        {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
+      </>
+    )
+  }
+)
 
 export default QuestionResults

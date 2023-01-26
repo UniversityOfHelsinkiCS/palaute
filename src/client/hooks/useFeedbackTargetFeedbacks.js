@@ -1,5 +1,5 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useFeedbackTargetFeedbacks = (targetId, options = {}) => {
   const queryKey = ['feedbackTargetFeedbacks', targetId]
@@ -12,6 +12,9 @@ const useFeedbackTargetFeedbacks = (targetId, options = {}) => {
 
   const { data: feedbackTargetData, ...rest } = useQuery(queryKey, queryFn, {
     enabled: Boolean(targetId),
+    refetchOnFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     ...options,
   })
 

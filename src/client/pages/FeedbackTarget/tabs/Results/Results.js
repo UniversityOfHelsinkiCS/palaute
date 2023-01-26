@@ -99,19 +99,17 @@ const ResultsView = forwardRef((_props, ref) => {
         {!enoughFeedbacks && <NotEnoughFeedbacks t={t} />}
 
         {enoughFeedbacks && (
-          <Box>
-            <QuestionResults
-              publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-              publicQuestionIds={publicQuestionIds ?? []}
-              questions={questions}
-              questionOrder={questionOrder}
-              feedbacks={feedbackTargetData?.feedbacks ?? []}
-              isResponsibleTeacher={isResponsibleTeacher}
-              isOrganisationUser={isOrganisationReader}
-              feedbackCount={feedbackCount}
-              feedbackTargetId={id}
-            />
-          </Box>
+          <QuestionResults
+            publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
+            publicQuestionIds={publicQuestionIds ?? []}
+            questions={questions}
+            questionOrder={questionOrder}
+            feedbacks={feedbackTargetData?.feedbacks ?? []}
+            isResponsibleTeacher={isResponsibleTeacher}
+            isOrganisationUser={isOrganisationReader}
+            feedbackCount={feedbackCount}
+            feedbackTargetId={id}
+          />
         )}
       </Box>
     </>

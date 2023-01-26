@@ -1,7 +1,7 @@
+import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
 import _ from 'lodash'
 import { useSnackbar } from 'notistack'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../../../util/languageUtils'
@@ -42,18 +42,21 @@ const QuestionItem = ({
     resourceId: feedbackTargetId,
   })
 
-  const onPublicityToggle = async isPublic => {
-    const newPublicQuestionIds = isPublic
-      ? _.uniq(publicQuestionIds.concat(question.id))
-      : publicQuestionIds.filter(id => id !== question.id)
+  const onPublicityToggle = React.useCallback(
+    async isPublic => {
+      const newPublicQuestionIds = isPublic
+        ? _.uniq(publicQuestionIds.concat(question.id))
+        : publicQuestionIds.filter(id => id !== question.id)
 
-    try {
-      await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
+      try {
+        await mutation.mutateAsync(newPublicQuestionIds)
+        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      } catch (error) {
+        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      }
+    },
+    [publicQuestionIds]
+  )
 
   const actualAnswers = _.sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 

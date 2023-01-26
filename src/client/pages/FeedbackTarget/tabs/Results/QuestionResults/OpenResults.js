@@ -102,7 +102,7 @@ const OpenResults = ({ question }) => {
 
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
   const renderWhenScrolled = feedbacks.length > 10
-  const { render, ref } = useRenderVisible({ initial: !renderWhenScrolled })
+  const { render, ref } = useRenderVisible({ initial: false })
 
   return (
     <ResultsContent>

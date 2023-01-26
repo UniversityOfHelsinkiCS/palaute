@@ -64,10 +64,7 @@ const getData = (questions, feedbacks, language) => {
   return data
 }
 
-const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
-
+const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
   const headers = getHeaders(feedbackTarget.questions, feedbacks, language)
   const questions = getData(feedbackTarget.questions, feedbacks, language)
 
@@ -79,8 +76,20 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
   const workbook = utils.book_new()
   utils.book_append_sheet(workbook, worksheet, filename)
 
+  return { workbook, filename: `${filename}.xlsx` }
+}
+
+const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
+  const { i18n, t } = useTranslation()
+  const { language } = i18n
+
+  const { workbook, filename } = React.useMemo(
+    () => createXLSX({ feedbackTarget, feedbacks, language }),
+    [feedbacks, feedbackTarget, language]
+  )
+
   return (
-    <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, `${filename}.xlsx`)}>
+    <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, filename)}>
       {t('exportCsv')}
     </Button>
   )
