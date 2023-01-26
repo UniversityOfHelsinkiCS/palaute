@@ -84,7 +84,7 @@ const Filters = ({
               <MenuItem value="All">{t('courseSummary:allFaculties')}</MenuItem>
               {faculties.map(faculty => (
                 <MenuItem key={faculty.code} value={faculty.code}>
-                  {faculty.name[i18n.language] || faculty.name.se}
+                  {faculty.name[i18n.language]}
                 </MenuItem>
               ))}
             </Select>
