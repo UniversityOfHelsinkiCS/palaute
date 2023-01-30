@@ -101,7 +101,8 @@ const OpenResults = ({ question }) => {
   const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
 
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
-  const { render, ref } = useRenderVisible({ initial: false })
+  const renderInitially = feedbacks.length < 10
+  const { render, ref } = useRenderVisible({ initial: renderInitially })
 
   return (
     <ResultsContent>
