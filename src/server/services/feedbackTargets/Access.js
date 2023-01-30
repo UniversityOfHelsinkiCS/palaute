@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 // Actions 'enum'
 // HEY YOU THERE if you can think of better solution, its your responsibility to implement!!!
 // gotta be very careful with these numbers
@@ -9,30 +11,42 @@ const STUDENTS = 4
 const CONTINUOUS_FEEDBACKS = 5
 const CONTINUOUS_FEEDBACK_RESPONSE = 6
 const GIVE_CONTINUOUS_FEEDBACK = 7
-const LOGS = 8
-const DELETE_TEACHER = 9
-const TOKENS = 10
-const SEND_REMINDER_EMAIL = 11
+const GIVE_FEEDBACK = 8
+const HIDE_FEEDBACK = 9
+const LOGS = 10
+const DELETE_TEACHER = 11
+const TOKENS = 12
+const SEND_REMINDER_EMAIL = 13
+
+const ALL = [
+  UPDATE,
+  UPDATE_RESPONSE,
+  ALL_FEEDBACKS,
+  PUBLIC_FEEDBACKS,
+  STUDENTS,
+  CONTINUOUS_FEEDBACKS,
+  CONTINUOUS_FEEDBACK_RESPONSE,
+  GIVE_CONTINUOUS_FEEDBACK,
+  GIVE_FEEDBACK,
+  HIDE_FEEDBACK,
+  LOGS,
+  DELETE_TEACHER,
+  TOKENS,
+  SEND_REMINDER_EMAIL,
+].sort()
+
+Object.freeze(ALL)
+
+// Validate that there are no duplicate numberings
+if (!_.isEqual(_.uniq(ALL), ALL))
+  throw new Error('Access actions are invalidly numbered. Fix them at... (see trace below)')
 
 /**
  * Describes what actions are allowed, given some access status
  */
 const RIGHTS = {
-  ADMIN: [
-    UPDATE,
-    UPDATE_RESPONSE,
-    ALL_FEEDBACKS,
-    PUBLIC_FEEDBACKS,
-    STUDENTS,
-    CONTINUOUS_FEEDBACKS,
-    CONTINUOUS_FEEDBACK_RESPONSE,
-    GIVE_CONTINUOUS_FEEDBACK,
-    LOGS,
-    DELETE_TEACHER,
-    TOKENS,
-    SEND_REMINDER_EMAIL,
-  ],
-  ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS, STUDENTS],
+  ADMIN: ALL,
+  ORGANISATION_ADMIN: [UPDATE, ALL_FEEDBACKS, PUBLIC_FEEDBACKS, CONTINUOUS_FEEDBACKS, STUDENTS, HIDE_FEEDBACK],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
   RESPONSIBLE_TEACHER: [
     UPDATE,
@@ -43,9 +57,10 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACKS,
     CONTINUOUS_FEEDBACK_RESPONSE,
     SEND_REMINDER_EMAIL,
+    HIDE_FEEDBACK,
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
-  STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK],
+  STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK, GIVE_FEEDBACK],
   NONE: [],
 }
 
@@ -92,6 +107,14 @@ class Access {
 
   canGiveContinuousFeedback() {
     return hasRight(this.accessStatus, GIVE_CONTINUOUS_FEEDBACK)
+  }
+
+  canGiveFeedback() {
+    return hasRight(this.accessStatus, GIVE_FEEDBACK)
+  }
+
+  canHideFeedback() {
+    return hasRight(this.accessStatus, HIDE_FEEDBACK)
   }
 
   canSeeLogs() {

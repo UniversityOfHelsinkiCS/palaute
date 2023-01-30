@@ -2,28 +2,23 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
 const { validateFeedback } = require('../../util/feedbackValidator')
+const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
+const { getAccess } = require('../../services/feedbackTargets/getAccess')
 
 const create = async (req, res) => {
+  const { user } = req
   const { data, feedbackTargetId } = req.body
   const { id: userId, degreeStudyRight } = req.user
 
-  const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
-
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-
-  const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
-
-  if (!feedbackCanBeGiven) throw new ApplicationError('Feedback is not open', 403)
-
-  const userFeedbackTarget = await UserFeedbackTarget.findOne({
-    where: {
-      userId,
-      feedbackTargetId: feedbackTarget.id,
-      accessStatus: 'STUDENT',
-    },
+  const { feedbackTarget, userFeedbackTarget, access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
   })
 
-  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+  const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
+  if (!feedbackCanBeGiven) ApplicationError.Forbidden('Feedback is not open')
+
+  if (!access?.canGiveFeedback() || !userFeedbackTarget) ApplicationError.Forbidden('Not an enrolled student')
 
   if (userFeedbackTarget.feedbackId)
     throw new ApplicationError(
@@ -49,7 +44,7 @@ const create = async (req, res) => {
 
 const getFeedbackForUser = async req => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
-  if (!feedback) throw new ApplicationError('Not found', 404)
+  if (!feedback) ApplicationError.NotFound()
 
   const feedbackTarget = await UserFeedbackTarget.findOne({
     where: {
@@ -58,7 +53,7 @@ const getFeedbackForUser = async req => {
     },
   })
 
-  if (!feedbackTarget) throw new ApplicationError('Forbidden', 403)
+  if (!feedbackTarget) ApplicationError.Forbidden()
 
   return feedback
 }
@@ -80,11 +75,11 @@ const update = async (req, res) => {
     },
   })
 
-  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!userFeedbackTarget) ApplicationError.NotFound()
 
   const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!feedbackTarget) ApplicationError.NotFound()
 
   if (!feedbackTarget.isOpen()) throw new ApplicationError('Feedback is not open', 403)
 
@@ -121,6 +116,7 @@ const destroy = async (req, res) => {
 }
 
 const updateAnswerHidden = async (req, res) => {
+  const { user } = req
   const { id: feedbackId, questionId } = req.params
   const { hidden } = req.body
   if (typeof hidden !== 'boolean') {
@@ -139,19 +135,13 @@ const updateAnswerHidden = async (req, res) => {
     },
   })
 
-  if (!feedback) {
-    throw new ApplicationError('Feedback not found', 404)
-  }
-
-  const { feedbackTarget } = feedback.userFeedbackTarget
+  if (!feedback) ApplicationError.NotFound('Feedback not found')
+  const { userFeedbackTarget } = feedback
+  const { feedbackTarget } = userFeedbackTarget
 
   // check access
-  if (!req.isAdmin && !(await req.user.getTeacherAssociation(feedbackTarget))) {
-    const organisationAccess = await req.user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
-    if (!organisationAccess.admin) {
-      throw new ApplicationError('Admin or teacher access required', 403)
-    }
-  }
+  const access = await getAccess({ userFeedbackTarget, user, feedbackTarget })
+  if (!access?.canHideFeedback()) ApplicationError.Forbidden('Must be responsible teacher, organisation admin or admin')
 
   // find and update question
   let updated = false

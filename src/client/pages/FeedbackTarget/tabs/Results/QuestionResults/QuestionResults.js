@@ -18,7 +18,6 @@ import { getQuestionsWithFeedback } from './utils'
 import AlertLink from '../../../../../components/common/AlertLink'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
-import { RenderProfiler } from '../../../../../components/common/RenderProfiler'
 
 const styles = {
   list: theme => ({
