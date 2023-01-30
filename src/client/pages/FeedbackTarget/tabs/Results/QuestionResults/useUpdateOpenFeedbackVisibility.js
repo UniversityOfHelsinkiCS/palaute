@@ -1,3 +1,5 @@
+import { useSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import apiClient from '../../../../../util/apiClient'
 import queryClient from '../../../../../util/queryClient'
@@ -9,6 +11,8 @@ import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
  */
 const useUpdateOpenFeedbackVisibility = () => {
   const { feedbackTarget, isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
+  const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const mutationFn = async ({ feedbackId, questionId, hidden }) =>
     apiClient.put(`/feedbacks/${feedbackId}/question/${questionId}`, { hidden })
@@ -43,7 +47,7 @@ const useUpdateOpenFeedbackVisibility = () => {
         hidden: !feedback.hidden,
       })
     } catch (e) {
-      console.error(e.response)
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

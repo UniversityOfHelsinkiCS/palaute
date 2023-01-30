@@ -128,19 +128,18 @@ const updateAnswerHidden = async (req, res) => {
     include: {
       model: UserFeedbackTarget,
       as: 'userFeedbackTarget',
-      include: {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-      },
+      attributes: ['feedbackTargetId'],
     },
   })
 
   if (!feedback) ApplicationError.NotFound('Feedback not found')
   const { userFeedbackTarget } = feedback
-  const { feedbackTarget } = userFeedbackTarget
 
   // check access
-  const access = await getAccess({ userFeedbackTarget, user, feedbackTarget })
+  const { feedbackTarget, access } = await getFeedbackTargetContext({
+    feedbackTargetId: userFeedbackTarget.feedbackTargetId,
+    user,
+  })
   if (!access?.canHideFeedback()) ApplicationError.Forbidden('Must be responsible teacher, organisation admin or admin')
 
   // find and update question
