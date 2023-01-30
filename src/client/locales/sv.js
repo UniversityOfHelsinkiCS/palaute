@@ -257,8 +257,9 @@ export default {
     hiddenInfo:
       'Den här responsen är gömd. Den är synlig endast för ansvariga lärare eller utbildningsprogrammets administratörer.',
     hidingFeatureInfoTitle: 'Information om att gömma svaren',
-    hidingFeatureInfo:
-      'Du kan gömma individuella svar till frågor vars svar annars är synliga för studerande, ifall svaret är olämpligt eller innehåller känslig information. Att gömma svar har ingen inverkan om svaren inte annars är synliga för studerande. För att förhindra missbruk, visas antalet gömda svar för utbildningsprogrammets administratörer i kurssammandraget.',
+    // publishingInfo: 'Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia "Ei julkinen".',
+    // unpublishingInfo: 'Tämän kysymyksen näkyvät kurssin opiskelijoille.',
+    // hidingFeatureInfo: 'Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero, tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain, jos vastaukset on julkistettu.',
   },
   navBar: {
     myFeedbacks: 'Mina responser',

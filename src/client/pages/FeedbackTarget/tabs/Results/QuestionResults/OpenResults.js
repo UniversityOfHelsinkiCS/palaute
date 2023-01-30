@@ -101,19 +101,18 @@ const OpenResults = ({ question }) => {
   const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
 
   const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
-  const renderWhenScrolled = feedbacks.length > 10
   const { render, ref } = useRenderVisible({ initial: false })
 
   return (
     <ResultsContent>
       <Box display="flex" justifyContent="center">
-        <Box sx={[styles.list, renderWhenScrolled ? { height: '800px' } : {}]} ref={ref}>
-          {renderWhenScrolled && !render && (
+        <Box sx={[styles.list, { maxHeight: '800px' }]} ref={ref}>
+          {!render && (
             <Box display="flex" alignSelf="stretch" justifyContent="center">
               <CircularProgress />
             </Box>
           )}
-          {(!renderWhenScrolled || render) &&
+          {render &&
             feedbacks.map((f, index) => (
               <OpenFeedback feedback={f} key={index} canHide={canHide} toggleVisibility={toggleVisibility} />
             ))}

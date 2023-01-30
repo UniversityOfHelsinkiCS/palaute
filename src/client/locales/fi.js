@@ -61,7 +61,7 @@ export default {
     downloadCSV: 'Lataa tiedosto',
     changePublicity: 'Muuta näkyvyyttä',
     notPublicInfo: 'Vastaukset näkyvät vain kurssin vastuuopettajille ja ohjelman hallinnoijille',
-    publicInfo: 'Vastaukset näkyvät ilmoittautuneille opiskelijoille',
+    publicInfo: 'Vastaukset näkyvät kurssin opiskelijoille',
     notPublicShortInfo: 'Näkyy vain vastuuopettajille ja hallinnolle',
     publicShortInfo: 'Näkyy kurssin opiskelijoille',
     editable: 'Voit muuttaa tätä asetusta',
@@ -253,10 +253,13 @@ export default {
     setHidden: 'Piilota näkyvistä',
     setVisible: 'Poista piilotus',
     hiddenInfo:
-      'Tämä palaute on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille',
-    hidingFeatureInfoTitle: 'Tietoa vastausten piilotuksesta',
+      'Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille',
+    hidingFeatureInfoTitle: 'Tietoa vastausten näkyvyydestä',
+    publishingInfo:
+      'Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia "Ei julkinen".',
+    unpublishingInfo: 'Tämän kysymyksen näkyvät kurssin opiskelijoille.',
     hidingFeatureInfo:
-      'Voit piilottaa yksittäisiä vastauksia kysymyksiin silmäkuvakkeesta, jos vastaus on sopimaton tai sisältää sensitiivisiä tietoja. Piilotuksella ei ole vaikutusta, jos vastaukset eivät näy opiskelijoille. Väärinkäytön estämiseksi piilotettujen vastausten lukumäärä näkyy koulutusohjelman hallintohenkilöille kurssiyhteenvedossa.',
+      'Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.',
   },
   navBar: {
     myFeedbacks: 'Kurssipalautteeni',

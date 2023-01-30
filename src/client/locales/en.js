@@ -252,8 +252,11 @@ export default {
     setVisible: 'Unhide',
     hiddenInfo: 'This answer is hidden and is visible only to responsible teachers and programme administrators',
     hidingFeatureInfoTitle: 'Info about hiding answers',
+    publishingInfo:
+      'The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled "Not public".',
+    unpublishingInfo: 'The answers to this questions are shown to students.',
     hidingFeatureInfo:
-      "You can hide individual answers by clicking the eye-icon, to censor inappropriate or sensitive content. This only has effect if the question is visible to students.\nTo prevent misuse, the number of hidden answers is visible to programme's administrative personnel in course summary.",
+      'If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published.',
   },
   navBar: {
     myFeedbacks: 'My feedback',

@@ -20,6 +20,19 @@ const componentByType = {
   OPEN: OpenResults,
 }
 
+const VisibilityInfoBox = ({ t, isPublic }) => {
+  const content = (
+    <>
+      <span>{isPublic ? t('feedbackTargetResults:unpublishingInfo') : t('feedbackTargetResults:publishingInfo')}</span>
+      <br />
+      <br />
+      <span>{t('feedbackTargetResults:hidingFeatureInfo')}</span>
+    </>
+  )
+
+  return <InfoBox label={t('feedbackTargetResults:hidingFeatureInfoTitle')} content={content} />
+}
+
 const QuestionItem = ({
   question,
   isResponsibleTeacher,
@@ -83,12 +96,7 @@ const QuestionItem = ({
               <AverageResult question={question} />
             </Box>
           )}
-          {isResponsibleTeacher && question.type === 'OPEN' && (
-            <InfoBox
-              label={t('feedbackTargetResults:hidingFeatureInfoTitle')}
-              content={t('feedbackTargetResults:hidingFeatureInfo')}
-            />
-          )}
+          {isResponsibleTeacher && question.type === 'OPEN' && <VisibilityInfoBox t={t} isPublic={isPublic} />}
         </Box>
         <Box display="flex" flexDirection="column" alignItems="stretch">
           {content}
