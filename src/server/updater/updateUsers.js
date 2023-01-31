@@ -1,5 +1,5 @@
 const { User } = require('../models')
-const mangleData = require('./updateLooper')
+const mangleData = require('./mangleData')
 const { safeBulkCreate } = require('./util')
 
 const usersHandler = async users => {

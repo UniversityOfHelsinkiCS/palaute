@@ -6,10 +6,19 @@ const updateUsers = require('./updateUsers')
 const updateOrganisations = require('./updateOrganisations')
 const { updateCoursesAndTeacherFeedbackTargets } = require('./updateCoursesAndTeacherFeedbackTargets')
 const { updateStudentFeedbackTargets } = require('./updateStudentFeedbackTargets')
-const { UpdaterStatus } = require('../models')
 const { updateFeedbackTargetCounts } = require('./updateFeedbackTargetCounts')
+const { UpdaterStatus } = require('../models')
 
 const JOB_TYPE = 'NIGHTLY'
+
+const runUpdater = async () => {
+  // Dependencies between updating, may result in failure if order not kept
+  await updateUsers()
+  await updateOrganisations()
+  await updateCoursesAndTeacherFeedbackTargets()
+  await updateStudentFeedbackTargets()
+  await updateFeedbackTargetCounts()
+}
 
 const checkStatusOnStartup = async () => {
   const statuses = await UpdaterStatus.findAll({
@@ -26,15 +35,6 @@ const checkStatusOnStartup = async () => {
     Sentry.captureMessage(msg)
     logger.error(`[UPDATER] ${msg}`)
   }
-}
-
-const runUpdater = async () => {
-  // Dependencies between updating, may result in failure if order not kept
-  await updateUsers()
-  await updateOrganisations()
-  await updateCoursesAndTeacherFeedbackTargets()
-  await updateStudentFeedbackTargets()
-  await updateFeedbackTargetCounts()
 }
 
 const run = async () => {

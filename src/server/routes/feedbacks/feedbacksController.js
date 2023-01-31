@@ -3,7 +3,6 @@ const { ApplicationError } = require('../../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
 const { validateFeedback } = require('../../util/feedbackValidator')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
-const { getAccess } = require('../../services/feedbackTargets/getAccess')
 
 const create = async (req, res) => {
   const { user } = req

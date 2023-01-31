@@ -3,6 +3,12 @@ const { UpdaterStatus } = require('../models')
 const logger = require('../util/logger')
 const { updateNewEnrolments } = require('./updateStudentFeedbackTargets')
 
+const JOB_TYPE = 'ENROLMENTS'
+
+/**
+ * Job that runs the updateNewEnrolments function and produces a status report for it.
+ * It is not run if for example the main updater is already running.
+ */
 const updateNewEnrolmentsJob = async () => {
   const running = await UpdaterStatus.findAll({
     where: { status: 'RUNNING' },
@@ -13,7 +19,7 @@ const updateNewEnrolmentsJob = async () => {
   }
   const status = await UpdaterStatus.create({
     status: 'RUNNING',
-    jobType: 'ENROLMENTS',
+    jobType: JOB_TYPE,
   })
   try {
     await updateNewEnrolments()

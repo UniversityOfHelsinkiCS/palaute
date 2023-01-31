@@ -36,6 +36,7 @@ const start = async () => {
   await seed()
   await redis.connect()
   await updateLastRestart()
+
   await updater.checkStatusOnStartup()
   await updater.start()
   await startViewsCron()
@@ -43,6 +44,7 @@ const start = async () => {
   await startPrecacheFeedbackTargetsCron()
   await mailer.startCron()
   await mailer.startContinuousFeedbackCron()
+
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
   })

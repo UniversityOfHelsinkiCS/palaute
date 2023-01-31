@@ -26,7 +26,7 @@ const getTestUser = async () => {
 const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
   if (!isSuperAdmin(actualUser)) return undefined
 
-  const user = await User.findOne({ where: { id: loggedInAsUser } })
+  const user = await User.findByPk(loggedInAsUser)
 
   return user
 }

@@ -17,7 +17,7 @@ const {
 } = require('../models')
 
 const logger = require('../util/logger')
-const mangleData = require('./updateLooper')
+const mangleData = require('./mangleData')
 const { sequelize } = require('../db/dbConnection')
 const { safeBulkCreate } = require('./util')
 

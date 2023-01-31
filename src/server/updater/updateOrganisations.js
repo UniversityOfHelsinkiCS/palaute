@@ -1,9 +1,9 @@
 const { Organisation } = require('../models')
-const mangleData = require('./updateLooper')
+const mangleData = require('./mangleData')
 const { safeBulkCreate } = require('./util')
 
 const organisationsHandler = async organisations => {
-  const ids = new Set() // TODO fix
+  const ids = new Set()
   const uniqueOrganisations = organisations.filter(org => {
     if (!ids.has(org.id)) {
       ids.add(org.id)

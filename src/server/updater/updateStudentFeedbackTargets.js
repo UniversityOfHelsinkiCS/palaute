@@ -4,8 +4,8 @@ const { subHours } = require('date-fns')
 const { sequelize } = require('../db/dbConnection')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
-const mangleData = require('./updateLooper')
-const importerClient = require('./importerClient')
+const mangleData = require('./mangleData')
+const { fetchData } = require('./importerClient')
 const { notifyOnEnrolmentsIfRequested } = require('../services/enrolmentNotices/enrolmentNotices')
 
 const createEnrolmentTargets = async enrolment => {
@@ -108,7 +108,7 @@ const updateStudentFeedbackTargets = async () => {
 const updateEnrolmentsOfCourse = async courseRealisationId => {
   const start = Date.now()
   try {
-    const { data: enrolments } = await importerClient.get(`palaute/updater/enrolments/${courseRealisationId}`)
+    const { data: enrolments } = await fetchData(`/enrolments/${courseRealisationId}`)
     await enrolmentsHandler(enrolments)
     const end = Date.now()
     logger.info(
@@ -165,7 +165,7 @@ const updateNewEnrolments = async () => {
   const start = new Date()
   const twoHoursAgo = subHours(start, 2)
   try {
-    const { data: enrolments } = await importerClient.get(`palaute/updater/enrolments-new?since=${twoHoursAgo}`)
+    const { data: enrolments } = await fetchData(`/enrolments-new`, { since: twoHoursAgo })
     const count = await saveNewEnrolments(enrolments)
     const end = Date.now()
     logger.info(
