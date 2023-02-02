@@ -3,14 +3,11 @@ import { useParams } from 'react-router-dom'
 import { Divider, Box, Alert, Card, CardContent, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import useFeedbackTarget from '../../../../../hooks/useFeedbackTarget'
 import Toolbar from './Toolbar'
 
-import useAuthorizedUser from '../../../../../hooks/useAuthorizedUser'
-
 import { getUpperLevelQuestions, getOrganisationNames, feedbackTargetIsOpenOrClosed } from './utils'
-import { LoadingProgress } from '../../../../../components/common/LoadingProgress'
 import { TeacherSurvey } from '../../../../../components/QuestionEditor'
+import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
 
 const styles = {
   heading: {
@@ -31,19 +28,9 @@ const EditFeedbackTarget = () => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
-  const { authorizedUser, isLoading: authorizedUserLoading } = useAuthorizedUser()
+  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
 
-  const isAdminUser = authorizedUser?.isAdmin ?? false
-
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
-
-  if (isLoading || authorizedUserLoading) {
-    return <LoadingProgress />
-  }
-
-  if (!feedbackTarget || (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdminUser)) {
+  if (!feedbackTarget || (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdmin)) {
     return null
   }
 
