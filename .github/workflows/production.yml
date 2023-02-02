@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yml
+    secrets: inherit
 
   dockerhub-release:
     runs-on: ubuntu-latest
