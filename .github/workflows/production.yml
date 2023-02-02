@@ -5,46 +5,14 @@ on:
     types: [published]
 
 jobs:
-  cypress:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Login to toska docker registry
-        uses: docker/login-action@v1
-        with:
-          registry: registry.toska.cs.helsinki.fi
-          username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
-          password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
-
-      - name: Prepare test data and start the application
-        run: docker-compose -f docker-compose.ci.yml up -d
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v4
-        with:
-          browser: chrome
-          install-command: npm i
-
-      - name: Upload video
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          path: /home/runner/work/palaute/palaute/cypress/videos/*
-
-
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build project for eslint
-        run: npm install
-      - name: Run eslint
-        run: npm run lint
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
 
   dockerhub-release:
     runs-on: ubuntu-latest
-    needs: [cypress, eslint]
+    needs: test
+
     steps:
       - uses: actions/checkout@v3
 
@@ -62,7 +30,6 @@ jobs:
           build-args: |
             BASE_PATH=/
             GIT_SHA=${{ github.sha }}
-
 
   sentry-release:
     runs-on: ubuntu-latest
