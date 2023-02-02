@@ -1,7 +1,12 @@
 const Survey = require('../../models/survey')
 
 /**
+ * Gets the university survey.
  *
+ * University level questions publicity is handled so that numeric questions are public and open questions are nonpublic.
+ *
+ * It follows that programmes and teacher can never change publicity of uni numeric questions
+ * but can always change publicity of uni open questions.
  * @returns {Promise<Survey>} university survey
  */
 const getUniversitySurvey = async () => {

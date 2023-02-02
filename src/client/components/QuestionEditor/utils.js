@@ -86,3 +86,25 @@ export const questionCanMoveDown = (questions, index) => {
 
   return nextQuestion?.editable ?? true
 }
+
+export const validateQuestions = values => {
+  const { questions } = values
+
+  const editableQuestions = questions.filter(({ editable }) => editable)
+
+  for (const question of editableQuestions) {
+    if (question.type === 'SINGLE_CHOICE' || question.type === 'MULTIPLE_CHOICE') {
+      if (!question.data.options || question.data.options.length < 1) return false
+    }
+  }
+  return true
+}
+
+export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
+  const questions = feedbackTarget.surveys?.teacherSurvey?.questions ?? []
+
+  return questions.map(q => ({
+    ...copyQuestion(q),
+    editable: true,
+  }))
+}

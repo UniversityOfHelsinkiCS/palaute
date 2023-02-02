@@ -24,6 +24,7 @@ import {
 } from './utils'
 import { LoadingProgress } from '../../../../../components/common/LoadingProgress'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
+import TeacherSurvey from '../../../../../components/QuestionEditor/TeacherSurvey.js'
 
 const styles = {
   heading: {
@@ -124,7 +125,6 @@ const QuestionEditorContainer = ({ onSave, language, feedbackTarget }) => {
 
 const EditFeedbackTarget = () => {
   const { id } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
@@ -146,7 +146,7 @@ const EditFeedbackTarget = () => {
 
   const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(q => q.type !== 'TEXT')
 
-  const handleSaveQuestions = async values => {
+  /* const handleSaveQuestions = async values => {
     try {
       if (!validateQuestions(values)) {
         enqueueSnackbar(t('choiceQuestionError'), { variant: 'error' })
@@ -159,7 +159,7 @@ const EditFeedbackTarget = () => {
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
-
+ */
   const questionsInitialValues = getQuestionsInitialValues(feedbackTarget)
 
   const organisationNames = getOrganisationNames(feedbackTarget, language)
@@ -187,11 +187,7 @@ const EditFeedbackTarget = () => {
           </Box>
         )}
 
-        <Formik initialValues={questionsInitialValues} enableReinitialize validateOnChange={false}>
-          {() => (
-            <QuestionEditorContainer onSave={handleSaveQuestions} language={language} feedbackTarget={feedbackTarget} />
-          )}
-        </Formik>
+        <TeacherSurvey feedbackTarget={feedbackTarget} />
 
         <Divider sx={styles.toolbarDivider} />
 
