@@ -27,9 +27,8 @@ import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { STUDENT_LIST_BY_COURSE_ENABLED, STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN } from '../../../config'
+import { STUDENT_LIST_BY_COURSE_ENABLED } from '../../../config'
 import { TagChip } from '../../components/common/TagChip'
 import CourseUnitTagSelector from './CourseUnitTagSelector'
 
@@ -127,13 +126,10 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
-  const { authorizedUser } = useAuthorizedUser()
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedCourse, setSelectedCourse] = React.useState(null)
 
-  const studentListVisibleFeatureEnabled =
-    STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code) ||
-    ((STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(organisation.code) && authorizedUser?.isAdmin) ?? false)
+  const studentListVisibleFeatureEnabled = STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(organisation.disabledCourseCodes ?? [])
 
