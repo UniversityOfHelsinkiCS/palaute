@@ -1,10 +1,21 @@
 name: E2E Tests
 
-on: push
+on: [workflow_call]
 
 jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build project for eslint
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
+
   cypress:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -29,12 +40,3 @@ jobs:
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
-
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build project for eslint
-        run: npm install
-      - name: Run eslint
-        run: npm run lint
