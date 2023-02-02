@@ -12,7 +12,7 @@ import useOrganisation from '../../hooks/useOrganisation'
 
 import { getUpperLevelQuestions } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import ProgrammeSurvey from '../../components/QuestionEditor/ProgrammeSurvey'
+import { ProgrammeSurvey } from '../../components/QuestionEditor'
 
 const EditSurvey = () => {
   const { code } = useParams()

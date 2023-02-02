@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import UniversitySurvey from '../../components/QuestionEditor/UniversitySurvey'
+import { UniversitySurvey } from '../../components/QuestionEditor'
 
 const EditUniversitySurveyAccordion = () => {
   const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()

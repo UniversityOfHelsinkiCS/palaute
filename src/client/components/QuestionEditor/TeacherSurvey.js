@@ -1,15 +1,12 @@
 import React from 'react'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@mui/material'
-import { useField } from 'formik'
 import _ from 'lodash'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 import QuestionEditor from './QuestionEditor'
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
-import { copyQuestionsFromFeedbackTarget, validateQuestions } from './utils'
-import CopyFromCourseDialog from './CopyFromCourseDialog'
+import { validateQuestions } from './utils'
 import { getFormInitialValues } from './getFormInitialValues'
 
 const saveQuestionsValues = async (values, feedbackTarget) => {
@@ -32,39 +29,6 @@ const saveQuestionsValues = async (values, feedbackTarget) => {
   }
 
   return data
-}
-
-const QuestionEditorActions = ({ onCopy = () => {} }) => {
-  const { t } = useTranslation()
-  const [, meta, helpers] = useField('questions')
-  const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { enqueueSnackbar } = useSnackbar()
-
-  const handleCloseDialog = () => setDialogOpen(false)
-
-  const handleOpenDialog = () => setDialogOpen(true)
-
-  const handleCopy = feedbackTarget => {
-    handleCloseDialog()
-
-    helpers.setValue([...meta.value, ...copyQuestionsFromFeedbackTarget(feedbackTarget)])
-
-    enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
-      variant: 'info',
-    })
-
-    onCopy()
-  }
-
-  return (
-    <>
-      <CopyFromCourseDialog open={dialogOpen} onClose={handleCloseDialog} onCopy={handleCopy} />
-
-      <Button color="primary" onClick={handleOpenDialog}>
-        {t('editFeedbackTarget:copyFromCourseButton')}
-      </Button>
-    </>
-  )
 }
 
 const TeacherSurvey = ({ feedbackTarget }) => {
@@ -99,6 +63,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
         enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
       }
     } catch (e) {
+      console.error(e)
       enqueueSnackbar(t('unknownError'), { variant: 'error' })
     }
   }
@@ -126,7 +91,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       handlePublicityToggle={onPublicityToggle}
       publicQuestionIds={publicQuestionIds}
       publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-      actions={<QuestionEditorActions onCopy={handleSubmit} />}
+      copyFromCourseDialog
     />
   )
 }

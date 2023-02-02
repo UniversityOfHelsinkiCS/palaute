@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import QuestionCard from './QuestionCard'
 
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
+import QuestionEditorActions from './QuestionEditorActions'
 
 const styles = {
   questionCard: {
@@ -78,7 +79,7 @@ const QuestionEditorForm = ({
                 name={`${name}.${index}`}
                 onRemove={() => {
                   arrayHelpers.remove(index)
-                  onRemoveQuestion(question)
+                  onRemoveQuestion()
                 }}
                 onMoveUp={() => {
                   arrayHelpers.swap(index - 1, index)
@@ -90,7 +91,7 @@ const QuestionEditorForm = ({
                 }}
                 onCopy={() => {
                   arrayHelpers.insert(index + 1, copyQuestion(question))
-                  onCopyQuestion(question)
+                  onCopyQuestion()
                 }}
                 moveUpDisabled={!questionCanMoveUp(questions, index)}
                 moveDownDisabled={!questionCanMoveDown(questions, index)}
@@ -145,11 +146,11 @@ const QuestionEditor = ({
   initialValues,
   name = 'questions',
   editable = true,
-  actions,
   publicQuestionIds,
   publicityConfigurableQuestionIds,
   handleSubmit,
   handlePublicityToggle,
+  copyFromCourseDialog,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -162,7 +163,7 @@ const QuestionEditor = ({
         publicQuestionIds={publicQuestionIds}
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
-        actions={actions}
+        actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
       />
     )}
   </Formik>
