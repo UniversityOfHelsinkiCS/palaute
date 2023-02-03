@@ -162,10 +162,10 @@ const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
 export const SkeletonRow = ({ numberOfQuestions = 5 }) => (
   <tr>
     <td>
-      <Skeleton height="48px" sx={{ mr: '1rem', borderRadius: '10px' }} variant="rectangular" />
+      <Skeleton height="48px" sx={{ mr: '1rem', borderRadius: '10px', bgcolor: 'grey.200' }} variant="rectangular" />
     </td>
     <td colSpan={numberOfQuestions}>
-      <Skeleton height="50px" variant="rectangular" />
+      <Skeleton height="50px" variant="rectangular" sx={{ bgcolor: 'grey.200' }} />
     </td>
   </tr>
 )
