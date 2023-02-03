@@ -229,7 +229,7 @@ const ResultsRow = React.memo(
     cellsAfter = null,
   }) => {
     const [accordionOpen, setAccordionOpen] = useAccordionState(id, accordionEnabled, accordionInitialOpen)
-    const [nextState, setNextState] = useState(false)
+    const [nextState, setNextState] = useState(accordionOpen)
 
     const acuallyOpen = accordionEnabled && accordionOpen
 
