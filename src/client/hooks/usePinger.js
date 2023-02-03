@@ -1,10 +1,10 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const usePinger = (options = {}) => {
   const queryKey = 'ping'
 
-  const result = useQuery(
+  useQuery(
     queryKey,
     async () => {
       const { data } = await apiClient.get('/ping')
@@ -15,7 +15,7 @@ const usePinger = (options = {}) => {
       refetchInterval: 6 * 60 * 1000,
       refetchIntervalInBackground: true,
       refetchOnMount: true,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
       refetchOnReconnect: 'always',
       cacheTime: 7 * 60 * 1000,
       onError: error => {
@@ -24,8 +24,6 @@ const usePinger = (options = {}) => {
       ...options,
     }
   )
-
-  return result
 }
 
 export default usePinger

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import useOrganisations from '../../hooks/useOrganisations'
 import Filters from './Filters'
 
-import { getFacultyAccess, useOpenAccordions, useAggregatedOrganisationSummaries, ORDER_BY_OPTIONS } from './utils'
+import { getFacultyAccess, useAggregatedOrganisationSummaries, ORDER_BY_OPTIONS } from './utils'
 import Title from '../../components/common/Title'
 import useHistoryState from '../../hooks/useHistoryState'
 import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
@@ -90,8 +90,6 @@ const OrganisationSummary = () => {
     organisationData,
   })
 
-  const { openAccordions, toggleAccordion } = useOpenAccordions(organisationSummaries?.organisations ?? [])
-
   if (isDateLoadingError) {
     return <ErrorView message={errors.getGeneralError(dateLoadingError)} response={dateLoadingError.response} />
   }
@@ -147,8 +145,6 @@ const OrganisationSummary = () => {
         isOrganisationsLoading={isOrganisationsLoading}
         questions={questions}
         organisationAccess={organisationAccess}
-        initialOpenAccordions={openAccordions}
-        onToggleAccordion={toggleAccordion}
         onOrderByChange={handleOrderByChange}
         organisationLinks={!code}
         isRefetching={isFetching && organisationSummaries}

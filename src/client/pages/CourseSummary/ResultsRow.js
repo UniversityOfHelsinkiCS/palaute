@@ -159,102 +159,143 @@ const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
   )
 }
 
-const ResultsRow = ({
-  label,
-  link,
-  results,
-  questions,
-  children,
-  level = 0,
-  feedbackCount,
-  studentCount,
-  feedbackResponseGiven,
-  feedbackResponsePercentage,
-  currentFeedbackTargetId,
-  accordionEnabled = false,
-  accordionInitialOpen = false,
-  onToggleAccordion = () => {},
-  cellsAfter = null,
-}) => {
-  const [accordionOpen, setAccordionOpen] = useState(accordionInitialOpen)
+const useAccordionState = (id, enabled, forceOpen) => {
+  const key = `accordions`
 
-  const handleToggleAccordion = () => {
-    setAccordionOpen(previousOpen => !previousOpen)
-    onToggleAccordion()
-  }
+  const initial = React.useMemo(() => {
+    if (!enabled) return false
+    if (forceOpen) return true
 
-  const percent = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
+    const str = localStorage.getItem(key)
+    if (typeof str === 'string') {
+      const ids = JSON.parse(str)
+      if (Array.isArray(ids)) {
+        return ids.includes(id)
+      }
+    }
+    return false
+  }, [key])
 
-  const feedbackResponsePercent = (feedbackResponsePercentage * 100).toFixed(0)
+  const [open, setOpen] = useState(initial)
 
-  return (
-    <>
-      <TableRow>
-        <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
-          {accordionEnabled ? (
-            // eslint-disable-next-line react/button-has-type
-            <ButtonBase onClick={handleToggleAccordion} sx={styles.accordionButton} variant="contained" disableRipple>
-              {label}
-              <Box sx={styles.arrowContainer}>
-                <ChevronRight
-                  sx={{
-                    ...styles.arrow,
-                    ...(accordionOpen ? styles.arrowOpen : {}),
-                  }}
-                />
-              </Box>
-            </ButtonBase>
-          ) : (
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            <>
-              {link ? (
-                <ButtonBase
-                  to={link}
-                  component={RouterLink}
-                  sx={{ ...styles.accordionButton, ...styles.link }}
-                  variant="contained"
-                >
-                  {label}
-                </ButtonBase>
-              ) : (
-                label
-              )}
-            </>
-          )}
-        </td>
-        {results.map(({ questionId, mean, distribution, previous }) => (
-          <SummaryResultItem
-            key={questionId}
-            question={getQuestion(questions, questionId)}
-            mean={mean}
-            distribution={distribution}
-            previous={previous}
-            sx={styles.resultCell}
-          />
-        ))}
-        <td css={styles.countCell}>
-          <Typography component="div" variant="body2">
-            {feedbackCount}/{studentCount}
-          </Typography>
-        </td>
-        <td css={styles.percentCell}>
-          <PercentageCell label={`${percent}%`} percent={percent} />
-        </td>
-        <td css={styles.percentCell}>
-          {feedbackResponsePercentage !== undefined ? (
-            <PercentageCell label={`${feedbackResponsePercent}%`} percent={feedbackResponsePercent} />
-          ) : (
-            <FeedbackResponseIndicator
-              status={feedbackResponseGiven}
-              currentFeedbackTargetId={currentFeedbackTargetId}
-            />
-          )}
-        </td>
-        {cellsAfter}
-      </TableRow>
-      {accordionEnabled && accordionOpen && children}
-    </>
-  )
+  React.useEffect(() => {
+    if (!enabled || forceOpen) return
+
+    let ids = []
+    const str = localStorage.getItem(key)
+    if (typeof str === 'string') {
+      ids = JSON.parse(str)
+      if (Array.isArray(ids)) {
+        if (open && !ids.includes(id)) {
+          ids.push(id)
+        } else if (!open) {
+          ids = ids.filter(aid => aid !== id)
+        }
+      }
+    }
+    localStorage.setItem(key, JSON.stringify(ids))
+  }, [open])
+
+  return [open, setOpen]
 }
+
+const ResultsRow = React.memo(
+  ({
+    id,
+    label,
+    link,
+    results,
+    questions,
+    children,
+    level = 0,
+    feedbackCount,
+    studentCount,
+    feedbackResponseGiven,
+    feedbackResponsePercentage,
+    currentFeedbackTargetId,
+    accordionEnabled = false,
+    accordionInitialOpen = false,
+    cellsAfter = null,
+  }) => {
+    const [accordionOpen, setAccordionOpen] = useAccordionState(id, accordionEnabled, accordionInitialOpen)
+    const acuallyOpen = accordionEnabled && (accordionOpen || accordionInitialOpen)
+    const handleToggleAccordion = () => {
+      React.startTransition(() => setAccordionOpen(previousOpen => !previousOpen))
+    }
+
+    const percent = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
+
+    const feedbackResponsePercent = (feedbackResponsePercentage * 100).toFixed(0)
+
+    return (
+      <>
+        <TableRow>
+          <td css={[styles.labelCell, level > 0 && styles.innerLabelCell]}>
+            {accordionEnabled ? (
+              // eslint-disable-next-line react/button-has-type
+              <ButtonBase onClick={handleToggleAccordion} sx={styles.accordionButton} variant="contained" disableRipple>
+                {label}
+                <Box sx={styles.arrowContainer}>
+                  <ChevronRight
+                    sx={{
+                      ...styles.arrow,
+                      ...(acuallyOpen ? styles.arrowOpen : {}),
+                    }}
+                  />
+                </Box>
+              </ButtonBase>
+            ) : (
+              // eslint-disable-next-line react/jsx-no-useless-fragment
+              <>
+                {link ? (
+                  <ButtonBase
+                    to={link}
+                    component={RouterLink}
+                    sx={{ ...styles.accordionButton, ...styles.link }}
+                    variant="contained"
+                  >
+                    {label}
+                  </ButtonBase>
+                ) : (
+                  label
+                )}
+              </>
+            )}
+          </td>
+          {results.map(({ questionId, mean, distribution, previous }) => (
+            <SummaryResultItem
+              key={questionId}
+              question={getQuestion(questions, questionId)}
+              mean={mean}
+              distribution={distribution}
+              previous={previous}
+              sx={styles.resultCell}
+            />
+          ))}
+          <td css={styles.countCell}>
+            <Typography component="div" variant="body2">
+              {feedbackCount}/{studentCount}
+            </Typography>
+          </td>
+          <td css={styles.percentCell}>
+            <PercentageCell label={`${percent}%`} percent={percent} />
+          </td>
+          <td css={styles.percentCell}>
+            {feedbackResponsePercentage !== undefined ? (
+              <PercentageCell label={`${feedbackResponsePercent}%`} percent={feedbackResponsePercent} />
+            ) : (
+              <FeedbackResponseIndicator
+                status={feedbackResponseGiven}
+                currentFeedbackTargetId={currentFeedbackTargetId}
+              />
+            )}
+          </td>
+          {cellsAfter}
+        </TableRow>
+        {acuallyOpen && children}
+      </>
+    )
+  }
+)
 
 export default ResultsRow

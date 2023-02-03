@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
 import { orderBy, sortBy } from 'lodash'
 import { useHistory } from 'react-router-dom'
@@ -224,32 +224,9 @@ export const orderByCriteria = (organisations, orderByCriteria) => {
     : sortBy(organisations, organisation => (organisation.feedbackCount ? 0 : 1))
 }
 
-export const useOpenAccordions = organisations => {
-  const history = useHistory()
-
-  const historyState = history.location.state ?? {}
-
-  const replaceHistoryState = update => {
-    history.replace({
-      state: { ...historyState, ...update },
-    })
-  }
-
-  const openAccordions = getInitialOpenAccordions(organisations, history)
-
-  const toggleAccordion = id => {
-    let nextOpenAccordions = openAccordions
-
-    if (openAccordions.includes(id)) {
-      nextOpenAccordions = openAccordions.filter(a => a !== id)
-    } else {
-      nextOpenAccordions = openAccordions.concat(id)
-    }
-
-    replaceHistoryState({ openAccordions: nextOpenAccordions })
-  }
-
-  return { openAccordions, toggleAccordion }
+export const useInitiallyOpenAccordions = organisations => {
+  if (organisations.length < 3) return organisations.map(org => org.id)
+  return []
 }
 
 export const useAggregatedOrganisationSummaries = ({
@@ -270,7 +247,7 @@ export const useAggregatedOrganisationSummaries = ({
     startDate: dateRange?.start,
     endDate: dateRange?.end,
     keepPreviousData: true,
-    retry: 2,
+    retry: 1,
     enabled: Boolean(dateRange?.start && dateRange?.end),
   })
 

@@ -16,6 +16,8 @@ const useOrganisationData = (options = {}) => {
   const { data, ...rest } = useQuery(queryKey, queryFn, {
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     ...options,
   })
 

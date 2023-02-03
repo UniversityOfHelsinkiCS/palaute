@@ -16,6 +16,7 @@ import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
 import CensoredCount from './CensoredCount'
+import { useInitiallyOpenAccordions } from './utils'
 
 const styles = {
   table: {
@@ -67,8 +68,6 @@ const OrganisationTable = forwardRef(
       isOrganisationsLoading,
       questions,
       organisationAccess,
-      initialOpenAccordions = [],
-      onToggleAccordion = () => {},
       onOrderByChange,
       filters,
       isRefetching = false,
@@ -79,6 +78,7 @@ const OrganisationTable = forwardRef(
     const { i18n } = useTranslation()
 
     const showHidingModeButton = organisationAccess?.length > 1 && organisations.length > 1
+    const initialOpenAccordions = useInitiallyOpenAccordions(organisations)
 
     return (
       <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
@@ -129,35 +129,34 @@ const OrganisationTable = forwardRef(
                     feedbackResponsePercentage,
                     access,
                   }) => (
-                    <React.Fragment key={id}>
-                      <ResultsRow
-                        label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
-                        results={results}
-                        questions={questions}
-                        feedbackCount={feedbackCount}
-                        studentCount={studentCount}
-                        feedbackResponsePercentage={feedbackResponsePercentage}
-                        accordionEnabled={courseUnits.length > 0}
-                        accordionInitialOpen={initialOpenAccordions.includes(id)}
-                        onToggleAccordion={() => onToggleAccordion(id)}
-                        cellsAfter={
-                          organisationLinks && (
-                            <>
-                              <td css={{ paddingLeft: '2rem' }}>
-                                <OrganisationButton code={code} access={access} />
+                    <ResultsRow
+                      id={id}
+                      key={id}
+                      label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
+                      results={results}
+                      questions={questions}
+                      feedbackCount={feedbackCount}
+                      studentCount={studentCount}
+                      feedbackResponsePercentage={feedbackResponsePercentage}
+                      accordionEnabled={courseUnits.length > 0}
+                      accordionInitialOpen={initialOpenAccordions.includes(id)}
+                      cellsAfter={
+                        organisationLinks && (
+                          <>
+                            <td css={{ paddingLeft: '2rem' }}>
+                              <OrganisationButton code={code} access={access} />
+                            </td>
+                            {access?.admin && !!hiddenCount && (
+                              <td>
+                                <CensoredCount count={hiddenCount} />
                               </td>
-                              {access?.admin && !!hiddenCount && (
-                                <td>
-                                  <CensoredCount count={hiddenCount} />
-                                </td>
-                              )}
-                            </>
-                          )
-                        }
-                      >
-                        <CourseUnitSummary courseUnits={courseUnits} questions={questions} access={access} />
-                      </ResultsRow>
-                    </React.Fragment>
+                            )}
+                          </>
+                        )
+                      }
+                    >
+                      <CourseUnitSummary courseUnits={courseUnits} questions={questions} access={access} />
+                    </ResultsRow>
                   )
                 )}
               </>
