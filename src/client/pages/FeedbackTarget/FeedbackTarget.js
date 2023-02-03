@@ -34,7 +34,6 @@ const FeedbackTarget = () => {
     <FeedbackTargetContextProvider
       id={id}
       isAdmin={authorizedUser?.isAdmin}
-      accessStatus={feedbackTarget?.accessStatus}
       feedbackTarget={feedbackTarget}
       organisation={organisation}
     >

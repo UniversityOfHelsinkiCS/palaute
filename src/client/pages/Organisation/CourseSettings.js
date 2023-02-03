@@ -129,7 +129,7 @@ const CourseUnitTable = React.memo(
       ({ courseCode, name }) =>
         (courseCode ?? '').toLowerCase().includes(query) || (name ?? '').toLowerCase().includes(query)
     )
-    console.log('table')
+
     return (
       <TableContainer>
         <Table stickyHeader size="small">
