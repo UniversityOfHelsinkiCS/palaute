@@ -71,12 +71,13 @@ const CourseUnitItem = ({
 
   const link = (
     <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
-      {`${getLanguageValue(name, i18n.language)} (${courseCode})`}
+      {getLanguageValue(name, i18n.language)}
     </MuiLink>
   )
 
   return (
     <TableRow>
+      <TableCell>{courseCode}</TableCell>
       <TableCell>{link}</TableCell>
       {organisationTags.length > 0 && (
         <TableCell>
@@ -209,7 +210,8 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t('organisationSettings:course')}</TableCell>
+                  <TableCell>{t('common:courseCode')}</TableCell>
+                  <TableCell>{t('common:course')}</TableCell>
                   {organisation.tags.length > 0 && <TableCell>{t('common:studyTracks')}</TableCell>}
                   <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
                   {studentListVisibleFeatureEnabled && (

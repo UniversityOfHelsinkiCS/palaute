@@ -21,6 +21,8 @@ export default {
     supportContact: 'Vid problemfall, kontakta supporten: ',
     save: 'Spara',
     saveSuccess: 'Informationen har sparats',
+    course: 'Kurs',
+    // courseCode: 'Kurssikoodi',
     name: 'Namn',
     edit: 'Redigera',
     show: 'Visa',
