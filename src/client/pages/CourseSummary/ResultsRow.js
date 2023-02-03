@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Tooltip, Typography, ButtonBase, Box, TableRow } from '@mui/material'
+import { Tooltip, Typography, ButtonBase, Box, TableRow, Skeleton } from '@mui/material'
 
 import { ChevronRight } from '@mui/icons-material'
 import DoneIcon from '@mui/icons-material/Done'
@@ -159,6 +159,17 @@ const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
   )
 }
 
+export const SkeletonRow = ({ numberOfQuestions = 5 }) => (
+  <tr>
+    <td>
+      <Skeleton height="48px" sx={{ mr: '1rem', borderRadius: '10px' }} variant="rectangular" />
+    </td>
+    <td colSpan={numberOfQuestions}>
+      <Skeleton height="50px" variant="rectangular" />
+    </td>
+  </tr>
+)
+
 const useAccordionState = (id, enabled, forceOpen) => {
   const key = `accordions`
 
@@ -218,9 +229,29 @@ const ResultsRow = React.memo(
     cellsAfter = null,
   }) => {
     const [accordionOpen, setAccordionOpen] = useAccordionState(id, accordionEnabled, accordionInitialOpen)
-    const acuallyOpen = accordionEnabled && (accordionOpen || accordionInitialOpen)
+    const [nextState, setNextState] = useState(false)
+
+    const acuallyOpen = accordionEnabled && accordionOpen
+
+    const isOpening = !acuallyOpen && nextState
+    const isClosing = acuallyOpen && !nextState
+
     const handleToggleAccordion = () => {
-      React.startTransition(() => setAccordionOpen(previousOpen => !previousOpen))
+      if (isOpening) {
+        setAccordionOpen(false)
+        setNextState(false)
+        return
+      }
+      if (isClosing) {
+        setAccordionOpen(true)
+        setNextState(true)
+        return
+      }
+
+      setNextState(!accordionOpen)
+      React.startTransition(() => {
+        setAccordionOpen(previousOpen => !previousOpen)
+      })
     }
 
     const percent = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
@@ -239,7 +270,7 @@ const ResultsRow = React.memo(
                   <ChevronRight
                     sx={{
                       ...styles.arrow,
-                      ...(acuallyOpen ? styles.arrowOpen : {}),
+                      ...((isOpening || acuallyOpen) && !isClosing ? styles.arrowOpen : {}),
                     }}
                   />
                 </Box>
@@ -293,6 +324,7 @@ const ResultsRow = React.memo(
           {cellsAfter}
         </TableRow>
         {acuallyOpen && children}
+        {isOpening && <SkeletonRow numberOfQuestions={results.length} />}
       </>
     )
   }

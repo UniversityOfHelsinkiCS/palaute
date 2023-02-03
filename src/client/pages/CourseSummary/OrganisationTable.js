@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import ResultsRow from './ResultsRow'
+import ResultsRow, { SkeletonRow } from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
 
 import ColumnHeadings from './ColumnHeadings'
@@ -97,11 +97,11 @@ const OrganisationTable = forwardRef(
           </thead>
           <tbody>
             {(isOrganisationsLoading || isRefetching) && (
-              <tr>
-                <td colSpan={99}>
-                  <LinearProgress />
-                </td>
-              </tr>
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
             )}
 
             {!(isOrganisationsLoading || isRefetching) && (

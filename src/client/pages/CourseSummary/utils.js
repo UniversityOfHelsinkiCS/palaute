@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { isBefore, parseISO } from 'date-fns'
 import { orderBy, sortBy } from 'lodash'
-import { useHistory } from 'react-router-dom'
 
 import useOrganisationSummaries from '../../hooks/useOrganisationSummaries'
 
@@ -92,20 +91,6 @@ export const filterByCourseCode = (organisations, keyword) => {
 
 export const getAccess = (organisationId, organisationAccess) =>
   (organisationAccess ?? []).find(({ id }) => id === organisationId)?.access
-
-const getInitialOpenAccordions = (organisations, history) => {
-  const historyOpenAccordions = history.location.state?.openAccordions
-
-  if (historyOpenAccordions) {
-    return historyOpenAccordions
-  }
-
-  if (organisations.length < 3) {
-    return organisations.map(({ id }) => id)
-  }
-
-  return []
-}
 
 export const ORDER_BY_OPTIONS = [
   {
