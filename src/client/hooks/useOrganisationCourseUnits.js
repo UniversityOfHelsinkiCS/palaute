@@ -13,6 +13,8 @@ const useOrganisationCourseUnits = (code, options = {}) => {
 
   const { data: courseUnits, ...rest } = useQuery(queryKey, queryFn, {
     enabled: Boolean(code),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     ...options,
   })
 

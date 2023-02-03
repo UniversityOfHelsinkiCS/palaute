@@ -23,7 +23,6 @@ import { useMutation } from 'react-query'
 import { useSnackbar } from 'notistack'
 import { useParams, Link } from 'react-router-dom'
 
-import { getLanguageValue } from '../../util/languageUtils'
 import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
@@ -31,18 +30,17 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { STUDENT_LIST_BY_COURSE_ENABLED } from '../../../config'
 import { TagChip } from '../../components/common/TagChip'
 import CourseUnitTagSelector from './CourseUnitTagSelector'
+import { getLanguageValue } from '../../util/languageUtils'
 
-const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, query, language = 'en') =>
-  (courseUnits ?? [])
-    .filter(({ courseCode, name }) => courseCode?.includes(query) || name[language]?.includes(query))
-    .map(({ id, courseCode, name, tags }) => ({
-      id,
-      courseCode,
-      name,
-      tags,
-      enabledCourse: !disabledCourseCodes.includes(courseCode),
-      studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
-    }))
+const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, language = 'en') =>
+  (courseUnits ?? []).map(({ id, courseCode, name, tags }) => ({
+    id,
+    courseCode,
+    name: getLanguageValue(name, language),
+    tags,
+    enabledCourse: !disabledCourseCodes.includes(courseCode),
+    studentListVisible: studentListVisibleCourseCodes.includes(courseCode),
+  }))
 
 const saveChangedCourseCodes = async ({ code, disabledCourseCodes, studentListVisibleCourseCodes }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -66,12 +64,11 @@ const CourseUnitItem = ({
   onSelect,
   studentListVisibleFeatureEnabled,
 }) => {
-  const { i18n } = useTranslation()
   const labelId = `courseUnitItem-${courseCode}`
 
   const link = (
     <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
-      {getLanguageValue(name, i18n.language)}
+      {name}
     </MuiLink>
   )
 
@@ -123,14 +120,61 @@ const CourseUnitItem = ({
   )
 }
 
-const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => {
+const CourseUnitTable = React.memo(
+  ({ courseUnits, query, organisation, onToggleDisabledCourses, onToggleStudentListVisible, onSelect }) => {
+    const { t } = useTranslation()
+    const studentListVisibleFeatureEnabled = STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
+
+    const filteredCourseUnits = courseUnits.filter(
+      ({ courseCode, name }) =>
+        (courseCode ?? '').toLowerCase().includes(query) || (name ?? '').toLowerCase().includes(query)
+    )
+    console.log('table')
+    return (
+      <TableContainer>
+        <Table stickyHeader size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('common:courseCode')}</TableCell>
+              <TableCell>{t('common:course')}</TableCell>
+              {organisation.tags.length > 0 && <TableCell>{t('common:studyTracks')}</TableCell>}
+              <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
+              {studentListVisibleFeatureEnabled && (
+                <TableCell>{t('organisationSettings:courseStudentListVisible')}</TableCell>
+              )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredCourseUnits.map(courseUnit => (
+              <CourseUnitItem
+                name={courseUnit.name}
+                courseCode={courseUnit.courseCode}
+                key={courseUnit.courseCode}
+                enabledCourse={courseUnit.enabledCourse}
+                studentListVisible={courseUnit.studentListVisible}
+                onChangeDisabledCourses={() => onToggleDisabledCourses(courseUnit.courseCode)}
+                onChangeStudentList={() => onToggleStudentListVisible(courseUnit.courseCode)}
+                onSelect={() => onSelect(courseUnit)}
+                organisationTags={organisation.tags}
+                tags={courseUnit.tags}
+                studentListVisibleFeatureEnabled={studentListVisibleFeatureEnabled}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+)
+
+const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
   const mutation = useMutation(saveChangedCourseCodes)
+  const { t, i18n } = useTranslation()
   const [searchQuery, setSearchQuery] = React.useState('')
+  const deferredQuery = React.useDeferredValue(searchQuery.toLowerCase())
   const [selectedCourse, setSelectedCourse] = React.useState(null)
-
-  const studentListVisibleFeatureEnabled = STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
 
   const [disabledCourseCodes, setDisabledCourseCodes] = useState(organisation.disabledCourseCodes ?? [])
 
@@ -138,53 +182,56 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
     organisation.studentListVisibleCourseCodes ?? []
   )
 
-  const courseUnitItems = getCourseUnitItems(
-    courseUnits,
-    disabledCourseCodes,
-    studentListVisibleCourseCodes,
-    searchQuery,
-    language
+  const courseUnitItems = React.useMemo(
+    () => getCourseUnitItems(courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, i18n.language),
+    [courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, i18n.language]
   )
 
-  const makeOnToggleDisabledCourses = courseCode => async () => {
-    const checked = disabledCourseCodes.includes(courseCode)
+  const onToggleDisabledCourses = React.useCallback(
+    async courseCode => {
+      const checked = disabledCourseCodes.includes(courseCode)
 
-    const updatedDisabledCourseCodes = checked
-      ? disabledCourseCodes.filter(c => c !== courseCode)
-      : [...disabledCourseCodes, courseCode]
+      const updatedDisabledCourseCodes = checked
+        ? disabledCourseCodes.filter(c => c !== courseCode)
+        : [...disabledCourseCodes, courseCode]
 
-    try {
-      const updatedOrganisation = await mutation.mutateAsync({
-        code,
-        disabledCourseCodes: updatedDisabledCourseCodes,
-      })
+      try {
+        const updatedOrganisation = await mutation.mutateAsync({
+          code,
+          disabledCourseCodes: updatedDisabledCourseCodes,
+        })
 
-      setDisabledCourseCodes(updatedOrganisation.disabledCourseCodes)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
+        setDisabledCourseCodes(updatedOrganisation.disabledCourseCodes)
+        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      } catch (error) {
+        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      }
+    },
+    [disabledCourseCodes]
+  )
 
-  const makeOnToggleStudentListVisible = courseCode => async () => {
-    const checked = studentListVisibleCourseCodes.includes(courseCode)
+  const onToggleStudentListVisible = React.useCallback(
+    async courseCode => {
+      const checked = studentListVisibleCourseCodes.includes(courseCode)
 
-    const updatedStudentListVisibleCourseCodes = checked
-      ? studentListVisibleCourseCodes.filter(c => c !== courseCode)
-      : [...studentListVisibleCourseCodes, courseCode]
+      const updatedStudentListVisibleCourseCodes = checked
+        ? studentListVisibleCourseCodes.filter(c => c !== courseCode)
+        : [...studentListVisibleCourseCodes, courseCode]
 
-    try {
-      const updatedOrganisation = await mutation.mutateAsync({
-        code,
-        studentListVisibleCourseCodes: updatedStudentListVisibleCourseCodes,
-      })
+      try {
+        const updatedOrganisation = await mutation.mutateAsync({
+          code,
+          studentListVisibleCourseCodes: updatedStudentListVisibleCourseCodes,
+        })
 
-      setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
-    }
-  }
+        setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
+        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      } catch (error) {
+        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      }
+    },
+    [studentListVisibleCourseCodes]
+  )
 
   return (
     <>
@@ -206,39 +253,14 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
             autoComplete="off"
           />
           <Box m={1} />
-          <TableContainer>
-            <Table stickyHeader size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>{t('common:courseCode')}</TableCell>
-                  <TableCell>{t('common:course')}</TableCell>
-                  {organisation.tags.length > 0 && <TableCell>{t('common:studyTracks')}</TableCell>}
-                  <TableCell>{t('organisationSettings:feedbackEnabled')}</TableCell>
-                  {studentListVisibleFeatureEnabled && (
-                    <TableCell>{t('organisationSettings:courseStudentListVisible')}</TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {courseUnitItems.map(courseUnit => (
-                  <CourseUnitItem
-                    name={courseUnit.name}
-                    courseCode={courseUnit.courseCode}
-                    key={courseUnit.courseCode}
-                    enabledCourse={courseUnit.enabledCourse}
-                    studentListVisible={courseUnit.studentListVisible}
-                    onChangeDisabledCourses={makeOnToggleDisabledCourses(courseUnit.courseCode)}
-                    onChangeStudentList={makeOnToggleStudentListVisible(courseUnit.courseCode)}
-                    onSelect={() => setSelectedCourse(courseUnit)}
-                    organisationTags={organisation.tags}
-                    tags={courseUnit.tags}
-                    disabled={mutation.isLoading}
-                    studentListVisibleFeatureEnabled={studentListVisibleFeatureEnabled}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <CourseUnitTable
+            organisation={organisation}
+            query={deferredQuery}
+            courseUnits={courseUnitItems}
+            onToggleDisabledCourses={onToggleDisabledCourses}
+            onToggleStudentListVisible={onToggleStudentListVisible}
+            onSelect={setSelectedCourse}
+          />
         </CardContent>
       </Card>
     </>
@@ -247,7 +269,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits, t, language }) => 
 
 const CourseSettings = () => {
   const { code } = useParams()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const { courseUnits, isLoading } = useOrganisationCourseUnits(code)
 
@@ -260,7 +282,7 @@ const CourseSettings = () => {
   return (
     <Box>
       <Typography textTransform="uppercase">{t('organisationSettings:courseSettings')}</Typography>
-      <CourseSettingsContainer organisation={organisation} courseUnits={courseUnits} t={t} language={i18n.language} />
+      <CourseSettingsContainer organisation={organisation} courseUnits={courseUnits} />
     </Box>
   )
 }

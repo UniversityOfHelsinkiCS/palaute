@@ -12,7 +12,7 @@ function onRenderCallback(
 ) {
   // Aggregate or log render timings...
   // eslint-disable-next-line no-console
-  console.log(id, phase, `${actualDuration} ms`)
+  console.log(id, phase, `${actualDuration} ms, ${interactions}`)
 }
 
 export const RenderProfiler = ({ id, children }) => (
