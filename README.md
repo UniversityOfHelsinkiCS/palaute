@@ -1,6 +1,6 @@
 ![Norppa](https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/seal_1f9ad.png)
 
-# Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/test.yml/badge.svg)
+# Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
 
 More commonly known as **Norppa**
 
