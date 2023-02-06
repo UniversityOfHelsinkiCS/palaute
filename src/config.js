@@ -9,8 +9,6 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-const WORKLOAD_QUESTION_ID = 1042
-
 const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
@@ -24,5 +22,4 @@ module.exports = {
   basePath,
   GIT_SHA,
   NOAD_LINK_EXPIRATION_DAYS,
-  WORKLOAD_QUESTION_ID,
 }

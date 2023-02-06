@@ -1,4 +1,3 @@
-const config = require('config')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
@@ -8,6 +7,7 @@ const { User, Banner } = require('../../models')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
+const { ADMINS } = require('../../util/config')
 
 const login = async (req, res) => {
   const { user, isAdmin, loginAs } = req
@@ -59,7 +59,7 @@ const getUserByEmail = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
   const { id } = req.params
-  if (id !== req.user.id && !config.get('ADMINS')?.includes(req.user.username)) {
+  if (id !== req.user.id && !ADMINS.includes(req.user.username)) {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
 
@@ -75,7 +75,7 @@ const getUserDetails = async (req, res) => {
 }
 
 const getAllUserAccess = async (req, res) => {
-  if (!config.get('ADMINS')?.includes(req.user.username)) throw new ApplicationError('Forbidden', 403)
+  if (!ADMINS.includes(req.user.username)) throw new ApplicationError('Forbidden', 403)
 
   const usersWithAccess = await getAllOrganisationAccess()
 

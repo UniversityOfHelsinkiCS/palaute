@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken')
-const config = require('config')
 const { ApplicationError } = require('../util/customErrors')
-const { JWT_KEY } = require('../util/config')
+const { JWT_KEY, ADMINS } = require('../util/config')
 const { User } = require('../models')
 const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 
-const isSuperAdmin = username => config.get('ADMINS')?.includes(username)
+const isSuperAdmin = username => ADMINS?.includes(username)
 
 const getTestUser = async () => {
   let testUser = await User.findByPk('abc1234')

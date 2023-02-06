@@ -1,6 +1,6 @@
-const config = require('config')
 const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
+const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
@@ -29,7 +29,7 @@ const getStudentListVisibility = async courseUnitId => {
     student_list_visible_course_codes: studentListVisibleCourseCodes,
   } = organisationRows[0][0]
 
-  if (config.get('STUDENT_LIST_BY_COURSE_ENABLED')?.includes(code)) {
+  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
     const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })
