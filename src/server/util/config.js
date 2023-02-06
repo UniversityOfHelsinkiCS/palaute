@@ -1,20 +1,5 @@
 const common = require('../../config')
-
-const DB_CONFIG = {
-  dialect: 'postgres',
-  pool: {
-    max: 10,
-    min: 0,
-    acquire: 10000,
-    idle: 300000000,
-  },
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  port: 5432,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DATABASE,
-  logging: false,
-}
+const { inProduction, inStaging } = require('../../config')
 
 const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT } = process.env
 
@@ -30,9 +15,13 @@ const JAMI_URL = common.inProduction ? 'https://importer.cs.helsinki.fi/api/auth
 
 const useOldImporter = false
 
+let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DATABASE}?targetServerType=primary`
+
+if (inProduction || inStaging) DB_CONNECTION_STRING = `${DB_CONNECTION_STRING}&ssl=true`
+
 module.exports = {
   ...common,
-  DB_CONFIG,
+  DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,
   API_TOKEN,
