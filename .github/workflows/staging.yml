@@ -29,6 +29,6 @@ jobs:
           push: true
           tags: toska/palaute:staging
           build-args: |
-            BASE_PATH=/
+            BASE_PATH=/norppa
             GIT_SHA=${{ github.sha }}
             STAGING=true
