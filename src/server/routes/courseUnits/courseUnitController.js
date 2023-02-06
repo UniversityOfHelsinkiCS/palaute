@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { INCLUDE_COURSES } = require('../../../config')
+const config = require('config')
 
 const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, Tag } = require('../../models')
 
@@ -138,7 +138,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         target.courseRealisation.startDate >= new Date(2021, 8, 1) ||
         (target.courseRealisation.startDate >= new Date(2021, 7, 15) &&
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
-        INCLUDE_COURSES.has(target.courseRealisation.id)
+        config.get('INCLUDE_COURSES')?.includes(target.courseRealisation.id)
     )
 
     const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
