@@ -1,4 +1,4 @@
-import { inProduction } from '../../../config'
+import { inProduction } from '../../util/common'
 import { clearHeaders } from '../../util/mockHeaders'
 import apiClient from '../../util/apiClient'
 

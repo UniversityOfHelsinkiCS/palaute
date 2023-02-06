@@ -17,6 +17,9 @@ import queryClient from './util/queryClient'
 initializeSentry()
 initializeI18n()
 
+// eslint-disable-next-line no-undef
+console.log(CONFIG)
+
 const ensureDevUser = () => {
   if (inProduction) return
   const headers = getHeaders()

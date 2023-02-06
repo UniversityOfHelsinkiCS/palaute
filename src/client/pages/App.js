@@ -9,7 +9,7 @@ import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
 import usePinger from '../hooks/usePinger'
-import { inE2EMode } from '../../config'
+import { inE2EMode } from '../util/common'
 
 /* eslint-disable */
 const App = () => {

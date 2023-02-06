@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { TableContainer, IconButton, Tooltip, LinearProgress } from '@mui/material'
+import { TableContainer, IconButton, Tooltip } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
 import { Link } from 'react-router-dom'
@@ -82,10 +82,10 @@ const OrganisationTable = forwardRef(
 
     return (
       <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
-        <table css={styles.table}>
+        <table style={styles.table}>
           <thead>
             <tr>
-              <th css={styles.filtersCell}>{filters}</th>
+              <th style={styles.filtersCell}>{filters}</th>
               <ColumnHeadings onOrderByChange={onOrderByChange} questions={questions} />
               <th />
               {showHidingModeButton && (
@@ -143,7 +143,7 @@ const OrganisationTable = forwardRef(
                       cellsAfter={
                         organisationLinks && (
                           <>
-                            <td css={{ paddingLeft: '2rem' }}>
+                            <td style={{ paddingLeft: '2rem' }}>
                               <OrganisationButton code={code} access={access} />
                             </td>
                             {access?.admin && !!hiddenCount && (

@@ -1,5 +1,4 @@
 import React from 'react'
-/** @jsxImportSource @emotion/react */
 
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 
@@ -8,14 +7,13 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { images } from '../util/common'
+import { images, inProduction } from '../util/common'
 
-import { inProduction } from '../../config'
 import { localeForLanguage } from '../util/languageUtils'
 
 const styles = {
   logo: {
-    marginLeft: theme => theme.spacing(2),
+    marginLeft: '2rem',
     width: '80px',
     height: 'auto',
   },
@@ -52,7 +50,7 @@ const Footer = ({ user }) => {
               <Box>
                 <Typography>DEVELOPMENT</Typography>
               </Box>
-              <img src={images.norppa_viskaali} css={styles.norppa} alt="Norppa drawing by tttriple" />
+              <img src={images.norppa_viskaali} style={styles.norppa} alt="Norppa drawing by tttriple" />
             </>
           )}
           <div>
@@ -74,7 +72,7 @@ const Footer = ({ user }) => {
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
             <Link href="https://toska.dev" target="_blank" rel="noopener" underline="hover">
-              <img src={images.toska_color} css={styles.logo} alt="Toska" />
+              <img src={images.toska_color} style={styles.logo} alt="Toska" />
             </Link>
             {duration && (
               <Typography variant="subtitle1" fontSize={14}>

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /**
  * Insert application wide common items here
  */
@@ -196,8 +197,6 @@ const INCLUDE_COURSES = new Set([
   'hy-CUR-142349531',
 ])
 
-const STUDENT_LIST_BY_COURSE_ENABLED = ['700-K003', '700-M008']
-
 const WORKLOAD_QUESTION_ID = 1042
 
 const basePath = process.env.PUBLIC_URL || ''
@@ -214,7 +213,6 @@ module.exports = {
   GIT_SHA,
   ADMINS,
   INCLUDE_COURSES,
-  STUDENT_LIST_BY_COURSE_ENABLED,
   NOAD_LINK_EXPIRATION_DAYS,
   WORKLOAD_QUESTION_ID,
 }

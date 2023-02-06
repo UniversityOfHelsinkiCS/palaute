@@ -21,7 +21,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
-import { inProduction } from '../../../config'
+import { inProduction } from '../../util/common'
 import ExternalLink from '../../components/common/ExternalLink'
 
 const createGraylogLink = updaterStatus => {

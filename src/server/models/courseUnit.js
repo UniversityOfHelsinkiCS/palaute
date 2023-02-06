@@ -1,5 +1,5 @@
 const { Model, JSONB, STRING } = require('sequelize')
-const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../config')
+const config = require('config')
 const { sequelize } = require('../db/dbConnection')
 const logger = require('../util/logger')
 
@@ -28,7 +28,7 @@ class CourseUnit extends Model {
       student_list_visible_course_codes: studentListVisibleCourseCodes,
     } = organisationRows[0][0]
 
-    if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
+    if (config.get('STUDENT_LIST_BY_COURSE_ENABLED')?.includes(code)) {
       if (studentListVisibleCourseCodes.includes(this.courseCode)) return true
     }
     return studentListVisible ?? false

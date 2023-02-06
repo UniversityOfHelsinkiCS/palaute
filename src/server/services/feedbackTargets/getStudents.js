@@ -1,4 +1,4 @@
-const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../../config')
+const config = require('config')
 const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
@@ -29,7 +29,7 @@ const getStudentListVisibility = async courseUnitId => {
     student_list_visible_course_codes: studentListVisibleCourseCodes,
   } = organisationRows[0][0]
 
-  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
+  if (config.get('STUDENT_LIST_BY_COURSE_ENABLED')?.includes(code)) {
     const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })

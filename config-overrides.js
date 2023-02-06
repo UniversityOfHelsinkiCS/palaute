@@ -16,6 +16,7 @@ module.exports = function override(config) {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
     }),
+    new webpack.DefinePlugin({ CONFIG: JSON.stringify(require('config')) }),
   ])
   config.module.rules.push({
     test: /\.m?js/,
