@@ -1,11 +1,12 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const config = require('config')
 
 const { normalizeOrganisationCode } = require('../../util/common')
-const { ADMINS, inE2EMode } = require('../../util/config')
+const { inE2EMode } = require('../../util/config')
 const { getUserIamAccess, getAccessToAll, getAllUserAccess } = require('../../util/jami')
 
-const isSuperAdmin = user => ADMINS.includes(user.username)
+const isSuperAdmin = user => config.get('ADMINS')?.includes(user.username)
 
 const getAccessFromIAMs = async user => {
   if (inE2EMode) return {}

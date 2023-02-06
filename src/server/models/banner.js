@@ -1,14 +1,12 @@
-const { ENUM } = require('sequelize')
-const { DATE } = require('sequelize')
-const { Op } = require('sequelize')
+const config = require('config')
+const { ENUM, DATE, Op } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
-const { ADMINS } = require('../../config')
 const { sequelize } = require('../db/dbConnection')
 
 class Banner extends Model {
   static async getForUser(user) {
     let access = ['STUDENT']
-    const isAdmin = ADMINS.includes(user.username)
+    const isAdmin = config.get('ADMINS').includes(user.username)
     const isTeacher = await user.isTeacher()
     const hasOrgAccess = (await user.getOrganisationAccess())?.length > 0
 

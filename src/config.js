@@ -9,8 +9,6 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-const ADMINS = ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko']
-
 const WORKLOAD_QUESTION_ID = 1042
 
 const basePath = process.env.PUBLIC_URL || ''
@@ -25,7 +23,6 @@ module.exports = {
   inStaging,
   basePath,
   GIT_SHA,
-  ADMINS,
   NOAD_LINK_EXPIRATION_DAYS,
   WORKLOAD_QUESTION_ID,
 }
