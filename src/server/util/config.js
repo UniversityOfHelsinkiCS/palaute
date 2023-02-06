@@ -1,6 +1,11 @@
 const config = require('config')
-const common = require('../../config')
-const { inProduction, inStaging } = require('../../config')
+
+const inProduction = process.env.NODE_ENV === 'production'
+const inStaging = process.env.REACT_APP_STAGING === 'true'
+const inE2EMode = process.env.REACT_APP_E2E === 'true'
+const basePath = process.env.PUBLIC_URL || ''
+
+const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT } = process.env
 
@@ -12,7 +17,7 @@ const PORT = process.env.PORT || 8000
 
 const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
 
-const JAMI_URL = common.inProduction ? 'https://importer.cs.helsinki.fi/api/auth' : `http://${JAMI_HOST}:${JAMI_PORT}`
+const JAMI_URL = inProduction ? 'https://importer.cs.helsinki.fi/api/auth' : `http://${JAMI_HOST}:${JAMI_PORT}`
 
 const useOldImporter = false
 
@@ -24,9 +29,15 @@ const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 const ADMINS = config.get('ADMINS') ?? []
 const INCLUDE_COURSES = config.get('INCLUDE_COURSES') ?? []
 const STUDENT_LIST_BY_COURSE_ENABLED = config.get('STUDENT_LIST_BY_COURSE_ENABLED') ?? []
+const NOAD_LINK_EXPIRATION_DAYS = Number(config.get('NOAD_LINK_EXPIRATION_DAYS'))
 
 module.exports = {
-  ...common,
+  inE2EMode,
+  inProduction,
+  inStaging,
+  basePath,
+  GIT_SHA,
+  NOAD_LINK_EXPIRATION_DAYS,
   DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,

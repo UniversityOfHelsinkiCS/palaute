@@ -3,7 +3,7 @@ const axios = require('axios')
 const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
-const { inProduction, inStaging } = require('../../config')
+const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
 
 const template = {

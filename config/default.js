@@ -190,6 +190,8 @@ const config = {
   STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
 
   WORKLOAD_QUESTION_ID: 1042,
+
+  NOAD_LINK_EXPIRATION_DAYS: 14,
 }
 
 module.exports = config

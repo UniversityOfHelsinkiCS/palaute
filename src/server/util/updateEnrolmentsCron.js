@@ -1,4 +1,4 @@
-const { inProduction, inStaging } = require('../../config')
+const { inProduction, inStaging } = require('./config')
 const updateNewEnrolmentsJob = require('../updater/updateNewEnrolmentsJob')
 const logger = require('./logger')
 const { schedule } = require('./cron')

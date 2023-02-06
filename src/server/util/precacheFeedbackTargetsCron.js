@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { Op, fn, col } = require('sequelize')
 const { subDays } = require('date-fns')
-const { inProduction, inStaging } = require('../../config')
+const { inProduction, inStaging } = require('./config')
 const logger = require('./logger')
 const { schedule } = require('./cron')
 const { FeedbackTarget, UserFeedbackTarget } = require('../models')
