@@ -42,7 +42,7 @@ jobs:
         run: docker create --name palaute toska/palaute:production
 
       - name: Copy assets from the container
-        run: docker cp palaute:/usr/src/app/build ./build
+        run: docker cp palaute:/opt/app-root/src/build ./build
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1
