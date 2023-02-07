@@ -243,7 +243,7 @@ export default {
     closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
     sendReminder: 'Lähetä muistutusviesti',
     sendReminderButton: 'Lähetä muistutus',
-    reminderDisabled: 'Olet jo lähettänyt muistutusviestin viimeisen 24 tunnin aikana',
+    reminderDisabled: 'Olet jo lähettänyt muistutusviestin viimeisen {{cooldown}} tunnin aikana',
     reminderLastSent: 'Muistutus viimeksi lähetetty',
     cancelReminder: 'Peruuta',
     modalTitle: 'Lähetä muistutus palautteesta sähköpostilla',

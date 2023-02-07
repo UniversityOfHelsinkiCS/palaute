@@ -10,6 +10,7 @@ import apiClient from '../../../../util/apiClient'
 import { formatClosesAt } from './utils'
 import queryClient from '../../../../util/queryClient'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
+import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
 
 const styles = {
   container: {
@@ -65,7 +66,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
 
   const { courseUnit, id, feedbackReminderLastSentAt } = feedbackTarget
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
-  const disabled = differenceInHours(Date.now(), lastSentAt) < 24
+  const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
   const sendEmail = async () => {
     onClose()
@@ -112,7 +113,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
             onClick={sendEmail}
             color="primary"
             variant="contained"
-            tooltip={t('feedbackTargetResults:reminderDisabled')}
+            tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}
             disabled={disabled}
           >
             {t('feedbackTargetResults:sendReminderButton')}

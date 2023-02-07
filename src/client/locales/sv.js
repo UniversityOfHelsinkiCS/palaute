@@ -245,7 +245,7 @@ export default {
       'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
     sendReminder: 'Skicka påminnelse via e-post',
     sendReminderButton: 'Skicka påminnelse',
-    reminderDisabled: 'Du har redan skickat en påminnelse under de senaste 24 timmarna',
+    reminderDisabled: 'Du har redan skickat en påminnelse under de senaste {{cooldown}} timmarna',
     reminderLastSent: 'Påminnelse senast skickad',
     cancelReminder: 'Avbryt',
     modalTitle: 'Skicka en påminnelse om respons via e-post',

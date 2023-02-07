@@ -222,6 +222,16 @@ const config = {
    * Before this date, teacher role url is also considered responsible_teacher
    */
   RESPONSIBLE_TEACHERS_SPLIT_DATE: new Date('2023-01-01'),
+
+  /**
+   * How many days before feedbackTarget opening to send a reminder to responsible teachers
+   */
+  TEACHER_REMINDER_DAYS_TO_OPEN: 7,
+
+  /**
+   * How often (hours) can teacher send manual reminder email
+   */
+  FEEDBACK_REMINDER_COOLDOWN: 24,
 }
 
 module.exports = config

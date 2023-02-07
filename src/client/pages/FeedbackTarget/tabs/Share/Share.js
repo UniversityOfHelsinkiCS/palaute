@@ -14,6 +14,7 @@ import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import ReminderEmailModal from './ReminderEmailModal'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
@@ -38,7 +39,7 @@ const Share = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const lastSentAt = Date.parse(feedbackTarget.feedbackReminderLastSentAt)
-  const modalDisabled = differenceInHours(Date.now(), lastSentAt) < 24
+  const modalDisabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
   const formattedLastSentAt = lastSentAt ? format(lastSentAt, 'dd.MM hh.mm') : undefined
 
   const feedbackLink = `https://${window.location.host}/targets/${id}/feedback`
@@ -59,7 +60,7 @@ const Share = () => {
             color="primary"
             onClick={openModal}
             disabled={modalDisabled}
-            tooltip={t('feedbackTargetResults:reminderDisabled')}
+            tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}
           >
             {t('feedbackTargetResults:sendReminder')}
           </TooltipButton>

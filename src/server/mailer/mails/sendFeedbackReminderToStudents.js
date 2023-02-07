@@ -1,5 +1,6 @@
 const { differenceInHours, format } = require('date-fns')
 const { CourseUnit } = require('../../models')
+const { FEEDBACK_REMINDER_COOLDOWN } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 
@@ -47,8 +48,8 @@ const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students,
 }
 
 const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
-  if (differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) < 24) {
-    throw new ApplicationError('Can send only 1 feedback reminder every 24 hours', 403)
+  if (differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) < FEEDBACK_REMINDER_COOLDOWN) {
+    throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
   }
 
   const courseUnit = await CourseUnit.findByPk(feedbackTarget.courseUnitId)

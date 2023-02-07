@@ -17,6 +17,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     where: {
       closesAt: {
         [Op.lt]: new Date(),
+        // Important to have some limit. 3 is arbitrary.
         [Op.gt]: subDays(new Date(), 3),
       },
       feedbackType: 'courseRealisation',

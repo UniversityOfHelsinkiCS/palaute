@@ -1,6 +1,7 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
+const { TEACHER_REMINDER_DAYS_TO_OPEN } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, instructionsAndSupport } = require('./util')
 
@@ -8,8 +9,8 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.lt]: addDays(new Date(), 7),
-        [Op.gt]: addDays(new Date(), 6),
+        [Op.lt]: addDays(new Date(), TEACHER_REMINDER_DAYS_TO_OPEN),
+        [Op.gt]: new Date(),
       },
       feedbackOpeningReminderEmailSent: false,
       feedbackType: 'courseRealisation',
