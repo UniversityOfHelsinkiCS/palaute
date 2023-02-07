@@ -23,11 +23,11 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
     AND fbt.closes_at < NOW() + interval '3 days' -- 3 days before
     AND (
       fbt.feedback_reminder_last_sent_at IS NULL
-      OR fbt.feedback_reminder_last_sent_at < NOW() - interval ':cooldown hours'
+      OR fbt.feedback_reminder_last_sent_at < NOW() - interval '${FEEDBACK_REMINDER_COOLDOWN} hours'
     )
   `,
     {
-      replacements: { cooldown: FEEDBACK_REMINDER_COOLDOWN },
+      // Not using a replacement for FEEDBACK_REMINDER_COOLDOWN as sequelize somehow cant replace inside quotes here.
       model: FeedbackTarget,
       mapToModel: true,
     }
