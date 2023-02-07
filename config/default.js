@@ -1,7 +1,13 @@
 const config = {
+  /**
+   * Usernames of admin
+   */
   ADMINS: ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko'],
 
-  // These courses bypass the starting after 1.9 filter
+  /**
+   * These courses bypass the starting after 1.9 filter.
+   * Work in progress
+   */
   INCLUDE_COURSES: [
     'hy-opt-cur-2122-9f78b627-6261-4eb9-91c4-426066b56cef', // MED-200
     'hy-opt-cur-2122-329bfeb5-2c56-450f-b3f5-ff9dbcca8932',
@@ -187,11 +193,35 @@ const config = {
     'hy-CUR-142349531',
   ],
 
+  /**
+   * Enables the feature for these organisations.
+   * Feature allows to select whether feedback targets related to a course code
+   * can see the list of students who have given feedback.
+   * Normally it is either on or off for all courses of organisation.
+   */
   STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
 
+  /**
+   * The id of a LIKERT-type question that is considered the university level workload question.
+   * Future ideas: get rid of this and add a new question type for it instead.
+   */
   WORKLOAD_QUESTION_ID: 1042,
 
+  /**
+   * How long JWT tokens in noad links last
+   */
   NOAD_LINK_EXPIRATION_DAYS: 14,
+
+  /**
+   * How many objects fit in LRU cache
+   * Set to zero to disable fbt caching
+   */
+  FEEDBACK_TARGET_CACHE_SIZE: 250,
+
+  /**
+   * Before this date, teacher role url is also considered responsible_teacher
+   */
+  RESPONSIBLE_TEACHERS_SPLIT_DATE: new Date('2023-01-01'),
 }
 
 module.exports = config

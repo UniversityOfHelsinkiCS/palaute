@@ -19,7 +19,7 @@ const deleteTeacher = async ({ feedbackTargetId, teacherId, user }) => {
   })
 
   if (!userFeedbackTargetToDelete) {
-    ApplicationError.NotFound(`Teacher ${teacherId} not found on target ${feedbackTargetId}`, 404)
+    ApplicationError.NotFound(`Teacher ${teacherId} not found on target ${feedbackTargetId}`)
   }
 
   await userFeedbackTargetToDelete.destroy()
