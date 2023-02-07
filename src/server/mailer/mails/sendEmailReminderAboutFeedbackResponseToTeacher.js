@@ -28,9 +28,6 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-        where: {
-          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
-        },
       },
       {
         model: CourseUnit,
