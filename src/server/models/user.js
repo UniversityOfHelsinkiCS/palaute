@@ -1,4 +1,4 @@
-const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL, ARRAY } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
