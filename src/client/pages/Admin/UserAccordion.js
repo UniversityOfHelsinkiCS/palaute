@@ -113,12 +113,7 @@ const Details = ({ user }) => {
   )
 }
 
-const StaffChip = ({ user }) => (
-  <>
-    {user.possiblyStaff && !user.probablyStaff && <Chip label="Possibly staff" variant="outlined" />}
-    {user.probablyStaff && <Chip label="Definitely staff" color="primary" variant="outlined" />}
-  </>
-)
+const StaffChip = ({ user }) => user.possiblyStaff && <Chip label="Possibly staff" variant="outlined" />
 
 const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
   <Accordion key={user.id} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>

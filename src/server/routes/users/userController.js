@@ -65,6 +65,8 @@ const getUserDetails = async (req, res) => {
 
   const user = await User.findByPk(id)
   const iamGroups = await getUserIams(id)
+
+  user.iamGroups = iamGroups
   const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
 
   return res.send({

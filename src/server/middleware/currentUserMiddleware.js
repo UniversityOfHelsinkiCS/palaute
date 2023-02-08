@@ -4,6 +4,7 @@ const { JWT_KEY, ADMINS } = require('../util/config')
 const { User } = require('../models')
 const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
+const { getUserIams } = require('../util/jami')
 
 const isSuperAdmin = username => ADMINS?.includes(username)
 
@@ -27,6 +28,7 @@ const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
   if (!isSuperAdmin(actualUser)) return undefined
 
   const user = await User.findByPk(loggedInAsUser)
+  user.iamGroups = await getUserIams(loggedInAsUser)
 
   return user
 }
@@ -74,8 +76,9 @@ const currentUserMiddleware = async (req, _, next) => {
   }
 
   req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)
-  req.user.set('isAdmin', req.isAdmin)
-  req.user.set('iamGroups', req.iamGroups)
+  req.user.isAdmin = req.isAdmin
+
+  if (!req.loginAs) req.user.iamGroups = req.iamGroups
 
   return next()
 }
