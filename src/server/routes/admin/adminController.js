@@ -7,6 +7,7 @@ const { format } = require('date-fns')
 const { ApplicationError } = require('../../util/customErrors')
 const { updater } = require('../../updater')
 const { deleteCancelledCourses } = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
+const { getUserIams } = require('../../util/jami')
 
 const {
   FeedbackTarget,
@@ -126,10 +127,6 @@ const findUser = async (req, res) => {
   const { rows: persons, count } = await User.findAndCountAll({
     where,
     limit: 20,
-    attributes: {
-      exclude: ['iamGroups'],
-      include: [[sequelize.literal(`'hy-employees' = ANY (iam_groups)`), 'hasEmployeeIam']],
-    },
   })
 
   return res.send({
@@ -516,7 +513,6 @@ const getFeedbackCorrespondents = async (req, res) => {
       u.secondary_email as "secondaryEmail", 
       u.employee_number as "employeeNumber",
       u.student_number as "studentNumber",
-      u.iam_groups as "iamGroups",
       u.degree_study_right as "degreeStudyRight",
       u.last_logged_in as "lastLoggedIn",
       u.username,

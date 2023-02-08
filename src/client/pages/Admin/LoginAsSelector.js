@@ -16,7 +16,6 @@ const LoginAsSelector = () => {
   const transformUsers = users =>
     users.map(u => ({
       ...u,
-      probablyStaff: u.hasEmployeeIam && u.employeeNumber,
       possiblyStaff: Boolean(u.employeeNumber),
     }))
 

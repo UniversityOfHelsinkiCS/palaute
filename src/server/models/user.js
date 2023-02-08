@@ -151,11 +151,6 @@ User.init(
       allowNull: false,
       defaultValue: false,
     },
-    iamGroups: {
-      type: ARRAY(STRING),
-      allowNull: false,
-      defaultValue: [],
-    },
     lastLoggedIn: {
       type: DATE,
       allowNull: true,
