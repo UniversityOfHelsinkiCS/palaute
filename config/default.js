@@ -221,7 +221,7 @@ const config = {
   /**
    * Before this date, teacher role url is also considered responsible_teacher
    */
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: new Date('2023-01-01'),
+  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2023-01-01',
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
