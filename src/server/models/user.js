@@ -1,4 +1,4 @@
-const { Model, STRING, Op, BOOLEAN, ARRAY, DATE, QueryTypes, VIRTUAL } = require('sequelize')
+const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL, ARRAY } = require('sequelize')
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
@@ -163,7 +163,7 @@ User.init(
     isAdmin: {
       type: VIRTUAL,
       get() {
-        ADMINS?.includes(this.username)
+        return ADMINS?.includes(this.username)
       },
     },
   },
