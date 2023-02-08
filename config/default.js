@@ -240,6 +240,11 @@ const config = {
    * (automatic reminder is also considered for cooldown)
    */
   FEEDBACK_REMINDER_COOLDOWN: 24,
+
+  /**
+   * This is a test, e2e tests may check its value
+   */
+  CONFIG_TEST_VALUE: 'Minttujam',
 }
 
 module.exports = config

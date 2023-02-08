@@ -1,3 +1,5 @@
+import { baseUrl } from '../support'
+
 describe('Common tests', () => {
   it('User can change language', () => {
     cy.loginAsStudent()
@@ -8,5 +10,10 @@ describe('Common tests', () => {
     cy.contains('Olli Oppilas').click()
     cy.contains('FI').click()
     cy.contains('Kurssipalautteeni')
+  })
+  it('CONFIG is polyfilled correctly', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin`)
+    cy.contains('Minttujam')
   })
 })

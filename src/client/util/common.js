@@ -33,3 +33,6 @@ export const STUDENT_LIST_BY_COURSE_ENABLED = CONFIG?.STUDENT_LIST_BY_COURSE_ENA
 
 // eslint-disable-next-line no-undef
 export const FEEDBACK_REMINDER_COOLDOWN = CONFIG?.FEEDBACK_REMINDER_COOLDOWN || 24
+
+// eslint-disable-next-line no-undef
+export const CONFIG_TEST_VALUE = CONFIG?.CONFIG_TEST_VALUE

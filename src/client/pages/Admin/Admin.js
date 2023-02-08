@@ -2,9 +2,9 @@ import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { Route, Switch, useRouteMatch } from 'react-router'
 
-import { Box, Tab } from '@mui/material'
+import { Box, Tab, Typography } from '@mui/material'
 
-import { ADMINS, images } from '../../util/common'
+import { ADMINS, CONFIG_TEST_VALUE, images } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
@@ -19,6 +19,12 @@ import FeedbackCorrespondents from './FeedbackCorrespondents'
 import BannerView from './BannersView'
 import EnableCourses from './EnableCourses'
 
+const ConfigTestValue = () => (
+  <Typography sx={{ p: '1rem' }} variant="caption" color="textSecondary">
+    The secret word is: <Box color="pink">{CONFIG_TEST_VALUE}</Box> It is used for testing
+  </Typography>
+)
+
 const AdminView = () => {
   const { path, url } = useRouteMatch()
 
@@ -32,6 +38,7 @@ const AdminView = () => {
       <Box display="flex" alignItems="end">
         <h1>Admin page</h1>
         <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" sx={{ height: '1vh' }} />
+        <ConfigTestValue />
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
