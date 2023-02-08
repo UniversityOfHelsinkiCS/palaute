@@ -24,4 +24,6 @@ and `const value = config.get('key')`. The config values can be getted and parse
 Client configuration is slightly more involved.
 A global `CONFIG` object is polyfilled at build time using the webpack DefinePlugin (see `config-overrides.js`).
 
+Because eslint (and we) don't like custom global objects like `CONFIG`, the values required by client are safely parsed in `src/client/util/common` to exported constants.
+
 As client configuration happens at build time, you need to set the env `NODE_CONFIG_ENV` in the build context. See `docker-compose.ci.yml` and `Dockerfile` for example.
