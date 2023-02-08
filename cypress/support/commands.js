@@ -1,4 +1,4 @@
-import { baseUrl } from '.'
+import { baseUrl } from './index'
 
 const adminUser = {
   uid: 'mluukkai',
