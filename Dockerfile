@@ -4,6 +4,11 @@ ENV TZ="Europe/Helsinki"
 
 WORKDIR /opt/app-root/src
 
+# Build time env variables
+
+ARG NODE_CONFIG_ENV
+ENV NODE_CONFIG_ENV=$NODE_CONFIG_ENV
+
 ARG GIT_SHA
 ENV REACT_APP_GIT_SHA=$GIT_SHA
 

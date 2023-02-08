@@ -6,6 +6,7 @@ services:
       context: .
       args:
         - E2E=true
+        - NODE_CONFIG_ENV=hy
     command: ['npm','run', 'start:test']
     environment:
       - POSTGRES_HOST=db
