@@ -1,7 +1,7 @@
 # Configuration
 
-Configuration is done using [node-config](https://github.com/node-config).
-All configs extend from the `default.js` config, and may override its values.
+Configuration is done using [node-config](https://github.com/node-config), which reads files from the `config`-directory.
+All configs extend from `default.js`, and may override its values.
 `development.js`, `test.js` and `production.js` can also be used depending on `NODE_ENV`.
 
 The different configurable values are documented in `default.js`.
@@ -12,7 +12,7 @@ To use a custom config file, create `config/{configName}.js` and export an objec
 
 Set `NODE_CONFIG_ENV={configName}` at build time and runtime.
 
-## Details
+## Usage
 
 ### Server
 
@@ -24,6 +24,14 @@ and `const value = config.get('key')`. The config values can be getted and parse
 Client configuration is slightly more involved.
 A global `CONFIG` object is polyfilled at build time using the webpack DefinePlugin (see `config-overrides.js`).
 
+Currently this means that all config values are shipped in the build, which may not be desirable.
+
 Because eslint (and we) don't like custom global objects like `CONFIG`, the values required by client are safely parsed in `src/client/util/common` to exported constants.
 
 As client configuration happens at build time, you need to set the env `NODE_CONFIG_ENV` in the build context. See `docker-compose.ci.yml` and `Dockerfile` for example.
+
+## Future ideas
+
+- [ ] Config validation
+- [ ] Common logic to read and safely parse values with different types
+- [ ] Ability to select which values are shipped in the build
