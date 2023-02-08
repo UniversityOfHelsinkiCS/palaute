@@ -229,7 +229,15 @@ const config = {
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
   /**
+   * How many days before closing to send an automatic reminder to students who have not given feedback.
+   * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
+   * (only configured organisations can do this)
+   */
+  STUDENT_REMINDER_DAYS_TO_CLOSE: 3,
+
+  /**
    * How often (hours) can teacher send manual reminder email
+   * (automatic reminder is also considered for cooldown)
    */
   FEEDBACK_REMINDER_COOLDOWN: 24,
 }
