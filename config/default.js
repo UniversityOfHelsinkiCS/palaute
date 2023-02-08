@@ -1,8 +1,9 @@
 /**
  * These are the default config values, and may be overridden by subsequent config files.
+ * Use NODE_CONFIG_ENV to select a config file.
  * See hy.js for more usage examples.
- *
- * The config object is JSON.stringified for frontend.
+ * ---
+ * The config object is JSON.stringified and polyfilled for frontend AT BUILD TIME.
  * One should only use simple POJOs here.
  * Dates for example should be parsed elsewhere from a string defined here.
  */

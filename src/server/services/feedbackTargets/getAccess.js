@@ -10,7 +10,6 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
 
   if (accessStatus) {
     const access = Access.For(accessStatus)
-    console.log('The object', RESPONSIBLE_TEACHERS_SPLIT_DATE.getMonth())
     if (access === Access.TEACHER && startDate < RESPONSIBLE_TEACHERS_SPLIT_DATE) {
       return Access.RESPONSIBLE_TEACHER
     }

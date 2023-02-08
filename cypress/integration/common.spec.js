@@ -13,7 +13,7 @@ describe('Common tests', () => {
   })
   it('CONFIG is polyfilled correctly', () => {
     cy.loginAsAdmin()
-    cy.visit(`${baseUrl}/admin`)
+    cy.visit(`${baseUrl}/admin/users`)
     cy.contains('HY-Minttujam')
   })
 })

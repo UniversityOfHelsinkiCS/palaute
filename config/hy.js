@@ -2,9 +2,6 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  /**
-   * Usernames of admin
-   */
   ADMINS: ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko'],
 
   /**
@@ -210,43 +207,18 @@ const config = {
    */
   WORKLOAD_QUESTION_ID: 1042,
 
-  /**
-   * How long JWT tokens in noad links last
-   */
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
-  /**
-   * How many objects fit in LRU cache
-   * Set to zero to disable fbt caching
-   */
   FEEDBACK_TARGET_CACHE_SIZE: 250,
 
-  /**
-   * Before this date, teacher role url is also considered responsible_teacher
-   */
   RESPONSIBLE_TEACHERS_SPLIT_DATE: '2023-01-01',
 
-  /**
-   * How many days before feedbackTarget opening to send a reminder to responsible teachers
-   */
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
-  /**
-   * How many days before closing to send an automatic reminder to students who have not given feedback.
-   * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
-   * (only configured organisations can do this)
-   */
   STUDENT_REMINDER_DAYS_TO_CLOSE: 3,
 
-  /**
-   * How often (hours) can teacher send manual reminder email
-   * (automatic reminder is also considered for cooldown)
-   */
   FEEDBACK_REMINDER_COOLDOWN: 24,
 
-  /**
-   * This is a test, e2e tests may check its value
-   */
   CONFIG_TEST_VALUE: 'HY-Minttujam',
 }
 
