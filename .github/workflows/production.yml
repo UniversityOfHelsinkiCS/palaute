@@ -28,6 +28,7 @@ jobs:
           push: true
           tags: toska/palaute:production
           build-args: |
+            NODE_CONFIG_ENV=hy
             BASE_PATH=/
             GIT_SHA=${{ github.sha }}
 

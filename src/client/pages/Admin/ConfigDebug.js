@@ -13,16 +13,25 @@ import {
   Typography,
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
+import { useQuery } from 'react-query'
+import apiClient from '../../util/apiClient'
 
 const ConfigDebug = () => {
   // eslint-disable-next-line no-undef
   const entries = Object.entries(CONFIG ?? {})
 
+  const { data, isLoading } = useQuery('NODE_CONFIG_ENV', async () => {
+    const res = await apiClient.get('/admin/node-config-env')
+    return res.data
+  })
+
   return (
     <Box mb={2}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography>Configuration</Typography>
+          <Box display="flex" gap="2rem">
+            Configuration <Typography fontFamily="monospace">{!isLoading && JSON.stringify(data)}</Typography>
+          </Box>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2">This is the configuration polyfilled at build time</Typography>

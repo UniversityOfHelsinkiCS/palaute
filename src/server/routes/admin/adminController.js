@@ -559,6 +559,11 @@ const updateInactiveCourseRealisation = async (req, res) => {
   return res.send(inactiveCourse)
 }
 
+const getNodeConfigEnv = (_req, res) => {
+  const { NODE_CONFIG_ENV } = process.env
+  return res.send({ NODE_CONFIG_ENV })
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -582,4 +587,5 @@ router.put('/inactive-course-realisations/:id', updateInactiveCourseRealisation)
 router.post('/banners', createBanner)
 router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
+router.get('/node-config-env', getNodeConfigEnv)
 module.exports = router
