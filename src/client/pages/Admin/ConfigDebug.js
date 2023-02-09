@@ -29,13 +29,17 @@ const ConfigDebug = () => {
     <Box mb={2}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Box display="flex" gap="2rem">
-            Configuration <Typography fontFamily="monospace">{!isLoading && JSON.stringify(data)}</Typography>
-          </Box>
+          <Box>Configuration</Box>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="body2">This is the configuration polyfilled at build time</Typography>
-          <TableContainer sx={{ mt: 1 }}>
+          <Box fontWeight="light">
+            <Box display="flex" gap="1rem" mb="2rem">
+              Backend config in use:{' '}
+              <Typography fontFamily="monospace">{!isLoading && JSON.stringify(data)}</Typography>
+            </Box>
+            Below is the configuration polyfilled at build time:
+          </Box>
+          <TableContainer sx={{ mt: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
