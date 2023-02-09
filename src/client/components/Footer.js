@@ -7,7 +7,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { images, inProduction } from '../util/common'
+import { CONFIG_NAME, images, inProduction, inStaging } from '../util/common'
 
 import { localeForLanguage } from '../util/languageUtils'
 
@@ -48,7 +48,7 @@ const Footer = ({ user }) => {
           {!inProduction && (
             <>
               <Box>
-                <Typography>DEVELOPMENT</Typography>
+                <Typography>{inStaging ? 'STAGING' : 'DEVELOPMENT'}</Typography>
               </Box>
               <img src={images.norppa_viskaali} style={styles.norppa} alt="Norppa drawing by tttriple" />
             </>
@@ -79,6 +79,7 @@ const Footer = ({ user }) => {
                 {t('footer:lastUpdate', { duration })}
               </Typography>
             )}
+            <span>Config: {CONFIG_NAME ?? 'none'}</span>
           </Box>
         </Box>
       </Container>

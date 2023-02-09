@@ -220,6 +220,8 @@ const config = {
   FEEDBACK_REMINDER_COOLDOWN: 24,
 
   CONFIG_TEST_VALUE: 'HY-Minttujam',
+
+  CONFIG_NAME: 'HY',
 }
 
 module.exports = config

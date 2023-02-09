@@ -45,7 +45,7 @@ const config = {
   FEEDBACK_TARGET_CACHE_SIZE: 250,
 
   /**
-   * Before this date, teacher role url is also considered responsible_teacher
+   * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
    */
   RESPONSIBLE_TEACHERS_SPLIT_DATE: '2020-01-01',
 
@@ -71,6 +71,11 @@ const config = {
    * This is a test, e2e tests may check its value
    */
   CONFIG_TEST_VALUE: 'Minttujam',
+
+  /**
+   * Can be used to check which config is in use
+   */
+  CONFIG_NAME: 'Default',
 }
 
 module.exports = config

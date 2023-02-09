@@ -29,7 +29,7 @@ const AdminView = () => {
   const { path, url } = useRouteMatch()
 
   const { authorizedUser } = useAuthorizedUser()
-
+  console.log(ADMINS)
   if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
 
   return (
