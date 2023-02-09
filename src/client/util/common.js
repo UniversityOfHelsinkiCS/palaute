@@ -32,6 +32,9 @@ export const INCLUDE_COURSES = CONFIG?.INCLUDE_COURSES ?? []
 export const STUDENT_LIST_BY_COURSE_ENABLED = CONFIG?.STUDENT_LIST_BY_COURSE_ENABLED ?? []
 
 // eslint-disable-next-line no-undef
+export const TAGS_ENABLED = CONFIG?.TAGS_ENABLED ?? []
+
+// eslint-disable-next-line no-undef
 export const FEEDBACK_REMINDER_COOLDOWN = CONFIG?.FEEDBACK_REMINDER_COOLDOWN
 
 // eslint-disable-next-line no-undef

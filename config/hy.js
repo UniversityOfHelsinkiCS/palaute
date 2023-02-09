@@ -194,12 +194,14 @@ const config = {
   ],
 
   /**
-   * Enables the feature for these organisations.
-   * Feature allows to select whether feedback targets related to a course code
-   * can see the list of students who have given feedback.
-   * Normally it is either on or off for all courses of organisation.
+   * Enabled for SOS
    */
   STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
+
+  /**
+   * Tags enabled for kasvis
+   */
+  TAGS_ENABLED: ['600-K001', '600-M001'],
 
   /**
    * The id of a LIKERT-type question that is considered the university level workload question.

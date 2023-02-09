@@ -28,6 +28,11 @@ const config = {
   STUDENT_LIST_BY_COURSE_ENABLED: [],
 
   /**
+   * Enables tags for these organisations
+   */
+  TAGS_ENABLED: [],
+
+  /**
    * The id of a LIKERT-type question that is considered the university level workload question.
    * Future ideas: get rid of this and add a new question type for it instead.
    */

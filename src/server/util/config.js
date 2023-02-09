@@ -29,6 +29,7 @@ const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 const ADMINS = config.get('ADMINS') ?? []
 const INCLUDE_COURSES = config.get('INCLUDE_COURSES') ?? []
 const STUDENT_LIST_BY_COURSE_ENABLED = config.get('STUDENT_LIST_BY_COURSE_ENABLED') ?? []
+const TAGS_ENABLED = config.get('TAGS_ENABLED') ?? []
 const NOAD_LINK_EXPIRATION_DAYS = Number(config.get('NOAD_LINK_EXPIRATION_DAYS'))
 const FEEDBACK_TARGET_CACHE_SIZE = Number(config.get('FEEDBACK_TARGET_CACHE_SIZE'))
 const RESPONSIBLE_TEACHERS_SPLIT_DATE = new Date(config.get('RESPONSIBLE_TEACHERS_SPLIT_DATE'))
@@ -59,5 +60,6 @@ module.exports = {
   ADMINS,
   INCLUDE_COURSES,
   STUDENT_LIST_BY_COURSE_ENABLED,
+  TAGS_ENABLED,
   useOldImporter,
 }

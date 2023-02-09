@@ -19,6 +19,7 @@ import errors from '../../util/errorMessage'
 import ErrorView from '../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
+import { TAGS_ENABLED } from '../../util/common'
 
 const safelyParseDateRange = dateRange =>
   dateRange?.startDate && dateRange?.endDate
@@ -55,7 +56,7 @@ const OrganisationSummary = () => {
   const [tagId, setTagId] = useHistoryState('tagId', 'All')
   const [keyword, setKeyword] = useHistoryState('keyword', '')
 
-  const isKasvis = code === '600-K001' || code === '600-M001'
+  const tagsEnabled = TAGS_ENABLED.includes(code)
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useHistoryState('includeOpenUniCourseUnits', false)
 
@@ -155,7 +156,7 @@ const OrganisationSummary = () => {
             keyword={keyword}
             facultyAccess={facultyAccess}
             onFacultyChange={handleFacultyChange}
-            tagId={isKasvis && tagId}
+            tagId={tagsEnabled && tagId}
             onTagChange={handleTagChange}
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
