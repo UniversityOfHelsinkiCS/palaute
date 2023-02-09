@@ -29,6 +29,12 @@ Currently this means that all config values are shipped in the build, which may 
 Because eslint (and we) don't like custom global objects like `CONFIG`, the values required by client are safely parsed in `src/client/util/common` to exported constants.
 
 As client configuration happens at build time, you need to set the env `NODE_CONFIG_ENV` in the build context. See `docker-compose.ci.yml` and `Dockerfile` for example.
+CI workflows may also need to set it, see `.github/production.yml`.
+
+## Debugging
+
+Debugging configuration issues can be challenging especially in deployments.
+A widget titled 'Configuration' at `/admin/misc` displays the values of `CONFIG` and also fetches the `NODE_CONFIG_ENV` from backend.
 
 ## Future ideas
 
