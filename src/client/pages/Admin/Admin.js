@@ -4,7 +4,7 @@ import { Route, Switch, useRouteMatch } from 'react-router'
 
 import { Box, Tab, Typography } from '@mui/material'
 
-import { ADMINS, CONFIG_TEST_VALUE, images } from '../../util/common'
+import { CONFIG_TEST_VALUE, images } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
@@ -29,8 +29,8 @@ const AdminView = () => {
   const { path, url } = useRouteMatch()
 
   const { authorizedUser } = useAuthorizedUser()
-  console.log(ADMINS)
-  if (!ADMINS.includes(authorizedUser?.username)) return <Redirect to="/" />
+
+  if (!authorizedUser?.isAdmin) return <Redirect to="/" />
 
   return (
     <>
