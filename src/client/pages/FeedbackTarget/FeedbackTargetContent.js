@@ -42,6 +42,7 @@ import {
   getFeedbackPeriod,
   getCourseUnitSummaryPath,
   deleteResponsibleTeacher,
+  feedbackTargetHasContinuousFeedback,
 } from './utils'
 
 import TeacherChip from '../../components/common/TeacherChip'
@@ -199,8 +200,11 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
+  const hasContinuousFeedback = feedbackTargetHasContinuousFeedback(feedbackTarget)
+
   const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
-  const showContinuousFeedbackTab = continuousFeedbackEnabled
+  const showContinuousFeedbackTab =
+    continuousFeedbackEnabled || ((isOrganisationAdmin || isResponsibleTeacher) && hasContinuousFeedback)
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher

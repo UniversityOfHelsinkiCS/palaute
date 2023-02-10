@@ -449,6 +449,7 @@ export default {
     activateContinuousFeedbackDigest: 'Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons',
     continuousFeedbackGiven: 'Given kontinuerlig respons',
     noContinuousFeedbackGiven: 'Ingen kontinuerlig respons har ännu getts',
+    // continuousFeedbackInactive: 'Jatkuva palaute ei ole käytössä',
     continuousFeedbackStudentInfo:
       'Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.',
     respondContinuousFeedback: 'Svara',

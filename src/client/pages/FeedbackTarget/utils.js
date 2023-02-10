@@ -1,6 +1,7 @@
 import { parseISO, format } from 'date-fns'
 
 import apiClient from '../../util/apiClient'
+import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
 
 export const getCoursePeriod = courseRealisation => {
   if (!courseRealisation) {
@@ -28,4 +29,12 @@ export const getCourseUnitSummaryPath = feedbackTarget => `/course-summary/${fee
 
 export const deleteResponsibleTeacher = async (feedbackTarget, teacher) => {
   await apiClient.delete(`/feedback-targets/${feedbackTarget.id}/user-feedback-targets/${teacher.id}`)
+}
+
+export const feedbackTargetHasContinuousFeedback = ({ id }) => {
+  const { continuousFeedbacks, isLoading } = useFeedbackTargetContinuousFeedbacks(id)
+
+  if (isLoading) return true
+
+  return continuousFeedbacks.length > 0
 }
