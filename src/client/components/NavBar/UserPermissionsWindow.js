@@ -56,16 +56,18 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {_.uniq(authorizedUser.iamGroups.concat(user?.iamGroups)).map(iam => (
-                <Box
-                  key={iam}
-                  fontFamily="monospace"
-                  fontSize={12}
-                  fontWeight={user?.iamGroups?.includes(iam) ? 'bold' : 'normal'}
-                >
-                  {iam}
-                </Box>
-              ))}
+              {_.uniq(authorizedUser.iamGroups.concat(user?.iamGroups))
+                .filter(Boolean)
+                .map(iam => (
+                  <Box
+                    key={iam}
+                    fontFamily="monospace"
+                    fontSize={12}
+                    fontWeight={user?.iamGroups?.includes(iam) ? 'bold' : 'normal'}
+                  >
+                    {iam}
+                  </Box>
+                ))}
             </Box>
             <Box>
               <Typography variant="button">{t('userInformation:organisationAccess')}</Typography>

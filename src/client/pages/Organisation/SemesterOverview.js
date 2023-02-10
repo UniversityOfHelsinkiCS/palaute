@@ -115,11 +115,11 @@ const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) =>
     // if teacher name query not empty, filter by teachers
     ((!first && !last) ||
       fbt.teachers.some(u => {
-        const firstName = u.firstName.toLowerCase()
-        const lastName = u.lastName.toLowerCase()
+        const firstName = u.firstName?.toLowerCase()
+        const lastName = u.lastName?.toLowerCase()
         return last
-          ? firstName.startsWith(first) && lastName.startsWith(last)
-          : firstName.startsWith(first) || lastName.startsWith(first)
+          ? firstName?.startsWith(first) && lastName?.startsWith(last)
+          : firstName?.startsWith(first) || lastName?.startsWith(first)
       })) &&
     // if includeWithoutTeachers, skip checking that there are teachers
     (includeWithoutTeachers || fbt.teachers.length > 0)
