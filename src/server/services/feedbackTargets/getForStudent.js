@@ -19,9 +19,6 @@ const feedbackTargetToJSON = feedbackTarget => {
 
 const getFeedbackTargetsForStudent = async userId => {
   const feedbackTargets = await FeedbackTarget.findAll({
-    attributes: {
-      exclude: ['feedbackResponse'], // Not needed
-    },
     include: [
       {
         model: UserFeedbackTarget,

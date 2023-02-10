@@ -91,6 +91,7 @@ export default {
     feedbackNotStartedChip: 'Responsen har inte börjat',
     feedbackEndedChip: 'Responsen har avslutats',
     continuousFeedbackChip: 'Kontinuerlig respons',
+    // feedbackResponseGiven: 'Opettaja on antanut vastapalautteen',
     deleted: 'Din respons har tagits bort',
   },
   feedbackView: {

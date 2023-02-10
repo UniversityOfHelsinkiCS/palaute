@@ -91,6 +91,7 @@ export default {
     feedbackNotStartedChip: 'Feedback has not started',
     feedbackEndedChip: 'Feedback has ended',
     continuousFeedbackChip: 'Continuous feedback',
+    feedbackResponseGiven: 'Teacher has given counter feedback',
     deleted: 'Your feedback has been deleted',
   },
   feedbackView: {

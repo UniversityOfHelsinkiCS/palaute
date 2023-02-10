@@ -91,6 +91,7 @@ export default {
     feedbackNotStartedChip: 'Palaute ei ole alkanut',
     feedbackEndedChip: 'Palaute on päättynyt',
     continuousFeedbackChip: 'Jatkuva palaute',
+    feedbackResponseGiven: 'Opettaja on antanut vastapalautteen',
     deleted: 'Palautteesi on poistettu',
   },
   feedbackView: {
