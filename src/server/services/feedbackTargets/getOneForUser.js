@@ -8,6 +8,7 @@ const {
   Feedback,
   User,
   Tag,
+  ContinuousFeedback,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
@@ -37,6 +38,11 @@ const getFromDb = async id => {
           as: 'user',
           attributes: ['id', 'firstName', 'lastName', 'email'],
         },
+      },
+      {
+        model: ContinuousFeedback,
+        as: 'continuousFeedbacks',
+        attributes: ['id'],
       },
       {
         model: CourseUnit,
@@ -98,7 +104,7 @@ const getFromDb = async id => {
     )
   )
   fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
-
+  fbt.set('continuousFeedbackCount', fbt.continuousFeedbacks.length)
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
@@ -132,7 +138,7 @@ const getUserFeedbackTarget = (userId, feedbackTargetId) =>
 const getFeedbackTarget = feedbackTargetId =>
   FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: {
-      /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds'],
+      /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds', 'continuousFeedbackCount'],
     },
     include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })

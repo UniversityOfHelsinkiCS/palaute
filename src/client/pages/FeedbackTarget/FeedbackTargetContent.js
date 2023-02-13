@@ -191,6 +191,7 @@ const FeedbackTargetContent = () => {
     settingsReadByTeacher,
     feedbackCount,
     studentCount,
+    continuousFeedbackCount,
     continuousFeedbackEnabled,
     feedbackCanBeGiven,
   } = feedbackTarget
@@ -200,7 +201,7 @@ const FeedbackTargetContent = () => {
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
   const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
-  const showContinuousFeedbackTab = continuousFeedbackEnabled
+  const showContinuousFeedbackTab = continuousFeedbackEnabled || continuousFeedbackCount > 0
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
@@ -373,6 +374,8 @@ const FeedbackTargetContent = () => {
               icon={<ReviewsOutlined />}
               label={t('feedbackTargetView:continuousFeedbackTab')}
               to={`${url}/continuous-feedback`}
+              badge={continuousFeedbackCount}
+              badgeContent={continuousFeedbackCount}
             />
           )}
           {showEditFeedbackResponseTab && (
