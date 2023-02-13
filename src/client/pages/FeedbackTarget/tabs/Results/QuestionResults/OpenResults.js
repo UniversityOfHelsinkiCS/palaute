@@ -48,6 +48,9 @@ const styles = {
   hiddenListItem: theme => ({
     color: theme.palette.error.light,
   }),
+  noPrint: {
+    '@media print': { display: 'none' },
+  },
 }
 
 const OpenFeedback = ({ feedback, toggleVisibility, canHide }) => {
@@ -59,7 +62,7 @@ const OpenFeedback = ({ feedback, toggleVisibility, canHide }) => {
       sx={[styles.listItem, feedback.hidden ? styles.hiddenListItem : {}]}
       secondaryAction={
         canHide && (
-          <Box display="flex" alignContent="start">
+          <Box display="flex" alignContent="start" sx={styles.noPrint}>
             <Tooltip
               title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}
             >

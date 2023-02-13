@@ -8,6 +8,7 @@ import * as _ from 'lodash'
 import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../../../util/languageUtils'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const styles = {
   button: {
@@ -100,6 +101,7 @@ const ExportPdfLink = ({ componentRef }) => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle: '',
   })
 
   return (
