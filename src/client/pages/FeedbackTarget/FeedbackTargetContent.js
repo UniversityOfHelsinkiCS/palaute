@@ -215,8 +215,9 @@ const FeedbackTargetContent = () => {
   const wikiLink = links.teacherInstructions[i18n.language]
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
-  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
+  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
+  const title = `${visibleCourseCode} ${courseUnitName}`
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
@@ -232,7 +233,7 @@ const FeedbackTargetContent = () => {
 
   return (
     <>
-      <Title>{courseUnitName}</Title>
+      <Title>{title}</Title>
       <Box mb={3}>
         {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>
