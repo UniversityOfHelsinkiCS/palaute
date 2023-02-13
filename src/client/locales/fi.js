@@ -452,6 +452,7 @@ export default {
     activateContinuousFeedbackDigest: 'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
     continuousFeedbackGiven: 'Annettu jatkuva palaute',
     noContinuousFeedbackGiven: 'Jatkuvaa palautetta ei ole vielä annettu',
+    continuousFeedbackInactive: 'Jatkuva palaute ei ole käytössä',
     continuousFeedbackStudentInfo:
       'Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy kurssin järjestäjille.',
     respondContinuousFeedback: 'Vastaa',

@@ -73,6 +73,21 @@ const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
   )
 }
 
+const TeacherInfo = ({ enabled, hasFeedback }) => {
+  const { t } = useTranslation()
+
+  if (!enabled)
+    return (
+      <Alert mb={1} severity="warning">
+        {t('feedbackTargetView:continuousFeedbackInactive')}
+      </Alert>
+    )
+
+  if (!hasFeedback) return <Alert severity="info">{t('feedbackTargetView:noContinuousFeedbackGiven')}</Alert>
+
+  return null
+}
+
 const ContinuousFeedback = () => {
   const { id } = useParams()
   const { t } = useTranslation()
@@ -93,6 +108,9 @@ const ContinuousFeedback = () => {
 
   const sortedFeedbacks = continuousFeedbacks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
+  const { continuousFeedbackEnabled } = feedbackTarget
+  const hasFeedback = sortedFeedbacks.length > 0
+
   return (
     <Box margin={3}>
       <Typography mb={1} textTransform="uppercase">
@@ -105,11 +123,13 @@ const ContinuousFeedback = () => {
         </Box>
       )}
 
-      {(isTeacher || isResponsibleTeacher) && !sortedFeedbacks.length && (
-        <Alert severity="info">{t('feedbackTargetView:noContinuousFeedbackGiven')}</Alert>
+      {(isTeacher || isResponsibleTeacher) && (
+        <Box mb={2}>
+          <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={hasFeedback} />
+        </Box>
       )}
 
-      {!!sortedFeedbacks.length &&
+      {hasFeedback &&
         sortedFeedbacks.map(feedback => (
           <FeedbackItem
             key={feedback.id}

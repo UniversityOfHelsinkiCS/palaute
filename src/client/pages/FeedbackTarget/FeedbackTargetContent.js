@@ -200,8 +200,11 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
+  const hasContinuousFeedback = continuousFeedbackCount > 0
+
   const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
-  const showContinuousFeedbackTab = continuousFeedbackEnabled || continuousFeedbackCount > 0
+  const showContinuousFeedbackTab =
+    continuousFeedbackEnabled || ((isOrganisationAdmin || isResponsibleTeacher) && hasContinuousFeedback)
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher

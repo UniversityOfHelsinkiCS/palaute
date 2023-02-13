@@ -449,6 +449,7 @@ export default {
     activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     continuousFeedbackGiven: 'Continuous feedback given',
     noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
+    continuousFeedbackInactive: 'Continuous feedback is not active',
     continuousFeedbackStudentInfo:
       'Here you can see your continuous feedback and responses. Your feedback is anonymous, so your name is not visible to the course organisers.',
     respondContinuousFeedback: 'Respond',
