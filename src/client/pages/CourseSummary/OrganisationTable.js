@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { TableContainer, IconButton, Tooltip } from '@mui/material'
+import { TableContainer, IconButton, Tooltip, Box } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
 import { Link } from 'react-router-dom'
@@ -30,10 +30,15 @@ const styles = {
     paddingBottom: '1rem',
     minHeight: '12px',
   },
-  settingsButton: {
+  organisationButton: {
     '&:hover': {
       color: theme => theme.palette.primary.light,
       background: 'transparent',
+    },
+  },
+  organisationButtonContainer: {
+    '@media print': {
+      display: 'none',
     },
   },
 }
@@ -44,19 +49,21 @@ const OrganisationButton = ({ code, access }) => {
   const { write } = access
 
   return (
-    <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
-      <IconButton
-        id={`settings-button-${code}`}
-        component={Link}
-        to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
-        size="large"
-        sx={styles.settingsButton}
-        color="primary"
-        disableFocusRipple
-      >
-        {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
-      </IconButton>
-    </Tooltip>
+    <Box sx={styles.organisationButtonContainer}>
+      <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
+        <IconButton
+          id={`settings-button-${code}`}
+          component={Link}
+          to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
+          size="large"
+          sx={styles.organisationButton}
+          color="primary"
+          disableFocusRipple
+        >
+          {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
+        </IconButton>
+      </Tooltip>
+    </Box>
   )
 }
 
