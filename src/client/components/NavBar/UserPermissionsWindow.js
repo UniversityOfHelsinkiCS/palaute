@@ -56,7 +56,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {_.uniq(authorizedUser.iamGroups.concat(user?.iamGroups))
+              {_.uniq((authorizedUser?.iamGroups ?? []).concat(user?.iamGroups))
                 .filter(Boolean)
                 .map(iam => (
                   <Box
