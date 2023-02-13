@@ -6,7 +6,6 @@ const { FeedbackTarget, UserFeedbackTarget } = require('../models')
 const logger = require('../util/logger')
 const mangleData = require('./mangleData')
 const { fetchData } = require('./importerClient')
-const { notifyOnEnrolmentsIfRequested } = require('../services/enrolmentNotices/enrolmentNotices')
 
 const createEnrolmentTargets = async enrolment => {
   const { personId: userId, courseUnitRealisationId, studySubGroups } = enrolment
@@ -155,8 +154,6 @@ const saveNewEnrolments = async enrolments => {
       }
     }
   }
-
-  await notifyOnEnrolmentsIfRequested(newUfbts)
 
   return newUfbts.length
 }

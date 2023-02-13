@@ -469,9 +469,6 @@ export default {
     noAccess:
       'Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.',
     notFound: 'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
-    notifyOnEnrolment: 'Skicka e-post till mig när min anmälan har hittats',
-    notificationEnabled: 'Ok, ett meddelande skickas till adressen {{email}}, om din anmälan hittas inom 24h',
-    notificationDisabled: 'Ok, ett meddelande skickas inte',
   },
   noadUser: {
     noUser:
