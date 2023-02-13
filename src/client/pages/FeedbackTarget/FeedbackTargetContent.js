@@ -376,6 +376,7 @@ const FeedbackTargetContent = () => {
               to={`${url}/continuous-feedback`}
               badge={continuousFeedbackCount}
               badgeContent={continuousFeedbackCount}
+              badgeColor="grey"
             />
           )}
           {showEditFeedbackResponseTab && (
