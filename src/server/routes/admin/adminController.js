@@ -5,9 +5,7 @@ const _ = require('lodash')
 const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
-const { updater } = require('../../updater')
-const { deleteCancelledCourses } = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
-const { getUserIams } = require('../../util/jami')
+const updaterClient = require('../../util/updaterClient')
 
 const {
   FeedbackTarget,
@@ -29,12 +27,11 @@ const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
-const { updateEnrolmentsOfCourse } = require('../../updater/updateStudentFeedbackTargets')
 const { adminAccess } = require('../../middleware/adminAccess')
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
-  updater.run()
+  await updaterClient.run()
   return res.send({})
 }
 
@@ -43,7 +40,7 @@ const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
   if (!curId) return res.sendStatus(400)
 
   try {
-    await updateEnrolmentsOfCourse(curId)
+    await updaterClient.updateEnrolments(curId)
   } catch (error) {
     if (error?.response) {
       res.status(error.response.status).send(error.response.data)
@@ -554,7 +551,7 @@ const updateInactiveCourseRealisation = async (req, res) => {
     { where: { id } }
   )
 
-  if (!manuallyEnabled) deleteCancelledCourses([id])
+  if (!manuallyEnabled) await updaterClient.deleteCourse(id)
 
   return res.send(inactiveCourse)
 }
