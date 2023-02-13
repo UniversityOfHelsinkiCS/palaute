@@ -19,6 +19,8 @@ const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
 
 const JAMI_URL = inProduction ? 'https://importer.cs.helsinki.fi/api/auth' : `http://${JAMI_HOST}:${JAMI_PORT}`
 
+const UPDATER_URL = process.env.UPDATER_URL || ''
+
 const useOldImporter = false
 
 let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DATABASE}?targetServerType=primary`
@@ -55,6 +57,7 @@ module.exports = {
   API_TOKEN,
   IMPORTER_API_URL,
   JAMI_URL,
+  UPDATER_URL,
   JWT_KEY,
   WORKLOAD_QUESTION_ID,
   ADMINS,
