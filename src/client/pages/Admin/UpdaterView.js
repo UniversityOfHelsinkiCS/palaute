@@ -131,6 +131,11 @@ const UpdaterView = () => {
 
   return (
     <Box marginTop={4}>
+      <Box mb="2rem">
+        <Button variant="contained" color="primary" onClick={runUpdater}>
+          Run updater
+        </Button>
+      </Box>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Job type</InputLabel>
         <Select
@@ -146,11 +151,6 @@ const UpdaterView = () => {
         </Select>
       </FormControl>
       <StatusTable updaterStatuses={updaterStatuses} />
-      <Box marginTop={2}>
-        <Button variant="contained" color="primary" onClick={runUpdater}>
-          Run updater
-        </Button>
-      </Box>
     </Box>
   )
 }
