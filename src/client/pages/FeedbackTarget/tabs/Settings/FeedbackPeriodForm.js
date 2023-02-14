@@ -83,80 +83,74 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
   const submitButtonTooltip = errors => Object.values(errors).map(t).join('\n')
 
   return (
-    <Box mb={5}>
-      <Card>
-        <CardContent>
-          <Box mb={4}>
-            <Typography variant="h6">{t('feedbackTargetSettings:editPeriodTitle')}</Typography>
-          </Box>
-          <OpenFeedbackImmediatelyDialog
-            open={warningDialogOpen}
-            onClose={handleCloseWarningDialog}
-            onConfirm={handleConfirmWarning}
-          />
-          <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validate={validateFeedbackPeriod(isOpen, isOver)}
-          >
-            {({ dirty, errors, isValid }) => (
-              <Form>
-                <Alert severity="warning">
-                  <Trans
-                    i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
-                    values={{ supportEmail }}
-                    components={{
-                      mailTo: <Link href={`mailto:${supportEmail}`} underline="hover" />,
-                    }}
-                  />
-                </Alert>
-                <Box mb={1}>
-                  <FormikDatePicker
-                    name="opensAt"
-                    label={t('editFeedbackTarget:opensAt')}
-                    disablePast
-                    disabled={(formDisabled || isOpen || isOver) && !isAdmin}
-                  />
-                </Box>
-                <Box mb={2}>
-                  <FormikDatePicker
-                    name="closesAt"
-                    label={t('editFeedbackTarget:closesAt')}
-                    disablePast
-                    disabled={formDisabled}
-                  />
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  {!formDisabled && (
-                    <Tooltip title={submitButtonTooltip(errors)}>
-                      <span>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          type="submit"
-                          disabled={!dirty || formDisabled || (!isValid && !isAdmin)}
-                        >
-                          {t('save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  )}
-                  <TooltipButton
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleOpenImmediatelyClick}
-                    disabled={!openImmediatelyEnabled}
-                    tooltip={cannotOpenImmediatelyMessage}
-                  >
-                    {t('editFeedbackTarget:openImmediately')}
-                  </TooltipButton>
-                </Box>
-              </Form>
-            )}
-          </Formik>
-        </CardContent>
-      </Card>
-    </Box>
+    <Card>
+      <CardContent>
+        <Box mb={4}>
+          <Typography variant="h6">{t('feedbackTargetSettings:editPeriodTitle')}</Typography>
+        </Box>
+        <OpenFeedbackImmediatelyDialog
+          open={warningDialogOpen}
+          onClose={handleCloseWarningDialog}
+          onConfirm={handleConfirmWarning}
+        />
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validateFeedbackPeriod(isOpen, isOver)}>
+          {({ dirty, errors, isValid }) => (
+            <Form>
+              <Alert severity="warning">
+                <Trans
+                  i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
+                  values={{ supportEmail }}
+                  components={{
+                    mailTo: <Link href={`mailto:${supportEmail}`} underline="hover" />,
+                  }}
+                />
+              </Alert>
+              <Box mb={1}>
+                <FormikDatePicker
+                  name="opensAt"
+                  label={t('editFeedbackTarget:opensAt')}
+                  disablePast
+                  disabled={(formDisabled || isOpen || isOver) && !isAdmin}
+                />
+              </Box>
+              <Box mb={2}>
+                <FormikDatePicker
+                  name="closesAt"
+                  label={t('editFeedbackTarget:closesAt')}
+                  disablePast
+                  disabled={formDisabled}
+                />
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                {!formDisabled && (
+                  <Tooltip title={submitButtonTooltip(errors)}>
+                    <span>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={!dirty || formDisabled || (!isValid && !isAdmin)}
+                      >
+                        {t('save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
+                      </Button>
+                    </span>
+                  </Tooltip>
+                )}
+                <TooltipButton
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleOpenImmediatelyClick}
+                  disabled={!openImmediatelyEnabled}
+                  tooltip={cannotOpenImmediatelyMessage}
+                >
+                  {t('editFeedbackTarget:openImmediately')}
+                </TooltipButton>
+              </Box>
+            </Form>
+          )}
+        </Formik>
+      </CardContent>
+    </Card>
   )
 }
 

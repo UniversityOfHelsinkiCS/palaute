@@ -8,7 +8,6 @@ import * as _ from 'lodash'
 import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../../../util/languageUtils'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const styles = {
   button: {
