@@ -2,16 +2,25 @@ const ITEM_NAME = 'fakeUser'
 
 export const possibleUsers = [
   {
-    uid: 'mluukkai',
+    uid: 'admin',
   },
   {
-    uid: 'varisleo',
+    uid: 'dean',
   },
   {
-    uid: 'jakousa',
+    uid: 'teacher',
   },
   {
-    uid: 'keolli',
+    uid: 'student',
+  },
+  {
+    uid: 'correspondent',
+  },
+  {
+    uid: 'tuni-person-repos',
+  },
+  {
+    uid: 'tuni-person-sy80051',
   },
 ]
 

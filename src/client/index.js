@@ -23,7 +23,7 @@ const ensureDevUser = () => {
   if (headers.uid) return
 
   localStorage.clear()
-  setHeaders('mluukkai')
+  setHeaders('admin')
 }
 
 ensureDevUser()

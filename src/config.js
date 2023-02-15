@@ -8,7 +8,7 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-const ADMINS = ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko']
+const ADMINS = ['admin']
 
 // These courses bypass the starting after 1.9 filter
 const INCLUDE_COURSES = new Set([
