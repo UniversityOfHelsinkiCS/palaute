@@ -11,7 +11,7 @@ describe('Common tests', () => {
     cy.contains('FI').click()
     cy.contains('Kurssipalautteeni')
   })
-  it('CONFIG is polyfilled correctly', () => {
+  it('CONFIG is populated correctly', () => {
     cy.loginAsAdmin()
     cy.visit(`${baseUrl}/admin/users`)
     cy.contains('HY-Minttujam')

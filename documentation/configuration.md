@@ -22,7 +22,7 @@ and `const value = config.get('key')`. The config values can be getted and parse
 ### Client
 
 Client configuration is slightly more involved.
-A global `CONFIG` object is polyfilled at build time using the webpack DefinePlugin (see `config-overrides.js`).
+A global `CONFIG` object is populated at build time using the webpack DefinePlugin (see `config-overrides.js`).
 
 Currently this means that all config values are shipped in the build, which may not be desirable.
 

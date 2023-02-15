@@ -37,7 +37,7 @@ const ConfigDebug = () => {
               Backend config in use:{' '}
               <Typography fontFamily="monospace">{!isLoading && JSON.stringify(data)}</Typography>
             </Box>
-            Below is the configuration polyfilled at build time:
+            Below is the configuration populated at build time:
           </Box>
           <TableContainer sx={{ mt: 2 }}>
             <Table>
