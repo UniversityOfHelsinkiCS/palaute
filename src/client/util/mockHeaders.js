@@ -1,5 +1,29 @@
 const ITEM_NAME = 'fakeUser'
 
+export const possibleUsers = [
+  {
+    uid: 'admin',
+  },
+  {
+    uid: 'dean',
+  },
+  {
+    uid: 'teacher',
+  },
+  {
+    uid: 'student',
+  },
+  {
+    uid: 'correspondent',
+  },
+  {
+    uid: 'tuni-person-repos',
+  },
+  {
+    uid: 'tuni-person-sy80051',
+  },
+]
+
 export const setHeaders = uid => {
   localStorage.setItem(ITEM_NAME, JSON.stringify({ uid }))
 }
