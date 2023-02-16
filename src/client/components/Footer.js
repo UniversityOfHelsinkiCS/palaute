@@ -7,7 +7,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { CONFIG_NAME, images, inProduction, inStaging } from '../util/common'
+import { images, inProduction, inStaging } from '../util/common'
 
 import { localeForLanguage } from '../util/languageUtils'
 
@@ -69,11 +69,10 @@ const Footer = ({ user }) => {
               <img src={images.toska_color} style={styles.logo} alt="Toska" />
             </Link>
             {duration && (
-              <Typography variant="subtitle1" fontSize={14}>
+              <Typography variant="subtitle1" fontSize={12}>
                 {t('footer:lastUpdate', { duration })}
               </Typography>
             )}
-            <span>Config: {CONFIG_NAME ?? 'none'}</span>
           </Box>
         </Box>
       </Container>
