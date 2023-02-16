@@ -27,7 +27,6 @@ import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
-import { links } from '../../util/links'
 import LinkButton from '../../components/common/LinkButton'
 
 const Organisation = () => {
@@ -69,7 +68,7 @@ const Organisation = () => {
         </Typography>
       </Box>
       <Box mb="1rem">
-        <LinkButton to={links.organisationInstructions[i18n.language]} title={t('footer:wikiLink')} external />
+        <LinkButton to={t('links:wikiOrganisationHelp')} title={t('footer:wikiLink')} external />
       </Box>
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">

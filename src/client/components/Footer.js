@@ -22,12 +22,6 @@ const styles = {
   },
 }
 
-const supportEmail = 'coursefeedback@helsinki.fi'
-const wikiLink = 'https://wiki.helsinki.fi/display/CF'
-const accessibilityDocument =
-  'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md'
-const dataProtectionNotice = 'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991'
-
 const Footer = ({ user }) => {
   const { t, i18n } = useTranslation()
   const duration = Date.parse(user?.lastRestart)
@@ -56,22 +50,22 @@ const Footer = ({ user }) => {
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${supportEmail}`} underline="hover">
-                {supportEmail}
+              <Link href={`mailto:${t('links:supportEmail')}`} underline="hover">
+                {t('links:supportEmail')}
               </Link>
             </Typography>
-            <ExternalLink href={accessibilityDocument}>{t('footer:accessibilityDocument')}</ExternalLink>
+            <ExternalLink href={t('links:accessibility')}>{t('footer:accessibilityDocument')}</ExternalLink>
             <Typography>
-              <ExternalLink href={dataProtectionNotice}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
+              <ExternalLink href={t('links:dataProtection')}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
             </Typography>
             {user && user.isTeacher && (
               <Typography>
-                <ExternalLink href={wikiLink}>{t('footer:wikiLink')}</ExternalLink>
+                <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
               </Typography>
             )}
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
-            <Link href="https://toska.dev" target="_blank" rel="noopener" underline="hover">
+            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
               <img src={images.toska_color} style={styles.logo} alt="Toska" />
             </Link>
             {duration && (

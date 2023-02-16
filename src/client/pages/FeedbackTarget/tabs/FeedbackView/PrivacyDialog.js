@@ -19,7 +19,7 @@ const PrivacyDialog = ({ open, onClose }) => {
         <DialogContentText id="feedback-privacy-dialog-description">
           {t('feedbackView:feedbackInfoContent')}
           <br />
-          <Link href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991" underline="hover">
+          <Link href={t('links:dataProtection')} underline="hover">
             {t('feedbackView:dataProtectionNotice')}
           </Link>
         </DialogContentText>

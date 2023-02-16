@@ -113,7 +113,7 @@ const CourseRealisationSummary = () => {
     ? null
     : organisations.find(org => org.id === courseUnit.organisations[0]?.id)
 
-  const coursePageLink = `https://studies.helsinki.fi/opintotarjonta/cu/${courseUnit.id}`
+  const coursePageLink = `${t('links:courseUnitPage')}${courseUnit.id}`
 
   return (
     <>

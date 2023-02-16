@@ -47,10 +47,15 @@ const styles = {
 const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
-  const infoSite = 'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
 
   const infoLink = (
-    <AlertLink sx={styles.link} component={MuiLink} href={infoSite} target="_blank" rel="noreferrer">
+    <AlertLink
+      sx={styles.link}
+      component={MuiLink}
+      href={t('links:wikiOrganisationHelp')}
+      target="_blank"
+      rel="noreferrer"
+    >
       {t('questionResults:here')}
     </AlertLink>
   )

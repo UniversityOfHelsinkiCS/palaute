@@ -16,7 +16,7 @@ const LanguageTextEditor = ({ name, language }) => {
         <Alert severity="info">
           <Trans i18nKey="feedbackResponse:responseInfo">
             This field supports{' '}
-            <AlertLink href="https://commonmark.org/help/" target="_blank">
+            <AlertLink href={t('links:markdownHelp')} target="_blank">
               Markdown
             </AlertLink>{' '}
             syntax

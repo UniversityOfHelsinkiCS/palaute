@@ -20,9 +20,6 @@ export const getFeedbackPeriod = feedbackTarget => {
   return `${opensAt} - ${closesAt}`
 }
 
-export const getCoursePageUrl = feedbackTarget =>
-  `https://studies.helsinki.fi/opintotarjonta/cur/${feedbackTarget.courseRealisation.id}`
-
 export const saveValues = async (values, feedbackTarget) => {
   const { answers } = values
 
