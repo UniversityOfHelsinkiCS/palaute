@@ -224,6 +224,14 @@ const config = {
   CONFIG_TEST_VALUE: 'HY-Minttujam',
 
   CONFIG_NAME: 'HY',
+
+  SENTRY_DSN: 'https://8877ea30aa714216b27b22c8aa395723@sentry.cs.helsinki.fi/6',
+
+  PATE_URL: 'https://importer.cs.helsinki.fi/api/pate',
+
+  JAMI_URL: 'https://importer.cs.helsinki.fi/api/auth',
+
+  PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
 }
 
 module.exports = config

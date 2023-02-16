@@ -51,7 +51,7 @@ const ConfigDebug = () => {
                 {entries.map(([k, v]) => (
                   <TableRow key={k}>
                     <TableCell>{k}</TableCell>
-                    <TableCell sx={{ fontFamily: 'monospace' }}>{Array.isArray(v) ? `[${v.join(', ')}]` : v}</TableCell>
+                    <TableCell sx={{ fontFamily: 'monospace' }}>{JSON.stringify(v)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

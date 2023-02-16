@@ -81,6 +81,28 @@ const config = {
    * Can be used to check which config is in use
    */
   CONFIG_NAME: 'Default',
+
+  /**
+   * Dsn for Sentry reporting client
+   */
+  SENTRY_DSN: '',
+
+  /**
+   * Pate (mail service) url
+   */
+  PATE_URL: '',
+
+  /**
+   * JAMI (iam rights service) url
+   */
+  JAMI_URL: '',
+
+  /**
+   * The public url of the app, to be used for example in email links.
+   * Why is it defined here in addition to the normal build argument? I don't trust it's given to the server properly.
+   * Might not be required once mails are extracted away from server
+   */
+  PUBLIC_URL: 'https://coursefeedback.helsinki.fi/',
 }
 
 module.exports = config

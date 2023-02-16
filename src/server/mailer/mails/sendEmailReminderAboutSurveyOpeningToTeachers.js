@@ -1,7 +1,7 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
-const { TEACHER_REMINDER_DAYS_TO_OPEN } = require('../../util/config')
+const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, instructionsAndSupport } = require('./util')
 
@@ -119,7 +119,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
       sv: `stängs ${humanClosesAtDate}`,
     }
 
-    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
         ${name[language]}
         </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }

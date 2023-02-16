@@ -15,13 +15,7 @@ const REDIS_CONFIG = {
 
 const PORT = process.env.PORT || 8000
 
-const IMPORTER_API_URL = 'https://importer.cs.helsinki.fi/api/importer'
-
-const JAMI_URL = inProduction ? 'https://importer.cs.helsinki.fi/api/auth' : `http://${JAMI_HOST}:${JAMI_PORT}`
-
 const UPDATER_URL = process.env.UPDATER_URL || ''
-
-const useOldImporter = false
 
 let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DATABASE}?targetServerType=primary`
 
@@ -38,6 +32,9 @@ const RESPONSIBLE_TEACHERS_SPLIT_DATE = new Date(config.get('RESPONSIBLE_TEACHER
 const TEACHER_REMINDER_DAYS_TO_OPEN = Number(config.get('TEACHER_REMINDER_DAYS_TO_OPEN'))
 const FEEDBACK_REMINDER_COOLDOWN = Number(config.get('FEEDBACK_REMINDER_COOLDOWN'))
 const STUDENT_REMINDER_DAYS_TO_CLOSE = Number(config.get('STUDENT_REMINDER_DAYS_TO_CLOSE'))
+const PATE_URL = config.get('PATE_URL')
+const JAMI_URL = inProduction ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
+const PUBLIC_URL = config.get('PUBLIC_URL')
 
 module.exports = {
   inE2EMode,
@@ -51,12 +48,13 @@ module.exports = {
   TEACHER_REMINDER_DAYS_TO_OPEN,
   FEEDBACK_REMINDER_COOLDOWN,
   STUDENT_REMINDER_DAYS_TO_CLOSE,
+  PATE_URL,
+  JAMI_URL,
+  PUBLIC_URL,
   DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,
   API_TOKEN,
-  IMPORTER_API_URL,
-  JAMI_URL,
   UPDATER_URL,
   JWT_KEY,
   WORKLOAD_QUESTION_ID,
@@ -64,5 +62,4 @@ module.exports = {
   INCLUDE_COURSES,
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,
-  useOldImporter,
 }

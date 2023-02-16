@@ -1,6 +1,6 @@
 const { differenceInHours, format } = require('date-fns')
 const { CourseUnit } = require('../../models')
-const { FEEDBACK_REMINDER_COOLDOWN } = require('../../util/config')
+const { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 
@@ -54,7 +54,7 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
 
   const courseUnit = await CourseUnit.findByPk(feedbackTarget.courseUnitId)
   const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
-  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback`
+  const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback`
   const formattedStudents = students
     .filter(student => student.email)
     .map(student => ({

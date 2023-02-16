@@ -1,4 +1,5 @@
 const { format } = require('date-fns')
+const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 
 const buildNotificationAboutEnrolment = (urlToGiveFeedback, courseName, closesAt) => {
@@ -36,7 +37,7 @@ const sendEmailNotificationAboutEnrolments = async userFeedbackTargets => {
     if (await feedbackTarget.isDisabled()) continue
 
     const courseUnit = await feedbackTarget.getCourseUnit()
-    const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback`
+    const url = `${PUBLIC_URL}/${feedbackTarget.id}/feedback`
 
     const formattedClosesAt = format(new Date(feedbackTarget.closesAt), 'dd.MM.yyyy')
 

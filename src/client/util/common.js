@@ -42,3 +42,6 @@ export const CONFIG_TEST_VALUE = CONFIG?.CONFIG_TEST_VALUE
 
 // eslint-disable-next-line no-undef
 export const CONFIG_NAME = CONFIG?.CONFIG_NAME
+
+// eslint-disable-next-line no-undef
+export const SENTRY_DSN = CONFIG?.SENTRY_DSN

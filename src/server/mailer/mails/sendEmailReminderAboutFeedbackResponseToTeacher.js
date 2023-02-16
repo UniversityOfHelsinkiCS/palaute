@@ -9,6 +9,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
+const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { instructionsAndSupport } = require('./util')
 
@@ -117,7 +118,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const { language } = teacher
   const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
-  const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
+  const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback-response`}>
       ${feedbackTarget.courseUnit.name[language]}
       </a> <br/>`
 

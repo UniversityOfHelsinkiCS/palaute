@@ -4,6 +4,7 @@ const { Op } = require('sequelize')
 const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
+const { PUBLIC_URL } = require('../../util/config')
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({
@@ -142,7 +143,7 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
     const name = userFeedbackTarget.courseRealisation.name[language]
 
     courseNameLinksAndNewFeedback = `${courseNameLinksAndNewFeedback}
-    <a href=${`https://coursefeedback.helsinki.fi/targets/${id}/continuous-feedback`}>${name}</a>
+    <a href=${`${PUBLIC_URL}/targets/${id}/continuous-feedback`}>${name}</a>
     <ul>
     ${userFeedbackTarget.continuousFeedback.map(({ data }) => `<li>${data}</li>`).join('')}
     </ul>`
