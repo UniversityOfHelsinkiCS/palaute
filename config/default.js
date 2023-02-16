@@ -103,6 +103,11 @@ const config = {
    * Might not be required once mails are extracted away from server
    */
   PUBLIC_URL: 'https://coursefeedback.helsinki.fi/',
+
+  /**
+   * Admin interface has link to our graylog to check updater logs
+   */
+  GRAYLOG_URL: '',
 }
 
 module.exports = config

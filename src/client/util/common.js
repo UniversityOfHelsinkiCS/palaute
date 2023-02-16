@@ -45,3 +45,6 @@ export const CONFIG_NAME = CONFIG?.CONFIG_NAME
 
 // eslint-disable-next-line no-undef
 export const SENTRY_DSN = CONFIG?.SENTRY_DSN
+
+// eslint-disable-next-line no-undef
+export const GRAYLOG_URL = CONFIG?.GRAYLOG_URL

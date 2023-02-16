@@ -232,6 +232,8 @@ const config = {
   JAMI_URL: 'https://importer.cs.helsinki.fi/api/auth',
 
   PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
+
+  GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
 }
 
 module.exports = config

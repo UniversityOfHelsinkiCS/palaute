@@ -21,11 +21,11 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
-import { inProduction } from '../../util/common'
+import { GRAYLOG_URL, inProduction } from '../../util/common'
 import ExternalLink from '../../components/common/ExternalLink'
 
 const createGraylogLink = updaterStatus => {
-  const baseUrl = 'https://graylog.toska.cs.helsinki.fi'
+  const baseUrl = GRAYLOG_URL
   const start = updaterStatus.startedAt
   const end = updaterStatus.finishedAt || new Date()
   return `${baseUrl}/search?q=app%3A+norppa+AND+message%3A+"%5BUPDATER%5D"&rangetype=absolute&from=${start}&to=${end}`
