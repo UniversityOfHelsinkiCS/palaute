@@ -30,7 +30,7 @@ export const makeValidate = questions => {
 
       if (hasError) {
         errors.answers = errors.answers ?? {}
-        errors.answers[questionId] = 'validationErrors.required'
+        errors.answers[questionId] = 'validationErrors:required'
       }
     })
 

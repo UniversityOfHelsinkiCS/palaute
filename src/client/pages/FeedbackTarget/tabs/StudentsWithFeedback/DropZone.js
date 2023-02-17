@@ -83,8 +83,8 @@ const DropZone = ({ students }) => {
         <div className="container" style={{ cursor: 'pointer' }}>
           <div data-cy="dropzone" {...getRootProps({ style })}>
             <input {...getInputProps()} />
-            <p>{t('dropZoneInfo1')}</p>
-            <p>{t('dropZoneInfo2')}</p>
+            <p>{t('common:dropZoneInfo1')}</p>
+            <p>{t('common:dropZoneInfo2')}</p>
           </div>
         </div>
         <ExportCsv headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
@@ -125,7 +125,7 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
     updatedRows.push(newRow)
   }
 
-  const data = [headers.concat(t('feedbackHeader')), ...updatedRows]
+  const data = [headers.concat(t('common:feedbackHeader')), ...updatedRows]
 
   const worksheet = utils.aoa_to_sheet(data)
   const workbook = utils.book_new()
@@ -139,7 +139,7 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
         style={{ margin: 10, width: '170px' }}
         onClick={() => writeFileXLSX(workbook, `${filename}_combined.xlsx`)}
       >
-        {t('downloadCSV')}
+        {t('common:downloadCSV')}
       </Button>
     </Box>
   )

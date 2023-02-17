@@ -56,7 +56,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
   const handleSubmit = async values => {
     try {
       if (!validateQuestions(values)) {
-        enqueueSnackbar(t('choiceQuestionError'), { variant: 'error' })
+        enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
       } else {
         await saveQuestionsValues(values, feedbackTarget)
 

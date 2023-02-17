@@ -80,7 +80,7 @@ const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownD
         valueMapper={value => value === 'true'}
       />
       <Box mr="4rem" />
-      <FormikSwitch label={t('required')} name={`${name}.required`} />
+      <FormikSwitch label={t('common:required')} name={`${name}.required`} />
 
       <OrderButtons
         onMoveUp={onMoveUp}

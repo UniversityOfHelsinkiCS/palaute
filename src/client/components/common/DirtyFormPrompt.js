@@ -8,7 +8,7 @@ const DirtyFormPrompt = () => {
   const { t } = useTranslation()
   const { dirty } = useFormikContext()
 
-  return <Prompt when={dirty} message={t('dirtyFormPrompt')} />
+  return <Prompt when={dirty} message={t('common:dirtyFormPrompt')} />
 }
 
 export default DirtyFormPrompt
