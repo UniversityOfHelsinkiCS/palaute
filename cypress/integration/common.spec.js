@@ -16,4 +16,9 @@ describe('Common tests', () => {
     cy.visit(`${baseUrl}/admin/users`)
     cy.contains('HY-Minttujam')
   })
+  it('Custom translation override is loaded correctly', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin/users`)
+    cy.contains('Illuminati-silmä')
+  })
 })
