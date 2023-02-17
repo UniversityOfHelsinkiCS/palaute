@@ -63,9 +63,9 @@ const QuestionItem = ({
 
       try {
         await mutation.mutateAsync(newPublicQuestionIds)
-        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch (error) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
     [publicQuestionIds]

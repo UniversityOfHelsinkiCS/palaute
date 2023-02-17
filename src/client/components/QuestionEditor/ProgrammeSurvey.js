@@ -47,10 +47,10 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
     try {
       await saveSurveyValues(values, surveyId)
       actions.resetForm({ values })
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (e) {
       console.error(e)
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -61,9 +61,9 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
 
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

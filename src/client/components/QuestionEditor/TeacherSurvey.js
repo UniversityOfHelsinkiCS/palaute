@@ -47,9 +47,9 @@ const TeacherSurvey = ({ feedbackTarget }) => {
 
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -60,11 +60,11 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       } else {
         await saveQuestionsValues(values, feedbackTarget)
 
-        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       }
     } catch (e) {
       console.error(e)
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

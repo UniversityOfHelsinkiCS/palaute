@@ -24,9 +24,9 @@ const UniversitySurvey = ({ universitySurvey }) => {
   const handleSubmit = async values => {
     try {
       await saveSurveyValues(values, universitySurvey.id)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

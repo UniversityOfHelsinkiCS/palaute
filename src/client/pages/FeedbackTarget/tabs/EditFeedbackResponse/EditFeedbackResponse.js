@@ -51,9 +51,9 @@ const EditFeedbackResponse = () => {
         id,
         data: values,
       })
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

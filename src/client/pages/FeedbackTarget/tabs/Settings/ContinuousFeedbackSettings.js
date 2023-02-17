@@ -32,9 +32,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         continuousFeedbackEnabled: !feedbackEnabled,
       })
       setFeedbackEnabled(!feedbackEnabled)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -45,9 +45,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         sendContinuousFeedbackDigestEmail: !sendDigestEmail,
       })
       setSendDigestEmail(!sendDigestEmail)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

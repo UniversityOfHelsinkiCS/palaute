@@ -39,7 +39,7 @@ const Settings = () => {
       history.replace(`/targets/${id}`)
       queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -47,7 +47,7 @@ const Settings = () => {
     try {
       await saveFeedbackPeriodValues(values, feedbackTarget)
 
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
 
       if (opensAtIsImmediately(values)) {
         history.replace(`/targets/${id}`)
@@ -55,7 +55,7 @@ const Settings = () => {
 
       queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

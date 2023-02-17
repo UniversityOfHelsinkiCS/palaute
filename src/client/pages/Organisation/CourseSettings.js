@@ -202,9 +202,9 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
         })
 
         setDisabledCourseCodes(updatedOrganisation.disabledCourseCodes)
-        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch (error) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
     [disabledCourseCodes]
@@ -225,9 +225,9 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
         })
 
         setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
-        enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch (error) {
-        enqueueSnackbar(t('unknownError'), { variant: 'error' })
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
     [studentListVisibleCourseCodes]
