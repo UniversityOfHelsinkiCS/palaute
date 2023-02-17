@@ -11,11 +11,10 @@ import { getHeaders, setHeaders } from './util/mockHeaders'
 import App from './pages/App'
 import ErrorBoundary from './components/ErrorBoundary'
 import initializeSentry from './util/sentry'
-import initializeI18n from './util/i18n'
+import './util/i18n'
 import queryClient from './util/queryClient'
 
 initializeSentry()
-initializeI18n()
 
 const ensureDevUser = () => {
   if (inProduction) return

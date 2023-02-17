@@ -234,6 +234,8 @@ const config = {
   PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
 
   GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
+
+  TRANSLATION_NAMESPACE: 'hy',
 }
 
 module.exports = config

@@ -108,6 +108,11 @@ const config = {
    * Admin interface has link to our graylog to check updater logs
    */
   GRAYLOG_URL: '',
+
+  /**
+   * The translation file to use (i18n is set to always fallback to 'translation')
+   */
+  TRANSLATION_NAMESPACE: 'translation',
 }
 
 module.exports = config
