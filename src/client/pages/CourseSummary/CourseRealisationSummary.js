@@ -117,7 +117,7 @@ const CourseRealisationSummary = () => {
 
   return (
     <>
-      <Title>{t('courseSummaryPage')}</Title>
+      <Title>{t('common:courseSummaryPage')}</Title>
       <Box display="flex" flexDirection="column">
         <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
           <Typography variant="h4" component="h1">

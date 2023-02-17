@@ -122,7 +122,7 @@ const OrganisationSummary = () => {
 
   return (
     <>
-      <Title>{t('courseSummaryPage')}</Title>
+      <Title>{t('common:courseSummaryPage')}</Title>
       <Box mb={6} px={1}>
         <Box display="flex" gap="1rem" alignItems="end">
           <Typography variant="h4" component="h1">

@@ -188,7 +188,7 @@ const QuestionCard = ({
                     {t('questionEditor:duplicate')}
                   </Button>
                   <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
-                    {t('edit')}
+                    {t('common:edit')}
                   </Button>
                 </div>
                 <OrderButtons {...orderButtonsProps} />

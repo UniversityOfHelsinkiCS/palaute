@@ -26,7 +26,7 @@ const PrivacyDialog = ({ open, onClose }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          {t('close')}
+          {t('common:close')}
         </Button>
       </DialogActions>
     </Dialog>

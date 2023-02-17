@@ -131,7 +131,7 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
                         type="submit"
                         disabled={!dirty || formDisabled || (!isValid && !isAdmin)}
                       >
-                        {t('save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
+                        {t('common:save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                       </Button>
                     </span>
                   </Tooltip>

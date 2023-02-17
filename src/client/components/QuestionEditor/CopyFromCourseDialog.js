@@ -144,7 +144,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
-          {t('close')}
+          {t('common:close')}
         </Button>
       </DialogActions>
     </Dialog>

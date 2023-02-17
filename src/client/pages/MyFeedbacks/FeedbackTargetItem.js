@@ -164,7 +164,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
 
-  const periodInfo = t('feedbackOpenPeriod', {
+  const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
     closesAt: formatDate(parseISO(closesAt)),
   })

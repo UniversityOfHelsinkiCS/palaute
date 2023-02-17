@@ -127,7 +127,7 @@ const ExportPdfLink = ({ componentRef }) => {
 
   return (
     <Button sx={styles.button} onClick={handlePrint}>
-      {t('exportPdf')}
+      {t('common:exportPdf')}
     </Button>
   )
 }
