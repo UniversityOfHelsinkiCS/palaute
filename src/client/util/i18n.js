@@ -3,10 +3,13 @@ import { initReactI18next } from 'react-i18next'
 import HttpApi from 'i18next-http-backend'
 import { basePath, inProduction, TRANSLATION_NAMESPACE } from './common'
 
-//import en from '../locales/en'
-//import fi from '../locales/fi'
-//import sv from '../locales/sv'
-
+/**
+ * Load the translation files using Http backend, from public server resources (public/locales/)
+ * We swap around the default namespace separator and keyseparator of i18n, because of how existing code used namespaces.
+ * Now, namespace specifies the translation variant to be used. For example, HY would use the 'hy' namespace.
+ * The namespace to be used is specified by the config value TRANSLATION_NAMESPACE.
+ * When a key is not found from the primary specified namespace, the fallback namespace 'translations' is used.
+ */
 i18n
   .use(initReactI18next)
   .use(HttpApi)

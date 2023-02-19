@@ -236,6 +236,8 @@ const config = {
   GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
 
   TRANSLATION_NAMESPACE: 'hy',
+
+  DEV_USERNAME: 'mluukkai',
 }
 
 module.exports = config

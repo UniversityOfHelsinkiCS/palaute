@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClientProvider } from 'react-query'
 
-import { inProduction, basePath } from './util/common'
+import { inProduction, basePath, DEV_USERNAME } from './util/common'
 import { getHeaders, setHeaders } from './util/mockHeaders'
 import App from './pages/App'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -22,7 +22,7 @@ const ensureDevUser = () => {
   if (headers.uid) return
 
   localStorage.clear()
-  setHeaders('mluukkai')
+  setHeaders(DEV_USERNAME)
 }
 
 ensureDevUser()

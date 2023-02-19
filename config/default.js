@@ -113,6 +113,11 @@ const config = {
    * The translation file to use (i18n is set to always fallback to 'translation')
    */
   TRANSLATION_NAMESPACE: 'translation',
+
+  /**
+   * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
+   */
+  DEV_USERNAME: 'mluukkai',
 }
 
 module.exports = config

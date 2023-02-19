@@ -1,19 +1,10 @@
+import { ADMINS } from './common'
+
 const ITEM_NAME = 'fakeUser'
 
-export const possibleUsers = [
-  {
-    uid: 'mluukkai',
-  },
-  {
-    uid: 'varisleo',
-  },
-  {
-    uid: 'jakousa',
-  },
-  {
-    uid: 'keolli',
-  },
-]
+export const possibleUsers = ADMINS.map(username => ({
+  uid: username,
+}))
 
 export const setHeaders = uid => {
   const user = possibleUsers.find(u => u.uid === uid)

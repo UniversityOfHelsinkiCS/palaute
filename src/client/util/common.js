@@ -51,3 +51,6 @@ export const GRAYLOG_URL = CONFIG?.GRAYLOG_URL
 
 // eslint-disable-next-line no-undef
 export const TRANSLATION_NAMESPACE = CONFIG?.TRANSLATION_NAMESPACE
+
+// eslint-disable-next-line no-undef
+export const DEV_USERNAME = CONFIG?.DEV_USERNAME
