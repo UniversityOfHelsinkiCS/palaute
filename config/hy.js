@@ -240,6 +240,8 @@ const config = {
   DEV_USERNAME: 'mluukkai',
 
   OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
+
+  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
 }
 
 module.exports = config

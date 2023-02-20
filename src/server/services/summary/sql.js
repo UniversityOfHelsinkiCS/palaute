@@ -199,7 +199,7 @@ WITH course_unit_data AS (
       organisation_id IN (:organisationIds)
       OR cr.course_realisation_id IN (:courseRealisationIds)
     )
-    AND organisation_id NOT IN ('hy-org-48901898', 'hy-org-48902017')
+    AND organisation_id NOT IN (:summaryExcludedOrgIds)
     AND start_date > :startDate
     AND start_date < :endDate
   )

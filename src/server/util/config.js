@@ -36,6 +36,7 @@ const PATE_URL = config.get('PATE_URL')
 const JAMI_URL = inProduction ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
 const PUBLIC_URL = config.get('PUBLIC_URL')
 const OPEN_UNIVERSITY_ORG_ID = config.get('OPEN_UNIVERSITY_ORG_ID')
+const SUMMARY_EXCLUDED_ORG_IDS = config.get('SUMMARY_EXCLUDED_ORG_IDS')
 
 module.exports = {
   inE2EMode,
@@ -53,6 +54,7 @@ module.exports = {
   JAMI_URL,
   PUBLIC_URL,
   OPEN_UNIVERSITY_ORG_ID,
+  SUMMARY_EXCLUDED_ORG_IDS,
   DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,

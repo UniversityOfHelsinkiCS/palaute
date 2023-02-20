@@ -123,6 +123,12 @@ const config = {
    * HY has some special cases for open university courses, especially how they are handled in summary stats. Should work when this id matches nothing.
    */
   OPEN_UNIVERSITY_ORG_ID: '',
+
+  /**
+   * These orgs are explicitely excluded from summary statistics,
+   * for example to workaround a universitys Sisu abuse that would cause weird organisations to appear in summary.
+   */
+  SUMMARY_EXCLUDED_ORG_IDS: [],
 }
 
 module.exports = config

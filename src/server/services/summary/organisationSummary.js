@@ -1,7 +1,7 @@
 const { subMonths } = require('date-fns')
 const _ = require('lodash')
 const { sequelize } = require('../../db/dbConnection')
-const { OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
+const { OPEN_UNIVERSITY_ORG_ID, SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
 const { getMean, getTagIds, getRowAverage } = require('./utils')
 
@@ -68,6 +68,7 @@ const getOrganisationSummaries = async ({
       endDate,
       includeOpenUniCourseUnits,
       openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+      summaryExcludedOrgIds: SUMMARY_EXCLUDED_ORG_IDS,
     },
     type: sequelize.QueryTypes.SELECT,
   })
