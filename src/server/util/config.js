@@ -37,6 +37,7 @@ const JAMI_URL = inProduction ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${
 const PUBLIC_URL = config.get('PUBLIC_URL')
 const OPEN_UNIVERSITY_ORG_ID = config.get('OPEN_UNIVERSITY_ORG_ID')
 const SUMMARY_EXCLUDED_ORG_IDS = config.get('SUMMARY_EXCLUDED_ORG_IDS')
+const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPONSE_EMAILS_SINCE_DATE'))
 
 module.exports = {
   inE2EMode,
@@ -55,6 +56,7 @@ module.exports = {
   PUBLIC_URL,
   OPEN_UNIVERSITY_ORG_ID,
   SUMMARY_EXCLUDED_ORG_IDS,
+  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
   DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,

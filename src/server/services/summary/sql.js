@@ -21,7 +21,12 @@ Delete this comment if you find something better
 
 const { QueryTypes } = require('sequelize')
 const { sequelize } = require('../../db/dbConnection')
-const { OPEN_UNIVERSITY_ORG_ID, WORKLOAD_QUESTION_ID, SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
+const {
+  OPEN_UNIVERSITY_ORG_ID,
+  WORKLOAD_QUESTION_ID,
+  SUMMARY_EXCLUDED_ORG_IDS,
+  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
+} = require('../../util/config')
 
 const SUMMARY_VIEW_QUERY = `
 DROP MATERIALIZED VIEW IF EXISTS course_results_view;
@@ -159,7 +164,7 @@ DISTINCT ON (cur.id)
     fbt.feedback_count as "feedbackCount",
     fbtc.student_count as "studentCount",
     fbt.hidden_count as "hiddenCount",
-    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
+    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < :feedbackResponseEmailsSinceDate) as "feedbackResponseGiven",
     fbt.closes_at as "closesAt",
     cur.start_date as "startDate",
     cur.end_date as "endDate",
@@ -183,7 +188,7 @@ WITH course_unit_data AS (
       cr.course_code as "courseCode",
       cr.question_distribution as "distribution",
       cr.question_ids as "questionIds",
-      LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
+      LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < :feedbackResponseEmailsSinceDate) as "feedbackResponseGiven",
       fbt.id as "feedbackTargetId",
       fbt.closes_at as "closesAt",
       cur.start_date as "startDate",
@@ -259,7 +264,10 @@ const runRefreshViewsQuery = async () => {
 
 const runCourseRealisationSummaryQuery = async courseCode => {
   const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
-    replacements: { courseCode },
+    replacements: {
+      courseCode,
+      feedbackResponseEmailsSinceDate: FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
+    },
     type: QueryTypes.SELECT,
   })
   return allCuSummaries
@@ -284,6 +292,7 @@ const runOrganisationSummaryQuery = async ({
       includeOpenUniCourseUnits,
       openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
       summaryExcludedOrgIds: SUMMARY_EXCLUDED_ORG_IDS,
+      feedbackResponseEmailsSinceDate: FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
     },
     type: sequelize.QueryTypes.SELECT,
   })

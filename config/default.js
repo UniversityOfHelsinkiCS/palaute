@@ -5,7 +5,7 @@
  * ---
  * The config object is JSON.stringified and populated for frontend AT BUILD TIME.
  * One should only use simple POJOs here.
- * Dates for example should be parsed elsewhere from a string defined here.
+ * Dates for example should be parsed elsewhere from a date string defined here.
  */
 const config = {
   /**
@@ -129,6 +129,13 @@ const config = {
    * for example to workaround a universitys Sisu abuse that would cause weird organisations to appear in summary.
    */
   SUMMARY_EXCLUDED_ORG_IDS: [],
+
+  /**
+   * "Feedback response given" indicator in summary is given to targets where response is written AND email about response is sent.
+   * Email-field however didn't exist always, so this config value is needed. Targets whose course ended before this date get the "given" indicator
+   * if the response is written even if the "email sent" field is false.
+   */
+  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 }
 
 module.exports = config
