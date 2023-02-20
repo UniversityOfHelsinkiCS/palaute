@@ -1,11 +1,15 @@
-const { inE2EMode, inProduction } = require('./config')
+const { inE2EMode, inProduction, OPEN_UNIVERSITY_ORG_ID } = require('./config')
 const { REFRESH_VIEWS_QUERY } = require('../services/summary')
 const { sequelize } = require('../db/dbConnection')
 const { schedule } = require('./cron')
 
 const run = async () => {
   console.time('Refresh views')
-  await sequelize.query(REFRESH_VIEWS_QUERY)
+  await sequelize.query(REFRESH_VIEWS_QUERY, {
+    replacements: {
+      openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+    },
+  })
   console.timeEnd('Refresh views')
 }
 

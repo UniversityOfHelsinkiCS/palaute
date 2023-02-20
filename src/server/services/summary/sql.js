@@ -111,11 +111,11 @@ CREATE MATERIALIZED VIEW course_results_view AS (
 
     LEFT JOIN LATERAL (
         SELECT true as is_open FROM course_units_organisations cuo 
-        WHERE cuo.course_unit_id = cu.id AND organisation_id = 'hy-org-48645785'
+        WHERE cuo.course_unit_id = cu.id AND organisation_id = :openUniversityOrgId
         --LIMIT 1
         UNION
         SELECT true as is_open FROM course_realisations_organisations curo 
-        WHERE curo.course_realisation_id = curr.course_realisation_id AND organisation_id = 'hy-org-48645785'
+        WHERE curo.course_realisation_id = curr.course_realisation_id AND organisation_id = :openUniversityOrgId
         --LIMIT 1
     ) org_access ON true
 );
@@ -211,7 +211,7 @@ WITH course_unit_data AS (
 
   FROM 
     stuffs
-  WHERE :includeOpenUniCourseUnits OR "isOpen" = ("organisationId" = 'hy-org-48645785')
+  WHERE :includeOpenUniCourseUnits OR "isOpen" = ("organisationId" = :openUniversityOrgId)
   GROUP BY "organisationId", stuffs."courseCode"
 )
 

@@ -238,6 +238,8 @@ const config = {
   TRANSLATION_NAMESPACE: 'hy',
 
   DEV_USERNAME: 'mluukkai',
+
+  OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
 }
 
 module.exports = config

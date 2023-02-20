@@ -118,6 +118,11 @@ const config = {
    * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
    */
   DEV_USERNAME: 'mluukkai',
+
+  /**
+   * HY has some special cases for open university courses, especially how they are handled in summary stats. Should work when this id matches nothing.
+   */
+  OPEN_UNIVERSITY_ORG_ID: '',
 }
 
 module.exports = config

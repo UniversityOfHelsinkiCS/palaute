@@ -35,6 +35,7 @@ const STUDENT_REMINDER_DAYS_TO_CLOSE = Number(config.get('STUDENT_REMINDER_DAYS_
 const PATE_URL = config.get('PATE_URL')
 const JAMI_URL = inProduction ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
 const PUBLIC_URL = config.get('PUBLIC_URL')
+const OPEN_UNIVERSITY_ORG_ID = config.get('OPEN_UNIVERSITY_ORG_ID')
 
 module.exports = {
   inE2EMode,
@@ -51,6 +52,7 @@ module.exports = {
   PATE_URL,
   JAMI_URL,
   PUBLIC_URL,
+  OPEN_UNIVERSITY_ORG_ID,
   DB_CONNECTION_STRING,
   REDIS_CONFIG,
   PORT,
