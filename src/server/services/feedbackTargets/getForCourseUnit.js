@@ -2,8 +2,6 @@ const _ = require('lodash')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } = require('../../models')
 
-const OLDEST_END_DATE = new Date('2021-09-01')
-
 const getForCourseUnit = async ({
   courseCode,
   user,
@@ -110,7 +108,7 @@ const getForCourseUnit = async ({
       feedbackResponseGiven: target.feedbackResponse?.length > 3,
       feedbackResponseSent: target.feedbackResponseEmailSent,
     }))
-    .filter(fbt => fbt.feedbackCount > 0 || Date.parse(fbt.courseRealisation.endDate) > OLDEST_END_DATE)
+    .filter(fbt => fbt.feedbackCount > 0)
 
   return formattedFeedbackTargets
 }
