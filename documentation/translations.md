@@ -24,6 +24,46 @@ NodeJS example
 
 // TODO. i18n setup for backend is a work in progress.
 
+### Coding style considerations
+
+<details>
+  <summary>
+    See details
+  </summary>
+
+  When using the `t` function, always access translation keys by providing the key as a string literal as an argument directly to the function. This drastically helps searching for translation key usage and helps the job of automatic translation checker tools.
+  ```js
+  // good
+  const someTranslatedText = t('common:validation:error')
+
+  // good
+  const someJsx = <div>{t('common:validation:success')}</div>
+
+  // Still fine
+  const options = {
+    first: t('options:first'),
+    second: t('options:second'),
+    third: t('options:third'),
+  }
+
+  // Bad! Search tools or checkers can have hard time finding these keys.
+  const optionKeys = {
+    first: 'options:first',
+    second: 'options:second',
+    third: 'options:third',
+  }
+
+  // Bad! Should only pass a string literal to t
+  const moreTranslatedText = t(optionKeys["first"])
+
+  // Bad!
+  const yetAnother = t(level === 0 ? 'common:levelZero' : 'common:levelOther')
+
+  // Do it like this:
+  const better = level === 0 ? t('common:levelZero') : t('common:levelOther')
+  ```
+</details>
+
 ## Translation files
 
 Are located at `public/locales/{{language}}/{{namespace}}.json`. Namespaces are used for different variants of translations. The default namespace is `translations`, and other namespaces can extend and override keys from the default.
