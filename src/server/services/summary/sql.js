@@ -19,6 +19,10 @@ https://www.postgresql.org/docs/current/functions-json.html
 Delete this comment if you find something better
 */
 
+const { QueryTypes } = require('sequelize')
+const { sequelize } = require('../../db/dbConnection')
+const { OPEN_UNIVERSITY_ORG_ID, WORKLOAD_QUESTION_ID, SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
+
 const SUMMARY_VIEW_QUERY = `
 DROP MATERIALIZED VIEW IF EXISTS course_results_view;
 CREATE MATERIALIZED VIEW course_results_view AS (
@@ -34,7 +38,7 @@ CREATE MATERIALIZED VIEW course_results_view AS (
                         FROM questions, surveys
                         WHERE questions.id = ANY(surveys.question_ids)
                         AND (surveys.type = 'university' OR surveys.type = 'programme')
-                        AND (questions.type = 'LIKERT' OR questions.id = 1042)
+                        AND (questions.type = 'LIKERT' OR questions.id = :workloadQuestionId)
                     ), feedbacks_1 AS (
                         SELECT 
                             (jsonb_array_elements(data)) as data,
@@ -231,10 +235,66 @@ INNER JOIN course_units cu ON cu.course_code = "courseCode"
 INNER JOIN organisations org ON org.id = "organisationId"
 `
 
+/**
+ * Views must be initialised when database is first created. This can be done in a migration for example.
+ */
+const initialiseSummaryView = async () => {
+  await sequelize.query(SUMMARY_VIEW_QUERY, {
+    replacements: { openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID, workloadQuestionId: WORKLOAD_QUESTION_ID },
+  })
+}
+
+const initialiseCountsView = async () => {
+  await sequelize.query(COUNTS_VIEW_QUERY)
+}
+
+const runRefreshViewsQuery = async () => {
+  await sequelize.query(REFRESH_VIEWS_QUERY, {
+    replacements: {
+      openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+      workloadQuestionId: WORKLOAD_QUESTION_ID,
+    },
+  })
+}
+
+const runCourseRealisationSummaryQuery = async courseCode => {
+  const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
+    replacements: { courseCode },
+    type: QueryTypes.SELECT,
+  })
+  return allCuSummaries
+}
+
+/**
+ * @returns rows for each CU with its associated CURs in json
+ */
+const runOrganisationSummaryQuery = async ({
+  organisationIds,
+  courseRealisationIds,
+  startDate,
+  endDate,
+  includeOpenUniCourseUnits,
+}) => {
+  const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
+    replacements: {
+      organisationIds: organisationIds.length === 0 ? [''] : organisationIds, // do this for sql reasons
+      courseRealisationIds: courseRealisationIds.length === 0 ? [''] : courseRealisationIds,
+      startDate,
+      endDate,
+      includeOpenUniCourseUnits,
+      openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+      summaryExcludedOrgIds: SUMMARY_EXCLUDED_ORG_IDS,
+    },
+    type: sequelize.QueryTypes.SELECT,
+  })
+
+  return rows
+}
+
 module.exports = {
-  SUMMARY_VIEW_QUERY,
-  COUNTS_VIEW_QUERY,
-  REFRESH_VIEWS_QUERY,
-  COURSE_REALISATION_SUMMARY_QUERY,
-  ORGANISATION_SUMMARY_QUERY,
+  initialiseSummaryView,
+  initialiseCountsView,
+  runRefreshViewsQuery,
+  runCourseRealisationSummaryQuery,
+  runOrganisationSummaryQuery,
 }
