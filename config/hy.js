@@ -244,6 +244,10 @@ const config = {
   SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
 
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
+
+  PRIVATE_TEST: 'Pahaminttu',
+
+  PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 }
 
 module.exports = config
