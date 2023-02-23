@@ -17,7 +17,6 @@ import {
   PollOutlined,
   ShareOutlined,
   ReviewsOutlined,
-  Edit,
 } from '@mui/icons-material'
 
 import Results from './tabs/Results'
@@ -356,7 +355,7 @@ const FeedbackTargetContent = () => {
 
       <Box mb="2rem" sx={styles.hidePrint}>
         <TabGroupsContainer>
-          <TabGroup title={t('common:survey')} titleVisible={!isStudent}>
+          <TabGroup title={t('common:survey')} hideTitle={isStudent}>
             {feedback && isOpen ? (
               <RouterTab
                 label={t('feedbackTargetView:editFeedbackTab')}
@@ -403,7 +402,7 @@ const FeedbackTargetContent = () => {
           </TabGroup>
 
           {showResultsSection && (
-            <TabGroup title={t('feedbackTargetView:results')} titleVisible={!isStudent}>
+            <TabGroup title={t('feedbackTargetView:results')} hideTitle={isStudent}>
               <RouterTab label={t('feedbackTargetView:feedbacksTab')} to={`${url}/results`} icon={<PollOutlined />} />
               {showStudentsWithFeedbackTab && (
                 <RouterTab

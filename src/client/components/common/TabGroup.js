@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Divider, Paper, Typography } from '@mui/material'
 
-export const TabGroup = ({ title, titleVisible, Icon, children }) => (
+export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
   <Box display="flex">
     <Box display="flex" flexDirection="column" pt="0.6rem">
-      {titleVisible && (
+      {!hideTitle && (
         <Box display="flex" gap="0.5rem" px="1.5rem" mb="auto" color="textSecondary" alignItems="center">
           {Icon && <Icon sx={theme => ({ color: theme.palette.text.secondary })} />}
           <Typography variant="button" color="textSecondary" sx={{ userSelect: 'none' }} fontSize="small">

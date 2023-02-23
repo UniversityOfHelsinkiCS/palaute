@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
-import { Tabs, Box, Tooltip, Badge, Paper, Button, Tab } from '@mui/material'
+import { Tabs, Box, Tooltip, Badge, Paper, Tab } from '@mui/material'
 
 import { get } from 'lodash'
 
