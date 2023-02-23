@@ -1,9 +1,9 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Switch, useRouteMatch, useParams, Redirect, Link } from 'react-router-dom'
+import { Switch, useRouteMatch, useParams, Redirect } from 'react-router-dom'
 
-import { Box, Typography, Tab, Button, Alert, List, ListItem } from '@mui/material'
+import { Box, Typography, Button, Alert, List, ListItem } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import { useTranslation } from 'react-i18next'
@@ -17,6 +17,7 @@ import {
   PollOutlined,
   ShareOutlined,
   ReviewsOutlined,
+  Edit,
 } from '@mui/icons-material'
 
 import Results from './tabs/Results'
@@ -30,7 +31,7 @@ import Logs from './tabs/Logs'
 import ContinuousFeedback from './tabs/ContinuousFeedback'
 
 import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
-import { RouterTab, RouterTabs, TabLabel } from '../../components/common/RouterTabs'
+import { RouterTab } from '../../components/common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -52,6 +53,7 @@ import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
 import Title from '../../components/common/Title'
+import { TabGroup, TabGroupsContainer } from '../../components/common/TabGroup'
 
 const styles = {
   datesContainer: {
@@ -201,15 +203,13 @@ const FeedbackTargetContent = () => {
 
   const hasContinuousFeedback = continuousFeedbackCount > 0
 
-  const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
+  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
   const showContinuousFeedbackTab =
     continuousFeedbackEnabled || ((isOrganisationAdmin || isResponsibleTeacher) && hasContinuousFeedback)
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = isOrganisationAdmin || isResponsibleTeacher
-  const showTogen = isAdmin
-  const showLogsTab = isAdmin
 
   const showTags = feedbackTarget?.tags?.length > 0
   const coursePeriod = getCoursePeriod(courseRealisation)
@@ -355,65 +355,78 @@ const FeedbackTargetContent = () => {
       </Box>
 
       <Box mb="2rem" sx={styles.hidePrint}>
-        <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab
-            label={
-              feedback && isOpen ? (
-                <TabLabel icon={<EditOutlined />} text={t('feedbackTargetView:editFeedbackTab')} />
-              ) : (
-                <TabLabel icon={<LiveHelpOutlined />} text={t('feedbackTargetView:surveyTab')} />
-              )
-            }
-            component={Link}
-            to={`${url}/feedback`}
-          />
-          {showFeedbacksTab && (
-            <RouterTab icon={<PollOutlined />} label={t('feedbackTargetView:feedbacksTab')} to={`${url}/results`} />
+        <TabGroupsContainer>
+          <TabGroup title={t('common:survey')} titleVisible={!isStudent}>
+            {feedback && isOpen ? (
+              <RouterTab
+                label={t('feedbackTargetView:editFeedbackTab')}
+                to={`${url}/feedback`}
+                icon={<EditOutlined />}
+              />
+            ) : (
+              <RouterTab
+                label={t('feedbackTargetView:surveyTab')}
+                to={`${url}/feedback`}
+                badge={isOpen}
+                icon={<LiveHelpOutlined />}
+              />
+            )}
+            {showSettingsTab && (
+              <RouterTab
+                label={t('feedbackTargetView:surveySettingsTab')}
+                to={`${url}/edit`}
+                badge={!settingsReadByTeacher}
+                icon={<EditOutlined />}
+              />
+            )}
+            {showContinuousFeedbackTab && (
+              <RouterTab
+                label={t('feedbackTargetView:continuousFeedbackTab')}
+                to={`${url}/continuous-feedback`}
+                badge={continuousFeedbackCount}
+                badgeContent={continuousFeedbackCount}
+                badgeColor="grey"
+                icon={<ReviewsOutlined />}
+              />
+            )}
+            {showEditFeedbackResponseTab && (
+              <RouterTab
+                label={t('feedbackTargetView:editFeedbackResponseTab')}
+                to={`${url}/edit-feedback-response`}
+                badge={!feedbackResponseEmailSent}
+                icon={<EditOutlined />}
+              />
+            )}
+            {showLinksTab && (
+              <RouterTab label={t('feedbackTargetView:shareTab')} to={`${url}/share`} icon={<ShareOutlined />} />
+            )}
+          </TabGroup>
+
+          {showResultsSection && (
+            <TabGroup title={t('feedbackTargetView:results')} titleVisible={!isStudent}>
+              <RouterTab label={t('feedbackTargetView:feedbacksTab')} to={`${url}/results`} icon={<PollOutlined />} />
+              {showStudentsWithFeedbackTab && (
+                <RouterTab
+                  label={t('feedbackTargetView:studentsWithFeedbackTab')}
+                  to={`${url}/students-with-feedback`}
+                  icon={<PeopleOutlined />}
+                />
+              )}
+            </TabGroup>
           )}
-          {showContinuousFeedbackTab && (
-            <RouterTab
-              icon={<ReviewsOutlined />}
-              label={t('feedbackTargetView:continuousFeedbackTab')}
-              to={`${url}/continuous-feedback`}
-              badge={continuousFeedbackCount}
-              badgeContent={continuousFeedbackCount}
-              badgeColor="grey"
-            />
+
+          {isAdmin && (
+            <TabGroup title="Admin">
+              <RouterTab label="Togen" to={`${url}/togen`} icon={<ListOutlined />} />
+              <RouterTab label="Logs" to={`${url}/logs`} icon={<ListOutlined />} />
+            </TabGroup>
           )}
-          {showEditFeedbackResponseTab && (
-            <RouterTab
-              icon={<EditOutlined />}
-              label={t('feedbackTargetView:editFeedbackResponseTab')}
-              to={`${url}/edit-feedback-response`}
-              badge={!feedbackResponseEmailSent}
-            />
-          )}
-          {showSettingsTab && (
-            <RouterTab
-              icon={<EditOutlined />}
-              label={t('feedbackTargetView:surveySettingsTab')}
-              to={`${url}/edit`}
-              badge={!settingsReadByTeacher}
-            />
-          )}
-          {showLinksTab && (
-            <RouterTab icon={<ShareOutlined />} label={t('feedbackTargetView:shareTab')} to={`${url}/share`} />
-          )}
-          {showStudentsWithFeedbackTab && (
-            <RouterTab
-              icon={<PeopleOutlined />}
-              label={t('feedbackTargetView:studentsWithFeedbackTab')}
-              to={`${url}/students-with-feedback`}
-            />
-          )}
-          {showTogen && <RouterTab icon={<ListOutlined />} label="Togen" to={`${url}/togen`} />}
-          {showLogsTab && <RouterTab icon={<ListOutlined />} label="Logs" to={`${url}/logs`} />}
-        </RouterTabs>
+        </TabGroupsContainer>
       </Box>
 
       <Switch>
         <ProtectedRoute path={`${path}/edit`} component={Settings} hasAccess={showSettingsTab} />
-        <ProtectedRoute path={`${path}/results`} component={Results} hasAccess={showFeedbacksTab} />
+        <ProtectedRoute path={`${path}/results`} component={Results} hasAccess={showResultsSection} />
         <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} hasAccess />
         <ProtectedRoute
           path={`${path}/continuous-feedback`}
@@ -426,13 +439,13 @@ const FeedbackTargetContent = () => {
           hasAccess={showStudentsWithFeedbackTab}
         />
         <ProtectedRoute path={`${path}/share`} component={Share} hasAccess={showLinksTab} />
-        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={showTogen} />
+        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={isAdmin} />
         <ProtectedRoute
           path={`${path}/edit-feedback-response`}
           component={EditFeedbackResponse}
           hasAccess={showEditFeedbackResponseTab}
         />
-        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={showLogsTab} />
+        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={isAdmin} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>
