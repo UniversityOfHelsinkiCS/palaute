@@ -129,38 +129,44 @@ const QuestionResults = React.memo(
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
-            sx={theme => ({
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '1rem',
-              [theme.breakpoints.down('xl')]: {
-                gridTemplateColumns: 'repeat(4, 1fr)',
-              },
-              [theme.breakpoints.down('lg')]: {
-                gridTemplateColumns: 'repeat(3, 1fr)',
-              },
-              [theme.breakpoints.down('md')]: {
-                gridTemplateColumns: 'repeat(2, 1fr)',
-              },
-              [theme.breakpoints.down('sm')]: {
-                gridTemplateColumns: 'repeat(1, 1fr)',
-              },
-              '@media print': {
-                gridTemplateColumns: 'repeat(4, 1fr)',
-              },
-            })}
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}
           >
             {notOpenQuestions.map(q => (
-              <QuestionItem
+              <Box
                 key={q.id}
-                question={q}
-                publicQuestionIds={publicQuestionIds}
-                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                isResponsibleTeacher={isResponsibleTeacher}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={feedbackTargetId}
-                t={t}
-              />
+                sx={theme => ({
+                  width: '20%',
+                  padding: '0.5rem',
+                  [theme.breakpoints.down('xl')]: {
+                    width: '25%',
+                  },
+                  [theme.breakpoints.down('lg')]: {
+                    width: '33%',
+                  },
+                  [theme.breakpoints.down('md')]: {
+                    width: '50%',
+                  },
+                  [theme.breakpoints.down('sm')]: {
+                    width: '100%',
+                  },
+                  '@media print': {
+                    width: '20%',
+                  },
+                })}
+              >
+                <QuestionItem
+                  question={q}
+                  publicQuestionIds={publicQuestionIds}
+                  disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+                  isResponsibleTeacher={isResponsibleTeacher}
+                  feedbackCount={feedbackCount}
+                  feedbackTargetId={feedbackTargetId}
+                  t={t}
+                />
+              </Box>
             ))}
           </Box>
         </QuestionSection>
