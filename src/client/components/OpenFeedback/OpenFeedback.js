@@ -10,8 +10,8 @@ const styles = {
     boxShadow: `0 1px 5px 0px rgb(0 0 50 / 13%)`,
     backgroundColor: grey[50],
     borderRadius: '0.8rem',
-    marginBottom: '0.6rem',
-    p: '0.9rem',
+    marginBottom: '1rem',
+    p: '0.7rem',
     width: '100%',
     alignItems: 'start',
   },
@@ -24,12 +24,6 @@ const styles = {
 }
 
 export const OpenFeedbackContainer = ({ children, sx = {} }) => <Box sx={[styles.listItem, sx]}>{children}</Box>
-
-export const OpenFeedbackText = ({ content }) => (
-  <Typography whiteSpace="pre-line" fontSize={18} fontWeight={400}>
-    {content}
-  </Typography>
-)
 
 export const OpenFeedback = ({ content, hidden, toggleVisibility, canHide }) => {
   const { t } = useTranslation()

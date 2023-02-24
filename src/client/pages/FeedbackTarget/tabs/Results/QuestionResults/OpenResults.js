@@ -6,7 +6,8 @@ import { useInView } from 'react-intersection-observer'
 
 import ResultsContent from './ResultsContent'
 import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
-import { OpenFeedback, OpenFeedbackText } from '../../../../../components/OpenFeedback/OpenFeedback'
+import { OpenFeedback } from '../../../../../components/OpenFeedback/OpenFeedback'
+import Markdown from '../../../../../components/common/Markdown'
 
 const styles = {
   list: theme => ({
@@ -75,9 +76,9 @@ const OpenResults = ({ question }) => {
           {render &&
             feedbacks.map((f, index) => (
               <OpenFeedback
-                content={<OpenFeedbackText content={f.data} />}
-                hidden={f.hidden}
                 key={index}
+                content={<Markdown disallowImages>{f.data}</Markdown>}
+                hidden={f.hidden}
                 canHide={canHide}
                 toggleVisibility={() => toggleVisibility(f)}
               />

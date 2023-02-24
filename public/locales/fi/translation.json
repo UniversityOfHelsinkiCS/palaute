@@ -5,11 +5,6 @@
       "sv": "Ruotsi",
       "en": "Englanti"
     },
-    "validationErrors": {
-      "required": "Tämä kenttä vaaditaan",
-      "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
-      "invalidDate": "Virheellinen päivämäärä"
-    },
     "unknownError": "Jotain meni pieleen",
     "choiceQuestionError": "Valintakysymykset tarvitsevat vastausvaihtoehtoja",
     "fetchError": "Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.",
@@ -69,6 +64,11 @@
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna"
+  },
+  "validationErrors": {
+    "required": "Tämä kenttä vaaditaan",
+    "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
+    "invalidDate": "Virheellinen päivämäärä"
   },
   "links": {
     "supportEmail": "coursefeedback@helsinki.fi",

@@ -5,11 +5,6 @@
       "sv": "Swedish",
       "en": "English"
     },
-    "validationErrors": {
-      "required": "This field is required",
-      "wrongDate": "Survey closing date is before opening date",
-      "invalidDate": "Invalid date"
-    },
     "unknownError": "Something went wrong",
     "choiceQuestionError": "Choice questions require answer options",
     "fetchError": "Error while fetching data. Refreshing the page may fix this.",
@@ -69,6 +64,11 @@
     "editable": "You can change this setting",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected"
+  },
+  "validationErrors": {
+    "required": "This field is required",
+    "wrongDate": "Survey closing date is before opening date",
+    "invalidDate": "Invalid date"
   },
   "links": {
     "supportEmail": "coursefeedback@helsinki.fi",

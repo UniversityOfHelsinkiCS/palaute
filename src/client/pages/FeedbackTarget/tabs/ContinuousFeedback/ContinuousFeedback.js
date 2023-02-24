@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Box, Paper, Typography, Alert, Button, Card, CardContent } from '@mui/material'
+import { Box, Typography, Alert, Button, Card, CardContent } from '@mui/material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import ResponseForm from './ResponseForm'
