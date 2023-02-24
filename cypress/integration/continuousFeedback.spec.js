@@ -10,7 +10,7 @@ describe('Continuous feedback', () => {
     cy.setUpSecondaryTeacherView()
     cy.loginAsSecondaryTeacher()
 
-    cy.visit(`${baseUrl}/targets/163/edit`)
+    cy.visit(`${baseUrl}/targets/163/continuous-feedback`)
 
     cy.get('[data-cy=activateContinuousFeedback]').click()
 
