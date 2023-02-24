@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Box, Paper, Typography, Alert, Button } from '@mui/material'
+import { Box, Paper, Typography, Alert, Button, Card, CardContent } from '@mui/material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
-
 import ResponseForm from './ResponseForm'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
@@ -11,6 +10,8 @@ import { feedbackTargetIsOngoing } from './utils'
 import Markdown from '../../../../components/common/Markdown'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import ErrorView from '../../../../components/common/ErrorView'
+import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
+import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -18,9 +19,9 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const [showEdit, setShowEdit] = useState(false)
 
   return (
-    <Box ml={2} mt={-1} mb={2}>
-      <Paper>
-        <Box padding={2} marginBottom={2}>
+    <Box ml="2rem">
+      <OpenFeedbackContainer sx={{ mb: '1rem' }}>
+        <Box width="100%">
           <Typography variant="body2">{t('feedbackTargetView:continuousFeedbackResponse')}</Typography>
           <Markdown>{response}</Markdown>
           {isTeacher && (
@@ -33,13 +34,13 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
             </Box>
           )}
         </Box>
-      </Paper>
+      </OpenFeedbackContainer>
       {showEdit && <ResponseForm feedbackId={feedbackId} setShow={setShowEdit} refetch={refetch} response={response} />}
     </Box>
   )
 }
 
-const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
+const FeedbackItem = ({ feedback, canRespond, refetch }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
@@ -47,15 +48,15 @@ const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
   const [showResponse, setShowResponse] = useState(false)
 
   return (
-    <Box>
-      <Paper>
-        <Box padding={2} marginBottom={2}>
+    <Box mb="2rem">
+      <OpenFeedbackContainer>
+        <Box width="100%">
           <Markdown>{data}</Markdown>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="body2" alignSelf="flex-end">
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
-            {isResponsibleTeacher && !response && (
+            {canRespond && !response && (
               <Button onClick={() => setShowResponse(!showResponse)}>
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
@@ -64,10 +65,8 @@ const FeedbackItem = ({ feedback, isResponsibleTeacher, refetch }) => {
             )}
           </Box>
         </Box>
-      </Paper>
-      {response && (
-        <ResponseItem feedbackId={id} response={response} isTeacher={isResponsibleTeacher} refetch={refetch} />
-      )}
+      </OpenFeedbackContainer>
+      {response && <ResponseItem feedbackId={id} response={response} isTeacher={canRespond} refetch={refetch} />}
       {showResponse && <ResponseForm feedbackId={id} setShow={setShowResponse} refetch={refetch} />}
     </Box>
   )
@@ -88,13 +87,9 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
   return null
 }
 
-const ContinuousFeedback = () => {
+const ContinuousFeedbackList = ({ canRespond }) => {
   const { id } = useParams()
-  const { t } = useTranslation()
-
   const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
-
-  const { feedbackTarget, isTeacher, isResponsibleTeacher, isStudent } = useFeedbackTargetContext()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -104,46 +99,63 @@ const ContinuousFeedback = () => {
     return <ErrorView returnTo={`/targets/${id}`} />
   }
 
-  const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
-
   const sortedFeedbacks = continuousFeedbacks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
-  const { continuousFeedbackEnabled } = feedbackTarget
-  const hasFeedback = sortedFeedbacks.length > 0
+  return (
+    <Box>
+      {sortedFeedbacks.map(feedback => (
+        <FeedbackItem key={feedback.id} feedback={feedback} canRespond={canRespond} refetch={refetch} />
+      ))}
+    </Box>
+  )
+}
+
+const ContinuousFeedback = () => {
+  const { id } = useParams()
+  const { t } = useTranslation()
+
+  const { feedbackTarget, isTeacher, isResponsibleTeacher, isAdmin, isOrganisationAdmin, isStudent } =
+    useFeedbackTargetContext()
+
+  const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
+
+  const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
+
+  const { continuousFeedbackEnabled, continuousFeedbackCount } = feedbackTarget
 
   return (
-    <Box margin={3}>
-      <Typography mb={1} textTransform="uppercase">
-        {t('feedbackTargetView:continuousFeedbackGiven')}
-      </Typography>
+    <Box>
+      {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
-      {isStudent && (
-        <Box mb={2}>
-          <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
-        </Box>
-      )}
+      <Box my="1rem">
+        <Card>
+          <CardContent>
+            <Box mb={4}>
+              <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackGiven')}</Typography>
+            </Box>
 
-      {(isTeacher || isResponsibleTeacher) && (
-        <Box mb={2}>
-          <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={hasFeedback} />
-        </Box>
-      )}
+            {isStudent && (
+              <Box mb={2}>
+                <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
+              </Box>
+            )}
 
-      {hasFeedback &&
-        sortedFeedbacks.map(feedback => (
-          <FeedbackItem
-            key={feedback.id}
-            feedback={feedback}
-            isResponsibleTeacher={isResponsibleTeacher}
-            refetch={refetch}
-          />
-        ))}
+            {(isTeacher || isResponsibleTeacher) && (
+              <Box mb={2}>
+                <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
+              </Box>
+            )}
 
-      {isStudent && isOngoing && (
-        <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
-          {t('userFeedbacks:giveContinuousFeedback')}
-        </Button>
-      )}
+            <ContinuousFeedbackList canRespond={isResponsibleTeacher} />
+
+            {isStudent && isOngoing && (
+              <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
+                {t('userFeedbacks:giveContinuousFeedback')}
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   )
 }

@@ -1,13 +1,12 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import { Box, CircularProgress, IconButton, ListItem, ListItemText, Tooltip } from '@mui/material'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Box, CircularProgress } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 
 import ResultsContent from './ResultsContent'
 import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
+import { OpenFeedback, OpenFeedbackText } from '../../../../../components/OpenFeedback/OpenFeedback'
 
 const styles = {
   list: theme => ({
@@ -39,49 +38,6 @@ const styles = {
       height: 'auto',
     },
   }),
-  listItem: {
-    boxShadow: `0 2px 4px 0 rgb(0 0 0 / 7%)`,
-    backgroundColor: grey[50],
-    borderRadius: '0.8rem',
-    marginBottom: '0.5rem',
-  },
-  hiddenListItem: theme => ({
-    color: theme.palette.error.light,
-  }),
-  noPrint: {
-    '@media print': { display: 'none' },
-  },
-}
-
-const OpenFeedback = ({ feedback, toggleVisibility, canHide }) => {
-  const { t } = useTranslation()
-  const secondaryText = feedback.hidden ? t('feedbackTargetResults:hiddenInfo') : ''
-
-  return (
-    <ListItem
-      sx={[styles.listItem, feedback.hidden ? styles.hiddenListItem : {}]}
-      secondaryAction={
-        canHide && (
-          <Box display="flex" alignContent="start" sx={styles.noPrint}>
-            <Tooltip
-              title={t(feedback.hidden ? 'feedbackTargetResults:setVisible' : 'feedbackTargetResults:setHidden')}
-            >
-              <IconButton onClick={() => toggleVisibility(feedback)} size="small">
-                {feedback.hidden ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )
-      }
-    >
-      <ListItemText
-        sx={{ py: '0.2rem' }}
-        primary={feedback.data}
-        primaryTypographyProps={{ fontSize: 18, whiteSpace: 'pre-line', fontWeight: '400' }}
-        secondary={secondaryText}
-      />
-    </ListItem>
-  )
 }
 
 const useRenderVisible = ({ threshold = 0.0, delay = 0, initial = false }) => {
@@ -118,7 +74,13 @@ const OpenResults = ({ question }) => {
           )}
           {render &&
             feedbacks.map((f, index) => (
-              <OpenFeedback feedback={f} key={index} canHide={canHide} toggleVisibility={toggleVisibility} />
+              <OpenFeedback
+                content={<OpenFeedbackText content={f.data} />}
+                hidden={f.hidden}
+                key={index}
+                canHide={canHide}
+                toggleVisibility={() => toggleVisibility(f)}
+              />
             ))}
         </Box>
       </Box>

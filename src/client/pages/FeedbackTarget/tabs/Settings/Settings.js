@@ -13,7 +13,6 @@ import {
   saveFeedbackPeriodValues,
 } from './utils'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
-import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
@@ -78,7 +77,6 @@ const Settings = () => {
           onOpenImmediately={handleOpenFeedbackImmediately}
           feedbackTarget={feedbackTarget}
         />
-        <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
       </Box>
       <EditFeedbackTarget />
     </Box>
