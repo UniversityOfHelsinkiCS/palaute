@@ -26,11 +26,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
           <Markdown>{response}</Markdown>
           {isTeacher && (
             <Box display="flex" justifyContent="flex-end" mt={-2}>
-              <Button onClick={() => setShowEdit(!showEdit)}>
-                {showEdit
-                  ? t('feedbackTargetView:closeRespondContinuousFeedback')
-                  : t('feedbackTargetView:editContinuousFeedbackResponse')}
-              </Button>
+              <Button onClick={() => setShowEdit(!showEdit)}>{showEdit ? t('common:close') : t('common:edit')}</Button>
             </Box>
           )}
         </Box>
