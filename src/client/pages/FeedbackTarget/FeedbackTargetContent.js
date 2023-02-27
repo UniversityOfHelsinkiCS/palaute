@@ -36,13 +36,7 @@ import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 
-import {
-  getCoursePeriod,
-  copyLink,
-  getFeedbackPeriod,
-  getCourseUnitSummaryPath,
-  deleteResponsibleTeacher,
-} from './utils'
+import { copyLink, getCourseUnitSummaryPath, deleteResponsibleTeacher } from './utils'
 
 import TeacherChip from '../../components/common/TeacherChip'
 import PercentageCell from '../CourseSummary/PercentageCell'
@@ -53,6 +47,7 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
 import Title from '../../components/common/Title'
 import { TabGroup, TabGroupsContainer } from '../../components/common/TabGroup'
+import Dates from './Dates'
 
 const styles = {
   datesContainer: {
@@ -208,8 +203,6 @@ const FeedbackTargetContent = () => {
   const showSettingsTab = isOrganisationAdmin || isResponsibleTeacher
 
   const showTags = feedbackTarget?.tags?.length > 0
-  const coursePeriod = getCoursePeriod(courseRealisation)
-  const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
@@ -232,7 +225,7 @@ const FeedbackTargetContent = () => {
   return (
     <>
       <Title>{title}</Title>
-      <Box mb={3}>
+      <Box mb={2}>
         {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>
           <Box display="flex" flexDirection="column" gap="1rem">
@@ -276,37 +269,8 @@ const FeedbackTargetContent = () => {
         </Box>
 
         <Box sx={styles.infoContainer}>
-          <Box mr="auto">
-            <dl css={styles.datesContainer}>
-              <Typography color="textSecondary" variant="body2" component="dt">
-                {t('feedbackTargetView:coursePeriod')}:
-              </Typography>
+          <Dates />
 
-              <Typography color="textSecondary" variant="body2" component="dd">
-                {coursePeriod}
-              </Typography>
-
-              <Typography color="textSecondary" variant="body2" component="dt">
-                {t('feedbackTargetView:feedbackPeriod')}:
-              </Typography>
-
-              <Typography color="textSecondary" variant="body2" component="dd">
-                {feedbackPeriod}
-              </Typography>
-
-              {continuousFeedbackEnabled && (
-                <>
-                  <Typography color="textSecondary" variant="body2" component="dt">
-                    {t('feedbackTargetView:continuousFeedbackTab')}:
-                  </Typography>
-
-                  <Typography color="textSecondary" variant="body2" component="dd">
-                    {coursePeriod}
-                  </Typography>
-                </>
-              )}
-            </dl>
-          </Box>
           {isResponsibleTeacher && (
             <Box mt="1rem" mr="3rem">
               <Typography gutterBottom>{t('feedbackTargetView:studentsWithFeedbackTab')}</Typography>

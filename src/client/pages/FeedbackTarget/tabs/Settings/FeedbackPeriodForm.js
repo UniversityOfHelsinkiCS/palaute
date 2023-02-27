@@ -2,41 +2,67 @@ import React, { useState, useRef } from 'react'
 import { Box, Button, Tooltip, Link, Alert } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
+import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router'
+import { WarningAmber } from '@mui/icons-material'
 
 import FormikDatePicker from '../../../../components/common/FormikDatePicker'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
-import { validateFeedbackPeriod, requiresSubmitConfirmation } from './utils'
-import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
-import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import {
+  validateFeedbackPeriod,
+  requiresSubmitConfirmation,
+  getFeedbackPeriodInitialValues,
+  openFeedbackImmediately,
+  saveFeedbackPeriodValues,
+  opensAtIsImmediately,
+} from './utils'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
-import useOrganisationAccess from '../../../../hooks/useOrganisationAccess'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import CardSection from '../../../../components/common/CardSection'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import queryClient from '../../../../util/queryClient'
 
-const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {}, initialValues, feedbackTarget }) => {
+const FeedbackPeriodForm = () => {
   const { t } = useTranslation()
-  const { authorizedUser, isLoading } = useAuthorizedUser()
-  const orgAccess = useOrganisationAccess(feedbackTarget)
+  const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
+  const { feedbackTarget, isResponsibleTeacher, isOrganisationAdmin, isAdmin } = useFeedbackTargetContext()
+  const { id } = feedbackTarget
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
 
-  if (isLoading) {
-    return <LoadingProgress />
-  }
-  const { isAdmin } = authorizedUser
-
-  const supportEmail = 'coursefeedback@helsinki.fi'
-
+  const initialValues = getFeedbackPeriodInitialValues(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOver = Date.parse(feedbackTarget.closesAt) < Date.now()
 
-  const formDisabled =
-    ((feedbackTarget.accessStatus !== 'RESPONSIBLE_TEACHER' &&
-      feedbackTarget.accessStatus !== 'TEACHER' &&
-      !orgAccess.admin) ||
-      isOver) &&
-    !isAdmin
+  const formEnabled = ((isResponsibleTeacher || isOrganisationAdmin) && !isOver) || isAdmin
+
+  const handleOpenFeedbackImmediately = async () => {
+    try {
+      await openFeedbackImmediately(feedbackTarget)
+      history.replace(`/targets/${id}`)
+      queryClient.refetchQueries(['feedbackTarget', id])
+    } catch (e) {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
+  }
+
+  const handleSubmitFeedbackPeriod = async values => {
+    try {
+      await saveFeedbackPeriodValues(values, feedbackTarget)
+
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+
+      if (opensAtIsImmediately(values)) {
+        history.replace(`/targets/${id}`)
+      }
+
+      queryClient.refetchQueries(['feedbackTarget', id])
+    } catch (e) {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
+  }
 
   const openImmediatelyEnabled = !(isOpen || isOver)
 
@@ -44,23 +70,23 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
 
   const handleOpenWarningDialog = () => setWarningDialogOpen(true)
 
-  const handleCloseWarningDialog = () => setWarningDialogOpen(false)
+  const closeWarningDialog = () => setWarningDialogOpen(false)
 
   const handleConfirmWarning = () => {
     const { current: warningOrigin } = warningOriginRef
     const { current: submitPayload } = submitPayloadRef
 
     if (warningOrigin === 'formSubmit') {
-      onSubmit(...submitPayload)
+      handleSubmitFeedbackPeriod(...submitPayload)
 
       const [values, actions] = submitPayload
 
       actions.resetForm({ values })
     } else {
-      onOpenImmediately()
+      handleOpenFeedbackImmediately()
     }
 
-    handleCloseWarningDialog()
+    closeWarningDialog()
   }
 
   const handleSubmit = (values, actions) => {
@@ -70,7 +96,7 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
     if (requiresSubmitConfirmation(values)) {
       handleOpenWarningDialog()
     } else {
-      onSubmit(values, actions)
+      handleSubmitFeedbackPeriod(values, actions)
       actions.resetForm({ values })
     }
   }
@@ -87,7 +113,7 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
     <CardSection title={t('feedbackTargetSettings:editPeriodTitle')}>
       <OpenFeedbackImmediatelyDialog
         open={warningDialogOpen}
-        onClose={handleCloseWarningDialog}
+        onClose={closeWarningDialog}
         onConfirm={handleConfirmWarning}
       />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validateFeedbackPeriod(isOpen, isOver)}>
@@ -96,9 +122,9 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
             <Alert severity="warning">
               <Trans
                 i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
-                values={{ supportEmail }}
+                values={{ supportEmail: t('links:supportEmail') }}
                 components={{
-                  mailTo: <Link href={`mailto:${supportEmail}`} underline="hover" />,
+                  mailTo: <Link href={`mailto:${t('links:supportEmail')}`} underline="hover" />,
                 }}
               />
             </Alert>
@@ -107,7 +133,7 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
                 name="opensAt"
                 label={t('editFeedbackTarget:opensAt')}
                 disablePast
-                disabled={(formDisabled || isOpen || isOver) && !isAdmin}
+                disabled={(!formEnabled || isOpen || isOver) && !isAdmin}
               />
             </Box>
             <Box mb={2}>
@@ -115,18 +141,18 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
                 name="closesAt"
                 label={t('editFeedbackTarget:closesAt')}
                 disablePast
-                disabled={formDisabled}
+                disabled={!formEnabled}
               />
             </Box>
             <Box display="flex" justifyContent="space-between">
-              {!formDisabled && (
+              {formEnabled && (
                 <Tooltip title={submitButtonTooltip(errors)}>
                   <span>
                     <Button
                       variant="contained"
                       color="primary"
                       type="submit"
-                      disabled={!dirty || formDisabled || (!isValid && !isAdmin)}
+                      disabled={!dirty || !formEnabled || (!isValid && !isAdmin)}
                     >
                       {t('common:save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                     </Button>
@@ -134,11 +160,12 @@ const FeedbackPeriodForm = ({ onSubmit = () => {}, onOpenImmediately = () => {},
                 </Tooltip>
               )}
               <TooltipButton
-                variant="contained"
-                color="secondary"
+                variant="outlined"
+                color="primary"
                 onClick={handleOpenImmediatelyClick}
                 disabled={!openImmediatelyEnabled}
                 tooltip={cannotOpenImmediatelyMessage}
+                endIcon={<WarningAmber />}
               >
                 {t('editFeedbackTarget:openImmediately')}
               </TooltipButton>
