@@ -1,3 +1,4 @@
+const { RESPONSIBLE_TEACHERS_SPLIT_DATE } = require('../../util/config')
 const { Access } = require('./Access')
 
 const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
@@ -9,9 +10,7 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
 
   if (accessStatus) {
     const access = Access.For(accessStatus)
-    // Teachers are considered responsible teachers
-    // for curs starting before 1.1.2023
-    if (access === Access.TEACHER && startDate < new Date('2023-01-01')) {
+    if (access === Access.TEACHER && startDate < RESPONSIBLE_TEACHERS_SPLIT_DATE) {
       return Access.RESPONSIBLE_TEACHER
     }
     return access

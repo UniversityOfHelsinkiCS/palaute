@@ -1,11 +1,11 @@
-const { STUDENT_LIST_BY_COURSE_ENABLED, STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN } = require('../../../config')
 const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
+const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
-const getStudentListVisibility = async (courseUnitId, isAdmin) => {
+const getStudentListVisibility = async courseUnitId => {
   const organisationRows = await sequelize.query(
     'SELECT O.* from organisations O, course_units_organisations C ' +
       " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
@@ -29,10 +29,7 @@ const getStudentListVisibility = async (courseUnitId, isAdmin) => {
     student_list_visible_course_codes: studentListVisibleCourseCodes,
   } = organisationRows[0][0]
 
-  if (
-    STUDENT_LIST_BY_COURSE_ENABLED.includes(code) ||
-    (STUDENT_LIST_BY_COURSE_ENABLED_FOR_ADMIN.includes(code) && isAdmin)
-  ) {
+  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
     const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })
@@ -50,7 +47,7 @@ const getStudents = async ({ feedbackTargetId, user }) => {
     ApplicationError.Forbidden()
   }
 
-  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId, user.dataValues.isAdmin)
+  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
 
   if (!studentListVisible) {
     return []

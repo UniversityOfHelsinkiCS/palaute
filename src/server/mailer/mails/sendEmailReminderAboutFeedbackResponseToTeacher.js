@@ -9,6 +9,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
+const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { instructionsAndSupport } = require('./util')
 
@@ -17,6 +18,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     where: {
       closesAt: {
         [Op.lt]: new Date(),
+        // Important to have some limit. 3 is arbitrary.
         [Op.gt]: subDays(new Date(), 3),
       },
       feedbackType: 'courseRealisation',
@@ -28,9 +30,6 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-        where: {
-          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
-        },
       },
       {
         model: CourseUnit,
@@ -119,7 +118,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const { language } = teacher
   const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
-  const courseNamesAndUrls = `<a href=${`https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/feedback-response`}>
+  const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/edit-feedback-response`}>
       ${feedbackTarget.courseUnit.name[language]}
       </a> <br/>`
 

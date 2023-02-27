@@ -2,6 +2,7 @@ const { format } = require('date-fns')
 const { Op } = require('sequelize')
 
 const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User } = require('../../models')
+const { PUBLIC_URL } = require('../../util/config')
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 
@@ -76,7 +77,7 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
 
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
-  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/continuous-feedback`
+  const url = `${PUBLIC_URL}/${feedbackTarget.id}/continuous-feedback`
 
   const translations = buildContinuousFeedbackResponsesToStudents(name, response, dates, url)
 

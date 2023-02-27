@@ -80,7 +80,7 @@ const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownD
         valueMapper={value => value === 'true'}
       />
       <Box mr="4rem" />
-      <FormikSwitch label={t('required')} name={`${name}.required`} />
+      <FormikSwitch label={t('common:required')} name={`${name}.required`} />
 
       <OrderButtons
         onMoveUp={onMoveUp}
@@ -188,7 +188,7 @@ const QuestionCard = ({
                     {t('questionEditor:duplicate')}
                   </Button>
                   <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
-                    {t('edit')}
+                    {t('common:edit')}
                   </Button>
                 </div>
                 <OrderButtons {...orderButtonsProps} />

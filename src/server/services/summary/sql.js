@@ -19,6 +19,15 @@ https://www.postgresql.org/docs/current/functions-json.html
 Delete this comment if you find something better
 */
 
+const { QueryTypes } = require('sequelize')
+const { sequelize } = require('../../db/dbConnection')
+const {
+  OPEN_UNIVERSITY_ORG_ID,
+  WORKLOAD_QUESTION_ID,
+  SUMMARY_EXCLUDED_ORG_IDS,
+  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
+} = require('../../util/config')
+
 const SUMMARY_VIEW_QUERY = `
 DROP MATERIALIZED VIEW IF EXISTS course_results_view;
 CREATE MATERIALIZED VIEW course_results_view AS (
@@ -34,7 +43,7 @@ CREATE MATERIALIZED VIEW course_results_view AS (
                         FROM questions, surveys
                         WHERE questions.id = ANY(surveys.question_ids)
                         AND (surveys.type = 'university' OR surveys.type = 'programme')
-                        AND (questions.type = 'LIKERT' OR questions.id = 1042)
+                        AND (questions.type = 'LIKERT' OR questions.id = :workloadQuestionId)
                     ), feedbacks_1 AS (
                         SELECT 
                             (jsonb_array_elements(data)) as data,
@@ -111,11 +120,11 @@ CREATE MATERIALIZED VIEW course_results_view AS (
 
     LEFT JOIN LATERAL (
         SELECT true as is_open FROM course_units_organisations cuo 
-        WHERE cuo.course_unit_id = cu.id AND organisation_id = 'hy-org-48645785'
+        WHERE cuo.course_unit_id = cu.id AND organisation_id = :openUniversityOrgId
         --LIMIT 1
         UNION
         SELECT true as is_open FROM course_realisations_organisations curo 
-        WHERE curo.course_realisation_id = curr.course_realisation_id AND organisation_id = 'hy-org-48645785'
+        WHERE curo.course_realisation_id = curr.course_realisation_id AND organisation_id = :openUniversityOrgId
         --LIMIT 1
     ) org_access ON true
 );
@@ -155,7 +164,7 @@ DISTINCT ON (cur.id)
     fbt.feedback_count as "feedbackCount",
     fbtc.student_count as "studentCount",
     fbt.hidden_count as "hiddenCount",
-    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
+    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < :feedbackResponseEmailsSinceDate) as "feedbackResponseGiven",
     fbt.closes_at as "closesAt",
     cur.start_date as "startDate",
     cur.end_date as "endDate",
@@ -179,7 +188,7 @@ WITH course_unit_data AS (
       cr.course_code as "courseCode",
       cr.question_distribution as "distribution",
       cr.question_ids as "questionIds",
-      LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < DATE('2022-01-01')) as "feedbackResponseGiven",
+      LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < :feedbackResponseEmailsSinceDate) as "feedbackResponseGiven",
       fbt.id as "feedbackTargetId",
       fbt.closes_at as "closesAt",
       cur.start_date as "startDate",
@@ -199,7 +208,7 @@ WITH course_unit_data AS (
       organisation_id IN (:organisationIds)
       OR cr.course_realisation_id IN (:courseRealisationIds)
     )
-    AND organisation_id NOT IN ('hy-org-48901898', 'hy-org-48902017')
+    AND organisation_id NOT IN (:summaryExcludedOrgIds)
     AND start_date > :startDate
     AND start_date < :endDate
   )
@@ -211,7 +220,7 @@ WITH course_unit_data AS (
 
   FROM 
     stuffs
-  WHERE :includeOpenUniCourseUnits OR "isOpen" = ("organisationId" = 'hy-org-48645785')
+  WHERE :includeOpenUniCourseUnits OR "isOpen" = ("organisationId" = :openUniversityOrgId)
   GROUP BY "organisationId", stuffs."courseCode"
 )
 
@@ -231,10 +240,70 @@ INNER JOIN course_units cu ON cu.course_code = "courseCode"
 INNER JOIN organisations org ON org.id = "organisationId"
 `
 
+/**
+ * Views must be initialised when database is first created. This can be done in a migration for example.
+ */
+const initialiseSummaryView = async () => {
+  await sequelize.query(SUMMARY_VIEW_QUERY, {
+    replacements: { openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID, workloadQuestionId: WORKLOAD_QUESTION_ID },
+  })
+}
+
+const initialiseCountsView = async () => {
+  await sequelize.query(COUNTS_VIEW_QUERY)
+}
+
+const runRefreshViewsQuery = async () => {
+  await sequelize.query(REFRESH_VIEWS_QUERY, {
+    replacements: {
+      openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+      workloadQuestionId: WORKLOAD_QUESTION_ID,
+    },
+  })
+}
+
+const runCourseRealisationSummaryQuery = async courseCode => {
+  const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
+    replacements: {
+      courseCode,
+      feedbackResponseEmailsSinceDate: FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
+    },
+    type: QueryTypes.SELECT,
+  })
+  return allCuSummaries
+}
+
+/**
+ * @returns rows for each CU with its associated CURs in json
+ */
+const runOrganisationSummaryQuery = async ({
+  organisationIds,
+  courseRealisationIds,
+  startDate,
+  endDate,
+  includeOpenUniCourseUnits,
+}) => {
+  const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
+    replacements: {
+      organisationIds: organisationIds.length === 0 ? [''] : organisationIds, // do this for sql reasons
+      courseRealisationIds: courseRealisationIds.length === 0 ? [''] : courseRealisationIds,
+      startDate,
+      endDate,
+      includeOpenUniCourseUnits,
+      openUniversityOrgId: OPEN_UNIVERSITY_ORG_ID,
+      summaryExcludedOrgIds: SUMMARY_EXCLUDED_ORG_IDS,
+      feedbackResponseEmailsSinceDate: FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
+    },
+    type: sequelize.QueryTypes.SELECT,
+  })
+
+  return rows
+}
+
 module.exports = {
-  SUMMARY_VIEW_QUERY,
-  COUNTS_VIEW_QUERY,
-  REFRESH_VIEWS_QUERY,
-  COURSE_REALISATION_SUMMARY_QUERY,
-  ORGANISATION_SUMMARY_QUERY,
+  initialiseSummaryView,
+  initialiseCountsView,
+  runRefreshViewsQuery,
+  runCourseRealisationSummaryQuery,
+  runOrganisationSummaryQuery,
 }

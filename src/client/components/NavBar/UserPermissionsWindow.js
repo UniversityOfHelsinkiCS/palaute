@@ -12,6 +12,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import _ from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
@@ -55,16 +56,18 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {user?.iamGroups.map(iam => (
-                <Box key={iam} fontFamily="monospace" fontSize={12}>
-                  {iam}
-                </Box>
-              ))}
-              {!user?.iamGroups?.length > 0 && (
-                <Box fontSize={12} fontFamily="monospace">
-                  {t('userInformation:none')}
-                </Box>
-              )}
+              {_.uniq((authorizedUser?.iamGroups ?? []).concat(user?.iamGroups))
+                .filter(Boolean)
+                .map(iam => (
+                  <Box
+                    key={iam}
+                    fontFamily="monospace"
+                    fontSize={12}
+                    fontWeight={user?.iamGroups?.includes(iam) ? 'bold' : 'normal'}
+                  >
+                    {iam}
+                  </Box>
+                ))}
             </Box>
             <Box>
               <Typography variant="button">{t('userInformation:organisationAccess')}</Typography>

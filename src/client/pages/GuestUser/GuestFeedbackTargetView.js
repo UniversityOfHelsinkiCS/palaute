@@ -16,7 +16,7 @@ import GuestFeedbackTargetResults from './GuestFeedbackTargetResults'
 
 import ExternalLink from '../../components/common/ExternalLink'
 
-import { getCoursePageUrl, getCoursePeriod, getFeedbackPeriod } from './utils'
+import { getCoursePeriod, getFeedbackPeriod } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 const styles = {
@@ -94,7 +94,7 @@ const GuestFeedbackTargetView = () => {
 
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
-  const coursePageUrl = getCoursePageUrl(feedbackTarget)
+  const coursePageUrl = `${t('links:courseRealisationPage')}${feedbackTarget.courseRealisation.id}`
 
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
 

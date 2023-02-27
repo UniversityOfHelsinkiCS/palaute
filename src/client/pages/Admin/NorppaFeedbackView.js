@@ -28,7 +28,7 @@ const NorppaFeedbackView = () => {
       await apiClient.put(`/norppa-feedback/${id}`, { solved })
       refetch()
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

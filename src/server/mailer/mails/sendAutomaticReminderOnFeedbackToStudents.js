@@ -1,5 +1,6 @@
 const { sequelize } = require('../../db/dbConnection')
 const { FeedbackTarget } = require('../../models')
+const { FEEDBACK_REMINDER_COOLDOWN, STUDENT_REMINDER_DAYS_TO_CLOSE } = require('../../util/config')
 const logger = require('../../util/logger')
 const { sendFeedbackReminderToStudents } = require('./sendFeedbackReminderToStudents')
 
@@ -19,13 +20,14 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
 
     WHERE cu.course_code = ANY (org.student_list_visible_course_codes)
     AND fbt.closes_at > NOW() + interval '0 days'
-    AND fbt.closes_at < NOW() + interval '3 days' -- 3 days before
+    AND fbt.closes_at < NOW() + interval '${STUDENT_REMINDER_DAYS_TO_CLOSE} days'
     AND (
       fbt.feedback_reminder_last_sent_at IS NULL
-      OR fbt.feedback_reminder_last_sent_at < NOW() - interval '24 hours'
+      OR fbt.feedback_reminder_last_sent_at < NOW() - interval '${FEEDBACK_REMINDER_COOLDOWN} hours'
     )
   `,
     {
+      // Not using a replacement for FEEDBACK_REMINDER_COOLDOWN as sequelize somehow cant replace inside quotes here.
       model: FeedbackTarget,
       mapToModel: true,
     }

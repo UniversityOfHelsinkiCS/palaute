@@ -48,7 +48,7 @@ const NorppaFeedback = () => {
         autoHideDuration: 6000,
       })
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -61,7 +61,7 @@ const NorppaFeedback = () => {
   }
   return (
     <Box>
-      <Title>{t('norppaFeedback')}</Title>
+      <Title>{t('common:norppaFeedback')}</Title>
       <Typography variant="h4" component="h4">
         {t('norppaFeedback:title')}
       </Typography>

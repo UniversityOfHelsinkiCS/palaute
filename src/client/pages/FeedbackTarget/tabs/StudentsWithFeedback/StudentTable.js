@@ -39,7 +39,13 @@ const styles = {
 const ExportCsv = ({ students, fileName }) => {
   const { t } = useTranslation()
 
-  const headers = [t('firstName'), t('lastName'), t('studentNumber'), t('email'), t('feedback')]
+  const headers = [
+    t('common:firstName'),
+    t('common:lastName'),
+    t('common:studentNumber'),
+    t('common:email'),
+    t('common:feedback'),
+  ]
   const stats = students.map(student => [...Object.values(student)])
   const data = [headers, ...stats]
 
@@ -55,7 +61,7 @@ const ExportCsv = ({ students, fileName }) => {
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
     >
-      {t('exportCsv')}
+      {t('common:exportCsv')}
     </Button>
   )
 }
@@ -79,7 +85,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
         lastName,
         studentNumber,
         email,
-        feedbackGiven: feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'),
+        feedbackGiven: feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven'),
       })),
     [students]
   )
@@ -99,7 +105,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
           sx={styles.button}
           onClick={() => setDropZoneVisible(!dropZoneVisible)}
         >
-          {t('combineCSV')}
+          {t('common:combineCSV')}
         </Button>
         <ExportCsv students={studentsCSV} fileName={fileName} />
       </Box>
@@ -109,35 +115,35 @@ const StudentTable = ({ students, feedbackTarget }) => {
           <TableRow>
             <TableHeadCell
               id="firstName"
-              name={t('firstName')}
+              name={t('common:firstName')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="lastName"
-              name={t('lastName')}
+              name={t('common:lastName')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="studentNumber"
-              name={t('studentNumber')}
+              name={t('common:studentNumber')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="email"
-              name={t('email')}
+              name={t('common:email')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="feedbackGiven"
-              name={t('feedback')}
+              name={t('common:feedback')}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -152,7 +158,9 @@ const StudentTable = ({ students, feedbackTarget }) => {
                 <TableCell>{lastName}</TableCell>
                 <TableCell>{studentNumber}</TableCell>
                 <TableCell>{email}</TableCell>
-                <TableCell>{String(feedbackGiven ? t('feedbackGiven') : t('feedbackNotGiven'))}</TableCell>
+                <TableCell>
+                  {String(feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven'))}
+                </TableCell>
               </TableRow>
             )
           )}

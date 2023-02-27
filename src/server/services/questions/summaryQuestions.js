@@ -1,4 +1,4 @@
-const { WORKLOAD_QUESTION_ID } = require('../../../config')
+const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { getUniversitySurvey, getProgrammeSurvey } = require('../surveys')
 
 /**

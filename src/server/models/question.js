@@ -1,7 +1,7 @@
 const { VIRTUAL } = require('sequelize')
 const { Model, JSONB, STRING, BOOLEAN } = require('sequelize')
-const { WORKLOAD_QUESTION_ID } = require('../../config')
 const { sequelize } = require('../db/dbConnection')
+const { WORKLOAD_QUESTION_ID } = require('../util/config')
 
 class Question extends Model {}
 

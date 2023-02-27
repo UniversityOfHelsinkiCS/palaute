@@ -27,7 +27,7 @@ import getAllUserAccess from '../../hooks/useAllUserAccess'
 import useOrganisationData from '../../hooks/useOrganisationData'
 import useHistoryState from '../../hooks/useHistoryState'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { ADMINS } from '../../../config'
+import { ADMINS } from '../../util/common'
 
 const AccessTable = ({ access, filterAdmins }) => {
   const sortByAccess = ({ access: a }, { access: b }) => {

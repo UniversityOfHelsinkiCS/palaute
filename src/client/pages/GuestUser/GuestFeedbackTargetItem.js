@@ -104,7 +104,7 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
 
   const { feedback } = userFeedbackTargets[0]
 
-  const periodInfo = t('feedbackOpenPeriod', {
+  const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
     closesAt: formatDate(parseISO(closesAt)),
   })

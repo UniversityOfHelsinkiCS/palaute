@@ -190,7 +190,7 @@ const FeedbackView = () => {
         })
       }
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

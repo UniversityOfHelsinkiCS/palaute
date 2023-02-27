@@ -381,6 +381,12 @@ FeedbackTarget.init(
       allowNull: false,
       defaultValue: false,
     },
+    continuousFeedbackCount: {
+      type: VIRTUAL,
+      get() {
+        return this.dataValues.continuousFeedbackCount ?? 0
+      },
+    },
     sendContinuousFeedbackDigestEmail: {
       type: BOOLEAN,
       allowNull: false,

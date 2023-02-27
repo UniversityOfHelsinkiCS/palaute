@@ -26,9 +26,9 @@ const LanguageSelect = ({ value, onChange, label }) => {
     <FormControl variant="outlined">
       <InputLabel id={labelId}>{label}</InputLabel>
       <Select labelId={labelId} sx={style.select} onChange={handleChange} value={value} label={label}>
-        <MenuItem value="fi">{t('languages.fi')}</MenuItem>
-        <MenuItem value="sv">{t('languages.sv')}</MenuItem>
-        <MenuItem value="en">{t('languages.en')}</MenuItem>
+        <MenuItem value="fi">{t('common:languages:fi')}</MenuItem>
+        <MenuItem value="sv">{t('common:languages:sv')}</MenuItem>
+        <MenuItem value="en">{t('common:languages:en')}</MenuItem>
       </Select>
     </FormControl>
   )

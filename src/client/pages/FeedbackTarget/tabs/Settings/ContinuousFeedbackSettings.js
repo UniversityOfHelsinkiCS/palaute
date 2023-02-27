@@ -32,9 +32,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         continuousFeedbackEnabled: !feedbackEnabled,
       })
       setFeedbackEnabled(!feedbackEnabled)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -45,49 +45,47 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         sendContinuousFeedbackDigestEmail: !sendDigestEmail,
       })
       setSendDigestEmail(!sendDigestEmail)
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (error) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
   return (
-    <Box mb={5}>
-      <Card>
-        <CardContent>
-          <Box mb={4}>
-            <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackTab')}</Typography>
-          </Box>
-          <Box mb={2}>
-            <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
-          </Box>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={feedbackEnabled}
-                  onChange={handleFeedbackEnabledChange}
-                  color="primary"
-                  data-cy="activateContinuousFeedback"
-                />
-              }
-              label={t('feedbackTargetView:activateContinuousFeedback')}
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={sendDigestEmail}
-                  disabled={!feedbackEnabled}
-                  onChange={handleSendDigestEmailChange}
-                  color="primary"
-                />
-              }
-              label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
-            />
-          </FormGroup>
-        </CardContent>
-      </Card>
-    </Box>
+    <Card>
+      <CardContent>
+        <Box mb={4}>
+          <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackTab')}</Typography>
+        </Box>
+        <Box mb={2}>
+          <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
+        </Box>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={feedbackEnabled}
+                onChange={handleFeedbackEnabledChange}
+                color="primary"
+                data-cy="activateContinuousFeedback"
+              />
+            }
+            label={t('feedbackTargetView:activateContinuousFeedback')}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={sendDigestEmail}
+                disabled={!feedbackEnabled}
+                onChange={handleSendDigestEmailChange}
+                color="primary"
+              />
+            }
+            label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
+          />
+        </FormGroup>
+      </CardContent>
+    </Card>
   )
 }
 

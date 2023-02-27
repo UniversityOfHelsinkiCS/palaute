@@ -4,6 +4,7 @@ const { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
 const CourseUnitsTag = require('../../models/courseUnitsTag')
+const { TAGS_ENABLED } = require('../../util/config')
 
 /**
  * Check whether user has access to organisation with given code
@@ -170,7 +171,7 @@ const getTags = async (req, res) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
-  if (code !== '600-K001' && code !== '600-M001') throw new ApplicationError('Invalid organisation code', 400)
+  if (!TAGS_ENABLED.includes(code)) throw new ApplicationError('Invalid organisation code', 400)
 
   const { id: organisationId } = await Organisation.findOne({
     where: {

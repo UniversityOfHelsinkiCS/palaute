@@ -20,7 +20,17 @@ export const RouterTabs = ({ children, ...props }) => {
   )
 }
 
-export const RouterTab = ({ icon, label, to, disabled, disabledTooltip, badge, ...props }) => {
+export const RouterTab = ({
+  icon,
+  label,
+  to,
+  disabled,
+  disabledTooltip,
+  badge,
+  badgeContent,
+  badgeColor = 'primary',
+  ...props
+}) => {
   let content = icon ? (
     <Box display="flex" alignItems="center">
       {icon}
@@ -33,7 +43,12 @@ export const RouterTab = ({ icon, label, to, disabled, disabledTooltip, badge, .
 
   if (badge) {
     content = (
-      <Badge color="primary" variant="dot" overlap="rectangular">
+      <Badge
+        color={badgeColor}
+        variant={badgeContent ? 'standard' : 'dot'}
+        overlap="rectangular"
+        badgeContent={badgeContent}
+      >
         {content}
       </Badge>
     )

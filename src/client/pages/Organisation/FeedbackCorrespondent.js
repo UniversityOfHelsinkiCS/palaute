@@ -114,7 +114,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
       }))
     },
     onError: () => {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     },
   })
 

@@ -1,3 +1,5 @@
+import { baseUrl } from '../support'
+
 describe('Common tests', () => {
   it('User can change language', () => {
     cy.loginAsStudent()
@@ -8,5 +10,15 @@ describe('Common tests', () => {
     cy.contains('Olli Oppilas').click()
     cy.contains('FI').click()
     cy.contains('Kurssipalautteeni')
+  })
+  it('CONFIG is populated correctly', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin/users`)
+    cy.contains('HY-Minttujam')
+  })
+  it('Custom translation override is loaded correctly', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin/users`)
+    cy.contains('Illuminati-silmä')
   })
 })

@@ -6,9 +6,11 @@ const CensoredCount = ({ count }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   return (
-    <Tooltip title={t('courseSummary:censoredCount')} placement="right">
-      <Box color={theme.palette.error.light}>{count}</Box>
-    </Tooltip>
+    <Box sx={{ '@media print': { display: 'none' } }}>
+      <Tooltip title={t('courseSummary:censoredCount')} placement="right">
+        <Box color={theme.palette.error.light}>{count}</Box>
+      </Tooltip>
+    </Box>
   )
 }
 

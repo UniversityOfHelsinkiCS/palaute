@@ -2,20 +2,21 @@
 import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { TableContainer, IconButton, Tooltip, LinearProgress } from '@mui/material'
+import { TableContainer, IconButton, Tooltip, Box } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import ResultsRow from './ResultsRow'
+import ResultsRow, { SkeletonRow } from './ResultsRow'
 import CourseUnitSummary from './CourseUnitSummary'
 
 import ColumnHeadings from './ColumnHeadings'
 import { OrganisationLabel } from './Labels'
 import HiddenRows from './HiddenRows'
 import CensoredCount from './CensoredCount'
+import { useInitiallyOpenAccordions } from './utils'
 
 const styles = {
   table: {
@@ -29,10 +30,15 @@ const styles = {
     paddingBottom: '1rem',
     minHeight: '12px',
   },
-  settingsButton: {
+  organisationButton: {
     '&:hover': {
       color: theme => theme.palette.primary.light,
       background: 'transparent',
+    },
+  },
+  organisationButtonContainer: {
+    '@media print': {
+      display: 'none',
     },
   },
 }
@@ -43,19 +49,21 @@ const OrganisationButton = ({ code, access }) => {
   const { write } = access
 
   return (
-    <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
-      <IconButton
-        id={`settings-button-${code}`}
-        component={Link}
-        to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
-        size="large"
-        sx={styles.settingsButton}
-        color="primary"
-        disableFocusRipple
-      >
-        {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
-      </IconButton>
-    </Tooltip>
+    <Box sx={styles.organisationButtonContainer}>
+      <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
+        <IconButton
+          id={`settings-button-${code}`}
+          component={Link}
+          to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
+          size="large"
+          sx={styles.organisationButton}
+          color="primary"
+          disableFocusRipple
+        >
+          {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
+        </IconButton>
+      </Tooltip>
+    </Box>
   )
 }
 
@@ -67,8 +75,6 @@ const OrganisationTable = forwardRef(
       isOrganisationsLoading,
       questions,
       organisationAccess,
-      initialOpenAccordions = [],
-      onToggleAccordion = () => {},
       onOrderByChange,
       filters,
       isRefetching = false,
@@ -79,13 +85,14 @@ const OrganisationTable = forwardRef(
     const { i18n } = useTranslation()
 
     const showHidingModeButton = organisationAccess?.length > 1 && organisations.length > 1
+    const initialOpenAccordions = useInitiallyOpenAccordions(organisations)
 
     return (
       <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
-        <table css={styles.table}>
+        <table style={styles.table}>
           <thead>
             <tr>
-              <th css={styles.filtersCell}>{filters}</th>
+              <th style={styles.filtersCell}>{filters}</th>
               <ColumnHeadings onOrderByChange={onOrderByChange} questions={questions} />
               <th />
               {showHidingModeButton && (
@@ -97,11 +104,11 @@ const OrganisationTable = forwardRef(
           </thead>
           <tbody>
             {(isOrganisationsLoading || isRefetching) && (
-              <tr>
-                <td colSpan={99}>
-                  <LinearProgress />
-                </td>
-              </tr>
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
             )}
 
             {!(isOrganisationsLoading || isRefetching) && (
@@ -129,35 +136,34 @@ const OrganisationTable = forwardRef(
                     feedbackResponsePercentage,
                     access,
                   }) => (
-                    <React.Fragment key={id}>
-                      <ResultsRow
-                        label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
-                        results={results}
-                        questions={questions}
-                        feedbackCount={feedbackCount}
-                        studentCount={studentCount}
-                        feedbackResponsePercentage={feedbackResponsePercentage}
-                        accordionEnabled={courseUnits.length > 0}
-                        accordionInitialOpen={initialOpenAccordions.includes(id)}
-                        onToggleAccordion={() => onToggleAccordion(id)}
-                        cellsAfter={
-                          organisationLinks && (
-                            <>
-                              <td css={{ paddingLeft: '2rem' }}>
-                                <OrganisationButton code={code} access={access} />
+                    <ResultsRow
+                      id={id}
+                      key={id}
+                      label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
+                      results={results}
+                      questions={questions}
+                      feedbackCount={feedbackCount}
+                      studentCount={studentCount}
+                      feedbackResponsePercentage={feedbackResponsePercentage}
+                      accordionEnabled={courseUnits.length > 0}
+                      accordionInitialOpen={initialOpenAccordions.includes(id)}
+                      cellsAfter={
+                        organisationLinks && (
+                          <>
+                            <td style={{ paddingLeft: '2rem' }}>
+                              <OrganisationButton code={code} access={access} />
+                            </td>
+                            {access?.admin && !!hiddenCount && (
+                              <td>
+                                <CensoredCount count={hiddenCount} />
                               </td>
-                              {access?.admin && !!hiddenCount && (
-                                <td>
-                                  <CensoredCount count={hiddenCount} />
-                                </td>
-                              )}
-                            </>
-                          )
-                        }
-                      >
-                        <CourseUnitSummary courseUnits={courseUnits} questions={questions} access={access} />
-                      </ResultsRow>
-                    </React.Fragment>
+                            )}
+                          </>
+                        )
+                      }
+                    >
+                      <CourseUnitSummary courseUnits={courseUnits} questions={questions} access={access} />
+                    </ResultsRow>
                   )
                 )}
               </>

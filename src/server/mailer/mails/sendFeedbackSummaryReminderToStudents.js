@@ -1,4 +1,5 @@
 const { format } = require('date-fns')
+const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 
 const buildNotificationAboutFeedbackResponseToStudents = (
@@ -66,7 +67,7 @@ const sendFeedbackSummaryReminderToStudents = async (feedbackTarget, feedbackRes
   const courseUnit = await feedbackTarget.getCourseUnit()
   const cr = await feedbackTarget.getCourseRealisation()
   const students = await feedbackTarget.getStudentsForFeedbackTarget()
-  const url = `https://coursefeedback.helsinki.fi/targets/${feedbackTarget.id}/results`
+  const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/results`
   const formattedStudents = students
     .filter(student => student.email)
     .map(student => ({

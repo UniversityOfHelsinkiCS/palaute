@@ -21,6 +21,8 @@ export default {
     supportContact: 'Vid problemfall, kontakta supporten: ',
     save: 'Spara',
     saveSuccess: 'Informationen har sparats',
+    course: 'Kurs',
+    // courseCode: 'Kurssikoodi',
     name: 'Namn',
     edit: 'Redigera',
     show: 'Visa',
@@ -89,6 +91,7 @@ export default {
     feedbackNotStartedChip: 'Responsen har inte börjat',
     feedbackEndedChip: 'Responsen har avslutats',
     continuousFeedbackChip: 'Kontinuerlig respons',
+    // feedbackResponseGiven: 'Opettaja on antanut vastapalautteen',
     deleted: 'Din respons har tagits bort',
   },
   feedbackView: {
@@ -243,7 +246,7 @@ export default {
       'Responsen stängs {{date}}, för att den ska vara öppen åtminstone ett dygn. Efter att responsen stängts, går det inte att samla in respons mer. Vill du verkligen stänga responsen?',
     sendReminder: 'Skicka påminnelse via e-post',
     sendReminderButton: 'Skicka påminnelse',
-    reminderDisabled: 'Du har redan skickat en påminnelse under de senaste 24 timmarna',
+    reminderDisabled: 'Du har redan skickat en påminnelse under de senaste {{cooldown}} timmarna',
     reminderLastSent: 'Påminnelse senast skickad',
     cancelReminder: 'Avbryt',
     modalTitle: 'Skicka en påminnelse om respons via e-post',
@@ -447,6 +450,7 @@ export default {
     activateContinuousFeedbackDigest: 'Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons',
     continuousFeedbackGiven: 'Given kontinuerlig respons',
     noContinuousFeedbackGiven: 'Ingen kontinuerlig respons har ännu getts',
+    // continuousFeedbackInactive: 'Jatkuva palaute ei ole käytössä',
     continuousFeedbackStudentInfo:
       'Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.',
     respondContinuousFeedback: 'Svara',
@@ -465,9 +469,6 @@ export default {
     noAccess:
       'Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.',
     notFound: 'Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt',
-    notifyOnEnrolment: 'Skicka e-post till mig när min anmälan har hittats',
-    notificationEnabled: 'Ok, ett meddelande skickas till adressen {{email}}, om din anmälan hittas inom 24h',
-    notificationDisabled: 'Ok, ett meddelande skickas inte',
   },
   noadUser: {
     noUser:

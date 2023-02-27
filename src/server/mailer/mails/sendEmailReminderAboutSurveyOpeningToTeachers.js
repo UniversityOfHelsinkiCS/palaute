@@ -1,6 +1,7 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
+const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, instructionsAndSupport } = require('./util')
 
@@ -8,8 +9,8 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
-        [Op.lt]: addDays(new Date(), 7),
-        [Op.gt]: addDays(new Date(), 6),
+        [Op.lt]: addDays(new Date(), TEACHER_REMINDER_DAYS_TO_OPEN),
+        [Op.gt]: new Date(),
       },
       feedbackOpeningReminderEmailSent: false,
       feedbackType: 'courseRealisation',
@@ -19,9 +20,6 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-        where: {
-          startDate: { [Op.gt]: new Date('August 1, 2021 00:00:00') },
-        },
       },
       {
         model: CourseUnit,
@@ -121,7 +119,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
       sv: `stängs ${humanClosesAtDate}`,
     }
 
-    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`https://coursefeedback.helsinki.fi/targets/${id}/edit`}>
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
         ${name[language]}
         </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }

@@ -1,17 +1,6 @@
 import React, { useMemo } from 'react'
 
-import {
-  Card,
-  CardContent,
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Link as MuiLink,
-  Chip,
-  Grid,
-} from '@mui/material'
+import { Card, CardContent, Box, Typography, List, ListItem, ListItemText, Link as MuiLink, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getQuestionsWithFeedback } from './utils'
@@ -58,10 +47,15 @@ const styles = {
 const HiddenQuestionsList = ({ hiddenQuestions }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
-  const infoSite = 'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide'
 
   const infoLink = (
-    <AlertLink sx={styles.link} component={MuiLink} href={infoSite} target="_blank" rel="noreferrer">
+    <AlertLink
+      sx={styles.link}
+      component={MuiLink}
+      href={t('links:wikiOrganisationHelp')}
+      target="_blank"
+      rel="noreferrer"
+    >
       {t('questionResults:here')}
     </AlertLink>
   )
@@ -134,22 +128,41 @@ const QuestionResults = React.memo(
           data-cy="multipleChoiceQuestions"
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
-
-          <Grid container rowSpacing={3} columnSpacing={1.5} direction="row" alignItems="stretch">
+          <Box
+            sx={theme => ({
+              display: 'grid',
+              gridTemplateColumns: 'repeat(5, 1fr)',
+              gap: '1rem',
+              [theme.breakpoints.down('xl')]: {
+                gridTemplateColumns: 'repeat(4, 1fr)',
+              },
+              [theme.breakpoints.down('lg')]: {
+                gridTemplateColumns: 'repeat(3, 1fr)',
+              },
+              [theme.breakpoints.down('md')]: {
+                gridTemplateColumns: 'repeat(2, 1fr)',
+              },
+              [theme.breakpoints.down('sm')]: {
+                gridTemplateColumns: 'repeat(1, 1fr)',
+              },
+              '@media print': {
+                gridTemplateColumns: 'repeat(4, 1fr)',
+              },
+            })}
+          >
             {notOpenQuestions.map(q => (
-              <Grid item key={q.id} xs={12} sm={12} md={6} lg={4} xl={3}>
-                <QuestionItem
-                  question={q}
-                  publicQuestionIds={publicQuestionIds}
-                  disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                  isResponsibleTeacher={isResponsibleTeacher}
-                  feedbackCount={feedbackCount}
-                  feedbackTargetId={feedbackTargetId}
-                  t={t}
-                />
-              </Grid>
+              <QuestionItem
+                key={q.id}
+                question={q}
+                publicQuestionIds={publicQuestionIds}
+                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+                isResponsibleTeacher={isResponsibleTeacher}
+                feedbackCount={feedbackCount}
+                feedbackTargetId={feedbackTargetId}
+                t={t}
+              />
             ))}
-          </Grid>
+          </Box>
         </QuestionSection>
         <QuestionSection
           title={t('questionResults:openQuestions')}

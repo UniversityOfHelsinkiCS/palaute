@@ -14,8 +14,9 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import { inE2EMode } from '../../src/config'
 import './commands'
+
+const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
 beforeEach(() => {
   cy.enableCourses()

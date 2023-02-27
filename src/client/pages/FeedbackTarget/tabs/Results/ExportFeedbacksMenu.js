@@ -90,7 +90,7 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   return (
     <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, filename)}>
-      {t('exportCsv')}
+      {t('common:exportCsv')}
     </Button>
   )
 }
@@ -100,11 +100,12 @@ const ExportPdfLink = ({ componentRef }) => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle: '',
   })
 
   return (
     <Button sx={styles.button} onClick={handlePrint}>
-      {t('exportPdf')}
+      {t('common:exportPdf')}
     </Button>
   )
 }

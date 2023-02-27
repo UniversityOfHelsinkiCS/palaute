@@ -24,7 +24,7 @@ const MyTeaching = () => {
 
   return (
     <>
-      <Title>{t('teacherPage')}</Title>
+      <Title>{t('common:teacherPage')}</Title>
       <Box mb={2}>
         <Typography variant="h4" component="h1">
           {t('teacherView:mainHeading')}

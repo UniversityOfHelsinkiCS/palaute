@@ -45,7 +45,6 @@ import {
 } from './utils'
 
 import TeacherChip from '../../components/common/TeacherChip'
-import { links } from '../../util/links'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import { TagChip } from '../../components/common/TagChip'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
@@ -191,6 +190,7 @@ const FeedbackTargetContent = () => {
     settingsReadByTeacher,
     feedbackCount,
     studentCount,
+    continuousFeedbackCount,
     continuousFeedbackEnabled,
     feedbackCanBeGiven,
   } = feedbackTarget
@@ -199,8 +199,11 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
+  const hasContinuousFeedback = continuousFeedbackCount > 0
+
   const showFeedbacksTab = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
-  const showContinuousFeedbackTab = continuousFeedbackEnabled
+  const showContinuousFeedbackTab =
+    continuousFeedbackEnabled || ((isOrganisationAdmin || isResponsibleTeacher) && hasContinuousFeedback)
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab = isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
@@ -211,12 +214,12 @@ const FeedbackTargetContent = () => {
   const showTags = feedbackTarget?.tags?.length > 0
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
-  const coursePageUrl = links.getCoursePage(feedbackTarget)
-  const wikiLink = links.teacherInstructions[i18n.language]
+  const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
-  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
+  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
+  const title = `${visibleCourseCode} ${courseUnitName}`
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
@@ -232,7 +235,7 @@ const FeedbackTargetContent = () => {
 
   return (
     <>
-      <Title>{courseUnitName}</Title>
+      <Title>{title}</Title>
       <Box mb={3}>
         {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
         <div css={styles.headingContainer}>
@@ -273,7 +276,7 @@ const FeedbackTargetContent = () => {
 
           <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />
 
-          {isTeacher && <LinkButton to={wikiLink} title={t('footer:wikiLink')} external />}
+          {isTeacher && <LinkButton to={t('links:wikiTeacherHelp')} title={t('footer:wikiLink')} external />}
         </Box>
 
         <Box sx={styles.infoContainer}>
@@ -372,6 +375,9 @@ const FeedbackTargetContent = () => {
               icon={<ReviewsOutlined />}
               label={t('feedbackTargetView:continuousFeedbackTab')}
               to={`${url}/continuous-feedback`}
+              badge={continuousFeedbackCount}
+              badgeContent={continuousFeedbackCount}
+              badgeColor="grey"
             />
           )}
           {showEditFeedbackResponseTab && (

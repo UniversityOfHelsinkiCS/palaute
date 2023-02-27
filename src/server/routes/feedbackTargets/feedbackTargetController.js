@@ -4,10 +4,6 @@ const { ApplicationError } = require('../../util/customErrors')
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
 const {
-  getEnrolmentNotification,
-  requestEnrolmentNotification,
-} = require('../../services/enrolmentNotices/enrolmentNotices')
-const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
   updateFeedbackResponse,
@@ -89,16 +85,8 @@ const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  try {
-    const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.isAdmin)
-    return res.send(result)
-  } catch (error) {
-    if (error.status === 403) {
-      const enabled = await getEnrolmentNotification(req.user.id, feedbackTargetId)
-      return res.status(403).send({ enabled })
-    }
-    throw error
-  }
+  const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.isAdmin)
+  return res.send(result)
 }
 adRouter.get('/:id', getOne)
 noadRouter.get('/:id', getOne)
@@ -226,20 +214,6 @@ adRouter.get('/:id/logs', async (req, res) => {
 
   return res.send(logs)
 })
-
-const updateEnrolmentNotification = async (req, res) => {
-  const { user } = req
-  const { id: feedbackTargetId } = req.params
-  const { enabled: enabledRaw } = req.body
-  const enabled = Boolean(enabledRaw)
-
-  // Could check if enrolment already exists, but it doesnt really matter... the notification will just expire anyways.
-  await requestEnrolmentNotification(user.id, feedbackTargetId, enabled)
-
-  return res.send({ enabled, email: user.getDefaultEmail() })
-}
-adRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
-noadRouter.put('/:id/enrolment-notification', updateEnrolmentNotification)
 
 module.exports = {
   adRouter,

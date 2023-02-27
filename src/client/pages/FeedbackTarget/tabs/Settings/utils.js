@@ -23,18 +23,18 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   const errors = {}
 
   if (!closesAt) {
-    errors.closesAt = 'validationErrors.required'
+    errors.closesAt = 'validationErrors:required'
   }
   if (_.isNaN(Date.parse(closesAt))) {
-    errors.closesAt = 'validationErrors.invalidDate'
+    errors.closesAt = 'validationErrors:invalidDate'
     return errors
   }
 
   if (!opensAt) {
-    errors.opensAt = 'validationErrors.required'
+    errors.opensAt = 'validationErrors:required'
   }
   if (_.isNaN(Date.parse(opensAt))) {
-    errors.opensAt = 'validationErrors.invalidDate'
+    errors.opensAt = 'validationErrors:invalidDate'
     return errors
   }
 

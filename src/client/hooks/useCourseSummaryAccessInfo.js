@@ -1,5 +1,5 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useCourseSummaryAccessInfo = (options = {}) => {
   const queryKey = 'courseSummaryAccessInfo'
@@ -10,7 +10,11 @@ const useCourseSummaryAccessInfo = (options = {}) => {
     return data
   }
 
-  const { data: courseSummaryAccessInfo, ...rest } = useQuery(queryKey, queryFn, options)
+  const { data: courseSummaryAccessInfo, ...rest } = useQuery(queryKey, queryFn, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    ...options,
+  })
 
   return { courseSummaryAccessInfo, ...rest }
 }

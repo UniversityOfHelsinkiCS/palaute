@@ -53,7 +53,7 @@ const MyFeedbacks = () => {
 
   return (
     <div>
-      <Title>{t('feedbacks')}</Title>
+      <Title>{t('common:feedbacks')}</Title>
       <Typography variant="h4" component="h1" sx={styles.heading}>
         {t('userFeedbacks:mainHeading')}
       </Typography>

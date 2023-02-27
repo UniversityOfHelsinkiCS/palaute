@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
+import { TAGS_ENABLED } from '../util/common'
 
 const useOrganisationTags = organisationCode => {
   const queryKey = ['organisationTags']
@@ -12,7 +13,7 @@ const useOrganisationTags = organisationCode => {
   }
 
   const { data: tags, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: organisationCode === '600-K001' || organisationCode === '600-M001',
+    enabled: TAGS_ENABLED.includes(organisationCode),
   })
 
   return { tags, ...rest }

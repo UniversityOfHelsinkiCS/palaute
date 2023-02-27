@@ -1,7 +1,6 @@
 const { subMonths } = require('date-fns')
 const _ = require('lodash')
-const { sequelize } = require('../../db/dbConnection')
-const { ORGANISATION_SUMMARY_QUERY } = require('./sql')
+const { runOrganisationSummaryQuery } = require('./sql')
 const { getMean, getTagIds, getRowAverage } = require('./utils')
 
 const includeEmptyOrganisations = (organisations, organisationsToShow, questions) => {
@@ -59,15 +58,12 @@ const getOrganisationSummaries = async ({
   const organisationIds = organisationsToShow.map(org => org.id)
 
   // rows for each CU with its associated CURs in json
-  const rows = await sequelize.query(ORGANISATION_SUMMARY_QUERY, {
-    replacements: {
-      organisationIds: organisationIds.length === 0 ? [''] : organisationIds, // do this for sql reasons
-      courseRealisationIds: accessibleCourseRealisationIds.length === 0 ? [''] : accessibleCourseRealisationIds,
-      startDate,
-      endDate,
-      includeOpenUniCourseUnits,
-    },
-    type: sequelize.QueryTypes.SELECT,
+  const rows = await runOrganisationSummaryQuery({
+    organisationIds,
+    courseRealisationIds: accessibleCourseRealisationIds,
+    startDate,
+    endDate,
+    includeOpenUniCourseUnits,
   })
 
   const initialResults = questions.map(q => ({

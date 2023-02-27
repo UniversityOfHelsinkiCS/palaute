@@ -109,7 +109,7 @@ const HiddenRows = () => {
     0
 
   return (
-    <>
+    <Box sx={{ '@media print': { display: 'none' } }}>
       <HidingModeButton value={isHidingMode} onClick={handleClick} count={count} />
       <Popover
         id={isHidingMode ? 'hidden-rows-popover' : undefined}
@@ -173,7 +173,7 @@ const HiddenRows = () => {
           </Box>
         </Box>
       </Popover>
-    </>
+    </Box>
   )
 }
 

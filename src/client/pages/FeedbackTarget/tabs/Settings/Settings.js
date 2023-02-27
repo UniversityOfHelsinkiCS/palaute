@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from 'react-query'
 import { useHistory, useParams } from 'react-router'
+import { Box } from '@mui/material'
 
 import FeedbackPeriodForm from './FeedbackPeriodForm'
 import {
@@ -38,7 +39,7 @@ const Settings = () => {
       history.replace(`/targets/${id}`)
       queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -46,7 +47,7 @@ const Settings = () => {
     try {
       await saveFeedbackPeriodValues(values, feedbackTarget)
 
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
 
       if (opensAtIsImmediately(values)) {
         history.replace(`/targets/${id}`)
@@ -54,23 +55,33 @@ const Settings = () => {
 
       queryClient.refetchQueries(['feedbackTarget', id])
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
   const feedbackPeriodInitialValues = getFeedbackPeriodInitialValues(feedbackTarget)
 
   return (
-    <>
-      <FeedbackPeriodForm
-        onSubmit={handleSubmitFeedbackPeriod}
-        initialValues={feedbackPeriodInitialValues}
-        onOpenImmediately={handleOpenFeedbackImmediately}
-        feedbackTarget={feedbackTarget}
-      />
-      <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
+    <Box>
+      <Box
+        sx={theme => ({
+          display: 'flex',
+          alignItems: 'start',
+          gap: '2rem',
+          mb: '2rem',
+          [theme.breakpoints.down('md')]: { flexDirection: 'column' },
+        })}
+      >
+        <FeedbackPeriodForm
+          onSubmit={handleSubmitFeedbackPeriod}
+          initialValues={feedbackPeriodInitialValues}
+          onOpenImmediately={handleOpenFeedbackImmediately}
+          feedbackTarget={feedbackTarget}
+        />
+        <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />
+      </Box>
       <EditFeedbackTarget />
-    </>
+    </Box>
   )
 }
 

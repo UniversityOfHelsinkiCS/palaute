@@ -6,16 +6,15 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClientProvider } from 'react-query'
 
-import { inProduction, basePath } from './util/common'
+import { inProduction, basePath, DEV_USERNAME } from './util/common'
 import { getHeaders, setHeaders } from './util/mockHeaders'
 import App from './pages/App'
 import ErrorBoundary from './components/ErrorBoundary'
 import initializeSentry from './util/sentry'
-import initializeI18n from './util/i18n'
+import './util/i18n'
 import queryClient from './util/queryClient'
 
 initializeSentry()
-initializeI18n()
 
 const ensureDevUser = () => {
   if (inProduction) return
@@ -23,7 +22,7 @@ const ensureDevUser = () => {
   if (headers.uid) return
 
   localStorage.clear()
-  setHeaders('admin')
+  setHeaders(DEV_USERNAME)
 }
 
 ensureDevUser()

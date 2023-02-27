@@ -2,8 +2,6 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { lightBlue, green, grey } from '@mui/material/colors'
 import { useMemo } from 'react'
 
-import { inStaging } from '../config'
-
 const useTheme = () => {
   const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
   const mode = prefersDarkMode ? 'dark' : 'light'
@@ -33,11 +31,11 @@ const useTheme = () => {
               ? {
                   primary: {
                     light: '#4f96db',
-                    main: !inStaging ? '#3770b3' : '#77dcbb',
-                    dark: '#124c8c', // Ukraine blue
+                    main: '#3770b3',
+                    dark: '#124c8c',
                   },
                   secondary: {
-                    main: '#e6c309', // Ukraine yellow
+                    main: '#e6c309',
                   },
                   info: {
                     main: lightBlue[700],
@@ -54,7 +52,7 @@ const useTheme = () => {
                   },
                   warning: {
                     main: '#e6c309',
-                    light: '#ffd700', // Ukraine yellow
+                    light: '#ffd700',
                   },
                 }
               : {}),

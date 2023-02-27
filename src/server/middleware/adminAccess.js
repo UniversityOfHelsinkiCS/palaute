@@ -1,4 +1,4 @@
-const { ADMINS } = require('../../config')
+const { ADMINS } = require('../util/config')
 const { ApplicationError } = require('../util/customErrors')
 
 const adminAccess = (req, _, next) => {

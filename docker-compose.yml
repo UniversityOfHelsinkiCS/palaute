@@ -17,6 +17,7 @@ services:
       - JAMI_HOST=jami
       - JAMI_PORT=3003
       - JWT_KEY=minttujam
+      - NODE_CONFIG_ENV=hy
     ports:
       - 3000:3000
       - 9229:9229

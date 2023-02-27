@@ -5,8 +5,7 @@ const _ = require('lodash')
 const { format } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
-const { updater } = require('../../updater')
-const { deleteCancelledCourses } = require('../../updater/updateCoursesAndTeacherFeedbackTargets')
+const updaterClient = require('../../util/updaterClient')
 
 const {
   FeedbackTarget,
@@ -28,12 +27,11 @@ const { sequelize } = require('../../db/dbConnection')
 const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
-const { updateEnrolmentsOfCourse } = require('../../updater/updateStudentFeedbackTargets')
 const { adminAccess } = require('../../middleware/adminAccess')
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
-  updater.run()
+  await updaterClient.run()
   return res.send({})
 }
 
@@ -42,7 +40,7 @@ const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
   if (!curId) return res.sendStatus(400)
 
   try {
-    await updateEnrolmentsOfCourse(curId)
+    await updaterClient.updateEnrolments(curId)
   } catch (error) {
     if (error?.response) {
       res.status(error.response.status).send(error.response.data)
@@ -126,10 +124,6 @@ const findUser = async (req, res) => {
   const { rows: persons, count } = await User.findAndCountAll({
     where,
     limit: 20,
-    attributes: {
-      exclude: ['iamGroups'],
-      include: [[sequelize.literal(`'hy-employees' = ANY (iam_groups)`), 'hasEmployeeIam']],
-    },
   })
 
   return res.send({
@@ -516,7 +510,6 @@ const getFeedbackCorrespondents = async (req, res) => {
       u.secondary_email as "secondaryEmail", 
       u.employee_number as "employeeNumber",
       u.student_number as "studentNumber",
-      u.iam_groups as "iamGroups",
       u.degree_study_right as "degreeStudyRight",
       u.last_logged_in as "lastLoggedIn",
       u.username,
@@ -558,9 +551,14 @@ const updateInactiveCourseRealisation = async (req, res) => {
     { where: { id } }
   )
 
-  if (!manuallyEnabled) deleteCancelledCourses([id])
+  if (!manuallyEnabled) await updaterClient.deleteCourse(id)
 
   return res.send(inactiveCourse)
+}
+
+const getNodeConfigEnv = (_req, res) => {
+  const { NODE_CONFIG_ENV } = process.env
+  return res.send({ NODE_CONFIG_ENV })
 }
 
 const router = Router()
@@ -586,4 +584,5 @@ router.put('/inactive-course-realisations/:id', updateInactiveCourseRealisation)
 router.post('/banners', createBanner)
 router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
+router.get('/node-config-env', getNodeConfigEnv)
 module.exports = router

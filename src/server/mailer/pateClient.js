@@ -3,7 +3,7 @@ const axios = require('axios')
 const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
-const { inProduction, inStaging } = require('../../config')
+const { inProduction, inStaging, PATE_URL } = require('../util/config')
 const logger = require('../util/logger')
 
 const template = {
@@ -20,7 +20,7 @@ const settings = {
 }
 
 const pateClient = axios.create({
-  baseURL: 'https://importer.cs.helsinki.fi/api/pate',
+  baseURL: PATE_URL,
   params: {
     token: process.env.API_TOKEN,
   },

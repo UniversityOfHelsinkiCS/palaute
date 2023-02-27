@@ -1,40 +1,7 @@
 import { format, parseISO, isWithinInterval } from 'date-fns'
-import apiClient from '../../util/apiClient'
 
 export const getUpperLevelQuestions = survey =>
   (survey?.universitySurvey?.questions ?? []).filter(q => q.type !== 'TEXT')
-
-export const getSurveyInitialValues = (survey, publicQuestionIds, publicityConfigurableQuestionIds) => {
-  const questions = [
-    ...(survey.universitySurvey?.questions ?? []).map(question => ({
-      ...question,
-      editable: false,
-      chip: 'questionEditor:universityQuestion',
-    })),
-    ...(survey.questions ?? []).map(question => ({
-      ...question,
-      editable: true,
-    })),
-  ].map(q => ({
-    ...q,
-    public: publicQuestionIds.includes(q.id),
-    publicityConfigurable: publicityConfigurableQuestionIds.includes(q.id),
-  }))
-  return {
-    questions,
-  }
-}
-
-export const saveSurveyValues = async (values, surveyId) => {
-  const { questions } = values
-  const editableQuestions = questions.filter(({ editable }) => editable)
-
-  const { data } = await apiClient.put(`/surveys/${surveyId}`, {
-    questions: editableQuestions,
-  })
-
-  return data
-}
 
 export const filterCoursesWithNoResponses = courses => {
   const coursesWithRealisations = courses.filter(course => course.realisations.length > 0)

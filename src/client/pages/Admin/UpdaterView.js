@@ -21,11 +21,11 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import apiClient from '../../util/apiClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
-import { inProduction } from '../../../config'
+import { GRAYLOG_URL, inProduction } from '../../util/common'
 import ExternalLink from '../../components/common/ExternalLink'
 
 const createGraylogLink = updaterStatus => {
-  const baseUrl = 'https://graylog.toska.cs.helsinki.fi'
+  const baseUrl = GRAYLOG_URL
   const start = updaterStatus.startedAt
   const end = updaterStatus.finishedAt || new Date()
   return `${baseUrl}/search?q=app%3A+norppa+AND+message%3A+"%5BUPDATER%5D"&rangetype=absolute&from=${start}&to=${end}`
@@ -131,6 +131,11 @@ const UpdaterView = () => {
 
   return (
     <Box marginTop={4}>
+      <Box mb="2rem">
+        <Button variant="contained" color="primary" onClick={runUpdater}>
+          Run updater
+        </Button>
+      </Box>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Job type</InputLabel>
         <Select
@@ -146,11 +151,6 @@ const UpdaterView = () => {
         </Select>
       </FormControl>
       <StatusTable updaterStatuses={updaterStatuses} />
-      <Box marginTop={2}>
-        <Button variant="contained" color="primary" onClick={runUpdater}>
-          Run updater
-        </Button>
-      </Box>
     </Box>
   )
 }

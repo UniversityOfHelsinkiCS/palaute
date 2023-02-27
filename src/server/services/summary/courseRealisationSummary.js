@@ -1,10 +1,9 @@
 const _ = require('lodash')
-const { Op, QueryTypes } = require('sequelize')
+const { Op } = require('sequelize')
 
-const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User } = require('../../models')
 const languages = require('../../util/languages.json')
-const { COURSE_REALISATION_SUMMARY_QUERY } = require('./sql')
+const { runCourseRealisationSummaryQuery } = require('./sql')
 const { getMean } = require('./utils')
 
 const getCourseRealisationSummaries = async ({
@@ -13,10 +12,7 @@ const getCourseRealisationSummaries = async ({
   accessibleCourseRealisationIds,
   organisationAccess,
 }) => {
-  const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
-    replacements: { courseCode },
-    type: QueryTypes.SELECT,
-  })
+  const allCuSummaries = await runCourseRealisationSummaryQuery(courseCode)
 
   const summaries = organisationAccess
     ? allCuSummaries

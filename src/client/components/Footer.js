@@ -1,5 +1,4 @@
 import React from 'react'
-/** @jsxImportSource @emotion/react */
 
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 
@@ -8,14 +7,13 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { images } from '../util/common'
+import { images, inProduction, inStaging } from '../util/common'
 
-import { inProduction } from '../../config'
 import { localeForLanguage } from '../util/languageUtils'
 
 const styles = {
   logo: {
-    marginLeft: theme => theme.spacing(2),
+    marginLeft: '2rem',
     width: '80px',
     height: 'auto',
   },
@@ -23,12 +21,6 @@ const styles = {
     height: '100px',
   },
 }
-
-const supportEmail = 'coursefeedback@helsinki.fi'
-const wikiLink = 'https://wiki.helsinki.fi/display/CF'
-const accessibilityDocument =
-  'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md'
-const dataProtectionNotice = 'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991'
 
 const Footer = ({ user }) => {
   const { t, i18n } = useTranslation()
@@ -50,34 +42,34 @@ const Footer = ({ user }) => {
           {!inProduction && (
             <>
               <Box>
-                <Typography>DEVELOPMENT</Typography>
+                <Typography>{inStaging ? 'STAGING' : 'DEVELOPMENT'}</Typography>
               </Box>
-              <img src={images.norppa_viskaali} css={styles.norppa} alt="Norppa drawing by tttriple" />
+              <img src={images.norppa_viskaali} style={styles.norppa} alt="Norppa drawing by tttriple" />
             </>
           )}
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${supportEmail}`} underline="hover">
-                {supportEmail}
+              <Link href={`mailto:${t('links:supportEmail')}`} underline="hover">
+                {t('links:supportEmail')}
               </Link>
             </Typography>
-            <ExternalLink href={accessibilityDocument}>{t('footer:accessibilityDocument')}</ExternalLink>
+            <ExternalLink href={t('links:accessibility')}>{t('footer:accessibilityDocument')}</ExternalLink>
             <Typography>
-              <ExternalLink href={dataProtectionNotice}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
+              <ExternalLink href={t('links:dataProtection')}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
             </Typography>
             {user && user.isTeacher && (
               <Typography>
-                <ExternalLink href={wikiLink}>{t('footer:wikiLink')}</ExternalLink>
+                <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
               </Typography>
             )}
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
-            <Link href="https://toska.dev" target="_blank" rel="noopener" underline="hover">
-              <img src={images.toska_color} css={styles.logo} alt="Toska" />
+            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
+              <img src={images.toska_color} style={styles.logo} alt="Toska" />
             </Link>
             {duration && (
-              <Typography variant="subtitle1" fontSize={14}>
+              <Typography variant="subtitle1" fontSize={12}>
                 {t('footer:lastUpdate', { duration })}
               </Typography>
             )}

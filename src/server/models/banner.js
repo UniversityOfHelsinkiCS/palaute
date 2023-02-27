@@ -1,9 +1,7 @@
-const { ENUM } = require('sequelize')
-const { DATE } = require('sequelize')
-const { Op } = require('sequelize')
+const { ENUM, DATE, Op } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
-const { ADMINS } = require('../../config')
 const { sequelize } = require('../db/dbConnection')
+const { ADMINS } = require('../util/config')
 
 class Banner extends Model {
   static async getForUser(user) {

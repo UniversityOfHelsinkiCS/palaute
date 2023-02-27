@@ -1,6 +1,6 @@
 const { format } = require('date-fns')
 const jwt = require('jsonwebtoken')
-const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS } = require('../../util/config')
+const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL } = require('../../util/config')
 
 const instructionsAndSupport = {
   en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
@@ -16,7 +16,7 @@ const instructionsAndSupport = {
 
 const getNoAdUrl = (username, userId, days) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
-  return `https://coursefeedback.helsinki.fi/noad/token/${token}?userId=${userId}`
+  return `${PUBLIC_URL}/noad/token/${token}?userId=${userId}`
 }
 
 const getFeedbackTargetLink = feedbackTarget => {
@@ -67,13 +67,13 @@ const getFeedbackTargetLink = feedbackTarget => {
     return `<i><a href=${noAdUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
   }
   if (possiblyNoAdUser) {
-    const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
+    const adUrl = `${PUBLIC_URL}/targets/${id}/feedback`
     const noAdUrl = getNoAdUrl(username, userId, daysUntilExpiration)
     return `<i>${name[language]}</i> (${openUntil[language]})<br/>${adLinkInfo[language]}, <a href=${adUrl}>${linkText[language]}</a> 
         ${noAdLinkInfo[language]}, <a href=${noAdUrl}>${linkText[language]}</a> (${noAdLinkExpirationInfo[language]})<br/>`
   }
 
-  const adUrl = `https://coursefeedback.helsinki.fi/targets/${id}/feedback`
+  const adUrl = `${PUBLIC_URL}/targets/${id}/feedback`
   return `<i><a href=${adUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
 }
 

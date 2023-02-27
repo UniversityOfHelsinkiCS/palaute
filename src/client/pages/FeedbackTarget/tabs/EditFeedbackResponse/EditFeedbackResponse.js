@@ -51,9 +51,9 @@ const EditFeedbackResponse = () => {
         id,
         data: values,
       })
-      enqueueSnackbar(t('saveSuccess'), { variant: 'success' })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 
@@ -65,7 +65,7 @@ const EditFeedbackResponse = () => {
           <Alert severity="info">
             <Trans i18nKey="feedbackResponse:responseInfo">
               This field supports{' '}
-              <AlertLink href="https://commonmark.org/help/" target="_blank">
+              <AlertLink href={t('links:markdownHelp')} target="_blank">
                 Markdown
               </AlertLink>{' '}
               syntax

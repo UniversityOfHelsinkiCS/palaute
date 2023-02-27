@@ -2,16 +2,10 @@ import React from 'react'
 
 const FeedbackTargetContext = React.createContext()
 
-export const FeedbackTargetContextProvider = ({
-  id,
-  accessStatus,
-  isAdmin,
-  organisation,
-  feedbackTarget,
-  children,
-}) => {
+export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedbackTarget, children }) => {
   const context = React.useMemo(() => {
     const orgAccess = organisation?.access
+    const accessStatus = feedbackTarget?.accessStatus
 
     const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || isAdmin
     const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher || isAdmin
@@ -29,7 +23,7 @@ export const FeedbackTargetContextProvider = ({
       organisation,
       feedbackTarget,
     }
-  }, [id, feedbackTarget])
+  }, [id, feedbackTarget, organisation])
 
   return <FeedbackTargetContext.Provider value={context}>{children}</FeedbackTargetContext.Provider>
 }

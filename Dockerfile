@@ -1,8 +1,13 @@
-FROM node:16
+FROM registry.access.redhat.com/ubi8/nodejs-16
 
 ENV TZ="Europe/Helsinki"
 
-WORKDIR /usr/src/app
+WORKDIR /opt/app-root/src
+
+# Build time env variables
+
+ARG NODE_CONFIG_ENV
+ENV NODE_CONFIG_ENV=$NODE_CONFIG_ENV
 
 ARG GIT_SHA
 ENV REACT_APP_GIT_SHA=$GIT_SHA
@@ -18,7 +23,7 @@ ENV REACT_APP_STAGING=$STAGING
 
 # Setup
 COPY package* ./
-RUN npm ci --only=production --ignore-scripts
+RUN npm ci -f --omit-dev --ignore-scripts
 COPY . .
 
 RUN npm run build

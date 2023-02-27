@@ -141,6 +141,19 @@ const ContinuousFeedbackChip = () => {
   )
 }
 
+const FeedbackResponseChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<FeedbackGivenIcon />}
+      label={t('userFeedbacks:feedbackResponseGiven')}
+      sx={styles.success}
+    />
+  )
+}
+
 const formatDate = date => lightFormat(date, 'd.M.yyyy')
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
@@ -149,14 +162,15 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const queryClient = useQueryClient()
 
-  const { id, closesAt, opensAt, feedback } = feedbackTarget
+  const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
 
-  const periodInfo = t('feedbackOpenPeriod', {
+  const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: formatDate(parseISO(opensAt)),
     closesAt: formatDate(parseISO(closesAt)),
   })
 
   const feedbackGiven = Boolean(feedback)
+  const feedbackResponseGiven = feedbackResponse?.length > 3
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const notStarted = !isOpen && !isEnded
@@ -176,12 +190,13 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <ListItemText primary={periodInfo} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
-      <Box mt={1} mb={1}>
+      <Box mt={1} mb={1} display="flex" gap="1rem">
         {isEnded && !feedbackGiven && <FeedbackEndedChip />}
         {notStarted && !continuousFeedbackEnabled && <FeedbackNotStartedChip />}
         {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackChip />}
         {feedbackGiven && <FeedbackGivenChip />}
         {isOpen && !feedbackGiven && <NoFeedbackChip />}
+        {feedbackResponseGiven && <FeedbackResponseChip />}
       </Box>
 
       <Box m={-0.5} mt={1}>

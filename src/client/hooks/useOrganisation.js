@@ -1,5 +1,5 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useOrganisation = (code, options = {}) => {
   const queryKey = ['organisation', code]
@@ -12,6 +12,8 @@ const useOrganisation = (code, options = {}) => {
 
   const { data: organisation, ...rest } = useQuery(queryKey, queryFn, {
     enabled: Boolean(code),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     ...options,
   })
 

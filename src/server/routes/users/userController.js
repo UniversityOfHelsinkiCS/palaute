@@ -4,10 +4,10 @@ const _ = require('lodash')
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
-const { ADMINS } = require('../../../config')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
+const { ADMINS } = require('../../util/config')
 
 const login = async (req, res) => {
   const { user, isAdmin, loginAs } = req
@@ -65,6 +65,8 @@ const getUserDetails = async (req, res) => {
 
   const user = await User.findByPk(id)
   const iamGroups = await getUserIams(id)
+
+  user.iamGroups = iamGroups
   const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
 
   return res.send({

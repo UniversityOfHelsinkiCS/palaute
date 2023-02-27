@@ -47,7 +47,7 @@ const ContinuousFeedback = () => {
         autoHideDuration: 6000,
       })
     } catch (e) {
-      enqueueSnackbar(t('unknownError'), { variant: 'error' })
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
 

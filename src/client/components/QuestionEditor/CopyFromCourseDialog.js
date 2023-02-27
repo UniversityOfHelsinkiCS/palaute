@@ -19,11 +19,11 @@ import {
 
 import { useTranslation } from 'react-i18next'
 
-import useTeacherCourseUnits from '../../../../../hooks/useTeacherCourseUnits'
-import useCourseUnitFeedbackTargets from '../../../../../hooks/useCourseUnitFeedbackTargets'
-import { getLanguageValue } from '../../../../../util/languageUtils'
-import formatDate from '../../../../../util/formatDate'
-import { LoadingProgress } from '../../../../../components/common/LoadingProgress'
+import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
+import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
+import { getLanguageValue } from '../../util/languageUtils'
+import formatDate from '../../util/formatDate'
+import { LoadingProgress } from '../common/LoadingProgress'
 
 const styles = {
   listItem: {
@@ -144,7 +144,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={onClose}>
-          {t('close')}
+          {t('common:close')}
         </Button>
       </DialogActions>
     </Dialog>

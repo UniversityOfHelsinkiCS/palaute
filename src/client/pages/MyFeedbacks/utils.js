@@ -1,6 +1,6 @@
 import groupBy from 'lodash/groupBy'
 
-import { INCLUDE_COURSES } from '../../../config'
+import { INCLUDE_COURSES } from '../../util/common'
 
 export const courseRealisationIsMisisingFeedback = courseRealisation => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -63,7 +63,7 @@ export const filterFeedbackTargets = feedbackTargets => {
           new Date(target.courseRealisation.startDate) >= new Date(2021, 8, 1) ||
           (new Date(target.courseRealisation.startDate) >= new Date(2021, 7, 15) &&
             new Date(target.courseRealisation.endDate) >= new Date(2021, 9, 1)) ||
-          INCLUDE_COURSES.has(target.courseRealisation.id)
+          INCLUDE_COURSES.includes(target.courseRealisation.id)
       )
 
   const continuousFeedbackEnabled = feedbackTargets.ongoing.filter(fbt => fbt.continuousFeedbackEnabled)

@@ -21,6 +21,8 @@ export default {
     supportContact: 'If you are not able to resolve this issue, please contact support: ',
     save: 'Save',
     saveSuccess: 'Information has been saved',
+    course: 'Course',
+    courseCode: 'Course code',
     name: 'Name',
     edit: 'Edit',
     show: 'Show',
@@ -68,6 +70,19 @@ export default {
     studyTracks: 'Studytracks',
     currentlySelected: 'Currently selected',
   },
+  links: {
+    supportEmail: 'coursefeedback@helsinki.fi',
+    wikiRoot: 'https://wiki.helsinki.fi/display/CF',
+    wikiOrganisationHelp: 'https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide',
+    wikiTeacherHelp: 'https://wiki.helsinki.fi/display/CF/3.+Teacher%27s+guide',
+    accessibility: 'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md',
+    dataProtection: 'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991',
+    toska: 'https://toska.dev',
+    markdownHelp: 'https://commonmark.org/help/',
+    adminGraylog: 'https://graylog.toska.cs.helsinki.fi',
+    courseUnitPage: 'https://studies.helsinki.fi/opintotarjonta/cu/',
+    courseRealisationPage: 'https://studies.helsinki.fi/opintotarjonta/cur/',
+  },
   userFeedbacks: {
     mainHeading: 'My feedback',
     giveFeedbackButton: 'Give feedback',
@@ -89,6 +104,7 @@ export default {
     feedbackNotStartedChip: 'Feedback has not started',
     feedbackEndedChip: 'Feedback has ended',
     continuousFeedbackChip: 'Continuous feedback',
+    feedbackResponseGiven: 'Teacher has given counter feedback',
     deleted: 'Your feedback has been deleted',
   },
   feedbackView: {
@@ -239,7 +255,7 @@ export default {
     closeImmediatelyTomorrowConfirm: `Feedback will be closed {{date}}, so that it's open for atleast a day. Feedback can't be collected after it is closed. Are you sure you want to close the feedback immediately?`,
     sendReminder: 'Send reminder email',
     sendReminderButton: 'Send reminder',
-    reminderDisabled: 'You have already sent a reminder email less than 24 hours ago',
+    reminderDisabled: 'You have already sent a reminder email less than {{cooldown}} hours ago',
     reminderLastSent: 'Reminder last sent',
     cancelReminder: 'Cancel',
     modalTitle: 'Send a reminder about feedback via email',
@@ -400,7 +416,6 @@ export default {
     setAsCorrespondent: 'Set as feedback liaison',
     email: 'Email',
     remove: 'Remove',
-    course: 'Course',
     feedbackEnabled: 'Feedback enabled',
     courseStudentListVisible: 'Student list visible',
     filters: 'Filters',
@@ -447,6 +462,7 @@ export default {
     activateContinuousFeedbackDigest: 'Send a daily email digest about new continuous feedback',
     continuousFeedbackGiven: 'Continuous feedback given',
     noContinuousFeedbackGiven: 'No continuous feedback has been given yet',
+    continuousFeedbackInactive: 'Continuous feedback is not active',
     continuousFeedbackStudentInfo:
       'Here you can see your continuous feedback and responses. Your feedback is anonymous, so your name is not visible to the course organisers.',
     respondContinuousFeedback: 'Respond',
@@ -465,9 +481,6 @@ export default {
     noAccess:
       "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
     notFound: 'Cannot find this course feedback! If you entered the URL manually, make sure it is correct',
-    notifyOnEnrolment: 'Email me when my enrolment is found',
-    notificationEnabled: "Ok, we'll send a notification to {{email}} if your enrolment is found within 24h",
-    notificationDisabled: "Ok, you won't be notified",
   },
   noadUser: {
     noUser:

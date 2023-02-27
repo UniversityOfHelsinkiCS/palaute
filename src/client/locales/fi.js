@@ -21,6 +21,8 @@ export default {
     supportContact: 'Ongelmatilanteessa ota yhteyttä tukeen: ',
     save: 'Tallenna',
     saveSuccess: 'Tiedot tallennettiin onnistuneesti',
+    course: 'Kurssi',
+    courseCode: 'Kurssikoodi',
     name: 'Nimi',
     edit: 'Muokkaa',
     show: 'Näytä',
@@ -68,6 +70,19 @@ export default {
     studyTracks: 'Opintosuunnat',
     currentlySelected: 'Valittuna',
   },
+  links: {
+    supportEmail: 'coursefeedback@helsinki.fi',
+    wikiRoot: 'https://wiki.helsinki.fi/display/CF',
+    wikiOrganisationHelp: 'https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje',
+    wikiTeacherHelp: 'https://wiki.helsinki.fi/display/CF/3.+Opettajan+ohje',
+    accessibility: 'https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md',
+    dataProtection: 'https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991',
+    toska: 'https://toska.dev',
+    markdownHelp: 'https://commonmark.org/help/',
+    adminGraylog: 'https://graylog.toska.cs.helsinki.fi',
+    courseUnitPage: 'https://studies.helsinki.fi/opintotarjonta/cu/',
+    courseRealisationPage: 'https://studies.helsinki.fi/opintotarjonta/cur/',
+  },
   userFeedbacks: {
     mainHeading: 'Kurssipalautteeni',
     giveFeedbackButton: 'Anna palautetta',
@@ -89,6 +104,7 @@ export default {
     feedbackNotStartedChip: 'Palaute ei ole alkanut',
     feedbackEndedChip: 'Palaute on päättynyt',
     continuousFeedbackChip: 'Jatkuva palaute',
+    feedbackResponseGiven: 'Opettaja on antanut vastapalautteen',
     deleted: 'Palautteesi on poistettu',
   },
   feedbackView: {
@@ -241,7 +257,7 @@ export default {
     closeImmediatelyTomorrowConfirm: `Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua kurssipalautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?`,
     sendReminder: 'Lähetä muistutusviesti',
     sendReminderButton: 'Lähetä muistutus',
-    reminderDisabled: 'Olet jo lähettänyt muistutusviestin viimeisen 24 tunnin aikana',
+    reminderDisabled: 'Olet jo lähettänyt muistutusviestin viimeisen {{cooldown}} tunnin aikana',
     reminderLastSent: 'Muistutus viimeksi lähetetty',
     cancelReminder: 'Peruuta',
     modalTitle: 'Lähetä muistutus palautteesta sähköpostilla',
@@ -404,7 +420,6 @@ export default {
     setAsCorrespondent: 'Aseta palautevastaavaksi',
     email: 'Sähköposti',
     remove: 'Poista',
-    course: 'Kurssi',
     feedbackEnabled: 'Palaute käytössä',
     courseStudentListVisible: 'Näytä palautteenantajat',
     filters: 'Rajaus',
@@ -450,6 +465,7 @@ export default {
     activateContinuousFeedbackDigest: 'Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta',
     continuousFeedbackGiven: 'Annettu jatkuva palaute',
     noContinuousFeedbackGiven: 'Jatkuvaa palautetta ei ole vielä annettu',
+    continuousFeedbackInactive: 'Jatkuva palaute ei ole käytössä',
     continuousFeedbackStudentInfo:
       'Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy kurssin järjestäjille.',
     respondContinuousFeedback: 'Vastaa',
@@ -468,9 +484,6 @@ export default {
     noAccess:
       'Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.',
     notFound: 'Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.',
-    notifyOnEnrolment: 'Lähetä minulle ilmoitus heti kun ilmoittautuminen löytyy',
-    notificationEnabled: 'Ok, ilmoitamme osoitteeseen {{email}} jos ilmoittautumisesi löytyy 24h sisällä',
-    notificationDisabled: 'Ok, ilmoitusta ei lähetetä',
   },
 
   noadUser: {

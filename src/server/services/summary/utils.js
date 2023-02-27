@@ -1,9 +1,9 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const { getUniversitySurvey } = require('../surveys')
-const { Tag, CourseRealisationsTag, CourseUnit, CourseRealisation } = require('../../models')
-const { WORKLOAD_QUESTION_ID } = require('../../../config')
+const { CourseRealisationsTag } = require('../../models')
 const CourseUnitsTag = require('../../models/courseUnitsTag')
+const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 
 const QUESTION_AVERAGES_QUERY = `
 SELECT

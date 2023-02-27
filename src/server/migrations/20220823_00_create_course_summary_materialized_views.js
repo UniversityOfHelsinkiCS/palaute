@@ -1,9 +1,9 @@
-const { SUMMARY_VIEW_QUERY, COUNTS_VIEW_QUERY } = require('../services/summary/sql')
+const { initialiseSummaryView, initialiseCountsView } = require('../services/summary/sql')
 
 module.exports = {
-  up: async queryInterface => {
-    await queryInterface.sequelize.query(SUMMARY_VIEW_QUERY)
-    await queryInterface.sequelize.query(COUNTS_VIEW_QUERY)
+  up: async () => {
+    await initialiseSummaryView()
+    await initialiseCountsView()
   },
   down: async queryInterface => {
     await queryInterface.sequelize.query('DROP course_results_view')

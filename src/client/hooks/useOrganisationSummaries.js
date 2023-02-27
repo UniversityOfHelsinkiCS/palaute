@@ -28,6 +28,8 @@ const useOrganisationSummaries = (options = {}) => {
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
     enabled,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     ...queryOptions,
   })
 

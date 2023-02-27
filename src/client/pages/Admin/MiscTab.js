@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack'
 import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
 import EmailAccordion from './EmailAccordion'
 import apiClient from '../../util/apiClient'
+import ConfigDebug from './ConfigDebug'
 
 const MiscTab = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -32,6 +33,7 @@ const MiscTab = () => {
     <>
       <EditUniversitySurveyAccordion />
       <EmailAccordion />
+      <ConfigDebug />
       <Button variant="contained" color="primary" onClick={runPateCron} data-cy="run-pate">
         Run pateCron
       </Button>

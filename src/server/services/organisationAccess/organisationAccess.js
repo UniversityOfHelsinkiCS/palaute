@@ -2,7 +2,7 @@ const { Op } = require('sequelize')
 const _ = require('lodash')
 
 const { normalizeOrganisationCode } = require('../../util/common')
-const { ADMINS, inE2EMode } = require('../../util/config')
+const { inE2EMode, ADMINS } = require('../../util/config')
 const { getUserIamAccess, getAccessToAll, getAllUserAccess } = require('../../util/jami')
 
 const isSuperAdmin = user => ADMINS.includes(user.username)
