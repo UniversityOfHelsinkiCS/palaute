@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Box, Typography, Alert, Button, Card, CardContent } from '@mui/material'
+import { Box, Typography, Alert, Button } from '@mui/material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import ResponseForm from './ResponseForm'
@@ -12,6 +12,7 @@ import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import ErrorView from '../../../../components/common/ErrorView'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
+import CardSection from '../../../../components/common/CardSection'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -124,33 +125,27 @@ const ContinuousFeedback = () => {
       {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
       <Box my="1rem">
-        <Card>
-          <CardContent>
-            <Box mb={4}>
-              <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackGiven')}</Typography>
+        <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
+          {isStudent && (
+            <Box mb={2}>
+              <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
             </Box>
+          )}
 
-            {isStudent && (
-              <Box mb={2}>
-                <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
-              </Box>
-            )}
+          {(isTeacher || isResponsibleTeacher) && (
+            <Box mb={2}>
+              <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
+            </Box>
+          )}
 
-            {(isTeacher || isResponsibleTeacher) && (
-              <Box mb={2}>
-                <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
-              </Box>
-            )}
+          <ContinuousFeedbackList canRespond={isResponsibleTeacher} />
 
-            <ContinuousFeedbackList canRespond={isResponsibleTeacher} />
-
-            {isStudent && isOngoing && (
-              <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
-                {t('userFeedbacks:giveContinuousFeedback')}
-              </Button>
-            )}
-          </CardContent>
-        </Card>
+          {isStudent && isOngoing && (
+            <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
+              {t('userFeedbacks:giveContinuousFeedback')}
+            </Button>
+          )}
+        </CardSection>
       </Box>
     </Box>
   )
