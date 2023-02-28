@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { Box } from '@mui/material'
 
-import FeedbackPeriodForm from './FeedbackPeriodForm'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
@@ -21,8 +20,6 @@ const Settings = () => {
 
   return (
     <Box>
-      <FeedbackPeriodForm />
-      <Box mb="1rem" />
       <EditFeedbackTarget />
     </Box>
   )

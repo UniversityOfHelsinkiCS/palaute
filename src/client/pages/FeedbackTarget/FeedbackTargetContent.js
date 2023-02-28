@@ -47,7 +47,7 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
 import Title from '../../components/common/Title'
 import { TabGroup, TabGroupsContainer } from '../../components/common/TabGroup'
-import Dates from './Dates'
+import Dates from './Dates/Dates'
 
 const styles = {
   datesContainer: {

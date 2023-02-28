@@ -2,32 +2,23 @@ import React, { useState, useRef } from 'react'
 import { Box, Button, Tooltip, Link, Alert } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
-import { useSnackbar } from 'notistack'
-import { useHistory } from 'react-router'
 import { WarningAmber } from '@mui/icons-material'
 
-import FormikDatePicker from '../../../../components/common/FormikDatePicker'
+import FormikDatePicker from '../../../components/common/FormikDatePicker'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
-import {
-  validateFeedbackPeriod,
-  requiresSubmitConfirmation,
-  getFeedbackPeriodInitialValues,
-  openFeedbackImmediately,
-  saveFeedbackPeriodValues,
-  opensAtIsImmediately,
-} from './utils'
-import { TooltipButton } from '../../../../components/common/TooltipButton'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import CardSection from '../../../../components/common/CardSection'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import queryClient from '../../../../util/queryClient'
+import { validateFeedbackPeriod, requiresSubmitConfirmation, getFeedbackPeriodInitialValues } from './utils'
+import { TooltipButton } from '../../../components/common/TooltipButton'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import CardSection from '../../../components/common/CardSection'
+import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import { useOpenImmediately, useUpdateDates } from './api'
+import useInteractiveMutation from '../../../hooks/useInteractiveMutation'
 
 const FeedbackPeriodForm = () => {
   const { t } = useTranslation()
-  const history = useHistory()
-  const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget, isResponsibleTeacher, isOrganisationAdmin, isAdmin } = useFeedbackTargetContext()
-  const { id } = feedbackTarget
+  const updateDates = useUpdateDates(feedbackTarget)
+  const openImmediately = useOpenImmediately(feedbackTarget)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
@@ -38,31 +29,8 @@ const FeedbackPeriodForm = () => {
 
   const formEnabled = ((isResponsibleTeacher || isOrganisationAdmin) && !isOver) || isAdmin
 
-  const handleOpenFeedbackImmediately = async () => {
-    try {
-      await openFeedbackImmediately(feedbackTarget)
-      history.replace(`/targets/${id}`)
-      queryClient.refetchQueries(['feedbackTarget', id])
-    } catch (e) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
-
-  const handleSubmitFeedbackPeriod = async values => {
-    try {
-      await saveFeedbackPeriodValues(values, feedbackTarget)
-
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-
-      if (opensAtIsImmediately(values)) {
-        history.replace(`/targets/${id}`)
-      }
-
-      queryClient.refetchQueries(['feedbackTarget', id])
-    } catch (e) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
+  const handleOpenFeedbackImmediately = useInteractiveMutation(() => openImmediately.mutateAsync())
+  const handleSubmitFeedbackPeriod = useInteractiveMutation(dates => updateDates.mutateAsync(dates))
 
   const openImmediatelyEnabled = !(isOpen || isOver)
 

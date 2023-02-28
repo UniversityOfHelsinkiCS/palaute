@@ -2,9 +2,9 @@ import React from 'react'
 import { Box, Button, Dialog, Paper, Typography } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
-import FeedbackPeriodForm from './tabs/Settings/FeedbackPeriodForm'
-import { getDateRangeString } from '../../util/getDateRangeString'
+import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import FeedbackPeriodForm from './FeedbackPeriodForm'
+import { getDateRangeString } from '../../../util/getDateRangeString'
 
 const DateModal = ({ open, onClose }) => (
   <Dialog open={open} onClose={onClose}>
