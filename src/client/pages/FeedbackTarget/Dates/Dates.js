@@ -16,7 +16,7 @@ const Dates = () => {
   const { t } = useTranslation()
   const { feedbackTarget, isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { courseRealisation, opensAt, closesAt } = feedbackTarget
+  const { courseRealisation, opensAt, closesAt, continuousFeedbackEnabled } = feedbackTarget
 
   const coursePeriod = getDateRangeString(courseRealisation.startDate, courseRealisation.endDate)
   const feedbackPeriod = getDateRangeString(opensAt, closesAt)
@@ -42,6 +42,19 @@ const Dates = () => {
           <Typography color="textSecondary" component="dd">
             {feedbackPeriod}
           </Typography>
+
+          {continuousFeedbackEnabled && (
+            <>
+              <Typography color="textSecondary" component="dt">
+                {t('feedbackTargetView:continuousFeedbackTab')}:
+              </Typography>
+
+              <Typography color="textSecondary" component="dd">
+                {coursePeriod}
+              </Typography>
+            </>
+          )}
+
           {showEditButton && (
             <Box gridColumn="span 2">
               <Button onClick={() => setDialogOpen(true)} variant="outlined" startIcon={<Edit />}>
