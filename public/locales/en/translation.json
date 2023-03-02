@@ -22,6 +22,7 @@
     "show": "Show",
     "hide": "Hide",
     "accept": "Accept",
+    "preview": "Preview",
     "clearSelection": "Clear selection",
     "copyToClipBoard": "Copy to clipboard",
     "feedbackOpenPeriod": "Feedback can be given between {{opensAt}} and {{closesAt}}",

@@ -21,6 +21,7 @@
     "show": "Visa",
     "hide": "Göm",
     "accept": "Godkänn",
+    "preview": "Förhandsvisning",
     "clearSelection": "Töm val",
     "copyToClipBoard": "Kopiera till urklipp",
     "feedbackOpenPeriod": "Respons kan ges mellan {{opensAt}} och {{closesAt}}",

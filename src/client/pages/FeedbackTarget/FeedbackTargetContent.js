@@ -325,7 +325,7 @@ const FeedbackTargetContent = () => {
               />
             ) : (
               <RouterTab
-                label={t('feedbackTargetView:surveyTab')}
+                label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
                 to={`${url}/feedback`}
                 badge={isOpen}
                 icon={<LiveHelpOutlined />}

@@ -22,6 +22,7 @@
     "show": "Näytä",
     "hide": "Piilota",
     "accept": "Hyväksy",
+    "preview": "Esikatselu",
     "clearSelection": "Tyhjennä valinta",
     "copyToClipBoard": "Kopioi leikepöydälle",
     "feedbackOpenPeriod": "Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}",
