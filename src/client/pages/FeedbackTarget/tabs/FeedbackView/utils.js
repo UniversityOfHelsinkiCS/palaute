@@ -1,4 +1,5 @@
 import { parseISO, lightFormat } from 'date-fns'
+import _ from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 
@@ -46,6 +47,11 @@ const getInitialAnswerByType = type => {
   return ''
 }
 
+/**
+ * Merges surveys into one list of questions and orders them properly
+ * @param {object} feedbackTarget
+ * @returns {object[]} array of questions in correct order
+ */
 export const getQuestions = feedbackTarget => {
   const { surveys } = feedbackTarget
 
@@ -57,12 +63,20 @@ export const getQuestions = feedbackTarget => {
     []
   )
 
-  return [
+  const programmeOpenQuestions = programmeSurveyQuestions.filter(q => q.type === 'OPEN')
+  const filteredProgrammeQuestions = programmeSurveyQuestions.filter(q => q.type !== 'OPEN')
+
+  // General ordering
+  const allQuestions = [
     ...filteredUniQuestions,
-    ...(programmeSurveyQuestions ?? []),
+    ...(filteredProgrammeQuestions ?? []),
     ...(surveys?.teacherSurvey?.questions ?? []),
+    ...programmeOpenQuestions,
     ...uniOpenQuestions,
   ]
+
+  // Grouping questions are first
+  return _.orderBy(allQuestions, q => q.type === 'GROUPING', 'desc')
 }
 
 const getInitialAnswerByFeedback = (feedback, question) => {

@@ -19,6 +19,8 @@ import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
+import GroupingEditor from './GroupingEditor'
+import GroupingPreview from './GroupingPreview'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -26,6 +28,7 @@ const editorComponentByType = {
   TEXT: TextEditor,
   MULTIPLE_CHOICE: ChoiceEditor,
   SINGLE_CHOICE: ChoiceEditor,
+  GROUPING: GroupingEditor,
 }
 
 const previewComponentByType = {
@@ -34,6 +37,7 @@ const previewComponentByType = {
   TEXT: TextPreview,
   MULTIPLE_CHOICE: MultipleChoicePreview,
   SINGLE_CHOICE: SingleChoicePreview,
+  GROUPING: GroupingPreview,
 }
 
 const getTitleByType = (type, t) => {
@@ -43,6 +47,7 @@ const getTitleByType = (type, t) => {
     TEXT: t('questionEditor:textualContent'),
     MULTIPLE_CHOICE: t('questionEditor:multipleChoiceQuestion'),
     SINGLE_CHOICE: t('questionEditor:singleChoiceQuestion'),
+    GROUPING: t('questionEditor:groupingQuestion'),
   }
 
   return mapping[type]
@@ -128,6 +133,7 @@ const QuestionCard = ({
 
   const questionIsEditable = question.editable ?? true
   const canEdit = questionIsEditable && editable
+  const canDuplicate = question.type !== 'GROUPING'
 
   const orderButtonsProps = {
     onMoveUp,
@@ -184,9 +190,11 @@ const QuestionCard = ({
             {canEdit && (
               <ActionsContainer>
                 <div style={{ display: 'flex' }}>
-                  <Button color="primary" onClick={onCopy}>
-                    {t('questionEditor:duplicate')}
-                  </Button>
+                  {canDuplicate && (
+                    <Button color="primary" onClick={onCopy}>
+                      {t('questionEditor:duplicate')}
+                    </Button>
+                  )}
                   <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
                     {t('common:edit')}
                   </Button>

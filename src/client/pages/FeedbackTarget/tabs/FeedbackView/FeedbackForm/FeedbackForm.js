@@ -6,6 +6,7 @@ import OpenQuestion from './OpenQuestion'
 import SingleChoiceQuestion from './SingleChoiceQuestion'
 import MultipleChoiceQuestion from './MultipleChoiceQuestion'
 import Text from './Text'
+import GroupingQuestion from './GroupingQuestion'
 
 const componentByType = {
   LIKERT: LikertQuestion,
@@ -13,6 +14,7 @@ const componentByType = {
   MULTIPLE_CHOICE: MultipleChoiceQuestion,
   SINGLE_CHOICE: SingleChoiceQuestion,
   TEXT: Text,
+  GROUPING: GroupingQuestion,
 }
 
 const styles = {

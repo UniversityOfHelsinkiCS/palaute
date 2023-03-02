@@ -155,6 +155,7 @@
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
     "textualContent": "Tekstuaalinen sisältö",
+    "groupingQuestion": "Ryhmittelykysymys",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",

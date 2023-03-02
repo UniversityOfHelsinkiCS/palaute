@@ -155,6 +155,7 @@
     "singleChoiceQuestion": "Single choice question",
     "multipleChoiceQuestion": "Multiple choice question",
     "textualContent": "Textual content",
+    "groupingQuestion": "Grouping question",
     "moveUp": "Move up",
     "moveDown": "Move down",
     "removeQuestion": "Remove question",
