@@ -40,7 +40,7 @@ const EditFeedbackTarget = () => {
   const organisationNames = getOrganisationNames(feedbackTarget, language)
 
   return (
-    <CardSection title={t('feedbackTargetView:editSurveyTab')}>
+    <CardSection title={t('feedbackView:editSurvey')}>
       {upperLevelQuestions.length > 0 && (
         <Box mb={2}>
           <Alert severity="info">
