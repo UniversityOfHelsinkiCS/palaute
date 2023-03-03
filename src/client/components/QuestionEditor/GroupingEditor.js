@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Box, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useField } from 'formik'
 
 import OptionEditor from './OptionEditor'
 import FormikTextField from '../common/FormikTextField'
@@ -45,10 +44,6 @@ const InfoEditor = ({ name, language }) => {
 
 const GroupingEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
   const { i18n } = useTranslation()
-  const [field] = useField(name)
-  const { value } = field
-
-  console.log(value)
 
   return (
     <>
