@@ -199,8 +199,16 @@ CourseUnit.belongsToMany(Tag, {
 })
 Tag.hasMany(CourseUnitsTag)
 
-CourseRealisation.hasMany(Group)
-Group.belongsTo(CourseRealisation)
+/**
+ * Groups associations
+ */
+
+CourseRealisation.hasMany(Group, {
+  foreignKey: 'courseRealisationId',
+})
+Group.belongsTo(CourseRealisation, {
+  foreignKey: 'courseRealisationId',
+})
 
 module.exports = {
   Feedback,
