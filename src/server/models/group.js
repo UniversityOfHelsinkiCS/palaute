@@ -1,3 +1,4 @@
+const { INTEGER } = require('sequelize')
 const { Model, JSONB, STRING } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
@@ -10,8 +11,8 @@ Group.init(
       primaryKey: true,
       allowNull: false,
     },
-    courseRealisationId: {
-      type: STRING,
+    feedbackTargetId: {
+      type: INTEGER,
       allowNull: false,
     },
     name: {

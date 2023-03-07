@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      course_realisation_id: {
-        type: DataTypes.STRING,
+      feedback_target_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: 'course_realisations', key: 'id' },
+        references: { model: 'feedback_targets', key: 'id' },
       },
       name: {
         type: DataTypes.JSONB,

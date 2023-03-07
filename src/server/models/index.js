@@ -203,11 +203,11 @@ Tag.hasMany(CourseUnitsTag)
  * Groups associations
  */
 
-CourseRealisation.hasMany(Group, {
-  foreignKey: 'courseRealisationId',
+FeedbackTarget.hasMany(Group, {
+  foreignKey: 'feedbackTargetId',
 })
-Group.belongsTo(CourseRealisation, {
-  foreignKey: 'courseRealisationId',
+Group.belongsTo(FeedbackTarget, {
+  foreignKey: 'feedbackTargetId',
 })
 
 module.exports = {
