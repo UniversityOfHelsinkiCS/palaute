@@ -53,6 +53,13 @@ const getStudents = async ({ feedbackTargetId, user }) => {
     return []
   }
 
+  /**
+   *  Anonymity is breached if teacher can see students while their feedback given status can change
+   */
+  if (feedbackTarget.isOpen()) {
+    return []
+  }
+
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,

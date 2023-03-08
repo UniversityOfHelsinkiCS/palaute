@@ -279,6 +279,7 @@
     "none": "ei ole"
   },
   "studentsWithFeedback": {
+    "cannotShowWhenOpen": "Palautteenantajia ei voida näyttää palautteen ollessa auki.",
     "noFeedbackInfo": "Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
     "studentsList": "Palautteen antaneet opiskelijat"
   },
