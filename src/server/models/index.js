@@ -188,9 +188,11 @@ Tag.hasMany(CourseUnitsTag)
 
 FeedbackTarget.hasMany(Group, {
   foreignKey: 'feedbackTargetId',
+  as: 'groups',
 })
 Group.belongsTo(FeedbackTarget, {
   foreignKey: 'feedbackTargetId',
+  as: 'feedbackTarget',
 })
 
 module.exports = {
