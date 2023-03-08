@@ -1,5 +1,4 @@
 const logger = require('../../util/logger')
-const { seedTestGroups } = require('./groupsTest')
 const { seedTags } = require('./tags')
 
 const seed = async () => {
@@ -8,7 +7,6 @@ const seed = async () => {
   console.time('seed')
   try {
     await seedTags()
-    await seedTestGroups()
   } catch (e) {
     logger.error('Seeding failed: ', e)
   }
