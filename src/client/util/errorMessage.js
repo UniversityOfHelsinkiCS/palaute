@@ -1,18 +1,18 @@
 const getGeneralError = error => {
-  if (error.message.toLowerCase() === 'network error') {
+  if (error.message?.toLowerCase() === 'network error') {
     return 'common:fetchError'
   }
   const res = error?.response
   if (!res?.status) {
     return 'common:unknownError'
   }
-  if (res.status >= 500) {
+  if (res?.status >= 500) {
     return 'common:serverError'
   }
-  if (res.status === 404) {
+  if (res?.status === 404) {
     return 'common:notFound'
   }
-  if (res.status === 403) {
+  if (res?.status === 403) {
     return 'common:noAccess'
   }
   return null
@@ -21,10 +21,10 @@ const getGeneralError = error => {
 const getFeedbackTargetError = error => {
   const res = error.response
 
-  if (res.status === 403) {
+  if (res?.status === 403) {
     return 'feedbackTargetView:noAccess'
   }
-  if (res.status === 404) {
+  if (res?.status === 404) {
     return 'feedbackTargetView:notFound'
   }
 
