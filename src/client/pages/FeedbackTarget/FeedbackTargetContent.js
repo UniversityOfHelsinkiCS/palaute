@@ -385,27 +385,35 @@ const FeedbackTargetContent = () => {
       </Box>
 
       <Switch>
-        <ProtectedRoute path={`${path}/edit`} component={Settings} hasAccess={showSettingsTab} />
-        <ProtectedRoute path={`${path}/results`} component={Results} hasAccess={showResultsSection} />
+        <ProtectedRoute path={`${path}/edit`} component={Settings} hasAccess={showSettingsTab} redirectPath={path} />
+        <ProtectedRoute
+          path={`${path}/results`}
+          component={Results}
+          hasAccess={showResultsSection}
+          redirectPath={path}
+        />
         <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} hasAccess />
         <ProtectedRoute
           path={`${path}/continuous-feedback`}
           component={ContinuousFeedback}
           hasAccess={showContinuousFeedbackTab}
+          redirectPath={path}
         />
         <ProtectedRoute
           path={`${path}/students-with-feedback`}
           component={StudentsWithFeedback}
           hasAccess={showStudentsWithFeedbackTab}
+          redirectPath={path}
         />
-        <ProtectedRoute path={`${path}/share`} component={Share} hasAccess={showLinksTab} />
-        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={isAdmin} />
+        <ProtectedRoute path={`${path}/share`} component={Share} hasAccess={showLinksTab} redirectPath={path} />
+        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={isAdmin} redirectPath={path} />
         <ProtectedRoute
           path={`${path}/edit-feedback-response`}
+          redirectPath={path}
           component={EditFeedbackResponse}
           hasAccess={showEditFeedbackResponseTab}
         />
-        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={isAdmin} />
+        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={isAdmin} redirectPath={path} />
         <Redirect to={`${path}/feedback`} />
       </Switch>
     </>
