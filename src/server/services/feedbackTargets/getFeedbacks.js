@@ -1,7 +1,17 @@
+const _ = require('lodash')
 const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
+
+/**
+ * Check whether all groups of feedback target have +5 feedbacks given.
+ * @param {object[]} studentFeedbackTargets
+ */
+const getGroupsAvailable = studentFeedbackTargets => {
+  const feedbacksGroupIds = _.countBy(studentFeedbackTargets.flatMap(ufbt => ufbt.groupIds))
+  return Object.values(feedbacksGroupIds).every(count => count > 0)
+}
 
 const getFeedbackTarget = (id, userId) =>
   FeedbackTarget.findByPk(id, {
@@ -22,7 +32,7 @@ const getFeedbackTarget = (id, userId) =>
     ],
   })
 
-const getStudentFeedbacks = async feedbackTargetId => {
+const getStudentFeedbackTargets = async feedbackTargetId => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -35,7 +45,7 @@ const getStudentFeedbacks = async feedbackTargetId => {
     },
   })
 
-  return studentFeedbackTargets.map(t => t.feedback.toPublicObject())
+  return studentFeedbackTargets
 }
 
 const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
@@ -44,7 +54,14 @@ const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
     data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
 
-const getFeedbacks = async (id, user) => {
+/**
+ *
+ * @param {number} id feedback target id
+ * @param {object} user
+ * @param {string?} groupId
+ * @returns
+ */
+const getFeedbacks = async (id, user, groupId) => {
   const [feedbackTarget, additionalData] = await Promise.all([
     getFeedbackTarget(id, user.id),
     getAdditionalDataFromCacheOrDb(id),
@@ -69,13 +86,21 @@ const getFeedbacks = async (id, user) => {
     }
   }
 
-  const allStudentFeedbacks = await getStudentFeedbacks(id)
+  const studentFeedbackTargets = await getStudentFeedbackTargets(id)
+  const groupsAvailable = getGroupsAvailable(studentFeedbackTargets)
+
+  const allStudentFeedbacks = (
+    groupId && groupsAvailable
+      ? studentFeedbackTargets.filter(ufbt => ufbt.groupIds.includes(groupId))
+      : studentFeedbackTargets
+  ).map(ufbt => ufbt.feedback.toPublicObject())
 
   if (access.canSeeAllFeedbacks()) {
     return {
       feedbacks: allStudentFeedbacks,
       feedbackVisible: true,
       accessStatus: access,
+      groupsAvailable,
     }
   }
 
@@ -86,6 +111,7 @@ const getFeedbacks = async (id, user) => {
     feedbacks: publicFeedbacks,
     feedbackVisible: true,
     accessStatus: access,
+    groupsAvailable,
   }
 }
 
