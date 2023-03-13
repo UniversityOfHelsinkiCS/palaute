@@ -59,10 +59,12 @@ const ResultsView = forwardRef((_props, ref) => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
 
+  const hasMultipleGroups = groups?.length > 1
+
   return (
     <>
       <Box display="flex" alignItems="center" maxHeight={1}>
-        {isTeacher && !isLoading && (
+        {isTeacher && !isLoading && hasMultipleGroups && (
           <GroupSelector
             groupId={groupId}
             setGroupId={setGroupId}
