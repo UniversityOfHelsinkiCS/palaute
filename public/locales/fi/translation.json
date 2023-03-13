@@ -64,7 +64,8 @@
     "publicShortInfo": "Näkyy kurssin opiskelijoille",
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
-    "currentlySelected": "Valittuna"
+    "currentlySelected": "Valittuna",
+    "all": "Kaikki"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -227,6 +228,9 @@
     "answers": "Vastanneita"
   },
   "feedbackTargetResults": {
+    "chooseGroup": "Valitse tarkasteltava ryhmä",
+    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",

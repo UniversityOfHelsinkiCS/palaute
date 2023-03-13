@@ -13,6 +13,7 @@ import FeedbackChart from './QuestionResults/FeedbackChart'
 import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import GroupSelector from './GroupSelector'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -32,11 +33,12 @@ const ResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobile = useIsMobile()
+  const [groupId, setGroupId] = React.useState('ALL')
   useChartConfig()
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
 
-  const { feedbackTargetData } = useFeedbackTargetFeedbacks(id)
+  const { feedbackTargetData, isLoading } = useFeedbackTargetFeedbacks(id, groupId)
 
   const {
     questions,
@@ -49,6 +51,7 @@ const ResultsView = forwardRef((_props, ref) => {
     opensAt,
     closesAt,
     feedbackReminderLastSentAt,
+    groups,
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -58,13 +61,23 @@ const ResultsView = forwardRef((_props, ref) => {
 
   return (
     <>
-      <Box display="flex" alignItems="flex-end" flexDirection="column">
-        {isTeacher && (
-          <ExportFeedbacksMenu
-            feedbackTarget={feedbackTarget}
-            feedbacks={feedbackTargetData?.feedbacks}
-            componentRef={ref}
+      <Box display="flex" alignItems="center" maxHeight={1}>
+        {isTeacher && !isLoading && (
+          <GroupSelector
+            groupId={groupId}
+            setGroupId={setGroupId}
+            groups={groups}
+            groupsAvailable={feedbackTargetData?.groupsAvailable}
           />
+        )}
+        {isTeacher && (
+          <Box ml="auto">
+            <ExportFeedbacksMenu
+              feedbackTarget={feedbackTarget}
+              feedbacks={feedbackTargetData?.feedbacks}
+              componentRef={ref}
+            />
+          </Box>
         )}
       </Box>
 

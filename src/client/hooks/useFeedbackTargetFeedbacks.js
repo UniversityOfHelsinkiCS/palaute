@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
 
-const useFeedbackTargetFeedbacks = (targetId, options = {}) => {
-  const queryKey = ['feedbackTargetFeedbacks', targetId]
+const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
+  const queryKey = ['feedbackTargetFeedbacks', targetId, groupId]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/feedback-targets/${targetId}/feedbacks`)
+    const urlQueryString = groupId !== 'ALL' ? `?groupId=${groupId}` : ''
+    const { data } = await apiClient.get(`/feedback-targets/${targetId}/feedbacks${urlQueryString}`)
 
     return data
   }
@@ -15,6 +16,7 @@ const useFeedbackTargetFeedbacks = (targetId, options = {}) => {
     refetchOnFocus: false,
     refetchOnMount: false,
     refetchInterval: false,
+    keepPreviousData: true,
     ...options,
   })
 

@@ -64,7 +64,8 @@
     "publicShortInfo": "Visible to enrolled students",
     "editable": "You can change this setting",
     "studyTracks": "Studytracks",
-    "currentlySelected": "Currently selected"
+    "currentlySelected": "Currently selected",
+    "all": "All"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -228,6 +229,9 @@
     "answers": "Answers"
   },
   "feedbackTargetResults": {
+    "chooseGroup": "Choose the group to show",
+    "groupsNotAvailableInfoTitle": "Groups are not available",
+    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",

@@ -5,12 +5,12 @@ const { getAccess } = require('./getAccess')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
 
 /**
- * Check whether all groups of feedback target have +5 feedbacks given.
+ * Check that no group has between 1 and 4 feedbacks. This would endanger anonymity.
  * @param {object[]} studentFeedbackTargets
  */
 const getGroupsAvailable = studentFeedbackTargets => {
   const feedbacksGroupIds = _.countBy(studentFeedbackTargets.flatMap(ufbt => ufbt.groupIds))
-  return Object.values(feedbacksGroupIds).every(count => count > 0)
+  return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= 5)
 }
 
 const getFeedbackTarget = (id, userId) =>
