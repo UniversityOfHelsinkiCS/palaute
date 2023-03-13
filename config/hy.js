@@ -248,11 +248,6 @@ const config = {
   PRIVATE_TEST: 'Pahaminttu',
 
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
-
-  /**
-   * Random stuff
-   */
-  GROUPS_TEST: true,
 }
 
 module.exports = config
