@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, Paper } from '@mui/material'
@@ -60,11 +60,12 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   )
 }
 
-const ResultsView = forwardRef((_props, ref) => {
+const Results = () => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobile = useIsMobile()
   const [groupId, setGroupId] = React.useState('ALL')
+  const exportRef = useRef()
   useChartConfig()
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
@@ -98,13 +99,13 @@ const ResultsView = forwardRef((_props, ref) => {
           feedbackResults={feedbackTargetData}
           groupId={groupId}
           setGroupId={setGroupId}
-          exportRef={ref}
+          exportRef={exportRef}
         />
       )}
 
       {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
 
-      <Box ref={ref}>
+      <Box ref={exportRef}>
         {feedbackHasStarted && !isOpen && enoughFeedbacks && (
           <Box mt={4} mb={2}>
             <FeedbackResponse feedbackTarget={feedbackTarget} />
@@ -147,16 +148,6 @@ const ResultsView = forwardRef((_props, ref) => {
         )}
       </Box>
     </>
-  )
-})
-
-const Results = () => {
-  const componentRef = useRef()
-
-  return (
-    <Box>
-      <ResultsView ref={componentRef} />
-    </Box>
   )
 }
 
