@@ -229,6 +229,7 @@
   },
   "feedbackTargetResults": {
     "chooseGroup": "Valitse tarkasteltava ryhmä",
+    "teachersOfGroup": "Ryhmän opettajat",
     "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
     "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",

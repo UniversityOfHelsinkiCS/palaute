@@ -230,6 +230,7 @@
   },
   "feedbackTargetResults": {
     "chooseGroup": "Choose the group to show",
+    "teachersOfGroup": "Teachers of this group",
     "groupsNotAvailableInfoTitle": "Groups are not available",
     "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
