@@ -78,7 +78,6 @@ const Results = () => {
     publicQuestionIds,
     publicityConfigurableQuestionIds,
     feedback,
-    studentCount,
     feedbackCount,
     opensAt,
     closesAt,
@@ -90,6 +89,9 @@ const Results = () => {
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
   const filtersVisible = isOrganisationReader || isTeacher || isResponsibleTeacher
+
+  const feedbacks = feedbackTargetData?.feedbacks ?? []
+  const groupFeedbackCount = feedbackTargetData?.studentCount ?? 0
 
   return (
     <>
@@ -121,8 +123,8 @@ const Results = () => {
         {!isMobile && (
           <Box>
             <FeedbackChart
-              feedbacks={feedbackTargetData?.feedbacks ?? []}
-              studentCount={studentCount}
+              feedbacks={feedbacks}
+              studentCount={groupFeedbackCount}
               opensAt={opensAt}
               closesAt={closesAt}
               feedbackReminderLastSentAt={feedbackReminderLastSentAt}
@@ -139,10 +141,10 @@ const Results = () => {
             publicQuestionIds={publicQuestionIds ?? []}
             questions={questions}
             questionOrder={questionOrder}
-            feedbacks={feedbackTargetData?.feedbacks ?? []}
+            feedbacks={feedbacks}
             isResponsibleTeacher={isResponsibleTeacher}
             isOrganisationUser={isOrganisationReader}
-            feedbackCount={feedbackCount}
+            feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />
         )}

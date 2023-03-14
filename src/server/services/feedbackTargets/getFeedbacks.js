@@ -9,7 +9,11 @@ const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
  * @param {object[]} studentFeedbackTargets
  */
 const getGroupsAvailable = studentFeedbackTargets => {
-  const feedbacksGroupIds = _.countBy(studentFeedbackTargets.flatMap(ufbt => ufbt.groupIds))
+  // count how many feedbacks every group has
+  const feedbacksGroupIds = _.countBy(
+    studentFeedbackTargets.filter(ufbt => ufbt.feedback).flatMap(ufbt => ufbt.groupIds)
+  )
+  // check whether each group has 0 or 5+ feedbacks
   return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= 5)
 }
 
@@ -40,7 +44,6 @@ const getStudentFeedbackTargets = async feedbackTargetId => {
     },
     include: {
       model: Feedback,
-      required: true,
       as: 'feedback',
     },
   })
@@ -89,29 +92,36 @@ const getFeedbacks = async (id, user, groupId) => {
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
   const groupsAvailable = getGroupsAvailable(studentFeedbackTargets)
 
-  const allStudentFeedbacks = (
+  const studentFeedbackTargetsOfGroup =
     groupId && groupsAvailable
       ? studentFeedbackTargets.filter(ufbt => ufbt.groupIds.includes(groupId))
       : studentFeedbackTargets
-  ).map(ufbt => ufbt.feedback.toPublicObject())
+
+  const studentCountOfGroup = studentFeedbackTargetsOfGroup.length
+
+  const allFeedbacks = studentFeedbackTargetsOfGroup
+    .filter(ufbt => ufbt.feedback)
+    .map(ufbt => ufbt.feedback.toPublicObject())
 
   if (access.canSeeAllFeedbacks()) {
     return {
-      feedbacks: allStudentFeedbacks,
+      feedbacks: allFeedbacks,
       feedbackVisible: true,
       accessStatus: access,
       groupsAvailable,
+      studentCount: studentCountOfGroup,
     }
   }
 
   const { publicQuestionIds } = additionalData
-  const publicFeedbacks = getPublicFeedbacks(allStudentFeedbacks, publicQuestionIds)
+  const publicFeedbacks = getPublicFeedbacks(allFeedbacks, publicQuestionIds)
 
   return {
     feedbacks: publicFeedbacks,
     feedbackVisible: true,
     accessStatus: access,
     groupsAvailable,
+    studentCount: studentCountOfGroup,
   }
 }
 
