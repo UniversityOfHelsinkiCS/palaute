@@ -1,7 +1,8 @@
 import React, { useRef, forwardRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Alert } from '@mui/material'
+import { Box, Alert, Paper } from '@mui/material'
+import { useInView } from 'react-intersection-observer'
 
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
@@ -29,6 +30,36 @@ const OnlyTeacherAccess = ({ t }) => (
   </Box>
 )
 
+const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef }) => {
+  const { ref, inView } = useInView({ initialInView: true })
+
+  const { feedbackTarget } = useFeedbackTargetContext()
+  const { groups } = feedbackTarget
+  const hasMultipleGroups = groups?.length > 1
+  const groupsAvailable = feedbackResults?.groupsAvailable
+  const feedbacks = feedbackResults?.feedbacks
+
+  const isSticky = hasMultipleGroups && groupsAvailable
+  const isStuckTop = !inView && isSticky
+
+  return (
+    <Box position={isSticky ? 'sticky' : 'initial'} top="-1px" zIndex="100">
+      <Box h="1px" ref={ref} />
+      <Paper
+        sx={{ p: '1rem', display: 'flex', alignItems: 'center', backgroundColor: isStuckTop ? 'white' : 'transparent' }}
+        elevation={isStuckTop ? 4 : 0}
+      >
+        {!isLoading && hasMultipleGroups && (
+          <GroupSelector groupId={groupId} setGroupId={setGroupId} groups={groups} groupsAvailable={groupsAvailable} />
+        )}
+        <Box ml="auto">
+          <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
+        </Box>
+      </Paper>
+    </Box>
+  )
+}
+
 const ResultsView = forwardRef((_props, ref) => {
   const { t } = useTranslation()
   const { id } = useParams()
@@ -51,37 +82,25 @@ const ResultsView = forwardRef((_props, ref) => {
     opensAt,
     closesAt,
     feedbackReminderLastSentAt,
-    groups,
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbackCount > 0
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
-
-  const hasMultipleGroups = groups?.length > 1
+  const filtersVisible = isOrganisationReader || isTeacher || isResponsibleTeacher
 
   return (
     <>
-      <Box display="flex" alignItems="center" maxHeight={1}>
-        {isTeacher && !isLoading && hasMultipleGroups && (
-          <GroupSelector
-            groupId={groupId}
-            setGroupId={setGroupId}
-            groups={groups}
-            groupsAvailable={feedbackTargetData?.groupsAvailable}
-          />
-        )}
-        {isTeacher && (
-          <Box ml="auto">
-            <ExportFeedbacksMenu
-              feedbackTarget={feedbackTarget}
-              feedbacks={feedbackTargetData?.feedbacks}
-              componentRef={ref}
-            />
-          </Box>
-        )}
-      </Box>
+      {filtersVisible && (
+        <FilterSection
+          isLoading={isLoading}
+          feedbackResults={feedbackTargetData}
+          groupId={groupId}
+          setGroupId={setGroupId}
+          exportRef={ref}
+        />
+      )}
 
       {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
 

@@ -1,13 +1,12 @@
 import React from 'react'
-import { Box, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 
 const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable }) => {
-  const [loading, setLoading] = React.useState(false)
-  const [tempDisplayId, setTempDisplayId] = React.useState(groupId)
   const { i18n, t } = useTranslation()
+  const [userSelectedGroupId, setUserSelectedGroupId] = React.useState(groupId)
 
   if (!groupsAvailable)
     return (
@@ -20,39 +19,39 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable }) => {
     )
 
   const handleChange = e => {
-    setLoading(true)
-    setTempDisplayId(e.target.value)
+    setUserSelectedGroupId(e.target.value)
     React.startTransition(() => {
       setGroupId(e.target.value)
-      setLoading(false)
     })
   }
 
-  const groupOptions = groups
-    .map(group => ({
-      id: group.id,
-      name: getLanguageValue(group.name, i18n.language),
-    }))
-    .concat({
-      id: 'ALL',
-      name: t('common:all'),
-    })
+  const groupOptions = React.useMemo(
+    () =>
+      [
+        {
+          id: 'ALL',
+          name: t('common:all'),
+        },
+      ].concat(
+        groups.map(group => ({
+          id: group.id,
+          name: getLanguageValue(group.name, i18n.language),
+        }))
+      ),
+    [groups]
+  )
 
   return (
     <Box>
-      <InputLabel id="group-select-label">{t('feedbackTargetResults:chooseGroup')}</InputLabel>
-      <Select
-        labelId="group-select-label"
-        value={loading ? tempDisplayId : groupId}
-        onChange={handleChange}
-        disabled={loading}
-      >
+      <Typography variant="body2">{t('feedbackTargetResults:chooseGroup')}</Typography>
+
+      <ToggleButtonGroup value={userSelectedGroupId} onChange={handleChange} disabled={userSelectedGroupId !== groupId}>
         {groupOptions.map(opt => (
-          <MenuItem key={opt.id} value={opt.id}>
+          <ToggleButton value={opt.id} key={opt.id}>
             {opt.name}
-          </MenuItem>
+          </ToggleButton>
         ))}
-      </Select>
+      </ToggleButtonGroup>
     </Box>
   )
 }
