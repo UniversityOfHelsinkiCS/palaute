@@ -16,7 +16,7 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
-const inE2EMode = process.env.REACT_APP_E2E === 'true'
+import { baseUrl } from './baseUrl'
 
 beforeEach(() => {
   cy.enableCourses()
@@ -25,6 +25,7 @@ beforeEach(() => {
   cy.setUpSecondaryTeacherView()
 })
 
-export const baseUrl = inE2EMode ? 'localhost:8000' : 'localhost:8000'
+export { baseUrl }
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

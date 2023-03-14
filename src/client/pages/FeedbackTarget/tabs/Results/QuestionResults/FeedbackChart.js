@@ -68,6 +68,7 @@ const buildChartConfig = (
   )
 
   const opensAtDate = startOfDay(Date.parse(opensAt)).getTime()
+
   const chartMin = Math.min(
     subDays(Date.now(), 1),
     subDays(opensAtDate, 1),
@@ -180,7 +181,7 @@ const buildChartConfig = (
             },
             title: ([tooltip]) => {
               if (tooltip.dataIndex === data.length - 1) return t('common:today')
-              if (data[tooltip.dataIndex].x === opensAtDate) return t('editFeedbackTarget:opensAt')
+              if (data[tooltip.dataIndex].x === firstVisibleDataPoint) return t('editFeedbackTarget:opensAt')
               return tooltip.label
             },
           },

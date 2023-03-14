@@ -8,27 +8,8 @@ const CourseRealisation = require('./courseRealisation')
 const User = require('./user')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const { sequelize } = require('../db/dbConnection')
-const {
-  getUniversitySurvey,
-  getProgrammeSurveysByCourseUnit,
-  getOrCreateTeacherSurvey,
-} = require('../services/surveys')
 
 class FeedbackTarget extends Model {
-  async getSurveys() {
-    const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
-      getProgrammeSurveysByCourseUnit(this.courseUnitId),
-      getOrCreateTeacherSurvey(this),
-      getUniversitySurvey(),
-    ])
-
-    return {
-      programmeSurveys,
-      teacherSurvey,
-      universitySurvey,
-    }
-  }
-
   isOpen() {
     if (!this.opensAt || !this.closesAt) {
       return true

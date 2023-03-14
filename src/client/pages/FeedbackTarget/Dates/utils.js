@@ -1,21 +1,7 @@
-import { isAfter, differenceInDays, startOfDay, endOfDay, format } from 'date-fns'
+import { isAfter, differenceInDays, startOfDay, format } from 'date-fns'
 import _ from 'lodash'
 
-import apiClient from '../../../../util/apiClient'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-
-export const openFeedbackImmediately = async feedbackTarget => {
-  const { id } = feedbackTarget
-  const opensAt = new Date()
-
-  const payload = {
-    opensAt,
-  }
-
-  const { data } = await apiClient.put(`/feedback-targets/${id}/open-immediately`, payload)
-
-  return data
-}
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 
 export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   const { closesAt, opensAt } = values
@@ -71,24 +57,6 @@ export const getFeedbackPeriodInitialValues = feedbackTarget => {
     opensAt: new Date(opensAt),
     closesAt: new Date(closesAt),
   }
-}
-
-export const saveFeedbackPeriodValues = async (values, feedbackTarget) => {
-  const closesAt = values.closesAt ? endOfDay(new Date(values.closesAt)) : null
-  const opensAt = values.opensAt ? startOfDay(new Date(values.opensAt)) : null
-
-  const { surveys, id } = feedbackTarget
-  const { id: surveyId } = surveys.teacherSurvey
-
-  const payload = {
-    surveyId,
-    closesAt,
-    opensAt,
-  }
-
-  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
-
-  return data
 }
 
 export const feedbackTargetIsOpenOrClosed = feedbackTarget => {

@@ -51,7 +51,7 @@ const Share = () => {
   }
 
   return (
-    <Box display="flex" flexDirection="column" margin={3}>
+    <Box my={3}>
       <ReminderEmailModal open={open} onClose={closeModal} feedbackTarget={feedbackTarget} />
       {isOpen && (
         <Box mb={2} display="flex" alignItems="center">

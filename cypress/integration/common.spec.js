@@ -15,6 +15,7 @@ describe('Common tests', () => {
     cy.loginAsAdmin()
     cy.visit(`${baseUrl}/admin/users`)
     cy.contains('HY-Minttujam')
+    cy.contains('Pahaminttu').should('not.exist')
   })
   it('Custom translation override is loaded correctly', () => {
     cy.loginAsAdmin()

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Box, Typography, Card, CardContent, Switch, FormGroup, FormControlLabel, Alert } from '@mui/material'
+import { Box, Switch, FormGroup, FormControlLabel, Alert } from '@mui/material'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../../util/apiClient'
+import CardSection from '../../../../components/common/CardSection'
 
 const updateContinuousFeedbackStatus = async ({ id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail }) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, {
@@ -52,40 +53,35 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Box mb={4}>
-          <Typography variant="h6">{t('feedbackTargetView:continuousFeedbackTab')}</Typography>
-        </Box>
-        <Box mb={2}>
-          <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
-        </Box>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={feedbackEnabled}
-                onChange={handleFeedbackEnabledChange}
-                color="primary"
-                data-cy="activateContinuousFeedback"
-              />
-            }
-            label={t('feedbackTargetView:activateContinuousFeedback')}
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={sendDigestEmail}
-                disabled={!feedbackEnabled}
-                onChange={handleSendDigestEmailChange}
-                color="primary"
-              />
-            }
-            label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
-          />
-        </FormGroup>
-      </CardContent>
-    </Card>
+    <CardSection title={t('feedbackTargetView:continuousFeedbackTab')}>
+      <Box mb={2}>
+        <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
+      </Box>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={feedbackEnabled}
+              onChange={handleFeedbackEnabledChange}
+              color="primary"
+              data-cy="activateContinuousFeedback"
+            />
+          }
+          label={t('feedbackTargetView:activateContinuousFeedback')}
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={sendDigestEmail}
+              disabled={!feedbackEnabled}
+              onChange={handleSendDigestEmailChange}
+              color="primary"
+            />
+          }
+          label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
+        />
+      </FormGroup>
+    </CardSection>
   )
 }
 

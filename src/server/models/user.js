@@ -2,34 +2,10 @@ const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL } = require('seque
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
-const Organisation = require('./organisation')
-const { getOrganisationAccess } = require('../services/organisationAccess')
 const UserFeedbackTarget = require('./userFeedbackTarget')
 const { ADMINS } = require('../util/config')
 
 class User extends Model {
-  async getOrganisationAccess() {
-    const organisationAccess = await getOrganisationAccess(this)
-
-    const organisations = await Organisation.findAll({
-      where: {
-        code: {
-          [Op.in]: Object.keys(organisationAccess),
-        },
-      },
-      include: {
-        model: User,
-        as: 'users',
-        attributes: ['id', 'firstName', 'lastName', 'email'],
-      },
-    })
-
-    return organisations.map(org => ({
-      access: organisationAccess[org.code],
-      organisation: org,
-    }))
-  }
-
   async isTeacher() {
     const teachings = await UserFeedbackTarget.findAll({
       where: {

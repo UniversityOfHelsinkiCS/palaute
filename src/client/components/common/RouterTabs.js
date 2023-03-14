@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
-import { Tabs, Tab, Box, Tooltip, Badge, Paper } from '@mui/material'
+import { Tabs, Box, Tooltip, Badge, Paper, Tab } from '@mui/material'
 
 import { get } from 'lodash'
 
@@ -31,6 +31,9 @@ export const RouterTab = ({
   badgeColor = 'primary',
   ...props
 }) => {
+  const { pathname } = useLocation()
+  const active = !!matchPath(pathname, { path: to })
+
   let content = icon ? (
     <Box display="flex" alignItems="center">
       {icon}
@@ -54,11 +57,38 @@ export const RouterTab = ({
     )
   }
 
-  const tab = <Tab label={content} component={Link} to={to} disabled={disabled} {...props} />
+  const tab = (
+    <Box
+      sx={{
+        borderBottom: '3px solid',
+        py: '0.2rem',
+        px: '0.2rem',
+        borderColor: active ? 'primary.main' : 'transparent',
+      }}
+    >
+      <Tab
+        label={content}
+        component={Link}
+        to={to}
+        disabled={disabled}
+        {...props}
+        sx={theme => ({
+          borderRadius: '0.5rem',
+          transition: theme.transitions.create('background-color'),
+          color: active ? 'primary.main' : 'text.secondary',
+          opacity: 1,
+          '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+          },
+        })}
+      />
+    </Box>
+  )
+
   if (disabled)
     return (
       <Tooltip title={disabledTooltip} placement="top">
-        <Box>{tab}</Box>
+        {tab}
       </Tooltip>
     )
   return tab

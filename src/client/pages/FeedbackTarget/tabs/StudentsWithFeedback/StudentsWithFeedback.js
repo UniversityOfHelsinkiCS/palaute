@@ -7,12 +7,14 @@ import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../../../hooks/useStudentsWithFeedback'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
 const StudentsWithFeedback = () => {
   const { t } = useTranslation()
   const { id } = useParams()
 
   const { feedbackTarget } = useFeedbackTargetContext()
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const { students, isLoading } = useStudentsWithFeedback(id)
 
@@ -22,7 +24,9 @@ const StudentsWithFeedback = () => {
 
   const noFeedbackALert = (
     <Box mb={2}>
-      <Alert severity="info">{t('studentsWithFeedback:noFeedbackInfo')}</Alert>
+      <Alert severity="info">
+        {isOpen ? t('studentsWithFeedback:cannotShowWhenOpen') : t('studentsWithFeedback:noFeedbackInfo')}
+      </Alert>
     </Box>
   )
 

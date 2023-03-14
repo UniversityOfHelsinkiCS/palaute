@@ -3,10 +3,10 @@ import React from 'react'
 
 import { Redirect, Route } from 'react-router-dom'
 
-const ProtectedRoute = ({ path, component, hasAccess, redirectPath = '/' }) => {
+const ProtectedRoute = ({ path, component, hasAccess, notify, redirectPath = '/' }) => {
   const { enqueueSnackbar } = useSnackbar()
 
-  if (!hasAccess) {
+  if (!hasAccess && notify) {
     enqueueSnackbar(`No access to ${path}, sorry!`)
   }
 

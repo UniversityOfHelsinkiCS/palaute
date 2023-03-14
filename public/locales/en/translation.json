@@ -5,11 +5,6 @@
       "sv": "Swedish",
       "en": "English"
     },
-    "validationErrors": {
-      "required": "This field is required",
-      "wrongDate": "Survey closing date is before opening date",
-      "invalidDate": "Invalid date"
-    },
     "unknownError": "Something went wrong",
     "choiceQuestionError": "Choice questions require answer options",
     "fetchError": "Error while fetching data. Refreshing the page may fix this.",
@@ -23,9 +18,11 @@
     "courseCode": "Course code",
     "name": "Name",
     "edit": "Edit",
+    "send": "Send",
     "show": "Show",
     "hide": "Hide",
     "accept": "Accept",
+    "preview": "Preview",
     "clearSelection": "Clear selection",
     "copyToClipBoard": "Copy to clipboard",
     "feedbackOpenPeriod": "Feedback can be given between {{opensAt}} and {{closesAt}}",
@@ -53,6 +50,7 @@
     "goBack": "Go back",
     "settings": "Settings",
     "feedbacks": "Feedbacks",
+    "survey": "Survey",
     "teacherPage": "My teaching",
     "courseSummaryPage": "Course summary",
     "norppaFeedback": "Give feedback to Norppa developers",
@@ -66,7 +64,13 @@
     "publicShortInfo": "Visible to enrolled students",
     "editable": "You can change this setting",
     "studyTracks": "Studytracks",
-    "currentlySelected": "Currently selected"
+    "currentlySelected": "Currently selected",
+    "all": "All"
+  },
+  "validationErrors": {
+    "required": "This field is required",
+    "wrongDate": "Survey closing date is before opening date",
+    "invalidDate": "Invalid date"
   },
   "links": {
     "supportEmail": "coursefeedback@helsinki.fi",
@@ -92,7 +96,7 @@
     "continousFeedbackActive": "Continuous feedback is underway",
     "giveContinuousFeedback": "Give continuous Feedback",
     "viewFeedbackSummary": "View feedback summary",
-    "noFeedback": "There are no courses or course feedbacks here yet",
+    "noFeedback": "You have no pending course feedbacks at this time",
     "continuousFeedbackTab": "Continuous",
     "feedbackClosedTab": "Closed",
     "waitingForFeedbackTab": "Awaiting",
@@ -152,6 +156,7 @@
     "singleChoiceQuestion": "Single choice question",
     "multipleChoiceQuestion": "Multiple choice question",
     "textualContent": "Textual content",
+    "groupingQuestion": "Grouping question",
     "moveUp": "Move up",
     "moveDown": "Move down",
     "removeQuestion": "Remove question",
@@ -224,6 +229,9 @@
     "answers": "Answers"
   },
   "feedbackTargetResults": {
+    "chooseGroup": "Choose the group to show",
+    "groupsNotAvailableInfoTitle": "Groups are not available",
+    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
@@ -276,6 +284,7 @@
     "none": "none"
   },
   "studentsWithFeedback": {
+    "cannotShowWhenOpen": "The list of students who have given feedback cannot be shown while the feedback is open.",
     "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
     "studentsList": "Students who have given feedback"
   },
@@ -415,7 +424,6 @@
     "surveyTab": "Survey",
     "feedbacksTab": "Answers",
     "feedbackResponseTab": "Counter feedback",
-    "editSurveyTab": "Edit survey",
     "continuousFeedbackTab": "Continuous feedback",
     "editFeedbackResponseTab": "Give counter feedback",
     "studentsWithFeedbackTab": "Respondents",
@@ -429,8 +437,9 @@
     "teachers": "Teachers",
     "responsibleTeachers": "Responsible teachers",
     "administrativePersons": "Administrative persons",
-    "shareTab": "Share survey",
-    "surveySettingsTab": "Survey editing",
+    "shareTab": "Share",
+    "surveySettingsTab": "Edit",
+    "results": "Results",
     "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course, before the actual course feedback starts on the course end date.",
     "activateContinuousFeedback": "Activate continuous feedback for the course",
     "activateContinuousFeedbackDigest": "Send a daily email digest about new continuous feedback",
@@ -441,9 +450,7 @@
     "respondContinuousFeedback": "Respond",
     "closeRespondContinuousFeedback": "Close",
     "continuousFeedbackResponse": "Response",
-    "sendContinuousFeedbackResponse": "Send",
     "continuousFeedbackResponseInfo": "Respond to continuous feedback",
-    "editContinuousFeedbackResponse": "Edit",
     "continuousFeedbackResponseSuccessAlert": "Response sent succesfully",
     "studentLinkTitle": "Student link to survey",
     "studentResultsLinkTitle": "Link to answers and counter feedback",

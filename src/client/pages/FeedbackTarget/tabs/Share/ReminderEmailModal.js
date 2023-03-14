@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import { useMutation } from 'react-query'
 import { differenceInHours } from 'date-fns'
 
 import { Box, Typography, Modal, Button, TextField } from '@mui/material'
 
-import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import apiClient from '../../../../util/apiClient'
 import { formatClosesAt } from './utils'
-import queryClient from '../../../../util/queryClient'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
+import { useSendReminderEmail } from './api'
+import useInteractiveMutation from '../../../../hooks/useInteractiveMutation'
 
 const styles = {
   container: {
@@ -38,27 +36,8 @@ const styles = {
   },
 }
 
-const useSendReminderEmail = () => {
-  const mutationFn = async ({ id, data }) =>
-    apiClient.put(`/feedback-targets/${id}/remind-students`, {
-      data: { data },
-    })
-
-  const mutation = useMutation(mutationFn, {
-    onSuccess: (response, variables) => {
-      queryClient.setQueryData(['feedbackTarget', String(variables.id)], feedbackTarget => ({
-        ...feedbackTarget,
-        ...response.data,
-      }))
-    },
-  })
-
-  return mutation
-}
-
 const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const [reminder, setReminder] = useState('')
-  const { enqueueSnackbar } = useSnackbar()
   const sendReminderEmail = useSendReminderEmail(feedbackTarget.id)
 
   const { t, i18n } = useTranslation()
@@ -68,17 +47,11 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
-  const sendEmail = async () => {
-    onClose()
+  const sendEmailReminder = useInteractiveMutation(() => sendReminderEmail.mutateAsync({ id, data: reminder }))
 
-    try {
-      await sendReminderEmail.mutateAsync({ id, data: reminder })
-      enqueueSnackbar(t('feedbackTargetResults:emailSent'), {
-        variant: 'success',
-      })
-    } catch (err) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
+  const onEmailSend = () => {
+    onClose()
+    sendEmailReminder()
   }
 
   const closesAt = formatClosesAt(feedbackTarget.closesAt)
@@ -110,7 +83,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         />
         <div style={styles.buttons}>
           <TooltipButton
-            onClick={sendEmail}
+            onClick={onEmailSend}
             color="primary"
             variant="contained"
             tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}

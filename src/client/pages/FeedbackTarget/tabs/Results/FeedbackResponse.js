@@ -2,11 +2,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Typography, Box, Button, Card, CardContent, Alert, Tooltip } from '@mui/material'
-import { grey } from '@mui/material/colors'
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
+import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 
 const styles = {
   title: {
@@ -22,9 +22,6 @@ const styles = {
     },
     paddingTop: '2rem',
     paddingBottom: '1.5rem',
-    boxShadow: `0 2px 5px 0 rgb(0 0 0 / 7%)`,
-    backgroundColor: grey[50],
-    borderRadius: '0.8rem',
   }),
 }
 
@@ -46,9 +43,11 @@ const FeedbackResponse = ({ feedbackTarget }) => {
 
         {!feedbackResponse && <Alert severity="info">{t('feedbackTargetResults:noResponseInfo')}</Alert>}
         {feedbackResponse && (
-          <Box sx={styles.responseBox}>
-            <Markdown>{feedbackResponse}</Markdown>
-          </Box>
+          <OpenFeedbackContainer sx={styles.responseBox}>
+            <Box>
+              <Markdown>{feedbackResponse}</Markdown>
+            </Box>
+          </OpenFeedbackContainer>
         )}
 
         {isResponsibleTeacher && !feedbackResponse && (

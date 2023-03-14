@@ -26,7 +26,7 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
 
   const handleSubmit = async values => {
     try {
-      if (!values.response.length) {
+      if (!values.response.length && !response) {
         enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {
           variant: 'error',
         })
@@ -46,6 +46,8 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
     }
   }
 
+  const sendEnabled = (current, isSubmitting) => (response || current.length) && !isSubmitting
+
   return (
     <Box mb={3}>
       <Formik initialValues={{ response }} onSubmit={handleSubmit}>
@@ -54,19 +56,19 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
             <FormikTextField
               name="response"
               label={t('feedbackTargetView:continuousFeedbackResponse')}
-              helperText={t('feedbackTargetView:continuousFeedbackResponseInfo')}
               fullWidth
               minRows={4}
               multiline
+              sx={{ mb: '0.5rem' }}
             />
             <Button
               type="submit"
               color="primary"
               variant="contained"
-              disabled={!values.response.length || isSubmitting}
+              disabled={!sendEnabled(values.response, isSubmitting)}
               sx={styles.button}
             >
-              {t('feedbackTargetView:sendContinuousFeedbackResponse')}
+              {response ? t('common:edit') : t('common:send')}
             </Button>
           </Form>
         )}

@@ -88,27 +88,25 @@ const getForCourseUnit = async ({
     }
   }
 
-  const formattedFeedbackTargets = feedbackTargets
-    .map(target => ({
-      ..._.pick(target.toJSON(), [
-        'id',
-        'name',
-        'opensAt',
-        'closesAt',
-        'feedbackType',
-        'courseRealisation',
-        'courseUnit',
-        'feedbackResponse',
-        'continuousFeedbackEnabled',
-        'questions',
-        'surveys',
-        'feedbackCount',
-      ]),
-      studentCount: target.students.length,
-      feedbackResponseGiven: target.feedbackResponse?.length > 3,
-      feedbackResponseSent: target.feedbackResponseEmailSent,
-    }))
-    .filter(fbt => fbt.feedbackCount > 0)
+  const formattedFeedbackTargets = feedbackTargets.map(target => ({
+    ..._.pick(target.toJSON(), [
+      'id',
+      'name',
+      'opensAt',
+      'closesAt',
+      'feedbackType',
+      'courseRealisation',
+      'courseUnit',
+      'feedbackResponse',
+      'continuousFeedbackEnabled',
+      'questions',
+      'surveys',
+      'feedbackCount',
+    ]),
+    studentCount: target.students.length,
+    feedbackResponseGiven: target.feedbackResponse?.length > 3,
+    feedbackResponseSent: target.feedbackResponseEmailSent,
+  }))
 
   return formattedFeedbackTargets
 }

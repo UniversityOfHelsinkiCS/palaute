@@ -136,6 +136,11 @@ const config = {
    * if the response is written even if the "email sent" field is false.
    */
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
+
+  /**
+   * Keys defined here are filtered away from frontend config during build process.
+   */
+  PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL'],
 }
 
 module.exports = config
