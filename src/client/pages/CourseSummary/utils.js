@@ -38,7 +38,9 @@ export const normalizeOrganisationCode = r => {
 }
 
 export const getFacultyAccess = (organisationAccess, data) => {
-  const organisationCodes = organisationAccess.map(({ code }) => code)
+  if (!organisationAccess?.length || !data?.length) return []
+
+  const organisationCodes = organisationAccess?.map(({ code }) => code)
   const faculties = data.map(data => ({
     ...data,
     programmes: data.programmes.map(programme => ({
