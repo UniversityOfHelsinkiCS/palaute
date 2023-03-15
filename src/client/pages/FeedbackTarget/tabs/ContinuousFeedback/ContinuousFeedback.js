@@ -120,9 +120,17 @@ const ContinuousFeedback = () => {
 
   const { continuousFeedbackEnabled, continuousFeedbackCount } = feedbackTarget
 
+  const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
+
   return (
     <Box>
-      {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
+      {showSettings && (
+        <ContinuousFeedbackSettings
+          feedbackTarget={feedbackTarget}
+          feedbackEnabled={feedbackEnabled}
+          setFeedbackEnabled={setFeedbackEnabled}
+        />
+      )}
 
       <Box my="1rem">
         <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
@@ -134,7 +142,7 @@ const ContinuousFeedback = () => {
 
           {(isTeacher || isResponsibleTeacher) && (
             <Box mb={2}>
-              <TeacherInfo enabled={continuousFeedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
+              <TeacherInfo enabled={feedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
             </Box>
           )}
 

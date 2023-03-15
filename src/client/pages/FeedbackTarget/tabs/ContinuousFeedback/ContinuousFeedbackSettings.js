@@ -16,14 +16,13 @@ const updateContinuousFeedbackStatus = async ({ id, continuousFeedbackEnabled, s
   return data
 }
 
-const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
-  const { id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail } = feedbackTarget
+const ContinuousFeedbackSettings = ({ feedbackTarget, feedbackEnabled, setFeedbackEnabled }) => {
+  const { id, sendContinuousFeedbackDigestEmail } = feedbackTarget
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
   const mutation = useMutation(updateContinuousFeedbackStatus)
 
-  const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
   const [sendDigestEmail, setSendDigestEmail] = useState(sendContinuousFeedbackDigestEmail)
 
   const handleFeedbackEnabledChange = async () => {
