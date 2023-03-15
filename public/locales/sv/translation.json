@@ -5,11 +5,6 @@
       "sv": "Svenska",
       "en": "Engelska"
     },
-    "validationErrors": {
-      "required": "Fältet krävs",
-      "wrongDate": "Förfrågans slutdatum är före startdatumet",
-      "invalidDate": "Ogiltigt datum"
-    },
     "unknownError": "Något gick fel",
     "serverError": "Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.",
     "choiceQuestionError": "Flervalsfrågor kräver svarsalternativ",
@@ -22,9 +17,11 @@
     "course": "Kurs",
     "name": "Namn",
     "edit": "Redigera",
+    "send": "Skicka",
     "show": "Visa",
     "hide": "Göm",
     "accept": "Godkänn",
+    "preview": "Förhandsvisning",
     "clearSelection": "Töm val",
     "copyToClipBoard": "Kopiera till urklipp",
     "feedbackOpenPeriod": "Respons kan ges mellan {{opensAt}} och {{closesAt}}",
@@ -47,6 +44,7 @@
     "goBack": "Gå tillbaka",
     "settings": "Inställningar",
     "feedbacks": "Mina responser",
+    "survey": "Förfrågan",
     "teacherPage": "Mina kurser",
     "courseSummaryPage": "Kurssammandrag",
     "norppaFeedback": "Ge respons",
@@ -63,6 +61,11 @@
     "publicInfo": "Svaren syns åt anmälda studerande",
     "studyTracks": "Studieinriktningar",
     "currentlySelected": "Valda"
+  },
+  "validationErrors": {
+    "required": "Fältet krävs",
+    "wrongDate": "Förfrågans slutdatum är före startdatumet",
+    "invalidDate": "Ogiltigt datum"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -385,7 +388,6 @@
     "surveyTab": "Förfrågan",
     "feedbacksTab": "Responser",
     "editFeedbackResponseTab": "Ge motrespons",
-    "editSurveyTab": "Redigera förfrågan",
     "continuousFeedbackTab": "Kontinuerlig respons",
     "studentsWithFeedbackTab": "De som gett respons",
     "linkCopied": "Länken till responsen har kopierats till urklippet",
@@ -397,8 +399,9 @@
     "courseSummary": "Sammandrag av kursens genomföranden",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
-    "shareTab": "Dela förfrågan",
-    "surveySettingsTab": "Enkätredigering",
+    "shareTab": "Dela",
+    "surveySettingsTab": "Redigering",
+    "results": "Resultaten",
     "activateContinuousFeedback": "Aktivera kontinuerlig respons för kursen",
     "activateContinuousFeedbackDigest": "Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons",
     "continuousFeedbackGiven": "Given kontinuerlig respons",
@@ -407,9 +410,7 @@
     "respondContinuousFeedback": "Svara",
     "closeRespondContinuousFeedback": "Stäng",
     "continuousFeedbackResponse": "Svar",
-    "sendContinuousFeedbackResponse": "Skicka",
     "continuousFeedbackResponseInfo": "Svara på kontinuerlig respons",
-    "editContinuousFeedbackResponse": "Redigera",
     "continuousFeedbackResponseSuccessAlert": "Svaret har skickats",
     "studentLinkTitle": "Studerandelänk till översikt",
     "studentResultsLinkTitle": "Länk till svaren och motresponsen",

@@ -3,31 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 
-import {
-  Table,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableHead,
-  TableContainer,
-  TableSortLabel,
-  Paper,
-  Button,
-  Box,
-} from '@mui/material'
+import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import _ from 'lodash'
 
 import { sortTable } from '../../../../util/tableUtils'
 import DropZone from './DropZone'
+import CardSection from '../../../../components/common/CardSection'
 
 const styles = {
   box: {
     display: 'flex',
-    flexDirection: 'row-reverse',
   },
   button: {
-    margin: 2,
+    ml: '1rem',
     width: '170px',
   },
   link: {
@@ -96,19 +85,24 @@ const StudentTable = ({ students, feedbackTarget }) => {
   )}_students`
 
   return (
-    <TableContainer component={Paper}>
-      <Box sx={styles.box}>
-        <Button
-          endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-          variant="contained"
-          color="primary"
-          sx={styles.button}
-          onClick={() => setDropZoneVisible(!dropZoneVisible)}
-        >
-          {t('common:combineCSV')}
-        </Button>
-        <ExportCsv students={studentsCSV} fileName={fileName} />
-      </Box>
+    <CardSection
+      title={
+        <Box sx={styles.box}>
+          {t('feedbackTargetView:studentsWithFeedbackTab')}
+          <Box mr="auto" />
+          <ExportCsv students={studentsCSV} fileName={fileName} />
+          <Button
+            endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
+            variant="contained"
+            color="primary"
+            sx={styles.button}
+            onClick={() => setDropZoneVisible(!dropZoneVisible)}
+          >
+            {t('common:combineCSV')}
+          </Button>
+        </Box>
+      }
+    >
       {dropZoneVisible && <DropZone students={studentsCSV} />}
       <Table>
         <TableHead>
@@ -166,7 +160,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
           )}
         </TableBody>
       </Table>
-    </TableContainer>
+    </CardSection>
   )
 }
 

@@ -87,10 +87,6 @@ const respondToFeedback = async (req, res) => {
   const continuousFeedbackId = Number(req.params.continuousFeedbackId)
   const { response } = req.body
 
-  if (!response) {
-    throw new ApplicationError('Response missing', 400)
-  }
-
   const { access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
@@ -99,6 +95,10 @@ const respondToFeedback = async (req, res) => {
   if (!access?.canRespondToContinuousFeedback()) ApplicationError.Forbidden()
 
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId)
+
+  if (!response && !continuousFeedback.responseEmailSent) {
+    throw new ApplicationError('Response missing', 400)
+  }
 
   continuousFeedback.response = response
   await continuousFeedback.save()

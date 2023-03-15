@@ -5,11 +5,6 @@
       "sv": "Ruotsi",
       "en": "Englanti"
     },
-    "validationErrors": {
-      "required": "Tämä kenttä vaaditaan",
-      "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
-      "invalidDate": "Virheellinen päivämäärä"
-    },
     "unknownError": "Jotain meni pieleen",
     "choiceQuestionError": "Valintakysymykset tarvitsevat vastausvaihtoehtoja",
     "fetchError": "Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.",
@@ -23,9 +18,11 @@
     "courseCode": "Kurssikoodi",
     "name": "Nimi",
     "edit": "Muokkaa",
+    "send": "Lähetä",
     "show": "Näytä",
     "hide": "Piilota",
     "accept": "Hyväksy",
+    "preview": "Esikatselu",
     "clearSelection": "Tyhjennä valinta",
     "copyToClipBoard": "Kopioi leikepöydälle",
     "feedbackOpenPeriod": "Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}",
@@ -48,6 +45,7 @@
     "goBack": "Takaisin",
     "settings": "Asetukset",
     "feedbacks": "Palautteet",
+    "survey": "Kysely",
     "teacherPage": "Opetukseni",
     "courseSummaryPage": "Kurssiyhteenveto",
     "norppaFeedback": "Anna palautetta",
@@ -66,7 +64,13 @@
     "publicShortInfo": "Näkyy kurssin opiskelijoille",
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
-    "currentlySelected": "Valittuna"
+    "currentlySelected": "Valittuna",
+    "all": "Kaikki"
+  },
+  "validationErrors": {
+    "required": "Tämä kenttä vaaditaan",
+    "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
+    "invalidDate": "Virheellinen päivämäärä"
   },
   "links": {
     "supportEmail": "coursefeedback@helsinki.fi",
@@ -92,7 +96,7 @@
     "continousFeedbackActive": "Jatkuva palaute on käynnissä",
     "giveContinuousFeedback": "Anna jatkuvaa palautetta",
     "viewFeedbackSummary": "Näytä palautteen yhteenveto",
-    "noFeedback": "Täällä ei ole vielä yhtään kurssia tai kurssipalautetta",
+    "noFeedback": "Sinulla ei ole yhtään odottavaa kurssipalautetta",
     "continuousFeedbackTab": "Jatkuva",
     "feedbackClosedTab": "Päättyneet",
     "waitingForFeedbackTab": "Odottaa",
@@ -152,6 +156,7 @@
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
     "textualContent": "Tekstuaalinen sisältö",
+    "groupingQuestion": "Ryhmittelykysymys",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",
@@ -223,6 +228,9 @@
     "answers": "Vastanneita"
   },
   "feedbackTargetResults": {
+    "chooseGroup": "Valitse tarkasteltava ryhmä",
+    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
@@ -275,6 +283,7 @@
     "none": "ei ole"
   },
   "studentsWithFeedback": {
+    "cannotShowWhenOpen": "Palautteenantajia ei voida näyttää palautteen ollessa auki.",
     "noFeedbackInfo": "Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
     "studentsList": "Palautteen antaneet opiskelijat"
   },
@@ -415,7 +424,6 @@
     "surveyTab": "Kysely",
     "feedbacksTab": "Vastaukset",
     "editFeedbackResponseTab": "Anna vastapalaute",
-    "editSurveyTab": "Muokkaa kyselyä",
     "continuousFeedbackTab": "Jatkuva palaute",
     "studentsWithFeedbackTab": "Palautteenantajat",
     "linkCopied": "Linkki palautteeseen on kopioitu leikepöydälle",
@@ -428,8 +436,9 @@
     "teachers": "Opettajat",
     "responsibleTeachers": "Vastuuopettajat",
     "administrativePersons": "Hallintohenkilöt",
-    "shareTab": "Jaa kysely",
-    "surveySettingsTab": "Kyselyn muokkaus",
+    "shareTab": "Jaa",
+    "results": "Tulokset",
+    "surveySettingsTab": "Muokkaus",
     "continuousFeedbackInfo": "Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.",
     "activateContinuousFeedback": "Ota jatkuva palaute käyttöön kurssilla",
     "activateContinuousFeedbackDigest": "Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta",
@@ -440,9 +449,7 @@
     "respondContinuousFeedback": "Vastaa",
     "closeRespondContinuousFeedback": "Sulje",
     "continuousFeedbackResponse": "Vastaus",
-    "sendContinuousFeedbackResponse": "Lähetä",
     "continuousFeedbackResponseInfo": "Vastaa jatkuvaan palautteeseen",
-    "editContinuousFeedbackResponse": "Muokkaa",
     "continuousFeedbackResponseSuccessAlert": "Vastaus lähetetty onnistuneesti",
     "studentLinkTitle": "Opiskelijan vastauslinkki",
     "studentResultsLinkTitle": "Linkki vastauksiin ja vastapalautteeseen",

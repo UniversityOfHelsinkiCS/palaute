@@ -9,6 +9,7 @@ const {
   User,
   Tag,
   ContinuousFeedback,
+  Group,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
@@ -17,8 +18,9 @@ const { getAccess } = require('./getAccess')
 /**
  * Expensive data of feedback targets is cached:
  * - courseUnit
- * - organisation
+ * - organisations
  * - courseRealisation
+ * - groups
  * - studentCount
  * - surveys
  * - responsibleTeachers
@@ -75,6 +77,11 @@ const getFromDb = async id => {
             through: { attributes: [] },
           },
         ],
+      },
+      {
+        model: Group,
+        as: 'groups',
+        required: false,
       },
     ],
   })

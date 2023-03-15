@@ -5,7 +5,7 @@ import { Route, Switch, useRouteMatch } from 'react-router'
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { CONFIG_TEST_VALUE, images } from '../../util/common'
+import { CONFIG_TEST_VALUE, images, PRIVATE_TEST } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './NorppaFeedbackView'
 import NorppaStatisticView from './NorppaStatisticsView'
@@ -28,6 +28,8 @@ const ConfigTestValues = () => {
       The secret words are:{' '}
       <Box color="pink">
         {CONFIG_TEST_VALUE}
+        <br />
+        {PRIVATE_TEST}
         <br />
         {t('test:testValue')}
       </Box>{' '}

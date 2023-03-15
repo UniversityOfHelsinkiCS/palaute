@@ -56,6 +56,9 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQues
 
 const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   const updatedQuestionIdsList = []
+  console.log(_.countBy(questions, 'type'))
+  const tooManyGroupingQuestions = _.countBy(questions, 'type').GROUPING > 1
+  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping questions is allowed')
 
   for (const question of questions) {
     let updatedQuestion
@@ -88,7 +91,6 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
     },
   })
   if (!survey) ApplicationError.NotFound('Survey not found')
-  await createFeedbackTargetSurveyLog(surveyId, questions, user)
   const oldIds = survey.questionIds
   survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
   // assuming there is only 1 new. Find whether its going to be public, and update publicQuestionIds
@@ -104,6 +106,8 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
   }
 
   await survey.save()
+
+  await createFeedbackTargetSurveyLog(surveyId, questions, user)
 
   return updates
 }

@@ -92,7 +92,7 @@ const QuestionItem = ({
             <Typography variant="body2">{description}</Typography>
           </Box>
           {(question.type === 'LIKERT' || question.secondaryType === 'WORKLOAD') && (
-            <Box>
+            <Box ml="0.5rem">
               <AverageResult question={question} />
             </Box>
           )}

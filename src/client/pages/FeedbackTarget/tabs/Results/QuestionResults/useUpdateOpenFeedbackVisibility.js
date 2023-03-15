@@ -21,8 +21,10 @@ const useUpdateOpenFeedbackVisibility = () => {
     onSuccess: (response, { feedbackId, questionId }) => {
       const { hidden } = response.data
 
-      queryClient.setQueryData(['feedbackTargetFeedbacks', String(feedbackTarget.id)], data => {
-        const { feedbacks } = data
+      queryClient.setQueriesData(['feedbackTargetFeedbacks', String(feedbackTarget.id)], data => {
+        const feedbacks = data?.feedbacks
+        if (!feedbacks) return data
+
         const updatedFeedbacks = feedbacks.map(f =>
           f.id === feedbackId
             ? {

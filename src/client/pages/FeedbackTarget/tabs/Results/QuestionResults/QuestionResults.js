@@ -1,85 +1,10 @@
 import React, { useMemo } from 'react'
 
-import { Card, CardContent, Box, Typography, List, ListItem, ListItemText, Link as MuiLink, Chip } from '@mui/material'
+import { Box, Typography, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getQuestionsWithFeedback } from './utils'
-import AlertLink from '../../../../../components/common/AlertLink'
-import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionItem from './QuestionItem'
-
-const styles = {
-  list: theme => ({
-    maxHeight: '800px',
-    overflowY: 'auto',
-    '&::-webkit-scrollbar': {
-      width: 10,
-    },
-    '&::-webkit-scrollbar-track': {
-      borderRadius: 10,
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background: theme.palette.primary.light,
-      borderRadius: 10,
-    },
-    '&::-webkit-scrollbar-thumb:hover': {
-      background: theme.palette.info.main,
-    },
-  }),
-  link: {
-    fontWeight: theme => theme.typography.fontWeightMedium,
-    textDecoration: 'underline',
-    color: 'black',
-  },
-  hidePrint: {
-    display: 'inherit',
-    '@media print': {
-      display: 'none',
-    },
-  },
-  displayStyle: {
-    '@media print': {
-      display: 'block',
-    },
-  },
-}
-
-const HiddenQuestionsList = ({ hiddenQuestions }) => {
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
-
-  const infoLink = (
-    <AlertLink
-      sx={styles.link}
-      component={MuiLink}
-      href={t('links:wikiOrganisationHelp')}
-      target="_blank"
-      rel="noreferrer"
-    >
-      {t('questionResults:here')}
-    </AlertLink>
-  )
-
-  return (
-    <Card sx={styles.container}>
-      <CardContent>
-        <Typography variant="h6" component="h2">
-          {t('questionResults:publicityOfQuestions')}
-        </Typography>
-        <Typography variant="body2">
-          {t('questionResults:moreInfo')} {infoLink}
-        </Typography>
-        <List sx={styles.list}>
-          {hiddenQuestions.map((question, index) => (
-            <ListItem divider={index < hiddenQuestions.length - 1} disableGutters key={index}>
-              <ListItemText primary={getLanguageValue(question.data.label, language)} />
-            </ListItem>
-          ))}
-        </List>
-      </CardContent>
-    </Card>
-  )
-}
 
 const QuestionSection = ({ title, count, children, ...props }) => (
   <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem" {...props}>
@@ -118,8 +43,6 @@ const QuestionResults = React.memo(
       q => q.type !== 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
     )
 
-    const hiddenQuestions = questionsWithFeedbacks.filter(q => !publicQuestionIds.includes(q.id))
-
     return (
       <>
         <QuestionSection
@@ -129,38 +52,44 @@ const QuestionResults = React.memo(
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
-            sx={theme => ({
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '1rem',
-              [theme.breakpoints.down('xl')]: {
-                gridTemplateColumns: 'repeat(4, 1fr)',
-              },
-              [theme.breakpoints.down('lg')]: {
-                gridTemplateColumns: 'repeat(3, 1fr)',
-              },
-              [theme.breakpoints.down('md')]: {
-                gridTemplateColumns: 'repeat(2, 1fr)',
-              },
-              [theme.breakpoints.down('sm')]: {
-                gridTemplateColumns: 'repeat(1, 1fr)',
-              },
-              '@media print': {
-                gridTemplateColumns: 'repeat(4, 1fr)',
-              },
-            })}
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}
           >
             {notOpenQuestions.map(q => (
-              <QuestionItem
+              <Box
                 key={q.id}
-                question={q}
-                publicQuestionIds={publicQuestionIds}
-                disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
-                isResponsibleTeacher={isResponsibleTeacher}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={feedbackTargetId}
-                t={t}
-              />
+                sx={theme => ({
+                  width: '20%',
+                  padding: '0.5rem',
+                  [theme.breakpoints.down('xl')]: {
+                    width: '25%',
+                  },
+                  [theme.breakpoints.down('lg')]: {
+                    width: '33%',
+                  },
+                  [theme.breakpoints.down('md')]: {
+                    width: '50%',
+                  },
+                  [theme.breakpoints.down('sm')]: {
+                    width: '100%',
+                  },
+                  '@media print': {
+                    width: '20%',
+                  },
+                })}
+              >
+                <QuestionItem
+                  question={q}
+                  publicQuestionIds={publicQuestionIds}
+                  disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+                  isResponsibleTeacher={isResponsibleTeacher}
+                  feedbackCount={feedbackCount}
+                  feedbackTargetId={feedbackTargetId}
+                  t={t}
+                />
+              </Box>
             ))}
           </Box>
         </QuestionSection>
@@ -182,8 +111,6 @@ const QuestionResults = React.memo(
             />
           ))}
         </QuestionSection>
-
-        {isOrganisationUser && hiddenQuestions.length > 0 && <HiddenQuestionsList hiddenQuestions={hiddenQuestions} />}
       </>
     )
   }

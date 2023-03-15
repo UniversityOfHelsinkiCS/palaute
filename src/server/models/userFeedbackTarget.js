@@ -25,6 +25,7 @@ UserFeedbackTarget.init(
       allowNull: false,
     },
     feedbackId: INTEGER,
+    groupIds: Array(INTEGER),
     userId: {
       type: STRING,
       allowNull: false,

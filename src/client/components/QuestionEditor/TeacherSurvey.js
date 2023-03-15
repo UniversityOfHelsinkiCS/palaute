@@ -8,6 +8,7 @@ import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
 import { validateQuestions } from './utils'
 import { getFormInitialValues } from './getFormInitialValues'
+import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
 const saveQuestionsValues = async (values, feedbackTarget) => {
   const { questions } = values
@@ -39,18 +40,14 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     resource: 'feedbackTarget',
     resourceId: feedbackTarget.id,
   })
+  const togglePublicity = useInteractiveMutation(ids => mutation.mutateAsync(ids))
 
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
       ? _.uniq(feedbackTarget.publicQuestionIds.concat(question.id))
       : feedbackTarget.publicQuestionIds.filter(id => id !== question.id)
 
-    try {
-      await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
+    await togglePublicity(newPublicQuestionIds)
   }
 
   const handleSubmit = async values => {
@@ -63,7 +60,6 @@ const TeacherSurvey = ({ feedbackTarget }) => {
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       }
     } catch (e) {
-      console.error(e)
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
@@ -91,6 +87,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       handlePublicityToggle={onPublicityToggle}
       publicQuestionIds={publicQuestionIds}
       publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
+      groups={[]}
       copyFromCourseDialog
     />
   )

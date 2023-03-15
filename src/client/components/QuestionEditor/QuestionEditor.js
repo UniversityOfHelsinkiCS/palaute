@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Button, Menu, MenuItem, Box } from '@mui/material'
+import { Button, Menu, MenuItem, Box, Tooltip } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -16,7 +16,22 @@ const styles = {
   },
 }
 
-const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
+const TypeItem = ({ onClick, label, disabled, disabledText }) =>
+  disabled && disabledText ? (
+    <Tooltip title={disabledText}>
+      <div>
+        <MenuItem onClick={onClick} disabled={disabled}>
+          {label}
+        </MenuItem>
+      </div>
+    </Tooltip>
+  ) : (
+    <MenuItem onClick={onClick} disabled={disabled}>
+      {label}
+    </MenuItem>
+  )
+
+const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language, groupingAvailable, groupingDisabledReason }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -27,13 +42,22 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 
   return (
     <Menu anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <MenuItem onClick={() => handleChooseType('LIKERT')}>{t('questionEditor:likertQuestion')}</MenuItem>
-      <MenuItem onClick={() => handleChooseType('OPEN')}>{t('questionEditor:openQuestion')}</MenuItem>
-      <MenuItem onClick={() => handleChooseType('SINGLE_CHOICE')}>{t('questionEditor:singleChoiceQuestion')}</MenuItem>
-      <MenuItem onClick={() => handleChooseType('MULTIPLE_CHOICE')}>
-        {t('questionEditor:multipleChoiceQuestion')}
-      </MenuItem>
-      <MenuItem onClick={() => handleChooseType('TEXT')}>{t('questionEditor:textualContent')}</MenuItem>
+      <TypeItem onClick={() => handleChooseType('LIKERT')} label={t('questionEditor:likertQuestion')} />
+      <TypeItem onClick={() => handleChooseType('OPEN')} label={t('questionEditor:openQuestion')} />
+      <TypeItem onClick={() => handleChooseType('SINGLE_CHOICE')} label={t('questionEditor:singleChoiceQuestion')} />
+      <TypeItem
+        onClick={() => handleChooseType('MULTIPLE_CHOICE')}
+        label={t('questionEditor:multipleChoiceQuestion')}
+      />
+      <TypeItem onClick={() => handleChooseType('TEXT')} label={t('questionEditor:textualContent')} />
+      {groupingAvailable && (
+        <TypeItem
+          disabled={!!groupingDisabledReason}
+          disabledText={groupingDisabledReason}
+          onClick={() => handleChooseType('GROUPING')}
+          label={t('questionEditor:groupingQuestion')}
+        />
+      )}
     </Menu>
   )
 }
@@ -48,6 +72,7 @@ const QuestionEditorForm = ({
   publicityConfigurableQuestionIds,
   handlePublicityToggle,
   actions,
+  groups,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
@@ -66,6 +91,10 @@ const QuestionEditorForm = ({
   const makePublicityToggle = question => isPublic => {
     handlePublicityToggle(question, isPublic)
   }
+
+  const hasGroupingQuestion = questions.some(q => q.type === 'GROUPING')
+  const hasGroupsAvailable = groups?.length > 0
+  const groupingDisabledReason = hasGroupingQuestion ? t('questionEditor:alreadyHasGroupingQuestion') : undefined
 
   return (
     <Form>
@@ -117,6 +146,8 @@ const QuestionEditorForm = ({
                 setEditingQuestionId(getQuestionId(newQuestion))
               }}
               language={i18n.language}
+              groupingAvailable={hasGroupsAvailable}
+              groupingDisabledReason={groupingDisabledReason}
             />
 
             <Box display="flex">
@@ -151,6 +182,7 @@ const QuestionEditor = ({
   handleSubmit,
   handlePublicityToggle,
   copyFromCourseDialog,
+  groups,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -164,6 +196,7 @@ const QuestionEditor = ({
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
         actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
+        groups={groups}
       />
     )}
   </Formik>

@@ -109,8 +109,9 @@ adRouter.put('/:id', async (req, res) => {
 const getFeedbacks = async (req, res) => {
   const { user } = req
   const feedbackTargetId = Number(req.params.id)
+  const { groupId } = req.query
 
-  const feedbackData = await getFeedbacksForUserById(feedbackTargetId, user)
+  const feedbackData = await getFeedbacksForUserById(feedbackTargetId, user, groupId)
 
   return res.send(feedbackData)
 }

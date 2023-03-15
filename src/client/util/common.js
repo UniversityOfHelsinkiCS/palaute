@@ -54,3 +54,6 @@ export const TRANSLATION_NAMESPACE = CONFIG?.TRANSLATION_NAMESPACE
 
 // eslint-disable-next-line no-undef
 export const DEV_USERNAME = CONFIG?.DEV_USERNAME
+
+// eslint-disable-next-line no-undef
+export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undefined in e2e tests

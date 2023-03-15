@@ -36,6 +36,15 @@ class ApplicationError extends Error {
   static Forbidden(msg = 'Forbidden') {
     throw new ApplicationError(msg, 403)
   }
+
+  /**
+   *
+   * @param {string} msg
+   * @throws {ApplicationError}
+   */
+  static BadRequest(msg = 'Bad request') {
+    throw new ApplicationError(msg, 400)
+  }
 }
 
 module.exports = {
