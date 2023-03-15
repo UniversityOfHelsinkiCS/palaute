@@ -11,12 +11,15 @@ const config = {
   INCLUDE_COURSES: [],
 
   /**
-   * Enabled for SOS
+   * Enables the feature for these organisations.
+   * Feature allows to select whether feedback targets related to a course code
+   * can see the list of students who have given feedback.
+   * Normally it is either on or off for all courses of organisation.
    */
   STUDENT_LIST_BY_COURSE_ENABLED: [],
 
   /**
-   * Tags enabled for kasvis
+   * Enables tags for these organisations
    */
   TAGS_ENABLED: [],
 
@@ -24,43 +27,113 @@ const config = {
    * The id of a LIKERT-type question that is considered the university level workload question.
    * Future ideas: get rid of this and add a new question type for it instead.
    */
-  WORKLOAD_QUESTION_ID: 1042,
+  WORKLOAD_QUESTION_ID: 0,
 
-  NOAD_LINK_EXPIRATION_DAYS: 14,
+  /**
+   * How long JWT tokens in noad links last
+   */
+  NOAD_LINK_EXPIRATION_DAYS: 0,
 
+  /**
+   * How many objects fit in LRU cache
+   * Set to zero to disable fbt caching
+   */
   FEEDBACK_TARGET_CACHE_SIZE: 250,
 
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2023-01-01',
+  /**
+   * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
+   */
+  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2020-01-01',
 
+  /**
+   * How many days before feedbackTarget opening to send a reminder to responsible teachers
+   */
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
+  /**
+   * How many days before closing to send an automatic reminder to students who have not given feedback.
+   * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
+   * (only configured organisations can do this)
+   */
   STUDENT_REMINDER_DAYS_TO_CLOSE: 3,
 
+  /**
+   * How often (hours) can teacher send manual reminder email
+   * (automatic reminder is also considered for cooldown)
+   */
   FEEDBACK_REMINDER_COOLDOWN: 24,
 
-  CONFIG_TEST_VALUE: 'HY-Minttujam',
+  /**
+   * This is a test, e2e tests may check its value
+   */
+  CONFIG_TEST_VALUE: 'TAU_CONFIG_TEST_VALUE',
 
+  /**
+   * Can be used to check which config is in use
+   */
   CONFIG_NAME: 'TAU',
 
-  SENTRY_DSN: 'https://8877ea30aa714216b27b22c8aa395723@sentry.cs.helsinki.fi/6',
+  /**
+   * Dsn for Sentry reporting client
+   */
+  SENTRY_DSN: '',
 
-  PATE_URL: 'https://importer.cs.helsinki.fi/api/pate',
+  /**
+   * Pate (mail service) url
+   */
+  PATE_URL: '',
 
-  JAMI_URL: 'https://importer.cs.helsinki.fi/api/auth',
+  /**
+   * JAMI (iam rights service) url
+   */
+  JAMI_URL: '',
 
-  PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
+  /**
+   * The public url of the app, to be used for example in email links.
+   * Why is it defined here in addition to the normal build argument? I don't trust it's given to the server properly.
+   * Might not be required once mails are extracted away from server
+   */
+  PUBLIC_URL: '',
 
-  GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
+  /**
+   * Admin interface has link to our graylog to check updater logs
+   */
+  GRAYLOG_URL: '',
 
+  /**
+   * The translation file to use (i18n is set to always fallback to 'translation')
+   */
   TRANSLATION_NAMESPACE: 'tau',
 
+  /**
+   * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
+   */
   DEV_USERNAME: 'admin',
 
-  OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
+  /**
+   * HY has some special cases for open university courses, especially how they are handled in summary stats. Should work when this id matches nothing.
+   */
+  OPEN_UNIVERSITY_ORG_ID: '',
 
-  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
+  /**
+   * These orgs are explicitely excluded from summary statistics,
+   * for example to workaround a universitys Sisu abuse that would cause weird organisations to appear in summary.
+   */
+  SUMMARY_EXCLUDED_ORG_IDS: [],
 
+  /**
+   * "Feedback response given" indicator in summary is given to targets where response is written AND email about response is sent.
+   * Email-field however didn't exist always, so this config value is needed. Targets whose course ended before this date get the "given" indicator
+   * if the response is written even if the "email sent" field is false.
+   */
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
+
+  PRIVATE_TEST: 'TAU_PRIVATE_TEST',
+
+  /**
+   * Keys defined here are filtered away from frontend config during build process.
+   */
+  PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 }
 
 module.exports = config
