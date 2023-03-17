@@ -190,6 +190,7 @@ const getOneForUser = async (id, user) => {
     ...additionalData,
     accessStatus: access,
     feedback: userFeedbackTarget?.feedback ?? null,
+    groupIds: userFeedbackTarget?.groupIds ?? [],
     ...feedbackTarget.toJSON(),
   }
 }
