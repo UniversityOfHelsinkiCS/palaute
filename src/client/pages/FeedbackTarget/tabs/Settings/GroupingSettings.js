@@ -25,8 +25,8 @@ const useGroupInformation = (feedbackTargetId, enabled) =>
   useQuery(
     ['feedbackTarget', feedbackTargetId, 'groups'],
     async () => {
-      const data = await apiClient.get(`/feedback-targets/${feedbackTargetId}/groups`)
-      return data
+      const res = await apiClient.get(`/feedback-targets/${feedbackTargetId}/groups`)
+      return res.data
     },
     { enabled, retry: 0 }
   )
@@ -56,9 +56,9 @@ const GroupInformation = () => {
               {groups.map(group => (
                 <TableRow key={group.id}>
                   <TableCell>{getLanguageValue(group.name, i18n.language)}</TableCell>
-                  <TableCell>10</TableCell>
+                  <TableCell>{group.studentCount}</TableCell>
                   <TableCell>
-                    {group.teachers.map(teacher => (
+                    {group.teachers?.map(teacher => (
                       <TeacherChip key={teacher.id} user={teacher} />
                     ))}
                   </TableCell>

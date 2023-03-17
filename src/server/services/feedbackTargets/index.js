@@ -15,6 +15,7 @@ const { remindStudentsOnFeedback } = require('./remindStudentsOnFeedback')
 const { getForCourseUnit } = require('./getForCourseUnit')
 const { getByOrganisation } = require('./getByOrganisation')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+const { getGroups } = require('./getGroups')
 
 module.exports = {
   getFeedbacksForUserById: getFeedbacks,
@@ -31,5 +32,6 @@ module.exports = {
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit: getForCourseUnit,
   getFeedbackTargetsForOrganisation: getByOrganisation,
+  getFeedbackTargetGroups: getGroups,
   getFeedbackTargetContext,
 }
