@@ -1,5 +1,5 @@
 import React from 'react'
-import { RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import { FormControlLabel, FormGroup, Checkbox } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'
@@ -12,16 +12,16 @@ const GroupingPreview = ({ question, language }) => {
 
   return (
     <PreviewBase label={label} description={description} required={required}>
-      <RadioGroup>
+      <FormGroup>
         {options.map(option => (
           <FormControlLabel
             value={option.id}
-            control={<Radio color="primary" />}
+            control={<Checkbox color="primary" name={option.id} />}
             label={getLanguageValue(option.label, language)}
             key={option.id}
           />
         ))}
-      </RadioGroup>
+      </FormGroup>
     </PreviewBase>
   )
 }

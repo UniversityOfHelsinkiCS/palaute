@@ -66,6 +66,21 @@ services:
       - 5433:5432
     volumes:
       - jami_data:/data
+  updater:
+    build:
+      context: ../norppa-updater
+      dockerfile: ../norppa-updater/dev.Dockerfile
+    image: updater-dev
+    volumes:
+      - ../norppa-updater:/usr/src/app
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+    ports:
+      - 8000:3000
+    container_name: updater-dev
 
 volumes:
   pg_data:

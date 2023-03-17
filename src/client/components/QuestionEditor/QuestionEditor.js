@@ -141,7 +141,7 @@ const QuestionEditorForm = ({
               anchorEl={addButtonRef.current}
               onClose={() => setMenuOpen(false)}
               onChooseType={type => {
-                const newQuestion = createQuestion(type)
+                const newQuestion = createQuestion(type, groups)
                 arrayHelpers.push(newQuestion)
                 setEditingQuestionId(getQuestionId(newQuestion))
               }}
