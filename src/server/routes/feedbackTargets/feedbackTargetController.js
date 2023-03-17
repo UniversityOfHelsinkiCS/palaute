@@ -17,7 +17,6 @@ const {
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit,
   getFeedbackTargetsForOrganisation,
-  getFeedbackTargetGroups,
 } = require('../../services/feedbackTargets')
 
 const adRouter = Router()
@@ -215,15 +214,6 @@ adRouter.get('/:id/logs', async (req, res) => {
   const logs = await getFeedbackTargetLogs({ feedbackTargetId, user })
 
   return res.send(logs)
-})
-
-adRouter.get('/:id/groups', async (req, res) => {
-  const { user } = req
-  const { id: feedbackTargetId } = req.params
-
-  const groups = await getFeedbackTargetGroups({ feedbackTargetId, user })
-
-  return res.send(groups)
 })
 
 module.exports = {

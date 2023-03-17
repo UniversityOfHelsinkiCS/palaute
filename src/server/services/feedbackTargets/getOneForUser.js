@@ -15,7 +15,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
 const { getAccess } = require('./getAccess')
 
-const populateGroupTeachers = feedbackTarget => {
+const populateGroupInformation = feedbackTarget => {
   for (const group of feedbackTarget.groups ?? []) {
     const teachers = feedbackTarget.userFeedbackTargets.filter(
       ufbt => ufbt.groupIds?.includes(group.id) && ufbt.hasTeacherAccess()
@@ -27,6 +27,10 @@ const populateGroupTeachers = feedbackTarget => {
         'lastName'
       )
     )
+    const students = feedbackTarget.userFeedbackTargets.filter(
+      ufbt => ufbt.groupIds?.includes(group.id) && ufbt.hasStudentAccess()
+    )
+    group.set('studentCount', students.length)
   }
 }
 
@@ -128,7 +132,7 @@ const getFromDb = async id => {
   fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
   fbt.set('continuousFeedbackCount', fbt.continuousFeedbacks.length)
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
-  populateGroupTeachers(fbt)
+  populateGroupInformation(fbt)
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
   const publicTarget = await fbt.toPublicObject()

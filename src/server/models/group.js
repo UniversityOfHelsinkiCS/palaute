@@ -22,6 +22,9 @@ Group.init(
     teachers: {
       type: VIRTUAL,
     },
+    studentCount: {
+      type: VIRTUAL,
+    },
   },
   {
     underscored: true,
