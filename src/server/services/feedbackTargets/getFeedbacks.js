@@ -94,7 +94,7 @@ const getFeedbacks = async (id, user, groupId) => {
 
   const studentFeedbackTargetsOfGroup =
     groupId && groupsAvailable
-      ? studentFeedbackTargets.filter(ufbt => ufbt.groupIds.includes(groupId))
+      ? studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
       : studentFeedbackTargets
 
   const studentCountOfGroup = studentFeedbackTargetsOfGroup.length
