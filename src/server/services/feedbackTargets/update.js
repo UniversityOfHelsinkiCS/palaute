@@ -56,9 +56,8 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQues
 
 const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   const updatedQuestionIdsList = []
-  console.log(_.countBy(questions, 'type'))
   const tooManyGroupingQuestions = _.countBy(questions, 'type').GROUPING > 1
-  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping questions is allowed')
+  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping question is allowed')
 
   for (const question of questions) {
     let updatedQuestion
@@ -124,7 +123,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      throw new ApplicationError('ClosesAt cannot be before opensAt', 400)
+      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
   }

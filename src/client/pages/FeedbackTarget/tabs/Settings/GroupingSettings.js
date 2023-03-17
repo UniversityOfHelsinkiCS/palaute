@@ -51,8 +51,10 @@ const GroupInformation = ({ groups, t, lang }) => (
 
 const GroupingSettings = () => {
   const { t, i18n } = useTranslation()
-  const { feedbackTarget } = useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
+
+  if (!isAdmin) return null
 
   return (
     <Box mb={2}>
