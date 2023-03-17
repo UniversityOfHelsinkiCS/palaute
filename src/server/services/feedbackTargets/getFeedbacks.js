@@ -4,15 +4,30 @@ const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
 
+const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets, groupingQuestionId) =>
+  _.countBy(
+    studentFeedbackTargets
+      .filter(ufbt => ufbt.feedback)
+      .flatMap(ufbt => {
+        const answers = ufbt.feedback.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
+        return answers
+      })
+  )
+
+const countGroupsByGroupIds = studentFeedbackTargets =>
+  _.countBy(studentFeedbackTargets.filter(ufbt => ufbt.feedback).flatMap(ufbt => ufbt.groupIds))
+
 /**
  * Check that no group has between 1 and 4 feedbacks. This would endanger anonymity.
  * @param {object[]} studentFeedbackTargets
+ * @param {number?} groupingQuestionId leave this empty if survey does not have a grouping question
  */
-const getGroupsAvailable = studentFeedbackTargets => {
+const getGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
   // count how many feedbacks every group has
-  const feedbacksGroupIds = _.countBy(
-    studentFeedbackTargets.filter(ufbt => ufbt.feedback).flatMap(ufbt => ufbt.groupIds)
-  )
+  const feedbacksGroupIds = groupingQuestionId
+    ? countGroupsByGroupQuestionAnswer(studentFeedbackTargets, groupingQuestionId)
+    : countGroupsByGroupIds(studentFeedbackTargets)
+
   // check whether each group has 0 or 5+ feedbacks
   return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= 5)
 }
@@ -49,6 +64,24 @@ const getStudentFeedbackTargets = async feedbackTargetId => {
   })
 
   return studentFeedbackTargets
+}
+
+const filterByGroupId = (studentFeedbackTargets, groupId, groupsAvailable, groupingQuestionId) => {
+  //  not requested or not available, do nothing
+  if (!groupId || !groupsAvailable) {
+    return studentFeedbackTargets
+  }
+
+  // grouped by grouping question
+  if (groupingQuestionId) {
+    return studentFeedbackTargets.filter(ufbt => {
+      const groupAnswers = ufbt.feedback?.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
+      return groupAnswers.includes(groupId)
+    })
+  }
+
+  // grouped automatically by group ids
+  return studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
 }
 
 const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
@@ -90,12 +123,15 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
-  const groupsAvailable = getGroupsAvailable(studentFeedbackTargets)
+  const groupingQuestionId = additionalData.surveys.teacherSurvey?.questions?.find(q => q.type === 'GROUPING')?.id
+  const groupsAvailable = getGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
 
-  const studentFeedbackTargetsOfGroup =
-    groupId && groupsAvailable
-      ? studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
-      : studentFeedbackTargets
+  const studentFeedbackTargetsOfGroup = filterByGroupId(
+    studentFeedbackTargets,
+    groupId,
+    groupsAvailable,
+    groupingQuestionId
+  )
 
   const studentCountOfGroup = studentFeedbackTargetsOfGroup.length
 

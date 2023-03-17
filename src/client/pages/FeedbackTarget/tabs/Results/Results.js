@@ -15,6 +15,7 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
+import { getGroups } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -34,7 +35,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const { ref, inView } = useInView({ initialInView: true })
 
   const { feedbackTarget } = useFeedbackTargetContext()
-  const { groups } = feedbackTarget
+  const groups = getGroups(feedbackTarget)
   const hasMultipleGroups = groups?.length > 1
   const groupsAvailable = feedbackResults?.groupsAvailable
   const feedbacks = feedbackResults?.feedbacks

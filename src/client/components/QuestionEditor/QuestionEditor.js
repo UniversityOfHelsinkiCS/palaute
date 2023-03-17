@@ -31,7 +31,7 @@ const TypeItem = ({ onClick, label, disabled, disabledText }) =>
     </MenuItem>
   )
 
-const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language, groupingAvailable, groupingDisabledReason }) => {
+const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -50,14 +50,6 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language, groupingAva
         label={t('questionEditor:multipleChoiceQuestion')}
       />
       <TypeItem onClick={() => handleChooseType('TEXT')} label={t('questionEditor:textualContent')} />
-      {groupingAvailable && (
-        <TypeItem
-          disabled={!!groupingDisabledReason}
-          disabledText={groupingDisabledReason}
-          onClick={() => handleChooseType('GROUPING')}
-          label={t('questionEditor:groupingQuestion')}
-        />
-      )}
     </Menu>
   )
 }
@@ -91,10 +83,6 @@ const QuestionEditorForm = ({
   const makePublicityToggle = question => isPublic => {
     handlePublicityToggle(question, isPublic)
   }
-
-  const hasGroupingQuestion = questions.some(q => q.type === 'GROUPING')
-  const hasGroupsAvailable = groups?.length > 0
-  const groupingDisabledReason = hasGroupingQuestion ? t('questionEditor:alreadyHasGroupingQuestion') : undefined
 
   return (
     <Form>
@@ -146,8 +134,6 @@ const QuestionEditorForm = ({
                 setEditingQuestionId(getQuestionId(newQuestion))
               }}
               language={i18n.language}
-              groupingAvailable={hasGroupsAvailable}
-              groupingDisabledReason={groupingDisabledReason}
             />
 
             <Box display="flex">

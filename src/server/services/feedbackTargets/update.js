@@ -54,10 +54,21 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQues
   return _.uniq(currentIds).filter(Number)
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
-  const updatedQuestionIdsList = []
-  const tooManyGroupingQuestions = _.countBy(questions, 'type').GROUPING > 1
+const validateGroupingQuestions = questions => {
+  const tooManyGroupingQuestions = _.countBy(questions, 'secondaryType').GROUPING > 1
   if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping question is allowed')
+
+  const illegalGroupingQuestion = questions.some(
+    q => q.secondaryType === 'GROUPING' && !['SINGLE_CHOICE', 'MULTIPLE_CHOICE'].includes(q.type)
+  )
+  if (illegalGroupingQuestion)
+    ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
+}
+
+const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
+  validateGroupingQuestions(questions)
+
+  const updatedQuestionIdsList = []
 
   for (const question of questions) {
     let updatedQuestion

@@ -8,25 +8,13 @@ const createTranslationObject = () => ({
   en: '',
 })
 
-const createGroupQuestion = groups => ({
-  label: {
-    fi: 'Valitse mihin ryhmään tai ryhmiin osallistuit',
-    en: 'Choose the group(s) you attended to',
-    sv: 'Välj den grupp som du deltog i',
-  },
-  options: groups.map(g => ({
-    id: g.id,
-    label: { ...createTranslationObject(), ...g.name },
-  })),
-})
-
 /**
  *
  * @param {string} type
  * @param {object[]?} groups
  * @returns
  */
-const createQuestionData = (type, groups) => {
+const createQuestionData = type => {
   switch (type) {
     case 'LIKERT':
       return {
@@ -50,8 +38,6 @@ const createQuestionData = (type, groups) => {
       return {
         content: createTranslationObject(),
       }
-    case 'GROUPING':
-      return createGroupQuestion(groups ?? [])
     default:
       return null
   }
@@ -69,12 +55,6 @@ const getOptionOverrides = type => {
       return {}
     case 'TEXT':
       return {}
-    case 'GROUPING':
-      return {
-        public: false,
-        publicityConfigurable: false,
-        required: true,
-      }
     default:
       return {}
   }

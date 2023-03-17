@@ -1,5 +1,4 @@
 import { parseISO, lightFormat } from 'date-fns'
-import _ from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 
@@ -75,8 +74,7 @@ export const getQuestions = feedbackTarget => {
     ...uniOpenQuestions,
   ]
 
-  // Grouping questions are first
-  return _.orderBy(allQuestions, q => q.type === 'GROUPING', 'desc')
+  return allQuestions
 }
 
 const getInitialAnswerByFeedback = (feedback, question) => {

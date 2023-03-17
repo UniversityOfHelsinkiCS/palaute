@@ -16,14 +16,18 @@ const GroupButton = ({ option, onClick, ...props }) => {
       <PaperTooltip
         title={
           <Box p="0.3rem">
-            <Typography variant="body2" sx={{ mb: '0.2rem' }}>
-              {t('feedbackTargetResults:teachersOfGroup')}
-            </Typography>
-            {option.teachers.map(t => (
-              <div key={t.id}>
-                <TeacherChip user={t} tooltipPlacement="right" />
-              </div>
-            ))}
+            {option.teachers && (
+              <>
+                <Typography variant="body2" sx={{ mb: '0.2rem' }}>
+                  {t('feedbackTargetResults:teachersOfGroup')}
+                </Typography>
+                {option.teachers.map(t => (
+                  <div key={t.id}>
+                    <TeacherChip user={t} tooltipPlacement="right" />
+                  </div>
+                ))}
+              </>
+            )}
           </Box>
         }
       >
