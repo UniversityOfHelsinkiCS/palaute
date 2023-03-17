@@ -88,7 +88,7 @@ const Results = () => {
   const enoughFeedbacks = feedbackCount > 0
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
-  const filtersVisible = isOrganisationReader || isTeacher || isResponsibleTeacher
+  const filtersVisible = isOrganisationReader || isResponsibleTeacher
 
   const feedbacks = feedbackTargetData?.feedbacks ?? []
   const groupFeedbackCount = feedbackTargetData?.studentCount ?? 0
