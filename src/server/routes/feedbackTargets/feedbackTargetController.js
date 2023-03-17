@@ -177,7 +177,7 @@ adRouter.put('/:id/open-immediately', async (req, res) => {
 
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
-  return res.sendStatus(200)
+  return res.send(updatedFeedbackTarget)
 })
 
 adRouter.get('/:id/users', async (req, res) => {
