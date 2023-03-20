@@ -56,6 +56,8 @@ const GroupingSettings = () => {
   const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
 
+  const hasGroupingQuestion = feedbackTarget.questions.some(q => q.secondaryType === 'GROUPING')
+
   if (!isAdmin) return null
 
   return (
@@ -65,6 +67,9 @@ const GroupingSettings = () => {
           <Typography variant="h6">{t('groups:groupingSettings')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
+          <Typography>
+            {hasGroupingQuestion ? t('groups:hasGroupingQuestion') : t('groups:noGroupingQuestion')}
+          </Typography>
           <Typography>We have these groups available from SISU</Typography>
           <GroupInformation groups={groups} />
         </AccordionDetails>
