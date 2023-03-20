@@ -22,7 +22,7 @@ const countGroupsByGroupIds = studentFeedbackTargets =>
  * @param {object[]} studentFeedbackTargets
  * @param {number?} groupingQuestionId leave this empty if survey does not have a grouping question
  */
-const getGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
+const isGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
   // count how many feedbacks every group has
   const feedbacksGroupIds = groupingQuestionId
     ? countGroupsByGroupQuestionAnswer(studentFeedbackTargets, groupingQuestionId)
@@ -105,6 +105,7 @@ const getFeedbacks = async (id, user, groupId) => {
 
   if (!feedbackTarget) ApplicationError.NotFound()
 
+  const { publicQuestionIds, surveys } = additionalData
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]
 
@@ -123,8 +124,8 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
-  const groupingQuestionId = additionalData.surveys.teacherSurvey?.questions?.find(q => q.type === 'GROUPING')?.id
-  const groupsAvailable = getGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
+  const groupingQuestionId = surveys.teacherSurvey?.getGroupingQuestion()?.id
+  const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
 
   const studentFeedbackTargetsOfGroup = filterByGroupId(
     studentFeedbackTargets,
@@ -149,7 +150,6 @@ const getFeedbacks = async (id, user, groupId) => {
     }
   }
 
-  const { publicQuestionIds } = additionalData
   const publicFeedbacks = getPublicFeedbacks(allFeedbacks, publicQuestionIds)
 
   return {
