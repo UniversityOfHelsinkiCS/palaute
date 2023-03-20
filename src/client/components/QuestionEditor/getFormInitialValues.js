@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const getFormInitialValues = ({
   teacherQuestions,
   programmeQuestions,
@@ -10,7 +12,15 @@ export const getFormInitialValues = ({
   const canEditProgramme = editorLevel === 'programme'
   const canEditTeacher = editorLevel === 'teacher'
 
+  teacherQuestions = (teacherQuestions ?? []).map(question => ({
+    ...question,
+    editable: canEditTeacher,
+  }))
+
+  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+
   const questions = [
+    ...(groupingQuestions ?? []),
     ...(universityQuestions ?? []).map(question => ({
       ...question,
       editable: canEditUniversity,
@@ -21,10 +31,7 @@ export const getFormInitialValues = ({
       editable: canEditProgramme,
       chip: 'questionEditor:programmeQuestion',
     })),
-    ...(teacherQuestions ?? []).map(question => ({
-      ...question,
-      editable: canEditTeacher,
-    })),
+    ...otherTeacherQuestions,
   ].map(q => ({
     ...q,
     public: publicQuestionIds.includes(q.id),

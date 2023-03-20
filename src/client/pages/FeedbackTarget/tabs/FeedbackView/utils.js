@@ -1,4 +1,5 @@
 import { parseISO, lightFormat } from 'date-fns'
+import _ from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 
@@ -65,11 +66,15 @@ export const getQuestions = feedbackTarget => {
   const programmeOpenQuestions = programmeSurveyQuestions.filter(q => q.type === 'OPEN')
   const filteredProgrammeQuestions = programmeSurveyQuestions.filter(q => q.type !== 'OPEN')
 
+  const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
+  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+
   // General ordering
   const allQuestions = [
+    ...groupingQuestions,
     ...filteredUniQuestions,
     ...(filteredProgrammeQuestions ?? []),
-    ...(surveys?.teacherSurvey?.questions ?? []),
+    ...otherTeacherQuestions,
     ...programmeOpenQuestions,
     ...uniOpenQuestions,
   ]

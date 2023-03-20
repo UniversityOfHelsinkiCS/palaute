@@ -39,10 +39,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
 
   const { surveys, publicQuestionIds, publicityConfigurableQuestionIds } = feedbackTarget
 
-  const programmeQuestions = surveys.programmeSurveys.reduce(
-    (questions, survey) => questions.concat(survey.questions),
-    []
-  )
+  const programmeQuestions = surveys.programmeSurveys.flatMap(survey => survey.questions)
 
   const initialValues = React.useMemo(
     () =>

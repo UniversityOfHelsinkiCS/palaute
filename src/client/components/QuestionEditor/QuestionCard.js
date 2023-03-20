@@ -128,13 +128,14 @@ const QuestionCard = ({
 
   const questionIsEditable = question.editable ?? true
   const canEdit = questionIsEditable && editable
-  const canDuplicate = question.secondaryType !== 'GROUPING'
+  const isGrouping = question.secondaryType === 'GROUPING'
+  const canDuplicate = !isGrouping
 
   const orderButtonsProps = {
     onMoveUp,
     onMoveDown,
-    moveUpDisabled,
-    moveDownDisabled,
+    moveUpDisabled: moveUpDisabled || isGrouping,
+    moveDownDisabled: moveDownDisabled || isGrouping,
   }
 
   return (
@@ -142,7 +143,10 @@ const QuestionCard = ({
       <CardContent>
         <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
           <Grid item xs={4}>
-            <Chip label={title} variant="outlined" />
+            <Box display="flex" gap="0.5rem">
+              <Chip label={title} variant="outlined" />
+              {isGrouping && <Chip label={t('groups:groupingQuestion')} variant="outlined" />}
+            </Box>
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
             {question.type !== 'TEXT' && !isEditing && (
@@ -194,7 +198,7 @@ const QuestionCard = ({
                     {t('common:edit')}
                   </Button>
                 </div>
-                <OrderButtons {...orderButtonsProps} />
+                {!isGrouping && <OrderButtons {...orderButtonsProps} />}
               </ActionsContainer>
             )}
           </>
