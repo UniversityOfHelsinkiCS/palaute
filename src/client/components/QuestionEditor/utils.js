@@ -11,7 +11,6 @@ const createTranslationObject = () => ({
 /**
  *
  * @param {string} type
- * @param {object[]?} groups
  * @returns
  */
 const createQuestionData = type => {
@@ -43,46 +42,22 @@ const createQuestionData = type => {
   }
 }
 
-const getOptionOverrides = type => {
-  switch (type) {
-    case 'LIKERT':
-      return {}
-    case 'MULTIPLE_CHOICE':
-      return {}
-    case 'SINGLE_CHOICE':
-      return {}
-    case 'OPEN':
-      return {}
-    case 'TEXT':
-      return {}
-    default:
-      return {}
-  }
-}
-
 export const getQuestionId = question => question.id ?? question[TEMP_ID]
 
 /**
  *
- * @param {string} type
- * @param {object[]?} groups
  * @returns question data
  */
-export const createQuestion = (type, groups) => {
-  const data = createQuestionData(type, groups)
-  const optionOverrides = getOptionOverrides(type)
-
-  return {
-    [TEMP_ID]: uuidv4(),
-    type,
-    data,
-    required: false,
-    editable: true,
-    public: true,
-    publicityConfigurable: true,
-    ...optionOverrides,
-  }
-}
+export const createQuestion = ({ type, data = createQuestionData(type), options = {} }) => ({
+  [TEMP_ID]: uuidv4(),
+  type,
+  data,
+  required: false,
+  editable: true,
+  public: true,
+  publicityConfigurable: true,
+  ...options,
+})
 
 export const copyQuestion = question => {
   const { id, ...rest } = question

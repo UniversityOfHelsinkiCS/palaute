@@ -4,43 +4,21 @@ import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 import QuestionEditor from './QuestionEditor'
-import apiClient from '../../util/apiClient'
-import queryClient from '../../util/queryClient'
 import { validateQuestions } from './utils'
 import { getFormInitialValues } from './getFormInitialValues'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
-
-const saveQuestionsValues = async (values, feedbackTarget) => {
-  const { questions } = values
-  const { surveys, id } = feedbackTarget
-  const { id: surveyId } = surveys.teacherSurvey
-
-  const editableQuestions = questions.filter(({ editable }) => editable)
-
-  const payload = {
-    surveyId,
-    questions: editableQuestions,
-  }
-  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
-
-  const { questions: updatedQuestions } = data
-  if (updatedQuestions && Array.isArray(updatedQuestions) && updatedQuestions.length > 0) {
-    // update cache
-    queryClient.refetchQueries(['feedbackTarget', String(id)])
-  }
-
-  return data
-}
+import useUpdateTeacherSurvey from '../../hooks/useUpdateTeacherSurvey'
 
 const TeacherSurvey = ({ feedbackTarget }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const mutation = useQuestionPublicityMutation({
+  const teacherSurveyMutation = useUpdateTeacherSurvey(feedbackTarget)
+  const updateSurvey = useInteractiveMutation(questions => teacherSurveyMutation.mutateAsync(questions))
+  const questionPublicityMutation = useQuestionPublicityMutation({
     resource: 'feedbackTarget',
     resourceId: feedbackTarget.id,
   })
-  const togglePublicity = useInteractiveMutation(ids => mutation.mutateAsync(ids))
+  const togglePublicity = useInteractiveMutation(ids => questionPublicityMutation.mutateAsync(ids))
 
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
@@ -51,17 +29,12 @@ const TeacherSurvey = ({ feedbackTarget }) => {
   }
 
   const handleSubmit = async values => {
-    try {
-      if (!validateQuestions(values)) {
-        enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
-      } else {
-        await saveQuestionsValues(values, feedbackTarget)
-
-        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-      }
-    } catch (e) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    if (!validateQuestions(values)) {
+      enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
+      return
     }
+
+    await updateSurvey(values)
   }
 
   const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, groups } = feedbackTarget
@@ -71,14 +44,18 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     []
   )
 
-  const initialValues = getFormInitialValues({
-    teacherQuestions: surveys.teacherSurvey.questions,
-    programmeQuestions,
-    universityQuestions: surveys.universitySurvey.questions,
-    publicQuestionIds,
-    publicityConfigurableQuestionIds,
-    editorLevel: 'teacher',
-  })
+  const initialValues = React.useMemo(
+    () =>
+      getFormInitialValues({
+        teacherQuestions: surveys.teacherSurvey.questions,
+        programmeQuestions,
+        universityQuestions: surveys.universitySurvey.questions,
+        publicQuestionIds,
+        publicityConfigurableQuestionIds,
+        editorLevel: 'teacher',
+      }),
+    [feedbackTarget]
+  )
 
   return (
     <QuestionEditor

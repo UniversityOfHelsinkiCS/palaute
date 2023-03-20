@@ -238,6 +238,9 @@
     "hiddenInfo": "Den här responsen är gömd. Den är synlig endast för ansvariga lärare eller utbildningsprogrammets administratörer.",
     "hidingFeatureInfoTitle": "Information om att gömma svaren"
   },
+  "groups": {
+    "groupingQuestionDefaultLabel": "Välj den grupp som du deltog i"
+  },
   "navBar": {
     "myFeedbacks": "Mina responser",
     "myCourses": "Mina kurser",
