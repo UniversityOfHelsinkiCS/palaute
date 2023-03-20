@@ -18,13 +18,8 @@ const useUpdateTeacherSurvey = feedbackTarget => {
   }
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: response => {
-      const { questions: updatedQuestions } = response.data
-
-      if (updatedQuestions && Array.isArray(updatedQuestions) && updatedQuestions.length > 0) {
-        // update cache
-        queryClient.refetchQueries(['feedbackTarget', String(id)])
-      }
+    onSuccess: () => {
+      queryClient.refetchQueries(['feedbackTarget', String(id)])
     },
   })
 

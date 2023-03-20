@@ -64,7 +64,6 @@ const QuestionEditorForm = ({
   publicityConfigurableQuestionIds,
   handlePublicityToggle,
   actions,
-  groups,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
@@ -129,7 +128,7 @@ const QuestionEditorForm = ({
               anchorEl={addButtonRef.current}
               onClose={() => setMenuOpen(false)}
               onChooseType={type => {
-                const newQuestion = createQuestion(type, groups)
+                const newQuestion = createQuestion({ type })
                 arrayHelpers.push(newQuestion)
                 setEditingQuestionId(getQuestionId(newQuestion))
               }}
@@ -168,7 +167,6 @@ const QuestionEditor = ({
   handleSubmit,
   handlePublicityToggle,
   copyFromCourseDialog,
-  groups,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -182,7 +180,6 @@ const QuestionEditor = ({
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
         actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
-        groups={groups}
       />
     )}
   </Formik>

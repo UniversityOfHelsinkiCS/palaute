@@ -37,7 +37,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     await updateSurvey(values)
   }
 
-  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, groups } = feedbackTarget
+  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds } = feedbackTarget
 
   const programmeQuestions = surveys.programmeSurveys.reduce(
     (questions, survey) => questions.concat(survey.questions),
@@ -64,7 +64,6 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       handlePublicityToggle={onPublicityToggle}
       publicQuestionIds={publicQuestionIds}
       publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-      groups={groups}
       copyFromCourseDialog
     />
   )
