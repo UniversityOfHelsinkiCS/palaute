@@ -65,7 +65,8 @@
     "editable": "You can change this setting",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
-    "all": "All"
+    "all": "All",
+    "studentCount": "Students"
   },
   "validationErrors": {
     "required": "This field is required",

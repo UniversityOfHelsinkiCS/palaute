@@ -65,7 +65,8 @@
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
-    "all": "Kaikki"
+    "all": "Kaikki",
+    "studentCount": "Opiskelijoita"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",

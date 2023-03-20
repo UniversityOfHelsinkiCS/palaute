@@ -16,9 +16,15 @@ const GroupButton = ({ option, onClick, ...props }) => {
       <PaperTooltip
         title={
           <Box p="0.3rem">
+            <Typography variant="body2">
+              {t('common:studentCount')}:{' '}
+              <Typography component="span" color="textSecondary">
+                {option.studentCount}
+              </Typography>
+            </Typography>
             {option.teachers && (
               <>
-                <Typography variant="body2" sx={{ mb: '0.2rem' }}>
+                <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
                   {t('feedbackTargetResults:teachersOfGroup')}
                 </Typography>
                 {option.teachers.map(t => (
@@ -44,7 +50,7 @@ const GroupButton = ({ option, onClick, ...props }) => {
   )
 }
 
-const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable }) => {
+const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCount }) => {
   const { i18n, t } = useTranslation()
   const [userSelectedGroupId, setUserSelectedGroupId] = React.useState(groupId)
 
@@ -72,12 +78,14 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable }) => {
           id: 'ALL',
           name: t('common:all'),
           teachers: [],
+          studentCount,
         },
       ].concat(
         groups.map(group => ({
           id: group.id,
           name: getLanguageValue(group.name, i18n.language),
           teachers: group.teachers,
+          studentCount: group.studentCount,
         }))
       ),
     [groups]

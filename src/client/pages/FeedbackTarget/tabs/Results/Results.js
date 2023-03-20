@@ -35,6 +35,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const { ref, inView } = useInView({ initialInView: true })
 
   const { feedbackTarget } = useFeedbackTargetContext()
+  const { studentCount } = feedbackTarget
   const groups = getGroups(feedbackTarget)
   const hasMultipleGroups = groups?.length > 1
   const groupsAvailable = feedbackResults?.groupsAvailable
@@ -51,7 +52,13 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
         elevation={isStuckTop ? 4 : 0}
       >
         {!isLoading && hasMultipleGroups && (
-          <GroupSelector groupId={groupId} setGroupId={setGroupId} groups={groups} groupsAvailable={groupsAvailable} />
+          <GroupSelector
+            groupId={groupId}
+            setGroupId={setGroupId}
+            groups={groups}
+            groupsAvailable={groupsAvailable}
+            studentCount={studentCount}
+          />
         )}
         <Box ml="auto">
           <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
