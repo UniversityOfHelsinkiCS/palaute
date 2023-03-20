@@ -229,10 +229,6 @@
     "answers": "Vastanneita"
   },
   "feedbackTargetResults": {
-    "chooseGroup": "Valitse tarkasteltava ryhmä",
-    "teachersOfGroup": "Ryhmän opettajat",
-    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
-    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
@@ -265,6 +261,19 @@
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
     "unpublishingInfo": "Tämän kysymyksen näkyvät kurssin opiskelijoille.",
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu."
+  },
+  "groups": {
+    "groupingSettings": "Ryhmittely",
+    "groupingInfoTextTitle": "Lue, miten ryhmittely toimii",
+    "groupingInfoText": "Grouping allows you to see and compare answers of single groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try to not ask too specific things or add options that might get less than 5 answers.",
+    "groupInformation": "Ryhmien tiedot",
+    "teachersOfGroup": "Ryhmän opettajat",
+    "groupName": "Ryhmän nimi",
+    "noGroupingQuestion": "Kyselyllä ei ole ryhmittelykysymystä. Opiskelijoiden vastaukset ryhmitellään automaattisesti ryhmiin, joihin he ovat ilmoittautuneet.",
+    "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys.",
+    "chooseGroup": "Valitse tarkasteltava ryhmä",
+    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää."
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",

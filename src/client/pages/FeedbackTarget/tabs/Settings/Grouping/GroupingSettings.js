@@ -13,9 +13,10 @@ import {
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { ExpandMore } from '@mui/icons-material'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import { getLanguageValue } from '../../../../util/languageUtils'
-import TeacherChip from '../../../../components/common/TeacherChip'
+import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
+import { getLanguageValue } from '../../../../../util/languageUtils'
+import TeacherChip from '../../../../../components/common/TeacherChip'
+import InstructionAccordion from '../../../../../components/common/InstructionAccordion'
 
 const GroupInformation = ({ groups }) => {
   const { t, i18n } = useTranslation()
@@ -29,7 +30,7 @@ const GroupInformation = ({ groups }) => {
             <TableRow>
               <TableCell>{t('groups:groupName')}</TableCell>
               <TableCell>{t('common:studentCount')}</TableCell>
-              <TableCell>{t('common:teachers')}</TableCell>
+              <TableCell>{t('groups:teachersOfGroup')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -67,6 +68,7 @@ const GroupingSettings = () => {
           <Typography variant="h6">{t('groups:groupingSettings')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
+          <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
           <Typography>
             {hasGroupingQuestion ? t('groups:hasGroupingQuestion') : t('groups:noGroupingQuestion')}
           </Typography>

@@ -25,7 +25,7 @@ const GroupButton = ({ option, onClick, ...props }) => {
             {option.teachers && (
               <>
                 <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
-                  {t('feedbackTargetResults:teachersOfGroup')}
+                  {t('groups:teachersOfGroup')}
                 </Typography>
                 {option.teachers.map(t => (
                   <div key={t.id}>
@@ -57,10 +57,7 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
   if (!groupsAvailable)
     return (
       <Box>
-        <InfoBox
-          label={t('feedbackTargetResults:groupsNotAvailableInfoTitle')}
-          content={t('feedbackTargetResults:groupsNotAvailableInfoContent')}
-        />
+        <InfoBox label={t('groups:groupsNotAvailableInfoTitle')} content={t('groups:groupsNotAvailableInfoContent')} />
       </Box>
     )
 
@@ -93,7 +90,7 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
 
   return (
     <Box>
-      <Typography variant="body2">{t('feedbackTargetResults:chooseGroup')}</Typography>
+      <Typography variant="body2">{t('groups:chooseGroup')}</Typography>
       <ToggleButtonGroup value={userSelectedGroupId}>
         {groupOptions.map(opt => (
           <GroupButton key={opt.id} value={opt.id} option={opt} onClick={() => onSelect(opt.id)} />

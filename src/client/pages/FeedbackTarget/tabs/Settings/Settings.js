@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import GroupingSettings from './GroupingSettings'
+import GroupingSettings from './Grouping/GroupingSettings'
 
 const Settings = () => {
   const { id } = useParams()
