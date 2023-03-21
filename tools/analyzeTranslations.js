@@ -37,23 +37,43 @@ const BgWhite = '\x1b[47m'
  */
 const CLIENT_PATH = './src/client'
 const LOCALES_DIR_NAME = 'locales'
-const LOCALES_PATH = './src/client/locales'
+const LOCALES_PATH = './public/locales'
 const EXTENSION_MATCHER = /.+\.js/
 // matches 'asd:asd'
-const TRANSLATION_KEY_REFERENCE_MATCHER = new RegExp(
-  /['"`]\w+(?::\w+)+['"`]/,
-  'g',
-)
+const TRANSLATION_KEY_REFERENCE_MATCHER = new RegExp(/['"`]\w+(?::\w+)+['"`]/, 'g')
 // matches t('asd'
-const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
-  /\bt\(['"`]\w+(?::\w+)*['"`]/,
-  'g',
-)
+const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(/\bt\(['"`]\w+(?::\w+)*['"`]/, 'g')
+
+const LANGUAGES = ['fi', 'sv', 'en']
+const NAMESPACE = 'translation'
+
+const importTranslationObjectFromESModule = async f => {
+  const content = await fs.readFile(f, 'utf8')
+  const jsLines = ['"use strict";({']
+  let objectStarted = false
+  for (const line of content.split('\n')) {
+    if (objectStarted) {
+      jsLines.push(line)
+    }
+    if (line.startsWith('export default')) {
+      objectStarted = true
+    }
+  }
+  jsLines.push(')')
+
+  const js = jsLines.join('\n')
+  return eval?.(js)
+}
 
 /**
  * Main
  */
 ;(async () => {
+  if (args.help) {
+    printHelp()
+    return
+  }
+
   const translationKeyReferences = new Map()
   console.log('Analyzing...')
   for await (const file of walk(CLIENT_PATH)) {
@@ -63,14 +83,11 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
       ;[...line.matchAll(TRANSLATION_KEY_REFERENCE_MATCHER)]
         .concat([...line.matchAll(TRANSLATION_KEY_REFERENCE_MATCHER_2)])
         .flat()
-        .forEach((match) => {
+        .forEach(match => {
           const t = match.startsWith('t')
           const common = !match.includes(':')
           const location = new Location(file, lineNumber)
-          const reference = `${common ? 'common:' : ''}${match.slice(
-            t ? 3 : 1,
-            match.length - 1,
-          )}`
+          const reference = `${common ? 'common:' : ''}${match.slice(t ? 3 : 1, match.length - 1)}`
           if (translationKeyReferences.has(reference)) {
             translationKeyReferences.get(reference).push(location)
           } else {
@@ -85,34 +102,15 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
 
   const locales = {}
 
-  const importTranslationObjectFromESModule = async (f) => {
-    const content = await fs.readFile(f, 'utf8')
-    const jsLines = ['"use strict";({']
-    let objectStarted = false
-    for (const line of content.split('\n')) {
-      if (objectStarted) {
-        jsLines.push(line)
-      }
-      if (line.startsWith('export default')) {
-        objectStarted = true
-      }
-    }
-    jsLines.push(')')
-
-    const js = jsLines.join('\n')
-    return eval?.(js)
-  }
-
-  for await (const fileName of walk(LOCALES_PATH)) {
-    const lang = fileName.slice(fileName.length - 5, fileName.length - 3)
-    locales[lang] = await importTranslationObjectFromESModule(fileName)
+  for await (const lang of LANGUAGES) {
+    locales[lang] = require(`../${LOCALES_PATH}/${lang}/${NAMESPACE}.json`)
   }
   console.log('Imported translation modules')
 
   const translationsNotUsed = new Set()
   const findKeysRecursively = (obj, path) => {
     const keys = []
-    Object.keys(obj).forEach((k) => {
+    Object.keys(obj).forEach(k => {
       if (typeof obj[k] === 'object') {
         keys.push(...findKeysRecursively(obj[k], `${path}:${k}`))
       } else if (typeof obj[k] === 'string') {
@@ -122,15 +120,11 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
     return keys
   }
   Object.entries(locales).forEach(([_, t]) => {
-    findKeysRecursively(t, '').forEach((k) =>
-      translationsNotUsed.add(k.slice(1)),
-    )
+    findKeysRecursively(t, '').forEach(k => translationsNotUsed.add(k.slice(1)))
   })
   const numberOfTranslations = translationsNotUsed.size
   console.log('Generated translation keys\n')
-  console.log(
-    `${Underscore}Listing references with missing translations${Reset}\n`,
-  )
+  console.log(`${Underscore}Listing references with missing translations${Reset}\n`)
 
   let longestKey = 0
   translationKeyReferences.forEach((v, k) => {
@@ -156,20 +150,13 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(
 
     printMissing(k, v, missing, longestKey)
   })
+  console.log()
 
   printUnused(translationsNotUsed, numberOfTranslations)
 })()
 
-const printMissing = (
-  translationKey,
-  referenceLocations,
-  missingLangs,
-  longestKey,
-) => {
-  if (
-    missingLangs.length > 0 &&
-    (!args.lang || missingLangs.some((l) => args.lang.includes(l)))
-  ) {
+const printMissing = (translationKey, referenceLocations, missingLangs, longestKey) => {
+  if (missingLangs.length > 0 && (!args.lang || missingLangs.some(l => args.lang.includes(l)))) {
     let msg = translationKey
     // add padding
     for (let i = 0; i < longestKey - translationKey.length; i++) {
@@ -177,11 +164,7 @@ const printMissing = (
     }
 
     msg += ['fi', 'en', 'sv']
-      .map((l) =>
-        missingLangs.includes(l)
-          ? `${FgRed}${l}${Reset}`
-          : `${FgGreen}${l}${Reset}`,
-      )
+      .map(l => (missingLangs.includes(l) ? `${FgRed}${l}${Reset}` : `${FgGreen}${l}${Reset}`))
       .join(', ')
 
     if (args.detailed) {
@@ -196,14 +179,17 @@ const printUnused = (translationsNotUsed, numberOfTranslations) => {
   if (!args.unused) return
 
   console.log(
-    `${Underscore}Potentially unused translations (${translationsNotUsed.size}/${numberOfTranslations}): ${Reset}`,
+    `${Underscore}Potentially unused translations (${translationsNotUsed.size}/${numberOfTranslations}): ${Reset}`
   )
-  console.log(
-    `${FgMagenta}please check if they are used before deleting${Reset}`,
-  )
-  translationsNotUsed.forEach((t) =>
-    console.log(`  ${t.split(':').join(`${FgMagenta}:${Reset}`)}`),
-  )
+  console.log(`${FgMagenta}please check if they are used before deleting${Reset}`)
+  translationsNotUsed.forEach(t => console.log(`  ${t.split(':').join(`${FgMagenta}:${Reset}`)}`))
+}
+
+function printHelp() {
+  console.log('Usage:')
+  console.log('--lang: fi sv en')
+  console.log('--unused: print all potentially unused translation fields')
+  console.log('--detailed: Show usage locations')
 }
 
 /**
