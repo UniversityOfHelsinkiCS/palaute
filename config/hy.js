@@ -199,9 +199,9 @@ const config = {
   STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
 
   /**
-   * Tags enabled for kasvis
+   * Tags enabled for kasvis and kielikeskus
    */
-  TAGS_ENABLED: ['600-K001', '600-M001'],
+  TAGS_ENABLED: ['600-K001', '600-M001', 'H906'],
 
   /**
    * The id of a LIKERT-type question that is considered the university level workload question.
