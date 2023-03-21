@@ -219,5 +219,6 @@ module.exports = {
   InactiveCourseRealisation,
   Banner,
   Tag,
+  CourseUnitsTag,
   Group,
 }
