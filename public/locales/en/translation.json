@@ -157,7 +157,6 @@
     "singleChoiceQuestion": "Single choice question",
     "multipleChoiceQuestion": "Multiple choice question",
     "textualContent": "Textual content",
-    "groupingQuestion": "Grouping question",
     "moveUp": "Move up",
     "moveDown": "Move down",
     "removeQuestion": "Remove question",
@@ -265,17 +264,20 @@
   },
   "groups": {
     "groupingSettings": "Grouping",
+    "groupingQuestion": "Grouping question",
     "groupingQuestionDefaultLabel": "Choose the group(s) you attended to",
     "groupingInfoTextTitle": "Read how grouping works",
-    "groupingInfoText": "Grouping allows you to see and compare answers of single groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try to not ask too specific things or add options that might get less than 5 answers.",
+    "groupingInfoText": "Grouping allows you to see and compare answers of single groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try to not ask too specific things or add options that might get less than 5 answers.",
     "groupInformation": "Group information",
     "teachersOfGroup": "Teachers of this group",
     "groupName": "Group name",
     "noGroupingQuestion": "The survey has no grouping question. Students' answers are automatically grouped based on their confirmed study sub group.",
-    "hasGroupingQuestion": "The survey has a grouping question.",
+    "hasGroupingQuestion": "The survey has a grouping question '{{ name }}'.",
     "chooseGroup": "Choose the group to show",
     "groupsNotAvailableInfoTitle": "Groups are not available",
-    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately."
+    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
+    "groupingQuestionAddSuccess": "Grouping question added with existing groups as options. You may edit it as you wish.",
+    "addGroupingQuestion": "Add grouping question"
   },
   "navBar": {
     "myFeedbacks": "My feedback",

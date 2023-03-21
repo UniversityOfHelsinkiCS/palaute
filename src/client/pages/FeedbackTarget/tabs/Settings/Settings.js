@@ -5,7 +5,6 @@ import { Box } from '@mui/material'
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import GroupingSettings from '../../../../components/QuestionEditor/GroupingSettings'
 
 const Settings = () => {
   const { id } = useParams()
@@ -21,7 +20,6 @@ const Settings = () => {
 
   return (
     <Box>
-      <GroupingSettings />
       <EditFeedbackTarget />
     </Box>
   )

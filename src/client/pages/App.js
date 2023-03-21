@@ -22,7 +22,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Suspense fallback={null}>
-            <SnackbarProvider maxSnack={3} preventDuplicate>
+            <SnackbarProvider maxSnack={3} preventDuplicate autoHideDuration={10_000}>
               <Switch>
                 <Route path="/noad">
                   <GuestUser />

@@ -157,7 +157,6 @@
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
     "textualContent": "Tekstuaalinen sisältö",
-    "groupingQuestion": "Ryhmittelykysymys",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",
@@ -264,17 +263,20 @@
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
+    "groupingQuestion": "Ryhmittelykysymys",
     "groupingQuestionDefaultLabel": "Valitse mihin ryhmiin osallistuit",
     "groupingInfoTextTitle": "Lue, miten ryhmittely toimii",
-    "groupingInfoText": "Grouping allows you to see and compare answers of single groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try to not ask too specific things or add options that might get less than 5 answers.",
+    "groupingInfoText": "Ryhmittely mahdollistaa yksittäisten ryhmien palautteen tarkastelun erikseen. Norppa luokittelee opiskelijoiden vastaukset ryhmiin automaattisesti ilmoittautumisten perusteella. \n\nJos kurssin SISUssa määritellyt ryhmät eivät vastaa tarpeitasi, haluat ryhmitellä vastauksia jonkin muun kriteerin mukaan tai haluat että opiskelijat manuaalisesti valitsevat ryhmänsä, voit luoda alla olevasta napista muokattavan ryhmittelykysymyksen, joka lisätään kyselyn alkuun. \n\nHuomaa, että mikäli jossain ryhmässä on 1-4 vastausta, vastausten ryhmittely ei ole ollenkaan käytettävissä. Tällä suojellaan opiskelijoiden vastausten anonymiteettiä. Jos luot oman ryhmittelykysymyksen, kannattaa vastausvaihtoehtojen olla sellaisia, jotka todennäköisesti valitsee 5 tai useampi opiskelija.",
     "groupInformation": "Ryhmien tiedot",
     "teachersOfGroup": "Ryhmän opettajat",
     "groupName": "Ryhmän nimi",
     "noGroupingQuestion": "Kyselyllä ei ole ryhmittelykysymystä. Opiskelijoiden vastaukset ryhmitellään automaattisesti ryhmiin, joihin he ovat ilmoittautuneet.",
-    "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys.",
+    "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys \"{{ name }}\".",
     "chooseGroup": "Valitse tarkasteltava ryhmä",
     "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
-    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää."
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
+    "groupingQuestionAddSuccess": "Ryhmittelykysymys luotu olemassa olevien ryhmien pohjalta. Voit muokata kysymystä halusi mukaan.",
+    "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",

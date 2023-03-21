@@ -7,6 +7,7 @@ import QuestionCard from './QuestionCard'
 
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 import QuestionEditorActions from './QuestionEditorActions'
+import GroupingQuestionSettings from './GroupingQuestionSettings'
 
 const styles = {
   questionCard: {
@@ -64,6 +65,7 @@ const QuestionEditorForm = ({
   publicityConfigurableQuestionIds,
   handlePublicityToggle,
   actions,
+  groupingQuestionSettings,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
@@ -89,6 +91,7 @@ const QuestionEditorForm = ({
         name={name}
         render={arrayHelpers => (
           <div>
+            {groupingQuestionSettings && <GroupingQuestionSettings onAddQuestion={q => arrayHelpers.insert(0, q)} />}
             {questions.map((question, index) => (
               <QuestionCard
                 key={getQuestionId(question)}
@@ -167,6 +170,7 @@ const QuestionEditor = ({
   handleSubmit,
   handlePublicityToggle,
   copyFromCourseDialog,
+  groupingQuestionSettings,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -180,6 +184,7 @@ const QuestionEditor = ({
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
         actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
+        groupingQuestionSettings={groupingQuestionSettings}
       />
     )}
   </Formik>

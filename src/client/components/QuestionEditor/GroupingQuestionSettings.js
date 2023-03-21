@@ -65,10 +65,12 @@ const createGroupingQuestion = groups => {
     })),
   }
 
-  return createQuestion({ type: 'MULTIPLE_CHOICE', data, options: { required: true, secondaryType: 'GROUPING' } })
+  const options = { required: true, secondaryType: 'GROUPING', public: false }
+
+  return createQuestion({ type: 'MULTIPLE_CHOICE', data, options })
 }
 
-const GroupingSettings = () => {
+const GroupingQuestionSettings = ({ onAddQuestion }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
@@ -82,8 +84,10 @@ const GroupingSettings = () => {
     }
   )
 
-  const handleAddGroupingQuestion = () => {
-    addGroupingQuestion(createGroupingQuestion(groups))
+  const handleAddGroupingQuestion = async () => {
+    const question = createGroupingQuestion(groups)
+    await addGroupingQuestion(question)
+    onAddQuestion(question)
   }
 
   const groupingQuestion = feedbackTarget.questions.find(q => q.secondaryType === 'GROUPING')
@@ -94,24 +98,32 @@ const GroupingSettings = () => {
     <Box mb={2}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6">{t('groups:groupingSettings')}</Typography>
+          <Typography variant="body1" fontWeight="medium">
+            {t('groups:groupingSettings')}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
           {groupingQuestion ? (
-            t('groups:hasGroupingQuestion', { name: getLanguageValue(groupingQuestion.name, i18n.language) })
+            t('groups:hasGroupingQuestion', { name: getLanguageValue(groupingQuestion.data.label, i18n.language) })
           ) : (
-            <Box>
+            <Box mt="1rem">
               {t('groups:noGroupingQuestion')}
-              <Button onClick={handleAddGroupingQuestion}>{t('groups:addGroupingQuestion')}</Button>
+              <Box mt="0.5rem">
+                <Button onClick={handleAddGroupingQuestion} variant="contained">
+                  {t('groups:addGroupingQuestion')}
+                </Button>
+              </Box>
             </Box>
           )}
-          <Typography>We have these groups available from SISU</Typography>
-          <GroupInformation groups={groups} />
+
+          <Box mt="1rem">
+            <GroupInformation groups={groups} />
+          </Box>
         </AccordionDetails>
       </Accordion>
     </Box>
   )
 }
 
-export default GroupingSettings
+export default GroupingQuestionSettings

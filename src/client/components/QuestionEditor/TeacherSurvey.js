@@ -62,6 +62,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       publicQuestionIds={publicQuestionIds}
       publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
       copyFromCourseDialog
+      groupingQuestionSettings
     />
   )
 }
