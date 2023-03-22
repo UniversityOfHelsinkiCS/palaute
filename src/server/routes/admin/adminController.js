@@ -390,7 +390,7 @@ const getNorppaStatistics = async (req, res) => {
     WHERE opens_at > :opensAt
     AND closes_at < :closesAt
     AND feedback_type = 'courseRealisation'
-    AND (u.access_status != 'RESPONSIBLE_TEACHER OR u.access_status != 'TEACHER)'
+    AND NOT is_teacher(u.access_status)
     GROUP BY f.id, cu.name, cu.course_code, c.start_date, c.end_date, org.id, parentorg.id;
     `,
     {
