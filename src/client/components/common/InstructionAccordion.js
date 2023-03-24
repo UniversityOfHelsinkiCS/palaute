@@ -18,7 +18,7 @@ const styles = {
 }
 
 const InstructionAccordion = ({ title, text }) => (
-  <Box my={1}>
+  <Box mb={1}>
     <Accordion sx={styles.accordion}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography sx={styles.summary}>{title}</Typography>
