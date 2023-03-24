@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useField } from 'formik'
@@ -173,7 +174,7 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button color="primary" onClick={onStopEditing} data-cy="saveQuestion">
+                  <Button color="primary" variant="contained" onClick={onStopEditing} data-cy="saveQuestion">
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
@@ -194,7 +195,7 @@ const QuestionCard = ({
                       {t('questionEditor:duplicate')}
                     </Button>
                   )}
-                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
+                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion" startIcon={<EditOutlined />}>
                     {t('common:edit')}
                   </Button>
                 </div>
