@@ -19,6 +19,7 @@ import AccessTab from './AccessTab'
 import FeedbackCorrespondents from './FeedbackCorrespondents'
 import BannerView from './BannersView'
 import EnableCourses from './EnableCourses'
+import CrashDebug from './CrashDebug'
 
 const ConfigTestValues = () => {
   const { t } = useTranslation()
@@ -52,6 +53,7 @@ const AdminView = () => {
         <h1>Admin page</h1>
         <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" sx={{ height: '1vh' }} />
         <ConfigTestValues />
+        <CrashDebug />
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
