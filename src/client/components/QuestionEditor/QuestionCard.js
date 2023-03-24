@@ -119,7 +119,7 @@ const QuestionCard = ({
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
-  const [field] = useField(name)
+  const [field, , helpers] = useField(name)
   const { value: question } = field
 
   const EditorComponent = editorComponentByType[question.type]
@@ -139,6 +139,14 @@ const QuestionCard = ({
     moveDownDisabled: moveDownDisabled || isGrouping,
   }
 
+  const handlePublicityToggle = isPublic => {
+    helpers.setValue({
+      ...field.value,
+      public: isPublic,
+    })
+    onPublicityToggle(isPublic)
+  }
+
   return (
     <Card sx={sx}>
       <CardContent>
@@ -154,7 +162,7 @@ const QuestionCard = ({
               <QuestionPublicityToggle
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
-                onChange={onPublicityToggle}
+                onChange={handlePublicityToggle}
               />
             )}
           </Grid>

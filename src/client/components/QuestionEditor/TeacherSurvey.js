@@ -24,7 +24,6 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     const newPublicQuestionIds = isPublic
       ? _.uniq(feedbackTarget.publicQuestionIds.concat(question.id))
       : feedbackTarget.publicQuestionIds.filter(id => id !== question.id)
-
     await togglePublicity(newPublicQuestionIds)
   }
 
