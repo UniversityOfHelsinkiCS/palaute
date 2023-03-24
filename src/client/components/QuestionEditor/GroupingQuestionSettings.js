@@ -74,7 +74,7 @@ const createGroupingQuestion = (groups, type = 'SINGLE_CHOICE') => {
 
 const GroupingQuestionSettings = ({ onAddQuestion }) => {
   const { t, i18n } = useTranslation()
-  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
+  const { feedbackTarget } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
 
   const updateSurveyMutation = useUpdateTeacherSurvey(feedbackTarget)
@@ -93,8 +93,6 @@ const GroupingQuestionSettings = ({ onAddQuestion }) => {
   }
 
   const groupingQuestion = feedbackTarget.questions.find(q => q.secondaryType === 'GROUPING')
-
-  if (!isAdmin) return null
 
   return (
     <Box mb={2}>
