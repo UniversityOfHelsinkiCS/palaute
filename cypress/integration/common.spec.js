@@ -26,6 +26,6 @@ describe('Common tests', () => {
     cy.loginAsAdmin()
     cy.visit(`${baseUrl}/admin/`)
     cy.get('[data-cy=errorButton]').click()
-    cy.contains('[data-cy=errorView]')
+    cy.get('[data-cy=errorView]').should('exist')
   })
 })
