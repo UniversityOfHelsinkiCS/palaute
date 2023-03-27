@@ -1,16 +1,15 @@
 const { ENUM, DATE, Op } = require('sequelize')
 const { Model, JSONB } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
-const { ADMINS } = require('../util/config')
 
 class Banner extends Model {
   static async getForUser(user) {
     let access = ['STUDENT']
-    const isAdmin = ADMINS.includes(user.username)
+
     const isTeacher = await user.isTeacher()
     const hasOrgAccess = (await user.getOrganisationAccess())?.length > 0
 
-    if (isAdmin) {
+    if (user.isAdmin) {
       access = access.concat(['TEACHER', 'ORG', 'ADMIN'])
     } else if (hasOrgAccess) {
       access = access.concat(['TEACHER', 'ORG'])

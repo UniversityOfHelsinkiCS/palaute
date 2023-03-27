@@ -2,7 +2,7 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  ADMINS: ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko'],
+  DEV_ADMINS: ['mluukkai', 'vesuvesu', 'kemiko'],
 
   /**
    * These courses bypass the starting after 1.9 filter.

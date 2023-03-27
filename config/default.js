@@ -9,9 +9,9 @@
  */
 const config = {
   /**
-   * Usernames of admin
+   * Usernames of admin in development mode
    */
-  ADMINS: [],
+  DEV_ADMINS: [],
 
   /**
    * These courses bypass the starting after 1.9 filter.

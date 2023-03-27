@@ -22,7 +22,7 @@ let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.en
 if (inStaging) DB_CONNECTION_STRING = `${DB_CONNECTION_STRING}&ssl=true`
 
 const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
-const ADMINS = config.get('ADMINS') ?? []
+const DEV_ADMINS = config.get('DEV_ADMINS') ?? []
 const INCLUDE_COURSES = config.get('INCLUDE_COURSES') ?? []
 const STUDENT_LIST_BY_COURSE_ENABLED = config.get('STUDENT_LIST_BY_COURSE_ENABLED') ?? []
 const TAGS_ENABLED = config.get('TAGS_ENABLED') ?? []
@@ -64,7 +64,7 @@ module.exports = {
   UPDATER_URL,
   JWT_KEY,
   WORKLOAD_QUESTION_ID,
-  ADMINS,
+  DEV_ADMINS,
   INCLUDE_COURSES,
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,

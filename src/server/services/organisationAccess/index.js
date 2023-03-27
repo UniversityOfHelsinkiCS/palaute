@@ -1,6 +1,7 @@
-const { getOrganisationAccess, getAllOrganisationAccess } = require('./organisationAccess')
+const { getOrganisationAccess, getAllOrganisationAccess, getAdminOrganisationAccess } = require('./organisationAccess')
 
 module.exports = {
   getOrganisationAccess,
   getAllOrganisationAccess,
+  getAdminOrganisationAccess,
 }

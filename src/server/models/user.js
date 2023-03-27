@@ -3,7 +3,6 @@ const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
 const UserFeedbackTarget = require('./userFeedbackTarget')
-const { ADMINS } = require('../util/config')
 
 class User extends Model {
   async isTeacher() {
@@ -131,11 +130,14 @@ User.init(
       type: DATE,
       allowNull: true,
     },
+    organisationAccess: {
+      type: VIRTUAL,
+    },
+    specialGroup: {
+      type: VIRTUAL,
+    },
     isAdmin: {
       type: VIRTUAL,
-      get() {
-        return ADMINS?.includes(this.username)
-      },
     },
   },
   {
