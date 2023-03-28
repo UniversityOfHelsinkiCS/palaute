@@ -119,7 +119,7 @@ const config = {
    * These orgs are explicitely excluded from summary statistics,
    * for example to workaround a universitys Sisu abuse that would cause weird organisations to appear in summary.
    */
-  SUMMARY_EXCLUDED_ORG_IDS: [],
+  SUMMARY_EXCLUDED_ORG_IDS: [''],
 
   /**
    * "Feedback response given" indicator in summary is given to targets where response is written AND email about response is sent.
