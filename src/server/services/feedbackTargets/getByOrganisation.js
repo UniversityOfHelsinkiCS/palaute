@@ -11,10 +11,10 @@ const {
   User,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-const { getOrganisationAccess } = require('../organisationAccess')
 
 const getByOrganisation = async ({ organisationCode, startDate, endDate, user }) => {
-  const organisationAccess = await getOrganisationAccess(user)
+  const organisationAccess = await user.organisationAccess
+
   if (!organisationAccess[organisationCode]?.read) ApplicationError.Forbidden()
 
   const start = startDate ? new Date(startDate) : new Date()
