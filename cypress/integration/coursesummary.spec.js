@@ -13,6 +13,7 @@ describe('Course summary view', () => {
 
   it('User can navigate to programme from summary', () => {
     cy.visit(`${baseUrl}/course-summary`)
+    cy.wait(1000)
     cy.get('a[id=settings-button-500-K005]').click()
     cy.contains(`Bachelor's Programme in Computer Science`)
     cy.contains('Programme survey').click()
