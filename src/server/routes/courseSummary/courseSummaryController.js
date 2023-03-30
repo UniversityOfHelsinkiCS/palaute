@@ -68,7 +68,7 @@ const getAccessInfo = async (req, res) => {
     getAccessibleCourseRealisationIds(user),
   ])
 
-  const adminAccess = !!organisationAccess.find(org => org.access.admin)
+  const isAdminOfSomeOrganisation = !!organisationAccess.find(org => org.access?.admin)
 
   const accessible = organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
 
@@ -90,7 +90,7 @@ const getAccessInfo = async (req, res) => {
 
   return res.send({
     accessible,
-    adminAccess,
+    adminAccess: isAdminOfSomeOrganisation,
     defaultDateRange,
   })
 }
