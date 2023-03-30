@@ -10,7 +10,7 @@ const { getLastRestart } = require('../../util/lastRestart')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
-  const iamGroups = req.noad ? [] : req.iamGroups ?? []
+  const iamGroups = req.noad ? [] : req.user.iamGroups ?? []
 
   if (!loginAs) {
     user.lastLoggedIn = new Date()

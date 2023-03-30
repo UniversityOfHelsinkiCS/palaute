@@ -40,6 +40,12 @@ FeedbackTarget.prototype.getSurveys = async function () {
   }
 }
 
+/**
+ * Gets, somewhat confusingly, the organisations user has access to, along the corresponding access objects.
+ *
+ * Should not be confused with the user's organisationAccess field, which is a map of organisation codes to access objects.
+ * @returns {Promise<{ access: object, organisation: Organisation }[]>}
+ */
 User.prototype.getOrganisationAccess = async function () {
   if (!this.organisationAccess) {
     await this.populateAccess()
@@ -64,6 +70,10 @@ User.prototype.getOrganisationAccess = async function () {
   }))
 }
 
+/**
+ * Populates the user's organisationAccess, specialGroup and isAdmin fields.
+ * This should be called once per request, as it is not cached.
+ */
 User.prototype.populateAccess = async function () {
   // get organisation access and special groups based on IAMs
   const organisationAccess = await getOrganisationAccess(this)
