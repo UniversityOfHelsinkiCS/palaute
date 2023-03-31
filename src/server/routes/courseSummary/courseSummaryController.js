@@ -48,14 +48,13 @@ const getAccessInfo = async (req, res) => {
     })
   }
 
-  const [organisationAccess, accessibleCourseRealisationIds] = await Promise.all([
-    user.getOrganisationAccess(),
-    getAccessibleCourseRealisationIds(user),
-  ])
+  const { organisationAccess } = user
+  const accesses = Object.entries(organisationAccess)
+  const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
 
-  const isAdminOfSomeOrganisation = !!organisationAccess.find(org => org.access?.admin)
+  const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
 
-  const accessible = organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
+  const accessible = accesses.length > 0 || accessibleCourseRealisationIds.length > 0
 
   const defaultDateRange = accessible
     ? await getSummaryDefaultDateRange({
@@ -66,11 +65,14 @@ const getAccessInfo = async (req, res) => {
 
   // For grafana statistics
   if (organisationAccess.length === 1) {
-    const { name, code } = organisationAccess[0].organisation.dataValues
-    logger.info('Organisation access', {
-      organisationName: name.fi,
-      organisationCode: code,
-    })
+    ;(async () => {
+      const organisation = await Organisation.findOne({ where: { code: accesses[0][0] } })
+      const { name, code } = organisation.dataValues
+      logger.info('Organisation access', {
+        organisationName: name.fi,
+        organisationCode: code,
+      })
+    })()
   }
 
   return res.send({

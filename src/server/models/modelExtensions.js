@@ -47,9 +47,7 @@ FeedbackTarget.prototype.getSurveys = async function () {
  * @returns {Promise<{ access: object, organisation: Organisation }[]>}
  */
 User.prototype.getOrganisationAccess = async function () {
-  if (!this.organisationAccess) {
-    await this.populateAccess()
-  }
+  await this.populateAccess()
 
   const organisations = await Organisation.findAll({
     where: {
@@ -72,9 +70,10 @@ User.prototype.getOrganisationAccess = async function () {
 
 /**
  * Populates the user's organisationAccess, specialGroup and isAdmin fields.
- * This should be called once per request, as it is not cached.
  */
 User.prototype.populateAccess = async function () {
+  if (this.organisationAccess) return
+
   // get organisation access and special groups based on IAMs
   const organisationAccess = await getOrganisationAccess(this)
 
