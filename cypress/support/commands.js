@@ -38,7 +38,7 @@ const studyCoordinator = {
   mail: 'dekaani@toska.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'hy-hlo-1501077',
-  hygroupcn: ['hy-employees', 'hy-rehtoraatti'],
+  hygroupcn: ['hy-employees', 'grp-toska'],
 }
 
 Cypress.Commands.add('loginAsTeacher', () => {
