@@ -12,21 +12,6 @@ const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
 
-const INCLUDED_ORGANISATIONS_BY_USER_ID = {
-  // Jussi Merenmies
-  'hy-hlo-1548120': ['300-M001'],
-}
-
-const filterOrganisationAccess = (organisationAccess, user) => {
-  const includedOrganisationCodes = INCLUDED_ORGANISATIONS_BY_USER_ID[user.id]
-
-  if (!includedOrganisationCodes) {
-    return organisationAccess
-  }
-
-  return organisationAccess.filter(({ organisation }) => includedOrganisationCodes.includes(organisation.code))
-}
-
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
     `
@@ -122,7 +107,7 @@ const getOrganisations = async (req, res) => {
   const { averageRow, organisations } = await getOrganisationSummaries({
     user,
     questions,
-    organisationAccess: filterOrganisationAccess(organisationAccess, user),
+    organisationAccess,
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
     tagId,
