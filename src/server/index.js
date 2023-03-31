@@ -11,7 +11,6 @@ const { start: startViewsCron } = require('./util/refreshViewsCron')
 const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
-const { seed } = require('./db/seeders')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
 
@@ -32,7 +31,6 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await initializeFunctions()
-  await seed()
   await redis.connect()
   await updateLastRestart()
 
