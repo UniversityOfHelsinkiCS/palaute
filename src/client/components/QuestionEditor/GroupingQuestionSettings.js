@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -18,9 +19,8 @@ import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTar
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
 import InstructionAccordion from '../common/InstructionAccordion'
-import useUpdateTeacherSurvey from '../../hooks/useUpdateTeacherSurvey'
-import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 import { createQuestion } from './utils'
+import QuestionCard from './QuestionCard'
 
 const GroupInformation = ({ groups }) => {
   const { t, i18n } = useTranslation()
@@ -67,63 +67,81 @@ const createGroupingQuestion = (groups, type = 'SINGLE_CHOICE') => {
     })),
   }
 
-  const options = { required: true, secondaryType: 'GROUPING', public: false }
+  const options = { required: true, secondaryType: 'GROUPING', public: false, publicityConfigurable: false }
 
   return createQuestion({ type, data, options })
 }
 
-const GroupingQuestionSettings = ({ onAddQuestion }) => {
+const GroupingQuestionSettings = ({
+  onAddQuestion,
+  onRemove,
+  groupingQuestion,
+  isEditing,
+  onStartEditing,
+  onStopEditing,
+}) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
 
-  const updateSurveyMutation = useUpdateTeacherSurvey(feedbackTarget)
-
-  const addGroupingQuestion = useInteractiveMutation(
-    question => updateSurveyMutation.mutateAsync({ questions: [question] }),
-    {
-      success: t('groups:groupingQuestionAddSuccess'),
-    }
-  )
-
   const handleAddGroupingQuestion = async () => {
     const question = createGroupingQuestion(groups)
-    await addGroupingQuestion(question)
     onAddQuestion(question)
   }
 
-  const groupingQuestion = feedbackTarget.questions.find(q => q.secondaryType === 'GROUPING')
-
   return (
     <Box mb={2}>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="body1" fontWeight="medium">
-            {t('groups:groupingSettings')}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box mt="1rem" mb="2rem" display="flex" gap="1rem" flexWrap="wrap">
-            <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
-            <GroupInformation groups={groups} />
-          </Box>
-
-          <Box mb="1rem">
-            {groupingQuestion ? (
-              t('groups:hasGroupingQuestion', { name: getLanguageValue(groupingQuestion.data.label, i18n.language) })
-            ) : (
-              <Box>
-                {t('groups:noGroupingQuestion')}
-                <Box mt="0.5rem">
-                  <Button onClick={handleAddGroupingQuestion} variant="outlined" startIcon={<EditOutlined />}>
-                    {t('groups:addGroupingQuestion')}
-                  </Button>
-                </Box>
+      <Paper>
+        <Box p={1}>
+          <Accordion variant="outlined" elevation={0}>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography variant="body1" fontWeight="medium">
+                {t('groups:groupingSettings')}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box mt="1rem" mb="2rem" display="flex" gap="1rem" flexWrap="wrap">
+                <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
+                <GroupInformation groups={groups} />
               </Box>
-            )}
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+
+              <Box mb="1rem">
+                {groupingQuestion ? (
+                  t('groups:hasGroupingQuestion', {
+                    name: getLanguageValue(groupingQuestion.data.label, i18n.language),
+                  })
+                ) : (
+                  <Box>
+                    {t('groups:noGroupingQuestion')}
+                    <Box mt="0.5rem">
+                      <Button onClick={handleAddGroupingQuestion} variant="outlined" startIcon={<EditOutlined />}>
+                        {t('groups:addGroupingQuestion')}
+                      </Button>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          {groupingQuestion && (
+            <QuestionCard
+              name="groupingQuestion" // Used to access the value from formik context.
+              onRemove={onRemove}
+              moveUpDisabled
+              moveDownDisabled
+              language={i18n.language}
+              isEditing={isEditing}
+              onStopEditing={onStopEditing}
+              onStartEditing={onStartEditing}
+              editable
+              showMoveButtons={false}
+              showRequiredToggle={false}
+              onPublicityToggle={() => {}} // should never get called because of the above
+              elevation={0} // Because this component is already inside a paper
+            />
+          )}
+        </Box>
+      </Paper>
     </Box>
   )
 }

@@ -42,7 +42,7 @@ const createQuestionData = type => {
   }
 }
 
-export const getQuestionId = question => question.id ?? question[TEMP_ID]
+export const getQuestionId = question => (question ? question.id ?? question[TEMP_ID] : undefined)
 
 /**
  *

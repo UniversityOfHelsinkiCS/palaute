@@ -58,7 +58,17 @@ const ActionsContainer = ({ children }) => (
   </div>
 )
 
-const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownDisabled, name }) => {
+const EditActions = ({
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+  moveUpDisabled,
+  moveDownDisabled,
+  showMoveButtons,
+  showRequiredToggle,
+  name,
+  publicityConfigurable,
+}) => {
   const { t } = useTranslation()
 
   const handleRemove = () => {
@@ -79,16 +89,19 @@ const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownD
           { label: t('common:notPublicInfo'), value: false },
         ]}
         valueMapper={value => value === 'true'}
+        disabled={!publicityConfigurable}
       />
       <Box mr="4rem" />
-      <FormikSwitch label={t('common:required')} name={`${name}.required`} />
+      {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
 
-      <OrderButtons
-        onMoveUp={onMoveUp}
-        onMoveDown={onMoveDown}
-        moveUpDisabled={moveUpDisabled}
-        moveDownDisabled={moveDownDisabled}
-      />
+      {showMoveButtons && (
+        <OrderButtons
+          onMoveUp={onMoveUp}
+          onMoveDown={onMoveDown}
+          moveUpDisabled={moveUpDisabled}
+          moveDownDisabled={moveDownDisabled}
+        />
+      )}
 
       <Tooltip title={t('questionEditor:removeQuestion')}>
         <div>
@@ -108,7 +121,6 @@ const QuestionCard = ({
   onMoveUp,
   onMoveDown,
   onCopy,
-  sx,
   isEditing = false,
   onStartEditing,
   onStopEditing,
@@ -116,6 +128,9 @@ const QuestionCard = ({
   moveDownDisabled = false,
   editable,
   onPublicityToggle,
+  showMoveButtons = true,
+  showRequiredToggle = true,
+  elevation = 2,
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
@@ -137,6 +152,7 @@ const QuestionCard = ({
     onMoveDown,
     moveUpDisabled: moveUpDisabled || isGrouping,
     moveDownDisabled: moveDownDisabled || isGrouping,
+    showMoveButtons,
   }
 
   const handlePublicityToggle = isPublic => {
@@ -148,13 +164,12 @@ const QuestionCard = ({
   }
 
   return (
-    <Card sx={sx}>
+    <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
         <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
           <Grid item xs={4}>
             <Box display="flex" gap="0.5rem">
               <Chip label={title} variant="outlined" />
-              {isGrouping && <Chip label={t('groups:groupingQuestion')} variant="outlined" />}
             </Box>
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
@@ -186,7 +201,13 @@ const QuestionCard = ({
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
-                <EditActions {...orderButtonsProps} onRemove={onRemove} name={name} />
+                <EditActions
+                  publicityConfigurable={question.publicityConfigurable}
+                  {...orderButtonsProps}
+                  onRemove={onRemove}
+                  showRequiredToggle={showRequiredToggle}
+                  name={name}
+                />
               </div>
             </ActionsContainer>
           </>

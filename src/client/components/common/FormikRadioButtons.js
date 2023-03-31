@@ -2,7 +2,7 @@ import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useField } from 'formik'
 import React from 'react'
 
-const FormikRadioButtons = ({ name, options, valueMapper = v => v, ...props }) => {
+const FormikRadioButtons = ({ name, options, valueMapper = v => v, disabled, ...props }) => {
   const [field, , helpers] = useField(name)
 
   return (
@@ -17,7 +17,7 @@ const FormikRadioButtons = ({ name, options, valueMapper = v => v, ...props }) =
       {...props}
     >
       {options.map(({ value, label }, idx) => (
-        <FormControlLabel key={idx} value={value} control={<Radio />} label={label} />
+        <FormControlLabel key={idx} value={value} control={<Radio disabled={disabled} />} label={label} />
       ))}
     </RadioGroup>
   )

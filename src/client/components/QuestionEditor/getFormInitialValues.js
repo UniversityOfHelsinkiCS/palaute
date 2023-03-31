@@ -20,7 +20,6 @@ export const getFormInitialValues = ({
   const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
   const questions = [
-    ...(groupingQuestions ?? []),
     ...(universityQuestions ?? []).map(question => ({
       ...question,
       editable: canEditUniversity,
@@ -38,7 +37,14 @@ export const getFormInitialValues = ({
     publicityConfigurable: publicityConfigurableQuestionIds.includes(q.id),
   }))
 
+  const groupingQuestionsWithPublicity = groupingQuestions.map(q => ({
+    ...q,
+    public: false,
+    publicityConfigurable: false,
+  }))
+
   return {
     questions,
+    groupingQuestion: groupingQuestionsWithPublicity[0], // assume there is only one grouping question
   }
 }

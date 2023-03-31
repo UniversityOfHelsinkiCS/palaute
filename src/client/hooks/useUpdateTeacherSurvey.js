@@ -6,8 +6,11 @@ const useUpdateTeacherSurvey = feedbackTarget => {
   const { surveys, id } = feedbackTarget
   const { id: surveyId } = surveys.teacherSurvey
 
-  const mutationFn = async ({ questions }) => {
+  const mutationFn = async ({ questions, groupingQuestion }) => {
     const editableQuestions = questions.filter(({ editable }) => editable)
+    if (groupingQuestion) {
+      editableQuestions.push(groupingQuestion)
+    }
 
     const payload = {
       surveyId,
