@@ -51,7 +51,9 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
             <tr>
               <td colSpan={99}>
                 <Box my="1rem" mx="2rem">
-                  <Alert severity="info">{t('courseSummary:noCourseRealisations')}</Alert>
+                  <Alert severity="info" data-cy="noCourseRealisations">
+                    {t('courseSummary:noCourseRealisations')}
+                  </Alert>
                 </Box>
               </td>
             </tr>
