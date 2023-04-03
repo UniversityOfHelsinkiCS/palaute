@@ -4,13 +4,11 @@ import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 9_000_000
 
-const useCourseRealisationSummaries = (courseCode, options = { failSilently: false }) => {
+const useCourseRealisationSummaries = (courseCode, options = {}) => {
   const queryKey = ['courseRealisationSummaries', courseCode]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(
-      `/course-summaries/course-units/${courseCode}?silent=${!!options.failSilently}`
-    )
+    const { data } = await apiClient.get(`/course-summaries/course-units/${courseCode}`)
     return data
   }
 

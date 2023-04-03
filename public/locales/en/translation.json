@@ -380,7 +380,8 @@
     "organisationCode": "Organisation code",
     "given": "given",
     "notGiven": "not given",
-    "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback."
+    "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
+    "noCourseRealisations": "No course realisations with feedback available for this course unit"
   },
   "footer": {
     "contactSupport": "Contact support",

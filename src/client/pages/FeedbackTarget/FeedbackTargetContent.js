@@ -166,14 +166,11 @@ const FeedbackTargetContent = () => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
     useFeedbackTargetContext()
 
-  // If link to cur summary should not be shown, gets empty response when failSilentry: true
-  const { courseRealisationSummaries: showCourseSummaryLink } = useCourseRealisationSummaries(
-    feedbackTarget.courseUnit.courseCode,
-    {
-      failSilently: true,
-      enabled: isTeacher,
-    }
-  )
+  // Try prefetching this and show link if the response is not empty (0 course realisations)
+  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
+    enabled: isTeacher,
+  })
+  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0
 
   const {
     courseUnit,
