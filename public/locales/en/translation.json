@@ -379,7 +379,8 @@
     "code": "Code",
     "organisationCode": "Organisation code",
     "given": "given",
-    "notGiven": "not given"
+    "notGiven": "not given",
+    "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback."
   },
   "footer": {
     "contactSupport": "Contact support",

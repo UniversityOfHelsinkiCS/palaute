@@ -98,10 +98,6 @@ const getOrganisations = async (req, res) => {
     ? fullOrganisationAccess.filter(org => org.organisation.code === code)
     : fullOrganisationAccess
 
-  if (organisationAccess.length === 0 && accessibleCourseRealisationIds.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
   const parsedStartDate = startDate ? new Date(startDate) : null
   const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
   const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate

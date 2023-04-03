@@ -379,7 +379,8 @@
     "code": "Koodi",
     "organisationCode": "Organisaatiokoodi",
     "given": "annettu",
-    "notGiven": "ei annettu"
+    "notGiven": "ei annettu",
+    "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne."
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
