@@ -61,7 +61,7 @@ const getUpdaterStatuses = async (req, res) => {
 }
 
 const runPate = async (_, res) => {
-  await mailer.runCron()
+  await mailer.runPateCron()
   return res.sendStatus(204)
 }
 

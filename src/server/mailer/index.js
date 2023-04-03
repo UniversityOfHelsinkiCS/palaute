@@ -11,9 +11,7 @@ const {
 
 const { returnEmailsToBeSentToday } = require('./mails/stats')
 
-const { start: startContinuousFeedbackCron } = require('./continuousFeedbackCron')
-
-const { start: startCron, run: runCron } = require('./pateCron')
+const { runContinuousFeedbackCron, runPateCron, scheduleCronJobs } = require('./scheduleCronJobs')
 
 const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
@@ -25,9 +23,9 @@ const mailer = {
   sendEmailNotificationAboutEnrolments,
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
-  startContinuousFeedbackCron,
-  startCron,
-  runCron,
+  runContinuousFeedbackCron,
+  scheduleCronJobs,
+  runPateCron,
 }
 
 module.exports = { mailer }
