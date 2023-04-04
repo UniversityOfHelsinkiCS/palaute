@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid } from '@mui/material'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid, Typography } from '@mui/material'
 import { EditOutlined } from '@mui/icons-material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -37,7 +37,7 @@ const previewComponentByType = {
   SINGLE_CHOICE: SingleChoicePreview,
 }
 
-const getTitleByType = (type, t) => {
+const getTitleByType = (question, t) => {
   const mapping = {
     LIKERT: t('questionEditor:likertQuestion'),
     OPEN: t('questionEditor:openQuestion'),
@@ -46,13 +46,15 @@ const getTitleByType = (type, t) => {
     SINGLE_CHOICE: t('questionEditor:singleChoiceQuestion'),
   }
 
-  return mapping[type]
+  const grouping = question.secondaryType === 'GROUPING'
+
+  return grouping ? t('groups:groupingQuestion') : mapping[question.type]
 }
 
 const ActionsContainer = ({ children }) => (
   <div>
     <Divider />
-    <Box mt={2} display="flex" justifyContent="space-between">
+    <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
       {children}
     </Box>
   </div>
@@ -68,6 +70,7 @@ const EditActions = ({
   showRequiredToggle,
   name,
   publicityConfigurable,
+  isPublic,
 }) => {
   const { t } = useTranslation()
 
@@ -82,16 +85,23 @@ const EditActions = ({
 
   return (
     <>
-      <FormikRadioButtons
-        name={`${name}.public`}
-        options={[
-          { label: t('common:publicInfo'), value: true },
-          { label: t('common:notPublicInfo'), value: false },
-        ]}
-        valueMapper={value => value === 'true'}
-        disabled={!publicityConfigurable}
-      />
-      <Box mr="4rem" />
+      <Box ml="1rem" mr="2rem">
+        {publicityConfigurable ? (
+          <FormikRadioButtons
+            name={`${name}.public`}
+            options={[
+              { label: t('common:publicInfo'), value: true },
+              { label: t('common:notPublicInfo'), value: false },
+            ]}
+            valueMapper={value => value === 'true'}
+            disabled={!publicityConfigurable}
+          />
+        ) : (
+          <Typography variant="body1" color="textSecondary">
+            {isPublic ? t('common:publicInfo') : t('common:notPublicInfo')}
+          </Typography>
+        )}
+      </Box>
       {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
 
       {showMoveButtons && (
@@ -140,7 +150,7 @@ const QuestionCard = ({
   const EditorComponent = editorComponentByType[question.type]
   const PreviewComponent = previewComponentByType[question.type]
 
-  const title = getTitleByType(question.type, t)
+  const title = getTitleByType(question, t)
 
   const questionIsEditable = question.editable ?? true
   const canEdit = questionIsEditable && editable
@@ -203,6 +213,7 @@ const QuestionCard = ({
                 </Box>
                 <EditActions
                   publicityConfigurable={question.publicityConfigurable}
+                  isPublic={question.public}
                   {...orderButtonsProps}
                   onRemove={onRemove}
                   showRequiredToggle={showRequiredToggle}
