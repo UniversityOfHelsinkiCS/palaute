@@ -112,7 +112,7 @@ const GroupingQuestionSettings = ({
                   })
                 ) : (
                   <Box>
-                    {t('groups:noGroupingQuestion')}
+                    {t('groups:noGroupingQuestion')} {groups.length === 1 && t('groups:onlyOneGroup')}
                     <Box mt="0.5rem">
                       <Button onClick={handleAddGroupingQuestion} variant="outlined" startIcon={<EditOutlined />}>
                         {t('groups:addGroupingQuestion')}
