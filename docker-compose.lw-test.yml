@@ -42,6 +42,8 @@ services:
     image: redis:6.2.6
     command: redis-server
     container_name: tuni-kpj-lw-test_redis
+    networks:
+      - internal-docker-network
   jami:
     image: tuni-kpj-auth
     environment:
