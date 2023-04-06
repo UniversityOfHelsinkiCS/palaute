@@ -1,6 +1,19 @@
 version: '3.5'
 
 services:
+  db:
+    image: postgres:13.2
+    environment:
+      - PGDATA=/data
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5446:5432
+    volumes:
+      - pg_data:/data
+    container_name: tuni-kpj-lw-test-postgres
+    hostname: postgres
+    networks:
+      - internal-docker-network
   app:
     build:
       context: ./
@@ -9,7 +22,7 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DATABASE=postgres
@@ -23,22 +36,6 @@ services:
       - 3000:3000
       - 9229:9229
     container_name: tuni-kpj-lw-test
-    networks:
-      - internal-docker-network
-  db:
-    image: postgres:13.2
-    environment:
-      - PGDATA=/data
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - 5446:5432
-    volumes:
-      - pg_data:/data
-    container_name: tuni-kpj-lw-test_db
-    command: >
-      -c ssl=on 
-      -c ssl_cert_file=/var/lib/postgresql/server.crt 
-      -c ssl_key_file=/var/lib/postgresql/server.key
     networks:
       - internal-docker-network
   redis:
