@@ -1,0 +1,62 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:13.2
+    environment:
+      - PGDATA=/data
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5446:5432
+    volumes:
+      - pg_data:/data
+    container_name: tuni-kpj-lw-test-postgres
+    hostname: postgres
+    networks:
+      - internal-docker-network
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: tuni-kpj-lw-test
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+      - REDIS_HOST=redis
+      - JAMI_HOST=jami
+      - JAMI_PORT=3001
+      - JWT_KEY=minttujam
+      - REACT_APP_STAGING=true
+      - NODE_CONFIG_ENV=tau
+    ports:
+      - 3000:3000
+      - 9229:9229
+    container_name: tuni-kpj-lw-test
+    networks:
+      - internal-docker-network
+  redis:
+    image: redis:6.2.6
+    command: redis-server
+    container_name: tuni-kpj-lw-test_redis
+    networks:
+      - internal-docker-network
+  jami:
+    image: tuni-kpj-auth
+    environment:
+      - PORT=3001
+    ports:
+      - 3001:3001
+    container_name: tuni-kpj-auth-test
+    networks:
+      - internal-docker-network
+
+networks:
+  internal-docker-network:
+    name: internal-docker-network
+
+volumes:
+  pg_data:
