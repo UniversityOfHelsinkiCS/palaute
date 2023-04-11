@@ -28,7 +28,7 @@ const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL
   const start = updaterStatus.startedAt
   const end = updaterStatus.finishedAt || new Date()
-  return `${baseUrl}/search?q=app%3A+norppa+AND+message%3A+"%5BUPDATER%5D"&rangetype=absolute&from=${start}&to=${end}`
+  return `${baseUrl}/search?q=source%3A+svm-103+AND+container_name%3A+updater&rangetype=absolute&from=${start}&to=${end}`
 }
 
 const StatusChip = ({ status }) => {
