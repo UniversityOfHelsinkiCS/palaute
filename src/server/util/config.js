@@ -17,9 +17,7 @@ const PORT = process.env.PORT || 8000
 
 const UPDATER_URL = process.env.UPDATER_URL || ''
 
-let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DATABASE}?targetServerType=primary`
-
-if (inStaging) DB_CONNECTION_STRING = `${DB_CONNECTION_STRING}&ssl=true`
+const DATABASE_URL = process.env.DATABASE_URL || ''
 
 const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 const DEV_ADMINS = config.get('DEV_ADMINS') ?? []
@@ -57,7 +55,7 @@ module.exports = {
   OPEN_UNIVERSITY_ORG_ID,
   SUMMARY_EXCLUDED_ORG_IDS,
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
-  DB_CONNECTION_STRING,
+  DATABASE_URL,
   REDIS_CONFIG,
   PORT,
   API_TOKEN,
