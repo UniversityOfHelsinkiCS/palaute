@@ -14,6 +14,17 @@ services:
     hostname: postgres
     networks:
       - internal-docker-network
+  nginx:
+    depends_on:
+      - app
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - 3000:80
+    networks:
+      - internal-docker-network
   app:
     build:
       context: ./
@@ -22,6 +33,8 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
+      - PUBLIC_URL=http://nginx
+      - PORT=3004
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -33,7 +46,7 @@ services:
       - REACT_APP_STAGING=true
       - NODE_CONFIG_ENV=tau
     ports:
-      - 3000:3000
+      - 3004:3004
       - 9229:9229
     container_name: tuni-kpj-lw-test
     networks:
