@@ -110,7 +110,11 @@ const FeedbackTargetInformation = () => {
               }}
             >
               {!!responsibleTeachers.length && (
-                <TeacherList title={t('feedbackTargetView:responsibleTeachers')} teachers={responsibleTeachers} open />
+                <TeacherList
+                  title={t('feedbackTargetView:responsibleTeachers')}
+                  teachers={responsibleTeachers}
+                  open={responsibleTeachers.length < 8}
+                />
               )}
               {!!teachers.length && <TeacherList teachers={teachers} title={t('feedbackTargetView:teachers')} />}
 
