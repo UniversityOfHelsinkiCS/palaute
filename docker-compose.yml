@@ -9,10 +9,7 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DATABASE=postgres
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
       - REDIS_HOST=redis
       - JAMI_HOST=jami
       - JAMI_PORT=3003
