@@ -1,3 +1,5 @@
+const { IAM_GROUPS_HEADER } = require('../util/config')
+
 const parse = groupString => {
   if (!groupString) {
     return []
@@ -7,7 +9,7 @@ const parse = groupString => {
 }
 
 const iamGroupsMiddleware = (req, res, next) => {
-  req.iamGroups = parse(req.headers.hygroupcn)
+  req.iamGroups = parse(req.headers[IAM_GROUPS_HEADER])
 
   next()
 }
