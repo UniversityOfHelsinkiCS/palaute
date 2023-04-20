@@ -7,7 +7,7 @@ const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
-const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT } = process.env
+const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_URL, PATE_JWT } = process.env
 
 const REDIS_CONFIG = {
   url: `redis://default:redis@${REDIS_HOST}:6379`,
@@ -31,7 +31,6 @@ const FEEDBACK_TARGET_CACHE_SIZE = Number(config.get('FEEDBACK_TARGET_CACHE_SIZE
 const TEACHER_REMINDER_DAYS_TO_OPEN = Number(config.get('TEACHER_REMINDER_DAYS_TO_OPEN'))
 const FEEDBACK_REMINDER_COOLDOWN = Number(config.get('FEEDBACK_REMINDER_COOLDOWN'))
 const STUDENT_REMINDER_DAYS_TO_CLOSE = Number(config.get('STUDENT_REMINDER_DAYS_TO_CLOSE'))
-const PATE_URL = config.get('PATE_URL')
 const JAMI_URL = inProduction && !inStaging ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
 const PUBLIC_URL = config.get('PUBLIC_URL')
 const OPEN_UNIVERSITY_ORG_ID = config.get('OPEN_UNIVERSITY_ORG_ID')
@@ -52,6 +51,7 @@ module.exports = {
   FEEDBACK_REMINDER_COOLDOWN,
   STUDENT_REMINDER_DAYS_TO_CLOSE,
   PATE_URL,
+  PATE_JWT,
   JAMI_URL,
   PUBLIC_URL,
   OPEN_UNIVERSITY_ORG_ID,
