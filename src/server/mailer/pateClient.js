@@ -26,6 +26,8 @@ const pateClient = axios.create({
   },
 })
 
+pateClient.defaults.headers.post['x-auth-token'] = process.env.PATE_JWT
+
 const sleep = time =>
   // eslint-disable-next-line no-promise-executor-return
   new Promise(resolve => setTimeout(() => resolve(), time))

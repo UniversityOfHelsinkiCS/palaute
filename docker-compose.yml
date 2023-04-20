@@ -18,6 +18,8 @@ services:
       - JAMI_PORT=3003
       - JWT_KEY=minttujam
       - NODE_CONFIG_ENV=tau
+      - PATE_URL=http://pate:3473
+      - PATE_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0dW5pLWtwaiIsIm5hbWUiOiJUdW5pIE5vcnBwYSIsImlhdCI6MTUxNjIzOTAyMn0.nSkIbaRiqyKsH6Iu1uaChitQMf8qHGYtdr_7xBHxsSQ
     ports:
       - 3000:3000
       - 9229:9229
@@ -66,6 +68,21 @@ services:
       - 5437:5432
     volumes:
       - jami_data:/data
+  pate:
+    image: tuni-kpj-pate
+    container_name: tuni-kpj-pate
+    environment:
+      - PORT=3473
+      - NODE_ENV=dev
+      - JWT_KEY=df0abc4cf576a23a96e6368bfd2f58e1292ebc0e7c5a1ffd79da7dd9b919e14a
+      - JWT_SUB=tuni-kpj
+      - MAIL_FROM_ADDRESS=pate.leanware.fi
+      - SMTP_PORT=465
+      - SMTP_USERNAME=smtp_user_env
+      - SMTP_PASSWORD=smtp_password_env
+      - SMTP_HOST=smtp_host_env
+    ports:
+      - 3473:3473
 
 volumes:
   pg_data:
