@@ -25,7 +25,7 @@
     "preview": "Preview",
     "clearSelection": "Clear selection",
     "copyToClipBoard": "Copy to clipboard",
-    "feedbackOpenPeriod": "Feedback can be given between {{opensAt}} and {{closesAt}}",
+    "feedbackOpenPeriod": "Feedback open between {{opensAt}} and {{closesAt}}",
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",

@@ -24,7 +24,7 @@ const styles = {
       padding: '1rem',
     },
     [theme.breakpoints.down('sm')]: {
-      padding: '0.2rem',
+      padding: '0.6rem',
     },
     marginTop: '1rem',
   }),

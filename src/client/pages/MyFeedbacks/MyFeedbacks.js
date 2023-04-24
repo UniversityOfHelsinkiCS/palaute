@@ -16,9 +16,6 @@ const styles = {
   heading: {
     marginBottom: 2,
   },
-  courseRealisationItem: {
-    marginBottom: 3,
-  },
   statusTabs: {
     marginBottom: 3,
   },
@@ -77,7 +74,7 @@ const MyFeedbacks = () => {
 
       {sortedCourseRealisations.map(courseRealisation => (
         <Fragment key={courseRealisation.id}>
-          <CourseRealisationItem sx={styles.courseRealisationItem} courseRealisation={courseRealisation} />
+          <CourseRealisationItem courseRealisation={courseRealisation} />
         </Fragment>
       ))}
     </div>
