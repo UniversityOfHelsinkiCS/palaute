@@ -75,11 +75,15 @@ const FeedbackTargetInformation = () => {
             </Box>
           </Box>
 
-          <Box display="flex" mt="1rem">
+          <Box
+            display="flex"
+            mt="1rem"
+            rowGap="1rem"
+            sx={theme => ({ [theme.breakpoints.down('md')]: { flexDirection: 'column' } })}
+          >
             <Box
               sx={{
                 pb: '0.8rem',
-                mb: '4rem',
                 display: 'flex',
                 flexDirection: 'column',
                 flexWrap: 'wrap',
@@ -102,12 +106,16 @@ const FeedbackTargetInformation = () => {
             </Box>
 
             <Box
-              sx={{
+              sx={theme => ({
                 display: 'flex',
                 flexDirection: 'column',
-                ml: 'auto',
-                pr: '2rem',
-              }}
+                alignItems: 'start',
+                [theme.breakpoints.up('md')]: {
+                  ml: 'auto',
+                  pr: '2rem',
+                  alignItems: 'normal',
+                },
+              })}
             >
               {!!responsibleTeachers.length && (
                 <TeacherList

@@ -25,7 +25,15 @@ const Dates = () => {
 
   return (
     <Box>
-      <Box component="dl" display="grid" gridTemplateColumns="9rem auto" gap="0.5rem">
+      <Box
+        component="dl"
+        rowGap="0.5rem"
+        sx={theme => ({
+          display: 'flex',
+          flexDirection: 'column',
+          [theme.breakpoints.up('md')]: { display: 'grid', gridTemplateColumns: '9rem auto' },
+        })}
+      >
         <Typography color="textSecondary" component="dt">
           {t('feedbackTargetView:coursePeriod')}:
         </Typography>
@@ -56,7 +64,7 @@ const Dates = () => {
 
         {showEditButton && (
           <Box gridColumn="span 2">
-            <Button onClick={() => setDialogOpen(true)} variant="outlined" startIcon={<Edit />}>
+            <Button onClick={() => setDialogOpen(true)} variant="text" startIcon={<Edit />}>
               {t('feedbackTargetSettings:editPeriodTitle')}
             </Button>
           </Box>
