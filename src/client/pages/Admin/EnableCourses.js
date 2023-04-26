@@ -1,10 +1,20 @@
 import React, { useState } from 'react'
-import { Box, Typography, FormGroup, FormControlLabel, Switch, Paper, TextField, Alert, Chip } from '@mui/material'
+import {
+  Box,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+  Paper,
+  TextField,
+  Alert,
+  Chip,
+  LinearProgress,
+} from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
 import useInactiveCourseRealisations from '../../hooks/useInactiveCourseRealisations'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 const Enable = ({ cur, active, setActive }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -73,17 +83,17 @@ const EnableCourses = () => {
 
   const { inactiveCourseRealisations, isLoading } = useInactiveCourseRealisations()
 
-  if (isLoading) return <LoadingProgress />
-
   const filteredInactiveCourseRealisations = React.useMemo(
     () =>
-      inactiveCourseRealisations.filter(
-        cur =>
-          cur.id.startsWith(deferredSearch) ||
-          cur.name.fi?.includes(deferredSearch) ||
-          cur.name.en?.includes(deferredSearch)
-      ),
-    [deferredSearch]
+      isLoading
+        ? []
+        : inactiveCourseRealisations.filter(
+            cur =>
+              cur.id.startsWith(deferredSearch) ||
+              cur.name.fi?.includes(deferredSearch) ||
+              cur.name.en?.includes(deferredSearch)
+          ),
+    [deferredSearch, inactiveCourseRealisations]
   )
 
   return (
@@ -101,6 +111,7 @@ const EnableCourses = () => {
         </Alert>
       </Box>
 
+      {isLoading && <LinearProgress />}
       <CourseList courses={filteredInactiveCourseRealisations} />
     </Box>
   )

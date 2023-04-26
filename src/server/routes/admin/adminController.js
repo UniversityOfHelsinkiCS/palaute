@@ -2,7 +2,7 @@ const Router = require('express')
 
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { format } = require('date-fns')
+const { format, subMonths } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
 const updaterClient = require('../../util/updaterClient')
@@ -531,7 +531,13 @@ const getFeedbackCorrespondents = async (req, res) => {
 }
 
 const getInactiveCourseRealisations = async (req, res) => {
-  const inactiveCourseRealisations = await InactiveCourseRealisation.findAll()
+  const inactiveCourseRealisations = await InactiveCourseRealisation.findAll({
+    where: {
+      endDate: {
+        [Op.gt]: subMonths(new Date(), 3),
+      },
+    },
+  })
 
   return res.send(inactiveCourseRealisations)
 }
