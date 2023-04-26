@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Typography, FormGroup, FormControlLabel, Switch, Paper, TextField, Alert } from '@mui/material'
+import { Box, Typography, FormGroup, FormControlLabel, Switch, Paper, TextField, Alert, Chip } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../util/apiClient'
@@ -65,34 +65,43 @@ const CourseAccordion = ({ cur }) => {
   )
 }
 
+const CourseList = React.memo(({ courses }) => courses.map(cur => <CourseAccordion key={cur.id} cur={cur} />))
+
 const EnableCourses = () => {
   const [search, setSearch] = useState('')
+  const deferredSearch = React.useDeferredValue(search)
 
   const { inactiveCourseRealisations, isLoading } = useInactiveCourseRealisations()
 
   if (isLoading) return <LoadingProgress />
 
-  const filteredInactiveCourseRealisations = inactiveCourseRealisations.filter(
-    cur => cur.id.startsWith(search) || cur.name.fi.includes(search) || cur.name.en.includes(search)
+  const filteredInactiveCourseRealisations = React.useMemo(
+    () =>
+      inactiveCourseRealisations.filter(
+        cur =>
+          cur.id.startsWith(deferredSearch) ||
+          cur.name.fi?.includes(deferredSearch) ||
+          cur.name.en?.includes(deferredSearch)
+      ),
+    [deferredSearch]
   )
 
   return (
     <Box mt="1rem">
-      <Box m="1rem" display="flex" flexDirection="row">
+      <Box my="2rem" display="flex" flexDirection="row" gap="1rem" alignItems="center">
         <TextField
-          sx={{ width: '50ch', marginRight: '1rem' }}
+          sx={{ width: '50ch' }}
           label="Search by course realisation name or id"
           variant="outlined"
           onChange={({ target }) => setSearch(target.value)}
         />
+        <Chip label={filteredInactiveCourseRealisations.length} />
         <Alert sx={{ width: '60ch' }} severity="info">
           Enabled courses will activate during next Updater cycle
         </Alert>
       </Box>
 
-      {filteredInactiveCourseRealisations.map(cur => (
-        <CourseAccordion key={cur.id} cur={cur} />
-      ))}
+      <CourseList courses={filteredInactiveCourseRealisations} />
     </Box>
   )
 }
