@@ -118,7 +118,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const { language } = teacher
   const courseName = feedbackTarget.courseUnit?.name[language || 'en']
 
-  const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/edit-feedback-response`}>
+  const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
       ${feedbackTarget.courseUnit.name[language]}
       </a> <br/>`
 
