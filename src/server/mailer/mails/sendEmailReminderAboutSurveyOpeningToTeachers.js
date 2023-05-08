@@ -63,12 +63,12 @@ const buildReminderAboutSurveyOpeningToTeachers = (courseNamesAndUrls, courseNam
       en: `Dear teacher! <br/>
           The course feedback form for the following courses will open in a week: <br/>
           ${courseNamesAndUrls}
-          Please add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Thank you! <br/>
+          Please add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>
           ${instructionsAndSupport.en}`,
       fi: `Hyvä opettaja! <br/> 
           Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>
           ${courseNamesAndUrls}
-          Lisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Kiitos!  <br/>
+          Lisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos!  <br/>
           ${instructionsAndSupport.fi}`,
       sv: `Bästa lärare! <br/>
           Kursresponsblanketten för följande kurser öppnas om en vecka: <br/>
