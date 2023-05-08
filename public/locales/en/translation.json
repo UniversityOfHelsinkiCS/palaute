@@ -495,5 +495,11 @@
     "successAlert": "Feedback has been sent succesfully",
     "anonymousInfo": "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
     "anonymous": "Send anonymously"
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Please give feedback on the course {{courseName}}",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+    }
   }
 }

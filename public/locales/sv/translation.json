@@ -440,5 +440,11 @@
     "successAlert": "Responsen har skickats!",
     "anonymous": "Lähetä anonyymisti Skicka anonymt",
     "anonymousInfo": "Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet."
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Ge gärna respons på kursen {{courseName}}",
+      "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!\n\n{{reminder}}"
+    }
   }
 }

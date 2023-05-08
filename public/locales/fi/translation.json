@@ -494,5 +494,11 @@
     "successAlert": "Palaute lähetetty onnistuneesti!",
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Anna palautetta kurssille {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
+    }
   }
 }

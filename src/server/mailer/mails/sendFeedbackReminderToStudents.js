@@ -3,41 +3,17 @@ const { CourseUnit } = require('../../models')
 const { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
+const { i18n } = require('../../util/i18n')
 
-const buildReminderToGiveFeedbackToStudents = (urlToGiveFeedback, courseName, reminder, closesAt) => {
-  const translations = {
-    text: {
-      en: `Dear student!\n 
-          Please give feedback for the course <a href=${urlToGiveFeedback}>${courseName.en}</a>. 
-          The feedback period ends on ${closesAt}. Thank you!\n
-          ${reminder}`,
-      fi: `Hyvä opiskelija!\n 
-          Vastaathan kurssin <a href=${urlToGiveFeedback}>${courseName.fi}</a> palautteeseen.
-          Palautejakso päättyy ${closesAt}. Kiitos!\n 
-          ${reminder}`,
-      sv: `Bästa studerande!\n
-          Ge gärna respons på kursen <a href=${urlToGiveFeedback}>${courseName.sv}</a>. 
-          Responsperioden tar slut ${closesAt}. Tack!\n
-          ${reminder}`,
-    },
-    subject: {
-      en: `Please give feedback for the course ${courseName.en}`,
-      fi: `Annathan palautetta kurssille ${courseName.fi}`,
-      sv: `Ge gärna respons på kursen ${courseName.sv}`,
-    },
-  }
-
-  return translations
-}
-
-const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students, courseName, reminder, closesAt) => {
-  const translations = buildReminderToGiveFeedbackToStudents(urlToGiveFeedback, courseName, reminder, closesAt)
-
+const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students, courseNames, reminder, closesAt) => {
   const emails = students.map(student => {
+    const t = i18n.getFixedT(student.language ?? 'en')
+    const courseName = courseNames[student.language ?? 'en']
+
     const email = {
       to: student.email,
-      subject: translations.subject[student.language] || translations.subject.en,
-      text: translations.text[student.language] || translations.text.en,
+      subject: t('mails:reminderOnFeedbackToStudents:subject', { courseName }),
+      text: t('mails:reminderOnFeedbackToStudents:text', { url: urlToGiveFeedback, courseName, reminder, closesAt }),
     }
     return email
   })
