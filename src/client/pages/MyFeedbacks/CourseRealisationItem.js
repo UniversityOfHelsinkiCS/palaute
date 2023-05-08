@@ -16,7 +16,7 @@ const CourseRealisationItem = ({ courseRealisation }) => {
   return (
     <Card sx={{ mb: 3 }}>
       <CardContent>
-        <Typography variant="body1" fontWeight={500} component="h2">
+        <Typography variant="body1" fontWeight={600} component="h2">
           {translatedName}
         </Typography>
         <List disablePadding>
