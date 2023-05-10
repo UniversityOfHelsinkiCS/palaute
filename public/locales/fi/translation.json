@@ -499,6 +499,10 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta kurssille {{courseName}}",
       "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
+      "text": "Hyvä opiskelija!\n Kurssin {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseName}}</a>"
     }
   }
 }
