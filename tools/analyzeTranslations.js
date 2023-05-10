@@ -35,7 +35,7 @@ const BgWhite = '\x1b[47m'
 /**
  * Paths and regexs
  */
-const CLIENT_PATH = './src/client'
+const ROOT_PATH = './src'
 const LOCALES_DIR_NAME = 'locales'
 const LOCALES_PATH = './public/locales'
 const EXTENSION_MATCHER = /.+\.js/
@@ -75,8 +75,10 @@ const importTranslationObjectFromESModule = async f => {
   }
 
   const translationKeyReferences = new Map()
-  console.log('Analyzing...')
-  for await (const file of walk(CLIENT_PATH)) {
+  let fileCount = 0
+  console.log(`Analyzing ${ROOT_PATH}...`)
+  for await (const file of walk(ROOT_PATH)) {
+    fileCount += 1
     const contents = await fs.readFile(file, 'utf8')
     let lineNumber = 1
     for (const line of contents.split('\n')) {
@@ -98,7 +100,7 @@ const importTranslationObjectFromESModule = async f => {
       lineNumber += 1
     }
   }
-  console.log(`Found ${translationKeyReferences.size} references`)
+  console.log(`Found ${translationKeyReferences.size} references in ${fileCount} files`)
 
   const locales = {}
 
