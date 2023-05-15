@@ -450,6 +450,11 @@
       "subject": "Kursresponsen för kursen {{courseName}} har öppnats",
       "subjectMultiple": "Kursresponsen har öppnats",
       "text": "Bästa studerande! <br/>\nKursresponsblanketten för följande kurser är nu öppna: <br/>\n{{- courseNamesAndUrls}}\nGe gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.\nEfter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen."
-    }
+    },
+    "counterFeedbackReminder": {
+      "subject": "Ge gärna motrespons för kursen {{courseName}}",
+      "text": "Bästa lärare! <br/>\nResponsperioden för följande kurser har tagit slut: <br/>{{- courseNamesAndUrls}} \nGe gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>\nDitt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>\nTack! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Påminnelse skickad till {{teachers, list}}"
+    },
+    "instructionsAndSupport": "Kontakta stödet: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nAnvändarinstruktioner: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Mer information om Norppa i flamma</a>"
   }
 }
