@@ -455,6 +455,11 @@
       "subject": "Ge gärna motrespons för kursen {{courseName}}",
       "text": "Bästa lärare! <br/>\nResponsperioden för följande kurser har tagit slut: <br/>{{- courseNamesAndUrls}} \nGe gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>\nDitt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>\nTack! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Påminnelse skickad till {{teachers, list}}"
     },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Tidsperioden för kursrespons på kursen {{courseName}} börjar",
+      "subjectMultiple": "Perioden för kursrespons börjar på dina kurser",
+      "text": "Bästa lärare! <br/>\nKursresponsblanketten för följande kurser öppnas om en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
     "instructionsAndSupport": "Kontakta stödet: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nAnvändarinstruktioner: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Mer information om Norppa i flamma</a>"
   }
 }
