@@ -455,6 +455,10 @@
       "subject": "Ge gärna motrespons för kursen {{courseName}}",
       "text": "Bästa lärare! <br/>\nResponsperioden för följande kurser har tagit slut: <br/>{{- courseNamesAndUrls}} \nGe gärna studerandena respons tillbaka. Du kan ge motrespons genom att klicka på kursens namn. <br/>\nDitt svar till studerandena är centralt i skapandet av en bra responskultur: det visar studerandena att deras respons faktiskt läses och beaktas. Det här uppmuntrar dem att ge konstruktiv feedback i framtiden. Responsen kommer att skickas till alla studenter i kursen. <br/>\nTack! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Påminnelse skickad till {{teachers, list}}"
     },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "Din lärare har gett ett nytt svar till kursresponsen på kursen {{courseName}}",
+      "text": "Bästa studerande!\n\n Läraren på kursen {{courseName}} {{dates}} har svarat på responsen som kursens studerande har gett. \n\nSvaret: {{- feedbackResponse}}\n\nDu kan läsa responsen här: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+    },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Tidsperioden för kursrespons på kursen {{courseName}} börjar",
       "subjectMultiple": "Perioden för kursrespons börjar på dina kurser",

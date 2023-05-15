@@ -505,8 +505,8 @@
       "text": "Hyvä opiskelija!\n Kurssin {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseName}}</a>"
     },
     "surveyOpeningEmailToStudents": {
-      "subject": "Kurssin {{courseName}} has opened",
-      "subjectMultiple": "Kurssipalaute kurssipalaute on avautunut",
+      "subject": "Kurssin {{courseName}} kurssipalaute on avautunut",
+      "subjectMultiple": "Kurssipalaute on avautunut",
       "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
     },
     "continuousFeedbackDigest": {
@@ -517,6 +517,10 @@
     "counterFeedbackReminder": {
       "subject": "Annathan vastapalautetta kurssillesi {{courseName}}",
       "text": "Hyvä opettaja! <br/>\nPalautejakso kurssille on päättynyt: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "Uusi vastapalaute opettajaltasi kurssilla {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Palautejakso opettamallesi kurssille {{courseName}} on alkamassa",
