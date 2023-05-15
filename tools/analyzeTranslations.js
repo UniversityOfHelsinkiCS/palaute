@@ -47,6 +47,9 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(/\bt\(['"`]\w+(?::\w+)*['
 const LANGUAGES = ['fi', 'sv', 'en']
 const NAMESPACE = 'translation'
 
+/**
+ * Evil thing of the past
+ */
 const importTranslationObjectFromESModule = async f => {
   const content = await fs.readFile(f, 'utf8')
   const jsLines = ['"use strict";({']

@@ -504,6 +504,11 @@
     "continuousFeedbackResponse": {
       "subject": "Your feedback received a response on on the course {{courseName}}",
       "text": "Dear student!\n The teacher of the course {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Course feedback for course {{courseName}} has opened",
+      "subjectMultiple": "Course feedback has opened",
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and University operations.\nOnce you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long\nas the form remains open."
     }
   }
 }

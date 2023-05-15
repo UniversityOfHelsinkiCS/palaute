@@ -503,6 +503,11 @@
     "continuousFeedbackResponse": {
       "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
       "text": "Hyvä opiskelija!\n Kurssin {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Kurssin {{courseName}} has opened",
+      "subjectMultiple": "Kurssipalaute kurssipalaute on avautunut",
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
     }
   }
 }

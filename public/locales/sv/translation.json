@@ -445,6 +445,11 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Ge gärna respons på kursen {{courseName}}",
       "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!\n\n{{reminder}}"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Kursresponsen för kursen {{courseName}} har öppnats",
+      "subjectMultiple": "Kursresponsen har öppnats",
+      "text": "Bästa studerande! <br/>\nKursresponsblanketten för följande kurser är nu öppna: <br/>\n{{- courseNamesAndUrls}}\nGe gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.\nEfter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen."
     }
   }
 }
