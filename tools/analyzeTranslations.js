@@ -136,9 +136,12 @@ const importTranslationObjectFromESModule = async f => {
     if (k.length > longestKey) longestKey = k.length
   })
 
+  let missingCount = 0
+
   translationKeyReferences.forEach((v, k) => {
     const missing = []
     const parts = k.split(':')
+    if (parts.includes('continuousFeedbackDigest')) console.log(parts)
 
     Object.entries(locales).forEach(([lang, t]) => {
       let obj = t
@@ -153,9 +156,10 @@ const importTranslationObjectFromESModule = async f => {
       }
     })
 
-    printMissing(k, v, missing, longestKey)
+    missingCount += printMissing(k, v, missing, longestKey)
   })
-  console.log()
+
+  console.log(`\n${missingCount} translations missing${Reset}\n`)
 
   printUnused(translationsNotUsed, numberOfTranslations)
 })()
@@ -178,6 +182,8 @@ const printMissing = (translationKey, referenceLocations, missingLangs, longestK
 
     console.log(msg, Reset)
   }
+
+  return missingLangs.length
 }
 
 const printUnused = (translationsNotUsed, numberOfTranslations) => {

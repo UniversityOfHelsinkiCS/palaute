@@ -508,6 +508,11 @@
       "subject": "Kurssin {{courseName}} has opened",
       "subjectMultiple": "Kurssipalaute kurssipalaute on avautunut",
       "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "Uutta jatkuvaa palautetta opettamallesi kurssille {{courseName}}",
+      "subjectMultiple": "Uutta jatkuvaa palautetta opettamillesi kursseille",
+      "text": "Hyvä opettaja! <br/>\nSeuraaville kurseille on annettu uutta jatkuvaa palautetta:\n{{- courseNameLinksAndNewFeedback}}"
     }
   }
 }
