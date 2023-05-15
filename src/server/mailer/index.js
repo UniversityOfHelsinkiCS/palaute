@@ -6,7 +6,6 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
-  sendEmailNotificationAboutEnrolments,
 } = require('./mails')
 
 const { returnEmailsToBeSentToday } = require('./mails/stats')
@@ -20,7 +19,6 @@ const mailer = {
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
   sendFeedbackSummaryReminderToStudents,
-  sendEmailNotificationAboutEnrolments,
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
   runContinuousFeedbackCron,
