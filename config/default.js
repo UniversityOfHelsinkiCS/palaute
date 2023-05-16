@@ -50,11 +50,6 @@ const config = {
   FEEDBACK_TARGET_CACHE_SIZE: 250,
 
   /**
-   * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
-   */
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2020-01-01',
-
-  /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
    */
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
