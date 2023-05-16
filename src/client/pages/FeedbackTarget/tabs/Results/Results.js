@@ -99,7 +99,8 @@ const Results = () => {
   const filtersVisible = isOrganisationReader || isResponsibleTeacher
 
   const feedbacks = feedbackTargetData?.feedbacks ?? []
-  const groupFeedbackCount = feedbackTargetData?.studentCount ?? 0
+  const groupFeedbackCount = feedbacks.length
+  const groupStudentCount = feedbackTargetData?.studentCount ?? 0
 
   return (
     <>
@@ -132,7 +133,7 @@ const Results = () => {
           <Box>
             <FeedbackChart
               feedbacks={feedbacks}
-              studentCount={groupFeedbackCount}
+              studentCount={groupStudentCount}
               opensAt={opensAt}
               closesAt={closesAt}
               feedbackReminderLastSentAt={feedbackReminderLastSentAt}
