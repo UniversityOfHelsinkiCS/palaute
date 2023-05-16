@@ -51,7 +51,15 @@ const ComponentWithTranslations = () => {
 
 NodeJS example
 
-// TODO. i18n setup for backend is a work in progress.
+```js
+const i18n = require('../utils/i18n')
+
+const getHelloMessage = (user) => {
+  const t = i18n.getFixedT(user.language)
+  
+  return t('common:hello') // Hello in user's language
+}
+```
 
 ### Coding style considerations
 
