@@ -66,4 +66,4 @@ University of Helsinki.
 
 Seal emojis & gif by https://github.com/googlefonts/noto-emoji/ licenced under SIL
 
-
+[norppa_holy_smoke.png](./src/client/assets/norppa_holy_smoke.png) by [tttriple](https://github.com/tttriple)
