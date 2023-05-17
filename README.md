@@ -1,6 +1,6 @@
-![Norppa](https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/seal_1f9ad.png)
 
-# Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
+# <img src=./public/seal.gif width=100px /> Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
+
 
 More commonly known as **Norppa**
 
@@ -61,4 +61,9 @@ $ npm run reset
 **[Toska](https://toska.dev/)**
 
 University of Helsinki.
+
+### Credits
+
+Seal emojis & gif by https://github.com/googlefonts/noto-emoji/ licenced under SIL
+
 
