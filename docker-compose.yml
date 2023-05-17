@@ -19,7 +19,7 @@ services:
       - JWT_KEY=minttujam
       - NODE_CONFIG_ENV=tau
       - PATE_URL=http://pate:3473
-      - PATE_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0dW5pLWtwaiIsIm5hbWUiOiJUdW5pIE5vcnBwYSIsImlhdCI6MTUxNjIzOTAyMn0.nSkIbaRiqyKsH6Iu1uaChitQMf8qHGYtdr_7xBHxsSQ
+      - PATE_JWT=
     ports:
       - 3000:3000
       - 9229:9229
@@ -89,7 +89,7 @@ services:
     environment:
       - PORT=3473
       - NODE_ENV=dev
-      - JWT_KEY=df0abc4cf576a23a96e6368bfd2f58e1292ebc0e7c5a1ffd79da7dd9b919e14a
+      - JWT_KEY=
       - JWT_SUB=tuni-kpj
       - MAIL_FROM_ADDRESS=pate.leanware.fi
       - SMTP_PORT=465
