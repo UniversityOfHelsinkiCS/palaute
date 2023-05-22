@@ -16,12 +16,13 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   const emails = students.map(student => {
     const { language } = student
     const t = i18n.getFixedT(language)
-
+    const courseNameWithUserLanguage = courseName[language ?? 'en']
+  
     const email = {
       to: student.email,
-      subject: t('mails:counterFeedbackNotificationToStudents:subject', { courseName }),
+      subject: t('mails:counterFeedbackNotificationToStudents:subject', { courseName: courseNameWithUserLanguage }),
       text: t('mails:counterFeedbackNotificationToStudents:text', {
-        courseName,
+        courseName: courseNameWithUserLanguage,
         dates,
         feedbackResponse,
         urlToSeeFeedbackSummary,
