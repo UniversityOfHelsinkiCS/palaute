@@ -141,7 +141,6 @@ const importTranslationObjectFromESModule = async f => {
   translationKeyReferences.forEach((v, k) => {
     const missing = []
     const parts = k.split(':')
-    if (parts.includes('continuousFeedbackDigest')) console.log(parts)
 
     Object.entries(locales).forEach(([lang, t]) => {
       let obj = t
