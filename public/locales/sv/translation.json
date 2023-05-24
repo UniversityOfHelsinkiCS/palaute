@@ -15,6 +15,7 @@
     "save": "Spara",
     "saveSuccess": "Informationen har sparats",
     "course": "Kurs",
+    "courseCode": "Kurskod",
     "name": "Namn",
     "edit": "Redigera",
     "send": "Skicka",
@@ -59,13 +60,30 @@
     "changePublicity": "Ändra synlighet",
     "notPublicInfo": "Svaren syns endast åt kursens lärare och programmets adminstratörer",
     "publicInfo": "Svaren syns åt anmälda studerande",
+    "notPublicShortInfo": "Endast synligt för adminstratörer och lärare",
+    "publicShortInfo": "Synligt for kursens studeranden",
+    "editable": "Du kan ändra denna inställning",
     "studyTracks": "Studieinriktningar",
-    "currentlySelected": "Valda"
+    "currentlySelected": "Valda",
+    "all": "Alla",
+    "studentCount": "Studerande"
   },
   "validationErrors": {
     "required": "Fältet krävs",
     "wrongDate": "Förfrågans slutdatum är före startdatumet",
     "invalidDate": "Ogiltigt datum"
+  },
+  "links": {
+    "supportEmail": "coursefeedback@helsinki.fi",
+    "wikiRoot": "https://wiki.helsinki.fi/display/CF",
+    "wikiOrganisationHelp": "https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje",
+    "wikiTeacherHelp": "https://wiki.helsinki.fi/display/CF/3.+Opettajan+ohje",
+    "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
+    "dataProtection": "https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991",
+    "toska": "https://toska.dev",
+    "markdownHelp": "https://commonmark.org/help/",
+    "courseUnitPage": "https://studies.helsinki.fi/opintotarjonta/cu/",
+    "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -75,6 +93,7 @@
     "clearConfirmationQuestion": "Är du säker på att du vill tömma denna respons?",
     "yes": "Ja",
     "no": "Nej",
+    "continousFeedbackActive": "Kontinuerlig feedback är på",
     "giveContinuousFeedback": "Ge kontinuerlig respons",
     "viewFeedbackSummary": "Visa sammanfattning av responsen",
     "noFeedback": "Ingenting här. Kom tillbaka senare!",
@@ -87,6 +106,7 @@
     "feedbackNotStartedChip": "Responsen har inte börjat",
     "feedbackEndedChip": "Responsen har avslutats",
     "continuousFeedbackChip": "Kontinuerlig respons",
+    "feedbackResponseGiven": "Läraren har gett återkoppling på den givna feedbacken.",
     "deleted": "Din respons har tagits bort"
   },
   "feedbackView": {
@@ -212,11 +232,13 @@
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Förfrågans resultat visas inte på grund av för få responser",
     "onlyForEnrolledInfo": "Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare",
+    "teacherAccessInfo": "Du har lärarbehörighet på kursen, d.v.s. du kan bara se svaren på frågor som är offentliga. Om du behöver breda insyn, be om rollen som ansvarslärare via Sisu.",
     "studentsWithFeedbackHeading": "Studeranden som givit respons",
     "responseHeading": "Lärarens svar på responsen",
     "giveResponse": "Ge svar på responsen",
     "editResponse": "Redigera svaret på responsen",
     "noResponseInfo": "Kursens lärare har inte ännu svarat på responsen",
+    "giveResponseInfo": "Svar på kursens feedback kan ges efter att antagning av feedback har avslutats",
     "export": "Exportera resultat",
     "useLegacyVersion": "Använd gamla responsvyn",
     "thankYouMessage": "Tack för reponsen. Här är en sammanfattning av responsen som har getts hittills.",
@@ -236,10 +258,27 @@
     "setHidden": "Göm",
     "setVisible": "Visa",
     "hiddenInfo": "Den här responsen är gömd. Den är synlig endast för ansvariga lärare eller utbildningsprogrammets administratörer.",
-    "hidingFeatureInfoTitle": "Information om att gömma svaren"
+    "unpublishingInfo": "Denna fråga kommer att vara synlig för kursens studenter.",
+    "publishingInfo": "Svaren på denna fråga är inte synliga för kursens studeranden. Om du vill kan du göra dem offentliga genom att klicka på knappen till vänster \"Inte offentlig\".",
+    "hidingFeatureInfoTitle": "Information om att gömma svaren",
+    "hidingFeatureInfo": "Om ett svar innehåller konfidentiell information så som ett studerandenummer eller om svaret på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts."
   },
   "groups": {
-    "groupingQuestionDefaultLabel": "Välj den grupp som du deltog i"
+    "groupingSettings": "Gruppering",
+    "groupingQuestion": "Grupperingsfråga",
+    "groupingQuestionDefaultLabel": "Välj den grupp som du deltog i",
+    "groupingInfoTextTitle": "Bekanta dig med hur gruppering fungerar",
+    "onlyOneGroup": "I Sisu är endast en grupp definierad, så automatisk gruppering är inte bruk.",
+    "groupingInfoText": "Kurser kan bilda grupper i SISU som studerande kan anmäla sig till. Denna registrerings-/gruppinformation skickas automatiskt till Norppa och med den kan läraren se feedbackinformation gruppvis. \n\nOm det inte finns några definierade grupper för kursen i SISU, de definierade grupperna inte uppfyller dina behov, du vill att studenterna manuellt ska välja sina grupper, eller om du vill definiera dina egna kriterier, kan du använda knappen nedan för att lägg till en grupperingsfråga, som kommer att läggas till i början av undersökningen.\n\nGruppspecifik granskning är endast tillgänglig om det finns minst 5 respondenter i varje grupp, så att eleverna inte kan identifieras utifrån svaren. Det bör finnas få alternativ för grupperingsfrågan eller så bör du välja dem på ett sådant sätt att det förmodligen finns 5 eller fler respondenter för varje alternativ.",
+    "groupInformation": "Sisu gruppernas information",
+    "teachersOfGroup": "Gruppens lärare",
+    "groupName": "Gruppens namn",
+    "noGroupingQuestion": "Enkäten har inte en grupperingsfråga.",
+    "hasGroupingQuestion": "Enkäten har en grupperingsfråga \"{{ namn }}\". Du kan ta bort den från redigeringsmenyn under frågan om du vill använda automatisk gruppering i Sisu-grupper.",
+    "chooseGroup": "Välj grupp att visas",
+    "groupsNotAvailableInfoTitle": "Gruppklassificering är inte tillgängligt",
+    "groupsNotAvailableInfoContent": "Minst en grupp har 1-4 återkopplingar. För att bibehålla anonymitet kan feedback från enskilda grupper inte visas.",
+    "addGroupingQuestion": "Lägg till grupperingsfråga"
   },
   "navBar": {
     "myFeedbacks": "Mina responser",
@@ -260,6 +299,7 @@
     "none": "inga"
   },
   "studentsWithFeedback": {
+    "cannotShowWhenOpen": "Personen som gett feedback kan inte se den så länge formuläret ännu är öppet.",
     "noFeedbackInfo": "Ingen har tillsvidare givit respons",
     "studentsList": "Studerande som gett respons"
   },
@@ -314,6 +354,9 @@
     "programmeSummary": "Utbildningsprogrammets sammandrag",
     "programmeSettings": "Utbildningsprogrammets inställningar",
     "courseRealisation": "Kursinstans",
+    "responsibleTeacher": "Ansvarslärare",
+    "teacher": "Lärare",
+    "administrativePerson": "Administrativ person",
     "facultyLabel": "Fakultet",
     "allFaculties": "Alla fakulteter",
     "tagLabel": "Studieinriktning",
@@ -323,6 +366,7 @@
     "responsibleTeachers": "Ansvariga lärare",
     "includeOpenUniCourses": "Inkludera kurser i öppna universitetet",
     "showHiddenOrganisations": "Visa gömda utbildningsprogram ({{count}})",
+    "hidingInfo": "Du kan dölja sammanfattningar av utbildningsprogram som inte intresserar dig",
     "orderByLabel": "Ordning",
     "orderByCodeAsc": "Kod i stigande ordning",
     "orderByFeedbackCountAsc": "Antal responser i stigande ordning",
@@ -338,7 +382,9 @@
     "code": "Kod",
     "organisationCode": "Organisationskod",
     "given": "given",
-    "notGiven": "inte given"
+    "notGiven": "inte given",
+    "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
+    "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",
@@ -360,6 +406,7 @@
     "feedbackCorrespondents": "Korrespondenter för responsen",
     "surveyTab": "Utbildningsprogrammets förfrågan",
     "summaryTab": "Sammandrag",
+    "courseRealisationsTab": "Hur kursen är implementerad",
     "openQuestionsTab": "Öppna frågor",
     "editProgrammeQuestionsDialogTitle": "Varning!",
     "editProgrammeQuestionsDialogContent": "Du håller på att redigera hela utbildningsprogrammets gemensamma frågor. Dessa ändringar syns på alla av utbildningsprogrammets kurser. Är du säker på att du vill redigera dessa frågor?",
@@ -384,7 +431,12 @@
     "calendarMode": "Vaihda kalenterinäkymään Ändra till kalendervy",
     "listMode": "Ändra till listvy",
     "setStudyTracks": "Markera studieinriktningarna för kursgenomförandet",
-    "setStudyTracksForSelection": "Markera studieinriktningarna för kursgenomförandet"
+    "setStudyTracksForCourseUnit": "Markera kursens {{name}} ({{code}}) inriktning",
+    "courseUnitTagSettingInfo": "Kursens studieriktningar är också synliga i alla dess implementeringar",
+    "courseUnitTagInfo": "Kursen {{code}} har {{count}} studieinriktning(ar) som ärvs från denna implementering",
+    "setStudyTracksForSelection": "Markera studieinriktningarna för kursgenomförandet",
+    "noTags": "Visa endast kurser utan studieinriktning",
+    "showCurName": "Visa namnen på kursimplementeringar"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Denna respons är inte i bruk",
@@ -402,13 +454,16 @@
     "courseSummary": "Sammandrag av kursens genomföranden",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
+    "administrativePersons": "Administrativ person",
     "shareTab": "Dela",
     "surveySettingsTab": "Redigering",
     "results": "Resultaten",
+    "continuousFeedbackInfo": "Fortlöpande feedback möjliggör att ge feedback i fritt textformat. Fortlöpande feedback används under kursens gång, innan själva kursåterkopplingen öppnar den dag kursen tarslut.",
     "activateContinuousFeedback": "Aktivera kontinuerlig respons för kursen",
     "activateContinuousFeedbackDigest": "Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons",
     "continuousFeedbackGiven": "Given kontinuerlig respons",
     "noContinuousFeedbackGiven": "Ingen kontinuerlig respons har ännu getts",
+    "continuousFeedbackInactive": "Fortlöpande feedback är inte aktiverad",
     "continuousFeedbackStudentInfo": "Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.",
     "respondContinuousFeedback": "Svara",
     "closeRespondContinuousFeedback": "Stäng",
@@ -446,10 +501,19 @@
       "subject": "Ge gärna respons på kursen {{courseName}}",
       "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!\n\n{{reminder}}"
     },
+    "continuousFeedbackResponse": {
+      "subject": "Läraren har svarat på din feedback i kursen {{courseName}}",
+      "text": "Kära student!\n Läraren i kursen {{courseName}} {{dates}} har svarat på din fortlöpande feedback. \n\nSvar: {{response}}\n\nDu kan läsa svaret här: <a href={{- url}}>{{courseName}}</a>"
+    },
     "surveyOpeningEmailToStudents": {
       "subject": "Kursresponsen för kursen {{courseName}} har öppnats",
       "subjectMultiple": "Kursresponsen har öppnats",
       "text": "Bästa studerande! <br/>\nKursresponsblanketten för följande kurser är nu öppna: <br/>\n{{- courseNamesAndUrls}}\nGe gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.\nEfter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "Ny fortlöpande feedback för kursen du undervisar {{courseName}}",
+      "subjectMultiple": "Ny kontinuerlig feedback för de kurser du undervisar",
+      "text": "Bra lärare! <br/>\nFöljande kurser har fått ny fortlöpande feedback:\n{{- courseNameLinksAndNewFeedback}}"
     },
     "counterFeedbackReminder": {
       "subject": "Ge gärna motrespons för kursen {{courseName}}",
