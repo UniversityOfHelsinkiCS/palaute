@@ -17,9 +17,7 @@ const PORT = process.env.PORT || 8000
 
 const UPDATER_URL = process.env.UPDATER_URL || ''
 
-let DB_CONNECTION_STRING = `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DATABASE}?targetServerType=primary`
-
-if (process.env.POSTGRES_SSL) DB_CONNECTION_STRING = `${DB_CONNECTION_STRING}&ssl=true`
+const DATABASE_URL = process.env.DATABASE_URL || ''
 
 const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 const DEV_ADMINS = config.get('DEV_ADMINS') ?? []
