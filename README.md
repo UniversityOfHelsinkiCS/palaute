@@ -1,6 +1,4 @@
-
 # <img src=./public/seal.gif width=100px /> Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
-
 
 More commonly known as **Norppa**
 
@@ -52,7 +50,6 @@ $ npm run reset
 [Accessibility document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md)
 
 ## Maintainers and Contribution <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
-
 
 **[Toska](https://toska.dev/)**
 
