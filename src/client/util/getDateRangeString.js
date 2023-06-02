@@ -2,10 +2,10 @@ import { format, parseISO } from 'date-fns'
 
 export const getDateRangeString = (startDate, endDate) => {
   if (typeof startDate === 'string') {
-    startDate = parseISO(startDate.slice(0, -5))
+    startDate = parseISO(startDate)
   }
   if (typeof endDate === 'string') {
-    endDate = parseISO(endDate.slice(0, -5))
+    endDate = parseISO(endDate)
   }
 
   const differentYears = startDate.getFullYear() !== endDate.getFullYear()
@@ -18,10 +18,10 @@ export const getDateRangeString = (startDate, endDate) => {
 
 export const getStartAndEndString = (startDate, endDate) => {
   if (typeof startDate === 'string') {
-    startDate = parseISO(startDate.slice(0, -5))
+    startDate = parseISO(startDate)
   }
   if (typeof endDate === 'string') {
-    endDate = parseISO(endDate.slice(0, -5))
+    endDate = parseISO(endDate)
   }
 
   const differentYears = startDate.getFullYear() !== endDate.getFullYear()
