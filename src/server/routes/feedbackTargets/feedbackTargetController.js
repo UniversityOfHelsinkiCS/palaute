@@ -85,7 +85,7 @@ const getOne = async (req, res) => {
   const feedbackTargetId = Number(req.params.id)
   if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
 
-  const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.isAdmin)
+  const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.user.isAdmin)
   return res.send(result)
 }
 adRouter.get('/:id', getOne)
@@ -177,7 +177,7 @@ adRouter.put('/:id/open-immediately', async (req, res) => {
 
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
-  return res.sendStatus(200)
+  return res.send(updatedFeedbackTarget)
 })
 
 adRouter.get('/:id/users', async (req, res) => {

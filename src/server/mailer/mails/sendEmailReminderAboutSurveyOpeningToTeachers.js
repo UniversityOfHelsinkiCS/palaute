@@ -3,7 +3,8 @@ const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
 const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
-const { createRecipientsForFeedbackTargets, instructionsAndSupport } = require('./util')
+const { createRecipientsForFeedbackTargets } = require('./util')
+const { i18n } = require('../../util/i18n')
 
 const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -57,41 +58,6 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   return filteredFeedbackTargets
 }
 
-const buildReminderAboutSurveyOpeningToTeachers = (courseNamesAndUrls, courseName, hasMultipleFeedbackTargets) => {
-  const translations = {
-    text: {
-      en: `Dear teacher! <br/>
-          The course feedback form for the following courses will open in a week: <br/>
-          ${courseNamesAndUrls}
-          Please add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Thank you! <br/>
-          ${instructionsAndSupport.en}`,
-      fi: `Hyvä opettaja! <br/> 
-          Kurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>
-          ${courseNamesAndUrls}
-          Lisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Kiitos!  <br/>
-          ${instructionsAndSupport.fi}`,
-      sv: `Bästa lärare! <br/>
-          Kursresponsblanketten för följande kurser öppnas om en vecka: <br/>
-          ${courseNamesAndUrls}
-          Du kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>
-          ${instructionsAndSupport.sv}`,
-    },
-    subject: {
-      en: hasMultipleFeedbackTargets
-        ? `The feedback for your courses are about to start`
-        : `Feedback for the course ${courseName} is about to start`,
-      fi: hasMultipleFeedbackTargets
-        ? `Palautejakso opettamillesi kursseille on alkamassa`
-        : `Palautejakso opettamallesi kurssille ${courseName} on alkamassa`,
-      sv: hasMultipleFeedbackTargets
-        ? `Perioden för kursrespons börjar på dina kurser`
-        : `Tidsperioden för kursrespons på kursen ${courseName} börjar`,
-    },
-  }
-
-  return translations
-}
-
 const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedbackTargets) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
   const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
@@ -124,16 +90,15 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
         </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
 
-  const translations = buildReminderAboutSurveyOpeningToTeachers(
-    courseNamesAndUrls,
-    courseName,
-    hasMultipleFeedbackTargets
-  )
+  const t = i18n.getFixedT(language)
+  const subject = hasMultipleFeedbackTargets
+    ? t('mails:reminderAboutSurveyOpeningToTeachers:subjectMultiple')
+    : t('mails:reminderAboutSurveyOpeningToTeachers:subject', { courseName })
 
   const email = {
     to: emailAddress,
-    subject: translations.subject[language] || translations.subject.en,
-    text: translations.text[language] || translations.text.en,
+    subject,
+    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls }),
   }
 
   return email

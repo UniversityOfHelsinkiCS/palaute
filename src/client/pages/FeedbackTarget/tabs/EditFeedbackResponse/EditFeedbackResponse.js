@@ -11,9 +11,9 @@ import FormikTextField from '../../../../components/common/FormikTextField'
 import AlertLink from '../../../../components/common/AlertLink'
 import Markdown from '../../../../components/common/Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
-import InstructionAccordion from './InstructionAccordion'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import InstructionAccordion from '../../../../components/common/InstructionAccordion'
 
 const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -60,7 +60,10 @@ const EditFeedbackResponse = () => {
   return (
     <Card>
       <CardContent>
-        <InstructionAccordion />
+        <InstructionAccordion
+          title={t('feedbackResponse:instructionTitle')}
+          text={`${t('feedbackResponse:responseInstruction')}\n\n${t('feedbackResponse:writingInstruction')}`}
+        />
         <Box mb={2}>
           <Alert severity="info">
             <Trans i18nKey="feedbackResponse:responseInfo">

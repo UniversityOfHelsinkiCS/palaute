@@ -7,9 +7,25 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
+  sendEmailContinuousFeedbackDigestToTeachers,
 } = require('./mails')
 
-const run = async () => {
+const runContinuousFeedbackCron = async () => {
+  logger.info('Running continuous feedback digest cron')
+  await sendEmailContinuousFeedbackDigestToTeachers()
+}
+
+const startContinuousFeedbackCron = async () => {
+  if (!inProduction || inStaging) {
+    return logger.info('Not running continuous feedback cron if not in production')
+  }
+  logger.info('Setup continuous feedback cron')
+  const cronTime = '0 8 * * *' // Daily at 8:00
+
+  return schedule(cronTime, runContinuousFeedbackCron)
+}
+
+const runPateCron = async () => {
   logger.info('Running pate cron')
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
@@ -17,7 +33,7 @@ const run = async () => {
   await sendAutomaticReminderOnFeedbackToStudents()
 }
 
-const start = async () => {
+const startPateCron = async () => {
   // run()
   if (!inProduction || inStaging) {
     return logger.info('Not running Pate if not in production')
@@ -25,10 +41,16 @@ const start = async () => {
   logger.info('Setup pate cron')
   const cronTime = '15 11 * * *' // Daily at 11:15
 
-  return schedule(cronTime, run)
+  return schedule(cronTime, runPateCron)
+}
+
+const scheduleCronJobs = async () => {
+  await startPateCron()
+  await startContinuousFeedbackCron()
 }
 
 module.exports = {
-  start,
-  run,
+  scheduleCronJobs,
+  runPateCron,
+  runContinuousFeedbackCron,
 }

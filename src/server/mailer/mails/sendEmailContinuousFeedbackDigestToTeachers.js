@@ -5,6 +5,7 @@ const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbac
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 const { PUBLIC_URL } = require('../../util/config')
+const { i18n } = require('../../util/i18n')
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({
@@ -97,39 +98,6 @@ const getTeachersWithContinuousFeedback = async () => {
   }
 }
 
-const buildContinuousFeedbackDigestToTeachers = (
-  courseNameLinksAndNewFeedback,
-  courseName,
-  hasMultipleFeedbackTargets
-) => {
-  const translations = {
-    text: {
-      en: `Dear teacher! <br/>
-      The following courses have received new continuous feedback:
-      ${courseNameLinksAndNewFeedback}`,
-      fi: `Hyvä opettaja! <br/>
-      Seuraaville kurseille on annettu uutta jatkuvaa palautetta:
-      ${courseNameLinksAndNewFeedback}`,
-      sv: `Dear teacher! <br/>
-      The following courses have received new continuous feedback:
-      ${courseNameLinksAndNewFeedback}`,
-    },
-    subject: {
-      en: hasMultipleFeedbackTargets
-        ? `New continuous feedback for your courses`
-        : `New continuous feedback for the course ${courseName}`,
-      fi: hasMultipleFeedbackTargets
-        ? `Uutta jatkuvaa palautetta opettamillesi kursseille`
-        : `Uutta jatkuvaa palautetta opettamallesi kurssille ${courseName}`,
-      sv: hasMultipleFeedbackTargets
-        ? `New continuous feedback for your courses`
-        : `New continuous feedback for the course ${courseName}`,
-    },
-  }
-
-  return translations
-}
-
 const emailContinuousFeedbackDigestToTeachers = teacher => {
   const { language, userFeedbackTargets, email: teacherEmail } = teacher
 
@@ -149,16 +117,15 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
     </ul>`
   }
 
-  const translations = buildContinuousFeedbackDigestToTeachers(
-    courseNameLinksAndNewFeedback,
-    courseName,
-    hasMultipleFeedbackTargets
-  )
+  const t = i18n.getFixedT(language)
+  const subject = hasMultipleFeedbackTargets
+    ? t('mails:continuousFeedbackDigest:subjectMultiple')
+    : t('mails:continuousFeedbackDigest:subject', { courseName })
 
   const email = {
     to: teacherEmail,
-    subject: translations.subject[language] || translations.subject.en,
-    text: translations.text[language] || translations.text.en,
+    subject,
+    text: t('mails:continuousFeedbackDigest:text', { courseNameLinksAndNewFeedback }),
   }
 
   return email

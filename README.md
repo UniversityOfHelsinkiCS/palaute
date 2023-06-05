@@ -1,23 +1,17 @@
-![Norppa](https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/seal_1f9ad.png)
-
-# Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
+# <img src=./public/seal.gif width=100px /> Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
 
 More commonly known as **Norppa**
 
 Production in <https://coursefeedback.helsinki.fi>
 
-## Issues with Palaute
+## Found a bug or have a feature request?
 
-Send an issue if you find mistakes, problems or something to improve in Palaute.
+Write an issue if you find mistakes, problems or something to improve in Palaute.
 Feel free to create a pull request.
 
 ## Environment configuration
 
 Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add correct values for the variables based on the documentation.
-
-## Module missing?
-
-Install the dependencies **inside** the container to have the application **inside** the container access them. You can use `npm run bash` to get inside the container to do so.
 
 ## How users can get started with Palaute
 
@@ -60,3 +54,9 @@ $ npm run reset
 **[Toska](https://toska.dev/)**
 
 University of Helsinki.
+
+### Credits
+
+Seal emojis & gif by https://github.com/googlefonts/noto-emoji/ licenced under SIL
+
+[norppa_holy_smoke.png](./src/client/assets/norppa_holy_smoke.png) by [tttriple](https://github.com/tttriple)

@@ -7,14 +7,7 @@ import QuestionCard from './QuestionCard'
 
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 import QuestionEditorActions from './QuestionEditorActions'
-
-const styles = {
-  questionCard: {
-    marginBottom: theme => theme.spacing(2),
-    marginTop: '1.5rem',
-    padding: '0.5rem',
-  },
-}
+import GroupingQuestionSettings from './GroupingQuestionSettings'
 
 const TypeItem = ({ onClick, label, disabled, disabledText }) =>
   disabled && disabledText ? (
@@ -31,7 +24,7 @@ const TypeItem = ({ onClick, label, disabled, disabledText }) =>
     </MenuItem>
   )
 
-const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language, groupingAvailable, groupingDisabledReason }) => {
+const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -50,34 +43,23 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language, groupingAva
         label={t('questionEditor:multipleChoiceQuestion')}
       />
       <TypeItem onClick={() => handleChooseType('TEXT')} label={t('questionEditor:textualContent')} />
-      {groupingAvailable && (
-        <TypeItem
-          disabled={!!groupingDisabledReason}
-          disabledText={groupingDisabledReason}
-          onClick={() => handleChooseType('GROUPING')}
-          label={t('questionEditor:groupingQuestion')}
-        />
-      )}
     </Menu>
   )
 }
 
 const QuestionEditorForm = ({
-  name,
   onStopEditing,
   onRemoveQuestion,
   onCopyQuestion,
   editable,
-  publicQuestionIds,
-  publicityConfigurableQuestionIds,
   handlePublicityToggle,
   actions,
-  groups,
+  groupingQuestionSettings,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
-  const [questionsField] = useField(name)
-  const { value: questions = [] } = questionsField
+  const [questionsField] = useField('questions')
+  const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const { t, i18n } = useTranslation()
   const [editingQuestionId, setEditingQuestionId] = useState()
 
@@ -92,102 +74,109 @@ const QuestionEditorForm = ({
     handlePublicityToggle(question, isPublic)
   }
 
-  const hasGroupingQuestion = questions.some(q => q.type === 'GROUPING')
-  const hasGroupsAvailable = groups?.length > 0
-  const groupingDisabledReason = hasGroupingQuestion ? t('questionEditor:alreadyHasGroupingQuestion') : undefined
-
   return (
     <Form>
-      <FieldArray
-        name={name}
-        render={arrayHelpers => (
-          <div>
-            {questions.map((question, index) => (
-              <QuestionCard
-                key={getQuestionId(question)}
-                name={`${name}.${index}`}
-                onRemove={() => {
-                  arrayHelpers.remove(index)
-                  onRemoveQuestion()
-                }}
-                onMoveUp={() => {
-                  arrayHelpers.swap(index - 1, index)
-                  onStopEditing()
-                }}
-                onMoveDown={() => {
-                  arrayHelpers.swap(index + 1, index)
-                  onStopEditing()
-                }}
-                onCopy={() => {
-                  arrayHelpers.insert(index + 1, copyQuestion(question))
-                  onCopyQuestion()
-                }}
-                moveUpDisabled={!questionCanMoveUp(questions, index)}
-                moveDownDisabled={!questionCanMoveDown(questions, index)}
-                language={i18n.language}
-                sx={styles.questionCard}
-                isEditing={editingQuestionId === getQuestionId(question)}
-                onStopEditing={() => handleStopEditing()}
-                onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
-                editable={editable}
-                publicQuestionIds={publicQuestionIds}
-                publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-                onPublicityToggle={makePublicityToggle(question)}
-              />
-            ))}
-
-            <TypeMenu
-              open={menuOpen}
-              anchorEl={addButtonRef.current}
-              onClose={() => setMenuOpen(false)}
-              onChooseType={type => {
-                const newQuestion = createQuestion(type)
-                arrayHelpers.push(newQuestion)
-                setEditingQuestionId(getQuestionId(newQuestion))
-              }}
-              language={i18n.language}
-              groupingAvailable={hasGroupsAvailable}
-              groupingDisabledReason={groupingDisabledReason}
-            />
-
-            <Box display="flex">
-              {editable && (
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    setMenuOpen(true)
-                    handleStopEditing()
-                  }}
-                  ref={addButtonRef}
-                >
-                  {t('questionEditor:addQuestion')}
-                </Button>
-              )}
-
-              {actions && <Box ml={editable ? 1 : 0}>{actions}</Box>}
-            </Box>
-          </div>
+      <Box display="flex" flexDirection="column" gap="1.5rem">
+        {groupingQuestionSettings && (
+          <GroupingQuestionSettings
+            onAddQuestion={q => {
+              groupingQuestionHelpers.setValue(q)
+              setEditingQuestionId(getQuestionId(q))
+            }}
+            onRemove={() => {
+              groupingQuestionHelpers.setValue(null)
+              onRemoveQuestion()
+            }}
+            groupingQuestion={groupingQuestionField.value}
+            isEditing={editingQuestionId === getQuestionId(groupingQuestionField.value)}
+            onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestionField.value))}
+            onStopEditing={handleStopEditing}
+          />
         )}
-      />
+        <FieldArray
+          name="questions"
+          render={arrayHelpers => (
+            <>
+              {questionsField.value.map((question, index) => (
+                <QuestionCard
+                  key={getQuestionId(question)}
+                  name={`questions.${index}`}
+                  onRemove={() => {
+                    arrayHelpers.remove(index)
+                    onRemoveQuestion()
+                  }}
+                  onMoveUp={() => {
+                    arrayHelpers.swap(index - 1, index)
+                    onStopEditing()
+                  }}
+                  onMoveDown={() => {
+                    arrayHelpers.swap(index + 1, index)
+                    onStopEditing()
+                  }}
+                  onCopy={() => {
+                    arrayHelpers.insert(index + 1, copyQuestion(question))
+                    onCopyQuestion()
+                  }}
+                  moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
+                  moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
+                  language={i18n.language}
+                  isEditing={editingQuestionId === getQuestionId(question)}
+                  onStopEditing={() => handleStopEditing()}
+                  onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
+                  editable={editable}
+                  onPublicityToggle={makePublicityToggle(question)}
+                />
+              ))}
+
+              <TypeMenu
+                open={menuOpen}
+                anchorEl={addButtonRef.current}
+                onClose={() => setMenuOpen(false)}
+                onChooseType={type => {
+                  const newQuestion = createQuestion({ type })
+                  arrayHelpers.push(newQuestion)
+                  setEditingQuestionId(getQuestionId(newQuestion))
+                }}
+                language={i18n.language}
+              />
+
+              <Box display="flex">
+                {editable && (
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setMenuOpen(true)
+                      handleStopEditing()
+                    }}
+                    ref={addButtonRef}
+                  >
+                    {t('questionEditor:addQuestion')}
+                  </Button>
+                )}
+
+                {actions && <Box ml={editable ? 1 : 0}>{actions}</Box>}
+              </Box>
+            </>
+          )}
+        />
+      </Box>
     </Form>
   )
 }
 
 const QuestionEditor = ({
   initialValues,
-  name = 'questions',
   editable = true,
   publicQuestionIds,
   publicityConfigurableQuestionIds,
   handleSubmit,
   handlePublicityToggle,
   copyFromCourseDialog,
-  groups,
+  groupingQuestionSettings,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
       <QuestionEditorForm
-        name={name}
         onStopEditing={handleSubmit}
         onRemoveQuestion={handleSubmit}
         onCopyQuestion={handleSubmit}
@@ -196,7 +185,7 @@ const QuestionEditor = ({
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
         actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
-        groups={groups}
+        groupingQuestionSettings={groupingQuestionSettings}
       />
     )}
   </Formik>

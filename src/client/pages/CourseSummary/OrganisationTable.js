@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { TableContainer, IconButton, Tooltip, Box } from '@mui/material'
+import { TableContainer, IconButton, Tooltip, Box, Alert } from '@mui/material'
 import { Search, SettingsOutlined } from '@mui/icons-material'
 
 import { Link } from 'react-router-dom'
@@ -82,10 +82,12 @@ const OrganisationTable = forwardRef(
     },
     ref
   ) => {
-    const { i18n } = useTranslation()
+    const { t, i18n } = useTranslation()
 
     const showHidingModeButton = organisationAccess?.length > 1 && organisations.length > 1
     const initialOpenAccordions = useInitiallyOpenAccordions(organisations)
+    const isLoading = isOrganisationsLoading || isRefetching
+    const noResults = organisations.length === 0 && !isLoading
 
     return (
       <TableContainer sx={{ overflow: 'visible' }} ref={ref}>
@@ -103,7 +105,7 @@ const OrganisationTable = forwardRef(
             </tr>
           </thead>
           <tbody>
-            {(isOrganisationsLoading || isRefetching) && (
+            {isLoading && (
               <>
                 <SkeletonRow />
                 <SkeletonRow />
@@ -111,7 +113,17 @@ const OrganisationTable = forwardRef(
               </>
             )}
 
-            {!(isOrganisationsLoading || isRefetching) && (
+            {noResults && (
+              <tr>
+                <td colSpan={99}>
+                  <Box my="1rem" mx="2rem">
+                    <Alert severity="info">{t('courseSummary:noCourses')}</Alert>
+                  </Box>
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && (
               <>
                 {average && (
                   <ResultsRow

@@ -1,6 +1,7 @@
 require('dotenv').config()
 require('express-async-errors')
 require('./models/modelExtensions')
+require('./util/i18n')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
@@ -11,7 +12,6 @@ const { start: startViewsCron } = require('./util/refreshViewsCron')
 const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
-const { seed } = require('./db/seeders')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
 
@@ -32,14 +32,12 @@ if (inProduction || inE2EMode) {
 const start = async () => {
   await connectToDatabase()
   await initializeFunctions()
-  await seed()
   await redis.connect()
   await updateLastRestart()
 
   await startViewsCron()
   await startPrecacheFeedbackTargetsCron()
-  await mailer.startCron()
-  await mailer.startContinuousFeedbackCron()
+  await mailer.scheduleCronJobs()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)

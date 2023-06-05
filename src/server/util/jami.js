@@ -13,7 +13,9 @@ const jamiClient = axios.create({
 })
 
 const getUserIamAccess = async (user, attempt = 1) => {
-  if (user.iamGroups.length === 0) return {}
+  if (user.iamGroups.length === 0) {
+    return {}
+  }
 
   const { id, iamGroups } = user
 

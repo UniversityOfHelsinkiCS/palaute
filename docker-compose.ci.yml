@@ -9,10 +9,7 @@ services:
         - NODE_CONFIG_ENV=hy
     command: ['npm','run', 'start:test']
     environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DATABASE=postgres
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
       - JAMI_HOST=jami
       - JAMI_PORT=3003
       - NODE_CONFIG_ENV=hy

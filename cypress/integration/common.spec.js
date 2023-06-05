@@ -22,4 +22,10 @@ describe('Common tests', () => {
     cy.visit(`${baseUrl}/admin/users`)
     cy.contains('Illuminati-silmä')
   })
+  it('Error view is shown when a component throws during render', () => {
+    cy.loginAsAdmin()
+    cy.visit(`${baseUrl}/admin/`)
+    cy.get('[data-cy=errorButton]').click()
+    cy.get('[data-cy=errorView]').should('exist')
+  })
 })

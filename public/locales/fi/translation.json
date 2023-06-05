@@ -25,7 +25,7 @@
     "preview": "Esikatselu",
     "clearSelection": "Tyhjennä valinta",
     "copyToClipBoard": "Kopioi leikepöydälle",
-    "feedbackOpenPeriod": "Palautetta voi antaa aikavälillä {{opensAt}} - {{closesAt}}",
+    "feedbackOpenPeriod": "Palaute auki {{opensAt}} – {{closesAt}}",
     "firstName": "Etunimi",
     "lastName": "Sukunimi",
     "username": "Käyttäjätunnus",
@@ -65,7 +65,8 @@
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
-    "all": "Kaikki"
+    "all": "Kaikki",
+    "studentCount": "Opiskelijoita"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -101,7 +102,7 @@
     "feedbackClosedTab": "Päättyneet",
     "waitingForFeedbackTab": "Odottaa",
     "feedbackGivenTab": "Annetut",
-    "feedbackGivenChip": "Palaute on annettu",
+    "feedbackGivenChip": "Palaute annettu",
     "waitingForFeedbackChip": "Palaute puuttuu",
     "feedbackNotStartedChip": "Palaute ei ole alkanut",
     "feedbackEndedChip": "Palaute on päättynyt",
@@ -156,7 +157,6 @@
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
     "textualContent": "Tekstuaalinen sisältö",
-    "groupingQuestion": "Ryhmittelykysymys",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",
@@ -228,9 +228,6 @@
     "answers": "Vastanneita"
   },
   "feedbackTargetResults": {
-    "chooseGroup": "Valitse tarkasteltava ryhmä",
-    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
-    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
@@ -263,6 +260,25 @@
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
     "unpublishingInfo": "Tämän kysymyksen näkyvät kurssin opiskelijoille.",
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu."
+  },
+  "groups": {
+    "groupingSettings": "Ryhmittely",
+    "groupingQuestion": "Ryhmittelykysymys",
+    "groupingQuestionDefaultLabel": "Valitse mihin ryhmiin osallistuit",
+    "groupingInfoTextTitle": "Lue, miten ryhmittely toimii",
+    "onlyOneGroup": "Sisussa on määritelty vain yksi ryhmä, joten automaattinen ryhmittely ei ole käytössä.",
+    "groupingInfoText": "Kurssille voidaan määritellä SISU:ssa ryhmät joihin opiskelijat ilmoittautuvat. Tämä ilmoittautumis/ryhmätieto periytyy automaattisesti Norppaan ja sen avulla opettaja voi tarkastella palautetietoja ryhmäkohtaisesti. \n\nJos kurssille ei ole SISU:ssa määritelty ryhmiä, määritellyt ryhmät eivät vastaa tarpeitasi, haluat että opiskelijat valitsevat manuaalisesti ryhmänsä tai haluat määritellä omat kriteerit, voit lisätä alla olevasta napista ryhmittelykysymyksen, joka lisätään kyselyn alkuun.\n\nRyhmäkohtainen tarkastelu on käytettävissä vain jos jokaisessa ryhmässä on vähintään 5 vastannutta, jotta opiskelijoita ei voi tunnistaa vastauksista. Ryhmittelykysymyksen vaihtoehtoja kannattaa olla vähän tai ne kannattaa valita siten, että vastanneita on todennäköisesti 5 tai enemmän jokaisessa vaihtoehdossa.",
+    "groupInformation": "Sisun ryhmien tiedot",
+    "teachersOfGroup": "Ryhmän opettajat",
+    "groupName": "Ryhmän nimi",
+    "noGroupingQuestion": "Kyselyllä ei ole ryhmittelykysymystä.",
+    "automaticGrouping": "Opiskelijoiden vastaukset ryhmitellään automaattisesti ryhmiin, joihin he ovat ilmoittautuneet.",
+    "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys \"{{ name }}\". Voit poistaa sen alta kysymyksen muokkausvalikosta, jos haluat käyttää automaattista ryhmittelyä Sisun ryhmiin.",
+    "chooseGroup": "Valitse tarkasteltava ryhmä",
+    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
+    "groupingQuestionAddSuccess": "Ryhmittelykysymys luotu olemassa olevien Sisun ryhmien pohjalta. Voit muokata kysymystä halusi mukaan.",
+    "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
@@ -365,7 +381,9 @@
     "code": "Koodi",
     "organisationCode": "Organisaatiokoodi",
     "given": "annettu",
-    "notGiven": "ei annettu"
+    "notGiven": "ei annettu",
+    "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
+    "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
@@ -476,5 +494,39 @@
     "successAlert": "Palaute lähetetty onnistuneesti!",
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Anna palautetta kurssille {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
+      "text": "Hyvä opiskelija!\n Kurssin {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Kurssin {{courseName}} kurssipalaute on avautunut",
+      "subjectMultiple": "Kurssipalaute on avautunut",
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "Uutta jatkuvaa palautetta opettamallesi kurssille {{courseName}}",
+      "subjectMultiple": "Uutta jatkuvaa palautetta opettamillesi kursseille",
+      "text": "Hyvä opettaja! <br/>\nSeuraaville kurseille on annettu uutta jatkuvaa palautetta:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Annathan vastapalautetta kurssillesi {{courseName}}",
+      "text": "Hyvä opettaja! <br/>\nPalautejakso kurssille on päättynyt: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "Uusi vastapalaute opettajaltasi kurssilla {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Palautejakso opettamallesi kurssille {{courseName}} on alkamassa",
+      "subjectMultiple": "Palautejakso opettamillesi kursseille on alkamassa",
+      "text": "Hyvä opettaja! <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "Ota yhteyttä tukeen: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nKäyttöohje: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Lisätietoja Norpasta Flammassa</a>"
   }
 }

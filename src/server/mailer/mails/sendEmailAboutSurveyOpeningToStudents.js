@@ -9,6 +9,7 @@ const {
 } = require('../../models')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, getFeedbackTargetLink } = require('./util')
+const { i18n } = require('../../util/i18n')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -66,41 +67,6 @@ const getOpenFeedbackTargetsForStudents = async () => {
   return filteredFeedbackTargets
 }
 
-const buildNotificationAboutSurveyOpeningToStudents = (courseNamesAndUrls, courseName, hasMultipleFeedbackTargets) => {
-  const translations = {
-    text: {
-      en: `Dear student, <br/>
-          Course feedback for the following courses are now open: <br/>
-          ${courseNamesAndUrls}
-          Please provide feedback on the course so that we can improve teaching and University operations.
-          Once you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long
-          as the form remains open.`,
-      fi: `Hyvä opiskelija!<br/> Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>
-          ${courseNamesAndUrls}
-          Käythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa. 
-          Vastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki.`,
-      sv: `Bästa studerande! <br/>
-          Kursresponsblanketten för följande kurser är nu öppna: <br/>
-          ${courseNamesAndUrls}
-          Ge gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.
-          Efter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen.`,
-    },
-    subject: {
-      en: hasMultipleFeedbackTargets
-        ? `Course feedback has opened`
-        : `Course feedback for course ${courseName} has opened`,
-      fi: hasMultipleFeedbackTargets
-        ? `Kurssipalaute on avautunut`
-        : `Kurssin ${courseName} kurssipalaute on avautunut`,
-      sv: hasMultipleFeedbackTargets
-        ? `Kursresponsen har öppnats`
-        : `Kursresponsen för kursen ${courseName} har öppnats`,
-    },
-  }
-
-  return translations
-}
-
 const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackTargets) => {
   const { language, name } = studentFeedbackTargets[0]
   const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
@@ -115,16 +81,16 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
     courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(feedbackTarget)}`
   }
 
-  const translations = buildNotificationAboutSurveyOpeningToStudents(
-    courseNamesAndUrls,
-    courseName,
-    hasMultipleFeedbackTargets
-  )
+  const t = i18n.getFixedT(language)
+
+  const subject = hasMultipleFeedbackTargets
+    ? t('mails:surveyOpeningEmailToStudents:subjectMultiple')
+    : t('mails:surveyOpeningEmailToStudents:subject', { courseName })
 
   const email = {
     to: emailAddress,
-    subject: translations.subject[language] || translations.subject.en,
-    text: translations.text[language] || translations.text.en,
+    subject,
+    text: t('mails:surveyOpeningEmailToStudents:text', { courseNamesAndUrls }),
   }
 
   return email

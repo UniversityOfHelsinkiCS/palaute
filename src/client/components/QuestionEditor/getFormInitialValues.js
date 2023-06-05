@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const getFormInitialValues = ({
   teacherQuestions,
   programmeQuestions,
@@ -10,6 +12,13 @@ export const getFormInitialValues = ({
   const canEditProgramme = editorLevel === 'programme'
   const canEditTeacher = editorLevel === 'teacher'
 
+  teacherQuestions = (teacherQuestions ?? []).map(question => ({
+    ...question,
+    editable: canEditTeacher,
+  }))
+
+  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+
   const questions = [
     ...(universityQuestions ?? []).map(question => ({
       ...question,
@@ -21,17 +30,21 @@ export const getFormInitialValues = ({
       editable: canEditProgramme,
       chip: 'questionEditor:programmeQuestion',
     })),
-    ...(teacherQuestions ?? []).map(question => ({
-      ...question,
-      editable: canEditTeacher,
-    })),
+    ...otherTeacherQuestions,
   ].map(q => ({
     ...q,
     public: publicQuestionIds.includes(q.id),
     publicityConfigurable: publicityConfigurableQuestionIds.includes(q.id),
   }))
 
+  const groupingQuestionsWithPublicity = groupingQuestions.map(q => ({
+    ...q,
+    public: false,
+    publicityConfigurable: false,
+  }))
+
   return {
     questions,
+    groupingQuestion: groupingQuestionsWithPublicity[0], // assume there is only one grouping question
   }
 }

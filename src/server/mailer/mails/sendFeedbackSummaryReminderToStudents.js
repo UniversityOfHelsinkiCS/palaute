@@ -1,37 +1,7 @@
 const { format } = require('date-fns')
 const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
-
-const buildNotificationAboutFeedbackResponseToStudents = (
-  courseName,
-  startDate,
-  endDate,
-  urlToSeeFeedbackSummary,
-  feedbackResponse
-) => {
-  const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
-  const translations = {
-    text: {
-      en: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to the course feedback recieved from students. \n 
-          Counter feedback: ${feedbackResponse}\n
-          You can read the course feedbacks here: <a href=${urlToSeeFeedbackSummary}>${courseName.en}</a>`,
-      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} ${dates} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n
-          Vastapalaute: ${feedbackResponse}\n
-          Voit käydä lukemassa kurssin palautteita täältä: <a href=${urlToSeeFeedbackSummary}>${courseName.fi}</a>`,
-      sv: `Bästa studerande!\n
-          Läraren på kursen ${courseName.sv} ${dates} har svarat på responsen som kursens studerande har gett. \n
-          Svaret: ${feedbackResponse}\n
-          Du kan läsa responsen här: <a href=${urlToSeeFeedbackSummary}>${courseName.sv}</a>`,
-    },
-    subject: {
-      en: `A new counter feedback from your teacher to course ${courseName.en}`,
-      fi: `Uusi vastapalaute opettajaltasi kurssilla ${courseName.fi}`,
-      sv: `Din lärare har gett ett nytt svar till kursresponsen på kursen ${courseName.sv}`,
-    },
-  }
-
-  return translations
-}
+const { i18n } = require('../../util/i18n')
 
 const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary,
@@ -41,19 +11,22 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   endDate,
   feedbackResponse
 ) => {
-  const translations = buildNotificationAboutFeedbackResponseToStudents(
-    courseName,
-    startDate,
-    endDate,
-    urlToSeeFeedbackSummary,
-    feedbackResponse
-  )
+  const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
   const emails = students.map(student => {
+    const { language } = student
+    const t = i18n.getFixedT(language)
+    const courseNameWithUserLanguage = courseName[language ?? 'en']
+  
     const email = {
       to: student.email,
-      subject: translations.subject[student.language] || translations.subject.en,
-      text: translations.text[student.language] || translations.text.en,
+      subject: t('mails:counterFeedbackNotificationToStudents:subject', { courseName: courseNameWithUserLanguage }),
+      text: t('mails:counterFeedbackNotificationToStudents:text', {
+        courseName: courseNameWithUserLanguage,
+        dates,
+        feedbackResponse,
+        urlToSeeFeedbackSummary,
+      }),
     }
     return email
   })

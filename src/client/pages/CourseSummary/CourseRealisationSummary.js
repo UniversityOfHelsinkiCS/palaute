@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 
 import { useParams } from 'react-router-dom'
 
-import { Box, Typography, TableContainer } from '@mui/material'
+import { Box, Typography, TableContainer, Alert } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -47,6 +47,17 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
           </tr>
         </thead>
         <tbody>
+          {courseRealisations.length === 0 && (
+            <tr>
+              <td colSpan={99}>
+                <Box my="1rem" mx="2rem">
+                  <Alert severity="info" data-cy="noCourseRealisations">
+                    {t('courseSummary:noCourseRealisations')}
+                  </Alert>
+                </Box>
+              </td>
+            </tr>
+          )}
           {courseRealisations.map(courseRealisation => {
             const feedbackResponseGiven = getFeedbackResponseGiven(
               courseRealisation.feedbackResponseGiven,

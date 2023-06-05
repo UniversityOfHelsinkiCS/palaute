@@ -1,17 +1,6 @@
-import { ADMINS } from './common'
-
 const ITEM_NAME = 'fakeUser'
 
-/*
-export const possibleUsers = ADMINS.map(username => ({
-  uid: username,
-}))
- */
-
 export const possibleUsers = [
-  {
-    uid: 'mluukkai',
-  },
   {
     uid: 'admin',
   },
@@ -36,10 +25,7 @@ export const possibleUsers = [
 ]
 
 export const setHeaders = uid => {
-  const user = possibleUsers.find(u => u.uid === uid)
-  if (!user) return
-
-  localStorage.setItem(ITEM_NAME, JSON.stringify(user))
+  localStorage.setItem(ITEM_NAME, JSON.stringify({ uid }))
 }
 
 export const getHeaders = () => {

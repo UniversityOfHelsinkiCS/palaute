@@ -9,9 +9,9 @@
  */
 const config = {
   /**
-   * Usernames of admin
+   * Usernames of admin in development mode
    */
-  ADMINS: [],
+  DEV_ADMINS: [],
 
   /**
    * These courses bypass the starting after 1.9 filter.
@@ -48,11 +48,6 @@ const config = {
    * Set to zero to disable fbt caching
    */
   FEEDBACK_TARGET_CACHE_SIZE: 250,
-
-  /**
-   * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
-   */
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2020-01-01',
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
@@ -141,6 +136,11 @@ const config = {
    * Keys defined here are filtered away from frontend config during build process.
    */
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL'],
+
+  /**
+   * Iam groups header name
+   */
+  IAM_GROUPS_HEADER: 'hygroupcn',
 }
 
 module.exports = config

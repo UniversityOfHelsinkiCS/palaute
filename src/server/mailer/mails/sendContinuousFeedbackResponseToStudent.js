@@ -3,8 +3,8 @@ const { Op } = require('sequelize')
 
 const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User } = require('../../models')
 const { PUBLIC_URL } = require('../../util/config')
-const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
+const { i18n } = require('../../util/i18n')
 
 const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId, {
@@ -42,34 +42,6 @@ const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
   return continuousFeedback
 }
 
-const buildContinuousFeedbackResponsesToStudents = (
-  courseName,
-  continuousFeedbackResponse,
-  dates,
-  urlToSeeContinuousFeedback
-) => {
-  const translations = {
-    text: {
-      en: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to your continuous feedback. \n 
-      Response: ${continuousFeedbackResponse}\n
-      You can read the response here: <a href=${urlToSeeContinuousFeedback}>${courseName.en}</a>`,
-      fi: `Hyvä opiskelija!\n Kurssin ${courseName.fi} ${dates} opettaja on vastannut antaamaasi jatkuvaan palautteeseen. \n
-      Vastaus: ${continuousFeedbackResponse}\n
-      Voit käydä lukemassa vastauksen täältä: <a href=${urlToSeeContinuousFeedback}>${courseName.fi}</a>`,
-      sv: `Dear student!\n The teacher of the course ${courseName.en} ${dates} has responded to your continuous feedback. \n 
-      Response: ${continuousFeedbackResponse}\n
-      You can read the response here: <a href=${urlToSeeContinuousFeedback}>${courseName.en}</a>`,
-    },
-    subject: {
-      en: `Response to your continuous feedback on course ${courseName.en}`,
-      fi: `Vastaus jatkuvaan palautteeseesi kurssilla ${courseName.fi}`,
-      sv: `Response to your continuous feedback on course ${courseName.en}`,
-    },
-  }
-
-  return translations
-}
-
 const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
   const { response, user, feedback_target: feedbackTarget } = continuousFeedback
   const { language, email: studentEmail } = user
@@ -79,12 +51,12 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
 
   const url = `${PUBLIC_URL}/${feedbackTarget.id}/continuous-feedback`
 
-  const translations = buildContinuousFeedbackResponsesToStudents(name, response, dates, url)
+  const t = i18n.getFixedT(language)
 
   const email = {
     to: studentEmail,
-    subject: translations.subject[language] || translations.subject.en,
-    text: translations.text[language] || translations.text.en,
+    subject: t('mails:continuousFeedbackResponse:subject', { courseName: name[language ?? 'en'] }),
+    text: t('mails:continuousFeedbackResponse:text', { courseName: name[language ?? 'en'], response, dates, url }),
   }
 
   return email

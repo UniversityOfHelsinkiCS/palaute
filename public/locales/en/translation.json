@@ -25,7 +25,7 @@
     "preview": "Preview",
     "clearSelection": "Clear selection",
     "copyToClipBoard": "Copy to clipboard",
-    "feedbackOpenPeriod": "Feedback can be given between {{opensAt}} and {{closesAt}}",
+    "feedbackOpenPeriod": "Feedback open between {{opensAt}} and {{closesAt}}",
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
@@ -65,7 +65,8 @@
     "editable": "You can change this setting",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
-    "all": "All"
+    "all": "All",
+    "studentCount": "Students"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -156,7 +157,6 @@
     "singleChoiceQuestion": "Single choice question",
     "multipleChoiceQuestion": "Multiple choice question",
     "textualContent": "Textual content",
-    "groupingQuestion": "Grouping question",
     "moveUp": "Move up",
     "moveDown": "Move down",
     "removeQuestion": "Remove question",
@@ -229,9 +229,6 @@
     "answers": "Answers"
   },
   "feedbackTargetResults": {
-    "chooseGroup": "Choose the group to show",
-    "groupsNotAvailableInfoTitle": "Groups are not available",
-    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
@@ -264,6 +261,25 @@
     "publishingInfo": "The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled \"Not public\".",
     "unpublishingInfo": "The answers to this questions are shown to students.",
     "hidingFeatureInfo": "If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published."
+  },
+  "groups": {
+    "groupingSettings": "Grouping",
+    "groupingQuestion": "Grouping question",
+    "groupingQuestionDefaultLabel": "Choose the group(s) you attended to",
+    "groupingInfoTextTitle": "Read how grouping works",
+    "onlyOneGroup": "Only one group from SISU is available, so automatic grouping cannot be used.",
+    "groupingInfoText": "Grouping allows you to see and compare answers of single SISU groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try not to ask too specific things or add options that might get less than 5 answers.",
+    "groupInformation": "Group information from Sisu",
+    "teachersOfGroup": "Teachers of this group",
+    "groupName": "Group name",
+    "noGroupingQuestion": "The survey has no grouping question.",
+    "automaticGrouping": "Students' answers are automatically grouped based on their confirmed study sub group from SISU.",
+    "hasGroupingQuestion": "The survey has a grouping question '{{ name }}'. If you want to use automatic grouping based on SISU groups, you can delete it from below from the question's edit menu.",
+    "chooseGroup": "Choose the group to show",
+    "groupsNotAvailableInfoTitle": "Groups are not available",
+    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
+    "groupingQuestionAddSuccess": "Grouping question added with existing groups as options. You may edit it as you wish.",
+    "addGroupingQuestion": "Add grouping question"
   },
   "navBar": {
     "myFeedbacks": "My feedback",
@@ -365,7 +381,9 @@
     "code": "Code",
     "organisationCode": "Organisation code",
     "given": "given",
-    "notGiven": "not given"
+    "notGiven": "not given",
+    "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
+    "noCourseRealisations": "No course realisations with feedback available for this course unit"
   },
   "footer": {
     "contactSupport": "Contact support",
@@ -477,5 +495,39 @@
     "successAlert": "Feedback has been sent succesfully",
     "anonymousInfo": "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
     "anonymous": "Send anonymously"
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Please give feedback on the course {{courseName}}",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Your feedback received a response on on the course {{courseName}}",
+      "text": "Dear student!\n The teacher of the course {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Course feedback for course {{courseName}} has opened",
+      "subjectMultiple": "Course feedback has opened",
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and University operations.\nOnce you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long\nas the form remains open."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "New continuous feedback on your course {{courseName}}",
+      "subjectMultiple": "New continuous feedback on your courses",
+      "text": "Dear teacher! <br/>\nThe following courses have received new continuous feedback:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Please give counter feedback for the course {{courseName}}",
+      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "A new counter feedback from your teacher to course {{courseName}}",
+      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Feedback for the course {{courseName}} is about to start",
+      "subjectMultiple": "The feedback for your courses are about to start",
+      "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "Contact support: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nUser instructions: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>More information about Norppa in Flamma</a>"
   }
 }

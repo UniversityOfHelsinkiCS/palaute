@@ -7,7 +7,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { images, inProduction, inStaging } from '../util/common'
+import { GIT_SHA, images, inProduction, inStaging } from '../util/common'
 
 import { localeForLanguage } from '../util/languageUtils'
 
@@ -69,9 +69,16 @@ const Footer = ({ user }) => {
               <img src={images.toska_color} style={styles.logo} alt="Toska" />
             </Link>
             {duration && (
-              <Typography variant="subtitle1" fontSize={12}>
-                {t('footer:lastUpdate', { duration })}
-              </Typography>
+              <>
+                <Typography variant="subtitle1" fontSize={12}>
+                  {t('footer:lastUpdate', { duration })}
+                </Typography>
+                {user.isAdmin && (
+                  <Typography variant="subtitle1" fontSize={12}>
+                    git sha = {GIT_SHA}
+                  </Typography>
+                )}
+              </>
             )}
           </Box>
         </Box>

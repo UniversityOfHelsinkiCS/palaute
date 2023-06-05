@@ -2,7 +2,7 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  ADMINS: ['admin'],
+  DEV_ADMINS: ['admin'],
 
   /**
    * These courses bypass the starting after 1.9 filter.

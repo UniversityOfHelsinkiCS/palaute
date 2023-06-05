@@ -66,17 +66,20 @@ export const getQuestions = feedbackTarget => {
   const programmeOpenQuestions = programmeSurveyQuestions.filter(q => q.type === 'OPEN')
   const filteredProgrammeQuestions = programmeSurveyQuestions.filter(q => q.type !== 'OPEN')
 
+  const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
+  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+
   // General ordering
   const allQuestions = [
+    ...groupingQuestions,
     ...filteredUniQuestions,
     ...(filteredProgrammeQuestions ?? []),
-    ...(surveys?.teacherSurvey?.questions ?? []),
+    ...otherTeacherQuestions,
     ...programmeOpenQuestions,
     ...uniOpenQuestions,
   ]
 
-  // Grouping questions are first
-  return _.orderBy(allQuestions, q => q.type === 'GROUPING', 'desc')
+  return allQuestions
 }
 
 const getInitialAnswerByFeedback = (feedback, question) => {

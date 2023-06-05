@@ -54,11 +54,21 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQues
   return _.uniq(currentIds).filter(Number)
 }
 
+const validateGroupingQuestions = questions => {
+  const tooManyGroupingQuestions = _.countBy(questions, 'secondaryType').GROUPING > 1
+  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping question is allowed')
+
+  const illegalGroupingQuestion = questions.some(
+    q => q.secondaryType === 'GROUPING' && !['SINGLE_CHOICE', 'MULTIPLE_CHOICE'].includes(q.type)
+  )
+  if (illegalGroupingQuestion)
+    ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
+}
+
 const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
+  validateGroupingQuestions(questions)
+
   const updatedQuestionIdsList = []
-  console.log(_.countBy(questions, 'type'))
-  const tooManyGroupingQuestions = _.countBy(questions, 'type').GROUPING > 1
-  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping questions is allowed')
 
   for (const question of questions) {
     let updatedQuestion
@@ -124,7 +134,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      throw new ApplicationError('ClosesAt cannot be before opensAt', 400)
+      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
   }

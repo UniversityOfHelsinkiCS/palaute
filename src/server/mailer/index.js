@@ -6,14 +6,11 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
-  sendEmailNotificationAboutEnrolments,
 } = require('./mails')
 
 const { returnEmailsToBeSentToday } = require('./mails/stats')
 
-const { start: startContinuousFeedbackCron } = require('./continuousFeedbackCron')
-
-const { start: startCron, run: runCron } = require('./pateCron')
+const { runContinuousFeedbackCron, runPateCron, scheduleCronJobs } = require('./scheduleCronJobs')
 
 const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
@@ -22,12 +19,11 @@ const mailer = {
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
   sendFeedbackSummaryReminderToStudents,
-  sendEmailNotificationAboutEnrolments,
   sendFeedbackReminderToStudents,
   returnEmailsToBeSentToday,
-  startContinuousFeedbackCron,
-  startCron,
-  runCron,
+  runContinuousFeedbackCron,
+  scheduleCronJobs,
+  runPateCron,
 }
 
 module.exports = { mailer }

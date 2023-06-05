@@ -14,12 +14,13 @@
  */
 
 const { Op } = require('sequelize')
-const { getOrganisationAccess } = require('../services/organisationAccess')
+const { getOrganisationAccess, getAdminOrganisationAccess } = require('../services/organisationAccess')
 const {
   getUniversitySurvey,
   getOrCreateTeacherSurvey,
   getProgrammeSurveysByCourseUnit,
 } = require('../services/surveys')
+const { inProduction, DEV_ADMINS } = require('../util/config')
 const FeedbackTarget = require('./feedbackTarget')
 const Organisation = require('./organisation')
 const User = require('./user')
@@ -39,13 +40,19 @@ FeedbackTarget.prototype.getSurveys = async function () {
   }
 }
 
+/**
+ * Gets, somewhat confusingly, the organisations user has access to, along the corresponding access objects.
+ *
+ * Should not be confused with the user's organisationAccess field, which is a map of organisation codes to access objects.
+ * @returns {Promise<{ access: object, organisation: Organisation }[]>}
+ */
 User.prototype.getOrganisationAccess = async function () {
-  const organisationAccess = await getOrganisationAccess(this)
+  await this.populateAccess()
 
   const organisations = await Organisation.findAll({
     where: {
       code: {
-        [Op.in]: Object.keys(organisationAccess),
+        [Op.in]: Object.keys(this.organisationAccess),
       },
     },
     include: {
@@ -56,9 +63,32 @@ User.prototype.getOrganisationAccess = async function () {
   })
 
   return organisations.map(org => ({
-    access: organisationAccess[org.code],
+    access: this.organisationAccess[org.code],
     organisation: org,
   }))
+}
+
+/**
+ * Populates the user's organisationAccess, specialGroup and isAdmin fields.
+ */
+User.prototype.populateAccess = async function () {
+  if (this.organisationAccess) return
+
+  // get organisation access and special groups based on IAMs
+  const organisationAccess = await getOrganisationAccess(this)
+
+  this.organisationAccess = organisationAccess
+  this.specialGroup = organisationAccess.specialGroup
+  this.isAdmin = organisationAccess?.specialGroup?.superAdmin
+
+  // Give admin access to configured users in development
+  if (!inProduction) {
+    this.isAdmin = DEV_ADMINS.includes(this.username)
+  }
+
+  if (this.isAdmin) {
+    this.organisationAccess = await getAdminOrganisationAccess()
+  }
 }
 
 User.prototype.feedbackTargetsHasTeacherAccessTo = function () {

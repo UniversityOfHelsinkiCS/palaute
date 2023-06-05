@@ -1,9 +1,9 @@
 import { baseUrl } from '../support'
 
 describe('Course realisation summaries', () => {
-  it('User gets 403 when trying to navigate to CUR summary with no data', () => {
+  it('User gets a message telling no course realisations when cur summary has no data', () => {
     cy.loginAsStudyCoordinator()
     cy.visit(`${baseUrl}/course-summary/TKT21029`)
-    cy.contains('403 Forbidden')
+    cy.get('[data-cy=noCourseRealisations]').should('exist')
   })
 })

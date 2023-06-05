@@ -1,4 +1,3 @@
-const { VIRTUAL } = require('sequelize')
 const { Model, JSONB, STRING, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 const { WORKLOAD_QUESTION_ID } = require('../util/config')
@@ -12,9 +11,11 @@ Question.init(
       allowNull: false,
     },
     secondaryType: {
-      type: VIRTUAL,
+      type: STRING,
+      allowNull: true,
       get() {
-        return this.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : 'OTHER'
+        const secondaryTypeValue = this.getDataValue('secondaryType') ?? 'OTHER'
+        return this.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : secondaryTypeValue
       },
     },
     required: {

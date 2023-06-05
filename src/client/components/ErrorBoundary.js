@@ -29,7 +29,7 @@ export default class ErrorBoundary extends Component {
     if (!hasError) return children
 
     return (
-      <Container style={{ padding: '5em' }}>
+      <Container style={{ padding: '5em' }} data-cy="errorView">
         <h1>Something bad happened and we have been notified</h1>
         <p>You can speed up the fixes by filling the form that opens from the following button:</p>
         <Button variant="contained" color="primary" onClick={() => Sentry.showReportDialog({ eventId })}>

@@ -2,7 +2,7 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  ADMINS: ['kalleilv', 'mluukkai', 'ttiittan', 'kurhila', 'vesuvesu', 'kemiko'],
+  DEV_ADMINS: ['mluukkai', 'vesuvesu', 'kemiko'],
 
   /**
    * These courses bypass the starting after 1.9 filter.
@@ -199,9 +199,9 @@ const config = {
   STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
 
   /**
-   * Tags enabled for kasvis
+   * Tags enabled for kasvis and kielikeskus
    */
-  TAGS_ENABLED: ['600-K001', '600-M001'],
+  TAGS_ENABLED: ['600-K001', '600-M001', 'H906'],
 
   /**
    * The id of a LIKERT-type question that is considered the university level workload question.
@@ -212,8 +212,6 @@ const config = {
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
   FEEDBACK_TARGET_CACHE_SIZE: 250,
-
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2023-01-01',
 
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
@@ -248,6 +246,8 @@ const config = {
   PRIVATE_TEST: 'Pahaminttu',
 
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
+
+  IAM_GROUPS_HEADER: 'hygroupcn',
 }
 
 module.exports = config

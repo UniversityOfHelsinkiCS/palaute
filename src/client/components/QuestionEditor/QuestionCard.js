@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid } from '@mui/material'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid, Typography } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useField } from 'formik'
@@ -19,8 +20,6 @@ import FormikSwitch from '../common/FormikSwitch'
 import OrderButtons from './OrderButtons'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
-import GroupingEditor from './GroupingEditor'
-import GroupingPreview from './GroupingPreview'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -28,7 +27,6 @@ const editorComponentByType = {
   TEXT: TextEditor,
   MULTIPLE_CHOICE: ChoiceEditor,
   SINGLE_CHOICE: ChoiceEditor,
-  GROUPING: GroupingEditor,
 }
 
 const previewComponentByType = {
@@ -37,32 +35,43 @@ const previewComponentByType = {
   TEXT: TextPreview,
   MULTIPLE_CHOICE: MultipleChoicePreview,
   SINGLE_CHOICE: SingleChoicePreview,
-  GROUPING: GroupingPreview,
 }
 
-const getTitleByType = (type, t) => {
+const getTitleByType = (question, t) => {
   const mapping = {
     LIKERT: t('questionEditor:likertQuestion'),
     OPEN: t('questionEditor:openQuestion'),
     TEXT: t('questionEditor:textualContent'),
     MULTIPLE_CHOICE: t('questionEditor:multipleChoiceQuestion'),
     SINGLE_CHOICE: t('questionEditor:singleChoiceQuestion'),
-    GROUPING: t('questionEditor:groupingQuestion'),
   }
 
-  return mapping[type]
+  const grouping = question.secondaryType === 'GROUPING'
+
+  return grouping ? t('groups:groupingQuestion') : mapping[question.type]
 }
 
 const ActionsContainer = ({ children }) => (
   <div>
     <Divider />
-    <Box mt={2} display="flex" justifyContent="space-between">
+    <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
       {children}
     </Box>
   </div>
 )
 
-const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownDisabled, name }) => {
+const EditActions = ({
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+  moveUpDisabled,
+  moveDownDisabled,
+  showMoveButtons,
+  showRequiredToggle,
+  name,
+  publicityConfigurable,
+  isPublic,
+}) => {
   const { t } = useTranslation()
 
   const handleRemove = () => {
@@ -76,23 +85,33 @@ const EditActions = ({ onMoveUp, onMoveDown, onRemove, moveUpDisabled, moveDownD
 
   return (
     <>
-      <FormikRadioButtons
-        name={`${name}.public`}
-        options={[
-          { label: t('common:publicInfo'), value: true },
-          { label: t('common:notPublicInfo'), value: false },
-        ]}
-        valueMapper={value => value === 'true'}
-      />
-      <Box mr="4rem" />
-      <FormikSwitch label={t('common:required')} name={`${name}.required`} />
+      <Box ml="1rem" mr="2rem">
+        {publicityConfigurable ? (
+          <FormikRadioButtons
+            name={`${name}.public`}
+            options={[
+              { label: t('common:publicInfo'), value: true },
+              { label: t('common:notPublicInfo'), value: false },
+            ]}
+            valueMapper={value => value === 'true'}
+            disabled={!publicityConfigurable}
+          />
+        ) : (
+          <Typography variant="body1" color="textSecondary">
+            {isPublic ? t('common:publicInfo') : t('common:notPublicInfo')}
+          </Typography>
+        )}
+      </Box>
+      {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
 
-      <OrderButtons
-        onMoveUp={onMoveUp}
-        onMoveDown={onMoveDown}
-        moveUpDisabled={moveUpDisabled}
-        moveDownDisabled={moveDownDisabled}
-      />
+      {showMoveButtons && (
+        <OrderButtons
+          onMoveUp={onMoveUp}
+          onMoveDown={onMoveDown}
+          moveUpDisabled={moveUpDisabled}
+          moveDownDisabled={moveDownDisabled}
+        />
+      )}
 
       <Tooltip title={t('questionEditor:removeQuestion')}>
         <div>
@@ -112,7 +131,6 @@ const QuestionCard = ({
   onMoveUp,
   onMoveDown,
   onCopy,
-  sx,
   isEditing = false,
   onStartEditing,
   onStopEditing,
@@ -120,41 +138,56 @@ const QuestionCard = ({
   moveDownDisabled = false,
   editable,
   onPublicityToggle,
+  showMoveButtons = true,
+  showRequiredToggle = true,
+  elevation = 2,
 }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
-  const [field] = useField(name)
+  const [field, , helpers] = useField(name)
   const { value: question } = field
 
   const EditorComponent = editorComponentByType[question.type]
   const PreviewComponent = previewComponentByType[question.type]
 
-  const title = getTitleByType(question.type, t)
+  const title = getTitleByType(question, t)
 
   const questionIsEditable = question.editable ?? true
   const canEdit = questionIsEditable && editable
-  const canDuplicate = question.type !== 'GROUPING'
+  const isGrouping = question.secondaryType === 'GROUPING'
+  const canDuplicate = !isGrouping
 
   const orderButtonsProps = {
     onMoveUp,
     onMoveDown,
-    moveUpDisabled,
-    moveDownDisabled,
+    moveUpDisabled: moveUpDisabled || isGrouping,
+    moveDownDisabled: moveDownDisabled || isGrouping,
+    showMoveButtons,
+  }
+
+  const handlePublicityToggle = isPublic => {
+    helpers.setValue({
+      ...field.value,
+      public: isPublic,
+    })
+    onPublicityToggle(isPublic)
   }
 
   return (
-    <Card sx={sx}>
+    <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
         <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
           <Grid item xs={4}>
-            <Chip label={title} variant="outlined" />
+            <Box display="flex" gap="0.5rem">
+              <Chip label={title} variant="outlined" />
+            </Box>
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
             {question.type !== 'TEXT' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
-                onChange={onPublicityToggle}
+                onChange={handlePublicityToggle}
               />
             )}
           </Grid>
@@ -174,11 +207,18 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button color="primary" onClick={onStopEditing} data-cy="saveQuestion">
+                  <Button color="primary" variant="contained" onClick={onStopEditing} data-cy="saveQuestion">
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
-                <EditActions {...orderButtonsProps} onRemove={onRemove} name={name} />
+                <EditActions
+                  publicityConfigurable={question.publicityConfigurable}
+                  isPublic={question.public}
+                  {...orderButtonsProps}
+                  onRemove={onRemove}
+                  showRequiredToggle={showRequiredToggle}
+                  name={name}
+                />
               </div>
             </ActionsContainer>
           </>
@@ -195,11 +235,11 @@ const QuestionCard = ({
                       {t('questionEditor:duplicate')}
                     </Button>
                   )}
-                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion">
+                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion" startIcon={<EditOutlined />}>
                     {t('common:edit')}
                   </Button>
                 </div>
-                <OrderButtons {...orderButtonsProps} />
+                {!isGrouping && <OrderButtons {...orderButtonsProps} />}
               </ActionsContainer>
             )}
           </>

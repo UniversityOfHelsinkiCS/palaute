@@ -15,8 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  FormControlLabel,
-  Checkbox,
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
@@ -27,9 +25,8 @@ import getAllUserAccess from '../../hooks/useAllUserAccess'
 import useOrganisationData from '../../hooks/useOrganisationData'
 import useHistoryState from '../../hooks/useHistoryState'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { ADMINS } from '../../util/common'
 
-const AccessTable = ({ access, filterAdmins }) => {
+const AccessTable = ({ access }) => {
   const sortByAccess = ({ access: a }, { access: b }) => {
     const SORT_VALUES = {
       read: 1,
@@ -42,8 +39,6 @@ const AccessTable = ({ access, filterAdmins }) => {
 
     return b.reduce((sum, b) => sum + SORT_VALUES[b], 0) - a.reduce((sum, a) => sum + SORT_VALUES[a], 0)
   }
-
-  if (filterAdmins) access = access.filter(({ username }) => !ADMINS.includes(username))
 
   return (
     <TableContainer>
@@ -80,7 +75,7 @@ const AccessTable = ({ access, filterAdmins }) => {
   )
 }
 
-const ProgrammeAccordion = ({ code, name, access, filterAdmins }) => (
+const ProgrammeAccordion = ({ code, name, access }) => (
   <Accordion key={code} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>
     <AccordionSummary sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}>
       <Box display="flex" alignItems="center" width="100%">
@@ -90,14 +85,13 @@ const ProgrammeAccordion = ({ code, name, access, filterAdmins }) => (
       </Box>
     </AccordionSummary>
     <AccordionDetails>
-      <AccessTable access={access} filterAdmins={filterAdmins} />
+      <AccessTable access={access} />
     </AccordionDetails>
   </Accordion>
 )
 
 const AccessTab = () => {
   const [access, setAccess] = useState([])
-  const [filterAdmins, setFilterAdmins] = useState(true)
   const [facultyCode, setFaculty] = useHistoryState('organisationAccessFaculty', 'All')
 
   const { t } = useTranslation()
@@ -132,17 +126,12 @@ const AccessTab = () => {
             </Select>
           </FormControl>
         </Box>
-
-        <FormControlLabel
-          control={<Checkbox checked={filterAdmins} onClick={() => setFilterAdmins(!filterAdmins)} />}
-          label="Filter Norppa admins"
-        />
       </Box>
 
       {access
         .sort((a, b) => a.name.fi > b.name.fi)
         .map(({ key, name, access }) => (
-          <ProgrammeAccordion key={key} code={key} name={name} access={access} filterAdmins={filterAdmins} />
+          <ProgrammeAccordion key={key} code={key} name={name} access={access} />
         ))}
     </Box>
   )

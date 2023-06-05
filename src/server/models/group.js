@@ -1,4 +1,5 @@
 const { INTEGER } = require('sequelize')
+const { VIRTUAL } = require('sequelize')
 const { Model, JSONB, STRING } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
@@ -17,6 +18,12 @@ Group.init(
     },
     name: {
       type: JSONB,
+    },
+    teachers: {
+      type: VIRTUAL,
+    },
+    studentCount: {
+      type: VIRTUAL,
     },
   },
   {

@@ -2,18 +2,6 @@ const { format } = require('date-fns')
 const jwt = require('jsonwebtoken')
 const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL } = require('../../util/config')
 
-const instructionsAndSupport = {
-  en: `Contact support: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
-      User instructions: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
-      <a href="https://flamma.helsinki.fi/en/group/ajankohtaista/news/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">More information about Norppa in Flamma</a>`,
-  fi: `Ota yhteyttä tukeen: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
-      Käyttöohje: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
-      <a href="https://flamma.helsinki.fi/fi/group/ajankohtaista/uutinen/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">Lisätietoja Norpasta Flammassa</a>`,
-  sv: `Kontakta stödet: <a href="mailto:coursefeedback@helsinki.fi">coursefeedback@helsinki.fi</a> <br/>
-      Användarinstruktioner: <a href="https://wiki.helsinki.fi/display/CF">https://wiki.helsinki.fi/display/CF</a> <br/>
-      <a href="https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526">Mer information om Norppa i flamma</a>`,
-}
-
 const getNoAdUrl = (username, userId, days) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
   return `${PUBLIC_URL}/noad/token/${token}?userId=${userId}`
@@ -122,7 +110,6 @@ const createRecipientsForFeedbackTargets = async (
 }
 
 module.exports = {
-  instructionsAndSupport,
   createRecipientsForFeedbackTargets,
   getFeedbackTargetLink,
 }

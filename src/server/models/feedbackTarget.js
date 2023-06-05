@@ -164,6 +164,9 @@ class FeedbackTarget extends Model {
       publicityConfigurableQuestionIds,
     }
 
+    // Do not accidentally send this to client
+    delete feedbackTarget.userFeedbackTargets
+
     return feedbackTarget
   }
 

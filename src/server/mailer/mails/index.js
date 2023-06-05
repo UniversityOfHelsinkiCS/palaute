@@ -9,7 +9,6 @@ const { sendEmailReminderAboutSurveyOpeningToTeachers } = require('./sendEmailRe
 const { sendEmailAboutSurveyOpeningToStudents } = require('./sendEmailAboutSurveyOpeningToStudents')
 const { sendEmailContinuousFeedbackDigestToTeachers } = require('./sendEmailContinuousFeedbackDigestToTeachers')
 const { sendEmailContinuousFeedbackResponseToStudent } = require('./sendContinuousFeedbackResponseToStudent')
-const { sendEmailNotificationAboutEnrolments } = require('./sendEmailNotificationAboutEnrolments')
 
 module.exports = {
   sendFeedbackReminderToStudents,
@@ -21,5 +20,4 @@ module.exports = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
   sendEmailContinuousFeedbackResponseToStudent,
-  sendEmailNotificationAboutEnrolments,
 }

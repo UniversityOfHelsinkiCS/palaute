@@ -1,7 +1,8 @@
-import React, { useRef, forwardRef } from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Alert } from '@mui/material'
+import { Box, Alert, Paper } from '@mui/material'
+import { useInView } from 'react-intersection-observer'
 
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
@@ -14,6 +15,7 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
+import { getGroups } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -29,11 +31,49 @@ const OnlyTeacherAccess = ({ t }) => (
   </Box>
 )
 
-const ResultsView = forwardRef((_props, ref) => {
+const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef }) => {
+  const { ref, inView } = useInView({ initialInView: true })
+
+  const { feedbackTarget } = useFeedbackTargetContext()
+  const { studentCount } = feedbackTarget
+  const groups = getGroups(feedbackTarget)
+  const hasMultipleGroups = groups?.length > 1
+  const groupsAvailable = feedbackResults?.groupsAvailable
+  const feedbacks = feedbackResults?.feedbacks
+
+  const isSticky = hasMultipleGroups && groupsAvailable
+  const isStuckTop = !inView && isSticky
+
+  return (
+    <Box position={isSticky ? 'sticky' : 'initial'} top="-1px" zIndex="100">
+      <Box h="1px" ref={ref} />
+      <Paper
+        sx={{ p: '1rem', display: 'flex', alignItems: 'center', backgroundColor: isStuckTop ? 'white' : 'transparent' }}
+        elevation={isStuckTop ? 4 : 0}
+      >
+        {!isLoading && hasMultipleGroups && (
+          <GroupSelector
+            groupId={groupId}
+            setGroupId={setGroupId}
+            groups={groups}
+            groupsAvailable={groupsAvailable}
+            studentCount={studentCount}
+          />
+        )}
+        <Box ml="auto">
+          <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
+        </Box>
+      </Paper>
+    </Box>
+  )
+}
+
+const Results = () => {
   const { t } = useTranslation()
   const { id } = useParams()
   const isMobile = useIsMobile()
   const [groupId, setGroupId] = React.useState('ALL')
+  const exportRef = useRef()
   useChartConfig()
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
@@ -46,46 +86,37 @@ const ResultsView = forwardRef((_props, ref) => {
     publicQuestionIds,
     publicityConfigurableQuestionIds,
     feedback,
-    studentCount,
     feedbackCount,
     opensAt,
     closesAt,
     feedbackReminderLastSentAt,
-    groups,
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const enoughFeedbacks = feedbackCount > 0
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
+  const filtersVisible = isOrganisationReader || isResponsibleTeacher
 
-  const hasMultipleGroups = groups?.length > 1
+  const feedbacks = feedbackTargetData?.feedbacks ?? []
+  const groupFeedbackCount = feedbacks.length
+  const groupStudentCount = feedbackTargetData?.studentCount ?? 0
 
   return (
     <>
-      <Box display="flex" alignItems="center" maxHeight={1}>
-        {isTeacher && !isLoading && hasMultipleGroups && (
-          <GroupSelector
-            groupId={groupId}
-            setGroupId={setGroupId}
-            groups={groups}
-            groupsAvailable={feedbackTargetData?.groupsAvailable}
-          />
-        )}
-        {isTeacher && (
-          <Box ml="auto">
-            <ExportFeedbacksMenu
-              feedbackTarget={feedbackTarget}
-              feedbacks={feedbackTargetData?.feedbacks}
-              componentRef={ref}
-            />
-          </Box>
-        )}
-      </Box>
+      {filtersVisible && (
+        <FilterSection
+          isLoading={isLoading}
+          feedbackResults={feedbackTargetData}
+          groupId={groupId}
+          setGroupId={setGroupId}
+          exportRef={exportRef}
+        />
+      )}
 
       {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
 
-      <Box ref={ref}>
+      <Box ref={exportRef}>
         {feedbackHasStarted && !isOpen && enoughFeedbacks && (
           <Box mt={4} mb={2}>
             <FeedbackResponse feedbackTarget={feedbackTarget} />
@@ -101,8 +132,8 @@ const ResultsView = forwardRef((_props, ref) => {
         {!isMobile && (
           <Box>
             <FeedbackChart
-              feedbacks={feedbackTargetData?.feedbacks ?? []}
-              studentCount={studentCount}
+              feedbacks={feedbacks}
+              studentCount={groupStudentCount}
               opensAt={opensAt}
               closesAt={closesAt}
               feedbackReminderLastSentAt={feedbackReminderLastSentAt}
@@ -119,25 +150,15 @@ const ResultsView = forwardRef((_props, ref) => {
             publicQuestionIds={publicQuestionIds ?? []}
             questions={questions}
             questionOrder={questionOrder}
-            feedbacks={feedbackTargetData?.feedbacks ?? []}
+            feedbacks={feedbacks}
             isResponsibleTeacher={isResponsibleTeacher}
             isOrganisationUser={isOrganisationReader}
-            feedbackCount={feedbackCount}
+            feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />
         )}
       </Box>
     </>
-  )
-})
-
-const Results = () => {
-  const componentRef = useRef()
-
-  return (
-    <Box>
-      <ResultsView ref={componentRef} />
-    </Box>
   )
 }
 

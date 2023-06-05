@@ -40,7 +40,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
 }
 
 const update = async (req, res) => {
-  const { isAdmin, user } = req
+  const { user } = req
   const survey = await Survey.findByPk(Number(req.params.id))
 
   if (!survey) throw new ApplicationError('Not found', 404)
@@ -49,7 +49,7 @@ const update = async (req, res) => {
 
   const isUniversitySurvey = survey.type === 'university'
 
-  if (isUniversitySurvey && !isAdmin) throw new ApplicationError('Forbidden', 403)
+  if (isUniversitySurvey && !user.isAdmin) throw new ApplicationError('Forbidden', 403)
 
   if (survey.type === 'programme') {
     const writeAccess = await checkUserWriteAccess(survey, user)

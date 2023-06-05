@@ -7,11 +7,10 @@ const { User, Banner } = require('../../models')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
-const { ADMINS } = require('../../util/config')
 
 const login = async (req, res) => {
-  const { user, isAdmin, loginAs } = req
-  const iamGroups = req.noad ? [] : req.iamGroups ?? []
+  const { user, loginAs } = req
+  const iamGroups = req.noad ? [] : req.user.iamGroups ?? []
 
   if (!loginAs) {
     user.lastLoggedIn = new Date()
@@ -27,7 +26,6 @@ const login = async (req, res) => {
     ...user.toJSON(),
     isTeacher,
     iamGroups,
-    isAdmin,
     lastRestart,
     banners,
   })
@@ -59,7 +57,7 @@ const getUserByEmail = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
   const { id } = req.params
-  if (id !== req.user.id && !ADMINS.includes(req.user.username)) {
+  if (id !== req.user.id && !req.user.isAdmin) {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
 
@@ -77,7 +75,7 @@ const getUserDetails = async (req, res) => {
 }
 
 const getAllUserAccess = async (req, res) => {
-  if (!ADMINS.includes(req.user.username)) throw new ApplicationError('Forbidden', 403)
+  if (!req.user.isAdmin) throw new ApplicationError('Forbidden', 403)
 
   const usersWithAccess = await getAllOrganisationAccess()
 

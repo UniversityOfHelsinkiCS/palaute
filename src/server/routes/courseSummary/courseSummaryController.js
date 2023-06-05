@@ -12,21 +12,6 @@ const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
 
-const INCLUDED_ORGANISATIONS_BY_USER_ID = {
-  // Jussi Merenmies
-  'hy-hlo-1548120': ['300-M001'],
-}
-
-const filterOrganisationAccess = (organisationAccess, user) => {
-  const includedOrganisationCodes = INCLUDED_ORGANISATIONS_BY_USER_ID[user.id]
-
-  if (!includedOrganisationCodes) {
-    return organisationAccess
-  }
-
-  return organisationAccess.filter(({ organisation }) => includedOrganisationCodes.includes(organisation.code))
-}
-
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
     `
@@ -63,14 +48,13 @@ const getAccessInfo = async (req, res) => {
     })
   }
 
-  const [organisationAccess, accessibleCourseRealisationIds] = await Promise.all([
-    user.getOrganisationAccess(),
-    getAccessibleCourseRealisationIds(user),
-  ])
+  const { organisationAccess } = user
+  const accesses = Object.entries(organisationAccess)
+  const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
 
-  const adminAccess = !!organisationAccess.find(org => org.access.admin)
+  const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
 
-  const accessible = organisationAccess.length > 0 || accessibleCourseRealisationIds.length > 0
+  const accessible = accesses.length > 0 || accessibleCourseRealisationIds.length > 0
 
   const defaultDateRange = accessible
     ? await getSummaryDefaultDateRange({
@@ -81,16 +65,19 @@ const getAccessInfo = async (req, res) => {
 
   // For grafana statistics
   if (organisationAccess.length === 1) {
-    const { name, code } = organisationAccess[0].organisation.dataValues
-    logger.info('Organisation access', {
-      organisationName: name.fi,
-      organisationCode: code,
-    })
+    ;(async () => {
+      const organisation = await Organisation.findOne({ where: { code: accesses[0][0] } })
+      const { name, code } = organisation.dataValues
+      logger.info('Organisation access', {
+        organisationName: name.fi,
+        organisationCode: code,
+      })
+    })()
   }
 
   return res.send({
     accessible,
-    adminAccess,
+    adminAccess: isAdminOfSomeOrganisation,
     defaultDateRange,
   })
 }
@@ -111,10 +98,6 @@ const getOrganisations = async (req, res) => {
     ? fullOrganisationAccess.filter(org => org.organisation.code === code)
     : fullOrganisationAccess
 
-  if (organisationAccess.length === 0 && accessibleCourseRealisationIds.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
-  }
-
   const parsedStartDate = startDate ? new Date(startDate) : null
   const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
   const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
@@ -122,7 +105,7 @@ const getOrganisations = async (req, res) => {
   const { averageRow, organisations } = await getOrganisationSummaries({
     user,
     questions,
-    organisationAccess: filterOrganisationAccess(organisationAccess, user),
+    organisationAccess,
     accessibleCourseRealisationIds,
     includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
     tagId,
@@ -139,7 +122,6 @@ const getOrganisations = async (req, res) => {
 
 const getByCourseUnit = async (req, res) => {
   const { user } = req
-  const { silent } = req.query
   const { code } = req.params
 
   const courseUnits = await CourseUnit.findAll({
@@ -170,14 +152,6 @@ const getByCourseUnit = async (req, res) => {
     courseCode: code,
     questions,
   })
-
-  if (courseRealisations.length === 0) {
-    if (silent !== 'true') {
-      throw new ApplicationError('Forbidden', 403)
-    } else {
-      return res.send(null)
-    }
-  }
 
   return res.send({
     questions,

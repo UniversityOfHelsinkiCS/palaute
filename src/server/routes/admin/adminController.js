@@ -2,7 +2,7 @@ const Router = require('express')
 
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { format } = require('date-fns')
+const { format, subMonths } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')
 const updaterClient = require('../../util/updaterClient')
@@ -61,7 +61,7 @@ const getUpdaterStatuses = async (req, res) => {
 }
 
 const runPate = async (_, res) => {
-  await mailer.runCron()
+  await mailer.runPateCron()
   return res.sendStatus(204)
 }
 
@@ -390,7 +390,7 @@ const getNorppaStatistics = async (req, res) => {
     WHERE opens_at > :opensAt
     AND closes_at < :closesAt
     AND feedback_type = 'courseRealisation'
-    AND (u.access_status != 'RESPONSIBLE_TEACHER OR u.access_status != 'TEACHER)'
+    AND NOT is_teacher(u.access_status)
     GROUP BY f.id, cu.name, cu.course_code, c.start_date, c.end_date, org.id, parentorg.id;
     `,
     {
@@ -531,7 +531,13 @@ const getFeedbackCorrespondents = async (req, res) => {
 }
 
 const getInactiveCourseRealisations = async (req, res) => {
-  const inactiveCourseRealisations = await InactiveCourseRealisation.findAll()
+  const inactiveCourseRealisations = await InactiveCourseRealisation.findAll({
+    where: {
+      endDate: {
+        [Op.gt]: subMonths(new Date(), 3),
+      },
+    },
+  })
 
   return res.send(inactiveCourseRealisations)
 }

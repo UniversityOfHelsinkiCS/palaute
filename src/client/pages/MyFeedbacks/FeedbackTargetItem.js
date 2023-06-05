@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { lightFormat, parseISO } from 'date-fns'
 
 import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 import { useSnackbar } from 'notistack'
@@ -15,6 +14,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import styles from '../../util/chipStyles'
+import { getStartAndEndString } from '../../util/getDateRangeString'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -154,8 +154,6 @@ const FeedbackResponseChip = () => {
   )
 }
 
-const formatDate = date => lightFormat(date, 'd.M.yyyy')
-
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -164,9 +162,10 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
 
+  const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
-    opensAt: formatDate(parseISO(opensAt)),
-    closesAt: formatDate(parseISO(closesAt)),
+    opensAt: startDate,
+    closesAt: endDate,
   })
 
   const feedbackGiven = Boolean(feedback)
@@ -190,7 +189,14 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       <ListItemText primary={periodInfo} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
-      <Box mt={1} mb={1} display="flex" gap="1rem">
+      <Box
+        mt={1}
+        mb={1}
+        display="flex"
+        rowGap="0.4rem"
+        columnGap="1rem"
+        sx={theme => ({ [theme.breakpoints.down('sm')]: { flexDirection: 'column', alignItems: 'start' } })}
+      >
         {isEnded && !feedbackGiven && <FeedbackEndedChip />}
         {notStarted && !continuousFeedbackEnabled && <FeedbackNotStartedChip />}
         {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackChip />}

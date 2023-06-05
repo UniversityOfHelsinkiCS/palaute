@@ -1,12 +1,10 @@
 const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
-const { JWT_KEY, ADMINS } = require('../util/config')
+const { JWT_KEY } = require('../util/config')
 const { User } = require('../models')
 const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 const { getUserIams } = require('../util/jami')
-
-const isSuperAdmin = username => ADMINS?.includes(username)
 
 const getTestUser = async () => {
   let testUser = await User.findByPk('abc1234')
@@ -24,13 +22,13 @@ const getTestUser = async () => {
   return testUser
 }
 
-const getLoggedInAsUser = async (actualUser, loggedInAsUser) => {
-  if (!isSuperAdmin(actualUser)) return undefined
+const getLoggedInAsUser = async (user, loggedInAsUserId) => {
+  if (!user.isAdmin) return undefined
 
-  const user = await User.findByPk(loggedInAsUser)
-  user.iamGroups = await getUserIams(loggedInAsUser)
+  const loggedInAsUser = await User.findByPk(loggedInAsUserId)
+  loggedInAsUser.iamGroups = await getUserIams(loggedInAsUserId)
 
-  return user
+  return loggedInAsUser
 }
 
 const getUsernameFromToken = req => {
@@ -68,17 +66,15 @@ const currentUserMiddleware = async (req, _, next) => {
   }
 
   if (req.headers['x-admin-logged-in-as']) {
-    const loggedInAsUser = await getLoggedInAsUser(username, req.headers['x-admin-logged-in-as'])
+    const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
     if (loggedInAsUser) {
       req.user = loggedInAsUser
       req.loginAs = true
     }
   }
 
-  req.isAdmin = isNoAdPath ? false : isSuperAdmin(req.user.username)
-  req.user.isAdmin = req.isAdmin
-
   if (!req.loginAs) req.user.iamGroups = req.iamGroups
+  await req.user.populateAccess()
 
   return next()
 }

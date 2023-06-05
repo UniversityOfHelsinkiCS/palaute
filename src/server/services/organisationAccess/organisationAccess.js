@@ -1,11 +1,11 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { normalizeOrganisationCode } = require('../../util/common')
-const { inE2EMode, ADMINS } = require('../../util/config')
-const { getUserIamAccess, getAccessToAll, getAllUserAccess } = require('../../util/jami')
+const { User, Organisation } = require('../../models')
 
-const isSuperAdmin = user => ADMINS.includes(user.username)
+const { normalizeOrganisationCode } = require('../../util/common')
+const { inE2EMode } = require('../../util/config')
+const { getUserIamAccess, getAllUserAccess, getAccessToAll } = require('../../util/jami')
 
 const getAccessFromIAMs = async user => {
   if (inE2EMode) return {}
@@ -18,6 +18,7 @@ const getAccessFromIAMs = async user => {
   Object.keys(iamAccess).forEach(code => {
     access[normalizeOrganisationCode(code)] = iamAccess[code]
   })
+
   return access
 }
 
@@ -36,10 +37,6 @@ const getFeedbackCorrespondentAccess = async user => {
 }
 
 const getOrganisationAccess = async user => {
-  if (isSuperAdmin(user)) {
-    return getAccessToAll()
-  }
-
   const access = {
     ...(await getAccessFromIAMs(user)),
     ...(await getFeedbackCorrespondentAccess(user)),
@@ -48,10 +45,9 @@ const getOrganisationAccess = async user => {
   return access
 }
 
-const getAllOrganisationAccess = async () => {
-  // eslint-disable-next-line global-require
-  const { User, Organisation } = require('../../models')
+const getAdminOrganisationAccess = () => getAccessToAll()
 
+const getAllOrganisationAccess = async () => {
   const allAccess = await getAllUserAccess()
 
   const userIds = allAccess.map(({ id }) => id)
@@ -104,5 +100,6 @@ const getAllOrganisationAccess = async () => {
 
 module.exports = {
   getOrganisationAccess,
+  getAdminOrganisationAccess,
   getAllOrganisationAccess,
 }

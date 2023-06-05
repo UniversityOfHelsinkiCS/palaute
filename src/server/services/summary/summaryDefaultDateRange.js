@@ -11,7 +11,7 @@ const getYearRange = date => {
   }
 }
 
-const getLatestDateForOrganisations = async organisationIds => {
+const getLatestDateForOrganisations = async organisationCodes => {
   const latestFeedbackTargetWithFeedbacks = await FeedbackTarget.findOne({
     attributes: ['id'],
     where: {
@@ -29,7 +29,7 @@ const getLatestDateForOrganisations = async organisationIds => {
           required: true,
           attributes: ['id'],
           where: {
-            id: { [Op.in]: organisationIds },
+            code: { [Op.in]: organisationCodes },
           },
         },
       },
@@ -84,8 +84,8 @@ const getLatestDateForTeacher = async user => {
  * and the last year is determined.
  */
 const getSummaryDefaultDateRange = async ({ user, organisationAccess }) => {
-  if (organisationAccess.some(org => org.access.read)) {
-    const startDate = await getLatestDateForOrganisations(organisationAccess.map(org => org.organisation.id))
+  if (Object.values(organisationAccess).some(access => access.read)) {
+    const startDate = await getLatestDateForOrganisations(Object.keys(organisationAccess))
     if (!startDate) {
       return getYearRange(Date.now())
     }
