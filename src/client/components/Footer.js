@@ -70,11 +70,11 @@ const Footer = ({ user }) => {
             </Link>
             {duration && (
               <>
-                <Typography variant="subtitle1" fontSize={12}>
+                <Typography variant="subtitle1" fontSize={10}>
                   {t('footer:lastUpdate', { duration })}
                 </Typography>
                 {user.isAdmin && (
-                  <Typography variant="subtitle1" fontSize={12}>
+                  <Typography variant="subtitle1" fontSize={10}>
                     git sha = {GIT_SHA}
                   </Typography>
                 )}
