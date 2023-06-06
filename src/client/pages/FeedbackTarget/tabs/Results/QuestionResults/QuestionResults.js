@@ -76,7 +76,7 @@ const QuestionResults = React.memo(
                     width: '100%',
                   },
                   '@media print': {
-                    width: '20%',
+                    width: '50%',
                   },
                 })}
               >
