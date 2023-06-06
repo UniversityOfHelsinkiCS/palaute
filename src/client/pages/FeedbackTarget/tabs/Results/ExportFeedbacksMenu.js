@@ -26,7 +26,7 @@ const styles = {
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map(f => f.questionId)
-  const sortedQuestions = questions.sort((a, b) => orderOfIds.indexOf(a.id) - orderOfIds.indexOf(b.id))
+  const sortedQuestions = _.orderBy(questions, q => orderOfIds.indexOf(q.id))
 
   const headers = sortedQuestions
     .filter(q => {
