@@ -4,7 +4,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 
 import { Link } from 'react-router-dom'
-import hyLogo from '../../assets/hy_logo.svg'
+import hyLogo from '../../assets/tau_logo.svg'
 
 const styles = {
   link: {
