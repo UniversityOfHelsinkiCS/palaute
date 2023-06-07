@@ -248,8 +248,8 @@ const NavBar = ({ guest = false }) => {
         position="relative"
         sx={{
           zIndex: theme => theme.zIndex.drawer + 1,
-          background: theme => theme.palette.primary.dark,
-          boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
+          background: theme => theme.palette.primary.main,
+          boxShadow: theme => `0px 0px 6px 1px #aaa`,
           borderRadius: 0,
         }}
       >
