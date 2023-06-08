@@ -1,5 +1,14 @@
 {
   "navBar": {
     "admin": "Admin TAU"
+  },
+  "footer": {
+    "contactSupport": "Contact support and give feedback"
+  },
+  "links": {
+    "accessibility": "https://www.tuni.fi/fi/tutustu-meihin/tampereen-korkeakouluyhteison-verkkosivujen-saavutettavuusseloste",
+    "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja",
+    "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
+    "wikiRoot": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut"
   }
 }
