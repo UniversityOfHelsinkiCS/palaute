@@ -38,6 +38,13 @@ const Footer = ({ user }) => {
     <Box marginTop="auto" pt="1rem">
       <Divider />
       <Container component="footer" maxWidth="xl">
+        {!inProduction && (
+          <Box my={2}>
+            <Box>
+              <Typography>{inStaging ? 'STAGING' : 'DEVELOPMENT'}</Typography>
+            </Box>
+          </Box>
+        )}
         <Box my="2rem" display="flex" justifyContent="space-between" alignItems="center">
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
