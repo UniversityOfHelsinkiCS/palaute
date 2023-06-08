@@ -4,7 +4,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 
 import { Link } from 'react-router-dom'
-import hyLogo from '../../assets/hy_logo.svg'
+import hyLogo from '../../assets/tau_logo.svg'
 
 const styles = {
   link: {
@@ -24,16 +24,16 @@ const styles = {
     },
   },
   image: {
-    width: '2.5rem',
+    width: '12rem',
     height: 'auto',
   },
 }
 
 const Logo = ({ guest = false }) => (
   <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
-    <Box display="inline-flex" alignItems="end" sx={styles.link}>
+    <Box display="flex" alignItems="center" sx={styles.link}>
       <img src={hyLogo} alt="HY" css={styles.image} />
-      <Box ml="1rem" pb="0.2rem" textTransform="uppercase" fontWeight={700} fontSize={18}>
+      <Box ml="1rem" textTransform="uppercase" fontWeight={700} fontSize={18}>
         Norppa
       </Box>
     </Box>
