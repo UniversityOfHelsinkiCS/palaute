@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Container, Divider, Link, Typography } from '@mui/material'
+import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { formatDuration, intervalToDuration } from 'date-fns'
@@ -39,48 +39,37 @@ const Footer = ({ user }) => {
       <Divider />
       <Container component="footer" maxWidth="xl">
         <Box my="2rem" display="flex" justifyContent="space-between" alignItems="center">
-          {!inProduction && (
-            <>
-              <Box>
-                <Typography>{inStaging ? 'STAGING' : 'DEVELOPMENT'}</Typography>
-              </Box>
-              <img src={images.norppa_viskaali} style={styles.norppa} alt="Norppa drawing by tttriple" />
-            </>
-          )}
-          <div>
-            <Typography>
-              {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${t('links:supportEmail')}`} underline="hover">
-                {t('links:supportEmail')}
-              </Link>
-            </Typography>
-            <ExternalLink href={t('links:accessibility')}>{t('footer:accessibilityDocument')}</ExternalLink>
-            <Typography>
-              <ExternalLink href={t('links:dataProtection')}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
-            </Typography>
-            {user && user.isTeacher && (
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
               <Typography>
-                <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
+                {t('footer:contactSupport')}:{' '}
+                <Link href={`mailto:${t('links:supportEmail')}`} underline="hover">
+                  {t('links:supportEmail')}
+                </Link>
               </Typography>
-            )}
-          </div>
-          <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
-            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
-              <img src={images.toska_color} style={styles.logo} alt="Toska" />
-            </Link>
-            {duration && (
-              <>
-                <Typography variant="subtitle1" fontSize={12}>
-                  {t('footer:lastUpdate', { duration })}
-                </Typography>
-                {user.isAdmin && (
-                  <Typography variant="subtitle1" fontSize={12}>
-                    git sha = {GIT_SHA}
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2} justifyContent="flex-end">
+                <Grid item xs={12} md={'auto'}>
+                  <ExternalLink href={t('links:accessibility')}>{t('footer:accessibilityDocument')}</ExternalLink>
+                </Grid>
+                <Grid item xs={12} md={'auto'}>
+                  <Typography>
+                    <ExternalLink href={t('links:dataProtection')}>
+                      {t('feedbackView:dataProtectionNotice')}
+                    </ExternalLink>
                   </Typography>
+                </Grid>
+                {user && user.isTeacher && (
+                  <Grid item xs={12} md={'auto'}>
+                    <Typography>
+                      <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
+                    </Typography>
+                  </Grid>
                 )}
-              </>
-            )}
-          </Box>
+              </Grid>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </Box>
