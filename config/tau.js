@@ -27,7 +27,7 @@ const config = {
    * The id of a LIKERT-type question that is considered the university level workload question.
    * Future ideas: get rid of this and add a new question type for it instead.
    */
-  WORKLOAD_QUESTION_ID: 0,
+  WORKLOAD_QUESTION_ID: 90,
 
   /**
    * How long JWT tokens in noad links last

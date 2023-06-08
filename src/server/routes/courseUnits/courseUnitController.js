@@ -6,6 +6,7 @@ const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organ
 
 const { sequelize } = require('../../db/dbConnection')
 const { INCLUDE_COURSES } = require('../../util/config')
+const logger = require('../../util/logger')
 
 const getCourseUnitsForTeacher = async (req, res) => {
   const { user } = req
@@ -41,6 +42,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
   )
 
   const latestEndedCourseRealisationIds = latestEndedCourseRealisationsRows.map(row => row.course_realisation_id)
+
+  // log latestEndedCourseRealisationIds
+  logger.info(`latestEndedCourseRealisationIds:`)
+  logger.info(latestEndedCourseRealisationIds)
 
   const userTargets = await UserFeedbackTarget.findAll({
     where: {
@@ -113,6 +118,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
       },
     ],
   })
+  logger.info(`userTargets:`)
+  logger.info(`${JSON.stringify(userTargets)}`)
 
   const targets = userTargets
     .map(({ feedbackTarget }) => feedbackTarget)
@@ -120,6 +127,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
       ({ courseUnit }) =>
         !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
     )
+  logger.info(`targets:`)
+  logger.info(`${JSON.stringify(targets)}`)
 
   const courseUnitByCourseCode = targets.reduce(
     (acc, { courseUnit }) => ({
@@ -140,7 +149,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.includes(target.courseRealisation.id)
     )
-
+    logger.info(`targets 2:`)
+    logger.info(`${JSON.stringify(targets)}`)
     const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
 
     const ongoingTargets = targets.filter(
