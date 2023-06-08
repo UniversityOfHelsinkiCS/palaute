@@ -225,9 +225,9 @@ const config = {
 
   SENTRY_DSN: 'https://8877ea30aa714216b27b22c8aa395723@sentry.cs.helsinki.fi/6',
 
-  PATE_URL: 'https://importer.cs.helsinki.fi/api/pate',
+  PATE_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate',
 
-  JAMI_URL: 'https://importer.cs.helsinki.fi/api/auth',
+  JAMI_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami',
 
   PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
 
