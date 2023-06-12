@@ -141,6 +141,11 @@ const config = {
    * Iam groups header name
    */
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  /**
+   * Transport logs to separate graylog server
+   */
+  GELF_TRANSPORT_ENABLED: false,
 }
 
 module.exports = config

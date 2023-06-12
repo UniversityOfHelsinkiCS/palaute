@@ -248,6 +248,8 @@ const config = {
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  GELF_TRANSPORT_ENABLED: true,
 }
 
 module.exports = config
