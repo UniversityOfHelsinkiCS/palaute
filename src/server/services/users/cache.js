@@ -1,8 +1,10 @@
 const LRU = require('lru-cache')
 const logger = require('../../util/logger')
+const { USER_CACHE_SIZE, USER_CACHE_TTL } = require('../../util/config')
 
 const lru = new LRU({
-  max: 250,
+  max: USER_CACHE_SIZE,
+  ttl: USER_CACHE_TTL,
 })
 
 const cache = {

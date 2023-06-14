@@ -6,10 +6,11 @@ const FeedbackTarget = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
 const logger = require('../../util/logger')
 const { CourseRealisationsTag, CourseRealisation } = require('../../models')
-const { FEEDBACK_TARGET_CACHE_SIZE } = require('../../util/config')
+const { FEEDBACK_TARGET_CACHE_SIZE, FEEDBACK_TARGET_CACHE_TTL } = require('../../util/config')
 
 const lru = new LRUCache({
   max: FEEDBACK_TARGET_CACHE_SIZE,
+  ttl: FEEDBACK_TARGET_CACHE_TTL,
 })
 
 const cache = {
