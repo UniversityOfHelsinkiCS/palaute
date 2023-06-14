@@ -1,6 +1,4 @@
-
 # <img src=./public/seal.gif width=100px /> Palaute ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/production.yml/badge.svg) ![Release](https://github.com/UniversityOfHelsinkiCS/palaute/actions/workflows/staging.yml/badge.svg)
-
 
 More commonly known as **Norppa**
 
@@ -18,6 +16,8 @@ Create a `.env` file inside the project's root directory. In that file, copy the
 ## How users can get started with Palaute
 
 Clone the repo, install docker to get started!
+
+Before starting the project for the first time run `npm i` to install needed development dependencies.
 
 To start the project in development mode use this command. It will start everything in development mode:
 
@@ -52,7 +52,6 @@ $ npm run reset
 [Accessibility document](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md)
 
 ## Maintainers and Contribution <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
-
 
 **[Toska](https://toska.dev/)**
 
