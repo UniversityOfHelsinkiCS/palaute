@@ -7,8 +7,57 @@
   },
   "links": {
     "accessibility": "https://www.tuni.fi/fi/tutustu-meihin/tampereen-korkeakouluyhteison-verkkosivujen-saavutettavuusseloste",
-    "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja",
+    "dataProtection": "https://www.tuni.fi/en/about-us/data-protection/privacy-notice-students-and-student-services",
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
-    "wikiRoot": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut"
+    "wikiRoot": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system"
+  },
+  "common": {
+    "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
+    "notPublicShortInfo": "Visible only to responsible teachers and unit admins"
+  },
+  "teacherView": {
+    "noCourseRealisations": "No course implementations"
+  },
+  "questionEditor": {
+    "programmeQuestion": "Unit level"
+  },
+  "editFeedbackTarget": {
+    "upperLevelQuestionsInfo": "Survey already has {{count}} university and unit level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the question",
+    "upperLevelQuestionsInfoOne": "Survey already has {{count}} university and unit ({{primaryOrganisation}}) level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the questions",
+    "upperLevelQuestionsInfoMany": "Survey already has {{count}} university and unit level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the questions.\n Unit level questions come from the responsible organisations, which are {{organisations}}.",
+    "copyFromCourseDialogTitle": "Copy questions from another course implementation",
+    "copyFromCourseButton": "Copy questions from another course implementation",
+    "copyFromCourseInfoAlert": "You can copy questions from courses that you teach. First, choose the course and then the implementation from which you want to copy the questions",
+    "copyFromCourseChooseCourse": "Choose a course to see its implementations",
+    "copyFromCourseNoQuestions": "None of the implementations on the course have any questions"
+  },
+  "questionResults": {
+    "multipleChoiceScale": "1= sufficient, 2= satisfactory, 3= good, 4= very good, 5= excellent, N/A = cannot answer"
+  },
+  "feedbackTargetResults": {
+    "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and unit administrators"
+  },
+  "studentsWithFeedback": {
+    "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the unit's settings"
+  },
+  "publicQuestions": {
+    "none": "Only unit personnel"
+  },
+  "courseSummary": {
+    "programmeLevelQuestions": "University and unit level questions",
+    "programmeSummary": "Unit summary",
+    "programmeSettings": "Unit settings",
+    "courseRealisation": "Course implementation",
+    "showHiddenOrganisations": "Select hidden units ({{count}})",
+    "hidingInfo": "You can hide uninteresting unit summaries from yourself"
+  },
+  "organisationSettings": {
+    "surveyInfo": "Unit level questions are displayed in every unit's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    "surveyTab": "Unit survey",
+    "editProgrammeQuestionsDialogContent": "'You are editing the questions shared by the whole unit. These questions are visible for all the courses of the unit. Are you sure you want to edit these questions?",
+    "showCurName": "Show course implementation names"
+  },
+  "feedbackTargetView": {
+    "courseSummary": "Summary of course implementations"
   }
 }
