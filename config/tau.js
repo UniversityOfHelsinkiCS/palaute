@@ -106,6 +106,11 @@ const config = {
   TRANSLATION_NAMESPACE: 'tau',
 
   /**
+   * Supported languages. Add translations for each language. Defaults are 'fi' ,'sv' and 'en'
+   */
+  LANGUAGES: ['fi', 'en'],
+
+  /**
    * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
    */
   DEV_USERNAME: 'admin',
