@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import HttpApi from 'i18next-http-backend'
-import { basePath, inProduction, TRANSLATION_NAMESPACE } from './common'
+import { basePath, inProduction, LANGUAGES, TRANSLATION_NAMESPACE } from './common'
 
 /**
  * Load the translation files using Http backend, from public server resources (public/locales/)
@@ -25,6 +25,7 @@ i18n
     debug: !inProduction,
     nsSeparator: '.',
     keySeparator: ':',
+    supportedLngs: LANGUAGES,
   })
 
 // eslint-disable-next-line
