@@ -56,6 +56,7 @@ const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPON
 const IAM_GROUPS_HEADER = config.get('IAM_GROUPS_HEADER')
 const TRANSLATION_NAMESPACE = config.get('TRANSLATION_NAMESPACE')
 const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
+const SENTRY_DSN = config.get('SENTRY_DSN')
 
 module.exports = {
   inE2EMode,
@@ -91,4 +92,5 @@ module.exports = {
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,
   GELF_TRANSPORT_ENABLED,
+  SENTRY_DSN,
 }
