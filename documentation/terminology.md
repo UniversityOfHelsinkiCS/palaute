@@ -15,8 +15,15 @@ Some Norppa-related terminology and "koodari slang" is explained here
 |       `survey`       |     -      |             Palautekysely             |              -              |      Many levels: one by teacher, one by `org`, one by university       |
 |      `question`      |     -      |                Kysymys                |              -              |                            `survey` has many                            |
 |      `feedback`      |    `fb`    |          Opiskelijan palaute          |              -              |    json contains all of one student's answers to questions of survey    |
-|  `feedbackResponse`  |     -      |             Vastapalaute              |              -              |               Given by teacher after feedback period over               |
+|  `feedbackResponse`  |     -      |   Vastapalaute (en: Counter Feedback) |              -              |               Given by teacher after feedback period over               |
 
+### Extras: less common things
+
+|      Code name       | Short name |                Finnish                |                             Additional info                             |
+| :------------------: | :--------: | :-----------------------------------: | :---------------------------------------------------------------------: |
+| `continuousFeedback` | `cfb`      | Jatkuva palaute                       | Free form textual feedback given during the course. Must be activated   |
+| `feedbackCorrespondent` | -       | Palautevastaava                       | Users appointed (by org admin) in Norppa to receive org admin rights.   |
+| `tag`                | -          | Tägi                                  | Associable to `cu` and `cur`, used by some orgs to sort and filter their courses | 
 ---
 
 ## Infra and services
