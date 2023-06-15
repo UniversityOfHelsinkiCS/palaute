@@ -6,6 +6,7 @@ import { EditOutlined } from '@mui/icons-material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { LANGUAGES } from '../../util/common'
 
 import LikertEditor from './LikertEditor'
 import LikertPreview from './LikertPreview'
@@ -202,7 +203,7 @@ const QuestionCard = ({
         {isEditing ? (
           <>
             <Box mb={2}>
-              <EditorComponent name={name} languages={['fi', 'sv', 'en']} />
+              <EditorComponent name={name} languages={LANGUAGES} />
             </Box>
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
