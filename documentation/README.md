@@ -2,15 +2,12 @@
 
 This is the index page for Norppa docs.
 
-We plan to broadly document core topics suchs as entity schema, architecture and infrastructure, and maybe go over some more specific design decisions.
-
-Data protection and accessibility documents are also considered.
-
 ## Topics
 
 - [Entity schema](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/entity_diagram.md)
 - [Access rights (Oikeusryhmät, in Finnish)](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/oikeusryhmat.md)
 - [Norppa terminology](https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/terminology.md)
+- [Cronjobs](cronjobs.md)
 - [Configuration](configuration.md)
 - [Translations](translations.md)
 
@@ -50,3 +47,8 @@ graph TB
     end
 
 ```
+
+## Documentation guidelines
+
+- Document whatever cannot be documented in code or needs visibility for a broader audience.
+- The biggest and only crime is to not delete or update outdated documentation when you notice it. No need to ask for permission to do so.
