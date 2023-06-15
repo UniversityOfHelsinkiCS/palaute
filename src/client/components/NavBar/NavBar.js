@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { PersonOutlined } from '@mui/icons-material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import { LANGUAGES } from '../../util/common'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
@@ -90,19 +91,15 @@ const styles = {
   },
 }
 
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
-  const languages = ['fi', 'sv', 'en']
-
-  return (
-    <Box sx={styles.container} ref={ref}>
-      {languages.map(l => (
-        <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
-          {l.toUpperCase()}
-        </MenuItem>
-      ))}
-    </Box>
-  )
-})
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
+  <Box sx={styles.container} ref={ref}>
+    {LANGUAGES.map(l => (
+      <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
+        {l.toUpperCase()}
+      </MenuItem>
+    ))}
+  </Box>
+))
 
 const NavBar = ({ guest = false }) => {
   const { pathname } = useLocation()
