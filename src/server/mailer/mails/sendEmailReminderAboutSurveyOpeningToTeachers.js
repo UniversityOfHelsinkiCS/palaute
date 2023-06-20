@@ -107,11 +107,6 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  const t = i18n.getFixedT('fi')
-  const courseNamesAndUrls = ''
-
-  const text = t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls, FEEDBACK_SYSTEM })
-
   const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, { primaryOnly: true })
 
   const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(teacher =>
