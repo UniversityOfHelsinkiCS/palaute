@@ -11,5 +11,39 @@
     "instructions": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut",
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
     "wikiRoot": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut"
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Anna palautetta opintojaksolle {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan opintojakson <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautekysely sulkeutuu {{closesAt}}. Kiitos!\n\n{{reminder}}"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Opettaja vastasi palautteeseesi opintojaksolla {{courseName}}",
+      "text": "Hyvä opiskelija!\n Opintojakson {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Opintojakson {{courseName}} palautelomake on avautunut",
+      "subjectMultiple": "Opintojaksopalaute on avautunut",
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "Uutta jatkuvaa palautetta opettamallesi opintojaksolle {{courseName}}",
+      "subjectMultiple": "Uutta jatkuvaa palautetta opettamillesi opintojaksoille",
+      "text": "Hyvä opettaja! <br/>\nSeuraaville opintojaksojen toteutuksille on annettu uutta jatkuvaa palautetta:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Annathan vastapalautetta opintojaksolle {{courseName}}",
+      "text": "Hyvä opettaja! <br/>\nOpintojakson palautekysely on sulkeutunut: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla opintojakson nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille opintojakson toteutukselle ilmoittautuneille opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "Uusi vastapalaute opettajaltasi opintojaksolla {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Opintojakson {{courseName}} {{dates}} opettaja on antanut vastapalautteen opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa opintojakson palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Palautekysely opettamallesi opintojaksolle {{courseName}} on aukeamassa",
+      "subjectMultiple": "Opettamiesi opintojaksojen palautekyselyt ovat aukeamassa",
+      "text": "Hyvä opettaja! <br/> \nSeuraavien opintojaksojen palautekyselyt ovat aukeamassa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "Tämä on automaattiviesti opintojaksopalautejärjestelmästä <a href={{FEEDBACK_SYSTEM}}>{{FEEDBACK_SYSTEM}}</a>. Älä vastaa tähän viestiin. Ongelmatilanteissa ota yhteys <a href=mailto:opintotietojarjestelmat.tau@tuni.fi>opintotietojarjestelmat.tau@tuni.fi</a>"
   }
 }

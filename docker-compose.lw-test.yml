@@ -45,6 +45,7 @@ services:
       - JWT_KEY=minttujam
       - REACT_APP_STAGING=true
       - NODE_CONFIG_ENV=tau
+      - FEEDBACK_SYSTEM=http://www.google.fi
     ports:
       - 3004:3004
       - 9229:9229

@@ -2,6 +2,7 @@
   "navBar": {
     "admin": "Admin TAU"
   },
+
   "footer": {
     "contactSupport": "Contact support and give feedback"
   },
@@ -10,5 +11,39 @@
     "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja",
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
     "wikiRoot": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut"
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Please give feedback on the course {{courseName}}",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Your feedback received a response on on the course {{courseName}}",
+      "text": "Dear student!\n The teacher of the course {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseName}}</a>"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Course feedback for course {{courseName}} has opened",
+      "subjectMultiple": "Course feedback has opened",
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and University operations.\nOnce you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long\nas the form remains open."
+    },
+    "continuousFeedbackDigest": {
+      "subject": "New continuous feedback on your course {{courseName}}",
+      "subjectMultiple": "New continuous feedback on your courses",
+      "text": "Dear teacher! <br/>\nThe following courses have received new continuous feedback:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Please give counter feedback for the course {{courseName}}",
+      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course implementation. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "A new counter feedback from your teacher to course {{courseName}}",
+      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Feedback for the course {{courseName}} is about to start",
+      "subjectMultiple": "The feedback for your courses are about to start",
+      "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "This message has been automatically sent from Course Feedback System <a href={{FEEDBACK_SYSTEM}}>{{FEEDBACK_SYSTEM}}</a>. Please do not reply to this message. If you have any problems with Course Feedback System, please contact <a href=mailto:studies.helpdesk.tau@tuni.fi>studies.helpdesk.tau@tuni.fi</a>"
   }
 }

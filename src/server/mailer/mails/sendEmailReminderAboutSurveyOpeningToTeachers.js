@@ -1,7 +1,7 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
-const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL } = require('../../util/config')
+const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
 const { i18n } = require('../../util/i18n')
@@ -98,7 +98,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const email = {
     to: emailAddress,
     subject,
-    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls }),
+    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls, FEEDBACK_SYSTEM }),
   }
 
   return email
@@ -106,6 +106,11 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
 
 const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
+
+  const t = i18n.getFixedT('fi')
+  const courseNamesAndUrls = ''
+
+  const text = t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls, FEEDBACK_SYSTEM })
 
   const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, { primaryOnly: true })
 
