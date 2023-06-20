@@ -21,7 +21,14 @@
     "wikiRoot": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
     "accessibility": "https://www.tuni.fi/fi/tutustu-meihin/tampereen-korkeakouluyhteison-verkkosivujen-saavutettavuusseloste",
     "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja/tietosuojailmoitus-opiskelijat-ja-opiskelijapalvelut?lang=fi",
-    "instructions": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut"
+    "instructions": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut",
+    "wikiOrganisationHelp": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
+    "wikiTeacherHelp": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
+    "toska": "",
+    "markdownHelp": "",
+    "adminGraylog": "",
+    "courseUnitPage": "https://sis-tuni.funidata.fi/student/courseunit/",
+    "courseRealisationPage": ""
   },
   "userFeedbacks": {
     "mainHeading": "Opintojaksopalautteeni",

@@ -9,7 +9,14 @@
     "accessibility": "https://www.tuni.fi/fi/tutustu-meihin/tampereen-korkeakouluyhteison-verkkosivujen-saavutettavuusseloste",
     "dataProtection": "https://www.tuni.fi/en/about-us/data-protection/privacy-notice-students-and-student-services",
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
-    "wikiRoot": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system"
+    "wikiRoot": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "wikiOrganisationHelp": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "wikiTeacherHelp": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "toska": "",
+    "markdownHelp": "",
+    "adminGraylog": "",
+    "courseUnitPage": "https://sis-tuni.funidata.fi/student/courseunit/",
+    "courseRealisationPage": ""
   },
   "common": {
     "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
