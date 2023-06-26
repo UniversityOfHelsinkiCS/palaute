@@ -18,13 +18,13 @@ services:
     container_name: palaute_app_test
 
   db:
-    image: registry.toska.cs.helsinki.fi/palaute_test_db
+    image: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi/palaute_test_db
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: palaute_test_db
   
   jami:
-    image: toska/jami:latest
+    image: quay.io/toska/jami:production
     environment:
       - PORT=3003
       - NODE_ENV=dev
