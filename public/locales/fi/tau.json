@@ -1,4 +1,12 @@
 {
+  "navBar": {
+    "admin": "Admin TAU",
+    "myFeedbacks": "Opintojaksopalautteeni",
+    "courseSummary": "Palautteiden yhteenveto"
+  },
+  "footer": {
+    "contactSupport": "Käyttäjätuki ja palaute"
+  },
   "common": {
     "course": "Opintojakso",
     "courseCode": "Opintojakson koodi",
@@ -7,14 +15,6 @@
     "publicInfo": "Vastaukset näkyvät toteutukselle ilmoittautuneille opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja yksikön palautevastaaville",
     "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille"
-  },
-  "navBar": {
-    "admin": "Admin TAU",
-    "myFeedbacks": "Opintojaksopalautteeni",
-    "courseSummary": "Palautteiden yhteenveto"
-  },
-  "footer": {
-    "contactSupport": "Käyttäjätuki ja palaute"
   },
   "links": {
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
