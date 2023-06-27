@@ -7,7 +7,7 @@ const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
-const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_URL, PATE_JWT } = process.env
+const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_URL, PATE_JWT, FEEDBACK_SYSTEM } = process.env
 
 const REDIS_CONFIG = {
   url: `redis://default:redis@${REDIS_HOST}:6379`,
@@ -37,6 +37,7 @@ const SUMMARY_EXCLUDED_ORG_IDS = config.get('SUMMARY_EXCLUDED_ORG_IDS')
 const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPONSE_EMAILS_SINCE_DATE'))
 const IAM_GROUPS_HEADER = config.get('IAM_GROUPS_HEADER')
 const TRANSLATION_NAMESPACE = config.get('TRANSLATION_NAMESPACE')
+const LANGUAGES = config.get('LANGUAGES')
 
 module.exports = {
   inE2EMode,
@@ -59,6 +60,7 @@ module.exports = {
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
   IAM_GROUPS_HEADER,
   TRANSLATION_NAMESPACE,
+  LANGUAGES,
   DATABASE_URL,
   REDIS_CONFIG,
   PORT,
@@ -70,4 +72,5 @@ module.exports = {
   INCLUDE_COURSES,
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,
+  FEEDBACK_SYSTEM,
 }
