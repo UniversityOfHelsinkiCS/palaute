@@ -9,7 +9,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
-const { PUBLIC_URL } = require('../../util/config')
+const { PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
 
@@ -90,7 +90,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const email = {
     to: teacher.email,
     subject: t('mails:counterFeedbackReminder:subject', { courseName }),
-    text: t('mails:counterFeedbackReminder:text', { courseNamesAndUrls, teachers }),
+    text: t('mails:counterFeedbackReminder:text', { courseNamesAndUrls, teachers, FEEDBACK_SYSTEM }),
   }
 
   return email
