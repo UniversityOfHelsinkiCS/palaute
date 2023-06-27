@@ -2,9 +2,12 @@
   "navBar": {
     "admin": "Admin TAU"
   },
-
   "footer": {
     "contactSupport": "Contact support and give feedback"
+  },
+  "common": {
+    "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
+    "notPublicShortInfo": "Visible only to responsible teachers and unit admins"
   },
   "links": {
     "accessibility": "https://www.tuni.fi/fi/tutustu-meihin/tampereen-korkeakouluyhteison-verkkosivujen-saavutettavuusseloste",
@@ -18,10 +21,6 @@
     "adminGraylog": "",
     "courseUnitPage": "https://sis-tuni.funidata.fi/student/courseunit/",
     "courseRealisationPage": ""
-  },
-  "common": {
-    "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
-    "notPublicShortInfo": "Visible only to responsible teachers and unit admins"
   },
   "teacherView": {
     "noCourseRealisations": "No course implementations"

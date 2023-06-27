@@ -110,6 +110,11 @@ const config = {
   TRANSLATION_NAMESPACE: 'translation',
 
   /**
+   * Supported languages. Add translations for each language. Defaults are 'fi' ,'sv' and 'en'
+   */
+  LANGUAGES: ['fi', 'sv', 'en'],
+
+  /**
    * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
    */
   DEV_USERNAME: 'mluukkai',
