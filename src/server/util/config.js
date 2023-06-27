@@ -7,7 +7,7 @@ const basePath = process.env.PUBLIC_URL || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
-const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_URL, PATE_JWT } = process.env
+const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_URL, PATE_JWT, FEEDBACK_SYSTEM } = process.env
 
 const REDIS_CONFIG = {
   url: `redis://default:redis@${REDIS_HOST}:6379`,
@@ -70,4 +70,5 @@ module.exports = {
   INCLUDE_COURSES,
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,
+  FEEDBACK_SYSTEM,
 }
