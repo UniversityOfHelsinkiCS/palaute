@@ -33,6 +33,13 @@ export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
   return new Date() > closesAt || feedbackTargetIsOpen(feedbackTarget)
 }
 
+const getOrganisationName = ({ name }, language) => {
+  // Some organisations only have a Finnish name
+  const localizedName = name[language] ?? name.fi ?? name.en ?? name.sv
+
+  return localizedName.replace("'", '`')
+}
+
 export const getOrganisationNames = (feedbackTarget, language) => {
   const { organisations } = feedbackTarget.courseUnit
 
@@ -40,14 +47,14 @@ export const getOrganisationNames = (feedbackTarget, language) => {
 
   if (organisations.length === 1)
     return {
-      primaryOrganisation: organisations[0].name[language].replace("'", '`'),
+      primaryOrganisation: getOrganisationName(organisations[0], language),
     }
 
   const lastCode = organisations[organisations.length - 1].code
 
   const allOrganisations = organisations.reduce((a, b) => {
-    if (b.code === lastCode) return `${a}${b.name[language].replace("'", '`')}`
-    return `${a}${b.name[language].replace("'", '`')}, `
+    if (b.code === lastCode) return `${a}${getOrganisationName(b, language)}`
+    return `${a}${getOrganisationName(b, language)}, `
   }, '')
 
   return {
