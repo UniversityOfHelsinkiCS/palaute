@@ -16,7 +16,13 @@ const config = {
    * can see the list of students who have given feedback.
    * Normally it is either on or off for all courses of organisation.
    */
-  STUDENT_LIST_BY_COURSE_ENABLED: [],
+  STUDENT_LIST_BY_COURSE_ENABLED: [
+    'tuni-org-1301000005',
+    'tuni-org-1010000001',
+    'tuni-org-1301000035',
+    'tuni-org-1010000009',
+    'tuni-org-1301000602',
+  ],
 
   /**
    * Enables tags for these organisations
@@ -93,7 +99,7 @@ const config = {
    * Why is it defined here in addition to the normal build argument? I don't trust it's given to the server properly.
    * Might not be required once mails are extracted away from server
    */
-  PUBLIC_URL: '',
+  PUBLIC_URL: 'https://norppa.tuni.fi',
 
   /**
    * Admin interface has link to our graylog to check updater logs
