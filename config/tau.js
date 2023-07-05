@@ -86,7 +86,7 @@ const config = {
   /**
    * JAMI (iam rights service) url
    */
-  JAMI_URL: '',
+  JAMI_URL: 'http://jami:3001',
 
   /**
    * The public url of the app, to be used for example in email links.
