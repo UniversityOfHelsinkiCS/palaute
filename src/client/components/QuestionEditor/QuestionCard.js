@@ -188,7 +188,7 @@ const QuestionCard = ({
               <QuestionPublicityToggle
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
-                onChange={handlePublicityToggle}
+                onChange={() => handlePublicityToggle(!question.public)}
               />
             )}
           </Grid>

@@ -1,5 +1,9 @@
+const os = require('os')
+
 const winston = require('winston')
-const { inProduction } = require('./config')
+const { WinstonGelfTransporter } = require('winston-gelf-transporter')
+
+const { inProduction, GELF_TRANSPORT_ENABLED } = require('./config')
 
 const { combine, timestamp, printf, splat } = winston.format
 
@@ -41,6 +45,22 @@ if (inProduction) {
   )
 
   transports.push(new winston.transports.Console({ format: prodFormat }))
+
+  if (GELF_TRANSPORT_ENABLED) {
+    transports.push(
+      new WinstonGelfTransporter({
+        handleExceptions: true,
+        host: 'svm-116.cs.helsinki.fi',
+        port: 9503,
+        protocol: 'udp',
+        hostName: os.hostname(),
+        additional: {
+          app: 'norppa',
+          environment: 'production',
+        },
+      })
+    )
+  }
 }
 
 const logger = winston.createLogger({ transports })

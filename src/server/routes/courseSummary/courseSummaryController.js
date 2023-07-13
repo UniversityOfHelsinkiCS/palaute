@@ -52,9 +52,10 @@ const getAccessInfo = async (req, res) => {
   const accesses = Object.entries(organisationAccess)
   const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
 
+  const hasReadOnSomeOrganisation = accesses.some(([, access]) => access.read)
   const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
 
-  const accessible = accesses.length > 0 || accessibleCourseRealisationIds.length > 0
+  const accessible = hasReadOnSomeOrganisation || accessibleCourseRealisationIds.length > 0
 
   const defaultDateRange = accessible
     ? await getSummaryDefaultDateRange({

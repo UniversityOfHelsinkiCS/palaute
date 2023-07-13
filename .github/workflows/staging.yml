@@ -10,26 +10,32 @@ jobs:
     uses: ./.github/workflows/test.yml
     secrets: inherit
 
-  dockerhub-release:
+  build-and-push:
     runs-on: ubuntu-latest
     needs: test
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+  
+      - name: Build image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: toska/palaute:staging
+          image: norppa
+          tags: staging ${{ github.sha }}
+          containerfiles: |
+            ./Dockerfile
           build-args: |
             BASE_PATH=/norppa
             GIT_SHA=${{ github.sha }}
             STAGING=true
             NODE_CONFIG_ENV=hy
+
+      - name: Push to quay.io
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/toska
+          username: toska+github
+          password: ${{ secrets.QUAY_IO_TOKEN }}

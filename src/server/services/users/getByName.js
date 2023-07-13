@@ -1,10 +1,6 @@
-const LRU = require('lru-cache')
 const { User } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-
-const cache = new LRU({
-  max: 250,
-})
+const cache = require('./cache')
 
 const getByUsername = async username => {
   let user = cache.get(username)
