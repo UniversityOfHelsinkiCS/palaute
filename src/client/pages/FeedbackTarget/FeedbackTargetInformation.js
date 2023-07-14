@@ -43,7 +43,7 @@ const FeedbackTargetInformation = () => {
 
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
-  const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
+  const coursePageUrl = `${t('links:courseUnitPage')}${courseUnit?.id}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = feedbackTarget?.tags?.length > 0
   const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
