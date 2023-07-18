@@ -20,6 +20,8 @@ import useOrganisationTags from '../../hooks/useOrganisationTags'
 import useHistoryState from '../../hooks/useHistoryState'
 import { getLanguageValue } from '../../util/languageUtils'
 
+import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
+
 const styles = {
   container: {
     minWidth: theme => ({
@@ -65,6 +67,8 @@ const Filters = ({
         : [],
     [facultyAccess, i18n.language]
   )
+
+  const hideSwitch = OPEN_UNIVERSITY_ORG_ID === '' || OPEN_UNIVERSITY_ORG_ID === undefined
 
   return (
     <Box sx={styles.container}>
@@ -123,18 +127,20 @@ const Filters = ({
           fullWidth
         />
       </Box>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={includeOpenUniCourseUnits}
-            onChange={event => {
-              onIncludeOpenUniCourseUnitsChange(event.target.checked)
-            }}
-            color="primary"
-          />
-        }
-        label={t('courseSummary:includeOpenUniCourses')}
-      />
+      {!hideSwitch && (
+        <FormControlLabel
+          control={
+            <Switch
+              checked={includeOpenUniCourseUnits}
+              onChange={event => {
+                onIncludeOpenUniCourseUnitsChange(event.target.checked)
+              }}
+              color="primary"
+            />
+          }
+          label={t('courseSummary:includeOpenUniCourses')}
+        />
+      )}
     </Box>
   )
 }
