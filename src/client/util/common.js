@@ -61,3 +61,6 @@ export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undef
 
 // eslint-disable-next-line no-undef
 export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = CONFIG?.STUDENT_FEEDBACK_SHOW_REALISATION_NAME
+
+// eslint-disable-next-line no-undef
+export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
