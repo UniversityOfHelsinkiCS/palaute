@@ -58,3 +58,6 @@ export const DEV_USERNAME = CONFIG?.DEV_USERNAME
 
 // eslint-disable-next-line no-undef
 export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undefined in e2e tests
+
+// eslint-disable-next-line no-undef
+export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = CONFIG?.STUDENT_FEEDBACK_SHOW_REALISATION_NAME

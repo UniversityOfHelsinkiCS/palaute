@@ -145,6 +145,11 @@ const config = {
    * Keys defined here are filtered away from frontend config during build process.
    */
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
+
+  /**
+   * Controls course realisation name visibility on feedback page for students
+   */
+  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: false,
 }
 
 module.exports = config
