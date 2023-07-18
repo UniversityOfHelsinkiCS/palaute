@@ -68,9 +68,6 @@ const FeedbackTargetInformation = () => {
               </Typography>
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
-              <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
-                {courseRealisationName}
-              </Typography>
               {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
             </Box>
           </Box>
