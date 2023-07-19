@@ -44,10 +44,28 @@ const config = {
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
   /**
-   * How many objects fit in LRU cache
-   * Set to zero to disable fbt caching
+   * How many fbts fit in LRU cache
    */
   FEEDBACK_TARGET_CACHE_SIZE: 250,
+
+  /**
+   * Optional TTL in ms for fbt cache. Small number effectively disables caching.
+   * Disabling will slow down requests related to feedback target view.
+   * Do not set if you don't want cache to do TTL checks.
+   */
+  FEEDBACK_TARGET_CACHE_TTL: undefined,
+
+  /**
+   * How many users fit in LRU cache
+   */
+  USER_CACHE_SIZE: 250,
+
+  /**
+   * Optional TTL in ms for user cache. Small number effectively disables caching.
+   * Disabling can sometimes be helpful for development but it will slow down every request and cause a lot of Jami calls.
+   * Do not set if you don't want cache to do TTL checks.
+   */
+  USER_CACHE_TTL: undefined,
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
@@ -146,6 +164,11 @@ const config = {
    * Iam groups header name
    */
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  /**
+   * Transport logs to separate graylog server
+   */
+  GELF_TRANSPORT_ENABLED: false,
 
   /**
    * Controls course realisation name visibility on feedback page for students

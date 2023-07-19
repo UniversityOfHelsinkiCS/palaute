@@ -17,6 +17,8 @@ Create a `.env` file inside the project's root directory. In that file, copy the
 
 Clone the repo, install docker to get started!
 
+Before starting the project for the first time run `npm i` to install needed development dependencies.
+
 To start the project in development mode use this command. It will start everything in development mode:
 
 ```bash

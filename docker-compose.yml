@@ -95,7 +95,6 @@ services:
       - SMTP_HOST=smtp_host_env
     ports:
       - 3473:3473
-
 volumes:
   pg_data:
   jami_data:

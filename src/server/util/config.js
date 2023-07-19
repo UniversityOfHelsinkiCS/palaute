@@ -1,5 +1,20 @@
 const config = require('config')
 
+/**
+ * Util for getting config values that may be undefined.
+ * Node-config throws by default when trying to get undefined values so this must be used.
+ * Optional transform function can be supplied to transform the value when it is found.
+ * @param {string} key
+ * @param {(val) => any}
+ * @returns config value
+ */
+const getOptional = (key, transform = val => val) => {
+  if (config.has(key)) {
+    return transform(config.get(key))
+  }
+  return undefined
+}
+
 const inProduction = process.env.NODE_ENV === 'production'
 const inStaging = process.env.REACT_APP_STAGING === 'true'
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
@@ -26,9 +41,11 @@ const STUDENT_LIST_BY_COURSE_ENABLED = config.get('STUDENT_LIST_BY_COURSE_ENABLE
 const TAGS_ENABLED = config.get('TAGS_ENABLED') ?? []
 const NOAD_LINK_EXPIRATION_DAYS = Number(config.get('NOAD_LINK_EXPIRATION_DAYS'))
 const FEEDBACK_TARGET_CACHE_SIZE = Number(config.get('FEEDBACK_TARGET_CACHE_SIZE'))
+const FEEDBACK_TARGET_CACHE_TTL = getOptional('FEEDBACK_TARGET_CACHE_TTL', Number)
+const USER_CACHE_SIZE = Number(config.get('USER_CACHE_SIZE'))
+const USER_CACHE_TTL = getOptional('USER_CACHE_TTL', Number)
 const TEACHER_REMINDER_DAYS_TO_OPEN = Number(config.get('TEACHER_REMINDER_DAYS_TO_OPEN'))
 const FEEDBACK_REMINDER_COOLDOWN = Number(config.get('FEEDBACK_REMINDER_COOLDOWN'))
-const SENTRY_DSN = config.get('SENTRY_DSN')
 const STUDENT_REMINDER_DAYS_TO_CLOSE = Number(config.get('STUDENT_REMINDER_DAYS_TO_CLOSE'))
 const JAMI_URL = inProduction && !inStaging ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
 const PUBLIC_URL = config.get('PUBLIC_URL')
@@ -38,6 +55,8 @@ const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPON
 const IAM_GROUPS_HEADER = config.get('IAM_GROUPS_HEADER')
 const TRANSLATION_NAMESPACE = config.get('TRANSLATION_NAMESPACE')
 const LANGUAGES = config.get('LANGUAGES')
+const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
+const SENTRY_DSN = config.get('SENTRY_DSN')
 
 module.exports = {
   inE2EMode,
@@ -47,9 +66,11 @@ module.exports = {
   GIT_SHA,
   NOAD_LINK_EXPIRATION_DAYS,
   FEEDBACK_TARGET_CACHE_SIZE,
+  FEEDBACK_TARGET_CACHE_TTL,
+  USER_CACHE_SIZE,
+  USER_CACHE_TTL,
   TEACHER_REMINDER_DAYS_TO_OPEN,
   FEEDBACK_REMINDER_COOLDOWN,
-  SENTRY_DSN,
   STUDENT_REMINDER_DAYS_TO_CLOSE,
   PATE_URL,
   PATE_JWT,
@@ -73,4 +94,6 @@ module.exports = {
   STUDENT_LIST_BY_COURSE_ENABLED,
   TAGS_ENABLED,
   FEEDBACK_SYSTEM,
+  GELF_TRANSPORT_ENABLED,
+  SENTRY_DSN,
 }

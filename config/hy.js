@@ -213,6 +213,12 @@ const config = {
 
   FEEDBACK_TARGET_CACHE_SIZE: 250,
 
+  FEEDBACK_TARGET_CACHE_TTL: undefined,
+
+  USER_CACHE_SIZE: 250,
+
+  USER_CACHE_TTL: undefined,
+
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
   STUDENT_REMINDER_DAYS_TO_CLOSE: 3,
@@ -225,9 +231,9 @@ const config = {
 
   SENTRY_DSN: 'https://8877ea30aa714216b27b22c8aa395723@sentry.cs.helsinki.fi/6',
 
-  PATE_URL: 'https://importer.cs.helsinki.fi/api/pate',
+  PATE_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate',
 
-  JAMI_URL: 'https://importer.cs.helsinki.fi/api/auth',
+  JAMI_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami',
 
   PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
 
@@ -248,6 +254,8 @@ const config = {
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  GELF_TRANSPORT_ENABLED: true,
 }
 
 module.exports = config
