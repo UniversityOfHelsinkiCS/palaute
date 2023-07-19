@@ -146,6 +146,11 @@ const config = {
    * Iam groups header name
    */
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  /**
+   * Controls course realisation name visibility on feedback page for students
+   */
+  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
 }
 
 module.exports = config

@@ -12,6 +12,7 @@ import PercentageCell from '../CourseSummary/PercentageCell'
 import { getLanguageValue } from '../../util/languageUtils'
 import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
+import { STUDENT_FEEDBACK_SHOW_REALISATION_NAME } from '../../util/common'
 
 const FeedbackTargetInformation = () => {
   const { feedbackTarget, organisation, isStudent, isTeacher } = useFeedbackTargetContext()
@@ -68,9 +69,11 @@ const FeedbackTargetInformation = () => {
               </Typography>
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
-              <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
-                {courseRealisationName}
-              </Typography>
+              {STUDENT_FEEDBACK_SHOW_REALISATION_NAME && (
+                <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
+                  {courseRealisationName}
+                </Typography>
+              )}
               {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
             </Box>
           </Box>
