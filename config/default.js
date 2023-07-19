@@ -169,6 +169,11 @@ const config = {
    * Transport logs to separate graylog server
    */
   GELF_TRANSPORT_ENABLED: false,
+
+  /**
+   * Controls course realisation name visibility on feedback page for students
+   */
+  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
 }
 
 module.exports = config
