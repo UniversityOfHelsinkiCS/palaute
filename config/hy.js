@@ -248,8 +248,6 @@ const config = {
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 
   IAM_GROUPS_HEADER: 'hygroupcn',
-
-  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
 }
 
 module.exports = config
