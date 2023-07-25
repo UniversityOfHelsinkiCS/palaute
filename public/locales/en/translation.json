@@ -36,6 +36,7 @@
     "feedbackNotGiven": "Not given",
     "export": "Download",
     "exportCsv": "Download as CSV",
+    "exportXLSX": "Donload as XLSX",
     "exportPdf": "Download as PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",

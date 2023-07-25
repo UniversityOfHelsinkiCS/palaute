@@ -20,7 +20,7 @@ const styles = {
   },
 }
 
-const ExportCsv = ({ results }) => {
+const ExportXLSX = ({ results }) => {
   const headers = getHeaders(results)
   const stats = getData(results)
 
@@ -38,7 +38,7 @@ const ExportCsv = ({ results }) => {
       disabled={!results.length}
       onClick={() => writeFileXLSX(workbook, 'norppa-statistics.xlsx')}
     >
-      Download as CSV
+      Download as XLSX
     </Button>
   )
 }
@@ -106,7 +106,7 @@ const NorppaStatisticView = () => {
           </Box>
         )}
       </Button>
-      <ExportCsv results={results} />
+      <ExportXLSX results={results} />
       {!results.length && !paramsChanged && (
         <Alert marginTop={2} severity="warning">
           No data from the given period

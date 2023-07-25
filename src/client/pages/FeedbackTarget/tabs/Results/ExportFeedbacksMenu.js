@@ -79,7 +79,7 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
   return { workbook, filename: `${filename}.xlsx` }
 }
 
-const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
+const ExportXLSXLink = ({ feedbackTarget, feedbacks }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
@@ -90,7 +90,7 @@ const ExportCsvLink = ({ feedbackTarget, feedbacks }) => {
 
   return (
     <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, filename)}>
-      {t('common:exportCsv')}
+      {t('common:exportXLSX')}
     </Button>
   )
 }
@@ -117,7 +117,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   return (
     <ExportButton
       disabled={!hasFeedbacks}
-      CsvLink={hasFeedbacks && <ExportCsvLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      XLSXLink={hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
       PdfLink={hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
       label={t('feedbackTargetResults:export')}
     />
