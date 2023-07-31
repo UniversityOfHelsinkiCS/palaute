@@ -6,6 +6,7 @@ i18n.use(FsBackend).init({
   lng: 'fi', // doesnt matter in backend. One should always use getFixedT anyways.
   fallbackLng: 'en',
   supportedLngs: ['fi', 'en', 'sv'],
+  ns: ['translation', TRANSLATION_NAMESPACE], // https://www.i18next.com/principles/fallback#namespace-fallback
   defaultNS: TRANSLATION_NAMESPACE,
   fallbackNS: 'translation',
   load: ['fi', 'en', 'sv'], // load all langs on initialization
