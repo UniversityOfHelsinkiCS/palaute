@@ -74,17 +74,18 @@
     "invalidDate": "Invalid date"
   },
   "links": {
-    "supportEmail": "coursefeedback@helsinki.fi",
-    "wikiRoot": "https://wiki.helsinki.fi/display/CF",
-    "wikiOrganisationHelp": "https://wiki.helsinki.fi/display/CF/4.+Degree+program%27s+guide",
-    "wikiTeacherHelp": "https://wiki.helsinki.fi/display/CF/3.+Teacher%27s+guide",
-    "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
-    "dataProtection": "https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991",
-    "toska": "https://toska.dev",
+    "supportEmail": "-",
+    "wikiRoot": "-",
+    "wikiOrganisationHelp": "-",
+    "wikiTeacherHelp": "-",
+    "accessibility": "-",
+    "dataProtection": "-",
+    "toska": "-",
     "markdownHelp": "https://commonmark.org/help/",
-    "adminGraylog": "https://graylog.toska.cs.helsinki.fi",
-    "courseUnitPage": "https://studies.helsinki.fi/opintotarjonta/cu/",
-    "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
+    "adminGraylog": "-",
+    "courseUnitPage": "-",
+    "courseUnitPageStudent": "-",
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
@@ -528,6 +529,6 @@
       "subjectMultiple": "The feedback for your courses are about to start",
       "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "Contact support: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nUser instructions: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>More information about Norppa in Flamma</a>"
+    "instructionsAndSupport": "-"
   }
 }
