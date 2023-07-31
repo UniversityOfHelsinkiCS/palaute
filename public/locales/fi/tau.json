@@ -19,7 +19,7 @@
   "links": {
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
     "wikiRoot": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
-    "accessibility": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelmansaavutettavuusseloste",
+    "accessibility": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelman-saavutettavuusseloste",
     "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja/tietosuojailmoitus-opiskelijat-ja-opiskelijapalvelut?lang=fi",
     "instructions": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut",
     "wikiOrganisationHelp": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
@@ -27,8 +27,9 @@
     "toska": "",
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
-    "courseUnitPage": "https://sis-tuni.funidata.fi/student/courseunit/",
-    "courseRealisationPage": ""
+    "courseUnitPage": "https://sis-tuni.funidata.fi/teacher/courseunit/",
+    "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/",
+    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Opintojaksopalautteeni",
