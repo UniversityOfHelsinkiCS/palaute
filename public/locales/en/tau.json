@@ -22,7 +22,7 @@
     "adminGraylog": "",
     "courseUnitPage": "https://sis-tuni.funidata.fi/teacher/courseunit/",
     "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/",
-    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{id}}/information/basicinfo"
+    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo"
   },
   "teacherView": {
     "noCourseRealisations": "No course implementations"
