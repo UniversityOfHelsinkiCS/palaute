@@ -1,0 +1,18 @@
+{
+  "links": {
+    "supportEmail": "coursefeedback@helsinki.fi",
+    "wikiRoot": "https://wiki.helsinki.fi/display/CF",
+    "wikiOrganisationHelp": "https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje",
+    "wikiTeacherHelp": "https://wiki.helsinki.fi/display/CF/3.+Opettajan+ohje",
+    "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
+    "dataProtection": "https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991",
+    "toska": "https://toska.dev",
+    "markdownHelp": "https://commonmark.org/help/",
+    "adminGraylog": "https://graylog.toska.cs.helsinki.fi",
+    "courseUnitPage": "https://studies.helsinki.fi/opintotarjonta/cu/",
+    "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
+  },
+  "mails": {
+    "instructionsAndSupport": "Ota yhteyttä tukeen: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nKäyttöohje: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Lisätietoja Norpasta Flammassa</a>"
+  }
+}
