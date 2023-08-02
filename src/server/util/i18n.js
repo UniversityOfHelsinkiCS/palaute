@@ -9,7 +9,7 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['fi', 'en', 'sv'],
-    ns: TRANSLATION_NAMESPACE,
+    ns: ['translation', TRANSLATION_NAMESPACE],
     defaultNS: TRANSLATION_NAMESPACE,
     fallbackNS: 'translation',
     load: ['fi', 'en', 'sv'], // load all langs on initialization
