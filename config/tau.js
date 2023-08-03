@@ -189,6 +189,8 @@ const config = {
    * Controls course realisation name visibility on feedback page for students
    */
   STUDENT_FEEDBACK_SHOW_REALISATION_NAME: false,
+
+  STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: true,
 }
 
 module.exports = config

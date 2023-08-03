@@ -174,6 +174,25 @@ const config = {
    * Controls course realisation name visibility on feedback page for students
    */
   STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
+
+  /*
+    STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL controls order of questions for student (and preview)
+    value: false = HY Style (university and programme questions with type OPEN are last)
+      1. grouping questions
+      2. university questions (except questions with type OPEN)
+      3. programme questions (except questions with type OPEN)
+      4. feedbacktarget questions (teacher's questions)
+      5. programme questions with type OPEN
+      6. university questions with type OPEN
+
+    value: true = TAU Style (same order as in edit view)
+      1. grouping questions
+      2. university questions
+      3. programme questions
+      4. feedbacktarget questions (teacher's questions)
+  */
+
+  STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
 }
 
 module.exports = config
