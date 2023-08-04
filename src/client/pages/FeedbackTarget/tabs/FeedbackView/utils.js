@@ -69,14 +69,14 @@ export const getQuestions = feedbackTarget => {
     )
 
     // Initial ordering
-    const allQuestions = [
+    const allQuestionsInInitialOrder = [
       ...groupingQuestions,
       ...uniOpenQuestions,
       ...programmeSurveyQuestions,
       ...otherTeacherQuestions,
     ]
 
-    return allQuestions
+    return allQuestionsInInitialOrder
   }
 
   const uniOpenQuestions = surveys?.universitySurvey?.questions.filter(q => q.type === 'OPEN') ?? []

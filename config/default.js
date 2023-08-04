@@ -177,7 +177,7 @@ const config = {
 
   /*
     STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL controls order of questions for student (and preview)
-    value: false = HY Style (university and programme questions with type OPEN are last)
+    value: false = HY Mode (university and programme questions with type OPEN are last)
       1. grouping questions
       2. university questions (except questions with type OPEN)
       3. programme questions (except questions with type OPEN)
@@ -185,7 +185,7 @@ const config = {
       5. programme questions with type OPEN
       6. university questions with type OPEN
 
-    value: true = TAU Style (same order as in edit view)
+    value: true = Same order as in edit view (initial order, only grouping questions are first)
       1. grouping questions
       2. university questions
       3. programme questions
