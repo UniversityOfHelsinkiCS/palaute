@@ -64,6 +64,7 @@
     "notPublicShortInfo": "Visible only to responsible teachers and programme admins",
     "publicShortInfo": "Visible to enrolled students",
     "editable": "You can change this setting",
+    "notEditable": "Setting cannot be changed, it's set at a higher level",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
     "all": "All",

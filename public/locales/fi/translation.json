@@ -63,6 +63,7 @@
     "publicInfo": "Vastaukset näkyvät kurssin opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja hallinnolle",
     "publicShortInfo": "Näkyy kurssin opiskelijoille",
+    "notEditable": "Asetusta ei voi muuttaa, se on valittu julkiseksi ylemmällä tasolla",
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
