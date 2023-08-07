@@ -398,7 +398,7 @@
     "noFeedbackTarget": "This course does not have a feedback available to you"
   },
   "organisationSettings": {
-    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions. You can change the answers visibility from the 'Public'/'Not public'-button, but only if the question isn't already set as public at a higher level.",
     "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback",
     "courseSettingsInfo": "Feedback is only collected from activated courses",
     "settingsTab": "Settings",

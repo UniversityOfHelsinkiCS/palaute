@@ -398,7 +398,7 @@
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"
   },
   "organisationSettings": {
-    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
+    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. Kysymysten vastausten näkyvyyttä voit muuttaa 'Julkinen'/'Ei julkinen'-painikkeesta, mutta vain jos kysymystä ei ole ylemmällä tasolla vielä valittu julkiseksi.",
     "studentListVisible": "Näytä palautetta antaneet opiskelijat kurssin vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla kursseilla",
     "settingsTab": "Asetukset",
