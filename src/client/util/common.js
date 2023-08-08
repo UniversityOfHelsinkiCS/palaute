@@ -55,3 +55,12 @@ export const DEV_USERNAME = CONFIG?.DEV_USERNAME
 
 // eslint-disable-next-line no-undef
 export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undefined in e2e tests
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLOR_SCALE_MIN = CONFIG?.SUMMARY_COLOR_SCALE_MIN
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX

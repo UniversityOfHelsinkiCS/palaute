@@ -164,6 +164,38 @@ const config = {
    * Transport logs to separate graylog server
    */
   GELF_TRANSPORT_ENABLED: false,
+
+  /**
+   * The course summary color scale used in summary views and fbt results view for LIKERT type values ranging from 1-5. (LIKERT options minimum is 1 so below 1 means no data)
+   * First color in the scale is for NO DATA.
+   * Second color is for everything below MIN, eg. the 'worst' color.
+   * Similarly, last color is for everything above MAX, eg. the 'best' color.
+   * In between, the colors are in equal sized steps.
+   * Support for multiple color scales (such as more accessible ones) is in idea stage.
+   */
+  SUMMARY_COLORS: [
+    '#d5d6f0',
+    '#c9586f',
+    '#e66067',
+    '#f57368',
+    '#fb8c6e',
+    '#fba678',
+    '#dbda7d',
+    '#9ec27c',
+    '#60a866',
+    '#008c59',
+  ],
+
+  /**
+   * The value below which the 'worst' color is used. Increase/decrease to make bad values more/less visible.
+   */
+  SUMMARY_COLOR_SCALE_MIN: 2.5,
+
+  /**
+   * The value above which the 'best' color is used. The idea is that above MAX, the value is already considered 'perfect' and no hue change is needed.
+   * Make sure it's fit to your data, eg. if a lot of values are above 4.5 you might want to increase it and vice versa.
+   */
+  SUMMARY_COLOR_SCALE_MAX: 4.5,
 }
 
 module.exports = config
