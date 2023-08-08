@@ -39,21 +39,6 @@ $ npm run reset
 
 ## Documentation
 
-### Topics
-
-- [Accessibility](documentation/accessibility.md)
-- [Entity schema](documentation/entity_diagram.md)
-- [Oikeusryhmät](documentation/oikeusryhmat.md)
-- [Norppa terminology](documentation/terminology.md)
-- [Cronjobs](documentation/cronjobs.md)
-- [Configuration](documentation/configuration.md)
-- [Translations](documentation/translations.md)
-- [Troubleshooting](documentation/troubleshooting.md)
-- [Testing](documentation/testingdocument.md)
-- [Deleted tables](documentation/deleted_tables.md)
-- [Question data format](documentation/question_formats.md)
-- [Feedback target visibility](documentation/feedback_target_visibility.md)
-
 ### Service architecture overview
 
 The Norppa core in this repo consists of a NodeJS server and a React frontend, but the entire Norppa system is built of many more services. The following graph describes Norppa service implementation in UoH.
@@ -92,6 +77,20 @@ graph TB
 ```
 
 When implementing Norppa for your organisation, you will implement your own updater, jami, pate and possibly some kind of importer, as well as analytics.
+### Topics
+
+- [Accessibility](documentation/accessibility.md)
+- [Entity schema](documentation/entity_diagram.md)
+- [Oikeusryhmät](documentation/oikeusryhmat.md)
+- [Norppa terminology](documentation/terminology.md)
+- [Cronjobs](documentation/cronjobs.md)
+- [Configuration](documentation/configuration.md)
+- [Translations](documentation/translations.md)
+- [Troubleshooting](documentation/troubleshooting.md)
+- [Testing](documentation/testingdocument.md)
+- [Deleted tables](documentation/deleted_tables.md)
+- [Question data format](documentation/question_formats.md)
+- [Feedback target visibility](documentation/feedback_target_visibility.md)
 
 ### Documentation guidelines
 
@@ -101,7 +100,7 @@ When implementing Norppa for your organisation, you will implement your own upda
 ### Documentation Feedback
 
 Need something documented or see a problem in existing docs?
-Please give feedback in the form of issues (add the documentation tag). All kind of feedback is welcome from everyone reading the Norppa documentation.
+Please give feedback in the form of issues (add the documentation tag). All kinds of feedback is welcome from everyone reading the Norppa documentation.
 
 ## Maintainers <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
 
