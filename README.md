@@ -56,7 +56,7 @@ $ npm run reset
 
 ### Service architecture overview
 
-The Norppa core in this repo consists of a NodeJS server and a React frontend, but the entire Norppa system is built of many more services.
+The Norppa core in this repo consists of a NodeJS server and a React frontend, but the entire Norppa system is built of many more services. The following graph describes Norppa service implementation in UoH.
 
 ```mermaid
 graph TB
@@ -66,7 +66,7 @@ graph TB
             client[React app] --> server[NodeJS server]
         end
 
-        server -->|Read, write| pg[(Postgres)]
+        server -->|Read, Write| pg[(Postgres)]
         updater[Updater] -->|Write| pg
     end
 
@@ -90,6 +90,8 @@ graph TB
     end
 
 ```
+
+When implementing Norppa for your organisation, you will implement your own updater, jami, pate and possibly some kind of importer, as well as analytics.
 
 ### Documentation guidelines
 
