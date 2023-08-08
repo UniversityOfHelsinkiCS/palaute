@@ -15,7 +15,6 @@ const {
   UserFeedbackTarget,
   User,
   UpdaterStatus,
-  FeedbackTargetDateCheck,
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
@@ -417,42 +416,6 @@ const getNorppaStatistics = async (req, res) => {
   return res.send(resultsWithBetterAvoin)
 }
 
-const getFeedbackTargetsToCheck = async (req, res) => {
-  const relevantFeedbackTargetDateChecks = await FeedbackTargetDateCheck.findAll({
-    where: {},
-    attributes: ['is_solved', 'created_at'],
-    include: [
-      {
-        model: FeedbackTarget,
-        attributes: ['id', 'opens_at', 'closes_at'],
-        as: 'feedback_target',
-        include: [
-          {
-            model: CourseRealisation,
-            attributes: ['name', 'start_date', 'end_date'],
-            as: 'courseRealisation',
-          },
-        ],
-      },
-    ],
-  })
-
-  return res.send(relevantFeedbackTargetDateChecks)
-}
-
-const solveFeedbackTargetDateCheck = async (req, res) => {
-  if (!req.body || !req?.params.id) return res.status(400).send()
-
-  const { id } = req.params
-  const { isSolved } = req.body
-
-  if (!id) return res.status(400)
-
-  await FeedbackTargetDateCheck.update({ is_solved: isSolved }, { where: { feedback_target_id: id } })
-
-  return res.status(200).send()
-}
-
 const createBanner = async (req, res) => {
   const { body } = req
 
@@ -580,8 +543,6 @@ router.post('/run-pate', runPate)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
-router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
-router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
 router.get('/feedback-targets', findFeedbackTargets)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
