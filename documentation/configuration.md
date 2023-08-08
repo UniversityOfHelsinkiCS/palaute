@@ -31,6 +31,8 @@ Because eslint (and we) don't like custom global objects like `CONFIG`, the valu
 As client configuration happens at build time, you need to set the env `NODE_CONFIG_ENV` in the build context. See `docker-compose.ci.yml` and `Dockerfile` for example.
 CI workflows may also need to set it, see `.github/production.yml`.
 
+Unfortunately this method is not very nice for development, as you have to rebuild the image for client configuration changes to take effect.
+
 ## Debugging
 
 Debugging configuration issues can be challenging especially in deployments.
