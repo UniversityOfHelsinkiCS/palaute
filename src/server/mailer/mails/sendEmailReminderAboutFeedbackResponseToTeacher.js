@@ -52,7 +52,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         attributes: ['id', 'username', 'email', 'language', 'secondaryEmail', 'firstName', 'lastName'],
         through: {
           where: {
-            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER'] },
           },
         },
       },
