@@ -4,11 +4,19 @@ Myös nimillä: _yleistetty kurssiyhteenveto_, _MINTufied kurssiyhteenveto_, _se
 
 Kurssiyhteenvedolla tarkoitetaan pääasiassa näkymää osoitteessa `/course-summary`, eli johon siirrytään navigointipalkin Yhteenveto-napista. Muutokset tulisivat myös vaikuttamaan vähintään teknisellä tasolla myös organisaation omaan yhteenvetoon osoitteessa `/organisations/:code/summary` ja opintojakson yhteenvetoon `/course-summary/:courseCode`.
 
+Muutosesityksen yksityiskohdat ovat vielä mietinnässä mutta kommentteja kaivataan.
+
 ## Ongelmat
 
-Kurssiyhteenvetonäkymä teknisesti olettaa pitkälti organisaatiorakenteen olevan HY:n mukainen: ylimpänä yliopisto, niiden alla tiedekunnat ja erillislaitokset, niiden alla koulutusohjelmat joiden alla opintojaksot. Tämä rakenne ei kuitenkaan näy kovin hyvin käyttäjälle, sillä tiedekunnat näyttäytyvät koulutosohjelmien kanssa samanarvoisina riveinä näkymässä. Seurauksena on **ongelma no. 1**, eli yliopiston johdolle näkyy ~140 riviä organisaatioita, joissa on sekaisin koulutusohjelmia, erillislaitoksia ja tiedekuntia.
+Kurssiyhteenvetonäkymä teknisesti olettaa pitkälti organisaatiorakenteen olevan HY:n mukainen: ylimpänä yliopisto, niiden alla tiedekunnat ja erillislaitokset, niiden alla koulutusohjelmat joiden alla opintojaksot. Tämä rakenne ei kuitenkaan näy kovin hyvin käyttäjälle, sillä tiedekunnat näyttäytyvät koulutosohjelmien kanssa samanarvoisina riveinä näkymässä. Seurauksena on **ongelma no. 1**, eli yliopiston johdolle näkyy ~140 riviä organisaatioita, joissa on sekaisin koulutusohjelmia, erillislaitoksia ja tiedekuntia:
 
-Tiedekuntien jaottelu on hoidettu erillisillä valitsimella, joka oli nopea teippiratkaisu. Valitsimen ongelma, eli **ongelma no. 2** on se, että se olettaa tietyn tiedekunta/koulutusohjelma-rakenteen. Esimerkiksi TAU:lla, jolla ei ole samanlaisia tiedekuntien alaisia koulutusohjelmia, valitsin ei käy järkeen.
+![image](https://github.com/UniversityOfHelsinkiCS/palaute/assets/54055199/4e5d4cd9-1323-47a7-9e06-9015d202bc5e)
+
+Tiedekuntien jaottelu on hoidettu erillisillä valitsimella, joka oli nopea teippiratkaisu:
+
+![image](https://github.com/UniversityOfHelsinkiCS/palaute/assets/54055199/9378762d-b220-404b-bd18-fe82fd683680)
+
+Valitsimen ongelma, eli **ongelma no. 2** on se, että se olettaa tietyn tiedekunta/koulutusohjelma-rakenteen. Esimerkiksi TAU:lla, jolla ei ole samanlaisia tiedekuntien alaisia koulutusohjelmia, valitsin ei käy järkeen.
 
 ## Ratkaisut
 
@@ -43,3 +51,5 @@ Yhteenvedon tiedekuntavalitsin poistetaan.
 ### Haasteita
 
 - Sisun organisaatiodatassa on PALJON epärelevantteja organisaatioita. Esimerkiksi HY:n alla on suoraan 318 organisaatiota, joista noin 15 on Norpassa relevantteja. Ne täytyy osata filtteröidä jollain järkevällä logiikalla. Jamiin kovakoodattu organisaatiorakenne on yksi vaihtoehto, Toskassa se on yleinen ratkaisu.
+- Kurssien palautemääriä ei saa laskea kahteen kertaan (#1052). Koska kurssin järjestäjänä voi olla useita organisaatioita, laskettaessa organisaatioiden statistiikkaa on muistettava, mitkä kurssit on jo laskettu mukaan.
+- Muitakin tulee varmaan...
