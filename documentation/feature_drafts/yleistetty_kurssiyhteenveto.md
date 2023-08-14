@@ -53,3 +53,7 @@ Yhteenvedon tiedekuntavalitsin poistetaan.
 - Sisun organisaatiodatassa on PALJON epärelevantteja organisaatioita. Esimerkiksi HY:n alla on suoraan 318 organisaatiota, joista noin 15 on Norpassa relevantteja. Ne täytyy osata filtteröidä jollain järkevällä logiikalla. Jamiin kovakoodattu organisaatiorakenne on yksi vaihtoehto, Toskassa se on yleinen ratkaisu.
 - Kurssien palautemääriä ei saa laskea kahteen kertaan (#1052). Koska kurssin järjestäjänä voi olla useita organisaatioita, laskettaessa organisaatioiden statistiikkaa on muistettava, mitkä kurssit on jo laskettu mukaan.
 - Muitakin tulee varmaan...
+
+## Miten edetään
+
+Kun eri Norpan osapuolet hyväksyvät muutosten hyödyllisyyden ja pääpiirteittäin teknisen lähestymistavan, Toska tekee uudesta kurssiyhteenvetonäkymästä nopeasti prototyyppiversion vanhan rinnalle. Prototyyppiversio tulee ensin näkymään vain admineille mutta se viedään HY:n tuotantoon heti kun se on käyttökelpoinen. Kun se on todettu riittävän vakaaksi ja toimivaksi eri käyttäjäryhmille (Yliopistohallinto, johtoryhmien jäsenet, opettajat), korvataan vanha näkymä uudella.
