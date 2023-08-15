@@ -115,7 +115,7 @@ const config = {
    * Why is it defined here in addition to the normal build argument? I don't trust it's given to the server properly.
    * Might not be required once mails are extracted away from server
    */
-  PUBLIC_URL: 'https://coursefeedback.helsinki.fi/',
+  PUBLIC_URL: 'https://norppa.helsinki.fi/',
 
   /**
    * Admin interface has link to our graylog to check updater logs

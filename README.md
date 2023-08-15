@@ -4,7 +4,7 @@ More commonly known as **Norppa**
 
 The open source course feedback system used by University of Helsinki and Tampere University
 
-Production in <https://coursefeedback.helsinki.fi>
+Production in <https://norppa.helsinki.fi>
 
 ## Found a bug or have a feature request?
 
@@ -77,6 +77,7 @@ graph TB
 ```
 
 When implementing Norppa for your organisation, you will implement your own updater, jami, pate and possibly some kind of importer, as well as analytics.
+
 ### Topics
 
 - [Accessibility](documentation/accessibility.md)

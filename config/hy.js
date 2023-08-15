@@ -235,7 +235,7 @@ const config = {
 
   JAMI_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami',
 
-  PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
+  PUBLIC_URL: 'https://norppa.helsinki.fi',
 
   GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
 
