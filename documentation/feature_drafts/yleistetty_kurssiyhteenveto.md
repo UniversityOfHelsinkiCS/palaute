@@ -28,6 +28,15 @@ Kursseja ja organisaatioita voi siis olla rinnakkain yhden organisaation alla. T
 
 Näin ratkaistaan **ongelma no. 1** ja **ongelma no. 2**.
 
+## Muita hyötyjä päivityksestä
+
+Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
+
+Parannetaan ylläpidettävyyttä. Nykyinen yhteenveto lasketaan parilla isolla "SQL-matolla", joiden ymmärtäminen ja muuttaminen on haastava jopa alkuperäisille toteuttajille.
+
+Parannetaan tehokkuutta. Vaikka aiempi toteutus on melko optimoitu, HY:n uudessa tietokantaklusterissa yhteenvetonäkymän laskeminen isoille pomoille kestää hiukan liikaa. 
+Uudella logiikalla näkymästä on tarkoitus saada tehokas ilman ihmeempiä erikoiskikkoja.
+
 ## Toteutus
 
 Yksityiskohdat työn alla.
