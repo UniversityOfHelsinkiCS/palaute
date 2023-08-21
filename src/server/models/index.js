@@ -11,7 +11,6 @@ const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
 const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
 const NorppaFeedback = require('./norppaFeedback')
 const UpdaterStatus = require('./updaterStatus')
-const FeedbackTargetDateCheck = require('./feedbackTargetDateCheck')
 const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
@@ -93,11 +92,6 @@ User.belongsToMany(FeedbackTarget, {
 
 NorppaFeedback.belongsTo(User, {
   as: 'user',
-})
-
-FeedbackTargetDateCheck.belongsTo(FeedbackTarget, {
-  as: 'feedback_target',
-  foreign_key: 'feedback_target_id',
 })
 
 OrganisationLog.belongsTo(Organisation, {
@@ -209,7 +203,6 @@ module.exports = {
   CourseRealisationsOrganisation,
   NorppaFeedback,
   UpdaterStatus,
-  FeedbackTargetDateCheck,
   OrganisationLog,
   FeedbackTargetLog,
   ContinuousFeedback,

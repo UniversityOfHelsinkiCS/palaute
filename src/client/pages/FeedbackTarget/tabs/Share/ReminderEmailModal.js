@@ -32,7 +32,7 @@ const styles = {
   },
   textField: {
     whiteSpace: 'pre-line',
-    marginBottom: 5,
+    mb: 1,
   },
 }
 
@@ -71,6 +71,9 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
             courseName: courseUnit.name[language],
             closesAt,
           })}
+        </Typography>
+        <Typography variant="body2" component="p" sx={styles.subtitle}>
+          {t('feedbackTargetResults:emailMessageInfo')}
         </Typography>
         <Box mb={2} />
         <TextField

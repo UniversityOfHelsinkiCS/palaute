@@ -14,15 +14,19 @@ const styles = {
   },
 }
 
-const Toolbar = ({ editLink, language, onLanguageChange }) => {
+const Toolbar = ({ showEdit, editLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
 
   return (
     <FixedContainer>
       <Box sx={styles.container}>
-        <Button color="primary" variant="contained" component={Link} to={editLink}>
-          {t('feedbackView:editSurvey')}
-        </Button>
+        {showEdit ? (
+          <Button color="primary" variant="contained" component={Link} to={editLink}>
+            {t('feedbackView:editSurvey')}
+          </Button>
+        ) : (
+          <div />
+        )}
 
         <LanguageSelect value={language} onChange={onLanguageChange} label={t('feedbackView:translationLanguage')} />
       </Box>

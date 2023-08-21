@@ -5,8 +5,6 @@ import { Box, Alert } from '@mui/material'
 
 import { useParams } from 'react-router-dom'
 
-import PublicQuestions from './PublicQuestions'
-
 import useProgrammeSurvey from '../../hooks/useProgrammeSurvey'
 import useOrganisation from '../../hooks/useOrganisation'
 
@@ -27,12 +25,6 @@ const EditSurvey = () => {
     return <LoadingProgress />
   }
 
-  const { universitySurvey } = survey
-  const allQuestions = universitySurvey.questions.concat(survey.questions)
-  const allQuestionIds = allQuestions.map(({ id }) => id)
-  const publicQuestionIds = universitySurvey.publicQuestionIds.concat(organisation.publicQuestionIds)
-  const publicityConfigurableQuestionIds = allQuestionIds.filter(id => !universitySurvey.publicQuestionIds.includes(id))
-
   return (
     <>
       <Box mb={2}>
@@ -42,14 +34,6 @@ const EditSurvey = () => {
           })}
         </Alert>
       </Box>
-      <PublicQuestions
-        organisation={{
-          id: organisation.code,
-          publicQuestionIds,
-          questions: allQuestions,
-          publicityConfigurableQuestionIds,
-        }}
-      />
       <ProgrammeSurvey organisation={organisation} survey={survey} />
     </>
   )

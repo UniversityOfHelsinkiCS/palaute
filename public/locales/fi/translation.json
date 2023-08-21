@@ -54,7 +54,8 @@
     "notPublic": "Ei julkinen",
     "export": "Lataa",
     "exportPdf": "Lataa pdf",
-    "exportCsv": "Lataa csv",
+    "exportXLSX": "Lataa XLSX",
+    "exportCsv": "Lataa CSV",
     "combineCSV": "Yhdistä Sisu-CSV:n kanssa",
     "downloadCSV": "Lataa tiedosto",
     "changePublicity": "Muuta näkyvyyttä",
@@ -62,6 +63,7 @@
     "publicInfo": "Vastaukset näkyvät kurssin opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja hallinnolle",
     "publicShortInfo": "Näkyy kurssin opiskelijoille",
+    "notEditable": "Asetusta ei voi muuttaa, se on valittu julkiseksi ylemmällä tasolla",
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
@@ -252,6 +254,7 @@
     "modalTitle": "Lähetä muistutus palautteesta sähköpostilla",
     "writeAMessage": "Kirjoita viesti opiskelijoille",
     "emailMessage": "Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
+    "emailMessageInfo": "(Viestin alkuosa kääntyy opiskelijan käyttämälle kielelle)",
     "modalSubtitle": "Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä",
     "emailSent": "Muistutusviesti lähetetty",
     "setHidden": "Piilota näkyvistä",
@@ -396,7 +399,7 @@
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"
   },
   "organisationSettings": {
-    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
+    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. Kysymysten vastausten näkyvyyttä voit muuttaa 'Julkinen'/'Ei julkinen'-painikkeesta, mutta vain jos kysymystä ei ole ylemmällä tasolla vielä valittu julkiseksi.",
     "studentListVisible": "Näytä palautetta antaneet opiskelijat kurssin vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla kursseilla",
     "settingsTab": "Asetukset",
@@ -528,6 +531,6 @@
       "subjectMultiple": "Palautejakso opettamillesi kursseille on alkamassa",
       "text": "Hyvä opettaja! <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "-"
+    "instructionsAndSupport": "Ota yhteyttä tukeen."
   }
 }

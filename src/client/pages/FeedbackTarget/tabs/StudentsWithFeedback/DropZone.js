@@ -87,13 +87,13 @@ const DropZone = ({ students }) => {
             <p>{t('common:dropZoneInfo2')}</p>
           </div>
         </div>
-        <ExportCsv headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
+        <ExportXLSX headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
       </Box>
     </Box>
   )
 }
 
-const ExportCsv = ({ headers, rows, students, filename }) => {
+const ExportXLSX = ({ headers, rows, students, filename }) => {
   const { t } = useTranslation()
 
   const isStudentNumber = value => {
@@ -139,7 +139,7 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
         style={{ margin: 10, width: '170px' }}
         onClick={() => writeFileXLSX(workbook, `${filename}_combined.xlsx`)}
       >
-        {t('common:downloadCSV')}
+        {t('common:exportXLSX')}
       </Button>
     </Box>
   )

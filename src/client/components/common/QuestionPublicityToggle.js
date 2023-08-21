@@ -8,8 +8,10 @@ const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const { t } = useTranslation()
 
+  const notEditableInfo = checked ? t('common:notEditable') : ''
+
   const tooltipText = `${checked ? t('common:publicShortInfo') : t('common:notPublicShortInfo')}. ${
-    !disabled ? t('common:editable') : ''
+    !disabled ? t('common:editable') : notEditableInfo
   }`
 
   return (

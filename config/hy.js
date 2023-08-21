@@ -235,7 +235,7 @@ const config = {
 
   JAMI_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami',
 
-  PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
+  PUBLIC_URL: 'https://norppa.helsinki.fi',
 
   GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
 
@@ -256,6 +256,23 @@ const config = {
   IAM_GROUPS_HEADER: 'hygroupcn',
 
   GELF_TRANSPORT_ENABLED: true,
+
+  SUMMARY_COLORS: [
+    '#d5d6f0',
+    '#c9586f',
+    '#e66067',
+    '#f57368',
+    '#fb8c6e',
+    '#fba678',
+    '#dbda7d',
+    '#9ec27c',
+    '#60a866',
+    '#008c59',
+  ],
+
+  SUMMARY_COLOR_SCALE_MIN: 2.3,
+
+  SUMMARY_COLOR_SCALE_MAX: 4.4,
 }
 
 module.exports = config
