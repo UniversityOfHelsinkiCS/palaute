@@ -81,8 +81,8 @@ const StudentTable = ({ students, feedbackTarget }) => {
 
   const fileName = `${feedbackTarget.courseUnit.courseCode}_${format(
     parseISO(feedbackTarget.courseRealisation.startDate),
-    'yyyy-MM-dd'
-  )}_students`
+    'yyyyMMdd'
+  )}student`
 
   return (
     <CardSection
