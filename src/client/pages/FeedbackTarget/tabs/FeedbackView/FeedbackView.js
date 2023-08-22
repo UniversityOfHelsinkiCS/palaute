@@ -157,7 +157,8 @@ const FeedbackView = () => {
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
   // TODO clean up this shit again
   const isStudent = accessStatus === 'STUDENT'
-  const isTeacher = accessStatus === 'TEACHER' || accessStatus === 'RESPONSIBLE_TEACHER'
+  const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER'
+  const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher
   const isOutsider = accessStatus === 'NONE'
   const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -258,6 +259,7 @@ const FeedbackView = () => {
       {showToolbar && (
         <Box mt={2}>
           <Toolbar
+            showEdit={isResponsibleTeacher}
             editLink={`/targets/${feedbackTarget.id}/edit`}
             language={language}
             onLanguageChange={handleLanguageChange}

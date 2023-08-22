@@ -4,11 +4,19 @@ Myös nimillä: _yleistetty kurssiyhteenveto_, _MINTufied kurssiyhteenveto_, _se
 
 Kurssiyhteenvedolla tarkoitetaan pääasiassa näkymää osoitteessa `/course-summary`, eli johon siirrytään navigointipalkin Yhteenveto-napista. Muutokset tulisivat myös vaikuttamaan vähintään teknisellä tasolla myös organisaation omaan yhteenvetoon osoitteessa `/organisations/:code/summary` ja opintojakson yhteenvetoon `/course-summary/:courseCode`.
 
+Muutosesityksen yksityiskohdat ovat vielä mietinnässä mutta kommentteja kaivataan.
+
 ## Ongelmat
 
-Kurssiyhteenvetonäkymä teknisesti olettaa pitkälti organisaatiorakenteen olevan HY:n mukainen: ylimpänä yliopisto, niiden alla tiedekunnat ja erillislaitokset, niiden alla koulutusohjelmat joiden alla opintojaksot. Tämä rakenne ei kuitenkaan näy kovin hyvin käyttäjälle, sillä tiedekunnat näyttäytyvät koulutosohjelmien kanssa samanarvoisina riveinä näkymässä. Seurauksena on **ongelma no. 1**, eli yliopiston johdolle näkyy ~140 riviä organisaatioita, joissa on sekaisin koulutusohjelmia, erillislaitoksia ja tiedekuntia.
+Kurssiyhteenvetonäkymä teknisesti olettaa pitkälti organisaatiorakenteen olevan HY:n mukainen: ylimpänä yliopisto, niiden alla tiedekunnat ja erillislaitokset, niiden alla koulutusohjelmat joiden alla opintojaksot. Tämä rakenne ei kuitenkaan näy kovin hyvin käyttäjälle, sillä tiedekunnat näyttäytyvät koulutosohjelmien kanssa samanarvoisina riveinä näkymässä. Seurauksena on **ongelma no. 1**, eli yliopiston johdolle näkyy ~140 riviä organisaatioita, joissa on sekaisin koulutusohjelmia, erillislaitoksia ja tiedekuntia:
 
-Tiedekuntien jaottelu on hoidettu erillisillä valitsimella, joka oli nopea teippiratkaisu. Valitsimen ongelma, eli **ongelma no. 2** on se, että se olettaa tietyn tiedekunta/koulutusohjelma-rakenteen. Esimerkiksi TAU:lla, jolla ei ole samanlaisia tiedekuntien alaisia koulutusohjelmia, valitsin ei käy järkeen.
+![image](https://github.com/UniversityOfHelsinkiCS/palaute/assets/54055199/4e5d4cd9-1323-47a7-9e06-9015d202bc5e)
+
+Tiedekuntien jaottelu on hoidettu erillisillä valitsimella, joka oli nopea teippiratkaisu:
+
+![image](https://github.com/UniversityOfHelsinkiCS/palaute/assets/54055199/9378762d-b220-404b-bd18-fe82fd683680)
+
+Valitsimen ongelma, eli **ongelma no. 2** on se, että se olettaa tietyn tiedekunta/koulutusohjelma-rakenteen. Esimerkiksi TAU:lla, jolla ei ole samanlaisia tiedekuntien alaisia koulutusohjelmia, valitsin ei käy järkeen.
 
 ## Ratkaisut
 
@@ -19,6 +27,15 @@ Yleistäen, organisaation O alla on kaikki ne organisaatiot joiden parent_id = O
 Kursseja ja organisaatioita voi siis olla rinnakkain yhden organisaation alla. Tämä on yleistä ainakin HY:n datassa.
 
 Näin ratkaistaan **ongelma no. 1** ja **ongelma no. 2**.
+
+## Muita hyötyjä päivityksestä
+
+Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
+
+Parannetaan ylläpidettävyyttä. Nykyinen yhteenveto lasketaan parilla isolla "SQL-matolla", joiden ymmärtäminen ja muuttaminen on haastava jopa alkuperäisille toteuttajille.
+
+Parannetaan tehokkuutta. Vaikka aiempi toteutus on melko optimoitu, HY:n uudessa tietokantaklusterissa yhteenvetonäkymän laskeminen isoille pomoille kestää hiukan liikaa. 
+Uudella logiikalla näkymästä on tarkoitus saada tehokas ilman ihmeempiä erikoiskikkoja.
 
 ## Toteutus
 
@@ -32,7 +49,7 @@ Tulevat koskemaan erityisesti `services/summary` -hakemiston koodia. Suurin osa 
 
 Nykyinen materialized view `course_results_view` tullaan poistamaan.
 
-Tilalle tulee uudenlainen materialized view tai volatile table, johon tallennetaan kaikki yhteenvedon rivit. Kuten nykyään, uusi välimuistitaulu päivitetään sopivin väliajoin.
+Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata tallennetaan. 
 
 ### Muutokset fronttiin
 
@@ -43,3 +60,11 @@ Yhteenvedon tiedekuntavalitsin poistetaan.
 ### Haasteita
 
 - Sisun organisaatiodatassa on PALJON epärelevantteja organisaatioita. Esimerkiksi HY:n alla on suoraan 318 organisaatiota, joista noin 15 on Norpassa relevantteja. Ne täytyy osata filtteröidä jollain järkevällä logiikalla. Jamiin kovakoodattu organisaatiorakenne on yksi vaihtoehto, Toskassa se on yleinen ratkaisu.
+  - Ratkaistu: Näistä turhista organisaatioista ei tallennu Summary-objekteja, koska ne tai niiden aliorganisaatiot eivät järjestä kursseja.
+- Kurssien palautemääriä ei saa laskea kahteen kertaan (#1052). Koska kurssin järjestäjänä voi olla useita organisaatioita, laskettaessa organisaatioiden statistiikkaa on muistettava, mitkä kurssit on jo laskettu mukaan.
+  - Ratkaistu: statistiikan päivitysajossa laskenta tapahtuu siten, että jokaiselle Summary-objektille (organisaatio/opintojakso...) rakennetaan lista toteutuksista, joiden statistiikka tulee sen alle. Listalle yksinkertaisesti tehdään unique by id -operaatio, jolloin mitään ei lasketa kahdesti, vaikka yksi toteutus voikin olla useiden muiden entiteettien vastuulla.
+- Muitakin tulee varmaan...
+
+## Miten edetään
+
+Kun eri Norpan osapuolet hyväksyvät muutosten hyödyllisyyden ja pääpiirteittäin teknisen lähestymistavan, Toska tekee uudesta kurssiyhteenvetonäkymästä nopeasti prototyyppiversion vanhan rinnalle. Prototyyppiversio tulee ensin näkymään vain admineille mutta se viedään HY:n tuotantoon heti kun se on käyttökelpoinen. Kun se on todettu riittävän vakaaksi ja toimivaksi eri käyttäjäryhmille (Yliopistohallinto, johtoryhmien jäsenet, opettajat), korvataan vanha näkymä uudella.
