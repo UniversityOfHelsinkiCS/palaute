@@ -49,7 +49,7 @@ Tulevat koskemaan erityisesti `services/summary` -hakemiston koodia. Suurin osa 
 
 Nykyinen materialized view `course_results_view` tullaan poistamaan.
 
-Tilalle tulee uudenlainen materialized view tai volatile table, johon tallennetaan kaikki yhteenvedon rivit. Kuten nykyään, uusi välimuistitaulu päivitetään sopivin väliajoin.
+Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata tallennetaan. 
 
 ### Muutokset fronttiin
 
@@ -60,7 +60,9 @@ Yhteenvedon tiedekuntavalitsin poistetaan.
 ### Haasteita
 
 - Sisun organisaatiodatassa on PALJON epärelevantteja organisaatioita. Esimerkiksi HY:n alla on suoraan 318 organisaatiota, joista noin 15 on Norpassa relevantteja. Ne täytyy osata filtteröidä jollain järkevällä logiikalla. Jamiin kovakoodattu organisaatiorakenne on yksi vaihtoehto, Toskassa se on yleinen ratkaisu.
+  - Ratkaistu: Näistä turhista organisaatioista ei tallennu Summary-objekteja, koska ne tai niiden aliorganisaatiot eivät järjestä kursseja.
 - Kurssien palautemääriä ei saa laskea kahteen kertaan (#1052). Koska kurssin järjestäjänä voi olla useita organisaatioita, laskettaessa organisaatioiden statistiikkaa on muistettava, mitkä kurssit on jo laskettu mukaan.
+  - Ratkaistu: statistiikan päivitysajossa laskenta tapahtuu siten, että jokaiselle Summary-objektille (organisaatio/opintojakso...) rakennetaan lista toteutuksista, joiden statistiikka tulee sen alle. Listalle yksinkertaisesti tehdään unique by id -operaatio, jolloin mitään ei lasketa kahdesti, vaikka yksi toteutus voikin olla useiden muiden entiteettien vastuulla.
 - Muitakin tulee varmaan...
 
 ## Miten edetään
