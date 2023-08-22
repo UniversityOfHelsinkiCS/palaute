@@ -47,10 +47,9 @@ steps:
      ./start-containers.sh
    failOnStderr: false
 - task: Bash@3
-  displayName: Remove dist folder
+  displayName: Remove folders from the agent
   inputs:
    targetType: 'inline'
    script: |
-     rm -rf dist
-     rm -rf node_modules
+     rm -rf -- ..?* .[!.]* *
    failOnStderr: true
