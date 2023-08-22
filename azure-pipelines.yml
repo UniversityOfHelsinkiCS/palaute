@@ -1,19 +1,56 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - development
 
 pool:
-  vmImage: ubuntu-latest
+  name: Leanware Kampus testi
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: Docker@2
+  displayName: Leanware Docker registry login
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    command: 'login'
+- task: Docker@2
+  displayName: Build Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'build'
+    Dockerfile: 'Dockerfile'
+    arguments: |
+      --build-arg NODE_CONFIG_ENV=tau
+      --build-arg GIT_SHA=$(Build.SourceVersion)
+    tags: |
+      latest
+- task: Docker@2
+  displayName: Push Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'push'
+    tags: |
+      latest
+- task: Bash@3
+  displayName: Pull new image from Leanware registry
+  inputs:
+   targetType: 'inline'
+   script: |
+     docker pull hub.leanware.fi/lw/tau/tuni-kpj
+   failOnStderr: true
+- task: Bash@3
+  displayName: Restart containers
+  inputs:
+   targetType: 'inline'
+   script: |
+     cd /home/leanware/tuni-kpj
+     ./stop-containers.sh
+     ./start-containers.sh
+   failOnStderr: false
+- task: Bash@3
+  displayName: Remove dist folder
+  inputs:
+   targetType: 'inline'
+   script: |
+     rm -rf dist
+     rm -rf node_modules
+   failOnStderr: true
