@@ -43,8 +43,8 @@ steps:
    targetType: 'inline'
    script: |
      cd /home/leanware/tuni-kpj
-     ./stop-containers.sh
-     ./start-containers.sh
+     ./stop_containers.sh
+     ./start_containers.sh
    failOnStderr: false
 - task: Bash@3
   displayName: Remove folders from the agent
