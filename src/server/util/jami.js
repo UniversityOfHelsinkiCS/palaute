@@ -40,6 +40,7 @@ const getUserIamAccess = async (user, attempt = 1) => {
 
 const getAccessToAll = async () => {
   const { data: access } = await jamiClient.get('/access-to-all')
+  access['01'] = { read: true } // University (TEST)
 
   return access
 }

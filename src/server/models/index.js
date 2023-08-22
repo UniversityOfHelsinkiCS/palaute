@@ -22,6 +22,7 @@ const Banner = require('./banner')
 const InactiveCourseRealisation = require('./inactiveCourseRealisation')
 const CourseUnitsTag = require('./courseUnitsTag')
 const Group = require('./group')
+const Summary = require('./summary')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -214,4 +215,5 @@ module.exports = {
   Tag,
   CourseUnitsTag,
   Group,
+  Summary,
 }
