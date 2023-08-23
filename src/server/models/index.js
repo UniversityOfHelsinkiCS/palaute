@@ -32,6 +32,10 @@ FeedbackTarget.belongsTo(CourseRealisation, {
   foreignKey: 'courseRealisationId',
   as: 'courseRealisation',
 })
+CourseRealisation.hasMany(FeedbackTarget, {
+  foreignKey: 'courseRealisationId',
+  as: 'feedbackTargets',
+})
 
 UserFeedbackTarget.belongsTo(FeedbackTarget, { as: 'feedbackTarget' })
 FeedbackTarget.hasMany(UserFeedbackTarget, { as: 'userFeedbackTargets' })
@@ -77,6 +81,16 @@ CourseRealisation.belongsToMany(Organisation, {
 Organisation.belongsToMany(CourseRealisation, {
   through: CourseRealisationsOrganisation,
   as: 'courseRealisations',
+})
+
+Organisation.belongsTo(Organisation, {
+  foreignKey: 'parent_id',
+  as: 'parentOrganisation',
+})
+
+Organisation.hasMany(Organisation, {
+  foreignKey: 'parent_id',
+  as: 'childOrganisations',
 })
 
 FeedbackTarget.belongsToMany(User, {
@@ -189,6 +203,18 @@ Group.belongsTo(FeedbackTarget, {
   foreignKey: 'feedbackTargetId',
   as: 'feedbackTarget',
 })
+
+/**
+ * Summary associations
+ */
+Summary.belongsTo(Organisation, { foreignKey: 'entityId', as: 'organisation' })
+Organisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+
+Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
+CourseUnit.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+
+Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
+CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
 
 module.exports = {
   Feedback,

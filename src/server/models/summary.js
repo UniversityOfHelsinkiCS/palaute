@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, DATEONLY, INTEGER } = require('sequelize')
+const { Model, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, Op } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 /**
@@ -62,6 +62,9 @@ Summary.init(
       type: JSONB,
       allowNull: false,
     },
+    children: {
+      type: VIRTUAL,
+    },
   },
   {
     underscored: true,
@@ -74,6 +77,26 @@ Summary.init(
         fields: ['entity_id', 'start_date'], // Must be underscored in this case
       },
     ],
+    scopes: {
+      between(startDate, endDate) {
+        return {
+          where: {
+            startDate: {
+              [Op.between]: [startDate, endDate],
+            },
+          },
+        }
+      },
+    },
+    defaultScope: {
+      where: {
+        data: {
+          feedbackCount: {
+            [Op.gt]: 0,
+          },
+        },
+      },
+    },
   }
 )
 

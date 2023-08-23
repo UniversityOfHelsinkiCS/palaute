@@ -11,8 +11,9 @@ const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
-const { getSummaries } = require('../../services/summary/summaryV2')
+const { getOrganisationSummaryWithChildren } = require('../../services/summary/summaryV2')
 const { startOfStudyYear } = require('../../util/common')
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -123,37 +124,25 @@ const getOrganisations = async (req, res) => {
   })
 }
 
+/**
+ * Only accessible to admin currently.
+ */
 const getOrganisationsV2 = async (req, res) => {
-  const { user } = req
   const { startDate, endDate, entityId } = req.query
-  console.log(req.query)
+
   if (!entityId) {
     return ApplicationError.BadRequest('Missing entityId')
   }
 
-  // Return summaries 'under' entityId
+  const questions = getSummaryQuestions()
 
-  const [fullOrganisationAccess, accessibleCourseRealisationIds] = await Promise.all([
-    user.getOrganisationAccess(),
-    getAccessibleCourseRealisationIds(user),
-  ])
-
-  // The auth question is: Does user have access to entityId? If so, they have access to everything below it.
-  // CUR shit is left for later.
-
-  if (!fullOrganisationAccess.some(access => access.organisation.id === entityId)) {
-    return ApplicationError.Forbidden(`No access to ${entityId}`)
-  }
-
-  const summaries = await getSummaries({
-    entityId,
-    accessibleOrganisations: fullOrganisationAccess.map(access => access.organisation),
-    courseRealisationIds: [],
+  const organisation = await getOrganisationSummaryWithChildren({
+    organisationId: entityId,
     startDate: startDate ? new Date(startDate) : startOfStudyYear(new Date()),
     endDate: endDate ? new Date(endDate) : new Date(),
   })
 
-  return res.send(summaries)
+  return res.send({ organisation, questions: await questions })
 }
 
 const getByCourseUnit = async (req, res) => {
@@ -199,7 +188,7 @@ const getByCourseUnit = async (req, res) => {
 const router = Router()
 
 router.get('/organisations', getOrganisations)
-router.get('/organisations-v2', getOrganisationsV2)
+router.get('/organisations-v2', adminAccess, getOrganisationsV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/access', getAccessInfo)
