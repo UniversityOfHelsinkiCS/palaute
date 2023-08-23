@@ -14,7 +14,6 @@ const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
-const { buildSummaries } = require('./services/summary/buildSummaries')
 
 const app = express()
 
@@ -39,8 +38,6 @@ const start = async () => {
   await startViewsCron()
   await startPrecacheFeedbackTargetsCron()
   await mailer.scheduleCronJobs()
-
-  // await buildSummaries()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)

@@ -1,12 +1,14 @@
 import React from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { subDays } from 'date-fns'
+import { useSnackbar } from 'notistack'
 import OrganisationSummaryRow from './SummaryRow'
-import { useSummaries } from './api'
+import { updateSummaries, useSummaries } from './api'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import LinkButton from '../../../components/common/LinkButton'
 
 const SummaryV2 = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const startDate = new Date('2023-01-01')
   const endDate = subDays(new Date('2023-08-01'), 1)
   const entityId = 'hy-university-root-id'
@@ -16,6 +18,11 @@ const SummaryV2 = () => {
     startDate,
     endDate,
   })
+
+  const handleUpdateData = async () => {
+    const duration = await updateSummaries()
+    if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
+  }
 
   return (
     <Box>
@@ -27,6 +34,9 @@ const SummaryV2 = () => {
           <LinkButton to="/course-summary" title="unmintufy" />
         </Box>
         <Typography variant="subtitle1">Vain admineille</Typography>
+        <Button variant="text" onClick={handleUpdateData}>
+          Aja datanpäivitys
+        </Button>
       </Box>
       {isLoading ? (
         <LoadingProgress />

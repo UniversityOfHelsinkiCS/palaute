@@ -25,3 +25,12 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled }) => {
 
   return { organisation, questions, ...rest }
 }
+
+export const updateSummaries = async () => {
+  // eslint-disable-next-line no-alert
+  if (!window.confirm('Tämä voi kestää yli minuutin. Oletko varma?')) return null
+
+  const { data } = await apiClient.post('admin/build-summaries')
+
+  return data.duration
+}
