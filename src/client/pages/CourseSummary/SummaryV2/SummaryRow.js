@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
+import { grey } from '@mui/material/colors'
 import _ from 'lodash'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -9,13 +10,16 @@ import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResu
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 
-const { Box, Grid, ButtonBase } = require('@mui/material')
+const { Box, ButtonBase } = require('@mui/material')
 
 const styles = {
   resultCell: {
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '3.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   countCell: {
     padding: '0rem 1rem 0rem 1rem',
@@ -140,20 +144,19 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
         <Box flex={0.5}>
           <RowHeader label={label} link={link} />
         </Box>
         {questions.map(q => (
-          <Box key={q.id}>
-            <SummaryResultItem
-              question={q}
-              mean={summary.data.result[q.id]?.mean}
-              distribution={summary.data.result[q.id]?.distribution}
-              sx={styles.resultCell}
-              component="div"
-            />
-          </Box>
+          <SummaryResultItem
+            key={q.id}
+            question={q}
+            mean={summary.data.result[q.id]?.mean}
+            distribution={summary.data.result[q.id]?.distribution}
+            sx={styles.resultCell}
+            component="div"
+          />
         ))}
       </Box>
     </Box>
@@ -191,26 +194,31 @@ const OrganisationSummaryRow = ({
   const link = null
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch">
-      <Box display="flex" alignItems="center">
+    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem" pt={isOpen ? '0.5rem' : 0}>
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
         <Box flex={0.5}>
           <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={handleOpenRow} link={link} />
         </Box>
         {questions.map(q => (
-          <Box key={q.id}>
-            <SummaryResultItem
-              question={q}
-              mean={summary.data.result[q.id]?.mean}
-              distribution={summary.data.result[q.id]?.distribution}
-              sx={styles.resultCell}
-              component="div"
-            />
-          </Box>
+          <SummaryResultItem
+            key={q.id}
+            question={q}
+            mean={summary.data.result[q.id]?.mean}
+            distribution={summary.data.result[q.id]?.distribution}
+            sx={styles.resultCell}
+            component="div"
+          />
         ))}
       </Box>
       {isOpen && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <Box sx={{ pl: '2rem', borderLeft: 'solid 1px grey' }}>
+        <Box
+          sx={{ pl: '2rem', borderLeft: `solid 2px ${grey[300]}`, pb: '0.5rem' }}
+          display="flex"
+          flexDirection="column"
+          alignItems="stretch"
+          gap="0.4rem"
+        >
           {!childOrganisations ? (
             <LoadingProgress />
           ) : (
