@@ -9,8 +9,9 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
+import PercentageCell from '../PercentageCell'
 
-const { Box, ButtonBase } = require('@mui/material')
+const { Box, ButtonBase, Typography } = require('@mui/material')
 
 const styles = {
   resultCell: {
@@ -18,14 +19,17 @@ const styles = {
     textAlign: 'center',
     minWidth: '3.5rem',
     display: 'flex',
+    flex: '0.05',
     alignItems: 'center',
     justifyContent: 'center',
   },
   countCell: {
-    padding: '0rem 1rem 0rem 1rem',
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    minWidth: '100px',
+    flex: '0.1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   percentCell: {
     whiteSpace: 'nowrap',
@@ -141,11 +145,12 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const label = <CourseUnitLabel name={getLanguageValue(courseUnit.name, i18n.language)} code={courseUnit.courseCode} />
   const link = `/course-summary/${courseUnit.courseCode}`
   const { summary } = courseUnit
+  const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <Box flex={0.5}>
+        <Box flex={0.4} pr="1rem">
           <RowHeader label={label} link={link} />
         </Box>
         {questions.map(q => (
@@ -158,6 +163,10 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
             component="div"
           />
         ))}
+        <Typography variant="body2" sx={styles.countCell}>
+          {summary.data.feedbackCount} / {summary.data.studentCount}
+        </Typography>
+        <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
       </Box>
     </Box>
   )
@@ -193,10 +202,12 @@ const OrganisationSummaryRow = ({
 
   const link = null
 
+  const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
+
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem" pt={isOpen ? '0.5rem' : 0}>
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <Box flex={0.5}>
+        <Box flex={0.4} pr="1rem">
           <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={handleOpenRow} link={link} />
         </Box>
         {questions.map(q => (
@@ -209,6 +220,10 @@ const OrganisationSummaryRow = ({
             component="div"
           />
         ))}
+        <Typography variant="body2" sx={styles.countCell}>
+          {summary.data.feedbackCount} / {summary.data.studentCount}
+        </Typography>
+        <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
       </Box>
       {isOpen && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
