@@ -94,13 +94,6 @@ steps:
     tags: |
       ${{ parameters.RELEASE_TAG }}
 - task: Bash@3
-  displayName: Pull new tuni-kpj image from Leanware registry
-  inputs:
-   targetType: 'inline'
-   script: |
-     docker pull hub.leanware.fi/lw/tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
-   failOnStderr: true
-- task: Bash@3
   displayName: Push new release to AWS
   inputs:
    targetType: 'inline'
