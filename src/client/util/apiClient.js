@@ -3,7 +3,6 @@ import { getHeaders } from './mockHeaders'
 import { basePath, inProduction, inE2EMode } from './common'
 
 const apiClient = axios.create({ baseURL: `${basePath}/api` })
-
 const getNoadUrl = url => `/noad${url}`
 
 apiClient.interceptors.request.use(config => {

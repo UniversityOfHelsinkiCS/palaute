@@ -11,6 +11,9 @@ const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
+const { getOrganisationSummaryWithChildren } = require('../../services/summary/summaryV2')
+const { startOfStudyYear } = require('../../util/common')
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -121,6 +124,27 @@ const getOrganisations = async (req, res) => {
   })
 }
 
+/**
+ * Only accessible to admin currently.
+ */
+const getOrganisationsV2 = async (req, res) => {
+  const { startDate, endDate, entityId } = req.query
+
+  if (!entityId) {
+    return ApplicationError.BadRequest('Missing entityId')
+  }
+
+  const questions = getSummaryQuestions()
+
+  const organisation = await getOrganisationSummaryWithChildren({
+    organisationId: entityId,
+    startDate: startDate ? new Date(startDate) : startOfStudyYear(new Date()),
+    endDate: endDate ? new Date(endDate) : new Date(),
+  })
+
+  return res.send({ organisation, questions: await questions })
+}
+
 const getByCourseUnit = async (req, res) => {
   const { user } = req
   const { code } = req.params
@@ -164,6 +188,7 @@ const getByCourseUnit = async (req, res) => {
 const router = Router()
 
 router.get('/organisations', getOrganisations)
+router.get('/organisations-v2', adminAccess, getOrganisationsV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/access', getAccessInfo)

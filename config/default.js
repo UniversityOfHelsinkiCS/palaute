@@ -33,7 +33,8 @@ const config = {
   TAGS_ENABLED: [],
 
   /**
-   * The id of a LIKERT-type question that is considered the university level workload question.
+   * The id of a SINGLE_CHOICE-type question that is considered the university level workload question.
+   * The workload question has some assumptions about it, mainly that it MUST NOT have a "no answer (EOS)"-option.
    * Future ideas: get rid of this and add a new question type for it instead.
    */
   WORKLOAD_QUESTION_ID: 1042,
