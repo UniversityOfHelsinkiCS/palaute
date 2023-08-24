@@ -19,7 +19,7 @@ const styles = {
     textAlign: 'center',
     minWidth: '3.5rem',
     display: 'flex',
-    flex: '0.05',
+    aspectRatio: 1, // Make them square
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -110,6 +110,46 @@ const styles = {
   },
 }
 
+const useAccordionState = (id, enabled, forceOpen) => {
+  const key = `accordions-v2`
+
+  const initial = React.useMemo(() => {
+    if (!enabled) return false
+    if (forceOpen) return true
+
+    const str = localStorage.getItem(key)
+    if (typeof str === 'string') {
+      const ids = JSON.parse(str)
+      if (Array.isArray(ids)) {
+        return ids.includes(id)
+      }
+    }
+    return false
+  }, [key])
+
+  const [open, setOpen] = React.useState(initial)
+
+  React.useEffect(() => {
+    if (!enabled || forceOpen) return
+
+    let ids = []
+    const str = localStorage.getItem(key)
+    if (typeof str === 'string') {
+      ids = JSON.parse(str)
+      if (Array.isArray(ids)) {
+        if (open && !ids.includes(id)) {
+          ids.push(id)
+        } else if (!open) {
+          ids = ids.filter(aid => aid !== id)
+        }
+      }
+    }
+    localStorage.setItem(key, JSON.stringify(ids))
+  }, [open])
+
+  return [open, setOpen]
+}
+
 const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link }) => (
   // eslint-disable-next-line react/jsx-no-useless-fragment
   <>
@@ -146,6 +186,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const link = `/course-summary/${courseUnit.courseCode}`
   const { summary } = courseUnit
   const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
+  const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
@@ -167,6 +208,11 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
           {summary.data.feedbackCount} / {summary.data.studentCount}
         </Typography>
         <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
+        <PercentageCell
+          label={`${feedbackResponsePercentage}%`}
+          percent={feedbackResponsePercentage}
+          sx={styles.percentCell}
+        />
       </Box>
     </Box>
   )
@@ -179,7 +225,8 @@ const OrganisationSummaryRow = ({
   organisation: initialOrganisation,
   questions,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(isInitiallyOpen)
+  const [isTransitioning, startTransition] = React.useTransition()
+  const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
 
   const { i18n } = useTranslation()
 
@@ -197,12 +244,13 @@ const OrganisationSummaryRow = ({
   const label = <OrganisationLabel name={getLanguageValue(organisation.name, i18n.language)} code={organisation.code} /> //getLanguageValue(rootSummary.organisation?.name, i18n.language)
 
   const handleOpenRow = () => {
-    setIsOpen(!isOpen)
+    startTransition(() => setIsOpen(!isOpen))
   }
 
   const link = null
 
   const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
+  const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem" pt={isOpen ? '0.5rem' : 0}>
@@ -224,8 +272,13 @@ const OrganisationSummaryRow = ({
           {summary.data.feedbackCount} / {summary.data.studentCount}
         </Typography>
         <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
+        <PercentageCell
+          label={`${feedbackResponsePercentage}%`}
+          percent={feedbackResponsePercentage}
+          sx={styles.percentCell}
+        />
       </Box>
-      {isOpen && (
+      {(isTransitioning || isOpen) && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <Box
           sx={{ pl: '2rem', borderLeft: `solid 2px ${grey[300]}`, pb: '0.5rem' }}
