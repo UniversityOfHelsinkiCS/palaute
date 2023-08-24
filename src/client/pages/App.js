@@ -9,11 +9,12 @@ import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
 import usePinger from '../hooks/usePinger'
-import { inE2EMode } from '../util/common'
+import { inE2EMode, CUSTOM_THEME_NAMESPACE } from '../util/common'
 
 /* eslint-disable */
 const App = () => {
-  const theme = useTheme()
+  const theme = useTheme(CUSTOM_THEME_NAMESPACE || undefined)
+
   usePinger({ enabled: !inE2EMode })
 
   return (

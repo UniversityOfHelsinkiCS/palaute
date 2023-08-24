@@ -1,68 +1,62 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
-import { lightBlue, green, grey } from '@mui/material/colors'
-import { useMemo } from 'react'
+import { green, grey, lightBlue } from '@mui/material/colors'
+import { useEffect, useMemo, useState } from 'react'
+import { deepmerge } from '@mui/utils'
 
-const useTheme = () => {
-  const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
-  const mode = prefersDarkMode ? 'dark' : 'light'
-
-  const theme = useMemo(
-    () =>
-      responsiveFontSizes(
-        createTheme({
-          typography: {
-            fontFamily: [
-              '"Open Sans"',
-              '"Helvetica"',
-              '"Arial"',
-              '"sans-serif"',
-              '"Apple Color Emoji"',
-              '"Segoe UI Emoji"',
-              '"Segoe UI Symbol"',
-            ].join(','),
-            fontWeightLight: 400,
-            fontWeightRegular: 500,
-            fontWeightMedium: 700,
-            fontWeightBold: 800,
+const defaultTheme = mode => ({
+  typography: {
+    fontFamily: [
+      '"Open Sans"',
+      '"Helvetica"',
+      '"Arial"',
+      '"sans-serif"',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 700,
+    fontWeightBold: 800,
+  },
+  palette: {
+    mode,
+    ...(mode === 'light'
+      ? {
+          primary: {
+            light: '#4f96db',
+            main: '#3770b3',
+            dark: '#124c8c',
           },
-          palette: {
-            mode,
-            ...(mode === 'light'
-              ? {
-                  primary: {
-                    light: '#5c00a8',
-                    main: '#4e008e',
-                    dark: '#0e0021',
-                  },
-                  secondary: {
-                    main: '#e6c309',
-                  },
-                  info: {
-                    main: lightBlue[700],
-                    light: lightBlue[500],
-                    dark: lightBlue[900],
-                  },
-                  success: {
-                    main: green[800],
-                    light: green[500],
-                    dark: green[900],
-                  },
-                  background: {
-                    default: grey[50],
-                  },
-                  warning: {
-                    main: '#e6c309',
-                    light: '#ffd700',
-                  },
-                }
-              : {}),
+          secondary: {
+            main: '#e6c309',
           },
-          shape: {
-            borderRadius: 6,
+          info: {
+            main: lightBlue[700],
+            light: lightBlue[500],
+            dark: lightBlue[900],
           },
-          components: {
-            MuiCssBaseline: {
-              styleOverrides: `
+          success: {
+            main: green[800],
+            light: green[500],
+            dark: green[900],
+          },
+          background: {
+            default: grey[50],
+          },
+          warning: {
+            main: '#e6c309',
+            light: '#ffd700',
+          },
+        }
+      : {}),
+  },
+  shape: {
+    borderRadius: 6,
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
                 body {
                   height: 100vh;
                 }
@@ -80,67 +74,82 @@ const useTheme = () => {
                   background: theme.palette.info.main,
                 }
               `,
-            },
-            MuiPaper: {
-              defaultProps: {
-                elevation: 2,
-              },
-              styleOverrides: {
-                root: {
-                  borderRadius: '0.8rem',
-                },
-              },
-            },
-            MuiCard: {
-              defaultProps: {
-                elevation: 2,
-              },
-              styleOverrides: {
-                root: {
-                  borderRadius: '0.8rem',
-                },
-              },
-            },
-            MuiAccordion: {
-              defaultProps: {
-                elevation: 2,
-              },
-              styleOverrides: {
-                rounded: {
-                  borderRadius: '0.8rem',
-                },
-              },
-            },
-            MuiAlert: {
-              defaultProps: {
-                elevation: 0,
-              },
-              styleOverrides: {
-                standardInfo: {
-                  boxShadow: `0 2px 8px 0 ${lightBlue[100]}`,
-                },
-              },
-            },
-            MuiButton: {
-              styleOverrides: {
-                containedPrimary: {
-                  color: 'white',
-                  background: 'rgb(78,0,142)',
-                  boxShadow: '0 4px 14px 0 rgb(0 118 255 / 39%)',
-                  '&:hover': {
-                    background: 'rgb(92,0,168)',
-                    boxShadow: '0 4px 14px 0 rgb(0 118 255 / 44%)',
-                  },
-                },
-              },
-            },
+    },
+    MuiPaper: {
+      defaultProps: {
+        elevation: 2,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: '0.8rem',
+        },
+      },
+    },
+    MuiCard: {
+      defaultProps: {
+        elevation: 2,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: '0.8rem',
+        },
+      },
+    },
+    MuiAccordion: {
+      defaultProps: {
+        elevation: 2,
+      },
+      styleOverrides: {
+        rounded: {
+          borderRadius: '0.8rem',
+        },
+      },
+    },
+    MuiAlert: {
+      defaultProps: {
+        elevation: 0,
+      },
+      styleOverrides: {
+        standardInfo: {
+          boxShadow: `0 2px 8px 0 ${lightBlue[100]}`,
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          color: 'white',
+          background: 'rgb(8 110 221)',
+          boxShadow: '0 4px 14px 0 rgb(0 118 255 / 39%)',
+          '&:hover': {
+            background: 'rgba(10,130,235,1)',
+            boxShadow: '0 4px 14px 0 rgb(0 118 255 / 44%)',
           },
-        })
-      ),
-    [mode]
+        },
+      },
+    },
+  },
+})
+
+const useTheme = customThemeNamespace => {
+  const [customTheme, setCustomTheme] = useState()
+
+  useEffect(() => {
+    if (customThemeNamespace) {
+      import(`./themes/${customThemeNamespace}`).then(customTheme => setCustomTheme(customTheme))
+    }
+  }, [customThemeNamespace])
+
+  const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
+  const mode = prefersDarkMode ? 'dark' : 'light'
+  const baseTheme = createTheme(defaultTheme(mode))
+
+  return useMemo(
+    () =>
+      customTheme
+        ? responsiveFontSizes(deepmerge(baseTheme, createTheme(customTheme.default(mode))))
+        : responsiveFontSizes(baseTheme),
+    [mode, customTheme]
   )
-
-  return theme
 }
-
 export default useTheme
