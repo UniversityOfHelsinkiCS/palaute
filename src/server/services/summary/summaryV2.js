@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const { Summary, Organisation, CourseUnit, CourseRealisation, FeedbackTarget } = require('../../models')
 const { sumSummaryDatas } = require('./summaryUtils')
+const { ApplicationError } = require('../../util/customErrors')
 
 const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, endDate }) => {
   const rootOrganisation = await Organisation.findByPk(organisationId, {
@@ -59,6 +60,10 @@ const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, e
       },
     ],
   })
+
+  if (!rootOrganisation) {
+    return ApplicationError.NotFound(`Summary for organisation with id ${organisationId} not found`)
+  }
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.

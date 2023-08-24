@@ -41,14 +41,21 @@ const SummaryV2 = () => {
       {isLoading ? (
         <LoadingProgress />
       ) : (
-        <OrganisationSummaryRow
-          entityId={entityId}
-          organisation={organisation}
-          questions={questions}
-          startDate={startDate}
-          endDate={endDate}
-          isInitiallyOpen
-        />
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        <>
+          {organisation ? (
+            <OrganisationSummaryRow
+              entityId={entityId}
+              organisation={organisation}
+              questions={questions}
+              startDate={startDate}
+              endDate={endDate}
+              isInitiallyOpen
+            />
+          ) : (
+            <div>Jaahas, mitään ei löydy. Data pitää varmaan päivittää</div>
+          )}
+        </>
       )}
     </Box>
   )

@@ -115,16 +115,4 @@ create unlogged table summaries (
 create index summaries_entity_ids on summaries (entity_id);
 `
 
-const fun = `
-select start_date, 
---data->'result'->'6'->'mean' as "Osaamistavoitteet olivat selvät", 
---data->'result'->'7'->'mean' as "Toteutustapa tuki oppimistani", 
---data->'result'->'8'->'mean' as "Materiaalit tukivat oppimistani",
---data->'result'->'9'->'mean' as "Kurssilla käytettävät arviointimenetelmät mittaavat oppimistani"
-data->'feedbackCount',
-data->'studentCount',
-data->'feedbackResponsePercentage'
-from summaries where entity_id = 'hy-university-root-id' order by start_date asc;
-`
-
 module.exports = Summary
