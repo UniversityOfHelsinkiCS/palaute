@@ -20,12 +20,11 @@ const PercentageCell = ({ label, percent, sx }) => {
   hex = hex.padStart(2, '0')
 
   return (
-    <Box sx={styles.cell}>
+    <Box sx={{ ...styles.cell, ...(sx ?? {}) }}>
       <Chip
         label={label}
         sx={{
           background: theme => `${theme.palette.info.light}${hex}`,
-          ...(sx ?? {}),
         }}
       />
     </Box>

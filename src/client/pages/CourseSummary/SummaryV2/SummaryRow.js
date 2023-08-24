@@ -10,6 +10,9 @@ import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResu
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
+import { colors } from '../../../util/common'
+import { generate } from '../../../util/randomColor'
+import useRandomColor from '../../../hooks/useRandomColor'
 
 const { Box, ButtonBase, Typography } = require('@mui/material')
 
@@ -18,15 +21,16 @@ const styles = {
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '3.5rem',
-    display: 'flex',
     aspectRatio: 1, // Make them square
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   countCell: {
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    flex: '0.1',
+    // flex: 0.2,
+    width: '7rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -34,27 +38,14 @@ const styles = {
   percentCell: {
     whiteSpace: 'nowrap',
     textAlign: 'right',
-    minWidth: '60px',
-  },
-  labelCell: theme => ({
-    [theme.breakpoints.down('md')]: {
-      width: '100px',
-      height: '74px', // Sets a good height for the entire row
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '450px',
-    },
-    [theme.breakpoints.up('lg')]: {
-      width: '500px',
-    },
-    paddingRight: '1rem',
-  }),
-  innerLabelCell: {
-    paddingLeft: '1.3rem',
+    width: '4rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   accordionButton: {
-    width: '100%',
-    height: '100%',
+    // flex: 0.5,
+    width: '40%',
     minHeight: '48px',
     maxHeight: '74px',
     paddingLeft: '0.5rem',
@@ -67,6 +58,7 @@ const styles = {
     '&:hover': {
       background: theme => theme.palette.action.hover,
     },
+    transition: 'background-color 0.15s ease-out',
   },
   link: {
     color: theme => theme.palette.primary.main,
@@ -191,9 +183,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <Box flex={0.4} pr="1rem">
-          <RowHeader label={label} link={link} />
-        </Box>
+        <RowHeader label={label} link={link} />
         {questions.map(q => (
           <SummaryResultItem
             key={q.id}
@@ -227,7 +217,7 @@ const OrganisationSummaryRow = ({
 }) => {
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
-
+  const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
   const { i18n } = useTranslation()
 
   const { organisation: fetchedOrganisation } = useSummaries({
@@ -244,6 +234,7 @@ const OrganisationSummaryRow = ({
   const label = <OrganisationLabel name={getLanguageValue(organisation.name, i18n.language)} code={organisation.code} /> //getLanguageValue(rootSummary.organisation?.name, i18n.language)
 
   const handleOpenRow = () => {
+    setNextIsOpen(!isOpen)
     startTransition(() => setIsOpen(!isOpen))
   }
 
@@ -252,12 +243,19 @@ const OrganisationSummaryRow = ({
   const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
   const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
 
+  const indentLineColor = useRandomColor(organisation.code)
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem" pt={isOpen ? '0.5rem' : 0}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="stretch"
+      gap="0.4rem"
+      pt={nextIsOpen ? '0.5rem' : 0}
+      sx={{ transition: 'padding-top 0.2s ease-out' }}
+    >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <Box flex={0.4} pr="1rem">
-          <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={handleOpenRow} link={link} />
-        </Box>
+        <RowHeader openable label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} link={link} />
         {questions.map(q => (
           <SummaryResultItem
             key={q.id}
@@ -281,7 +279,7 @@ const OrganisationSummaryRow = ({
       {(isTransitioning || isOpen) && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <Box
-          sx={{ pl: '2rem', borderLeft: `solid 2px ${grey[300]}`, pb: '0.5rem' }}
+          sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
           display="flex"
           flexDirection="column"
           alignItems="stretch"
