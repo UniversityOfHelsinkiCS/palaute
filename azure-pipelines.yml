@@ -10,7 +10,8 @@ pool:
   name: Leanware Kampus testi
 
 steps:
-- checkout: git://Kampus/tuni-kpj
+- checkout: self
+- checkout: git://Kampus/tuni-kpj-auth
 
 - task: NodeTool@0
   inputs:
@@ -64,5 +65,5 @@ steps:
   inputs:
    targetType: 'inline'
    script: |
-     rm -rf -- ..?* .[!.]* *
+     echo rm -rf -- ..?* .[!.]* *
    failOnStderr: true
