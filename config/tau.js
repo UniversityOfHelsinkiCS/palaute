@@ -191,6 +191,8 @@ const config = {
   STUDENT_FEEDBACK_SHOW_REALISATION_NAME: false,
 
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: true,
+
+  CUSTOM_THEME_NAMESPACE: 'tau',
 }
 
 module.exports = config

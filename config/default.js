@@ -193,6 +193,16 @@ const config = {
   */
 
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
+
+  /**
+   * A custom theme namespace to use. A custom theme config file with the same name should be located under src/client/themes/<CUSTOM_THEME_NAMESPACE>.js.
+   * For example CUSTOM_THEME_NAMESPACE is set as 'custom' and then a custom theme file named custom.js is added into src/client/themes/ - folder.
+   * The file is a JavaScript file that returns a function that returns Material UI theme options object.
+   * Function description: (Mode: light | dark) => ThemeOptions
+   * The existing theme in src/client/theme.js can be used as an example
+   * More info about theming: https://mui.com/material-ui/customization/theming/
+   */
+  CUSTOM_THEME_NAMESPACE: undefined,
 }
 
 module.exports = config
