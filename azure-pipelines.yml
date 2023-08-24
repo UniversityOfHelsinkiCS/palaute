@@ -1,19 +1,68 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+trigger: none
 
-trigger:
-- development
+parameters:
+- name: RELEASE_TAG
+  displayName: Release tag
+  type: string
+  default: false
 
 pool:
-  vmImage: ubuntu-latest
+  name: Leanware Kampus testi
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- checkout: git://Kampus/tuni-kpj
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: NodeTool@0
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '16.x'
+- task: Docker@2
+  displayName: Leanware Docker registry login
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    command: 'login'
+
+- task: Docker@2
+  displayName: Build Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'build'
+    Dockerfile: 'tuni-kpj/Dockerfile'
+    arguments: |
+      --build-arg NODE_CONFIG_ENV=tau
+      --build-arg GIT_SHA=$(Build.SourceVersion)
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+
+- task: Docker@2
+  displayName: Push Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'push'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Bash@3
+  displayName: Pull new image from Leanware registry
+  inputs:
+   targetType: 'inline'
+   script: |
+     docker pull hub.leanware.fi/lw/tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
+   failOnStderr: true
+- task: Bash@3
+  displayName: Push new release to AWS
+  inputs:
+   targetType: 'inline'
+   script: |
+     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau
+     docker tag hub.leanware.fi/lw/tau/tuni-kpj:${{ parameters.RELEASE_TAG }} 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
+     docker push 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
+   failOnStderr: false
+- task: Bash@3
+  displayName: Remove folders from the agent
+  inputs:
+   targetType: 'inline'
+   script: |
+     rm -rf -- ..?* .[!.]* *
+   failOnStderr: true
