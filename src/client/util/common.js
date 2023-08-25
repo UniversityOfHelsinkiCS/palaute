@@ -69,7 +69,4 @@ export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK
 export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
 
 // eslint-disable-next-line no-undef
-console.log(CONFIG.CUSTOM_THEME_NAMESPACE)
-
-// eslint-disable-next-line no-undef
 export const CUSTOM_THEME_NAMESPACE = CONFIG?.CUSTOM_THEME_NAMESPACE
