@@ -14,7 +14,6 @@ import { inE2EMode } from '../util/common'
 /* eslint-disable */
 const App = () => {
   const theme = useTheme()
-
   usePinger({ enabled: !inE2EMode })
 
   return (
