@@ -3,6 +3,8 @@ import { green, grey, lightBlue } from '@mui/material/colors'
 import { useEffect, useMemo, useState } from 'react'
 import { deepmerge } from '@mui/utils'
 
+import { CUSTOM_THEME_NAMESPACE } from './util/common'
+
 const defaultTheme = mode => ({
   typography: {
     fontFamily: [
@@ -131,14 +133,14 @@ const defaultTheme = mode => ({
   },
 })
 
-const useTheme = customThemeNamespace => {
+const useTheme = () => {
   const [customTheme, setCustomTheme] = useState()
 
   useEffect(() => {
-    if (customThemeNamespace) {
-      import(`./themes/${customThemeNamespace}`).then(customTheme => setCustomTheme(customTheme))
+    if (CUSTOM_THEME_NAMESPACE) {
+      import(`./themes/${CUSTOM_THEME_NAMESPACE}`).then(customTheme => setCustomTheme(customTheme))
     }
-  }, [customThemeNamespace])
+  }, [CUSTOM_THEME_NAMESPACE])
 
   const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
   const mode = prefersDarkMode ? 'dark' : 'light'
