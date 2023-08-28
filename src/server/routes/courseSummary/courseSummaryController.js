@@ -25,8 +25,7 @@ const getAccessibleCourseRealisationIds = async user => {
     WHERE user_feedback_targets.user_id = :userId
     AND is_teacher(user_feedback_targets.access_status)
     AND feedback_targets.feedback_type = 'courseRealisation'
-    AND course_realisations.start_date < NOW()
-    AND course_realisations.start_date > NOW() - interval '16 months';
+    AND course_realisations.start_date > NOW() - interval '24 months';
   `,
     {
       replacements: {
@@ -54,7 +53,6 @@ const getAccessInfo = async (req, res) => {
   const { organisationAccess } = user
   const accesses = Object.entries(organisationAccess)
   const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
-
   const hasReadOnSomeOrganisation = accesses.some(([, access]) => access.read)
   const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
 

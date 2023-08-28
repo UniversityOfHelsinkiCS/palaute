@@ -2,7 +2,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
-import { grey } from '@mui/material/colors'
 import _ from 'lodash'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -10,8 +9,6 @@ import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResu
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
-import { colors } from '../../../util/common'
-import { generate } from '../../../util/randomColor'
 import useRandomColor from '../../../hooks/useRandomColor'
 
 const { Box, ButtonBase, Typography } = require('@mui/material')
