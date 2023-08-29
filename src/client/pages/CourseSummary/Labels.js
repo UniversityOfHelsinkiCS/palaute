@@ -7,7 +7,6 @@ import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../../components/common/TeacherChip'
-import { getDateRangeString } from '../../util/getDateRangeString'
 
 const TeacherChips = ({ courseRealisation }) => {
   const { t } = useTranslation()
@@ -85,14 +84,11 @@ export const CourseUnitLabel = ({ name, code }) => (
   </Box>
 )
 
-export const OrganisationLabel = ({ name, code, dates }) => (
+export const OrganisationLabel = ({ name, code }) => (
   <Box display="flex" flexDirection="column">
     <Typography variant="caption" color="textSecondary">
       {code}
     </Typography>
-    <Box display="flex" gap="1rem">
-      <Typography variant="body2">{name}</Typography>
-      {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
-    </Box>
+    <Typography variant="body2">{name}</Typography>
   </Box>
 )

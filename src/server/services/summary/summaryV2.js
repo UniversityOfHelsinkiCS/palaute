@@ -1,16 +1,15 @@
 const _ = require('lodash')
 const { Summary, Organisation, CourseUnit, CourseRealisation, FeedbackTarget } = require('../../models')
-const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
+const { sumSummaryDatas } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
 
 const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, endDate }) => {
-  console.log(`Asking for ${startDate} - ${endDate}`)
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: [
       {
         model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
-        as: 'summaries',
+        as: 'summary',
         required: true,
       },
       {
@@ -19,7 +18,7 @@ const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, e
         attributes: ['name', 'id', 'code'],
         include: {
           model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
-          as: 'summaries',
+          as: 'summary',
           required: true,
         },
       },
@@ -30,7 +29,7 @@ const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, e
         through: { attributes: [] },
         include: {
           model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
-          as: 'summaries',
+          as: 'summary',
           required: true,
         },
       },
@@ -64,16 +63,6 @@ const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, e
 
   if (!rootOrganisation) {
     return ApplicationError.NotFound(`Summary for organisation with id ${organisationId} not found`)
-  }
-
-  // Each organisation and course unit may have multiple summaries if the time range is larger.
-  // Merge them together.
-  rootOrganisation.summary = sumSummaries(rootOrganisation.summaries)
-  for (const org of rootOrganisation.childOrganisations) {
-    org.summary = sumSummaries(org.summaries)
-  }
-  for (const cu of rootOrganisation.courseUnits) {
-    cu.summary = sumSummaries(cu.summaries)
   }
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
@@ -110,7 +99,6 @@ const getOrganisationSummaryWithChildren = async ({ organisationId, startDate, e
   organisation.courseUnits = rootOrganisation.courseUnits.concat(partialCourseUnits)
   // These we dont need.
   delete organisation.courseRealisations
-  console.log(`Got ${organisation.summary.startDate} - ${organisation.summary.endDate}`)
 
   return organisation
 }

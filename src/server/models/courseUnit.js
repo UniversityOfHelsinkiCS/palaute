@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, VIRTUAL } = require('sequelize')
+const { Model, JSONB, STRING } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../util/config')
 const logger = require('../util/logger')
@@ -51,9 +51,6 @@ CourseUnit.init(
     name: {
       type: JSONB,
       allowNull: false,
-    },
-    summary: {
-      type: VIRTUAL,
     },
   },
   {
