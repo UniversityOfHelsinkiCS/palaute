@@ -208,10 +208,10 @@ Group.belongsTo(FeedbackTarget, {
  * Summary associations
  */
 Summary.belongsTo(Organisation, { foreignKey: 'entityId', as: 'organisation' })
-Organisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+Organisation.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 
 Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
-CourseUnit.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })

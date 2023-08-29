@@ -19,6 +19,7 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled }) => {
   const { data, ...rest } = useQuery(queryKey, queryFn, {
     enabled,
     retry: false,
+    refetchOnWindowFocus: false,
   })
 
   const { organisation, questions } = data || {}

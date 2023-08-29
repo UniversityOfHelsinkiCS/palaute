@@ -111,7 +111,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
         required: true,
         include: {
           model: Feedback,
-          attributes: ['data'],
+          attributes: ['data', 'createdAt'],
           as: 'feedback',
         },
       },
@@ -173,10 +173,17 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
       }
     }
 
+    // We mark the end date of this data to be at the time the last feedback was given.
+    // This is more accurate compared to CUR end date, which can sometimes be set arbitrarily far into the future by the teacher
+    // If no feedback was given, use the start date.
+    const endDate = fbt.feedbackCount
+      ? _.max(fbt.userFeedbackTargets.filter(ufbt => ufbt.feedback).map(ufbt => ufbt.feedback.createdAt))
+      : fbt.courseRealisation.startDate
+
     courseRealisationSummaries.push({
       entityId: fbt.courseRealisation.id,
       startDate: fbt.courseRealisation.startDate,
-      endDate: fbt.courseRealisation.endDate,
+      endDate,
       data: {
         result,
         studentCount: fbt.userFeedbackTargets.length,
@@ -313,6 +320,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
 }
 
 const buildSummaries = async () => {
+  await sequelize.query(`DELETE FROM summaries;`)
   // First, consider N time spans. Each time span should be for one period.
   // Lets say we have kevät and syys periods for each year, and the split is 01/08/
   // The result will be N different "summary trees", one for each period.

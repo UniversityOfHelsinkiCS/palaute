@@ -211,6 +211,7 @@ const OrganisationSummaryRow = ({
   endDate,
   organisation: initialOrganisation,
   questions,
+  showDates = false,
 }) => {
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
@@ -228,7 +229,13 @@ const OrganisationSummaryRow = ({
 
   const { childOrganisations, courseUnits, summary } = organisation
 
-  const label = <OrganisationLabel name={getLanguageValue(organisation.name, i18n.language)} code={organisation.code} /> //getLanguageValue(rootSummary.organisation?.name, i18n.language)
+  const label = (
+    <OrganisationLabel
+      name={getLanguageValue(organisation.name, i18n.language)}
+      code={organisation.code}
+      dates={isOpen ? { startDate: summary.startDate, endDate: summary.endDate } : null}
+    />
+  )
 
   const handleOpenRow = () => {
     setNextIsOpen(!isOpen)
