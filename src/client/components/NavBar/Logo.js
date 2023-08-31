@@ -13,10 +13,7 @@ import { useUiConfig } from '../CustomUiConfigProvider'
 const styles = {
   link: {
     alignItems: 'end',
-    display: 'flex',
-    fontSize: '18px',
-    fontWeight: '700',
-    textTransform: 'uppercase',
+    display: 'inline-flex',
     marginRight: 4,
     textDecoration: 'none',
     borderRadius: 3,
@@ -37,8 +34,11 @@ const styles = {
     height: 'auto',
   },
   text: {
+    fontSize: '18px',
+    fontWeight: '700',
     marginLeft: '1rem',
-    paddingBottom: '1px',
+    paddingBottom: '0.2rem',
+    textTransform: 'uppercase',
   },
 }
 
