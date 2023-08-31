@@ -1,9 +1,7 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { green, grey, lightBlue } from '@mui/material/colors'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { deepmerge } from '@mui/utils'
-
-import { CUSTOM_THEME_NAMESPACE } from './util/common'
 
 const defaultTheme = mode => ({
   typography: {
@@ -133,15 +131,7 @@ const defaultTheme = mode => ({
   },
 })
 
-const useTheme = () => {
-  const [customTheme, setCustomTheme] = useState()
-
-  useEffect(() => {
-    if (CUSTOM_THEME_NAMESPACE) {
-      import(`./themes/${CUSTOM_THEME_NAMESPACE}`).then(customTheme => setCustomTheme(customTheme))
-    }
-  }, [CUSTOM_THEME_NAMESPACE])
-
+const useTheme = customTheme => {
   const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
   const mode = prefersDarkMode ? 'dark' : 'light'
   const baseTheme = createTheme(defaultTheme(mode))
@@ -149,7 +139,7 @@ const useTheme = () => {
   return useMemo(
     () =>
       customTheme
-        ? responsiveFontSizes(deepmerge(baseTheme, createTheme(customTheme.default(mode))))
+        ? responsiveFontSizes(deepmerge(baseTheme, createTheme(customTheme(mode))))
         : responsiveFontSizes(baseTheme),
     [mode, customTheme]
   )
