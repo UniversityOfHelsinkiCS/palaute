@@ -10,6 +10,7 @@ const styles = {
   logo: {
     link: {
       alignItems: 'center',
+      display: 'flex',
     },
     image: {
       height: 'auto',
