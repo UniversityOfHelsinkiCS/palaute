@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 
 import { Link } from 'react-router-dom'
 
-import logo from '../../assets/hy_logo.svg'
+import hyLogo from '../../assets/hy_logo.svg'
 
 import { useUiConfig } from '../CustomUiConfigProvider'
 
@@ -51,7 +51,7 @@ const Logo = ({ guest = false }) => {
   return (
     <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
       <Box sx={logoStyles.link}>
-        <img src={customLogo || logo} alt="HY" css={logoStyles.image} />
+        <img src={customLogo || hyLogo} alt="HY" style={logoStyles.image} />
         <Box css={logoStyles.text}>Norppa</Box>
       </Box>
     </Link>
