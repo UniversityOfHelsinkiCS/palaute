@@ -1,6 +1,27 @@
 import { green, grey, lightBlue } from '@mui/material/colors'
 
-const tau = mode => ({
+import logo from '../assets/tau_logo.svg'
+
+const images = {
+  logo,
+}
+
+const styles = {
+  logo: {
+    link: {
+      alignItems: 'center',
+    },
+    image: {
+      height: 'auto',
+      width: '192px',
+    },
+    text: {
+      paddingBottom: '0',
+    },
+  },
+}
+
+const theme = mode => ({
   typography: {
     fontFamily: [
       '"Open Sans"',
@@ -128,4 +149,4 @@ const tau = mode => ({
   },
 })
 
-export default tau
+export default { images, styles, theme }
