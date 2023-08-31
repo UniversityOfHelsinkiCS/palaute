@@ -57,7 +57,7 @@ const TRANSLATION_NAMESPACE = config.get('TRANSLATION_NAMESPACE')
 const LANGUAGES = config.get('LANGUAGES')
 const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
 const SENTRY_DSN = config.get('SENTRY_DSN')
-const CUSTOM_THEME_NAMESPACE = config.get('CUSTOM_THEME_NAMESPACE')
+const UI_CONFIG_NAME = config.get('UI_CONFIG_NAME')
 
 module.exports = {
   inE2EMode,
@@ -97,5 +97,5 @@ module.exports = {
   FEEDBACK_SYSTEM,
   GELF_TRANSPORT_ENABLED,
   SENTRY_DSN,
-  CUSTOM_THEME_NAMESPACE,
+  UI_CONFIG_NAME,
 }
