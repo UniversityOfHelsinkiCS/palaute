@@ -1,13 +1,22 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
+import merge from 'lodash/merge'
 import { Box } from '@mui/material'
 
 import { Link } from 'react-router-dom'
-import hyLogo from '../../assets/tau_logo.svg'
+
+import logo from '../../assets/hy_logo.svg'
+
+import { useUiConfig } from '../CustomUiConfigProvider'
 
 const styles = {
   link: {
+    alignItems: 'end',
+    display: 'flex',
+    fontSize: '18px',
+    fontWeight: '700',
+    textTransform: 'uppercase',
     marginRight: 4,
     textDecoration: 'none',
     borderRadius: 3,
@@ -24,20 +33,29 @@ const styles = {
     },
   },
   image: {
-    width: '12rem',
+    width: '2.5rem',
     height: 'auto',
+  },
+  text: {
+    marginLeft: '1rem',
+    paddingBottom: '1px',
   },
 }
 
-const Logo = ({ guest = false }) => (
-  <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
-    <Box display="flex" alignItems="center" sx={styles.link}>
-      <img src={hyLogo} alt="HY" css={styles.image} />
-      <Box ml="1rem" textTransform="uppercase" fontWeight={700} fontSize={18}>
-        Norppa
+const Logo = ({ guest = false }) => {
+  const customUiConfig = useUiConfig()
+  const customStyles = customUiConfig?.styles?.logo ?? {}
+  const logoStyles = merge(styles, customStyles)
+  const customLogo = customUiConfig?.images?.logo
+
+  return (
+    <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
+      <Box sx={logoStyles.link}>
+        <img src={customLogo || logo} alt="HY" css={logoStyles.image} />
+        <Box css={logoStyles.text}>Norppa</Box>
       </Box>
-    </Box>
-  </Link>
-)
+    </Link>
+  )
+}
 
 export default Logo
