@@ -150,6 +150,12 @@ const config = {
    */
   TRANSLATION_NAMESPACE: 'tau',
 
+  //10 minutes time to live
+  FEEDBACK_TARGET_CACHE_TTL: 30000,
+
+  //1 hour time to live
+  USER_CACHE_TTL: 360000,
+
   /**
    * Supported languages. Add translations for each language. Defaults are 'fi' ,'sv' and 'en'
    */
