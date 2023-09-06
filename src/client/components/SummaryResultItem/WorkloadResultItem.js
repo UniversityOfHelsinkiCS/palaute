@@ -8,7 +8,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
 
 const normalizeMean = mean => {
-  const diff = Math.abs(mean - 3)
+  const diff = mean - 3
 
   return diff / 2
 }
@@ -16,7 +16,7 @@ const normalizeMean = mean => {
 const getArrow = mean => {
   const normalizedMean = normalizeMean(mean)
 
-  const angle = mean < 3 ? -(normalizedMean * 90) : normalizedMean * 90
+  const angle = normalizedMean * 90
 
   return <ArrowIcon style={{ transform: `rotate(${angle}deg)` }} />
 }
