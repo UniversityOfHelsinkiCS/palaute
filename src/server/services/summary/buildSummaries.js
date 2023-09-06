@@ -151,7 +151,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
       }
     }
 
-    // Compute the mean (which we've initialised to 0) for each question. Two cases: LIKERT (easy) and WORKLOAD (a slight pain)
+    // Compute the mean (which we've initialised to 0) for each question.
     // Keep in mind that value of 0 for LIKERT means NO ANSWER, its not counted to mean.
     // WORKLOAD has no such option, are values are actual values.
     const questionIds = Object.keys(result)
@@ -164,7 +164,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
           // skip the NO ANSWER option
           const count = Number(result[questionId].distribution[optionId])
           totalCount += count
-          sum += mapOptionIdToValue(optionId, questionId) * count // For LIKERT, optionId is the value
+          sum += mapOptionIdToValue(optionId, questionId) * count
         }
       }
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0

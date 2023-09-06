@@ -2,7 +2,7 @@ const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
 
 const mapOptionIdToValue = (optionId, questionId) => {
-  if (questionId === WORKLOAD_QUESTION_ID) {
+  if (Number(questionId) === WORKLOAD_QUESTION_ID) {
     return WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) + 1
   }
   return Number(optionId)
