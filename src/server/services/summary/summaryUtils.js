@@ -1,3 +1,4 @@
+const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
 
 const mapOptionIdToValue = (optionId, questionId) => {
@@ -66,7 +67,20 @@ const sumSummaryDatas = summaryDatas => {
   return data
 }
 
+const sumSummaries = summaries => {
+  const data = sumSummaryDatas(summaries.map(s => s.data))
+  const startDate = datefns.min(summaries.map(s => datefns.parseISO(s.startDate)))
+  const endDate = datefns.max(summaries.map(s => datefns.parseISO(s.endDate)))
+  const summary = summaries[0]
+  summary.data = data
+  summary.startDate = startDate
+  summary.endDate = endDate
+
+  return summary
+}
+
 module.exports = {
   sumSummaryDatas,
   mapOptionIdToValue,
+  sumSummaries,
 }
