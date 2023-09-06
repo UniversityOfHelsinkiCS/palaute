@@ -10,10 +10,11 @@ const {
   CourseUnit,
   Organisation,
   Summary,
+  Question,
 } = require('../../models')
-const { WORKLOAD_QUESTION_ID } = require('../../util/config')
+const { WORKLOAD_QUESTION_ID, WORKLOAD_QUESTION_ID_ORDER } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
-const { sumSummaryDatas } = require('./summaryUtils')
+const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
 
 const startYear = 2021 // Nothing ending before this is considered
 const endYear = new Date().getFullYear() // Nothing ending after this is considered
@@ -57,9 +58,9 @@ let relevantQuestionIds = null
     FROM surveys s
     INNER JOIN questions q ON q.id = ANY (s.question_ids)
     WHERE (s.type = 'university' OR s.type = 'programme')
-    AND q.type = 'LIKERT';
+    AND q.type = 'LIKERT' OR q.id = :workloadQuestionId;
   `,
-    { queryType: QueryTypes.SELECT }
+    { queryType: QueryTypes.SELECT, replacements: { workloadQuestionId: WORKLOAD_QUESTION_ID } }
   )
 
   const questionIds = questions.map(q => q.id)
@@ -156,21 +157,17 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
     const questionIds = Object.keys(result)
     for (const questionId of questionIds) {
       const optionIds = Object.keys(result[questionId].distribution)
-      if (Number(questionId) === WORKLOAD_QUESTION_ID) {
-        // different shit. Need to know which uuid type optionIds correspond to which values.
-      } else {
-        let totalCount = 0
-        let sum = 0
-        for (const optionId of optionIds) {
-          if (Number(optionId) !== 0) {
-            // skip the NO ANSWER option
-            const count = result[questionId].distribution[optionId]
-            totalCount += count
-            sum += Number(optionId) * count // For LIKERT, optionId is the value
-          }
+      let totalCount = 0
+      let sum = 0
+      for (const optionId of optionIds) {
+        if (Number(optionId) !== 0) {
+          // skip the NO ANSWER option
+          const count = Number(result[questionId].distribution[optionId])
+          totalCount += count
+          sum += mapOptionIdToValue(optionId, questionId) * count // For LIKERT, optionId is the value
         }
-        result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
       }
+      result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
     courseRealisationSummaries.push({

@@ -1,4 +1,13 @@
-const sumLikertResults = (...results) => {
+const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
+
+const mapOptionIdToValue = (optionId, questionId) => {
+  if (questionId === WORKLOAD_QUESTION_ID) {
+    return WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) + 1
+  }
+  return Number(optionId)
+}
+
+const sumQuestionResults = (results, questionId) => {
   const distribution = {}
 
   for (const result of results) {
@@ -11,7 +20,7 @@ const sumLikertResults = (...results) => {
   let totalAnsweredCount = 0
   Object.entries(distribution).forEach(([optionId, count]) => {
     if (Number(optionId) !== 0) {
-      totalValue += count * Number(optionId)
+      totalValue += count * mapOptionIdToValue(optionId, questionId)
       totalAnsweredCount += count
     }
   })
@@ -45,7 +54,10 @@ const sumSummaryDatas = summaryDatas => {
         }
       }
 
-      data.result[questionId] = sumLikertResults(data.result[questionId], summaryData.result[questionId])
+      data.result[questionId] = sumQuestionResults(
+        [data.result[questionId], summaryData.result[questionId]],
+        questionId
+      )
     }
   }
 
@@ -56,4 +68,5 @@ const sumSummaryDatas = summaryDatas => {
 
 module.exports = {
   sumSummaryDatas,
+  mapOptionIdToValue,
 }
