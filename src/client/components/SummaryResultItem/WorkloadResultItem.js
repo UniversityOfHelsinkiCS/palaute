@@ -2,10 +2,10 @@ import React from 'react'
 import { Box } from '@mui/material'
 import ArrowIcon from '@mui/icons-material/TrendingFlat'
 import { useTranslation } from 'react-i18next'
-import { sumBy, isEmpty, round } from 'lodash'
-
+import { sumBy, isEmpty, round, orderBy } from 'lodash'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
+import { WORKLOAD_QUESTION_ID_ORDER } from '../../util/common'
 
 const normalizeMean = mean => {
   const diff = mean - 3
@@ -30,7 +30,8 @@ const getTooltipData = (distribution, question) => {
     {}
   )
 
-  const entries = Object.entries(distribution)
+  // Order by WORKLOAD_QUESTION_ID_ORDER, from "too little" to "too much"
+  const entries = orderBy(Object.entries(distribution), ([id]) => -WORKLOAD_QUESTION_ID_ORDER.indexOf(id), ['asc'])
   const totalCount = sumBy(entries, ([, count]) => count)
 
   return entries.map(([id, count]) => ({
