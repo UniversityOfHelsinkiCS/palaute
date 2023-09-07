@@ -100,19 +100,4 @@ Summary.init(
   }
 )
 
-// eslint-disable-next-line no-unused-vars
-const customSqlToMakeThisDuringDevelopment = `
-drop index summaries_entity_ids;
-drop table summaries;
-create unlogged table summaries (
-  id serial PRIMARY KEY,
-	entity_id VARCHAR(255) NOT NULL,
-	start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  data JSONB NOT NULL,
-  UNIQUE (entity_id, start_date)
-);
-create index summaries_entity_ids on summaries (entity_id);
-`
-
 module.exports = Summary
