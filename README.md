@@ -37,6 +37,10 @@ If stuck reset everything and start from a clean slate:
 $ npm run reset
 ```
 
+### Commit guidelines
+
+Recommended to use [CommitSense](https://github.com/HRemonen/CommitSense)
+
 ## Documentation
 
 ### Service architecture overview
