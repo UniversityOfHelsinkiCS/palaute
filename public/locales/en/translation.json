@@ -36,6 +36,7 @@
     "feedbackNotGiven": "Not given",
     "export": "Download",
     "exportCsv": "Download as CSV",
+    "exportXLSX": "Donload as XLSX",
     "exportPdf": "Download as PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",
@@ -63,6 +64,7 @@
     "notPublicShortInfo": "Visible only to responsible teachers and programme admins",
     "publicShortInfo": "Visible to enrolled students",
     "editable": "You can change this setting",
+    "notEditable": "Setting cannot be changed, it's set at a higher level",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
     "all": "All",
@@ -253,6 +255,7 @@
     "modalTitle": "Send a reminder about feedback via email",
     "writeAMessage": "Write a message to students",
     "emailMessage": "Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>",
+    "emailMessageInfo": "(The preamble is translated to the student's preferred language)",
     "modalSubtitle": "Students who have already given feedback wont receive this email",
     "emailSent": "Reminder email sent",
     "setHidden": "Hide this answer",
@@ -396,7 +399,7 @@
     "noFeedbackTarget": "This course does not have a feedback available to you"
   },
   "organisationSettings": {
-    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions. You can change the answers visibility from the 'Public'/'Not public'-button, but only if the question isn't already set as public at a higher level.",
     "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback",
     "courseSettingsInfo": "Feedback is only collected from activated courses",
     "settingsTab": "Settings",
@@ -529,6 +532,6 @@
       "subjectMultiple": "The feedback for your courses are about to start",
       "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "-"
+    "instructionsAndSupport": "Contact support."
   }
 }

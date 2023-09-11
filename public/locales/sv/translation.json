@@ -55,6 +55,7 @@
     "export": "Exportera som",
     "exportPdf": "Exportera som pdf",
     "exportCsv": "Exportera som CSV",
+    "exportXLSX": "Exportera som XLSX",
     "combineCSV": "Kombinera med Sisu CSV",
     "downloadCSV": "Ladda ner fil",
     "changePublicity": "Ändra synlighet",
@@ -74,16 +75,17 @@
     "invalidDate": "Ogiltigt datum"
   },
   "links": {
-    "supportEmail": "coursefeedback@helsinki.fi",
-    "wikiRoot": "https://wiki.helsinki.fi/display/CF",
-    "wikiOrganisationHelp": "https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje",
-    "wikiTeacherHelp": "https://wiki.helsinki.fi/display/CF/3.+Opettajan+ohje",
+    "supportEmail": "",
+    "wikiRoot": "",
+    "wikiOrganisationHelp": "",
+    "wikiTeacherHelp": "",
     "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
-    "dataProtection": "https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991",
+    "dataProtection": "",
     "toska": "https://toska.dev",
     "markdownHelp": "https://commonmark.org/help/",
-    "courseUnitPage": "https://studies.helsinki.fi/opintotarjonta/cu/",
-    "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
+    "adminGraylog": "",
+    "courseUnitPage": "",
+    "courseRealisationPage": ""
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -528,6 +530,6 @@
       "subjectMultiple": "Perioden för kursrespons börjar på dina kurser",
       "text": "Bästa lärare! <br/>\nKursresponsblanketten för följande kurser öppnas om en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "Kontakta stödet: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nAnvändarinstruktioner: <a href=https://wiki.helsinki.fi/display/CF>https://wiki.helsinki.fi/display/CF</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Mer information om Norppa i flamma</a>"
+    "instructionsAndSupport": "Kontakta stödet."
   }
 }

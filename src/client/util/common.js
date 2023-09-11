@@ -67,3 +67,12 @@ export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK
 
 // eslint-disable-next-line no-undef
 export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLOR_SCALE_MIN = CONFIG?.SUMMARY_COLOR_SCALE_MIN
+
+// eslint-disable-next-line no-undef
+export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX

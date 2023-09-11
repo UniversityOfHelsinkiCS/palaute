@@ -25,7 +25,7 @@ const styles = {
   },
 }
 
-const ExportCsv = ({ students, fileName }) => {
+const ExportXLSX = ({ students, fileName }) => {
   const { t } = useTranslation()
 
   const headers = [
@@ -50,7 +50,7 @@ const ExportCsv = ({ students, fileName }) => {
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
     >
-      {t('common:exportCsv')}
+      {t('common:exportXLSX')}
     </Button>
   )
 }
@@ -67,7 +67,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
     setOrderBy(property)
   }
 
-  const studentsCSV = useMemo(
+  const studentsData = useMemo(
     () =>
       _.orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
         firstName,
@@ -90,7 +90,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
         <Box sx={styles.box}>
           {t('feedbackTargetView:studentsWithFeedbackTab')}
           <Box mr="auto" />
-          <ExportCsv students={studentsCSV} fileName={fileName} />
+          <ExportXLSX students={studentsData} fileName={fileName} />
           <Button
             endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
             variant="contained"
@@ -103,7 +103,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
         </Box>
       }
     >
-      {dropZoneVisible && <DropZone students={studentsCSV} />}
+      {dropZoneVisible && <DropZone students={studentsData} />}
       <Table>
         <TableHead>
           <TableRow>

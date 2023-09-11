@@ -68,7 +68,7 @@ const getData = (data, language, t) => {
   return data
 }
 
-const exportCsv = (average, organisations, questions, language, t) => {
+const exportXLSX = (average, organisations, questions, language, t) => {
   const courseUnits = organisations.flatMap(({ courseUnits }) => courseUnits)
 
   organisations = average ? [average].concat(organisations) : organisations
@@ -93,13 +93,13 @@ const exportCsv = (average, organisations, questions, language, t) => {
   writeFileXLSX(workbook, `${filename}.xlsx`)
 }
 
-const ExportCsvLink = ({ average, organisations, questions }) => {
+const ExportXLSXLink = ({ average, organisations, questions }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
 
   return (
-    <Button sx={styles.button} onClick={() => exportCsv(average, organisations, questions, language, t)}>
-      {t('common:exportCsv')}
+    <Button sx={styles.button} onClick={() => exportXLSX(average, organisations, questions, language, t)}>
+      {t('common:exportXLSX')}
     </Button>
   )
 }
@@ -123,7 +123,7 @@ const ExportCourses = ({ average, organisations, questions, componentRef }) => {
 
   return (
     <ExportButton
-      CsvLink={<ExportCsvLink average={average} organisations={organisations} questions={questions} />}
+      XLSXLink={<ExportXLSXLink average={average} organisations={organisations} questions={questions} />}
       PdfLink={<ExportPdfLink componentRef={componentRef} />}
       label={t('common:export')}
     />

@@ -1,5 +1,7 @@
 # Feedback target visibility
 
+May be outdated, needs review asap.
+
 ## Before feedback period has started
 
 | User type/Page            | Outsider with HY login info             | Student   | Teacher   |

@@ -49,7 +49,7 @@ const FeedbackPeriodForm = () => {
 
       const [values, actions] = submitPayload
 
-      actions.resetForm({ values })
+      actions?.resetForm({ values })
     } else {
       handleOpenFeedbackImmediately()
     }
@@ -64,9 +64,15 @@ const FeedbackPeriodForm = () => {
     if (requiresSubmitConfirmation(values)) {
       handleOpenWarningDialog()
     } else {
-      handleSubmitFeedbackPeriod(values, actions)
-      actions.resetForm({ values })
+      handleSubmitFeedbackPeriod(values)
+      actions?.resetForm({ values })
     }
+  }
+
+  const handleSubmitWithAdminPower = values => {
+    // eslint-disable-next-line no-alert
+    if (!window.confirm('WARNING: using admin powers to circumvent validation. Are you sure?')) return
+    handleSubmit(values)
   }
 
   const handleOpenImmediatelyClick = () => {
@@ -85,7 +91,7 @@ const FeedbackPeriodForm = () => {
         onConfirm={handleConfirmWarning}
       />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validateFeedbackPeriod(isOpen, isOver)}>
-        {({ dirty, errors, isValid }) => (
+        {({ dirty, errors, isValid, values }) => (
           <Form>
             <Alert severity="warning">
               <Trans
@@ -100,7 +106,7 @@ const FeedbackPeriodForm = () => {
               <FormikDatePicker
                 name="opensAt"
                 label={t('editFeedbackTarget:opensAt')}
-                disablePast
+                disablePast={!isAdmin}
                 disabled={(!formEnabled || isOpen || isOver) && !isAdmin}
               />
             </Box>
@@ -108,7 +114,7 @@ const FeedbackPeriodForm = () => {
               <FormikDatePicker
                 name="closesAt"
                 label={t('editFeedbackTarget:closesAt')}
-                disablePast
+                disablePast={!isAdmin}
                 disabled={!formEnabled}
               />
             </Box>
@@ -121,6 +127,7 @@ const FeedbackPeriodForm = () => {
                       color="primary"
                       type="submit"
                       disabled={!dirty || !formEnabled || (!isValid && !isAdmin)}
+                      onClick={isAdmin && !isValid ? () => handleSubmitWithAdminPower(values) : undefined}
                     >
                       {t('common:save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                     </Button>
