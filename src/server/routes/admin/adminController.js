@@ -27,6 +27,7 @@ const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
 const { adminAccess } = require('../../middleware/adminAccess')
+const { buildSummaries } = require('../../services/summary/buildSummaries')
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
@@ -530,6 +531,14 @@ const getNodeConfigEnv = (_req, res) => {
   return res.send({ NODE_CONFIG_ENV })
 }
 
+const updateSummariesTable = async (_req, res) => {
+  logger.info('Starting to update summaries')
+  const start = Date.now()
+  await buildSummaries()
+  const duration = Date.now() - start
+  return res.send({ duration })
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -552,4 +561,5 @@ router.post('/banners', createBanner)
 router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
 router.get('/node-config-env', getNodeConfigEnv)
+router.post('/build-summaries', updateSummariesTable)
 module.exports = router

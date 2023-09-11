@@ -20,6 +20,7 @@ import ErrorView from '../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
 import { TAGS_ENABLED } from '../../util/common'
+import LinkButton from '../../components/common/LinkButton'
 
 const safelyParseDateRange = dateRange =>
   dateRange?.startDate && dateRange?.endDate
@@ -134,6 +135,7 @@ const OrganisationSummary = () => {
             questions={questions || []}
             componentRef={componentRef}
           />
+          {courseSummaryAccessInfo?.adminAccess && <LinkButton to="/course-summary/v2" title="MINTUfy" />}
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">

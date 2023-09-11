@@ -54,10 +54,10 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_URL: https://toska.cs.helsinki.fi/
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
+          SENTRY_ORG: toska
+          SENTRY_PROJECT: palaute
         with:
           environment: production
           set_commits: 'skip'

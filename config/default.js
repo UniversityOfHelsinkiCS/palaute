@@ -33,10 +33,24 @@ const config = {
   TAGS_ENABLED: [],
 
   /**
-   * The id of a LIKERT-type question that is considered the university level workload question.
+   * The id of a SINGLE_CHOICE-type question that is considered the university level workload question.
+   * The workload question has some assumptions about it, mainly that it MUST NOT have a "no answer (EOS)"-option.
    * Future ideas: get rid of this and add a new question type for it instead.
    */
   WORKLOAD_QUESTION_ID: 1042,
+
+  /**
+   * Workload question id order. Needed to map the single choice question to a number.
+   * The HY question values are there for reference.
+   * The order is: [too much, much, just right, little, too little]
+   */
+  WORKLOAD_QUESTION_ID_ORDER: [
+    'c5ecf5aa-76cc-4ded-985c-8cbd091a4a95',
+    '2ea2b421-5c85-47cd-9008-1acc008e009f',
+    'e35a20ca-8e0e-4c44-8c26-6a197be3d422',
+    'b2dab0a2-4139-4dfc-949c-fdca744495c2',
+    'ae8bccc7-1c4f-4f22-9c4c-2879d4e123d5',
+  ],
 
   /**
    * How long JWT tokens in noad links last
