@@ -22,6 +22,7 @@ const Banner = require('./banner')
 const InactiveCourseRealisation = require('./inactiveCourseRealisation')
 const CourseUnitsTag = require('./courseUnitsTag')
 const Group = require('./group')
+const Summary = require('./summary')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -30,6 +31,10 @@ FeedbackTarget.belongsTo(CourseUnit, {
 FeedbackTarget.belongsTo(CourseRealisation, {
   foreignKey: 'courseRealisationId',
   as: 'courseRealisation',
+})
+CourseRealisation.hasMany(FeedbackTarget, {
+  foreignKey: 'courseRealisationId',
+  as: 'feedbackTargets',
 })
 
 UserFeedbackTarget.belongsTo(FeedbackTarget, { as: 'feedbackTarget' })
@@ -76,6 +81,16 @@ CourseRealisation.belongsToMany(Organisation, {
 Organisation.belongsToMany(CourseRealisation, {
   through: CourseRealisationsOrganisation,
   as: 'courseRealisations',
+})
+
+Organisation.belongsTo(Organisation, {
+  foreignKey: 'parent_id',
+  as: 'parentOrganisation',
+})
+
+Organisation.hasMany(Organisation, {
+  foreignKey: 'parent_id',
+  as: 'childOrganisations',
 })
 
 FeedbackTarget.belongsToMany(User, {
@@ -189,6 +204,18 @@ Group.belongsTo(FeedbackTarget, {
   as: 'feedbackTarget',
 })
 
+/**
+ * Summary associations
+ */
+Summary.belongsTo(Organisation, { foreignKey: 'entityId', as: 'organisation' })
+Organisation.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
+
+Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
+CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
+
+Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
+CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+
 module.exports = {
   Feedback,
   User,
@@ -214,4 +241,5 @@ module.exports = {
   Tag,
   CourseUnitsTag,
   Group,
+  Summary,
 }

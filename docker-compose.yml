@@ -44,14 +44,11 @@ services:
     ports:
       - 8080:8080
   jami:
-    image: toska/jami:latest
+    image: quay.io/toska/jami:production
     environment:
       - PORT=3003
       - NODE_ENV=dev
-      - POSTGRES_HOST=jami-db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DATABASE=postgres
+      - DATABASE_URL=postgres://postgres:postgres@jami-db:5432/postgres
     ports:
       - 3003:3003
     container_name: tuni-kpj-jami
