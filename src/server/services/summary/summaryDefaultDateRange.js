@@ -2,7 +2,6 @@ const { addYears } = require('date-fns')
 const { Op, literal } = require('sequelize')
 const { startOfStudyYear } = require('../../util/common')
 const { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Organisation } = require('../../models')
-const logger = require('../../util/logger')
 
 const getYearRange = date => {
   const startDate = startOfStudyYear(date)
@@ -87,7 +86,6 @@ const getLatestDateForTeacher = async user => {
 const getSummaryDefaultDateRange = async ({ user, organisationAccess }) => {
   if (Object.values(organisationAccess).some(access => access.read)) {
     const startDate = await getLatestDateForOrganisations(Object.keys(organisationAccess))
-    logger.info(`startDate by getLatestDateForOrganisations: ${startDate}`)
     if (!startDate) {
       return getYearRange(Date.now())
     }
@@ -95,7 +93,6 @@ const getSummaryDefaultDateRange = async ({ user, organisationAccess }) => {
   }
 
   const startDate = await getLatestDateForTeacher(user)
-  logger.info(`startDate by getLatestDateForTeacher: ${startDate}`)
   if (!startDate) {
     return getYearRange(Date.now())
   }
