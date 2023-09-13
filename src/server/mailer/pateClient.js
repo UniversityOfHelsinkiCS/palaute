@@ -3,7 +3,7 @@ const axios = require('axios')
 const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
-const { inProduction, inStaging, PATE_URL } = require('../util/config')
+const { inProduction, inStaging, PATE_URL, PATE_JWT } = require('../util/config')
 const logger = require('../util/logger')
 
 const template = {
@@ -26,7 +26,7 @@ const pateClient = axios.create({
   },
 })
 
-pateClient.defaults.headers.post['x-auth-token'] = process.env.PATE_JWT
+pateClient.defaults.headers.post['x-auth-token'] = PATE_JWT
 
 const sleep = time =>
   // eslint-disable-next-line no-promise-executor-return
