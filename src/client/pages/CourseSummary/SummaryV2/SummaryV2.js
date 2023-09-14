@@ -15,11 +15,12 @@ const SummaryV2 = () => {
 
   const [dateRange, setDateRange] = React.useState({ start: startDate, end: endDate })
   const [option, setOption] = React.useState('year')
+  console.log(dateRange)
 
   const { organisation, questions, isLoading } = useSummaries({
     entityId,
-    startDate,
-    endDate,
+    startDate: dateRange.start,
+    endDate: dateRange.end,
   })
 
   const handleUpdateData = async () => {

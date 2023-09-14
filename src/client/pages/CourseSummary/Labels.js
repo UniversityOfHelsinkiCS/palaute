@@ -2,7 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { grey } from '@mui/material/colors'
 
-import { Box, Link, Typography } from '@mui/material'
+import { useIsFetching } from 'react-query'
+import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -85,14 +86,20 @@ export const CourseUnitLabel = ({ name, code }) => (
   </Box>
 )
 
-export const OrganisationLabel = ({ name, code, dates }) => (
-  <Box display="flex" flexDirection="column">
-    <Typography variant="caption" color="textSecondary">
-      {code}
-    </Typography>
-    <Box display="flex" gap="1rem">
-      <Typography variant="body2">{name}</Typography>
-      {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+export const OrganisationLabel = ({ organisation, dates }) => {
+  const { i18n } = useTranslation()
+  const isFetching = useIsFetching(['summaries-v2', organisation?.id])
+
+  return (
+    <Box display="flex" flexDirection="column">
+      <Typography variant="caption" color="textSecondary">
+        {organisation?.code}
+      </Typography>
+      <Box display="flex" gap="1rem">
+        <Typography variant="body2">{getLanguageValue(organisation?.name, i18n.language)}</Typography>
+        {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+        {Boolean(isFetching) && <CircularProgress size={20} />}
+      </Box>
     </Box>
-  </Box>
-)
+  )
+}

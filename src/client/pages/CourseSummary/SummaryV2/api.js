@@ -20,6 +20,7 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled }) => {
     enabled,
     retry: false,
     refetchOnWindowFocus: false,
+    keepPreviousData: true,
   })
 
   const { organisation, questions } = data || {}

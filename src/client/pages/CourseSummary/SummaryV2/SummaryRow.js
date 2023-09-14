@@ -216,7 +216,6 @@ const OrganisationSummaryRow = ({
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
-  const { i18n } = useTranslation()
 
   const { organisation: fetchedOrganisation } = useSummaries({
     entityId: initialOrganisation.id,
@@ -231,8 +230,7 @@ const OrganisationSummaryRow = ({
 
   const label = (
     <OrganisationLabel
-      name={getLanguageValue(organisation.name, i18n.language)}
-      code={organisation.code}
+      organisation={organisation}
       dates={isOpen ? { startDate: summary.startDate, endDate: summary.endDate } : null}
     />
   )

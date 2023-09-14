@@ -151,7 +151,7 @@ const OrganisationTable = forwardRef(
                     <ResultsRow
                       id={id}
                       key={id}
-                      label={<OrganisationLabel name={getLanguageValue(name, i18n.language)} code={code} />}
+                      label={<OrganisationLabel organisation={{ id, code, name }} />}
                       results={results}
                       questions={questions}
                       feedbackCount={feedbackCount}
