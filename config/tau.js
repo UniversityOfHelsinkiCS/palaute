@@ -126,7 +126,7 @@ const config = {
   /**
    * Pate (mail service) url
    */
-  PATE_URL: '',
+  PATE_URL: 'http://pate:3473',
 
   /**
    * JAMI (iam rights service) url
