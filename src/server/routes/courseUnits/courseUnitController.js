@@ -140,7 +140,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.includes(target.courseRealisation.id)
     )
-
     const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
 
     const ongoingTargets = targets.filter(
