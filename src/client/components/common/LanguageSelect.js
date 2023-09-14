@@ -4,6 +4,8 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
+import { LANGUAGES } from '../../util/common'
+
 import useId from '../../hooks/useId'
 
 const style = {
@@ -26,9 +28,11 @@ const LanguageSelect = ({ value, onChange, label }) => {
     <FormControl variant="outlined">
       <InputLabel id={labelId}>{label}</InputLabel>
       <Select labelId={labelId} sx={style.select} onChange={handleChange} value={value} label={label}>
-        <MenuItem value="fi">{t('common:languages:fi')}</MenuItem>
-        <MenuItem value="sv">{t('common:languages:sv')}</MenuItem>
-        <MenuItem value="en">{t('common:languages:en')}</MenuItem>
+        {LANGUAGES.map(language => (
+          <MenuItem key={language} value={language}>
+            {t(`common:languages:${language}`)}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   )

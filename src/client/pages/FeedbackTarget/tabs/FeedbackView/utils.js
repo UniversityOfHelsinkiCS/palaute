@@ -2,6 +2,7 @@ import { parseISO, lightFormat } from 'date-fns'
 import _ from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
+import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
 
 const isEmpty = value => {
   if (Array.isArray(value)) {
@@ -55,6 +56,29 @@ const getInitialAnswerByType = type => {
 export const getQuestions = feedbackTarget => {
   const { surveys } = feedbackTarget
 
+  if (STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL) {
+    const uniOpenQuestions = surveys?.universitySurvey?.questions
+    const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
+      (questions, survey) => questions.concat(survey.questions),
+      []
+    )
+    const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
+    const [groupingQuestions, otherTeacherQuestions] = _.partition(
+      teacherQuestions,
+      q => q.secondaryType === 'GROUPING'
+    )
+
+    // Initial ordering
+    const allQuestionsInInitialOrder = [
+      ...groupingQuestions,
+      ...uniOpenQuestions,
+      ...programmeSurveyQuestions,
+      ...otherTeacherQuestions,
+    ]
+
+    return allQuestionsInInitialOrder
+  }
+
   const uniOpenQuestions = surveys?.universitySurvey?.questions.filter(q => q.type === 'OPEN') ?? []
   const filteredUniQuestions = surveys?.universitySurvey?.questions.filter(q => q.type !== 'OPEN') ?? []
 
@@ -69,7 +93,7 @@ export const getQuestions = feedbackTarget => {
   const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
   const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
-  // General ordering
+  // Default ordering
   const allQuestions = [
     ...groupingQuestions,
     ...filteredUniQuestions,

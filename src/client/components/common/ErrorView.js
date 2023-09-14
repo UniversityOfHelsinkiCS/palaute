@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => {
   const { t } = useTranslation()
 
-  const supportEmail = 'coursefeedback@helsinki.fi'
+  const supportEmail = t('links:supportEmail')
 
   return (
     <Box m={4}>
