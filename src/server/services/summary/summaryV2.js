@@ -113,6 +113,18 @@ const getOrganisationSummaryWithPartialCourseUnits = async ({ organisationId, st
         required: true,
       },
       {
+        model: CourseUnit,
+        as: 'courseUnits',
+        attributes: ['id'],
+        through: { attributes: [] },
+        include: {
+          model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+          attributes: ['id'], // Data not used, only the inner join is needed
+          as: 'summaries',
+          required: true,
+        },
+      },
+      {
         model: CourseRealisation,
         as: 'courseRealisations',
         attributes: ['id'],
@@ -150,10 +162,14 @@ const getOrganisationSummaryWithPartialCourseUnits = async ({ organisationId, st
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
-  const { courseRealisations } = rootOrganisation
+  const { courseRealisations, courseUnits } = rootOrganisation
+
+  const partialCourseRealisations = courseRealisations.filter(
+    cur => !courseUnits.some(cu => cu.id === cur.feedbackTargets[0].courseUnit.id)
+  )
 
   // Group course realisations by associated course unit
-  const groupedPartialCourseUnits = _.groupBy(courseRealisations, cur => cur.feedbackTargets[0].courseUnit.id)
+  const groupedPartialCourseUnits = _.groupBy(partialCourseRealisations, cur => cur.feedbackTargets[0].courseUnit.id)
   // Now aggregate course units
   const partialCourseUnits = Object.entries(groupedPartialCourseUnits).map(([courseUnitId, courseRealisations]) => {
     const summaryData = sumSummaryDatas(courseRealisations.map(cur => cur.summary.data))
