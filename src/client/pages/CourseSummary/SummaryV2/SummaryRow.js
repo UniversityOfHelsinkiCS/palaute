@@ -217,16 +217,38 @@ const OrganisationSummaryRow = ({
   const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
-  const { organisation: fetchedOrganisation } = useSummaries({
+  const { organisation: fetchedOrganisationWithChildren } = useSummaries({
     entityId: initialOrganisation.id,
     enabled: isOpen,
     startDate,
     endDate,
+    include: 'childOrganisations',
   })
 
-  const organisation = fetchedOrganisation ?? initialOrganisation
+  const { organisation: fetchedOrganisationWithCourseUnits, isLoading: isCourseUnitsLoading } = useSummaries({
+    entityId: initialOrganisation.id,
+    enabled: isOpen,
+    startDate,
+    endDate,
+    include: 'courseUnits',
+  })
 
-  const { childOrganisations, courseUnits, summary } = organisation
+  const { organisation: fetchedOrganisationWithPartialCourseUnits, isLoading: isPartialCourseUnitsLoading } =
+    useSummaries({
+      entityId: initialOrganisation.id,
+      enabled: isOpen,
+      startDate,
+      endDate,
+      include: 'partialCourseUnits',
+    })
+
+  const organisation = fetchedOrganisationWithChildren ?? initialOrganisation
+
+  const courseUnits = fetchedOrganisationWithCourseUnits?.courseUnits ?? []
+
+  const partialCourseUnits = fetchedOrganisationWithPartialCourseUnits?.courseUnits ?? []
+
+  const { childOrganisations, summary } = organisation
 
   const label = (
     <OrganisationLabel
@@ -290,21 +312,29 @@ const OrganisationSummaryRow = ({
           {!childOrganisations ? (
             <LoadingProgress />
           ) : (
-            _.orderBy(childOrganisations, 'code')
-              .map(org => (
-                <OrganisationSummaryRow
-                  key={org.id}
-                  startDate={startDate}
-                  endDate={endDate}
-                  organisation={org}
-                  questions={questions}
-                />
-              ))
-              .concat(
-                _.orderBy(courseUnits, 'courseCode').map(cu => (
-                  <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
-                ))
-              )
+            _.orderBy(childOrganisations, 'code').map(org => (
+              <OrganisationSummaryRow
+                key={org.id}
+                startDate={startDate}
+                endDate={endDate}
+                organisation={org}
+                questions={questions}
+              />
+            ))
+          )}
+          {isCourseUnitsLoading ? (
+            <LoadingProgress />
+          ) : (
+            _.orderBy(courseUnits, 'courseCode').map(cu => (
+              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
+            ))
+          )}
+          {isPartialCourseUnitsLoading ? (
+            <LoadingProgress />
+          ) : (
+            _.orderBy(partialCourseUnits, 'courseCode').map(cu => (
+              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
+            ))
           )}
         </Box>
       )}

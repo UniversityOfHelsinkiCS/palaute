@@ -11,7 +11,12 @@ const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
-const { getOrganisationSummaryWithChildren } = require('../../services/summary/summaryV2')
+const {
+  getOrganisationSummaryWithChildOrganisations,
+  getOrganisationSummaryWithCourseUnits,
+  getOrganisationSummary,
+  getOrganisationSummaryWithPartialCourseUnits,
+} = require('../../services/summary/summaryV2')
 const { startOfStudyYear } = require('../../util/common')
 const { adminAccess } = require('../../middleware/adminAccess')
 
@@ -126,7 +131,7 @@ const getOrganisations = async (req, res) => {
  * Only accessible to admin currently.
  */
 const getOrganisationsV2 = async (req, res) => {
-  const { startDate, endDate, entityId } = req.query
+  const { startDate: startDateString, endDate: endDateString, entityId, include } = req.query
 
   if (!entityId) {
     return ApplicationError.BadRequest('Missing entityId')
@@ -134,11 +139,35 @@ const getOrganisationsV2 = async (req, res) => {
 
   const questions = getSummaryQuestions()
 
-  const organisation = await getOrganisationSummaryWithChildren({
-    organisationId: entityId,
-    startDate: startDate ? new Date(startDate) : startOfStudyYear(new Date()),
-    endDate: endDate ? new Date(endDate) : new Date(),
-  })
+  const startDate = startDateString ? new Date(startDateString) : startOfStudyYear(new Date())
+  const endDate = endDateString ? new Date(endDateString) : new Date()
+  let organisation
+
+  if (include === 'childOrganisations') {
+    organisation = await getOrganisationSummaryWithChildOrganisations({
+      organisationId: entityId,
+      startDate,
+      endDate,
+    })
+  } else if (include === 'courseUnits') {
+    organisation = await getOrganisationSummaryWithCourseUnits({
+      organisationId: entityId,
+      startDate,
+      endDate,
+    })
+  } else if (include === 'partialCourseUnits') {
+    organisation = await getOrganisationSummaryWithPartialCourseUnits({
+      organisationId: entityId,
+      startDate,
+      endDate,
+    })
+  } else {
+    organisation = await getOrganisationSummary({
+      organisationId: entityId,
+      startDate,
+      endDate,
+    })
+  }
 
   return res.send({ organisation, questions: await questions })
 }
