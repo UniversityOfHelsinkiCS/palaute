@@ -6,6 +6,7 @@ import { updateSummaries, useSummaries } from './api'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import LinkButton from '../../../components/common/LinkButton'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
+import useHistoryState from '../../../hooks/useHistoryState'
 
 const SummaryV2 = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -13,7 +14,7 @@ const SummaryV2 = () => {
   const endDate = new Date('2024-01-01')
   const entityId = 'hy-university-root-id'
 
-  const [dateRange, setDateRange] = React.useState({ start: startDate, end: endDate })
+  const [dateRange, setDateRange] = useHistoryState('summary-v2-time-range', { start: startDate, end: endDate })
   const [option, setOption] = React.useState('year')
 
   const { organisation, questions, isLoading } = useSummaries({
