@@ -51,10 +51,22 @@ export const GRAYLOG_URL = CONFIG?.GRAYLOG_URL
 export const TRANSLATION_NAMESPACE = CONFIG?.TRANSLATION_NAMESPACE
 
 // eslint-disable-next-line no-undef
+export const LANGUAGES = CONFIG?.LANGUAGES
+
+// eslint-disable-next-line no-undef
 export const DEV_USERNAME = CONFIG?.DEV_USERNAME
 
 // eslint-disable-next-line no-undef
 export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undefined in e2e tests
+
+// eslint-disable-next-line no-undef
+export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = CONFIG?.STUDENT_FEEDBACK_SHOW_REALISATION_NAME
+
+// eslint-disable-next-line no-undef
+export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
+
+// eslint-disable-next-line no-undef
+export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
 
 // eslint-disable-next-line no-undef
 export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS

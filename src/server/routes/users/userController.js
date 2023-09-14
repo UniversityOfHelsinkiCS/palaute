@@ -4,6 +4,7 @@ const _ = require('lodash')
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
+const cache = require('../../services/users/cache')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
@@ -83,6 +84,10 @@ const getAllUserAccess = async (req, res) => {
 }
 
 const logout = async (req, res) => {
+  if (req.headers.uid) {
+    cache.invalidate(req.headers.uid)
+  }
+
   const {
     headers: { shib_logout_url: shibLogoutUrl },
   } = req

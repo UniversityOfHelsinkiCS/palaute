@@ -1,7 +1,7 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
-const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL } = require('../../util/config')
+const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
 const { i18n } = require('../../util/i18n')
@@ -43,7 +43,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
         attributes: ['id', 'username', 'email', 'language', 'secondaryEmail'],
         through: {
           where: {
-            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+            accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER'] },
           },
         },
       },
@@ -98,7 +98,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const email = {
     to: emailAddress,
     subject,
-    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls }),
+    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls, FEEDBACK_SYSTEM }),
   }
 
   return email
