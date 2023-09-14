@@ -10,6 +10,7 @@ import useHistoryState from '../../../hooks/useHistoryState'
 
 const SummaryV2 = () => {
   const { enqueueSnackbar } = useSnackbar()
+  const [, startTransition] = React.useTransition()
   const startDate = new Date('2023-01-01')
   const endDate = new Date('2024-01-01')
   const entityId = 'hy-university-root-id'
@@ -26,6 +27,12 @@ const SummaryV2 = () => {
   const handleUpdateData = async () => {
     const duration = await updateSummaries()
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
+  }
+
+  const handleChangeTimeRange = nextDateRange => {
+    startTransition(() => {
+      setDateRange(nextDateRange)
+    })
   }
 
   return (
@@ -45,7 +52,7 @@ const SummaryV2 = () => {
       <Box display="flex" pb="2rem" justifyContent="space-between" alignItems="end">
         <YearSemesterSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
-          onChange={setDateRange}
+          onChange={handleChangeTimeRange}
           option={option}
           setOption={setOption}
         />

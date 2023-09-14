@@ -67,7 +67,8 @@
     "studyTracks": "Studieinriktningar",
     "currentlySelected": "Valda",
     "all": "Alla",
-    "studentCount": "Studerande"
+    "studentCount": "Studerande",
+    "partiallyResponsible": "Delansvarig"
   },
   "validationErrors": {
     "required": "Fältet krävs",

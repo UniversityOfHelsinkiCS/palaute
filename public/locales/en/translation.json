@@ -68,7 +68,8 @@
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
     "all": "All",
-    "studentCount": "Students"
+    "studentCount": "Students",
+    "partiallyResponsible": "Partially responsible"
   },
   "validationErrors": {
     "required": "This field is required",

@@ -169,9 +169,15 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   </>
 )
 
-const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
-  const { i18n } = useTranslation()
-  const label = <CourseUnitLabel name={getLanguageValue(courseUnit.name, i18n.language)} code={courseUnit.courseCode} />
+const CourseUnitSummaryRow = ({ courseUnit, questions, partiallyResponsible = false }) => {
+  const { i18n, t } = useTranslation()
+  const label = (
+    <CourseUnitLabel
+      name={getLanguageValue(courseUnit.name, i18n.language)}
+      code={courseUnit.courseCode}
+      partiallyResponsible={partiallyResponsible ? t('common:partiallyResponsible') : false}
+    />
+  )
   const link = `/course-summary/${courseUnit.courseCode}`
   const { summary } = courseUnit
   const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
@@ -333,7 +339,7 @@ const OrganisationSummaryRow = ({
             <LoadingProgress />
           ) : (
             _.orderBy(partialCourseUnits, 'courseCode').map(cu => (
-              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
+              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} partiallyResponsible />
             ))
           )}
         </Box>

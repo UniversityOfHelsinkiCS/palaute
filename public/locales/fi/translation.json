@@ -68,7 +68,8 @@
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
     "all": "Kaikki",
-    "studentCount": "Opiskelijoita"
+    "studentCount": "Opiskelijoita",
+    "partiallyResponsible": "Osavastuullinen"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
