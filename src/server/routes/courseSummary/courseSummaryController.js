@@ -15,7 +15,6 @@ const {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
   getOrganisationSummary,
-  getOrganisationSummaryWithPartialCourseUnits,
 } = require('../../services/summary/summaryV2')
 const { startOfStudyYear } = require('../../util/common')
 const { adminAccess } = require('../../middleware/adminAccess')
@@ -151,12 +150,6 @@ const getOrganisationsV2 = async (req, res) => {
     })
   } else if (include === 'courseUnits') {
     organisation = await getOrganisationSummaryWithCourseUnits({
-      organisationId: entityId,
-      startDate,
-      endDate,
-    })
-  } else if (include === 'partialCourseUnits') {
-    organisation = await getOrganisationSummaryWithPartialCourseUnits({
       organisationId: entityId,
       startDate,
       endDate,

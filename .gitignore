@@ -4,6 +4,8 @@ build
 stats.json
 *.log
 *.cpuprofile
+*.heapprofile
+*.heapsnapshot
 .env
 .DS_Store
 backups

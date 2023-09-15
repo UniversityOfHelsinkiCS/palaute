@@ -239,20 +239,9 @@ const OrganisationSummaryRow = ({
     include: 'courseUnits',
   })
 
-  const { organisation: fetchedOrganisationWithPartialCourseUnits, isLoading: isPartialCourseUnitsLoading } =
-    useSummaries({
-      entityId: initialOrganisation.id,
-      enabled: isOpen,
-      startDate,
-      endDate,
-      include: 'partialCourseUnits',
-    })
-
   const organisation = fetchedOrganisationWithChildren ?? initialOrganisation
 
   const courseUnits = fetchedOrganisationWithCourseUnits?.courseUnits ?? []
-
-  const partialCourseUnits = fetchedOrganisationWithPartialCourseUnits?.courseUnits ?? []
 
   const { childOrganisations, summary } = organisation
 
@@ -331,15 +320,16 @@ const OrganisationSummaryRow = ({
           {isCourseUnitsLoading ? (
             <LoadingProgress />
           ) : (
-            _.orderBy(courseUnits, 'courseCode').map(cu => (
-              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
-            ))
-          )}
-          {isPartialCourseUnitsLoading ? (
-            <LoadingProgress />
-          ) : (
-            _.orderBy(partialCourseUnits, 'courseCode').map(cu => (
-              <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} partiallyResponsible />
+            _.orderBy(courseUnits, [
+              ['courseCode', 'asc'],
+              ['partial', 'desc'],
+            ]).map(cu => (
+              <CourseUnitSummaryRow
+                key={cu.id}
+                courseUnit={cu}
+                questions={questions}
+                partiallyResponsible={cu.partial}
+              />
             ))
           )}
         </Box>
