@@ -135,7 +135,9 @@ const OrganisationSummary = () => {
             questions={questions || []}
             componentRef={componentRef}
           />
-          {courseSummaryAccessInfo?.adminAccess && <LinkButton to="/course-summary/v2" title="MINTUfy" />}
+          {courseSummaryAccessInfo?.adminAccess && (
+            <LinkButton to="/course-summary/v2" title="Siirry uuteen näkymään" />
+          )}
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">

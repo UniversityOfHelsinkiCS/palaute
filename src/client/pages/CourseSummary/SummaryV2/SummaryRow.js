@@ -55,6 +55,9 @@ const styles = {
     '&:hover': {
       background: theme => theme.palette.action.hover,
     },
+    '&:active': {
+      background: theme => theme.palette.action.selected,
+    },
     transition: 'background-color 0.15s ease-out',
   },
   link: {
