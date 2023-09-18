@@ -1,5 +1,6 @@
 import React from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import OrganisationSummaryRow from './SummaryRow'
 import { updateSummaries, useSummaries } from './api'
@@ -9,6 +10,7 @@ import { YearSemesterSelector } from '../../../components/common/YearSemesterSel
 import useHistoryState from '../../../hooks/useHistoryState'
 
 const SummaryV2 = () => {
+  const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [, startTransition] = React.useTransition()
   const startDate = new Date('2023-01-01')
@@ -40,11 +42,10 @@ const SummaryV2 = () => {
       <Box mb={6} px={1}>
         <Box display="flex" gap="1rem" alignItems="end">
           <Typography variant="h4" component="h1">
-            MINTUfied kurssiyhteenveto (ALPHA)
+            {t('courseSummary:heading')}
           </Typography>
-          <LinkButton to="/course-summary" title="unmintufy" />
+          <LinkButton to="/course-summary" title="Vanha" />
         </Box>
-        <Typography variant="subtitle1">Vain admineille</Typography>
         <Button variant="text" onClick={handleUpdateData}>
           Aja datanpäivitys
         </Button>
