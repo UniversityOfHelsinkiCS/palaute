@@ -142,6 +142,11 @@ const config = {
   TRANSLATION_NAMESPACE: 'translation',
 
   /**
+   * Supported languages. Add translations for each language. Defaults are 'fi' ,'sv' and 'en'
+   */
+  LANGUAGES: ['fi', 'sv', 'en'],
+
+  /**
    * The user that is used in development mode, when we dont have shibboleth. Must be one of the ADMINS.
    */
   DEV_USERNAME: 'mluukkai',
@@ -178,6 +183,29 @@ const config = {
    * Transport logs to separate graylog server
    */
   GELF_TRANSPORT_ENABLED: false,
+
+  /**
+   * Controls course realisation name visibility on feedback page for students
+   */
+  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
+
+  /*
+    STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL controls order of questions for student (and preview)
+    value: false = HY Mode (university and programme questions with type OPEN are last)
+      1. grouping questions
+      2. university questions (except questions with type OPEN)
+      3. programme questions (except questions with type OPEN)
+      4. feedbacktarget questions (teacher's questions)
+      5. programme questions with type OPEN
+      6. university questions with type OPEN
+
+    value: true = Same order as in edit view (initial order, only grouping questions are first)
+      1. grouping questions
+      2. university questions
+      3. programme questions
+      4. feedbacktarget questions (teacher's questions)
+  */
+  STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
 
   /**
    * The course summary color scale used in summary views and fbt results view for LIKERT type values ranging from 1-5. (LIKERT options minimum is 1 so below 1 means no data)

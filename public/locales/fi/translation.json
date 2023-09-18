@@ -77,17 +77,18 @@
     "invalidDate": "Virheellinen päivämäärä"
   },
   "links": {
-    "supportEmail": "",
-    "wikiRoot": "",
-    "wikiOrganisationHelp": "",
-    "wikiTeacherHelp": "",
-    "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
-    "dataProtection": "",
-    "toska": "https://toska.dev",
+    "supportEmail": "-",
+    "wikiRoot": "-",
+    "wikiOrganisationHelp": "-",
+    "wikiTeacherHelp": "-",
+    "accessibility": "-",
+    "dataProtection": "-",
+    "toska": "-",
     "markdownHelp": "https://commonmark.org/help/",
-    "adminGraylog": "",
-    "courseUnitPage": "",
-    "courseRealisationPage": ""
+    "adminGraylog": "-",
+    "courseUnitPage": "-",
+    "courseUnitPageStudent": "-",
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Kurssipalautteeni",

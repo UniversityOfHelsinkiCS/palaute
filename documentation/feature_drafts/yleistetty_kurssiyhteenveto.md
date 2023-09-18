@@ -34,7 +34,7 @@ Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
 
 Parannetaan ylläpidettävyyttä. Nykyinen yhteenveto lasketaan parilla isolla "SQL-matolla", joiden ymmärtäminen ja muuttaminen on haastava jopa alkuperäisille toteuttajille.
 
-Parannetaan tehokkuutta. Vaikka aiempi toteutus on melko optimoitu, HY:n uudessa tietokantaklusterissa yhteenvetonäkymän laskeminen isoille pomoille kestää hiukan liikaa. 
+Parannetaan tehokkuutta. Vaikka aiempi toteutus on melko optimoitu, HY:n uudessa tietokantaklusterissa yhteenvetonäkymän laskeminen isoille pomoille kestää hiukan liikaa.
 Uudella logiikalla näkymästä on tarkoitus saada tehokas ilman ihmeempiä erikoiskikkoja.
 
 ## Toteutus
