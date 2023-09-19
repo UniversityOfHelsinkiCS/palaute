@@ -113,6 +113,12 @@ const getLikertMean = distribution => {
   return _.round(sum / totalCount, 2)
 }
 
+/**
+ * Only used for WORKLOAD questions
+ * @param {*} distribution
+ * @param {*} question
+ * @returns
+ */
 const getSingleChoiceMean = (distribution, question) => {
   const entries = []
 
