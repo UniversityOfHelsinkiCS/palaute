@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
 import _ from 'lodash'
+import { Box, ButtonBase, Typography, Tooltip } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
@@ -10,8 +11,6 @@ import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
-
-const { Box, ButtonBase, Typography, Tooltip } = require('@mui/material')
 
 const styles = {
   resultCell: {
@@ -212,14 +211,22 @@ const CourseUnitSummaryRow = ({ courseUnit, questions, partiallyResponsible = fa
             component="div"
           />
         ))}
-        <Typography variant="body2" sx={styles.countCell}>
-          {summary.data.feedbackCount} / {summary.data.studentCount}
-        </Typography>
-        <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
+        <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+          <Typography variant="body2" sx={styles.countCell}>
+            {summary.data.feedbackCount} / {summary.data.studentCount}
+          </Typography>
+        </Tooltip>
+        <PercentageCell
+          label={`${percent}%`}
+          percent={percent}
+          sx={styles.percentCell}
+          tooltip={`Palauteprosentti: ${percent}%`}
+        />
         <PercentageCell
           label={`${feedbackResponsePercentage}%`}
           percent={feedbackResponsePercentage}
           sx={styles.percentCell}
+          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
         />
       </Box>
     </Box>
@@ -314,7 +321,7 @@ const OrganisationSummaryRow = ({
           label={`${feedbackResponsePercentage}%`}
           percent={feedbackResponsePercentage}
           sx={styles.percentCell}
-          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% kursseista`}
+          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
         />
       </Box>
       {(isTransitioning || isOpen) && (
