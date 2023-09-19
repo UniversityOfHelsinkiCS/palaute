@@ -1,8 +1,10 @@
 import { useQuery } from 'react-query'
 import apiClient from '../../../util/apiClient'
 
+const TWELVE_HOURS = 1000 * 60 * 60 * 12
+
 export const useSummaries = ({ startDate, endDate, entityId, enabled, include }) => {
-  const queryKey = ['summaries-v2', entityId, startDate, include]
+  const queryKey = ['summaries-v2', entityId, startDate, endDate, include]
 
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/organisations-v2`, {
@@ -22,6 +24,7 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled, include })
     retry: false,
     refetchOnWindowFocus: false,
     keepPreviousData: true,
+    staleTime: TWELVE_HOURS,
   })
 
   const { organisation, questions } = data || {}
