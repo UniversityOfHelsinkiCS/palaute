@@ -11,7 +11,7 @@ import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
 
-const { Box, ButtonBase, Typography } = require('@mui/material')
+const { Box, ButtonBase, Typography, Tooltip } = require('@mui/material')
 
 const styles = {
   resultCell: {
@@ -299,14 +299,22 @@ const OrganisationSummaryRow = ({
             component="div"
           />
         ))}
-        <Typography variant="body2" sx={styles.countCell}>
-          {summary.data.feedbackCount} / {summary.data.studentCount}
-        </Typography>
-        <PercentageCell label={`${percent}%`} percent={percent} sx={styles.percentCell} />
+        <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+          <Typography variant="body2" sx={styles.countCell}>
+            {summary.data.feedbackCount} / {summary.data.studentCount}
+          </Typography>
+        </Tooltip>
+        <PercentageCell
+          label={`${percent}%`}
+          percent={percent}
+          sx={styles.percentCell}
+          tooltip={`Palauteprosentti: ${percent}%`}
+        />
         <PercentageCell
           label={`${feedbackResponsePercentage}%`}
           percent={feedbackResponsePercentage}
           sx={styles.percentCell}
+          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% kursseista`}
         />
       </Box>
       {(isTransitioning || isOpen) && (
