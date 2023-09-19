@@ -12,22 +12,23 @@ import { formatDate, getFeedbackPercentageString } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 
 const getChip = feedbackTarget => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const isCurrent = !isEnded && !isOpen && !isOld
+  const isOngoing = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
   const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount, continuousFeedbackEnabled } = feedbackTarget
 
-  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
+  if (isOpen || (isOngoing && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
     return (
       <FeedbackResponseChip
         id={id}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         ongoing={isOpen}
-        continuous={isCurrent && continuousFeedbackEnabled}
+        continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={
           isOpen
             ? `feedbackOpen-${feedbackTarget.id}`

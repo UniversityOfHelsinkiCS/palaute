@@ -12,6 +12,7 @@ import FeedbackResponseChip from './FeedbackResponseChip'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 
 const styles = {
   accordion: {
@@ -32,17 +33,17 @@ const getChip = (courseRealisation, code) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const isCurrent = !isEnded && !isOpen && !isOld
+  const isOngoing = feedbackTargetCourseIsOngoing({ courseRealisation }) && !isOpen
   const { id: feedbackTargetId, continuousFeedbackEnabled } = feedbackTarget || {}
 
-  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
+  if (isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
         id={feedbackTargetId}
         feedbackResponseGiven={feedbackResponseGiven}
         feedbackResponseSent={feedbackResponseSent || isOld}
         ongoing={isOpen}
-        continuous={isCurrent && continuousFeedbackEnabled}
+        continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
       />
     )

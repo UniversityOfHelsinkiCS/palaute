@@ -13,6 +13,7 @@ import { useQueryClient } from 'react-query'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 import styles from '../../util/chipStyles'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 
@@ -172,7 +173,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const feedbackResponseGiven = feedbackResponse?.length > 3
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const notStarted = !isOpen && !isEnded
+  const notStarted = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
   const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
