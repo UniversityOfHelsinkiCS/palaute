@@ -35,7 +35,7 @@ const runPateCron = async () => {
 
 const startPateCron = async () => {
   // run()
-  if (true || !inProduction || inStaging) {
+  if (!inProduction || inStaging) {
     return logger.info('Not running Pate if not in production')
   }
   logger.info('Setup pate cron')
