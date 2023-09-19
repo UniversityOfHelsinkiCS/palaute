@@ -77,7 +77,7 @@ const SummaryV2 = () => {
               entityId={entityId}
               organisation={organisation}
               questions={questions}
-              isInitiallyOpen
+              alwaysOpen
               startDate={dateRange.start}
               endDate={dateRange.end}
             />

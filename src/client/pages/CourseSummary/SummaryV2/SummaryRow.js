@@ -60,6 +60,18 @@ const styles = {
     },
     transition: 'background-color 0.15s ease-out',
   },
+  unclickableLabel: {
+    width: '40%',
+    minHeight: '48px',
+    maxHeight: '74px',
+    paddingLeft: '0.5rem',
+    paddingRight: '2.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderRadius: '10px',
+    textAlign: 'left',
+    textTransform: 'none',
+  },
   link: {
     color: theme => theme.palette.primary.main,
   },
@@ -165,7 +177,7 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
             {label}
           </ButtonBase>
         ) : (
-          label
+          <Box sx={styles.unclickableLabel}>{label}</Box>
         )}
       </>
     )}
@@ -215,15 +227,14 @@ const CourseUnitSummaryRow = ({ courseUnit, questions, partiallyResponsible = fa
 }
 
 const OrganisationSummaryRow = ({
-  isInitiallyOpen = false,
+  alwaysOpen = false,
   startDate,
   endDate,
   organisation: initialOrganisation,
   questions,
-  showDates = false,
 }) => {
   const [isTransitioning, startTransition] = React.useTransition()
-  const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, isInitiallyOpen)
+  const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, alwaysOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
   const { organisation: fetchedOrganisationWithChildren } = useSummaries({
@@ -277,7 +288,7 @@ const OrganisationSummaryRow = ({
       sx={{ transition: 'padding-top 0.2s ease-out' }}
     >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <RowHeader openable label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} link={link} />
+        <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} link={link} />
         {questions.map(q => (
           <SummaryResultItem
             key={q.id}
