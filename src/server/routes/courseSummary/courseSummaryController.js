@@ -127,10 +127,22 @@ const getOrganisations = async (req, res) => {
 }
 
 /**
- * Only accessible to admin currently.
+ * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
   const { startDate: startDateString, endDate: endDateString, entityId, include } = req.query
+
+  /**
+   * Admins and some special group members can access this endpoint. This is WIP and uses HY specific special groups, need to be fixed.
+   */
+  if (
+    !req.user.isAdmin &&
+    !req.user.specialGroup?.allProgrammes &&
+    !req.user.specialGroup?.hyOne &&
+    !req.user.specialGroup?.admin
+  ) {
+    return ApplicationError.Forbidden()
+  }
 
   if (!entityId) {
     return ApplicationError.BadRequest('Missing entityId')
@@ -208,7 +220,7 @@ const getByCourseUnit = async (req, res) => {
 const router = Router()
 
 router.get('/organisations', getOrganisations)
-router.get('/organisations-v2', adminAccess, getOrganisationsV2)
+router.get('/organisations-v2', getOrganisationsV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/access', getAccessInfo)

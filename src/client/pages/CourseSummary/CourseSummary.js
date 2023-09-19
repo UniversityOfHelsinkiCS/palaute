@@ -16,7 +16,14 @@ const CourseSummary = () => {
         <OrganisationSummary />
       </Route>
 
-      <ProtectedRoute path="/course-summary/v2" component={SummaryV2} hasAccess={user?.isAdmin} />
+      <ProtectedRoute
+        path="/course-summary/v2"
+        component={SummaryV2}
+        hasAccess={
+          // TODO: do not use HY specific special groups
+          user.isAdmin || user?.specialGroup?.allProgrammes || user?.specialGroup?.hyOne || user?.specialGroup?.admin
+        }
+      />
 
       <Route path="/course-summary/:code" exact>
         <CourseRealisationSummary />
