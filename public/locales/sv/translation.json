@@ -68,7 +68,8 @@
     "currentlySelected": "Valda",
     "all": "Alla",
     "studentCount": "Studerande",
-    "partiallyResponsible": "Delansvarig"
+    "partiallyResponsible": "Delansvarig",
+    "university": "Universitet"
   },
   "validationErrors": {
     "required": "Fältet krävs",
@@ -387,7 +388,8 @@
     "given": "given",
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
-    "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback"
+    "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
+    "myOrganisations": "Mina utbildningsprogram"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",

@@ -66,9 +66,13 @@ const SummaryInContext = () => {
         </Alert>
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
-        <RouterTab label={'Organisaationi'} icon={<BarChartOutlined />} to="/course-summary/v2/my-organisations" />
         <RouterTab
-          label={'Yliopisto'}
+          label={t('courseSummary:myOrganisations')}
+          icon={<BarChartOutlined />}
+          to="/course-summary/v2/my-organisations"
+        />
+        <RouterTab
+          label={t('common:university')}
           icon={
             <Box sx={{ width: '1.5rem', height: 'auto' }}>
               <img src={hyLogo} alt="HY" />

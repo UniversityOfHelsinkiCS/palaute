@@ -69,7 +69,8 @@
     "currentlySelected": "Currently selected",
     "all": "All",
     "studentCount": "Students",
-    "partiallyResponsible": "Partially responsible"
+    "partiallyResponsible": "Partially responsible",
+    "university": "University"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -388,7 +389,8 @@
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
-    "noCourseRealisations": "No course realisations with feedback available for this course unit"
+    "noCourseRealisations": "No course realisations with feedback available for this course unit",
+    "myOrganisations": "My organisations"
   },
   "footer": {
     "contactSupport": "Contact support",

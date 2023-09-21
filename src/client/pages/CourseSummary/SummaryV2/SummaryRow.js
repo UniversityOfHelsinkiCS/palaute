@@ -4,17 +4,15 @@ import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
 import _ from 'lodash'
 import { useInView } from 'react-intersection-observer'
-import { Box, ButtonBase, Typography, Tooltip, Alert, Skeleton } from '@mui/material'
+import { Box, ButtonBase, Typography, Tooltip, Skeleton } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
-import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useSummaryQuestions } from './utils'
 import { useSummaryContext } from './context'
-import { SkeletonRow } from '../ResultsRow'
 
 const styles = {
   resultCell: {
