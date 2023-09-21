@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 const {
   Summary,
   Organisation,
@@ -10,6 +11,8 @@ const {
 } = require('../../models')
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
+const { getSummaryAccessibleOrganisationIds } = require('./access')
+const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 
 const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) => {
   const courseUnits = await CourseUnit.findAll({
@@ -32,6 +35,7 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
 
   for (const cu of courseUnits) {
     cu.summary = sumSummaries(cu.summaries)
+    delete cu.dataValues.summaries
   }
 
   return courseUnits
@@ -82,26 +86,37 @@ const getOrganisationSummary = async ({ organisationId, startDate, endDate }) =>
   })
 
   if (!rootOrganisation) {
-    return ApplicationError.NotFound(`Summary for organisation with id ${organisationId} not found`)
+    return null
   }
 
   // The organisation may have multiple summaries if the time range is larger.
   // Merge them together.
   rootOrganisation.summary = sumSummaries(rootOrganisation.summaries)
+  delete rootOrganisation.dataValues.summaries
 
   const organisation = rootOrganisation.toJSON()
 
   return organisation
 }
 
-const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, startDate, endDate }) => {
+const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, startDate, endDate, user }) => {
+  const organisationIds = await getSummaryAccessibleOrganisationIds(user)
+
+  // Todo refactor
+  const universityWideAccess =
+    user.isAdmin || user.specialGroup?.allProgrammes || user.specialGroup?.hyOne || user.specialGroup?.admin
+
+  if (!universityWideAccess && !organisationIds.includes(organisationId)) {
+    return ApplicationError.Forbidden(`User does not have access to organisation with id ${organisationId}`)
+  }
+
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: [
       {
         model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
         as: 'summaries',
-        required: true,
+        required: false,
       },
       {
         model: Organisation,
@@ -110,21 +125,31 @@ const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, st
         include: {
           model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
           as: 'summaries',
-          required: true,
+          required: false,
         },
+        where: {
+          id: {
+            // If user has university wide access, we don't need to filter by organisationIds
+            ...(universityWideAccess ? {} : { [Op.in]: organisationIds }),
+            [Op.notIn]: SUMMARY_EXCLUDED_ORG_IDS,
+          },
+        },
+        required: false,
       },
     ],
   })
 
   if (!rootOrganisation) {
-    return ApplicationError.NotFound(`Summary for organisation with id ${organisationId} not found`)
+    return null
   }
 
   // Each organisation may have multiple summaries if the time range is larger.
   // Merge them together.
   rootOrganisation.summary = sumSummaries(rootOrganisation.summaries)
+  delete rootOrganisation.dataValues.summaries
   for (const org of rootOrganisation.childOrganisations) {
     org.summary = sumSummaries(org.summaries)
+    delete org.dataValues.summaries
   }
 
   const organisation = rootOrganisation.toJSON()
@@ -140,14 +165,7 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   ])
 
   if (!organisation) {
-    return ApplicationError.NotFound(`Summary for organisation with id ${organisationId} not found`)
-  }
-
-  // Root organisation may have multiple summaries if the time range is larger.
-  // Merge them together.
-  organisation.summary = sumSummaries(organisation.summaries)
-  for (const cu of courseUnits) {
-    cu.summary = sumSummaries(cu.summaries)
+    return null
   }
 
   // Mangeling to do: we dont want to show individual CURs under organisation.

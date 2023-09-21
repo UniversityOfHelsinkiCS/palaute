@@ -69,6 +69,9 @@ export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK
 export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
 
 // eslint-disable-next-line no-undef
+export const UNIVERSITY_ROOT_ID = CONFIG?.UNIVERSITY_ROOT_ID
+
+// eslint-disable-next-line no-undef
 export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS
 
 // eslint-disable-next-line no-undef

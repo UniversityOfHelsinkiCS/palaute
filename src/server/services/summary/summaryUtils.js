@@ -68,6 +68,9 @@ const sumSummaryDatas = summaryDatas => {
 }
 
 const sumSummaries = summaries => {
+  if (!summaries?.length > 0) {
+    return null
+  }
   const data = sumSummaryDatas(summaries.map(s => s.data))
   const startDate = datefns.min(summaries.map(s => datefns.parseISO(s.startDate)))
   const endDate = datefns.max(summaries.map(s => datefns.parseISO(s.endDate)))

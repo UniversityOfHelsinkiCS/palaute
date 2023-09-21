@@ -18,8 +18,11 @@ const login = async (req, res) => {
     await user.save()
   }
 
-  const lastRestart = await getLastRestart()
-  const banners = await Banner.getForUser(user)
+  const [lastRestart, banners, organisations] = await Promise.all([
+    getLastRestart(),
+    Banner.getForUser(user),
+    user.getOrganisationAccess(),
+  ])
 
   const isTeacher = !!user.employeeNumber
 
@@ -29,6 +32,7 @@ const login = async (req, res) => {
     iamGroups,
     lastRestart,
     banners,
+    organisations,
   })
 }
 

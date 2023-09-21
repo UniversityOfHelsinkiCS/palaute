@@ -27,9 +27,9 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled, include })
     staleTime: TWELVE_HOURS,
   })
 
-  const { organisation, questions } = data || {}
+  const { organisation } = data || {}
 
-  return { organisation, questions, ...rest }
+  return { organisation, ...rest }
 }
 
 export const updateSummaries = async () => {

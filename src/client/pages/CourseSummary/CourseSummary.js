@@ -3,32 +3,54 @@ import { Route, Switch } from 'react-router-dom'
 
 import OrganisationSummary from './OrganisationSummary'
 import CourseRealisationSummary from './CourseRealisationSummary'
-import SummaryV2 from './SummaryV2/SummaryV2'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
+import { inProduction } from '../../util/common'
+import MyOrganisations from './SummaryV2/MyOrganisations'
+import { SummaryContextProvider } from './SummaryV2/context'
+import University from './SummaryV2/University'
 
 const CourseSummary = () => {
   const { authorizedUser: user } = useAuthorizedUser()
 
   return (
-    <Switch>
-      <Route path="/course-summary" exact>
-        <OrganisationSummary />
-      </Route>
+    <SummaryContextProvider>
+      <Switch>
+        <Route path="/course-summary" exact>
+          <OrganisationSummary />
+        </Route>
 
-      <ProtectedRoute
-        path="/course-summary/v2"
-        component={SummaryV2}
-        hasAccess={
-          // TODO: do not use HY specific special groups
-          user.isAdmin || user?.specialGroup?.allProgrammes || user?.specialGroup?.hyOne || user?.specialGroup?.admin
-        }
-      />
+        <ProtectedRoute
+          path="/course-summary/v2/my-organisations"
+          component={MyOrganisations}
+          hasAccess={
+            // TODO: do not use HY specific special groups
+            !inProduction ||
+            user.isAdmin ||
+            user?.specialGroup?.allProgrammes ||
+            user?.specialGroup?.hyOne ||
+            user?.specialGroup?.admin
+          }
+        />
 
-      <Route path="/course-summary/:code" exact>
-        <CourseRealisationSummary />
-      </Route>
-    </Switch>
+        <ProtectedRoute
+          path="/course-summary/v2/university"
+          component={University}
+          hasAccess={
+            // TODO: do not use HY specific special groups
+            !inProduction ||
+            user.isAdmin ||
+            user?.specialGroup?.allProgrammes ||
+            user?.specialGroup?.hyOne ||
+            user?.specialGroup?.admin
+          }
+        />
+
+        <Route path="/course-summary/:code" exact>
+          <CourseRealisationSummary />
+        </Route>
+      </Switch>
+    </SummaryContextProvider>
   )
 }
 

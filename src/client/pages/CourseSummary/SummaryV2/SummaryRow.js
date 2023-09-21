@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
 import _ from 'lodash'
-import { Box, ButtonBase, Typography, Tooltip } from '@mui/material'
+import { useInView } from 'react-intersection-observer'
+import { Box, ButtonBase, Typography, Tooltip, Alert, Skeleton } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
@@ -11,6 +12,9 @@ import { LoadingProgress } from '../../../components/common/LoadingProgress'
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
+import { useSummaryQuestions } from './utils'
+import { useSummaryContext } from './context'
+import { SkeletonRow } from '../ResultsRow'
 
 const styles = {
   resultCell: {
@@ -153,6 +157,26 @@ const useAccordionState = (id, enabled, forceOpen) => {
   return [open, setOpen]
 }
 
+const Loader = () => (
+  <Box
+    display="flex"
+    flexDirection="column"
+    alignItems="stretch"
+    gap="0.4rem"
+    sx={{ transition: 'padding-top 0.2s ease-out' }}
+  >
+    <Box display="flex" alignItems="stretch" gap="0.2rem">
+      <RowHeader
+        label={
+          <Skeleton>
+            <Typography>Ladataan</Typography>
+          </Skeleton>
+        }
+      />
+    </Box>
+  </Box>
+)
+
 const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link }) => (
   // eslint-disable-next-line react/jsx-no-useless-fragment
   <>
@@ -183,13 +207,13 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   </>
 )
 
-const CourseUnitSummaryRow = ({ courseUnit, questions, partiallyResponsible = false }) => {
+const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const { i18n, t } = useTranslation()
   const label = (
     <CourseUnitLabel
       name={getLanguageValue(courseUnit.name, i18n.language)}
       code={courseUnit.courseCode}
-      partiallyResponsible={partiallyResponsible ? t('common:partiallyResponsible') : false}
+      partiallyResponsible={courseUnit.partial ? t('common:partiallyResponsible') : false}
     />
   )
   const link = `/course-summary/${courseUnit.courseCode}`
@@ -233,60 +257,131 @@ const CourseUnitSummaryRow = ({ courseUnit, questions, partiallyResponsible = fa
   )
 }
 
-const OrganisationSummaryRow = ({
-  alwaysOpen = false,
-  startDate,
-  endDate,
-  organisation: initialOrganisation,
-  questions,
-}) => {
-  const [isTransitioning, startTransition] = React.useTransition()
-  const [isOpen, setIsOpen] = useAccordionState(initialOrganisation.id, true, alwaysOpen)
-  const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
-
-  const { organisation: fetchedOrganisationWithChildren } = useSummaries({
-    entityId: initialOrganisation.id,
-    enabled: isOpen,
+const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions }) => {
+  const { showSummariesWithNoFeedback } = useSummaryContext()
+  const { organisation, isLoading } = useSummaries({
+    entityId: organisationId,
     startDate,
     endDate,
     include: 'childOrganisations',
   })
 
-  const { organisation: fetchedOrganisationWithCourseUnits, isLoading: isCourseUnitsLoading } = useSummaries({
-    entityId: initialOrganisation.id,
-    enabled: isOpen,
+  if (isLoading) {
+    return <Loader />
+  }
+
+  const filteredOrganisations = showSummariesWithNoFeedback
+    ? organisation?.childOrganisations
+    : organisation?.childOrganisations?.filter(org => !!org.summary)
+
+  return filteredOrganisations?.map(org => (
+    <OrganisationSummaryRow
+      key={org.id}
+      startDate={startDate}
+      endDate={endDate}
+      organisation={org}
+      organisationId={org.id}
+      questions={questions}
+    />
+  ))
+}
+
+const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
+  const { organisation, isLoading } = useSummaries({
+    entityId: organisationId,
     startDate,
     endDate,
     include: 'courseUnits',
   })
 
-  const organisation = fetchedOrganisationWithChildren ?? initialOrganisation
+  if (isLoading) {
+    return <Loader />
+  }
 
-  const courseUnits = fetchedOrganisationWithCourseUnits?.courseUnits ?? []
+  return organisation?.courseUnits?.map(cu => (
+    <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
+  ))
+}
 
-  const { childOrganisations, summary } = organisation
+const OrganisationResults = ({ organisationId, startDate, endDate, questions }) => {
+  const { organisation, isLoading } = useSummaries({
+    entityId: organisationId,
+    startDate,
+    endDate,
+  })
 
-  const label = (
-    <OrganisationLabel
-      organisation={organisation}
-      dates={isOpen ? { startDate: summary.startDate, endDate: summary.endDate } : null}
-    />
+  if (isLoading) {
+    return 'Ladataan...'
+  }
+
+  const summary = organisation?.summary
+
+  const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
+
+  const feedbackResponsePercentage = summary ? (summary.data.feedbackResponsePercentage * 100).toFixed() : 0
+
+  return (
+    <>
+      {questions.map(q => (
+        <SummaryResultItem
+          key={q.id}
+          question={q}
+          mean={summary ? summary.data.result[q.id]?.mean : 0}
+          distribution={summary ? summary.data.result[q.id]?.distribution : {}}
+          sx={styles.resultCell}
+          component="div"
+        />
+      ))}
+      <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+        <Typography variant="body2" sx={styles.countCell}>
+          {summary ? summary.data.feedbackCount : '0'} / {summary ? summary.data.studentCount : '0'}
+        </Typography>
+      </Tooltip>
+      <PercentageCell
+        label={`${percent}%`}
+        percent={percent}
+        sx={styles.percentCell}
+        tooltip={`Palauteprosentti: ${percent}%`}
+      />
+      <PercentageCell
+        label={`${feedbackResponsePercentage}%`}
+        percent={feedbackResponsePercentage}
+        sx={styles.percentCell}
+        tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
+      />
+    </>
   )
+}
+
+const OrganisationSummaryRow = ({
+  alwaysOpen = false,
+  startDate,
+  endDate,
+  organisation: initialOrganisation,
+  organisationId,
+}) => {
+  const { ref, inView } = useInView({ triggerOnce: false })
+  const [isTransitioning, startTransition] = React.useTransition()
+  const [isOpen, setIsOpen] = useAccordionState(organisationId, true, alwaysOpen)
+  const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
+  const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
+
+  const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')
+
+  if (!alwaysOpen && (!initialOrganisation || isQuestionsLoading)) {
+    return <Loader />
+  }
+
+  const label = <OrganisationLabel organisation={initialOrganisation} dates={null} />
 
   const handleOpenRow = () => {
     setNextIsOpen(!isOpen)
     startTransition(() => setIsOpen(!isOpen))
   }
 
-  const link = null
-
-  const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
-  const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
-
-  const indentLineColor = useRandomColor(organisation.code)
-
   return (
     <Box
+      ref={ref}
       display="flex"
       flexDirection="column"
       alignItems="stretch"
@@ -295,34 +390,15 @@ const OrganisationSummaryRow = ({
       sx={{ transition: 'padding-top 0.2s ease-out' }}
     >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} link={link} />
-        {questions.map(q => (
-          <SummaryResultItem
-            key={q.id}
-            question={q}
-            mean={summary.data.result[q.id]?.mean}
-            distribution={summary.data.result[q.id]?.distribution}
-            sx={styles.resultCell}
-            component="div"
+        <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
+        {inView && (
+          <OrganisationResults
+            organisationId={organisationId}
+            startDate={startDate}
+            endDate={endDate}
+            questions={questions}
           />
-        ))}
-        <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
-          <Typography variant="body2" sx={styles.countCell}>
-            {summary.data.feedbackCount} / {summary.data.studentCount}
-          </Typography>
-        </Tooltip>
-        <PercentageCell
-          label={`${percent}%`}
-          percent={percent}
-          sx={styles.percentCell}
-          tooltip={`Palauteprosentti: ${percent}%`}
-        />
-        <PercentageCell
-          label={`${feedbackResponsePercentage}%`}
-          percent={feedbackResponsePercentage}
-          sx={styles.percentCell}
-          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
-        />
+        )}
       </Box>
       {(isTransitioning || isOpen) && (
         // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -333,33 +409,21 @@ const OrganisationSummaryRow = ({
           alignItems="stretch"
           gap="0.4rem"
         >
-          {!childOrganisations ? (
-            <LoadingProgress />
-          ) : (
-            _.orderBy(childOrganisations, 'code').map(org => (
-              <OrganisationSummaryRow
-                key={org.id}
+          {isOpen && (
+            <>
+              <ChildOrganisationsList
+                organisationId={organisationId}
                 startDate={startDate}
                 endDate={endDate}
-                organisation={org}
                 questions={questions}
               />
-            ))
-          )}
-          {isCourseUnitsLoading ? (
-            <LoadingProgress />
-          ) : (
-            _.orderBy(courseUnits, [
-              ['courseCode', 'asc'],
-              ['partial', 'desc'],
-            ]).map(cu => (
-              <CourseUnitSummaryRow
-                key={cu.id}
-                courseUnit={cu}
+              <CourseUnitsList
+                organisationId={organisationId}
+                startDate={startDate}
+                endDate={endDate}
                 questions={questions}
-                partiallyResponsible={cu.partial}
               />
-            ))
+            </>
           )}
         </Box>
       )}

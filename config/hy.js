@@ -243,9 +243,11 @@ const config = {
 
   DEV_USERNAME: 'mluukkai',
 
+  UNIVERSITY_ROOT_ID: 'hy-university-root-id',
+
   OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
 
-  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
+  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017', 'hy-org-116718610'],
 
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 

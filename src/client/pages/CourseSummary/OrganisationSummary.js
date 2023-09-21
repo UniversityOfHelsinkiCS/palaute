@@ -19,7 +19,7 @@ import errors from '../../util/errorMessage'
 import ErrorView from '../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
-import { TAGS_ENABLED } from '../../util/common'
+import { TAGS_ENABLED, inProduction } from '../../util/common'
 import LinkButton from '../../components/common/LinkButton'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
@@ -125,7 +125,11 @@ const OrganisationSummary = () => {
   }
 
   const canSeeNewLink =
-    user.isAdmin || user?.specialGroup?.allProgrammes || user?.specialGroup?.hyOne || user?.specialGroup?.admin
+    !inProduction ||
+    user.isAdmin ||
+    user?.specialGroup?.allProgrammes ||
+    user?.specialGroup?.hyOne ||
+    user?.specialGroup?.admin
 
   return (
     <>
@@ -141,7 +145,7 @@ const OrganisationSummary = () => {
             questions={questions || []}
             componentRef={componentRef}
           />
-          {canSeeNewLink && <LinkButton to="/course-summary/v2" title="Siirry uuteen näkymään" />}
+          {canSeeNewLink && <LinkButton to="/course-summary/v2/my-organisations" title="Siirry uuteen näkymään" />}
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">

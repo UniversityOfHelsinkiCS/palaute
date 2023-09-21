@@ -1,5 +1,5 @@
+import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useUniversitySurvey = (options = {}) => {
   const queryKey = ['universitySurvey']
@@ -11,7 +11,9 @@ const useUniversitySurvey = (options = {}) => {
   }
 
   const { data: survey, ...rest } = useQuery(queryKey, queryFn, {
-    skipCache: true,
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 60 * 24,
     ...options,
   })
 

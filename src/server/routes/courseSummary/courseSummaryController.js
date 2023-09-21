@@ -17,7 +17,7 @@ const {
   getOrganisationSummary,
 } = require('../../services/summary/summaryV2')
 const { startOfStudyYear } = require('../../util/common')
-const { adminAccess } = require('../../middleware/adminAccess')
+const { inProduction } = require('../../util/config')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -131,11 +131,13 @@ const getOrganisations = async (req, res) => {
  */
 const getOrganisationsV2 = async (req, res) => {
   const { startDate: startDateString, endDate: endDateString, entityId, include } = req.query
+  const { user } = req
 
   /**
    * Admins and some special group members can access this endpoint. This is WIP and uses HY specific special groups, need to be fixed.
    */
   if (
+    inProduction &&
     !req.user.isAdmin &&
     !req.user.specialGroup?.allProgrammes &&
     !req.user.specialGroup?.hyOne &&
@@ -148,8 +150,6 @@ const getOrganisationsV2 = async (req, res) => {
     return ApplicationError.BadRequest('Missing entityId')
   }
 
-  const questions = getSummaryQuestions()
-
   const startDate = startDateString ? new Date(startDateString) : startOfStudyYear(new Date())
   const endDate = endDateString ? new Date(endDateString) : new Date()
   let organisation
@@ -159,22 +159,25 @@ const getOrganisationsV2 = async (req, res) => {
       organisationId: entityId,
       startDate,
       endDate,
+      user,
     })
   } else if (include === 'courseUnits') {
     organisation = await getOrganisationSummaryWithCourseUnits({
       organisationId: entityId,
       startDate,
       endDate,
+      user,
     })
   } else {
     organisation = await getOrganisationSummary({
       organisationId: entityId,
       startDate,
       endDate,
+      user,
     })
   }
 
-  return res.send({ organisation, questions: await questions })
+  return res.send({ organisation })
 }
 
 const getByCourseUnit = async (req, res) => {

@@ -152,6 +152,11 @@ const config = {
   DEV_USERNAME: 'mluukkai',
 
   /**
+   * Id of the university root organisation (for example Helsingin Yliopisto).
+   */
+  UNIVERSITY_ROOT_ID: 'hy-university-root-id',
+
+  /**
    * HY has some special cases for open university courses, especially how they are handled in summary stats. Should work when this id matches nothing.
    */
   OPEN_UNIVERSITY_ORG_ID: '',

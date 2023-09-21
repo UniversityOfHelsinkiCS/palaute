@@ -48,21 +48,25 @@ FeedbackTarget.prototype.getSurveys = async function () {
  */
 User.prototype.getOrganisationAccess = async function () {
   await this.populateAccess()
+  let { accessibleOrganisations } = this
 
-  const organisations = await Organisation.findAll({
-    where: {
-      code: {
-        [Op.in]: Object.keys(this.organisationAccess),
+  if (!accessibleOrganisations) {
+    accessibleOrganisations = await Organisation.findAll({
+      attributes: ['id', 'name', 'code', 'parentId'],
+      where: {
+        code: {
+          [Op.in]: Object.keys(this.organisationAccess),
+        },
       },
-    },
-    include: {
-      model: User,
-      as: 'users',
-      attributes: ['id', 'firstName', 'lastName', 'email'],
-    },
-  })
+      include: {
+        model: User,
+        as: 'users',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
+    })
+  }
 
-  return organisations.map(org => ({
+  return accessibleOrganisations.map(org => ({
     access: this.organisationAccess[org.code],
     organisation: org,
   }))

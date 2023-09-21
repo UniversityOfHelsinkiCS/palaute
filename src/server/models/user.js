@@ -133,6 +133,9 @@ User.init(
     organisationAccess: {
       type: VIRTUAL,
     },
+    accessibleOrganisations: {
+      type: VIRTUAL,
+    },
     specialGroup: {
       type: VIRTUAL,
     },

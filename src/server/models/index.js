@@ -63,6 +63,18 @@ Survey.belongsTo(CourseUnit, {
   targetKey: 'courseCode',
 })
 
+Survey.belongsTo(Organisation, {
+  as: 'organisation',
+  foreignKey: 'typeId',
+  targetKey: 'code',
+})
+
+Organisation.hasMany(Survey, {
+  as: 'surveys',
+  foreignKey: 'typeId',
+  sourceKey: 'code',
+})
+
 CourseUnit.belongsToMany(Organisation, {
   through: CourseUnitsOrganisation,
   as: 'organisations',
