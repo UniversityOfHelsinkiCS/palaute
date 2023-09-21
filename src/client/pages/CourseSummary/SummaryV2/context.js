@@ -30,7 +30,7 @@ export const SummaryContextProvider = ({ children }) => {
       option,
       setOption,
     }),
-    [showSummariesWithNoFeedback, setShowSummariesWithNoFeedback]
+    [showSummariesWithNoFeedback, dateRange, option]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>
