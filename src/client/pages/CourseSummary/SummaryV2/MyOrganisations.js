@@ -2,29 +2,37 @@ import React from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import _ from 'lodash'
 import OrganisationSummaryRow from './SummaryRow'
-import { updateSummaries, useSummaries } from './api'
-import { LoadingProgress } from '../../../components/common/LoadingProgress'
+import { updateSummaries } from './api'
 import LinkButton from '../../../components/common/LinkButton'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 import useHistoryState from '../../../hooks/useHistoryState'
+import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 
-const SummaryV2 = () => {
+const useRootOrganisations = organisations => {
+  const rootOrganisations = React.useMemo(() => {
+    return organisations.map(o => o.organisation)
+  }, [organisations])
+
+  return rootOrganisations
+}
+
+/**
+ *
+ */
+const MyOrganisations = () => {
+  const { authorizedUser: user } = useAuthorizedUser()
+  const rootOrganisations = useRootOrganisations(user.organisations)
+
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [, startTransition] = React.useTransition()
   const startDate = new Date('2023-01-01')
   const endDate = new Date('2024-01-01')
-  const entityId = 'hy-university-root-id'
 
   const [dateRange, setDateRange] = useHistoryState('summary-v2-time-range', { start: startDate, end: endDate })
   const [option, setOption] = React.useState('year')
-
-  const { organisation, questions, isLoading } = useSummaries({
-    entityId,
-    startDate: dateRange.start,
-    endDate: dateRange.end,
-  })
 
   const handleUpdateData = async () => {
     const duration = await updateSummaries()
@@ -67,27 +75,20 @@ const SummaryV2 = () => {
           milloin palautetta on annettu.
         </Alert>
       </Box>
-      {isLoading ? (
-        <LoadingProgress />
-      ) : (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
-        <>
-          {organisation ? (
-            <OrganisationSummaryRow
-              entityId={entityId}
-              organisation={organisation}
-              questions={questions}
-              alwaysOpen
-              startDate={dateRange.start}
-              endDate={dateRange.end}
-            />
-          ) : (
-            <div>Jaahas, mitään ei löydy. Data pitää varmaan päivittää</div>
-          )}
-        </>
-      )}
+      <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
+        {rootOrganisations.map(organisation => (
+          <OrganisationSummaryRow
+            key={organisation.id}
+            loadClosed
+            organisationId={organisation.id}
+            organisation={organisation}
+            startDate={dateRange.start}
+            endDate={dateRange.end}
+          />
+        ))}
+      </Box>
     </Box>
   )
 }
 
-export default SummaryV2
+export default MyOrganisations
