@@ -301,18 +301,19 @@ const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
   ))
 }
 
-const OrganisationResults = ({ organisationId, startDate, endDate, questions }) => {
+const OrganisationResults = ({ organisationId, initialSummary, startDate, endDate, questions }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
+    enabled: !initialSummary,
   })
 
   if (isLoading) {
     return 'Ladataan...'
   }
 
-  const summary = organisation?.summary
+  const summary = initialSummary ?? organisation?.summary
 
   const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
 
@@ -395,6 +396,7 @@ const OrganisationSummaryRow = ({
             startDate={startDate}
             endDate={endDate}
             questions={questions}
+            initialSummary={initialOrganisation?.summary}
           />
         )}
       </Box>
