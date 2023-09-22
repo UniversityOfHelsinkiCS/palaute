@@ -10,6 +10,7 @@ const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
 const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
+const { start: startSummariesCron } = require('./util/summariesCron')
 const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
@@ -36,6 +37,7 @@ const start = async () => {
   await updateLastRestart()
 
   await startViewsCron()
+  await startSummariesCron()
   await startPrecacheFeedbackTargetsCron()
   await mailer.scheduleCronJobs()
 
