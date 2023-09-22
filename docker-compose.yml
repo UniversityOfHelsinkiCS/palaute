@@ -20,7 +20,7 @@ services:
       - 9229:9229
     container_name: palaute_dev
   db:
-    image: postgres:13.2
+    image: postgres:15.4
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
@@ -51,7 +51,7 @@ services:
       - 3003:3003
     container_name: jami
   jami-db:
-    image: postgres:13.2
+    image: postgres:15.4
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
