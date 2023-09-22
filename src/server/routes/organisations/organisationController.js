@@ -8,6 +8,7 @@ const { createOrganisationLog } = require('../../util/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
 const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
+const organisationSurveyRouter = require('./organisationSurveyController')
 const { getOrganisationData: getOrganisationDataFromJami } = require('../../util/jami')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
@@ -156,6 +157,7 @@ router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
+router.use('/', organisationSurveyRouter)
 router.use('/', feedbackCorrespondentRouter)
 
 module.exports = router
