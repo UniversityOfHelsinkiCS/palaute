@@ -45,8 +45,6 @@ If stuck reset everything and start from a clean slate:
 $ npm run reset
 ```
 
-```
-
 ### Commit guidelines
 
 We like the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
