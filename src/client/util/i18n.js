@@ -24,7 +24,7 @@ i18n
     backend: {
       loadPath: `${basePath}/locales/{{lng}}/{{ns}}.json`,
     },
-    debug: !inProduction,
+    debug: false,
     nsSeparator: '.',
     keySeparator: ':',
     supportedLngs: LANGUAGES,
