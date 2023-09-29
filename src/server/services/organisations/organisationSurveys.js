@@ -5,6 +5,7 @@ const {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
   FeedbackTarget,
+  Organisation,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationCode => {
@@ -76,7 +77,38 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
+const getOrganisationSurvey = async feedbackTargetId => {
+  const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
+    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+    ],
+  })
+
+  if (!organisationSurvey) throw new Error('Organisation survey not found')
+
+  return organisationSurvey
+}
+
 module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
+  getOrganisationSurvey,
 }

@@ -3,6 +3,7 @@ const { Router } = require('express')
 const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
+  getOrganisationSurvey,
 } = require('../../services/organisations/organisationSurveys')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
@@ -24,7 +25,9 @@ const createOrganisationSurvey = async (req, res) => {
 
   const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { startDate, endDate })
 
-  return res.status(201).send(feedbackTarget)
+  const survey = await getOrganisationSurvey(feedbackTarget.id)
+
+  return res.status(201).send(survey)
 }
 
 const router = Router()
