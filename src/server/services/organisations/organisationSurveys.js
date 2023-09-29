@@ -4,14 +4,21 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  FeedbackTarget,
 } = require('../../models')
 
-const initializeOrganisationCourseUnit = async organisation => {
-  const existingOrganisationCU = await CourseUnit.findOne({
+const getOrganisationCourseUnit = async organisationCode => {
+  const organisationCourseUnit = await CourseUnit.findOne({
     where: {
-      courseCode: organisation.code,
+      courseCode: organisationCode,
     },
   })
+
+  return organisationCourseUnit
+}
+
+const initializeOrganisationCourseUnit = async organisation => {
+  const existingOrganisationCU = getOrganisationCourseUnit(organisation.code)
 
   if (existingOrganisationCU) return
 
@@ -35,8 +42,12 @@ const initializeOrganisationCourseUnit = async organisation => {
   })
 }
 
-const createOrganisationFeedbackTarget = async (organisation, validityPeriod) => {
-  const { startDate, endDate } = validityPeriod
+const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData) => {
+  const { startDate, endDate } = feedbackTargetData
+
+  const organisationCourseUnit = await getOrganisationCourseUnit(organisation.code)
+
+  if (!organisationCourseUnit) throw new Error('Organisation course unit not found')
 
   const organisationCourseRealisation = await CourseRealisation.create({
     endDate,
@@ -51,6 +62,18 @@ const createOrganisationFeedbackTarget = async (organisation, validityPeriod) =>
     courseRealisationId: organisationCourseRealisation.id,
     organisationId: organisation.id,
   })
+
+  const organisationFeedbackTarget = await FeedbackTarget.create({
+    feedbackType: 'courseRealisation',
+    typeId: organisationCourseRealisation.id,
+    courseUnitId: organisationCourseUnit.id,
+    courseRealisationId: organisationCourseRealisation.id,
+    name: organisation.name,
+    hidden: false,
+    userCreated: true,
+  })
+
+  return organisationFeedbackTarget
 }
 
 module.exports = {
