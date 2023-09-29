@@ -1,5 +1,12 @@
 const { Router } = require('express')
-const { CourseUnit } = require('../../models')
+
+const { LANGUAGES } = require('../../util/config')
+const {
+  CourseUnit,
+  CourseRealisation,
+  CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
+} = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 
@@ -26,7 +33,32 @@ const createOrganisationSurvey = async (req, res) => {
     userCreated: true,
   })
 
-  return res.send(organisationCourseUnit)
+  const CuOrganisation = await CourseUnitsOrganisation.create({
+    type: 'PRIMARY',
+    courseUnitId: organisationCourseUnit.id,
+    organisationId: organisation.id,
+  })
+
+  const organisationCourseRealisation = await CourseRealisation.create({
+    endDate,
+    startDate,
+    name: organisation.name,
+    teachingLanguages: LANGUAGES,
+    userCreated: true,
+  })
+
+  const CurOrganisation = await CourseRealisationsOrganisation.create({
+    type: 'PRIMARY',
+    courseRealisationId: organisationCourseRealisation.id,
+    organisationId: organisation.id,
+  })
+
+  return res.send({
+    organisationCourseUnit,
+    organisationCourseRealisation,
+    CuOrganisation,
+    CurOrganisation,
+  })
 }
 
 const router = Router()
