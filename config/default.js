@@ -213,6 +213,12 @@ const config = {
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
 
   /**
+   * Allow organisation admins to create custom surveys
+   * Feature is still in development
+   */
+  ORGANISATION_SURVEYS_ENABLED: false,
+
+  /**
    * The course summary color scale used in summary views and fbt results view for LIKERT type values ranging from 1-5. (LIKERT options minimum is 1 so below 1 means no data)
    * First color in the scale is for NO DATA.
    * Second color is for everything below MIN, eg. the 'worst' color.

@@ -257,6 +257,8 @@ const config = {
 
   IAM_GROUPS_HEADER: 'hygroupcn',
 
+  ORGANISATION_SURVEYS_ENABLED: true,
+
   GELF_TRANSPORT_ENABLED: true,
 
   SUMMARY_COLORS: [

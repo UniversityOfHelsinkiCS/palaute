@@ -14,7 +14,7 @@ const createOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError(403, 'Only admins can create organisation surveys')
+  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can create organisation surveys')
 
   const organisationCourseUnit = await CourseUnit.create({
     courseCode: organisation.code,

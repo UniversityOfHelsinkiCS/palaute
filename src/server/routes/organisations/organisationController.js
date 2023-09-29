@@ -1,8 +1,8 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
+const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const { Organisation, OrganisationLog, User } = require('../../models')
-
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../util/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
@@ -157,7 +157,7 @@ router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
-router.use('/', organisationSurveyRouter)
+if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.use('/', feedbackCorrespondentRouter)
 
 module.exports = router
