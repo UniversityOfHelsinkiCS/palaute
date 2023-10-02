@@ -67,11 +67,6 @@ const SummaryInContext = () => {
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
         <RouterTab
-          label={t('courseSummary:myOrganisations')}
-          icon={<BarChartOutlined />}
-          to="/course-summary/v2/my-organisations"
-        />
-        <RouterTab
           label={t('common:university')}
           icon={
             <Box sx={{ width: '1.5rem', height: 'auto' }}>
@@ -79,6 +74,11 @@ const SummaryInContext = () => {
             </Box>
           }
           to="/course-summary/v2/university"
+        />
+        <RouterTab
+          label={t('courseSummary:myOrganisations')}
+          icon={<BarChartOutlined />}
+          to="/course-summary/v2/my-organisations"
         />
       </RouterTabs>
       <Box mt="3rem">
