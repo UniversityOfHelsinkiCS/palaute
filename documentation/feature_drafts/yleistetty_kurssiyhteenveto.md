@@ -76,6 +76,10 @@ Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata t
 
 Yhteenvetonäkymä tehdään käytännössä kokonaan uusiksi. Muutokset kohdistuvat `client/pages/Summary` hakemistoon.
 
+## Vielä ratkaisemattomia haasteita
+
+- Puurakenne perustuu Sisun tietorakenteeseen, eikä välttämättä vastaa sitä mitä oikeasti näkymässä halutaan nähdä. Esim HY:n tohtoriohjelmat ovat organisaatiorakenteessa omissa tutkijakouluissaan mutta niiden statistiikka käytännössä haluttaisiin tiedekuntien alle. Lisäksi puurakenteessa on paljon näennäisesti turhia "väliorganisaatioita", jotka olisi järkevä jotenkin ohittaa.
+
 ## Miten edetään
 
 Kun eri Norpan osapuolet hyväksyvät muutosten hyödyllisyyden ja pääpiirteittäin teknisen lähestymistavan, Toska tekee uudesta kurssiyhteenvetonäkymästä nopeasti prototyyppiversion vanhan rinnalle. Prototyyppiversio tulee ensin näkymään vain admineille mutta se viedään HY:n tuotantoon heti kun se on käyttökelpoinen. Kun se on todettu riittävän vakaaksi ja toimivaksi eri käyttäjäryhmille (Yliopistohallinto, johtoryhmien jäsenet, opettajat), korvataan vanha näkymä uudella.
