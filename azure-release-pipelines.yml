@@ -10,10 +10,10 @@ pool:
   name: Leanware Kampus testi
 
 steps:
-- checkout: self
-- checkout: git://Kampus/tuni-kpj-auth
-- checkout: git://Kampus/tuni-kpj-pate
-- checkout: git://Kampus/tuni-kpj-updater
+- checkout: self@refs/tags/tuni-kpj-release-1.26
+- checkout: git://Kampus/tuni-kpj-auth@refs/tags/tuni-kpj-release-1.26
+- checkout: git://Kampus/tuni-kpj-pate@refs/tags/tuni-kpj-release-1.26
+- checkout: git://Kampus/tuni-kpj-updater@refs/tags/tuni-kpj-release-1.26
 
 - task: Docker@2
   displayName: Leanware Docker registry login
