@@ -32,7 +32,7 @@ Näin ratkaistaan **ongelma no. 1** ja **ongelma no. 2**.
 
 Nykyiseen näkyvyyteen liittyy useita epäloogisuuksia ja parannuskohteita. HY:ssä olemme todenneet seuraavien muutosten olevan tarpeellisia:
 
-- Opettajien pitäisi voida verrata omien kurssiensa statistiikkoja kurssien organisaatioiden keskiarvoon. Vanhastaan se ei ole mahdollista ellei opettajalla ole lisäksi organisaatio-ongelmia. Ratkaisu on se, että opettaja näkee kurssin järjestävän (pää)organisaation yhteenvedon (ei kuitenkaan vielä muita organisaation rinnakkaisia kursseja).
+- Opettajien pitäisi voida verrata omien kurssiensa statistiikkoja kurssien organisaatioiden keskiarvoon. Vanhastaan se ei ole mahdollista ellei opettajalla ole lisäksi organisaatio-oikeuksia. Ratkaisu on se, että opettaja näkee kurssin järjestävän (pää)organisaation yhteenvedon (ei kuitenkaan vielä muita organisaation rinnakkaisia kursseja).
 - Organisaation jäsenten tulisi voida nähdä enemmän vertailustatistiikkaa. Esim: TKT:n ohjelman johtaja ei näe muuta kuin TKT:n keskiarvon, mutta suotavaa olisi että näkisi myös yläorganisaation eli MatLun keskiarvon. Lisäksi voitaisiin näyttää yliopisto-organisaation sekä yliopiston alaisten organisaatioiden keskiarvot (eli HY:ssä kaikkien tiedekuntien keskiarvot).
 
 ## Muita hyötyjä päivityksestä
