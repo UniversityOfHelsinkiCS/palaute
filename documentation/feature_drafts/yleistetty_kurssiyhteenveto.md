@@ -28,9 +28,18 @@ Kursseja ja organisaatioita voi siis olla rinnakkain yhden organisaation alla. T
 
 Näin ratkaistaan **ongelma no. 1** ja **ongelma no. 2**.
 
+## Näkyvyyden laajennukset
+
+Nykyiseen näkyvyyteen liittyy useita epäloogisuuksia ja parannuskohteita. HY:ssä olemme todenneet seuraavien muutosten olevan tarpeellisia:
+
+- Opettajien pitäisi voida verrata omien kurssiensa statistiikkoja kurssien organisaatioiden keskiarvoon. Vanhastaan se ei ole mahdollista ellei opettajalla ole lisäksi organisaatio-ongelmia. Ratkaisu on se, että opettaja näkee kurssin järjestävän (pää)organisaation yhteenvedon (ei kuitenkaan vielä muita organisaation rinnakkaisia kursseja).
+- Organisaation jäsenten tulisi voida nähdä enemmän vertailustatistiikkaa. Esim: TKT:n ohjelman johtaja ei näe muuta kuin TKT:n keskiarvon, mutta suotavaa olisi että näkisi myös yläorganisaation eli MatLun keskiarvon. Lisäksi voitaisiin näyttää yliopisto-organisaation sekä yliopiston alaisten organisaatioiden keskiarvot (eli HY:ssä kaikkien tiedekuntien keskiarvot).
+
 ## Muita hyötyjä päivityksestä
 
 Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
+
+Uusi laskentatapa tuottaa luotettavampaa dataa. HY:llä huomasimme, että vanha laskentatapa jätti useita organisaatioita näkymättömiin. 
 
 Parannetaan ylläpidettävyyttä. Nykyinen yhteenveto lasketaan parilla isolla "SQL-matolla", joiden ymmärtäminen ja muuttaminen on haastava jopa alkuperäisille toteuttajille.
 
@@ -39,31 +48,23 @@ Uudella logiikalla näkymästä on tarkoitus saada tehokas ilman ihmeempiä erik
 
 ## Toteutus
 
-Yksityiskohdat työn alla.
+Tässä kuvaillaan toteutus pääpiirteittäin.
+
+## Koodimuutosten sijainti.
 
 ### Muutokset backendiin
 
-Tulevat koskemaan erityisesti `services/summary` -hakemiston koodia. Suurin osa yhteenvedon "välimuistitaulujen" päivityksestä ja yhteenvedon hakemisesta vastaavista funktioista tehdään kokonaan uudestaan.
+Tulevat koskemaan erityisesti `services/summary` -hakemiston koodia ja `routes/courseSummary/courseSummaryController.js` tiedostoa. Suurin osa yhteenvedon "välimuistitaulujen" päivityksestä ja yhteenvedon hakemisesta vastaavista funktioista tehdään kokonaan uudestaan.
 
 ### Tietokantamuutokset
 
-Nykyinen materialized view `course_results_view` tullaan poistamaan.
+Nykyinen materialized view `course_results_view` poistetaan.
 
 Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata tallennetaan. 
 
 ### Muutokset fronttiin
 
-Yhteenvetorivien komponentit pysyvät pääosin samanlaisena, erona se että rakenne muuttuu enemmän puurakenteeksi.
-
-Yhteenvedon tiedekuntavalitsin poistetaan.
-
-### Haasteita
-
-- Sisun organisaatiodatassa on PALJON epärelevantteja organisaatioita. Esimerkiksi HY:n alla on suoraan 318 organisaatiota, joista noin 15 on Norpassa relevantteja. Ne täytyy osata filtteröidä jollain järkevällä logiikalla. Jamiin kovakoodattu organisaatiorakenne on yksi vaihtoehto, Toskassa se on yleinen ratkaisu.
-  - Ratkaistu: Näistä turhista organisaatioista ei tallennu Summary-objekteja, koska ne tai niiden aliorganisaatiot eivät järjestä kursseja.
-- Kurssien palautemääriä ei saa laskea kahteen kertaan (#1052). Koska kurssin järjestäjänä voi olla useita organisaatioita, laskettaessa organisaatioiden statistiikkaa on muistettava, mitkä kurssit on jo laskettu mukaan.
-  - Ratkaistu: statistiikan päivitysajossa laskenta tapahtuu siten, että jokaiselle Summary-objektille (organisaatio/opintojakso...) rakennetaan lista toteutuksista, joiden statistiikka tulee sen alle. Listalle yksinkertaisesti tehdään unique by id -operaatio, jolloin mitään ei lasketa kahdesti, vaikka yksi toteutus voikin olla useiden muiden entiteettien vastuulla.
-- Muitakin tulee varmaan...
+Yhteenvetonäkymä tehdään käytännössä kokonaan uusiksi. Muutokset kohdistuvat `client/pages/Summary` hakemistoon.
 
 ## Miten edetään
 
