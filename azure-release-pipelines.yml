@@ -10,7 +10,7 @@ pool:
   name: Leanware Kampus testi
 
 steps:
-- checkout: self@refs/tags/tuni-kpj-release-1.26
+- checkout: git://Kampus/tuni-kpj@refs/tags/tuni-kpj-release-1.26
 - checkout: git://Kampus/tuni-kpj-auth@refs/tags/tuni-kpj-release-1.26
 - checkout: git://Kampus/tuni-kpj-pate@refs/tags/tuni-kpj-release-1.26
 - checkout: git://Kampus/tuni-kpj-updater@refs/tags/tuni-kpj-release-1.26
