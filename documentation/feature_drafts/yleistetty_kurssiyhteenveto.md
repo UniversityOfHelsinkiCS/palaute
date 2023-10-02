@@ -28,14 +28,24 @@ Kursseja ja organisaatioita voi siis olla rinnakkain yhden organisaation alla. T
 
 Näin ratkaistaan **ongelma no. 1** ja **ongelma no. 2**.
 
-## Näkyvyyden laajennukset
+## Muita muutoksia
+
+Vanhasta ns "flatlistasta" haluttaisiin samalla säilyttää eri organisaatioiden vertailumahdollisuus, esimerkiksi järjestäminen palauteprosentin perusteella yms. Puurakenteessa se ei oikein onnistu, joten puurakennenäkymän rinnalle ehdotetaan jonkinlaista uutta flatlistaa. Tämän mietintä on vielä todella kesken mutta prototyypissä on sille yksinkertainen toteutus.
+
+Mietitään myös aikarajauksen parantamista. Nykyään ei voida tarkastella yhtä lukuvuotta pidempää aikaväliä, vaikka backend sen periaatteessa mahdollistaakin. Esimerkiksi jonkinlainen vedettävä rajaus voisi toimia nykyisen sijaan (tästä on ollut jo kauan suunnitelmia).
+
+### Näkyvyyden laajennukset
 
 Nykyiseen näkyvyyteen liittyy useita epäloogisuuksia ja parannuskohteita. HY:ssä olemme todenneet seuraavien muutosten olevan tarpeellisia:
 
 - Opettajien pitäisi voida verrata omien kurssiensa statistiikkoja kurssien organisaatioiden keskiarvoon. Vanhastaan se ei ole mahdollista ellei opettajalla ole lisäksi organisaatio-oikeuksia. Ratkaisu on se, että opettaja näkee kurssin järjestävän (pää)organisaation yhteenvedon (ei kuitenkaan vielä muita organisaation rinnakkaisia kursseja).
 - Organisaation jäsenten tulisi voida nähdä enemmän vertailustatistiikkaa. Esim: TKT:n ohjelman johtaja ei näe muuta kuin TKT:n keskiarvon, mutta suotavaa olisi että näkisi myös yläorganisaation eli MatLun keskiarvon. Lisäksi voitaisiin näyttää yliopisto-organisaation sekä yliopiston alaisten organisaatioiden keskiarvot (eli HY:ssä kaikkien tiedekuntien keskiarvot).
 
-## Muita hyötyjä päivityksestä
+### Käyttökokemusparannuksia
+
+- Haku- ja rajausvalinnat tallennetaan URL:n hakuparametreihin
+
+### Muita yleisiä hyötyjä päivityksestä
 
 Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
 
