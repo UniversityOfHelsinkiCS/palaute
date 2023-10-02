@@ -75,15 +75,44 @@ const config = {
   WORKLOAD_QUESTION_ID: 90,
 
   /**
+   * Workload question id order. Needed to map the single choice question to a number.
+   * The order is:
+   * [too heavy, somewhat too heavy, appropriate, somewhat too light, too light]
+   * HY ref:[too much, much, just right, little, too little]
+   */
+  WORKLOAD_QUESTION_ID_ORDER: [
+    '98f27153-73cf-4cc1-86f9-223a61aea325',
+    '919b3cbd-3be6-4de9-b337-9e0080144440',
+    '54b31110-5e16-4d8d-b02d-b8a3e4add24e',
+    '84b6ffdf-40a9-41d8-a411-1a0ab2993262',
+    '11559e75-3a6e-47a7-a979-991879c10469',
+  ],
+
+  /**
    * How long JWT tokens in noad links last
    */
   NOAD_LINK_EXPIRATION_DAYS: 0,
 
   /**
-   * How many objects fit in LRU cache
-   * Set to zero to disable fbt caching
+   * How many fbts fit in LRU cache
    */
   FEEDBACK_TARGET_CACHE_SIZE: 250,
+
+  /**
+   * Optional TTL in ms for fbt cache. Small number effectively disables caching.
+   * Disabling will slow down requests related to feedback target view.
+   * Do not set if you don't want cache to do TTL checks.
+   */
+  //10 minutes time to live
+  FEEDBACK_TARGET_CACHE_TTL: 30000,
+
+  /**
+   * How many users fit in LRU cache
+   */
+  USER_CACHE_SIZE: 250,
+
+  //1 hour time to live
+  USER_CACHE_TTL: 360000,
 
   /**
    * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
@@ -149,12 +178,6 @@ const config = {
    * The translation file to use (i18n is set to always fallback to 'translation')
    */
   TRANSLATION_NAMESPACE: 'tau',
-
-  //10 minutes time to live
-  FEEDBACK_TARGET_CACHE_TTL: 30000,
-
-  //1 hour time to live
-  USER_CACHE_TTL: 360000,
 
   /**
    * Supported languages. Add translations for each language. Defaults are 'fi' ,'sv' and 'en'
