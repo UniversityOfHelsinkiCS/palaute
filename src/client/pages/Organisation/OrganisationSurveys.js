@@ -10,6 +10,8 @@ import { useSnackbar } from 'notistack'
 import useOrganisationSurveys from './useOrganisationSurveys'
 import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
 
+import useInteractiveMutation from '../../hooks/useInteractiveMutation'
+
 import Title from '../../components/common/Title'
 import FormikTextField from '../../components/common/FormikTextField'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
@@ -59,21 +61,16 @@ const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
 const OrganisationSurveys = () => {
   const [showForm, setShowForm] = useState(false)
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
   const { code } = useParams()
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const mutation = useCreateOrganisationSurveyMutation(code)
 
+  const createOrganisationSurvey = useInteractiveMutation(surveyValues => mutation.mutateAsync(surveyValues))
+
   const handleSubmit = async values => {
     setShowForm(!showForm)
 
-    try {
-      mutation.mutate(values)
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (e) {
-      console.error(e)
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
+    await createOrganisationSurvey(values)
   }
 
   const handleClose = () => setShowForm(!showForm)
