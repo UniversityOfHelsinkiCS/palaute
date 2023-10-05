@@ -7,8 +7,8 @@ import { Form, Formik } from 'formik'
 import { useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 
-import useOrganisationSurveys from '../../hooks/useOrganisationSurveys'
-import { useCreateOrganisationSurveyMutation } from '../../hooks/useOrganisationSurveyMutation'
+import useOrganisationSurveys from './useOrganisationSurveys'
+import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
 
 import Title from '../../components/common/Title'
 import FormikTextField from '../../components/common/FormikTextField'

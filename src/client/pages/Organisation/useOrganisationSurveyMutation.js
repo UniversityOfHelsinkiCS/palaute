@@ -1,8 +1,8 @@
 import { useMutation } from 'react-query'
 
 import { queryKey } from './useOrganisationSurveys'
-import queryClient from '../util/queryClient'
-import apiClient from '../util/apiClient'
+import queryClient from '../../util/queryClient'
+import apiClient from '../../util/apiClient'
 
 export const useCreateOrganisationSurveyMutation = organisationCode => {
   const mutationFn = async ({ name, startDate, endDate }) => {
