@@ -5,9 +5,10 @@ import { Card, CardContent, Box, Button, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 
 import { useParams } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
-import useOrganisation from '../../hooks/useOrganisation'
 import useOrganisationSurveys from '../../hooks/useOrganisationSurveys'
+import { useCreateOrganisationSurveyMutation } from '../../hooks/useOrganisationSurveyMutation'
 
 import Title from '../../components/common/Title'
 import FormikTextField from '../../components/common/FormikTextField'
@@ -45,7 +46,7 @@ const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
                 {t('common:save')}
               </Button>
               <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={close}>
-                {t('common:hide')}
+                {t('common:cancel')}
               </Button>
             </Box>
           </Form>
@@ -57,19 +58,27 @@ const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
 
 const OrganisationSurveys = () => {
   const [showForm, setShowForm] = useState(false)
-  const { code } = useParams()
-  const { organisation, isLoading: isOrganisationLoading } = useOrganisation(code)
-  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+  const { code } = useParams()
+  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
+  const mutation = useCreateOrganisationSurveyMutation(code)
 
   const handleSubmit = async values => {
     setShowForm(!showForm)
-    console.log(values)
+
+    try {
+      mutation.mutate(values)
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+    } catch (e) {
+      console.error(e)
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
   }
 
   const handleClose = () => setShowForm(!showForm)
 
-  if (isOrganisationLoading || isOrganisationSurveysLoading) {
+  if (isOrganisationSurveysLoading) {
     return <LoadingProgress />
   }
 
