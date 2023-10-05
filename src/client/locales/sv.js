@@ -391,6 +391,7 @@ export default {
     feedbackCorrespondent: 'Korrespondent för responsen',
     feedbackCorrespondents: 'Korrespondenter för responsen',
     surveyTab: 'Utbildningsprogrammets förfrågan',
+    organisationSurveysTab: 'Organisaatio kyselyt',
     summaryTab: 'Sammandrag',
     // courseRealisationsTab: 'Kurssitoteutukset',
     openQuestionsTab: 'Öppna frågor',

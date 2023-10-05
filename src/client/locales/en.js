@@ -401,6 +401,7 @@ export default {
     feedbackCorrespondent: 'Feedback liaison',
     feedbackCorrespondents: 'Feedback liaisons',
     surveyTab: 'Programme survey',
+    organisationSurveysTab: 'Organisation surveys',
     summaryTab: 'Summary',
     courseRealisationsTab: 'Course realisations',
     openQuestionsTab: 'Open questions',

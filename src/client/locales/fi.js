@@ -405,6 +405,7 @@ export default {
     feedbackCorrespondent: 'Palautevastaava',
     feedbackCorrespondents: 'Palautevastaavat',
     surveyTab: 'Koulutusohjelman kysely',
+    organisationSurveysTab: 'Organisaatio kyselyt',
     summaryTab: 'Yhteenveto',
     courseRealisationsTab: 'Kurssitoteutukset',
     openQuestionsTab: 'Avoimet kysymykset',
