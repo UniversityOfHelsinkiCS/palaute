@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require('uuid')
+
 const { LANGUAGES } = require('../../util/config')
 const {
   CourseUnit,
@@ -8,18 +10,14 @@ const {
   Organisation,
 } = require('../../models')
 
-const getOrganisationCourseUnit = async organisationCode => {
-  const organisationCourseUnit = await CourseUnit.findOne({
-    where: {
-      courseCode: organisationCode,
-    },
-  })
+const getOrganisationCourseUnit = async organisationId => {
+  const organisationCourseUnit = await CourseUnit.findByPk(organisationId)
 
   return organisationCourseUnit
 }
 
 const initializeOrganisationCourseUnit = async organisation => {
-  const existingOrganisationCU = getOrganisationCourseUnit(organisation.code)
+  const existingOrganisationCU = await getOrganisationCourseUnit(organisation.id)
 
   if (existingOrganisationCU) return
 
@@ -27,6 +25,7 @@ const initializeOrganisationCourseUnit = async organisation => {
   const endDate = new Date().setFullYear(9999)
 
   const organisationCourseUnit = await CourseUnit.create({
+    id: organisation.id,
     courseCode: organisation.code,
     validityPeriod: {
       startDate,
@@ -44,13 +43,14 @@ const initializeOrganisationCourseUnit = async organisation => {
 }
 
 const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData) => {
-  const { startDate, endDate } = feedbackTargetData
+  const { name, startDate, endDate } = feedbackTargetData
 
-  const organisationCourseUnit = await getOrganisationCourseUnit(organisation.code)
+  const organisationCourseUnit = await getOrganisationCourseUnit(organisation.id)
 
   if (!organisationCourseUnit) throw new Error('Organisation course unit not found')
 
   const organisationCourseRealisation = await CourseRealisation.create({
+    id: uuidv4(),
     endDate,
     startDate,
     name: organisation.name,
@@ -69,7 +69,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
     typeId: organisationCourseRealisation.id,
     courseUnitId: organisationCourseUnit.id,
     courseRealisationId: organisationCourseRealisation.id,
-    name: organisation.name,
+    name,
     hidden: false,
     userCreated: true,
   })

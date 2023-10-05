@@ -11,7 +11,7 @@ const { getAccessAndOrganisation } = require('./util')
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { startDate, endDate } = req.body
+  const { name, startDate, endDate } = req.body
 
   if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
@@ -23,7 +23,7 @@ const createOrganisationSurvey = async (req, res) => {
 
   await initializeOrganisationCourseUnit(organisation)
 
-  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { startDate, endDate })
+  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
 
   const survey = await getOrganisationSurvey(feedbackTarget.id)
 
