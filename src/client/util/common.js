@@ -82,3 +82,6 @@ export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX
 
 // eslint-disable-next-line no-undef
 export const WORKLOAD_QUESTION_ID_ORDER = CONFIG?.WORKLOAD_QUESTION_ID_ORDER ?? []
+
+// eslint-disable-next-line no-undef
+export const ORGANISATION_SURVEYS_ENABLED = CONFIG?.ORGANISATION_SURVEYS_ENABLED

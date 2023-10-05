@@ -1,5 +1,7 @@
 import { useMutation } from 'react-query'
 
+import { queryKey } from './useOrganisationSurveys'
+import queryClient from '../util/queryClient'
 import apiClient from '../util/apiClient'
 
 export const useCreateOrganisationSurveyMutation = organisationCode => {
@@ -13,7 +15,11 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
     return data
   }
 
-  const mutation = useMutation(mutationFn)
+  const mutation = useMutation(mutationFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey)
+    },
+  })
 
   return mutation
 }
