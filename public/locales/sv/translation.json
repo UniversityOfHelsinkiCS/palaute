@@ -341,6 +341,10 @@
     "cannotCloseImmediatelyWhenOpen": "Responsen har stängts eller kommer att stängas om en dag",
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
   },
+  "organisationSurveys": {
+    "heading": "Organisaation kyselyt",
+    "addSurvey": "Luo uusi organisaatiokysely"
+  },
   "courseSummary": {
     "heading": "Sammandrag av kursens respons",
     "universityLevelQuestions": "Frågor på universitetsnivå",

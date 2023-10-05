@@ -342,6 +342,10 @@
     "cannotCloseImmediatelyWhenOpen": "Feedback either closes within a day or has already ended",
     "cannotOpenImmediately": "Feedback is already open or has ended"
   },
+  "organisationSurveys": {
+    "heading": "Organisation Surveys",
+    "addSurvey": "Create new organisation survey"
+  },
   "courseSummary": {
     "heading": "Summary of course feedback",
     "universityLevelQuestions": "University level questions",

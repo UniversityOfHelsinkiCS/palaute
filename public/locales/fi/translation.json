@@ -342,6 +342,10 @@
     "cannotCloseImmediatelyWhenOpen": "Palaute on sulkeutunut tai sulkeutuu päivän kuluttua",
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
   },
+  "organisationSurveys": {
+    "heading": "Organisaation kyselyt",
+    "addSurvey": "Luo uusi organisaatiokysely"
+  },
   "courseSummary": {
     "heading": "Kurssipalautteiden yhteenveto",
     "universityLevelQuestions": "Yliopistotason kysymykset",
