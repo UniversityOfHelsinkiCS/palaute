@@ -79,7 +79,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
 
 const getOrganisationSurvey = async feedbackTargetId => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
-    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'name', 'hidden', 'feedbackType', 'publicQuestionIds'],
     include: [
       {
         model: CourseUnit,
@@ -107,8 +107,40 @@ const getOrganisationSurvey = async feedbackTargetId => {
   return organisationSurvey
 }
 
+const getSurveysForOrganisation = async organisationId => {
+  const organisationSurveys = await FeedbackTarget.findAll({
+    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'name', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    where: {
+      courseUnitId: organisationId,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+    ],
+  })
+
+  return organisationSurveys
+}
+
 module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   getOrganisationSurvey,
+  getSurveysForOrganisation,
 }
