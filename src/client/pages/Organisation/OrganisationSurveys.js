@@ -43,7 +43,7 @@ const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
               <Button disabled={disabled} color="primary" variant="contained" type="submit">
                 {t('common:save')}
               </Button>
-              <Button color="error" variant="contained" type="button" onClick={close}>
+              <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={close}>
                 {t('common:hide')}
               </Button>
             </Box>
