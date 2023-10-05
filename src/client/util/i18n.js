@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next'
 import HttpApi from 'i18next-http-backend'
 
 import LanguageDetector from 'i18next-browser-languagedetector'
-import { basePath, inProduction, LANGUAGES, TRANSLATION_NAMESPACE } from './common'
+import { basePath, LANGUAGES, TRANSLATION_NAMESPACE } from './common'
 
 /**
  * Load the translation files using Http backend, from public server resources (public/locales/)
