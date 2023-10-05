@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
+import OrganisationSurveys from './OrganisationSurveys'
 import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -118,6 +119,13 @@ const Organisation = () => {
           hasAccess={hasWriteAccess}
           redirect={`${url}/summary`}
           component={EditSurvey}
+        />
+
+        <ProtectedRoute
+          path={`${path}/organisation-surveys`}
+          hasAccess={hasWriteAccess}
+          redirect={`${url}/summary`}
+          component={OrganisationSurveys}
         />
 
         <Route path={`${path}/summary`}>
