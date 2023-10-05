@@ -7,6 +7,7 @@ import { Form, Formik } from 'formik'
 import { useParams } from 'react-router-dom'
 
 import useOrganisation from '../../hooks/useOrganisation'
+import useOrganisationSurveys from '../../hooks/useOrganisationSurveys'
 
 import Title from '../../components/common/Title'
 import FormikTextField from '../../components/common/FormikTextField'
@@ -58,6 +59,7 @@ const OrganisationSurveys = () => {
   const [showForm, setShowForm] = useState(false)
   const { code } = useParams()
   const { organisation, isLoading: isOrganisationLoading } = useOrganisation(code)
+  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const { t } = useTranslation()
 
   const handleSubmit = async values => {
@@ -67,9 +69,11 @@ const OrganisationSurveys = () => {
 
   const handleClose = () => setShowForm(!showForm)
 
-  if (isOrganisationLoading) {
+  if (isOrganisationLoading || isOrganisationSurveysLoading) {
     return <LoadingProgress />
   }
+
+  console.log(surveys)
 
   return (
     <>
