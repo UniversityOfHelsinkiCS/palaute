@@ -11,7 +11,7 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
       startDate,
       endDate,
       studentNumbers,
-      teachers: teacherIds,
+      teacherIds,
     })
 
     return data

@@ -5,7 +5,6 @@ import { Card, CardContent, Box, Button, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 
 import { useParams } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 
 import useOrganisationSurveys from './useOrganisationSurveys'
 import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
@@ -66,7 +65,7 @@ const OrganisationSurveys = () => {
   const mutation = useCreateOrganisationSurveyMutation(code)
 
   const createOrganisationSurvey = useInteractiveMutation(surveyValues =>
-    mutation.mutateAsync({ ...surveyValues, studentNumbers: [], teachers: [] })
+    mutation.mutateAsync({ ...surveyValues, studentNumbers: [], teacherIds: [] })
   )
 
   const handleSubmit = async values => {
