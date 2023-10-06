@@ -86,13 +86,13 @@ const createUserFeedbackTargets = async (feedbackTarget, studentNumbers, teacher
       studentNumber: { [Op.in]: studentNumbers },
     },
     attributes: ['id'],
-  }).map(student => student.id)
+  })
 
   const studentFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    students.map(studentId => ({
+    students.map(({ id }) => ({
       accessStatus: 'STUDENT',
       feedbackTargetId: feedbackTarget.id,
-      userId: studentId,
+      userId: id,
       userCreated: true,
     }))
   )
