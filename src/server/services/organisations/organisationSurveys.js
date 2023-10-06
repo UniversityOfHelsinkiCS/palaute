@@ -56,7 +56,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
     id: uuidv4(),
     endDate,
     startDate,
-    name: organisation.name,
+    name,
     teachingLanguages: LANGUAGES,
     userCreated: true,
   })
