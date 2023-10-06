@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 
 const { LANGUAGES } = require('../../util/config')
@@ -7,7 +8,9 @@ const {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
   FeedbackTarget,
+  UserFeedbackTarget,
   Organisation,
+  User,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
@@ -77,6 +80,26 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
+const createUserFeedbackTargets = async (feedbackTarget, studentNumbers) => {
+  const students = await User.findAll({
+    where: {
+      studentNumber: { [Op.in]: studentNumbers },
+    },
+    attributes: ['id'],
+  }).map(student => student.id)
+
+  const studentFeedbackTargets = await UserFeedbackTarget.bulkCreate(
+    students.map(studentId => ({
+      accessStatus: 'STUDENT',
+      feedbackTargetId: feedbackTarget.id,
+      userId: studentId,
+      userCreated: true,
+    }))
+  )
+
+  return studentFeedbackTargets
+}
+
 const getOrganisationSurvey = async feedbackTargetId => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: ['id', 'courseUnitId', 'courseRealisationId', 'name', 'hidden', 'feedbackType', 'publicQuestionIds'],
@@ -141,6 +164,7 @@ const getSurveysForOrganisation = async organisationId => {
 module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
+  createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
 }

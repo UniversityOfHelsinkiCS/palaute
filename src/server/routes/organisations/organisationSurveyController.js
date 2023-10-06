@@ -3,6 +3,7 @@ const { Router } = require('express')
 const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
+  createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
 } = require('../../services/organisations/organisationSurveys')
@@ -29,7 +30,7 @@ const getOrganisationSurveys = async (req, res) => {
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { name, startDate, endDate } = req.body
+  const { name, startDate, endDate, studentNumbers } = req.body
 
   if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
@@ -43,9 +44,14 @@ const createOrganisationSurvey = async (req, res) => {
 
   const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
 
+  const userFeedbackTargets = await createUserFeedbackTargets(feedbackTarget, studentNumbers)
+
   const survey = await getOrganisationSurvey(feedbackTarget.id)
 
-  return res.status(201).send(survey)
+  return res.status(201).send({
+    ...survey.dataValues,
+    userFeedbackTargets,
+  })
 }
 
 const router = Router()
