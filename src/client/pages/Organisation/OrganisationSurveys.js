@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, Typography } from '@mui/material'
+import { Card, CardContent, Box, Button, Typography, ListItemText } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -14,7 +14,7 @@ import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 import Title from '../../components/common/Title'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
-import { formateDates } from './utils'
+import { getStartAndEndString } from '../../util/getDateRangeString'
 
 const styles = {
   realisationContainer: {
@@ -34,27 +34,49 @@ const styles = {
   },
 }
 
-const OrganisationSurvey = ({ organisationSurvey }) => {
-  const { i18n } = useTranslation()
+const OrganisationSurveyItem = ({ organisationSurvey }) => {
+  const { t, i18n } = useTranslation()
   const { language } = i18n
-  const organisationSurveyDates = formateDates(organisationSurvey.courseRealisation)
+
+  const { courseRealisation } = organisationSurvey
+  const viewPath = `/targets/${organisationSurvey.id}/feedback`
+
+  const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
+  const periodInfo = t('common:feedbackOpenPeriod', {
+    opensAt: startDate,
+    closesAt: endDate,
+  })
 
   return (
-    <Box key={organisationSurvey.id} sx={styles.realisationContainer}>
+    <Card sx={{ mb: 3 }}>
+      <CardContent>
+        <Typography variant="body1" fontWeight={600} component="h2">
+          {organisationSurvey.name[language] || organisationSurvey.name}
+        </Typography>
+
+        <ListItemText primary={periodInfo} />
+
+        <Button color="primary" variant="outlined" component={Link} to={viewPath}>
+          {t('userFeedbacks:viewFeedbackSummary')}
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+
+/* <Box key={organisationSurvey.id} sx={styles.realisationContainer}>
       <Link to={`/targets/${organisationSurvey.id}/feedback`} sx={styles.realisationTitle} replace>
         {organisationSurvey.name[language] || organisationSurvey.name}
       </Link>
       <Typography variant="body2" component="p" sx={styles.dates}>
         {organisationSurveyDates}
       </Typography>
-    </Box>
-  )
-}
+    </Box> */
 
 const OrganisationSurveys = () => {
-  const [showForm, setShowForm] = useState(false)
   const { t } = useTranslation()
   const { code } = useParams()
+  const [showForm, setShowForm] = useState(false)
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const mutation = useCreateOrganisationSurveyMutation(code)
 
@@ -114,7 +136,7 @@ const OrganisationSurveys = () => {
         />
 
         {surveys.map(survey => (
-          <OrganisationSurvey key={survey.id} organisationSurvey={survey} />
+          <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />
         ))}
       </Box>
     </>
