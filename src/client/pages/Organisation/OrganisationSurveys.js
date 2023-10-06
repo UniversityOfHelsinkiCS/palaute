@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, Box, Button, Typography } from '@mui/material'
-import { Form, Formik } from 'formik'
+import { Box, Button, Typography } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
 import useOrganisationSurveys from './useOrganisationSurveys'
+import OrganisationSurveyEditor from './OrganisationSurveyEditor'
 import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
 
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
 import Title from '../../components/common/Title'
-import FormikTextField from '../../components/common/FormikTextField'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import FormikDatePicker from '../../components/common/FormikDatePicker'
 
 import { formateDates } from './utils'
 
@@ -36,54 +34,15 @@ const styles = {
   },
 }
 
-const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
-  const { t } = useTranslation()
-
-  const initialValues = {
-    name: '',
-    startDate: new Date(),
-    endDate: new Date(),
-  }
-
-  if (!isOpen) return null
-
-  return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
-      {({ isSubmitting }) => {
-        const disabled = isSubmitting
-
-        return (
-          <Form>
-            <Card>
-              <CardContent>
-                <FormikTextField name="name" label="Name of the survey" id="name" fullWidth />
-                <FormikDatePicker name="startDate" label="Start date" id="startDate" />
-                <FormikDatePicker name="endDate" label="End date" id="endDate" />
-              </CardContent>
-            </Card>
-
-            <Box mt={2}>
-              <Button disabled={disabled} color="primary" variant="contained" type="submit">
-                {t('common:save')}
-              </Button>
-              <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={close}>
-                {t('common:cancel')}
-              </Button>
-            </Box>
-          </Form>
-        )
-      }}
-    </Formik>
-  )
-}
-
 const OrganisationSurvey = ({ organisationSurvey }) => {
+  const { i18n } = useTranslation()
+  const { language } = i18n
   const organisationSurveyDates = formateDates(organisationSurvey.courseRealisation)
 
   return (
     <Box key={organisationSurvey.id} sx={styles.realisationContainer}>
       <Link to={`/targets/${organisationSurvey.id}/feedback`} sx={styles.realisationTitle} replace>
-        {organisationSurvey.name}
+        {organisationSurvey.name[language] || organisationSurvey.name}
       </Link>
       <Typography variant="body2" component="p" sx={styles.dates}>
         {organisationSurveyDates}
@@ -98,6 +57,16 @@ const OrganisationSurveys = () => {
   const { code } = useParams()
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const mutation = useCreateOrganisationSurveyMutation(code)
+
+  const initialValues = {
+    name: {
+      fi: '',
+      en: '',
+      sv: '',
+    },
+    startDate: new Date(),
+    endDate: new Date(),
+  }
 
   const createOrganisationSurvey = useInteractiveMutation(surveyValues =>
     mutation.mutateAsync({ ...surveyValues, studentNumbers: [], teacherIds: [] })
@@ -137,7 +106,12 @@ const OrganisationSurveys = () => {
           </Button>
         </Box>
 
-        <OrganisationSurveyForm isOpen={showForm} close={handleClose} handleSubmit={handleSubmit} />
+        <OrganisationSurveyEditor
+          initialValues={initialValues}
+          handleSubmit={handleSubmit}
+          editing={showForm}
+          onStopEditing={handleClose}
+        />
 
         {surveys.map(survey => (
           <OrganisationSurvey key={survey.id} organisationSurvey={survey} />
