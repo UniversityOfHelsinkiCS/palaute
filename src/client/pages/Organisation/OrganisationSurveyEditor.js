@@ -44,6 +44,8 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
           label={t('organisationSettings:startDate')}
           id="organisation-survey-startDate"
         />
+      </Grid>
+      <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="endDate" label={t('organisationSettings:endDate')} id="organisation-survey-endDate" />
       </Grid>
     </Grid>
