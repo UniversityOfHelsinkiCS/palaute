@@ -65,7 +65,9 @@ const OrganisationSurveys = () => {
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const mutation = useCreateOrganisationSurveyMutation(code)
 
-  const createOrganisationSurvey = useInteractiveMutation(surveyValues => mutation.mutateAsync(surveyValues))
+  const createOrganisationSurvey = useInteractiveMutation(surveyValues =>
+    mutation.mutateAsync({ ...surveyValues, studentNumbers: [], teachers: [] })
+  )
 
   const handleSubmit = async values => {
     setShowForm(!showForm)
