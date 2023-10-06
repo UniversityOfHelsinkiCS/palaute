@@ -30,7 +30,7 @@ const getOrganisationSurveys = async (req, res) => {
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { name, startDate, endDate, studentNumbers } = req.body
+  const { name, startDate, endDate, studentNumbers, teachers } = req.body
 
   if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
@@ -44,7 +44,7 @@ const createOrganisationSurvey = async (req, res) => {
 
   const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
 
-  const userFeedbackTargets = await createUserFeedbackTargets(feedbackTarget, studentNumbers)
+  const userFeedbackTargets = await createUserFeedbackTargets(feedbackTarget, studentNumbers, teachers)
 
   const survey = await getOrganisationSurvey(feedbackTarget.id)
 

@@ -80,7 +80,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
-const createUserFeedbackTargets = async (feedbackTarget, studentNumbers) => {
+const createUserFeedbackTargets = async (feedbackTarget, studentNumbers, teachers) => {
   const students = await User.findAll({
     where: {
       studentNumber: { [Op.in]: studentNumbers },
@@ -97,7 +97,17 @@ const createUserFeedbackTargets = async (feedbackTarget, studentNumbers) => {
     }))
   )
 
-  return studentFeedbackTargets
+  const teacherFeedbackTargets = await UserFeedbackTarget.bulkCreate(
+    teachers.map(teacherId => ({
+      accessStatus: 'RESPONSIBLE_TEACHER',
+      feedbackTargetId: feedbackTarget.id,
+      userId: teacherId,
+      isAdministrativePerson: true,
+      userCreated: true,
+    }))
+  )
+
+  return studentFeedbackTargets.concat(teacherFeedbackTargets)
 }
 
 const getOrganisationSurvey = async feedbackTargetId => {
