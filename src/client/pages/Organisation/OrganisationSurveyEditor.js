@@ -22,25 +22,33 @@ const LanguageOpenEditor = ({ name, language }) => {
   )
 }
 
-const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => (
-  <Grid spacing={4} container>
-    {languages.map(language => (
-      <Grid md={4} sm={12} xs={12} item key={language}>
-        <Box mb={2}>
-          <Typography variant="h6" component="h2">
-            {language.toUpperCase()}
-          </Typography>
-        </Box>
+const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
+  const { t } = useTranslation()
 
-        <LanguageOpenEditor name="name" language={language} />
+  return (
+    <Grid spacing={4} container>
+      {languages.map(language => (
+        <Grid md={4} sm={12} xs={12} item key={language}>
+          <Box mb={2}>
+            <Typography variant="h6" component="h2">
+              {language.toUpperCase()}
+            </Typography>
+          </Box>
+
+          <LanguageOpenEditor name="name" language={language} />
+        </Grid>
+      ))}
+      <Grid md={6} sm={12} xs={12} item>
+        <FormikDatePicker
+          name="startDate"
+          label={t('organisationSettings:startDate')}
+          id="organisation-survey-startDate"
+        />
+        <FormikDatePicker name="endDate" label={t('organisationSettings:endDate')} id="organisation-survey-endDate" />
       </Grid>
-    ))}
-    <Grid md={6} sm={12} xs={12} item>
-      <FormikDatePicker name="startDate" label="Start date" id="organisation-survey-startDate" />
-      <FormikDatePicker name="endDate" label="End date" id="organisation-survey-endDate" />
     </Grid>
-  </Grid>
-)
+  )
+}
 
 const OrganisationSurveyEditor = ({ initialValues, handleSubmit, editing, onStopEditing }) => {
   const { t } = useTranslation()
