@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Card, CardContent, Box, Button, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import useOrganisationSurveys from './useOrganisationSurveys'
 import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
@@ -15,6 +15,26 @@ import Title from '../../components/common/Title'
 import FormikTextField from '../../components/common/FormikTextField'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import FormikDatePicker from '../../components/common/FormikDatePicker'
+
+import { formateDates } from './utils'
+
+const styles = {
+  realisationContainer: {
+    marginTop: 4,
+    marginBottom: 6,
+  },
+  dates: {
+    color: '#646464',
+    marginBottom: 3,
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    '@media print': {
+      display: 'none',
+    },
+  },
+}
 
 const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
   const { t } = useTranslation()
@@ -57,6 +77,21 @@ const OrganisationSurveyForm = ({ isOpen, close, handleSubmit }) => {
   )
 }
 
+const OrganisationSurvey = ({ organisationSurvey }) => {
+  const organisationSurveyDates = formateDates(organisationSurvey.courseRealisation)
+
+  return (
+    <Box key={organisationSurvey.id} sx={styles.realisationContainer}>
+      <Link to={`/targets/${organisationSurvey.id}/feedback`} sx={styles.realisationTitle} replace>
+        {organisationSurvey.name}
+      </Link>
+      <Typography variant="body2" component="p" sx={styles.dates}>
+        {organisationSurveyDates}
+      </Typography>
+    </Box>
+  )
+}
+
 const OrganisationSurveys = () => {
   const [showForm, setShowForm] = useState(false)
   const { t } = useTranslation()
@@ -80,8 +115,6 @@ const OrganisationSurveys = () => {
     return <LoadingProgress />
   }
 
-  console.log(surveys)
-
   return (
     <>
       <Title>{t('common:courseSummaryPage')}</Title>
@@ -91,11 +124,8 @@ const OrganisationSurveys = () => {
             {t('organisationSurveys:heading')}
           </Typography>
         </Box>
-        <Box mt={4} />
 
-        <OrganisationSurveyForm isOpen={showForm} close={handleClose} handleSubmit={handleSubmit} />
-
-        <Box mt={4}>
+        <Box sx={styles.buttonContainer}>
           <Button
             color="primary"
             onClick={() => {
@@ -106,6 +136,12 @@ const OrganisationSurveys = () => {
             {t('organisationSurveys:addSurvey')}
           </Button>
         </Box>
+
+        <OrganisationSurveyForm isOpen={showForm} close={handleClose} handleSubmit={handleSubmit} />
+
+        {surveys.map(survey => (
+          <OrganisationSurvey key={survey.id} organisationSurvey={survey} />
+        ))}
       </Box>
     </>
   )
