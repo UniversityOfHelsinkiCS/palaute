@@ -74,6 +74,8 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
     courseRealisationId: organisationCourseRealisation.id,
     name,
     hidden: false,
+    opensAt: startDate,
+    closesAt: endDate,
     userCreated: true,
   })
 
