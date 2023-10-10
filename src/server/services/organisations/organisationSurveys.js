@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 
+const logger = require('../../util/logger')
 const { sequelize } = require('../../db/dbConnection')
 const { LANGUAGES } = require('../../util/config')
 const {
@@ -181,49 +182,65 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
   const t = await sequelize.transaction()
 
   try {
+    logger.info(`Deleting organisation survey ${feedbackTargetId}`)
+
     const { courseRealisationId } = await FeedbackTarget.findByPk(feedbackTargetId)
 
-    await UserFeedbackTarget.destroy({
+    const ufbt = await UserFeedbackTarget.destroy({
       where: {
         feedbackTargetId,
       },
     })
 
-    await Survey.destroy({
+    logger.info(`Deleted ${ufbt} user feedback targets`)
+
+    const survey = await Survey.destroy({
       where: {
         feedbackTargetId,
       },
     })
 
-    await FeedbackTargetLog.destroy({
+    logger.info(`Deleted ${survey} surveys`)
+
+    const log = await FeedbackTargetLog.destroy({
       where: {
         feedbackTargetId,
       },
     })
 
-    await FeedbackTarget.destroy({
+    logger.info(`Deleted ${log} feedback target logs`)
+
+    const fbt = await FeedbackTarget.destroy({
       where: {
         id: feedbackTargetId,
       },
     })
 
-    await CourseRealisationsOrganisation.destroy({
+    logger.info(`Deleted ${fbt} feedback targets`)
+
+    const org = await CourseRealisationsOrganisation.destroy({
       where: {
         courseRealisationId,
       },
     })
 
-    await CourseRealisationsTag.destroy({
+    logger.info(`Deleted ${org} course realisation organisations`)
+
+    const tag = await CourseRealisationsTag.destroy({
       where: {
         courseRealisationId,
       },
     })
 
-    await CourseRealisation.destroy({
+    logger.info(`Deleted ${tag} course realisation tags`)
+
+    const cu = await CourseRealisation.destroy({
       where: {
         id: courseRealisationId,
       },
     })
+
+    logger.info(`Deleted ${cu} course realisations`)
   } catch (err) {
     await t.rollback()
     throw err
