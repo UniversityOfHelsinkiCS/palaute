@@ -64,19 +64,19 @@ const OrganisationSurveyEditor = ({ initialValues, handleSubmit, editing, onStop
 
         return (
           <Form>
-            <Card>
+            <Card sx={{ mb: 4 }}>
               <CardContent>
                 <OrganisationSurveyForm />
               </CardContent>
+              <Box sx={{ m: 2 }}>
+                <Button disabled={disabled} color="primary" variant="contained" type="submit">
+                  {t('common:save')}
+                </Button>
+                <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
+                  {t('common:cancel')}
+                </Button>
+              </Box>
             </Card>
-            <Box mt={2}>
-              <Button disabled={disabled} color="primary" variant="contained" type="submit">
-                {t('common:save')}
-              </Button>
-              <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
-                {t('common:cancel')}
-              </Button>
-            </Box>
           </Form>
         )
       }}
