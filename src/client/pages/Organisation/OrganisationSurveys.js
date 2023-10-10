@@ -97,11 +97,11 @@ const OrganisationSurveys = () => {
     },
     startDate: new Date(),
     endDate: new Date(),
+    studentNumbers: [],
+    teacherIds: [],
   }
 
-  const createOrganisationSurvey = useInteractiveMutation(surveyValues =>
-    mutation.mutateAsync({ ...surveyValues, studentNumbers: [], teacherIds: [] })
-  )
+  const createOrganisationSurvey = useInteractiveMutation(surveyValues => mutation.mutateAsync({ ...surveyValues }))
 
   const handleSubmit = async values => {
     setShowForm(!showForm)
