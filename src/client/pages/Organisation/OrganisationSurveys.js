@@ -7,7 +7,10 @@ import { Link, useParams } from 'react-router-dom'
 
 import useOrganisationSurveys from './useOrganisationSurveys'
 import OrganisationSurveyEditor from './OrganisationSurveyEditor'
-import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
+import {
+  useCreateOrganisationSurveyMutation,
+  useDeleteOrganisationSurveyMutation,
+} from './useOrganisationSurveyMutation'
 
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
@@ -33,6 +36,20 @@ const styles = {
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
+  const { code } = useParams()
+
+  const mutation = useDeleteOrganisationSurveyMutation(code)
+  const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
+    success: t('organisationSettings:removeSuccess'),
+    error: t('organisationSettings:removeError'),
+  })
+
+  const handleDelete = async () => {
+    // eslint-disable-next-line no-alert
+    if (!window.confirm(t('organisationSettings:confirmRemoveSurvey'))) return
+
+    await deleteOrganisationSurvey(organisationSurvey.id)
+  }
 
   const { courseRealisation } = organisationSurvey
   const viewPath = `/targets/${organisationSurvey.id}/feedback`
@@ -56,6 +73,10 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         <Button color="primary" variant="outlined" sx={{ mt: 2 }} component={Link} to={viewPath}>
           {t('userFeedbacks:viewFeedbackSummary')}
+        </Button>
+
+        <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+          {t('organisationSettings:remove')}
         </Button>
       </CardContent>
     </Card>

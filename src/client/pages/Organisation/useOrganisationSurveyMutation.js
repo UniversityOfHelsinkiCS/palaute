@@ -25,3 +25,17 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
 
   return mutation
 }
+
+export const useDeleteOrganisationSurveyMutation = organisationCode => {
+  const mutationFn = async surveyId => {
+    await apiClient.delete(`/organisations/${organisationCode}/surveys/${surveyId}`)
+  }
+
+  const mutation = useMutation(mutationFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey)
+    },
+  })
+
+  return mutation
+}
