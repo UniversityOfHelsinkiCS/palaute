@@ -6,6 +6,7 @@ const {
   createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
+  deleteOrganisationSurvey,
 } = require('../../services/organisations/organisationSurveys')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
@@ -54,9 +55,27 @@ const createOrganisationSurvey = async (req, res) => {
   })
 }
 
+const removeOrganisationSurvey = async (req, res) => {
+  const { user } = req
+  const { code, id } = req.params
+
+  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
+
+  const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    admin: true,
+  })
+
+  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can remove organisation surveys')
+
+  await deleteOrganisationSurvey(id)
+
+  return res.status(204).send()
+}
+
 const router = Router()
 
 router.get('/:code/surveys', getOrganisationSurveys)
 router.post('/:code/surveys', createOrganisationSurvey)
+router.delete('/:code/surveys/:id', removeOrganisationSurvey)
 
 module.exports = router

@@ -1,15 +1,19 @@
 const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 
+const { sequelize } = require('../../db/dbConnection')
 const { LANGUAGES } = require('../../util/config')
 const {
   CourseUnit,
   CourseRealisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  CourseRealisationsTag,
   FeedbackTarget,
+  FeedbackTargetLog,
   UserFeedbackTarget,
   Organisation,
+  Survey,
   User,
 } = require('../../models')
 
@@ -173,10 +177,64 @@ const getSurveysForOrganisation = async organisationId => {
   return organisationSurveys
 }
 
+const deleteOrganisationSurvey = async feedbackTargetId => {
+  const t = await sequelize.transaction()
+
+  try {
+    const { courseRealisationId } = await FeedbackTarget.findByPk(feedbackTargetId)
+
+    await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId,
+      },
+    })
+
+    await Survey.destroy({
+      where: {
+        feedbackTargetId,
+      },
+    })
+
+    await FeedbackTargetLog.destroy({
+      where: {
+        feedbackTargetId,
+      },
+    })
+
+    await FeedbackTarget.destroy({
+      where: {
+        id: feedbackTargetId,
+      },
+    })
+
+    await CourseRealisationsOrganisation.destroy({
+      where: {
+        courseRealisationId,
+      },
+    })
+
+    await CourseRealisationsTag.destroy({
+      where: {
+        courseRealisationId,
+      },
+    })
+
+    await CourseRealisation.destroy({
+      where: {
+        id: courseRealisationId,
+      },
+    })
+  } catch (err) {
+    await t.rollback()
+    throw err
+  }
+}
+
 module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
+  deleteOrganisationSurvey,
 }
