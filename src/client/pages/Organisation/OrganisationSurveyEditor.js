@@ -1,10 +1,13 @@
-import React from 'react'
-import { Card, CardContent, Button, Box, Grid, Typography } from '@mui/material'
-import { Form, Formik } from 'formik'
+import React, { useState } from 'react'
+import { Autocomplete, Card, CardContent, Button, Box, Grid, Typography, TextField } from '@mui/material'
+import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { debounce } from 'lodash'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
 import FormikTextField from '../../components/common/FormikTextField'
+
+import apiClient from '../../util/apiClient'
 
 const LanguageOpenEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
@@ -17,6 +20,52 @@ const LanguageOpenEditor = ({ name, language }) => {
         name={`${name}.${language}`}
         label={t('organisationSurveys:newSurveyName')}
         fullWidth
+      />
+    </Box>
+  )
+}
+
+const CoordinatingTeachersSelector = () => {
+  const [potentialUsers, setPotentialUsers] = useState([])
+  const { t } = useTranslation()
+  const formikProps = useFormikContext()
+
+  const handleChange = debounce(async ({ target }) => {
+    const query = target.value
+    if (query.length < 5) return
+
+    const params = {
+      email: query,
+    }
+
+    const { data } = await apiClient.get('/users', { params })
+    const { persons } = data
+
+    setPotentialUsers(persons)
+  }, 400)
+
+  return (
+    <Box>
+      <Typography variant="body1" mb={2}>
+        {t('organisationSettings:newCorrespondent')}
+      </Typography>
+
+      <Autocomplete
+        multiple
+        fullWidth
+        name="teacherIds"
+        defaultValue={[]}
+        onChange={(_, teachers) => {
+          const teacherIds = teachers.map(t => t.id)
+
+          return formikProps.setFieldValue('teacherIds', teacherIds)
+        }}
+        options={potentialUsers}
+        onInputChange={handleChange}
+        getOptionLabel={option => option.email}
+        renderInput={params => (
+          <TextField {...params} label={t('organisationSettings:email')} id="default-coordinating-teacher" />
+        )}
       />
     </Box>
   )
@@ -47,6 +96,9 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
       </Grid>
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} id="organisation-survey-endDate" />
+      </Grid>
+      <Grid xs={12} item>
+        <CoordinatingTeachersSelector />
       </Grid>
     </Grid>
   )
