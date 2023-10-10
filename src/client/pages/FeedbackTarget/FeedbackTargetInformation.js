@@ -14,7 +14,7 @@ import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
 
 const FeedbackTargetInformation = () => {
-  const { feedbackTarget, organisation, isStudent, isTeacher } = useFeedbackTargetContext()
+  const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -44,6 +44,7 @@ const FeedbackTargetInformation = () => {
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
   const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
+  const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = feedbackTarget?.tags?.length > 0
   const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
@@ -163,6 +164,8 @@ const FeedbackTargetInformation = () => {
               <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />
 
               {isTeacher && <LinkButton to={t('links:wikiTeacherHelp')} title={t('footer:wikiLink')} external />}
+
+              {isAdmin && <LinkButton to={sisuPageUrl} title={t('feedbackTargetView:courseSisuPage')} external />}
             </Box>
           </Box>
         </Box>

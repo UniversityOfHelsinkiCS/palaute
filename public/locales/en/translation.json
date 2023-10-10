@@ -90,7 +90,8 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
@@ -465,6 +466,7 @@
     "feedbackPeriod": "Feedback open",
     "coursePage": "Course page",
     "courseSummary": "Summary of course's instances",
+    "courseSisuPage": "Course Sisu page",
     "teachers": "Teachers",
     "responsibleTeachers": "Responsible teachers",
     "administrativePersons": "Administrative persons",

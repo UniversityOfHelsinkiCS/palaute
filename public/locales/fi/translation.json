@@ -90,7 +90,8 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Kurssipalautteeni",
@@ -464,6 +465,7 @@
     "feedbackPeriod": "Palaute käynnissä",
     "coursePage": "Kurssisivu",
     "courseSummary": "Kurssin toteutusten yhteenveto",
+    "courseSisuPage": "Kurssin Sisu sivu",
     "teachers": "Opettajat",
     "responsibleTeachers": "Vastuuopettajat",
     "administrativePersons": "Hallintohenkilöt",

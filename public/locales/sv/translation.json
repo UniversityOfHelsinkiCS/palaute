@@ -88,7 +88,8 @@
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
     "courseUnitPage": "",
-    "courseRealisationPage": ""
+    "courseRealisationPage": "",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -463,6 +464,7 @@
     "editFeedbackTab": "Redigera responsen",
     "coursePage": "Kurssida",
     "courseSummary": "Sammandrag av kursens genomföranden",
+    "courseSisuPage": "Course Sisu page",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
     "administrativePersons": "Administrativ person",
