@@ -15,7 +15,7 @@ const LanguageOpenEditor = ({ name, language }) => {
       <FormikTextField
         id={`organisation-survey-${language}-${name}`}
         name={`${name}.${language}`}
-        label={t('questionEditor:label')}
+        label={t('organisationSurveys:newSurveyName')}
         fullWidth
       />
     </Box>
@@ -41,12 +41,12 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker
           name="startDate"
-          label={t('organisationSettings:startDate')}
+          label={t('organisationSurveys:startDate')}
           id="organisation-survey-startDate"
         />
       </Grid>
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker name="endDate" label={t('organisationSettings:endDate')} id="organisation-survey-endDate" />
+        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} id="organisation-survey-endDate" />
       </Grid>
     </Grid>
   )

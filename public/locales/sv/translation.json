@@ -345,7 +345,10 @@
   },
   "organisationSurveys": {
     "heading": "Organisaation kyselyt",
-    "addSurvey": "Luo uusi organisaatiokysely"
+    "addSurvey": "Luo uusi organisaatiokysely",
+    "newSurveyName": "Kyselyn nimi",
+    "startDate": "Från och med",
+    "endDate": "till"
   },
   "courseSummary": {
     "heading": "Sammandrag av kursens respons",
