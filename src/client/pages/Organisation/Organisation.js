@@ -12,6 +12,7 @@ import {
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
+import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
@@ -83,7 +84,7 @@ const Organisation = () => {
           {hasWriteAccess && (
             <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
           )}
-          {isAdmin && (
+          {ORGANISATION_SURVEYS_ENABLED && isAdmin && (
             <RouterTab label={t('organisationSettings:organisationSurveysTab')} to={`${url}/organisation-surveys`} />
           )}
           <RouterTab
@@ -121,12 +122,14 @@ const Organisation = () => {
           component={EditSurvey}
         />
 
-        <ProtectedRoute
-          path={`${path}/organisation-surveys`}
-          hasAccess={hasWriteAccess}
-          redirect={`${url}/summary`}
-          component={OrganisationSurveys}
-        />
+        {ORGANISATION_SURVEYS_ENABLED && (
+          <ProtectedRoute
+            path={`${path}/organisation-surveys`}
+            hasAccess={hasWriteAccess}
+            redirect={`${url}/summary`}
+            component={OrganisationSurveys}
+          />
+        )}
 
         <Route path={`${path}/summary`}>
           <OrganisationSummary />
