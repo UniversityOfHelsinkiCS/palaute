@@ -348,6 +348,8 @@
     "heading": "Organisaation kyselyt",
     "addSurvey": "Luo uusi organisaatiokysely",
     "newSurveyName": "Kyselyn nimi",
+    "responsibleTeacherTitle": "Lisää uusi vastuuopettaja",
+    "responsibleTeacherEmail": "Sähköposti",
     "startDate": "Alkaen",
     "endDate": "Loppuen"
   },

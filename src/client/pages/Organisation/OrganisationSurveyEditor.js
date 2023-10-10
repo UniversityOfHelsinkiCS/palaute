@@ -25,7 +25,7 @@ const LanguageOpenEditor = ({ name, language }) => {
   )
 }
 
-const CoordinatingTeachersSelector = () => {
+const ResponsibleTeachersSelector = () => {
   const [potentialUsers, setPotentialUsers] = useState([])
   const { t } = useTranslation()
   const formikProps = useFormikContext()
@@ -47,7 +47,7 @@ const CoordinatingTeachersSelector = () => {
   return (
     <Box>
       <Typography variant="body1" mb={2}>
-        {t('organisationSettings:newCorrespondent')}
+        {t('organisationSurveys:responsibleTeacherTitle')}
       </Typography>
 
       <Autocomplete
@@ -64,7 +64,11 @@ const CoordinatingTeachersSelector = () => {
         onInputChange={handleChange}
         getOptionLabel={option => option.email}
         renderInput={params => (
-          <TextField {...params} label={t('organisationSettings:email')} id="default-coordinating-teacher" />
+          <TextField
+            {...params}
+            label={t('organisationSurveys:responsibleTeacherEmail')}
+            id="default-reponsible-teacher"
+          />
         )}
       />
     </Box>
@@ -98,7 +102,7 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} id="organisation-survey-endDate" />
       </Grid>
       <Grid xs={12} item>
-        <CoordinatingTeachersSelector />
+        <ResponsibleTeachersSelector />
       </Grid>
     </Grid>
   )

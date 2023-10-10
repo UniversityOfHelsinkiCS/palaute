@@ -348,6 +348,8 @@
     "heading": "Organisation Surveys",
     "addSurvey": "Create new organisation survey",
     "newSurveyName": "Survey name",
+    "responsibleTeacherTitle": "Add new responsible teachers",
+    "responsibleTeacherEmail": "Email",
     "startDate": "From",
     "endDate": "To"
   },
