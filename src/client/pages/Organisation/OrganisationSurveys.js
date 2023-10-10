@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, Box, Button, Typography, ListItemText } from '@mui/material'
+import { Card, CardContent, Box, Button, Typography } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -17,10 +17,6 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 
 const styles = {
-  realisationContainer: {
-    marginTop: 4,
-    marginBottom: 6,
-  },
   dates: {
     color: '#646464',
     marginBottom: 3,
@@ -54,24 +50,17 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           {organisationSurvey.name[language] || organisationSurvey.name}
         </Typography>
 
-        <ListItemText primary={periodInfo} />
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          {periodInfo}
+        </Typography>
 
-        <Button color="primary" variant="outlined" component={Link} to={viewPath}>
+        <Button color="primary" variant="outlined" sx={{ mt: 2 }} component={Link} to={viewPath}>
           {t('userFeedbacks:viewFeedbackSummary')}
         </Button>
       </CardContent>
     </Card>
   )
 }
-
-/* <Box key={organisationSurvey.id} sx={styles.realisationContainer}>
-      <Link to={`/targets/${organisationSurvey.id}/feedback`} sx={styles.realisationTitle} replace>
-        {organisationSurvey.name[language] || organisationSurvey.name}
-      </Link>
-      <Typography variant="body2" component="p" sx={styles.dates}>
-        {organisationSurveyDates}
-      </Typography>
-    </Box> */
 
 const OrganisationSurveys = () => {
   const { t } = useTranslation()
