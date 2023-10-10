@@ -346,6 +346,7 @@
   },
   "organisationSurveys": {
     "heading": "Organisation Surveys",
+    "viewFeedbackSummary": "View survey summary",
     "addSurvey": "Create new organisation survey",
     "newSurveyName": "Survey name",
     "responsibleTeacherTitle": "Add new responsible teachers",

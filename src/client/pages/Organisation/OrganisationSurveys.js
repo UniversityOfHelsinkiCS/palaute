@@ -71,7 +71,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         </Typography>
 
         <Button color="primary" variant="outlined" sx={{ mt: 2 }} component={Link} to={viewPath}>
-          {t('userFeedbacks:viewFeedbackSummary')}
+          {t('organisationSurveys:viewFeedbackSummary')}
         </Button>
 
         <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>

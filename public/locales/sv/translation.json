@@ -345,6 +345,7 @@
   },
   "organisationSurveys": {
     "heading": "Organisaation kyselyt",
+    "viewFeedbackSummary": "Näytä kyselyn yhteenveto",
     "addSurvey": "Luo uusi organisaatiokysely",
     "newSurveyName": "Kyselyn nimi",
     "responsibleTeacherTitle": "Lisää uusi vastuuopettaja",
