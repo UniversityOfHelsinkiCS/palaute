@@ -44,7 +44,6 @@
     "dropZoneInfo1": "Drag a file here, or find it by clicking this box.",
     "dropZoneInfo2": "One .csv-ended file, under 5MB is accepted",
     "feedbackHeader": "FEEDBACK",
-    "dirtyFormPrompt": "The page has unsaved changes. Are you sure want to leave the page?",
     "actions": "Actions",
     "close": "Close",
     "required": "Required",
