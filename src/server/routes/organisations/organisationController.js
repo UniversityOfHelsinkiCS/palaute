@@ -91,7 +91,13 @@ const getOrganisationByCode = async (req, res) => {
     throw new ApplicationError(`Organisation by code ${code} is not found or it is not accessible`, 404)
   }
 
-  const { organisation, access } = theOrganisationAccess
+  const { access } = theOrganisationAccess
+
+  const organisation = await Organisation.findOne({
+    where: {
+      code,
+    },
+  })
 
   const tags = _.orderBy(await organisation.getTags(), tag => tag.name?.fi)
 
