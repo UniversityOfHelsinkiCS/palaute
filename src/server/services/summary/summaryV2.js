@@ -12,7 +12,7 @@ const {
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
-const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
+const { SUMMARY_EXCLUDED_ORG_IDS, SUMMARY_SKIP_ORG_IDS } = require('../../util/config')
 
 const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) => {
   const courseUnits = await CourseUnit.findAll({
@@ -99,17 +99,7 @@ const getOrganisationSummary = async ({ organisationId, startDate, endDate }) =>
   return organisation
 }
 
-const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, startDate, endDate, user }) => {
-  const organisationIds = await getSummaryAccessibleOrganisationIds(user)
-
-  // Todo refactor
-  const universityWideAccess =
-    user.isAdmin || user.specialGroup?.allProgrammes || user.specialGroup?.hyOne || user.specialGroup?.admin
-
-  if (!universityWideAccess && !organisationIds.includes(organisationId)) {
-    return ApplicationError.Forbidden(`User does not have access to organisation with id ${organisationId}`)
-  }
-
+const getChildOrganisations = async ({ organisationId, startDate, endDate, organisationIds, universityWideAccess }) => {
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: [
@@ -139,20 +129,64 @@ const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, st
     ],
   })
 
+  return rootOrganisation
+}
+
+const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, startDate, endDate, user }) => {
+  const organisationIds = await getSummaryAccessibleOrganisationIds(user)
+
+  // Todo configurable specialgroups
+  const universityWideAccess =
+    user.isAdmin || user.specialGroup?.allProgrammes || user.specialGroup?.hyOne || user.specialGroup?.admin
+
+  if (!universityWideAccess && !organisationIds.includes(organisationId)) {
+    return ApplicationError.Forbidden(`User does not have access to organisation with id ${organisationId}`)
+  }
+
+  // Get the main organisation and its children
+  const rootOrganisation = await getChildOrganisations({
+    organisationId,
+    startDate,
+    endDate,
+    organisationIds,
+    universityWideAccess,
+  })
+
+  // Not found? Stop here.
   if (!rootOrganisation) {
     return null
+  }
+
+  let childOrganisations = rootOrganisation.childOrganisations.map(org => org.toJSON())
+
+  // Skip some (configured) child organisations and get their children instead. Add them to the root organisations children.
+  for (const organisationToSkip of childOrganisations.filter(org => SUMMARY_SKIP_ORG_IDS.includes(org.id))) {
+    const { childOrganisations: newChildOrganisations } = await getChildOrganisations({
+      organisationId: organisationToSkip.id,
+      startDate,
+      endDate,
+      organisationIds,
+      universityWideAccess,
+    })
+
+    for (const org of newChildOrganisations) {
+      childOrganisations.push(org)
+    }
+
+    childOrganisations = childOrganisations.filter(org => org.id !== organisationToSkip.id)
   }
 
   // Each organisation may have multiple summaries if the time range is larger.
   // Merge them together.
   rootOrganisation.summary = sumSummaries(rootOrganisation.summaries)
   delete rootOrganisation.dataValues.summaries
-  for (const org of rootOrganisation.childOrganisations) {
+  for (const org of childOrganisations) {
     org.summary = sumSummaries(org.summaries)
-    delete org.dataValues.summaries
+    delete org.summaries
   }
 
   const organisation = rootOrganisation.toJSON()
+  organisation.childOrganisations = childOrganisations
 
   return organisation
 }

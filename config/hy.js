@@ -193,6 +193,12 @@ const config = {
     'hy-CUR-142349531',
   ],
 
+  SUMMARY_SKIP_ORG_IDS: [
+    'hy-org-1001813299', // Tiedekuntiin kuulumattomat laitokset
+    'hy-org-1001812245', // Yliopistonpalvelut
+    'hy-org-75261977', // Erillislaitokset
+  ],
+
   /**
    * Enabled for SOS
    */

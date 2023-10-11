@@ -168,6 +168,11 @@ const config = {
   SUMMARY_EXCLUDED_ORG_IDS: [],
 
   /**
+   * These orgs are "skipped" in the summary organisation tree, meaning that instead their child organisations are displayed directly under their parent.
+   */
+  SUMMARY_SKIP_ORG_IDS: [],
+
+  /**
    * "Feedback response given" indicator in summary is given to targets where response is written AND email about response is sent.
    * Email-field however didn't exist always, so this config value is needed. Targets whose course ended before this date get the "given" indicator
    * if the response is written even if the "email sent" field is false.
