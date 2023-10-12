@@ -178,6 +178,49 @@ const getSurveysForOrganisation = async organisationId => {
   return organisationSurveys
 }
 
+const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
+  const { name, startDate, endDate, teacherIds } = updates
+
+  const feebackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+
+  await feebackTarget.update({
+    name,
+    opensAt: startDate,
+    closesAt: endDate,
+  })
+
+  const courseRealisation = await CourseRealisation.findByPk(feebackTarget.courseRealisationId)
+
+  await courseRealisation.update({
+    name,
+    startDate,
+    endDate,
+  })
+
+  if (teacherIds) {
+    await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId,
+        accessStatus: 'RESPONSIBLE_TEACHER',
+      },
+    })
+
+    await UserFeedbackTarget.bulkCreate(
+      teacherIds.map(teacherId => ({
+        accessStatus: 'RESPONSIBLE_TEACHER',
+        feedbackTargetId,
+        userId: teacherId,
+        isAdministrativePerson: true,
+        userCreated: true,
+      }))
+    )
+  }
+
+  const survey = await getOrganisationSurvey(feedbackTargetId)
+
+  return survey
+}
+
 const deleteOrganisationSurvey = async feedbackTargetId => {
   const t = await sequelize.transaction()
 
@@ -253,5 +296,6 @@ module.exports = {
   createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
+  updateOrganisationSurvey,
   deleteOrganisationSurvey,
 }

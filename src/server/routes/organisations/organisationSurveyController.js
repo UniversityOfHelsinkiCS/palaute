@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const { Router } = require('express')
 
 const {
@@ -6,6 +7,7 @@ const {
   createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
+  updateOrganisationSurvey,
   deleteOrganisationSurvey,
 } = require('../../services/organisations/organisationSurveys')
 const { ApplicationError } = require('../../util/customErrors')
@@ -55,6 +57,25 @@ const createOrganisationSurvey = async (req, res) => {
   })
 }
 
+const editOrganisationSurvey = async (req, res) => {
+  const { user, body } = req
+  const { code, id } = req.params
+
+  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
+
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds'])
+
+  const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    admin: true,
+  })
+
+  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can update organisation surveys')
+
+  const updatedSurvey = await updateOrganisationSurvey(id, updates)
+
+  return res.send(updatedSurvey)
+}
+
 const removeOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code, id } = req.params
@@ -76,6 +97,7 @@ const router = Router()
 
 router.get('/:code/surveys', getOrganisationSurveys)
 router.post('/:code/surveys', createOrganisationSurvey)
+router.put('/:code/surveys/:id', editOrganisationSurvey)
 router.delete('/:code/surveys/:id', removeOrganisationSurvey)
 
 module.exports = router
