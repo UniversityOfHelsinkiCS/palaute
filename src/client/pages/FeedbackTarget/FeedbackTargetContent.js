@@ -30,6 +30,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import { feedbackTargetIsOpenOrClosed } from './Dates/utils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
@@ -59,6 +60,7 @@ const FeedbackTargetContent = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
+  const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
 
   const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
   const showContinuousFeedbackTab =
@@ -114,7 +116,9 @@ const FeedbackTargetContent = () => {
               <RouterTab
                 label={t('feedbackTargetView:surveySettingsTab')}
                 to={`${url}/edit`}
-                badge={!settingsReadByTeacher}
+                disabled={!isAdmin && isOpenOrClosed}
+                disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
+                badge={!settingsReadByTeacher && !isOpenOrClosed}
                 icon={<EditOutlined />}
               />
             )}

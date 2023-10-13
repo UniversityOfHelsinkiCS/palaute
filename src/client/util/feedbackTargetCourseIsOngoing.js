@@ -1,11 +1,11 @@
-const feedbackTargetCourseIsOngoing = ({ courseRealisation }) => {
-  const { startDate, endDate } = courseRealisation
+const feedbackTargetCourseIsOngoing = ({ courseRealisation, opensAt }) => {
+  const { startDate } = courseRealisation
 
-  if (!startDate || !endDate) return false
+  if (!startDate || !opensAt) return false
 
   const now = new Date()
 
-  return new Date(startDate) < now && now < new Date(endDate)
+  return new Date(startDate) < now && now < new Date(opensAt)
 }
 
 export default feedbackTargetCourseIsOngoing
