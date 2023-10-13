@@ -26,7 +26,7 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
         required: true,
       },
       {
-        model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+        model: Summary.scope({ method: ['at', startDate, endDate] }),
         as: 'summaries',
         required: true,
       },
@@ -53,7 +53,7 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
         required: true,
       },
       {
-        model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+        model: Summary.scope({ method: ['at', startDate, endDate] }),
         as: 'summary',
         required: true,
       },
@@ -70,6 +70,7 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
         },
       },
     ],
+    // logging: true,
   })
 
   return courseRealisations
@@ -79,7 +80,7 @@ const getOrganisationSummary = async ({ organisationId, startDate, endDate }) =>
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: {
-      model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+      model: Summary.scope({ method: ['at', startDate, endDate] }),
       as: 'summaries',
       required: true,
     },
@@ -104,7 +105,7 @@ const getChildOrganisations = async ({ organisationId, startDate, endDate, organ
     attributes: ['name', 'id', 'code'],
     include: [
       {
-        model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+        model: Summary.scope({ method: ['at', startDate, endDate] }),
         as: 'summaries',
         required: false,
       },
@@ -113,7 +114,7 @@ const getChildOrganisations = async ({ organisationId, startDate, endDate, organ
         as: 'childOrganisations',
         attributes: ['name', 'id', 'code'],
         include: {
-          model: Summary.scope('defaultScope', { method: ['between', startDate, endDate] }),
+          model: Summary.scope({ method: ['at', startDate, endDate] }),
           as: 'summaries',
           required: false,
         },

@@ -31,14 +31,8 @@ module.exports = {
         unlogged: true,
       }
     )
-
-    await queryInterface.addIndex('summaries', {
-      unique: true,
-      fields: ['entity_id', 'start_date'],
-    })
   },
   down: async queryInterface => {
     await queryInterface.dropTable('summaries')
-    await queryInterface.dropIndex('summaries_entity_id_start_date_key')
   },
 }

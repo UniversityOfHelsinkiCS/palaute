@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { addYears } = require('date-fns')
+const { addYears, format } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
 
@@ -16,7 +16,7 @@ const {
   getOrganisationSummaryWithCourseUnits,
   getOrganisationSummary,
 } = require('../../services/summary/summaryV2')
-const { startOfStudyYear } = require('../../util/common')
+const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 const { inProduction } = require('../../util/config')
 
 const getAccessibleCourseRealisationIds = async user => {
@@ -127,6 +127,19 @@ const getOrganisations = async (req, res) => {
 }
 
 /**
+ * Parse dates from query parameters. If both dates are not valid, default to current study year
+ */
+const parseDates = (startDateString, endDateString) => {
+  const parsedStartDate = Date.parse(startDateString)
+  const parsedEndDate = Date.parse(endDateString)
+  const hasDateRange = !Number.isNaN(parsedStartDate) && !Number.isNaN(parsedEndDate)
+  const startDateObj = hasDateRange ? parsedStartDate : startOfStudyYear(new Date())
+  const endDateObj = hasDateRange ? parsedEndDate : endOfStudyYear(new Date())
+
+  return { startDate: format(startDateObj, 'yyyy-MM-dd'), endDate: format(endDateObj, 'yyyy-MM-dd') }
+}
+
+/**
  * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
@@ -150,8 +163,8 @@ const getOrganisationsV2 = async (req, res) => {
     return ApplicationError.BadRequest('Missing entityId')
   }
 
-  const startDate = startDateString ? new Date(startDateString) : startOfStudyYear(new Date())
-  const endDate = endDateString ? new Date(endDateString) : new Date()
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
   let organisation
 
   if (include === 'childOrganisations') {

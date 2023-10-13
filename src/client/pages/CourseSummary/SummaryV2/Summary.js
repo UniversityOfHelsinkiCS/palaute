@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import { Alert, Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { BarChartOutlined } from '@mui/icons-material'
 import { SummaryContextProvider, useSummaryContext } from './context'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
@@ -55,15 +55,6 @@ const SummaryInContext = () => {
           option={option}
           setOption={setOption}
         />
-        <Alert severity="info" sx={{ whiteSpace: 'pre-wrap', mb: '1rem' }}>
-          Tässä näkymässä lukuvuosi alkaa 1.8. ja päättyy 1.8. seuraavana vuonna.{'\n'}
-          Kevätlukukausi alkaa 1.1. ja päättyy 1.8.{'\n'}
-          Syyslukukausi alkaa 1.8. ja päättyy 1.1. seuraavana vuonna.{'\n'}
-          {'\n'}
-          Jos kurssitoteutuksen aloituspäivämäärä osuu valitulle aikavälille, {'\n'}
-          sen statistiikka lasketaan mukaan riippumatta siitä, {'\n'}
-          milloin palautetta on annettu.
-        </Alert>
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
         <RouterTab

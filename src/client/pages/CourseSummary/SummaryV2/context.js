@@ -6,8 +6,8 @@ const summaryContext = React.createContext({
   showSummariesWithNoFeedback: false,
   setShowSummariesWithNoFeedback: () => {},
   dateRange: {
-    start: new Date('2023-01-01'),
-    end: new Date('2024-01-01'),
+    start: null,
+    end: null,
   },
   setDateRange: () => {},
   option: 'year',
@@ -36,8 +36,8 @@ export const SummaryContextProvider = ({ children }) => {
     return isValid(start) && isValid(end)
       ? { start, end }
       : {
-          start: new Date('2023-01-01'),
-          end: new Date('2024-01-01'),
+          start: null,
+          end: null,
         }
   })
 

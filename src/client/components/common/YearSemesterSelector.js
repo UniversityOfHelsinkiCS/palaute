@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import { Box, IconButton, MenuItem, Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { subDays } from 'date-fns'
 import { startOfStudyYear } from '../../util/startOfStudyYear'
 
 // Year starting month
@@ -16,11 +17,11 @@ const useYearSemesters = currentStart => {
     .flatMap(year => [
       {
         start: new Date(`${year}-01-01`),
-        end: new Date(`${year}-0${MONTH}-01`),
+        end: subDays(new Date(`${year}-0${MONTH}-01`), 1),
       },
       {
         start: new Date(`${year}-0${MONTH}-01`),
-        end: new Date(`${year + 1}-01-01`),
+        end: subDays(new Date(`${year + 1}-01-01`), 1),
       },
     ])
     .map((s, i) => ({ ...s, spring: i % 2 === 0 }))
@@ -150,7 +151,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
   const handleYearChange = year => {
     onChange({
       start: new Date(`${year}-0${MONTH}-01`),
-      end: new Date(`${year + 1}-0${MONTH}-01`),
+      end: subDays(new Date(`${year + 1}-0${MONTH}-01`), 1),
     })
   }
 

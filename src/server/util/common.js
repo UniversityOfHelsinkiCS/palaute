@@ -1,3 +1,5 @@
+const { addYears, subDays } = require('date-fns')
+
 const isNumber = value => !Number.isNaN(parseInt(value, 10))
 
 const normalizeOrganisationCode = r => {
@@ -36,7 +38,18 @@ const startOfStudyYear = date => {
   return new Date(`${year}-${MONTH}-01`)
 }
 
+/**
+ *
+ * @param {Date | string | number} date
+ * @returns {Date} last day of study year
+ */
+const endOfStudyYear = date => {
+  const start = startOfStudyYear(date)
+  return subDays(addYears(start, 1), 1)
+}
+
 module.exports = {
   normalizeOrganisationCode,
   startOfStudyYear,
+  endOfStudyYear,
 }
