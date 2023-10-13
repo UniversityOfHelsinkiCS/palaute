@@ -49,7 +49,15 @@ const populateGroupInformation = feedbackTarget => {
  */
 const getFromDb = async id => {
   const fbt = await FeedbackTarget.findByPk(id, {
-    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'userCreated',
+    ],
     include: [
       {
         model: UserFeedbackTarget,

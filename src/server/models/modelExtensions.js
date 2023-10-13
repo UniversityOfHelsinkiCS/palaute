@@ -33,6 +33,17 @@ FeedbackTarget.prototype.getSurveys = async function () {
     getUniversitySurvey(),
   ])
 
+  if (this.userCreated) {
+    universitySurvey.questionIds = []
+    universitySurvey.questions = []
+
+    return {
+      programmeSurveys: [],
+      teacherSurvey,
+      universitySurvey,
+    }
+  }
+
   return {
     programmeSurveys,
     teacherSurvey,
