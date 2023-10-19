@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Autocomplete, Card, CardContent, Button, Box, Grid, Typography, TextField } from '@mui/material'
-import { useFormikContext, Form, Formik } from 'formik'
+import { useFormikContext, Form, Field, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 
@@ -26,9 +26,9 @@ const LanguageOpenEditor = ({ name, language }) => {
 }
 
 const ResponsibleTeachersSelector = () => {
-  const [potentialUsers, setPotentialUsers] = useState([])
   const { t } = useTranslation()
   const formikProps = useFormikContext()
+  const [potentialUsers, setPotentialUsers] = useState([])
 
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
@@ -75,6 +75,37 @@ const ResponsibleTeachersSelector = () => {
   )
 }
 
+const StudentNumberInput = () => {
+  const { t } = useTranslation()
+  const formikProps = useFormikContext()
+
+  const handleChange = ({ target }) => {
+    const { value } = target
+
+    const valueArray = value.split(/[,\n;]/)
+    formikProps.setFieldValue('studentNumbers', valueArray)
+  }
+
+  return (
+    <Box>
+      <Typography variant="body1" mb={2}>
+        {t('organisationSurveys:studentNumberTitle')}
+      </Typography>
+
+      <TextField
+        name="studentNumbers"
+        label={t('organisationSurveys:studentNumberInputLabel')}
+        multiline
+        rows={5}
+        variant="outlined"
+        fullWidth
+        onChange={handleChange}
+        defaultValue={[]}
+      />
+    </Box>
+  )
+}
+
 const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
   const { t } = useTranslation()
 
@@ -103,6 +134,9 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
       </Grid>
       <Grid xs={12} item>
         <ResponsibleTeachersSelector />
+      </Grid>
+      <Grid xs={12} item>
+        <StudentNumberInput />
       </Grid>
     </Grid>
   )

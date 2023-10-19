@@ -350,6 +350,8 @@
     "newSurveyName": "Survey name",
     "responsibleTeacherTitle": "Add new responsible teachers",
     "responsibleTeacherEmail": "Email",
+    "studentNumberTitle": "Add new feedback students",
+    "studentNumberInputLabel": "Paste student numbers here",
     "startDate": "From",
     "endDate": "To"
   },

@@ -350,6 +350,8 @@
     "newSurveyName": "Kyselyn nimi",
     "responsibleTeacherTitle": "Lisää uusi vastuuopettaja",
     "responsibleTeacherEmail": "Sähköposti",
+    "studentNumberTitle": "Lisää palautteelle opiskelijoita",
+    "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "startDate": "Alkaen",
     "endDate": "Loppuen"
   },
