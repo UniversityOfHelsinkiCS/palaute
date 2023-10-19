@@ -16,7 +16,7 @@ const Dates = () => {
   const { t } = useTranslation()
   const { feedbackTarget, isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { courseRealisation, opensAt, closesAt, continuousFeedbackEnabled } = feedbackTarget
+  const { courseRealisation, opensAt, closesAt, continuousFeedbackEnabled, userCreated } = feedbackTarget
 
   const coursePeriod = getDateRangeString(courseRealisation.startDate, courseRealisation.endDate)
   const feedbackPeriod = getDateRangeString(opensAt, closesAt)
@@ -34,13 +34,17 @@ const Dates = () => {
           [theme.breakpoints.up('md')]: { display: 'grid', gridTemplateColumns: '9rem auto' },
         })}
       >
-        <Typography color="textSecondary" component="dt">
-          {t('feedbackTargetView:coursePeriod')}:
-        </Typography>
+        {!userCreated && (
+          <>
+            <Typography color="textSecondary" component="dt">
+              {t('feedbackTargetView:coursePeriod')}:
+            </Typography>
 
-        <Typography color="textSecondary" component="dd">
-          {coursePeriod}
-        </Typography>
+            <Typography color="textSecondary" component="dd">
+              {coursePeriod}
+            </Typography>
+          </>
+        )}
 
         <Typography color="textSecondary" component="dt">
           {t('feedbackTargetView:feedbackPeriod')}:
