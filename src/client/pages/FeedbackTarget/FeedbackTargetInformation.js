@@ -31,6 +31,7 @@ const FeedbackTargetInformation = () => {
     teachers,
     feedbackCount,
     studentCount,
+    userCreated,
   } = feedbackTarget
 
   const handleCopyLink = () => {
@@ -160,11 +161,13 @@ const FeedbackTargetInformation = () => {
                 <LinkButton to={courseSummaryPath} title={t('feedbackTargetView:courseSummary')} />
               )}
 
-              <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />
+              {!userCreated && <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />}
 
               {isTeacher && <LinkButton to={t('links:wikiTeacherHelp')} title={t('footer:wikiLink')} external />}
 
-              {isAdmin && <LinkButton to={sisuPageUrl} title={t('feedbackTargetView:courseSisuPage')} external />}
+              {isAdmin && !userCreated && (
+                <LinkButton to={sisuPageUrl} title={t('feedbackTargetView:courseSisuPage')} external />
+              )}
             </Box>
           </Box>
         </Box>
