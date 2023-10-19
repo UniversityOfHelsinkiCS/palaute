@@ -9,7 +9,7 @@ import FormikTextField from '../../components/common/FormikTextField'
 
 import apiClient from '../../util/apiClient'
 
-const LanguageOpenEditor = ({ name, language }) => {
+const LanguageEditor = ({ name, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -25,7 +25,7 @@ const LanguageOpenEditor = ({ name, language }) => {
   )
 }
 
-const ResponsibleTeachersSelector = () => {
+const ResponsibleTeachersSelector = ({ name, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [potentialUsers, setPotentialUsers] = useState([])
@@ -51,9 +51,10 @@ const ResponsibleTeachersSelector = () => {
       </Typography>
 
       <Autocomplete
+        id={name}
+        name={name}
         multiple
         fullWidth
-        name="teacherIds"
         defaultValue={[]}
         onChange={(_, teachers) => {
           const teacherIds = teachers.map(t => t.id)
@@ -63,26 +64,21 @@ const ResponsibleTeachersSelector = () => {
         options={potentialUsers}
         onInputChange={handleChange}
         getOptionLabel={option => option.email}
-        renderInput={params => (
-          <TextField
-            {...params}
-            label={t('organisationSurveys:responsibleTeacherEmail')}
-            id="default-reponsible-teacher"
-          />
-        )}
+        renderInput={params => <TextField {...params} />}
+        {...props}
       />
     </Box>
   )
 }
 
-const StudentNumberInput = () => {
+const StudentNumberInput = ({ name, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
 
   const handleChange = ({ target }) => {
     const { value } = target
 
-    const valueArray = value.split(/[,\n;]/)
+    const valueArray = value.split(/[,\n;]/).filter(v => v !== '')
     formikProps.setFieldValue('studentNumbers', valueArray)
   }
 
@@ -93,14 +89,15 @@ const StudentNumberInput = () => {
       </Typography>
 
       <TextField
-        name="studentNumbers"
-        label={t('organisationSurveys:studentNumberInputLabel')}
+        id={name}
+        name={name}
         multiline
         rows={5}
         variant="outlined"
         fullWidth
         onChange={handleChange}
         defaultValue={[]}
+        {...props}
       />
     </Box>
   )
@@ -119,24 +116,20 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
             </Typography>
           </Box>
 
-          <LanguageOpenEditor name="name" language={language} />
+          <LanguageEditor name="name" language={language} />
         </Grid>
       ))}
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker
-          name="startDate"
-          label={t('organisationSurveys:startDate')}
-          id="organisation-survey-startDate"
-        />
+        <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} id="organisation-survey-endDate" />
+        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
       <Grid xs={12} item>
-        <ResponsibleTeachersSelector />
+        <ResponsibleTeachersSelector name="teacherIds" label={t('organisationSurveys:responsibleTeacherEmail')} />
       </Grid>
       <Grid xs={12} item>
-        <StudentNumberInput />
+        <StudentNumberInput name="studentNumbers" label={t('organisationSurveys:studentNumberInputLabel')} />
       </Grid>
     </Grid>
   )
