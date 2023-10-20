@@ -344,9 +344,9 @@
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
   },
   "organisationSurveys": {
-    "heading": "Organisaation kyselyt",
+    "heading": "Koulutusohjelman kyselyt",
     "viewFeedbackSummary": "Näytä kyselyn yhteenveto",
-    "addSurvey": "Luo uusi organisaatiokysely",
+    "addSurvey": "Luo uusi koulutusohjelman kysely",
     "newSurveyName": "Kyselyn nimi",
     "responsibleTeacherTitle": "Lisää uusi vastuuopettaja",
     "responsibleTeacherEmail": "Sähköposti",
@@ -424,7 +424,7 @@
     "feedbackCorrespondent": "Palautevastaava",
     "feedbackCorrespondents": "Palautevastaavat",
     "surveyTab": "Koulutusohjelman kysymykset",
-    "organisationSurveysTab": "Organisaation kyselyt",
+    "organisationSurveysTab": "Koulutusohjelman kyselyt",
     "summaryTab": "Yhteenveto",
     "courseRealisationsTab": "Kurssitoteutukset",
     "openQuestionsTab": "Avoimet kysymykset",

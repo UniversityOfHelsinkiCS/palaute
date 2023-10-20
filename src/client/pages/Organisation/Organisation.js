@@ -9,6 +9,7 @@ import {
   LiveHelpOutlined,
   PollOutlined,
   SettingsOutlined,
+  DynamicFormOutlined,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
@@ -85,7 +86,11 @@ const Organisation = () => {
             <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
           )}
           {ORGANISATION_SURVEYS_ENABLED && isAdmin && (
-            <RouterTab label={t('organisationSettings:organisationSurveysTab')} to={`${url}/organisation-surveys`} />
+            <RouterTab
+              label={t('organisationSettings:organisationSurveysTab')}
+              icon={<DynamicFormOutlined />}
+              to={`${url}/organisation-surveys`}
+            />
           )}
           <RouterTab
             label={t('organisationSettings:courseRealisationsTab')}

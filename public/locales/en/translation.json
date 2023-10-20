@@ -344,9 +344,9 @@
     "cannotOpenImmediately": "Feedback is already open or has ended"
   },
   "organisationSurveys": {
-    "heading": "Organisation Surveys",
+    "heading": "Programme Surveys",
     "viewFeedbackSummary": "View survey summary",
-    "addSurvey": "Create new organisation survey",
+    "addSurvey": "Create new programme survey",
     "newSurveyName": "Survey name",
     "responsibleTeacherTitle": "Add new responsible teachers",
     "responsibleTeacherEmail": "Email",
@@ -424,7 +424,7 @@
     "feedbackCorrespondent": "Feedback liaison",
     "feedbackCorrespondents": "Feedback liaisons",
     "surveyTab": "Programme questions",
-    "organisationSurveysTab": "Organisation surveys",
+    "organisationSurveysTab": "Programme surveys",
     "summaryTab": "Summary",
     "courseRealisationsTab": "Course realisations",
     "openQuestionsTab": "Open questions",

@@ -343,9 +343,9 @@
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
   },
   "organisationSurveys": {
-    "heading": "Organisaation kyselyt",
+    "heading": "Koulutusohjelman kyselyt",
     "viewFeedbackSummary": "Näytä kyselyn yhteenveto",
-    "addSurvey": "Luo uusi organisaatiokysely",
+    "addSurvey": "Luo uusi koulutusohjelman kysely",
     "newSurveyName": "Kyselyn nimi",
     "responsibleTeacherTitle": "Lisää uusi vastuuopettaja",
     "responsibleTeacherEmail": "Sähköposti",
