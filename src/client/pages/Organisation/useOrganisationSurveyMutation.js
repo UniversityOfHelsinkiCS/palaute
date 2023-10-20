@@ -1,4 +1,5 @@
 import { useMutation } from 'react-query'
+import { endOfDay, startOfDay } from 'date-fns'
 
 import { queryKey } from './useOrganisationSurveys'
 import queryClient from '../../util/queryClient'
@@ -8,8 +9,8 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
   const mutationFn = async ({ name, startDate, endDate, studentNumbers, teacherIds }) => {
     const { data } = await apiClient.post(`/organisations/${organisationCode}/surveys`, {
       name,
-      startDate,
-      endDate,
+      startDate: startDate ? startOfDay(new Date(startDate)) : null,
+      endDate: endDate ? endOfDay(new Date(endDate)) : null,
       studentNumbers,
       teacherIds,
     })
