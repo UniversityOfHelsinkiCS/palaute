@@ -67,13 +67,18 @@ const editOrganisationSurvey = async (req, res) => {
 
   if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds'])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
 
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })
 
   if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can update organisation surveys')
+
+  if (updates.studentNumbers) {
+    const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
+    if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
+  }
 
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
 

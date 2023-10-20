@@ -89,7 +89,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
-const createUserFeedbackTargets = async (feedbackTarget, studentNumbers, teacherIds) => {
+const createUserFeedbackTargets = async (feedbackTarget, studentNumbers = [], teacherIds = []) => {
   const students = await User.findAll({
     where: {
       studentNumber: { [Op.in]: studentNumbers },
@@ -181,7 +181,7 @@ const getSurveysForOrganisation = async organisationId => {
 }
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
-  const { name, teacherIds } = updates
+  const { name, teacherIds, studentNumbers } = updates
   const { startDate, endDate } = formatActivityPeriod(updates)
 
   const feebackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
@@ -207,17 +207,18 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
         accessStatus: 'RESPONSIBLE_TEACHER',
       },
     })
-
-    await UserFeedbackTarget.bulkCreate(
-      teacherIds.map(teacherId => ({
-        accessStatus: 'RESPONSIBLE_TEACHER',
-        feedbackTargetId,
-        userId: teacherId,
-        isAdministrativePerson: true,
-        userCreated: true,
-      }))
-    )
   }
+
+  if (studentNumbers) {
+    await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId,
+        accessStatus: 'STUDENT',
+      },
+    })
+  }
+
+  await createUserFeedbackTargets(feebackTarget, studentNumbers, teacherIds)
 
   const survey = await getOrganisationSurvey(feedbackTargetId)
 
