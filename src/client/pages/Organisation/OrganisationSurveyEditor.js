@@ -78,7 +78,10 @@ const StudentNumberInput = ({ name, ...props }) => {
   const handleChange = ({ target }) => {
     const { value } = target
 
-    const studentNumbers = value.split(/[,\n;]/).filter(v => v !== '')
+    const studentNumbers = value
+      .split(/[,\n;]/)
+      .filter(v => v !== '')
+      .map(v => (v.length >= 9 ? v : `${'0'.repeat(9 - v.length)}${v}`))
     formikProps.setFieldValue('studentNumbers', studentNumbers)
   }
 
