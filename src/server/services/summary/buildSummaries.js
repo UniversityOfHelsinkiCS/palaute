@@ -58,6 +58,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
       feedbackCount: {
         [Op.gt]: 0,
       },
+      userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
     },
     include: [
       {
@@ -314,7 +315,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
   const allSummaries = courseRealisationSummaries
     .concat(courseUnitSummaries)
     .concat(orgSummaries)
-    .filter(summary => summary.data.feedbackCount > 0)
+    .filter(summary => summary.data && summary.data.feedbackCount > 0)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
 
@@ -322,7 +323,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
   const uniqueSummaries = _.uniqBy(allSummaries, 'entityId')
   if (uniqueSummaries.length !== allSummaries.length) {
     // Warning, duplicates found. Find and report duplicates.
-    const duplicates = _.differenceBy(allSummaries, uniqueSummaries, 'entityId')
+    const duplicates = _.differenceBy(allSummaries, uniqueSummaries, ({ entityId }) => entityId)
     Sentry.setExtra('duplicates', duplicates)
     Sentry.captureMessage(`Duplicate summaries found for ${duplicates.length} entities.`)
   }
