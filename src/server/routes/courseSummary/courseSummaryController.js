@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const { addYears, format } = require('date-fns')
+const { Op } = require('sequelize')
 
 const { CourseUnit, Organisation } = require('../../models')
 
@@ -15,6 +16,7 @@ const {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
   getOrganisationSummary,
+  getTeacherSummary,
 } = require('../../services/summary/summaryV2')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 const { inProduction } = require('../../util/config')
@@ -233,10 +235,26 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
+const getCoursesV2 = async (req, res) => {
+  const { startDate: startDateString, endDate: endDateString } = req.query
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const organisations = await getTeacherSummary({
+    user,
+    startDate,
+    endDate,
+  })
+
+  return res.send(organisations)
+}
+
 const router = Router()
 
 router.get('/organisations', getOrganisations)
 router.get('/organisations-v2', getOrganisationsV2)
+router.get('/courses-v2', getCoursesV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/access', getAccessInfo)

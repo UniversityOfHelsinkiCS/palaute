@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import OrganisationSummaryRow from './SummaryRow'
+import { OrganisationSummaryRow } from './SummaryRow'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import { useSummaryContext } from './context'
 

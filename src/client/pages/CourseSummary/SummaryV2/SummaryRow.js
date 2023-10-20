@@ -300,20 +300,7 @@ const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
   ))
 }
 
-const OrganisationResults = ({ organisationId, initialSummary, startDate, endDate, questions }) => {
-  const { organisation, isLoading } = useSummaries({
-    entityId: organisationId,
-    startDate,
-    endDate,
-    enabled: !initialSummary,
-  })
-
-  if (isLoading) {
-    return 'Ladataan...'
-  }
-
-  const summary = initialSummary ?? organisation?.summary
-
+const OrganisationResults = ({ summary, questions }) => {
   const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
 
   const feedbackResponsePercentage = summary ? (summary.data.feedbackResponsePercentage * 100).toFixed() : 0
@@ -351,7 +338,24 @@ const OrganisationResults = ({ organisationId, initialSummary, startDate, endDat
   )
 }
 
-const OrganisationSummaryRow = ({
+const OrganisationResultsLoader = ({ organisationId, initialSummary, startDate, endDate, questions }) => {
+  const { organisation, isLoading } = useSummaries({
+    entityId: organisationId,
+    startDate,
+    endDate,
+    enabled: !initialSummary,
+  })
+
+  if (isLoading) {
+    return 'Ladataan...'
+  }
+
+  const summary = initialSummary ?? organisation?.summary
+
+  return <OrganisationResults summary={summary} questions={questions} />
+}
+
+export const OrganisationSummaryRow = ({
   alwaysOpen = false,
   startDate,
   endDate,
@@ -390,7 +394,7 @@ const OrganisationSummaryRow = ({
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         {inView && (
-          <OrganisationResults
+          <OrganisationResultsLoader
             organisationId={organisationId}
             startDate={startDate}
             endDate={endDate}
@@ -430,4 +434,39 @@ const OrganisationSummaryRow = ({
   )
 }
 
-export default OrganisationSummaryRow
+export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
+  const [isOpen, setIsOpen] = React.useState(true)
+
+  const indentLineColor = useRandomColor(organisation?.code ?? '')
+
+  const label = <OrganisationLabel organisation={organisation} dates={null} />
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="stretch"
+      gap="0.4rem"
+      pt={isOpen ? '0.5rem' : 0}
+      sx={{ transition: 'padding-top 0.2s ease-out' }}
+    >
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
+        <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={() => setIsOpen(!isOpen)} />
+        <OrganisationResults summary={organisation.summary} questions={questions} />
+      </Box>
+      {isOpen && (
+        <Box
+          sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
+          display="flex"
+          flexDirection="column"
+          alignItems="stretch"
+          gap="0.4rem"
+        >
+          {organisation?.courseUnits?.map(cu => (
+            <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
+          ))}
+        </Box>
+      )}
+    </Box>
+  )
+}

@@ -402,7 +402,8 @@
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
     "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
-    "myOrganisations": "Mina utbildningsprogram"
+    "myOrganisations": "Mina utbildningsprogram",
+    "myCourses": "Mina kurser"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",

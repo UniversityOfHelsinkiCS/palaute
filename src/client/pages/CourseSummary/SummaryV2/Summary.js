@@ -3,7 +3,7 @@ import { Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
-import { BarChartOutlined } from '@mui/icons-material'
+import { BarChartOutlined, School } from '@mui/icons-material'
 import { SummaryContextProvider, useSummaryContext } from './context'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../../components/common/ProtectedRoute'
@@ -15,6 +15,7 @@ import LinkButton from '../../../components/common/LinkButton'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
 import hyLogo from '../../../assets/hy_logo_black.svg'
+import MyCourses from './MyCourses'
 
 const SummaryInContext = () => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
@@ -71,6 +72,7 @@ const SummaryInContext = () => {
           icon={<BarChartOutlined />}
           to="/course-summary/v2/my-organisations"
         />
+        <RouterTab label={t('courseSummary:myCourses')} icon={<School />} to="/course-summary/v2/my-courses" />
       </RouterTabs>
       <Box mt="3rem">
         <Switch>
@@ -99,6 +101,8 @@ const SummaryInContext = () => {
               user?.specialGroup?.admin
             }
           />
+
+          <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
         </Switch>
       </Box>
     </>

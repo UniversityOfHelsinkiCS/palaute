@@ -32,6 +32,33 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled, include })
   return { organisation, ...rest }
 }
 
+export const useTeacherSummaries = ({ startDate, endDate, enabled }) => {
+  const queryKey = ['summaries-v2-teacher', startDate, endDate]
+
+  const queryFn = async () => {
+    const { data } = await apiClient.get(`course-summaries/courses-v2`, {
+      params: {
+        startDate,
+        endDate,
+      },
+    })
+
+    return data
+  }
+
+  const { data, ...rest } = useQuery(queryKey, queryFn, {
+    enabled,
+    retry: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+    staleTime: TWELVE_HOURS,
+  })
+
+  const organisations = data || []
+
+  return { organisations, ...rest }
+}
+
 export const updateSummaries = async () => {
   // eslint-disable-next-line no-alert
   if (!window.confirm('Tämä voi kestää yli minuutin. Oletko varma?')) return null

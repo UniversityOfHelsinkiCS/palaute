@@ -8,6 +8,7 @@ const {
   FeedbackTarget,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  UserFeedbackTarget,
 } = require('../../models')
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
@@ -232,8 +233,101 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   return organisation
 }
 
+const getTeacherSummary = async ({ startDate, endDate, user }) => {
+  const organisations = await Organisation.findAll({
+    attributes: ['id', 'name', 'code'],
+    include: [
+      {
+        model: Summary.scope({ method: ['at', startDate, endDate] }),
+        as: 'summaries',
+      },
+      {
+        model: CourseUnit,
+        attributes: ['id', 'name', 'courseCode'],
+        as: 'courseUnits',
+        required: true,
+        through: {
+          attributes: [],
+          where: {
+            type: 'PRIMARY',
+          },
+        },
+        include: [
+          {
+            model: Summary.scope({ method: ['at', startDate, endDate] }),
+            as: 'summaries',
+            required: true,
+          },
+          {
+            model: FeedbackTarget,
+            attributes: ['id'],
+            as: 'feedbackTargets',
+            required: true,
+            include: [
+              {
+                model: UserFeedbackTarget,
+                as: 'userFeedbackTargets',
+                attributes: ['id'],
+                required: true,
+                where: {
+                  userId: user.id,
+                  accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
+                },
+              },
+              {
+                model: CourseRealisation,
+                as: 'courseRealisation',
+                attributes: ['id', 'name', 'startDate', 'endDate'],
+                required: true,
+                include: [
+                  {
+                    model: Summary.scope({ method: ['at', startDate, endDate] }),
+                    as: 'summary',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+
+  const organisationsJson = organisations.map(org => {
+    org.summary = sumSummaries(org.summaries)
+    delete org.dataValues.summaries
+
+    const courseUnits = org.courseUnits.map(cu => {
+      cu.summary = sumSummaries(cu.summaries)
+      delete cu.dataValues.summaries
+
+      const courseRealisations = cu.feedbackTargets.map(fbt => {
+        const { courseRealisation: cur } = fbt
+        cur.summary = sumSummaries(cur.summary)
+
+        return cur.toJSON()
+      })
+
+      delete cu.dataValues.feedbackTargets
+
+      return {
+        ...cu.toJSON(),
+        courseRealisations,
+      }
+    })
+
+    return {
+      ...org.toJSON(),
+      courseUnits,
+    }
+  })
+
+  return organisationsJson
+}
+
 module.exports = {
   getOrganisationSummary,
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
+  getTeacherSummary,
 }

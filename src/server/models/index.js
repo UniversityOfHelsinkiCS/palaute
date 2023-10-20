@@ -27,6 +27,9 @@ const Summary = require('./summary')
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
 })
+CourseUnit.hasMany(FeedbackTarget, {
+  as: 'feedbackTargets',
+})
 
 FeedbackTarget.belongsTo(CourseRealisation, {
   foreignKey: 'courseRealisationId',

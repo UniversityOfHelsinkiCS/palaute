@@ -404,7 +404,8 @@
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
     "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
-    "myOrganisations": "Organisaationi"
+    "myOrganisations": "Organisaationi",
+    "myCourses": "Kurssini"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
