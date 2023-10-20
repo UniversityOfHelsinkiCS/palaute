@@ -345,6 +345,7 @@
   },
   "organisationSurveys": {
     "heading": "Programme Surveys",
+    "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",
     "viewFeedbackSummary": "View survey summary",
     "addSurvey": "Create new programme survey",
     "newSurveyName": "Survey name",

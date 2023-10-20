@@ -144,9 +144,13 @@ const OrganisationSurveys = () => {
           onStopEditing={handleClose}
         />
 
-        {surveys.map(survey => (
-          <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />
-        ))}
+        {surveys.length > 0 ? (
+          surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
+        ) : (
+          <Box mt={8}>
+            <Typography variant="body1">{t('organisationSurveys:emptySurveys')}</Typography>
+          </Box>
+        )}
       </Box>
     </>
   )

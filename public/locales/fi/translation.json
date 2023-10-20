@@ -345,6 +345,7 @@
   },
   "organisationSurveys": {
     "heading": "Koulutusohjelman kyselyt",
+    "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",
     "viewFeedbackSummary": "Näytä kyselyn yhteenveto",
     "addSurvey": "Luo uusi koulutusohjelman kysely",
     "newSurveyName": "Kyselyn nimi",
