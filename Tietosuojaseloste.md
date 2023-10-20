@@ -14,9 +14,7 @@ PL 68 (Pietari Kalmin katu 5)
 
 ## Rekisteriasioista vastaava henkilö
 
-- FIX, mluukkai / tttriple knows who
-
-Matti Luukkainen, mluukkai@cs.helsinki.fi
+Matti Luukkainen, matti.luukkainen@helsinki.fi
 
 ## Henkilötietojen käsittelyn tarkoitus
 
