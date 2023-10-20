@@ -423,7 +423,7 @@
     "courseSettings": "Kurssikohtaiset asetukset",
     "feedbackCorrespondent": "Palautevastaava",
     "feedbackCorrespondents": "Palautevastaavat",
-    "surveyTab": "Koulutusohjelman kysely",
+    "surveyTab": "Koulutusohjelman kysymykset",
     "organisationSurveysTab": "Organisaation kyselyt",
     "summaryTab": "Yhteenveto",
     "courseRealisationsTab": "Kurssitoteutukset",
@@ -457,8 +457,8 @@
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
     "showCurName": "Näytä kurssitoteutusten nimet",
-    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
-    "removeSuccess": "Koulutusohjelman kysely poistettu"
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kysymyksen?",
+    "removeSuccess": "Koulutusohjelman kysymykset poistettu"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",

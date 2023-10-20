@@ -423,7 +423,7 @@
     "courseSettings": "Course settings",
     "feedbackCorrespondent": "Feedback liaison",
     "feedbackCorrespondents": "Feedback liaisons",
-    "surveyTab": "Programme survey",
+    "surveyTab": "Programme questions",
     "organisationSurveysTab": "Organisation surveys",
     "summaryTab": "Summary",
     "courseRealisationsTab": "Course realisations",
@@ -457,8 +457,8 @@
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
     "showCurName": "Show course realisation names",
-    "confirmRemoveSurvey": "Are you sure you want to remove this organisation survey?",
-    "removeSuccess": "Organisation survey removed"
+    "confirmRemoveSurvey": "Are you sure you want to remove this organisation question?",
+    "removeSuccess": "Organisation questions removed"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",
