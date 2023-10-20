@@ -1,5 +1,6 @@
 /* eslint-disable no-continue */
 const { Op, QueryTypes } = require('sequelize')
+const Sentry = require('@sentry/node')
 const datefns = require('date-fns')
 const _ = require('lodash')
 const {
@@ -309,17 +310,25 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
     delete org.parent
   }
 
-  // Write all summaries to db.
-
   const relevantFields = ['entityId', 'data']
-  await Summary.bulkCreate(
-    courseRealisationSummaries
-      .map(cur => _.pick(cur, relevantFields))
-      .concat(courseUnitSummaries.map(cu => _.pick(cu, relevantFields)))
-      .concat(orgSummaries.map(org => _.pick(org, relevantFields)))
-      .filter(summary => summary.data.feedbackCount > 0) // Don't make empty summary objects
-      .map(summary => ({ ...summary, startDate, endDate }))
-  )
+  const allSummaries = courseRealisationSummaries
+    .concat(courseUnitSummaries)
+    .concat(orgSummaries)
+    .filter(summary => summary.data.feedbackCount > 0)
+    .map(summary => _.pick(summary, relevantFields))
+    .map(summary => ({ ...summary, startDate, endDate }))
+
+  // Make sure no duplicates
+  const uniqueSummaries = _.uniqBy(allSummaries, 'entityId')
+  if (uniqueSummaries.length !== allSummaries.length) {
+    // Warning, duplicates found. Find and report duplicates.
+    const duplicates = _.differenceBy(allSummaries, uniqueSummaries, 'entityId')
+    Sentry.setExtra('duplicates', duplicates)
+    Sentry.captureMessage(`Duplicate summaries found for ${duplicates.length} entities.`)
+  }
+
+  // Write all summaries to db.
+  await Summary.bulkCreate(uniqueSummaries)
 }
 
 const startYear = 2020 // Nothing ending before this is considered
