@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 
 const logger = require('../../util/logger')
+const { formatActivityPeriod } = require('../../util/common')
 const { sequelize } = require('../../db/dbConnection')
 const { LANGUAGES } = require('../../util/config')
 const {
@@ -51,7 +52,8 @@ const initializeOrganisationCourseUnit = async organisation => {
 }
 
 const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData) => {
-  const { name, startDate, endDate } = feedbackTargetData
+  const { name } = feedbackTargetData
+  const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
 
   const organisationCourseUnit = await getOrganisationCourseUnit(organisation.id)
 
@@ -179,7 +181,8 @@ const getSurveysForOrganisation = async organisationId => {
 }
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
-  const { name, startDate, endDate, teacherIds } = updates
+  const { name, teacherIds } = updates
+  const { startDate, endDate } = formatActivityPeriod(updates)
 
   const feebackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 

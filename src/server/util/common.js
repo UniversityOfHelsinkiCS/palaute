@@ -1,4 +1,5 @@
-const { addYears, subDays } = require('date-fns')
+const { addYears, subDays, startOfDay, endOfDay } = require('date-fns')
+const { parseFromTimeZone } = require('date-fns-timezone')
 
 const isNumber = value => !Number.isNaN(parseInt(value, 10))
 
@@ -48,8 +49,16 @@ const endOfStudyYear = date => {
   return subDays(addYears(start, 1), 1)
 }
 
+const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+
+const formatActivityPeriod = ({ startDate, endDate }) => ({
+  startDate: startOfDay(parseDate(startDate)),
+  endDate: endOfDay(parseDate(endDate)),
+})
+
 module.exports = {
   normalizeOrganisationCode,
   startOfStudyYear,
   endOfStudyYear,
+  formatActivityPeriod,
 }
