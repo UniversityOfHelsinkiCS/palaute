@@ -119,12 +119,6 @@ const OrganisationSurveys = () => {
     <>
       <Title>{t('common:courseSummaryPage')}</Title>
       <Box mb={6} px={1}>
-        <Box display="flex" gap="1rem" alignItems="end">
-          <Typography variant="h4" component="h1">
-            {t('organisationSurveys:heading')}
-          </Typography>
-        </Box>
-
         <Box sx={styles.buttonContainer}>
           <Button
             color="primary"
