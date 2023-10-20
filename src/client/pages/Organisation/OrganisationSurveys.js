@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import * as Yup from 'yup'
 
 import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material'
 
@@ -102,6 +103,20 @@ const OrganisationSurveys = () => {
     teacherIds: [],
   }
 
+  const organisationSurveySchema = Yup.object().shape({
+    name: Yup.object().shape({
+      fi: Yup.string().required(t('validationErrors:required')),
+      en: Yup.string().required(t('validationErrors:required')),
+      sv: Yup.string().required(t('validationErrors:required')),
+    }),
+    startDate: Yup.date().required(t('validationErrors:invalidDate')),
+    endDate: Yup.date()
+      .required(t('validationErrors:invalidDate'))
+      .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
+    studentNumbers: Yup.array().of(Yup.string()),
+    teacherIds: Yup.array().of(Yup.string()),
+  })
+
   const createOrganisationSurvey = useInteractiveMutation(surveyValues => mutation.mutateAsync({ ...surveyValues }))
 
   const handleSubmit = async values => {
@@ -134,6 +149,7 @@ const OrganisationSurveys = () => {
 
         <OrganisationSurveyEditor
           initialValues={initialValues}
+          validationSchema={organisationSurveySchema}
           handleSubmit={handleSubmit}
           editing={showForm}
           onStopEditing={handleClose}

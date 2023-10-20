@@ -135,13 +135,18 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
   )
 }
 
-const OrganisationSurveyEditor = ({ initialValues, handleSubmit, editing, onStopEditing }) => {
+const OrganisationSurveyEditor = ({ initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
   const { t } = useTranslation()
 
   if (!editing) return null
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validateOnChange={false}
+      validationSchema={validationSchema}
+    >
       {({ isSubmitting }) => {
         const disabled = isSubmitting
 
