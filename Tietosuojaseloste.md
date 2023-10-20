@@ -1,7 +1,8 @@
 # Kurssipalautejärjestelmän rekisteri- ja tietosuojaseloste
 
 ## Rekisterin nimi
-Helsingin Yliopiston kurssipalautejärjestelmä.
+
+Helsingin Yliopiston kurssipalautejärjestelmä Norppa.
 
 Tallennamme ja käsittelemme Helsingin yliopiston opiskelijoiden henkilötietoja EU:n tietosuojaasetuksen mukaisesti.
 
