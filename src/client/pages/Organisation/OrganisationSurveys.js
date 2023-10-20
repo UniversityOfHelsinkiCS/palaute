@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, Box, Button, Typography } from '@mui/material'
+import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -141,9 +141,7 @@ const OrganisationSurveys = () => {
         {surveys.length > 0 ? (
           surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
         ) : (
-          <Box mt={8}>
-            <Typography variant="body1">{t('organisationSurveys:emptySurveys')}</Typography>
-          </Box>
+          <Alert severity="info">{t('organisationSurveys:emptySurveys')}</Alert>
         )}
       </Box>
     </>
