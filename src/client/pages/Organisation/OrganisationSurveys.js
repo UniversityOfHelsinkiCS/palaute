@@ -39,8 +39,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { language } = i18n
   const { code } = useParams()
 
-  console.log(organisationSurvey)
-
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
     success: t('organisationSettings:removeSuccess'),
