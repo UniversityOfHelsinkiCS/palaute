@@ -18,6 +18,7 @@ import Title from '../../components/common/Title'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 import { getStartAndEndString } from '../../util/getDateRangeString'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const styles = {
   dates: {
@@ -38,6 +39,8 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { language } = i18n
   const { code } = useParams()
 
+  console.log(organisationSurvey)
+
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
     success: t('organisationSettings:removeSuccess'),
@@ -53,7 +56,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { courseRealisation } = organisationSurvey
   const viewPath = `/targets/${organisationSurvey.id}/feedback`
 
-  const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
+  const [startDate, endDate] = getStartAndEndString(courseRealisation?.startDate, courseRealisation?.endDate)
   const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: startDate,
     closesAt: endDate,
@@ -63,7 +66,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     <Card sx={{ mb: 3 }}>
       <CardContent>
         <Typography variant="body1" fontWeight={600} component="h2">
-          {organisationSurvey.name[language] || organisationSurvey.name}
+          {getLanguageValue(organisationSurvey.name, language)}
         </Typography>
 
         <Typography variant="body1" sx={{ mt: 2 }}>
