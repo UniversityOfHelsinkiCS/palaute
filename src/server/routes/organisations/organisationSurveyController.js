@@ -45,7 +45,7 @@ const createOrganisationSurvey = async (req, res) => {
   if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can create organisation surveys')
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
-  if (invalidStudentNumbers.length > 0) res.status(400).send({ invalidStudentNumbers })
+  if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
 
   await initializeOrganisationCourseUnit(organisation)
 
