@@ -10,6 +10,7 @@ const {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
 } = require('../../services/organisations/organisationSurveys')
+const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 
@@ -42,6 +43,9 @@ const createOrganisationSurvey = async (req, res) => {
   })
 
   if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can create organisation surveys')
+
+  const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
+  if (invalidStudentNumbers.length > 0) res.status(400).send({ invalidStudentNumbers })
 
   await initializeOrganisationCourseUnit(organisation)
 
