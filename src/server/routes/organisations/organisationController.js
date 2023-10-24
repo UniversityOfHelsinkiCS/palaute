@@ -97,6 +97,13 @@ const getOrganisationByCode = async (req, res) => {
     where: {
       code,
     },
+    include: [
+      {
+        model: User,
+        as: 'users',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
+    ],
   })
 
   const tags = _.orderBy(await organisation.getTags(), tag => tag.name?.fi)
