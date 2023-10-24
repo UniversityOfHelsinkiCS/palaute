@@ -59,7 +59,7 @@ const CorrepondentSelector = ({ add }) => {
       </Card>
       <Box my={1} />
       {potentialUsers.map(user => (
-        <Card key={user.id}>
+        <Card key={user.id} sx={{ mb: 1 }}>
           <CardContent>
             <b>
               {user.firstName} {user.lastName} - {user.email}
