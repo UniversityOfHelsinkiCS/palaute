@@ -9,8 +9,19 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
-const StudentsWithFeedback = () => {
+const NoFeedbackAlert = ({ isOpen }) => {
   const { t } = useTranslation()
+
+  return (
+    <Box mb={2}>
+      <Alert severity="info">
+        {isOpen ? t('studentsWithFeedback:cannotShowWhenOpen') : t('studentsWithFeedback:noFeedbackInfo')}
+      </Alert>
+    </Box>
+  )
+}
+
+const StudentsWithFeedback = () => {
   const { id } = useParams()
 
   const { feedbackTarget } = useFeedbackTargetContext()
@@ -18,22 +29,14 @@ const StudentsWithFeedback = () => {
 
   const { students, isLoading } = useStudentsWithFeedback(id)
 
-  if (isLoading) {
-    return <LoadingProgress />
-  }
+  if (isLoading) return <LoadingProgress />
 
-  const noFeedbackALert = (
-    <Box mb={2}>
-      <Alert severity="info">
-        {isOpen ? t('studentsWithFeedback:cannotShowWhenOpen') : t('studentsWithFeedback:noFeedbackInfo')}
-      </Alert>
-    </Box>
-  )
+  const feedbackStatusAvailable = students.some(student => 'feedbackgiven' in student)
 
   return (
     <>
-      {students.length === 0 && noFeedbackALert}
-      {students.length > 0 && <StudentTable students={students} feedbackTarget={feedbackTarget} />}
+      {!feedbackStatusAvailable && <NoFeedbackAlert isOpen={isOpen} />}
+      <StudentTable students={students} feedbackTarget={feedbackTarget} />
     </>
   )
 }
