@@ -40,26 +40,7 @@ const getStudentListVisibility = async courseUnitId => {
   return studentListVisible ?? false
 }
 
-const getStudents = async ({ feedbackTargetId, user }) => {
-  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
-
-  if (!access?.canSeeStudents()) {
-    ApplicationError.Forbidden()
-  }
-
-  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
-
-  if (!studentListVisible) {
-    return []
-  }
-
-  /**
-   *  Anonymity is breached if teacher can see students while their feedback given status can change
-   */
-  if (feedbackTarget.isOpen()) {
-    return []
-  }
-
+const getStudentsWithFeedbackStatus = async feedbackTargetId => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -77,16 +58,37 @@ const getStudents = async ({ feedbackTargetId, user }) => {
     ],
   })
 
-  const users = studentFeedbackTargets.map(target => ({
+  const students = studentFeedbackTargets.map(target => ({
     ...target.user.dataValues,
     feedbackGiven: Boolean(target.feedback),
   }))
 
-  if (users.filter(u => u.feedbackGiven).length < 5) {
-    return []
-  }
+  return students
+}
 
-  return users
+const getStudents = async ({ feedbackTargetId, user }) => {
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
+
+  if (!access?.canSeeStudents()) ApplicationError.Forbidden()
+
+  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
+
+  const studentsWithFeedback = await getStudentsWithFeedbackStatus(feedbackTargetId)
+
+  /**
+   * Show feedback given status if:
+   * - Showing feedback status is enabled for organisation
+   * - Course is no longer open so that feedback status cannot change
+   * - At least 5 students have given feedback
+   */
+  const showFeedbackGiven =
+    studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5
+
+  if (showFeedbackGiven) return studentsWithFeedback
+
+  const studentsWithoutFeedback = studentsWithFeedback.map(({ feedbackGiven, ...rest }) => rest)
+
+  return studentsWithoutFeedback
 }
 
 module.exports = {
