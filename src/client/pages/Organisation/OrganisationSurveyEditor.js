@@ -75,6 +75,10 @@ const StudentNumberInput = ({ name, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
 
+  const hasError = formikProps.touched[name] && formikProps.errors[name]
+
+  console.log(hasError)
+
   const handleChange = ({ target }) => {
     const { value } = target
 
@@ -100,6 +104,8 @@ const StudentNumberInput = ({ name, ...props }) => {
         fullWidth
         onChange={handleChange}
         defaultValue={[]}
+        error={Boolean(hasError)}
+        helperText={hasError ? formikProps.errors[name] : ''}
         {...props}
       />
     </Box>
