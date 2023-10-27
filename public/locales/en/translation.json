@@ -35,6 +35,7 @@
     "feedback": "Feedback",
     "feedbackGiven": "Given",
     "feedbackNotGiven": "Not given",
+    "feedbackHidden": "Hidden",
     "export": "Download",
     "exportCsv": "Download as CSV",
     "exportXLSX": "Donload as XLSX",
@@ -70,8 +71,7 @@
     "all": "All",
     "studentCount": "Students",
     "partiallyResponsible": "Partially responsible",
-    "university": "University",
-    "noData": "No data"
+    "university": "University"
   },
   "validationErrors": {
     "required": "This field is required",

@@ -35,6 +35,7 @@
     "feedback": "Palaute",
     "feedbackGiven": "Annettu",
     "feedbackNotGiven": "Ei annettu",
+    "feedbackHidden": "Piilotettu",
     "dropZoneInfo1": "Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.",
     "dropZoneInfo2": "Alle 5MB .csv-päätteinen tiedosto hyväksytään.",
     "feedbackHeader": "PALAUTE",
@@ -70,8 +71,7 @@
     "all": "Kaikki",
     "studentCount": "Opiskelijoita",
     "partiallyResponsible": "Osavastuullinen",
-    "university": "Yliopisto",
-    "noData": "Ei tietoa"
+    "university": "Yliopisto"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",

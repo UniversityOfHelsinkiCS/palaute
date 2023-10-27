@@ -35,6 +35,7 @@
     "feedback": "Respons",
     "feedbackGiven": "Given",
     "feedbackNotGiven": "Inte given",
+    "feedbackHidden": "Gömd",
     "dropZoneInfo1": "Dra hit en fil, eller hitta den genom att klicka på denhär rutan",
     "dropZoneInfo2": "En .csv fil mindre än 5MB godkänns",
     "feedbackHeader": "RESPONS",
@@ -69,8 +70,7 @@
     "all": "Alla",
     "studentCount": "Studerande",
     "partiallyResponsible": "Delansvarig",
-    "university": "Universitet",
-    "noData": "Inga data"
+    "university": "Universitet"
   },
   "validationErrors": {
     "required": "Fältet krävs",

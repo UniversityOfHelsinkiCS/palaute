@@ -26,7 +26,7 @@ const styles = {
 }
 
 const getFeedbackText = (feedbackStatusAvailable, feedbackGiven, t) => {
-  if (!feedbackStatusAvailable) return t('common:noData')
+  if (!feedbackStatusAvailable) return t('common:feedbackHidden')
 
   return feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven')
 }
