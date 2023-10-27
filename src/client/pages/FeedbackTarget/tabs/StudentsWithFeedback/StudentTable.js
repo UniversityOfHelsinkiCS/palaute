@@ -25,6 +25,12 @@ const styles = {
   },
 }
 
+const getFeedbackText = (feedbackStatusAvailable, feedbackGiven, t) => {
+  if (!feedbackStatusAvailable) return t('common:noData')
+
+  return feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven')
+}
+
 const ExportXLSX = ({ students, fileName }) => {
   const { t } = useTranslation()
 
@@ -67,6 +73,8 @@ const StudentTable = ({ students, feedbackTarget }) => {
     setOrderBy(property)
   }
 
+  const feedbackStatusAvailable = students.some(student => 'feedbackgiven' in student)
+
   const studentsData = useMemo(
     () =>
       _.orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
@@ -74,7 +82,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
         lastName,
         studentNumber,
         email,
-        feedbackGiven: feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven'),
+        feedbackGiven: getFeedbackText(feedbackStatusAvailable, feedbackGiven, t),
       })),
     [students]
   )
@@ -90,16 +98,18 @@ const StudentTable = ({ students, feedbackTarget }) => {
         <Box sx={styles.box}>
           {t('feedbackTargetView:studentsWithFeedbackTab')}
           <Box mr="auto" />
-          <ExportXLSX students={studentsData} fileName={fileName} />
-          <Button
-            endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-            variant="contained"
-            color="primary"
-            sx={styles.button}
-            onClick={() => setDropZoneVisible(!dropZoneVisible)}
-          >
-            {t('common:combineCSV')}
-          </Button>
+          <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
+          {feedbackStatusAvailable && (
+            <Button
+              endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
+              variant="contained"
+              color="primary"
+              sx={styles.button}
+              onClick={() => setDropZoneVisible(!dropZoneVisible)}
+            >
+              {t('common:combineCSV')}
+            </Button>
+          )}
         </Box>
       }
     >
@@ -152,9 +162,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
                 <TableCell>{lastName}</TableCell>
                 <TableCell>{studentNumber}</TableCell>
                 <TableCell>{email}</TableCell>
-                <TableCell>
-                  {String(feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven'))}
-                </TableCell>
+                <TableCell>{getFeedbackText(feedbackStatusAvailable, feedbackGiven, t)}</TableCell>
               </TableRow>
             )
           )}
