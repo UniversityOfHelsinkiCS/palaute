@@ -69,7 +69,8 @@
     "all": "Alla",
     "studentCount": "Studerande",
     "partiallyResponsible": "Delansvarig",
-    "university": "Universitet"
+    "university": "Universitet",
+    "noData": "Inga data"
   },
   "validationErrors": {
     "required": "Fältet krävs",
@@ -304,8 +305,6 @@
     "none": "inga"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Personen som gett feedback kan inte se den så länge formuläret ännu är öppet.",
-    "noFeedbackInfo": "Ingen har tillsvidare givit respons",
     "studentsList": "Studerande som gett respons"
   },
   "feedbackResponse": {

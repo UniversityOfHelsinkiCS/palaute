@@ -70,7 +70,8 @@
     "all": "All",
     "studentCount": "Students",
     "partiallyResponsible": "Partially responsible",
-    "university": "University"
+    "university": "University",
+    "noData": "No data"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -308,8 +309,8 @@
     "none": "none"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "The list of students who have given feedback cannot be shown while the feedback is open.",
-    "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
+    "cannotShowWhenOpen": "Information about students who have given feedback cannot be shown while the feedback is open.",
+    "noFeedbackInfo": "Information about students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
     "studentsList": "Students who have given feedback"
   },
   "feedbackResponse": {

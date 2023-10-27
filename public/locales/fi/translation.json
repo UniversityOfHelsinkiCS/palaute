@@ -70,7 +70,8 @@
     "all": "Kaikki",
     "studentCount": "Opiskelijoita",
     "partiallyResponsible": "Osavastuullinen",
-    "university": "Yliopisto"
+    "university": "Yliopisto",
+    "noData": "Ei tietoa"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -307,8 +308,8 @@
     "none": "ei ole"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Palautteenantajia ei voida näyttää palautteen ollessa auki.",
-    "noFeedbackInfo": "Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
+    "cannotShowWhenOpen": "Tietoa palautteen antajista ei voida näyttää palautteen ollessa auki.",
+    "noFeedbackInfo": "Tietoa palautteen antaneista opiskelijoista ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
     "studentsList": "Palautteen antaneet opiskelijat"
   },
   "feedbackResponse": {
@@ -469,7 +470,7 @@
     "feedbacksTab": "Vastaukset",
     "editFeedbackResponseTab": "Anna vastapalaute",
     "continuousFeedbackTab": "Jatkuva palaute",
-    "studentsWithFeedbackTab": "Palautteenantajat",
+    "studentsWithFeedbackTab": "Opiskelijat",
     "linkCopied": "Linkki palautteeseen on kopioitu leikepöydälle",
     "copyLink": "Kopioi opiskelijan vastauslinkki",
     "editFeedbackTab": "Muokkaa palautetta",
