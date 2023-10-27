@@ -339,7 +339,7 @@
     "everyone": "Everyone"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Feedback period",
+    "editPeriodTitle": "Edit feedback period",
     "cannotCloseImmediately": "Feedback is not yet open",
     "cannotCloseImmediatelyWhenOpen": "Feedback either closes within a day or has already ended",
     "cannotOpenImmediately": "Feedback is already open or has ended"

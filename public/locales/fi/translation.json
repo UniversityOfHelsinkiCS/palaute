@@ -339,7 +339,7 @@
     "everyone": "Kaikki käyttäjät"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Palautteen käynnissäoloaika",
+    "editPeriodTitle": "Muokkaa palautteen käynnissäoloaikaa",
     "cannotCloseImmediately": "Palaute ei vielä ole käynnissä",
     "cannotCloseImmediatelyWhenOpen": "Palaute on sulkeutunut tai sulkeutuu päivän kuluttua",
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"

@@ -337,7 +337,7 @@
     "everyone": "Alla användare"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Responsperiod",
+    "editPeriodTitle": "Redigera responsperiod",
     "cannotCloseImmediately": "Responsen är ännu inte igång",
     "cannotCloseImmediatelyWhenOpen": "Responsen har stängts eller kommer att stängas om en dag",
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
