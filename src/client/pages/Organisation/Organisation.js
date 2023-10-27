@@ -85,7 +85,7 @@ const Organisation = () => {
           {hasWriteAccess && (
             <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
           )}
-          {ORGANISATION_SURVEYS_ENABLED && isAdmin && (
+          {ORGANISATION_SURVEYS_ENABLED && (
             <RouterTab
               label={t('organisationSettings:organisationSurveysTab')}
               icon={<DynamicFormOutlined />}
