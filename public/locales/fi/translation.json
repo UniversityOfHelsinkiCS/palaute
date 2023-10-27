@@ -75,7 +75,8 @@
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
     "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
-    "invalidDate": "Virheellinen päivämäärä"
+    "invalidDate": "Virheellinen päivämäärä",
+    "invalidStudentNumbers": "Seuraavat opiskelijanumerot eivät olleet oikein: "
   },
   "links": {
     "supportEmail": "-",

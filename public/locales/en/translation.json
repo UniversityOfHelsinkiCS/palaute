@@ -75,7 +75,8 @@
   "validationErrors": {
     "required": "This field is required",
     "wrongDate": "Survey closing date is before opening date",
-    "invalidDate": "Invalid date"
+    "invalidDate": "Invalid date",
+    "invalidStudentNumbers": "The following student numbers were not valid: "
   },
   "links": {
     "supportEmail": "-",
