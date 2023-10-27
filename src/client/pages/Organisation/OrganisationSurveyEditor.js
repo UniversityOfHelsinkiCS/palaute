@@ -77,8 +77,6 @@ const StudentNumberInput = ({ name, ...props }) => {
 
   const hasError = formikProps.touched[name] && formikProps.errors[name]
 
-  console.log(hasError)
-
   const handleChange = ({ target }) => {
     const { value } = target
 
