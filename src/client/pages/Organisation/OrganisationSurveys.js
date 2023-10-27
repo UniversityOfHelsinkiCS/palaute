@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
 
 import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material'
@@ -87,6 +88,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 const OrganisationSurveys = () => {
   const { t } = useTranslation()
   const { code } = useParams()
+  const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
   const mutation = useCreateOrganisationSurveyMutation(code)
@@ -117,15 +119,31 @@ const OrganisationSurveys = () => {
     teacherIds: Yup.array().of(Yup.string()),
   })
 
-  const createOrganisationSurvey = useInteractiveMutation(surveyValues => mutation.mutateAsync({ ...surveyValues }))
-
-  const handleSubmit = async values => {
-    setShowForm(!showForm)
-
-    await createOrganisationSurvey(values)
-  }
-
   const handleClose = () => setShowForm(!showForm)
+
+  const handleSubmit = async (values, { setErrors }) => {
+    await mutation.mutateAsync(values, {
+      onSuccess: () => {
+        handleClose()
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+      },
+      onError: error => {
+        if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
+          const { invalidStudentNumbers } = error.response.data
+          const errorString = `
+            ${t('validationErrors:invalidStudentNumbers')}
+      
+            ${invalidStudentNumbers.join(', ')}
+          `
+
+          setErrors({ studentNumbers: errorString })
+        } else {
+          handleClose()
+          enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+        }
+      },
+    })
+  }
 
   if (isOrganisationSurveysLoading) {
     return <LoadingProgress />
