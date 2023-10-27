@@ -106,11 +106,30 @@ const OrganisationSurveys = () => {
   }
 
   const organisationSurveySchema = Yup.object().shape({
-    name: Yup.object().shape({
-      fi: Yup.string().required(t('validationErrors:required')),
-      en: Yup.string().required(t('validationErrors:required')),
-      sv: Yup.string().required(t('validationErrors:required')),
-    }),
+    name: Yup.object().shape(
+      {
+        fi: Yup.string().when(['sv', 'en'], {
+          is: (sv, en) => !sv && !en,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+        sv: Yup.string().when(['fi', 'en'], {
+          is: (fi, en) => !fi && !en,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+        en: Yup.string().when(['fi', 'sv'], {
+          is: (fi, sv) => !fi && !sv,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+      },
+      [
+        ['sv', 'en'],
+        ['fi', 'en'],
+        ['fi', 'sv'],
+      ]
+    ),
     startDate: Yup.date().required(t('validationErrors:invalidDate')),
     endDate: Yup.date()
       .required(t('validationErrors:invalidDate'))
