@@ -169,36 +169,33 @@ const OrganisationSurveys = () => {
   }
 
   return (
-    <>
-      <Title>{t('common:courseSummaryPage')}</Title>
-      <Box mb={6} px={1}>
-        <Box sx={styles.buttonContainer}>
-          <Button
-            color="primary"
-            onClick={() => {
-              setShowForm(!showForm)
-            }}
-            disabled={showForm}
-          >
-            {t('organisationSurveys:addSurvey')}
-          </Button>
-        </Box>
-
-        <OrganisationSurveyEditor
-          initialValues={initialValues}
-          validationSchema={organisationSurveySchema}
-          handleSubmit={handleSubmit}
-          editing={showForm}
-          onStopEditing={handleClose}
-        />
-
-        {surveys.length > 0 ? (
-          surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
-        ) : (
-          <Alert severity="info">{t('organisationSurveys:emptySurveys')}</Alert>
-        )}
+    <Box mb={6} px={1}>
+      <Box sx={styles.buttonContainer}>
+        <Button
+          color="primary"
+          onClick={() => {
+            setShowForm(!showForm)
+          }}
+          disabled={showForm}
+        >
+          {t('organisationSurveys:addSurvey')}
+        </Button>
       </Box>
-    </>
+
+      <OrganisationSurveyEditor
+        initialValues={initialValues}
+        validationSchema={organisationSurveySchema}
+        handleSubmit={handleSubmit}
+        editing={showForm}
+        onStopEditing={handleClose}
+      />
+
+      {surveys.length > 0 ? (
+        surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
+      ) : (
+        <Alert severity="info">{t('organisationSurveys:emptySurveys')}</Alert>
+      )}
+    </Box>
   )
 }
 
