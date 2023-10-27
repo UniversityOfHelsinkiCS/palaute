@@ -16,7 +16,6 @@ import {
 
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
-import Title from '../../components/common/Title'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 import { getStartAndEndString } from '../../util/getDateRangeString'
@@ -28,8 +27,9 @@ const styles = {
     marginBottom: 3,
   },
   buttonContainer: {
+    mb: 2,
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     '@media print': {
       display: 'none',
     },
@@ -170,6 +170,9 @@ const OrganisationSurveys = () => {
 
   return (
     <Box mb={6} px={1}>
+      <Alert sx={{ mb: 2 }} severity="warning">
+        {t('organisationSurveys:heading')}
+      </Alert>
       <Box sx={styles.buttonContainer}>
         <Button
           color="primary"
@@ -193,7 +196,9 @@ const OrganisationSurveys = () => {
       {surveys.length > 0 ? (
         surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
       ) : (
-        <Alert severity="info">{t('organisationSurveys:emptySurveys')}</Alert>
+        <Alert sx={{ mt: 2 }} severity="info">
+          {t('organisationSurveys:emptySurveys')}
+        </Alert>
       )}
     </Box>
   )
