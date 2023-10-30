@@ -18,8 +18,6 @@ const getOrganisationSurveys = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
-
   const { organisation, hasReadAccess } = await getAccessAndOrganisation(user, code, {
     read: true,
   })
@@ -35,8 +33,6 @@ const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
   const { name, startDate, endDate, studentNumbers, teacherIds } = req.body
-
-  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
@@ -65,8 +61,6 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { code, id } = req.params
 
-  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
-
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
 
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
@@ -88,8 +82,6 @@ const editOrganisationSurvey = async (req, res) => {
 const removeOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code, id } = req.params
-
-  if (!user.isAdmin) throw new ApplicationError(403, 'Only for admins during development')
 
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
