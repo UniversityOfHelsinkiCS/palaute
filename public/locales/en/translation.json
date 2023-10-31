@@ -309,7 +309,7 @@
     "none": "none"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Information about students who have given feedback cannot be shown while the feedback is open.",
+    "cannotShowBeforeFeedbackEnds": "Information about students who have given feedback cannot be shown before the feedback period has ended.",
     "noFeedbackInfo": "Information about students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
     "studentsList": "Students who have given feedback"
   },

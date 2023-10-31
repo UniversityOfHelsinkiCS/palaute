@@ -308,7 +308,7 @@
     "none": "ei ole"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Tietoa palautteen antajista ei voida näyttää palautteen ollessa auki.",
+    "cannotShowBeforeFeedbackEnds": "Tietoa palautteen antajista ei voida näyttää ennen kuin palautteenantojakso on päättynyt.",
     "noFeedbackInfo": "Tietoa palautteen antaneista opiskelijoista ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
     "studentsList": "Palautteen antaneet opiskelijat"
   },
