@@ -243,7 +243,7 @@ const config = {
 
   PUBLIC_URL: 'https://norppa.helsinki.fi',
 
-  GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
+  GRAYLOG_URL: 'https://toska.cs.helsinki.fi/graylog',
 
   TRANSLATION_NAMESPACE: 'hy',
 
