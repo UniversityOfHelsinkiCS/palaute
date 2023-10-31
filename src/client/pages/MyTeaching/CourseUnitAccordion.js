@@ -33,8 +33,8 @@ const getChip = (courseRealisation, code) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const isOngoing = feedbackTargetCourseIsOngoing({ courseRealisation }) && !isOpen
-  const { id: feedbackTargetId, continuousFeedbackEnabled } = feedbackTarget || {}
+  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = feedbackTarget || {}
+  const isOngoing = feedbackTargetCourseIsOngoing({ opensAt, courseRealisation }) && !isOpen
 
   if (isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
