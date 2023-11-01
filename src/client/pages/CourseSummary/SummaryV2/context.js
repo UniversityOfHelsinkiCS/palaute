@@ -2,6 +2,19 @@ import React from 'react'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
 
+const getSummarySortFunction = sortField => {
+  switch (sortField) {
+    case 'feedbackCount':
+      return summary => summary.data.feedbackCount
+    case 'feedbackPercentage':
+      return summary => summary.data.feedbackCount / summary.data.studentCount
+    case 'feedbackResponsePercentage':
+      return summary => summary.data.feedbackResponsePercentage
+    default:
+      return summary => summary.data.result[sortField]?.mean
+  }
+}
+
 const summaryContext = React.createContext({
   showSummariesWithNoFeedback: false,
   setShowSummariesWithNoFeedback: () => {},
@@ -14,6 +27,7 @@ const summaryContext = React.createContext({
   setOption: () => {},
   sortBy: ['code', 'asc'],
   setSortBy: () => {},
+  sortFunction: getSummarySortFunction('code'),
 })
 
 export const SummaryContextProvider = ({ children }) => {
@@ -84,6 +98,8 @@ export const SummaryContextProvider = ({ children }) => {
     setParams(params)
   })
 
+  const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
+
   const value = React.useMemo(
     () => ({
       showSummariesWithNoFeedback,
@@ -94,6 +110,7 @@ export const SummaryContextProvider = ({ children }) => {
       setOption: updateOptionQS,
       sortBy,
       setSortBy: updateSortByQS,
+      sortFunction,
     }),
     [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1]]
   )

@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ChevronRight } from '@mui/icons-material'
 import { Link as RouterLink } from 'react-router-dom'
@@ -256,7 +257,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 }
 
 const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions }) => {
-  const { showSummariesWithNoFeedback } = useSummaryContext()
+  const { showSummariesWithNoFeedback, sortBy, sortFunction } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -264,15 +265,23 @@ const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions 
     include: 'childOrganisations',
   })
 
+  const filteredAndOrderedOrganisations = React.useMemo(
+    () =>
+      _.orderBy(
+        showSummariesWithNoFeedback
+          ? organisation?.childOrganisations
+          : organisation?.childOrganisations?.filter(org => !!org.summary),
+        org => sortFunction(org.summary),
+        sortBy[1]
+      ),
+    [showSummariesWithNoFeedback, organisation, sortBy[0], sortBy[1]]
+  )
+
   if (isLoading) {
     return <Loader />
   }
 
-  const filteredOrganisations = showSummariesWithNoFeedback
-    ? organisation?.childOrganisations
-    : organisation?.childOrganisations?.filter(org => !!org.summary)
-
-  return filteredOrganisations?.map(org => (
+  return filteredAndOrderedOrganisations?.map(org => (
     <OrganisationSummaryRow
       key={org.id}
       startDate={startDate}
@@ -491,7 +500,7 @@ export const SorterRow = () => {
         />
       ))}
       <Sort field="feedbackCount" label="" width={styles.countCell.width} />
-      <Sort field="feedbackPercent" label="" width={styles.percentCell.width} />
+      <Sort field="feedbackPercentage" label="" width={styles.percentCell.width} />
       <Sort field="feedbackResponsePercentage" label="" width={styles.percentCell.width} />
     </Box>
   )
