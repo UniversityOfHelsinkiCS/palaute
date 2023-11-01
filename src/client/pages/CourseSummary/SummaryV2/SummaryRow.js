@@ -294,6 +294,7 @@ const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions 
 }
 
 const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
+  const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -301,13 +302,19 @@ const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
     include: 'courseUnits',
   })
 
+  const orderedCourseUnits = React.useMemo(
+    () =>
+      organisation?.courseUnits?.length > 0
+        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1])
+        : [],
+    [organisation, sortBy[0], sortBy[1]]
+  )
+
   if (isLoading) {
     return <Loader />
   }
 
-  return organisation?.courseUnits?.map(cu => (
-    <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
-  ))
+  return orderedCourseUnits?.map(cu => <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />)
 }
 
 const OrganisationResults = ({ summary, questions }) => {
@@ -444,11 +451,20 @@ export const OrganisationSummaryRow = ({
 }
 
 export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
+  const { sortBy, sortFunction } = useSummaryContext()
   const [isOpen, setIsOpen] = React.useState(true)
 
   const indentLineColor = useRandomColor(organisation?.code ?? '')
 
   const label = <OrganisationLabel organisation={organisation} dates={null} />
+
+  const orderedCourseUnits = React.useMemo(
+    () =>
+      organisation?.courseUnits?.length > 0
+        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1])
+        : [],
+    [organisation, sortBy[0], sortBy[1]]
+  )
 
   return (
     <Box
@@ -471,7 +487,7 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
           alignItems="stretch"
           gap="0.4rem"
         >
-          {organisation?.courseUnits?.map(cu => (
+          {orderedCourseUnits.map(cu => (
             <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />
           ))}
         </Box>
