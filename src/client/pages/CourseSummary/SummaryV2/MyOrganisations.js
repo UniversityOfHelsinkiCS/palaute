@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import { OrganisationSummaryRow } from './SummaryRow'
+import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import { useSummaryContext } from './context'
 
@@ -20,7 +20,8 @@ const MyOrganisations = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
-      {rootOrganisations.map(organisation => (
+      <SorterRow />
+      {rootOrganisations.map((organisation, i) => (
         <OrganisationSummaryRow
           key={organisation.id}
           loadClosed
@@ -29,6 +30,7 @@ const MyOrganisations = () => {
           organisation={organisation}
           startDate={dateRange.start}
           endDate={dateRange.end}
+          hasSorter={i === 0}
         />
       ))}
     </Box>

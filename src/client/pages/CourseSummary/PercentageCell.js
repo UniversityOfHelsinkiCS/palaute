@@ -5,6 +5,7 @@ const styles = {
   cell: {
     display: 'flex',
     justifyContent: 'center',
+    height: '100%',
   },
 }
 

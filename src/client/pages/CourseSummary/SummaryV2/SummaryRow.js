@@ -12,6 +12,7 @@ import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useSummaryQuestions } from './utils'
 import { useSummaryContext } from './context'
+import Sort from './Sort'
 
 const styles = {
   resultCell: {
@@ -404,7 +405,6 @@ export const OrganisationSummaryRow = ({
         )}
       </Box>
       {(isTransitioning || isOpen) && (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <Box
           sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
           display="flex"
@@ -467,6 +467,32 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
           ))}
         </Box>
       )}
+    </Box>
+  )
+}
+
+export const SorterRow = () => {
+  const { i18n } = useTranslation()
+  const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
+
+  if (isQuestionsLoading) {
+    return <Loader />
+  }
+
+  return (
+    <Box display="flex" alignItems="stretch" gap="0.2rem">
+      <RowHeader label="" />
+      {questions.map(q => (
+        <Sort
+          key={q.id}
+          field={q.id}
+          label={getLanguageValue(q.data.label, i18n.language)}
+          width={styles.resultCell.minWidth}
+        />
+      ))}
+      <Sort field="feedbackCount" label="" width={styles.countCell.width} />
+      <Sort field="feedbackPercent" label="" width={styles.percentCell.width} />
+      <Sort field="feedbackResponsePercentage" label="" width={styles.percentCell.width} />
     </Box>
   )
 }
