@@ -18,8 +18,7 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
     INNER JOIN course_units_organisations as cuo ON cu.id = cuo.course_unit_id
     INNER JOIN organisations as org ON org.id = cuo.organisation_id
 
-    WHERE cu.course_code = ANY (org.student_list_visible_course_codes)
-    AND fbt.closes_at > NOW() + interval '0 days'
+    WHERE fbt.closes_at > NOW() + interval '0 days'
     AND fbt.closes_at < NOW() + interval '${STUDENT_REMINDER_DAYS_TO_CLOSE} days'
     AND (
       fbt.feedback_reminder_last_sent_at IS NULL
