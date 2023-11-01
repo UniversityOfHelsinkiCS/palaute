@@ -71,7 +71,9 @@
     "all": "Kaikki",
     "studentCount": "Opiskelijoita",
     "partiallyResponsible": "Osavastuullinen",
-    "university": "Yliopisto"
+    "university": "Yliopisto",
+    "ascending": "nousevasti",
+    "descending": "laskevasti"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -370,6 +372,7 @@
     "clickForDetails": "Katso lisätiedot",
     "feedbackResponseGiven": "Vastapalaute on annettu",
     "feedbackResponseNotGiven": "Vastapalautetta ei ole annettu",
+    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu",
     "feedbackStillOpen": "Kurssin palautejakso on vielä käynnissä",
     "courseOngoing": "Kurssi on vielä käynnissä",
     "programmeSummary": "Koulutusohjelman yhteenveto",

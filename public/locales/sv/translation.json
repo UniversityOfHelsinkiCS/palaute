@@ -70,7 +70,9 @@
     "all": "Alla",
     "studentCount": "Studerande",
     "partiallyResponsible": "Delansvarig",
-    "university": "Universitet"
+    "university": "Universitet",
+    "ascending": "stigande",
+    "descending": "fallande"
   },
   "validationErrors": {
     "required": "Fältet krävs",

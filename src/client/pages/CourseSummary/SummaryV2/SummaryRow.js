@@ -243,13 +243,13 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
           label={`${percent}%`}
           percent={percent}
           sx={styles.percentCell}
-          tooltip={`Palauteprosentti: ${percent}%`}
+          tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
         />
         <PercentageCell
           label={`${feedbackResponsePercentage}%`}
           percent={feedbackResponsePercentage}
           sx={styles.percentCell}
-          tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
+          tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
         />
       </Box>
     </Box>
@@ -481,7 +481,7 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
 }
 
 export const SorterRow = () => {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
 
   if (isQuestionsLoading) {
@@ -499,9 +499,13 @@ export const SorterRow = () => {
           width={styles.resultCell.minWidth}
         />
       ))}
-      <Sort field="feedbackCount" label="" width={styles.countCell.width} />
-      <Sort field="feedbackPercentage" label="" width={styles.percentCell.width} />
-      <Sort field="feedbackResponsePercentage" label="" width={styles.percentCell.width} />
+      <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
+      <Sort field="feedbackPercentage" label={t('courseSummary:feedbackPercentage')} width={styles.percentCell.width} />
+      <Sort
+        field="feedbackResponsePercentage"
+        label={t('courseSummary:feedbackResponsePercentage')}
+        width={styles.percentCell.width}
+      />
     </Box>
   )
 }

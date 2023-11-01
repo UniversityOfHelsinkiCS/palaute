@@ -71,7 +71,9 @@
     "all": "All",
     "studentCount": "Students",
     "partiallyResponsible": "Partially responsible",
-    "university": "University"
+    "university": "University",
+    "ascending": "ascending",
+    "descending": "descending"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -370,6 +372,7 @@
     "feedbackPercentage": "Feedback percentage",
     "feedbackResponseGiven": "Counter feedback has been given",
     "feedbackResponseNotGiven": "Counter feedback has not been given",
+    "feedbackResponsePercentage": "Courses where feedback response given",
     "feedbackStillOpen": "Feedback for this course is still ongoing",
     "courseOngoing": "The course is still ongoing",
     "programmeSummary": "Programme summary",
