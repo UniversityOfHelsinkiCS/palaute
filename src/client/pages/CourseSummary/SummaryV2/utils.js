@@ -20,11 +20,13 @@ export const useOrderedAndFilteredOrganisations = organisations => {
   const { showSummariesWithNoFeedback, sortBy, sortFunction } = useSummaryContext()
   const filteredAndOrderedOrganisations = React.useMemo(
     () =>
-      _.orderBy(
-        showSummariesWithNoFeedback ? organisations : organisations.filter(org => !!org.summary),
-        org => sortFunction(org.summary),
-        sortBy[1]
-      ),
+      !organisations
+        ? []
+        : _.orderBy(
+            showSummariesWithNoFeedback ? organisations : organisations.filter(org => !!org.summary),
+            org => sortFunction(org.summary),
+            sortBy[1]
+          ),
     [showSummariesWithNoFeedback, organisations, sortBy[0], sortBy[1]]
   )
 
