@@ -355,7 +355,7 @@
     "newSurveyName": "Survey name",
     "responsibleTeacherTitle": "Add a responsible person to this survey",
     "responsibleTeacherEmail": "Email",
-    "studentNumberTitle": "Add new feedback students",
+    "studentNumberTitle": "Add students to this survey",
     "studentNumberInputLabel": "Paste student numbers here",
     "startDate": "From",
     "endDate": "To"
