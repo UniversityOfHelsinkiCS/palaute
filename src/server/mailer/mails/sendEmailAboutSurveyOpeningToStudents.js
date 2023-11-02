@@ -21,6 +21,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
         [Op.gte]: new Date(),
       },
       feedbackType: 'courseRealisation',
+      userCreated: false,
     },
     include: [
       {
