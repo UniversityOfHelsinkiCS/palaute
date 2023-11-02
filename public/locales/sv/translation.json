@@ -344,14 +344,6 @@
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
   },
   "organisationSurveys": {
-    "heading": "Koulutusohjelman kyselyt",
-    "viewFeedbackSummary": "Näytä kyselyn yhteenveto",
-    "addSurvey": "Luo uusi koulutusohjelman kysely",
-    "newSurveyName": "Kyselyn nimi",
-    "responsibleTeacherTitle": "Lisää kyselylle vastuuhenkilö",
-    "responsibleTeacherEmail": "Sähköposti",
-    "studentNumberTitle": "Lisää palautteelle opiskelijoita",
-    "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "startDate": "Från och med",
     "endDate": "till"
   },
