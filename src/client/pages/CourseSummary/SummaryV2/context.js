@@ -92,10 +92,12 @@ export const SummaryContextProvider = ({ children }) => {
   })
 
   const updateSortByQS = React.useCallback(sortBy => {
-    setSortBy(sortBy)
-    params.set('sortBy', sortBy[0])
-    params.set('order', sortBy[1])
-    setParams(params)
+    React.startTransition(() => {
+      setSortBy(sortBy)
+      params.set('sortBy', sortBy[0])
+      params.set('order', sortBy[1])
+      setParams(params)
+    })
   })
 
   const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])

@@ -11,7 +11,7 @@ import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResu
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
-import { useSummaryQuestions } from './utils'
+import { useOrderedAndFilteredOrganisations, useSummaryQuestions } from './utils'
 import { useSummaryContext } from './context'
 import Sort from './Sort'
 
@@ -257,7 +257,6 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 }
 
 const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions }) => {
-  const { showSummariesWithNoFeedback, sortBy, sortFunction } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -265,23 +264,13 @@ const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions 
     include: 'childOrganisations',
   })
 
-  const filteredAndOrderedOrganisations = React.useMemo(
-    () =>
-      _.orderBy(
-        showSummariesWithNoFeedback
-          ? organisation?.childOrganisations
-          : organisation?.childOrganisations?.filter(org => !!org.summary),
-        org => sortFunction(org.summary),
-        sortBy[1]
-      ),
-    [showSummariesWithNoFeedback, organisation, sortBy[0], sortBy[1]]
-  )
+  const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(organisation?.childOrganisations)
 
   if (isLoading) {
     return <Loader />
   }
 
-  return filteredAndOrderedOrganisations?.map(org => (
+  return orderedAndFilteredOrganisations?.map(org => (
     <OrganisationSummaryRow
       key={org.id}
       startDate={startDate}

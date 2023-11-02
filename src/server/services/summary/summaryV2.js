@@ -325,9 +325,37 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
   return organisationsJson
 }
 
+const getUserOrganisationSummaries = async ({ startDate, endDate, user }) => {
+  const organisationIds = await getSummaryAccessibleOrganisationIds(user)
+
+  const organisations = await Organisation.findAll({
+    attributes: ['id', 'name', 'code'],
+    where: {
+      id: {
+        [Op.in]: organisationIds,
+        [Op.notIn]: SUMMARY_EXCLUDED_ORG_IDS,
+      },
+    },
+    include: {
+      model: Summary.scope({ method: ['at', startDate, endDate] }),
+      as: 'summaries',
+      required: false,
+    },
+  })
+
+  const organisationsJson = organisations.map(org => {
+    org.summary = sumSummaries(org.summaries)
+    delete org.dataValues.summaries
+    return org.toJSON()
+  })
+
+  return organisationsJson
+}
+
 module.exports = {
   getOrganisationSummary,
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
   getTeacherSummary,
+  getUserOrganisationSummaries,
 }

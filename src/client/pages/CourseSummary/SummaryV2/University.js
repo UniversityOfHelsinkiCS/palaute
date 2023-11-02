@@ -25,7 +25,6 @@ const University = () => {
         alwaysOpen
         startDate={dateRange.start}
         endDate={dateRange.end}
-        hasSorter
       />
     </>
   )

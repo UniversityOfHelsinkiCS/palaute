@@ -1,4 +1,7 @@
+import React from 'react'
+import _ from 'lodash'
 import useUniversitySurvey from '../../../hooks/useUniversitySurvey'
+import { useSummaryContext } from './context'
 
 export const useSummaryQuestions = () => {
   const { survey: universitySurvey, isLoading: isUniversitySurveyLoading } = useUniversitySurvey()
@@ -11,4 +14,19 @@ export const useSummaryQuestions = () => {
     questions: acualQuestions,
     isLoading: isUniversitySurveyLoading,
   }
+}
+
+export const useOrderedAndFilteredOrganisations = organisations => {
+  const { showSummariesWithNoFeedback, sortBy, sortFunction } = useSummaryContext()
+  const filteredAndOrderedOrganisations = React.useMemo(
+    () =>
+      _.orderBy(
+        showSummariesWithNoFeedback ? organisations : organisations.filter(org => !!org.summary),
+        org => sortFunction(org.summary),
+        sortBy[1]
+      ),
+    [showSummariesWithNoFeedback, organisations, sortBy[0], sortBy[1]]
+  )
+
+  return filteredAndOrderedOrganisations
 }
