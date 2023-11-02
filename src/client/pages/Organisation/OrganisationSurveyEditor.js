@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Autocomplete, Card, CardContent, Button, Box, Grid, Typography, TextField } from '@mui/material'
+import { Autocomplete, Alert, Card, CardContent, Button, Box, Grid, Typography, TextField } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
@@ -92,6 +92,28 @@ const StudentNumberInput = ({ name, ...props }) => {
       <Typography variant="body1" mb={2}>
         {t('organisationSurveys:studentNumberTitle')}
       </Typography>
+
+      <Box my={2}>
+        <Alert severity="info">
+          Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä <br />
+          <ul>
+            <li>Pilkulla</li>
+            <li>Puolipisteellä</li>
+            <li>Välilyönnillä</li>
+            <li>Rivinvaihdolla</li>
+          </ul>
+          <Typography variant="body2" mt={2}>
+            Esimerkiksi seuraavanlaisesti
+          </Typography>
+          <Box sx={{ background: 'white', width: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
+            010000003;
+            <br />
+            011000002,
+            <br />
+            011100009 011110002
+          </Box>
+        </Alert>
+      </Box>
 
       <TextField
         id={name}
