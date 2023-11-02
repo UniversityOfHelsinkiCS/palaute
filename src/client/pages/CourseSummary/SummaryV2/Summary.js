@@ -21,6 +21,7 @@ const SummaryInContext = () => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+  const { search } = window.location
   const [, startTransition] = React.useTransition()
 
   const handleUpdateData = async () => {
@@ -65,14 +66,18 @@ const SummaryInContext = () => {
               <img src={hyLogo} alt="HY" />
             </Box>
           }
-          to="/course-summary/v2/university"
+          to={`/course-summary/v2/university${search}`}
         />
         <RouterTab
           label={t('courseSummary:myOrganisations')}
           icon={<BarChartOutlined />}
-          to="/course-summary/v2/my-organisations"
+          to={`/course-summary/v2/my-organisations${search}`}
         />
-        <RouterTab label={t('courseSummary:myCourses')} icon={<School />} to="/course-summary/v2/my-courses" />
+        <RouterTab
+          label={t('courseSummary:myCourses')}
+          icon={<School />}
+          to={`/course-summary/v2/my-courses${search}`}
+        />
       </RouterTabs>
       <Box mt="3rem">
         <Switch>

@@ -4,12 +4,14 @@ import { Tabs, Box, Tooltip, Badge, Paper, Tab } from '@mui/material'
 
 import { get } from 'lodash'
 
+const stripSearch = path => path.split('?')[0]
+
 export const RouterTabs = ({ children, ...props }) => {
   const { pathname } = useLocation()
 
   const activeIndex = React.Children.toArray(children)
     .filter(c => React.isValidElement(c))
-    .findIndex(c => !!matchPath(pathname, { path: get(c, 'props.to') }))
+    .findIndex(c => !!matchPath(pathname, { path: stripSearch(get(c, 'props.to')) }))
 
   return (
     <Paper>
@@ -32,7 +34,7 @@ export const RouterTab = ({
   ...props
 }) => {
   const { pathname } = useLocation()
-  const active = !!matchPath(pathname, { path: to })
+  const active = !!matchPath(pathname, { path: stripSearch(to) })
 
   let content = icon ? (
     <Box display="flex" alignItems="center">
