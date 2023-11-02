@@ -95,15 +95,15 @@ const StudentNumberInput = ({ name, ...props }) => {
 
       <Box my={2}>
         <Alert severity="info">
-          Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä <br />
+          {t('organisationSurveys:studentNumberInformation')} <br />
           <ul>
-            <li>Pilkulla</li>
-            <li>Puolipisteellä</li>
-            <li>Välilyönnillä</li>
-            <li>Rivinvaihdolla</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
           </ul>
           <Typography variant="body2" mt={2}>
-            Esimerkiksi seuraavanlaisesti
+            {t('organisationSurveys:studentNumberExampleInput')}
           </Typography>
           <Box sx={{ background: 'white', width: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
             010000003;

@@ -357,6 +357,14 @@
     "responsibleTeacherEmail": "Email",
     "studentNumberTitle": "Add students to this survey",
     "studentNumberInputLabel": "Paste student numbers here",
+    "studentNumberInformation": "Student numbers can be separated by the following characters",
+    "studentNumberDelimiters": {
+      "comma": "Comma",
+      "semicolon": "Semicolon",
+      "space": "Space",
+      "newline": "Newline"
+    },
+    "studentNumberExampleInput": "For example, as follows",
     "startDate": "From",
     "endDate": "To"
   },

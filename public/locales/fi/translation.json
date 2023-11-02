@@ -357,6 +357,14 @@
     "responsibleTeacherEmail": "Sähköposti",
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
     "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
+    "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
+    "studentNumberDelimeters": {
+      "comma": "Pilkulla",
+      "semicolon": "Puolipisteellä",
+      "space": "Välilyönnillä",
+      "newline": "Rivinvaihdolla"
+    },
+    "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
     "startDate": "Alkaen",
     "endDate": "Loppuen"
   },
