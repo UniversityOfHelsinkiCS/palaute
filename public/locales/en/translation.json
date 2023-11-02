@@ -358,7 +358,7 @@
     "studentNumberTitle": "Add students to this survey",
     "studentNumberInputLabel": "Paste student numbers here",
     "studentNumberInformation": "Student numbers can be separated by the following characters",
-    "studentNumberDelimiters": {
+    "studentNumberDelimeters": {
       "comma": "Comma",
       "semicolon": "Semicolon",
       "space": "Space",
