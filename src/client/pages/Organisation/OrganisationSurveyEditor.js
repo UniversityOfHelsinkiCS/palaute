@@ -105,7 +105,7 @@ const StudentNumberInput = ({ name, ...props }) => {
           <Typography variant="body2" mt={2}>
             {t('organisationSurveys:studentNumberExampleInput')}
           </Typography>
-          <Box sx={{ background: 'white', width: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
+          <Box sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
             010000003;
             <br />
             011000002,
