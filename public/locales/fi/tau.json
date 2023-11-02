@@ -112,7 +112,7 @@
   },
   "organisationSettings": {
     "surveyInfo": "Yksikkötason kysymykset näytetään jokaisessa yksikön opintojakson toteutuksen kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
-    "studentListVisible": "Näytä palautetta antaneet opiskelijat toteutuksen vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi",
+    "studentListVisible": "Näytä palautetta antaneet opiskelijat toteutuksen vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi. Mikäli haluat säätää palautteenantajien näyttämistä opintojaksokohtaisesti, laita tämä vipu pois päältä ja tee opintojaksokohtaiset valinnat alta.",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla opintojaksoilla",
     "courseSettings": "Opintojaksokohtaiset asetukset",
     "surveyTab": "Yksikön kysely",

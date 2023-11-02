@@ -62,6 +62,7 @@
   },
   "organisationSettings": {
     "surveyInfo": "Unit level questions are displayed in every unit's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback. In case you want to make adjustments by courses, turn off this setting and make course-specific selections below.",
     "surveyTab": "Unit survey",
     "editProgrammeQuestionsDialogContent": "'You are editing the questions shared by the whole unit. These questions are visible for all the courses of the unit. Are you sure you want to edit these questions?",
     "showCurName": "Show course implementation names"
