@@ -15,11 +15,15 @@ import {
 } from './useOrganisationSurveyMutation'
 
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 
+import PercentageCell from '../CourseSummary/PercentageCell'
+import FeedbackResponseChip from '../MyTeaching/FeedbackResponseChip'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 
 const styles = {
   dates: {
@@ -40,11 +44,16 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const { code } = useParams()
+  const { feedbackTarget, isLoading } = useFeedbackTarget(organisationSurvey.id, { retry: 0 })
 
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
     success: t('organisationSettings:removeSuccess'),
   })
+
+  if (isLoading || !feedbackTarget) {
+    return <LoadingProgress />
+  }
 
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
@@ -62,6 +71,9 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     closesAt: endDate,
   })
 
+  const isOpen = feedbackTargetIsOpen(feedbackTarget)
+  const { feedbackCount, studentCount } = feedbackTarget
+
   return (
     <Card sx={{ mb: 3 }}>
       <CardContent>
@@ -72,6 +84,20 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         <Typography variant="body1" sx={{ mt: 2 }}>
           {periodInfo}
         </Typography>
+
+        <Box display="flex" gap="1rem" alignItems="center">
+          <Typography variant="body2">{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
+          <PercentageCell label={`${feedbackCount}/${studentCount}`} percent={(feedbackCount / studentCount) * 100} />
+        </Box>
+
+        <Box sx={{ mt: 2 }}>
+          <FeedbackResponseChip
+            id={feedbackTarget.id}
+            feedbackResponseGiven={false}
+            feedbackResponseSent={false}
+            ongoing={isOpen}
+          />
+        </Box>
 
         <Button color="primary" variant="outlined" sx={{ mt: 2 }} component={Link} to={viewPath}>
           {t('organisationSurveys:viewFeedbackSummary')}
