@@ -175,6 +175,7 @@ const getSurveysForOrganisation = async organisationId => {
         required: true,
       },
     ],
+    order: [['courseRealisation', 'endDate', 'DESC']],
   })
 
   return organisationSurveys
