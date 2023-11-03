@@ -87,7 +87,11 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <Typography variant="body2">{t('organisationSurveys:givenFeedback')}:</Typography>
-          <PercentageCell label={`${feedbackCount}/${studentCount}`} percent={(feedbackCount / studentCount) * 100} />
+          <PercentageCell
+            size="small"
+            label={`${feedbackCount}/${studentCount}`}
+            percent={(feedbackCount / studentCount) * 100}
+          />
         </Box>
 
         <Box sx={{ mt: 1, mb: 2 }}>
