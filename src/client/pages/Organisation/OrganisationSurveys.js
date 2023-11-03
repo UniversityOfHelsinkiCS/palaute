@@ -72,7 +72,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   })
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const { feedbackCount, studentCount } = feedbackTarget
+  const { feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } = feedbackTarget
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -93,8 +93,8 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         <Box sx={{ mt: 2 }}>
           <FeedbackResponseChip
             id={feedbackTarget.id}
-            feedbackResponseGiven={false}
-            feedbackResponseSent={false}
+            feedbackResponseGiven={Boolean(feedbackResponse)}
+            feedbackResponseSent={feedbackResponseEmailSent}
             ongoing={isOpen}
           />
         </Box>
