@@ -1,4 +1,4 @@
-const { Op } = require('sequelize')
+const { Op, fn, col } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 
 const logger = require('../../util/logger')
@@ -151,7 +151,21 @@ const getOrganisationSurvey = async feedbackTargetId => {
 
 const getSurveysForOrganisation = async organisationId => {
   const organisationSurveys = await FeedbackTarget.findAll({
-    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'name', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'name',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'feedbackCount',
+      [fn('COUNT', col('userFeedbackTargets.id')), 'studentCount'],
+      'feedbackResponse',
+      'feedbackResponseEmailSent',
+      'opensAt',
+      'closesAt',
+    ],
     where: {
       courseUnitId: organisationId,
     },
@@ -174,6 +188,20 @@ const getSurveysForOrganisation = async organisationId => {
         as: 'courseRealisation',
         required: true,
       },
+      {
+        model: UserFeedbackTarget,
+        attributes: [],
+        as: 'userFeedbackTargets',
+        required: true,
+        where: { accessStatus: 'STUDENT' },
+      },
+    ],
+    group: [
+      'FeedbackTarget.id',
+      'courseUnit.id',
+      'courseRealisation.id',
+      'courseUnit.organisations.id',
+      'courseUnit.organisations.courseUnitOrganisation.id',
     ],
     order: [['courseRealisation', 'endDate', 'DESC']],
   })

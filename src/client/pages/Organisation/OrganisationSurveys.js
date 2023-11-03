@@ -15,7 +15,6 @@ import {
 } from './useOrganisationSurveyMutation'
 
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 
 import PercentageCell from '../CourseSummary/PercentageCell'
 import FeedbackResponseChip from '../MyTeaching/FeedbackResponseChip'
@@ -44,16 +43,11 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const { code } = useParams()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(organisationSurvey.id, { retry: 0 })
 
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
     success: t('organisationSettings:removeSuccess'),
   })
-
-  if (isLoading || !feedbackTarget) {
-    return <LoadingProgress />
-  }
 
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
@@ -62,7 +56,8 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
 
-  const { courseRealisation } = organisationSurvey
+  const { courseRealisation, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
+    organisationSurvey
   const viewPath = `/targets/${organisationSurvey.id}/feedback`
 
   const [startDate, endDate] = getStartAndEndString(courseRealisation?.startDate, courseRealisation?.endDate)
@@ -71,8 +66,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     closesAt: endDate,
   })
 
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const { feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } = feedbackTarget
+  const isOpen = feedbackTargetIsOpen(organisationSurvey)
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -96,7 +90,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         <Box sx={{ mt: 1, mb: 2 }}>
           <FeedbackResponseChip
-            id={feedbackTarget.id}
+            id={organisationSurvey.id}
             feedbackResponseGiven={Boolean(feedbackResponse)}
             feedbackResponseSent={feedbackResponseEmailSent}
             ongoing={isOpen}
