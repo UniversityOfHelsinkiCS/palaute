@@ -162,6 +162,7 @@
   },
   "questionEditor": {
     "addQuestion": "Add question",
+    "addTextualContent": "Add textual contennt",
     "likertQuestion": "Scale of values",
     "openQuestion": "Open question",
     "singleChoiceQuestion": "Single choice question",
