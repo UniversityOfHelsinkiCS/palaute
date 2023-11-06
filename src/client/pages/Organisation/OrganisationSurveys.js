@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material'
 
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 
 import useOrganisationSurveys from './useOrganisationSurveys'
 import OrganisationSurveyEditor from './OrganisationSurveyEditor'
@@ -112,10 +112,12 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 const OrganisationSurveys = () => {
   const { t } = useTranslation()
   const { code } = useParams()
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
-  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
+
   const mutation = useCreateOrganisationSurveyMutation(code)
+  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
 
   const initialValues = {
     name: {
@@ -166,8 +168,10 @@ const OrganisationSurveys = () => {
 
   const handleSubmit = async (values, { setErrors }) => {
     await mutation.mutateAsync(values, {
-      onSuccess: () => {
+      onSuccess: data => {
         handleClose()
+
+        history.push(`/targets/${data.id}/feedback`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {
