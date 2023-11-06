@@ -49,9 +49,11 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     success: t('organisationSettings:removeSuccess'),
   })
 
+  const allowDelete = organisationSurvey.feedbackCount === 0
+
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
-    if (!window.confirm(t('organisationSettings:confirmRemoveSurvey'))) return
+    if (!allowDelete || !window.confirm(t('organisationSettings:confirmRemoveSurvey'))) return
 
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
@@ -101,9 +103,11 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           {t('organisationSurveys:viewFeedbackSummary')}
         </Button>
 
-        <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
-          {t('organisationSettings:remove')}
-        </Button>
+        {allowDelete && (
+          <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+            {t('organisationSettings:remove')}
+          </Button>
+        )}
       </CardContent>
     </Card>
   )
