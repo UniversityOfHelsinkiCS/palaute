@@ -60,7 +60,7 @@ const QuestionEditorForm = ({
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [editingQuestionId, setEditingQuestionId] = useState()
+  const [editingQuestionId, setEditingQuestionId] = useState(null)
 
   const handleStopEditing = async () => {
     if (editingQuestionId) {
@@ -72,8 +72,6 @@ const QuestionEditorForm = ({
   const makePublicityToggle = question => isPublic => {
     handlePublicityToggle(question, isPublic)
   }
-
-  console.log(editingQuestionId)
 
   return (
     <Form>
@@ -104,6 +102,7 @@ const QuestionEditorForm = ({
                   name={`questions.${index}`}
                   onRemove={() => {
                     arrayHelpers.remove(index)
+                    handleStopEditing()
                     onRemoveQuestion()
                   }}
                   onMoveUp={() => {
@@ -152,6 +151,7 @@ const QuestionEditorForm = ({
                         handleStopEditing()
                       }}
                       ref={addButtonRef}
+                      disabled={Boolean(editingQuestionId)}
                       sx={{ mr: 2 }}
                     >
                       {t('questionEditor:addQuestion')}
@@ -164,6 +164,7 @@ const QuestionEditorForm = ({
                         arrayHelpers.push(textContent)
                         setEditingQuestionId(getQuestionId(textContent))
                       }}
+                      disabled={Boolean(editingQuestionId)}
                       sx={{ mr: 2 }}
                     >
                       {t('questionEditor:addTextualContent')}
