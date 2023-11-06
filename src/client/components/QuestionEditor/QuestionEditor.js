@@ -42,7 +42,6 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
         onClick={() => handleChooseType('MULTIPLE_CHOICE')}
         label={t('questionEditor:multipleChoiceQuestion')}
       />
-      <TypeItem onClick={() => handleChooseType('TEXT')} label={t('questionEditor:textualContent')} />
     </Menu>
   )
 }
@@ -56,11 +55,11 @@ const QuestionEditorForm = ({
   actions,
   groupingQuestionSettings,
 }) => {
-  const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
+  const { t, i18n } = useTranslation()
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
-  const { t, i18n } = useTranslation()
+  const [menuOpen, setMenuOpen] = useState(false)
   const [editingQuestionId, setEditingQuestionId] = useState()
 
   const handleStopEditing = async () => {
@@ -73,6 +72,8 @@ const QuestionEditorForm = ({
   const makePublicityToggle = question => isPublic => {
     handlePublicityToggle(question, isPublic)
   }
+
+  console.log(editingQuestionId)
 
   return (
     <Form>
@@ -140,21 +141,36 @@ const QuestionEditorForm = ({
                 language={i18n.language}
               />
 
-              <Box display="flex">
+              <Box sx={{ display: 'flex' }}>
                 {editable && (
-                  <Button
-                    color="primary"
-                    onClick={() => {
-                      setMenuOpen(true)
-                      handleStopEditing()
-                    }}
-                    ref={addButtonRef}
-                  >
-                    {t('questionEditor:addQuestion')}
-                  </Button>
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        setMenuOpen(true)
+                        handleStopEditing()
+                      }}
+                      ref={addButtonRef}
+                      sx={{ mr: 2 }}
+                    >
+                      {t('questionEditor:addQuestion')}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        const textContent = createQuestion({ type: 'TEXT' })
+                        arrayHelpers.push(textContent)
+                        setEditingQuestionId(getQuestionId(textContent))
+                      }}
+                      sx={{ mr: 2 }}
+                    >
+                      {t('questionEditor:addTextualContent')}
+                    </Button>
+                  </Box>
                 )}
-
-                {actions && <Box ml={editable ? 1 : 0}>{actions}</Box>}
+                {actions && <Box>{actions}</Box>}
               </Box>
             </>
           )}
