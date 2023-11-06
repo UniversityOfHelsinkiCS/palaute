@@ -161,12 +161,13 @@
     "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}"
   },
   "questionEditor": {
-    "addQuestion": "Lisää osio tai kysymys",
+    "addQuestion": "Lisää kysymys",
+    "addTextualContent": "Lisää tekstiosio",
     "likertQuestion": "Arvoasteikkokysymys",
     "openQuestion": "Avoin kysymys",
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
-    "textualContent": "Teksti osio",
+    "textualContent": "Tekstiosio",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",
