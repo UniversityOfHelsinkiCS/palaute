@@ -55,7 +55,7 @@ export const createQuestion = ({ type, data = createQuestionData(type), options 
   required: false,
   editable: true,
   public: true,
-  publicityConfigurable: true,
+  publicityConfigurable: type !== 'TEXT',
   ...options,
 })
 
