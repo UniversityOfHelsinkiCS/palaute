@@ -30,9 +30,7 @@ describe('Course summary view', () => {
     })
 
     it('User with write access can ADD programme level questions', () => {
-      cy.contains('Add question').click()
-
-      cy.get('li').contains('Textual content').click()
+      cy.contains('Add textual content').click()
 
       cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
 
