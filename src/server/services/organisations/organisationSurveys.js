@@ -192,7 +192,7 @@ const getSurveysForOrganisation = async organisationId => {
         model: UserFeedbackTarget,
         attributes: [],
         as: 'userFeedbackTargets',
-        required: true,
+        required: false,
         where: { accessStatus: 'STUDENT' },
       },
     ],
