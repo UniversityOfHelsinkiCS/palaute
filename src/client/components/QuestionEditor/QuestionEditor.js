@@ -62,6 +62,11 @@ const QuestionEditorForm = ({
   const [menuOpen, setMenuOpen] = useState(false)
   const [editingQuestionId, setEditingQuestionId] = useState(null)
 
+  const handleStartEditing = () => {
+    const questionId = getQuestionId(groupingQuestionField.value)
+    setEditingQuestionId(questionId)
+  }
+
   const handleStopEditing = async () => {
     if (editingQuestionId) {
       setEditingQuestionId(null)
@@ -88,7 +93,7 @@ const QuestionEditorForm = ({
             }}
             groupingQuestion={groupingQuestionField.value}
             isEditing={editingQuestionId === getQuestionId(groupingQuestionField.value)}
-            onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestionField.value))}
+            onStartEditing={handleStartEditing}
             onStopEditing={handleStopEditing}
           />
         )}
