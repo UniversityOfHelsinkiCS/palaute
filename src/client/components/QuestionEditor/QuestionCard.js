@@ -157,6 +157,7 @@ const QuestionCard = ({
   const canEdit = questionIsEditable && editable
   const isGrouping = question.secondaryType === 'GROUPING'
   const canDuplicate = !isGrouping
+  const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
 
   const orderButtonsProps = {
     onMoveUp,
@@ -217,7 +218,7 @@ const QuestionCard = ({
                   isPublic={question.public}
                   {...orderButtonsProps}
                   onRemove={onRemove}
-                  showRequiredToggle={showRequiredToggle}
+                  showRequiredToggle={requiredConfigurable}
                   name={name}
                 />
               </div>
