@@ -209,6 +209,12 @@ const getSurveysForOrganisation = async organisationId => {
   return organisationSurveys
 }
 
+const getDeletionAllowed = async organisationSurveyId => {
+  const { feedbackCount } = await FeedbackTarget.findByPk(organisationSurveyId)
+
+  return feedbackCount === 0
+}
+
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   const { name, teacherIds, studentNumbers } = updates
   const { startDate, endDate } = formatActivityPeriod(updates)
@@ -329,6 +335,7 @@ module.exports = {
   createUserFeedbackTargets,
   getOrganisationSurvey,
   getSurveysForOrganisation,
+  getDeletionAllowed,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
 }

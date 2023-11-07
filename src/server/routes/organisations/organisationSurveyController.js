@@ -9,6 +9,7 @@ const {
   getSurveysForOrganisation,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
+  getDeletionAllowed,
 } = require('../../services/organisations/organisationSurveys')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
@@ -22,7 +23,7 @@ const getOrganisationSurveys = async (req, res) => {
     read: true,
   })
 
-  if (!hasReadAccess) throw new ApplicationError(403, 'No read access to organisation')
+  if (!hasReadAccess) throw new ApplicationError('No read access to organisation', 403)
 
   const surveys = await getSurveysForOrganisation(organisation.id)
 
@@ -38,7 +39,7 @@ const createOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can create organisation surveys')
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
   if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
@@ -67,7 +68,7 @@ const editOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can update organisation surveys')
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can update organisation surveys', 403)
 
   if (updates.studentNumbers) {
     const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
@@ -87,7 +88,11 @@ const removeOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError(403, 'Only organisation admins can remove organisation surveys')
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can remove organisation surveys', 403)
+
+  const allowDelete = await getDeletionAllowed(id)
+
+  if (!allowDelete) throw new ApplicationError('Can not delete orgnanisation survey when feedbacks are given', 403)
 
   await deleteOrganisationSurvey(id)
 
