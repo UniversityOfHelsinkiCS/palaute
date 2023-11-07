@@ -11,32 +11,31 @@ const Sort = ({ field, label, width }) => {
   const currentSortByField = String(sortBy[0])
   const currentOrderByField = String(sortBy[1])
 
+  const isDesc = currentOrderByField === 'desc'
+  const isActive = currentSortByField === String(field)
+  const isNextDesc = isActive && !isDesc
+  const isNextAsc = isActive && isDesc
+
   return (
     <Box sx={{ display: 'flex', width, justifyContent: 'center' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Tooltip title={`${label}, ${t('common:descending')}`} placement="top">
+        <Tooltip
+          title={`${t('common:sort')} ${isNextDesc ? t('common:descending') : t('common:ascending')}: ${label}`}
+          placement="top"
+        >
           <div>
             <IconButton
-              onClick={() => setSortBy([field, 'desc'])}
-              disabled={currentSortByField === String(field) && currentOrderByField === 'desc'}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                rowGap: '-1rem',
+              }}
+              onClick={() => setSortBy([field, isActive && isDesc ? 'asc' : 'desc'])}
               size="small"
               color="primary"
-              disableRipple
             >
-              <ArrowDropUp />
-            </IconButton>
-          </div>
-        </Tooltip>
-        <Tooltip title={`${label}, ${t('common:ascending')}`} placement="bottom">
-          <div>
-            <IconButton
-              onClick={() => setSortBy([field, 'asc'])}
-              disabled={currentSortByField === String(field) && currentOrderByField === 'asc'}
-              size="small"
-              color="primary"
-              disableRipple
-            >
-              <ArrowDropDown />
+              <ArrowDropUp color={isNextAsc ? 'primary' : 'disabled'} />
+              <ArrowDropDown color={isNextDesc ? 'primary' : 'disabled'} />
             </IconButton>
           </div>
         </Tooltip>
