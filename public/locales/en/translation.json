@@ -369,7 +369,8 @@
     },
     "studentNumberExampleInput": "For example, as follows",
     "startDate": "From",
-    "endDate": "To"
+    "endDate": "To",
+    "surveys": "surveys"
   },
   "courseSummary": {
     "heading": "Summary of course feedback",

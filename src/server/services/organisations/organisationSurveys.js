@@ -1,5 +1,6 @@
 const { Op, fn, col } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
+const { i18n } = require('../../util/i18n')
 
 const logger = require('../../util/logger')
 const { formatActivityPeriod } = require('../../util/common')
@@ -25,6 +26,17 @@ const getOrganisationCourseUnit = async organisationId => {
   return organisationCourseUnit
 }
 
+const getCourseUnitName = organisationName => {
+  const name = {}
+
+  LANGUAGES.forEach(language => {
+    const t = i18n.getFixedT(language)
+    name[language] = `${organisationName[language]}: ${t('organisationSurveys:surveys')}`
+  })
+
+  return name
+}
+
 const initializeOrganisationCourseUnit = async organisation => {
   const existingOrganisationCU = await getOrganisationCourseUnit(organisation.id)
 
@@ -40,7 +52,7 @@ const initializeOrganisationCourseUnit = async organisation => {
       startDate,
       endDate,
     },
-    name: organisation.name,
+    name: getCourseUnitName(organisation.name),
     userCreated: true,
   })
 

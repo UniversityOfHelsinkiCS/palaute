@@ -369,7 +369,8 @@
     },
     "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
     "startDate": "Alkaen",
-    "endDate": "Loppuen"
+    "endDate": "Loppuen",
+    "surveys": "kyselyt"
   },
   "courseSummary": {
     "heading": "Kurssipalautteiden yhteenveto",
