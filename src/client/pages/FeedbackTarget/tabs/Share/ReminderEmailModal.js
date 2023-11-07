@@ -43,7 +43,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
 
-  const { courseUnit, id, feedbackReminderLastSentAt } = feedbackTarget
+  const { courseUnit, id, name, feedbackReminderLastSentAt, userCreated } = feedbackTarget
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
@@ -56,6 +56,16 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
 
   const closesAt = formatClosesAt(feedbackTarget.closesAt)
 
+  const emailMessage = userCreated
+    ? t('feedbackTargetResults:customEmailMessage', {
+        courseName: name[language],
+        closesAt,
+      })
+    : t('feedbackTargetResults:emailMessage', {
+        courseName: courseUnit.name[language],
+        closesAt,
+      })
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box mb={2} sx={styles.container}>
@@ -67,10 +77,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         </Typography>
         <Box mb={4} />
         <Typography variant="body1" component="p" sx={styles.textField}>
-          {t('feedbackTargetResults:emailMessage', {
-            courseName: courseUnit.name[language],
-            closesAt,
-          })}
+          {emailMessage}
         </Typography>
         <Typography variant="body2" component="p" sx={styles.subtitle}>
           {t('feedbackTargetResults:emailMessageInfo')}

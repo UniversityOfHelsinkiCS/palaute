@@ -5,15 +5,27 @@ const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
 
-const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students, courseNames, reminder, closesAt) => {
+const sendReminderToGiveFeedbackToStudents = async (
+  urlToGiveFeedback,
+  students,
+  courseNames,
+  reminder,
+  closesAt,
+  userCreated
+) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
-    const courseName = courseNames[student.language ?? 'en']
+    const courseName = courseNames[student.language ?? 'en' ?? 'fi']
 
+    // Custom texts for user created feedback targets because they are not courses
     const email = {
       to: student.email,
-      subject: t('mails:reminderOnFeedbackToStudents:subject', { courseName }),
-      text: t('mails:reminderOnFeedbackToStudents:text', { url: urlToGiveFeedback, courseName, reminder, closesAt }),
+      subject: userCreated
+        ? t('mails:reminderOnFeedbackToStudents:customSubject', { courseName })
+        : t('mails:reminderOnFeedbackToStudents:subject', { courseName }),
+      text: userCreated
+        ? t('mails:reminderOnFeedbackToStudents:customText', { url: urlToGiveFeedback, courseName, reminder, closesAt })
+        : t('mails:reminderOnFeedbackToStudents:text', { url: urlToGiveFeedback, courseName, reminder, closesAt }),
     }
     return email
   })
@@ -44,9 +56,10 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
     const emails = await sendReminderToGiveFeedbackToStudents(
       url,
       formattedStudents,
-      courseUnit.name,
+      feedbackTarget.userCreated ? feedbackTarget.name : courseUnit.name,
       reminder,
-      formattedClosesAt
+      formattedClosesAt,
+      feedbackTarget.userCreated
     )
 
     feedbackTarget.feedbackReminderLastSentAt = new Date()

@@ -262,6 +262,7 @@
     "modalTitle": "Lähetä muistutus palautteesta sähköpostilla",
     "writeAMessage": "Kirjoita viesti opiskelijoille",
     "emailMessage": "Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
+    "customEmailMessage": "Hyvä vastaanottaja! \n Vastaathan kyselyyn {{courseName}}. Vastausaika päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
     "emailMessageInfo": "(Viestin alkuosa kääntyy opiskelijan käyttämälle kielelle)",
     "modalSubtitle": "Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä",
     "emailSent": "Muistutusviesti lähetetty",
@@ -540,7 +541,9 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta kurssille {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
+      "customSubject": "Vastaa kyselyyn {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}",
+      "customText": "Hyvä vastaanottaja!\n\n Vastaathan kyselyyn <a href={{- url}}>{{courseName}}</a>. Vastausaika päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
     },
     "continuousFeedbackResponse": {
       "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
