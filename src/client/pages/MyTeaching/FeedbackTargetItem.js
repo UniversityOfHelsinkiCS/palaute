@@ -44,19 +44,19 @@ const getChip = feedbackTarget => {
 const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const { i18n, t } = useTranslation()
 
-  const { id, feedbackCount, studentCount, courseRealisation, opensAt, closesAt } = feedbackTarget
+  const { id, feedbackCount, studentCount, courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
 
   const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
 
   const { name, startDate, endDate } = courseRealisation
 
+  const feedbackPeriod = t('teacherView:surveyOpen', {
+    closesAt: formatDate(closesAt),
+    opensAt: formatDate(opensAt),
+  })
+
   const periodInfo = (
-    <Tooltip
-      title={t('teacherView:surveyOpen', {
-        closesAt: formatDate(closesAt),
-        opensAt: formatDate(opensAt),
-      })}
-    >
+    <Tooltip title={feedbackPeriod}>
       <Typography>
         {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
@@ -74,7 +74,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
             <Link component={RouterLink} to={`/targets/${id}`} underline="hover">
               {getLanguageValue(name, i18n.language)}{' '}
             </Link>
-            {periodInfo}
+            {userCreated ? <Typography>{feedbackPeriod}</Typography> : periodInfo}
           </>
         }
         secondary={

@@ -102,6 +102,7 @@ const getForCourseUnit = async ({
       'questions',
       'surveys',
       'feedbackCount',
+      'userCreated',
     ]),
     studentCount: target.students.length,
     feedbackResponseGiven: target.feedbackResponse?.length > 3,
