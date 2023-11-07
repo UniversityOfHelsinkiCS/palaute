@@ -58,11 +58,11 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
 
-  const { courseRealisation, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
+  const { opensAt, closesAt, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
     organisationSurvey
   const viewPath = `/targets/${organisationSurvey.id}/feedback`
 
-  const [startDate, endDate] = getStartAndEndString(courseRealisation?.startDate, courseRealisation?.endDate)
+  const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: startDate,
     closesAt: endDate,
