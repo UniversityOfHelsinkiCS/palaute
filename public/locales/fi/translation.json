@@ -371,7 +371,11 @@
     "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
     "startDate": "Alkaen",
     "endDate": "Loppuen",
-    "surveys": "kyselyt"
+    "surveys": "kyselyt",
+    "edit": "Muokkaa",
+    "remove": "Poista",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
+    "removeSuccess": "Koulutusohjelman kysely poistettu"
   },
   "courseSummary": {
     "heading": "Kurssipalautteiden yhteenveto",
@@ -476,9 +480,7 @@
     "courseUnitTagInfo": "Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle",
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
-    "showCurName": "Näytä kurssitoteutusten nimet",
-    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
-    "removeSuccess": "Koulutusohjelman kysymykset poistettu"
+    "showCurName": "Näytä kurssitoteutusten nimet"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",

@@ -371,7 +371,11 @@
     "studentNumberExampleInput": "For example, as follows",
     "startDate": "From",
     "endDate": "To",
-    "surveys": "surveys"
+    "surveys": "surveys",
+    "edit": "Edit",
+    "remove": "Remove",
+    "confirmRemoveSurvey": "Are you sure you want to remove this organisation survey?",
+    "removeSuccess": "Organisation survey removed"
   },
   "courseSummary": {
     "heading": "Summary of course feedback",
@@ -476,9 +480,7 @@
     "courseUnitTagInfo": "Course realisation inherits {{count}} studytracks from its course unit {{code}}",
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
-    "showCurName": "Show course realisation names",
-    "confirmRemoveSurvey": "Are you sure you want to remove this organisation survey?",
-    "removeSuccess": "Organisation questions removed"
+    "showCurName": "Show course realisation names"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",
