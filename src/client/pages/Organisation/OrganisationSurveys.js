@@ -96,7 +96,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         name: survey.name,
         startDate: survey.opensAt,
         endDate: survey.closesAt,
-        studentNumbers: survey.students.map(s => s.id),
+        studentNumbers: survey.students.map(s => s.user.studentNumber),
         teachers: survey.userFeedbackTargets.map(t => t.user),
       }
 
