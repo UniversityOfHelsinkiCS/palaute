@@ -73,7 +73,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
     setOrderBy(property)
   }
 
-  const feedbackStatusAvailable = students.some(student => 'feedbackgiven' in student)
+  const feedbackStatusAvailable = students.some(student => 'feedbackGiven' in student)
 
   const studentsData = useMemo(
     () =>
