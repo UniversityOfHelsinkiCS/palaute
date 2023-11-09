@@ -71,7 +71,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
         name={name}
         multiple
         fullWidth
-        defaultValue={[]}
+        defaultValue={formikProps.initialValues.teacherIds}
         onChange={(_, teachers) => {
           const teacherIds = teachers.map(t => t.id)
 
