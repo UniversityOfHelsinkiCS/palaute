@@ -130,13 +130,8 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
-          const errorString = `
-            ${t('validationErrors:invalidStudentNumbers')}
-      
-            ${invalidStudentNumbers.join(', ')}
-          `
 
-          setErrors({ studentNumbers: errorString })
+          setErrors({ studentNumbers: invalidStudentNumbers })
         } else {
           handleClose()
           enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
@@ -276,13 +271,8 @@ const OrganisationSurveys = () => {
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
-          const errorString = `
-            ${t('validationErrors:invalidStudentNumbers')}
-      
-            ${invalidStudentNumbers.join(', ')}
-          `
 
-          setErrors({ studentNumbers: errorString })
+          setErrors({ studentNumbers: invalidStudentNumbers })
         } else {
           handleClose()
           enqueueSnackbar(t('common:unknownError'), { variant: 'error' })

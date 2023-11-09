@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Alert,
   Collapse,
+  Chip,
   Button,
   Box,
   Dialog,
@@ -86,7 +87,7 @@ const StudentNumberInput = ({ name, ...props }) => {
   const formikProps = useFormikContext()
   const [expand, setExpand] = useState(false)
 
-  const hasError = formikProps.touched[name] && formikProps.errors[name]
+  console.log(formikProps.errors[name])
 
   const handleChange = ({ target }) => {
     const { value } = target
@@ -133,17 +134,28 @@ const StudentNumberInput = ({ name, ...props }) => {
         </Alert>
       </Box>
 
-      <TextField
+      <Autocomplete
         id={name}
         name={name}
-        multiline
-        rows={5}
-        variant="outlined"
+        multiple
         fullWidth
-        onChange={handleChange}
         defaultValue={formikProps.initialValues.studentNumbers}
-        error={Boolean(hasError)}
-        helperText={hasError ? formikProps.errors[name] : ''}
+        onChange={(_, studentNumbers) => formikProps.setFieldValue('studentNumbers', studentNumbers)}
+        options={[]}
+        freeSolo
+        onInputChange={handleChange}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              {...getTagProps({ index })}
+              key={option}
+              variant="outlined"
+              label={option}
+              color={formikProps.errors[name] && formikProps.errors[name].includes(option) ? 'error' : 'primary'}
+            />
+          ))
+        }
+        renderInput={params => <TextField {...params} />}
         {...props}
       />
     </Box>
