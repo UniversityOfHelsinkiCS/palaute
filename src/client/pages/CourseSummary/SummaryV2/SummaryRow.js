@@ -14,6 +14,8 @@ import useRandomColor from '../../../hooks/useRandomColor'
 import { useOrderedAndFilteredOrganisations, useSummaryQuestions } from './utils'
 import { useSummaryContext } from './context'
 import Sort from './Sort'
+import { OrganisationLink } from './OrganisationLink'
+import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 
 const styles = {
   resultCell: {
@@ -41,6 +43,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   accordionButton: {
     // flex: 0.5,
@@ -306,7 +309,7 @@ const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
   return orderedCourseUnits?.map(cu => <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />)
 }
 
-const OrganisationResults = ({ summary, questions }) => {
+const OrganisationResults = ({ summary, questions, linkComponent }) => {
   const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
 
   const feedbackResponsePercentage = summary ? (summary.data.feedbackResponsePercentage * 100).toFixed() : 0
@@ -340,11 +343,13 @@ const OrganisationResults = ({ summary, questions }) => {
         sx={styles.percentCell}
         tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
       />
+      {linkComponent}
     </>
   )
 }
 
-const OrganisationResultsLoader = ({ organisationId, initialSummary, startDate, endDate, questions }) => {
+const OrganisationResultsLoader = ({ organisationId, initialOrganisation, startDate, endDate, questions }) => {
+  const initialSummary = initialOrganisation?.summary
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -352,13 +357,17 @@ const OrganisationResultsLoader = ({ organisationId, initialSummary, startDate, 
     enabled: !initialSummary,
   })
 
+  const access = useUserOrganisationAccessByCode(initialOrganisation?.code)
+
   if (isLoading) {
     return 'Ladataan...'
   }
 
   const summary = initialSummary ?? organisation?.summary
 
-  return <OrganisationResults summary={summary} questions={questions} />
+  const linkComponent = <OrganisationLink code={initialOrganisation?.code} access={access} />
+
+  return <OrganisationResults summary={summary} questions={questions} linkComponent={linkComponent} />
 }
 
 export const OrganisationSummaryRow = ({
@@ -401,11 +410,11 @@ export const OrganisationSummaryRow = ({
         <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         {inView && (
           <OrganisationResultsLoader
-            organisationId={organisationId}
             startDate={startDate}
             endDate={endDate}
             questions={questions}
-            initialSummary={initialOrganisation?.summary}
+            organisationId={organisationId}
+            initialOrganisation={initialOrganisation}
           />
         )}
       </Box>
@@ -455,6 +464,10 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
     [organisation, sortBy[0], sortBy[1]]
   )
 
+  const access = useUserOrganisationAccessByCode(organisation?.code)
+
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} />
+
   return (
     <Box
       display="flex"
@@ -466,7 +479,7 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
     >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={() => setIsOpen(!isOpen)} />
-        <OrganisationResults summary={organisation.summary} questions={questions} />
+        <OrganisationResults summary={organisation.summary} questions={questions} linkComponent={linkComponent} />
       </Box>
       {isOpen && (
         <Box
