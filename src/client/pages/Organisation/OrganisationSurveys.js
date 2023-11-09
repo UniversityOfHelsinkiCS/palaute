@@ -46,14 +46,14 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
-    success: t('organisationSettings:removeSuccess'),
+    success: t('organisationSurveys:removeSuccess'),
   })
 
   const allowDelete = organisationSurvey.feedbackCount === 0
 
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
-    if (!allowDelete || !window.confirm(t('organisationSettings:confirmRemoveSurvey'))) return
+    if (!allowDelete || !window.confirm(t('organisationSurveys:confirmRemoveSurvey'))) return
 
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
@@ -105,7 +105,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {allowDelete && (
           <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
-            {t('organisationSettings:remove')}
+            {t('organisationSurveys:remove')}
           </Button>
         )}
       </CardContent>
