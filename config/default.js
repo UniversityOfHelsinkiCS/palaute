@@ -170,6 +170,11 @@ const config = {
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 
   /**
+   * This controls sending of automatic reminders to students to give feedback
+   */
+  SEND_AUTOMATIC_REMINDER_ALWAYS: false,
+
+  /**
    * Keys defined here are filtered away from frontend config during build process.
    */
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL'],
