@@ -16,6 +16,7 @@ import {
   ReviewsOutlined,
 } from '@mui/icons-material'
 
+import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/common'
 import Results from './tabs/Results'
 import FeedbackView from './tabs/FeedbackView'
 import StudentsWithFeedback from './tabs/StudentsWithFeedback'
@@ -66,7 +67,8 @@ const FeedbackTargetContent = () => {
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
-  const showStudentsWithFeedbackTab = isAdmin || isOrganisationAdmin || isResponsibleTeacher
+  const showStudentsWithFeedbackTab =
+    isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = isOrganisationAdmin || isResponsibleTeacher
 

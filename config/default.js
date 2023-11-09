@@ -219,9 +219,15 @@ const config = {
 
   /**
    * Allow organisation admins to create custom surveys
-   * Feature is still in development
    */
   ORGANISATION_SURVEYS_ENABLED: false,
+
+  /**
+   * Alway show list of students in feedback target view
+   * value: false = Only show list of students when studentListVisible is set at course or organisation level
+   * value: true  = Always show list of students, hide feedback given status if studentListVisible is not set
+   */
+  ALWAYS_SHOW_STUDENT_LIST: false,
 
   /**
    * The course summary color scale used in summary views and fbt results view for LIKERT type values ranging from 1-5. (LIKERT options minimum is 1 so below 1 means no data)

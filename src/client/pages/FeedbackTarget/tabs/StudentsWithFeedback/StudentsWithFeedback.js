@@ -32,11 +32,12 @@ const StudentsWithFeedback = () => {
   if (isLoading) return <LoadingProgress />
 
   const feedbackStatusAvailable = students.some(student => 'feedbackgiven' in student)
+  const showStudentTable = students.length !== 0
 
   return (
     <>
       {!feedbackStatusAvailable && <NoFeedbackAlert isEnded={isEnded} />}
-      <StudentTable students={students} feedbackTarget={feedbackTarget} />
+      {showStudentTable && <StudentTable students={students} feedbackTarget={feedbackTarget} />}
     </>
   )
 }

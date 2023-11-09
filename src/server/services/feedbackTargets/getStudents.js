@@ -1,6 +1,6 @@
 const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
-const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../util/config')
+const { STUDENT_LIST_BY_COURSE_ENABLED, ALWAYS_SHOW_STUDENT_LIST } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
@@ -83,6 +83,9 @@ const getStudents = async ({ feedbackTargetId, user }) => {
    */
   const showFeedbackGiven =
     studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5
+
+  // Previous functionality to not show any student data if feedback given status is not shown
+  if (!ALWAYS_SHOW_STUDENT_LIST && !showFeedbackGiven) return []
 
   if (showFeedbackGiven) return studentsWithFeedback
 
