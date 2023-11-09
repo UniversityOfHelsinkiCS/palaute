@@ -31,7 +31,7 @@ const StudentsWithFeedback = () => {
 
   if (isLoading) return <LoadingProgress />
 
-  const feedbackStatusAvailable = students.some(student => 'feedbackgiven' in student)
+  const feedbackStatusAvailable = students.some(student => 'feedbackGiven' in student)
   const showStudentTable = students.length !== 0
 
   return (
