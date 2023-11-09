@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import {
   Autocomplete,
   Alert,
-  Card,
-  CardContent,
   Collapse,
   Button,
   Box,
@@ -71,12 +69,8 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
         name={name}
         multiple
         fullWidth
-        defaultValue={formikProps.initialValues.teacherIds}
-        onChange={(_, teachers) => {
-          const teacherIds = teachers.map(t => t.id)
-
-          return formikProps.setFieldValue('teacherIds', teacherIds)
-        }}
+        defaultValue={formikProps.initialValues.teachers}
+        onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
         options={potentialUsers}
         onInputChange={handleChange}
         getOptionLabel={option => option.email}

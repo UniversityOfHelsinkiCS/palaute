@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
@@ -7,7 +7,7 @@ import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material
 
 import { Link, useParams, useHistory } from 'react-router-dom'
 
-import useOrganisationSurveys from './useOrganisationSurveys'
+import { useOrganisationSurvey, useOrganisationSurveys } from './useOrganisationSurveys'
 import OrganisationSurveyEditor from './OrganisationSurveyEditor'
 import {
   useCreateOrganisationSurveyMutation,
@@ -39,17 +39,81 @@ const styles = {
   },
 }
 
+const getOrganisationSurveySchema = t =>
+  Yup.object().shape({
+    name: Yup.object().shape(
+      {
+        fi: Yup.string().when(['sv', 'en'], {
+          is: (sv, en) => !sv && !en,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+        sv: Yup.string().when(['fi', 'en'], {
+          is: (fi, en) => !fi && !en,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+        en: Yup.string().when(['fi', 'sv'], {
+          is: (fi, sv) => !fi && !sv,
+          then: () => Yup.string().required(t('validationErrors:required')),
+          otherwise: () => Yup.string(),
+        }),
+      },
+      [
+        ['sv', 'en'],
+        ['fi', 'en'],
+        ['fi', 'sv'],
+      ]
+    ),
+    startDate: Yup.date().required(t('validationErrors:invalidDate')),
+    endDate: Yup.date()
+      .required(t('validationErrors:invalidDate'))
+      .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
+    studentNumbers: Yup.array().of(Yup.string()),
+    teachers: Yup.array().of(Yup.object()),
+  })
+
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const { code } = useParams()
+  const [showForm, setShowForm] = useState(false)
+  const [surveyValues, setSurveyValues] = useState({})
 
   const mutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
     success: t('organisationSurveys:removeSuccess'),
   })
+  const { survey, isLoading: isOrganisationSurveyLoading } = useOrganisationSurvey(code, organisationSurvey.id)
+
+  useEffect(() => {
+    if (survey && !isOrganisationSurveyLoading) {
+      const formValues = {
+        name: survey.name,
+        startDate: survey.opensAt,
+        endDate: survey.closesAt,
+        studentNumbers: survey.students.map(s => s.id),
+        teachers: survey.userFeedbackTargets.map(t => t.user),
+      }
+
+      setSurveyValues(formValues)
+    }
+  }, [survey, isOrganisationSurveyLoading])
+
+  const organisationSurveySchema = getOrganisationSurveySchema(t)
+
+  const { opensAt, closesAt, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
+    organisationSurvey
 
   const allowDelete = organisationSurvey.feedbackCount === 0
+  const allowEdit = new Date() <= Date.parse(closesAt)
+
+  const handleClose = () => setShowForm(!showForm)
+
+  const handleSubmit = async values => {
+    console.log('hei')
+    console.log(values)
+  }
 
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
@@ -58,10 +122,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
 
-  const { opensAt, closesAt, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
-    organisationSurvey
-  const viewPath = `/targets/${organisationSurvey.id}/feedback`
-
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
     opensAt: startDate,
@@ -69,6 +129,19 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   })
 
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
+
+  if (isOrganisationSurveyLoading) return null
+
+  if (showForm)
+    return (
+      <OrganisationSurveyEditor
+        initialValues={surveyValues}
+        validationSchema={organisationSurveySchema}
+        handleSubmit={handleSubmit}
+        editing={showForm}
+        onStopEditing={handleClose}
+      />
+    )
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -99,12 +172,30 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           />
         </Box>
 
-        <Button color="primary" variant="outlined" sx={{ mt: 2 }} component={Link} to={viewPath}>
+        <Button
+          color="primary"
+          variant="outlined"
+          sx={{ mt: 2 }}
+          component={Link}
+          to={`/targets/${organisationSurvey.id}/feedback`}
+        >
           {t('organisationSurveys:viewFeedbackSummary')}
         </Button>
 
+        {allowEdit && (
+          <Button
+            disabled={showForm}
+            color="primary"
+            variant="outlined"
+            sx={{ mt: 2, ml: 2 }}
+            onClick={() => setShowForm(!showForm)}
+          >
+            {t('organisationSurveys:edit')}
+          </Button>
+        )}
+
         {allowDelete && (
-          <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+          <Button disabled={showForm} color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
             {t('organisationSurveys:remove')}
           </Button>
         )}
@@ -123,6 +214,8 @@ const OrganisationSurveys = () => {
   const mutation = useCreateOrganisationSurveyMutation(code)
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
 
+  const organisationSurveySchema = getOrganisationSurveySchema(t)
+
   const initialValues = {
     name: {
       fi: '',
@@ -132,45 +225,17 @@ const OrganisationSurveys = () => {
     startDate: new Date(),
     endDate: new Date(),
     studentNumbers: [],
-    teacherIds: [],
+    teachers: [],
   }
-
-  const organisationSurveySchema = Yup.object().shape({
-    name: Yup.object().shape(
-      {
-        fi: Yup.string().when(['sv', 'en'], {
-          is: (sv, en) => !sv && !en,
-          then: () => Yup.string().required(t('validationErrors:required')),
-          otherwise: () => Yup.string(),
-        }),
-        sv: Yup.string().when(['fi', 'en'], {
-          is: (fi, en) => !fi && !en,
-          then: () => Yup.string().required(t('validationErrors:required')),
-          otherwise: () => Yup.string(),
-        }),
-        en: Yup.string().when(['fi', 'sv'], {
-          is: (fi, sv) => !fi && !sv,
-          then: () => Yup.string().required(t('validationErrors:required')),
-          otherwise: () => Yup.string(),
-        }),
-      },
-      [
-        ['sv', 'en'],
-        ['fi', 'en'],
-        ['fi', 'sv'],
-      ]
-    ),
-    startDate: Yup.date().required(t('validationErrors:invalidDate')),
-    endDate: Yup.date()
-      .required(t('validationErrors:invalidDate'))
-      .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
-    studentNumbers: Yup.array().of(Yup.string()),
-    teacherIds: Yup.array().of(Yup.string()),
-  })
 
   const handleClose = () => setShowForm(!showForm)
 
-  const handleSubmit = async (values, { setErrors }) => {
+  const handleSubmit = async (data, { setErrors }) => {
+    const values = {
+      ...data,
+      teacherIds: data.teachers.map(t => t.id),
+    }
+
     await mutation.mutateAsync(values, {
       onSuccess: data => {
         handleClose()
