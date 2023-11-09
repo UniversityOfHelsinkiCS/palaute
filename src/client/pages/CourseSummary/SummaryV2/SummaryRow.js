@@ -498,13 +498,8 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = () => {
+export const SorterRow = ({ questions }) => {
   const { t, i18n } = useTranslation()
-  const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
-
-  if (isQuestionsLoading) {
-    return <Loader />
-  }
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">

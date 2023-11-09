@@ -17,15 +17,15 @@ const MyCourses = () => {
     endDate: dateRange.end,
     enabled: true,
   })
-  const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
+  const { questions } = useSummaryQuestions()
 
-  const show = !isOrganisationsLoading && !isQuestionsLoading && organisations && questions
+  const show = !isOrganisationsLoading && questions?.length && organisations && questions
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
+    <Box display="flex" flexDirection="column" alignItems="stretch">
       {show && organisations.length > 0 && (
         <>
-          <SorterRow />
+          {questions?.length && <SorterRow questions={questions} />}
           {organisations.map(organisation => (
             <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
           ))}

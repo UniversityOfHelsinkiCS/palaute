@@ -3,7 +3,7 @@ import { Box, LinearProgress } from '@mui/material'
 import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaryContext } from './context'
 import { useOrganisationSummaries } from './api'
-import { useOrderedAndFilteredOrganisations } from './utils'
+import { useOrderedAndFilteredOrganisations, useSummaryQuestions } from './utils'
 
 /**
  *
@@ -15,12 +15,13 @@ const MyOrganisations = () => {
     endDate: dateRange.end,
     enabled: true,
   })
+  const { questions } = useSummaryQuestions()
 
   const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(organisations)
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
-      <SorterRow />
+    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+      {questions?.length && <SorterRow questions={questions} />}
       {isLoading ? (
         <LinearProgress />
       ) : (
