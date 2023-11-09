@@ -28,11 +28,12 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
 }
 
 export const useEditOrganisationSurveyMutation = organisationCode => {
-  const mutationFn = async ({ surveyId, name, startDate, endDate, teacherIds }) => {
+  const mutationFn = async ({ surveyId, name, startDate, endDate, studentNumbers, teacherIds }) => {
     const { data } = await apiClient.put(`/organisations/${organisationCode}/surveys/${surveyId}`, {
       name,
       startDate,
       endDate,
+      studentNumbers,
       teacherIds,
     })
 
