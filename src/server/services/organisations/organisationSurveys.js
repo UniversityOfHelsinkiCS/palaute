@@ -178,6 +178,10 @@ const getSurveyById = async feedbackTargetId => {
         where: {
           accessStatus: 'RESPONSIBLE_TEACHER',
         },
+        include: {
+          model: User,
+          as: 'user',
+        },
       },
     ],
   })

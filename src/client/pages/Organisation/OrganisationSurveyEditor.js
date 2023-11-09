@@ -147,7 +147,7 @@ const StudentNumberInput = ({ name, ...props }) => {
         variant="outlined"
         fullWidth
         onChange={handleChange}
-        defaultValue={[]}
+        defaultValue={formikProps.initialValues.studentNumbers}
         error={Boolean(hasError)}
         helperText={hasError ? formikProps.errors[name] : ''}
         {...props}
