@@ -5,7 +5,7 @@ const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
-  getOrganisationSurvey,
+  getSurveyById,
   getSurveysForOrganisation,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
@@ -14,6 +14,21 @@ const {
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
+
+const getOrganisationSurvey = async (req, res) => {
+  const { user } = req
+  const { code, id } = req.params
+
+  const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    admin: true,
+  })
+
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can update organisation surveys', 403)
+
+  const survey = await getSurveyById(id)
+
+  return res.send(survey)
+}
 
 const getOrganisationSurveys = async (req, res) => {
   const { user } = req
@@ -50,7 +65,7 @@ const createOrganisationSurvey = async (req, res) => {
 
   const userFeedbackTargets = await createUserFeedbackTargets(feedbackTarget, studentNumbers, teacherIds)
 
-  const survey = await getOrganisationSurvey(feedbackTarget.id)
+  const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
     ...survey.dataValues,
@@ -101,6 +116,7 @@ const removeOrganisationSurvey = async (req, res) => {
 
 const router = Router()
 
+router.get('/:code/surveys/:id', getOrganisationSurvey)
 router.get('/:code/surveys', getOrganisationSurveys)
 router.post('/:code/surveys', createOrganisationSurvey)
 router.put('/:code/surveys/:id', editOrganisationSurvey)

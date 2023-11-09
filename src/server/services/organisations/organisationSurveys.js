@@ -131,9 +131,19 @@ const createUserFeedbackTargets = async (feedbackTarget, studentNumbers = [], te
   return studentFeedbackTargets.concat(teacherFeedbackTargets)
 }
 
-const getOrganisationSurvey = async feedbackTargetId => {
+const getSurveyById = async feedbackTargetId => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
-    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'name', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'name',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'opensAt',
+      'closesAt',
+    ],
     include: [
       {
         model: CourseUnit,
@@ -152,6 +162,22 @@ const getOrganisationSurvey = async feedbackTargetId => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id'],
+        as: 'students',
+        required: false,
+        where: { accessStatus: 'STUDENT' },
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id'],
+        as: 'userFeedbackTargets',
+        required: false,
+        where: {
+          accessStatus: 'RESPONSIBLE_TEACHER',
+        },
       },
     ],
   })
@@ -267,7 +293,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
 
   await createUserFeedbackTargets(feebackTarget, studentNumbers, teacherIds)
 
-  const survey = await getOrganisationSurvey(feedbackTargetId)
+  const survey = await getSurveyById(feedbackTargetId)
 
   return survey
 }
@@ -345,7 +371,7 @@ module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
-  getOrganisationSurvey,
+  getSurveyById,
   getSurveysForOrganisation,
   getDeletionAllowed,
   updateOrganisationSurvey,
