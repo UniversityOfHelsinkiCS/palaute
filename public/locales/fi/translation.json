@@ -477,7 +477,7 @@
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
     "showCurName": "Näytä kurssitoteutusten nimet",
-    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kysymyksen?",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
     "removeSuccess": "Koulutusohjelman kysymykset poistettu"
   },
   "feedbackTargetView": {

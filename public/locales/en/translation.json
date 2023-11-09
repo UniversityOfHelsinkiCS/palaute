@@ -477,7 +477,7 @@
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
     "showCurName": "Show course realisation names",
-    "confirmRemoveSurvey": "Are you sure you want to remove this organisation question?",
+    "confirmRemoveSurvey": "Are you sure you want to remove this organisation survey?",
     "removeSuccess": "Organisation questions removed"
   },
   "feedbackTargetView": {
