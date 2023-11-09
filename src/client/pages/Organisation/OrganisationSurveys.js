@@ -11,6 +11,7 @@ import { useOrganisationSurvey, useOrganisationSurveys } from './useOrganisation
 import OrganisationSurveyEditor from './OrganisationSurveyEditor'
 import {
   useCreateOrganisationSurveyMutation,
+  useEditOrganisationSurveyMutation,
   useDeleteOrganisationSurveyMutation,
 } from './useOrganisationSurveyMutation'
 
@@ -74,14 +75,17 @@ const getOrganisationSurveySchema = t =>
   })
 
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
-  const { t, i18n } = useTranslation()
-  const { language } = i18n
   const { code } = useParams()
+  const { t, i18n } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { language } = i18n
   const [showForm, setShowForm] = useState(false)
   const [surveyValues, setSurveyValues] = useState({})
 
-  const mutation = useDeleteOrganisationSurveyMutation(code)
-  const deleteOrganisationSurvey = useInteractiveMutation(surveyId => mutation.mutateAsync(surveyId), {
+  const editMutation = useEditOrganisationSurveyMutation(code)
+  const deleteMutation = useDeleteOrganisationSurveyMutation(code)
+  const deleteOrganisationSurvey = useInteractiveMutation(surveyId => deleteMutation.mutateAsync(surveyId), {
     success: t('organisationSurveys:removeSuccess'),
   })
   const { survey, isLoading: isOrganisationSurveyLoading } = useOrganisationSurvey(code, organisationSurvey.id)
@@ -110,9 +114,35 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const handleClose = () => setShowForm(!showForm)
 
-  const handleSubmit = async values => {
-    console.log('hei')
-    console.log(values)
+  const handleSubmit = async (data, { setErrors }) => {
+    const values = {
+      surveyId: organisationSurvey.id,
+      ...data,
+      teacherIds: data.teachers.map(t => t.id),
+    }
+
+    await editMutation.mutateAsync(values, {
+      onSuccess: () => {
+        handleClose()
+
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+      },
+      onError: error => {
+        if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
+          const { invalidStudentNumbers } = error.response.data
+          const errorString = `
+            ${t('validationErrors:invalidStudentNumbers')}
+      
+            ${invalidStudentNumbers.join(', ')}
+          `
+
+          setErrors({ studentNumbers: errorString })
+        } else {
+          handleClose()
+          enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+        }
+      },
+    })
   }
 
   const handleDelete = async () => {
@@ -205,9 +235,9 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 }
 
 const OrganisationSurveys = () => {
-  const { t } = useTranslation()
-  const { code } = useParams()
   const history = useHistory()
+  const { code } = useParams()
+  const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
