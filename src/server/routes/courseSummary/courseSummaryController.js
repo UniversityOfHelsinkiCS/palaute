@@ -169,6 +169,8 @@ const getByCourseUnit = async (req, res) => {
     getSummaryQuestions(code),
   ])
 
+  const isTeacher = accessibleCourseRealisationIds?.length > 0
+
   const courseRealisations = await getCourseRealisationSummaries({
     accessibleCourseRealisationIds,
     organisationAccess,
@@ -180,6 +182,7 @@ const getByCourseUnit = async (req, res) => {
     questions,
     courseRealisations,
     courseUnit: courseUnits[0],
+    isTeacher,
   })
 }
 

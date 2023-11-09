@@ -220,6 +220,11 @@ const config = {
   STUDENT_FEEDBACK_SHOW_REALISATION_NAME: false,
 
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: true,
+
+  /**
+   * Set course page SISU links based on user's role
+   */
+  USE_ROLE_BASED_COURSE_LINKS: true,
 }
 
 module.exports = config

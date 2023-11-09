@@ -21,6 +21,7 @@ import errors from '../../util/errorMessage'
 import ColumnHeadings from './ColumnHeadings'
 import CensoredCount from './CensoredCount'
 import LinkButton from '../../components/common/LinkButton'
+import { USE_ROLE_BASED_COURSE_LINKS } from '../../util/common'
 
 const styles = {
   realisationHeading: {
@@ -118,13 +119,23 @@ const CourseRealisationSummary = () => {
     return <ErrorView message={errors.getGeneralError(error)} response={error?.response} />
   }
 
-  const { questions, courseRealisations, courseUnit } = courseRealisationSummaries
+  const { questions, courseRealisations, courseUnit, isTeacher } = courseRealisationSummaries
 
   const organisation = organisationsLoading
     ? null
     : organisations.find(org => org.id === courseUnit.organisations[0]?.id)
 
-  const coursePageLink = `${t('links:courseUnitPage')}${courseUnit.id}`
+  let coursePageLink = ''
+  const courseUnitId = courseUnit?.id
+  if (USE_ROLE_BASED_COURSE_LINKS) {
+    if (isTeacher) {
+      coursePageLink = t('links:courseSummaryCourseUnitLink', { courseUnitId })
+    } else {
+      coursePageLink = t('links:courseSummaryCourseUnitLinkStudent', { courseUnitId })
+    }
+  } else {
+    coursePageLink = `${t('links:courseUnitPage')}${courseUnit.id}`
+  }
 
   return (
     <>
@@ -146,7 +157,7 @@ const CourseRealisationSummary = () => {
               title={getLanguageValue(organisation.name, i18n.language)}
             />
           )}
-          <LinkButton to={coursePageLink} title={t('feedbackTargetView:coursePage')} external />
+          <LinkButton to={coursePageLink} title={t('courseSummary:coursePage')} external />
         </Box>
 
         <Typography variant="body1" component="h2">

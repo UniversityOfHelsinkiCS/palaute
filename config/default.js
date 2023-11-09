@@ -185,6 +185,11 @@ const config = {
   GELF_TRANSPORT_ENABLED: false,
 
   /**
+   * Set course page SISU links based on user's role
+   */
+  USE_ROLE_BASED_COURSE_LINKS: false,
+
+  /**
    * Controls course realisation name visibility on feedback page for students
    */
   STUDENT_FEEDBACK_SHOW_REALISATION_NAME: true,
