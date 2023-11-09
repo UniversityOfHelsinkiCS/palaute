@@ -7,10 +7,12 @@ import {
   Collapse,
   Button,
   Box,
+  Dialog,
   Grid,
   IconButton,
   Typography,
   TextField,
+  DialogTitle,
 } from '@mui/material'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
@@ -189,37 +191,37 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
 const OrganisationSurveyEditor = ({ initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
   const { t } = useTranslation()
 
-  if (!editing) return null
-
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validateOnChange={false}
-      validationSchema={validationSchema}
-    >
-      {({ isSubmitting }) => {
-        const disabled = isSubmitting
+    <Dialog maxWidth={false} open={editing} onClose={onStopEditing}>
+      <DialogTitle>{t('organisationSurveys:addSurvey')}</DialogTitle>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validateOnChange={false}
+        validationSchema={validationSchema}
+      >
+        {({ isSubmitting }) => {
+          const disabled = isSubmitting
 
-        return (
-          <Form>
-            <Card sx={{ mb: 4 }}>
-              <CardContent>
+          return (
+            <Form>
+              <Box sx={{ m: 4 }}>
                 <OrganisationSurveyForm />
-              </CardContent>
-              <Box sx={{ m: 2 }}>
-                <Button disabled={disabled} color="primary" variant="contained" type="submit">
-                  {t('common:save')}
-                </Button>
-                <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
-                  {t('common:cancel')}
-                </Button>
+
+                <Box sx={{ mt: 2 }}>
+                  <Button disabled={disabled} color="primary" variant="contained" type="submit">
+                    {t('common:save')}
+                  </Button>
+                  <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
+                    {t('common:cancel')}
+                  </Button>
+                </Box>
               </Box>
-            </Card>
-          </Form>
-        )
-      }}
-    </Formik>
+            </Form>
+          )
+        }}
+      </Formik>
+    </Dialog>
   )
 }
 
