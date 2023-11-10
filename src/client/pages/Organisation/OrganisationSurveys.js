@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
 
-import { Alert, Card, CardContent, Box, Button, Typography } from '@mui/material'
+import { Alert, Card, CardContent, Box, Button, Typography, Chip, ListItem } from '@mui/material'
 
 import { Link, useParams, useHistory } from 'react-router-dom'
 
@@ -113,11 +113,25 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
 
-  const { opensAt, closesAt, feedbackCount, studentCount, feedbackResponse, feedbackResponseEmailSent } =
-    organisationSurvey
+  const {
+    opensAt,
+    closesAt,
+    feedbackCount,
+    feedbackResponse,
+    feedbackResponseEmailSent,
+    students,
+    userFeedbackTargets: teachers,
+  } = organisationSurvey
 
+  const studentCount = students.length
   const allowDelete = organisationSurvey.feedbackCount === 0
   const allowEdit = new Date() <= Date.parse(closesAt)
+  const isOpen = feedbackTargetIsOpen(organisationSurvey)
+  const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
+  const periodInfo = t('common:feedbackOpenPeriod', {
+    opensAt: startDate,
+    closesAt: endDate,
+  })
 
   const handleClose = () => setShowForm(!showForm)
 
@@ -161,16 +175,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
 
-  const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
-  const periodInfo = t('common:feedbackOpenPeriod', {
-    opensAt: startDate,
-    closesAt: endDate,
-  })
-
-  const isOpen = feedbackTargetIsOpen(organisationSurvey)
-
-  console.log(organisationSurvey)
-
   if (isOrganisationSurveyLoading) return null
 
   if (showForm)
@@ -212,6 +216,17 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
             feedbackResponseSent={feedbackResponseEmailSent}
             ongoing={isOpen}
           />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            listStyle: 'none',
+            flexWrap: 'wrap',
+          }}
+        >
+          {teachers.map(({ user: teacher }) => (
+            <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
+          ))}
         </Box>
 
         <Button
