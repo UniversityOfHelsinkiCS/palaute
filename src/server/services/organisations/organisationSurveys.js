@@ -207,7 +207,6 @@ const getSurveysForOrganisation = async organisationId => {
       'feedbackType',
       'publicQuestionIds',
       'feedbackCount',
-      [fn('COUNT', col('userFeedbackTargets.id')), 'studentCount'],
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
@@ -237,18 +236,24 @@ const getSurveysForOrganisation = async organisationId => {
       },
       {
         model: UserFeedbackTarget,
-        attributes: [],
-        as: 'userFeedbackTargets',
+        attributes: ['id'],
+        as: 'students',
         required: false,
         where: { accessStatus: 'STUDENT' },
       },
-    ],
-    group: [
-      'FeedbackTarget.id',
-      'courseUnit.id',
-      'courseRealisation.id',
-      'courseUnit.organisations.id',
-      'courseUnit.organisations.courseUnitOrganisation.id',
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id'],
+        as: 'userFeedbackTargets',
+        required: false,
+        where: {
+          accessStatus: 'RESPONSIBLE_TEACHER',
+        },
+        include: {
+          model: User,
+          as: 'user',
+        },
+      },
     ],
     order: [['courseRealisation', 'endDate', 'DESC']],
   })
