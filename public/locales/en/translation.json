@@ -356,6 +356,7 @@
     "givenFeedback": "Feedbacks given",
     "viewFeedbackSummary": "View survey summary",
     "addSurvey": "Create new programme survey",
+    "editSurvey": "Edit programme survey",
     "newSurveyName": "Survey name",
     "responsibleTeacherTitle": "Add a responsible person to this survey",
     "responsibleTeacherEmail": "Email",
@@ -374,8 +375,8 @@
     "surveys": "surveys",
     "edit": "Edit",
     "remove": "Remove",
-    "confirmRemoveSurvey": "Are you sure you want to remove this organisation survey?",
-    "removeSuccess": "Organisation survey removed"
+    "confirmRemoveSurvey": "Are you sure you want to remove this programme survey?",
+    "removeSuccess": "Programme survey removed"
   },
   "courseSummary": {
     "heading": "Summary of course feedback",

@@ -169,11 +169,14 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
 
+  console.log(organisationSurvey)
+
   if (isOrganisationSurveyLoading) return null
 
   if (showForm)
     return (
       <OrganisationSurveyEditor
+        title={t('organisationSurveys:editSurvey')}
         initialValues={surveyValues}
         validationSchema={organisationSurveySchema}
         handleSubmit={handleSubmit}
@@ -324,6 +327,7 @@ const OrganisationSurveys = () => {
       </Box>
 
       <OrganisationSurveyEditor
+        title={t('organisationSurveys:addSurvey')}
         initialValues={initialValues}
         validationSchema={organisationSurveySchema}
         handleSubmit={handleSubmit}

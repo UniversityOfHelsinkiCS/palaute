@@ -211,12 +211,12 @@ const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
   )
 }
 
-const OrganisationSurveyEditor = ({ initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
+const OrganisationSurveyEditor = ({ title, initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
   const { t } = useTranslation()
 
   return (
     <Dialog maxWidth={false} open={editing} onClose={onStopEditing}>
-      <DialogTitle>{t('organisationSurveys:addSurvey')}</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
