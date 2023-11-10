@@ -370,6 +370,8 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
     })
 
     logger.info(`Deleted ${cu} course realisations`)
+
+    await t.commit()
   } catch (err) {
     await t.rollback()
     throw err
