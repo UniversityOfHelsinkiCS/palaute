@@ -44,7 +44,7 @@ const getUserByEmail = async (req, res) => {
   const params = { email }
 
   const persons = await User.findAll({
-    attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
       [Op.or]: {
         email: { [Op.iLike]: `${email}%` },
