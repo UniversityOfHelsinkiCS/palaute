@@ -76,3 +76,13 @@ export const filterFeedbackTargets = feedbackTargets => {
     ended: feedbackTargets.ended ? filter(feedbackTargets.ended) : [],
   }
 }
+
+export const getCourseName = courseRealisation => {
+  const { feedbackTargets, courseUnitName } = courseRealisation
+
+  const customFeedbackTarget = feedbackTargets.find(target => target.userCreated)
+
+  if (customFeedbackTarget) return customFeedbackTarget.name
+
+  return courseUnitName
+}
