@@ -7,7 +7,7 @@ import { Alert, Card, CardContent, Box, Button, Typography, Chip } from '@mui/ma
 
 import { Link, useParams, useHistory } from 'react-router-dom'
 
-import { useOrganisationSurvey, useOrganisationSurveys } from './useOrganisationSurveys'
+import { useOrganisationSurveys } from './useOrganisationSurveys'
 import OrganisationSurveyEditor from './OrganisationSurveyEditor'
 import {
   useCreateOrganisationSurveyMutation,
@@ -88,28 +88,20 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const { language } = i18n
   const [showForm, setShowForm] = useState(false)
-  const [surveyValues, setSurveyValues] = useState({})
 
   const editMutation = useEditOrganisationSurveyMutation(code)
   const deleteMutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => deleteMutation.mutateAsync(surveyId), {
     success: t('organisationSurveys:removeSuccess'),
   })
-  const { survey, isLoading: isOrganisationSurveyLoading } = useOrganisationSurvey(code, organisationSurvey.id)
 
-  useEffect(() => {
-    if (survey && !isOrganisationSurveyLoading) {
-      const formValues = {
-        name: survey.name,
-        startDate: survey.opensAt,
-        endDate: survey.closesAt,
-        studentNumbers: survey.students.map(s => s.user.studentNumber),
-        teachers: survey.userFeedbackTargets.map(t => t.user),
-      }
-
-      setSurveyValues(formValues)
-    }
-  }, [survey, isOrganisationSurveyLoading])
+  const surveyValues = {
+    name: organisationSurvey.name,
+    startDate: organisationSurvey.opensAt,
+    endDate: organisationSurvey.closesAt,
+    studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
+    teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
+  }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
 
@@ -174,8 +166,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
-
-  if (isOrganisationSurveyLoading) return null
 
   if (showForm)
     return (

@@ -240,6 +240,11 @@ const getSurveysForOrganisation = async organisationId => {
         as: 'students',
         required: false,
         where: { accessStatus: 'STUDENT' },
+        include: {
+          model: User,
+          attributes: ['studentNumber'],
+          as: 'user',
+        },
       },
       {
         model: UserFeedbackTarget,

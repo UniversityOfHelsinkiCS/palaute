@@ -43,7 +43,6 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
   const mutation = useMutation(mutationFn, {
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey)
-      queryClient.invalidateQueries(['organisationSurvey'])
     },
   })
 
