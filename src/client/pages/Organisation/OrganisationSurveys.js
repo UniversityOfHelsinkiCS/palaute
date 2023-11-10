@@ -74,6 +74,13 @@ const getOrganisationSurveySchema = t =>
     teachers: Yup.array().of(Yup.object()),
   })
 
+const getOverlappingStudentTeachers = data => {
+  const { studentNumbers } = data
+  const overlappingStudentTeachers = data.teachers.filter(t => studentNumbers.includes(t.studentNumber))
+
+  return overlappingStudentTeachers
+}
+
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { code } = useParams()
   const { t, i18n } = useTranslation()
@@ -115,6 +122,13 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const handleClose = () => setShowForm(!showForm)
 
   const handleSubmit = async (data, { setErrors }) => {
+    const overlappingStudentTeachers = getOverlappingStudentTeachers(data)
+
+    if (overlappingStudentTeachers.length > 0) {
+      setErrors({ studentNumbers: overlappingStudentTeachers.map(t => t.studentNumber) })
+      return
+    }
+
     const values = {
       surveyId: organisationSurvey.id,
       ...data,
@@ -256,6 +270,13 @@ const OrganisationSurveys = () => {
   const handleClose = () => setShowForm(!showForm)
 
   const handleSubmit = async (data, { setErrors }) => {
+    const overlappingStudentTeachers = getOverlappingStudentTeachers(data)
+
+    if (overlappingStudentTeachers.length > 0) {
+      setErrors({ studentNumbers: overlappingStudentTeachers.map(t => t.studentNumber) })
+      return
+    }
+
     const values = {
       ...data,
       teacherIds: data.teachers.map(t => t.id),
