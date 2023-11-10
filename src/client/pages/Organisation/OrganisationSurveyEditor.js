@@ -86,18 +86,8 @@ const StudentNumberInput = ({ name, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [expand, setExpand] = useState(false)
-
-  console.log(formikProps.errors[name])
-
-  const handleChange = ({ target }) => {
-    const { value } = target
-
-    const studentNumbers = value
-      .split(/[,\n; ]/)
-      .filter(v => v !== '')
-      .map(v => (v.length >= 9 ? v : `${'0'.repeat(9 - v.length)}${v}`))
-    formikProps.setFieldValue('studentNumbers', studentNumbers)
-  }
+  const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
+  const [inputValue, setInputValue] = React.useState('')
 
   return (
     <Box>
@@ -128,7 +118,7 @@ const StudentNumberInput = ({ name, ...props }) => {
               <br />
               011000002,
               <br />
-              011100009 011110002
+              011000090 011000003
             </Box>
           </Collapse>
         </Alert>
@@ -139,11 +129,29 @@ const StudentNumberInput = ({ name, ...props }) => {
         name={name}
         multiple
         fullWidth
-        defaultValue={formikProps.initialValues.studentNumbers}
-        onChange={(_, studentNumbers) => formikProps.setFieldValue('studentNumbers', studentNumbers)}
         options={[]}
         freeSolo
-        onInputChange={handleChange}
+        value={value}
+        inputValue={inputValue}
+        onChange={(_, studentNumbers) => {
+          setValue(studentNumbers)
+          formikProps.setFieldValue('studentNumbers', studentNumbers)
+        }}
+        onInputChange={(_, newInputValue) => {
+          const options = newInputValue.split(/[,\n; ]/)
+
+          if (options.length > 1) {
+            const studentNumbers = value
+              .concat(options)
+              .map(x => x.trim())
+              .filter(x => x)
+
+            setValue(studentNumbers)
+            formikProps.setFieldValue('studentNumbers', studentNumbers)
+          } else {
+            setInputValue(newInputValue)
+          }
+        }}
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
             <Chip
