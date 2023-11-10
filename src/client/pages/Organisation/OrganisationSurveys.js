@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
 
-import { Alert, Card, CardContent, Box, Button, Typography, Chip, ListItem } from '@mui/material'
+import { Alert, Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
 import { Link, useParams, useHistory } from 'react-router-dom'
 
@@ -192,11 +192,20 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   return (
     <Card sx={{ mb: 3 }}>
       <CardContent>
-        <Typography variant="body1" fontWeight={600} component="h2">
+        <Typography sx={{ textTransform: 'capitalize', fontWeight: 'light' }} variant="h5" component="div">
           {getLanguageValue(organisationSurvey.name, language)}
         </Typography>
 
-        <Typography variant="body1" sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2, ml: -1 }}>
+          <FeedbackResponseChip
+            id={organisationSurvey.id}
+            feedbackResponseGiven={Boolean(feedbackResponse)}
+            feedbackResponseSent={feedbackResponseEmailSent}
+            ongoing={isOpen}
+          />
+        </Box>
+
+        <Typography variant="body2" sx={{ mt: 2 }}>
           {periodInfo}
         </Typography>
 
@@ -209,25 +218,14 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           />
         </Box>
 
-        <Box sx={{ mt: 1, mb: 2 }}>
-          <FeedbackResponseChip
-            id={organisationSurvey.id}
-            feedbackResponseGiven={Boolean(feedbackResponse)}
-            feedbackResponseSent={feedbackResponseEmailSent}
-            ongoing={isOpen}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            listStyle: 'none',
-            flexWrap: 'wrap',
-          }}
-        >
-          {teachers.map(({ user: teacher }) => (
-            <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
-          ))}
-        </Box>
+        {teachers.length > 0 && (
+          <Box sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}>
+            <Typography variant="body2">{t('organisationSurveys:responsibleTeachers')}:</Typography>
+            {teachers.map(({ user: teacher }) => (
+              <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
+            ))}
+          </Box>
+        )}
 
         <Button
           color="primary"

@@ -358,6 +358,7 @@
     "addSurvey": "Luo uusi koulutusohjelman kysely",
     "editSurvey": "Muokkaa koulutusohjelman kyselyä",
     "newSurveyName": "Kyselyn nimi",
+    "responsibleTeachers": "Vastuuhenkilöt",
     "responsibleTeacherTitle": "Lisää kyselylle vastuuhenkilö",
     "responsibleTeacherEmail": "Sähköposti",
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
