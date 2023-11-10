@@ -89,6 +89,8 @@ const StudentNumberInput = ({ name, ...props }) => {
   const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
   const [inputValue, setInputValue] = React.useState('')
 
+  const hasError = formikProps.touched[name] && formikProps.errors[name]
+
   return (
     <Box>
       <Typography variant="body1" mb={2}>
@@ -164,7 +166,13 @@ const StudentNumberInput = ({ name, ...props }) => {
             />
           ))
         }
-        renderInput={params => <TextField {...params} />}
+        renderInput={params => (
+          <TextField
+            {...params}
+            error={Boolean(hasError)}
+            helperText={hasError ? t('validationErrors:invalidStudentNumbers') : ''}
+          />
+        )}
         {...props}
       />
     </Box>

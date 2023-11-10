@@ -80,7 +80,7 @@
     "required": "This field is required",
     "wrongDate": "Survey closing date is before opening date",
     "invalidDate": "Invalid date",
-    "invalidStudentNumbers": "The following student numbers were not valid: "
+    "invalidStudentNumbers": "Please check the indicated invalid student numbers"
   },
   "links": {
     "supportEmail": "-",
