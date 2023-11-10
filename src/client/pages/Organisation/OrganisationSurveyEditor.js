@@ -129,6 +129,7 @@ const StudentNumberInput = ({ name, ...props }) => {
         name={name}
         multiple
         fullWidth
+        clearOnBlur
         options={[]}
         freeSolo
         value={value}
