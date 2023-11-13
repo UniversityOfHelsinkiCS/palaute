@@ -90,6 +90,8 @@ const StudentNumberInput = ({ name, ...props }) => {
   const [inputValue, setInputValue] = React.useState('')
 
   const hasError = formikProps.touched[name] && formikProps.errors[name]
+  const errorText = formikProps.errors[name]?.text
+  const errorData = formikProps.errors[name]?.data
 
   return (
     <Box>
@@ -162,16 +164,12 @@ const StudentNumberInput = ({ name, ...props }) => {
               key={option}
               variant="outlined"
               label={option}
-              color={formikProps.errors[name] && formikProps.errors[name].includes(option) ? 'error' : 'primary'}
+              color={formikProps.errors[name] && errorData.includes(option) ? 'error' : 'primary'}
             />
           ))
         }
         renderInput={params => (
-          <TextField
-            {...params}
-            error={Boolean(hasError)}
-            helperText={hasError ? t('validationErrors:invalidStudentNumbers') : ''}
-          />
+          <TextField {...params} error={Boolean(hasError)} helperText={hasError ? errorText : ''} />
         )}
         {...props}
       />

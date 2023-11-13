@@ -80,7 +80,8 @@
     "required": "Tämä kenttä vaaditaan",
     "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
     "invalidDate": "Virheellinen päivämäärä",
-    "invalidStudentNumbers": "Tarkistaisitko merkityt virheelliset opiskelijanumerot"
+    "invalidStudentNumbers": "Tarkistaisitko merkityt virheelliset opiskelijanumerot",
+    "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla kurssin opiskelija"
   },
   "links": {
     "supportEmail": "-",

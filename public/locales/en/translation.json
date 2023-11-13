@@ -80,7 +80,8 @@
     "required": "This field is required",
     "wrongDate": "Survey closing date is before opening date",
     "invalidDate": "Invalid date",
-    "invalidStudentNumbers": "Please check the indicated invalid student numbers"
+    "invalidStudentNumbers": "Please check the indicated invalid student numbers",
+    "overlappingStudentTeacher": "Responsible person can not be a student at the same time"
   },
   "links": {
     "supportEmail": "-",

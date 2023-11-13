@@ -134,7 +134,12 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     const overlappingStudentTeachers = getOverlappingStudentTeachers(data)
 
     if (overlappingStudentTeachers.length > 0) {
-      setErrors({ studentNumbers: overlappingStudentTeachers.map(t => t.studentNumber) })
+      setErrors({
+        studentNumbers: {
+          text: t('validationErrors:overlappingStudentTeacher'),
+          data: overlappingStudentTeachers.map(t => t.studentNumber),
+        },
+      })
       return
     }
 
@@ -154,7 +159,12 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
 
-          setErrors({ studentNumbers: invalidStudentNumbers })
+          setErrors({
+            studentNumbers: {
+              text: t('validationErrors:invalidStudentNumbers'),
+              data: invalidStudentNumbers,
+            },
+          })
         } else {
           handleClose()
           enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
@@ -282,7 +292,12 @@ const OrganisationSurveys = () => {
     const overlappingStudentTeachers = getOverlappingStudentTeachers(data)
 
     if (overlappingStudentTeachers.length > 0) {
-      setErrors({ studentNumbers: overlappingStudentTeachers.map(t => t.studentNumber) })
+      setErrors({
+        studentNumbers: {
+          text: t('validationErrors:overlappingStudentTeacher'),
+          data: overlappingStudentTeachers.map(t => t.studentNumber),
+        },
+      })
       return
     }
 
@@ -302,7 +317,12 @@ const OrganisationSurveys = () => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
 
-          setErrors({ studentNumbers: invalidStudentNumbers })
+          setErrors({
+            studentNumbers: {
+              text: t('validationErrors:invalidStudentNumbers'),
+              data: invalidStudentNumbers,
+            },
+          })
         } else {
           handleClose()
           enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
