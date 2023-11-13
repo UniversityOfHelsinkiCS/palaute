@@ -254,7 +254,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {(allowDelete || isAdmin) && (
           <Button disabled={showForm} color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
-            {t('organisationSurveys:remove')} {isAdmin && !allowDelete && 'ADMIN'}
+            {t('organisationSurveys:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
           </Button>
         )}
       </CardContent>
