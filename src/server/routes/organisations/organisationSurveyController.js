@@ -5,6 +5,7 @@ const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
+  getStudentIds,
   getSurveyById,
   getSurveysForOrganisation,
   updateOrganisationSurvey,
@@ -63,13 +64,15 @@ const createOrganisationSurvey = async (req, res) => {
 
   const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
 
-  const userFeedbackTargets = await createUserFeedbackTargets(feedbackTarget, studentNumbers, teacherIds)
+  const studentIds = await getStudentIds(studentNumbers)
+  const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
+  const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
     ...survey.dataValues,
-    userFeedbackTargets,
+    userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
 }
 

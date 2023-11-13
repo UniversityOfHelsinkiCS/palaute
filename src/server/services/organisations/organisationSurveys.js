@@ -1,4 +1,4 @@
-const { Op, fn, col } = require('sequelize')
+const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 const { i18n } = require('../../util/i18n')
 
@@ -101,7 +101,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
-const createUserFeedbackTargets = async (feedbackTarget, studentNumbers = [], teacherIds = []) => {
+const getStudentIds = async studentNumbers => {
   const students = await User.findAll({
     where: {
       studentNumber: { [Op.in]: studentNumbers },
@@ -109,26 +109,35 @@ const createUserFeedbackTargets = async (feedbackTarget, studentNumbers = [], te
     attributes: ['id'],
   })
 
-  const studentFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    students.map(({ id }) => ({
-      accessStatus: 'STUDENT',
-      feedbackTargetId: feedbackTarget.id,
-      userId: id,
+  const studentIds = students.map(({ id }) => id)
+
+  return studentIds
+}
+
+const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+  const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
+    userIds.map(userId => ({
+      accessStatus,
+      feedbackTargetId,
+      userId,
+      isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
       userCreated: true,
     }))
   )
 
-  const teacherFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    teacherIds.map(teacherId => ({
-      accessStatus: 'RESPONSIBLE_TEACHER',
-      feedbackTargetId: feedbackTarget.id,
-      userId: teacherId,
-      isAdministrativePerson: true,
-      userCreated: true,
-    }))
-  )
+  return userFeedbackTargets
+}
 
-  return studentFeedbackTargets.concat(teacherFeedbackTargets)
+const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
+  const userFeedbackTargets = await UserFeedbackTarget.findAll({
+    where: {
+      feedbackTargetId,
+      accessStatus,
+    },
+    attributes: ['id', 'userId'],
+  })
+
+  return userFeedbackTargets
 }
 
 const getSurveyById = async feedbackTargetId => {
@@ -272,6 +281,21 @@ const getDeletionAllowed = async organisationSurveyId => {
   return feedbackCount === 0
 }
 
+const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+  await UserFeedbackTarget.destroy({
+    where: {
+      feedbackTargetId,
+      userId: { [Op.notIn]: userIds },
+      accessStatus,
+    },
+  })
+
+  const existingUserIds = (await getUserFeedbackTargets(feedbackTargetId, accessStatus)).map(({ userId }) => userId)
+  const newUserIds = userIds.filter(id => !existingUserIds.includes(id))
+
+  await createUserFeedbackTargets(feedbackTargetId, newUserIds, accessStatus)
+}
+
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   const { name, teacherIds, studentNumbers } = updates
   const { startDate, endDate } = formatActivityPeriod(updates)
@@ -293,24 +317,14 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   })
 
   if (teacherIds) {
-    await UserFeedbackTarget.destroy({
-      where: {
-        feedbackTargetId,
-        accessStatus: 'RESPONSIBLE_TEACHER',
-      },
-    })
+    await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
 
   if (studentNumbers) {
-    await UserFeedbackTarget.destroy({
-      where: {
-        feedbackTargetId,
-        accessStatus: 'STUDENT',
-      },
-    })
-  }
+    const studentIds = await getStudentIds(studentNumbers)
 
-  await createUserFeedbackTargets(feebackTarget, studentNumbers, teacherIds)
+    await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
+  }
 
   const survey = await getSurveyById(feedbackTargetId)
 
@@ -392,6 +406,7 @@ module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
+  getStudentIds,
   getSurveyById,
   getSurveysForOrganisation,
   getDeletionAllowed,
