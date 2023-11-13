@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
@@ -15,6 +15,7 @@ import {
   useDeleteOrganisationSurveyMutation,
 } from './useOrganisationSurveyMutation'
 
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
 import PercentageCell from '../CourseSummary/PercentageCell'
@@ -89,6 +90,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { language } = i18n
   const [showForm, setShowForm] = useState(false)
 
+  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const editMutation = useEditOrganisationSurveyMutation(code)
   const deleteMutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => deleteMutation.mutateAsync(surveyId), {
@@ -115,6 +117,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     userFeedbackTargets: teachers,
   } = organisationSurvey
 
+  const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const studentCount = students.length
   const allowDelete = organisationSurvey.feedbackCount === 0
   const allowEdit = new Date() <= Date.parse(closesAt)
@@ -162,7 +165,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
-    if (!allowDelete || !window.confirm(t('organisationSurveys:confirmRemoveSurvey'))) return
+    if ((!isAdmin && !allowDelete) || !window.confirm(t('organisationSurveys:confirmRemoveSurvey'))) return
 
     await deleteOrganisationSurvey(organisationSurvey.id)
   }
@@ -239,9 +242,9 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           </Button>
         )}
 
-        {allowDelete && (
+        {(allowDelete || isAdmin) && (
           <Button disabled={showForm} color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
-            {t('organisationSurveys:remove')}
+            {t('organisationSurveys:remove')} {isAdmin && !allowDelete && 'ADMIN'}
           </Button>
         )}
       </CardContent>

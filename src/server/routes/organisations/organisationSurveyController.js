@@ -107,7 +107,8 @@ const removeOrganisationSurvey = async (req, res) => {
 
   const allowDelete = await getDeletionAllowed(id)
 
-  if (!allowDelete) throw new ApplicationError('Can not delete orgnanisation survey when feedbacks are given', 403)
+  if (!hasAdminAccess && !allowDelete)
+    throw new ApplicationError('Can not delete orgnanisation survey when feedbacks are given', 403)
 
   await deleteOrganisationSurvey(id)
 
