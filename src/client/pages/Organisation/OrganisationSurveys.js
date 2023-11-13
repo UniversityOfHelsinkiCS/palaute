@@ -292,7 +292,7 @@ const OrganisationSurveys = () => {
       onSuccess: data => {
         handleClose()
 
-        history.push(`/targets/${data.id}/feedback`)
+        history.push(`/targets/${data.id}/edit`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {
