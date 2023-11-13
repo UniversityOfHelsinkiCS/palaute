@@ -148,8 +148,8 @@ const StudentNumberInput = ({ name, ...props }) => {
           if (options.length > 1) {
             const studentNumbers = value
               .concat(options)
-              .map(x => x.trim())
-              .filter(x => x)
+              .filter(v => v)
+              .map(v => (v.length >= 9 ? v : `0${v}`))
 
             setValue(studentNumbers)
             formikProps.setFieldValue('studentNumbers', studentNumbers)
