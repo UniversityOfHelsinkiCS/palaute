@@ -56,7 +56,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
     const { data } = await apiClient.get('/users', { params })
     const { persons } = data
 
-    setPotentialUsers(persons)
+    setPotentialUsers(persons.filter(p => p.email.endsWith('@helsinki.fi')))
   }, 400)
 
   return (
