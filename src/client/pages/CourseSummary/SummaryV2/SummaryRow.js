@@ -11,7 +11,7 @@ import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResu
 import { CourseUnitLabel, OrganisationLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
-import { useOrderedAndFilteredOrganisations, useSummaryQuestions } from './utils'
+import { useOrderedAndFilteredOrganisations } from './utils'
 import { useSummaryContext } from './context'
 import Sort from './Sort'
 import { OrganisationLink } from './OrganisationLink'
@@ -378,15 +378,15 @@ export const OrganisationSummaryRow = ({
   organisation: initialOrganisation,
   organisationId,
 }) => {
+  const { questions } = useSummaryContext()
   const { ref, inView } = useInView({ triggerOnce: false })
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(organisationId, true, alwaysOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
-  const { questions, isLoading: isQuestionsLoading } = useSummaryQuestions()
 
   const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')
 
-  if (!alwaysOpen && (!initialOrganisation || isQuestionsLoading)) {
+  if (!alwaysOpen && !initialOrganisation) {
     return <Loader />
   }
 

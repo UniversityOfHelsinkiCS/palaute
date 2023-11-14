@@ -1,6 +1,7 @@
 import React from 'react'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
+import useUniversitySurvey from '../../../hooks/useUniversitySurvey'
 
 const getSummarySortFunction = sortField => {
   switch (sortField) {
@@ -28,9 +29,14 @@ const summaryContext = React.createContext({
   sortBy: ['code', 'asc'],
   setSortBy: () => {},
   sortFunction: getSummarySortFunction('code'),
+  questions: [],
 })
 
 export const SummaryContextProvider = ({ children }) => {
+  const { survey: universitySurvey } = useUniversitySurvey()
+  const questions = universitySurvey?.questions || []
+  const acualQuestions = questions.filter(q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD')
+
   const [params, setParams] = useURLSearchParams()
 
   // Whether to show summaries with no feedback
@@ -111,8 +117,9 @@ export const SummaryContextProvider = ({ children }) => {
       sortBy,
       setSortBy: updateSortByQS,
       sortFunction,
+      questions: acualQuestions,
     }),
-    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1]]
+    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>

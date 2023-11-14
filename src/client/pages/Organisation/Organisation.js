@@ -137,7 +137,7 @@ const Organisation = () => {
         )}
 
         <Route path={`${path}/summary`}>
-          <ForOrganisation organisationId={organisation.id} />
+          <ForOrganisation organisation={organisation} />
         </Route>
 
         <ProtectedRoute

@@ -3,20 +3,18 @@ import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { UNIVERSITY_ROOT_ID } from '../../../util/common'
 import { useSummaryContext } from './context'
-import { useSummaryQuestions } from './utils'
 
 /**
  *
  */
 const University = () => {
-  const { dateRange } = useSummaryContext()
+  const { dateRange, questions } = useSummaryContext()
 
   const { organisation: universityOrganisation } = useSummaries({
     entityId: UNIVERSITY_ROOT_ID,
     startDate: dateRange.start,
     endDate: dateRange.end,
   })
-  const { questions } = useSummaryQuestions()
 
   return (
     <>

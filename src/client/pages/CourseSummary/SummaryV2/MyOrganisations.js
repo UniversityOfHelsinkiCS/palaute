@@ -3,19 +3,18 @@ import { Box, LinearProgress } from '@mui/material'
 import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaryContext } from './context'
 import { useOrganisationSummaries } from './api'
-import { useOrderedAndFilteredOrganisations, useSummaryQuestions } from './utils'
+import { useOrderedAndFilteredOrganisations } from './utils'
 
 /**
  *
  */
 const MyOrganisations = () => {
-  const { dateRange } = useSummaryContext()
+  const { dateRange, questions } = useSummaryContext()
   const { organisations, isLoading } = useOrganisationSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
     enabled: true,
   })
-  const { questions } = useSummaryQuestions()
 
   const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(organisations)
 

@@ -4,20 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
 import { SorterRow, TeacherOrganisationSummaryRow } from './SummaryRow'
-import { useSummaryQuestions } from './utils'
 
 /**
  *
  */
 const MyCourses = () => {
   const { t } = useTranslation()
-  const { dateRange } = useSummaryContext()
+  const { dateRange, questions } = useSummaryContext()
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
     enabled: true,
   })
-  const { questions } = useSummaryQuestions()
 
   const show = !isOrganisationsLoading && questions?.length && organisations && questions
 
