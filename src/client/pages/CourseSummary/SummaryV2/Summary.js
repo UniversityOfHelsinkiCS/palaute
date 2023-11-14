@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
 import { BarChartOutlined, School } from '@mui/icons-material'
-import { SummaryContextProvider, useSummaryContext } from './context'
+import { SummaryContextProvider } from './context'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../../components/common/ProtectedRoute'
 import MyOrganisations from './MyOrganisations'
@@ -12,27 +12,18 @@ import { inProduction } from '../../../util/common'
 import University from './University'
 import { updateSummaries } from './api'
 import LinkButton from '../../../components/common/LinkButton'
-import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
 import hyLogo from '../../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
 
 const SummaryInContext = () => {
-  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { search } = window.location
-  const [, startTransition] = React.useTransition()
 
   const handleUpdateData = async () => {
     const duration = await updateSummaries()
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
-  }
-
-  const handleChangeTimeRange = nextDateRange => {
-    startTransition(() => {
-      setDateRange(nextDateRange)
-    })
   }
 
   const { authorizedUser: user } = useAuthorizedUser()
@@ -49,14 +40,6 @@ const SummaryInContext = () => {
         <Button variant="text" onClick={handleUpdateData}>
           Aja datanpäivitys
         </Button>
-      </Box>
-      <Box display="flex" pb="2rem" justifyContent="space-between" alignItems="end">
-        <YearSemesterSelector
-          value={dateRange ?? { start: new Date(), end: new Date() }}
-          onChange={handleChangeTimeRange}
-          option={option}
-          setOption={setOption}
-        />
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
         <RouterTab

@@ -23,14 +23,12 @@ const MyCourses = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
-      {show && organisations.length > 0 && (
-        <>
-          {questions?.length && <SorterRow questions={questions} />}
-          {organisations.map(organisation => (
-            <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
-          ))}
-        </>
-      )}
+      {questions?.length && <SorterRow questions={questions} />}
+      {show &&
+        organisations.length > 0 &&
+        organisations.map(organisation => (
+          <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
+        ))}
       {show && organisations.length === 0 && (
         <Box my="1rem" mx="2rem">
           <Alert severity="info">{t('courseSummary:noCourses')}</Alert>

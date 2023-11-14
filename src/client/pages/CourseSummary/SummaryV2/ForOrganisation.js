@@ -4,17 +4,9 @@ import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { useSummaryQuestions } from './utils'
 import { SummaryContextProvider, useSummaryContext } from './context'
-import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 
 const OrganisationSummaryInContext = ({ organisationId }) => {
-  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
-  const [, startTransition] = React.useTransition()
-
-  const handleChangeTimeRange = nextDateRange => {
-    startTransition(() => {
-      setDateRange(nextDateRange)
-    })
-  }
+  const { dateRange } = useSummaryContext()
 
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -24,18 +16,9 @@ const OrganisationSummaryInContext = ({ organisationId }) => {
   })
   const { questions } = useSummaryQuestions()
 
-  const filterComponent = (
-    <YearSemesterSelector
-      value={dateRange ?? { start: new Date(), end: new Date() }}
-      onChange={handleChangeTimeRange}
-      option={option}
-      setOption={setOption}
-    />
-  )
-
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      {questions?.length && <SorterRow questions={questions} filterComponent={filterComponent} />}
+      {questions?.length && <SorterRow questions={questions} />}
       {isLoading ? (
         <LinearProgress />
       ) : (

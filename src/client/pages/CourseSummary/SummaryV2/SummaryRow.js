@@ -16,6 +16,7 @@ import { useSummaryContext } from './context'
 import Sort from './Sort'
 import { OrganisationLink } from './OrganisationLink'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
+import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
 
 const styles = {
   resultCell: {
@@ -498,8 +499,22 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = ({ questions, filterComponent }) => {
+export const SorterRow = ({ questions }) => {
   const { t, i18n } = useTranslation()
+  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
+
+  const handleChangeTimeRange = nextDateRange => {
+    setDateRange(nextDateRange)
+  }
+
+  const filterComponent = (
+    <YearSemesterSelector
+      value={dateRange ?? { start: new Date(), end: new Date() }}
+      onChange={handleChangeTimeRange}
+      option={option}
+      setOption={setOption}
+    />
+  )
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
