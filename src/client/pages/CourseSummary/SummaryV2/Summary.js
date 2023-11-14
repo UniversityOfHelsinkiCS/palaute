@@ -15,6 +15,7 @@ import LinkButton from '../../../components/common/LinkButton'
 import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
 import hyLogo from '../../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
+import SummaryScrollContainer from './SummaryScrollContainer'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -62,7 +63,7 @@ const SummaryInContext = () => {
           to={`/course-summary/v2/my-courses${search}`}
         />
       </RouterTabs>
-      <Box mt="3rem">
+      <SummaryScrollContainer>
         <Switch>
           <ProtectedRoute
             path="/course-summary/v2/my-organisations"
@@ -92,7 +93,7 @@ const SummaryInContext = () => {
 
           <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
         </Switch>
-      </Box>
+      </SummaryScrollContainer>
     </>
   )
 }

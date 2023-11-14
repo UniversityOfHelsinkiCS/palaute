@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, LinearProgress } from '@mui/material'
+import { LinearProgress } from '@mui/material'
 import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { SummaryContextProvider, useSummaryContext } from './context'
+import SummaryScrollContainer from './SummaryScrollContainer'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, questions } = useSummaryContext()
@@ -15,7 +16,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   })
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+    <SummaryScrollContainer>
       {questions?.length && <SorterRow questions={questions} />}
       {isLoading ? (
         <LinearProgress />
@@ -29,7 +30,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
           endDate={dateRange.end}
         />
       )}
-    </Box>
+    </SummaryScrollContainer>
   )
 }
 
