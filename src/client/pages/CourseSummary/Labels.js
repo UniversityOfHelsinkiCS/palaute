@@ -89,7 +89,9 @@ export const CourseUnitLabel = ({ name, code, partiallyResponsible }) => (
         </Typography>
       )}
     </Box>
-    <Typography variant="body2">{name}</Typography>
+    <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+      {name}
+    </Typography>
   </Box>
 )
 
@@ -103,7 +105,9 @@ export const OrganisationLabel = ({ organisation, dates }) => {
         {organisation?.code}
       </Typography>
       <Box display="flex" gap="1rem">
-        <Typography variant="body2">{getLanguageValue(organisation?.name, i18n.language)}</Typography>
+        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+          {getLanguageValue(organisation?.name, i18n.language)}
+        </Typography>
         {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
         {Boolean(isFetching) && <CircularProgress size={20} />}
       </Box>

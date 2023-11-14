@@ -31,7 +31,7 @@ const styles = {
   countCell: {
     whiteSpace: 'nowrap',
     textAlign: 'center',
-    // flex: 0.2,
+    flexShrink: 0,
     width: '7rem',
     display: 'flex',
     alignItems: 'center',
@@ -45,10 +45,11 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    flexShrink: 0,
   },
   accordionButton: {
-    // flex: 0.5,
-    width: '40%',
+    width: '22rem',
+    flexShrink: 0,
     minHeight: '48px',
     maxHeight: '74px',
     paddingLeft: '0.5rem',
@@ -67,7 +68,8 @@ const styles = {
     transition: 'background-color 0.15s ease-out',
   },
   unclickableLabel: {
-    width: '40%',
+    width: '22rem',
+    flexShrink: 0,
     minHeight: '48px',
     maxHeight: '74px',
     paddingLeft: '0.5rem',
@@ -225,37 +227,35 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch">
-      <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <RowHeader label={label} link={link} />
-        {questions.map(q => (
-          <SummaryResultItem
-            key={q.id}
-            question={q}
-            mean={summary.data.result[q.id]?.mean}
-            distribution={summary.data.result[q.id]?.distribution}
-            sx={styles.resultCell}
-            component="div"
-          />
-        ))}
-        <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
-          <Typography variant="body2" sx={styles.countCell}>
-            {summary.data.feedbackCount} / {summary.data.studentCount}
-          </Typography>
-        </Tooltip>
-        <PercentageCell
-          label={`${percent}%`}
-          percent={percent}
-          sx={styles.percentCell}
-          tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
+    <Box display="flex" alignItems="stretch" gap="0.2rem">
+      <RowHeader label={label} link={link} />
+      {questions.map(q => (
+        <SummaryResultItem
+          key={q.id}
+          question={q}
+          mean={summary.data.result[q.id]?.mean}
+          distribution={summary.data.result[q.id]?.distribution}
+          sx={styles.resultCell}
+          component="div"
         />
-        <PercentageCell
-          label={`${feedbackResponsePercentage}%`}
-          percent={feedbackResponsePercentage}
-          sx={styles.percentCell}
-          tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
-        />
-      </Box>
+      ))}
+      <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+        <Typography variant="body2" sx={styles.countCell}>
+          {summary.data.feedbackCount} / {summary.data.studentCount}
+        </Typography>
+      </Tooltip>
+      <PercentageCell
+        label={`${percent}%`}
+        percent={percent}
+        sx={styles.percentCell}
+        tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
+      />
+      <PercentageCell
+        label={`${feedbackResponsePercentage}%`}
+        percent={feedbackResponsePercentage}
+        sx={styles.percentCell}
+        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
+      />
     </Box>
   )
 }

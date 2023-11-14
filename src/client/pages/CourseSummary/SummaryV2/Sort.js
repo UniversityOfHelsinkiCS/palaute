@@ -34,7 +34,7 @@ const Sort = ({ field, label, width }) => {
   const isNextDesc = !isActive || !isDesc
 
   return (
-    <Box sx={{ display: 'flex', width, justifyContent: 'center' }}>
+    <Box sx={{ display: 'flex', width, justifyContent: 'center', flexShrink: 0 }}>
       <Box
         sx={{
           display: 'flex',
