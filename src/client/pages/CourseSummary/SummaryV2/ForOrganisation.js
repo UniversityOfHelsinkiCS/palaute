@@ -34,7 +34,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
 }
 
 const ForOrganisation = ({ organisation }) => (
-  <SummaryContextProvider>
+  <SummaryContextProvider organisationCode={organisation.code}>
     <OrganisationSummaryInContext organisation={organisation} />
   </SummaryContextProvider>
 )

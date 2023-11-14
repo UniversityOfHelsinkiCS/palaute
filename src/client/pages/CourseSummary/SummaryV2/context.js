@@ -1,7 +1,8 @@
 import React from 'react'
+import { useQuery } from 'react-query'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
-import useUniversitySurvey from '../../../hooks/useUniversitySurvey'
+import apiClient from '../../../util/apiClient'
 
 const getSummarySortFunction = sortField => {
   switch (sortField) {
@@ -32,10 +33,34 @@ const summaryContext = React.createContext({
   questions: [],
 })
 
-export const SummaryContextProvider = ({ children }) => {
-  const { survey: universitySurvey } = useUniversitySurvey()
-  const questions = universitySurvey?.questions || []
+/**
+ * Mess
+ * @param {*} organisationCode
+ * @returns
+ */
+const useSummaryQuestions = organisationCode => {
+  const apiUrl = organisationCode ? `/surveys/organisation/${organisationCode}` : '/surveys/university'
+  const queryFn = async () => {
+    const { data } = await apiClient.get(apiUrl)
+    return data
+  }
+  const { data } = useQuery(['survey', organisationCode], queryFn, {
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 60 * 24,
+  })
+  const questions = data?.questions || []
   const acualQuestions = questions.filter(q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD')
+  return acualQuestions
+}
+
+/**
+ *
+ * @param {*} param0
+ * @returns
+ */
+export const SummaryContextProvider = ({ children, organisationCode }) => {
+  const questions = useSummaryQuestions(organisationCode)
 
   const [params, setParams] = useURLSearchParams()
 
@@ -117,7 +142,7 @@ export const SummaryContextProvider = ({ children }) => {
       sortBy,
       setSortBy: updateSortByQS,
       sortFunction,
-      questions: acualQuestions,
+      questions,
     }),
     [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions]
   )
