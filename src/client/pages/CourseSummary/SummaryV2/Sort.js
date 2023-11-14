@@ -4,7 +4,7 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import { useSummaryContext } from './context'
 
-const VerticalHeading = ({ label, isActive }) => (
+const AngledHeading = ({ label, isActive }) => (
   <Typography
     color={isActive ? 'text.primary' : 'text.secondary'}
     sx={{
@@ -44,7 +44,7 @@ const Sort = ({ field, label, width }) => {
           pt: '10rem',
         }}
       >
-        <VerticalHeading label={label} isActive={isActive} />
+        <AngledHeading label={label} isActive={isActive} />
         <Tooltip
           title={`${t('common:sort')} ${isNextDesc ? t('common:descending') : t('common:ascending')}`}
           placement="bottom"
