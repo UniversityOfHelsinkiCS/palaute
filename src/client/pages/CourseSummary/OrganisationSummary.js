@@ -19,9 +19,8 @@ import errors from '../../util/errorMessage'
 import ErrorView from '../../components/common/ErrorView'
 import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
-import { TAGS_ENABLED, inProduction } from '../../util/common'
+import { TAGS_ENABLED } from '../../util/common'
 import LinkButton from '../../components/common/LinkButton'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 const safelyParseDateRange = dateRange =>
   dateRange?.startDate && dateRange?.endDate
@@ -38,8 +37,6 @@ const safelyParseDateRange = dateRange =>
 const OrganisationSummary = () => {
   const { t } = useTranslation()
   const { code } = useParams()
-
-  const { authorizedUser: user } = useAuthorizedUser()
 
   const {
     courseSummaryAccessInfo,
@@ -124,13 +121,6 @@ const OrganisationSummary = () => {
     setOrderBy(nextOrderBy)
   }
 
-  const canSeeNewLink =
-    !inProduction ||
-    user.isAdmin ||
-    user?.specialGroup?.allProgrammes ||
-    user?.specialGroup?.hyOne ||
-    user?.specialGroup?.admin
-
   return (
     <>
       <Title>{t('common:courseSummaryPage')}</Title>
@@ -145,7 +135,7 @@ const OrganisationSummary = () => {
             questions={questions || []}
             componentRef={componentRef}
           />
-          {canSeeNewLink && <LinkButton to="/course-summary/v2/my-organisations" title="Siirry uuteen näkymään" />}
+          <LinkButton to="/course-summary/v2/my-organisations" title={t('courseSummary:newView')} />
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">

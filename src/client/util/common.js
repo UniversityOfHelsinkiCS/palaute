@@ -81,6 +81,9 @@ export const SUMMARY_COLOR_SCALE_MIN = CONFIG?.SUMMARY_COLOR_SCALE_MIN
 export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX
 
 // eslint-disable-next-line no-undef
+export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = CONFIG?.UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS ?? []
+
+// eslint-disable-next-line no-undef
 export const WORKLOAD_QUESTION_ID_ORDER = CONFIG?.WORKLOAD_QUESTION_ID_ORDER ?? []
 
 // eslint-disable-next-line no-undef

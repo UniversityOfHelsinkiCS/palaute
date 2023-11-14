@@ -260,6 +260,12 @@ const config = {
    * Make sure it's fit to your data, eg. if a lot of values are above 4.5 you might want to increase it and vice versa.
    */
   SUMMARY_COLOR_SCALE_MAX: 4.5,
+
+  /**
+   * The special groups which can view the whole university level organisation tree. Given to users by Jami.
+   * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
+   */
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
 }
 
 module.exports = config

@@ -285,6 +285,8 @@ const config = {
   SUMMARY_COLOR_SCALE_MIN: 2.3,
 
   SUMMARY_COLOR_SCALE_MAX: 4.4,
+
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 }
 
 module.exports = config

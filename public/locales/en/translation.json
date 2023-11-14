@@ -430,7 +430,8 @@
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
     "noCourseRealisations": "No course realisations with feedback available for this course unit",
     "myOrganisations": "My organisations",
-    "myCourses": "My courses"
+    "myCourses": "My courses",
+    "newView": "Go to the new course summary"
   },
   "footer": {
     "contactSupport": "Contact support",

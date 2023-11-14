@@ -430,7 +430,8 @@
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
     "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
     "myOrganisations": "Organisaationi",
-    "myCourses": "Kurssini"
+    "myCourses": "Kurssini",
+    "newView": "Kokeile uutta näkymää"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",

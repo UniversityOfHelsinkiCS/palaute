@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -15,6 +16,7 @@ import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
 import hyLogo from '../../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
 import SummaryScrollContainer from './SummaryScrollContainer'
+import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../../util/common'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -29,7 +31,9 @@ const SummaryInContext = () => {
   const { authorizedUser: user } = useAuthorizedUser()
 
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
-  const hasAccessToUniversityLevel = user?.specialGroup?.allProgrammes || user?.specialGroup?.hyOne || user?.isAdmin
+  const hasAccessToUniversityLevel =
+    user?.isAdmin ||
+    _.intersection(UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS, Object.keys(user?.specialGroup ?? {})).length > 0
 
   return (
     <>

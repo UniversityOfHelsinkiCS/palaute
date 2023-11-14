@@ -398,7 +398,8 @@
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
     "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
     "myOrganisations": "Mina utbildningsprogram",
-    "myCourses": "Mina kurser"
+    "myCourses": "Mina kurser",
+    "newView": "Prova den nya vyn"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",
