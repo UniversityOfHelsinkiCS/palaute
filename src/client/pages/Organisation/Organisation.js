@@ -26,11 +26,11 @@ import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
 import Title from '../../components/common/Title'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
-import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
+import ForOrganisation from '../CourseSummary/SummaryV2/ForOrganisation'
 
 const Organisation = () => {
   const { path, url } = useRouteMatch()
@@ -137,7 +137,7 @@ const Organisation = () => {
         )}
 
         <Route path={`${path}/summary`}>
-          <OrganisationSummary />
+          <ForOrganisation organisationId={organisation.id} />
         </Route>
 
         <ProtectedRoute

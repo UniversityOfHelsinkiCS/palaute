@@ -498,12 +498,12 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = ({ questions }) => {
+export const SorterRow = ({ questions, filterComponent }) => {
   const { t, i18n } = useTranslation()
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
-      <RowHeader label="" />
+      <RowHeader label={filterComponent} />
       {questions.map(q => (
         <Sort
           key={q.id}
