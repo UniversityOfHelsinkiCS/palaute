@@ -94,7 +94,10 @@ User.prototype.populateAccess = async function () {
 
   this.organisationAccess = organisationAccess
   this.specialGroup = organisationAccess.specialGroup ?? {}
-  this.isAdmin = organisationAccess?.specialGroup?.superAdmin
+  this.isAdmin = this.specialGroup.superAdmin
+
+  // remove specialGroup from organisationAccess. Its confusing to have it there, other keys are organisation codes.
+  delete this.organisationAccess.specialGroup
 
   // Give admin access to configured users in development
   if (!inProduction) {

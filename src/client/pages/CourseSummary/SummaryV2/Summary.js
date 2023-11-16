@@ -78,15 +78,17 @@ const SummaryInContext = () => {
       <SummaryScrollContainer>
         <Switch>
           <ProtectedRoute
-            path="/course-summary/v2/my-organisations"
-            component={MyOrganisations}
-            hasAccess={hasAccessToMyOrganisations}
+            path="/course-summary/v2/university"
+            redirectPath="/course-summary/v2/my-organisations"
+            component={University}
+            hasAccess={hasAccessToUniversityLevel}
           />
 
           <ProtectedRoute
-            path="/course-summary/v2/university"
-            component={University}
-            hasAccess={hasAccessToUniversityLevel}
+            path="/course-summary/v2/my-organisations"
+            redirectPath="/course-summary/v2/my-courses"
+            component={MyOrganisations}
+            hasAccess={hasAccessToMyOrganisations}
           />
 
           <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
