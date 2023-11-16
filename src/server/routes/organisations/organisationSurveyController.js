@@ -8,6 +8,7 @@ const {
   getStudentIds,
   getSurveyById,
   getSurveysForOrganisation,
+  getSurveysForTeacher,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getDeletionAllowed,
@@ -35,11 +36,13 @@ const getOrganisationSurveys = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const { organisation, hasReadAccess } = await getAccessAndOrganisation(user, code, {
-    read: true,
-  })
+  const { organisation, hasReadAccess } = await getAccessAndOrganisation(user, code)
 
-  if (!hasReadAccess) throw new ApplicationError('No read access to organisation', 403)
+  if (!hasReadAccess) {
+    const teacherSurveys = await getSurveysForTeacher(code, user.id)
+
+    return res.send(teacherSurveys)
+  }
 
   const surveys = await getSurveysForOrganisation(organisation.id)
 

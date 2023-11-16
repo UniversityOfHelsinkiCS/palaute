@@ -19,7 +19,7 @@ export const useOrganisationSurvey = (organisationCode, surveyId) => {
   return { survey, rest }
 }
 
-export const useOrganisationSurveys = organisationCode => {
+export const useOrganisationSurveys = (organisationCode, enable = true) => {
   const queryFn = async () => {
     const { data } = await apiClient.get(`/organisations/${organisationCode}/surveys`)
 
@@ -27,7 +27,7 @@ export const useOrganisationSurveys = organisationCode => {
   }
 
   const { data: surveys, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: ORGANISATION_SURVEYS_ENABLED,
+    enabled: enable && ORGANISATION_SURVEYS_ENABLED,
   })
 
   return { surveys, ...rest }

@@ -257,7 +257,7 @@ const getSurveysForOrganisation = async organisationId => {
       },
       {
         model: UserFeedbackTarget,
-        attributes: ['id'],
+        attributes: ['id', 'userId', 'accessStatus'],
         as: 'userFeedbackTargets',
         required: false,
         where: {
@@ -273,6 +273,23 @@ const getSurveysForOrganisation = async organisationId => {
   })
 
   return organisationSurveys
+}
+
+const getSurveysForTeacher = async (organisationCode, userId) => {
+  const organisation = await Organisation.findOne({
+    where: {
+      code: organisationCode,
+    },
+    attributes: ['id'],
+  })
+
+  const organisationSurveys = await getSurveysForOrganisation(organisation.id)
+
+  const userSurveys = organisationSurveys.filter(({ userFeedbackTargets }) =>
+    userFeedbackTargets.some(({ userId: id, accessStatus }) => id === userId && accessStatus === 'RESPONSIBLE_TEACHER')
+  )
+
+  return userSurveys
 }
 
 const getDeletionAllowed = async organisationSurveyId => {
@@ -409,6 +426,7 @@ module.exports = {
   getStudentIds,
   getSurveyById,
   getSurveysForOrganisation,
+  getSurveysForTeacher,
   getDeletionAllowed,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,

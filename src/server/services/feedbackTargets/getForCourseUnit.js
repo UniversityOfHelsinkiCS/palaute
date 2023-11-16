@@ -52,7 +52,7 @@ const getForCourseUnit = async ({
         as: 'userFeedbackTargets',
         required: true,
         where: {
-          userId: user.id,
+          [Op.or]: [{ userId: user.id }, { userCreated: true }],
         },
       },
       {

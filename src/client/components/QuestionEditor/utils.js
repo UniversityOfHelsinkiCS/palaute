@@ -114,3 +114,9 @@ export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
     editable: true,
   }))
 }
+
+export const getOrganisationSurveyCourseUnit = surveys => {
+  if (!surveys || surveys.length === 0) return null
+
+  return surveys[0]?.courseUnit ?? null
+}

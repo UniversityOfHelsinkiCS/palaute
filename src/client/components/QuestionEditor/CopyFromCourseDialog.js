@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import {
   Dialog,
@@ -20,10 +20,13 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
+import { useOrganisationSurveys } from '../../pages/Organisation/useOrganisationSurveys'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../common/LoadingProgress'
+import { getOrganisationSurveyCourseUnit } from './utils'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
   listItem: {
@@ -88,10 +91,14 @@ const FeedbackTargetList = ({ feedbackTargets, onCopy }) => (
 
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
-  const { courseUnits } = useTeacherCourseUnits()
+  const { feedbackTarget } = useFeedbackTargetContext()
+  const { courseUnit, userCreated } = feedbackTarget
+  const { courseUnits = [] } = useTeacherCourseUnits()
+  const { surveys = [] } = useOrganisationSurveys(courseUnit?.courseCode, userCreated)
   const [value, setValue] = useState(null)
 
   const options = courseUnits ?? []
+  const organisationSurvey = getOrganisationSurveyCourseUnit(surveys)
 
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
     feedbackType: 'courseRealisation',
@@ -111,6 +118,10 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions.length === 0
 
+  useEffect(() => {
+    if (userCreated) setValue(organisationSurvey)
+  }, [surveys])
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{t('editFeedbackTarget:copyFromCourseDialogTitle')}</DialogTitle>
@@ -122,7 +133,8 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
           <Autocomplete
             value={value}
             onChange={handleValueChange}
-            options={options}
+            options={userCreated ? [organisationSurvey] : options}
+            disabled={userCreated}
             getOptionLabel={getOptionLabel}
             renderInput={renderInput}
           />
