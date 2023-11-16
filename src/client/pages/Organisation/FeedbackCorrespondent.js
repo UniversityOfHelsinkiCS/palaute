@@ -35,6 +35,7 @@ const CorrepondentSelector = ({ add }) => {
 
     const params = {
       email: query,
+      isEmployee: true,
     }
 
     const { data } = await apiClient.get('/users', { params })

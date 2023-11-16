@@ -38,7 +38,7 @@ const login = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   const {
-    query: { email },
+    query: { email, isEmployee },
   } = req
 
   const params = { email }
@@ -46,10 +46,8 @@ const getUserByEmail = async (req, res) => {
   const persons = await User.findAll({
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
-      [Op.or]: {
-        email: { [Op.iLike]: `${email}%` },
-        secondaryEmail: { [Op.iLike]: `${email}%` },
-      },
+      email: { [Op.iLike]: `${email}%` },
+      ...(isEmployee ? { [Op.not]: { employeeNumber: null } } : {}),
     },
     limit: 10,
   })

@@ -51,6 +51,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
 
     const params = {
       email: query,
+      isEmployee: true,
     }
 
     const { data } = await apiClient.get('/users', { params })
