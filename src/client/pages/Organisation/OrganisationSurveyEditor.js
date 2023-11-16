@@ -161,7 +161,7 @@ const StudentNumberInput = ({ name, ...props }) => {
           value.map((option, index) => (
             <Chip
               {...getTagProps({ index })}
-              key={option}
+              key={`${option}-${index}`}
               variant="outlined"
               label={option}
               color={formikProps.errors[name] && errorData.includes(option) ? 'error' : 'primary'}
