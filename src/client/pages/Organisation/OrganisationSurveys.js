@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import * as Yup from 'yup'
+import { addDays } from 'date-fns'
 
 import { Alert, Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
@@ -285,8 +286,8 @@ const OrganisationSurveys = () => {
       en: '',
       sv: '',
     },
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: addDays(new Date(), 1),
+    endDate: addDays(new Date(), 7),
     studentNumbers: [],
     teachers: [authorizedUser],
   }
