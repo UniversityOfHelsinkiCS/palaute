@@ -22,7 +22,9 @@
     "adminGraylog": "",
     "courseUnitPage": "https://sis-tuni.funidata.fi/teacher/courseunit/",
     "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/",
-    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo"
+    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view//information/basicinfo",
+    "courseSummaryCourseUnitLink": "https://sis-tuni.funidata.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseSummaryCourseUnitLinkStudent": "https://sis-tuni.funidata.fi/student/courseunit/{{courseUnitId}}/brochure"
   },
   "teacherView": {
     "noCourseRealisations": "No course implementations"
@@ -71,7 +73,8 @@
     "courseSummary": "Summary of course implementations",
     "coursePeriod": "Implementation ongoing",
     "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course implementation, before the actual course feedback starts on the course end date.",
-    "activateContinuousFeedback": "Activate continuous feedback for the course implementation"
+    "activateContinuousFeedback": "Activate continuous feedback for the course implementation",
+    "coursePage": "Course/Course implementation in Sisu"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

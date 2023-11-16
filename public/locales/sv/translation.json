@@ -85,7 +85,10 @@
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
     "courseUnitPage": "",
-    "courseRealisationPage": ""
+    "courseUnitPageStudent": "-",
+    "courseRealisationPage": "",
+    "courseSummaryCourseUnitLink": "-",
+    "courseSummaryCourseUnitLinkStudent": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -386,7 +389,8 @@
     "given": "given",
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
-    "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback"
+    "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
+    "coursePage": "Kurssida"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",

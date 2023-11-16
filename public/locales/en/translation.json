@@ -87,7 +87,9 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseSummaryCourseUnitLink": "-",
+    "courseSummaryCourseUnitLinkStudent": "-"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
@@ -387,7 +389,8 @@
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
-    "noCourseRealisations": "No course realisations with feedback available for this course unit"
+    "noCourseRealisations": "No course realisations with feedback available for this course unit",
+    "coursePage": "Course page"
   },
   "footer": {
     "contactSupport": "Contact support",
