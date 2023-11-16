@@ -25,12 +25,10 @@ const updateFeedbackCorrespondents =
     return data
   }
 
-const CorrepondentSelector = ({ add }) => {
-  const [potentialUsers, setPotentialUsers] = useState([])
+const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotentialUsers }) => {
   const { t } = useTranslation()
 
-  const handleChange = debounce(async ({ target }) => {
-    const query = target.value
+  const updateUsers = debounce(async query => {
     if (query.length < 5) return
 
     const params = {
@@ -44,6 +42,11 @@ const CorrepondentSelector = ({ add }) => {
     setPotentialUsers(persons)
   }, 400)
 
+  const handleChange = ({ target }) => {
+    setQuery(target.value)
+    updateUsers(target.value)
+  }
+
   return (
     <Box>
       <Card>
@@ -53,6 +56,7 @@ const CorrepondentSelector = ({ add }) => {
           <TextField
             style={{ width: '30em', paddingBottom: 10 }}
             label={t('organisationSettings:email')}
+            value={query}
             variant="outlined"
             onChange={handleChange}
           />
@@ -106,6 +110,8 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
+  const [query, setQuery] = useState('')
+  const [potentialUsers, setPotentialUsers] = useState([])
 
   const mutation = useMutation(updateFeedbackCorrespondents(code), {
     onSuccess: data => {
@@ -113,6 +119,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
         ...organisation,
         users: data,
       }))
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     },
     onError: () => {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
@@ -147,11 +154,15 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
 
   const add = async user => {
     if (!confirmChange(user, true)) return
+
     await mutation.mutateAsync({ userId: user.id, add: true })
+    setQuery('')
+    setPotentialUsers([])
   }
 
   const remove = async user => {
     if (!confirmChange(user, false)) return
+
     await mutation.mutateAsync({ userId: user.id, add: false })
   }
 
@@ -167,7 +178,13 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
       ) : (
         <Alert severity="warning">{t('organisationSettings:correspondentMissing')}</Alert>
       )}
-      <CorrepondentSelector add={add} />
+      <CorrepondentSelector
+        add={add}
+        query={query}
+        setQuery={setQuery}
+        potentialUsers={potentialUsers}
+        setPotentialUsers={setPotentialUsers}
+      />
     </div>
   )
 }
