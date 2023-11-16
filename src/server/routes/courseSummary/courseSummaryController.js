@@ -19,7 +19,6 @@ const {
   getUserOrganisationSummaries,
 } = require('../../services/summary/summaryV2')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
-const { inProduction } = require('../../util/config')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -147,19 +146,6 @@ const parseDates = (startDateString, endDateString) => {
 const getOrganisationsV2 = async (req, res) => {
   const { startDate: startDateString, endDate: endDateString, entityId, include } = req.query
   const { user } = req
-
-  /**
-   * Admins and some special group members can access this endpoint. This is WIP and uses HY specific special groups, need to be fixed.
-   */
-  if (
-    inProduction &&
-    !req.user.isAdmin &&
-    !req.user.specialGroup?.allProgrammes &&
-    !req.user.specialGroup?.hyOne &&
-    !req.user.specialGroup?.admin
-  ) {
-    return ApplicationError.Forbidden()
-  }
 
   if (!entityId) {
     return ApplicationError.BadRequest('Missing entityId')

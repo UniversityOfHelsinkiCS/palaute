@@ -93,7 +93,7 @@ User.prototype.populateAccess = async function () {
   const organisationAccess = await getOrganisationAccess(this)
 
   this.organisationAccess = organisationAccess
-  this.specialGroup = organisationAccess.specialGroup
+  this.specialGroup = organisationAccess.specialGroup ?? {}
   this.isAdmin = organisationAccess?.specialGroup?.superAdmin
 
   // Give admin access to configured users in development

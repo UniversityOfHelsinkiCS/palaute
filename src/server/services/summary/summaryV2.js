@@ -13,7 +13,29 @@ const {
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
-const { SUMMARY_EXCLUDED_ORG_IDS, SUMMARY_SKIP_ORG_IDS } = require('../../util/config')
+const {
+  SUMMARY_EXCLUDED_ORG_IDS,
+  SUMMARY_SKIP_ORG_IDS,
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS,
+} = require('../../util/config')
+
+/**
+ * Wrap a function that requires organisation access check.
+ */
+const withOrganisationAccessCheck = asyncFunction => async params => {
+  const organisationIds = await getSummaryAccessibleOrganisationIds(params.user)
+  const userSpecialGroups = Object.keys(params.user.specialGroup)
+  const universityWideAccess = UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS.some(group => userSpecialGroups.includes(group))
+
+  if (!universityWideAccess && !organisationIds.includes(params.organisationId)) {
+    throw ApplicationError.Forbidden(`User does not have access to organisation with id ${params.organisationId}`)
+  }
+
+  params.accessibleOrganisationIds = organisationIds
+  params.universityWideAccess = universityWideAccess
+
+  return asyncFunction(params)
+}
 
 const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) => {
   const courseUnits = await CourseUnit.findAll({
@@ -134,23 +156,19 @@ const getChildOrganisations = async ({ organisationId, startDate, endDate, organ
   return rootOrganisation
 }
 
-const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, startDate, endDate, user }) => {
-  const organisationIds = await getSummaryAccessibleOrganisationIds(user)
-
-  // Todo configurable specialgroups
-  const universityWideAccess =
-    user.isAdmin || user.specialGroup?.allProgrammes || user.specialGroup?.hyOne || user.specialGroup?.admin
-
-  if (!universityWideAccess && !organisationIds.includes(organisationId)) {
-    return ApplicationError.Forbidden(`User does not have access to organisation with id ${organisationId}`)
-  }
-
+const getOrganisationSummaryWithChildOrganisations = async ({
+  organisationId,
+  startDate,
+  endDate,
+  universityWideAccess,
+  accessibleOrganisationIds,
+}) => {
   // Get the main organisation and its children
   const rootOrganisation = await getChildOrganisations({
     organisationId,
     startDate,
     endDate,
-    organisationIds,
+    organisationIds: accessibleOrganisationIds,
     universityWideAccess,
   })
 
@@ -167,7 +185,7 @@ const getOrganisationSummaryWithChildOrganisations = async ({ organisationId, st
       organisationId: organisationToSkip.id,
       startDate,
       endDate,
-      organisationIds,
+      organisationIds: accessibleOrganisationIds,
       universityWideAccess,
     })
 
@@ -353,9 +371,11 @@ const getUserOrganisationSummaries = async ({ startDate, endDate, user }) => {
 }
 
 module.exports = {
-  getOrganisationSummary,
-  getOrganisationSummaryWithChildOrganisations,
-  getOrganisationSummaryWithCourseUnits,
+  getOrganisationSummary: withOrganisationAccessCheck(getOrganisationSummary),
+  getOrganisationSummaryWithChildOrganisations: withOrganisationAccessCheck(
+    getOrganisationSummaryWithChildOrganisations
+  ),
+  getOrganisationSummaryWithCourseUnits: withOrganisationAccessCheck(getOrganisationSummaryWithCourseUnits),
   getTeacherSummary,
   getUserOrganisationSummaries,
 }
