@@ -72,7 +72,7 @@ const getOrganisationSurveySchema = t =>
       .required(t('validationErrors:invalidDate'))
       .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
     studentNumbers: Yup.array().of(Yup.string()),
-    teachers: Yup.array().of(Yup.object()),
+    teachers: Yup.array().of(Yup.object()).min(1, t('validationErrors:required')),
   })
 
 const getOverlappingStudentTeachers = data => {
@@ -269,10 +269,15 @@ const OrganisationSurveys = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
+  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const mutation = useCreateOrganisationSurveyMutation(code)
   const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
+
+  if (isUserLoading || isOrganisationSurveysLoading) {
+    return <LoadingProgress />
+  }
 
   const initialValues = {
     name: {
@@ -283,7 +288,7 @@ const OrganisationSurveys = () => {
     startDate: new Date(),
     endDate: new Date(),
     studentNumbers: [],
-    teachers: [],
+    teachers: [authorizedUser],
   }
 
   const handleClose = () => setShowForm(!showForm)
@@ -329,10 +334,6 @@ const OrganisationSurveys = () => {
         }
       },
     })
-  }
-
-  if (isOrganisationSurveysLoading) {
-    return <LoadingProgress />
   }
 
   return (
