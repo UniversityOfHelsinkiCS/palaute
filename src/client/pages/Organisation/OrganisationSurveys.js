@@ -237,7 +237,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           component={Link}
           to={`/targets/${organisationSurvey.id}/feedback`}
         >
-          {t('organisationSurveys:viewFeedbackSummary')}
+          {t('organisationSurveys:viewFeedback')}
         </Button>
 
         {allowEdit && (
