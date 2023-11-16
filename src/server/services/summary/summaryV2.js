@@ -54,6 +54,7 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
         required: true,
       },
     ],
+    order: [['courseCode', 'ASC']],
   })
 
   for (const cu of courseUnits) {
@@ -149,6 +150,7 @@ const getChildOrganisations = async ({ organisationId, startDate, endDate, organ
           },
         },
         required: false,
+        order: [['code', 'ASC']],
       },
     ],
   })
@@ -359,6 +361,7 @@ const getUserOrganisationSummaries = async ({ startDate, endDate, user }) => {
       as: 'summaries',
       required: false,
     },
+    order: [['code', 'ASC']],
   })
 
   const organisationsJson = organisations.map(org => {
