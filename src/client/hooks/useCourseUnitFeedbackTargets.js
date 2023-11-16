@@ -10,6 +10,7 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     courseRealisationEndDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   } = options
 
   const queryKey = [
@@ -39,6 +40,9 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     ...(feedbackType && { feedbackType }),
     ...(includeSurveys && {
       includeSurveys: includeSurveys ? 'true' : 'false',
+    }),
+    ...(isOrganisationSurvey && {
+      isOrganisationSurvey: 'true',
     }),
   }
 

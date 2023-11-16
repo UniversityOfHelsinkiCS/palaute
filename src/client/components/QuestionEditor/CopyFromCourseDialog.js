@@ -103,6 +103,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
     feedbackType: 'courseRealisation',
     includeSurveys: true,
+    isOrganisationSurvey: userCreated,
   })
 
   const getOptionLabel = option => `${option.courseCode} ${getLanguageValue(option.name, i18n.language)}`

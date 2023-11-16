@@ -65,6 +65,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     courseRealisationEndDateBefore: endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   } = req.query
 
   const feedbackTargets = await getFeedbackTargetsForCourseUnit({
@@ -76,6 +77,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   })
 
   return res.send(feedbackTargets)
