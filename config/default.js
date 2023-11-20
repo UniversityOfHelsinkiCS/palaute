@@ -20,14 +20,6 @@ const config = {
   INCLUDE_COURSES: [],
 
   /**
-   * Enables the feature for these organisations.
-   * Feature allows to select whether feedback targets related to a course code
-   * can see the list of students who have given feedback.
-   * Normally it is either on or off for all courses of organisation.
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: [],
-
-  /**
    * Enables tags for these organisations
    */
   TAGS_ENABLED: [],

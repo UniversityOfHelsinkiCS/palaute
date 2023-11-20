@@ -200,11 +200,6 @@ const config = {
   ],
 
   /**
-   * Enabled for SOS
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
-
-  /**
    * Tags enabled for kasvis and kielikeskus
    */
   TAGS_ENABLED: ['600-K001', '600-M001', 'H906'],

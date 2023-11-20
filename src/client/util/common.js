@@ -27,9 +27,6 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 export const INCLUDE_COURSES = CONFIG?.INCLUDE_COURSES ?? []
 
 // eslint-disable-next-line no-undef
-export const STUDENT_LIST_BY_COURSE_ENABLED = CONFIG?.STUDENT_LIST_BY_COURSE_ENABLED ?? []
-
-// eslint-disable-next-line no-undef
 export const TAGS_ENABLED = CONFIG?.TAGS_ENABLED ?? []
 
 // eslint-disable-next-line no-undef
