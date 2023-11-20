@@ -1,6 +1,5 @@
 const { Model, JSONB, STRING, BOOLEAN, VIRTUAL } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
-const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../util/config')
 const logger = require('../util/logger')
 
 class CourseUnit extends Model {
@@ -23,14 +22,13 @@ class CourseUnit extends Model {
     if (!organisationRows[0].length) return false
 
     const {
-      code,
       student_list_visible: studentListVisible,
+      student_list_visible_by_course: studentListVisibleByCourse,
       student_list_visible_course_codes: studentListVisibleCourseCodes,
     } = organisationRows[0][0]
 
-    if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
-      if (studentListVisibleCourseCodes.includes(this.courseCode)) return true
-    }
+    if (studentListVisibleByCourse && studentListVisibleCourseCodes.includes(this.courseCode)) return true
+
     return studentListVisible ?? false
   }
 }

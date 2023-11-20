@@ -1,55 +1,104 @@
 import React, { useState } from 'react'
 
-import { Card, CardContent, Switch, FormControlLabel, Box, Typography } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  FormControlLabel,
+  FormControl,
+  RadioGroup,
+  Radio,
+  Alert,
+  Box,
+  Typography,
+} from '@mui/material'
 
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
+import { getStudentListVisibility } from './utils'
 import apiClient from '../../util/apiClient'
+import queryClient from '../../util/queryClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import FeedbackCorrespondent from './FeedbackCorrespondent'
 import CourseSettings from './CourseSettings'
 import useOrganisation from '../../hooks/useOrganisation'
 import Tags from './Tags'
 
-const saveGeneralSettings = async ({ code, studentListVisible }) => {
+const saveGeneralSettings = async ({ code, studentListVisible, studentListVisibleByCourse }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
     studentListVisible,
+    studentListVisibleByCourse,
   })
 
   return data
 }
 
-const GeneralSettingsContainer = ({ organisation }) => {
+const StudentListSettings = ({ organisation }) => {
   const { t } = useTranslation()
   const { code } = organisation
 
-  const [studentListVisible, setStudentListVisible] = useState(organisation?.studentListVisible ?? false)
+  const [visibility, setVisibility] = useState(getStudentListVisibility(organisation))
 
   const mutation = useMutation(saveGeneralSettings)
 
-  const handleStudentListVisibleChange = async event => {
-    const updatedOrganisation = await mutation.mutateAsync({
+  const handleChange = async ({ target }) => {
+    const studentListVisible = target.value === 'visible'
+    const studentListVisibleByCourse = target.value === 'byCourse'
+
+    await mutation.mutateAsync({
       code,
-      studentListVisible: event.target.checked,
+      studentListVisible,
+      studentListVisibleByCourse,
     })
 
-    setStudentListVisible(updatedOrganisation.studentListVisible)
+    queryClient.invalidateQueries(['organisation', code])
+    setVisibility(target.value)
   }
 
   return (
+    <Card>
+      <CardContent>
+        <Typography mb={2} textTransform="uppercase">
+          {t('organisationSettings:studentListVisibility')}
+        </Typography>
+        <Alert severity="info">{t('organisationSettings:studentListVisibilityInfo')}</Alert>
+
+        <Box mt={2}>
+          <FormControl>
+            <RadioGroup value={visibility} onChange={handleChange}>
+              <FormControlLabel
+                value="visible"
+                control={<Radio />}
+                label={t('organisationSettings:studentListVisible')}
+              />
+              <FormControlLabel
+                value="hidden"
+                control={<Radio />}
+                label={t('organisationSettings:studentListHidden')}
+              />
+              <FormControlLabel
+                value="byCourse"
+                control={<Radio />}
+                label={t('organisationSettings:studentListByCourse')}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+      </CardContent>
+    </Card>
+  )
+}
+
+const GeneralSettingsContainer = ({ organisation }) => {
+  const { t } = useTranslation()
+
+  return (
     <Box>
-      <Typography textTransform="uppercase">{t('organisationSettings:generalSettings')}</Typography>
-      <Card>
-        <CardContent>
-          <FormControlLabel
-            control={<Switch checked={studentListVisible} onChange={handleStudentListVisibleChange} color="primary" />}
-            disabled={mutation.isLoading}
-            label={t('organisationSettings:studentListVisible')}
-          />
-        </CardContent>
-      </Card>
+      <Typography mb={2} textTransform="uppercase">
+        {t('organisationSettings:generalSettings')}
+      </Typography>
+      <StudentListSettings organisation={organisation} />
     </Box>
   )
 }

@@ -412,7 +412,6 @@
   },
   "organisationSettings": {
     "surveyInfo": "Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.",
-    "studentListVisible": "Visa studerandena som har gett respons till kursens ansvariga lärare",
     "courseSettingsInfo": "Respons samlas endast in för aktiverade kurser",
     "settingsTab": "Inställningar",
     "generalSettings": "Allmänna inställningar",

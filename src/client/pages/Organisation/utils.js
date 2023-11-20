@@ -44,3 +44,9 @@ export const formateDates = realisation => {
 
   return `${startDate} - ${endDate}`
 }
+
+export const getStudentListVisibility = ({ studentListVisible, studentListVisibleByCourse }) => {
+  if (studentListVisibleByCourse) return 'byCourse'
+  if (studentListVisible) return 'visible'
+  return 'hidden'
+}

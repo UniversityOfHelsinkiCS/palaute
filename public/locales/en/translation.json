@@ -444,7 +444,11 @@
   },
   "organisationSettings": {
     "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions. You can change the answers visibility from the 'Public'/'Not public'-button, but only if the question isn't already set as public at a higher level.",
-    "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback",
+    "studentListVisibility": "Visibility of students who have given feedback",
+    "studentListVisibilityInfo": "Students who have given feedback are shown to the course's responsible teacher after the feedback period has ended if at least five students have given feedback.",
+    "studentListVisible": "Show for all courses",
+    "studentListHidden": "Hide for all courses",
+    "studentListByCourse": "Set visibility for each course",
     "courseSettingsInfo": "Feedback is only collected from activated courses",
     "settingsTab": "Settings",
     "generalSettings": "General settings",

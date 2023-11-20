@@ -50,6 +50,7 @@ const updateOrganisation = async (req, res) => {
 
   const updates = _.pick(body, [
     'studentListVisible',
+    'studentListVisibleByCourse',
     'disabledCourseCodes',
     'studentListVisibleCourseCodes',
     'publicQuestionIds',
