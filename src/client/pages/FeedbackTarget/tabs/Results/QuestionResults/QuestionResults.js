@@ -61,13 +61,13 @@ const QuestionResults = React.memo(
               <Box
                 key={q.id}
                 sx={theme => ({
-                  width: '20%',
+                  width: '25%',
                   padding: '0.5rem',
                   [theme.breakpoints.down('xl')]: {
-                    width: '25%',
+                    width: '33%',
                   },
                   [theme.breakpoints.down('lg')]: {
-                    width: '33%',
+                    width: '50%',
                   },
                   [theme.breakpoints.down('md')]: {
                     width: '50%',

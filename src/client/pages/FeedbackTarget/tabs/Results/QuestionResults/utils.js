@@ -143,7 +143,7 @@ export const getMultipleChoiceChartConfig = (question, language, t, numberOfFeed
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 20))
+  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 80))
 
   const flatFeedbacks = flatMap(question.feedbacks, ({ data }) => data ?? [])
   const countByOptionId = countBy(flatFeedbacks, option => option)
@@ -168,7 +168,7 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 20))
+  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 80))
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
 
