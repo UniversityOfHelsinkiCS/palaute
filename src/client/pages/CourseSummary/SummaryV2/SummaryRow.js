@@ -379,7 +379,10 @@ export const OrganisationSummaryRow = ({
   organisationId,
 }) => {
   const { questions } = useSummaryContext()
-  const { ref, inView } = useInView({ triggerOnce: false })
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    rootMargin: '0 1000px 0 0', // Large margin on the right side, so horizontal scrolling cannot hide the element.
+  })
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(organisationId, true, alwaysOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
