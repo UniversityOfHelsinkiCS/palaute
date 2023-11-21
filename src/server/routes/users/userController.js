@@ -36,17 +36,49 @@ const login = async (req, res) => {
   })
 }
 
-const getUserByEmail = async (req, res) => {
+const getUser = async (req, res) => {
   const {
-    query: { email, isEmployee },
+    query: { user, isEmployee },
   } = req
 
-  const params = { email }
+  let params = {}
+  let where = {}
+
+  const isFullName = user.split(' ').length === 2
+  const isEmail = user.includes('.') || user.includes('@')
+
+  if (isFullName) {
+    const [firstName, lastName] = user.split(' ')
+    params = { firstName, lastName }
+    where = {
+      firstName: {
+        [Op.iLike]: `%${firstName}%`,
+      },
+      lastName: {
+        [Op.iLike]: `%${lastName}%`,
+      },
+    }
+  } else if (isEmail) {
+    where[Op.or] = {
+      email: { [Op.iLike]: `${user}%` },
+      secondaryEmail: { [Op.iLike]: `${user}%` },
+    }
+    params.email = user
+  } else {
+    where[Op.or] = {
+      firstName: {
+        [Op.iLike]: `%${user}%`,
+      },
+      lastName: {
+        [Op.iLike]: `%${user}%`,
+      },
+    }
+  }
 
   const persons = await User.findAll({
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
-      email: { [Op.iLike]: `${email}%` },
+      ...where,
       ...(isEmployee ? { [Op.not]: { employeeNumber: null } } : {}),
     },
     limit: 10,
@@ -103,7 +135,7 @@ const router = Router()
 
 router.get('/login', login)
 router.get('/logout', logout)
-router.get('/users', getUserByEmail)
+router.get('/users', getUser)
 router.get('/users/access', getAllUserAccess)
 router.get('/users/:id', getUserDetails)
 
