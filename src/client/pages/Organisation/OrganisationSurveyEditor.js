@@ -76,7 +76,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
         options={potentialUsers}
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
-        renderInput={params => <TextField {...params} />}
+        renderInput={params => <TextField label={t('organisationSurveys:responsibleTeachers')} {...params} />}
         {...props}
       />
     </Box>
@@ -170,7 +170,12 @@ const StudentNumberInput = ({ name, ...props }) => {
           ))
         }
         renderInput={params => (
-          <TextField {...params} error={Boolean(hasError)} helperText={hasError ? errorText : ''} />
+          <TextField
+            label={t('organisationSurveys:students')}
+            {...params}
+            error={Boolean(hasError)}
+            helperText={hasError ? errorText : ''}
+          />
         )}
         {...props}
       />
