@@ -362,6 +362,7 @@
     "responsibleTeachers": "Responsible persons",
     "responsibleTeacherTitle": "Add a responsible person to this survey",
     "responsibleTeacherEmail": "Email",
+    "students": "Students",
     "studentNumberTitle": "Add students to this survey",
     "studentNumberInputLabel": "Paste student numbers here",
     "studentNumberInformation": "Student numbers can be separated by the following characters",
@@ -488,7 +489,8 @@
     "courseUnitTagInfo": "Course realisation inherits {{count}} studytracks from its course unit {{code}}",
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
-    "showCurName": "Show course realisation names"
+    "showCurName": "Show course realisation names",
+    "searchUser": "Email or name"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",

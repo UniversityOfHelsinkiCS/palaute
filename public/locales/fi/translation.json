@@ -362,6 +362,7 @@
     "responsibleTeachers": "Vastuuhenkilöt",
     "responsibleTeacherTitle": "Lisää kyselylle vastuuhenkilö",
     "responsibleTeacherEmail": "Sähköposti",
+    "students": "Opiskelijat",
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
     "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
@@ -488,7 +489,8 @@
     "courseUnitTagInfo": "Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle",
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
-    "showCurName": "Näytä kurssitoteutusten nimet"
+    "showCurName": "Näytä kurssitoteutusten nimet",
+    "searchUser": "Sähköposti tai nimi"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",
