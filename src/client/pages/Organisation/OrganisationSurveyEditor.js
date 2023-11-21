@@ -50,7 +50,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
     if (query.length < 5) return
 
     const params = {
-      email: query,
+      user: query,
       isEmployee: true,
     }
 
@@ -75,7 +75,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
         onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
         options={potentialUsers}
         onInputChange={handleChange}
-        getOptionLabel={option => option.email}
+        getOptionLabel={option => `${option.firstName} ${option.lastName}`}
         renderInput={params => <TextField {...params} />}
         {...props}
       />
