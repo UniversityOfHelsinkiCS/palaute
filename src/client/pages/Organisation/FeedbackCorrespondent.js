@@ -95,7 +95,12 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
             <Typography>{correspondent.email.toLowerCase()}</Typography>
           </Box>
           <Box>
-            <Button color="secondary" onClick={() => remove(correspondent)} data-cy="resetCorrespondentButton">
+            <Button
+              color="error"
+              variant="outlined"
+              onClick={() => remove(correspondent)}
+              data-cy="resetCorrespondentButton"
+            >
               {t('organisationSettings:remove')}
             </Button>
           </Box>
