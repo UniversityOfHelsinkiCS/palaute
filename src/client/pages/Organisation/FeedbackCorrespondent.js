@@ -55,7 +55,7 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
           <Box mb={2} />
           <TextField
             style={{ width: '30em', paddingBottom: 10 }}
-            label={t('organisationSettings:email')}
+            label={t('organisationSettings:searchUser')}
             value={query}
             variant="outlined"
             onChange={handleChange}
