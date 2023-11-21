@@ -32,7 +32,7 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
     if (query.length < 5) return
 
     const params = {
-      email: query,
+      user: query,
       isEmployee: true,
     }
 
