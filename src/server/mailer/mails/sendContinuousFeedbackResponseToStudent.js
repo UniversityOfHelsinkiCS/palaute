@@ -49,7 +49,7 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
 
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
-  const url = `${PUBLIC_URL}/${feedbackTarget.id}/continuous-feedback`
+  const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/continuous-feedback`
 
   const t = i18n.getFixedT(language)
 
