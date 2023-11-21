@@ -21,7 +21,22 @@ const {
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
-  const organisationCourseUnit = await CourseUnit.findByPk(organisationId)
+  const organisationCourseUnit = await CourseUnit.findOne({
+    where: {
+      userCreated: true,
+    },
+    include: [
+      {
+        model: CourseUnitsOrganisation,
+        as: 'courseUnitsOrganisations',
+        where: {
+          organisationId,
+        },
+        required: true,
+        attributes: [],
+      },
+    ],
+  })
 
   return organisationCourseUnit
 }
@@ -46,8 +61,8 @@ const initializeOrganisationCourseUnit = async organisation => {
   const endDate = new Date().setFullYear(9999)
 
   const organisationCourseUnit = await CourseUnit.create({
-    id: organisation.id,
-    courseCode: organisation.code,
+    id: uuidv4(),
+    courseCode: `${organisation.code}-SRV`,
     validityPeriod: {
       startDate,
       endDate,
@@ -221,13 +236,13 @@ const getSurveysForOrganisation = async organisationId => {
       'opensAt',
       'closesAt',
     ],
-    where: {
-      courseUnitId: organisationId,
-    },
     include: [
       {
         model: CourseUnit,
         as: 'courseUnit',
+        where: {
+          userCreated: true,
+        },
         required: true,
         include: [
           {
@@ -235,6 +250,15 @@ const getSurveysForOrganisation = async organisationId => {
             as: 'organisations',
             through: { attributes: ['type'], as: 'courseUnitOrganisation' },
             required: true,
+          },
+          {
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            where: {
+              organisationId,
+            },
+            required: true,
+            attributes: [],
           },
         ],
       },
