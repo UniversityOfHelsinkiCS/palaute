@@ -94,7 +94,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { feedbackTarget } = useFeedbackTargetContext()
   const { courseUnit, userCreated } = feedbackTarget
   const { courseUnits = [] } = useTeacherCourseUnits()
-  const { surveys = [] } = useOrganisationSurveys(courseUnit?.courseCode, userCreated)
+  const { surveys = [] } = useOrganisationSurveys(courseUnit.organisations[0]?.code, userCreated)
   const [value, setValue] = useState(null)
 
   const options = courseUnits ?? []
