@@ -93,10 +93,45 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   )
 }
 
+const StudenNumberInputInfo = () => {
+  const { t } = useTranslation()
+  const [expand, setExpand] = useState(false)
+
+  return (
+    <Box my={2}>
+      <Alert severity="info">
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
+          <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
+
+          <IconButton onClick={() => setExpand(!expand)}>{!expand ? <ExpandMore /> : <ExpandLess />}</IconButton>
+        </Box>
+
+        <Collapse in={expand} timeout="auto" unmountOnExit>
+          <ul>
+            <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
+          </ul>
+          <Typography variant="body2" mt={2}>
+            {t('organisationSurveys:studentNumberExampleInput')}
+          </Typography>
+          <Box sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
+            010000003;
+            <br />
+            011000002,
+            <br />
+            011000090 011000003
+          </Box>
+        </Collapse>
+      </Alert>
+    </Box>
+  )
+}
+
 const StudentNumberInput = ({ name, title, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
-  const [expand, setExpand] = useState(false)
   const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
   const [inputValue, setInputValue] = React.useState('')
 
@@ -110,34 +145,7 @@ const StudentNumberInput = ({ name, title, ...props }) => {
         {title}
       </Typography>
 
-      <Box my={2}>
-        <Alert severity="info">
-          <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
-            <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
-
-            <IconButton onClick={() => setExpand(!expand)}>{!expand ? <ExpandMore /> : <ExpandLess />}</IconButton>
-          </Box>
-
-          <Collapse in={expand} timeout="auto" unmountOnExit>
-            <ul>
-              <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
-              <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
-              <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
-              <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
-            </ul>
-            <Typography variant="body2" mt={2}>
-              {t('organisationSurveys:studentNumberExampleInput')}
-            </Typography>
-            <Box sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
-              010000003;
-              <br />
-              011000002,
-              <br />
-              011000090 011000003
-            </Box>
-          </Collapse>
-        </Alert>
-      </Box>
+      <StudenNumberInputInfo />
 
       <Autocomplete
         id={name}
