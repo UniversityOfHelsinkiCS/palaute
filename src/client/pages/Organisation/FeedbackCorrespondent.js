@@ -1,7 +1,20 @@
 /* eslint-disable no-alert */
 import React, { useState } from 'react'
 
-import { TextField, Card, CardContent, CardActions, Button, Box, Typography, Alert } from '@mui/material'
+import {
+  TextField,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Box,
+  Typography,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -54,29 +67,38 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
           <Typography variant="body1">{t('organisationSettings:newCorrespondent')}</Typography>
           <Box mb={2} />
           <TextField
-            style={{ width: '30em', paddingBottom: 10 }}
+            style={{ width: '100%', paddingBottom: 10 }}
             label={t('organisationSettings:searchUser')}
             value={query}
             variant="outlined"
             onChange={handleChange}
+            type="text"
           />
         </CardContent>
+        <List
+          sx={{
+            width: '100%',
+            bgcolor: 'background.paper',
+            position: 'relative',
+            overflow: 'auto',
+            maxHeight: 300,
+            mb: 2,
+          }}
+        >
+          {potentialUsers.map(user => (
+            <ListItem key={`user-${user.id}`}>
+              <ListItemText
+                primary={`${user.firstName} ${user.lastName} - ${user.email}`}
+                primaryTypographyProps={{ fontWeight: 'bold' }}
+              />
+
+              <Button onClick={() => add(user)} variant="outlined">
+                {t('organisationSettings:setAsCorrespondent')}
+              </Button>
+            </ListItem>
+          ))}
+        </List>
       </Card>
-      <Box my={1} />
-      {potentialUsers.map(user => (
-        <Card key={user.id} sx={{ mb: 1 }}>
-          <CardContent>
-            <b>
-              {user.firstName} {user.lastName} - {user.email}
-            </b>
-          </CardContent>
-          <CardActions>
-            <Button onClick={() => add(user)} variant="outlined">
-              {t('organisationSettings:setAsCorrespondent')}
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
     </Box>
   )
 }
