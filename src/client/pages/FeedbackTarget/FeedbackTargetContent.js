@@ -136,7 +136,11 @@ const FeedbackTargetContent = () => {
             )}
             {showEditFeedbackResponseTab && (
               <RouterTab
-                label={t('feedbackTargetView:editFeedbackResponseTab')}
+                label={
+                  !feedbackResponseEmailSent
+                    ? t('feedbackTargetView:giveFeedbackResponseTab')
+                    : t('feedbackTargetView:editFeedbackResponseTab')
+                }
                 to={`${url}/edit-feedback-response`}
                 badge={!feedbackResponseEmailSent}
                 icon={<EditOutlined />}
