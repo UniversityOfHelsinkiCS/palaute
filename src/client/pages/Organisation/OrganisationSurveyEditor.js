@@ -24,7 +24,7 @@ import FormikTextField from '../../components/common/FormikTextField'
 
 import apiClient from '../../util/apiClient'
 
-const LanguageEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+const LanguageEditor = ({ fieldName, languages = ['fi', 'sv', 'en'] }) => {
   const { t } = useTranslation()
 
   return (
@@ -38,8 +38,8 @@ const LanguageEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
           </Box>
           <Box mb={2}>
             <FormikTextField
-              id={`organisation-survey-${language}-${name}`}
-              name={`${name}.${language}`}
+              id={`organisation-survey-${language}-${fieldName}`}
+              name={`${fieldName}.${language}`}
               label={t('organisationSurveys:newSurveyName')}
               fullWidth
             />
@@ -198,7 +198,7 @@ const OrganisationSurveyForm = () => {
 
   return (
     <Grid spacing={4} container>
-      <LanguageEditor name="name" />
+      <LanguageEditor fieldName="name" />
 
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
