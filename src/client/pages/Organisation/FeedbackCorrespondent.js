@@ -75,29 +75,31 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
             type="text"
           />
         </CardContent>
-        <List
-          sx={{
-            width: '100%',
-            bgcolor: 'background.paper',
-            position: 'relative',
-            overflow: 'auto',
-            maxHeight: 300,
-            mb: 2,
-          }}
-        >
-          {potentialUsers.map(user => (
-            <ListItem key={`user-${user.id}`}>
-              <ListItemText
-                primary={`${user.firstName} ${user.lastName} - ${user.email}`}
-                primaryTypographyProps={{ fontWeight: 'bold' }}
-              />
+        {potentialUsers.length > 0 && (
+          <List
+            sx={{
+              width: '100%',
+              bgcolor: 'background.paper',
+              position: 'relative',
+              overflow: 'auto',
+              maxHeight: 300,
+              mb: 2,
+            }}
+          >
+            {potentialUsers.map(user => (
+              <ListItem key={`user-${user.id}`}>
+                <ListItemText
+                  primary={`${user.firstName} ${user.lastName} - ${user.email}`}
+                  primaryTypographyProps={{ fontWeight: 'bold' }}
+                />
 
-              <Button onClick={() => add(user)} variant="outlined">
-                {t('organisationSettings:setAsCorrespondent')}
-              </Button>
-            </ListItem>
-          ))}
-        </List>
+                <Button onClick={() => add(user)} variant="outlined">
+                  {t('organisationSettings:setAsCorrespondent')}
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Card>
     </Box>
   )
