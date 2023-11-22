@@ -200,14 +200,22 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           {getLanguageValue(organisationSurvey.name, language)}
         </Typography>
 
-        <Box sx={{ mt: 2, ml: -1 }}>
-          <FeedbackResponseChip
-            id={organisationSurvey.id}
-            feedbackResponseGiven={Boolean(feedbackResponse)}
-            feedbackResponseSent={feedbackResponseEmailSent}
-            ongoing={isOpen}
-          />
-        </Box>
+        {Date.parse(opensAt) < new Date() ? (
+          <Box sx={{ mt: 2, ml: -1 }}>
+            <FeedbackResponseChip
+              id={organisationSurvey.id}
+              feedbackResponseGiven={Boolean(feedbackResponse)}
+              feedbackResponseSent={feedbackResponseEmailSent}
+              ongoing={isOpen}
+            />
+          </Box>
+        ) : (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2" color="textSecondary" component="span">
+              {t('teacherView:feedbackNotStarted')}
+            </Typography>
+          </Box>
+        )}
 
         <Typography variant="body2" sx={{ mt: 2 }}>
           {periodInfo}
