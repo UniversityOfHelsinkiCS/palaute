@@ -24,19 +24,29 @@ import FormikTextField from '../../components/common/FormikTextField'
 
 import apiClient from '../../util/apiClient'
 
-const LanguageEditor = ({ name, language }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+const LanguageEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+  const { t } = useTranslation()
 
   return (
-    <Box mb={2}>
-      <FormikTextField
-        id={`organisation-survey-${language}-${name}`}
-        name={`${name}.${language}`}
-        label={t('organisationSurveys:newSurveyName')}
-        fullWidth
-      />
-    </Box>
+    <>
+      {languages.map(language => (
+        <Grid md={4} sm={12} xs={12} item key={language}>
+          <Box mb={2}>
+            <Typography variant="h6" component="h2">
+              {language.toUpperCase()}
+            </Typography>
+          </Box>
+          <Box mb={2}>
+            <FormikTextField
+              id={`organisation-survey-${language}-${name}`}
+              name={`${name}.${language}`}
+              label={t('organisationSurveys:newSurveyName')}
+              fullWidth
+            />
+          </Box>
+        </Grid>
+      ))}
+    </>
   )
 }
 
@@ -183,22 +193,13 @@ const StudentNumberInput = ({ name, ...props }) => {
   )
 }
 
-const OrganisationSurveyForm = ({ languages = ['fi', 'sv', 'en'] }) => {
+const OrganisationSurveyForm = () => {
   const { t } = useTranslation()
 
   return (
     <Grid spacing={4} container>
-      {languages.map(language => (
-        <Grid md={4} sm={12} xs={12} item key={language}>
-          <Box mb={2}>
-            <Typography variant="h6" component="h2">
-              {language.toUpperCase()}
-            </Typography>
-          </Box>
+      <LanguageEditor name="name" />
 
-          <LanguageEditor name="name" language={language} />
-        </Grid>
-      ))}
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
