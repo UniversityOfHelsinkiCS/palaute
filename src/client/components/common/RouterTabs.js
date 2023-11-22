@@ -31,6 +31,7 @@ export const RouterTab = ({
   badge,
   badgeContent,
   badgeColor = 'primary',
+  badgeVisible = true,
   ...props
 }) => {
   const { pathname } = useLocation()
@@ -46,7 +47,7 @@ export const RouterTab = ({
     label
   )
 
-  if (badge) {
+  if (badge && badgeVisible) {
     content = (
       <Badge
         color={badgeColor}

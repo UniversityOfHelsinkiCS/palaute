@@ -130,6 +130,7 @@ const FeedbackTargetContent = () => {
                 to={`${url}/continuous-feedback`}
                 badge={continuousFeedbackCount}
                 badgeContent={continuousFeedbackCount}
+                badgeVisible={!isStudent}
                 badgeColor="grey"
                 icon={<ReviewsOutlined />}
               />
