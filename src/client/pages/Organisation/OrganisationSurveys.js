@@ -190,6 +190,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         handleSubmit={handleSubmit}
         editing={showForm}
         onStopEditing={handleClose}
+        editView
       />
     )
 

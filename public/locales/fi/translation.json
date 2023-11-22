@@ -361,9 +361,11 @@
     "newSurveyName": "Kyselyn nimi",
     "responsibleTeachers": "Vastuuhenkilöt",
     "responsibleTeacherTitle": "Lisää kyselylle vastuuhenkilö",
+    "editResponsibleTeacherTitle": "Muokkaa kyselyn vastuuhenkilöitä",
     "responsibleTeacherEmail": "Sähköposti",
     "students": "Opiskelijat",
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
+    "editStudentNumberTitle": "Muokkaa kyselyn opiskelijoita",
     "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
     "studentNumberDelimeters": {

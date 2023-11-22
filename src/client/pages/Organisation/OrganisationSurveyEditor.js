@@ -224,7 +224,40 @@ const OrganisationSurveyForm = () => {
   )
 }
 
-const OrganisationSurveyEditor = ({ title, initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
+const EditOrganisationSurveyForm = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Grid spacing={4} container>
+      <LanguageEditor fieldName="name" />
+
+      <Grid xs={12} item>
+        <ResponsibleTeachersSelector
+          name="teacherIds"
+          title={t('organisationSurveys:editResponsibleTeacherTitle')}
+          label={t('organisationSurveys:responsibleTeacherEmail')}
+        />
+      </Grid>
+      <Grid xs={12} item>
+        <StudentNumberInput
+          name="studentNumbers"
+          title={t('organisationSurveys:editStudentNumberTitle')}
+          label={t('organisationSurveys:studentNumberInputLabel')}
+        />
+      </Grid>
+    </Grid>
+  )
+}
+
+const OrganisationSurveyEditor = ({
+  title,
+  initialValues,
+  validationSchema,
+  handleSubmit,
+  editing,
+  onStopEditing,
+  editView = false,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -242,7 +275,7 @@ const OrganisationSurveyEditor = ({ title, initialValues, validationSchema, hand
           return (
             <Form>
               <Box sx={{ m: 4 }}>
-                <OrganisationSurveyForm />
+                {editView ? <EditOrganisationSurveyForm /> : <OrganisationSurveyForm />}
 
                 <Box sx={{ mt: 2 }}>
                   <Button disabled={disabled} color="primary" variant="contained" type="submit">
