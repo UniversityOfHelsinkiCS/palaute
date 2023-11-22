@@ -70,7 +70,7 @@ const FeedbackTargetContent = () => {
   const showStudentsWithFeedbackTab =
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
-  const showSettingsTab = isOrganisationAdmin || isResponsibleTeacher
+  const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
 
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
