@@ -375,6 +375,7 @@
       "newline": "Newline"
     },
     "studentNumberExampleInput": "For example, as follows",
+    "confirmStudentDelete": "Are you sure you want to remove the student: {{ studentNumber }} from this survey?",
     "startDate": "From",
     "endDate": "To",
     "surveys": "surveys",

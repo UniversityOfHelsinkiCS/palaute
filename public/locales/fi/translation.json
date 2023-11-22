@@ -375,6 +375,7 @@
       "newline": "Rivinvaihdolla"
     },
     "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
+    "confirmStudentDelete": "Haluatko varmasti poistaa opiskelijan: {{ studentNumber }} tästä kyselystä?",
     "startDate": "Alkaen",
     "endDate": "Loppuen",
     "surveys": "kyselyt",

@@ -129,7 +129,7 @@ const StudenNumberInputInfo = () => {
   )
 }
 
-const StudentNumberInput = ({ name, title, ...props }) => {
+const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
@@ -157,7 +157,14 @@ const StudentNumberInput = ({ name, title, ...props }) => {
         freeSolo
         value={value}
         inputValue={inputValue}
-        onChange={(_, studentNumbers) => {
+        onChange={(_, studentNumbers, reason, detail) => {
+          if (
+            editView &&
+            reason === 'removeOption' &&
+            !window.confirm(t('organisationSurveys:confirmStudentDelete', { studentNumber: detail.option }))
+          )
+            return
+
           setValue(studentNumbers)
           formikProps.setFieldValue('studentNumbers', studentNumbers)
         }}
@@ -251,6 +258,7 @@ const EditOrganisationSurveyForm = () => {
           name="studentNumbers"
           title={t('organisationSurveys:editStudentNumberTitle')}
           label={t('organisationSurveys:studentNumberInputLabel')}
+          editView
         />
       </Grid>
     </Grid>
