@@ -5,7 +5,6 @@ import {
   TextField,
   Card,
   CardContent,
-  CardActions,
   Button,
   Box,
   Typography,
@@ -13,7 +12,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
@@ -42,7 +40,10 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
   const { t } = useTranslation()
 
   const updateUsers = debounce(async query => {
-    if (query.length < 5) return
+    if (query.length < 5) {
+      setPotentialUsers([])
+      return
+    }
 
     const params = {
       user: query,
