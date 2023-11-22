@@ -40,6 +40,10 @@ CourseUnit.init(
       primaryKey: true,
       allowNull: false,
     },
+    groupId: {
+      type: STRING,
+      allowNull: true,
+    },
     courseCode: {
       type: STRING,
     },
