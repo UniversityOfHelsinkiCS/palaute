@@ -1,8 +1,6 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16
 
 ENV TZ="Europe/Helsinki"
-ARG MAX_OLD_SPACE_SIZE=4096
-ENV NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE}
 
 WORKDIR /opt/app-root/src
 
@@ -10,6 +8,8 @@ WORKDIR /opt/app-root/src
 
 ARG NODE_CONFIG_ENV
 ENV NODE_CONFIG_ENV=$NODE_CONFIG_ENV
+
+ENV NODE_OPTIONS=--max-old-space-size=4096
 
 ARG GIT_SHA
 ENV REACT_APP_GIT_SHA=$GIT_SHA
