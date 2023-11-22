@@ -50,7 +50,7 @@ const LanguageEditor = ({ fieldName, languages = ['fi', 'sv', 'en'] }) => {
   )
 }
 
-const ResponsibleTeachersSelector = ({ name, ...props }) => {
+const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [potentialUsers, setPotentialUsers] = useState([])
@@ -73,7 +73,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
   return (
     <Box>
       <Typography variant="body1" mb={2}>
-        {t('organisationSurveys:responsibleTeacherTitle')}
+        {title}
       </Typography>
 
       <Autocomplete
@@ -93,7 +93,7 @@ const ResponsibleTeachersSelector = ({ name, ...props }) => {
   )
 }
 
-const StudentNumberInput = ({ name, ...props }) => {
+const StudentNumberInput = ({ name, title, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [expand, setExpand] = useState(false)
@@ -107,7 +107,7 @@ const StudentNumberInput = ({ name, ...props }) => {
   return (
     <Box>
       <Typography variant="body1" mb={2}>
-        {t('organisationSurveys:studentNumberTitle')}
+        {title}
       </Typography>
 
       <Box my={2}>
@@ -207,10 +207,18 @@ const OrganisationSurveyForm = () => {
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
       <Grid xs={12} item>
-        <ResponsibleTeachersSelector name="teacherIds" label={t('organisationSurveys:responsibleTeacherEmail')} />
+        <ResponsibleTeachersSelector
+          name="teacherIds"
+          title={t('organisationSurveys:responsibleTeacherTitle')}
+          label={t('organisationSurveys:responsibleTeacherEmail')}
+        />
       </Grid>
       <Grid xs={12} item>
-        <StudentNumberInput name="studentNumbers" label={t('organisationSurveys:studentNumberInputLabel')} />
+        <StudentNumberInput
+          name="studentNumbers"
+          title={t('organisationSurveys:studentNumberTitle')}
+          label={t('organisationSurveys:studentNumberInputLabel')}
+        />
       </Grid>
     </Grid>
   )
