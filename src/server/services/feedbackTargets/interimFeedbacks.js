@@ -1,7 +1,44 @@
 const { Op } = require('sequelize')
+const { v4: uuidv4 } = require('uuid')
 
 const { formatActivityPeriod } = require('../../util/common')
-const { FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
+
+const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
+  const users = await UserFeedbackTarget.findAll({
+    attributes: ['userId'],
+    where: {
+      feedbackTargetId,
+      accessStatus,
+    },
+  })
+
+  const userIds = users.map(({ userId }) => userId)
+
+  return userIds
+}
+
+const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+  const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
+    userIds.map(userId => ({
+      accessStatus,
+      feedbackTargetId,
+      userId,
+      isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
+      userCreated: true,
+    }))
+  )
+
+  return userFeedbackTargets
+}
+
+const getInterimFeedbackById = async feedbackTargetId => {
+  const interimFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+
+  if (!interimFeedbackTarget) throw new Error('Interim feedback target not found')
+
+  return interimFeedbackTarget
+}
 
 const createInterimFeedbackTarget = async (parentId, feedbackTargetData) => {
   const { name } = feedbackTargetData
@@ -15,9 +52,11 @@ const createInterimFeedbackTarget = async (parentId, feedbackTargetData) => {
 
   const parentCU = await CourseUnit.findByPk(parentFbt.courseUnitId)
 
+  // TODO: CREATE EQUAL AMOUNT OF UFBTS FROM THE ORIGINAL FBT TO THIS INTERIM FBT ALSO
+
   const interimFeedbackTarget = await FeedbackTarget.create({
     feedbackType: 'courseRealisation',
-    typeId: parentCUR.id,
+    typeId: uuidv4(),
     courseUnitId: parentCU.id,
     courseRealisationId: parentCUR.id,
     name,
@@ -31,5 +70,8 @@ const createInterimFeedbackTarget = async (parentId, feedbackTargetData) => {
 }
 
 module.exports = {
+  getFbtUserIds,
+  getInterimFeedbackById,
+  createUserFeedbackTargets,
   createInterimFeedbackTarget,
 }
