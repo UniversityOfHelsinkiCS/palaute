@@ -585,7 +585,9 @@
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "Uusi vastapalaute opettajaltasi kurssilla {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+      "customSubject": "Uusi vastapalaute kyselylle {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>",
+      "customText": "Hyvä opiskelija!\n\n Kyselyn {{courseName}} {{dates}} vastuuhenkilö on antanut vastapalautteen kyselyn vastaajilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kyselyn vastauksia täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Palautejakso opettamallesi kurssille {{courseName}} on alkamassa",
