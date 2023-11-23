@@ -15,6 +15,7 @@ const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
+const updaterClient = require('./util/updaterClient')
 
 const app = express()
 
@@ -35,7 +36,7 @@ const start = async () => {
   await initializeFunctions()
   await redis.connect()
   await updateLastRestart()
-
+  await updaterClient.ping().catch(() => logger.error('Updater not available'))
   await startViewsCron()
   await startSummariesCron()
   await startPrecacheFeedbackTargetsCron()
