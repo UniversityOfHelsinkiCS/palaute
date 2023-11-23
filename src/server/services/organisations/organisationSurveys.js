@@ -339,17 +339,18 @@ const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   const { name, teacherIds, studentNumbers } = updates
-  const { startDate, endDate } = formatActivityPeriod(updates)
 
-  const feebackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+  const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
-  await feebackTarget.update({
+  const { startDate, endDate } = formatActivityPeriod(updates) ?? feedbackTarget
+
+  await feedbackTarget.update({
     name,
     opensAt: startDate,
     closesAt: endDate,
   })
 
-  const courseRealisation = await CourseRealisation.findByPk(feebackTarget.courseRealisationId)
+  const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
 
   await courseRealisation.update({
     name,

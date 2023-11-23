@@ -83,7 +83,7 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { code, id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
+  const updates = _.pick(body, ['name', 'teacherIds', 'studentNumbers'])
 
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,

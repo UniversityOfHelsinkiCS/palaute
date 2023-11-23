@@ -51,10 +51,14 @@ const endOfStudyYear = date => {
 
 const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
 
-const formatActivityPeriod = ({ startDate, endDate }) => ({
-  startDate: startOfDay(parseDate(startDate)),
-  endDate: endOfDay(parseDate(endDate)),
-})
+const formatActivityPeriod = ({ startDate, endDate }) => {
+  if (!startDate || !endDate) return null
+
+  return {
+    startDate: startOfDay(parseDate(startDate)),
+    endDate: endOfDay(parseDate(endDate)),
+  }
+}
 
 module.exports = {
   normalizeOrganisationCode,
