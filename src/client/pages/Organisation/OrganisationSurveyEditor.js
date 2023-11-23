@@ -68,7 +68,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
     const { persons } = data
 
     setPotentialUsers(persons)
-  }, 400)
+  }, 1000)
 
   return (
     <Box>
@@ -84,6 +84,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         defaultValue={formikProps.initialValues.teachers}
         onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
         options={potentialUsers}
+        filterOptions={options => options}
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
         renderInput={params => <TextField label={t('organisationSurveys:responsibleTeachers')} {...params} />}

@@ -57,13 +57,16 @@ const getUser = async (req, res) => {
       lastName: {
         [Op.iLike]: `%${lastName}%`,
       },
+      email: {
+        [Op.ne]: null,
+      },
     }
   } else if (isEmail) {
-    where[Op.or] = {
+    params = { email: user }
+
+    where = {
       email: { [Op.iLike]: `${user}%` },
-      secondaryEmail: { [Op.iLike]: `${user}%` },
     }
-    params.email = user
   } else {
     where[Op.or] = {
       firstName: {
@@ -72,6 +75,9 @@ const getUser = async (req, res) => {
       lastName: {
         [Op.iLike]: `%${user}%`,
       },
+      email: {
+        [Op.ne]: null,
+      },
     }
   }
 
@@ -79,9 +85,6 @@ const getUser = async (req, res) => {
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
       ...where,
-      email: {
-        [Op.ne]: null,
-      },
       ...(isEmployee ? { [Op.not]: { employeeNumber: null } } : {}),
     },
     limit: 10,
