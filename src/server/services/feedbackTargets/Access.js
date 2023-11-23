@@ -17,6 +17,7 @@ const LOGS = 10
 const DELETE_TEACHER = 11
 const TOKENS = 12
 const SEND_REMINDER_EMAIL = 13
+const CREATE_INTERIM_FEEDBACK = 14
 
 const ALL = [
   UPDATE,
@@ -33,6 +34,7 @@ const ALL = [
   DELETE_TEACHER,
   TOKENS,
   SEND_REMINDER_EMAIL,
+  CREATE_INTERIM_FEEDBACK,
 ].sort()
 
 Object.freeze(ALL)
@@ -66,6 +68,7 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACK_RESPONSE,
     SEND_REMINDER_EMAIL,
     HIDE_FEEDBACK,
+    CREATE_INTERIM_FEEDBACK,
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
   STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK, GIVE_FEEDBACK],
@@ -139,6 +142,10 @@ class Access {
 
   canSendReminderEmail() {
     return hasRight(this.accessStatus, SEND_REMINDER_EMAIL)
+  }
+
+  canCreateInterimFeedback() {
+    return hasRight(this.accessStatus, CREATE_INTERIM_FEEDBACK)
   }
 
   // Role enum
