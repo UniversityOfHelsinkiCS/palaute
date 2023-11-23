@@ -50,9 +50,11 @@ const createInterimFeedbackTarget = async (parentId, feedbackTargetData) => {
 
   const parentCUR = await CourseRealisation.findByPk(parentFbt.courseRealisationId)
 
+  if (!parentCUR) throw new Error('Parent fbt course unit realisation not found')
+
   const parentCU = await CourseUnit.findByPk(parentFbt.courseUnitId)
 
-  // TODO: CREATE EQUAL AMOUNT OF UFBTS FROM THE ORIGINAL FBT TO THIS INTERIM FBT ALSO
+  if (!parentCU) throw new Error('Parent fbt course unit not found')
 
   const interimFeedbackTarget = await FeedbackTarget.create({
     feedbackType: 'courseRealisation',
