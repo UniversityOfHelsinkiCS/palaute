@@ -236,6 +236,9 @@ Organisation.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
 CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 
+Summary.belongsTo(CourseUnit, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupCourseUnit' })
+CourseUnit.hasMany(Summary, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupSummaries' })
+
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
 

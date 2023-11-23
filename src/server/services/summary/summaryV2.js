@@ -39,7 +39,7 @@ const withOrganisationAccessCheck = asyncFunction => async params => {
 
 const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) => {
   const courseUnits = await CourseUnit.findAll({
-    attributes: ['id', 'name', 'courseCode'],
+    attributes: ['id', 'name', 'groupId', 'courseCode'],
     include: [
       {
         model: CourseUnitsOrganisation,
@@ -263,7 +263,7 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
       },
       {
         model: CourseUnit,
-        attributes: ['id', 'name', 'courseCode'],
+        attributes: ['id', 'groupId', 'name', 'courseCode'],
         as: 'courseUnits',
         required: true,
         through: {
@@ -275,7 +275,7 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
         include: [
           {
             model: Summary.scope({ method: ['at', startDate, endDate] }),
-            as: 'summaries',
+            as: 'groupSummaries',
             required: true,
           },
           {
@@ -317,16 +317,21 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
     org.summary = sumSummaries(org.summaries)
     delete org.dataValues.summaries
 
-    const courseUnits = org.courseUnits.map(cu => {
-      cu.summary = sumSummaries(cu.summaries)
-      delete cu.dataValues.summaries
+    const groupedCourseUnits = _.groupBy(org.courseUnits, cu => cu.groupId)
+    const courseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
+      // Each of courseUnits has the same groupId and groupSummaries (calculated from the group...) so we can do this:
+      const cu = courseUnits[0]
+      cu.summary = sumSummaries(cu.groupSummaries)
+      delete cu.dataValues.groupSummaries
 
-      const courseRealisations = cu.feedbackTargets.map(fbt => {
-        const { courseRealisation: cur } = fbt
-        cur.summary = sumSummaries(cur.summary)
+      const courseRealisations = courseUnits.flatMap(cu =>
+        cu.feedbackTargets.map(fbt => {
+          const { courseRealisation: cur } = fbt
+          cur.summary = sumSummaries(cur.summary)
 
-        return cur.toJSON()
-      })
+          return cur.toJSON()
+        })
+      )
 
       delete cu.dataValues.feedbackTargets
 
@@ -338,7 +343,7 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
 
     return {
       ...org.toJSON(),
-      courseUnits,
+      courseUnits: _.orderBy(courseUnits, ['courseCode'], ['asc']),
     }
   })
 

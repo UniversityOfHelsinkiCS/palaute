@@ -16,21 +16,19 @@ const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
 
-// Todo not reliable
 let rootOrganisations = []
-;(async () => {
+const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
     attributes: ['id'],
     where: {
       parentId: null,
     },
   })
-  rootOrganisations = rootOrgs.map(org => org.id)
-})()
+  return rootOrgs.map(org => org.id)
+}
 
-// Todo not reliable
 let relevantQuestionIds = null
-;(async () => {
+const getRelevantQuestionIds = async () => {
   const [questions] = await sequelize.query(
     `
     SELECT q.id
@@ -45,8 +43,8 @@ let relevantQuestionIds = null
   const questionIds = questions.map(q => q.id)
   questionIds.push(WORKLOAD_QUESTION_ID)
 
-  relevantQuestionIds = new Set(questionIds)
-})()
+  return new Set(questionIds)
+}
 
 const buildSummariesForPeriod = async (startDate, endDate) => {
   // ---------------- Phase 1: ------------------
@@ -106,7 +104,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
       },
       {
         model: CourseUnit,
-        attributes: ['id'],
+        attributes: ['id', 'groupId'],
         as: 'courseUnit',
         required: true,
         include: {
@@ -201,6 +199,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
         feedbackResponsePercentage: Number(fbt.feedbackResponseEmailSent),
       },
       courseUnitId: fbt.courseUnit.id,
+      courseUnitGroupId: fbt.courseUnit.groupId,
       curOrganisations: fbt.courseRealisation.organisations.map(org => _.pick(org, ['id', 'parentId'])),
       cuOrganisations: fbt.courseUnit.organisations.map(org => _.pick(org, ['id', 'parentId'])),
     })
@@ -220,6 +219,22 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
     delete cu.courseRealisations // Now not needed anymore
 
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+  }
+
+  // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
+  const courseUnitGroupSummaries = Object.entries(
+    _.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId)
+  ).map(([cuGroupId, courseRealisations]) => ({
+    entityId: cuGroupId,
+    courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+  }))
+
+  // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
+  for (const cuGroup of courseUnitGroupSummaries) {
+    const { courseRealisations } = cuGroup
+    delete cuGroup.courseRealisations // Now not needed anymore
+
+    cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
@@ -314,6 +329,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
   const relevantFields = ['entityId', 'data']
   const allSummaries = courseRealisationSummaries
     .concat(courseUnitSummaries)
+    .concat(courseUnitGroupSummaries)
     .concat(orgSummaries)
     .filter(summary => summary.data && summary.data.feedbackCount > 0)
     .map(summary => _.pick(summary, relevantFields))
@@ -383,8 +399,14 @@ const datePeriods = (() => {
  * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
  */
 const buildSummaries = async () => {
+  // Initialize root organisations and relevant question ids
+  rootOrganisations = await getRootOrganisations()
+  relevantQuestionIds = await getRelevantQuestionIds()
+
+  // Delete all summaries
   await sequelize.query(`DELETE FROM summaries;`)
 
+  // Build summaries for each time period
   for (const { start, end } of datePeriods) {
     console.time(`${start.toISOString()}-${end.toISOString()}`)
     await buildSummariesForPeriod(start, end)
