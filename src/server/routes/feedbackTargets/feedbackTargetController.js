@@ -3,6 +3,7 @@ const { ApplicationError } = require('../../util/customErrors')
 
 const { createFeedbackTargetLog } = require('../../util/auditLog')
 const { mailer } = require('../../mailer')
+const interimFeedbackController = require('./interimFeedbackController')
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -215,6 +216,8 @@ adRouter.get('/:id/logs', async (req, res) => {
 
   return res.send(logs)
 })
+
+adRouter.use('/', interimFeedbackController)
 
 module.exports = {
   adRouter,
