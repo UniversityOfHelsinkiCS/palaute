@@ -10,9 +10,8 @@ const {
 const createInterimFeedback = async (req, res) => {
   const { user } = req
   const { fbtId } = req.params
-  const { name, startDate, endDate } = req.body
 
-  const interimFeedbackTarget = await createInterimFeedbackTarget(fbtId, { name, startDate, endDate })
+  const interimFeedbackTarget = await createInterimFeedbackTarget(fbtId, user, req.body)
 
   const studentIds = await getFbtUserIds(fbtId, 'STUDENT')
   const teacherIds = await getFbtUserIds(fbtId, 'RESPONSIBLE_TEACHER')

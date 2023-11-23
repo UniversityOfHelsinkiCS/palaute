@@ -1,5 +1,7 @@
-const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
+const { ApplicationError } = require('../../util/customErrors')
+
+const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const { formatActivityPeriod } = require('../../util/common')
 const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
@@ -40,11 +42,16 @@ const getInterimFeedbackById = async feedbackTargetId => {
   return interimFeedbackTarget
 }
 
-const createInterimFeedbackTarget = async (parentId, feedbackTargetData) => {
+const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) => {
   const { name } = feedbackTargetData
   const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
 
-  const parentFbt = await FeedbackTarget.findByPk(parentId)
+  const { access, feedbackTarget: parentFbt } = await getFeedbackTargetContext({
+    feedbackTargetId: parentId,
+    user,
+  })
+
+  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
 
   if (!parentFbt) throw new Error('Parent feedback target not found')
 
