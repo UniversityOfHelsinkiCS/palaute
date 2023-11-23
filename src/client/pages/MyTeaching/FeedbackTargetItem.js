@@ -26,7 +26,8 @@ const getChip = feedbackTarget => {
       <FeedbackResponseChip
         id={id}
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent || isOld}
+        feedbackResponseSent={feedbackResponseSent}
+        isOld={isOld}
         ongoing={isOpen}
         continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={

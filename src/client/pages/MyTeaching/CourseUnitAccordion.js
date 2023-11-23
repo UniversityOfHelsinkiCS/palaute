@@ -41,7 +41,8 @@ const getChip = (courseRealisation, code) => {
       <FeedbackResponseChip
         id={feedbackTargetId}
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent || isOld}
+        feedbackResponseSent={feedbackResponseSent}
+        isOld={isOld}
         ongoing={isOpen}
         continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}

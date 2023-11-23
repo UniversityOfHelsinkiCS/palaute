@@ -4,8 +4,18 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../util/chipStyles'
 import LinkChip from '../../components/common/LinkChip'
 
-const FeedbackResponseChip = ({ id, feedbackResponseGiven, feedbackResponseSent, ongoing, continuous, ...props }) => {
+const FeedbackResponseChip = ({
+  id,
+  feedbackResponseGiven,
+  feedbackResponseSent,
+  isOld,
+  ongoing,
+  continuous,
+  ...props
+}) => {
   const { t } = useTranslation()
+
+  if (isOld && !feedbackResponseGiven) return null
 
   const notSentLabel = feedbackResponseGiven
     ? t('teacherView:feedbackResponseNotSent')
