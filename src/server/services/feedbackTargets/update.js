@@ -5,6 +5,7 @@ const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
 const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
+const { updateOrganisationSurvey } = require('../organisations/organisationSurveys')
 
 const filterUpdates = update => update !== undefined && update !== null
 
@@ -137,6 +138,15 @@ const update = async ({ feedbackTargetId, user, body }) => {
       ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
+
+    // When organisation survey update course realisation activity period as well
+    if (feedbackTarget.courseRealisation.userCreated) {
+      const activityPeriod = {
+        startDate: updates?.opensAt ?? feedbackTarget.opensAt,
+        endDate: updates?.closesAt ?? feedbackTarget.closesAt,
+      }
+      await updateOrganisationSurvey(feedbackTarget.id, activityPeriod)
+    }
   }
 
   if (Array.isArray(questions)) {

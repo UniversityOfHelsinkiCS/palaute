@@ -173,7 +173,7 @@ adRouter.put('/:id/open-immediately', async (req, res) => {
     body: { feedbackOpeningReminderEmailSent: true, ...body },
   })
 
-  await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+  if (!updatedFeedbackTarget.userCreated) await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
 
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
