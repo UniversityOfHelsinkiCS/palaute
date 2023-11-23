@@ -14,6 +14,7 @@ const logger = require('./util/logger')
 const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
+const v8 = require('v8');
 
 const app = express()
 
@@ -41,6 +42,7 @@ const start = async () => {
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
+    console.log(v8.getHeapStatistics());
   })
 }
 
