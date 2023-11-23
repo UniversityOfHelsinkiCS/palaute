@@ -77,10 +77,13 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
 
 const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, allTeachers) => {
   const { language } = teacher
-  const courseName = feedbackTarget.courseUnit?.name[language || 'en']
+  const { userCreated } = feedbackTarget
+  const courseName = userCreated
+    ? feedbackTarget.courseRealisation?.name[language || 'en']
+    : feedbackTarget.courseUnit?.name[language || 'en']
 
   const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
-      ${feedbackTarget.courseUnit.name[language]}
+      ${courseName}
       </a> <br/>`
 
   const teachers = allTeachers.map(t => `${t.firstName} ${t.lastName}`)
@@ -89,8 +92,12 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
 
   const email = {
     to: teacher.email,
-    subject: t('mails:counterFeedbackReminder:subject', { courseName }),
-    text: t('mails:counterFeedbackReminder:text', { courseNamesAndUrls, teachers, FEEDBACK_SYSTEM }),
+    subject: t(`mails:counterFeedbackReminder:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+    text: t(`mails:counterFeedbackReminder:${userCreated ? 'customText' : 'text'}`, {
+      courseNamesAndUrls,
+      teachers,
+      FEEDBACK_SYSTEM,
+    }),
   }
 
   return email

@@ -20,12 +20,13 @@ const sendReminderToGiveFeedbackToStudents = async (
     // Custom texts for user created feedback targets because they are not courses
     const email = {
       to: student.email,
-      subject: userCreated
-        ? t('mails:reminderOnFeedbackToStudents:customSubject', { courseName })
-        : t('mails:reminderOnFeedbackToStudents:subject', { courseName }),
-      text: userCreated
-        ? t('mails:reminderOnFeedbackToStudents:customText', { url: urlToGiveFeedback, courseName, reminder, closesAt })
-        : t('mails:reminderOnFeedbackToStudents:text', { url: urlToGiveFeedback, courseName, reminder, closesAt }),
+      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+      text: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
+        url: urlToGiveFeedback,
+        courseName,
+        reminder,
+        closesAt,
+      }),
     }
     return email
   })

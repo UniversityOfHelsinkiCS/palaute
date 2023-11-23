@@ -15,6 +15,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
       },
       feedbackOpeningReminderEmailSent: false,
       feedbackType: 'courseRealisation',
+      userCreated: false,
     },
     include: [
       {

@@ -580,7 +580,9 @@
     },
     "counterFeedbackReminder": {
       "subject": "Please give counter feedback for the course {{courseName}}",
-      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
+      "customSubject": "Please give counter feedback for the survey {{courseName}}",
+      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}",
+      "customText": "Dear recipient! <br/>\nThe answering period for the survey has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the survey name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all survey participants. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "A new counter feedback from your teacher to course {{courseName}}",
