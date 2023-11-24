@@ -5,7 +5,17 @@ const {
   createInterimFeedbackTarget,
   getFbtUserIds,
   getInterimFeedbackById,
+  getInterimFeedbackTargets,
 } = require('../../services/feedbackTargets/interimFeedbacks')
+
+const getInterimFeedbacks = async (req, res) => {
+  const { user } = req
+  const { fbtId } = req.params
+
+  const iterimFeedbackTargets = await getInterimFeedbackTargets(fbtId, user)
+
+  return res.send(iterimFeedbackTargets)
+}
 
 const createInterimFeedback = async (req, res) => {
   const { user } = req
@@ -33,6 +43,7 @@ const createInterimFeedback = async (req, res) => {
 
 const router = Router()
 
-router.post('/:fbtId/interimFeedback', createInterimFeedback)
+router.get('/:fbtId/interimFeedbacks', getInterimFeedbacks)
+router.post('/:fbtId/interimFeedbacks', createInterimFeedback)
 
 module.exports = router
