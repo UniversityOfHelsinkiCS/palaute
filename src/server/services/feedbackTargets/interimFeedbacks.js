@@ -4,7 +4,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const { formatActivityPeriod } = require('../../util/common')
-const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
+const { User, UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
 
 const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
   const users = await UserFeedbackTarget.findAll({
@@ -40,6 +40,79 @@ const getInterimFeedbackById = async feedbackTargetId => {
   if (!interimFeedbackTarget) throw new Error('Interim feedback target not found')
 
   return interimFeedbackTarget
+}
+
+const getInterimFeedbackTargets = async (parentId, user) => {
+  const { access, feedbackTarget: parentFbt } = await getFeedbackTargetContext({
+    feedbackTargetId: parentId,
+    user,
+  })
+
+  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
+
+  if (!parentFbt) throw new Error('Parent feedback target not found')
+
+  const interimFeedbacks = await FeedbackTarget.findAll({
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'name',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'feedbackCount',
+      'feedbackResponse',
+      'feedbackResponseEmailSent',
+      'opensAt',
+      'closesAt',
+    ],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id'],
+        as: 'students',
+        required: false,
+        where: { accessStatus: 'STUDENT' },
+        include: {
+          model: User,
+          attributes: ['studentNumber'],
+          as: 'user',
+        },
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id', 'userId', 'accessStatus'],
+        as: 'userFeedbackTargets',
+        required: false,
+        where: {
+          accessStatus: 'RESPONSIBLE_TEACHER',
+        },
+        include: {
+          model: User,
+          as: 'user',
+        },
+      },
+    ],
+    where: {
+      courseUnitId: parentFbt.courseUnitId,
+      courseRealisationId: parentFbt.courseRealisationId,
+      userCreated: true,
+    },
+    order: [['courseRealisation', 'endDate', 'DESC']],
+  })
+
+  return interimFeedbacks
 }
 
 const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) => {
@@ -81,6 +154,7 @@ const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) =
 module.exports = {
   getFbtUserIds,
   getInterimFeedbackById,
+  getInterimFeedbackTargets,
   createUserFeedbackTargets,
   createInterimFeedbackTarget,
 }
