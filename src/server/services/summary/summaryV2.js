@@ -50,19 +50,24 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
       },
       {
         model: Summary.scope({ method: ['at', startDate, endDate] }),
-        as: 'summaries',
+        as: 'groupSummaries',
         required: true,
       },
     ],
     order: [['courseCode', 'ASC']],
   })
 
-  for (const cu of courseUnits) {
-    cu.summary = sumSummaries(cu.summaries)
-    delete cu.dataValues.summaries
-  }
+  const groupedCourseUnits = _.groupBy(courseUnits, cu => cu.groupId)
+  const aggregatedCourseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
+    // Each of courseUnits has the same groupId and groupSummaries (calculated from the group...) so we can do this:
+    const cu = courseUnits[0]
+    cu.summary = sumSummaries(cu.groupSummaries)
+    delete cu.dataValues.groupSummaries
 
-  return courseUnits
+    return cu.toJSON()
+  })
+
+  return aggregatedCourseUnits
 }
 
 const getCourseRealisationSummaries = async ({ organisationId, startDate, endDate }) => {
@@ -89,7 +94,7 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
         include: {
           model: CourseUnit,
           as: 'courseUnit',
-          attributes: ['name', 'id', 'courseCode'],
+          attributes: ['name', 'id', 'courseCode', 'groupId'],
           required: true,
         },
       },
@@ -227,26 +232,31 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
   const partialCourseRealisations = courseRealisations.filter(
-    cur => !courseUnits.some(cu => cu.id === cur.feedbackTargets[0].courseUnit.id)
+    cur => !courseUnits.some(cu => cu.id === cur.feedbackTargets[0].courseUnit.groupId)
   )
 
-  // Group course realisations by associated course unit
-  const groupedPartialCourseUnits = _.groupBy(partialCourseRealisations, cur => cur.feedbackTargets[0].courseUnit.id)
+  // Group course realisations by associated course unit group id
+  const groupedPartialCourseUnits = _.groupBy(
+    partialCourseRealisations,
+    cur => cur.feedbackTargets[0].courseUnit.groupId
+  )
   // Now aggregate course units
-  const partialCourseUnits = Object.entries(groupedPartialCourseUnits).map(([courseUnitId, courseRealisations]) => {
-    const summaryData = sumSummaryDatas(courseRealisations.map(cur => cur.summary.data))
-    const { courseUnit } = groupedPartialCourseUnits[courseUnitId][0].feedbackTargets[0]
+  const partialCourseUnits = Object.entries(groupedPartialCourseUnits).map(
+    ([courseUnitGroupId, courseRealisations]) => {
+      const summaryData = sumSummaryDatas(courseRealisations.map(cur => cur.summary.data))
+      const { courseUnit } = groupedPartialCourseUnits[courseUnitGroupId][0].feedbackTargets[0]
 
-    return {
-      id: courseUnitId,
-      name: courseUnit.name,
-      courseCode: courseUnit.courseCode,
-      summary: {
-        data: summaryData,
-      },
-      partial: true,
+      return {
+        id: courseUnit.id,
+        name: courseUnit.name,
+        courseCode: courseUnit.courseCode,
+        summary: {
+          data: summaryData,
+        },
+        partial: true,
+      }
     }
-  })
+  )
 
   organisation.courseUnits = courseUnits.concat(partialCourseUnits)
 
