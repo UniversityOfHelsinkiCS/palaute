@@ -128,19 +128,11 @@ const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) =
 
   if (!parentFbt) throw new Error('Parent feedback target not found')
 
-  const parentCUR = await CourseRealisation.findByPk(parentFbt.courseRealisationId)
-
-  if (!parentCUR) throw new Error('Parent fbt course unit realisation not found')
-
-  const parentCU = await CourseUnit.findByPk(parentFbt.courseUnitId)
-
-  if (!parentCU) throw new Error('Parent fbt course unit not found')
-
   const interimFeedbackTarget = await FeedbackTarget.create({
     feedbackType: 'courseRealisation',
     typeId: uuidv4(),
-    courseUnitId: parentCU.id,
-    courseRealisationId: parentCUR.id,
+    courseUnitId: parentFbt.courseUnitId,
+    courseRealisationId: parentFbt.courseRealisationId,
     name,
     hidden: false,
     opensAt: startDate,
