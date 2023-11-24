@@ -4,6 +4,7 @@ const { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const sendReminderToGiveFeedbackToStudents = async (
   urlToGiveFeedback,
@@ -15,7 +16,7 @@ const sendReminderToGiveFeedbackToStudents = async (
 ) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
-    const courseName = courseNames[student.language ?? 'en' ?? 'fi']
+    const courseName = getLanguageValue(courseNames, student.language)
 
     // Custom texts for user created feedback targets because they are not courses
     const email = {

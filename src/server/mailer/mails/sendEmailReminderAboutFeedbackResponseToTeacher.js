@@ -12,6 +12,7 @@ const {
 const { PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -79,8 +80,8 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const { language } = teacher
   const { userCreated } = feedbackTarget
   const courseName = userCreated
-    ? feedbackTarget.courseRealisation?.name[language || 'en']
-    : feedbackTarget.courseUnit?.name[language || 'en']
+    ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
+    : getLanguageValue(feedbackTarget.courseUnit?.name)
 
   const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
       ${courseName}

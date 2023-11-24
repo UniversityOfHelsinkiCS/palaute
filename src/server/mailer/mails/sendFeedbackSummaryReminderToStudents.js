@@ -2,6 +2,7 @@ const { format } = require('date-fns')
 const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary,
@@ -17,7 +18,7 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   const emails = students.map(student => {
     const { language } = student
     const t = i18n.getFixedT(language)
-    const courseNameWithUserLanguage = courseName[language ?? 'en']
+    const courseNameWithUserLanguage = getLanguageValue(courseName, language)
 
     const email = {
       to: student.email,
