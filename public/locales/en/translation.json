@@ -384,6 +384,23 @@
     "confirmRemoveSurvey": "Are you sure you want to remove this programme survey?",
     "removeSuccess": "Programme survey removed"
   },
+  "interimFeedback": {
+    "heading": "Interim feedback feature is still in the development stage and in a demo trial",
+    "emptySurveys": "There are no interim feedbacks for this programme yet; you can create a new interim feedback for the course here.",
+    "givenFeedback": "Feedbacks given",
+    "viewFeedback": "View interim feedback",
+    "addSurvey": "Create new interim feedback",
+    "editSurvey": "Edit interim feedback",
+    "newSurveyName": "Interim feedback name",
+    "responsibleTeachers": "Responsible persons",
+    "students": "Students",
+    "startDate": "From",
+    "endDate": "To",
+    "edit": "Edit",
+    "remove": "Remove",
+    "confirmRemoveSurvey": "Are you sure you want to remove this interim feedback?",
+    "removeSuccess": "Interim feedback removed"
+  },
   "courseSummary": {
     "heading": "Summary of course feedback",
     "universityLevelQuestions": "University level questions",

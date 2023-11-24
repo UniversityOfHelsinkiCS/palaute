@@ -384,6 +384,23 @@
     "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
     "removeSuccess": "Koulutusohjelman kysely poistettu"
   },
+  "interimFeedback": {
+    "heading": "Välipalaute -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
+    "emptySurveys": "Kurssilla ei ole yhtään välipalautetta, voit luoda välipalautteen kurssille täällä",
+    "givenFeedback": "Palautteita annettu",
+    "viewFeedback": "Näytä kysely",
+    "addSurvey": "Luo uusi välipalaute",
+    "editSurvey": "Muokkaa välipalautetta",
+    "newSurveyName": "Välipalautteen nimi",
+    "responsibleTeachers": "Vastuuhenkilöt",
+    "students": "Opiskelijat",
+    "startDate": "Alkaen",
+    "endDate": "Loppuen",
+    "edit": "Muokkaa",
+    "remove": "Poista",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän välipalautteen?",
+    "removeSuccess": "Välipalaute poistettu"
+  },
   "courseSummary": {
     "heading": "Kurssipalautteiden yhteenveto",
     "universityLevelQuestions": "Yliopistotason kysymykset",
