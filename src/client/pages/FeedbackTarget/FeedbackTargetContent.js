@@ -27,6 +27,7 @@ import Links from './tabs/Links'
 import Settings from './tabs/Settings'
 import Logs from './tabs/Logs'
 import ContinuousFeedback from './tabs/ContinuousFeedback'
+import InterimFeedback from './tabs/InterimFeedback'
 import { RouterTab } from '../../components/common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -201,6 +202,12 @@ const FeedbackTargetContent = () => {
           path={`${path}/continuous-feedback`}
           component={ContinuousFeedback}
           hasAccess={showContinuousFeedbackTab}
+          redirectPath={defaultPath}
+        />
+        <ProtectedRoute
+          path={`${path}/interim-feedback`}
+          component={InterimFeedback}
+          hasAccess={showInterimFeedbackTab}
           redirectPath={defaultPath}
         />
         <ProtectedRoute
