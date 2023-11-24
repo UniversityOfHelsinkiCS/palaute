@@ -538,7 +538,8 @@
     "deleteTeacherConfirmation": "Delete {{name}} from teachers?",
     "noFeedbackResponseYet": "The teacher of the course has not yet given counter feedback",
     "noAccess": "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
-    "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct"
+    "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
+    "interimFeedbackTab": "Interim feedbacks"
   },
   "noadUser": {
     "noUser": "Something went wrong, you are currently not logged in. Try going through the email link again or contact the course teacher",

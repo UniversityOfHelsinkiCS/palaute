@@ -14,6 +14,7 @@ import {
   PollOutlined,
   ShareOutlined,
   ReviewsOutlined,
+  ForumOutlined,
 } from '@mui/icons-material'
 
 import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/common'
@@ -71,6 +72,7 @@ const FeedbackTargetContent = () => {
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
+  const showInterimFeedbackTab = (isStudent || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
 
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
   const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
@@ -133,6 +135,13 @@ const FeedbackTargetContent = () => {
                 badgeVisible={!isStudent}
                 badgeColor="grey"
                 icon={<ReviewsOutlined />}
+              />
+            )}
+            {showInterimFeedbackTab && (
+              <RouterTab
+                label={t('feedbackTargetView:interimFeedbackTab')}
+                to={`${url}/interim-feedback`}
+                icon={<ForumOutlined />}
               />
             )}
             {showEditFeedbackResponseTab && (

@@ -537,7 +537,8 @@
     "deleteTeacherConfirmation": "Poista {{name}} opettajien joukosta?",
     "noFeedbackResponseYet": "Kurssin opettaja ei ole vielä antanut vastapalautetta",
     "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
-    "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein."
+    "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
+    "interimFeedbackTab": "Välipalautteet"
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan",
