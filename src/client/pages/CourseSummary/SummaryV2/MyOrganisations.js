@@ -28,7 +28,6 @@ const MyOrganisations = () => {
           <OrganisationSummaryRow
             key={organisation.id}
             loadClosed
-            alwaysOpen={organisations.length === 1}
             organisationId={organisation.id}
             organisation={organisation}
             startDate={dateRange.start}

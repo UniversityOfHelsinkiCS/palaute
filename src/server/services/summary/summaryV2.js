@@ -360,11 +360,11 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
   return organisationsJson
 }
 
-const getUserOrganisationSummaries = async ({ startDate, endDate, user }) => {
+const getUserOrganisationSummaries = async ({ startDate, endDate, user, viewingMode = 'flat' }) => {
   const organisationIds = await getSummaryAccessibleOrganisationIds(user)
 
   const organisations = await Organisation.findAll({
-    attributes: ['id', 'name', 'code'],
+    attributes: ['id', 'name', 'code', 'parentId'],
     where: {
       id: {
         [Op.in]: organisationIds,
@@ -385,7 +385,29 @@ const getUserOrganisationSummaries = async ({ startDate, endDate, user }) => {
     return org.toJSON()
   })
 
-  return organisationsJson
+  if (viewingMode === 'flat') {
+    return organisationsJson
+  }
+
+  if (viewingMode === 'tree') {
+    const rootOrganisations = []
+    for (const org of organisationsJson) {
+      const parentOrg = organisationsJson.find(o => o.id === org.parentId)
+      if (!parentOrg) {
+        rootOrganisations.push(org)
+      } else {
+        if (!parentOrg.childOrganisations) {
+          parentOrg.childOrganisations = []
+        }
+        parentOrg.childOrganisations.push(org)
+        parentOrg.initiallyExpanded = true
+      }
+    }
+
+    return rootOrganisations
+  }
+
+  return ApplicationError.BadRequest(`Invalid viewing mode ${viewingMode}`)
 }
 
 module.exports = {

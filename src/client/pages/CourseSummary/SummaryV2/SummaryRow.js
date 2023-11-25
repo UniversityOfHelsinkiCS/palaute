@@ -260,15 +260,18 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   )
 }
 
-const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, questions }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
     include: 'childOrganisations',
+    enabled: !initialChildOrganisations?.length,
   })
 
-  const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(organisation?.childOrganisations)
+  const childOrganisations = initialChildOrganisations ?? organisation?.childOrganisations
+
+  const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(childOrganisations)
 
   if (isLoading) {
     return <Loader />
@@ -286,20 +289,20 @@ const ChildOrganisationsList = ({ organisationId, startDate, endDate, questions 
   ))
 }
 
-const CourseUnitsList = ({ organisationId, startDate, endDate, questions }) => {
+const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDate, questions }) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
     include: 'courseUnits',
+    enabled: !initialCourseUnits?.length,
   })
 
+  const childCourseUnits = initialCourseUnits ?? organisation?.courseUnits
+
   const orderedCourseUnits = React.useMemo(
-    () =>
-      organisation?.courseUnits?.length > 0
-        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1])
-        : [],
+    () => (childCourseUnits?.length > 0 ? _.orderBy(childCourseUnits, cu => sortFunction(cu.summary), sortBy[1]) : []),
     [organisation, sortBy[0], sortBy[1]]
   )
 
@@ -383,7 +386,8 @@ export const OrganisationSummaryRow = ({
     triggerOnce: true,
   })
   const [isTransitioning, startTransition] = React.useTransition()
-  const [isOpen, setIsOpen] = useAccordionState(organisationId, true, alwaysOpen)
+  const actuallyAlwaysOpen = alwaysOpen || initialOrganisation.initiallyExpanded
+  const [isOpen, setIsOpen] = useAccordionState(organisationId, true, actuallyAlwaysOpen)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
   const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')
@@ -433,12 +437,14 @@ export const OrganisationSummaryRow = ({
             <>
               <ChildOrganisationsList
                 organisationId={organisationId}
+                initialChildOrganisations={initialOrganisation?.childOrganisations}
                 startDate={startDate}
                 endDate={endDate}
                 questions={questions}
               />
               <CourseUnitsList
                 organisationId={organisationId}
+                initialCourseUnits={initialOrganisation?.courseUnits}
                 startDate={startDate}
                 endDate={endDate}
                 questions={questions}
