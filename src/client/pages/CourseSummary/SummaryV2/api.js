@@ -71,14 +71,15 @@ export const useTeacherSummaries = ({ startDate, endDate, enabled }) => {
 /**
  * Fetches all organisation rows for user based on their org access
  */
-export const useOrganisationSummaries = ({ startDate, endDate, enabled }) => {
-  const queryKey = ['summaries-v2-organisations', startDate, endDate]
+export const useOrganisationSummaries = ({ startDate, endDate, viewingMode, enabled }) => {
+  const queryKey = ['summaries-v2-organisations', startDate, endDate, viewingMode]
 
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/user-organisations-v2`, {
       params: {
         startDate,
         endDate,
+        viewingMode,
       },
     })
 

@@ -31,6 +31,8 @@ const summaryContext = React.createContext({
   setSortBy: () => {},
   sortFunction: getSummarySortFunction('code'),
   questions: [],
+  viewingMode: 'flat',
+  setViewingMode: () => {},
 })
 
 /**
@@ -131,6 +133,19 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
 
   const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
 
+  // Viewing mode
+
+  const [viewingMode, setViewingMode] = React.useState(() => {
+    const viewingMode = params.get('viewingMode')
+    return viewingMode || 'flat'
+  })
+
+  const updateViewingModeQS = React.useCallback(viewingMode => {
+    setViewingMode(viewingMode)
+    params.set('viewingMode', viewingMode)
+    setParams(params)
+  })
+
   const value = React.useMemo(
     () => ({
       showSummariesWithNoFeedback,
@@ -143,8 +158,10 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       setSortBy: updateSortByQS,
       sortFunction,
       questions,
+      viewingMode,
+      setViewingMode: updateViewingModeQS,
     }),
-    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions]
+    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, viewingMode]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>
