@@ -237,7 +237,7 @@ const getCoursesV2 = async (req, res) => {
 }
 
 const getUserOrganisationsV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString } = req.query
+  const { startDate: startDateString, endDate: endDateString, viewingMode } = req.query
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -246,6 +246,7 @@ const getUserOrganisationsV2 = async (req, res) => {
     user,
     startDate,
     endDate,
+    viewingMode,
   })
 
   res.send(organisations)
