@@ -232,7 +232,7 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
   const partialCourseRealisations = courseRealisations.filter(
-    cur => !courseUnits.some(cu => cu.id === cur.feedbackTargets[0].courseUnit.groupId)
+    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets[0].courseUnit.groupId)
   )
 
   // Group course realisations by associated course unit group id
