@@ -285,6 +285,7 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
       organisation={org}
       organisationId={org.id}
       questions={questions}
+      alwaysOpen={orderedAndFilteredOrganisations.length === 1}
     />
   ))
 }
@@ -387,7 +388,8 @@ export const OrganisationSummaryRow = ({
   })
   const [isTransitioning, startTransition] = React.useTransition()
   const actuallyAlwaysOpen = alwaysOpen || initialOrganisation.initiallyExpanded
-  const [isOpen, setIsOpen] = useAccordionState(organisationId, true, actuallyAlwaysOpen)
+  const [storedIsOpen, setIsOpen] = useAccordionState(organisationId, true)
+  const isOpen = actuallyAlwaysOpen || storedIsOpen
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
   const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')

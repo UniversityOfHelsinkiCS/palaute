@@ -53,6 +53,7 @@ const MyOrganisations = () => {
             organisation={organisation}
             startDate={dateRange.start}
             endDate={dateRange.end}
+            alwaysOpen={orderedAndFilteredOrganisations.length === 1}
           />
         ))
       )}
