@@ -6,16 +6,23 @@ import { useSummaryContext } from './context'
 import { useOrganisationSummaries } from './api'
 import { useOrderedAndFilteredOrganisations } from './utils'
 
-const ViewingModeSelector = ({ viewingMode, setViewingMode }) => (
-  <ToggleButtonGroup exclusive value={viewingMode} onChange={(_ev, value) => setViewingMode(value)} color="primary">
-    <ToggleButton value="flat">
-      <Reorder />
-    </ToggleButton>
-    <ToggleButton value="tree">
-      <Segment />
-    </ToggleButton>
-  </ToggleButtonGroup>
-)
+const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
+  const handleChange = (_ev, value) => {
+    if (!value) return
+    setViewingMode(value)
+  }
+
+  return (
+    <ToggleButtonGroup exclusive value={viewingMode} onChange={handleChange} color="primary">
+      <ToggleButton value="flat">
+        <Reorder />
+      </ToggleButton>
+      <ToggleButton value="tree">
+        <Segment />
+      </ToggleButton>
+    </ToggleButtonGroup>
+  )
+}
 
 /**
  *
