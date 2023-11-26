@@ -21,7 +21,7 @@ const MyCourses = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch">
-      {questions?.length && <SorterRow questions={questions} />}
+      <SorterRow />
       {show &&
         organisations.length > 0 &&
         organisations.map(organisation => (

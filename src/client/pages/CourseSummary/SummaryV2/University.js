@@ -8,7 +8,7 @@ import { useSummaryContext } from './context'
  *
  */
 const University = () => {
-  const { dateRange, questions } = useSummaryContext()
+  const { dateRange } = useSummaryContext()
 
   const { organisation: universityOrganisation } = useSummaries({
     entityId: UNIVERSITY_ROOT_ID,
@@ -18,7 +18,7 @@ const University = () => {
 
   return (
     <>
-      {questions?.length && <SorterRow questions={questions} />}
+      <SorterRow />
       <OrganisationSummaryRow
         organisationId={UNIVERSITY_ROOT_ID}
         organisation={universityOrganisation}

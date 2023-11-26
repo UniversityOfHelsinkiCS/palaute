@@ -28,7 +28,7 @@ const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
  *
  */
 const MyOrganisations = () => {
-  const { dateRange, questions, viewingMode, setViewingMode } = useSummaryContext()
+  const { dateRange, viewingMode, setViewingMode } = useSummaryContext()
   const { organisations, isLoading } = useOrganisationSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
@@ -41,14 +41,13 @@ const MyOrganisations = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <ViewingModeSelector viewingMode={viewingMode} setViewingMode={setViewingMode} />
-      {questions?.length && <SorterRow questions={questions} />}
+      <SorterRow />
       {isLoading ? (
         <LinearProgress />
       ) : (
         orderedAndFilteredOrganisations.map(organisation => (
           <OrganisationSummaryRow
             key={organisation.id}
-            loadClosed
             organisationId={organisation.id}
             organisation={organisation}
             startDate={dateRange.start}

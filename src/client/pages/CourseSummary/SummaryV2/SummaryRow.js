@@ -260,7 +260,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   )
 }
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, questions }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -284,7 +284,6 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
       endDate={endDate}
       organisation={org}
       organisationId={org.id}
-      questions={questions}
       alwaysOpen={orderedAndFilteredOrganisations.length === 1}
     />
   ))
@@ -442,7 +441,6 @@ export const OrganisationSummaryRow = ({
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
                 startDate={startDate}
                 endDate={endDate}
-                questions={questions}
               />
               <CourseUnitsList
                 organisationId={organisationId}
@@ -509,9 +507,9 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = ({ questions }) => {
+export const SorterRow = () => {
   const { t, i18n } = useTranslation()
-  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
+  const { dateRange, setDateRange, option, setOption, questions } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
     setDateRange(nextDateRange)

@@ -6,7 +6,7 @@ import { SummaryContextProvider, useSummaryContext } from './context'
 import SummaryScrollContainer from './SummaryScrollContainer'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
-  const { dateRange, questions } = useSummaryContext()
+  const { dateRange } = useSummaryContext()
 
   const { organisation, isLoading } = useSummaries({
     entityId: initialOrganisation.id,
@@ -17,12 +17,11 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
 
   return (
     <SummaryScrollContainer>
-      {questions?.length && <SorterRow questions={questions} />}
+      <SorterRow />
       {isLoading ? (
         <LinearProgress />
       ) : (
         <OrganisationSummaryRow
-          loadClosed
           alwaysOpen
           organisationId={initialOrganisation.id}
           organisation={organisation}
