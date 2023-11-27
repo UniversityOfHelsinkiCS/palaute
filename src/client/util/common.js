@@ -88,3 +88,6 @@ export const ORGANISATION_SURVEYS_ENABLED = CONFIG?.ORGANISATION_SURVEYS_ENABLED
 
 // eslint-disable-next-line no-undef
 export const ALWAYS_SHOW_STUDENT_LIST = CONFIG?.ALWAYS_SHOW_STUDENT_LIST
+
+// eslint-disable-next-line no-undef
+export const INTERIM_FEEDBACKS_ENABLED = CONFIG?.INTERIM_FEEDBACKS_ENABLED
