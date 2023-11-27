@@ -1,6 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
-import { INCLUDE_COURSES } from '../../util/common'
+import { LANGUAGES, INCLUDE_COURSES } from '../../util/common'
+import { getLanguageValue } from '../../util/languageUtils'
 
 export const courseRealisationIsMisisingFeedback = courseRealisation => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -77,12 +78,32 @@ export const filterFeedbackTargets = feedbackTargets => {
   }
 }
 
+const getInterimFeedbackName = (feedbackTargetName, courseUnitName) => {
+  const interimFeedbackName = {}
+
+  LANGUAGES.forEach(language => {
+    const fbtName = getLanguageValue(feedbackTargetName, language)
+    const cuName = getLanguageValue(courseUnitName, language)
+
+    interimFeedbackName[language] = `${cuName}: ${fbtName}`
+  })
+
+  return interimFeedbackName
+}
+
 export const getCourseName = courseRealisation => {
-  const { feedbackTargets, courseUnitName } = courseRealisation
+  const {
+    name: courseRealisationName,
+    feedbackTargets,
+    courseUnitName,
+    userCreated: organisationSurvey,
+  } = courseRealisation
 
-  const customFeedbackTarget = feedbackTargets.find(target => target.userCreated)
+  if (organisationSurvey) return courseRealisationName
 
-  if (customFeedbackTarget) return customFeedbackTarget.name
+  const interimFeedback = feedbackTargets.find(target => target.userCreated)
+
+  if (interimFeedback) return getInterimFeedbackName(interimFeedback.name, courseUnitName)
 
   return courseUnitName
 }
