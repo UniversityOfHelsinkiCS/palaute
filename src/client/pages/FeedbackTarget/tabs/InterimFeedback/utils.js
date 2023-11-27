@@ -30,6 +30,4 @@ export const getInterimFeedbackSchema = t =>
     endDate: Yup.date()
       .required(t('validationErrors:invalidDate'))
       .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
-    studentNumbers: Yup.array().of(Yup.string()),
-    teachers: Yup.array().of(Yup.object()).min(1, t('validationErrors:required')),
   })
