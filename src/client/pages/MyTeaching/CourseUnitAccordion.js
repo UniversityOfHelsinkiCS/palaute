@@ -9,6 +9,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import FeedbackTargetList from './FeedbackTargetList'
 import { getRelevantCourseRealisation } from './utils'
 import FeedbackResponseChip from './FeedbackResponseChip'
+import { getCourseCode } from '../../util/courseIdentifiers'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
@@ -56,8 +57,9 @@ const getChip = (courseRealisation, code) => {
 const CourseUnitAccordion = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
 
-  const { name, courseCode, userCreated } = courseUnit
+  const { name } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
+  const courseCode = getCourseCode(courseUnit)
   const chip = getChip(courseRealisation, courseCode)
 
   return (
@@ -69,7 +71,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`courseUnitAccordion-${courseCode}`}>
         <div>
           <Typography>
-            {userCreated ? '' : courseCode} {getLanguageValue(name, i18n.language)}
+            {courseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
           {chip}
         </div>

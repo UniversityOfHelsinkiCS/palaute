@@ -10,6 +10,7 @@ import LinkButton from '../../components/common/LinkButton'
 import Dates from './Dates/Dates'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import { getLanguageValue } from '../../util/languageUtils'
+import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
 
@@ -42,12 +43,15 @@ const FeedbackTargetInformation = () => {
     })
   }
 
-  const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
+  const primaryCourseName = getLanguageValue(getPrimaryCourseName(courseRealisation, courseUnit), i18n.language)
+  const secondaryCourseName = getLanguageValue(getSecondaryCourseName(courseRealisation, courseUnit), i18n.language)
+  const courseCode = getCourseCode(courseUnit)
+  // Show course code only if it is not already in the course name
+  const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
   const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
   const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = feedbackTarget?.tags?.length > 0
-  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
 
   return (
     <Box mb="1rem">
@@ -62,15 +66,15 @@ const FeedbackTargetInformation = () => {
           <Box display="flex" flexDirection="column" gap="1rem">
             <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
               <Typography variant="h4" component="h1">
-                {courseUnitName}
+                {primaryCourseName}
               </Typography>
               <Typography variant="h5" color="textSecondary">
-                {courseUnit?.courseCode ?? ''}
+                {visibleCourseCode}
               </Typography>
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
               <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
-                {courseRealisationName}
+                {secondaryCourseName}
               </Typography>
               {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
             </Box>

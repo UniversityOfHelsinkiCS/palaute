@@ -33,6 +33,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import { getCourseCode, getPrimaryCourseName } from '../../util/courseIdentifiers'
 import { feedbackTargetIsOpenOrClosed } from './Dates/utils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
@@ -75,10 +76,11 @@ const FeedbackTargetContent = () => {
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
   const showInterimFeedbackTab = !inProduction && isAdmin && !userCreated
 
-  const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
-  const visibleCourseCode = courseRealisationName.indexOf(courseUnit?.courseCode) > -1 ? '' : courseUnit?.courseCode
-  const courseUnitName = getLanguageValue(courseUnit?.name, i18n.language)
-  const title = `${visibleCourseCode} ${courseUnitName}`
+  const courseName = getLanguageValue(getPrimaryCourseName(courseRealisation, courseUnit), i18n.language)
+  const courseCode = getCourseCode(courseUnit)
+  // Show course code only if it is not already in the course name
+  const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
+  const title = `${visibleCourseCode} ${courseName}`
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
