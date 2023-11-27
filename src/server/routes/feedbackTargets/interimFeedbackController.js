@@ -6,15 +6,16 @@ const {
   getFbtUserIds,
   getInterimFeedbackById,
   getInterimFeedbackTargets,
+  updateInterimFeedbackTarget,
 } = require('../../services/feedbackTargets/interimFeedbacks')
 
 const getInterimFeedbacks = async (req, res) => {
   const { user } = req
   const { fbtId } = req.params
 
-  const iterimFeedbackTargets = await getInterimFeedbackTargets(fbtId, user)
+  const interimFeedbackTargets = await getInterimFeedbackTargets(fbtId, user)
 
-  return res.send(iterimFeedbackTargets)
+  return res.send(interimFeedbackTargets)
 }
 
 const createInterimFeedback = async (req, res) => {
@@ -33,17 +34,27 @@ const createInterimFeedback = async (req, res) => {
     'RESPONSIBLE_TEACHER'
   )
 
-  const survey = await getInterimFeedbackById(interimFeedbackTarget.id)
+  const interimFeedback = await getInterimFeedbackById(interimFeedbackTarget.id)
 
   return res.status(201).send({
-    ...survey.dataValues,
+    ...interimFeedback.dataValues,
     userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
+}
+
+const updateInterimFeedback = async (req, res) => {
+  const { user } = req
+  const { interimFbtId } = req.params
+
+  const updatedInterimFeedbackTarget = await updateInterimFeedbackTarget(interimFbtId, user, req.body)
+
+  return res.send(updatedInterimFeedbackTarget)
 }
 
 const router = Router()
 
 router.get('/:fbtId/interimFeedbacks', getInterimFeedbacks)
 router.post('/:fbtId/interimFeedbacks', createInterimFeedback)
+router.put('/:fbtId/interimFeedbacks/:interimFbtId', updateInterimFeedback)
 
 module.exports = router

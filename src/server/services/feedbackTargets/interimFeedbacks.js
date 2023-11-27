@@ -146,10 +146,32 @@ const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) =
   return interimFeedbackTarget
 }
 
+const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
+  const { name } = updates
+
+  const { access, feedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: fbtId,
+    user,
+  })
+
+  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
+
+  const { startDate, endDate } = formatActivityPeriod(updates) ?? feedbackTarget
+
+  const updatedInterimFeedbackTarget = await feedbackTarget.update({
+    name,
+    opensAt: startDate,
+    closesAt: endDate,
+  })
+
+  return updatedInterimFeedbackTarget
+}
+
 module.exports = {
   getFbtUserIds,
   getInterimFeedbackById,
   getInterimFeedbackTargets,
   createUserFeedbackTargets,
   createInterimFeedbackTarget,
+  updateInterimFeedbackTarget,
 }
