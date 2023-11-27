@@ -15,7 +15,7 @@ const FeedbackResponseChip = ({
 }) => {
   const { t } = useTranslation()
 
-  if (isOld && !feedbackResponseGiven) return null
+  if (isOld && (!feedbackResponseGiven || !feedbackResponseSent)) return null
 
   const notSentLabel = feedbackResponseGiven
     ? t('teacherView:feedbackResponseNotSent')

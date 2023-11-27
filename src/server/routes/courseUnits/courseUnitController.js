@@ -62,6 +62,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
           'feedbackCount',
           'continuousFeedbackEnabled',
+          'userCreated',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -131,7 +132,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
   const targetsByCourseCode = _.groupBy(targets, ({ courseUnit }) => courseUnit.courseCode)
 
-  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled']
+  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled', 'userCreated']
   const courseUnits = Object.entries(targetsByCourseCode).map(([courseCode, unfilteredTargets]) => {
     const targets = unfilteredTargets.filter(
       target =>
