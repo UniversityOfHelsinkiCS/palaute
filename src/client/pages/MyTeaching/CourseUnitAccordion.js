@@ -59,7 +59,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
-  const vivibleCourseCode = getCourseCode(courseUnit)
+  const visibleCourseCode = getCourseCode(courseUnit)
   const chip = getChip(courseRealisation, courseCode)
 
   return (
@@ -71,7 +71,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`courseUnitAccordion-${courseCode}`}>
         <div>
           <Typography>
-            {vivibleCourseCode} {getLanguageValue(name, i18n.language)}
+            {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
           {chip}
         </div>
