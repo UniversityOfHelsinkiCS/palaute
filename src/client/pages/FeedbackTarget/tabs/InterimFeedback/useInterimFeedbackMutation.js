@@ -23,3 +23,35 @@ export const useCreateInterimFeedbackMutation = parentId => {
 
   return mutation
 }
+
+export const useEditInterimFeedbackMutation = parentId => {
+  const mutationFn = async ({ fbtId, name }) => {
+    const { data } = await apiClient.put(`/feedback-targets/interimFeedbacks/${fbtId}`, {
+      name,
+    })
+
+    return data
+  }
+
+  const mutation = useMutation(mutationFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['interimFeedbacks', parentId])
+    },
+  })
+
+  return mutation
+}
+
+export const useDeleteInterimFeedbackMutation = parentId => {
+  const mutationFn = async fbtId => {
+    await apiClient.delete(`/feedback-targets/interimFeedbacks/${fbtId}`)
+  }
+
+  const mutation = useMutation(mutationFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['interimFeedbacks', parentId])
+    },
+  })
+
+  return mutation
+}
