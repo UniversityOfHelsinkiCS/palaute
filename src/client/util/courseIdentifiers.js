@@ -1,15 +1,28 @@
 export const getCourseCode = ({ courseCode, userCreated }) => (userCreated || !courseCode ? '' : courseCode)
 
-export const getPrimaryCourseName = (courseRealisation, courseUnit) => {
-  const { name: courseRealisationName } = courseRealisation
-  const { name: courseUnitName, userCreated } = courseUnit
+const getSurveyType = (courseUnit, feedbackTarget = {}) => {
+  const isOrganisationSurvey = courseUnit.userCreated
+  const isInterimSurvey = !isOrganisationSurvey && feedbackTarget?.userCreated
 
-  return userCreated ? courseRealisationName : courseUnitName
+  return {
+    isOrganisationSurvey,
+    isInterimSurvey,
+  }
 }
 
-export const getSecondaryCourseName = (courseRealisation, courseUnit) => {
-  const { name: courseRealisationName } = courseRealisation
-  const { name: courseUnitName, userCreated } = courseUnit
+export const getPrimaryCourseName = (courseUnit, courseRealisation, feedbackTarget) => {
+  const { isOrganisationSurvey, isInterimSurvey } = getSurveyType(courseUnit, feedbackTarget)
 
-  return userCreated ? courseUnitName : courseRealisationName
+  if (isOrganisationSurvey) return courseRealisation.name
+  if (isInterimSurvey) return feedbackTarget.name
+
+  return courseUnit.name
+}
+
+export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTarget) => {
+  const { isOrganisationSurvey, isInterimSurvey } = getSurveyType(courseUnit, feedbackTarget)
+
+  if (isOrganisationSurvey || isInterimSurvey) return courseUnit.name
+
+  return courseRealisation.name
 }

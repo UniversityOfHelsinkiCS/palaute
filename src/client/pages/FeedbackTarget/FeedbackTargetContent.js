@@ -76,7 +76,10 @@ const FeedbackTargetContent = () => {
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
   const showInterimFeedbackTab = !inProduction && INTERIM_FEEDBACKS_ENABLED && isAdmin && !userCreated
 
-  const courseName = getLanguageValue(getPrimaryCourseName(courseRealisation, courseUnit), i18n.language)
+  const courseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode

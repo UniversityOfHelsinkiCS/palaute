@@ -43,8 +43,14 @@ const FeedbackTargetInformation = () => {
     })
   }
 
-  const primaryCourseName = getLanguageValue(getPrimaryCourseName(courseRealisation, courseUnit), i18n.language)
-  const secondaryCourseName = getLanguageValue(getSecondaryCourseName(courseRealisation, courseUnit), i18n.language)
+  const primaryCourseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
+  const secondaryCourseName = getLanguageValue(
+    getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
+    i18n.language
+  )
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
