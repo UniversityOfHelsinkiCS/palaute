@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import * as Yup from 'yup'
 import { addDays } from 'date-fns'
 
 import { Alert, Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
@@ -18,6 +17,8 @@ import FeedbackResponseChip from '../../../MyTeaching/FeedbackResponseChip'
 import { getStartAndEndString } from '../../../../util/getDateRangeString'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import InterimFeedbackEditor from './InterimFeedbackEditor'
+import { getInterimFeedbackSchema } from './utils'
 
 const styles = {
   dates: {
@@ -43,6 +44,8 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const [showForm, setShowForm] = useState(false)
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
+
+  const interimFeedbackSchema = getInterimFeedbackSchema(t)
 
   const surveyValues = {
     name: interimFeedback.name,
@@ -83,6 +86,19 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
     console.log('DELETE')
   }
+
+  if (showForm)
+    return (
+      <InterimFeedbackEditor
+        title={t('interimFeedback:editSurvey')}
+        initialValues={surveyValues}
+        validationSchema={interimFeedbackSchema}
+        handleSubmit={handleSubmit}
+        editing={showForm}
+        onStopEditing={handleClose}
+        editView
+      />
+    )
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -175,6 +191,8 @@ const InterimFeedback = () => {
     return <LoadingProgress />
   }
 
+  const interimFeedbackSchema = getInterimFeedbackSchema(t)
+
   const initialValues = {
     name: {
       fi: '',
@@ -209,6 +227,15 @@ const InterimFeedback = () => {
           {t('interimFeedback:addSurvey')}
         </Button>
       </Box>
+
+      <InterimFeedbackEditor
+        title={t('interimFeedback:addSurvey')}
+        initialValues={initialValues}
+        validationSchema={interimFeedbackSchema}
+        handleSubmit={handleSubmit}
+        editing={showForm}
+        onStopEditing={handleClose}
+      />
 
       {interimFeedbacks.length > 0 ? (
         interimFeedbacks.map(feedback => <InterimFeedbackItem key={feedback.id} interimFeedback={feedback} />)
