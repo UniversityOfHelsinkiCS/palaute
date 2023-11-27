@@ -1,4 +1,19 @@
 import * as Yup from 'yup'
+import { addDays } from 'date-fns'
+
+export const getInitialInterimFeedbackValues = () => {
+  const initialValues = {
+    name: {
+      fi: '',
+      en: '',
+      sv: '',
+    },
+    startDate: addDays(new Date(), 1),
+    endDate: addDays(new Date(), 7),
+  }
+
+  return initialValues
+}
 
 export const getInterimFeedbackSchema = t =>
   Yup.object().shape({

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import { addDays } from 'date-fns'
 
 import { Alert, Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
@@ -18,8 +17,9 @@ import { getStartAndEndString } from '../../../../util/getDateRangeString'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import InterimFeedbackEditor from './InterimFeedbackEditor'
-import { getInterimFeedbackSchema } from './utils'
+import { getInitialInterimFeedbackValues, getInterimFeedbackSchema } from './utils'
 import { useInterimFeedbacks } from './useInterimFeedbacks'
+import { useCreateInterimFeedbackMutation } from './useInterimFeedbackMutation'
 
 const styles = {
   dates: {
@@ -186,29 +186,32 @@ const InterimFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(parentId)
+  const mutation = useCreateInterimFeedbackMutation(parentId)
 
-  if (isUserLoading || isInterimFeedbacksLoading) {
+  if (isInterimFeedbacksLoading) {
     return <LoadingProgress />
   }
 
   const interimFeedbackSchema = getInterimFeedbackSchema(t)
 
-  const initialValues = {
-    name: {
-      fi: '',
-      en: '',
-      sv: '',
-    },
-    startDate: addDays(new Date(), 1),
-    endDate: addDays(new Date(), 7),
-  }
+  const initialValues = getInitialInterimFeedbackValues()
 
   const handleClose = () => setShowForm(!showForm)
 
-  const handleSubmit = async (data, { setErrors }) => {
-    console.log('CREATE', data)
+  const handleSubmit = async values => {
+    await mutation.mutateAsync(values, {
+      onSuccess: data => {
+        handleClose()
+
+        history.push(`/targets/${data.id}/edit`)
+        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+      },
+      onError: error => {
+        handleClose()
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      },
+    })
   }
 
   return (
