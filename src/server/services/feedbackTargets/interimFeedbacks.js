@@ -31,13 +31,27 @@ const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
   return userIds
 }
 
-const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+const getFbtAdministrativePersons = async feedbackTargetId => {
+  const users = await UserFeedbackTarget.findAll({
+    attributes: ['userId'],
+    where: {
+      feedbackTargetId,
+      isAdministrativePerson: true,
+    },
+  })
+
+  const userIds = users.map(({ userId }) => userId)
+
+  return userIds
+}
+
+const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus, administrativePersons = []) => {
   const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
     userIds.map(userId => ({
       accessStatus,
       feedbackTargetId,
       userId,
-      isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
+      isAdministrativePerson: administrativePersons.includes(userId),
       userCreated: true,
     }))
   )
@@ -232,6 +246,7 @@ const deleteInterimFeedbackTarget = async (fbtId, user) => {
 
 module.exports = {
   getFbtUserIds,
+  getFbtAdministrativePersons,
   getInterimFeedbackById,
   getInterimFeedbackTargets,
   createUserFeedbackTargets,

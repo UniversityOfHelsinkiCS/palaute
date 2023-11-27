@@ -8,6 +8,7 @@ const {
   getInterimFeedbackTargets,
   updateInterimFeedbackTarget,
   deleteInterimFeedbackTarget,
+  getFbtAdministrativePersons,
 } = require('../../services/feedbackTargets/interimFeedbacks')
 
 const getInterimFeedbacks = async (req, res) => {
@@ -27,12 +28,14 @@ const createInterimFeedback = async (req, res) => {
 
   const studentIds = await getFbtUserIds(fbtId, 'STUDENT')
   const teacherIds = await getFbtUserIds(fbtId, 'RESPONSIBLE_TEACHER')
+  const administrativePersons = await getFbtAdministrativePersons(fbtId)
 
   const studentFeedbackTargets = await createUserFeedbackTargets(interimFeedbackTarget.id, studentIds, 'STUDENT')
   const teacherFeedbackTargets = await createUserFeedbackTargets(
     interimFeedbackTarget.id,
     teacherIds,
-    'RESPONSIBLE_TEACHER'
+    'RESPONSIBLE_TEACHER',
+    administrativePersons
   )
 
   const interimFeedback = await getInterimFeedbackById(interimFeedbackTarget.id)
