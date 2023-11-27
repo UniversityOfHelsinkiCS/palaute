@@ -1,10 +1,21 @@
 const { v4: uuidv4 } = require('uuid')
-const { ApplicationError } = require('../../util/customErrors')
+const { sequelize } = require('../../db/dbConnection')
 
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
+const {
+  CourseUnit,
+  CourseRealisation,
+  FeedbackTarget,
+  FeedbackTargetLog,
+  UserFeedbackTarget,
+  Survey,
+  User,
+} = require('../../models')
+
+const logger = require('../../util/logger')
 const { formatActivityPeriod } = require('../../util/common')
-const { User, UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
+const { ApplicationError } = require('../../util/customErrors')
 
 const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
   const users = await UserFeedbackTarget.findAll({
@@ -167,6 +178,58 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
   return updatedInterimFeedbackTarget
 }
 
+const deleteInterimFeedbackTarget = async (fbtId, user) => {
+  const t = await sequelize.transaction()
+
+  const { access, feedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: fbtId,
+    user,
+  })
+
+  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
+
+  try {
+    logger.info(`Deleting organisation survey ${feedbackTarget.id}`)
+
+    const ufbt = await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
+
+    logger.info(`Deleted ${ufbt} user feedback targets`)
+
+    const survey = await Survey.destroy({
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
+
+    logger.info(`Deleted ${survey} surveys`)
+
+    const log = await FeedbackTargetLog.destroy({
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
+
+    logger.info(`Deleted ${log} feedback target logs`)
+
+    const fbt = await FeedbackTarget.destroy({
+      where: {
+        id: feedbackTarget.id,
+      },
+    })
+
+    logger.info(`Deleted ${fbt} feedback targets`)
+
+    await t.commit()
+  } catch (err) {
+    await t.rollback()
+    throw err
+  }
+}
+
 module.exports = {
   getFbtUserIds,
   getInterimFeedbackById,
@@ -174,4 +237,5 @@ module.exports = {
   createUserFeedbackTargets,
   createInterimFeedbackTarget,
   updateInterimFeedbackTarget,
+  deleteInterimFeedbackTarget,
 }
