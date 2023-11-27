@@ -99,7 +99,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseUnit,
             as: 'courseUnit',
             required: true,
-            attributes: ['id', 'name', 'courseCode'],
+            attributes: ['id', 'name', 'courseCode', 'userCreated'],
             include: [
               {
                 model: Organisation,
@@ -140,7 +140,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.includes(target.courseRealisation.id)
     )
-    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
+    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name', 'userCreated'])
 
     const ongoingTargets = targets.filter(
       ({ courseRealisation }) => courseRealisation.startDate <= new Date() && courseRealisation.endDate >= new Date()
