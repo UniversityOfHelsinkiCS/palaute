@@ -19,11 +19,6 @@ const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
-    enabled: isTeacher,
-  })
-  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0
-
   const {
     courseUnit,
     courseRealisation,
@@ -34,6 +29,11 @@ const FeedbackTargetInformation = () => {
     studentCount,
     userCreated,
   } = feedbackTarget
+
+  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
+    enabled: isTeacher,
+  })
+  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
