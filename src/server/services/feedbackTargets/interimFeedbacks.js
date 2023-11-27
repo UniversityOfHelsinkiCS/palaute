@@ -128,6 +128,9 @@ const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) =
 
   if (!parentFbt) throw new Error('Parent feedback target not found')
 
+  if (parentFbt.userCreated)
+    throw new Error('Creation of interim feedbacks prohibitet for user created feedback targets')
+
   const interimFeedbackTarget = await FeedbackTarget.create({
     feedbackType: 'courseRealisation',
     typeId: uuidv4(),
