@@ -19,6 +19,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import InterimFeedbackEditor from './InterimFeedbackEditor'
 import { getInterimFeedbackSchema } from './utils'
+import { useInterimFeedbacks } from './useInterimFeedbacks'
 
 const styles = {
   dates: {
@@ -180,14 +181,15 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
 const InterimFeedback = () => {
   const history = useHistory()
-  const params = useParams()
+  const { id: parentId } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
+  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(parentId)
 
-  if (isUserLoading) {
+  if (isUserLoading || isInterimFeedbacksLoading) {
     return <LoadingProgress />
   }
 
@@ -202,8 +204,6 @@ const InterimFeedback = () => {
     startDate: addDays(new Date(), 1),
     endDate: addDays(new Date(), 7),
   }
-
-  const interimFeedbacks = []
 
   const handleClose = () => setShowForm(!showForm)
 
