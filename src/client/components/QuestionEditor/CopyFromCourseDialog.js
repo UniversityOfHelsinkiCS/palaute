@@ -92,9 +92,11 @@ const FeedbackTargetList = ({ feedbackTargets, onCopy }) => (
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget } = useFeedbackTargetContext()
-  const { courseUnit, userCreated } = feedbackTarget
+  const {
+    courseUnit: { name, organisations, userCreated },
+  } = feedbackTarget
   const { courseUnits = [] } = useTeacherCourseUnits()
-  const { surveys = [] } = useOrganisationSurveys(courseUnit.organisations[0]?.code, userCreated)
+  const { surveys = [] } = useOrganisationSurveys(organisations[0]?.code, userCreated)
   const [value, setValue] = useState(null)
 
   const options = courseUnits ?? []
@@ -130,16 +132,19 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         <Box mb={2}>
           <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
         </Box>
-        <Box mb={2}>
-          <Autocomplete
-            value={value}
-            onChange={handleValueChange}
-            options={userCreated ? [organisationSurvey] : options}
-            disabled={userCreated}
-            getOptionLabel={getOptionLabel}
-            renderInput={renderInput}
-          />
-        </Box>
+        {userCreated ? (
+          <Typography variant="h6">{getLanguageValue(name, i18n.language)}</Typography>
+        ) : (
+          <Box mb={2}>
+            <Autocomplete
+              value={value}
+              onChange={handleValueChange}
+              options={options}
+              getOptionLabel={getOptionLabel}
+              renderInput={renderInput}
+            />
+          </Box>
+        )}
         {!value && (
           <Typography color="textSecondary" align="center">
             {t('editFeedbackTarget:copyFromCourseChooseCourse')}
