@@ -17,7 +17,7 @@ import {
   ForumOutlined,
 } from '@mui/icons-material'
 
-import { inProduction, ALWAYS_SHOW_STUDENT_LIST } from '../../util/common'
+import { inProduction, ALWAYS_SHOW_STUDENT_LIST, INTERIM_FEEDBACKS_ENABLED } from '../../util/common'
 import Results from './tabs/Results'
 import FeedbackView from './tabs/FeedbackView'
 import StudentsWithFeedback from './tabs/StudentsWithFeedback'
@@ -74,7 +74,7 @@ const FeedbackTargetContent = () => {
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
-  const showInterimFeedbackTab = !inProduction && isAdmin && !userCreated
+  const showInterimFeedbackTab = !inProduction && INTERIM_FEEDBACKS_ENABLED && isAdmin && !userCreated
 
   const courseName = getLanguageValue(getPrimaryCourseName(courseRealisation, courseUnit), i18n.language)
   const courseCode = getCourseCode(courseUnit)
