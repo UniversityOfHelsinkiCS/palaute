@@ -85,3 +85,10 @@ export const getOrganisationSurveySchema = t =>
     studentNumbers: Yup.array().of(Yup.string()),
     teachers: Yup.array().of(Yup.object()).min(1, t('validationErrors:required')),
   })
+
+export const getOverlappingStudentTeachers = data => {
+  const { studentNumbers } = data
+  const overlappingStudentTeachers = data.teachers.filter(t => studentNumbers.includes(t.studentNumber))
+
+  return overlappingStudentTeachers
+}

@@ -22,7 +22,7 @@ import PercentageCell from '../CourseSummary/PercentageCell'
 import FeedbackResponseChip from '../MyTeaching/FeedbackResponseChip'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
-import { getOrganisationSurveySchema } from './utils'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from './utils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
@@ -40,13 +40,6 @@ const styles = {
       display: 'none',
     },
   },
-}
-
-const getOverlappingStudentTeachers = data => {
-  const { studentNumbers } = data
-  const overlappingStudentTeachers = data.teachers.filter(t => studentNumbers.includes(t.studentNumber))
-
-  return overlappingStudentTeachers
 }
 
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
