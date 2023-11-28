@@ -405,15 +405,7 @@ export const OrganisationSummaryRow = ({
   }
 
   return (
-    <Box
-      ref={ref}
-      display="flex"
-      flexDirection="column"
-      alignItems="stretch"
-      gap="0.4rem"
-      pt={nextIsOpen ? '0.5rem' : 0}
-      sx={{ transition: 'padding-top 0.2s ease-out' }}
-    >
+    <Box ref={ref} display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         {inView && (
