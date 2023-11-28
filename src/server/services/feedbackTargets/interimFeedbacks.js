@@ -192,7 +192,7 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
   return updatedInterimFeedbackTarget
 }
 
-const deleteInterimFeedbackTarget = async (fbtId, user) => {
+const removeInterimFeedbackTarget = async (fbtId, user) => {
   const t = await sequelize.transaction()
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
@@ -252,5 +252,5 @@ module.exports = {
   createUserFeedbackTargets,
   createInterimFeedbackTarget,
   updateInterimFeedbackTarget,
-  deleteInterimFeedbackTarget,
+  removeInterimFeedbackTarget,
 }

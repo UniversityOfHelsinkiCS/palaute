@@ -7,7 +7,7 @@ const {
   getInterimFeedbackById,
   getInterimFeedbackTargets,
   updateInterimFeedbackTarget,
-  deleteInterimFeedbackTarget,
+  removeInterimFeedbackTarget,
   getFbtAdministrativePersons,
 } = require('../../services/feedbackTargets/interimFeedbacks')
 
@@ -59,7 +59,7 @@ const removeInterimFeedback = async (req, res) => {
   const { user } = req
   const { interimFbtId } = req.params
 
-  await deleteInterimFeedbackTarget(interimFbtId, user)
+  await removeInterimFeedbackTarget(interimFbtId, user)
 
   return res.status(204).send()
 }
