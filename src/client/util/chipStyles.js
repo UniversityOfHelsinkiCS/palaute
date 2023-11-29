@@ -73,10 +73,10 @@ const styles = {
     borderColor: '#33cc33',
   },
   interim: {
-    background: 'rgb(168 85 247)',
+    background: 'rgb(243 232 255)',
     backgroundSize: '150px, 20px',
-    color: 'rgb(243 232 255)',
-    borderColor: 'rgb(243 232 255)',
+    color: 'rgb(107 33 168)',
+    borderColor: 'rgb(107 33 168)',
   },
 }
 
