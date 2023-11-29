@@ -13,15 +13,26 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
+import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
 
 const FeedbackTargetInformation = () => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
+  const isInterimFeedback =
+    feedbackTarget.userCreated &&
+    !(feedbackTarget.courseUnit.userCreated && feedbackTarget.courseRealisation.userCreated)
+
+  const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
+    feedbackTarget.id,
+    isInterimFeedback
+  )
   const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
     enabled: isTeacher,
   })
+
+  if (isInterimFeedback && isParentFeedbackLoading) return null
 
   const {
     courseUnit,
@@ -33,6 +44,13 @@ const FeedbackTargetInformation = () => {
     studentCount,
     userCreated,
   } = feedbackTarget
+
+  const parentCourseName = parentFeedback
+    ? getLanguageValue(
+        getPrimaryCourseName(parentFeedback?.courseUnit, parentFeedback?.courseRealisation, parentFeedback),
+        i18n.language
+      )
+    : ''
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -177,6 +195,9 @@ const FeedbackTargetInformation = () => {
 
               {isAdmin && !userCreated && (
                 <LinkButton to={sisuPageUrl} title={t('feedbackTargetView:courseSisuPage')} external />
+              )}
+              {isInterimFeedback && (
+                <LinkButton to={`/targets/${parentFeedback?.id}/interim-feedback`} title={parentCourseName} />
               )}
             </Box>
           </Box>
