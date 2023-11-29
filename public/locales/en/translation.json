@@ -277,7 +277,7 @@
     "publishingInfo": "The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled \"Not public\".",
     "unpublishingInfo": "The answers to this questions are shown to students.",
     "hidingFeatureInfo": "If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published.",
-    "confirmDeleteFeedback": "You are about to PERMANTENTLY delete a student's answer using admin rights. Are you sure you want to delete this answer?",
+    "confirmDeleteFeedback": "You are about to PERMANTENTLY delete a student's answer using admin rights. Are you sure you want to delete this answer? Type \"delete\" to confirm.",
     "deleteSuccess": "Answer deleted."
   },
   "groups": {
