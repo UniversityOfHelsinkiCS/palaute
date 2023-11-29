@@ -117,7 +117,7 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
             <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
             </Typography>
-            <Typography>{correspondent.email.toLowerCase()}</Typography>
+            <Typography>{correspondent.email?.toLowerCase()}</Typography>
           </Box>
           <Box>
             <Button
