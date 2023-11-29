@@ -74,7 +74,11 @@ const styles = {
   },
   interim: {
     background: 'rgb(243 232 255)',
+    backgroundImage: 'linear-gradient(55deg, rgb(233 213 255) 10%, rgb(216 180 254) 30%, rgb(233 213 255) 50%)',
     backgroundSize: '150px, 20px',
+    animation: css`
+      ${flow} 6.5s infinite forwards linear
+    `,
     color: 'rgb(107 33 168)',
     borderColor: 'rgb(107 33 168)',
   },
