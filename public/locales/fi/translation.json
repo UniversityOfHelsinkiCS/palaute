@@ -156,6 +156,7 @@
     "feedbackResponseMissing": "Vastapalaute puuttuu",
     "continuousFeedback": "Jatkuva palaute",
     "feedbackOpen": "Palaute käynnissä",
+    "interimFeedbackOpen": "Välipalaute käynnissä",
     "ongoingCourses": "Käynnissä olevat kurssit",
     "upcomingCourses": "Tulevat kurssit",
     "endedCourses": "Päättyneet kurssit",

@@ -156,6 +156,7 @@
     "feedbackResponseMissing": "Counter feedback missing",
     "continuousFeedback": "Continuous feedback",
     "feedbackOpen": "Feedback open",
+    "interimFeedbackOpen": "Interim feedback open",
     "ongoingCourses": "Ongoing courses",
     "upcomingCourses": "Upcoming courses",
     "endedCourses": "Ended courses",
