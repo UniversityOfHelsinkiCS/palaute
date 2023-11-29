@@ -27,14 +27,14 @@ const useDeleteOpenFeedback = () => {
 
   const deleteAnswer = async feedback => {
     // eslint-disable-next-line no-alert
-    if (!canDelete || !window.confirm(t('feedbacks:confirmDeleteFeedback'))) return
+    if (!canDelete || !window.confirm(t('feedbackTargetResults:confirmDeleteFeedback'))) return
 
     try {
       await mutation.mutateAsync({
         feedbackId: feedback.feedbackId,
         questionId: feedback.questionId,
       })
-      enqueueSnackbar(t('feedbacks:feedbackDeleted'), { variant: 'success' })
+      enqueueSnackbar(t('feedbackTargetResults:deleteSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
