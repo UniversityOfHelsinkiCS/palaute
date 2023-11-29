@@ -2,7 +2,8 @@ const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
 const { validateFeedback } = require('../../util/feedbackValidator')
-const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
+const { getFeedbackTargetContext, feedbackTargetCache } = require('../../services/feedbackTargets')
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const create = async (req, res) => {
   const { user } = req
@@ -161,6 +162,50 @@ const updateAnswerHidden = async (req, res) => {
   return res.send({ hidden })
 }
 
+const adminDeleteAnswer = async (req, res) => {
+  const { user } = req
+  const { id: feedbackId, questionId } = req.params
+
+  // find feedback
+  const feedback = await Feedback.findByPk(feedbackId, {
+    include: {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTarget',
+      attributes: ['feedbackTargetId'],
+    },
+  })
+
+  if (!feedback) ApplicationError.NotFound('Feedback not found')
+  const { userFeedbackTarget } = feedback
+  const { feedbackTargetId } = userFeedbackTarget
+
+  // check access
+  const { access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
+  })
+  if (!access?.canAdminDeleteFeedback()) ApplicationError.Forbidden('Must be admin')
+
+  // find and delete the answer
+  let updated = false
+  feedback.data = feedback.data.filter(answer => {
+    if (answer.questionId === Number(questionId)) {
+      updated = true
+      return false
+    }
+    return true
+  })
+
+  if (!updated) {
+    throw new ApplicationError('Question not found on feedback', 404)
+  }
+
+  await feedback.save()
+  feedbackTargetCache.invalidate(feedbackTargetId)
+
+  return res.sendStatus(200)
+}
+
 const adRouter = Router()
 
 adRouter.post('/', create)
@@ -168,6 +213,7 @@ adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.delete('/:id', destroy)
 adRouter.put('/:id/question/:questionId', updateAnswerHidden)
+adRouter.delete('/:id/question/:questionId', adminAccess, adminDeleteAnswer)
 
 const noadRouter = Router()
 

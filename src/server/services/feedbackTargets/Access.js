@@ -18,6 +18,7 @@ const DELETE_TEACHER = 11
 const TOKENS = 12
 const SEND_REMINDER_EMAIL = 13
 const CREATE_INTERIM_FEEDBACK = 14
+const DELETE_ANSWER = 15
 
 const ALL = [
   UPDATE,
@@ -35,6 +36,7 @@ const ALL = [
   TOKENS,
   SEND_REMINDER_EMAIL,
   CREATE_INTERIM_FEEDBACK,
+  DELETE_ANSWER,
 ].sort()
 
 Object.freeze(ALL)
@@ -126,6 +128,10 @@ class Access {
 
   canHideFeedback() {
     return hasRight(this.accessStatus, HIDE_FEEDBACK)
+  }
+
+  canAdminDeleteFeedback() {
+    return hasRight(this.accessStatus, DELETE_ANSWER)
   }
 
   canSeeLogs() {
