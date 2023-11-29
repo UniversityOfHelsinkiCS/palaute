@@ -49,15 +49,11 @@ const InterimFeedbackForm = () => {
   )
 }
 
-const EditInterimFeedbackForm = () => {
-  const { t } = useTranslation()
-
-  return (
-    <Grid spacing={4} container>
-      <LanguageEditor fieldName="name" />
-    </Grid>
-  )
-}
+const EditInterimFeedbackForm = () => (
+  <Grid spacing={4} container>
+    <LanguageEditor fieldName="name" />
+  </Grid>
+)
 
 const InterimFeedbackEditor = ({
   title,
