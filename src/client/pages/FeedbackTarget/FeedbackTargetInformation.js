@@ -19,6 +19,10 @@ const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
+  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
+    enabled: isTeacher,
+  })
+
   const {
     courseUnit,
     courseRealisation,
@@ -29,19 +33,6 @@ const FeedbackTargetInformation = () => {
     studentCount,
     userCreated,
   } = feedbackTarget
-
-  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
-    enabled: isTeacher,
-  })
-  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
-
-  const handleCopyLink = () => {
-    const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
-    copyLink(link)
-    enqueueSnackbar(`${t('feedbackTargetView:linkCopied')}: ${link}`, {
-      variant: 'info',
-    })
-  }
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -58,6 +49,15 @@ const FeedbackTargetInformation = () => {
   const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = feedbackTarget?.tags?.length > 0
+  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
+
+  const handleCopyLink = () => {
+    const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
+    copyLink(link)
+    enqueueSnackbar(`${t('feedbackTargetView:linkCopied')}: ${link}`, {
+      variant: 'info',
+    })
+  }
 
   return (
     <Box mb="1rem">
