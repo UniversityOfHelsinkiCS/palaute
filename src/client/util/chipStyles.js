@@ -73,14 +73,14 @@ const styles = {
     borderColor: '#33cc33',
   },
   interim: {
-    background: 'rgb(243 232 255)',
-    backgroundImage: 'linear-gradient(55deg, rgb(233 213 255) 10%, rgb(216 180 254) 30%, rgb(233 213 255) 50%)',
+    background: theme => theme.palette.primary,
+    backgroundImage: 'linear-gradient(55deg, #e1bee7 10%, #ce93d8 30%, #e1bee7 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
       ${flow} 6.5s infinite forwards linear
     `,
-    color: 'rgb(107 33 168)',
-    borderColor: 'rgb(107 33 168)',
+    color: '#300d59',
+    borderColor: '#ab47bc',
   },
 }
 
