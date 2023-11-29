@@ -72,6 +72,12 @@ const styles = {
     color: '#003300',
     borderColor: '#33cc33',
   },
+  interim: {
+    background: 'rgb(168 85 247)',
+    backgroundSize: '150px, 20px',
+    color: 'rgb(243 232 255)',
+    borderColor: 'rgb(243 232 255)',
+  },
 }
 
 export default styles
