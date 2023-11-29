@@ -9,7 +9,17 @@ const {
   updateInterimFeedbackTarget,
   removeInterimFeedbackTarget,
   getFbtAdministrativePersons,
+  getInterimFeedbackParentFbt,
 } = require('../../services/feedbackTargets/interimFeedbacks')
+
+const getInterimFeedbackParent = async (req, res) => {
+  const { user } = req
+  const { interimFbtId } = req.params
+
+  const parentFeedbackTarget = await getInterimFeedbackParentFbt(interimFbtId, user)
+
+  return res.send(parentFeedbackTarget)
+}
 
 const getInterimFeedbacks = async (req, res) => {
   const { user } = req
@@ -67,6 +77,7 @@ const removeInterimFeedback = async (req, res) => {
 const router = Router()
 
 router.get('/:fbtId/interimFeedbacks', getInterimFeedbacks)
+router.get('/interimFeedbacks/:interimFbtId/parent', getInterimFeedbackParent)
 router.post('/:fbtId/interimFeedbacks', createInterimFeedback)
 router.put('/interimFeedbacks/:interimFbtId', updateInterimFeedback)
 router.delete('/interimFeedbacks/:interimFbtId', removeInterimFeedback)
