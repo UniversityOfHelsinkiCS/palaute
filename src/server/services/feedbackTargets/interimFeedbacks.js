@@ -17,6 +17,37 @@ const logger = require('../../util/logger')
 const { formatActivityPeriod } = require('../../util/common')
 const { ApplicationError } = require('../../util/customErrors')
 
+const getInterimFeedbackParentFbt = async (interimFbtId, user) => {
+  const { access, feedbackTarget: interimFeedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: interimFbtId,
+    user,
+  })
+
+  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
+
+  const parentFeedbackTarget = await FeedbackTarget.findOne({
+    where: {
+      courseUnitId: interimFeedbackTarget.courseUnitId,
+      courseRealisationId: interimFeedbackTarget.courseRealisationId,
+      userCreated: false,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+    ],
+  })
+
+  return parentFeedbackTarget
+}
+
 const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
   const users = await UserFeedbackTarget.findAll({
     attributes: ['userId'],
@@ -245,6 +276,7 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
 }
 
 module.exports = {
+  getInterimFeedbackParentFbt,
   getFbtUserIds,
   getFbtAdministrativePersons,
   getInterimFeedbackById,
