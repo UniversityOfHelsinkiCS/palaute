@@ -346,8 +346,9 @@
   },
   "organisationSurveys": {
     "startDate": "Från och med",
-    "endDate": "till",
-    "surveys": "undersökningar"
+    "endDate": "Till",
+    "surveys": "Undersökningar",
+    "newSurveyName": "Undersökningens namn"
   },
   "courseSummary": {
     "heading": "Sammandrag av kursens respons",

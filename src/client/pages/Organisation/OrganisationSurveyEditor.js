@@ -23,6 +23,7 @@ import FormikDatePicker from '../../components/common/FormikDatePicker'
 import FormikTextField from '../../components/common/FormikTextField'
 
 import apiClient from '../../util/apiClient'
+import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
 
 const LanguageEditor = ({ fieldName, languages = ['fi', 'sv', 'en'] }) => {
   const { t } = useTranslation()
@@ -214,7 +215,7 @@ const OrganisationSurveyForm = () => {
 
   return (
     <Grid spacing={4} container>
-      <LanguageEditor fieldName="name" />
+      <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
@@ -245,7 +246,7 @@ const EditOrganisationSurveyForm = () => {
 
   return (
     <Grid spacing={4} container>
-      <LanguageEditor fieldName="name" />
+      <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
       <Grid xs={12} item>
         <ResponsibleTeachersSelector
