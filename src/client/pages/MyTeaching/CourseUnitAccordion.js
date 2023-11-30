@@ -36,8 +36,6 @@ const styles = {
 const getChip = (courseRealisation, code) => {
   const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
 
-  if (feedbackTarget.userCreated) return null
-
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
