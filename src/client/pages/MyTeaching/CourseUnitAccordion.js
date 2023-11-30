@@ -8,7 +8,10 @@ import FeedbackTargetList from './FeedbackTargetList'
 import InterimFeedbackChip from './InterimFeedbackChip'
 import FeedbackResponseChip from './FeedbackResponseChip'
 
-import { useInterimFeedbacks } from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
+import {
+  useInterimFeedbacks,
+  useInterimFeedbackParent,
+} from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
 
 import { getRelevantCourseRealisation } from './utils'
 
@@ -35,11 +38,14 @@ const styles = {
 
 const getChip = (courseRealisation, code) => {
   const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
+  const { parentFeedback } = useInterimFeedbackParent(feedbackTarget.id)
 
-  const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const isOld = feedbackTargetIsOld(feedbackTarget)
-  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = feedbackTarget || {}
+  const acualFeeback = parentFeedback || feedbackTarget
+
+  const isEnded = feedbackTargetIsEnded(acualFeeback)
+  const isOpen = feedbackTargetIsOpen(acualFeeback)
+  const isOld = feedbackTargetIsOld(acualFeeback)
+  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = acualFeeback || {}
   const isOngoing = feedbackTargetCourseIsOngoing({ opensAt, courseRealisation }) && !isOpen
 
   if (isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
