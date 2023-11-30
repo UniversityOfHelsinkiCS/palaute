@@ -1,21 +1,23 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
+import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
-import { useSnackbar } from 'notistack'
+import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 import FeedbackClosedIcon from '@mui/icons-material/Lock'
 
-import { useQueryClient } from 'react-query'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { getCourseName } from './utils'
+import { getLanguageValue } from '../../util/languageUtils'
+import styles from '../../util/chipStyles'
 import apiClient from '../../util/apiClient'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
-import styles from '../../util/chipStyles'
-import { getStartAndEndString } from '../../util/getDateRangeString'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -156,10 +158,9 @@ const FeedbackResponseChip = () => {
 }
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
-  const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
-
+  const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
+  const { enqueueSnackbar } = useSnackbar()
 
   const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
 
@@ -168,6 +169,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     opensAt: startDate,
     closesAt: endDate,
   })
+
+  const courseName = getCourseName(feedbackTarget)
+  const translatedName = getLanguageValue(courseName, i18n.language)
 
   const feedbackGiven = Boolean(feedback)
   const feedbackResponseGiven = feedbackResponse?.length > 3
@@ -187,6 +191,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   return (
     <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
+      <Typography variant="body1" fontWeight={600} component="h2">
+        {translatedName}
+      </Typography>
       <ListItemText primary={periodInfo} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
