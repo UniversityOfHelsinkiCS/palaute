@@ -20,36 +20,9 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
-import FormikTextField from '../../components/common/FormikTextField'
 
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
-
-const LanguageEditor = ({ fieldName, languages = ['fi', 'sv', 'en'] }) => {
-  const { t } = useTranslation()
-
-  return (
-    <>
-      {languages.map(language => (
-        <Grid md={4} sm={12} xs={12} item key={language}>
-          <Box mb={2}>
-            <Typography variant="h6" component="h2">
-              {language.toUpperCase()}
-            </Typography>
-          </Box>
-          <Box mb={2}>
-            <FormikTextField
-              id={`organisation-survey-${language}-${fieldName}`}
-              name={`${fieldName}.${language}`}
-              label={t('organisationSurveys:newSurveyName')}
-              fullWidth
-            />
-          </Box>
-        </Grid>
-      ))}
-    </>
-  )
-}
 
 const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
