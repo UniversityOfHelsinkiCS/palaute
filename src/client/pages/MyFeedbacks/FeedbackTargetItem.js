@@ -173,6 +173,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const courseName = getCourseName(feedbackTarget)
   const translatedName = getLanguageValue(courseName, i18n.language)
 
+  const editPath = `/targets/${id}/feedback`
+  const viewPath = `/targets/${id}/results`
+
   const feedbackGiven = Boolean(feedback)
   const feedbackResponseGiven = feedbackResponse?.length > 3
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -185,9 +188,6 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     queryClient.invalidateQueries('feedbackTargetsForStudent')
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
-
-  const editPath = `/targets/${id}/feedback`
-  const viewPath = `/targets/${id}/results`
 
   return (
     <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
