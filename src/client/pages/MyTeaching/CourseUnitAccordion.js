@@ -38,7 +38,7 @@ const styles = {
 
 const getChip = (courseRealisation, code) => {
   const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
-  const { parentFeedback } = useInterimFeedbackParent(feedbackTarget.id)
+  const { parentFeedback } = useInterimFeedbackParent(feedbackTarget.id, feedbackTarget.userCreated)
 
   const acualFeeback = parentFeedback || feedbackTarget
 
@@ -67,13 +67,22 @@ const getChip = (courseRealisation, code) => {
 
 const getInterimFeedbackChip = (courseRealisation, enable) => {
   const { feedbackTarget } = courseRealisation
-  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(feedbackTarget?.id, enable)
 
-  if (!enable || isInterimFeedbacksLoading || interimFeedbacks?.length === 0) return null
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOld = feedbackTargetIsOld(feedbackTarget)
 
-  const isOpen = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
+  const fetchInterimFeedbacks = feedbackTarget.userCreated && !isEnded && !isOld && enable
 
-  if (!isOpen) return null
+  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(
+    feedbackTarget?.id,
+    fetchInterimFeedbacks
+  )
+
+  if (!fetchInterimFeedbacks || isInterimFeedbacksLoading || interimFeedbacks?.length === 0) return null
+
+  const isOpenInterim = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
+
+  if (!isOpenInterim) return null
 
   return <InterimFeedbackChip id={feedbackTarget.id} />
 }
