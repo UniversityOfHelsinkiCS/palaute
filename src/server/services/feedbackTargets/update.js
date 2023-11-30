@@ -118,7 +118,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 
   await survey.save()
 
-  await createFeedbackTargetSurveyLog(surveyId, questions, user)
+  createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
 
   return updates
 }

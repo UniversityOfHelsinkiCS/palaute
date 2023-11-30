@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { Survey, Question, Organisation, OrganisationLog, FeedbackTargetLog, User } = require('../models')
+const { Question, Organisation, OrganisationLog, FeedbackTargetLog, User } = require('../models')
 
 const createOrganisationSurveyLog = async (survey, questions, user) => {
   let previousQuestions = await Question.findAll({
@@ -80,79 +80,36 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
   }
 }
 
-const createFeedbackTargetSurveyLog = async (surveyId, questions, user) => {
-  const survey = await Survey.findByPk(surveyId, {
-    attributes: ['id', 'feedbackTargetId', 'questionIds'],
-  })
+const createFeedbackTargetSurveyLog = async (feedbackTargetId, user, removedIds, newIds) => {
+  const data = {}
 
-  let previousQuestions = await Question.findAll({
-    where: {
-      id: { [Op.in]: survey.questionIds },
-    },
-    attributes: ['id', 'type', 'data', 'required'],
-  })
-  previousQuestions = previousQuestions.map(question => question.dataValues)
+  if (removedIds.length > 0) {
+    const removedQuestions = await Question.findAll({
+      where: { id: removedIds },
+      attributes: ['id', 'data'],
+    })
 
-  questions = questions.map(({ id, type, data, required }) => ({
-    id,
-    type,
+    data.deleteQuestion = removedQuestions[0].data
+    data.deleteQuestion.id = removedQuestions[0].id
+  }
+
+  if (newIds.length > 0) {
+    const addedQuestions = await Question.findAll({
+      where: { id: newIds },
+      attributes: ['id', 'data'],
+    })
+
+    data.createQuestion = addedQuestions[0].data
+    data.createQuestion.id = addedQuestions[0].id
+  }
+
+  if (Object.keys(data).length === 0) return
+
+  await FeedbackTargetLog.create({
     data,
-    required,
-  }))
-
-  const deletedQuestions = previousQuestions.filter(question => !questions.find(q => q.id === question.id))
-
-  for (const question of deletedQuestions) {
-    const data = {
-      deleteQuestion: {
-        id: question.id,
-        type: question.type,
-        ...question.data,
-      },
-    }
-
-    await FeedbackTargetLog.create({
-      data,
-      feedbackTargetId: survey.feedbackTargetId,
-      userId: user.id,
-    })
-  }
-
-  for (const question of questions) {
-    let data
-    if (question.id) {
-      const previousQuestion = previousQuestions.find(q => q.id === question.id)
-      // Get the changed values of the question
-      const difference = _.fromPairs(_.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), _.isEqual))
-
-      // eslint-disable-next-line no-continue
-      if (Object.keys(difference).length === 0) continue
-
-      const label = previousQuestion.data.label || previousQuestion.data.content
-      data = {
-        updateQuestion: {
-          id: question.id,
-          previousLabel: label && (label.en || label.fi || label.sv),
-          ...difference,
-        },
-      }
-    } else {
-      data = {
-        createQuestion: {
-          id: question.id,
-          ...question.data,
-          type: question.type,
-          required: question.required,
-        },
-      }
-    }
-
-    await FeedbackTargetLog.create({
-      data,
-      feedbackTargetId: survey.feedbackTargetId,
-      userId: user.id,
-    })
-  }
+    feedbackTargetId,
+    userId: user.id,
+  })
 }
 
 const createOrganisationLog = async (organisation, updates, user) => {
