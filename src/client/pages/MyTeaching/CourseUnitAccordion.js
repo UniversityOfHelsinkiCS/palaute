@@ -8,7 +8,7 @@ import FeedbackTargetList from './FeedbackTargetList'
 import InterimFeedbackChip from './InterimFeedbackChip'
 import FeedbackResponseChip from './FeedbackResponseChip'
 
-import { useInterimFeedbackParent } from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
+import { useInterimFeedbacks } from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
 
 import { getRelevantCourseRealisation } from './utils'
 
@@ -59,16 +59,17 @@ const getChip = (courseRealisation, code) => {
   return null
 }
 
-const getInterimFeedbackChip = courseRealisation => {
+const getInterimFeedbackChip = (courseRealisation, enable) => {
   const { feedbackTarget } = courseRealisation
-  const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
-    feedbackTarget?.id,
-    feedbackTarget?.userCreated
-  )
+  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(feedbackTarget?.id, enable)
 
-  if (isParentFeedbackLoading || !parentFeedback) return null
+  if (!enable || isInterimFeedbacksLoading || interimFeedbacks?.length === 0) return null
 
-  return <InterimFeedbackChip id={parentFeedback.id} />
+  const isOpen = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
+
+  if (!isOpen) return null
+
+  return <InterimFeedbackChip id={feedbackTarget.id} />
 }
 
 const CourseUnitAccordion = ({ courseUnit, group }) => {
@@ -78,7 +79,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
   const FeedbackResponseChip = getChip(courseRealisation, courseCode)
-  const InterimFeedbackChip = getInterimFeedbackChip(courseRealisation)
+  const InterimFeedbackChip = getInterimFeedbackChip(courseRealisation, !courseUnit.userCreated)
 
   return (
     <Accordion
@@ -92,8 +93,8 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            {FeedbackResponseChip}
-            {InterimFeedbackChip}
+            <Box sx={{ mr: 1 }}>{FeedbackResponseChip}</Box>
+            <Box>{InterimFeedbackChip}</Box>
           </Box>
         </Box>
       </AccordionSummary>
