@@ -201,14 +201,19 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
     const enabledPublicQuestionIds = _.difference(updates.publicQuestionIds, feedbackTarget.publicQuestionIds)
     const disabledPublicQuestionIds = _.difference(feedbackTarget.publicQuestionIds, updates.publicQuestionIds)
 
-    data.enabledPublicQuestions = await Question.findAll({
-      where: { id: enabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
-    data.disabledPublicQuestions = await Question.findAll({
-      where: { id: disabledPublicQuestionIds },
-      attributes: ['id', 'data'],
-    })
+    if (enabledPublicQuestionIds.length > 0) {
+      data.enabledPublicQuestions = await Question.findAll({
+        where: { id: enabledPublicQuestionIds },
+        attributes: ['id', 'data'],
+      })
+    }
+
+    if (disabledPublicQuestionIds.length > 0) {
+      data.disabledPublicQuestions = await Question.findAll({
+        where: { id: disabledPublicQuestionIds },
+        attributes: ['id', 'data'],
+      })
+    }
   }
 
   if (updates.opensAt && new Date(updates.opensAt).toDateString() !== feedbackTarget.opensAt.toDateString()) {
