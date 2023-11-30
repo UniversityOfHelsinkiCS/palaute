@@ -1,14 +1,19 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useInterimFeedbackParent } from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
+
 import LinkChip from '../../components/common/LinkChip'
 
 import styles from '../../util/chipStyles'
 
 const InterimFeedbackChip = ({ id }) => {
   const { t } = useTranslation()
+  const { parentFeedback, isLoading } = useInterimFeedbackParent(id)
 
-  const url = `/targets/${id}/interim-feedback`
+  if (isLoading || !parentFeedback) return null
+
+  const url = `/targets/${parentFeedback.id}/interim-feedback`
 
   return (
     <LinkChip
