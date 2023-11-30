@@ -91,19 +91,10 @@ const getInterimFeedbackName = (feedbackTargetName, courseUnitName) => {
   return interimFeedbackName
 }
 
-export const getCourseName = courseRealisation => {
-  const {
-    name: courseRealisationName,
-    feedbackTargets,
-    courseUnitName,
-    userCreated: organisationSurvey,
-  } = courseRealisation
+export const getCourseName = feedbackTarget => {
+  const { courseUnit, userCreated } = feedbackTarget
 
-  if (organisationSurvey) return courseRealisationName
+  if (userCreated) return getInterimFeedbackName(feedbackTarget.name, courseUnit.name)
 
-  const interimFeedback = feedbackTargets.find(target => target.userCreated)
-
-  if (interimFeedback) return getInterimFeedbackName(interimFeedback.name, courseUnitName)
-
-  return courseUnitName
+  return courseUnit.name
 }
