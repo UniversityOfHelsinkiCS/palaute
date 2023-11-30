@@ -1,9 +1,10 @@
-import { Alert, Box, Paper, Typography } from '@mui/material'
+import { Alert, Box, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
 import { useParams } from 'react-router'
 import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 
 const getLogMessage = data => {
   if (!data) {
@@ -69,17 +70,17 @@ const getLogMessage = data => {
 }
 
 const LogItem = ({ log }) => (
-  <Box m={2}>
-    <Paper>
-      <Box display="flex" p={2}>
-        <Typography>{format(new Date(log.createdAt), 'yyyy/MM/dd hh.mm')}</Typography>
-        <Box m={2} />
-        <Typography>{log.user.email}</Typography>
-        <Box m={2} />
-        <Typography>{getLogMessage(log.data)}</Typography>
-      </Box>
-    </Paper>
-  </Box>
+  <OpenFeedbackContainer>
+    <Box display="flex" gap="1rem" alignItems="end">
+      <Typography variant="body2" color="text.secondary">
+        {format(new Date(log.createdAt), 'hh:mm dd.MM.yyyy')}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {log.user.email}
+      </Typography>
+      <Typography>{getLogMessage(log.data)}</Typography>
+    </Box>
+  </OpenFeedbackContainer>
 )
 
 const Logs = () => {
