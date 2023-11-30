@@ -66,7 +66,7 @@ const FeedbackTargetInformation = () => {
   const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
   const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
-  const showTags = feedbackTarget?.tags?.length > 0
+  const showTags = !isStudent && feedbackTarget?.tags?.length > 0
   const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
 
   const handleCopyLink = () => {
