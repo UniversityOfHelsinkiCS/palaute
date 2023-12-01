@@ -607,7 +607,8 @@
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "A new counter feedback from your teacher to course {{courseName}}",
-      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>",
+      "customText": "Dear student!\n\n The administrator of the survey {{courseName}} {{dates}} has responded to the feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the survey responses here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Feedback for the course {{courseName}} is about to start",

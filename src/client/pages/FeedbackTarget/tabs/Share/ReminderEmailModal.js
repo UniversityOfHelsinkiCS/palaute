@@ -56,15 +56,10 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
 
   const closesAt = formatClosesAt(feedbackTarget.closesAt)
 
-  const emailMessage = userCreated
-    ? t('feedbackTargetResults:customEmailMessage', {
-        courseName: name[language],
-        closesAt,
-      })
-    : t('feedbackTargetResults:emailMessage', {
-        courseName: courseUnit.name[language],
-        closesAt,
-      })
+  const emailMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
+    courseName: userCreated ? courseUnit.name[language] : name[language],
+    closesAt,
+  })
 
   return (
     <Modal open={open} onClose={onClose}>
