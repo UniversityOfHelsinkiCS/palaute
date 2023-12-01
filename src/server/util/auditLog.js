@@ -155,8 +155,13 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
   const data = {}
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    const enabledPublicQuestionIds = _.difference(updates.publicQuestionIds, feedbackTarget.publicQuestionIds)
-    const disabledPublicQuestionIds = _.difference(feedbackTarget.publicQuestionIds, updates.publicQuestionIds)
+    const enabledPublicQuestionIds = _.difference(updates.publicQuestionIds, feedbackTarget.publicQuestionIds).filter(
+      qId => (updates.questions?.length ? updates.questions.some(q => q.id === qId) : true)
+    )
+
+    const disabledPublicQuestionIds = _.difference(feedbackTarget.publicQuestionIds, updates.publicQuestionIds).filter(
+      qId => (updates.questions?.length ? updates.questions.some(q => q.id === qId) : true)
+    )
 
     if (enabledPublicQuestionIds.length > 0) {
       data.enabledPublicQuestions = await Question.findAll({

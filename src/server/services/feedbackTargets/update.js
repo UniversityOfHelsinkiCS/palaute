@@ -176,13 +176,14 @@ const update = async ({ feedbackTargetId, user, body }) => {
     updates.questions = updatedQuestions
   }
 
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
+
   Object.assign(feedbackTarget, updates)
 
   // force hooks
   feedbackTarget.changed('updatedAt', true)
 
   await feedbackTarget.save()
-  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   return feedbackTarget
 }

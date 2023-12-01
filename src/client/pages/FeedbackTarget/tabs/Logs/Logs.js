@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
+import { getLanguageValue } from '../../../../util/languageUtils'
 
 const getLogMessage = data => {
   if (!data) {
@@ -28,12 +29,14 @@ const getLogMessage = data => {
     )
   }
 
-  if (data.enabledPublicQuestions) {
-    messages = messages.concat(
-      data.enabledPublicQuestions.length > 0
-        ? `Set answers visible for question '${data.enabledPublicQuestions[0]?.data?.label?.en}'`
-        : `Set answers hidden for question '${data.disabledPublicQuestions[0]?.data?.label?.en}'`
-    )
+  if (data.enabledPublicQuestions?.length) {
+    const questionName = getLanguageValue(data.enabledPublicQuestions[0]?.data?.label, 'fi')
+    messages = messages.concat(`Set answers visible for question '${questionName}'`)
+  }
+
+  if (data.disabledPublicQuestions?.length) {
+    const questionName = getLanguageValue(data.disabledPublicQuestions[0]?.data?.label, 'fi')
+    messages = messages.concat(`Set answers hidden for question '${questionName}'`)
   }
 
   if (data.openImmediately !== undefined) {
@@ -44,15 +47,13 @@ const getLogMessage = data => {
 
   if (data.createQuestion) {
     const { label, content } = data.createQuestion
-    const question =
-      (label && (label.en || label.fi || label.sv)) || (content && (content.en || content.fi || content.sv))
+    const question = getLanguageValue(label, 'fi') || getLanguageValue(content, 'fi')
     messages = messages.concat(`Added question '${question}'`)
   }
 
   if (data.deleteQuestion) {
     const { label, content } = data.deleteQuestion
-    const question =
-      (label && (label.en || label.fi || label.sv)) || (content && (content.en || content.fi || content.sv))
+    const question = getLanguageValue(label, 'fi') || getLanguageValue(content, 'fi')
     messages = messages.concat(`Deleted question '${question}'`)
   }
 
