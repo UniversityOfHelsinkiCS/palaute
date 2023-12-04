@@ -21,6 +21,7 @@ const client = {
   expire: (key, seconds) => redisClient.expire(key, seconds),
   delete: key => redisClient.del(key),
   keys: pattern => redisClient.keys(pattern),
+  mGet: keys => redisClient.mGet(keys),
   flushDb: () => redisClient.flushDb(),
 
   async testConnection() {
