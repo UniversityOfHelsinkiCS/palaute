@@ -277,10 +277,23 @@ const OrganisationSurveyEditor = ({
                 {editView ? <EditOrganisationSurveyForm /> : <OrganisationSurveyForm />}
 
                 <Box sx={{ mt: 2 }}>
-                  <Button disabled={disabled} color="primary" variant="contained" type="submit">
+                  <Button
+                    data-cy="organisation-survey-editor-save"
+                    disabled={disabled}
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                  >
                     {t('common:save')}
                   </Button>
-                  <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
+                  <Button
+                    data-cy="organisation-survey-editor-cancel"
+                    sx={{ ml: 4 }}
+                    color="error"
+                    variant="contained"
+                    type="button"
+                    onClick={onStopEditing}
+                  >
                     {t('common:cancel')}
                   </Button>
                 </Box>
