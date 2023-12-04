@@ -50,11 +50,6 @@ const config = {
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
   /**
-   * How many fbts fit in LRU cache
-   */
-  FEEDBACK_TARGET_CACHE_SIZE: 250,
-
-  /**
    * Optional TTL in ms for fbt cache. Small number effectively disables caching.
    * Disabling will slow down requests related to feedback target view.
    * Do not set if you don't want cache to do TTL checks.
