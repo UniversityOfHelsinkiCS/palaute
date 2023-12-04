@@ -13,7 +13,6 @@ const FormikDatePicker = ({ name, ...props }) => {
 
   return (
     <DatePicker
-      data-cy={`formik-date-picker-field-${name}`}
       inputFormat="dd/MM/yyyy"
       id={name}
       value={field.value ?? ''}
@@ -24,7 +23,11 @@ const FormikDatePicker = ({ name, ...props }) => {
         <TextField fullWidth margin="normal" {...props} helperText={t(meta.error)} error={showError} />
       )}
       error={showError}
+      InputProps={{
+        'data-cy': `formik-date-picker-field-${name}`,
+      }}
       KeyboardButtonProps={{
+        'data-cy': `formik-date-picker-keyboard-field-${name}`,
         'aria-label': 'change date',
       }}
       inputVariant="outlined"
