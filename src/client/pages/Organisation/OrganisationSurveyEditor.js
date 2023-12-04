@@ -51,7 +51,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
       </Typography>
 
       <Autocomplete
-        data-cy="formik-responsible-teacher-input-field"
+        data-cy="formik-responsible-teacher-input"
         id={name}
         name={name}
         multiple
@@ -62,7 +62,19 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         filterOptions={options => options}
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
-        renderInput={params => <TextField label={t('organisationSurveys:responsibleTeachers')} {...params} />}
+        ChipProps={{
+          'data-cy': `formik-responsible-teacher-input-field-chip`,
+        }}
+        renderInput={params => (
+          <TextField
+            {...params}
+            inputProps={{
+              ...params.inputProps,
+              'data-cy': 'formik-responsible-teacher-input-field',
+            }}
+            label={t('organisationSurveys:responsibleTeachers')}
+          />
+        )}
         {...props}
       />
     </Box>

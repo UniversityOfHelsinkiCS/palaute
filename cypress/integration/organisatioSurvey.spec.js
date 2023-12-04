@@ -57,16 +57,27 @@ describe('Organisation Surveys: User with organisation access', () => {
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
 
+    // Fill in the name of the survey
     cy.get('[data-cy="formik-locales-field-fi-name"]').type('Testi kysely')
     cy.get('[data-cy="formik-locales-field-sv-name"]').type('Testundersökning')
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
 
+    // Assert that the startDate picker is there
     cy.get('[data-cy="formik-date-picker-field-startDate"]').should('be.visible')
 
+    // Assert that the endDate picker is there
     cy.get('[data-cy="formik-date-picker-field-endDate"]').should('be.visible')
 
+    // Assert responsible teacher input field is there
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
+
     // assure that the logged user is by default the responsible teacher
+    const teacherChipTag = '[data-cy="formik-responsible-teacher-input-field-chip"]'
+    cy.get(teacherChipTag).should('exist')
+    cy.get(teacherChipTag).should('have.attr', 'data-tag-index', '0')
+
+    cy.get(teacherChipTag).should('have.text', 'Matti Luukkainen')
+
     // add a new responsible teacher by inserting the email or name
     // assure that the added responsible teacher chip is rendered correctly
 
