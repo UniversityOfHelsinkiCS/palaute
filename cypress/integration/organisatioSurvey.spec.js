@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 const { baseUrl } = require('../support')
 
 describe('Organisation Surveys: User with organisation access', () => {
@@ -71,19 +72,25 @@ describe('Organisation Surveys: User with organisation access', () => {
     // Assert responsible teacher input field is there
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
 
-    // assure that the logged user is by default the responsible teacher
+    // Assert that the logged user is by default the responsible teacher
     const teacherChipTag = '[data-cy="formik-responsible-teacher-input-field-chip"]'
     cy.get(teacherChipTag).should('exist')
     cy.get(teacherChipTag).should('have.attr', 'data-tag-index', '0')
 
     cy.get(teacherChipTag).should('have.text', 'Matti Luukkainen')
 
-    // add a new responsible teacher by inserting the email or name
-    // assure that the added responsible teacher chip is rendered correctly
+    // Add a new responsible teacher by inserting the email or name
+    cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
+    cy.wait(500)
+    cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Tommi Testaaja').click()
 
-    cy.get('[data-cy="formik-student-number-input-field"]').should('be.visible')
-    // add a new student by inserting the student number
-    // assure that the added student number is rendered to a chip correctly
+    cy.wait(1000)
+
+    // Assert that the added responsible teacher chip is rendered correctly
+    cy.get(teacherChipTag).should('have.text', 'Tommi Testaaja')
+
+    // Add a new student by inserting the student number
+    // Assert that the added student number is rendered to a chip correctly
   })
 
   it.skip('can not create survey without name', () => {
