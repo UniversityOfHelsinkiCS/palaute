@@ -5,7 +5,7 @@ require('./util/i18n')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
-const { PORT, inProduction, inE2EMode } = require('./util/config')
+const { PORT, inProduction, inE2EMode, RUN_CRON } = require('./util/config')
 const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
 const { start: startViewsCron } = require('./util/refreshViewsCron')
@@ -37,10 +37,13 @@ const start = async () => {
   await redis.connect()
   await updateLastRestart()
   await updaterClient.ping().catch(() => logger.error('Updater not available'))
-  await startViewsCron()
-  await startSummariesCron()
-  await startPrecacheFeedbackTargetsCron()
-  await mailer.scheduleCronJobs()
+
+  if (RUN_CRON) {
+    await startViewsCron()
+    await startSummariesCron()
+    await startPrecacheFeedbackTargetsCron()
+    await mailer.scheduleCronJobs()
+  }
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)

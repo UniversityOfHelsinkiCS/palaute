@@ -24,6 +24,8 @@ const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_JWT, FEEDBACK_SYSTEM } = process.env
 
+const RUN_CRON = process.env.RUN_CRON === 'true'
+
 const REDIS_CONFIG = {
   url: `redis://default:redis@${REDIS_HOST}:6379`,
 }
@@ -96,6 +98,7 @@ module.exports = {
   API_TOKEN,
   UPDATER_URL,
   JWT_KEY,
+  RUN_CRON,
   WORKLOAD_QUESTION_ID,
   WORKLOAD_QUESTION_ID_ORDER,
   DEV_ADMINS,
