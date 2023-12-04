@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
-
 const { Router } = require('express')
+
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
 const cache = require('../../services/users/cache')
@@ -14,8 +14,7 @@ const login = async (req, res) => {
   const iamGroups = req.noad ? [] : req.user.iamGroups ?? []
 
   if (!loginAs) {
-    user.lastLoggedIn = new Date()
-    await user.save()
+    await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
   }
 
   const [lastRestart, banners, organisations] = await Promise.all([

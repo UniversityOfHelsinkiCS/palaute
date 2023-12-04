@@ -62,11 +62,6 @@ const config = {
   FEEDBACK_TARGET_CACHE_TTL: undefined,
 
   /**
-   * How many users fit in LRU cache
-   */
-  USER_CACHE_SIZE: 250,
-
-  /**
    * Optional TTL in ms for user cache. Small number effectively disables caching.
    * Disabling can sometimes be helpful for development but it will slow down every request and cause a lot of Jami calls.
    * Do not set if you don't want cache to do TTL checks.

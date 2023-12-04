@@ -17,9 +17,10 @@ const redisClient = redis.createClient({
 
 const client = {
   get: key => redisClient.get(key),
-  set: (key, value) => redisClient.set(key, value),
+  set: (key, value, options = {}) => redisClient.set(key, value, options),
   expire: (key, seconds) => redisClient.expire(key, seconds),
   delete: key => redisClient.del(key),
+  keys: pattern => redisClient.keys(pattern),
   flushDb: () => redisClient.flushDb(),
 
   async testConnection() {

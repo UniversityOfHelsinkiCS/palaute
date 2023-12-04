@@ -1,23 +1,34 @@
-const LRU = require('lru-cache')
-const logger = require('../../util/logger')
-const { USER_CACHE_SIZE, USER_CACHE_TTL } = require('../../util/config')
+const { User } = require('../../models')
 
-const lru = new LRU({
-  max: USER_CACHE_SIZE,
-  ttl: USER_CACHE_TTL,
-})
+const logger = require('../../util/logger')
+const { redis } = require('../../util/redisClient')
+
+const { USER_CACHE_TTL } = require('../../util/config')
+
+const getKey = uid => `user:${uid}`
 
 const cache = {
-  get: uid => lru.get(uid),
-  set: (uid, userJson) => lru.set(uid, userJson),
+  get: async uid => {
+    const userJson = await redis.get(getKey(uid))
+
+    if (!userJson) return null
+
+    return User.build(JSON.parse(userJson))
+  },
+  set: (uid, user) => {
+    redis.set(getKey(uid), JSON.stringify(user), { ttl: USER_CACHE_TTL })
+  },
   invalidate: uid => {
-    if (lru.delete(uid)) {
+    if (redis.delete(getKey(uid))) {
       logger.info(`[CACHE] invalidate user ${uid}`)
     }
   },
-  invalidateAll: () => {
+  invalidateAll: async () => {
     logger.info(`[CACHE] invalidate user ALL`)
-    lru.clear()
+
+    const pattern = getKey('*')
+    const keys = await redis.keys(pattern)
+    redis.delete(keys)
   },
 }
 
