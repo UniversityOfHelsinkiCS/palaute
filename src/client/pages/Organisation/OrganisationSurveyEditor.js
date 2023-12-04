@@ -51,6 +51,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
       </Typography>
 
       <Autocomplete
+        data-cy="formik-responsible-teacher-input-field"
         id={name}
         name={name}
         multiple
@@ -74,15 +75,17 @@ const StudenNumberInputInfo = () => {
 
   return (
     <Box my={2}>
-      <Alert severity="info">
+      <Alert data-cy="formik-student-number-input-alert" severity="info">
         <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
           <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
 
-          <IconButton onClick={() => setExpand(!expand)}>{!expand ? <ExpandMore /> : <ExpandLess />}</IconButton>
+          <IconButton data-cy="formik-student-number-input-expand-icon" onClick={() => setExpand(!expand)}>
+            {!expand ? <ExpandMore /> : <ExpandLess />}
+          </IconButton>
         </Box>
 
         <Collapse in={expand} timeout="auto" unmountOnExit>
-          <ul>
+          <ul data-cy="formik-student-number-input-delimeter-list">
             <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
             <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
             <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
@@ -91,7 +94,11 @@ const StudenNumberInputInfo = () => {
           <Typography variant="body2" mt={2}>
             {t('organisationSurveys:studentNumberExampleInput')}
           </Typography>
-          <Box sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }} component="pre">
+          <Box
+            data-cy="formik-student-number-input-example"
+            sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }}
+            component="pre"
+          >
             010000003;
             <br />
             011000002,
@@ -123,6 +130,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
       <StudenNumberInputInfo />
 
       <Autocomplete
+        data-cy="formik-student-number-input-field"
         id={name}
         name={name}
         multiple
@@ -205,6 +213,7 @@ const OrganisationSurveyForm = () => {
       </Grid>
       <Grid xs={12} item>
         <StudentNumberInput
+          data-cy="organisation-surveys-editor-student-number-field"
           name="studentNumbers"
           title={t('organisationSurveys:studentNumberTitle')}
           label={t('organisationSurveys:studentNumberInputLabel')}
@@ -253,7 +262,7 @@ const OrganisationSurveyEditor = ({
 
   return (
     <Dialog maxWidth={false} open={editing} onClose={onStopEditing}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle data-cy="organisation-surveys-editor-title">{title}</DialogTitle>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}

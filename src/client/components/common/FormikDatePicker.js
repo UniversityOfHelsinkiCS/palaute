@@ -13,6 +13,7 @@ const FormikDatePicker = ({ name, ...props }) => {
 
   return (
     <DatePicker
+      data-cy={`formik-date-picker-field-${name}`}
       inputFormat="dd/MM/yyyy"
       id={name}
       value={field.value ?? ''}

@@ -22,6 +22,7 @@ const FormikLocalesFieldEditor = ({ name, localesLabelString, languages = ['fi',
             </Box>
             <Box mb={2}>
               <FormikTextField
+                data-cy={`formik-locales-field-${language}-${name}`}
                 id={`locales-field-${language}-${name}`}
                 name={`${name}.${language}`}
                 label={t(localesLabelString)}
