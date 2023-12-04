@@ -213,7 +213,6 @@ const OrganisationSurveyForm = () => {
       </Grid>
       <Grid xs={12} item>
         <StudentNumberInput
-          data-cy="organisation-surveys-editor-student-number-field"
           name="studentNumbers"
           title={t('organisationSurveys:studentNumberTitle')}
           label={t('organisationSurveys:studentNumberInputLabel')}
