@@ -114,6 +114,7 @@ const OrganisationSurveys = () => {
       </Alert>
       <Box sx={styles.buttonContainer}>
         <Button
+          data-cy="organisation-surveys-add-new"
           color="primary"
           onClick={() => {
             setShowForm(!showForm)
@@ -136,7 +137,7 @@ const OrganisationSurveys = () => {
       {surveys.length > 0 ? (
         surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
       ) : (
-        <Alert sx={{ mt: 2 }} severity="info">
+        <Alert data-cy="organisation-surveys-no-surveys-alert" sx={{ mt: 2 }} severity="info">
           {t('organisationSurveys:emptySurveys')}
         </Alert>
       )}
