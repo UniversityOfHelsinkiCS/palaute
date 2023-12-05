@@ -6,22 +6,6 @@ const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 const { getUserIams } = require('../util/jami')
 
-const getTestUser = async () => {
-  let testUser = await User.findByPk('abc1234')
-  if (testUser) return testUser
-  testUser = await User.create({
-    id: 'abc1234',
-    username: 'ohj_tosk',
-    email: 'grp-toska@helsinki.fi',
-    studentNumber: '092345321',
-    employeeNumber: '99999a9',
-    firstName: 'Gert',
-    lastName: 'Adamson',
-  })
-
-  return testUser
-}
-
 const getLoggedInAsUser = async (user, loggedInAsUserId) => {
   if (!user.isAdmin) return undefined
 
@@ -60,11 +44,7 @@ const currentUserMiddleware = async (req, _, next) => {
 
   const username = isNoAdPath ? await getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
 
-  if (username === 'ohj_tosk') {
-    req.user = await getTestUser()
-  } else {
-    req.user = await getUserByUsername(username)
-  }
+  req.user = await getUserByUsername(username)
 
   req.user.iamGroups = req.iamGroups
   await req.user.populateAccess()
