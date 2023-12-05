@@ -153,3 +153,19 @@ Cypress.Commands.add('refreshSummary', () => {
     headers: admin,
   })
 })
+
+Cypress.Commands.add('seedUsers', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/seed/user',
+    headers: admin,
+  })
+})
+
+Cypress.Commands.add('clearUsers', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/clear/user',
+    headers: admin,
+  })
+})
