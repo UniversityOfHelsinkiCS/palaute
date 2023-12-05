@@ -26,11 +26,9 @@ services:
     container_name: palaute_app_test
 
   db:
-    image: postgres:15.4
+    image: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi/palaute_test_db
     environment:
       - POSTGRES_PASSWORD=postgres
-    volumes:
-      - pg_data:/data
     container_name: palaute_test_db
 
   jami:
@@ -48,6 +46,3 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: jami-db
-
-volumes:
-  pg_data:
