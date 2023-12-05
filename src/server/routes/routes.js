@@ -34,6 +34,10 @@ router.use(accessLogger)
 
 router.use(['/ping', '/noad/ping'], (_, res) => res.sendStatus(204))
 
+if (inE2EMode) {
+  router.use('/test', testing)
+}
+
 router.use(iamGroupsMiddleware)
 router.use(currentUserMiddleware)
 
@@ -49,10 +53,6 @@ router.use('/tags', tags)
 router.use('/norppa-feedback', norppaFeedback)
 router.use('/continuous-feedback', continuousFeedback)
 router.use('/admin', admin)
-
-if (inE2EMode) {
-  router.use('/test', testing)
-}
 
 // Link from courses-page
 router.use('/cur/:id', redirectFromCoursesPage)
