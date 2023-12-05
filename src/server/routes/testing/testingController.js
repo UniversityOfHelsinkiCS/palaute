@@ -1,11 +1,28 @@
 const Router = require('express')
 
 const _ = require('lodash')
+const { testUsers } = require('./utils/users')
 
 const { FeedbackTarget, CourseRealisation, Organisation, User } = require('../../models')
 const { run } = require('../../util/cron/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
+
+const seedTestUsers = async users => {
+  await User.bulkCreate(users)
+}
+
+const createTestUsers = async (req, res) => {
+  await seedTestUsers(testUsers)
+
+  return res.send(201)
+}
+
+const clearTestUsers = async (req, res) => {
+  await User.destroy({ truncate: { cascade: true } })
+
+  return res.send(200)
+}
 
 const updateCourseRealisation = async (req, res) => {
   const { user } = req
@@ -107,10 +124,16 @@ const refreshSummary = async (req, res) => {
 
 const router = Router()
 
+router.post('/clear/user', clearTestUsers)
+
+router.post('/seed/user', createTestUsers)
+
+router.put('/user/:userId', updateUser)
+
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
+
 router.put('/enableCourses', enableAllCourses)
-router.put('/user/:userId', updateUser)
 router.put('/refresh-summary', refreshSummary)
 
 module.exports = router
