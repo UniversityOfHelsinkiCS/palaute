@@ -1,6 +1,6 @@
-const { inE2EMode, inProduction } = require('./config')
-const { schedule } = require('./cron')
-const { runRefreshViewsQuery } = require('../services/summary/sql')
+const { inE2EMode, inProduction } = require('../config')
+const { schedule } = require('./schedule')
+const { runRefreshViewsQuery } = require('../../services/summary/sql')
 
 const run = async () => {
   console.time('Refresh views')

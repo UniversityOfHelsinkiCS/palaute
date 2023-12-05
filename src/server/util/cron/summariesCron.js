@@ -1,6 +1,6 @@
-const { inProduction } = require('./config')
-const { schedule } = require('./cron')
-const { buildSummaries } = require('../services/summary/buildSummaries')
+const { inProduction } = require('../config')
+const { schedule } = require('./schedule')
+const { buildSummaries } = require('../../services/summary/buildSummaries')
 
 const run = async () => {
   console.time('Build summaries')

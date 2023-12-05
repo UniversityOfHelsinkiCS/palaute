@@ -1,11 +1,11 @@
 const _ = require('lodash')
 const { Op, fn, col } = require('sequelize')
 const { subDays } = require('date-fns')
-const { inProduction, inStaging } = require('./config')
-const logger = require('./logger')
-const { schedule } = require('./cron')
-const { FeedbackTarget, UserFeedbackTarget } = require('../models')
-const { cacheFeedbackTargetById } = require('../services/feedbackTargets')
+const { inProduction, inStaging } = require('../config')
+const logger = require('../logger')
+const { schedule } = require('./schedule')
+const { FeedbackTarget, UserFeedbackTarget } = require('../../models')
+const { cacheFeedbackTargetById } = require('../../services/feedbackTargets')
 
 const run = async () => {
   const start = Date.now()

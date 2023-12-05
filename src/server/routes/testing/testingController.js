@@ -3,7 +3,7 @@ const Router = require('express')
 const _ = require('lodash')
 
 const { FeedbackTarget, CourseRealisation, Organisation, User } = require('../../models')
-const { run } = require('../../util/refreshViewsCron')
+const { run } = require('../../util/cron/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
 

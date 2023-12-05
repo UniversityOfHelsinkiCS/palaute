@@ -1,12 +1,12 @@
 const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
-const { schedule } = require('../util/cron')
+const { schedule } = require('../util/cron/schedule')
 
 const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
-  sendAutomaticReminderOnFeedbackToStudents,
+  // sendAutomaticReminderOnFeedbackToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
 } = require('./mails')
 

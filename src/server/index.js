@@ -5,14 +5,11 @@ require('./util/i18n')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
-const { PORT, inProduction, inE2EMode, CRON_DISABLED } = require('./util/config')
+const { PORT, inProduction, inE2EMode } = require('./util/config')
 const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
-const { start: startViewsCron } = require('./util/refreshViewsCron')
-const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
-const { start: startSummariesCron } = require('./util/summariesCron')
+const { scheduleCronJobs } = require('./util/cron/scheduleCronJobs')
 const logger = require('./util/logger')
-const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
 const updaterClient = require('./util/updaterClient')
@@ -37,13 +34,7 @@ const start = async () => {
   await redis.connect()
   await updateLastRestart()
   await updaterClient.ping().catch(() => logger.error('Updater not available'))
-
-  if (!CRON_DISABLED) {
-    await startViewsCron()
-    await startSummariesCron()
-    await startPrecacheFeedbackTargetsCron()
-    await mailer.scheduleCronJobs()
-  }
+  await scheduleCronJobs()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
