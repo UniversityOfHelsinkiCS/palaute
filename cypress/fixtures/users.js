@@ -1,4 +1,4 @@
-export const admin = {
+const admin = {
   uid: 'mluukkai',
   givenName: 'Matti',
   mail: 'grp-toska+mockadmin@helsinki.fi',
@@ -9,7 +9,7 @@ export const admin = {
   hygroupcn: ['hy-employees'],
 }
 
-export const teacher = {
+const teacher = {
   uid: 'testiman',
   givenname: 'Tommi',
   sn: 'Testaaja',
@@ -20,7 +20,7 @@ export const teacher = {
   hygroupcn: ['hy-employees'],
 }
 
-export const student = {
+const student = {
   uid: 'oppilasolli',
   givenname: 'Olli',
   sn: 'Oppilas',
@@ -29,7 +29,7 @@ export const student = {
   hyPersonSisuId: 'hy-hlo-115054920',
 }
 
-export const studyCoordinator = {
+const studyCoordinator = {
   uid: 'mluukkai',
   givenname: 'Daniel',
   sn: 'Dekaani',
@@ -37,4 +37,11 @@ export const studyCoordinator = {
   preferredLanguage: 'en',
   hyPersonSisuId: 'hy-hlo-1501077',
   hygroupcn: ['hy-employees', 'grp-toska'],
+}
+
+module.exports = {
+  admin,
+  teacher,
+  student,
+  studyCoordinator,
 }
