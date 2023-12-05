@@ -5,6 +5,9 @@ services:
     build:
       context: ./
       dockerfile: dev.Dockerfile
+      args:
+        - E2E=true
+        - REACT_APP_E2E=true
     image: palaute_dev
     volumes:
       - ./:/usr/src/app
@@ -14,6 +17,7 @@ services:
       - JAMI_HOST=jami
       - JAMI_PORT=3003
       - JWT_KEY=minttujam
+      - REACT_APP_E2E=true
       - NODE_CONFIG_ENV=hy
       - UPDATER_URL=http://updater:3000
     ports:
