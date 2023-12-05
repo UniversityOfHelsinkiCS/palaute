@@ -27,6 +27,7 @@ const getLoggedInAsUser = async (user, loggedInAsUserId) => {
 
   const loggedInAsUser = await User.findByPk(loggedInAsUserId)
   loggedInAsUser.iamGroups = await getUserIams(loggedInAsUserId)
+  await loggedInAsUser.populateAccess()
 
   return loggedInAsUser
 }
@@ -65,6 +66,9 @@ const currentUserMiddleware = async (req, _, next) => {
     req.user = await getUserByUsername(username)
   }
 
+  req.user.iamGroups = req.iamGroups
+  await req.user.populateAccess()
+
   if (req.headers['x-admin-logged-in-as']) {
     const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
     if (loggedInAsUser) {
@@ -72,9 +76,6 @@ const currentUserMiddleware = async (req, _, next) => {
       req.loginAs = true
     }
   }
-
-  if (!req.loginAs) req.user.iamGroups = req.iamGroups
-  await req.user.populateAccess()
 
   return next()
 }
