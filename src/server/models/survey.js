@@ -33,10 +33,6 @@ class Survey extends Model {
   async populateQuestions() {
     this.set('questions', await this.getQuestions())
   }
-
-  getGroupingQuestion() {
-    return this.questions?.find(q => q.secondaryType === 'GROUPING')
-  }
 }
 
 Survey.init(

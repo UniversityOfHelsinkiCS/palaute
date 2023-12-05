@@ -90,6 +90,8 @@ const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
     data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
 
+const getGroupingQuestion = surveys => surveys.teacherSurvey?.questions?.find(q => q.secondaryType === 'GROUPING')
+
 /**
  *
  * @param {number} id feedback target id
@@ -124,7 +126,7 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
-  const groupingQuestionId = surveys.teacherSurvey?.getGroupingQuestion()?.id
+  const groupingQuestionId = getGroupingQuestion(surveys)?.id
   const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
 
   const studentFeedbackTargetsOfGroup = filterByGroupId(
