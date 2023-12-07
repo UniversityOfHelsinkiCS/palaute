@@ -149,7 +149,9 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
 
-    cy.get('[data-cy="formik-date-picker-field-startDate"]').clear().type('01/01/2100{enter}')
+    cy.get('[data-cy="formik-date-picker-field-startDate"]')
+      .clear({ force: true })
+      .type('01/01/2100{enter}', { force: true })
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
