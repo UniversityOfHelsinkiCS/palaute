@@ -3,12 +3,15 @@ const { baseUrl } = require('../support')
 
 describe('Organisation Surveys: User with organisation access', () => {
   beforeEach(() => {
-    cy.loginAsStudyCoordinator()
-
     cy.clearOrganisationSurveys()
 
     cy.clearTestStudents()
     cy.seedTestStudents()
+
+    cy.clearComputerScienceCorrespondents()
+    cy.seedComputerScienceCorrespondents()
+
+    cy.loginAsOrganisationCorrespondent()
   })
 
   it('can visit organisation survey page', () => {
@@ -58,7 +61,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it('can fill in new organisation surveys', () => {
+  it.only('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -84,7 +87,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChipTag')
     cy.get('@teacherChipTag').should('exist')
     cy.get('@teacherChipTag').should('have.attr', 'data-tag-index', '0')
-    cy.get('@teacherChipTag').should('have.text', 'Matti Luukkainen')
+    cy.get('@teacherChipTag').should('have.text', 'Correspondent Tester')
 
     // Add a new responsible teacher by inserting the email or name
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
@@ -92,7 +95,7 @@ describe('Organisation Surveys: User with organisation access', () => {
 
     // Assert that the added responsible teacher chip is rendered correctly
     cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChips')
-    cy.get('@teacherChips').contains('[data-tag-index=0]', 'Matti Luukkainen')
+    cy.get('@teacherChips').contains('[data-tag-index=0]', 'Correspondent Tester')
     cy.get('@teacherChips').contains('[data-tag-index=1]', 'Tommi Testaaja')
 
     // Add a new student by inserting the student number
@@ -119,7 +122,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="organisation-survey-feedback-count-Test survey"]').should('exist')
     cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/4"]').should('exist')
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Matti Luukkainen"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
 
     cy.get('[data-cy="organisation-survey-show-feedback-Test survey"]').should('exist')
@@ -139,7 +142,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="formik-locales-field-en-name"]').contains('p', 'This field is required')
   })
 
-  it.only('can not set the end date to be before the start date', () => {
+  it('can not set the end date to be before the start date', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // try to set the end date to be before the start date
@@ -155,8 +158,11 @@ describe('Organisation Surveys: User with organisation access', () => {
   })
 
   it.skip('can not add a responsible teacher as a student at the same time', () => {
-    // fill  in the name field of a single language
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
     // try to insert the logged user's student number to the stundent number field and assert that the saving fails
+    cy.get('[data-cy="organisation-surveys-add-new"]').click()
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
   })
 
   it.skip('can view created organisation surveys', () => {})
