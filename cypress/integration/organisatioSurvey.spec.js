@@ -4,6 +4,9 @@ const { baseUrl } = require('../support')
 describe('Organisation Surveys: User with organisation access', () => {
   beforeEach(() => {
     cy.loginAsStudyCoordinator()
+
+    cy.clearTestStudents()
+    cy.seedTestStudents()
   })
 
   it('can visit organisation survey page', () => {
@@ -53,7 +56,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it('can fill in new organisation surveys', () => {
+  it.only('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -72,11 +75,13 @@ describe('Organisation Surveys: User with organisation access', () => {
     // Assert responsible teacher input field is there
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
 
+    // Assert student number input field is there
+    cy.get('[data-cy="formik-student-number-input-field"]').should('be.visible')
+
     // Assert that the logged user is by default the responsible teacher
     cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChipTag')
     cy.get('@teacherChipTag').should('exist')
     cy.get('@teacherChipTag').should('have.attr', 'data-tag-index', '0')
-
     cy.get('@teacherChipTag').should('have.text', 'Matti Luukkainen')
 
     // Add a new responsible teacher by inserting the email or name
@@ -84,10 +89,40 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Tommi Testaaja').click()
 
     // Assert that the added responsible teacher chip is rendered correctly
-    cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').contains('[data-tag-index=0]', 'Matti Luukkainen')
+    cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChips')
+    cy.get('@teacherChips').contains('[data-tag-index=0]', 'Matti Luukkainen')
+    cy.get('@teacherChips').contains('[data-tag-index=1]', 'Tommi Testaaja')
 
     // Add a new student by inserting the student number
     // Assert that the added student number is rendered to a chip correctly
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('014895968{enter}')
+    cy.get('@studentInput').type('015303763 ')
+    cy.get('@studentInput').type('015144922;')
+    cy.get('@studentInput').type('211111112,')
+
+    cy.get('[data-cy="formik-student-number-input-field-chip-014895968"]').should('exist')
+    cy.get('[data-cy="formik-student-number-input-field-chip-015303763"]').should('exist')
+    cy.get('[data-cy="formik-student-number-input-field-chip-015144922"]').should('exist')
+    cy.get('[data-cy="formik-student-number-input-field-chip-211111112"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Assert that the survey was created
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-not-open-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-period-info-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/4"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Matti Luukkainen"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-edit-feedback-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-delete-feedback-Test survey"]').should('exist')
   })
 
   it.skip('can not create survey without name', () => {

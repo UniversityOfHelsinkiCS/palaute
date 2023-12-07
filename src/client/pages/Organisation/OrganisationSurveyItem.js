@@ -171,6 +171,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         >
           <Typography variant="body2">{t('organisationSurveys:givenFeedback')}:</Typography>
           <PercentageCell
+            data-cy={`organisation-survey-feedback-count-percentage-${feedbackCount}/${studentCount}`}
             size="small"
             label={`${feedbackCount}/${studentCount}`}
             percent={(feedbackCount / studentCount) * 100}
@@ -184,7 +185,13 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           >
             <Typography variant="body2">{t('organisationSurveys:responsibleTeachers')}:</Typography>
             {teachers.map(({ user: teacher }) => (
-              <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
+              <Chip
+                data-cy={`organisation-survey-responsible-persons-${surveyName}-chips-${teacher.firstName} ${teacher.lastName}`}
+                key={teacher.id}
+                size="small"
+                sx={{ mr: 1 }}
+                label={`${teacher.firstName} ${teacher.lastName}`}
+              />
             ))}
           </Box>
         )}
