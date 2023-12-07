@@ -5,6 +5,8 @@ describe('Organisation Surveys: User with organisation access', () => {
   beforeEach(() => {
     cy.loginAsStudyCoordinator()
 
+    cy.clearOrganisationSurveys()
+
     cy.clearTestStudents()
     cy.seedTestStudents()
   })
@@ -56,7 +58,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it.only('can fill in new organisation surveys', () => {
+  it('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -121,8 +123,8 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
 
     cy.get('[data-cy="organisation-survey-show-feedback-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-edit-feedback-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-delete-feedback-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
   })
 
   it.skip('can not create survey without name', () => {
