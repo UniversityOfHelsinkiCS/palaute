@@ -23,6 +23,14 @@ const testStudents = [
     firstName: 'Veikko',
     lastName: 'Testaaja',
   },
+  {
+    id: 'hy-hlo-111111111',
+    username: 'studrandom',
+    email: 'random.testaaja@helsinki.fi',
+    studentNumber: '211111112',
+    firstName: 'Veikko',
+    lastName: 'Testaaja',
+  },
 ]
 
 module.exports = { testStudents }

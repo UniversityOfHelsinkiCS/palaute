@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const Router = require('express')
 
 const _ = require('lodash')
@@ -12,10 +13,26 @@ const seedTestUsers = async users => {
   await User.bulkCreate(users)
 }
 
+const clearTestUsers = async users => {
+  const userIds = users.map(user => user.id)
+
+  await User.destroy({
+    where: {
+      id: { [Op.in]: userIds },
+    },
+  })
+}
+
 const createTestStudents = async (req, res) => {
   await seedTestUsers(testStudents)
 
   return res.send(201)
+}
+
+const clearTestStudents = async (req, res) => {
+  await clearTestUsers(testStudents)
+
+  return res.send(204)
 }
 
 const updateCourseRealisation = async (req, res) => {
@@ -117,6 +134,8 @@ const refreshSummary = async (req, res) => {
 }
 
 const router = Router()
+
+router.post('/clear/user/student', clearTestStudents)
 
 router.post('/seed/user/student', createTestStudents)
 
