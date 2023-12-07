@@ -6,6 +6,7 @@ const testStudents = [
     studentNumber: '014895968',
     firstName: 'Henri',
     lastName: 'Testaaja',
+    language: 'en',
   },
   {
     id: 'hy-hlo-136095188	',
