@@ -28,7 +28,7 @@ const testStudents = [
     username: 'studrandom',
     email: 'random.testaaja@helsinki.fi',
     studentNumber: '211111112',
-    firstName: 'Veikko',
+    firstName: 'Random',
     lastName: 'Testaaja',
   },
 ]
