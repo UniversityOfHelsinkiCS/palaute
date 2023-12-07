@@ -39,9 +39,20 @@ const studyCoordinator = {
   hygroupcn: ['hy-employees', 'grp-toska'],
 }
 
+const organisationCorrespondent = {
+  uid: 'orgcscorrespondent',
+  givenname: 'Correspondent',
+  sn: 'Tester',
+  mail: 'cs.correspondent@helsinki.fi',
+  preferredLanguage: 'en',
+  hyPersonSisuId: 'hy-hlo-111111112',
+  hygroupcn: ['hy-employees'],
+}
+
 module.exports = {
   admin,
   teacher,
   student,
   studyCoordinator,
+  organisationCorrespondent,
 }

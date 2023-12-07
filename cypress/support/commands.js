@@ -1,5 +1,5 @@
 import { baseUrl } from './baseUrl'
-import { admin, teacher, student, studyCoordinator } from '../fixtures/headers'
+import { admin, teacher, student, studyCoordinator, organisationCorrespondent } from '../fixtures/headers'
 
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(admin))
@@ -27,6 +27,11 @@ Cypress.Commands.add('loginAsStudent', () => {
 
 Cypress.Commands.add('loginAsStudyCoordinator', () => {
   localStorage.setItem('fakeUser', JSON.stringify(studyCoordinator))
+  cy.visit(baseUrl)
+})
+
+Cypress.Commands.add('loginAsOrganisationCorrespondent', () => {
+  localStorage.setItem('fakeUser', JSON.stringify(organisationCorrespondent))
   cy.visit(baseUrl)
 })
 
@@ -174,6 +179,22 @@ Cypress.Commands.add('clearOrganisationSurveys', () => {
   cy.request({
     method: 'POST',
     url: '/api/test/clear/organisation-surveys',
+    headers: admin,
+  })
+})
+
+Cypress.Commands.add('seedComputerScienceCorrespondents', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/seed/user/correspondent/500-K005',
+    headers: admin,
+  })
+})
+
+Cypress.Commands.add('clearComputerScienceCorrespondents', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/clear/user/correspondent/500-K005',
     headers: admin,
   })
 })
