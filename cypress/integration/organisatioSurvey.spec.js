@@ -61,7 +61,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it.only('can fill in new organisation surveys', () => {
+  it('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -157,17 +157,21 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
   })
 
-  it.skip('can not add a responsible teacher as a student at the same time', () => {
+  it('can not add a responsible teacher as a student at the same time', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // try to insert the logged user's student number to the stundent number field and assert that the saving fails
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
+
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('000000000{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-000000000"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('@studentInput').contains('p', 'Responsible person can not be a student at the same time')
   })
-
-  it.skip('can view created organisation surveys', () => {})
-
-  it.skip('can edit created organisation surveys', () => {})
 
   it.skip('can edit organisation surveys before any feedback is given', () => {})
 
