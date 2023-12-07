@@ -182,6 +182,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           value.map((option, index) => (
             <Chip
               {...getTagProps({ index })}
+              data-cy={`formik-student-number-input-field-chip-${option}`}
               key={`${option}-${index}`}
               variant="outlined"
               label={option}
