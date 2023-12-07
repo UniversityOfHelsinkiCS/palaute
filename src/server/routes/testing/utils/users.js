@@ -1,38 +1,28 @@
-const testUsers = [
+const testStudents = [
   {
-    id: 'hy-hlo-1441871	',
-    username: 'mluukkai',
-    email: 'grp-toska@helsinki.fi',
-    studentNumber: '011120775',
-    employeeNumber: '9021313',
-    firstName: 'Matti',
-    lastName: 'Luukkainen',
-  },
-  {
-    id: 'hy-hlo-51367956	',
-    username: 'testiman',
-    email: 'Tommi.testaaja@toska.fi',
-    studentNumber: '123445678',
-    employeeNumber: '123445678',
-    firstName: 'Tommi',
+    id: 'hy-hlo-124043339	',
+    username: 'studhenri',
+    email: 'henri.testaaja@helsinki.fi',
+    studentNumber: '014895968',
+    firstName: 'Henri',
     lastName: 'Testaaja',
   },
   {
-    id: 'hy-hlo-115054920	',
-    username: 'oppilasolli',
-    email: 'opiskelija@toska.fi',
-    studentNumber: '115054920',
-    firstName: 'Olli',
-    lastName: 'Oppilas',
+    id: 'hy-hlo-136095188	',
+    username: 'studkemi',
+    email: 'miko.testaaja@helsinki.fi',
+    studentNumber: '015303763',
+    firstName: 'Miko',
+    lastName: 'Testaaja',
   },
   {
-    id: 'hy-hlo-1501077	',
-    username: 'danieldekaani',
-    email: 'dekaani@toska.fi',
-    employeeNumber: '1501077',
-    firstName: 'Daniel',
-    lastName: 'Dekaani',
+    id: 'hy-hlo-130991964	',
+    username: 'studvesu',
+    email: 'veikko.testaaja@helsinki.fi',
+    studentNumber: '015144922',
+    firstName: 'Veikko',
+    lastName: 'Testaaja',
   },
 ]
 
-module.exports = { testUsers }
+module.exports = { testStudents }

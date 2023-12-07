@@ -1,7 +1,7 @@
 const Router = require('express')
 
 const _ = require('lodash')
-const { testUsers } = require('./utils/users')
+const { testStudents } = require('./utils/users')
 
 const { FeedbackTarget, CourseRealisation, Organisation, User } = require('../../models')
 const { run } = require('../../util/cron/refreshViewsCron')
@@ -12,16 +12,10 @@ const seedTestUsers = async users => {
   await User.bulkCreate(users)
 }
 
-const createTestUsers = async (req, res) => {
-  await seedTestUsers(testUsers)
+const createTestStudents = async (req, res) => {
+  await seedTestUsers(testStudents)
 
   return res.send(201)
-}
-
-const clearTestUsers = async (req, res) => {
-  await User.destroy({ truncate: { cascade: true } })
-
-  return res.send(200)
 }
 
 const updateCourseRealisation = async (req, res) => {
@@ -124,9 +118,7 @@ const refreshSummary = async (req, res) => {
 
 const router = Router()
 
-router.post('/clear/user', clearTestUsers)
-
-router.post('/seed/user', createTestUsers)
+router.post('/seed/user/student', createTestStudents)
 
 router.put('/user/:userId', updateUser)
 
