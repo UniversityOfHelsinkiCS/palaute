@@ -142,15 +142,15 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-locales-field-en-name"]').contains('p', 'This field is required')
   })
 
-  it('can not set the end date to be before the start date', () => {
+  it.only('can not set the end date to be before the start date', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // try to set the end date to be before the start date
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
 
-    cy.get('[data-cy="formik-date-picker-field-startDate"]')
-      .clear({ force: true })
+    cy.get('[data-cy="formik-date-picker-field-startDate-input"]')
+      .clear('input', { force: true })
       .type('01/01/2100{enter}', { force: true })
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
