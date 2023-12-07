@@ -154,10 +154,10 @@ Cypress.Commands.add('refreshSummary', () => {
   })
 })
 
-Cypress.Commands.add('seedUsers', () => {
+Cypress.Commands.add('seedTestStudents', () => {
   cy.request({
     method: 'POST',
-    url: '/api/test/seed/user',
+    url: '/api/test/seed/user/student',
     headers: admin,
   })
 })
