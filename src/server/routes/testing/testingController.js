@@ -2,7 +2,7 @@ const { Op } = require('sequelize')
 const Router = require('express')
 
 const _ = require('lodash')
-const { testStudents } = require('./utils/users')
+const { testStudents, organisationCorrespondentUsers } = require('./utils/users')
 
 const {
   FeedbackTarget,
@@ -16,13 +16,16 @@ const {
   FeedbackTargetLog,
   CourseRealisationsOrganisation,
   CourseRealisationsTag,
+  OrganisationFeedbackCorrespondent,
 } = require('../../models')
 const { run } = require('../../util/cron/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
 
 const seedTestUsers = async users => {
-  await User.bulkCreate(users)
+  await User.bulkCreate(users, {
+    ignoreDuplicates: true,
+  })
 }
 
 const clearTestUsers = async users => {
@@ -32,6 +35,23 @@ const clearTestUsers = async users => {
     where: {
       id: { [Op.in]: userIds },
     },
+  })
+}
+
+const seedTestCorrespondent = async (organisationCode, users) => {
+  const correspondentUserIds = users.map(user => user.id)
+
+  const organisation = await Organisation.findOne({
+    where: {
+      code: organisationCode,
+    },
+  })
+
+  await correspondentUserIds.forEach(async userId => {
+    await OrganisationFeedbackCorrespondent.create({
+      organisationId: organisation.id,
+      userId,
+    })
   })
 }
 
@@ -135,6 +155,14 @@ const clearTestStudents = async (req, res) => {
   await clearTestUsers(testStudents)
 
   return res.send(204)
+}
+
+const createTestCorrespondents = async (req, res) => {
+  await seedTestUsers(organisationCorrespondentUsers)
+
+  await seedTestCorrespondent('500-K005', organisationCorrespondentUsers)
+
+  return res.send(201)
 }
 
 const updateCourseRealisation = async (req, res) => {
@@ -241,6 +269,7 @@ router.post('/clear/user/student', clearTestStudents)
 router.post('/clear/organisation-surveys', clearOrganisatioSurveyFbts)
 
 router.post('/seed/user/student', createTestStudents)
+router.post('/seed/user/correspondent', createTestCorrespondents)
 
 router.put('/user/:userId', updateUser)
 
