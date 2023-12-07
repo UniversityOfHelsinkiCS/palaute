@@ -162,10 +162,18 @@ Cypress.Commands.add('seedTestStudents', () => {
   })
 })
 
-Cypress.Commands.add('clearUsers', () => {
+Cypress.Commands.add('clearTestStudents', () => {
   cy.request({
     method: 'POST',
-    url: '/api/test/clear/user',
+    url: '/api/test/clear/user/student',
+    headers: admin,
+  })
+})
+
+Cypress.Commands.add('clearOrganisationSurveys', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/clear/organisation-surveys',
     headers: admin,
   })
 })

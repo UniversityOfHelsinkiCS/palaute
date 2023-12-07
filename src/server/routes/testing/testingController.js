@@ -4,7 +4,19 @@ const Router = require('express')
 const _ = require('lodash')
 const { testStudents } = require('./utils/users')
 
-const { FeedbackTarget, CourseRealisation, Organisation, User } = require('../../models')
+const {
+  FeedbackTarget,
+  CourseUnit,
+  CourseUnitsOrganisation,
+  CourseRealisation,
+  Organisation,
+  User,
+  UserFeedbackTarget,
+  Survey,
+  FeedbackTargetLog,
+  CourseRealisationsOrganisation,
+  CourseRealisationsTag,
+} = require('../../models')
 const { run } = require('../../util/cron/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
@@ -23,6 +35,95 @@ const clearTestUsers = async users => {
   })
 }
 
+const clearUserFbts = async users => {
+  const userIds = users.map(user => user.id)
+
+  await UserFeedbackTarget.destroy({
+    where: {
+      userId: { [Op.in]: userIds },
+    },
+  })
+}
+
+const clearOrganisatioSurveyFbts = async (req, res) => {
+  const organisationSurveyFbts = await FeedbackTarget.findAll({
+    where: {
+      userCreated: true,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        where: {
+          userCreated: true,
+        },
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+          {
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            required: true,
+            attributes: [],
+          },
+        ],
+      },
+    ],
+  })
+
+  const fbtIds = organisationSurveyFbts.map(fbt => fbt.id)
+  const curIds = organisationSurveyFbts.map(fbt => fbt.courseRealisationId)
+
+  await UserFeedbackTarget.destroy({
+    where: {
+      feedbackTargetId: { [Op.in]: fbtIds },
+    },
+  })
+
+  await Survey.destroy({
+    where: {
+      feedbackTargetId: { [Op.in]: fbtIds },
+    },
+  })
+
+  await FeedbackTargetLog.destroy({
+    where: {
+      feedbackTargetId: { [Op.in]: fbtIds },
+    },
+  })
+
+  await FeedbackTarget.destroy({
+    where: {
+      id: { [Op.in]: fbtIds },
+    },
+  })
+
+  await CourseRealisationsOrganisation.destroy({
+    where: {
+      courseRealisationId: { [Op.in]: curIds },
+    },
+  })
+
+  await CourseRealisationsTag.destroy({
+    where: {
+      courseRealisationId: { [Op.in]: curIds },
+    },
+  })
+
+  await CourseRealisation.destroy({
+    where: {
+      id: { [Op.in]: curIds },
+    },
+  })
+
+  return res.send(204)
+}
+
 const createTestStudents = async (req, res) => {
   await seedTestUsers(testStudents)
 
@@ -30,6 +131,7 @@ const createTestStudents = async (req, res) => {
 }
 
 const clearTestStudents = async (req, res) => {
+  await clearUserFbts(testStudents)
   await clearTestUsers(testStudents)
 
   return res.send(204)
@@ -136,6 +238,7 @@ const refreshSummary = async (req, res) => {
 const router = Router()
 
 router.post('/clear/user/student', clearTestStudents)
+router.post('/clear/organisation-surveys', clearOrganisatioSurveyFbts)
 
 router.post('/seed/user/student', createTestStudents)
 
