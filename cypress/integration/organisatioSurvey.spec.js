@@ -127,7 +127,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
   })
 
-  it.only('can not create survey without name', () => {
+  it('can not create survey without name', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // try to save a new survey without inserting any information
@@ -139,8 +139,19 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="formik-locales-field-en-name"]').contains('p', 'This field is required')
   })
 
-  it.skip('can not set the end date to be before the start date', () => {
+  it.only('can not set the end date to be before the start date', () => {
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
     // try to set the end date to be before the start date
+    cy.get('[data-cy="organisation-surveys-add-new"]').click()
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
+
+    cy.get('[data-cy="formik-date-picker-field-startDate"]').clear().type('01/01/2100{enter}')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="formik-date-picker-field-endDate"]').parent().as('endDateInputParent')
+    cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
   })
 
   it.skip('can not add a responsible teacher as a student at the same time', () => {
