@@ -65,6 +65,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     opensAt: startDate,
     closesAt: endDate,
   })
+  const surveyName = getLanguageValue(organisationSurvey.name, language)
 
   const handleClose = () => setShowForm(!showForm)
 
@@ -134,12 +135,17 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   return (
     <Card sx={{ mb: 3 }}>
       <CardContent>
-        <Typography sx={{ textTransform: 'capitalize', fontWeight: 'light' }} variant="h5" component="div">
-          {getLanguageValue(organisationSurvey.name, language)}
+        <Typography
+          data-cy={`organisation-survey-item-title-${surveyName}`}
+          sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
+          variant="h5"
+          component="div"
+        >
+          {surveyName}
         </Typography>
 
         {Date.parse(opensAt) < new Date() ? (
-          <Box sx={{ mt: 2, ml: -1 }}>
+          <Box data-cy={`organisation-survey-open-${surveyName}`} sx={{ mt: 2, ml: -1 }}>
             <FeedbackResponseChip
               id={organisationSurvey.id}
               feedbackResponseGiven={Boolean(feedbackResponse)}
@@ -148,18 +154,21 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
             />
           </Box>
         ) : (
-          <Box sx={{ mt: 2 }}>
+          <Box data-cy={`organisation-survey-not-open-${surveyName}`} sx={{ mt: 2 }}>
             <Typography variant="body2" color="textSecondary" component="span">
               {t('teacherView:feedbackNotStarted')}
             </Typography>
           </Box>
         )}
 
-        <Typography variant="body2" sx={{ mt: 2 }}>
+        <Typography data-cy={`organisation-survey-period-info-${surveyName}`} variant="body2" sx={{ mt: 2 }}>
           {periodInfo}
         </Typography>
 
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Box
+          data-cy={`organisation-survey-feedback-count-${surveyName}`}
+          sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
+        >
           <Typography variant="body2">{t('organisationSurveys:givenFeedback')}:</Typography>
           <PercentageCell
             size="small"
@@ -169,7 +178,10 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         </Box>
 
         {teachers.length > 0 && (
-          <Box sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}>
+          <Box
+            data-cy={`organisation-survey-responsible-persons-${surveyName}`}
+            sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}
+          >
             <Typography variant="body2">{t('organisationSurveys:responsibleTeachers')}:</Typography>
             {teachers.map(({ user: teacher }) => (
               <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
@@ -178,6 +190,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         )}
 
         <Button
+          data-cy={`organisation-survey-show-feedback-${surveyName}`}
           color="primary"
           variant="outlined"
           sx={{ mt: 2 }}
@@ -189,6 +202,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {allowEdit && (
           <Button
+            data-cy={`organisation-survey-edit-${surveyName}`}
             disabled={showForm}
             color="primary"
             variant="outlined"
@@ -200,7 +214,14 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         )}
 
         {(allowDelete || isAdmin) && (
-          <Button disabled={showForm} color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+          <Button
+            data-cy={`organisation-survey-delete-${surveyName}`}
+            disabled={showForm}
+            color="error"
+            variant="outlined"
+            sx={{ mt: 2, ml: 2 }}
+            onClick={handleDelete}
+          >
             {t('organisationSurveys:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
           </Button>
         )}
