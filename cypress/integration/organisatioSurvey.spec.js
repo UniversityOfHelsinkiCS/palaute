@@ -53,7 +53,7 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it.skip('can fill in new organisation surveys', () => {
+  it('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -73,21 +73,18 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
 
     // Assert that the logged user is by default the responsible teacher
-    const teacherChipTag = '[data-cy="formik-responsible-teacher-input-field-chip"]'
-    cy.get(teacherChipTag).should('exist')
-    cy.get(teacherChipTag).should('have.attr', 'data-tag-index', '0')
+    cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChipTag')
+    cy.get('@teacherChipTag').should('exist')
+    cy.get('@teacherChipTag').should('have.attr', 'data-tag-index', '0')
 
-    cy.get(teacherChipTag).should('have.text', 'Matti Luukkainen')
+    cy.get('@teacherChipTag').should('have.text', 'Matti Luukkainen')
 
     // Add a new responsible teacher by inserting the email or name
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
-    cy.wait(500)
     cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Tommi Testaaja').click()
 
-    cy.wait(1000)
-
     // Assert that the added responsible teacher chip is rendered correctly
-    cy.get(teacherChipTag).should('have.text', 'Tommi Testaaja')
+    cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').contains('[data-tag-index=0]', 'Matti Luukkainen')
 
     // Add a new student by inserting the student number
     // Assert that the added student number is rendered to a chip correctly
