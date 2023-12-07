@@ -1,7 +1,7 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 const { baseUrl } = require('../support')
 
-describe('Organisation Surveys: User with organisation access', () => {
+describe('Feedback Correspondents', () => {
   beforeEach(() => {
     cy.clearOrganisationSurveys()
 
@@ -236,19 +236,19 @@ describe('Organisation Surveys: User with organisation access', () => {
   it.skip('can not delete organisation surveys after feedback has been given', () => {})
 })
 
-describe('Organisation Surveys: Students', () => {
+describe('Students', () => {
   beforeEach(() => {
     cy.loginAsStudent()
   })
 })
 
-describe('Organisation Surveys: Teachers', () => {
+describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.loginAsTeacher()
   })
 })
 
-describe('Organisation Surveys: Admin users', () => {
+describe('Admin Users', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
   })
