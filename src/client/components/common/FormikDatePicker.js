@@ -14,13 +14,20 @@ const FormikDatePicker = ({ name, ...props }) => {
   return (
     <DatePicker
       inputFormat="dd/MM/yyyy"
-      id={name}
+      id={field.name}
       value={field.value ?? ''}
       onChange={value => {
         setFieldValue(name, value, true)
       }}
-      renderInput={props => (
-        <TextField fullWidth margin="normal" {...props} helperText={t(meta.error)} error={showError} />
+      renderInput={params => (
+        <TextField
+          {...params}
+          inputProps={{ ...params.inputProps, 'data-cy': `formik-date-picker-field-${name}-input` }}
+          fullWidth
+          margin="normal"
+          helperText={t(meta.error)}
+          error={showError}
+        />
       )}
       error={showError}
       InputProps={{
