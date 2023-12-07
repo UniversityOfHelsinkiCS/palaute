@@ -173,7 +173,65 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('@studentInput').contains('p', 'Responsible person can not be a student at the same time')
   })
 
-  it.skip('can edit organisation surveys before any feedback is given', () => {})
+  it('can edit organisation surveys', () => {
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    // Create a new survey with just the name given
+    cy.get('[data-cy="organisation-surveys-add-new"]').click()
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    // Assure that the survey does not have any students and only one responsible teacher
+    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/0"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('not.exist')
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist').click()
+
+    // Add new teacher
+    cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
+    cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Tommi Testaaja').click()
+
+    // Add students
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('014895968{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-014895968"]').should('exist')
+    cy.get('@studentInput').type('211111112{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-211111112"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Assure the changes is visible
+    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
+
+    // Edit the survey name
+    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist').click()
+
+    cy.get('[data-cy="formik-locales-field-en-name"]').clear().type('Greatest survey of them all!')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Assure that only the name changed
+    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('not.exist')
+    cy.get('[data-cy="organisation-survey-item-title-Greatest survey of them all!"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!"]').should('exist')
+    cy.get(
+      '[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!-chips-Correspondent Tester"]'
+    ).should('exist')
+    cy.get(
+      '[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!-chips-Tommi Testaaja"]'
+    ).should('exist')
+  })
 
   it.skip('can not delete organisation surveys after feedback has been given', () => {})
 })
