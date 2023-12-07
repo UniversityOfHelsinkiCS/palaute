@@ -1,5 +1,5 @@
 import { baseUrl } from './baseUrl'
-import { admin, teacher, student, studyCoordinator } from '../fixtures/users'
+import { admin, teacher, student, studyCoordinator } from '../fixtures/headers'
 
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(admin))
