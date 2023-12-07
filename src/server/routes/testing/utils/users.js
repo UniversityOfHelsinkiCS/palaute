@@ -14,6 +14,7 @@ const testStudents = [
     studentNumber: '015303763',
     firstName: 'Miko',
     lastName: 'Testaaja',
+    language: 'en',
   },
   {
     id: 'hy-hlo-130991964	',
@@ -22,6 +23,7 @@ const testStudents = [
     studentNumber: '015144922',
     firstName: 'Veikko',
     lastName: 'Testaaja',
+    language: 'en',
   },
   {
     id: 'hy-hlo-111111111',
@@ -30,6 +32,7 @@ const testStudents = [
     studentNumber: '211111112',
     firstName: 'Random',
     lastName: 'Testaaja',
+    language: 'en',
   },
 ]
 
@@ -42,6 +45,7 @@ const organisationCorrespondentUsers = [
     employeeNumber: '000000000',
     firstName: 'Correspondent',
     lastName: 'Tester',
+    language: 'en',
   },
 ]
 
