@@ -38,7 +38,7 @@ const clearTestUsers = async users => {
   })
 }
 
-const seedTestCorrespondent = async (organisationCode, users) => {
+const seedTestOrganisationCorrespondents = async (organisationCode, users) => {
   const correspondentUserIds = users.map(user => user.id)
 
   const organisation = await Organisation.findOne({
@@ -52,6 +52,20 @@ const seedTestCorrespondent = async (organisationCode, users) => {
       organisationId: organisation.id,
       userId,
     })
+  })
+}
+
+const clearTestOrganisationCorrespondents = async organisationCode => {
+  const organisation = await Organisation.findOne({
+    where: {
+      code: organisationCode,
+    },
+  })
+
+  await OrganisationFeedbackCorrespondent.destroy({
+    where: {
+      organisationId: organisation.id,
+    },
   })
 }
 
@@ -158,11 +172,21 @@ const clearTestStudents = async (req, res) => {
 }
 
 const createTestCorrespondents = async (req, res) => {
+  const { organisationCode } = req.params
   await seedTestUsers(organisationCorrespondentUsers)
 
-  await seedTestCorrespondent('500-K005', organisationCorrespondentUsers)
+  await seedTestOrganisationCorrespondents(organisationCode, organisationCorrespondentUsers)
 
   return res.send(201)
+}
+
+const clearTestCorrespondents = async (req, res) => {
+  const { organisationCode } = req.params
+
+  await clearTestOrganisationCorrespondents(organisationCode)
+  await clearTestUsers(organisationCorrespondentUsers)
+
+  return res.send(204)
 }
 
 const updateCourseRealisation = async (req, res) => {
@@ -266,10 +290,11 @@ const refreshSummary = async (req, res) => {
 const router = Router()
 
 router.post('/clear/user/student', clearTestStudents)
+router.post('/clear/user/correspondent/:organisationCode', clearTestCorrespondents)
 router.post('/clear/organisation-surveys', clearOrganisatioSurveyFbts)
 
 router.post('/seed/user/student', createTestStudents)
-router.post('/seed/user/correspondent', createTestCorrespondents)
+router.post('/seed/user/correspondent/:organisationCode', createTestCorrespondents)
 
 router.put('/user/:userId', updateUser)
 
