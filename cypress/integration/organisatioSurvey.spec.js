@@ -127,8 +127,16 @@ describe('Organisation Surveys: User with organisation access', () => {
     cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
   })
 
-  it.skip('can not create survey without name', () => {
+  it.only('can not create survey without name', () => {
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
     // try to save a new survey without inserting any information
+    cy.get('[data-cy="organisation-surveys-add-new"]').click()
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="formik-locales-field-fi-name"]').contains('p', 'This field is required')
+    cy.get('[data-cy="formik-locales-field-sv-name"]').contains('p', 'This field is required')
+    cy.get('[data-cy="formik-locales-field-en-name"]').contains('p', 'This field is required')
   })
 
   it.skip('can not set the end date to be before the start date', () => {
@@ -144,7 +152,7 @@ describe('Organisation Surveys: User with organisation access', () => {
 
   it.skip('can edit created organisation surveys', () => {})
 
-  it.skip('can edit delete organisation surveys before any feedback is given', () => {})
+  it.skip('can edit organisation surveys before any feedback is given', () => {})
 
   it.skip('can not delete organisation surveys after feedback has been given', () => {})
 })
