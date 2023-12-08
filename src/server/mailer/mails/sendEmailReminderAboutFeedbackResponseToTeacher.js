@@ -68,7 +68,9 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
 
   const filteredFeedbackTargets = feedbackTargets.filter(fbt => {
     const disabledCourseCodes = fbt.courseUnit.organisations.flatMap(org => org.disabledCourseCodes)
-    return !disabledCourseCodes.includes(fbt.courseUnit.courseCode)
+    const isInterimFeedback = fbt.userCreated && !fbt.courseRealisation.userCreated
+
+    return !disabledCourseCodes.includes(fbt.courseUnit.courseCode) && !isInterimFeedback
   })
 
   const filteredByFeedbacks = filteredFeedbackTargets.filter(fbt => fbt.feedbackCount)
