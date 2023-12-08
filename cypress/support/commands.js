@@ -65,6 +65,17 @@ Cypress.Commands.add('loginAsOrganisationCorrespondent', () => {
   cy.visit(baseUrl)
 })
 
+Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
+  const today = new Date()
+
+  cy.request({
+    method: 'POST',
+    url: `/api/organisations/${orgCode}/surveys`,
+    headers: admin,
+    body,
+  })
+})
+
 Cypress.Commands.add('setUpAdminTeacherView', () => {
   const date = new Date()
   cy.request({
