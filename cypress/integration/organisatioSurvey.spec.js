@@ -238,7 +238,42 @@ describe('Feedback Correspondents', () => {
     ).should('exist')
   })
 
-  it.skip('can not delete organisation surveys after feedback has been given', () => {})
+  it.only('can not delete organisation surveys after feedback has been given', () => {
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    // Create a new survey with just the name given
+    cy.get('[data-cy="organisation-surveys-add-new"]').click()
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
+
+    // Add student Henri to the survey
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('014895968{enter}')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Add likert question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
+    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Add another question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
+    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+  })
 })
 
 describe('Students', () => {

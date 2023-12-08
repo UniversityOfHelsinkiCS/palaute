@@ -37,6 +37,9 @@ const FormikDatePicker = ({ name, ...props }) => {
         'data-cy': `formik-date-picker-keyboard-field-${name}`,
         'aria-label': 'change date',
       }}
+      OpenPickerButtonProps={{
+        'data-cy': `formik-date-picker-field-${name}-popper`,
+      }}
       inputVariant="outlined"
       disableToolbar
       maxDate={new Date('2300-01-01')}
