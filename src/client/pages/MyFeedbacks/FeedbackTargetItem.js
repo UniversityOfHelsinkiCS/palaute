@@ -23,7 +23,7 @@ const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="giveCourseFeedback">
+    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="feedback-item-give-feedback">
       {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
@@ -48,23 +48,37 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <Box>
-      <Button variant="outlined" color="primary" component={Link} to={editPath} sx={{ mr: '1rem' }}>
+      <Button
+        data-cy="feedback-item-modify-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={editPath}
+        sx={{ mr: '1rem' }}
+      >
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
 
-      <Button variant="outlined" color="primary" component={Link} to={viewPath} sx={{ mr: '1rem' }}>
+      <Button
+        data-cy="feedback-item-view-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={viewPath}
+        sx={{ mr: '1rem' }}
+      >
         {t('userFeedbacks:viewFeedbackSummary')}
       </Button>
-      <Button color="error" onClick={handleOpen}>
+      <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog data-cy="feedback-item-clear-feedback-dialog" open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
-        <Button onClick={handleClose} color="primary">
+        <Button data-cy="feedback-item-view-feedback-cancel" onClick={handleClose} color="primary">
           {t('userFeedbacks:no')}
         </Button>
-        <Button onClick={handleSubmit} color="primary" autoFocus>
+        <Button data-cy="feedback-item-view-feedback-confirm" onClick={handleSubmit} color="primary" autoFocus>
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
@@ -190,7 +204,12 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   }
 
   return (
-    <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
+    <ListItem
+      data-cy={`feedback-item-${translatedName}`}
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+      divider={divider}
+      disableGutters
+    >
       <Typography variant="body1" fontWeight={600} component="h2">
         {translatedName}
       </Typography>
