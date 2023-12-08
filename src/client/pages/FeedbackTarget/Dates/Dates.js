@@ -68,7 +68,12 @@ const Dates = () => {
 
         {showEditButton && (
           <Box gridColumn="span 2">
-            <Button onClick={() => setDialogOpen(true)} variant="text" startIcon={<Edit />}>
+            <Button
+              data-cy="feedback-target-edit-period"
+              onClick={() => setDialogOpen(true)}
+              variant="text"
+              startIcon={<Edit />}
+            >
               {t('feedbackTargetSettings:editPeriodTitle')}
             </Button>
           </Box>
