@@ -28,7 +28,7 @@ module.exports = {
         },
       },
       {
-        unlogged: true,
+        unlogged: false,
       }
     )
   },
