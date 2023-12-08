@@ -29,7 +29,7 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   cy.visit(baseUrl)
 })
 
-Cypress.Commands.add('loginAsStudent', studentName => {
+Cypress.Commands.add('loginAsStudent', (studentName = '') => {
   let logInAsStudent
 
   // Select the correct student header based on the provided student name
@@ -66,8 +66,6 @@ Cypress.Commands.add('loginAsOrganisationCorrespondent', () => {
 })
 
 Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
-  const today = new Date()
-
   cy.request({
     method: 'POST',
     url: `/api/organisations/${orgCode}/surveys`,
