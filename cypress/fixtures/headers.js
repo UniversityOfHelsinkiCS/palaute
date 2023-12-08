@@ -37,6 +37,7 @@ const studentHenri = {
   preferredLanguage: ' en',
   hyPersonSisuId: 'hy-hlo-124043339',
 }
+
 const studentMiko = {
   uid: 'studkemi',
   givenname: 'Miko',

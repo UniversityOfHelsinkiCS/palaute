@@ -1,4 +1,3 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
 const { baseUrl } = require('../support')
 
 describe('Feedback Correspondents', () => {
@@ -238,7 +237,7 @@ describe('Feedback Correspondents', () => {
     ).should('exist')
   })
 
-  it.only('can not delete organisation surveys after feedback has been given', () => {
+  it('can not delete organisation surveys after feedback has been given', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
@@ -273,12 +272,54 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Open the feedback
+    cy.get('[data-cy="feedback-target-edit-period"]').click()
+    cy.get('[data-cy="feedback-target-open-feedback-immediately"]').click()
+    cy.get('[data-cy="feedback-target-open-feedback-immediately-confirm"]').click()
+
+    // Login as student Henri and test to give feedback
+    cy.loginAsStudent('henri')
+
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    cy.get('[data-cy$="Test survey"]').should('exist')
+    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
   })
 })
 
 describe('Students', () => {
   beforeEach(() => {
-    cy.loginAsStudent()
+    cy.clearOrganisationSurveys()
+
+    cy.clearTestStudents()
+    cy.seedTestStudents()
+
+    const today = new Date()
+    const body = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: ['014895968', '015303763', '015144922', '211111112'],
+      teacherIds: ['hy-hlo-111111112'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.createOrganisationSurvey('500-K005', body)
+
+    cy.loginAsStudent('henri')
+  })
+
+  it('can give organisation survey feedback', () => {
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    cy.get('[data-cy$="New survey"]').should('exist')
+    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
+
+    // Fill in the form and give feedback
   })
 })
 
