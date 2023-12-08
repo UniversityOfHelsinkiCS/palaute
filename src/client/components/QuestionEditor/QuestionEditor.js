@@ -9,7 +9,7 @@ import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questio
 import QuestionEditorActions from './QuestionEditorActions'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 
-const TypeItem = ({ onClick, label, disabled, disabledText }) =>
+const TypeItem = ({ dataCy, onClick, label, disabled, disabledText }) =>
   disabled && disabledText ? (
     <Tooltip title={disabledText}>
       <div>
@@ -19,7 +19,7 @@ const TypeItem = ({ onClick, label, disabled, disabledText }) =>
       </div>
     </Tooltip>
   ) : (
-    <MenuItem onClick={onClick} disabled={disabled}>
+    <MenuItem data-cy={dataCy} onClick={onClick} disabled={disabled}>
       {label}
     </MenuItem>
   )
@@ -34,11 +34,24 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   }
 
   return (
-    <Menu anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <TypeItem onClick={() => handleChooseType('LIKERT')} label={t('questionEditor:likertQuestion')} />
-      <TypeItem onClick={() => handleChooseType('OPEN')} label={t('questionEditor:openQuestion')} />
-      <TypeItem onClick={() => handleChooseType('SINGLE_CHOICE')} label={t('questionEditor:singleChoiceQuestion')} />
+    <Menu data-cy="question-editor-type-menu" anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
       <TypeItem
+        dataCy="question-editor-type-menu-select-likert"
+        onClick={() => handleChooseType('LIKERT')}
+        label={t('questionEditor:likertQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-open-question"
+        onClick={() => handleChooseType('OPEN')}
+        label={t('questionEditor:openQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-single-choice"
+        onClick={() => handleChooseType('SINGLE_CHOICE')}
+        label={t('questionEditor:singleChoiceQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-multiple-choice"
         onClick={() => handleChooseType('MULTIPLE_CHOICE')}
         label={t('questionEditor:multipleChoiceQuestion')}
       />
@@ -144,6 +157,7 @@ const QuestionEditorForm = ({
                 {editable && (
                   <Box>
                     <Button
+                      data-cy="question-editor-add-question"
                       variant="outlined"
                       color="primary"
                       onClick={() => {

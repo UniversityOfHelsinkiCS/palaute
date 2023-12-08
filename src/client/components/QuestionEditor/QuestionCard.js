@@ -209,7 +209,7 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button color="primary" variant="contained" onClick={onStopEditing} data-cy="saveQuestion">
+                  <Button data-cy="question-card-save-edit" color="primary" variant="contained" onClick={onStopEditing}>
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
