@@ -8,7 +8,7 @@ describe('User feedbacks view', () => {
     cy.loginAsStudent()
 
     cy.contains('Functional Programming I')
-    cy.get('[data-cy=giveCourseFeedback]').click()
+    cy.get('[data-cy=feedback-item-give-feedback]').click()
     cy.contains('This feedback is anonymous. Fields marked with an asterisk (*) are required')
     cy.get('input[value=1]').each($el => {
       cy.get($el).click()
