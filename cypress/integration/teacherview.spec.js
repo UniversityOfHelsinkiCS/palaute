@@ -51,7 +51,7 @@ describe('Teacher view', () => {
 
     cy.get('input[id^=likert-description-en-questions]').type('Test description')
 
-    cy.get('[data-cy=saveQuestion]').click()
+    cy.get('[data-cy=question-card-save-edit]').click()
     cy.reload()
     cy.contains('Test question')
     cy.contains('Test description')
@@ -63,7 +63,7 @@ describe('Teacher view', () => {
 
     cy.get('input[id^=likert-description-en-questions]').type(' edited')
 
-    cy.get('[data-cy=saveQuestion]').click()
+    cy.get('[data-cy=question-card-save-edit]').click()
     cy.reload()
     cy.contains('Test question edited')
     cy.contains('Test description edited')

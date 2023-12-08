@@ -34,7 +34,7 @@ describe('Course summary view', () => {
 
       cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
 
-      cy.get('[data-cy=saveQuestion]').click()
+      cy.get('[data-cy=question-card-save-edit]').click()
 
       cy.wait(500)
 
@@ -52,7 +52,7 @@ describe('Course summary view', () => {
 
       cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
 
-      cy.get('[data-cy=saveQuestion]').click()
+      cy.get('[data-cy=question-card-save-edit]').click()
 
       cy.wait(500)
 
@@ -73,7 +73,7 @@ describe('Course summary view', () => {
 
       cy.get('input[id^=likert-question-en-questions]').type('LIKERT TEST')
 
-      cy.get('[data-cy=saveQuestion]').click()
+      cy.get('[data-cy=question-card-save-edit]').click()
 
       cy.wait(500)
 
