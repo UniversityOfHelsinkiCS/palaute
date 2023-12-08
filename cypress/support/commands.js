@@ -1,5 +1,15 @@
 import { baseUrl } from './baseUrl'
-import { admin, teacher, student, studyCoordinator, organisationCorrespondent } from '../fixtures/headers'
+import {
+  admin,
+  teacher,
+  student,
+  studentHenri,
+  studentMiko,
+  studentVeikko,
+  studentRandom,
+  studyCoordinator,
+  organisationCorrespondent,
+} from '../fixtures/headers'
 
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(admin))
@@ -19,9 +29,29 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   cy.visit(baseUrl)
 })
 
-Cypress.Commands.add('loginAsStudent', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(student))
-  // cy.reload(true)
+Cypress.Commands.add('loginAsStudent', studentName => {
+  let logInAsStudent
+
+  // Select the correct student header based on the provided student name
+  switch (studentName.toLowerCase()) {
+    case 'henri':
+      logInAsStudent = studentHenri
+      break
+    case 'miko':
+      logInAsStudent = studentMiko
+      break
+    case 'veikko':
+      logInAsStudent = studentVeikko
+      break
+    case 'random':
+      logInAsStudent = studentRandom
+      break
+    default:
+      logInAsStudent = student
+  }
+
+  localStorage.setItem('fakeUser', JSON.stringify(logInAsStudent))
+
   cy.visit(baseUrl)
 })
 
