@@ -29,6 +29,41 @@ const student = {
   hyPersonSisuId: 'hy-hlo-115054920',
 }
 
+const studentHenri = {
+  uid: 'studhenri',
+  givenname: 'Henri',
+  sn: 'Testaaja',
+  mail: 'henri.testaaja@helsinki.fi',
+  preferredLanguage: ' en',
+  hyPersonSisuId: 'hy-hlo-124043339',
+}
+const studentMiko = {
+  uid: 'studkemi',
+  givenname: 'Miko',
+  sn: 'Testaaja',
+  mail: 'miko.testaaja@helsinki.fi',
+  preferredLanguage: ' en',
+  hyPersonSisuId: 'hy-hlo-136095188',
+}
+
+const studentVeikko = {
+  uid: 'studvesu',
+  givenname: 'Veikko',
+  sn: 'Testaaja',
+  mail: 'veikko.testaaja@helsinki.fi',
+  preferredLanguage: ' en',
+  hyPersonSisuId: 'hy-hlo-130991964',
+}
+
+const studentRandom = {
+  uid: 'studrandom',
+  givenname: 'Random',
+  sn: 'Testaaja',
+  mail: 'random.testaaja@helsinki.fi',
+  preferredLanguage: ' en',
+  hyPersonSisuId: 'hy-hlo-111111111',
+}
+
 const studyCoordinator = {
   uid: 'mluukkai',
   givenname: 'Daniel',
@@ -53,6 +88,10 @@ module.exports = {
   admin,
   teacher,
   student,
+  studentHenri,
+  studentMiko,
+  studentVeikko,
+  studentRandom,
   studyCoordinator,
   organisationCorrespondent,
 }
