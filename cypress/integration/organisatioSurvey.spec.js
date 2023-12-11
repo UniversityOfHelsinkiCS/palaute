@@ -311,9 +311,9 @@ describe('Feedback Correspondents', () => {
 
 describe('Students', () => {
   beforeEach(() => {
+    cy.clearTestStudents()
     cy.clearOrganisationSurveys()
 
-    cy.clearTestStudents()
     cy.seedTestStudents()
 
     const today = new Date()
@@ -335,7 +335,7 @@ describe('Students', () => {
     cy.loginAsStudent('henri')
   })
 
-  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
+  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy$="New survey"]').should('exist')
