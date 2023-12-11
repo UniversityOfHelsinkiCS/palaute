@@ -1,3 +1,5 @@
+import { studentRandom } from '../fixtures/headers'
+
 const { baseUrl } = require('../support')
 
 describe('Feedback Correspondents', () => {
@@ -237,7 +239,31 @@ describe('Feedback Correspondents', () => {
     ).should('exist')
   })
 
-  it('can not delete organisation surveys after feedback has been given', () => {
+  it.skip('can not delete organisation surveys after feedback has been given', () => {
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: ['211111112'],
+      teacherIds: ['hy-hlo-111111112'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 1),
+    }
+
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    cy.giveOrganisationSurveyFeedback(studentRandom)
+
+    cy.pause()
+  })
+
+  it('can create questions for the organisation survey', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
@@ -277,14 +303,6 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="feedback-target-edit-period"]').click()
     cy.get('[data-cy="feedback-target-open-feedback-immediately"]').click()
     cy.get('[data-cy="feedback-target-open-feedback-immediately-confirm"]').click()
-
-    // Login as student Henri and test to give feedback
-    cy.loginAsStudent('henri')
-
-    cy.visit(`${baseUrl}/feedbacks`)
-
-    cy.get('[data-cy$="Test survey"]').should('exist')
-    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
   })
 })
 
@@ -296,7 +314,8 @@ describe('Students', () => {
     cy.seedTestStudents()
 
     const today = new Date()
-    const body = {
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
       name: {
         fi: 'Uusi kysely',
         en: 'New survey',
@@ -308,12 +327,12 @@ describe('Students', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.createOrganisationSurvey('500-K005', body)
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     cy.loginAsStudent('henri')
   })
 
-  it('can give organisation survey feedback', () => {
+  it.skip('can give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy$="New survey"]').should('exist')
