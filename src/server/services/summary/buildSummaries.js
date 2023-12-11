@@ -15,6 +15,7 @@ const {
 const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
+const logger = require('../../util/logger')
 
 const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
@@ -345,6 +346,23 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
   })
 }
 
+const summariesHaveToBeFullyRebuilt = async () => {
+  // If there are no summaries, they have to be built
+  // also if there are summaries but they date back to more than 1 year, we should rebuild everything
+  const latestSummary = await Summary.findOne({
+    order: [['startDate', 'DESC']],
+  })
+  if (!latestSummary) {
+    return true
+  }
+
+  const diff = datefns.differenceInYears(new Date(), new Date(latestSummary.endDate))
+  if (diff > 0) {
+    return true
+  }
+  return false
+}
+
 /**
  * Build summaries for all organisations, CUs and CURs.
  * Summary rows will be created for each time period.
@@ -366,7 +384,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
  * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
  */
 const buildSummaries = async () => {
-  const datePeriods = (() => {
+  let datePeriods = (() => {
     const startYear = 2020 // Nothing ending before this is considered
     const endYear = new Date().getFullYear() // Nothing ending after this is considered
 
@@ -395,6 +413,15 @@ const buildSummaries = async () => {
     }
     return dates
   })()
+
+  if (!(await summariesHaveToBeFullyRebuilt())) {
+    // Only rebuild summaries for the "current" time periods. Those are the ones that end in the future.
+    const now = new Date()
+    datePeriods = datePeriods.filter(({ end }) => end > now)
+    logger.info(`Rebuilding summaries for ${datePeriods.length} time periods.`)
+  } else {
+    logger.info(`Rebuilding summaries fully.`)
+  }
 
   // Initialize root organisations and relevant question ids
   const rootOrganisations = await getRootOrganisations()
