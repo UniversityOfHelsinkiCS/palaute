@@ -113,11 +113,11 @@ const FormContainer = ({
             {showSubmitButton && (
               <Box mt={2}>
                 <Button
+                  data-cy="feedback-view-give-feedback"
                   disabled={disabled}
                   color="primary"
                   variant="contained"
                   type="submit"
-                  data-cy="submitFeedbackButton"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </Button>
