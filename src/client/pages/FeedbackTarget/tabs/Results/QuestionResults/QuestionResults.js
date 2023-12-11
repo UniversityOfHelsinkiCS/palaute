@@ -48,7 +48,7 @@ const QuestionResults = React.memo(
         <QuestionSection
           title={t('questionResults:multipleChoiceQuestions')}
           count={notOpenQuestions.length}
-          data-cy="multipleChoiceQuestions"
+          data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
@@ -96,7 +96,7 @@ const QuestionResults = React.memo(
         <QuestionSection
           title={t('questionResults:openQuestions')}
           count={openQuestions.length}
-          data-cy="openQuestions"
+          data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
         >
           {openQuestions.map(q => (
             <QuestionItem
