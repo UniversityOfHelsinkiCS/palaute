@@ -18,6 +18,7 @@ const {
   CourseRealisationsOrganisation,
   CourseRealisationsTag,
   OrganisationFeedbackCorrespondent,
+  Feedback,
 } = require('../../models')
 const { run } = require('../../util/cron/refreshViewsCron')
 
@@ -114,12 +115,27 @@ const clearOrganisatioSurveyFbts = async (req, res) => {
   const fbtIds = organisationSurveyFbts.map(fbt => fbt.id)
   const curIds = organisationSurveyFbts.map(fbt => fbt.courseRealisationId)
 
+  const feedbacks = await UserFeedbackTarget.findAll({
+    attributes: ['feedbackId'],
+    where: {
+      feedbackTargetId: { [Op.in]: fbtIds },
+    },
+  })
+
+  const feedbackIds = feedbacks.map(fb => fb.feedbackId)
+
   const t = await sequelize.transaction()
 
   try {
     await UserFeedbackTarget.destroy({
       where: {
         feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
+
+    await Feedback.destroy({
+      where: {
+        id: { [Op.in]: feedbackIds },
       },
     })
 
