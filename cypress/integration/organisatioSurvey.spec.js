@@ -266,7 +266,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-delete-New survey"]').should('not.exist')
   })
 
-  it('can create questions and open the organisation survey', () => {
+  it('can create questions for organisation survey and open the feedback', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
