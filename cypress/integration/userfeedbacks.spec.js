@@ -14,7 +14,7 @@ describe('User feedbacks view', () => {
       cy.get($el).click()
     })
     cy.get('textarea[id=19-label]').type('Other comments and such')
-    cy.get('[data-cy=submitFeedbackButton]').click()
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
   })
   it('Teacher can censor a feedback', () => {
