@@ -125,7 +125,9 @@ const Results = () => {
 
         {isOpen && feedback && (
           <Box mb={2}>
-            <Alert severity="info">{t('feedbackTargetResults:thankYouMessage')}</Alert>
+            <Alert data-cy="feedback-target-results-thank-you" severity="info">
+              {t('feedbackTargetResults:thankYouMessage')}
+            </Alert>
           </Box>
         )}
 
