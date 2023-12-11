@@ -335,13 +335,34 @@ describe('Students', () => {
     cy.loginAsStudent('henri')
   })
 
-  it.skip('can give organisation survey feedback', () => {
+  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy$="New survey"]').should('exist')
     cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
 
-    // Fill in the form and give feedback
+    cy.get('[data-cy="feedback-target-give-feedback-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-tab"]').should('not.exist')
+
+    // Give the feedback
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+
+    // New tabs are rendered when feedback was given
+    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
+
+    cy.url().should('include', '/results')
+
+    // Edit answer
+    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').click()
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+    cy.url().should('include', '/results')
   })
 })
 
