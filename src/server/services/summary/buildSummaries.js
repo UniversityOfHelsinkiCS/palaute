@@ -40,7 +40,7 @@ const getRelevantQuestionIds = async () => {
 
   const questionIds = questions.map(q => q.id)
 
-  return Array.from(new Set(questionIds))
+  return new Set(questionIds)
 }
 
 const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds) => {
@@ -340,7 +340,9 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
   }
 
   // Write all summaries to db.
-  await Summary.bulkCreate(uniqueSummaries)
+  await Summary.bulkCreate(uniqueSummaries, {
+    updateOnDuplicate: ['data'],
+  })
 }
 
 /**
@@ -398,14 +400,21 @@ const buildSummaries = async () => {
   const rootOrganisations = await getRootOrganisations()
   const relevantQuestionIds = await getRelevantQuestionIds()
 
-  // Delete all summaries
-  await sequelize.query(`DELETE FROM summaries;`)
-
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    // console.time(`${start.toISOString()}-${end.toISOString()}`)
+    console.time(`${start.toISOString()}-${end.toISOString()}`)
+
+    // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
+    await Summary.destroy({
+      where: {
+        startDate: start,
+        endDate: end,
+      },
+    })
+
     await buildSummariesForPeriod(start, end, rootOrganisations, relevantQuestionIds)
-    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
+
+    console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 
