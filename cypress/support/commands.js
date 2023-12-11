@@ -79,12 +79,58 @@ Cypress.Commands.add('loginAsOrganisationCorrespondent', () => {
   cy.visit(baseUrl)
 })
 
+/**
+ * Custom Cypress command to create an organization survey.
+ *
+ * @param {string} orgCode - The organization code for which the survey is being created.
+ * @param {Object} body - The request body for creating the organization survey.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.createOrganisationSurvey('your_org_code', {
+ *   // your survey creation data here
+ * })
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
   cy.request({
     method: 'POST',
     url: `/api/organisations/${orgCode}/surveys`,
     headers: admin,
     body,
+  }).then(response => {
+    cy.wrap(response.body).as('organisationSurvey')
+  })
+})
+
+/**
+ * Custom Cypress command to give feedback for an organization survey.
+ *
+ * @memberOf Cypress.Chainable
+ *
+ * @param {Survey} survey - The organization survey for which feedback is being given.
+ * @param {Object} headers - The headers for the HTTP request, see cypress/fixtures/headers.js
+ *
+ * @see createOrganisationSurvey
+ *
+ * @returns {Cypress.Chainable} Yields the original survey object for further chaining.
+ */
+Cypress.Commands.add('giveOrganisationSurveyFeedback', headers => {
+  cy.get('@organisationSurvey').then(survey => {
+    const body = {
+      feedbackTargetId: survey.id,
+      data: [],
+    }
+
+    cy.request({
+      method: 'POST',
+      url: '/api/feedbacks',
+      headers,
+      body,
+    })
   })
 })
 
