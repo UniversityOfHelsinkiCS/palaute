@@ -1,7 +1,8 @@
 const { Op } = require('sequelize')
 const Router = require('express')
-
 const _ = require('lodash')
+const { sequelize } = require('../../db/dbConnection')
+
 const { testStudents, organisationCorrespondentUsers } = require('./utils/users')
 
 const {
@@ -113,47 +114,56 @@ const clearOrganisatioSurveyFbts = async (req, res) => {
   const fbtIds = organisationSurveyFbts.map(fbt => fbt.id)
   const curIds = organisationSurveyFbts.map(fbt => fbt.courseRealisationId)
 
-  await UserFeedbackTarget.destroy({
-    where: {
-      feedbackTargetId: { [Op.in]: fbtIds },
-    },
-  })
+  const t = await sequelize.transaction()
 
-  await Survey.destroy({
-    where: {
-      feedbackTargetId: { [Op.in]: fbtIds },
-    },
-  })
+  try {
+    await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
 
-  await FeedbackTargetLog.destroy({
-    where: {
-      feedbackTargetId: { [Op.in]: fbtIds },
-    },
-  })
+    await Survey.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
 
-  await FeedbackTarget.destroy({
-    where: {
-      id: { [Op.in]: fbtIds },
-    },
-  })
+    await FeedbackTargetLog.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
 
-  await CourseRealisationsOrganisation.destroy({
-    where: {
-      courseRealisationId: { [Op.in]: curIds },
-    },
-  })
+    await FeedbackTarget.destroy({
+      where: {
+        id: { [Op.in]: fbtIds },
+      },
+    })
 
-  await CourseRealisationsTag.destroy({
-    where: {
-      courseRealisationId: { [Op.in]: curIds },
-    },
-  })
+    await CourseRealisationsOrganisation.destroy({
+      where: {
+        courseRealisationId: { [Op.in]: curIds },
+      },
+    })
 
-  await CourseRealisation.destroy({
-    where: {
-      id: { [Op.in]: curIds },
-    },
-  })
+    await CourseRealisationsTag.destroy({
+      where: {
+        courseRealisationId: { [Op.in]: curIds },
+      },
+    })
+
+    await CourseRealisation.destroy({
+      where: {
+        id: { [Op.in]: curIds },
+      },
+    })
+
+    await t.commit()
+  } catch (err) {
+    await t.rollback()
+    throw err
+  }
 
   return res.send(204)
 }
