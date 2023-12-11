@@ -16,7 +16,6 @@ const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
 
-let rootOrganisations = []
 const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
     attributes: ['id'],
@@ -27,7 +26,6 @@ const getRootOrganisations = async () => {
   return rootOrgs.map(org => org.id)
 }
 
-let relevantQuestionIds = null
 const getRelevantQuestionIds = async () => {
   const [questions] = await sequelize.query(
     `
@@ -41,12 +39,11 @@ const getRelevantQuestionIds = async () => {
   )
 
   const questionIds = questions.map(q => q.id)
-  questionIds.push(WORKLOAD_QUESTION_ID)
 
-  return new Set(questionIds)
+  return Array.from(new Set(questionIds))
 }
 
-const buildSummariesForPeriod = async (startDate, endDate) => {
+const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds) => {
   // ---------------- Phase 1: ------------------
   // Build course realisation, course unit and organisation summaries from feedbacks for courses during this time period
 
@@ -128,8 +125,6 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
         },
       },
     ],
-    // limit: 100,
-    // logging: true,
   })
 
   // Start summing the stuff for course realisations
@@ -348,36 +343,6 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
   await Summary.bulkCreate(uniqueSummaries)
 }
 
-const startYear = 2020 // Nothing ending before this is considered
-const endYear = new Date().getFullYear() // Nothing ending after this is considered
-
-const datePeriods = (() => {
-  const dates = []
-  for (let year = startYear; year <= endYear; year++) {
-    const startOfSpringSemester = new Date(`${year}-01-01`)
-    const startOfAutumnSemester = new Date(`${year}-08-01`)
-    const startOfNextSpringSemester = new Date(`${year + 1}-01-01`)
-    const endOfAcademicYear = new Date(`${year + 1}-07-31`)
-
-    dates.push({
-      // kevät
-      start: startOfSpringSemester,
-      end: datefns.subDays(startOfAutumnSemester, 1),
-    })
-    dates.push({
-      // syys
-      start: startOfAutumnSemester,
-      end: datefns.subDays(startOfNextSpringSemester, 1),
-    })
-    dates.push({
-      // full academic year
-      start: startOfAutumnSemester,
-      end: endOfAcademicYear,
-    })
-  }
-  return dates
-})()
-
 /**
  * Build summaries for all organisations, CUs and CURs.
  * Summary rows will be created for each time period.
@@ -399,18 +364,48 @@ const datePeriods = (() => {
  * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
  */
 const buildSummaries = async () => {
+  const datePeriods = (() => {
+    const startYear = 2020 // Nothing ending before this is considered
+    const endYear = new Date().getFullYear() // Nothing ending after this is considered
+
+    const dates = []
+    for (let year = startYear; year <= endYear; year++) {
+      const startOfSpringSemester = new Date(`${year}-01-01`)
+      const startOfAutumnSemester = new Date(`${year}-08-01`)
+      const startOfNextSpringSemester = new Date(`${year + 1}-01-01`)
+      const endOfAcademicYear = new Date(`${year + 1}-07-31`)
+
+      dates.push({
+        // kevät
+        start: startOfSpringSemester,
+        end: datefns.subDays(startOfAutumnSemester, 1),
+      })
+      dates.push({
+        // syys
+        start: startOfAutumnSemester,
+        end: datefns.subDays(startOfNextSpringSemester, 1),
+      })
+      dates.push({
+        // full academic year
+        start: startOfAutumnSemester,
+        end: endOfAcademicYear,
+      })
+    }
+    return dates
+  })()
+
   // Initialize root organisations and relevant question ids
-  rootOrganisations = await getRootOrganisations()
-  relevantQuestionIds = await getRelevantQuestionIds()
+  const rootOrganisations = await getRootOrganisations()
+  const relevantQuestionIds = await getRelevantQuestionIds()
 
   // Delete all summaries
   await sequelize.query(`DELETE FROM summaries;`)
 
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    console.time(`${start.toISOString()}-${end.toISOString()}`)
-    await buildSummariesForPeriod(start, end)
-    console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
+    // console.time(`${start.toISOString()}-${end.toISOString()}`)
+    await buildSummariesForPeriod(start, end, rootOrganisations, relevantQuestionIds)
+    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 
