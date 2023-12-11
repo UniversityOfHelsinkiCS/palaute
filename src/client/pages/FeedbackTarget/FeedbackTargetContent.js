@@ -107,15 +107,17 @@ const FeedbackTargetContent = () => {
         }}
       >
         <TabGroupsContainer>
-          <TabGroup title={t('common:survey')} hideTitle={isStudent}>
+          <TabGroup data-cy="feedback-target-feedback-tab-group" title={t('common:survey')} hideTitle={isStudent}>
             {feedback && isOpen ? (
               <RouterTab
+                data-cy="feedback-target-edit-feedback-tab"
                 label={t('feedbackTargetView:editFeedbackTab')}
                 to={`${url}/feedback`}
                 icon={<EditOutlined />}
               />
             ) : (
               <RouterTab
+                data-cy="feedback-target-give-feedback-tab"
                 label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
                 to={`${url}/feedback`}
                 badge={isOpen}
@@ -124,6 +126,7 @@ const FeedbackTargetContent = () => {
             )}
             {showSettingsTab && (
               <RouterTab
+                data-cy="feedback-target-settings-tab"
                 label={t('feedbackTargetView:surveySettingsTab')}
                 to={`${url}/edit`}
                 disabled={!isAdmin && isOpenOrClosed}
@@ -134,6 +137,7 @@ const FeedbackTargetContent = () => {
             )}
             {showContinuousFeedbackTab && (
               <RouterTab
+                data-cy="feedback-target-continuous-feedback-tab"
                 label={t('feedbackTargetView:continuousFeedbackTab')}
                 to={`${url}/continuous-feedback`}
                 badge={continuousFeedbackCount}
@@ -145,6 +149,7 @@ const FeedbackTargetContent = () => {
             )}
             {showInterimFeedbackTab && (
               <RouterTab
+                data-cy="feedback-target-interim-feedback-tab"
                 label={t('feedbackTargetView:interimFeedbackTab')}
                 to={`${url}/interim-feedback`}
                 icon={<ForumOutlined />}
@@ -152,6 +157,7 @@ const FeedbackTargetContent = () => {
             )}
             {showEditFeedbackResponseTab && (
               <RouterTab
+                data-cy="feedback-target-feedback-response-tab"
                 label={
                   !feedbackResponseEmailSent
                     ? t('feedbackTargetView:giveFeedbackResponseTab')
@@ -163,15 +169,30 @@ const FeedbackTargetContent = () => {
               />
             )}
             {showLinksTab && (
-              <RouterTab label={t('feedbackTargetView:shareTab')} to={`${url}/share`} icon={<ShareOutlined />} />
+              <RouterTab
+                data-cy="feedback-target-share-feedback-tab"
+                label={t('feedbackTargetView:shareTab')}
+                to={`${url}/share`}
+                icon={<ShareOutlined />}
+              />
             )}
           </TabGroup>
 
           {showResultsSection && (
-            <TabGroup title={t('feedbackTargetView:results')} hideTitle={isStudent}>
-              <RouterTab label={t('feedbackTargetView:feedbacksTab')} to={`${url}/results`} icon={<PollOutlined />} />
+            <TabGroup
+              data-cy="feedback-target-result-tab-group"
+              title={t('feedbackTargetView:results')}
+              hideTitle={isStudent}
+            >
+              <RouterTab
+                data-cy="feedback-target-results-tab"
+                label={t('feedbackTargetView:feedbacksTab')}
+                to={`${url}/results`}
+                icon={<PollOutlined />}
+              />
               {showStudentsWithFeedbackTab && (
                 <RouterTab
+                  data-cy="feedback-target-students-with-feedback-tab"
                   label={t('feedbackTargetView:studentsWithFeedbackTab')}
                   to={`${url}/students-with-feedback`}
                   icon={<PeopleOutlined />}
@@ -181,9 +202,14 @@ const FeedbackTargetContent = () => {
           )}
 
           {isAdmin && (
-            <TabGroup title="Admin">
-              <RouterTab label="Togen" to={`${url}/togen`} icon={<ListOutlined />} />
-              <RouterTab label="Logs" to={`${url}/logs`} icon={<ListOutlined />} />
+            <TabGroup data-cy="feedback-target-admin-tab-group" title="Admin">
+              <RouterTab
+                data-cy="feedback-target-togen-tab"
+                label="Togen"
+                to={`${url}/togen`}
+                icon={<ListOutlined />}
+              />
+              <RouterTab data-cy="feedback-target-logs-tab" label="Logs" to={`${url}/logs`} icon={<ListOutlined />} />
             </TabGroup>
           )}
         </TabGroupsContainer>
