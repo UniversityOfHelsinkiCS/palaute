@@ -239,7 +239,7 @@ describe('Feedback Correspondents', () => {
     ).should('exist')
   })
 
-  it.skip('can not delete organisation surveys after feedback has been given', () => {
+  it('can not delete organisation surveys after feedback has been given', () => {
     const today = new Date()
     const organisationCode = '500-K005'
     const organisationSurveyBody = {
@@ -260,10 +260,13 @@ describe('Feedback Correspondents', () => {
 
     cy.giveOrganisationSurveyFeedback(studentRandom)
 
-    cy.pause()
+    // Check that the view and edit buttons are there but delete button should not exist
+    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-edit-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-delete-New survey"]').should('not.exist')
   })
 
-  it('can create questions for the organisation survey', () => {
+  it('can create questions and open the organisation survey', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
