@@ -259,7 +259,14 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   )
 
   return (
-    <Box height="20rem" width="100%" my="1rem" display="flex" justifyContent="center">
+    <Box
+      data-cy="feedback-target-results-feedback-chart"
+      height="20rem"
+      width="100%"
+      my="1rem"
+      display="flex"
+      justifyContent="center"
+    >
       <Box minWidth="80%">
         <Line {...config} ref={chartRef} />
       </Box>
