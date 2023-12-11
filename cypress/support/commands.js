@@ -112,9 +112,10 @@ Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
  * Given header is the student that the feedback is given as.
  * Be sure that the headers match the students in the survey otherwise it is not possible to give feedback
  *
+ * The feedback is given to the organisation survey created using the 'createOrganisationSurvey' Cypress Command.
+ *
  * @memberOf Cypress.Chainable
  *
- * @param {Survey} survey - The organization survey for which feedback is being given.
  * @param {Object} headers - The headers for the HTTP request, see cypress/fixtures/headers.js
  *
  * @see createOrganisationSurvey
