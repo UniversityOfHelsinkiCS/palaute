@@ -29,6 +29,20 @@ Cypress.Commands.add('loginAsSecondaryTeacher', () => {
   cy.visit(baseUrl)
 })
 
+/**
+ * Custom Cypress command to simulate logging in as a student for testing purposes.
+ *
+ * @param {string} [studentName=''] - See cypress/fixtures/headers.js for available students or omit param for default student.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.loginAsStudent('henri');
+ * cy.loginAsStudent(); // Logs in as the default student
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('loginAsStudent', (studentName = '') => {
   let logInAsStudent
 
@@ -198,6 +212,17 @@ Cypress.Commands.add('refreshSummary', () => {
   })
 })
 
+/**
+ * Custom Cypress command to seed test students for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.seedTestStudents();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('seedTestStudents', () => {
   cy.request({
     method: 'POST',
@@ -206,6 +231,17 @@ Cypress.Commands.add('seedTestStudents', () => {
   })
 })
 
+/**
+ * Custom Cypress command to clear test students for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.clearTestStudents();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('clearTestStudents', () => {
   cy.request({
     method: 'POST',
@@ -214,6 +250,17 @@ Cypress.Commands.add('clearTestStudents', () => {
   })
 })
 
+/**
+ * Custom Cypress command to clear organization surveys for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.clearOrganisationSurveys();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('clearOrganisationSurveys', () => {
   cy.request({
     method: 'POST',
@@ -222,6 +269,17 @@ Cypress.Commands.add('clearOrganisationSurveys', () => {
   })
 })
 
+/**
+ * Custom Cypress command to seed computer science correspondents for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.seedComputerScienceCorrespondents();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('seedComputerScienceCorrespondents', () => {
   cy.request({
     method: 'POST',
@@ -230,6 +288,17 @@ Cypress.Commands.add('seedComputerScienceCorrespondents', () => {
   })
 })
 
+/**
+ * Custom Cypress command to clear computer science correspondents for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.clearComputerScienceCorrespondents();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
 Cypress.Commands.add('clearComputerScienceCorrespondents', () => {
   cy.request({
     method: 'POST',
