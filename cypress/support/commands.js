@@ -109,6 +109,9 @@ Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
 /**
  * Custom Cypress command to give feedback for an organization survey.
  *
+ * Given header is the student that the feedback is given as.
+ * Be sure that the headers match the students in the survey otherwise it is not possible to give feedback
+ *
  * @memberOf Cypress.Chainable
  *
  * @param {Survey} survey - The organization survey for which feedback is being given.
