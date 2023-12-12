@@ -4,12 +4,11 @@ const { baseUrl } = require('../support')
 
 describe('Feedback Correspondents', () => {
   beforeEach(() => {
+    cy.clearTestStudents()
+    cy.clearComputerScienceCorrespondents()
     cy.clearOrganisationSurveys()
 
-    cy.clearTestStudents()
     cy.seedTestStudents()
-
-    cy.clearComputerScienceCorrespondents()
     cy.seedComputerScienceCorrespondents()
 
     cy.loginAsOrganisationCorrespondent()
