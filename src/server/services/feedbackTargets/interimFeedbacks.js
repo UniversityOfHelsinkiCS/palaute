@@ -48,41 +48,21 @@ const getInterimFeedbackParentFbt = async (interimFbtId, user) => {
   return parentFeedbackTarget
 }
 
-const getFbtUserIds = async (feedbackTargetId, accessStatus) => {
-  const users = await UserFeedbackTarget.findAll({
-    attributes: ['userId'],
+const createUserFeedbackTargets = async (parentFeedbackTargetId, interimFeedbackTargetId) => {
+  const parentUserFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
-      feedbackTargetId,
-      accessStatus,
+      feedbackTargetId: parentFeedbackTargetId,
     },
+    raw: true,
   })
 
-  const userIds = users.map(({ userId }) => userId)
-
-  return userIds
-}
-
-const getFbtAdministrativePersons = async feedbackTargetId => {
-  const users = await UserFeedbackTarget.findAll({
-    attributes: ['userId'],
-    where: {
-      feedbackTargetId,
-      isAdministrativePerson: true,
-    },
-  })
-
-  const userIds = users.map(({ userId }) => userId)
-
-  return userIds
-}
-
-const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus, administrativePersons = []) => {
   const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    userIds.map(userId => ({
+    parentUserFeedbackTargets.map(({ accessStatus, userId, isAdministrativePerson, groupIds }) => ({
       accessStatus,
-      feedbackTargetId,
       userId,
-      isAdministrativePerson: administrativePersons.includes(userId),
+      isAdministrativePerson,
+      groupIds,
+      feedbackTargetId: interimFeedbackTargetId,
       userCreated: true,
     }))
   )
@@ -277,8 +257,6 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
 
 module.exports = {
   getInterimFeedbackParentFbt,
-  getFbtUserIds,
-  getFbtAdministrativePersons,
   getInterimFeedbackById,
   getInterimFeedbackTargets,
   createUserFeedbackTargets,
