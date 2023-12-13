@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 
 import { useParams, useHistory } from 'react-router-dom'
 
-import { Dialog, Box } from '@mui/material'
+import { Dialog, Box, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 
@@ -34,7 +35,19 @@ const InterimFeedbackModal = () => {
   if (organisationsLoading || isUserLoading || feedbackLoading) return null
 
   return (
-    <Dialog fullWidth maxWidth="xl" open={showInterimFeedback} onClose={handleClose}>
+    <Dialog fullWidth maxWidth="xl" scroll="paper" open={showInterimFeedback} onClose={handleClose}>
+      <IconButton
+        aria-label="close"
+        onClick={handleClose}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: theme => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
       <Box sx={{ m: 4 }}>
         <FeedbackTargetContextProvider
           id={interimFeedbackId}
