@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, Paper } from '@mui/material'
 import { useInView } from 'react-intersection-observer'
@@ -16,6 +15,7 @@ import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
 import { getGroups } from './utils'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -69,15 +69,16 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
 }
 
 const Results = () => {
+  const id = useFeedbackTargetId()
+
   const { t } = useTranslation()
-  const { id } = useParams()
   const isMobile = useIsMobile()
-  const [groupId, setGroupId] = React.useState('ALL')
   const exportRef = useRef()
+  const [groupId, setGroupId] = React.useState('ALL')
+
   useChartConfig()
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
-
   const { feedbackTargetData, isLoading } = useFeedbackTargetFeedbacks(id, groupId)
 
   const {

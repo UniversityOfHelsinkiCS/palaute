@@ -1,5 +1,4 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Alert } from '@mui/material'
@@ -8,6 +7,7 @@ import useStudentsWithFeedback from '../../../../hooks/useStudentsWithFeedback'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NoFeedbackAlert = ({ isEnded }) => {
   const { t } = useTranslation()
@@ -22,11 +22,10 @@ const NoFeedbackAlert = ({ isEnded }) => {
 }
 
 const StudentsWithFeedback = () => {
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
 
   const { feedbackTarget } = useFeedbackTargetContext()
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-
   const { students, isLoading } = useStudentsWithFeedback(id)
 
   if (isLoading) return <LoadingProgress />

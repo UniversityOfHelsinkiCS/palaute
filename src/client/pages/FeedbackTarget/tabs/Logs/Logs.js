@@ -1,11 +1,11 @@
 import { Alert, Box, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
-import { useParams } from 'react-router'
 import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import { getLanguageValue } from '../../../../util/languageUtils'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const getLogMessage = data => {
   if (!data) {
@@ -85,7 +85,8 @@ const LogItem = ({ log }) => (
 )
 
 const Logs = () => {
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
+
   const { feedbackTargetLogs, isLoading } = useFeedbackTargetLogs(id)
 
   if (isLoading) {

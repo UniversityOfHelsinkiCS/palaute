@@ -7,7 +7,9 @@ import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const Settings = () => {
-  const { id } = useParams()
+  const { id: feedbackId, interimFeedbackId } = useParams()
+  const id = interimFeedbackId || feedbackId
+
   const updateSettingsRead = useUpdateSettingsRead()
   const { feedbackTarget, isResponsibleTeacher, isAdmin } = useFeedbackTargetContext()
 
