@@ -74,7 +74,8 @@
     "university": "Yliopisto",
     "sort": "Järjestä",
     "ascending": "nousevasti",
-    "descending": "laskevasti"
+    "descending": "laskevasti",
+    "additional": "Täydentävät"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",

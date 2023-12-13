@@ -75,6 +75,7 @@ const FeedbackTargetContent = () => {
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
   const showInterimFeedbackTab = INTERIM_FEEDBACKS_ENABLED && isAdmin && !userCreated
+  const showAdditionalSection = showContinuousFeedbackTab || showInterimFeedbackTab
 
   const courseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -135,26 +136,6 @@ const FeedbackTargetContent = () => {
                 icon={<EditOutlined />}
               />
             )}
-            {showContinuousFeedbackTab && (
-              <RouterTab
-                data-cy="feedback-target-continuous-feedback-tab"
-                label={t('feedbackTargetView:continuousFeedbackTab')}
-                to={`${url}/continuous-feedback`}
-                badge={continuousFeedbackCount}
-                badgeContent={continuousFeedbackCount}
-                badgeVisible={!isStudent}
-                badgeColor="grey"
-                icon={<ReviewsOutlined />}
-              />
-            )}
-            {showInterimFeedbackTab && (
-              <RouterTab
-                data-cy="feedback-target-interim-feedback-tab"
-                label={t('feedbackTargetView:interimFeedbackTab')}
-                to={`${url}/interim-feedback`}
-                icon={<ForumOutlined />}
-              />
-            )}
             {showEditFeedbackResponseTab && (
               <RouterTab
                 data-cy="feedback-target-feedback-response-tab"
@@ -177,6 +158,35 @@ const FeedbackTargetContent = () => {
               />
             )}
           </TabGroup>
+
+          {showAdditionalSection && (
+            <TabGroup
+              data-cy="feedback-target-additional-tab-group"
+              title={t('common:additional')}
+              hideTitle={isStudent}
+            >
+              {showContinuousFeedbackTab && (
+                <RouterTab
+                  data-cy="feedback-target-continuous-feedback-tab"
+                  label={t('feedbackTargetView:continuousFeedbackTab')}
+                  to={`${url}/continuous-feedback`}
+                  badge={continuousFeedbackCount}
+                  badgeContent={continuousFeedbackCount}
+                  badgeVisible={!isStudent}
+                  badgeColor="grey"
+                  icon={<ReviewsOutlined />}
+                />
+              )}
+              {showInterimFeedbackTab && (
+                <RouterTab
+                  data-cy="feedback-target-interim-feedback-tab"
+                  label={t('feedbackTargetView:interimFeedbackTab')}
+                  to={`${url}/interim-feedback`}
+                  icon={<ForumOutlined />}
+                />
+              )}
+            </TabGroup>
+          )}
 
           {showResultsSection && (
             <TabGroup

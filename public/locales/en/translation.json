@@ -74,7 +74,8 @@
     "university": "University",
     "sort": "Sort",
     "ascending": "ascending",
-    "descending": "descending"
+    "descending": "descending",
+    "additional": "Additional"
   },
   "validationErrors": {
     "required": "This field is required",
