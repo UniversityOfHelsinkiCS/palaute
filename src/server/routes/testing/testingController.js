@@ -74,11 +74,26 @@ const clearTestOrganisationCorrespondents = async organisationCode => {
 const clearUserFbts = async users => {
   const userIds = users.map(user => user.id)
 
-  await UserFeedbackTarget.destroy({
-    where: {
-      userId: { [Op.in]: userIds },
-    },
-  })
+  const t = await sequelize.transaction()
+
+  try {
+    await UserFeedbackTarget.destroy({
+      where: {
+        userId: { [Op.in]: userIds },
+      },
+    })
+
+    await Feedback.destroy({
+      where: {
+        userId: { [Op.in]: userIds },
+      },
+    })
+
+    await t.commit()
+  } catch (err) {
+    await t.rollback()
+    throw err
+  }
 }
 
 const clearOrganisatioSurveyFbts = async (req, res) => {
@@ -192,6 +207,7 @@ const createTestStudents = async (req, res) => {
 
 const clearTestStudents = async (req, res) => {
   await clearUserFbts(testStudents)
+
   await clearTestUsers(testStudents)
 
   return res.send(204)
