@@ -5,8 +5,8 @@ const { baseUrl } = require('../support')
 describe('Feedback Correspondents', () => {
   beforeEach(() => {
     cy.clearTestStudents()
-    cy.clearComputerScienceCorrespondents()
     cy.clearOrganisationSurveys()
+    cy.clearComputerScienceCorrespondents()
 
     cy.seedTestStudents()
     cy.seedComputerScienceCorrespondents()
@@ -312,8 +312,10 @@ describe('Students', () => {
   beforeEach(() => {
     cy.clearTestStudents()
     cy.clearOrganisationSurveys()
+    cy.clearComputerScienceCorrespondents()
 
     cy.seedTestStudents()
+    cy.seedComputerScienceCorrespondents()
 
     const today = new Date()
     const organisationCode = '500-K005'
