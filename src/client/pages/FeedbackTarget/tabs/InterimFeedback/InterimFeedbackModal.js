@@ -34,7 +34,7 @@ const InterimFeedbackModal = () => {
   if (organisationsLoading || isUserLoading || feedbackLoading) return null
 
   return (
-    <Dialog maxWidth={false} open={showInterimFeedback} onClose={handleClose}>
+    <Dialog fullWidth maxWidth="xl" open={showInterimFeedback} onClose={handleClose}>
       <Box sx={{ m: 4 }}>
         <FeedbackTargetContextProvider
           id={interimFeedbackId}
