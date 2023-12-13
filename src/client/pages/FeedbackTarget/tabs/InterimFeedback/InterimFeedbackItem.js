@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
-import { Link, Switch, useRouteMatch, useParams, useLocation } from 'react-router-dom'
+import { Link, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
 import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
