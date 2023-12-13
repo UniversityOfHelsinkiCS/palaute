@@ -54,7 +54,7 @@ const InterimFeedback = () => {
       onSuccess: data => {
         handleClose()
 
-        history.push(`/targets/${data.id}/edit`)
+        history.push(`/targets/${parentId}/interim-feedback/${data.id}/edit`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {
