@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { useParams, useHistory } from 'react-router-dom'
 
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { Dialog, Box, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -17,6 +19,9 @@ const InterimFeedbackModal = () => {
   const history = useHistory()
   const { id: parentId, interimFeedbackId } = useParams()
   const [showInterimFeedback, setShowInterimFeedback] = useState(true)
+
+  const theme = useTheme()
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
 
@@ -35,7 +40,14 @@ const InterimFeedbackModal = () => {
   if (organisationsLoading || isUserLoading || feedbackLoading) return null
 
   return (
-    <Dialog fullWidth maxWidth="xl" scroll="paper" open={showInterimFeedback} onClose={handleClose}>
+    <Dialog
+      fullScreen={fullScreen}
+      fullWidth
+      maxWidth="xl"
+      scroll="paper"
+      open={showInterimFeedback}
+      onClose={handleClose}
+    >
       <IconButton
         aria-label="close"
         onClick={handleClose}
