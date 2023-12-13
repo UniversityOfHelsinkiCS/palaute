@@ -159,6 +159,18 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
             {t('interimFeedback:viewFeedback')}
           </Button>
 
+          {feedbackCount > 0 && (
+            <Button
+              color="primary"
+              variant="outlined"
+              sx={{ mt: 2, ml: 2 }}
+              component={Link}
+              to={`${url}/${interimFeedback.id}/results`}
+            >
+              {t('interimFeedback:viewResults')}
+            </Button>
+          )}
+
           {allowEdit && (
             <Button
               disabled={showForm}
