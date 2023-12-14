@@ -14,7 +14,7 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
-import { getGroups } from './utils'
+import { getGroups, sortGroups } from './utils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -35,11 +35,15 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const { ref, inView } = useInView({ initialInView: true })
 
   const { feedbackTarget } = useFeedbackTargetContext()
+
   const { studentCount } = feedbackTarget
-  const groups = getGroups(feedbackTarget)
+
+  const feedbackTargetGroups = getGroups(feedbackTarget)
+  const groups = feedbackTargetGroups.sort(sortGroups)
+
   const hasMultipleGroups = groups?.length > 1
-  const groupsAvailable = feedbackResults?.groupsAvailable
   const feedbacks = feedbackResults?.feedbacks
+  const groupsAvailable = feedbackResults?.groupsAvailable
 
   const isSticky = hasMultipleGroups && groupsAvailable
   const isStuckTop = !inView && isSticky
