@@ -34,9 +34,11 @@ const cache = {
   entries: async () => {
     const pattern = getKey('*')
     const keys = await redis.keys(pattern)
+    if (!(keys?.length > 0)) return [] // Passing an empty array to mGet causes an error, so we need to check this
+
     const cachedFeedbackTargets = await redis.mGet(keys)
 
-    return cachedFeedbackTargets.map(JSON.parse)
+    return cachedFeedbackTargets.map(JSON.parse).filter(Boolean)
   },
 }
 
