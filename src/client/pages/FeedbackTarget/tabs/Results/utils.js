@@ -35,6 +35,7 @@ export const sortGroups = (a, b) => {
   }
 
   // Helper function for natural comparison of alphanumeric strings
+  // https://stackoverflow.com/questions/15478954/sort-array-elements-string-with-numbers-natural-sort
   const naturalCompare = (a, b) => {
     const ax = []
     const bx = []
