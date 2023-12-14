@@ -67,6 +67,16 @@ const getLogMessage = data => {
     }
   }
 
+  if (data.feedbackResponse === 'created') {
+    messages = messages.concat(`Created feedback response`)
+  } else if (data.feedbackResponse === 'updated') {
+    messages = messages.concat(`Updated feedback response`)
+  }
+
+  if (data.sendFeedbackResponseEmail) {
+    messages = messages.concat(`Sent feedback response email`)
+  }
+
   return messages.join(', ')
 }
 

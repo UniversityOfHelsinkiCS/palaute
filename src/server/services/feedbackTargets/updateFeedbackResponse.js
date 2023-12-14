@@ -1,5 +1,6 @@
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
+const { createFeedbackResponseLog } = require('../auditLog/auditLog')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
@@ -13,6 +14,7 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
     throw new ApplicationError('Counter feedback email has already been sent', 400)
   }
 
+  const previousResponse = feedbackTarget.feedbackResponse
   feedbackTarget.feedbackResponse = responseText
   feedbackTarget.feedbackResponseEmailSent = sendEmail || feedbackTarget.feedbackResponseEmailSent
 
@@ -21,6 +23,14 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
   }
 
   await feedbackTarget.save()
+
+  await createFeedbackResponseLog({
+    feedbackTarget,
+    user,
+    responseText,
+    previousResponse,
+    sendEmail,
+  })
 
   return feedbackTarget.toJSON()
 }

@@ -203,9 +203,32 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
   })
 }
 
+const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, previousResponse, sendEmail }) => {
+  const data = {}
+
+  if (previousResponse?.length > 0 && responseText?.length > 0) {
+    data.feedbackResponse = 'updated'
+  } else if (responseText?.length > 0) {
+    data.feedbackResponse = 'created'
+  }
+
+  if (sendEmail) {
+    data.sendFeedbackResponseEmail = true
+  }
+
+  console.log(data)
+
+  await FeedbackTargetLog.create({
+    data,
+    feedbackTargetId: feedbackTarget.id,
+    userId: user.id,
+  })
+}
+
 module.exports = {
   createOrganisationSurveyLog,
   createFeedbackTargetSurveyLog,
   createOrganisationLog,
   createFeedbackTargetLog,
+  createFeedbackResponseLog,
 }
