@@ -76,6 +76,7 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
       teachers,
       studentCount,
     }))
+    .filter(group => group.studentCount > 0 && group.studentCount < studentCount)
     .sort(sortGroups)
 
   const groupOptions = React.useMemo(
