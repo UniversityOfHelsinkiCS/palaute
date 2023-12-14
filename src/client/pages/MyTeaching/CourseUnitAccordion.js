@@ -71,7 +71,7 @@ const getInterimFeedbackChip = (courseRealisation, enable) => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
 
-  const fetchInterimFeedbacks = feedbackTarget.userCreated && !isEnded && !isOld && enable
+  const fetchInterimFeedbacks = !feedbackTarget.userCreated && !isEnded && !isOld && enable
 
   const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(
     feedbackTarget?.id,
