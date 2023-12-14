@@ -48,6 +48,9 @@ const EditFeedbackResponse = () => {
   const feedbackResponseFormDisabled = now < closeTime
 
   const handleSubmit = async values => {
+    values.feedbackResponseEmailSent = !isSent && sendEmail
+    console.log(values)
+
     try {
       await updateFeedbackResponse.mutateAsync({
         id,
@@ -100,12 +103,7 @@ const EditFeedbackResponse = () => {
                     disabled={
                       (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
                     }
-                    onSubmit={() =>
-                      handleSubmit({
-                        ...values,
-                        feedbackResponseEmailSent: !isSent && sendEmail,
-                      })
-                    }
+                    onSubmit={() => handleSubmit(values)}
                   />
                   <FormControlLabel
                     control={
