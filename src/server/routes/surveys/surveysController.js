@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question, Organisation } = require('../../models')
-const { createOrganisationSurveyLog } = require('../../util/auditLog')
+const { createOrganisationSurveyLog } = require('../../services/auditLog')
 const { getUniversitySurvey: _getUniversitySurvey } = require('../../services/surveys')
 
 const checkUserWriteAccess = async (survey, user) => {

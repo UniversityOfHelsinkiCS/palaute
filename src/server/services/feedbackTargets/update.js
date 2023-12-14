@@ -4,7 +4,7 @@ const { parseFromTimeZone } = require('date-fns-timezone')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
-const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../auditLog')
 const { updateOrganisationSurvey } = require('../organisations/organisationSurveys')
 
 const filterUpdates = update => update !== undefined && update !== null

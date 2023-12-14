@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { Question, Organisation, OrganisationLog, FeedbackTargetLog, User } = require('../models')
+const { Question, Organisation, OrganisationLog, FeedbackTargetLog, User } = require('../../models')
 
 const createOrganisationSurveyLog = async (survey, questions, user) => {
   let previousQuestions = await Question.findAll({

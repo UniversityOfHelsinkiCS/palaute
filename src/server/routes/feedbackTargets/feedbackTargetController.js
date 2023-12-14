@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 
-const { createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetLog } = require('../../services/auditLog')
 const { mailer } = require('../../mailer')
 const interimFeedbackController = require('./interimFeedbackController')
 const {
