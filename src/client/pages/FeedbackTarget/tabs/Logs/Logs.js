@@ -1,11 +1,11 @@
-import { Alert, Box, Typography } from '@mui/material'
+import { Alert, Box } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
 import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { LogItem } from '../../../../components/Logs/LogItem'
 
 const getLogMessage = data => {
   if (!data) {
@@ -80,20 +80,6 @@ const getLogMessage = data => {
   return messages.join(', ')
 }
 
-const LogItem = ({ log }) => (
-  <OpenFeedbackContainer>
-    <Box display="flex" gap="1rem" alignItems="end">
-      <Typography variant="body2" color="text.secondary">
-        {format(new Date(log.createdAt), 'hh:mm dd.MM.yyyy')}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {log.user.email}
-      </Typography>
-      <Typography>{getLogMessage(log.data)}</Typography>
-    </Box>
-  </OpenFeedbackContainer>
-)
-
 const Logs = () => {
   const id = useFeedbackTargetId()
 
@@ -107,7 +93,7 @@ const Logs = () => {
     <Box display="flex" flexDirection="column">
       {!feedbackTargetLogs?.length > 0 && <Alert severity="info">No logs yet</Alert>}
       {feedbackTargetLogs.map((log, idx) => (
-        <LogItem key={idx} log={log} />
+        <LogItem key={idx} log={log} parseLogMessage={getLogMessage} />
       ))}
     </Box>
   )
