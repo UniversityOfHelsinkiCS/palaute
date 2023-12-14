@@ -38,8 +38,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
 
   const { studentCount } = feedbackTarget
 
-  const feedbackTargetGroups = getGroups(feedbackTarget)
-  const groups = feedbackTargetGroups.sort(sortGroups)
+  const groups = getGroups(feedbackTarget)
 
   const hasMultipleGroups = groups?.length > 1
   const feedbacks = feedbackResults?.feedbacks

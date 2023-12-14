@@ -5,6 +5,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
+import { sortGroups } from './utils'
 
 const GroupButton = ({ option, onClick, ...props }) => {
   const { t } = useTranslation()
@@ -68,12 +69,14 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
     })
   }
 
-  const localisatedGroups = groups.map(group => ({
-    id: group.id,
-    name: getLanguageValue(group.name, i18n.language),
-    teachers: group.teachers,
-    studentCount: group.studentCount,
-  }))
+  const localisatedGroups = groups
+    .map(({ id, name, teachers, studentCount }) => ({
+      id,
+      name: getLanguageValue(name, i18n.language),
+      teachers,
+      studentCount,
+    }))
+    .sort(sortGroups)
 
   const groupOptions = React.useMemo(
     () =>

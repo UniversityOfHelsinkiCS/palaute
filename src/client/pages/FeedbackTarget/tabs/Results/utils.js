@@ -15,14 +15,7 @@ export const getGroups = feedbackTarget => {
   return feedbackTarget.groups ?? []
 }
 
-export const sortGroups = (a, b) => {
-  // Helper function to get the concatenated name string
-  const getName = obj => (obj ? Object.values(obj).join('') : '')
-
-  // Get the name strings for comparison
-  const nameA = getName(a.name)
-  const nameB = getName(b.name)
-
+export const sortGroups = ({ name: nameA }, { name: nameB }) => {
   // Helper function to check if a string contains any numbers
   const containsNumber = str => /\d/.test(str)
 
