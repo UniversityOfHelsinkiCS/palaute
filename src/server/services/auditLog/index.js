@@ -1,9 +1,6 @@
-const {
-  createOrganisationSurveyLog,
-  createFeedbackTargetSurveyLog,
-  createOrganisationLog,
-  createFeedbackTargetLog,
-} = require('./auditLog')
+const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('./feedbackTargetLogs')
+
+const { createOrganisationSurveyLog, createOrganisationLog } = require('./organisationLogs')
 
 module.exports = {
   createOrganisationSurveyLog,

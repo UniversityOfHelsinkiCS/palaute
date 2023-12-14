@@ -1,6 +1,6 @@
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
-const { createFeedbackResponseLog } = require('../auditLog/auditLog')
+const { createFeedbackResponseLog } = require('../auditLog/feedbackTargetLogs')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
