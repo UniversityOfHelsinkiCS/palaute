@@ -156,35 +156,34 @@ const FeedbackTargetContent = () => {
             )}
           </TabGroup>
 
-          {showContinuousFeedbackTab ||
-            (showInterimFeedbackTab && (
-              <TabGroup
-                data-cy="feedback-target-additional-tab-group"
-                title={t('common:additional')}
-                hideTitle={isStudent}
-              >
-                {showContinuousFeedbackTab && (
-                  <RouterTab
-                    data-cy="feedback-target-continuous-feedback-tab"
-                    label={t('feedbackTargetView:continuousFeedbackTab')}
-                    to={`${url}/continuous-feedback`}
-                    badge={continuousFeedbackCount}
-                    badgeContent={continuousFeedbackCount}
-                    badgeVisible={!isStudent}
-                    badgeColor="grey"
-                    icon={<ReviewsOutlined />}
-                  />
-                )}
-                {showInterimFeedbackTab && (
-                  <RouterTab
-                    data-cy="feedback-target-interim-feedback-tab"
-                    label={t('feedbackTargetView:interimFeedbackTab')}
-                    to={`${url}/interim-feedback`}
-                    icon={<ForumOutlined />}
-                  />
-                )}
-              </TabGroup>
-            ))}
+          {(showContinuousFeedbackTab || showInterimFeedbackTab) && (
+            <TabGroup
+              data-cy="feedback-target-additional-tab-group"
+              title={t('common:additional')}
+              hideTitle={isStudent}
+            >
+              {showContinuousFeedbackTab && (
+                <RouterTab
+                  data-cy="feedback-target-continuous-feedback-tab"
+                  label={t('feedbackTargetView:continuousFeedbackTab')}
+                  to={`${url}/continuous-feedback`}
+                  badge={continuousFeedbackCount}
+                  badgeContent={continuousFeedbackCount}
+                  badgeVisible={!isStudent}
+                  badgeColor="grey"
+                  icon={<ReviewsOutlined />}
+                />
+              )}
+              {showInterimFeedbackTab && (
+                <RouterTab
+                  data-cy="feedback-target-interim-feedback-tab"
+                  label={t('feedbackTargetView:interimFeedbackTab')}
+                  to={`${url}/interim-feedback`}
+                  icon={<ForumOutlined />}
+                />
+              )}
+            </TabGroup>
+          )}
 
           {showResultsSection && (
             <TabGroup
