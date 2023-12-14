@@ -119,11 +119,11 @@ const getOrganisationByCode = async (req, res) => {
 }
 
 const getOrganisationLogs = async (req, res) => {
-  const { isAdmin } = req
+  const { user } = req
   const { code } = req.params
 
-  if (!isAdmin) {
-    return res.send([])
+  if (!user.isAdmin) {
+    throw new ApplicationError('Forbidden', 403)
   }
 
   const { organisationLogs } = await Organisation.findOne({
