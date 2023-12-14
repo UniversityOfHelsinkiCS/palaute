@@ -54,10 +54,6 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
   const { i18n, t } = useTranslation()
   const [userSelectedGroupId, setUserSelectedGroupId] = React.useState(groupId)
 
-  const { language } = i18n
-
-  console.log(language)
-
   if (!groupsAvailable)
     return (
       <Box>
