@@ -113,7 +113,8 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           {Date.parse(opensAt) < new Date() ? (
             <Box sx={{ mt: 2, ml: -1 }}>
               <FeedbackResponseChip
-                id={interimFeedback.id}
+                id={parentId}
+                interimFeedbackId={interimFeedback.id}
                 feedbackResponseGiven={Boolean(feedbackResponse)}
                 feedbackResponseSent={feedbackResponseEmailSent}
                 ongoing={isOpen}
