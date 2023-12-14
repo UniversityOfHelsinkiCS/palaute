@@ -54,6 +54,10 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
   const { i18n, t } = useTranslation()
   const [userSelectedGroupId, setUserSelectedGroupId] = React.useState(groupId)
 
+  const { language } = i18n
+
+  console.log(language)
+
   if (!groupsAvailable)
     return (
       <Box>
@@ -68,6 +72,13 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
     })
   }
 
+  const localisatedGroups = groups.map(group => ({
+    id: group.id,
+    name: getLanguageValue(group.name, i18n.language),
+    teachers: group.teachers,
+    studentCount: group.studentCount,
+  }))
+
   const groupOptions = React.useMemo(
     () =>
       [
@@ -77,15 +88,8 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
           teachers: [],
           studentCount,
         },
-      ].concat(
-        groups.map(group => ({
-          id: group.id,
-          name: getLanguageValue(group.name, i18n.language),
-          teachers: group.teachers,
-          studentCount: group.studentCount,
-        }))
-      ),
-    [groups]
+      ].concat(localisatedGroups),
+    [localisatedGroups]
   )
 
   return (
