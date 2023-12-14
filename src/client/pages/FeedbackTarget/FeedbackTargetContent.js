@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Switch, useRouteMatch, useParams, Redirect } from 'react-router-dom'
+import { Switch, useRouteMatch, Redirect } from 'react-router-dom'
 
 import { Alert, Box } from '@mui/material'
 
@@ -44,7 +44,6 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
   const { path, url } = useRouteMatch()
-  const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
     useFeedbackTargetContext()
@@ -61,6 +60,8 @@ const FeedbackTargetContent = () => {
     userCreated,
   } = feedbackTarget
 
+  const defaultPath = `/targets/${feedbackTarget.id}/feedback`
+
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
@@ -75,7 +76,6 @@ const FeedbackTargetContent = () => {
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
   const showInterimFeedbackTab = INTERIM_FEEDBACKS_ENABLED && isAdmin && !userCreated
-  const showAdditionalSection = showContinuousFeedbackTab || showInterimFeedbackTab
 
   const courseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -84,17 +84,14 @@ const FeedbackTargetContent = () => {
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
-  const title = `${visibleCourseCode} ${courseName}`
 
   if (!feedbackCanBeGiven && !isTeacher) {
     return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
   }
 
-  const defaultPath = `/targets/${id}/feedback`
-
   return (
     <>
-      <Title>{title}</Title>
+      <Title>{`${visibleCourseCode} ${courseName}`}</Title>
       {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
 
       <FeedbackTargetInformation />
@@ -159,34 +156,35 @@ const FeedbackTargetContent = () => {
             )}
           </TabGroup>
 
-          {showAdditionalSection && (
-            <TabGroup
-              data-cy="feedback-target-additional-tab-group"
-              title={t('common:additional')}
-              hideTitle={isStudent}
-            >
-              {showContinuousFeedbackTab && (
-                <RouterTab
-                  data-cy="feedback-target-continuous-feedback-tab"
-                  label={t('feedbackTargetView:continuousFeedbackTab')}
-                  to={`${url}/continuous-feedback`}
-                  badge={continuousFeedbackCount}
-                  badgeContent={continuousFeedbackCount}
-                  badgeVisible={!isStudent}
-                  badgeColor="grey"
-                  icon={<ReviewsOutlined />}
-                />
-              )}
-              {showInterimFeedbackTab && (
-                <RouterTab
-                  data-cy="feedback-target-interim-feedback-tab"
-                  label={t('feedbackTargetView:interimFeedbackTab')}
-                  to={`${url}/interim-feedback`}
-                  icon={<ForumOutlined />}
-                />
-              )}
-            </TabGroup>
-          )}
+          {showContinuousFeedbackTab ||
+            (showInterimFeedbackTab && (
+              <TabGroup
+                data-cy="feedback-target-additional-tab-group"
+                title={t('common:additional')}
+                hideTitle={isStudent}
+              >
+                {showContinuousFeedbackTab && (
+                  <RouterTab
+                    data-cy="feedback-target-continuous-feedback-tab"
+                    label={t('feedbackTargetView:continuousFeedbackTab')}
+                    to={`${url}/continuous-feedback`}
+                    badge={continuousFeedbackCount}
+                    badgeContent={continuousFeedbackCount}
+                    badgeVisible={!isStudent}
+                    badgeColor="grey"
+                    icon={<ReviewsOutlined />}
+                  />
+                )}
+                {showInterimFeedbackTab && (
+                  <RouterTab
+                    data-cy="feedback-target-interim-feedback-tab"
+                    label={t('feedbackTargetView:interimFeedbackTab')}
+                    to={`${url}/interim-feedback`}
+                    icon={<ForumOutlined />}
+                  />
+                )}
+              </TabGroup>
+            ))}
 
           {showResultsSection && (
             <TabGroup
