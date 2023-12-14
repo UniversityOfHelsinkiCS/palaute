@@ -49,7 +49,6 @@ const EditFeedbackResponse = () => {
 
   const handleSubmit = async values => {
     values.feedbackResponseEmailSent = !isSent && sendEmail
-    console.log(values)
 
     try {
       await updateFeedbackResponse.mutateAsync({

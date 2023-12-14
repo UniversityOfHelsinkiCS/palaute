@@ -216,8 +216,6 @@ const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, p
     data.sendFeedbackResponseEmail = true
   }
 
-  console.log(data)
-
   await FeedbackTargetLog.create({
     data,
     feedbackTargetId: feedbackTarget.id,

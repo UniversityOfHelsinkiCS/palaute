@@ -41,7 +41,6 @@ const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
   }
 
   const handleSubmit = async () => {
-    console.log('handleSubmit')
     handleCloseSubmitDialog()
     onSubmit()
   }
