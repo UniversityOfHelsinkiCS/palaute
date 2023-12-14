@@ -90,8 +90,8 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
 
   return (
     <Box>
-      <Typography variant="body2">{t('groups:chooseGroup')}</Typography>
-      <ToggleButtonGroup value={userSelectedGroupId}>
+      <Typography variant="body1">{t('groups:chooseGroup')}</Typography>
+      <ToggleButtonGroup sx={{ mt: 2 }} value={userSelectedGroupId}>
         {groupOptions.map(opt => (
           <GroupButton key={opt.id} value={opt.id} option={opt} onClick={() => onSelect(opt.id)} />
         ))}
