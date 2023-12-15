@@ -14,7 +14,7 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
-import { getGroups, sortGroups } from './utils'
+import { getGroups } from './utils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -48,10 +48,21 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const isStuckTop = !inView && isSticky
 
   return (
-    <Box position={isSticky ? 'sticky' : 'initial'} top="-1px" zIndex="100">
+    <Box
+      sx={{
+        position: isSticky ? 'sticky' : 'initial',
+        top: '-1px',
+        zIndex: 100,
+      }}
+    >
       <Box h="1px" ref={ref} />
       <Paper
-        sx={{ p: '1rem', display: 'flex', alignItems: 'center', backgroundColor: isStuckTop ? 'white' : 'transparent' }}
+        sx={{
+          p: '1rem',
+          alignItems: 'center',
+          backgroundColor: isStuckTop ? 'white' : 'transparent',
+          position: 'relative',
+        }}
         elevation={isStuckTop ? 4 : 0}
       >
         {!isLoading && hasMultipleGroups && (
@@ -63,7 +74,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
             studentCount={studentCount}
           />
         )}
-        <Box ml="auto">
+        <Box sx={{ position: 'absolute', pt: 1.5, top: 0, right: 4 }}>
           <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
         </Box>
       </Paper>
