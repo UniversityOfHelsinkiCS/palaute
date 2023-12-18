@@ -145,7 +145,7 @@ const getInterimFeedbackTargets = async (parentId, user) => {
       courseRealisationId: parentFbt.courseRealisationId,
       userCreated: true,
     },
-    order: [['courseRealisation', 'endDate', 'DESC']],
+    order: [['closesAt', 'DESC']],
   })
 
   return interimFeedbacks
