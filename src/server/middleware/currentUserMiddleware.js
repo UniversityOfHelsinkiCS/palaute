@@ -17,8 +17,9 @@ const getLoggedInAsUser = async loggedInAsUserId => {
 const setLoggedInAsUser = async req => {
   const loggedInAsUser = await getLoggedInAsUser(req.headers['x-admin-logged-in-as'])
   if (loggedInAsUser) {
-    req.originalUser = req.user
+    const originalUser = req.user
     req.user = loggedInAsUser
+    req.user.mockedBy = originalUser.username
     req.loginAs = true
   }
 }

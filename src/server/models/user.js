@@ -142,6 +142,9 @@ User.init(
     isAdmin: {
       type: VIRTUAL,
     },
+    mockedBy: {
+      type: VIRTUAL,
+    },
   },
   {
     underscored: true,

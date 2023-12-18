@@ -2,6 +2,20 @@ const { Op } = require('sequelize')
 const _ = require('lodash')
 const { OrganisationLog, Organisation, Question, User } = require('../../models')
 
+const createFromData = async (organisationId, user, data) => {
+  if (user.mockedBy) {
+    data.mockedBy = user.mockedBy
+  }
+
+  const log = await OrganisationLog.create({
+    data,
+    organisationId,
+    userId: user.id,
+  })
+
+  return log
+}
+
 const createOrganisationSurveyLog = async (survey, questions, user) => {
   let previousQuestions = await Question.findAll({
     where: {
@@ -71,11 +85,9 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
       }
     }
 
-    await OrganisationLog.create({
-      data,
-      organisationId: organisation.id,
-      userId: user.id,
-    })
+    if (Object.keys(data).length > 0) {
+      await createFromData(organisation.id, user, data)
+    }
   }
 }
 
@@ -111,11 +123,9 @@ const createOrganisationLog = async (organisation, updates, user) => {
     })
   }
 
-  await OrganisationLog.create({
-    data,
-    organisationId: organisation.id,
-    userId: user.id,
-  })
+  if (Object.keys(data).length === 0) return
+
+  await createFromData(organisation.id, user, data)
 }
 
 module.exports = {

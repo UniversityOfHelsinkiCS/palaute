@@ -2,6 +2,20 @@ const _ = require('lodash')
 
 const { Question, FeedbackTargetLog } = require('../../models')
 
+const createFromData = async (feedbackTargetId, user, data) => {
+  if (user.mockedBy) {
+    data.mockedBy = user.mockedBy
+  }
+
+  const log = await FeedbackTargetLog.create({
+    data,
+    feedbackTargetId,
+    userId: user.id,
+  })
+
+  return log
+}
+
 const createFeedbackTargetSurveyLog = async (feedbackTargetId, user, removedIds, newIds) => {
   const data = {}
 
@@ -27,11 +41,7 @@ const createFeedbackTargetSurveyLog = async (feedbackTargetId, user, removedIds,
 
   if (Object.keys(data).length === 0) return
 
-  await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId,
-    userId: user.id,
-  })
+  await createFromData(feedbackTargetId, user, data)
 }
 
 const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
@@ -79,11 +89,7 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
 
   if (Object.keys(data).length === 0) return
 
-  await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId: feedbackTarget.id,
-    userId: user.id,
-  })
+  await createFromData(feedbackTarget.id, user, data)
 }
 
 const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, previousResponse, sendEmail }) => {
@@ -99,11 +105,7 @@ const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, p
     data.sendFeedbackResponseEmail = true
   }
 
-  await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId: feedbackTarget.id,
-    userId: user.id,
-  })
+  await createFromData(feedbackTarget.id, user, data)
 }
 
 module.exports = {
