@@ -50,8 +50,14 @@ const EditInterimFeedback = () => {
 
   return (
     <>
-      <Button data-cy="feedback-target-edit-period" onClick={handleClose} variant="text" startIcon={<Edit />}>
-        {t('feedbackTargetSettings:editPeriodTitle')}
+      <Button
+        sx={{ textAlign: 'left', justifyContent: 'start' }}
+        data-cy="feedback-target-edit-period"
+        onClick={handleClose}
+        variant="text"
+        startIcon={<Edit />}
+      >
+        {t('interimFeedback:editSurvey')}
       </Button>
 
       <InterimFeedbackEditor
