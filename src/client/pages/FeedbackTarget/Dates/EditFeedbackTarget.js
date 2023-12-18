@@ -7,25 +7,24 @@ import FeedbackPeriodForm from './FeedbackPeriodForm'
 
 const EditFeedbackTargetDates = () => {
   const { t } = useTranslation()
-  const { feedbackTarget, isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
+  const { isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   const showEditButton = isAdmin || isOrganisationAdmin || isResponsibleTeacher
 
+  if (!showEditButton) return null
+
   return (
     <>
-      {showEditButton && (
-        <Box gridColumn="span 2">
-          <Button
-            data-cy="feedback-target-edit-period"
-            onClick={() => setDialogOpen(true)}
-            variant="text"
-            startIcon={<Edit />}
-          >
-            {t('feedbackTargetSettings:editPeriodTitle')}
-          </Button>
-        </Box>
-      )}
+      <Button
+        data-cy="feedback-target-edit-period"
+        onClick={() => setDialogOpen(true)}
+        variant="text"
+        startIcon={<Edit />}
+      >
+        {t('feedbackTargetSettings:editPeriodTitle')}
+      </Button>
+
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <FeedbackPeriodForm />
       </Dialog>
