@@ -23,11 +23,22 @@ const InterimFeedbackForm = () => {
   )
 }
 
-const EditInterimFeedbackForm = () => (
-  <Grid spacing={4} container>
-    <FormikLocalesFieldEditor name="name" localesLabelString="interimFeedback:newSurveyName" />
-  </Grid>
-)
+const EditInterimFeedbackForm = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Grid spacing={4} container>
+      <FormikLocalesFieldEditor name="name" localesLabelString="interimFeedback:newSurveyName" />
+
+      <Grid md={6} sm={12} xs={12} item>
+        <FormikDatePicker name="startDate" label={t('interimFeedback:startDate')} />
+      </Grid>
+      <Grid md={6} sm={12} xs={12} item>
+        <FormikDatePicker name="endDate" label={t('interimFeedback:endDate')} />
+      </Grid>
+    </Grid>
+  )
+}
 
 const InterimFeedbackEditor = ({
   title,
