@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Link, Switch, useRouteMatch, useParams } from 'react-router-dom'
@@ -25,7 +25,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const { t, i18n } = useTranslation()
 
   const { language } = i18n
-  const [showForm, setShowForm] = useState(false)
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const deleteMutation = useDeleteInterimFeedbackMutation(parentId)
@@ -133,7 +132,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           )}
 
           {(allowDelete || isAdmin) && (
-            <Button disabled={showForm} color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+            <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
               {t('interimFeedback:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
             </Button>
           )}
