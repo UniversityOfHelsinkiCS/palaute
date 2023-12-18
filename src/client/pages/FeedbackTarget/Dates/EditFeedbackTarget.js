@@ -17,6 +17,7 @@ const EditFeedbackTargetDates = () => {
   return (
     <>
       <Button
+        sx={{ textAlign: 'left', justifyContent: 'start' }}
         data-cy="feedback-target-edit-period"
         onClick={() => setDialogOpen(true)}
         variant="text"
