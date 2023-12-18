@@ -38,23 +38,30 @@ const getUsernameFromShibboHeaders = req => {
   return username
 }
 
+const isAdminLoginAs = req => req.user.isAdmin && req.headers['x-admin-logged-in-as']
+
+const setLoggedInAsUser = async req => {
+  const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
+  if (loggedInAsUser) {
+    req.originalUser = req.user
+    req.user = loggedInAsUser
+    req.loginAs = true
+  }
+}
+
 const currentUserMiddleware = async (req, _, next) => {
   const isNoAdPath = req.path.startsWith('/noad')
   req.noad = isNoAdPath
 
-  const username = isNoAdPath ? await getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
+  const username = isNoAdPath ? getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
 
   req.user = await getUserByUsername(username)
 
   req.user.iamGroups = req.iamGroups
   await req.user.populateAccess()
 
-  if (req.headers['x-admin-logged-in-as']) {
-    const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
-    if (loggedInAsUser) {
-      req.user = loggedInAsUser
-      req.loginAs = true
-    }
+  if (isAdminLoginAs(req)) {
+    setLoggedInAsUser(req)
   }
 
   return next()
