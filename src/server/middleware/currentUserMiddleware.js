@@ -6,14 +6,21 @@ const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 const { getUserIams } = require('../util/jami')
 
-const getLoggedInAsUser = async (user, loggedInAsUserId) => {
-  if (!user.isAdmin) return undefined
-
+const getLoggedInAsUser = async loggedInAsUserId => {
   const loggedInAsUser = await User.findByPk(loggedInAsUserId)
   loggedInAsUser.iamGroups = await getUserIams(loggedInAsUserId)
   await loggedInAsUser.populateAccess()
 
   return loggedInAsUser
+}
+
+const setLoggedInAsUser = async req => {
+  const loggedInAsUser = await getLoggedInAsUser(req.headers['x-admin-logged-in-as'])
+  if (loggedInAsUser) {
+    req.originalUser = req.user
+    req.user = loggedInAsUser
+    req.loginAs = true
+  }
 }
 
 const getUsernameFromToken = req => {
@@ -40,15 +47,6 @@ const getUsernameFromShibboHeaders = req => {
 
 const isAdminLoginAs = req => req.user.isAdmin && req.headers['x-admin-logged-in-as']
 
-const setLoggedInAsUser = async req => {
-  const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
-  if (loggedInAsUser) {
-    req.originalUser = req.user
-    req.user = loggedInAsUser
-    req.loginAs = true
-  }
-}
-
 const currentUserMiddleware = async (req, _, next) => {
   const isNoAdPath = req.path.startsWith('/noad')
   req.noad = isNoAdPath
@@ -61,7 +59,7 @@ const currentUserMiddleware = async (req, _, next) => {
   await req.user.populateAccess()
 
   if (isAdminLoginAs(req)) {
-    setLoggedInAsUser(req)
+    await setLoggedInAsUser(req)
   }
 
   return next()
