@@ -25,9 +25,11 @@ export const useCreateInterimFeedbackMutation = parentId => {
 }
 
 export const useEditInterimFeedbackMutation = parentId => {
-  const mutationFn = async ({ fbtId, name }) => {
+  const mutationFn = async ({ fbtId, name, startDate, endDate }) => {
     const { data } = await apiClient.put(`/feedback-targets/interimFeedbacks/${fbtId}`, {
       name,
+      startDate,
+      endDate,
     })
 
     return data
