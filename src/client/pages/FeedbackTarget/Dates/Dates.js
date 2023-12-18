@@ -1,27 +1,16 @@
 import React from 'react'
-import { Box, Button, Dialog, Typography } from '@mui/material'
-import { Edit } from '@mui/icons-material'
+import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
-import FeedbackPeriodForm from './FeedbackPeriodForm'
 import { getDateRangeString } from '../../../util/getDateRangeString'
-
-const DateModal = ({ open, onClose }) => (
-  <Dialog open={open} onClose={onClose}>
-    <FeedbackPeriodForm />
-  </Dialog>
-)
 
 const FeedbackTargetDates = () => {
   const { t } = useTranslation()
-  const { feedbackTarget, isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
-  const [dialogOpen, setDialogOpen] = React.useState(false)
+  const { feedbackTarget } = useFeedbackTargetContext()
   const { courseRealisation, opensAt, closesAt, continuousFeedbackEnabled, userCreated } = feedbackTarget
 
   const coursePeriod = getDateRangeString(courseRealisation.startDate, courseRealisation.endDate)
   const feedbackPeriod = getDateRangeString(opensAt, closesAt)
-
-  const showEditButton = isAdmin || isOrganisationAdmin || isResponsibleTeacher
 
   return (
     <Box>
@@ -65,21 +54,7 @@ const FeedbackTargetDates = () => {
             </Typography>
           </>
         )}
-
-        {showEditButton && (
-          <Box gridColumn="span 2">
-            <Button
-              data-cy="feedback-target-edit-period"
-              onClick={() => setDialogOpen(true)}
-              variant="text"
-              startIcon={<Edit />}
-            >
-              {t('feedbackTargetSettings:editPeriodTitle')}
-            </Button>
-          </Box>
-        )}
       </Box>
-      <DateModal open={dialogOpen} onClose={() => setDialogOpen(false)} />
     </Box>
   )
 }
