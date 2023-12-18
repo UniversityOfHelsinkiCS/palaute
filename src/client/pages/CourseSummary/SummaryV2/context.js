@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
 import apiClient from '../../../util/apiClient'
+import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 
 const getSummarySortFunction = sortField => {
   switch (sortField) {
@@ -15,6 +16,15 @@ const getSummarySortFunction = sortField => {
     default:
       return summary => summary.data.result[sortField]?.mean
   }
+}
+
+const useInitialViewingMode = () => {
+  const { authorizedUser } = useAuthorizedUser()
+  const organisationAccess = authorizedUser?.organisationAccess ?? {}
+  const organisationAccessCount = Object.keys(organisationAccess).length
+
+  if (organisationAccessCount > 2) return 'flat'
+  return 'tree'
 }
 
 const summaryContext = React.createContext({
@@ -31,7 +41,7 @@ const summaryContext = React.createContext({
   setSortBy: () => {},
   sortFunction: getSummarySortFunction('code'),
   questions: [],
-  viewingMode: 'flat',
+  viewingMode: 'tree',
   setViewingMode: () => {},
 })
 
@@ -134,10 +144,10 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
   const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
 
   // Viewing mode
-
+  const initialViewingMode = useInitialViewingMode()
   const [viewingMode, setViewingMode] = React.useState(() => {
     const viewingMode = params.get('viewingMode')
-    return viewingMode || 'flat'
+    return viewingMode || initialViewingMode
   })
 
   const updateViewingModeQS = React.useCallback(viewingMode => {
