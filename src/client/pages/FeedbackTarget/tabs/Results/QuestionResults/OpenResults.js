@@ -62,7 +62,10 @@ const OpenResults = ({ question }) => {
   const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
   const { canDelete, deleteAnswer } = isNoad ? {} : useDeleteOpenFeedback()
 
-  const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
+  const feedbacks = React.useMemo(
+    () => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)).sort((a, b) => a.data.localeCompare(b.data)),
+    [question]
+  )
   const renderInitially = feedbacks.length < 10
   const { render, ref } = useRenderVisible({ initial: renderInitially })
 
