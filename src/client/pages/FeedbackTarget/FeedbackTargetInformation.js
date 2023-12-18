@@ -15,6 +15,7 @@ import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
 import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
 import EditFeedbackTargetDates from './Dates/EditFeedbackTarget'
+import EditInterimFeedback from './EditInterimFeedback'
 
 const FeedbackTargetInformation = () => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
@@ -123,7 +124,7 @@ const FeedbackTargetInformation = () => {
               }}
             >
               <FeedbackTargetDates />
-              <EditFeedbackTargetDates />
+              {isInterimFeedback ? <EditInterimFeedback /> : <EditFeedbackTargetDates />}
 
               {isTeacher && (
                 <Box display="flex" gap="1rem" alignItems="center">
