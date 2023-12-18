@@ -158,6 +158,7 @@ const QuestionCard = ({
   const isGrouping = question.secondaryType === 'GROUPING'
   const canDuplicate = !isGrouping
   const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
+  const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT'
 
   const orderButtonsProps = {
     onMoveUp,
@@ -214,7 +215,7 @@ const QuestionCard = ({
                   </Button>
                 </Box>
                 <EditActions
-                  publicityConfigurable={question.publicityConfigurable}
+                  publicityConfigurable={publicityConfigurable}
                   isPublic={question.public}
                   {...orderButtonsProps}
                   onRemove={onRemove}
