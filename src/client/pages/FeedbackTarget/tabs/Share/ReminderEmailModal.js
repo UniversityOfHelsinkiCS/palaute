@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { differenceInHours } from 'date-fns'
-
 import { Box, Typography, Modal, Button, TextField } from '@mui/material'
-
 import { useTranslation } from 'react-i18next'
+
+import { getLanguageValue } from '../../../../util/languageUtils'
+import { getPrimaryCourseName } from '../../../../util/courseIdentifiers'
 import { formatClosesAt } from './utils'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
@@ -41,9 +42,12 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const sendReminderEmail = useSendReminderEmail(feedbackTarget.id)
 
   const { t, i18n } = useTranslation()
-  const { language } = i18n
 
-  const { courseUnit, id, name, feedbackReminderLastSentAt, userCreated } = feedbackTarget
+  const { courseUnit, courseRealisation, id, feedbackReminderLastSentAt, userCreated } = feedbackTarget
+  const courseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
@@ -57,7 +61,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const closesAt = formatClosesAt(feedbackTarget.closesAt)
 
   const emailMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
-    courseName: userCreated ? courseUnit.name[language] : name[language],
+    courseName,
     closesAt,
   })
 
