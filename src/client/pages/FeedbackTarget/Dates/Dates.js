@@ -12,7 +12,7 @@ const DateModal = ({ open, onClose }) => (
   </Dialog>
 )
 
-const Dates = () => {
+const FeedbackTargetDates = () => {
   const { t } = useTranslation()
   const { feedbackTarget, isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -84,4 +84,4 @@ const Dates = () => {
   )
 }
 
-export default Dates
+export default FeedbackTargetDates

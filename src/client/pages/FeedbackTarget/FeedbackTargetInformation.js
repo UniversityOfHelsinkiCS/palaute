@@ -7,7 +7,7 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 import { copyLink, getCourseUnitSummaryPath } from './utils'
 import LinkButton from '../../components/common/LinkButton'
-import Dates from './Dates/Dates'
+import FeedbackTargetDates from './Dates/Dates'
 import PercentageCell from '../CourseSummary/PercentageCell'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
@@ -121,7 +121,7 @@ const FeedbackTargetInformation = () => {
                 flexGrow: 0,
               }}
             >
-              <Dates />
+              <FeedbackTargetDates />
 
               {isTeacher && (
                 <Box display="flex" gap="1rem" alignItems="center">
