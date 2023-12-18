@@ -51,17 +51,6 @@ const SummaryInContext = () => {
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
-        {hasAccessToUniversityLevel && (
-          <RouterTab
-            label={t('common:university')}
-            icon={
-              <Box sx={{ width: '1.5rem', height: 'auto' }}>
-                <img src={hyLogo} alt="HY" />
-              </Box>
-            }
-            to={`/course-summary/v2/university${search}`}
-          />
-        )}
         {hasAccessToMyOrganisations && (
           <RouterTab
             label={t('courseSummary:myOrganisations')}
@@ -74,16 +63,20 @@ const SummaryInContext = () => {
           icon={<School />}
           to={`/course-summary/v2/my-courses${search}`}
         />
+        {hasAccessToUniversityLevel && (
+          <RouterTab
+            label={t('common:university')}
+            icon={
+              <Box sx={{ width: '1.5rem', height: 'auto' }}>
+                <img src={hyLogo} alt="HY" />
+              </Box>
+            }
+            to={`/course-summary/v2/university${search}`}
+          />
+        )}
       </RouterTabs>
       <SummaryScrollContainer>
         <Switch>
-          <ProtectedRoute
-            path="/course-summary/v2/university"
-            redirectPath="/course-summary/v2/my-organisations"
-            component={University}
-            hasAccess={hasAccessToUniversityLevel}
-          />
-
           <ProtectedRoute
             path="/course-summary/v2/my-organisations"
             redirectPath="/course-summary/v2/my-courses"
@@ -92,6 +85,13 @@ const SummaryInContext = () => {
           />
 
           <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
+
+          <ProtectedRoute
+            path="/course-summary/v2/university"
+            redirectPath="/course-summary/v2/my-organisations"
+            component={University}
+            hasAccess={hasAccessToUniversityLevel}
+          />
         </Switch>
       </SummaryScrollContainer>
     </>
