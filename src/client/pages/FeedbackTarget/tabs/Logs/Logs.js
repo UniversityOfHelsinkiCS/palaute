@@ -77,6 +77,10 @@ const getLogMessage = data => {
     messages = messages.concat(`Sent feedback response email`)
   }
 
+  if (data.mockedBy) {
+    messages = messages.concat(`(Mocked by ${data.mockedBy})`)
+  }
+
   return messages.join(', ')
 }
 

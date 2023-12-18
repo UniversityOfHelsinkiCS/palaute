@@ -67,6 +67,10 @@ const getLogMessage = data => {
     }
   }
 
+  if (data.mockedBy) {
+    messages = messages.concat(`(Mocked by ${data.mockedBy})`)
+  }
+
   return messages.join(', ')
 }
 
