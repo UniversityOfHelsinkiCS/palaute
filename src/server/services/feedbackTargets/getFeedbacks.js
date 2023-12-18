@@ -84,6 +84,23 @@ const filterByGroupId = (studentFeedbackTargets, groupId, groupsAvailable, group
   return studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
 }
 
+/**
+ * Shuffle feedbacks so that answers from the same student are not identifiable.
+ * @param {object[]} feedbacks
+ * @param {number[]} questionIds
+ */
+const shuffleFeedbacks = (feedbacks, questionIds) => {
+  const shuffledAnswers = _.shuffle(feedbacks.flatMap(({ data }) => data))
+  const answersByQuestion = _.groupBy(shuffledAnswers, 'questionId')
+
+  const shuffledFeedbacks = Array.from(feedbacks, feedback => feedback).map((feedback, i) => ({
+    ...feedback,
+    data: questionIds.map(questionId => answersByQuestion?.[questionId]?.[i] ?? { questionId, data: '' }),
+  }))
+
+  return shuffledFeedbacks
+}
+
 const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
   allFeedbacks.map(feedback => ({
     ...feedback,
@@ -107,7 +124,7 @@ const getFeedbacks = async (id, user, groupId) => {
 
   if (!feedbackTarget) ApplicationError.NotFound()
 
-  const { publicQuestionIds, surveys } = additionalData
+  const { publicQuestionIds, surveys, questions } = additionalData
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]
 
@@ -142,9 +159,12 @@ const getFeedbacks = async (id, user, groupId) => {
     .filter(ufbt => ufbt.feedback)
     .map(ufbt => ufbt.feedback.toPublicObject())
 
+  const questionIds = questions.filter(({ type }) => type !== 'TEXT').map(({ id }) => id)
+  const shuffledFeedbacks = shuffleFeedbacks(allFeedbacks, questionIds)
+
   if (access.canSeeAllFeedbacks()) {
     return {
-      feedbacks: allFeedbacks,
+      feedbacks: shuffledFeedbacks,
       feedbackVisible: true,
       accessStatus: access,
       groupsAvailable,
@@ -152,7 +172,7 @@ const getFeedbacks = async (id, user, groupId) => {
     }
   }
 
-  const publicFeedbacks = getPublicFeedbacks(allFeedbacks, publicQuestionIds)
+  const publicFeedbacks = getPublicFeedbacks(shuffledFeedbacks, publicQuestionIds)
 
   return {
     feedbacks: publicFeedbacks,
