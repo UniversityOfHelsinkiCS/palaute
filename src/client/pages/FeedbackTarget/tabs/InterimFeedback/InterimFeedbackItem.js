@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSnackbar } from 'notistack'
 
 import { Link, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
@@ -16,31 +15,25 @@ import ProtectedRoute from '../../../../components/common/ProtectedRoute'
 import { getStartAndEndString } from '../../../../util/getDateRangeString'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import InterimFeedbackEditor from './InterimFeedbackEditor'
-import { getInterimFeedbackEditSchema } from './utils'
-import { useDeleteInterimFeedbackMutation, useEditInterimFeedbackMutation } from './useInterimFeedbackMutation'
+
+import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
 import InterimFeedbackModal from './InterimFeedbackModal'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
   const { path, url } = useRouteMatch()
   const { id: parentId } = useParams()
   const { t, i18n } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
 
   const { language } = i18n
   const [showForm, setShowForm] = useState(false)
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
-  const editMutation = useEditInterimFeedbackMutation(parentId)
   const deleteMutation = useDeleteInterimFeedbackMutation(parentId)
   const deleteInterimFeedback = useInteractiveMutation(fbtId => deleteMutation.mutateAsync(fbtId), {
     success: t('organisationSurveys:removeSuccess'),
   })
 
   const defaultPath = `/targets/${parentId}/interim-feedback`
-  const interimFeedbackSchema = getInterimFeedbackEditSchema(t)
-
-  const surveyValues = { name: interimFeedback.name }
 
   const {
     opensAt,
@@ -55,7 +48,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const studentCount = students.length
   const allowDelete = interimFeedback.feedbackCount === 0
-  const allowEdit = new Date() <= Date.parse(closesAt)
   const isOpen = feedbackTargetIsOpen(interimFeedback)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -63,44 +55,12 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
     closesAt: endDate,
   })
 
-  const handleClose = () => setShowForm(!showForm)
-
-  const handleSubmit = async data => {
-    const values = {
-      fbtId: interimFeedback.id,
-      ...data,
-    }
-    await editMutation.mutateAsync(values, {
-      onSuccess: () => {
-        handleClose()
-        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-      },
-      onError: error => {
-        handleClose()
-        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-      },
-    })
-  }
-
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('interimFeedback:confirmRemoveSurvey'))) return
 
     await deleteInterimFeedback(interimFeedback.id)
   }
-
-  if (showForm)
-    return (
-      <InterimFeedbackEditor
-        title={t('interimFeedback:editSurvey')}
-        initialValues={surveyValues}
-        validationSchema={interimFeedbackSchema}
-        handleSubmit={handleSubmit}
-        editing={showForm}
-        onStopEditing={handleClose}
-        editView
-      />
-    )
 
   return (
     <>
@@ -169,18 +129,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               to={`${url}/${interimFeedback.id}/results`}
             >
               {t('interimFeedback:viewResults')}
-            </Button>
-          )}
-
-          {allowEdit && (
-            <Button
-              disabled={showForm}
-              color="primary"
-              variant="outlined"
-              sx={{ mt: 2, ml: 2 }}
-              onClick={() => setShowForm(!showForm)}
-            >
-              {t('interimFeedback:edit')}
             </Button>
           )}
 
