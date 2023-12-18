@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Dialog } from '@mui/material'
+import { Button, Dialog } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
