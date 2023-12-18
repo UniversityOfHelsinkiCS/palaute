@@ -73,4 +73,8 @@ export const getInterimFeedbackEditSchema = t =>
         ['fi', 'sv'],
       ]
     ),
+    startDate: Yup.date().required(t('validationErrors:invalidDate')),
+    endDate: Yup.date()
+      .required(t('validationErrors:invalidDate'))
+      .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
   })
