@@ -92,7 +92,7 @@ const EditOrganisationSurvey = () => {
         variant="text"
         startIcon={<Edit />}
       >
-        {t('interimFeedback:editSurvey')} {isAdmin && !allowEdit && '(ADMIN)'}
+        {t('organisationSurveys:editSurvey')} {isAdmin && !allowEdit && '(ADMIN)'}
       </Button>
 
       <OrganisationSurveyEditor
