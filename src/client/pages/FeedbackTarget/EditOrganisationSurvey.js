@@ -19,7 +19,7 @@ const EditOrganisationSurvey = () => {
 
   const { feedbackTarget, isAdmin, isTeacher, isStudent } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
-  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id)
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, isAdmin)
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 

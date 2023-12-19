@@ -5,7 +5,7 @@ import apiClient from '../../util/apiClient'
 
 export const queryKey = ['organisationSurveys']
 
-export const useOrganisationSurvey = (organisationCode, surveyId) => {
+export const useOrganisationSurvey = (organisationCode, surveyId, enable = true) => {
   const queryFn = async () => {
     const { data } = await apiClient.get(`/organisations/${organisationCode}/surveys/${surveyId}`)
 
@@ -13,7 +13,7 @@ export const useOrganisationSurvey = (organisationCode, surveyId) => {
   }
 
   const { data: survey, ...rest } = useQuery(['organisationSurvey', surveyId], queryFn, {
-    enabled: ORGANISATION_SURVEYS_ENABLED,
+    enabled: enable && ORGANISATION_SURVEYS_ENABLED,
   })
 
   return { survey, rest }
