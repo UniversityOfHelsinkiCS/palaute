@@ -345,6 +345,9 @@ describe('Students', () => {
     cy.get('[data-cy$="New survey"]').should('exist')
     cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
 
+    // Assert students does not see the edit button
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('not.exist')
+
     cy.get('[data-cy="feedback-target-give-feedback-tab"]').should('exist').click()
     cy.get('[data-cy="feedback-target-results-tab"]').should('not.exist')
 
