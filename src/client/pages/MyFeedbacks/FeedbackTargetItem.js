@@ -184,7 +184,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     closesAt: endDate,
   })
 
-  const courseName = getCourseName(feedbackTarget)
+  const courseName = getCourseName(feedbackTarget, t)
   const translatedName = getLanguageValue(courseName, i18n.language)
 
   const editPath = `/targets/${id}/feedback`

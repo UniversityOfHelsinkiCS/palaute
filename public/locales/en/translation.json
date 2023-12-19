@@ -389,6 +389,7 @@
     "removeSuccess": "Programme survey removed"
   },
   "interimFeedback": {
+    "interimFeedback": "Interim Feedback",
     "heading": "Interim feedback feature is still in the development stage and in a demo trial",
     "emptySurveys": "There are no interim feedbacks for this programme yet; you can create a new interim feedback for the course here.",
     "givenFeedback": "Feedbacks given",

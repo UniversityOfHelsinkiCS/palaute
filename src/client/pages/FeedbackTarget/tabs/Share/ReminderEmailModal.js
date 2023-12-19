@@ -4,7 +4,7 @@ import { Box, Typography, Modal, Button, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
-import { getPrimaryCourseName } from '../../../../util/courseIdentifiers'
+import { getInterimFeedbackName, getPrimaryCourseName } from '../../../../util/courseIdentifiers'
 import { formatClosesAt } from './utils'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
@@ -43,15 +43,18 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
 
   const { t, i18n } = useTranslation()
 
-  const { courseUnit, courseRealisation, id, feedbackReminderLastSentAt, userCreated } = feedbackTarget
-  const courseName = getLanguageValue(
-    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
-    i18n.language
-  )
+  const { courseUnit, courseRealisation, id, name, feedbackReminderLastSentAt, userCreated } = feedbackTarget
+  const isInterimFeedback = userCreated && !courseUnit.userCreated
+
+  const courseName = isInterimFeedback
+    ? getInterimFeedbackName(name, courseUnit.name, t)
+    : getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget)
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
-  const sendEmailReminder = useInteractiveMutation(() => sendReminderEmail.mutateAsync({ id, data: reminder }))
+  const sendEmailReminder = useInteractiveMutation(() =>
+    sendReminderEmail.mutateAsync({ id, courseName, data: reminder })
+  )
 
   const onEmailSend = () => {
     onClose()
@@ -61,7 +64,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const closesAt = formatClosesAt(feedbackTarget.closesAt)
 
   const emailMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
-    courseName,
+    courseName: getLanguageValue(courseName, i18n.language),
     closesAt,
   })
 

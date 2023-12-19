@@ -1,4 +1,20 @@
+import { LANGUAGES } from './common'
+import { getLanguageValue } from './languageUtils'
+
 export const getCourseCode = ({ courseCode, userCreated }) => (userCreated || !courseCode ? '' : courseCode)
+
+export const getInterimFeedbackName = (feedbackTargetName, courseUnitName, t) => {
+  const interimFeedbackName = {}
+
+  LANGUAGES.forEach(language => {
+    const fbtName = getLanguageValue(feedbackTargetName, language)
+    const cuName = getLanguageValue(courseUnitName, language)
+
+    interimFeedbackName[language] = `${cuName}, ${t('interimFeedback:interimFeedback')}: ${fbtName}`
+  })
+
+  return interimFeedbackName
+}
 
 const getSurveyType = (courseUnit, feedbackTarget = {}) => {
   const isOrganisationSurvey = courseUnit.userCreated
