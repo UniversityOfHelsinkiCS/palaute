@@ -126,7 +126,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
 
     cy.get('[data-cy="organisation-survey-show-feedback-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-show-results-Test survey"]').should('not.exist')
     cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
   })
 
@@ -371,6 +371,8 @@ describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.loginAsTeacher()
   })
+
+  it.skip('can edit organisation surveys')
 })
 
 describe('Admin Users', () => {
