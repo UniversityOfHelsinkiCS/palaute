@@ -15,10 +15,14 @@ const EditInterimFeedback = () => {
   const { t } = useTranslation()
   const { id: parentId } = useParams()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget: interimFeedback, isAdmin, isTeacher, isStudent } = useFeedbackTargetContext()
   const [showForm, setShowForm] = useState(false)
 
+  const { feedbackTarget: interimFeedback, isAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
+  const allowEdit = isAdmin || isResponsibleTeacher
+
   const editMutation = useEditInterimFeedbackMutation(parentId)
+
+  if (!allowEdit || !interimFeedback) return null
 
   const surveyValues = {
     name: interimFeedback.name,
@@ -47,8 +51,6 @@ const EditInterimFeedback = () => {
       },
     })
   }
-
-  if (!isAdmin || !isTeacher || isStudent) return null
 
   return (
     <>
