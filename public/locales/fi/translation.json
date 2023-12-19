@@ -360,6 +360,7 @@
     "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",
     "givenFeedback": "Palautteita annettu",
     "viewFeedback": "Näytä kysely",
+    "viewResults": "Näytä tulokset",
     "addSurvey": "Luo uusi koulutusohjelman kysely",
     "editSurvey": "Muokkaa koulutusohjelman kyselyä",
     "newSurveyName": "Kyselyn nimi",

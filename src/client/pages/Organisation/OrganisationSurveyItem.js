@@ -132,6 +132,19 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           {t('organisationSurveys:viewFeedback')}
         </Button>
 
+        {feedbackCount > 0 && (
+          <Button
+            data-cy={`organisation-survey-show-results-${surveyName}`}
+            color="primary"
+            variant="outlined"
+            sx={{ mt: 2, ml: 2 }}
+            component={Link}
+            to={`/targets/${organisationSurvey.id}/results`}
+          >
+            {t('organisationSurveys:viewResults')}
+          </Button>
+        )}
+
         {(allowDelete || isAdmin) && (
           <Button
             data-cy={`organisation-survey-delete-${surveyName}`}

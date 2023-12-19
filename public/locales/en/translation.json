@@ -360,6 +360,7 @@
     "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",
     "givenFeedback": "Feedbacks given",
     "viewFeedback": "View survey",
+    "viewResults": "View results",
     "addSurvey": "Create new programme survey",
     "editSurvey": "Edit programme survey",
     "newSurveyName": "Survey name",
