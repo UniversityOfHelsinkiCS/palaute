@@ -137,7 +137,7 @@ const FeedbackTargetInformation = () => {
               }}
             >
               <FeedbackTargetDates />
-              {EditComponent}
+              {!isStudent && EditComponent}
 
               {isTeacher && (
                 <Box display="flex" gap="1rem" alignItems="center">
