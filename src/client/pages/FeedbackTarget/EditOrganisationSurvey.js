@@ -84,8 +84,8 @@ const EditOrganisationSurvey = () => {
   return (
     <>
       <Button
+        data-cy="feedback-target-edit-organisation-survey"
         sx={{ textAlign: 'left', justifyContent: 'start' }}
-        data-cy="feedback-target-edit-period"
         onClick={handleClose}
         variant="text"
         startIcon={<Edit />}
