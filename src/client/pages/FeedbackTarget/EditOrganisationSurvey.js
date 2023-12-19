@@ -3,22 +3,27 @@ import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 
 import { useSnackbar } from 'notistack'
-import { useParams } from 'react-router-dom'
 
 import { useTranslation } from 'react-i18next'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
+
 import OrganisationSurveyEditor from '../Organisation/OrganisationSurveyEditor'
+import { useOrganisationSurvey } from '../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../Organisation/useOrganisationSurveyMutation'
 import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../Organisation/utils'
+import { useFeedbackTargetContext } from './FeedbackTargetContext'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()
-  const { code } = useParams()
   const { enqueueSnackbar } = useSnackbar()
-  const { feedbackTarget: organisationSurvey, isAdmin } = useFeedbackTargetContext()
   const [showForm, setShowForm] = useState(false)
 
-  const editMutation = useEditOrganisationSurveyMutation(code)
+  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
+  const { id, courseUnit: { organisations } = [] } = feedbackTarget
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id)
+
+  const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
+
+  if (!organisationSurvey || isLoading) return null
 
   const surveyValues = {
     name: organisationSurvey.name,
