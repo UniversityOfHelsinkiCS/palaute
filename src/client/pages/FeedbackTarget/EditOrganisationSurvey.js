@@ -17,7 +17,7 @@ const EditOrganisationSurvey = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
-  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin, isTeacher, isStudent } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id)
 
@@ -33,7 +33,6 @@ const EditOrganisationSurvey = () => {
     teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
   }
 
-  const allowEdit = new Date() <= Date.parse(organisationSurvey.closesAt)
   const organisationSurveySchema = getOrganisationSurveySchema(t)
 
   const handleClose = () => setShowForm(!showForm)
@@ -81,7 +80,7 @@ const EditOrganisationSurvey = () => {
     })
   }
 
-  if (!allowEdit && !isAdmin) return null
+  if (!isAdmin || !isTeacher || isStudent) return null
 
   return (
     <>
@@ -92,7 +91,7 @@ const EditOrganisationSurvey = () => {
         variant="text"
         startIcon={<Edit />}
       >
-        {t('organisationSurveys:editSurvey')} {isAdmin && !allowEdit && '(ADMIN)'}
+        {t('organisationSurveys:editSurvey')}
       </Button>
 
       <OrganisationSurveyEditor
