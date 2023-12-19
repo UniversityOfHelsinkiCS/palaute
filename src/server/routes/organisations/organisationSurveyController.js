@@ -13,21 +13,25 @@ const {
   deleteOrganisationSurvey,
   getDeletionAllowed,
 } = require('../../services/organisations/organisationSurveys')
+const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
-  const { code, id } = req.params
+  const { id } = req.params
 
-  const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
-    admin: true,
+  const { access, feedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: id,
+    user,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can update organisation surveys', 403)
+  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
 
-  const survey = await getSurveyById(id)
+  if (!feedbackTarget) throw new Error('Organisation survey not found')
+
+  const survey = await getSurveyById(feedbackTarget.id)
 
   return res.send(survey)
 }
@@ -81,15 +85,18 @@ const createOrganisationSurvey = async (req, res) => {
 
 const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
-  const { code, id } = req.params
+  const { id } = req.params
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
 
-  const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
-    admin: true,
+  const { access, feedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: id,
+    user,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can update organisation surveys', 403)
+  if (!access?.canUpdateOrganisationSurvey()) ApplicationError.Forbidden()
+
+  if (!feedbackTarget) throw new Error('Organisation survey not found')
 
   if (updates.studentNumbers) {
     const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
