@@ -151,11 +151,12 @@ adRouter.put('/:id/response', async (req, res) => {
 adRouter.put('/:id/remind-students', async (req, res) => {
   const { user } = req
   const feedbackTargetId = Number(req.params.id)
-  const { data: reminderText } = req.body.data
+  const { reminder: reminderText, courseName } = req.body.data
 
   const feedbackTarget = await remindStudentsOnFeedback({
     feedbackTargetId,
     reminderText,
+    courseName,
     user,
   })
 

@@ -53,7 +53,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
   const sendEmailReminder = useInteractiveMutation(() =>
-    sendReminderEmail.mutateAsync({ id, courseName, data: reminder })
+    sendReminderEmail.mutateAsync({ id, data: { reminder, courseName } })
   )
 
   const onEmailSend = () => {
