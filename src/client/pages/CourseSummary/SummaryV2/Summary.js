@@ -51,6 +51,12 @@ const SummaryInContext = () => {
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
+        <RouterTab
+          label={t('courseSummary:myCourses')}
+          icon={<School />}
+          to={`/course-summary/v2/my-courses${search}`}
+        />
+
         {hasAccessToMyOrganisations && (
           <RouterTab
             label={t('courseSummary:myOrganisations')}
@@ -58,11 +64,7 @@ const SummaryInContext = () => {
             to={`/course-summary/v2/my-organisations${search}`}
           />
         )}
-        <RouterTab
-          label={t('courseSummary:myCourses')}
-          icon={<School />}
-          to={`/course-summary/v2/my-courses${search}`}
-        />
+
         {hasAccessToUniversityLevel && (
           <RouterTab
             label={t('common:university')}
@@ -77,6 +79,8 @@ const SummaryInContext = () => {
       </RouterTabs>
       <SummaryScrollContainer>
         <Switch>
+          <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
+
           <ProtectedRoute
             path="/course-summary/v2/my-organisations"
             redirectPath="/course-summary/v2/my-courses"
@@ -84,11 +88,9 @@ const SummaryInContext = () => {
             hasAccess={hasAccessToMyOrganisations}
           />
 
-          <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
-
           <ProtectedRoute
             path="/course-summary/v2/university"
-            redirectPath="/course-summary/v2/my-organisations"
+            redirectPath="/course-summary/v2/my-courses"
             component={University}
             hasAccess={hasAccessToUniversityLevel}
           />

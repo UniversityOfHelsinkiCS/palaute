@@ -135,7 +135,7 @@ const OrganisationSummary = () => {
             questions={questions || []}
             componentRef={componentRef}
           />
-          <LinkButton to="/course-summary/v2/my-organisations" title={t('courseSummary:newView')} />
+          <LinkButton to="/course-summary/v2/my-courses" title={t('courseSummary:newView')} />
         </Box>
         <Box mt={1} />
         <Typography variant="body1" component="h2">
