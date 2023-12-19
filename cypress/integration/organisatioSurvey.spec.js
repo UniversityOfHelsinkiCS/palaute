@@ -196,7 +196,8 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('not.exist')
 
     // Edit the survey to add students and new responsible teacher
-    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist').click()
+    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"').should('exist').click()
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
     // Add new teacher
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
@@ -212,6 +213,8 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assure the changes is visible
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
     cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
     cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
@@ -219,13 +222,16 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
 
     // Edit the survey name
-    cy.get('[data-cy="organisation-survey-edit-Test survey"]').should('exist').click()
+    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"').should('exist').click()
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
     cy.get('[data-cy="formik-locales-field-en-name"]').clear().type('Greatest survey of them all!')
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assure that only the name changed
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
     cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('not.exist')
     cy.get('[data-cy="organisation-survey-item-title-Greatest survey of them all!"]').should('exist')
     cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
@@ -237,6 +243,8 @@ describe('Feedback Correspondents', () => {
       '[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!-chips-Tommi Testaaja"]'
     ).should('exist')
   })
+
+  it.skip('can edit organisation surveys after feedback period has started', () => {})
 
   it('can not delete organisation surveys after feedback has been given', () => {
     const today = new Date()
@@ -261,11 +269,11 @@ describe('Feedback Correspondents', () => {
 
     // Check that the view and edit buttons are there but delete button should not exist
     cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-edit-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-show-results-New survey"]').should('exist')
     cy.get('[data-cy="organisation-survey-delete-New survey"]').should('not.exist')
   })
 
-  it('can create questions for organisation survey and open the feedback', () => {
+  it('can create questions for organisation survey', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
@@ -300,11 +308,6 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
-
-    // Open the feedback
-    cy.get('[data-cy="feedback-target-edit-period"]').click()
-    cy.get('[data-cy="feedback-target-open-feedback-immediately"]').click()
-    cy.get('[data-cy="feedback-target-open-feedback-immediately-confirm"]').click()
   })
 })
 
@@ -372,7 +375,8 @@ describe('Responsible Teachers', () => {
     cy.loginAsTeacher()
   })
 
-  it.skip('can edit organisation surveys')
+  it.skip('can view own organisation surveys', () => {})
+  it.skip('can edit organisation surveys', () => {})
 })
 
 describe('Admin Users', () => {
