@@ -17,13 +17,14 @@ const EditOrganisationSurvey = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
-  const { feedbackTarget, isAdmin, isTeacher, isStudent } = useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
-  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, isAdmin)
+  const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 
-  if (!organisationSurvey || isLoading) return null
+  if (!allowEdit || !organisationSurvey || isLoading) return null
 
   const surveyValues = {
     name: organisationSurvey.name,
@@ -79,8 +80,6 @@ const EditOrganisationSurvey = () => {
       },
     })
   }
-
-  if (!isAdmin || !isTeacher || isStudent) return null
 
   return (
     <>
