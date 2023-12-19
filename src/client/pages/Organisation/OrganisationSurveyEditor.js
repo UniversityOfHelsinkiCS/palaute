@@ -217,6 +217,7 @@ const OrganisationSurveyForm = () => {
       <Grid md={6} sm={12} xs={12} item>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
+
       <Grid xs={12} item>
         <ResponsibleTeachersSelector
           name="teacherIds"
@@ -224,6 +225,7 @@ const OrganisationSurveyForm = () => {
           label={t('organisationSurveys:responsibleTeacherEmail')}
         />
       </Grid>
+
       <Grid xs={12} item>
         <StudentNumberInput
           name="studentNumbers"
@@ -242,6 +244,14 @@ const EditOrganisationSurveyForm = () => {
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
+      <Grid md={6} sm={12} xs={12} item>
+        <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
+      </Grid>
+
+      <Grid md={6} sm={12} xs={12} item>
+        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
+      </Grid>
+
       <Grid xs={12} item>
         <ResponsibleTeachersSelector
           name="teacherIds"
@@ -249,6 +259,7 @@ const EditOrganisationSurveyForm = () => {
           label={t('organisationSurveys:responsibleTeacherEmail')}
         />
       </Grid>
+
       <Grid xs={12} item>
         <StudentNumberInput
           name="studentNumbers"
