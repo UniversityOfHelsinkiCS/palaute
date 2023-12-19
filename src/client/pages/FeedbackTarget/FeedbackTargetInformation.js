@@ -16,6 +16,7 @@ import TeacherList from './TeacherList/TeacherList'
 import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
 import EditFeedbackTargetDates from './Dates/EditFeedbackTarget'
 import EditInterimFeedback from './EditInterimFeedback'
+import EditOrganisationSurvey from './EditOrganisationSurvey'
 
 const FeedbackTargetInformation = () => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
@@ -25,6 +26,8 @@ const FeedbackTargetInformation = () => {
   const isInterimFeedback =
     feedbackTarget.userCreated &&
     !(feedbackTarget.courseUnit.userCreated && feedbackTarget.courseRealisation.userCreated)
+
+  const isOrganisationSurvey = !isInterimFeedback && feedbackTarget.userCreated
 
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
     feedbackTarget.id,
@@ -62,6 +65,8 @@ const FeedbackTargetInformation = () => {
     getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
     i18n.language
   )
+
+  let EditComponent
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
@@ -70,6 +75,14 @@ const FeedbackTargetInformation = () => {
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = !isStudent && feedbackTarget?.tags?.length > 0
   const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
+
+  if (isInterimFeedback) {
+    EditComponent = <EditInterimFeedback />
+  } else if (isOrganisationSurvey) {
+    EditComponent = <EditOrganisationSurvey />
+  } else {
+    EditComponent = <EditFeedbackTargetDates />
+  }
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
@@ -124,7 +137,7 @@ const FeedbackTargetInformation = () => {
               }}
             >
               <FeedbackTargetDates />
-              {isInterimFeedback ? <EditInterimFeedback /> : <EditFeedbackTargetDates />}
+              {EditComponent}
 
               {isTeacher && (
                 <Box display="flex" gap="1rem" alignItems="center">
