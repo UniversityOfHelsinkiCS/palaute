@@ -104,15 +104,20 @@ const FeedbackTargetInformation = () => {
         >
           <Box display="flex" flexDirection="column" gap="1rem">
             <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
-              <Typography variant="h4" component="h1">
+              <Typography data-cy="feedback-target-primary-course-name" variant="h4" component="h1">
                 {primaryCourseName}
               </Typography>
-              <Typography variant="h5" color="textSecondary">
+              <Typography data-cy="feedback-target-visible-course-name" variant="h5" color="textSecondary">
                 {visibleCourseCode}
               </Typography>
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
-              <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
+              <Typography
+                data-cy="feedback-target-secondary-course-name"
+                variant="body1"
+                component="h2"
+                sx={{ mr: '1rem' }}
+              >
                 {secondaryCourseName}
               </Typography>
               {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
@@ -140,9 +145,10 @@ const FeedbackTargetInformation = () => {
               {!isStudent && EditComponent}
 
               {isTeacher && (
-                <Box display="flex" gap="1rem" alignItems="center">
+                <Box data-cy="feedback-target-feedback-count" display="flex" gap="1rem" alignItems="center">
                   <Typography color="textSecondary">{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
                   <PercentageCell
+                    data-cy={`feedback-target-feedback-count-percentage-${feedbackCount}/${studentCount}`}
                     label={`${feedbackCount}/${studentCount}`}
                     percent={(feedbackCount / studentCount) * 100}
                   />
@@ -189,31 +195,64 @@ const FeedbackTargetInformation = () => {
               }}
             >
               {isTeacher && (
-                <Button sx={{ px: '0.3rem' }} onClick={handleCopyLink} endIcon={<CopyIcon />}>
+                <Button
+                  data-cy="feedback-target-copy-student-link"
+                  sx={{ px: '0.3rem' }}
+                  onClick={handleCopyLink}
+                  endIcon={<CopyIcon />}
+                >
                   {t('feedbackTargetView:copyLink')}
                 </Button>
               )}
 
               {organisation && (
                 <LinkButton
+                  data-cy="feedback-target-organisation-link"
                   to={`/organisations/${organisation.code}`}
                   title={getLanguageValue(organisation.name, i18n.language)}
                 />
               )}
 
               {isTeacher && showCourseSummaryLink && (
-                <LinkButton to={courseSummaryPath} title={t('feedbackTargetView:courseSummary')} />
+                <LinkButton
+                  data-cy="feedback-target-course-summary-link"
+                  to={courseSummaryPath}
+                  title={t('feedbackTargetView:courseSummary')}
+                />
               )}
 
-              {!userCreated && <LinkButton to={coursePageUrl} title={t('feedbackTargetView:coursePage')} external />}
+              {!userCreated && (
+                <LinkButton
+                  data-cy="feedback-target-course-page-link"
+                  to={coursePageUrl}
+                  title={t('feedbackTargetView:coursePage')}
+                  external
+                />
+              )}
 
-              {isTeacher && <LinkButton to={t('links:wikiTeacherHelp')} title={t('footer:wikiLink')} external />}
+              {isTeacher && (
+                <LinkButton
+                  data-cy="feedback-target-wiki-link"
+                  to={t('links:wikiTeacherHelp')}
+                  title={t('footer:wikiLink')}
+                  external
+                />
+              )}
 
               {isAdmin && !userCreated && (
-                <LinkButton to={sisuPageUrl} title={t('feedbackTargetView:courseSisuPage')} external />
+                <LinkButton
+                  data-cy="feedback-target-sisu-page-link"
+                  to={sisuPageUrl}
+                  title={t('feedbackTargetView:courseSisuPage')}
+                  external
+                />
               )}
               {isInterimFeedback && (
-                <LinkButton to={`/targets/${parentFeedback?.id}/interim-feedback`} title={parentCourseName} />
+                <LinkButton
+                  data-cy="feedback-target-interim-feedback-parent-link"
+                  to={`/targets/${parentFeedback?.id}/interim-feedback`}
+                  title={parentCourseName}
+                />
               )}
             </Box>
           </Box>
