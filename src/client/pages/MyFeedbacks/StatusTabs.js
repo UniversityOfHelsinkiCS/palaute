@@ -50,13 +50,14 @@ const StatusTabs = ({ status, counts, ...props }) => {
         />
       )}
       <StatusTab
+        data-cy="my-feedbacks-waiting-tab"
         label={t('userFeedbacks:waitingForFeedbackTab')}
         status="waiting"
         count={counts.waiting}
         color="primary"
       />
-      <StatusTab label={t('userFeedbacks:feedbackGivenTab')} status="given" />
-      <StatusTab label={t('userFeedbacks:feedbackClosedTab')} status="ended" />
+      <StatusTab data-cy="my-feedbacks-given-tab" label={t('userFeedbacks:feedbackGivenTab')} status="given" />
+      <StatusTab data-cy="my-feedbacks-closed-tab" label={t('userFeedbacks:feedbackClosedTab')} status="ended" />
     </Tabs>
   )
 }

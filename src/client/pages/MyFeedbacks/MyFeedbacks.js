@@ -69,7 +69,9 @@ const MyFeedbacks = () => {
       {isLoading && <LoadingProgress />}
 
       {showNoFeedbackAlert && sortedCourseRealisations.length === 0 && (
-        <Alert severity="info">{t('userFeedbacks:noFeedback')}</Alert>
+        <Alert data-cy="my-feedbacks-no-feedbacks" severity="info">
+          {t('userFeedbacks:noFeedback')}
+        </Alert>
       )}
 
       {sortedCourseRealisations.map(courseRealisation => (
