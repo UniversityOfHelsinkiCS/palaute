@@ -244,7 +244,59 @@ describe('Feedback Correspondents', () => {
     ).should('exist')
   })
 
-  it.skip('can edit organisation surveys after feedback period has started', () => {})
+  it('can edit organisation surveys after feedback period has started', () => {
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: ['211111112'],
+      teacherIds: ['hy-hlo-111111112'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 1),
+    }
+
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    // Assert the survey data is correct
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.get('[data-cy="organisation-survey-item-title-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/1"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Correspondent Tester"]').should('exist')
+
+    cy.giveOrganisationSurveyFeedback(studentRandom)
+
+    // Visit the survey
+    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
+
+    // Add new teacher by email
+    cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('grp-toska+mockadmin@helsinki.fi')
+    cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Matti Luukkainen').click()
+
+    // Add students
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('014895968{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-014895968"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Assure the changes is visible
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.get('[data-cy="organisation-survey-item-title-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-1/2"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Correspondent Tester"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Matti Luukkainen"]').should('exist')
+  })
 
   it('can not delete organisation surveys after feedback has been given', () => {
     const today = new Date()
