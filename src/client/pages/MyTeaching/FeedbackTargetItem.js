@@ -51,6 +51,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
 
   const { name, startDate, endDate } = courseRealisation
 
+  const courseName = getLanguageValue(name, i18n.language)
   const feedbackPeriod = t('teacherView:surveyOpen', {
     closesAt: formatDate(closesAt),
     opensAt: formatDate(opensAt),
@@ -67,13 +68,18 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const chip = getChip(feedbackTarget)
 
   return (
-    <ListItem divider={divider} data-cy={`feedbackTargetItem-${id}`}>
+    <ListItem divider={divider} data-cy={`my-teaching-feedback-target-item-${id}`}>
       <ListItemText
         disableTypography
         primary={
           <>
-            <Link component={RouterLink} to={`/targets/${id}`} underline="hover">
-              {getLanguageValue(name, i18n.language)}{' '}
+            <Link
+              data-cy={`my-teaching-feedback-target-item-link-${courseName}`}
+              component={RouterLink}
+              to={`/targets/${id}`}
+              underline="hover"
+            >
+              {courseName}{' '}
             </Link>
             {userCreated ? <Typography>{feedbackPeriod}</Typography> : periodInfo}
           </>
