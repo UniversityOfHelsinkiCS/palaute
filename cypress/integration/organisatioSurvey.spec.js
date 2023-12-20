@@ -130,7 +130,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
   })
 
-  it('can not create survey without name', () => {
+  it('can not create survey with validation errors', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // try to save a new survey without inserting any information
@@ -140,6 +140,34 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-locales-field-fi-name"]').contains('p', 'This field is required')
     cy.get('[data-cy="formik-locales-field-sv-name"]').contains('p', 'This field is required')
     cy.get('[data-cy="formik-locales-field-en-name"]').contains('p', 'This field is required')
+
+    // try to insert the logged user's student number to the stundent number field and assert that the saving fails
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
+
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('000000000{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-000000000"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('@studentInput').contains('p', 'Responsible person can not be a student at the same time')
+
+    // try to add student as the responsible teacher
+    cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('henri.testaaja@helsinki.fi')
+    cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').should('not.exist')
+
+    // try to add invalid student
+    cy.get('[data-cy="formik-student-number-input-field-chip-000000000"]')
+      .find('[data-testid="CancelIcon"]')
+      .should('be.visible')
+      .click()
+
+    cy.get('@studentInput').clear().type('0148959{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-0148959"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('@studentInput').contains('p', 'Please check the indicated invalid student numbers')
   })
 
   it.skip('can not set the end date to be before the start date', () => {
@@ -160,22 +188,6 @@ describe('Feedback Correspondents', () => {
 
     cy.get('[data-cy="formik-date-picker-field-endDate"]').parent().as('endDateInputParent')
     cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
-  })
-
-  it('can not add a responsible teacher as a student at the same time', () => {
-    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
-
-    // try to insert the logged user's student number to the stundent number field and assert that the saving fails
-    cy.get('[data-cy="organisation-surveys-add-new"]').click()
-    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
-
-    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
-    cy.get('@studentInput').type('000000000{enter}')
-    cy.get('[data-cy="formik-student-number-input-field-chip-000000000"]').should('exist')
-
-    cy.get('[data-cy="organisation-survey-editor-save"]').click()
-
-    cy.get('@studentInput').contains('p', 'Responsible person can not be a student at the same time')
   })
 
   it('can edit organisation surveys', () => {
