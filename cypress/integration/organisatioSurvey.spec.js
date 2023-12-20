@@ -439,11 +439,67 @@ describe('Students', () => {
 
 describe('Responsible Teachers', () => {
   beforeEach(() => {
-    cy.loginAsTeacher()
+    cy.clearTestStudents()
+    cy.clearOrganisationSurveys()
+    cy.clearComputerScienceCorrespondents()
+
+    cy.seedTestStudents()
+    cy.seedComputerScienceCorrespondents()
+
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: [],
+      teacherIds: ['hy-hlo-51367956'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    // Login as Tommi Testaaja
+    cy.loginAsSecondaryTeacher()
   })
 
   it.skip('can view own organisation surveys', () => {})
-  it.skip('can edit organisation surveys', () => {})
+
+  it.only('can edit organisation surveys', () => {
+    cy.visit(`${baseUrl}/courses`)
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
+
+    // Add new teacher
+    cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Matti Luukkainen')
+    cy.get('.MuiAutocomplete-popper [role="listbox"] [role="option"]').contains('Matti Luukkainen').click()
+
+    // Add students
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type('014895968{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-014895968"]').should('exist')
+    cy.get('@studentInput').type('211111112{enter}')
+    cy.get('[data-cy="formik-student-number-input-field-chip-211111112"]').should('exist')
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    // Assure the changes is visible
+    cy.loginAsOrganisationCorrespondent()
+
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.get('[data-cy="organisation-survey-item-title-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Tommi Testaaja"]').should('exist')
+    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Matti Luukkainen"]').should('exist')
+  })
 })
 
 describe('Admin Users', () => {
