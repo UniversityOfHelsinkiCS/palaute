@@ -170,15 +170,26 @@ const FeedbackTargetInformation = () => {
             >
               {!!responsibleTeachers?.length && (
                 <TeacherList
+                  data-cy="feedback-target-responsible-teacher-list"
                   title={t('feedbackTargetView:responsibleTeachers')}
                   teachers={responsibleTeachers}
                   open={responsibleTeachers.length < 8}
                 />
               )}
-              {!!teachers?.length && <TeacherList teachers={teachers} title={t('feedbackTargetView:teachers')} />}
+              {!!teachers?.length && (
+                <TeacherList
+                  data-cy="feedback-target-teacher-list"
+                  teachers={teachers}
+                  title={t('feedbackTargetView:teachers')}
+                />
+              )}
 
               {!isStudent && !!administrativePersons?.length && (
-                <TeacherList teachers={administrativePersons} title={t('feedbackTargetView:administrativePersons')} />
+                <TeacherList
+                  data-cy="feedback-target-responsible-administrative-person-list"
+                  teachers={administrativePersons}
+                  title={t('feedbackTargetView:administrativePersons')}
+                />
               )}
             </Box>
 
