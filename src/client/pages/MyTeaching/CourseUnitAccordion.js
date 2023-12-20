@@ -100,9 +100,9 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
     <Accordion
       sx={styles.accordion}
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
-      data-cy="courseUnitItem"
+      data-cy="my-teaching-course-unit-item"
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`courseUnitAccordion-${courseCode}`}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`my-teaching-course-unit-accordion-${courseCode}`}>
         <Box>
           <Typography>
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
