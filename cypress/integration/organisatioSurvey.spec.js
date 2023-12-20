@@ -552,7 +552,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="feedback-target-organisation-link"]').should('not.exist')
     cy.get('[data-cy="feedback-target-course-summary-link"]').should('not.exist')
     cy.get('[data-cy="feedback-target-course-page-link"]').should('not.exist')
-    cy.get('[data-cy="feedback-target-wiki-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-wiki-link"]').should('exist')
     cy.get('[data-cy="feedback-target-sisu-page-link"]').should('not.exist')
     cy.get('[data-cy="feedback-target-interim-feedback-parent-link"]').should('not.exist')
 
@@ -595,6 +595,65 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="organisation-survey-responsible-persons-New survey"]').should('exist')
     cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Tommi Testaaja"]').should('exist')
     cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Matti Luukkainen"]').should('exist')
+  })
+
+  it('can not create/edit questions for ongoing organistaion survey', () => {
+    cy.visit(`${baseUrl}/courses`)
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+
+    cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
+  })
+
+  it('can create questions for organisation survey', () => {
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusin kysely',
+        en: 'Newest survey',
+        sv: '',
+      },
+      studentNumbers: [],
+      teacherIds: ['hy-hlo-51367956'],
+      startDate: new Date().setDate(today.getDate() + 1),
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    cy.visit(`${baseUrl}/courses`)
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click({ multiple: true })
+    cy.get('[data-cy="my-teaching-feedback-target-item-link-Newest survey"]').should('exist').click()
+
+    cy.get('[data-cy="feedback-target-settings-tab"]').should('exist').click()
+
+    // Add likert question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
+    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Add another question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
+    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
   })
 })
 
