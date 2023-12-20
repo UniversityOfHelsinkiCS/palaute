@@ -460,7 +460,7 @@ describe('Students', () => {
     cy.loginAsStudent('henri')
   })
 
-  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
+  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy$="New survey"]').should('exist')
@@ -491,6 +491,19 @@ describe('Students', () => {
     cy.get('[data-cy=feedback-view-give-feedback]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
     cy.url().should('include', '/results')
+
+    // Assert that the feedback page got updated
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    // Awaiting tab check
+    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+
+    // Given tab check
+    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
   })
 })
 
