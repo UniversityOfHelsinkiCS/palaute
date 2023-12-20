@@ -659,8 +659,54 @@ describe('Responsible Teachers', () => {
 
 describe('Admin Users', () => {
   beforeEach(() => {
+    cy.clearTestStudents()
+    cy.clearOrganisationSurveys()
+    cy.clearComputerScienceCorrespondents()
+
+    cy.seedTestStudents()
+    cy.seedComputerScienceCorrespondents()
+
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: ['211111112'],
+      teacherIds: ['hy-hlo-111111112'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 1),
+    }
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
     cy.loginAsAdmin()
   })
 
-  it.skip('can delete organisation surveys after feedback has been given', () => {})
+  it.only('can delete organisation surveys after feedback has been given', () => {
+    cy.giveOrganisationSurveyFeedback(studentRandom)
+
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+    cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('not.exist')
+
+    cy.on('window:confirm', str => {
+      expect(str).to.eq('Are you sure you want to remove this programme survey?')
+    })
+
+    // Check that the survey is there and delete it
+    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist')
+    cy.get('[data-cy="organisation-survey-show-results-New survey"]').should('exist')
+
+    // Assert that the survey has feedback given
+    cy.get('[data-cy="organisation-survey-feedback-count-percentage-1/1"]').should('exist')
+
+    // Remove the survey
+    cy.get('[data-cy="organisation-survey-delete-New survey"]').should('exist').click()
+
+    // Assert that the survey got deleted
+    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('not.exist')
+    cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('be.visible')
+  })
 })
