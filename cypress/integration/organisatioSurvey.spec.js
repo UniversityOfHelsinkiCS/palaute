@@ -460,7 +460,7 @@ describe('Students', () => {
     cy.loginAsStudent('henri')
   })
 
-  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
+  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy$="New survey"]').should('exist')
@@ -696,6 +696,37 @@ describe('Admin Users', () => {
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     cy.loginAsAdmin()
+  })
+
+  it('can create questions for organisation survey regardles of ongoing feedback', () => {
+    cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
+
+    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist').click()
+
+    cy.get('[data-cy="feedback-target-settings-tab"]').should('exist').click()
+
+    // Add likert question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
+    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Add another question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
+    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
   })
 
   it('can delete organisation surveys after feedback has been given', () => {
