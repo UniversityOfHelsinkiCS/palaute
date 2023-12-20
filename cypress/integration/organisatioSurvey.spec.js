@@ -685,7 +685,7 @@ describe('Admin Users', () => {
     cy.loginAsAdmin()
   })
 
-  it.only('can delete organisation surveys after feedback has been given', () => {
+  it('can delete organisation surveys after feedback has been given', () => {
     cy.giveOrganisationSurveyFeedback(studentRandom)
 
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
@@ -708,5 +708,25 @@ describe('Admin Users', () => {
     // Assert that the survey got deleted
     cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('not.exist')
     cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('be.visible')
+
+    // Assert that the survey also got removed from the students page
+    cy.loginAsStudent('random')
+
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    // Awaiting tab check
+    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+
+    // Given tab check
+    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+
+    // Closed tab check
+    cy.get('[data-cy="my-feedbacks-closed-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
   })
 })
