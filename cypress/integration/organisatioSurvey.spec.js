@@ -466,9 +466,48 @@ describe('Responsible Teachers', () => {
     cy.loginAsSecondaryTeacher()
   })
 
-  it.skip('can view own organisation surveys', () => {})
+  it('can view own organisation surveys if responsible teacher', () => {
+    cy.visit(`${baseUrl}/courses`)
 
-  it.only('can edit organisation surveys', () => {
+    // Visit the organisation survey where teacher is the responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+
+    cy.url().should('include', '/feedback')
+
+    // Assert that the feedback information is rendered correctly
+    cy.get('[data-cy="feedback-target-primary-course-name"]').should('exist')
+    cy.get('[data-cy="feedback-target-secondary-course-name"]').should('exist')
+    cy.get('[data-cy="feedback-target-feedback-dates"]').should('exist')
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist')
+    cy.get('[data-cy="feedback-target-feedback-count"]').should('exist')
+
+    // Assert no initial student feedbacks
+    cy.get('[data-cy="feedback-target-feedback-count-percentage-0/0"]').should('exist')
+
+    // Assert correct teacher list is rendered
+    cy.get('[data-cy="feedback-target-responsible-administrative-person-list"]').should('exist')
+    cy.get('[data-cy="feedback-target-responsible-teacher-list"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-teacher-list"]').should('not.exist')
+
+    // Assert that the links are rendered correctly
+    cy.get('[data-cy="feedback-target-copy-student-link"]').should('exist')
+    cy.get('[data-cy="feedback-target-organisation-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-course-summary-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-course-page-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-wiki-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-sisu-page-link"]').should('not.exist')
+    cy.get('[data-cy="feedback-target-interim-feedback-parent-link"]').should('not.exist')
+
+    // Assert that the tabs are rendered correctly
+    cy.get('[data-cy="feedback-target-give-feedback-tab"]').should('exist').click()
+    cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
+    cy.get('[data-cy="feedback-target-share-feedback-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-students-with-feedback-tab"]').should('exist').click()
+  })
+
+  it('can edit organisation surveys', () => {
     cy.visit(`${baseUrl}/courses`)
 
     // Edit the survey to add students and new responsible teacher
