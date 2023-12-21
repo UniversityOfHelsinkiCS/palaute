@@ -199,6 +199,84 @@ const clearOrganisatioSurveyFbts = async (req, res) => {
   return res.send(204)
 }
 
+const clearInterimFeedbackFbts = async (req, res) => {
+  const interimFeedbackFbts = await FeedbackTarget.findAll({
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        required: true,
+        where: {
+          userCreated: false,
+        },
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        where: {
+          userCreated: false,
+        },
+      },
+    ],
+    where: {
+      userCreated: true,
+    },
+  })
+
+  const fbtIds = interimFeedbackFbts.map(fbt => fbt.id)
+
+  const feedbacks = await UserFeedbackTarget.findAll({
+    attributes: ['feedbackId'],
+    where: {
+      feedbackTargetId: { [Op.in]: fbtIds },
+    },
+  })
+
+  const feedbackIds = feedbacks.map(fb => fb.feedbackId)
+
+  const t = await sequelize.transaction()
+
+  try {
+    await UserFeedbackTarget.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
+
+    await Feedback.destroy({
+      where: {
+        id: { [Op.in]: feedbackIds },
+      },
+    })
+
+    await Survey.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
+
+    await FeedbackTargetLog.destroy({
+      where: {
+        feedbackTargetId: { [Op.in]: fbtIds },
+      },
+    })
+
+    await FeedbackTarget.destroy({
+      where: {
+        id: { [Op.in]: fbtIds },
+      },
+    })
+
+    await t.commit()
+  } catch (err) {
+    await t.rollback()
+    throw err
+  }
+
+  return res.send(204)
+}
+
 const createTestStudents = async (req, res) => {
   await seedTestUsers(testStudents)
 
@@ -334,6 +412,7 @@ const router = Router()
 router.post('/clear/user/student', clearTestStudents)
 router.post('/clear/user/correspondent/:organisationCode', clearTestCorrespondents)
 router.post('/clear/organisation-surveys', clearOrganisatioSurveyFbts)
+router.post('/clear/interim-feedbacks', clearInterimFeedbackFbts)
 
 router.post('/seed/user/student', createTestStudents)
 router.post('/seed/user/correspondent/:organisationCode', createTestCorrespondents)
