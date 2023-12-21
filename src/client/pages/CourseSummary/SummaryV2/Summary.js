@@ -17,6 +17,7 @@ import hyLogo from '../../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
 import SummaryScrollContainer from './SummaryScrollContainer'
 import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../../util/common'
+import GenerateReport from './GenerateReport'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -43,6 +44,7 @@ const SummaryInContext = () => {
             {t('courseSummary:heading')}
           </Typography>
           <LinkButton to="/course-summary" title="Vanha" />
+          <GenerateReport />
         </Box>
         {user?.isAdmin && (
           <Button variant="text" onClick={handleUpdateData}>
