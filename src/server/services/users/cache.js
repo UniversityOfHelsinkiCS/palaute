@@ -13,7 +13,7 @@ const cache = {
 
     return User.build(JSON.parse(userJson))
   },
-  set: (uid, user) => redis.set(getKey(uid), JSON.stringify(user), { ttl: USER_CACHE_TTL }),
+  set: (uid, user) => redis.set(getKey(uid), JSON.stringify(user), { EX: USER_CACHE_TTL }),
   invalidate: uid => {
     if (redis.delete(getKey(uid))) {
       logger.info(`[CACHE] invalidate user ${uid}`)

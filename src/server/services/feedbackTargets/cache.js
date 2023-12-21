@@ -18,7 +18,7 @@ const cache = {
     return JSON.parse(feedbackTargetJson)
   },
   set: (feedbackTargetId, feedbackTarget) =>
-    redis.set(getKey(feedbackTargetId), JSON.stringify(feedbackTarget), { ttl: FEEDBACK_TARGET_CACHE_TTL }),
+    redis.set(getKey(feedbackTargetId), JSON.stringify(feedbackTarget), { EX: FEEDBACK_TARGET_CACHE_TTL }),
   invalidate: feedbackTargetId => {
     if (redis.delete(getKey(feedbackTargetId))) {
       logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
