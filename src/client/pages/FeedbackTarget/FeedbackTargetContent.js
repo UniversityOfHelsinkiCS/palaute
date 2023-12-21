@@ -75,7 +75,8 @@ const FeedbackTargetContent = () => {
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
   const showSettingsTab = (isOrganisationAdmin || isResponsibleTeacher) && !isEnded
-  const showInterimFeedbackTab = INTERIM_FEEDBACKS_ENABLED && isAdmin && !userCreated
+  const showInterimFeedbackTab =
+    INTERIM_FEEDBACKS_ENABLED && (isAdmin || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
 
   const courseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
