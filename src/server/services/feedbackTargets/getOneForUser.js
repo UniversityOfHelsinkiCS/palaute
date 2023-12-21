@@ -101,6 +101,7 @@ const getFromDb = async id => {
         model: Group,
         as: 'groups',
         required: false,
+        separate: true,
       },
     ],
   })
