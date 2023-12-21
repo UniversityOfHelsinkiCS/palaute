@@ -1,5 +1,3 @@
-import { studentRandom } from '../fixtures/headers'
-
 const { baseUrl } = require('../support')
 
 describe('Responsible Teachers', () => {
@@ -56,7 +54,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-delete-Test interim feedback"]').should('exist')
   })
 
-  it.only('can view courses interim feedbacks if responsible teacher', () => {
+  it('can view courses interim feedbacks if responsible teacher', () => {
     const today = new Date()
     const parentId = '163'
     const organisationSurveyBody = {
