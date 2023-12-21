@@ -133,7 +133,7 @@ const GenerateReport = () => {
   }, [organisationsLoaded, teacherOrganisationsLoaded, isGenerating])
 
   return (
-    <Button variant="contained" onClick={() => setIsGenerating(true)} disabled={isGenerating}>
+    <Button variant="outlined" onClick={() => setIsGenerating(true)} disabled={isGenerating}>
       {!isGenerating ? t('common:exportXLSX') : <CircularProgress />}
     </Button>
   )
