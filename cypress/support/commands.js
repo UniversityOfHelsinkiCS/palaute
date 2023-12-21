@@ -320,6 +320,25 @@ Cypress.Commands.add('clearOrganisationSurveys', () => {
 })
 
 /**
+ * Custom Cypress command to clear interim feedbacks for testing purposes.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.clearInterimFeedbacks();
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
+Cypress.Commands.add('clearInterimFeedbacks', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/test/clear/interim-feedbacks',
+    headers: admin,
+  })
+})
+
+/**
  * Custom Cypress command to seed computer science correspondents for testing purposes.
  *
  * @example
