@@ -54,6 +54,8 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
     closesAt: endDate,
   })
 
+  const interimFeedbackName = getLanguageValue(interimFeedback.name, language)
+
   const handleDelete = async () => {
     // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('interimFeedback:confirmRemoveSurvey'))) return
@@ -65,12 +67,17 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
     <>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Typography sx={{ textTransform: 'capitalize', fontWeight: 'light' }} variant="h5" component="div">
-            {getLanguageValue(interimFeedback.name, language)}
+          <Typography
+            data-cy={`interim-feedback-item-title-${interimFeedbackName}`}
+            sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
+            variant="h5"
+            component="div"
+          >
+            {interimFeedbackName}
           </Typography>
 
           {Date.parse(opensAt) < new Date() ? (
-            <Box sx={{ mt: 2, ml: -1 }}>
+            <Box data-cy={`interim-feedback-open-${interimFeedbackName}`} sx={{ mt: 2, ml: -1 }}>
               <FeedbackResponseChip
                 id={parentId}
                 interimFeedbackId={interimFeedback.id}
@@ -80,20 +87,24 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               />
             </Box>
           ) : (
-            <Box sx={{ mt: 2 }}>
+            <Box data-cy={`interim-feedback-not-open-${interimFeedbackName}`} sx={{ mt: 2 }}>
               <Typography variant="body2" color="textSecondary" component="span">
                 {t('teacherView:feedbackNotStarted')}
               </Typography>
             </Box>
           )}
 
-          <Typography variant="body2" sx={{ mt: 2 }}>
+          <Typography data-cy={`interim-feedback-period-info-${interimFeedbackName}`} variant="body2" sx={{ mt: 2 }}>
             {periodInfo}
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Box
+            data-cy={`interim-feedback-feedback-count-${interimFeedbackName}`}
+            sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
+          >
             <Typography variant="body2">{t('interimFeedback:givenFeedback')}:</Typography>
             <PercentageCell
+              data-cy={`interim-feedback-feedback-count-percentage-${feedbackCount}/${studentCount}`}
               size="small"
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
@@ -101,15 +112,25 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           </Box>
 
           {teachers.length > 0 && (
-            <Box sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}>
+            <Box
+              data-cy={`interim-feedback-responsible-persons-${interimFeedbackName}`}
+              sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}
+            >
               <Typography variant="body2">{t('interimFeedback:responsibleTeachers')}:</Typography>
               {teachers.map(({ user: teacher }) => (
-                <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
+                <Chip
+                  data-cy={`interim-feedback-responsible-persons-${interimFeedbackName}-chips-${teacher.firstName} ${teacher.lastName}`}
+                  key={teacher.id}
+                  size="small"
+                  sx={{ mr: 1 }}
+                  label={`${teacher.firstName} ${teacher.lastName}`}
+                />
               ))}
             </Box>
           )}
 
           <Button
+            data-cy={`interim-feedback-show-feedback-${interimFeedbackName}`}
             color="primary"
             variant="outlined"
             sx={{ mt: 2 }}
@@ -121,6 +142,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
           {feedbackCount > 0 && (
             <Button
+              data-cy={`interim-feedback-show-results-${interimFeedbackName}`}
               color="primary"
               variant="outlined"
               sx={{ mt: 2, ml: 2 }}
@@ -132,7 +154,13 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           )}
 
           {(allowDelete || isAdmin) && (
-            <Button color="error" variant="outlined" sx={{ mt: 2, ml: 2 }} onClick={handleDelete}>
+            <Button
+              data-cy={`interim-feedback-delete-${interimFeedbackName}`}
+              color="error"
+              variant="outlined"
+              sx={{ mt: 2, ml: 2 }}
+              onClick={handleDelete}
+            >
               {t('interimFeedback:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
             </Button>
           )}
@@ -143,7 +171,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
         <ProtectedRoute
           path={`${path}/:interimFeedbackId`}
           component={InterimFeedbackModal}
-          hasAccess={isAdmin}
+          hasAccess
           redirectPath={defaultPath}
         />
       </Switch>
