@@ -56,7 +56,7 @@ const EditInterimFeedback = () => {
     <>
       <Button
         sx={{ textAlign: 'left', justifyContent: 'start' }}
-        data-cy="feedback-target-edit-period"
+        data-cy="feedback-target-edit-interim-feedback"
         onClick={handleClose}
         variant="text"
         startIcon={<Edit />}

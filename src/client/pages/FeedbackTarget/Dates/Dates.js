@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { getDateRangeString } from '../../../util/getDateRangeString'
 
-const FeedbackTargetDates = () => {
+const FeedbackTargetDates = ({ ...props }) => {
   const { t } = useTranslation()
   const { feedbackTarget } = useFeedbackTargetContext()
   const { courseRealisation, opensAt, closesAt, continuousFeedbackEnabled, userCreated } = feedbackTarget
@@ -15,7 +15,7 @@ const FeedbackTargetDates = () => {
   return (
     <Box>
       <Box
-        data-cy="feedback-target-feedback-dates"
+        {...props}
         component="dl"
         rowGap="0.5rem"
         sx={theme => ({

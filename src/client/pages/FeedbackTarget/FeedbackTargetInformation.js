@@ -18,14 +18,10 @@ import EditFeedbackTargetDates from './Dates/EditFeedbackTarget'
 import EditInterimFeedback from './EditInterimFeedback'
 import EditOrganisationSurvey from './EditOrganisationSurvey'
 
-const FeedbackTargetInformation = () => {
+const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const isInterimFeedback =
-    feedbackTarget.userCreated &&
-    !(feedbackTarget.courseUnit.userCreated && feedbackTarget.courseRealisation.userCreated)
 
   const isOrganisationSurvey = !isInterimFeedback && feedbackTarget.userCreated
 
@@ -76,6 +72,9 @@ const FeedbackTargetInformation = () => {
   const showTags = !isStudent && feedbackTarget?.tags?.length > 0
   const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
 
+  // This is necessary to identify which is related to interim feedback modal and which is related to the original fbt
+  const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
+
   if (isInterimFeedback) {
     EditComponent = <EditInterimFeedback />
   } else if (isOrganisationSurvey) {
@@ -104,16 +103,20 @@ const FeedbackTargetInformation = () => {
         >
           <Box display="flex" flexDirection="column" gap="1rem">
             <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
-              <Typography data-cy="feedback-target-primary-course-name" variant="h4" component="h1">
+              <Typography data-cy={`${dataCyPrefix}feedback-target-primary-course-name`} variant="h4" component="h1">
                 {primaryCourseName}
               </Typography>
-              <Typography data-cy="feedback-target-visible-course-name" variant="h5" color="textSecondary">
+              <Typography
+                data-cy={`${dataCyPrefix}feedback-target-visible-course-name`}
+                variant="h5"
+                color="textSecondary"
+              >
                 {visibleCourseCode}
               </Typography>
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
               <Typography
-                data-cy="feedback-target-secondary-course-name"
+                data-cy={`${dataCyPrefix}feedback-target-secondary-course-name`}
                 variant="body1"
                 component="h2"
                 sx={{ mr: '1rem' }}
@@ -141,14 +144,19 @@ const FeedbackTargetInformation = () => {
                 flexGrow: 0,
               }}
             >
-              <FeedbackTargetDates />
+              <FeedbackTargetDates data-cy={`${dataCyPrefix}feedback-target-feedback-dates`} />
               {!isStudent && EditComponent}
 
               {isTeacher && (
-                <Box data-cy="feedback-target-feedback-count" display="flex" gap="1rem" alignItems="center">
+                <Box
+                  data-cy={`${dataCyPrefix}feedback-target-feedback-count`}
+                  display="flex"
+                  gap="1rem"
+                  alignItems="center"
+                >
                   <Typography color="textSecondary">{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
                   <PercentageCell
-                    data-cy={`feedback-target-feedback-count-percentage-${feedbackCount}/${studentCount}`}
+                    data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage-${feedbackCount}/${studentCount}`}
                     label={`${feedbackCount}/${studentCount}`}
                     percent={(feedbackCount / studentCount) * 100}
                   />
@@ -170,7 +178,7 @@ const FeedbackTargetInformation = () => {
             >
               {!!responsibleTeachers?.length && (
                 <TeacherList
-                  data-cy="feedback-target-responsible-teacher-list"
+                  data-cy={`${dataCyPrefix}feedback-target-responsible-teacher-list`}
                   title={t('feedbackTargetView:responsibleTeachers')}
                   teachers={responsibleTeachers}
                   open={responsibleTeachers.length < 8}
@@ -178,7 +186,7 @@ const FeedbackTargetInformation = () => {
               )}
               {!!teachers?.length && (
                 <TeacherList
-                  data-cy="feedback-target-teacher-list"
+                  data-cy={`${dataCyPrefix}feedback-target-teacher-list`}
                   teachers={teachers}
                   title={t('feedbackTargetView:teachers')}
                 />
@@ -186,7 +194,7 @@ const FeedbackTargetInformation = () => {
 
               {!isStudent && !!administrativePersons?.length && (
                 <TeacherList
-                  data-cy="feedback-target-responsible-administrative-person-list"
+                  data-cy={`${dataCyPrefix}feedback-target-responsible-administrative-person-list`}
                   teachers={administrativePersons}
                   title={t('feedbackTargetView:administrativePersons')}
                 />
@@ -207,7 +215,7 @@ const FeedbackTargetInformation = () => {
             >
               {isTeacher && (
                 <Button
-                  data-cy="feedback-target-copy-student-link"
+                  data-cy={`${dataCyPrefix}feedback-target-copy-student-link`}
                   sx={{ px: '0.3rem' }}
                   onClick={handleCopyLink}
                   endIcon={<CopyIcon />}
@@ -218,7 +226,7 @@ const FeedbackTargetInformation = () => {
 
               {organisation && (
                 <LinkButton
-                  data-cy="feedback-target-organisation-link"
+                  data-cy={`${dataCyPrefix}feedback-target-organisation-link`}
                   to={`/organisations/${organisation.code}`}
                   title={getLanguageValue(organisation.name, i18n.language)}
                 />
@@ -226,7 +234,7 @@ const FeedbackTargetInformation = () => {
 
               {isTeacher && showCourseSummaryLink && (
                 <LinkButton
-                  data-cy="feedback-target-course-summary-link"
+                  data-cy={`${dataCyPrefix}feedback-target-course-summary-link`}
                   to={courseSummaryPath}
                   title={t('feedbackTargetView:courseSummary')}
                 />
@@ -234,7 +242,7 @@ const FeedbackTargetInformation = () => {
 
               {!userCreated && (
                 <LinkButton
-                  data-cy="feedback-target-course-page-link"
+                  data-cy={`${dataCyPrefix}feedback-target-course-page-link`}
                   to={coursePageUrl}
                   title={t('feedbackTargetView:coursePage')}
                   external
@@ -243,7 +251,7 @@ const FeedbackTargetInformation = () => {
 
               {isTeacher && (
                 <LinkButton
-                  data-cy="feedback-target-wiki-link"
+                  data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
                   to={t('links:wikiTeacherHelp')}
                   title={t('footer:wikiLink')}
                   external
@@ -252,7 +260,7 @@ const FeedbackTargetInformation = () => {
 
               {isAdmin && !userCreated && (
                 <LinkButton
-                  data-cy="feedback-target-sisu-page-link"
+                  data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
                   to={sisuPageUrl}
                   title={t('feedbackTargetView:courseSisuPage')}
                   external
@@ -260,7 +268,7 @@ const FeedbackTargetInformation = () => {
               )}
               {isInterimFeedback && (
                 <LinkButton
-                  data-cy="feedback-target-interim-feedback-parent-link"
+                  data-cy={`${dataCyPrefix}feedback-target-interim-feedback-parent-link`}
                   to={`/targets/${parentFeedback?.id}/interim-feedback`}
                   title={parentCourseName}
                 />
