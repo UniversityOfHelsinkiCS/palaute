@@ -138,6 +138,39 @@ Cypress.Commands.add('giveOrganisationSurveyFeedback', headers => {
   })
 })
 
+/**
+ * Custom Cypress command to create an interim feedback.
+ *
+ * @param {string} parentId - The feedback target id that the interim feedback will be created to
+ * @param {Object} body - The request body for creating the interim feedback.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.createInterimFeedback('163', {
+ *  name: {
+ *    fi: "Uusi välipalaute",
+ *    en: "New interim feedback",
+ *    sv: "",
+ *  },
+ *  startDate: new Date(),
+ *  endDate: new Date()
+ * })
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
+Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
+  cy.request({
+    method: 'POST',
+    url: `/api/feedback-targets/${parentId}/interimFeedbacks`,
+    headers: admin,
+    body,
+  }).then(response => {
+    cy.wrap(response.body).as('interimFeedback')
+  })
+})
+
 Cypress.Commands.add('setUpAdminTeacherView', () => {
   const date = new Date()
   cy.request({
