@@ -71,6 +71,7 @@ const InterimFeedback = () => {
       </Alert>
       <Box sx={styles.buttonContainer}>
         <Button
+          data-cy="interim-feedbacks-add-new"
           color="primary"
           onClick={() => {
             setShowForm(!showForm)
@@ -93,7 +94,7 @@ const InterimFeedback = () => {
       {interimFeedbacks.length > 0 ? (
         interimFeedbacks.map(feedback => <InterimFeedbackItem key={feedback.id} interimFeedback={feedback} />)
       ) : (
-        <Alert sx={{ mt: 2 }} severity="info">
+        <Alert data-cy="interim-feedbacks-no-surveys-alert" sx={{ mt: 2 }} severity="info">
           {t('interimFeedback:emptySurveys')}
         </Alert>
       )}
