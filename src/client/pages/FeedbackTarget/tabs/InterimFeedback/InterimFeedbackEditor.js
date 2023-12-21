@@ -53,7 +53,7 @@ const InterimFeedbackEditor = ({
 
   return (
     <Dialog maxWidth={false} open={editing} onClose={onStopEditing}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle data-cy="interim-feedback-editor-title">{title}</DialogTitle>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -69,10 +69,23 @@ const InterimFeedbackEditor = ({
                 {editView ? <EditInterimFeedbackForm /> : <InterimFeedbackForm />}
 
                 <Box sx={{ mt: 2 }}>
-                  <Button disabled={disabled} color="primary" variant="contained" type="submit">
+                  <Button
+                    data-cy="interim-feedback-editor-save"
+                    disabled={disabled}
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                  >
                     {t('common:save')}
                   </Button>
-                  <Button sx={{ ml: 4 }} color="error" variant="contained" type="button" onClick={onStopEditing}>
+                  <Button
+                    data-cy="interim-feedback-editor-cancel"
+                    sx={{ ml: 4 }}
+                    color="error"
+                    variant="contained"
+                    type="button"
+                    onClick={onStopEditing}
+                  >
                     {t('common:cancel')}
                   </Button>
                 </Box>
