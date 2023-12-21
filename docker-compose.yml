@@ -70,6 +70,7 @@ services:
   #    - ../norppa-updater:/usr/src/app
   #  environment:
   #    - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+  #    - REDIS_HOST=redis
   #  ports:
   #    - 8000:3000
   #  container_name: updater-dev
