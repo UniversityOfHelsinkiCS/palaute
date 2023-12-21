@@ -432,81 +432,6 @@ describe('Feedback Correspondents', () => {
   })
 })
 
-describe('Students', () => {
-  beforeEach(() => {
-    cy.clearTestStudents()
-    cy.clearOrganisationSurveys()
-    cy.clearComputerScienceCorrespondents()
-
-    cy.seedTestStudents()
-    cy.seedComputerScienceCorrespondents()
-
-    const today = new Date()
-    const organisationCode = '500-K005'
-    const organisationSurveyBody = {
-      name: {
-        fi: 'Uusi kysely',
-        en: 'New survey',
-        sv: '',
-      },
-      studentNumbers: ['014895968', '015303763', '015144922', '211111112'],
-      teacherIds: ['hy-hlo-111111112'],
-      startDate: today,
-      endDate: new Date().setDate(today.getDate() + 7),
-    }
-
-    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
-
-    cy.loginAsStudent('henri')
-  })
-
-  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
-    cy.visit(`${baseUrl}/feedbacks`)
-
-    cy.get('[data-cy$="New survey"]').should('exist')
-    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
-
-    // Assert students does not see the edit button
-    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('not.exist')
-
-    cy.get('[data-cy="feedback-target-give-feedback-tab"]').should('exist').click()
-    cy.get('[data-cy="feedback-target-results-tab"]').should('not.exist')
-
-    // Give the feedback
-    cy.get('[data-cy=feedback-view-give-feedback]').click()
-    cy.contains('Feedback has been given. Thank you for your feedback!')
-
-    // New tabs are rendered when feedback was given
-    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
-    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
-
-    cy.url().should('include', '/results')
-
-    // Edit answer
-    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').click()
-    cy.get('[data-cy=feedback-view-give-feedback]').click()
-    cy.contains('Feedback has been given. Thank you for your feedback!')
-    cy.url().should('include', '/results')
-
-    // Assert that the feedback page got updated
-    cy.visit(`${baseUrl}/feedbacks`)
-
-    // Awaiting tab check
-    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
-
-    // Given tab check
-    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
-  })
-})
-
 describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.clearTestStudents()
@@ -667,6 +592,81 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
+  })
+})
+
+describe('Students', () => {
+  beforeEach(() => {
+    cy.clearTestStudents()
+    cy.clearOrganisationSurveys()
+    cy.clearComputerScienceCorrespondents()
+
+    cy.seedTestStudents()
+    cy.seedComputerScienceCorrespondents()
+
+    const today = new Date()
+    const organisationCode = '500-K005'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: '',
+      },
+      studentNumbers: ['014895968', '015303763', '015144922', '211111112'],
+      teacherIds: ['hy-hlo-111111112'],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    cy.loginAsStudent('henri')
+  })
+
+  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    cy.get('[data-cy$="New survey"]').should('exist')
+    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
+
+    // Assert students does not see the edit button
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('not.exist')
+
+    cy.get('[data-cy="feedback-target-give-feedback-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-tab"]').should('not.exist')
+
+    // Give the feedback
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+
+    // New tabs are rendered when feedback was given
+    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
+
+    cy.url().should('include', '/results')
+
+    // Edit answer
+    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').click()
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+    cy.url().should('include', '/results')
+
+    // Assert that the feedback page got updated
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    // Awaiting tab check
+    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+
+    // Given tab check
+    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+    cy.get('[data-cy$="New survey"]').should('exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
   })
 })
 
