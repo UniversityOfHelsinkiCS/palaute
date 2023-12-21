@@ -214,7 +214,7 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
   if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
 
   try {
-    logger.info(`Deleting organisation survey ${feedbackTarget.id}`)
+    logger.info(`Deleting interim feedback ${feedbackTarget.id}`)
 
     const ufbt = await UserFeedbackTarget.destroy({
       where: {
@@ -230,7 +230,7 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
       },
     })
 
-    logger.info(`Deleted ${survey} surveys`)
+    logger.info(`Deleted ${survey}`)
 
     const log = await FeedbackTargetLog.destroy({
       where: {
