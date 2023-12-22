@@ -275,7 +275,7 @@
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille",
     "hidingFeatureInfoTitle": "Tietoa vastausten näkyvyydestä",
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
-    "unpublishingInfo": "Tämän kysymyksen näkyvät kurssin opiskelijoille.",
+    "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät kurssin opiskelijoille.",
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "deleteSuccess": "Vastaus poistettu"
