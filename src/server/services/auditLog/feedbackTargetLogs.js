@@ -87,6 +87,14 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
     data.openImmediately = updates.openImmediately
   }
 
+  if (updates.continuousFeedbackEnabled !== undefined) {
+    data.continuousFeedbackEnabled = updates.continuousFeedbackEnabled
+  }
+
+  if (updates.sendContinuousFeedbackDigestEmails !== undefined) {
+    data.sendContinuousFeedbackDigestEmails = updates.sendContinuousFeedbackDigestEmails
+  }
+
   if (Object.keys(data).length === 0) return
 
   await createFromData(feedbackTarget.id, user, data)

@@ -77,6 +77,18 @@ const getLogMessage = data => {
     messages = messages.concat(`Sent feedback response email`)
   }
 
+  if (data.continuousFeedbackEnabled !== undefined) {
+    messages = data.continuousFeedbackEnabled
+      ? messages.concat(`Enabled continuous feedback`)
+      : messages.concat(`Disabled continuous feedback`)
+  }
+
+  if (data.sendContinuousFeedbackDigestEmails !== undefined) {
+    messages = data.sendContinuousFeedbackDigestEmails
+      ? messages.concat(`Enabled continuous feedback digest mail`)
+      : messages.concat(`Disabled continuous feedback digest mail`)
+  }
+
   if (data.mockedBy) {
     messages = messages.concat(`(Mocked by ${data.mockedBy})`)
   }
