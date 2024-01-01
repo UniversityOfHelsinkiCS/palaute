@@ -6,13 +6,13 @@ describe('Course summary view', () => {
   })
 
   it('User with organisation access can visit summary page', () => {
-    cy.contains('Course summary').click()
+    cy.visit(`${baseUrl}/course-summary/old`)
     cy.contains('Summary of course feedback')
     cy.contains(`Bachelor's Programme in Theology and Religious Studies`)
   })
 
   it('User can navigate to programme from summary', () => {
-    cy.visit(`${baseUrl}/course-summary`)
+    cy.visit(`${baseUrl}/course-summary/old`)
     cy.wait(1000)
     cy.get('a[id=settings-button-500-K005]').click()
     cy.contains(`Bachelor's Programme in Computer Science`)
