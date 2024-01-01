@@ -10,7 +10,6 @@ import ProtectedRoute from '../../../components/common/ProtectedRoute'
 import MyOrganisations from './MyOrganisations'
 import University from './University'
 import { updateSummaries } from './api'
-import LinkButton from '../../../components/common/LinkButton'
 import { RouterTab, RouterTabs } from '../../../components/common/RouterTabs'
 import hyLogo from '../../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
@@ -45,7 +44,6 @@ const SummaryInContext = () => {
           <Typography variant="h4" component="h1">
             {t('courseSummary:heading')}
           </Typography>
-          <LinkButton to="/course-summary/old" title="Vanha" />
           <GenerateReport />
         </Box>
         {user?.isAdmin && (
