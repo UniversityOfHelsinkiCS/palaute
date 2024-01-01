@@ -1,11 +1,10 @@
 import React from 'react'
 import _ from 'lodash'
-import { Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
 import { BarChartOutlined, School } from '@mui/icons-material'
-import { SummaryContextProvider } from './context'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../../components/common/ProtectedRoute'
 import MyOrganisations from './MyOrganisations'
@@ -18,6 +17,9 @@ import MyCourses from './MyCourses'
 import SummaryScrollContainer from './SummaryScrollContainer'
 import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../../util/common'
 import GenerateReport from './GenerateReport'
+import CourseRealisationSummary from '../CourseRealisationSummary'
+import OrganisationSummary from '../OrganisationSummary'
+import { SummaryContextProvider } from './context'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -43,7 +45,7 @@ const SummaryInContext = () => {
           <Typography variant="h4" component="h1">
             {t('courseSummary:heading')}
           </Typography>
-          <LinkButton to="/course-summary" title="Vanha" />
+          <LinkButton to="/course-summary/old" title="Vanha" />
           <GenerateReport />
         </Box>
         {user?.isAdmin && (
@@ -53,17 +55,13 @@ const SummaryInContext = () => {
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
-        <RouterTab
-          label={t('courseSummary:myCourses')}
-          icon={<School />}
-          to={`/course-summary/v2/my-courses${search}`}
-        />
+        <RouterTab label={t('courseSummary:myCourses')} icon={<School />} to={`/course-summary/my-courses${search}`} />
 
         {hasAccessToMyOrganisations && (
           <RouterTab
             label={t('courseSummary:myOrganisations')}
             icon={<BarChartOutlined />}
-            to={`/course-summary/v2/my-organisations${search}`}
+            to={`/course-summary/my-organisations${search}`}
           />
         )}
 
@@ -75,27 +73,39 @@ const SummaryInContext = () => {
                 <img src={hyLogo} alt="HY" />
               </Box>
             }
-            to={`/course-summary/v2/university${search}`}
+            to={`/course-summary/university${search}`}
           />
         )}
       </RouterTabs>
       <SummaryScrollContainer>
         <Switch>
-          <ProtectedRoute path="/course-summary/v2/my-courses" component={MyCourses} hasAccess />
+          <ProtectedRoute path="/course-summary/my-courses" component={MyCourses} hasAccess />
 
           <ProtectedRoute
-            path="/course-summary/v2/my-organisations"
-            redirectPath="/course-summary/v2/my-courses"
+            path="/course-summary/my-organisations"
+            redirectPath="/course-summary/my-courses"
             component={MyOrganisations}
             hasAccess={hasAccessToMyOrganisations}
           />
 
           <ProtectedRoute
-            path="/course-summary/v2/university"
-            redirectPath="/course-summary/v2/my-courses"
+            path="/course-summary/university"
+            redirectPath="/course-summary/my-courses"
             component={University}
             hasAccess={hasAccessToUniversityLevel}
           />
+
+          <Route path="/course-summary/old" exact>
+            <OrganisationSummary />
+          </Route>
+
+          <Route path="/course-summary/:code">
+            <CourseRealisationSummary />
+          </Route>
+
+          <Route path="/course-summary" exact>
+            <Redirect to="/course-summary/my-courses" />
+          </Route>
         </Switch>
       </SummaryScrollContainer>
     </>

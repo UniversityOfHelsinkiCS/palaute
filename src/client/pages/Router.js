@@ -4,7 +4,6 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Admin from './Admin'
 import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
-import CourseSummary from './CourseSummary'
 import MyTeaching from './MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
@@ -13,6 +12,7 @@ import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useIsMobile from '../hooks/useIsMobile'
 import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
+import Summary from './CourseSummary/SummaryV2/Summary'
 
 const styles = {
   container: theme => ({
@@ -56,7 +56,7 @@ const Router = () => (
       <Route path="/courses" component={MyTeaching} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
-      <Route path="/course-summary" component={CourseSummary} />
+      <Route path="/course-summary" component={Summary} />
       <Route path="/cur/:id" component={CourseRealisation} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />
       <Route path="/admin" component={Admin} />
