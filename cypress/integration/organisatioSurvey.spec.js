@@ -466,7 +466,9 @@ describe('Responsible Teachers', () => {
 
     // Visit the organisation survey where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
 
     cy.url().should('include', '/feedback')
 
@@ -507,7 +509,10 @@ describe('Responsible Teachers', () => {
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
+
     cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
     // Add new teacher
@@ -540,7 +545,9 @@ describe('Responsible Teachers', () => {
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click()
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-New survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
 
     cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
   })
@@ -566,7 +573,9 @@ describe('Responsible Teachers', () => {
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-500-K005-SRV"').should('exist').click({ multiple: true })
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-Newest survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
 
     cy.get('[data-cy="feedback-target-settings-tab"]').should('exist').click()
 

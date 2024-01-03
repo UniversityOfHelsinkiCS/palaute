@@ -30,7 +30,9 @@ describe('Responsible Teachers', () => {
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TKT21029"').should('exist').click()
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-Functional Programming I"]').should('exist').click()
+    cy.get('@parentId').then(parentId => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
+    })
 
     // Assert that the interim feedbacks tab is rendered
     cy.get('[data-cy="feedback-target-interim-feedback-tab"]').should('exist').click()
@@ -84,7 +86,9 @@ describe('Responsible Teachers', () => {
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TKT21029"').should('exist').click()
-    cy.get('[data-cy="my-teaching-feedback-target-item-link-Functional Programming I"]').should('exist').click()
+    cy.get('@parentId').then(parentId => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
+    })
 
     // Assert that the interim feedbacks tab is rendered
     cy.get('[data-cy="feedback-target-interim-feedback-tab"]').should('exist').click()
