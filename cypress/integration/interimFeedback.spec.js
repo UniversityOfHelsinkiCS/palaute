@@ -183,7 +183,16 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('not.exist')
   })
 
-  it('can not create/edit questions for ongoing interim feedback', () => {})
+  it.only('can not create/edit questions for ongoing interim feedback', () => {
+    cy.get('@parentId').then(parentId => {
+      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+    })
+
+    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').click()
+
+    cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
+    cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('have.attr', 'aria-disabled', 'true')
+  })
 
   it('can create questions for interim feedbacks', () => {})
 })
