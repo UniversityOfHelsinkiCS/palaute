@@ -368,7 +368,7 @@ describe('Admin Users', () => {
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
 
-  it.only('can delete interim feedbacks after feedback has been given', () => {
+  it('can delete interim feedbacks after feedback has been given', () => {
     cy.giveInterimFeedback(student)
 
     cy.get('@parentId').then(parentId => {
