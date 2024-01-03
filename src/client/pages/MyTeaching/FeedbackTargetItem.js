@@ -74,7 +74,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
         primary={
           <>
             <Link
-              data-cy={`my-teaching-feedback-target-item-link-${courseName}`}
+              data-cy={`my-teaching-feedback-target-item-link-${id}`}
               component={RouterLink}
               to={`/targets/${id}`}
               underline="hover"
