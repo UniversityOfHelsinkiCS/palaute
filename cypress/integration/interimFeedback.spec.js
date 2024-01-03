@@ -241,9 +241,75 @@ describe('Responsible Teachers', () => {
 })
 
 describe('Students', () => {
-  beforeEach(() => {})
+  beforeEach(() => {
+    cy.clearInterimFeedbacks()
 
-  it('can view ongoing interim feedbacks and give interim feedback', () => {})
+    const today = new Date()
+    const parentId = '163'
+    const interimFeedbackBody = {
+      name: {
+        fi: 'Testi välipalaute',
+        en: 'Test interim feedback',
+        sv: '',
+      },
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.wrap(parentId).as('parentId')
+
+    cy.createInterimFeedback(parentId, interimFeedbackBody)
+
+    // Login as Olli Oppilas
+    cy.loginAsStudent()
+  })
+
+  it.only('can view ongoing interim feedbacks and give interim feedback', () => {
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+    cy.get('[data-cy$="Test interim feedback"]').should('exist').click()
+    cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
+
+    // Assert students does not see the edit button
+    cy.get('[data-cy="feedback-target-edit-interim-feedback"]').should('not.exist')
+
+    cy.get('[data-cy="interim-feedback-target-give-feedback-tab"]').should('exist').click()
+    cy.get('[data-cy="interim-feedback-target-results-tab"]').should('not.exist')
+
+    // Give the feedback
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+
+    // New tabs are rendered when feedback was given
+    cy.get('[data-cy="interim-feedback-target-edit-feedback-tab"]').should('exist')
+    cy.get('[data-cy="interim-feedback-target-results-tab"]').should('exist').click()
+    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
+    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
+
+    cy.url().should('include', '/results')
+
+    // Edit answer
+    cy.get('[data-cy="interim-feedback-target-edit-feedback-tab"]').click()
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+    cy.contains('Feedback has been given. Thank you for your feedback!')
+    cy.url().should('include', '/results')
+
+    // Assert that the feedback page got updated
+    cy.visit(`${baseUrl}/feedbacks`)
+
+    // Awaiting tab check
+    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+    cy.get('[data-cy$="Test interim feedback"]').should('not.exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+
+    // Given tab check
+    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+    cy.get('[data-cy$="Test interim feedback"]').should('exist')
+    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
+  })
 })
 
 describe('Admin Users', () => {
