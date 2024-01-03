@@ -57,7 +57,7 @@ describe('Responsible Teachers', () => {
   it('can view courses interim feedbacks if responsible teacher', () => {
     const today = new Date()
     const parentId = '163'
-    const organisationSurveyBody = {
+    const interimFeedbackBody = {
       name: {
         fi: 'Testi välipalaute',
         en: 'Test interim feedback',
@@ -67,7 +67,7 @@ describe('Responsible Teachers', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.createInterimFeedback(parentId, organisationSurveyBody)
+    cy.createInterimFeedback(parentId, interimFeedbackBody)
 
     cy.visit(`${baseUrl}/courses`)
 
