@@ -170,6 +170,15 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
     cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback"]').should('exist')
     cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback-chips-Tommi Testaaja"]').should('exist')
+
+    // Assert that the interim feedback may be deleted if no feedbacks are given
+    cy.on('window:confirm', str => {
+      expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+    })
+
+    cy.get('[data-cy="interim-feedback-delete-New interim feedback"]').should('exist').click()
+    // Assert that the feedback was created correctly
+    cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('not.exist')
   })
 
   it('can not create/edit questions for ongoing interim feedback', () => {})
