@@ -1,3 +1,4 @@
+const { student } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Responsible Teachers', () => {
@@ -179,6 +180,7 @@ describe('Responsible Teachers', () => {
     })
 
     cy.get('[data-cy="interim-feedback-delete-New interim feedback"]').should('exist').click()
+
     // Assert that the feedback was created correctly
     cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('not.exist')
   })
@@ -366,5 +368,35 @@ describe('Admin Users', () => {
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
 
-  it('can delete interim feedbacks after feedback has been given', () => {})
+  it.only('can delete interim feedbacks after feedback has been given', () => {
+    cy.giveInterimFeedback(student)
+
+    cy.get('@parentId').then(parentId => {
+      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+    })
+
+    cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('not.exist')
+
+    cy.on('window:confirm', str => {
+      expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+    })
+
+    // Assert that the feedback is rendered correctly and feedback was given
+    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-open-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-period-info-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-feedback-count-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-feedback-count-percentage-1/7"]').should('exist')
+    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback-chips-Tommi Testaaja"]').should(
+      'exist'
+    )
+
+    // Remove the interim feedback
+    cy.get('[data-cy="interim-feedback-delete-Test interim feedback"]').should('exist').click()
+    // Assert that the feedback was created correctly
+    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('not.exist')
+
+    cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('be.visible')
+  })
 })
