@@ -29,7 +29,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const deleteMutation = useDeleteInterimFeedbackMutation(parentId)
   const deleteInterimFeedback = useInteractiveMutation(fbtId => deleteMutation.mutateAsync(fbtId), {
-    success: t('organisationSurveys:removeSuccess'),
+    success: t('interimFeedback:removeSuccess'),
   })
 
   const defaultPath = `/targets/${parentId}/interim-feedback`
