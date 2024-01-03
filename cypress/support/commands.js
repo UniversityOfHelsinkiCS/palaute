@@ -139,6 +139,38 @@ Cypress.Commands.add('giveOrganisationSurveyFeedback', headers => {
 })
 
 /**
+ * Custom Cypress command to give feedback for an interim feedback.
+ *
+ * Given header is the student that the feedback is given as.
+ * Be sure that the headers match the students in the survey otherwise it is not possible to give feedback
+ *
+ * The feedback is given to the organisation survey created using the 'createInterimFeedback' Cypress Command.
+ *
+ * @memberOf Cypress.Chainable
+ *
+ * @param {Object} headers - The headers for the HTTP request, see cypress/fixtures/headers.js
+ *
+ * @see createInterimFeedback
+ *
+ * @returns {Cypress.Chainable} Yields the original survey object for further chaining.
+ */
+Cypress.Commands.add('giveInterimFeedback', headers => {
+  cy.get('@interimFeedback').then(interimFeedback => {
+    const body = {
+      feedbackTargetId: interimFeedback.id,
+      data: [],
+    }
+
+    cy.request({
+      method: 'POST',
+      url: '/api/feedbacks',
+      headers,
+      body,
+    })
+  })
+})
+
+/**
  * Custom Cypress command to create an interim feedback.
  *
  * @param {string} parentId - The feedback target id that the interim feedback will be created to
