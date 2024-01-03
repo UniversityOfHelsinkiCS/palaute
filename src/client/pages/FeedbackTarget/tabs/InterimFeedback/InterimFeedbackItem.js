@@ -68,7 +68,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Typography
-            data-cy={`interim-feedback-item-title-${interimFeedbackName}`}
+            data-cy={`interim-feedback-item-title-${interimFeedback.id}`}
             sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
             variant="h5"
             component="div"
@@ -77,7 +77,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           </Typography>
 
           {Date.parse(opensAt) < new Date() ? (
-            <Box data-cy={`interim-feedback-open-${interimFeedbackName}`} sx={{ mt: 2, ml: -1 }}>
+            <Box data-cy={`interim-feedback-open-${interimFeedback.id}`} sx={{ mt: 2, ml: -1 }}>
               <FeedbackResponseChip
                 id={parentId}
                 interimFeedbackId={interimFeedback.id}
@@ -87,24 +87,24 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               />
             </Box>
           ) : (
-            <Box data-cy={`interim-feedback-not-open-${interimFeedbackName}`} sx={{ mt: 2 }}>
+            <Box data-cy={`interim-feedback-not-open-${interimFeedback.id}`} sx={{ mt: 2 }}>
               <Typography variant="body2" color="textSecondary" component="span">
                 {t('teacherView:feedbackNotStarted')}
               </Typography>
             </Box>
           )}
 
-          <Typography data-cy={`interim-feedback-period-info-${interimFeedbackName}`} variant="body2" sx={{ mt: 2 }}>
+          <Typography data-cy={`interim-feedback-period-info-${interimFeedback.id}`} variant="body2" sx={{ mt: 2 }}>
             {periodInfo}
           </Typography>
 
           <Box
-            data-cy={`interim-feedback-feedback-count-${interimFeedbackName}`}
+            data-cy={`interim-feedback-feedback-count-${interimFeedback.id}`}
             sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
           >
             <Typography variant="body2">{t('interimFeedback:givenFeedback')}:</Typography>
             <PercentageCell
-              data-cy={`interim-feedback-feedback-count-percentage-${feedbackCount}/${studentCount}`}
+              data-cy={`interim-feedback-feedback-count-percentage-${interimFeedback.id}-${feedbackCount}/${studentCount}`}
               size="small"
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
@@ -113,13 +113,13 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
           {teachers.length > 0 && (
             <Box
-              data-cy={`interim-feedback-responsible-persons-${interimFeedbackName}`}
+              data-cy={`interim-feedback-responsible-persons-${interimFeedback.id}`}
               sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}
             >
               <Typography variant="body2">{t('interimFeedback:responsibleTeachers')}:</Typography>
               {teachers.map(({ user: teacher }) => (
                 <Chip
-                  data-cy={`interim-feedback-responsible-persons-${interimFeedbackName}-chips-${teacher.firstName} ${teacher.lastName}`}
+                  data-cy={`interim-feedback-responsible-persons-${interimFeedback.id}-chips-${teacher.firstName} ${teacher.lastName}`}
                   key={teacher.id}
                   size="small"
                   sx={{ mr: 1 }}
@@ -130,7 +130,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           )}
 
           <Button
-            data-cy={`interim-feedback-show-feedback-${interimFeedbackName}`}
+            data-cy={`interim-feedback-show-feedback-${interimFeedback.id}`}
             color="primary"
             variant="outlined"
             sx={{ mt: 2 }}
@@ -142,7 +142,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
           {feedbackCount > 0 && (
             <Button
-              data-cy={`interim-feedback-show-results-${interimFeedbackName}`}
+              data-cy={`interim-feedback-show-results-${interimFeedback.id}`}
               color="primary"
               variant="outlined"
               sx={{ mt: 2, ml: 2 }}
@@ -155,7 +155,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
           {(allowDelete || isAdmin) && (
             <Button
-              data-cy={`interim-feedback-delete-${interimFeedbackName}`}
+              data-cy={`interim-feedback-delete-${interimFeedback.id}`}
               color="error"
               variant="outlined"
               sx={{ mt: 2, ml: 2 }}
