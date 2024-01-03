@@ -4,6 +4,22 @@ describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.clearInterimFeedbacks()
 
+    const today = new Date()
+    const parentId = '163'
+    const interimFeedbackBody = {
+      name: {
+        fi: 'Testi välipalaute',
+        en: 'Test interim feedback',
+        sv: '',
+      },
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.wrap(parentId).as('parentId')
+
+    cy.createInterimFeedback(parentId, interimFeedbackBody)
+
     // Login as Tommi Testaaja
     cy.loginAsSecondaryTeacher()
   })
@@ -17,7 +33,7 @@ describe('Responsible Teachers', () => {
 
     // Assert that the interim feedbacks tab is rendered
     cy.get('[data-cy="feedback-target-interim-feedback-tab"]').should('exist').click()
-    cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('exist')
+    cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('not.exist')
     cy.get('[data-cy="interim-feedbacks-add-new"]').should('exist').click()
 
     // Assert that the editor is rendered correctly
@@ -26,9 +42,9 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-editor-cancel"]').should('exist')
 
     // Fill in the name of the survey
-    cy.get('[data-cy="formik-locales-field-fi-name"]').type('Testi välipalaute')
-    cy.get('[data-cy="formik-locales-field-sv-name"]').type('Testundersökning')
-    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test interim feedback')
+    cy.get('[data-cy="formik-locales-field-fi-name"]').type('Uusi välipalaute')
+    cy.get('[data-cy="formik-locales-field-sv-name"]').type('New interim feedback')
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('New interim feedback')
 
     // Assert that the startDate picker is there
     cy.get('[data-cy="formik-date-picker-field-startDate"]').should('be.visible')
@@ -39,19 +55,17 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-editor-save"]').click()
 
     // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-not-open-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-period-info-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-not-open-New interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-period-info-New interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-feedback-count-New interim feedback"]').should('exist')
     cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback-chips-Tommi Testaaja"]').should(
-      'exist'
-    )
+    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback-chips-Tommi Testaaja"]').should('exist')
 
-    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-show-results-Test interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-delete-Test interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-show-feedback-New interim feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-show-results-New interim feedback"]').should('not.exist')
+    cy.get('[data-cy="interim-feedback-delete-New interim feedback"]').should('exist')
   })
 
   it('can view courses interim feedbacks if responsible teacher', () => {
@@ -118,22 +132,10 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-target-students-with-feedback-tab"]').should('exist').click()
   })
 
-  it.only('can edit interim feedbacks', () => {
-    const today = new Date()
-    const parentId = '163'
-    const interimFeedbackBody = {
-      name: {
-        fi: 'Testi välipalaute',
-        en: 'Test interim feedback',
-        sv: '',
-      },
-      startDate: today,
-      endDate: new Date().setDate(today.getDate() + 7),
-    }
-
-    cy.createInterimFeedback(parentId, interimFeedbackBody)
-
-    cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+  it('can edit interim feedbacks', () => {
+    cy.get('@parentId').then(parentId => {
+      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+    })
 
     // Assert that the feedback was created correctly
     cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
