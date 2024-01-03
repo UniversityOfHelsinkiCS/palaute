@@ -183,7 +183,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('not.exist')
   })
 
-  it.only('can not create/edit questions for ongoing interim feedback', () => {
+  it('can not create/edit questions for ongoing interim feedback', () => {
     cy.get('@parentId').then(parentId => {
       cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
     })
@@ -194,7 +194,50 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('have.attr', 'aria-disabled', 'true')
   })
 
-  it('can create questions for interim feedbacks', () => {})
+  it('can create questions for interim feedbacks', () => {
+    const today = new Date()
+    const parentId = '163'
+    const interimFeedbackBody = {
+      name: {
+        fi: 'Uusin välipalaute',
+        en: 'Newest interim feedback',
+        sv: '',
+      },
+      startDate: new Date().setDate(today.getDate() + 1),
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.createInterimFeedback(parentId, interimFeedbackBody)
+
+    cy.get('@interimFeedback').then(interimFeedback => {
+      cy.visit(`${baseUrl}/targets/${interimFeedback.id}`)
+    })
+
+    cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('exist').click()
+
+    // Add likert question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
+    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Add another question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
+    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+  })
 })
 
 describe('Students', () => {
