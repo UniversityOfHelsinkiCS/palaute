@@ -264,7 +264,7 @@ describe('Students', () => {
     cy.loginAsStudent()
   })
 
-  it.only('can view ongoing interim feedbacks and give interim feedback', () => {
+  it('can view ongoing interim feedbacks and give interim feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
@@ -313,9 +313,58 @@ describe('Students', () => {
 })
 
 describe('Admin Users', () => {
-  beforeEach(() => {})
+  beforeEach(() => {
+    cy.clearInterimFeedbacks()
 
-  it('can create questions for interim feedbacks regardles of ongoing feedback', () => {})
+    const today = new Date()
+    const parentId = '163'
+    const interimFeedbackBody = {
+      name: {
+        fi: 'Testi välipalaute',
+        en: 'Test interim feedback',
+        sv: '',
+      },
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.wrap(parentId).as('parentId')
+
+    cy.createInterimFeedback(parentId, interimFeedbackBody)
+
+    cy.loginAsAdmin()
+  })
+
+  it('can create questions for interim feedbacks regardles of ongoing feedback', () => {
+    cy.get('@interimFeedback').then(interimFeedback => {
+      cy.visit(`${baseUrl}/targets/${interimFeedback.id}`)
+    })
+
+    cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('exist').click()
+
+    // Add likert question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
+    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+
+    // Add another question to the survey
+    cy.get('[data-cy="question-editor-add-question"]').click()
+    cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
+    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-add-option"]').click()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+
+    cy.get('[data-cy="question-card-save-edit"]').click()
+  })
 
   it('can delete interim feedbacks after feedback has been given', () => {})
 })
