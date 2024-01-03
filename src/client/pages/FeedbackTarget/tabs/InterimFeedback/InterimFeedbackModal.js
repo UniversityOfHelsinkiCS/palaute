@@ -49,6 +49,7 @@ const InterimFeedbackModal = () => {
       onClose={handleClose}
     >
       <IconButton
+        data-cy="interim-feedback-modal-close-button"
         aria-label="close"
         onClick={handleClose}
         sx={{
