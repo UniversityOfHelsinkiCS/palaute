@@ -55,21 +55,31 @@ describe('Responsible Teachers', () => {
 
     cy.get('[data-cy="interim-feedback-editor-save"]').click()
 
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-not-open-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-period-info-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback-chips-Tommi Testaaja"]').should('exist')
+    // Visit the interim feedbacks
+    cy.get('@parentId').then(parentId => {
+      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+    })
 
-    cy.get('[data-cy="interim-feedback-show-feedback-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-show-results-New interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-delete-New interim feedback"]').should('exist')
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Assert that the feedback was created correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-not-open-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
+        'exist'
+      )
+
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist')
+    })
   })
 
-  it('can view courses interim feedbacks if responsible teacher', () => {
+  it('can view my teaching interim feedbacks if responsible teacher', () => {
     cy.visit(`${baseUrl}/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
@@ -80,24 +90,26 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="feedback-target-interim-feedback-tab"]').should('exist').click()
     cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('not.exist')
 
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-open-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-not-open-Test interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-period-info-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback-chips-Tommi Testaaja"]').should(
-      'exist'
-    )
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Assert that the feedback was created correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-not-open-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
+        'exist'
+      )
 
-    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-show-results-Test interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-delete-Test interim feedback"]').should('exist')
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist')
 
-    // Visit the interim feedbacks feedback page
-    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').click()
+      // Visit the interim feedbacks feedback page
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).click()
+    })
 
     cy.url().should('include', '/feedback')
 
@@ -138,21 +150,29 @@ describe('Responsible Teachers', () => {
       cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
     })
 
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-open-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-not-open-Test interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-period-info-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback-chips-Tommi Testaaja"]').should(
-      'exist'
-    )
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Assert that the feedback was created correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('Test interim feedback')
+      cy.get(`[data-cy="interim-feedback-not-open-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
+        'exist'
+      )
 
-    // Go to the edit modal of the interim feedback
-    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').click()
-    cy.get('[data-cy="feedback-target-edit-interim-feedback"]').should('exist').click()
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist')
+
+      // Visit the interim feedbacks feedback page
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).click()
+      cy.get('[data-cy="feedback-target-edit-interim-feedback"]').should('exist').click()
+    })
 
     // Change the interim feedbacks name fields
     cy.get('[data-cy="formik-locales-field-fi-name"]').clear().type('Uusi välipalaute')
@@ -164,25 +184,37 @@ describe('Responsible Teachers', () => {
 
     cy.get('[data-cy="interim-feedback-modal-close-button"]').should('exist').click()
 
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-open-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-not-open-New interim feedback"]').should('not.exist')
-    cy.get('[data-cy="interim-feedback-period-info-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-percentage-0/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-New interim feedback-chips-Tommi Testaaja"]').should('exist')
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Assert that the feedback was updated correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).contains('New interim feedback')
 
-    // Assert that the interim feedback may be deleted if no feedbacks are given
-    cy.on('window:confirm', str => {
-      expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+      // Only the name changed so these should have remained the same
+      cy.get(`[data-cy="interim-feedback-not-open-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
+        'exist'
+      )
+
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist')
+
+      // Assert that the interim feedback may be deleted if no feedbacks are given
+      cy.on('window:confirm', str => {
+        expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+      })
+
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist').click()
+
+      // Assert that the feedback was created correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('not.exist')
     })
 
-    cy.get('[data-cy="interim-feedback-delete-New interim feedback"]').should('exist').click()
-
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-New interim feedback"]').should('not.exist')
+    cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('exist')
   })
 
   it('can not create/edit questions for ongoing interim feedback', () => {
@@ -190,8 +222,11 @@ describe('Responsible Teachers', () => {
       cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
     })
 
-    cy.get('[data-cy="interim-feedback-show-feedback-Test interim feedback"]').click()
+    cy.get('@interimFeedback').then(interimFeedback => {
+      cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).click()
+    })
 
+    // Assert that the edit tab is disabled
     cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
     cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('have.attr', 'aria-disabled', 'true')
   })
@@ -381,21 +416,23 @@ describe('Admin Users', () => {
       expect(str).to.eq('Are you sure you want to remove this interim feedback?')
     })
 
-    // Assert that the feedback is rendered correctly and feedback was given
-    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-open-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-period-info-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-feedback-count-percentage-1/7"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback"]').should('exist')
-    cy.get('[data-cy="interim-feedback-responsible-persons-Test interim feedback-chips-Tommi Testaaja"]').should(
-      'exist'
-    )
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Assert that the feedback is rendered correctly and feedback was given
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-1/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
+        'exist'
+      )
 
-    // Remove the interim feedback
-    cy.get('[data-cy="interim-feedback-delete-Test interim feedback"]').should('exist').click()
-    // Assert that the feedback was created correctly
-    cy.get('[data-cy="interim-feedback-item-title-Test interim feedback"]').should('not.exist')
+      // Remove the interim feedback
+      cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist').click()
+      // Assert that the feedback was created correctly
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('not.exist')
+    })
 
     cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('be.visible')
   })
