@@ -60,9 +60,18 @@ const formatActivityPeriod = ({ startDate, endDate }) => {
   }
 }
 
+/**
+ * Transform tagId to the prefixed format used in summaries entityIds.
+ * This is for avoiding conflicts with other entityIds that may come from external APIs.
+ * @param {number} tagId - the original tagId
+ * @returns {string} the prefixed tagId, e.g. 'norppa-tag-1234'
+ */
+const prefixTagId = tagId => `norppa-tag-${tagId}`
+
 module.exports = {
   normalizeOrganisationCode,
   startOfStudyYear,
   endOfStudyYear,
   formatActivityPeriod,
+  prefixTagId,
 }

@@ -11,11 +11,13 @@ const {
   CourseUnit,
   Organisation,
   Summary,
+  Tag,
 } = require('../../models')
 const { WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
 const logger = require('../../util/logger')
+const { prefixTagId } = require('../../util/common')
 
 const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
@@ -46,8 +48,18 @@ const getRelevantQuestionIds = async () => {
 
 const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds) => {
   // ---------------- Phase 1: ------------------
-  // Build course realisation, course unit and organisation summaries from feedbacks for courses during this time period
+  // Build summary entities from feedbacks for courses during this time period
+  // We do this for the following entities, from "bottom up":
+  // 1. course realisations (built from feedback data)
+  // 2. course units (built from CURs)
+  // 3. course unit groups (--||--)
+  // 4. tags (--||--)
+  // 5. organisations
+  //
+  // This should be quite extensible should we want to add more different entities in the future.
+  // Since the initial version, I've already added cu groups and tags.
 
+  // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       // Only consider feedback targets that have feedback.
@@ -94,22 +106,36 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
             },
           ],
         },
-        include: {
-          model: Organisation,
-          as: 'organisations',
-          attributes: ['id', 'parentId'],
-        },
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: ['id', 'parentId'],
+          },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id'],
+          },
+        ],
       },
       {
         model: CourseUnit,
         attributes: ['id', 'groupId'],
         as: 'courseUnit',
         required: true,
-        include: {
-          model: Organisation,
-          as: 'organisations',
-          attributes: ['id', 'parentId'],
-        },
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: ['id', 'parentId'],
+          },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id'],
+          },
+        ],
       },
       {
         model: UserFeedbackTarget,
@@ -178,13 +204,6 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
-    // We mark the end date of this data to be at the time the last feedback was given.
-    // This is more accurate compared to CUR end date, which can sometimes be set arbitrarily far into the future by the teacher
-    // If no feedback was given, use the start date.
-    /*const endDate = fbt.feedbackCount
-      ? _.max(fbt.userFeedbackTargets.filter(ufbt => ufbt.feedback).map(ufbt => ufbt.feedback.createdAt))
-      : fbt.courseRealisation.startDate*/
-
     courseRealisationSummaries.push({
       entityId: fbt.courseRealisation.id,
       data: {
@@ -196,8 +215,10 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
       },
       courseUnitId: fbt.courseUnit.id,
       courseUnitGroupId: fbt.courseUnit.groupId,
-      curOrganisations: fbt.courseRealisation.organisations.map(org => _.pick(org, ['id', 'parentId'])),
-      cuOrganisations: fbt.courseUnit.organisations.map(org => _.pick(org, ['id', 'parentId'])),
+      curOrganisations: fbt.courseRealisation.organisations,
+      cuOrganisations: fbt.courseUnit.organisations,
+      curTags: fbt.courseRealisation.tags,
+      cuTags: fbt.courseUnit.tags,
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
 
@@ -233,6 +254,28 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
   }
 
+  // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
+  const tagSummaries = _.uniqBy(
+    courseRealisationSummaries.flatMap(cur => [...cur.curTags, ...cur.cuTags]),
+    'id'
+  ).map(tag => ({
+    entityId: prefixTagId(tag.id),
+    courseRealisations: _.uniqBy(
+      courseRealisationSummaries.filter(
+        cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+      ),
+      'entityId'
+    ),
+  }))
+
+  // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
+  for (const tag of tagSummaries) {
+    const { courseRealisations } = tag
+    delete tag.courseRealisations // Now not needed anymore
+
+    tag.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+  }
+
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
   const orgSummaries = _.uniqBy(
     courseRealisationSummaries.flatMap(cur => [...cur.cuOrganisations, ...cur.curOrganisations]),
@@ -249,7 +292,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     ),
   }))
 
-  // ---------------- Phase 2: ------------------
+  // ---------------- Phase 2 (organisations): ------------------
   // Now we're done with the base layer, CURs, CUs and their direct responsible organisations,
   // and can start the generalising step where we
   // 1. iteratively find parent organisations of all found organisations.
@@ -326,6 +369,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
   const allSummaries = courseRealisationSummaries
     .concat(courseUnitSummaries)
     .concat(courseUnitGroupSummaries)
+    .concat(tagSummaries)
     .concat(orgSummaries)
     .filter(summary => summary.data && summary.data.feedbackCount > 0)
     .map(summary => _.pick(summary, relevantFields))
