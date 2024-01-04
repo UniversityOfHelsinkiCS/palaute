@@ -391,7 +391,9 @@ describe('Feedback Correspondents', () => {
 
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
+    })
 
     // Assert that the feedback information is rendered correctly
     cy.get('[data-cy="feedback-target-primary-course-name"]').should('exist')
@@ -564,11 +566,20 @@ describe('Responsible Teachers', () => {
 
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-item-title-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Tommi Testaaja"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-New survey-chips-Matti Luukkainen"]').should('exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy^="organisation-survey-item-title-${organisationSurvey.id}"]`)
+        .should('exist')
+        .contains('New survey')
+      cy.get(`[data-cy^="organisation-survey-feedback-count-percentage-${organisationSurvey.id}"]`)
+        .should('exist')
+        .contains('0/2')
+      cy.get(`[data-cy^="organisation-survey-responsible-persons-${organisationSurvey.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 2)
+        .should('contain', 'Matti Luukkainen')
+        .should('contain', 'Tommi Testaaja')
+    })
   })
 
   it('can not create/edit questions for ongoing organistaion survey', () => {
