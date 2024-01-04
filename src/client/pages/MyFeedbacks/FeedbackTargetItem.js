@@ -205,7 +205,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   return (
     <ListItem
-      data-cy={`feedback-item-${translatedName}`}
+      data-cy={`feedback-item-${feedbackTarget.id}`}
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
       divider={divider}
       disableGutters
