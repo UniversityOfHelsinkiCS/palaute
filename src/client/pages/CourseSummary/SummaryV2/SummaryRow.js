@@ -214,7 +214,6 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
 )
 
 const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) => {
-  const { i18n, t } = useTranslation()
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = useAccordionState(tag.id, true)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
@@ -471,7 +470,7 @@ export const OrganisationSummaryRow = ({
 
   const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')
 
-  const tagsEnabled = TAGS_ENABLED.includes(initialOrganisation.code)
+  const tagsEnabled = TAGS_ENABLED.includes(initialOrganisation?.code)
 
   if (!alwaysOpen && !initialOrganisation) {
     return <Loader />
