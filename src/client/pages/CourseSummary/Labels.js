@@ -114,3 +114,23 @@ export const OrganisationLabel = ({ organisation, dates }) => {
     </Box>
   )
 }
+
+export const TagLabel = ({ tag, dates }) => {
+  const { t, i18n } = useTranslation()
+  const isFetching = useIsFetching(['summaries-v2', tag?.id])
+
+  return (
+    <Box display="flex" flexDirection="column">
+      <Typography variant="caption" color="textSecondary">
+        {t('courseSummary:tagLabel')}
+      </Typography>
+      <Box display="flex" gap="1rem">
+        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+          {getLanguageValue(tag?.name, i18n.language)}
+        </Typography>
+        {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+        {Boolean(isFetching) && <CircularProgress size={20} />}
+      </Box>
+    </Box>
+  )
+}

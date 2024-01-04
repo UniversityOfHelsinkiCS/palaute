@@ -8,7 +8,7 @@ import { Box, ButtonBase, Typography, Tooltip, Skeleton } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
-import { CourseUnitLabel, OrganisationLabel } from '../Labels'
+import { CourseUnitLabel, OrganisationLabel, TagLabel } from '../Labels'
 import PercentageCell from '../PercentageCell'
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useOrderedAndFilteredOrganisations } from './utils'
@@ -17,6 +17,7 @@ import Sort from './Sort'
 import { OrganisationLink } from './OrganisationLink'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
+import { TAGS_ENABLED } from '../../../util/common'
 
 const styles = {
   resultCell: {
@@ -212,6 +213,50 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   </>
 )
 
+const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) => {
+  const { i18n, t } = useTranslation()
+  const [isTransitioning, startTransition] = React.useTransition()
+  const [isOpen, setIsOpen] = useAccordionState(tag.id, true)
+  const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
+
+  const indentLineColor = useRandomColor(tag?.code ?? '')
+
+  const label = <TagLabel tag={tag} />
+
+  const handleOpenRow = () => {
+    setNextIsOpen(!isOpen)
+    startTransition(() => setIsOpen(!isOpen))
+  }
+
+  return (
+    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
+        <RowHeader label={label} openable handleOpenRow={handleOpenRow} isOpen={nextIsOpen} />
+        <OrganisationResults summary={tag.summary} questions={questions} />
+      </Box>
+      {(isTransitioning || isOpen) && (
+        <Box
+          sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
+          display="flex"
+          flexDirection="column"
+          alignItems="stretch"
+          gap="0.4rem"
+        >
+          {isOpen && (
+            <CourseUnitsList
+              organisationId={organisationId}
+              startDate={startDate}
+              endDate={endDate}
+              questions={questions}
+              tagId={tag.id}
+            />
+          )}
+        </Box>
+      )}
+    </Box>
+  )
+}
+
 const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const { i18n, t } = useTranslation()
   const label = (
@@ -260,14 +305,13 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   )
 }
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, tagId }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
     include: 'childOrganisations',
     enabled: !initialChildOrganisations?.length,
-    tagId,
   })
 
   const childOrganisations = initialChildOrganisations ?? organisation?.childOrganisations
@@ -290,8 +334,40 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
   ))
 }
 
-const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDate, questions }) => {
-  const { sortFunction, sortBy, tagId } = useSummaryContext()
+const TagList = ({ organisationId, initialTags, startDate, endDate, questions }) => {
+  const { organisation, isLoading } = useSummaries({
+    entityId: organisationId,
+    startDate,
+    endDate,
+    include: 'tags',
+    enabled: !initialTags?.length,
+  })
+
+  const childTags = initialTags ?? organisation?.tags
+
+  const orderedTags = React.useMemo(
+    () => (childTags?.length > 0 ? _.orderBy(childTags, t => t.name, 'asc') : []),
+    [organisation]
+  )
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  return orderedTags?.map(t => (
+    <TagSummaryRow
+      key={t.id}
+      tag={t}
+      questions={questions}
+      organisationId={organisationId}
+      startDate={startDate}
+      endDate={endDate}
+    />
+  ))
+}
+
+const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDate, questions, tagId }) => {
+  const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
@@ -383,7 +459,7 @@ export const OrganisationSummaryRow = ({
   organisation: initialOrganisation,
   organisationId,
 }) => {
-  const { questions, tagId } = useSummaryContext()
+  const { questions } = useSummaryContext()
   const { ref, inView } = useInView({
     triggerOnce: true,
   })
@@ -394,6 +470,8 @@ export const OrganisationSummaryRow = ({
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
   const indentLineColor = useRandomColor(initialOrganisation?.code ?? '')
+
+  const tagsEnabled = TAGS_ENABLED.includes(initialOrganisation.code)
 
   if (!alwaysOpen && !initialOrganisation) {
     return <Loader />
@@ -417,7 +495,6 @@ export const OrganisationSummaryRow = ({
             questions={questions}
             organisationId={organisationId}
             initialOrganisation={initialOrganisation}
-            tagId={tagId}
           />
         )}
       </Box>
@@ -436,8 +513,16 @@ export const OrganisationSummaryRow = ({
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
                 startDate={startDate}
                 endDate={endDate}
-                tagId={tagId}
               />
+              {tagsEnabled && (
+                <TagList
+                  organisationId={organisationId}
+                  initialTags={initialOrganisation?.tags}
+                  startDate={startDate}
+                  endDate={endDate}
+                  questions={questions}
+                />
+              )}
               <CourseUnitsList
                 organisationId={organisationId}
                 initialCourseUnits={initialOrganisation?.courseUnits}
