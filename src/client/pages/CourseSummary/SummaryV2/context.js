@@ -4,6 +4,7 @@ import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
 import apiClient from '../../../util/apiClient'
 import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
+import { getStudyYearRange } from '../../../util/yearSemesterUtils'
 
 const getSummarySortFunction = sortField => {
   switch (sortField) {
@@ -30,10 +31,7 @@ const useInitialViewingMode = () => {
 const summaryContext = React.createContext({
   showSummariesWithNoFeedback: false,
   setShowSummariesWithNoFeedback: () => {},
-  dateRange: {
-    start: null,
-    end: null,
-  },
+  dateRange: getStudyYearRange(new Date()),
   setDateRange: () => {},
   option: 'year',
   setOption: () => {},
@@ -98,12 +96,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     const start = new Date(String(params.get('startDate')))
     const end = new Date(String(params.get('endDate')))
 
-    return isValid(start) && isValid(end)
-      ? { start, end }
-      : {
-          start: null,
-          end: null,
-        }
+    return isValid(start) && isValid(end) ? { start, end } : getStudyYearRange(new Date())
   })
 
   const updateDateRangeQS = React.useCallback(dateRange => {

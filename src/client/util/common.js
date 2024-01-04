@@ -91,3 +91,5 @@ export const ALWAYS_SHOW_STUDENT_LIST = CONFIG?.ALWAYS_SHOW_STUDENT_LIST
 
 // eslint-disable-next-line no-undef
 export const INTERIM_FEEDBACKS_ENABLED = CONFIG?.INTERIM_FEEDBACKS_ENABLED
+
+export const STUDY_YEAR_START_MONTH = 8 // September
