@@ -118,13 +118,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
             >
               <Typography variant="body2">{t('interimFeedback:responsibleTeachers')}:</Typography>
               {teachers.map(({ user: teacher }) => (
-                <Chip
-                  data-cy={`interim-feedback-responsible-persons-${interimFeedback.id}-chips-${teacher.firstName} ${teacher.lastName}`}
-                  key={teacher.id}
-                  size="small"
-                  sx={{ mr: 1 }}
-                  label={`${teacher.firstName} ${teacher.lastName}`}
-                />
+                <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
               ))}
             </Box>
           )}

@@ -110,13 +110,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           >
             <Typography variant="body2">{t('organisationSurveys:responsibleTeachers')}:</Typography>
             {teachers.map(({ user: teacher }) => (
-              <Chip
-                data-cy={`organisation-survey-responsible-persons-${surveyName}-chips-${teacher.firstName} ${teacher.lastName}`}
-                key={teacher.id}
-                size="small"
-                sx={{ mr: 1 }}
-                label={`${teacher.firstName} ${teacher.lastName}`}
-              />
+              <Chip key={teacher.id} size="small" sx={{ mr: 1 }} label={`${teacher.firstName} ${teacher.lastName}`} />
             ))}
           </Box>
         )}
