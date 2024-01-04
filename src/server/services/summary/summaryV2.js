@@ -10,6 +10,8 @@ const {
   CourseRealisationsOrganisation,
   UserFeedbackTarget,
   Tag,
+  CourseUnitsTag,
+  CourseRealisationsTag,
 } = require('../../models')
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
@@ -39,7 +41,7 @@ const withOrganisationAccessCheck = asyncFunction => async params => {
   return asyncFunction(params)
 }
 
-const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) => {
+const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagId }) => {
   const courseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'groupId', 'courseCode'],
     include: [
@@ -55,6 +57,18 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
         as: 'groupSummaries',
         required: true,
       },
+      ...(tagId
+        ? [
+            {
+              // Include only if tagId defined in this request
+              model: CourseUnitsTag,
+              as: 'courseUnitsTags',
+              attributes: [],
+              where: { tagId },
+              required: true,
+            },
+          ]
+        : []),
     ],
     order: [['courseCode', 'ASC']],
   })
@@ -72,7 +86,7 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate }) =>
   return aggregatedCourseUnits
 }
 
-const getCourseRealisationSummaries = async ({ organisationId, startDate, endDate }) => {
+const getCourseRealisationSummaries = async ({ organisationId, startDate, endDate, tagId }) => {
   const courseRealisations = await CourseRealisation.findAll({
     attributes: ['id'],
     include: [
@@ -100,6 +114,18 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
           required: true,
         },
       },
+      ...(tagId
+        ? [
+            {
+              // Include only if tagId defined in this request
+              model: CourseRealisationsTag,
+              as: 'courseRealisationsTags',
+              attributes: [],
+              where: { tagId },
+              required: true,
+            },
+          ]
+        : []),
     ],
     // logging: true,
   })
@@ -220,11 +246,11 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   return organisation
 }
 
-const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate, endDate }) => {
+const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate, endDate, tagId }) => {
   const [organisation, courseUnits, courseRealisations] = await Promise.all([
     getOrganisationSummary({ organisationId, startDate, endDate }),
-    getCourseUnitSummaries({ organisationId, startDate, endDate }),
-    getCourseRealisationSummaries({ organisationId, startDate, endDate }),
+    getCourseUnitSummaries({ organisationId, startDate, endDate, tagId }),
+    getCourseRealisationSummaries({ organisationId, startDate, endDate, tagId }),
   ])
 
   if (!organisation) {

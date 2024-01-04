@@ -195,6 +195,10 @@ OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 
 Organisation.hasMany(Tag, { as: 'tags' })
 Tag.belongsTo(Organisation, { as: 'organisation' })
+
+Tag.hasOne(CourseRealisationsTag, { as: 'tag' })
+CourseRealisationsTag.belongsTo(Tag, { as: 'courseRealisationsTag' })
+CourseRealisation.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
 CourseRealisation.belongsToMany(Tag, {
   through: CourseRealisationsTag,
   as: 'tags',
@@ -212,7 +216,10 @@ CourseUnit.belongsToMany(Tag, {
   foreignKey: 'courseCode',
   as: 'tags',
 })
+CourseUnit.hasMany(CourseUnitsTag, { as: 'courseUnitsTags', sourceKey: 'courseCode', foreignKey: 'courseCode' })
 Tag.hasMany(CourseUnitsTag)
+Tag.hasOne(CourseUnitsTag, { as: 'courseUnitsTag' })
+CourseUnitsTag.belongsTo(Tag, { as: 'tag' })
 
 /**
  * Groups associations
