@@ -96,7 +96,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         >
           <Typography variant="body2">{t('organisationSurveys:givenFeedback')}:</Typography>
           <PercentageCell
-            data-cy={`organisation-survey-feedback-count-percentage-${feedbackCount}/${studentCount}`}
+            data-cy={`organisation-survey-feedback-count-percentage-${organisationSurvey.id}-${feedbackCount}/${studentCount}`}
             size="small"
             label={`${feedbackCount}/${studentCount}`}
             percent={(feedbackCount / studentCount) * 100}
