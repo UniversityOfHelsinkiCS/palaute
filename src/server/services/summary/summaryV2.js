@@ -9,6 +9,7 @@ const {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
   UserFeedbackTarget,
+  Tag,
 } = require('../../models')
 const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
 const { ApplicationError } = require('../../util/customErrors')
@@ -271,9 +272,13 @@ const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDa
     return null
   }
 
-  const tags = await organisation.getTags({
+  const tags = await Tag.findAll({
+    where: {
+      organisationId,
+    },
     attributes: ['id', 'name'],
   })
+
   const tagEntityIds = tags.map(tag => prefixTagId(tag.id))
   const summaries = await Summary.scope({ method: ['at', startDate, endDate] }).findAll({
     where: {
