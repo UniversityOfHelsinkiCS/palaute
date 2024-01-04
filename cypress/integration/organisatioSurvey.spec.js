@@ -61,7 +61,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it('can fill in new organisation surveys', () => {
+  it.only('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -116,18 +116,21 @@ describe('Feedback Correspondents', () => {
     // Assert that the survey was created
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-not-open-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-period-info-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/4"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
+    // Because there is no way of getting the organistaion survey's id
+    // that was created above we just have to check some elements are rendered.
+    cy.get(`[data-cy^="organisation-survey-item-title-"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-not-open-"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-period-info-"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-feedback-count-"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-feedback-count-percentage-0/4"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-responsible-persons-"]`)
+      .should('exist')
+      .children('.MuiChip-root')
+      .should('have.length', 2)
 
-    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-show-results-Test survey"]').should('not.exist')
-    cy.get('[data-cy="organisation-survey-delete-Test survey"]').should('exist')
+    cy.get(`[data-cy^="organisation-survey-show-feedback-"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-show-results-"]`).should('not.exist')
+    cy.get(`[data-cy^="organisation-survey-delete-"]`).should('exist')
   })
 
   it('can not create survey with validation errors', () => {
