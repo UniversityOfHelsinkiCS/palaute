@@ -72,10 +72,12 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
         .contains('0/7')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
-        'exist'
-      )
+
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 1)
+        .should('contain', 'Tommi Testaaja')
 
       cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
@@ -106,10 +108,12 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
         .contains('0/7')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
-        'exist'
-      )
+
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 1)
+        .should('contain', 'Tommi Testaaja')
 
       cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
@@ -170,10 +174,12 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
         .contains('0/7')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
-        'exist'
-      )
+
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 1)
+        .should('contain', 'Tommi Testaaja')
 
       cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
@@ -206,10 +212,12 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
         .contains('0/7')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
-        'exist'
-      )
+
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 1)
+        .should('contain', 'Tommi Testaaja')
 
       cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-show-results-${interimFeedback.id}"]`).should('not.exist')
@@ -443,10 +451,12 @@ describe('Admin Users', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
         .contains('1/7')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
-        'exist'
-      )
+
+      cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
+        .should('exist')
+        .children('.MuiChip-root')
+        .should('have.length', 1)
+        .should('contain', 'Tommi Testaaja')
 
       // Remove the interim feedback
       cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist').click()
