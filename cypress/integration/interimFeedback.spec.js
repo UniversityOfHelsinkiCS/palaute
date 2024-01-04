@@ -309,7 +309,11 @@ describe('Students', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
     cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
-    cy.get('[data-cy$="Test interim feedback"]').should('exist').click()
+
+    cy.get('@interimFeedback').then(interimFeedback => {
+      cy.get(`[data-cy="feedback-item-${interimFeedback.id}"]`).should('exist').click()
+    })
+
     cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
 
     // Assert students does not see the edit button
@@ -341,15 +345,17 @@ describe('Students', () => {
     // Assert that the feedback page got updated
     cy.visit(`${baseUrl}/feedbacks`)
 
-    // Awaiting tab check
-    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
-    cy.get('[data-cy$="Test interim feedback"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+    cy.get('@interimFeedback').then(interimFeedback => {
+      // Awaiting tab check
+      cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${interimFeedback.id}"]`).should('not.exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
 
-    // Given tab check
-    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
-    cy.get('[data-cy$="Test interim feedback"]').should('exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
+      // Given tab check
+      cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${interimFeedback.id}"]`).should('exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
+    })
   })
 })
 
