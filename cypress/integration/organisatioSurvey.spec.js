@@ -635,7 +635,10 @@ describe('Students', () => {
   it('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`${baseUrl}/feedbacks`)
 
-    cy.get('[data-cy$="New survey"]').should('exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('exist')
+    })
+
     cy.get('[data-cy="feedback-item-give-feedback"]').should('exist').click()
 
     // Assert students does not see the edit button
@@ -667,15 +670,17 @@ describe('Students', () => {
     // Assert that the feedback page got updated
     cy.visit(`${baseUrl}/feedbacks`)
 
-    // Awaiting tab check
-    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      // Awaiting tab check
+      cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('not.exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
 
-    // Given tab check
-    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
+      // Given tab check
+      cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('not.exist')
+    })
   })
 })
 
@@ -767,19 +772,21 @@ describe('Admin Users', () => {
 
     cy.visit(`${baseUrl}/feedbacks`)
 
-    // Awaiting tab check
-    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      // Awaiting tab check
+      cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('not.exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
 
-    // Given tab check
-    cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+      // Given tab check
+      cy.get('[data-cy="my-feedbacks-given-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('not.exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
 
-    // Closed tab check
-    cy.get('[data-cy="my-feedbacks-closed-tab"]').should('exist').click()
-    cy.get('[data-cy$="New survey"]').should('not.exist')
-    cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+      // Closed tab check
+      cy.get('[data-cy="my-feedbacks-closed-tab"]').should('exist').click()
+      cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('not.exist')
+      cy.get('[data-cy="my-feedbacks-no-feedbacks"]').should('exist')
+    })
   })
 })
