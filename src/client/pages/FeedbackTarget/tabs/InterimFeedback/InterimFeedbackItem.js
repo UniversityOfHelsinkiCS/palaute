@@ -104,7 +104,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
           >
             <Typography variant="body2">{t('interimFeedback:givenFeedback')}:</Typography>
             <PercentageCell
-              data-cy={`interim-feedback-feedback-count-percentage-${interimFeedback.id}-${feedbackCount}/${studentCount}`}
+              data-cy={`interim-feedback-feedback-count-percentage-${interimFeedback.id}`}
               size="small"
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}

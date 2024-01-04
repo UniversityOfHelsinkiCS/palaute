@@ -69,7 +69,9 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('0/7')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
         'exist'
@@ -101,7 +103,9 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('0/7')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
         'exist'
@@ -125,7 +129,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-target-feedback-count"]').should('exist')
 
     // Assert no initial student feedbacks
-    cy.get('[data-cy="interim-feedback-target-feedback-count-percentage-0/7"]').should('exist')
+    cy.get('[data-cy="interim-feedback-target-feedback-count-percentage"]').should('exist').contains('0/7')
 
     // Assert correct teacher list is rendered
     cy.get('[data-cy="interim-feedback-target-responsible-administrative-person-list"]').should('not.exist')
@@ -163,7 +167,9 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('0/7')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
         'exist'
@@ -197,7 +203,9 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-0/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('0/7')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
         'exist'
@@ -432,7 +440,9 @@ describe('Admin Users', () => {
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
-      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}-1/7"]`).should('exist')
+      cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
+        .should('exist')
+        .contains('1/7')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}-chips-Tommi Testaaja"]`).should(
         'exist'

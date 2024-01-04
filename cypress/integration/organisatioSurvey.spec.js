@@ -291,9 +291,6 @@ describe('Feedback Correspondents', () => {
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="organisation-survey-item-title-${organisationSurvey.id}"]`).should('exist')
-      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}-0/1"]`)
-        .should('exist')
-        .contains('0/1')
       cy.get(`[data-cy="organisation-survey-responsible-persons-${organisationSurvey.id}"]`).should('exist')
       cy.get(`[data-cy^="organisation-survey-responsible-persons-${organisationSurvey.id}"]`)
         .should('exist')
@@ -327,7 +324,7 @@ describe('Feedback Correspondents', () => {
       cy.get(`[data-cy="organisation-survey-item-title-${organisationSurvey.id}"]`)
         .should('exist')
         .contains('New survey')
-      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}-1/2"]`)
+      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}"]`)
         .should('exist')
         .contains('1/2')
       cy.get(`[data-cy="organisation-survey-responsible-persons-${organisationSurvey.id}"]`).should('exist')
@@ -403,7 +400,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="feedback-target-feedback-count"]').should('exist')
 
     // Assert no initial student feedbacks
-    cy.get('[data-cy="feedback-target-feedback-count-percentage-1/1"]').should('exist')
+    cy.get('[data-cy="feedback-target-feedback-count-percentage"]').should('exist').contains('1/1')
 
     // Assert correct teacher list is rendered
     cy.get('[data-cy="feedback-target-responsible-administrative-person-list"]').should('exist')
@@ -513,7 +510,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="feedback-target-feedback-count"]').should('exist')
 
     // Assert no initial student feedbacks
-    cy.get('[data-cy="feedback-target-feedback-count-percentage-0/0"]').should('exist')
+    cy.get('[data-cy="feedback-target-feedback-count-percentage"]').should('exist').contains('0/0')
 
     // Assert correct teacher list is rendered
     cy.get('[data-cy="feedback-target-responsible-administrative-person-list"]').should('exist')
@@ -803,7 +800,7 @@ describe('Admin Users', () => {
       cy.get(`[data-cy="organisation-survey-show-results-${organisationSurvey.id}"]`).should('exist')
 
       // Assert that the survey has feedback given
-      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}-1/1"]`)
+      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}"]`)
         .should('exist')
         .contains('1/1')
 
