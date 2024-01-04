@@ -61,7 +61,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
     <Card sx={{ mb: 3 }}>
       <CardContent>
         <Typography
-          data-cy={`organisation-survey-item-title-${surveyName}`}
+          data-cy={`organisation-survey-item-title-${organisationSurvey.id}`}
           sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
           variant="h5"
           component="div"
@@ -70,7 +70,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         </Typography>
 
         {Date.parse(opensAt) < new Date() ? (
-          <Box data-cy={`organisation-survey-open-${surveyName}`} sx={{ mt: 2, ml: -1 }}>
+          <Box data-cy={`organisation-survey-open-${organisationSurvey.id}`} sx={{ mt: 2, ml: -1 }}>
             <FeedbackResponseChip
               id={organisationSurvey.id}
               feedbackResponseGiven={Boolean(feedbackResponse)}
@@ -79,19 +79,19 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
             />
           </Box>
         ) : (
-          <Box data-cy={`organisation-survey-not-open-${surveyName}`} sx={{ mt: 2 }}>
+          <Box data-cy={`organisation-survey-not-open-${organisationSurvey.id}`} sx={{ mt: 2 }}>
             <Typography variant="body2" color="textSecondary" component="span">
               {t('teacherView:feedbackNotStarted')}
             </Typography>
           </Box>
         )}
 
-        <Typography data-cy={`organisation-survey-period-info-${surveyName}`} variant="body2" sx={{ mt: 2 }}>
+        <Typography data-cy={`organisation-survey-period-info-${organisationSurvey.id}`} variant="body2" sx={{ mt: 2 }}>
           {periodInfo}
         </Typography>
 
         <Box
-          data-cy={`organisation-survey-feedback-count-${surveyName}`}
+          data-cy={`organisation-survey-feedback-count-${organisationSurvey.id}`}
           sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
         >
           <Typography variant="body2">{t('organisationSurveys:givenFeedback')}:</Typography>
@@ -105,7 +105,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {teachers.length > 0 && (
           <Box
-            data-cy={`organisation-survey-responsible-persons-${surveyName}`}
+            data-cy={`organisation-survey-responsible-persons-${organisationSurvey.id}`}
             sx={{ my: 2, display: 'flex', flexWrap: 'wrap' }}
           >
             <Typography variant="body2">{t('organisationSurveys:responsibleTeachers')}:</Typography>
@@ -122,7 +122,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
         )}
 
         <Button
-          data-cy={`organisation-survey-show-feedback-${surveyName}`}
+          data-cy={`organisation-survey-show-feedback-${organisationSurvey.id}`}
           color="primary"
           variant="outlined"
           sx={{ mt: 2 }}
@@ -134,7 +134,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {feedbackCount > 0 && (
           <Button
-            data-cy={`organisation-survey-show-results-${surveyName}`}
+            data-cy={`organisation-survey-show-results-${organisationSurvey.id}`}
             color="primary"
             variant="outlined"
             sx={{ mt: 2, ml: 2 }}
@@ -147,7 +147,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
         {(allowDelete || isAdmin) && (
           <Button
-            data-cy={`organisation-survey-delete-${surveyName}`}
+            data-cy={`organisation-survey-delete-${organisationSurvey.id}`}
             color="error"
             variant="outlined"
             sx={{ mt: 2, ml: 2 }}
