@@ -267,7 +267,7 @@ describe('Feedback Correspondents', () => {
       .should('contain', 'Tommi Testaaja')
   })
 
-  it.only('can edit organisation surveys after feedback period has started', () => {
+  it('can edit organisation surveys after feedback period has started', () => {
     const today = new Date()
     const organisationCode = '500-K005'
     const organisationSurveyBody = {
@@ -360,11 +360,12 @@ describe('Feedback Correspondents', () => {
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     cy.giveOrganisationSurveyFeedback(studentRandom)
-
-    // Check that the view and edit buttons are there but delete button should not exist
-    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-show-results-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-delete-New survey"]').should('not.exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      // Check that the view and edit buttons are there but delete button should not exist
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist')
+      cy.get(`[data-cy="organisation-survey-show-results-${organisationSurvey.id}"]`).should('exist')
+      cy.get(`[data-cy="organisation-survey-delete-${organisationSurvey.id}"]`).should('not.exist')
+    })
   })
 
   it('can view own organisations organisation surveys', () => {
