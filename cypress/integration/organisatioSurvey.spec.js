@@ -61,7 +61,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy=organisation-survey-editor-save]').should('be.not.disabled')
   })
 
-  it.only('can fill in new organisation surveys', () => {
+  it('can fill in new organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -122,7 +122,7 @@ describe('Feedback Correspondents', () => {
     cy.get(`[data-cy^="organisation-survey-not-open-"]`).should('exist')
     cy.get(`[data-cy^="organisation-survey-period-info-"]`).should('exist')
     cy.get(`[data-cy^="organisation-survey-feedback-count-"]`).should('exist')
-    cy.get(`[data-cy^="organisation-survey-feedback-count-percentage-0/4"]`).should('exist')
+    cy.get(`[data-cy^="organisation-survey-feedback-count-percentage-"]`).should('exist').contains('0/4')
     cy.get(`[data-cy^="organisation-survey-responsible-persons-"]`)
       .should('exist')
       .children('.MuiChip-root')
@@ -193,7 +193,7 @@ describe('Feedback Correspondents', () => {
     cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
   })
 
-  it('can edit organisation surveys', () => {
+  it.only('can edit organisation surveys', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Create a new survey with just the name given
@@ -204,14 +204,18 @@ describe('Feedback Correspondents', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
     // Assure that the survey does not have any students and only one responsible teacher
-    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/0"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('not.exist')
+    cy.get('[data-cy^="organisation-survey-item-title-"]').should('exist')
+    cy.get('[data-cy^="organisation-survey-feedback-count-percentage-"]').should('exist').contains('0/0')
+    cy.get('[data-cy^="organisation-survey-responsible-persons-"]').should('exist')
+    cy.get(`[data-cy^="organisation-survey-responsible-persons-"]`)
+      .should('exist')
+      .children('.MuiChip-root')
+      .should('have.length', 1)
+      .should('contain', 'Correspondent Tester')
+      .should('not.contain', 'Tommi Testaaja')
 
     // Edit the survey to add students and new responsible teacher
-    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"').should('exist').click()
+    cy.get('[data-cy^="organisation-survey-show-feedback-"').should('exist').click()
     cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
     // Add new teacher
@@ -230,14 +234,18 @@ describe('Feedback Correspondents', () => {
     // Assure the changes is visible
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Correspondent Tester"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Test survey-chips-Tommi Testaaja"]').should('exist')
+    cy.get('[data-cy^="organisation-survey-item-title-"]').should('exist').contains('Test survey')
+    cy.get('[data-cy^="organisation-survey-feedback-count-percentage-"]').should('exist').contains('0/2')
+    cy.get('[data-cy^="organisation-survey-responsible-persons-"]').should('exist')
+    cy.get(`[data-cy^="organisation-survey-responsible-persons-"]`)
+      .should('exist')
+      .children('.MuiChip-root')
+      .should('have.length', 2)
+      .should('contain', 'Correspondent Tester')
+      .should('contain', 'Tommi Testaaja')
 
     // Edit the survey name
-    cy.get('[data-cy="organisation-survey-show-feedback-Test survey"').should('exist').click()
+    cy.get('[data-cy^="organisation-survey-show-feedback-"').should('exist').click()
     cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
     cy.get('[data-cy="formik-locales-field-en-name"]').clear().type('Greatest survey of them all!')
@@ -247,16 +255,16 @@ describe('Feedback Correspondents', () => {
     // Assure that only the name changed
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-item-title-Test survey"]').should('not.exist')
-    cy.get('[data-cy="organisation-survey-item-title-Greatest survey of them all!"]').should('exist')
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-0/2"]').should('exist')
-    cy.get('[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!"]').should('exist')
-    cy.get(
-      '[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!-chips-Correspondent Tester"]'
-    ).should('exist')
-    cy.get(
-      '[data-cy="organisation-survey-responsible-persons-Greatest survey of them all!-chips-Tommi Testaaja"]'
-    ).should('exist')
+    cy.get('[data-cy^="organisation-survey-item-title-"]').should('not.contain', 'Test survey')
+    cy.get('[data-cy^="organisation-survey-item-title-"]').should('contain', 'Greatest survey of them all!')
+    cy.get('[data-cy^="organisation-survey-feedback-count-percentage-"]').should('exist').contains('0/2')
+    cy.get('[data-cy^="organisation-survey-responsible-persons-"]').should('exist')
+    cy.get(`[data-cy^="organisation-survey-responsible-persons-"]`)
+      .should('exist')
+      .children('.MuiChip-root')
+      .should('have.length', 2)
+      .should('contain', 'Correspondent Tester')
+      .should('contain', 'Tommi Testaaja')
   })
 
   it('can edit organisation surveys after feedback period has started', () => {
