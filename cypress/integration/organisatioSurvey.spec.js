@@ -757,7 +757,9 @@ describe('Admin Users', () => {
   it('can create questions for organisation survey regardles of ongoing feedback', () => {
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
-    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
+    })
 
     cy.get('[data-cy="feedback-target-settings-tab"]').should('exist').click()
 
@@ -795,18 +797,23 @@ describe('Admin Users', () => {
       expect(str).to.eq('Are you sure you want to remove this programme survey?')
     })
 
-    // Check that the survey is there and delete it
-    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('exist')
-    cy.get('[data-cy="organisation-survey-show-results-New survey"]').should('exist')
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      // Check that the survey is there and delete it
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist')
+      cy.get(`[data-cy="organisation-survey-show-results-${organisationSurvey.id}"]`).should('exist')
 
-    // Assert that the survey has feedback given
-    cy.get('[data-cy="organisation-survey-feedback-count-percentage-1/1"]').should('exist')
+      // Assert that the survey has feedback given
+      cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}-1/1"]`)
+        .should('exist')
+        .contains('1/1')
 
-    // Remove the survey
-    cy.get('[data-cy="organisation-survey-delete-New survey"]').should('exist').click()
+      // Remove the survey
+      cy.get(`[data-cy="organisation-survey-delete-${organisationSurvey.id}"]`).should('exist').click()
 
-    // Assert that the survey got deleted
-    cy.get('[data-cy="organisation-survey-show-feedback-New survey"]').should('not.exist')
+      // Assert that the survey got deleted
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('not.exist')
+    })
+
     cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('be.visible')
 
     // Assert that the survey also got removed from the students page
