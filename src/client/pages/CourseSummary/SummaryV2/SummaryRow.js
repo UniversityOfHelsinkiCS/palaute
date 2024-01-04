@@ -260,13 +260,14 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   )
 }
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, tagId }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
     include: 'childOrganisations',
     enabled: !initialChildOrganisations?.length,
+    tagId,
   })
 
   const childOrganisations = initialChildOrganisations ?? organisation?.childOrganisations
@@ -290,13 +291,14 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
 }
 
 const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDate, questions }) => {
-  const { sortFunction, sortBy } = useSummaryContext()
+  const { sortFunction, sortBy, tagId } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     startDate,
     endDate,
     include: 'courseUnits',
     enabled: !initialCourseUnits?.length,
+    tagId,
   })
 
   const childCourseUnits = initialCourseUnits ?? organisation?.courseUnits
@@ -381,7 +383,7 @@ export const OrganisationSummaryRow = ({
   organisation: initialOrganisation,
   organisationId,
 }) => {
-  const { questions } = useSummaryContext()
+  const { questions, tagId } = useSummaryContext()
   const { ref, inView } = useInView({
     triggerOnce: true,
   })
@@ -415,6 +417,7 @@ export const OrganisationSummaryRow = ({
             questions={questions}
             organisationId={organisationId}
             initialOrganisation={initialOrganisation}
+            tagId={tagId}
           />
         )}
       </Box>
@@ -433,6 +436,7 @@ export const OrganisationSummaryRow = ({
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
                 startDate={startDate}
                 endDate={endDate}
+                tagId={tagId}
               />
               <CourseUnitsList
                 organisationId={organisationId}
@@ -499,7 +503,7 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = () => {
+export const SorterRow = ({ extraFilters }) => {
   const { t, i18n } = useTranslation()
   const { dateRange, setDateRange, option, setOption, questions } = useSummaryContext()
 
@@ -508,12 +512,15 @@ export const SorterRow = () => {
   }
 
   const filterComponent = (
-    <YearSemesterSelector
-      value={dateRange ?? { start: new Date(), end: new Date() }}
-      onChange={handleChangeTimeRange}
-      option={option}
-      setOption={setOption}
-    />
+    <div>
+      <YearSemesterSelector
+        value={dateRange ?? { start: new Date(), end: new Date() }}
+        onChange={handleChangeTimeRange}
+        option={option}
+        setOption={setOption}
+      />
+      {extraFilters && extraFilters}
+    </div>
   )
 
   return (

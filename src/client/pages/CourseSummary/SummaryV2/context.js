@@ -43,6 +43,8 @@ const summaryContext = React.createContext({
   questions: [],
   viewingMode: 'tree',
   setViewingMode: () => {},
+  tagId: undefined,
+  setTagId: () => {},
 })
 
 /**
@@ -156,6 +158,18 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setParams(params)
   })
 
+  // Tag id
+  const [tagId, setTagId] = React.useState(() => {
+    const tagId = params.get('tagId')
+    return tagId
+  })
+
+  const updateTagIdQS = React.useCallback(tagId => {
+    setTagId(tagId)
+    params.set('tagId', tagId)
+    setParams(params)
+  })
+
   const value = React.useMemo(
     () => ({
       showSummariesWithNoFeedback,
@@ -170,6 +184,8 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       questions,
       viewingMode,
       setViewingMode: updateViewingModeQS,
+      tagId,
+      setTagId: updateTagIdQS,
     }),
     [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, viewingMode]
   )

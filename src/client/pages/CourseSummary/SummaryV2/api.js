@@ -4,13 +4,14 @@ import queryClient from '../../../util/queryClient'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 
-const fetchSummaries = async ({ startDate, endDate, entityId, include }) => {
+const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId }) => {
   const { data } = await apiClient.get(`course-summaries/organisations-v2`, {
     params: {
       entityId,
       startDate,
       endDate,
       include,
+      tagId,
     },
   })
 
@@ -39,10 +40,11 @@ export const getCourseUnits = async ({ startDate, endDate, organisationId }) => 
  * include can be 'childOrganisations' or 'courseUnits', in which case the organisation's
  * corresponding children are included in the response, allowing the row to be expanded.
  */
-export const useSummaries = ({ startDate, endDate, entityId, enabled, include }) => {
+export const useSummaries = ({ startDate, endDate, entityId, enabled, include, tagId }) => {
   const queryKey = ['summaries-v2', entityId, startDate, endDate, include]
+  if (tagId) queryKey.push(tagId)
 
-  const queryFn = () => fetchSummaries({ startDate, endDate, entityId, include })
+  const queryFn = () => fetchSummaries({ startDate, endDate, entityId, include, tagId })
 
   const { data, ...rest } = useQuery(queryKey, queryFn, {
     enabled,
