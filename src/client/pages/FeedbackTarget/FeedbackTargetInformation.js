@@ -156,7 +156,7 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
                 >
                   <Typography color="textSecondary">{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
                   <PercentageCell
-                    data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage-${feedbackCount}/${studentCount}`}
+                    data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage`}
                     label={`${feedbackCount}/${studentCount}`}
                     percent={(feedbackCount / studentCount) * 100}
                   />
