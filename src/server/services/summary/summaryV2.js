@@ -18,6 +18,7 @@ const {
   SUMMARY_SKIP_ORG_IDS,
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS,
 } = require('../../util/config')
+const { prefixTagId } = require('../../util/common')
 
 /**
  * Wrap a function that requires organisation access check.
@@ -263,6 +264,32 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   return organisation
 }
 
+const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDate }) => {
+  const organisation = await getOrganisationSummary({ organisationId, startDate, endDate })
+
+  if (!organisation) {
+    return null
+  }
+
+  const tags = await organisation.getTags({
+    attributes: ['id', 'name'],
+  })
+  const tagEntityIds = tags.map(tag => prefixTagId(tag.id))
+  const summaries = await Summary.scope({ method: ['at', startDate, endDate] }).findAll({
+    where: {
+      entityId: tagEntityIds,
+    },
+    attributes: ['data'],
+  })
+
+  organisation.tags = tags.map(tag => {
+    tag.summary = sumSummaries(summaries.filter(s => s.entityId === prefixTagId(tag.id)).map(s => s.data))
+    return tag.toJSON()
+  })
+
+  return organisation
+}
+
 const getTeacherSummary = async ({ startDate, endDate, user }) => {
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
@@ -416,6 +443,7 @@ module.exports = {
     getOrganisationSummaryWithChildOrganisations
   ),
   getOrganisationSummaryWithCourseUnits: withOrganisationAccessCheck(getOrganisationSummaryWithCourseUnits),
+  getOrganisationSummaryWithTags: withOrganisationAccessCheck(getOrganisationSummaryWithTags),
   getTeacherSummary,
   getUserOrganisationSummaries,
 }

@@ -17,6 +17,7 @@ const {
   getOrganisationSummary,
   getTeacherSummary,
   getUserOrganisationSummaries,
+  getOrganisationSummaryWithTags,
 } = require('../../services/summary/summaryV2')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
@@ -144,7 +145,7 @@ const parseDates = (startDateString, endDateString) => {
  * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString, entityId, include, tagId: tagIdString } = req.query
+  const { startDate: startDateString, endDate: endDateString, entityId, include } = req.query
   const { user } = req
 
   if (!entityId) {
@@ -152,12 +153,18 @@ const getOrganisationsV2 = async (req, res) => {
   }
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
-  const tagId = tagIdString ? parseInt(tagIdString, 10) : null
 
   let organisation
 
   if (include === 'childOrganisations') {
     organisation = await getOrganisationSummaryWithChildOrganisations({
+      organisationId: entityId,
+      startDate,
+      endDate,
+      user,
+    })
+  } else if (include === 'tags') {
+    organisation = await getOrganisationSummaryWithTags({
       organisationId: entityId,
       startDate,
       endDate,
