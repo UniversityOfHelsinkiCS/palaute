@@ -388,7 +388,8 @@
     "edit": "Edit",
     "remove": "Remove",
     "confirmRemoveSurvey": "Are you sure you want to remove this programme survey?",
-    "removeSuccess": "Programme survey removed"
+    "removeSuccess": "Programme survey removed",
+    "feedbacksGivenRatio": "Feedbacks given / Student count"
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",
