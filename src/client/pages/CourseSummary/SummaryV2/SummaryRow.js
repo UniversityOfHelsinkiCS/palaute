@@ -283,7 +283,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
           component="div"
         />
       ))}
-      <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+      <Tooltip title={t('common:feedbacksGivenRatio')} disableInteractive>
         <Typography variant="body2" sx={styles.countCell}>
           {summary.data.feedbackCount} / {summary.data.studentCount}
         </Typography>
@@ -391,6 +391,8 @@ const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDat
 }
 
 const OrganisationResults = ({ summary, questions, linkComponent }) => {
+  const { t } = useTranslation()
+
   const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
 
   const feedbackResponsePercentage = summary ? (summary.data.feedbackResponsePercentage * 100).toFixed() : 0
@@ -407,7 +409,7 @@ const OrganisationResults = ({ summary, questions, linkComponent }) => {
           component="div"
         />
       ))}
-      <Tooltip title="Palautteita / Ilmoittautuneita" disableInteractive>
+      <Tooltip title={t('common:feedbacksGivenRatio')} disableInteractive>
         <Typography variant="body2" sx={styles.countCell}>
           {summary ? summary.data.feedbackCount : '0'} / {summary ? summary.data.studentCount : '0'}
         </Typography>
