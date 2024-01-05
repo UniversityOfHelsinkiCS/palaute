@@ -100,6 +100,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
             size="small"
             label={`${feedbackCount}/${studentCount}`}
             percent={(feedbackCount / studentCount) * 100}
+            tooltip={t('organisationSurveys:feedbacksGivenRatio')}
           />
         </Box>
 
