@@ -108,6 +108,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               size="small"
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
+              tooltip={t('common:feedbacksGivenRatio')}
             />
           </Box>
 
