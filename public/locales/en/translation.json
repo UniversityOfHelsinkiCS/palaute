@@ -75,7 +75,8 @@
     "sort": "Sort",
     "ascending": "ascending",
     "descending": "descending",
-    "additional": "Additional"
+    "additional": "Additional",
+    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count"
   },
   "validationErrors": {
     "required": "This field is required",

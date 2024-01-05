@@ -75,7 +75,8 @@
     "sort": "Järjestä",
     "ascending": "nousevasti",
     "descending": "laskevasti",
-    "additional": "Täydentävät"
+    "additional": "Täydentävät",
+    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
