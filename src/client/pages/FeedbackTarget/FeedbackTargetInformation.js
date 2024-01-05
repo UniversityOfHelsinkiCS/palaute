@@ -159,6 +159,7 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
                     data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage`}
                     label={`${feedbackCount}/${studentCount}`}
                     percent={(feedbackCount / studentCount) * 100}
+                    tooltip={t('common:feedbacksGivenRatio')}
                   />
                 </Box>
               )}
