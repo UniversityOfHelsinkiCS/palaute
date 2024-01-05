@@ -157,8 +157,9 @@ const QuestionCard = ({
   const canEdit = questionIsEditable && editable
   const isGrouping = question.secondaryType === 'GROUPING'
   const canDuplicate = !isGrouping
+
   const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
-  const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT'
+  const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT' && question.type !== 'OPEN'
 
   const orderButtonsProps = {
     onMoveUp,
@@ -186,7 +187,7 @@ const QuestionCard = ({
             </Box>
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
-            {question.type !== 'TEXT' && !isEditing && (
+            {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
