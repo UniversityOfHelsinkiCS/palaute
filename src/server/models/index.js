@@ -196,6 +196,9 @@ OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 Organisation.hasMany(Tag, { as: 'tags' })
 Tag.belongsTo(Organisation, { as: 'organisation' })
 
+Tag.hasOne(CourseRealisationsTag, { as: 'tag' })
+CourseRealisationsTag.belongsTo(Tag, { as: 'courseRealisationsTag' })
+CourseRealisation.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
 CourseRealisation.belongsToMany(Tag, {
   through: CourseRealisationsTag,
   as: 'tags',
@@ -204,10 +207,6 @@ Tag.belongsToMany(CourseRealisation, {
   through: CourseRealisationsTag,
   as: 'courseRealisations',
 })
-Tag.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
-CourseRealisationsTag.belongsTo(Tag, { as: 'tag' })
-CourseRealisation.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
-CourseRealisationsTag.belongsTo(CourseRealisation, { as: 'courseRealisation' })
 
 // Slightly fakd association here, as courseCode on CourseUnit is not unique constrained.
 // It works somewhat, but custom queries may sometimes be needed
@@ -218,7 +217,8 @@ CourseUnit.belongsToMany(Tag, {
   as: 'tags',
 })
 CourseUnit.hasMany(CourseUnitsTag, { as: 'courseUnitsTags', sourceKey: 'courseCode', foreignKey: 'courseCode' })
-Tag.hasMany(CourseUnitsTag, { as: 'courseUnitsTags' })
+Tag.hasMany(CourseUnitsTag)
+Tag.hasOne(CourseUnitsTag, { as: 'courseUnitsTag' })
 CourseUnitsTag.belongsTo(Tag, { as: 'tag' })
 
 /**
