@@ -46,7 +46,7 @@ const getRelevantQuestionIds = async () => {
   return new Set(questionIds)
 }
 
-const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds) => {
+const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds, transaction) => {
   // ---------------- Phase 1: ------------------
   // Build summary entities from feedbacks for courses during this time period
   // We do this for the following entities, from "bottom up":
@@ -152,6 +152,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
         },
       },
     ],
+    transaction,
   })
 
   // Start summing the stuff for course realisations
@@ -323,6 +324,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
           [Op.in]: orgsMissingParentOrgs.map(o => o.parentId),
         },
       },
+      transaction,
     })
 
     // And add them to the list. Next iteration their children will be joined to them.
@@ -387,6 +389,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
   // Write all summaries to db.
   await Summary.bulkCreate(uniqueSummaries, {
     updateOnDuplicate: ['data'],
+    transaction,
   })
 }
 
@@ -475,15 +478,18 @@ const buildSummaries = async () => {
   for (const { start, end } of datePeriods) {
     console.time(`${start.toISOString()}-${end.toISOString()}`)
 
-    // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
-    await Summary.destroy({
-      where: {
-        startDate: start,
-        endDate: end,
-      },
-    })
+    await sequelize.transaction(async transaction => {
+      // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
+      await Summary.destroy({
+        where: {
+          startDate: start,
+          endDate: end,
+        },
+        transaction,
+      })
 
-    await buildSummariesForPeriod(start, end, rootOrganisations, relevantQuestionIds)
+      await buildSummariesForPeriod(start, end, rootOrganisations, relevantQuestionIds, transaction)
+    })
 
     console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
