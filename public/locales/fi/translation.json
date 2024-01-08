@@ -191,7 +191,8 @@
     "universityQuestion": "Yliopistotaso",
     "programmeQuestion": "Koulutusohjelmataso",
     "uneditableTooltip": "Tämä on määritetty etukäteen ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa",
-    "duplicate": "Duplikoi"
+    "duplicate": "Duplikoi",
+    "markDownSupport": "Kentät tukevat <2>Markdown</2> sisältöä"
   },
   "editFeedbackTarget": {
     "closesAt": "Sulkeutuu",

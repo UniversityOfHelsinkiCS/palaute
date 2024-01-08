@@ -191,7 +191,8 @@
     "universityQuestion": "University level",
     "programmeQuestion": "Programme level",
     "uneditableTooltip": "This is predefined and automatically added to the survey and it can not be edited or removed",
-    "duplicate": "Duplicate"
+    "duplicate": "Duplicate",
+    "markDownSupport": "These fields supports <2>Markdown</2> content"
   },
   "editFeedbackTarget": {
     "closesAt": "Closes at",
