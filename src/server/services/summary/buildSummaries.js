@@ -394,8 +394,8 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
 }
 
 const summariesHaveToBeFullyRebuilt = async () => {
-  // If there are no summaries, they have to be built
-  // also if there are summaries but they date back to more than 1 year, we should rebuild everything
+  // If there are no summaries, they have to be built.
+  // Also if there are summaries but they date back to more than 1 year, we should rebuild everything
   const latestSummary = await Summary.findOne({
     order: [['startDate', 'DESC']],
   })

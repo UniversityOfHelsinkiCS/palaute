@@ -418,13 +418,13 @@ const OrganisationResults = ({ summary, questions, linkComponent }) => {
         label={`${percent}%`}
         percent={percent}
         sx={styles.percentCell}
-        tooltip={`Palauteprosentti: ${percent}%`}
+        tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
       />
       <PercentageCell
         label={`${feedbackResponsePercentage}%`}
         percent={feedbackResponsePercentage}
         sx={styles.percentCell}
-        tooltip={`Vastapalautteita: ${feedbackResponsePercentage}% toteutuksista`}
+        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
       />
       {linkComponent}
     </>
