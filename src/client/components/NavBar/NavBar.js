@@ -104,15 +104,15 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
 })
 
 const NavBar = ({ guest = false }) => {
+  const menuButtonRef = useRef()
   const { pathname } = useLocation()
+  const { t, i18n } = useTranslation()
+  const isMobile = useIsMobile()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
-  const { t, i18n } = useTranslation()
-  const menuButtonRef = useRef()
+
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useIsMobile()
-  // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
