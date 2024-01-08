@@ -61,6 +61,7 @@ const LANGUAGES = config.get('LANGUAGES')
 const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
 const SENTRY_DSN = config.get('SENTRY_DSN')
 const USE_ROLE_BASED_COURSE_LINKS = config.get('USE_ROLE_BASED_COURSE_LINKS') ?? false
+const NO_USER_USERNAME = config.get('NO_USER_USERNAME')
 
 module.exports = {
   inE2EMode,
@@ -103,4 +104,5 @@ module.exports = {
   GELF_TRANSPORT_ENABLED,
   SENTRY_DSN,
   USE_ROLE_BASED_COURSE_LINKS,
+  NO_USER_USERNAME,
 }

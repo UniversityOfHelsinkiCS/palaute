@@ -1,5 +1,6 @@
 const { User } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
+const { NO_USER_USERNAME } = require('../../util/config')
 const cache = require('./cache')
 
 const getByUsername = async username => {
@@ -11,7 +12,12 @@ const getByUsername = async username => {
     })
 
     if (!user) {
-      throw new ApplicationError(`User with username ${username} not found`, 404)
+      user = await User.findOne({
+        where: { username: NO_USER_USERNAME },
+      })
+      if (!user) {
+        throw new ApplicationError(`User with username ${username} not found`, 404)
+      }
     }
 
     cache.set(username, user)
