@@ -57,7 +57,7 @@ const getUserIams = async userId => {
 
     return data.iamGroups
   } catch (error) {
-    if (error.response.status !== 404) {
+    if (error.response && error.response.status !== 404) {
       logger.error('[Jami] error: ', error)
       Sentry.captureException(error)
     }
