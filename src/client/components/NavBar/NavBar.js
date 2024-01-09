@@ -14,7 +14,6 @@ import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStude
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout } from './utils'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
@@ -108,9 +107,6 @@ const NavBar = ({ guest = false }) => {
   const { pathname } = useLocation()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
-  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
-    enabled: !guest,
-  })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
   const { t, i18n } = useTranslation()
   const menuButtonRef = useRef()
@@ -128,7 +124,8 @@ const NavBar = ({ guest = false }) => {
     enabled: isAdminUser,
   })
 
-  const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
+  const preferences = authorizedUser?.preferences ?? {}
+  const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)

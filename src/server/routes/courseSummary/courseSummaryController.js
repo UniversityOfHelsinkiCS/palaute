@@ -7,7 +7,6 @@ const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../
 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
-const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
 const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
@@ -73,18 +72,6 @@ const getAccessInfo = async (req, res) => {
         organisationAccess,
       })
     : null
-
-  // For grafana statistics
-  if (organisationAccess.length === 1) {
-    ;(async () => {
-      const organisation = await Organisation.findOne({ where: { code: accesses[0][0] } })
-      const { name, code } = organisation.dataValues
-      logger.info('Organisation access', {
-        organisationName: name.fi,
-        organisationCode: code,
-      })
-    })()
-  }
 
   return res.send({
     accessible,

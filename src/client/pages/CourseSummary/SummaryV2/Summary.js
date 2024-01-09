@@ -32,8 +32,7 @@ const SummaryInContext = () => {
 
   const { authorizedUser: user } = useAuthorizedUser()
 
-  const preferredViewType = user?.preferences?.summaryView ?? 'organisation'
-  const preferredViewPath = preferredViewType === 'organisation' ? 'my-organisations' : 'my-courses'
+  const preferredView = user?.preferences?.summaryView ?? 'my-organisations'
 
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
   const hasAccessToUniversityLevel =
@@ -105,7 +104,7 @@ const SummaryInContext = () => {
           </Route>
 
           <Route path="/course-summary" exact>
-            <Redirect to={`/course-summary/${preferredViewPath}`} />
+            <Redirect to={`/course-summary/${preferredView}`} />
           </Route>
         </Switch>
       </SummaryScrollContainer>

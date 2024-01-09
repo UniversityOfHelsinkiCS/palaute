@@ -3,7 +3,6 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Admin from './Admin'
-import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
 import MyTeaching from './MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
@@ -12,6 +11,7 @@ import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
 import Summary from './CourseSummary/SummaryV2/Summary'
+import useAuthorizedUser from '../hooks/useAuthorizedUser'
 
 const styles = {
   container: theme => ({
@@ -30,20 +30,15 @@ const styles = {
 }
 
 const Home = () => {
-  const { courseSummaryAccessInfo, isLoading } = useCourseSummaryAccessInfo()
+  const { authorizedUser, isLoading } = useAuthorizedUser()
+  const preferences = authorizedUser?.preferences ?? {}
+  const defaultView = preferences.defaultView ?? 'feedbacks'
 
   if (isLoading) {
     return <LoadingProgress />
   }
 
-  if (courseSummaryAccessInfo.adminAccess) {
-    return <Redirect to="/course-summary" />
-  }
-
-  if (courseSummaryAccessInfo.accessible) {
-    return <Redirect to="/courses" />
-  }
-  return <Redirect to="/feedbacks" />
+  return <Redirect to={`/${defaultView}`} />
 }
 
 const Router = () => (
