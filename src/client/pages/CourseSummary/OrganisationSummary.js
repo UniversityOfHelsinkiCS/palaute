@@ -13,7 +13,6 @@ import Filters from './Filters'
 import { getFacultyAccess, useAggregatedOrganisationSummaries, ORDER_BY_OPTIONS } from './utils'
 import Title from '../../components/common/Title'
 import useHistoryState from '../../hooks/useHistoryState'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useOrganisationData from '../../hooks/useOrganisationData'
 import errors from '../../util/errorMessage'
 import ErrorView from '../../components/common/ErrorView'
@@ -21,14 +20,7 @@ import OrganisationTable from './OrganisationTable'
 import ExportCourses from './ExportCourses'
 import { TAGS_ENABLED } from '../../util/common'
 import LinkButton from '../../components/common/LinkButton'
-
-const safelyParseDateRange = dateRange =>
-  dateRange?.startDate && dateRange?.endDate
-    ? {
-        start: new Date(dateRange.startDate),
-        end: new Date(dateRange.endDate),
-      }
-    : { start: null, end: null }
+import { getStudyYearRange } from '../../util/yearSemesterUtils'
 
 /**
  * Somebody PLEASE refactor this file and components @TODO
@@ -37,13 +29,6 @@ const safelyParseDateRange = dateRange =>
 const OrganisationSummary = () => {
   const { t } = useTranslation()
   const { code } = useParams()
-
-  const {
-    courseSummaryAccessInfo,
-    isLoading: defaultDateRangeLoading,
-    isLoadingError: isDateLoadingError,
-    error: dateLoadingError,
-  } = useCourseSummaryAccessInfo()
 
   const { organisations: organisationAccess, isLoading: organisationLoading } = useOrganisations()
 
@@ -61,17 +46,11 @@ const OrganisationSummary = () => {
 
   const [includeOpenUniCourseUnits, setIncludeOpenUniCourseUnits] = useHistoryState('includeOpenUniCourseUnits', false)
 
-  const [dateRange, setDateRange] = useHistoryState('dateRange', {
-    start: null,
-    end: null,
-  })
+  const [dateRange, setDateRange] = useHistoryState('dateRange', getStudyYearRange(new Date()))
 
   const [orderBy, setOrderBy] = useHistoryState('orderBy', ORDER_BY_OPTIONS[0].value)
 
   const componentRef = useRef()
-
-  const resultingDateRange =
-    dateRange.start && dateRange.end ? dateRange : safelyParseDateRange(courseSummaryAccessInfo?.defaultDateRange)
 
   const {
     organisationSummaries,
@@ -87,14 +66,11 @@ const OrganisationSummary = () => {
     keyword,
     orderBy,
     includeOpenUniCourseUnits,
-    dateRange: resultingDateRange,
+    dateRange,
     organisationAccess,
     organisationData,
   })
 
-  if (isDateLoadingError) {
-    return <ErrorView message={errors.getGeneralError(dateLoadingError)} response={dateLoadingError.response} />
-  }
   if (isLoadingError && !organisationSummaries) {
     return <ErrorView message={errors.getGeneralError(error)} response={error.response} />
   }
@@ -163,8 +139,7 @@ const OrganisationSummary = () => {
             onKeywordChange={handleKeywordChange}
             includeOpenUniCourseUnits={includeOpenUniCourseUnits}
             onIncludeOpenUniCourseUnitsChange={handleIncludeOpenUniCourseUnitsChange}
-            dateRange={resultingDateRange}
-            isDateRangeLoading={defaultDateRangeLoading}
+            dateRange={dateRange}
             onDateRangeChange={setDateRange}
             componentRef={componentRef}
             organisations={!isOrganisationsLoading ? aggregatedOrganisations : []}

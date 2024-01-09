@@ -8,7 +8,6 @@ const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
 const { getSummaryQuestions } = require('../../services/questions')
-const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
 const { updateCustomisation, getCustomisation } = require('./customisation')
 const {
   getOrganisationSummaryWithChildOrganisations,
@@ -41,43 +40,6 @@ const getAccessibleCourseRealisationIds = async user => {
   )
 
   return rows.map(row => row.id)
-}
-
-/**
- * General information about user access to course summary, and defaults
- */
-const getAccessInfo = async (req, res) => {
-  const { user } = req
-
-  // shortcut for most students
-  if (user.iamGroups.length === 0 && !req.headers.employeenumber) {
-    return res.send({
-      accessible: false,
-      adminAccess: false,
-      defaultDateRange: null,
-    })
-  }
-
-  const { organisationAccess } = user
-  const accesses = Object.entries(organisationAccess)
-  const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
-  const hasReadOnSomeOrganisation = accesses.some(([, access]) => access.read)
-  const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
-
-  const accessible = hasReadOnSomeOrganisation || accessibleCourseRealisationIds.length > 0
-
-  const defaultDateRange = accessible
-    ? await getSummaryDefaultDateRange({
-        user,
-        organisationAccess,
-      })
-    : null
-
-  return res.send({
-    accessible,
-    adminAccess: isAdminOfSomeOrganisation,
-    defaultDateRange,
-  })
 }
 
 const getOrganisations = async (req, res) => {
@@ -260,7 +222,6 @@ router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
-router.get('/access', getAccessInfo)
 router.get('/customisation', getCustomisation)
 router.put('/customisation', updateCustomisation)
 
