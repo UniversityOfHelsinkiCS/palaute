@@ -44,6 +44,9 @@ const getAccessibleCourseRealisationIds = async user => {
   return rows.map(row => row.id)
 }
 
+/**
+ * General information about user access to course summary, and defaults
+ */
 const getAccessInfo = async (req, res) => {
   const { user } = req
 

@@ -8,6 +8,7 @@ const cache = require('../../services/users/cache')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
+const { getUserPreferences } = require('../../services/users')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
@@ -17,10 +18,11 @@ const login = async (req, res) => {
     await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
   }
 
-  const [lastRestart, banners, organisations] = await Promise.all([
+  const [lastRestart, banners, organisations, preferences] = await Promise.all([
     getLastRestart(),
     Banner.getForUser(user),
     user.getOrganisationAccess(),
+    getUserPreferences(user),
   ])
 
   const isTeacher = !!user.employeeNumber
@@ -32,6 +34,7 @@ const login = async (req, res) => {
     lastRestart,
     banners,
     organisations,
+    preferences,
   })
 }
 

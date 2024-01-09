@@ -10,7 +10,6 @@ import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from '../components/common/LoadingProgress'
-import useIsMobile from '../hooks/useIsMobile'
 import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
 import Summary from './CourseSummary/SummaryV2/Summary'
 
@@ -31,14 +30,13 @@ const styles = {
 }
 
 const Home = () => {
-  const { courseSummaryAccessInfo, isLoading: accessInfoLoading } = useCourseSummaryAccessInfo()
-  const isMobile = useIsMobile()
+  const { courseSummaryAccessInfo, isLoading } = useCourseSummaryAccessInfo()
 
-  if (accessInfoLoading) {
+  if (isLoading) {
     return <LoadingProgress />
   }
 
-  if (!isMobile && courseSummaryAccessInfo.adminAccess) {
+  if (courseSummaryAccessInfo.adminAccess) {
     return <Redirect to="/course-summary" />
   }
 
