@@ -3,7 +3,7 @@ import { addYears, subDays } from 'date-fns'
 import { startOfStudyYear } from './startOfStudyYear'
 import { STUDY_YEAR_START_MONTH } from './common'
 
-export const getStudyYearRange = date => {
+export const getStudyYearRange = (date = new Date()) => {
   const start = startOfStudyYear(date)
   const end = subDays(addYears(start, 1), 1)
 
