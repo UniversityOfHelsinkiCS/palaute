@@ -3,10 +3,10 @@ import _ from 'lodash'
 import { isBefore, parseISO } from 'date-fns'
 import { useSummaryContext } from './context'
 
-export const getFeedbackResponseGiven = (feedbackResponseGiven, closesAt) => {
-  if (isBefore(Date.now(), parseISO(closesAt))) return 'OPEN'
+export const getFeedbackResponseGiven = feedbackTarget => {
+  if (isBefore(Date.now(), parseISO(feedbackTarget.closesAt))) return 'OPEN'
 
-  return feedbackResponseGiven ? 'GIVEN' : 'NONE'
+  return feedbackTarget.feedbackResponse ? 'GIVEN' : 'NONE'
 }
 
 export const useOrderedAndFilteredOrganisations = organisations => {

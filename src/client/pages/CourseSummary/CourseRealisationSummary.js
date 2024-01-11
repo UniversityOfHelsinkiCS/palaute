@@ -59,21 +59,16 @@ const CourseRealisationTable = ({ courseRealisations, questions, access }) => {
             </tr>
           )}
           {courseRealisations.map(courseRealisation => {
-            const feedbackResponseGiven = getFeedbackResponseGiven(
-              courseRealisation.feedbackResponseGiven,
-              courseRealisation.closesAt
-            )
+            const feedbackResponseGiven = getFeedbackResponseGiven(courseRealisation.feedbackTargets[0])
 
             return (
               <Fragment key={courseRealisation.id}>
                 <ResultsRow
                   key={courseRealisation.id}
                   label={<CourseRealisationLabel courseRealisation={courseRealisation} language={i18n.language} />}
-                  results={courseRealisation.results}
-                  questions={questions}
-                  feedbackCount={courseRealisation.feedbackCount}
-                  studentCount={courseRealisation.studentCount}
+                  summary={courseRealisation.summary}
                   feedbackResponseGiven={feedbackResponseGiven}
+                  questions={questions}
                   currentFeedbackTargetId={courseRealisation.feedbackTargetId}
                   accordionCellEnabled={false}
                   cellsAfter={

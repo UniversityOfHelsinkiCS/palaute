@@ -1,55 +1,54 @@
 const _ = require('lodash')
-const { Op } = require('sequelize')
 
-const { UserFeedbackTarget, User } = require('../../models')
+const { UserFeedbackTarget, User, CourseRealisation, CourseUnit, FeedbackTarget, Summary } = require('../../models')
 const languages = require('../../util/languages.json')
-const { runCourseRealisationSummaryQuery } = require('./sql')
-const { getMean } = require('./utils')
 
-const getCourseRealisationSummaries = async ({
-  courseCode,
-  questions,
-  accessibleCourseRealisationIds,
-  organisationAccess,
-}) => {
-  const allCuSummaries = await runCourseRealisationSummaryQuery(courseCode)
+const getCourseRealisationSummaryEntities = async courseCode => {
+  const courseRealisations = await CourseRealisation.findAll({
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTargets',
+        attributes: ['id', 'closesAt', 'feedbackResponse'],
+        required: true,
+        include: [
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+            where: { courseCode },
+            attributes: ['id'],
+            required: true,
+          },
+          {
+            model: UserFeedbackTarget.scope('teachers'),
+            as: 'userFeedbackTargets',
+            include: {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'firstName', 'lastName', 'email'],
+            },
+          },
+        ],
+      },
+      {
+        model: Summary,
+        as: 'summary',
+      },
+    ],
+  })
 
-  const summaries = organisationAccess
+  return courseRealisations
+}
+
+const getCourseRealisationSummaries = async ({ courseCode, accessibleCourseRealisationIds, organisationAccess }) => {
+  const allCuSummaries = await getCourseRealisationSummaryEntities(courseCode)
+
+  const courseRealisations = organisationAccess
     ? allCuSummaries
     : allCuSummaries.filter(cur => accessibleCourseRealisationIds.includes(cur.id))
 
-  const teacherData = _.groupBy(
-    await UserFeedbackTarget.findAll({
-      where: {
-        feedbackTargetId: {
-          [Op.in]: summaries.map(cur => cur.feedbackTargetId),
-        },
-        accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-      },
-      include: {
-        model: User,
-        as: 'user',
-        attributes: ['id', 'firstName', 'lastName', 'email'],
-      },
-    }),
-    teacher => teacher.feedbackTargetId
-  )
-
-  const results = summaries.map(cur => {
-    const results = cur.questionDistribution
-      .map((questionData, idx) => {
-        const question = questions.find(q => q.id === cur.questionIds[idx])
-        if (!question) return undefined
-        const distribution = _.mapValues(questionData, Number)
-        return {
-          questionId: cur.questionIds[idx],
-          mean: getMean(distribution, question),
-          distribution,
-        }
-      })
-      .filter(Boolean)
-
-    const allTeachers = teacherData[cur.feedbackTargetId] || []
+  const results = courseRealisations.map(cur => {
+    const allTeachers = cur.feedbackTargets[0].userFeedbackTargets
 
     const teachers = _.sortBy(
       allTeachers.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(teacher => teacher.user),
@@ -69,9 +68,8 @@ const getCourseRealisationSummaries = async ({
     const teachingLanguages = (cur.teachingLanguages || []).map(lang => languages[lang]?.name)
 
     return {
-      ...cur,
+      ...cur.toJSON(),
       courseCode,
-      results,
       teachingLanguages,
       teachers,
       responsibleTeachers,
@@ -79,7 +77,7 @@ const getCourseRealisationSummaries = async ({
     }
   })
 
-  const orderedResults = _.orderBy(results, ['startDate', 'feedbackCount'], ['desc', 'desc'])
+  const orderedResults = _.orderBy(results, ['startDate', cur => cur.summary?.data?.feedbackCount], ['desc', 'desc'])
 
   return orderedResults
 }
