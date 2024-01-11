@@ -1,9 +1,9 @@
 const { Router } = require('express')
-const { addYears, format } = require('date-fns')
+const { format } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
 
-const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../../services/summary')
+const { getCourseRealisationSummaries } = require('../../services/summary')
 
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
@@ -39,44 +39,6 @@ const getAccessibleCourseRealisationIds = async user => {
   )
 
   return rows.map(row => row.id)
-}
-
-const getOrganisations = async (req, res) => {
-  const { user } = req
-  const { code } = req.params
-  const { includeOpenUniCourseUnits, tagId, startDate, endDate } = req.query
-
-  const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
-    user.getOrganisationAccess(),
-    // dont query users teached courses if code is defined (looking at one organisation)
-    code ? [] : getAccessibleCourseRealisationIds(user),
-    getSummaryQuestions(code),
-  ])
-
-  const organisationAccess = code
-    ? fullOrganisationAccess.filter(org => org.organisation.code === code)
-    : fullOrganisationAccess
-
-  const parsedStartDate = startDate ? new Date(startDate) : null
-  const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
-  const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
-
-  const { averageRow, organisations } = await getOrganisationSummaries({
-    user,
-    questions,
-    organisationAccess,
-    accessibleCourseRealisationIds,
-    includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    tagId,
-    startDate: parsedStartDate,
-    endDate: parsedEndDate,
-  })
-
-  return res.send({
-    questions,
-    organisations,
-    averageRow,
-  })
 }
 
 /**
@@ -215,11 +177,9 @@ const getUserOrganisationsV2 = async (req, res) => {
 
 const router = Router()
 
-router.get('/organisations', getOrganisations)
 router.get('/organisations-v2', getOrganisationsV2)
 router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
-router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
 
 module.exports = router
