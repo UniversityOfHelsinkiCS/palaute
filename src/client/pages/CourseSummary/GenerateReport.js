@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { useSummaryContext } from './context'
 import { getCourseUnits, useOrganisationSummaries, useTeacherSummaries } from './api'
-import { getLanguageValue } from '../../../util/languageUtils'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const getReportHeaders = (questions, language, t) => {
   const labels = questions.map(({ data }) => getLanguageValue(data.label, language))

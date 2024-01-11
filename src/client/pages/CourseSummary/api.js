@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
-import apiClient from '../../../util/apiClient'
-import queryClient from '../../../util/queryClient'
+import apiClient from '../../util/apiClient'
+import queryClient from '../../util/queryClient'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 

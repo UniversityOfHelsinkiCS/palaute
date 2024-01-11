@@ -1,10 +1,10 @@
 import React from 'react'
 import { useQuery } from 'react-query'
 import { format, isValid } from 'date-fns'
-import useURLSearchParams from '../../../hooks/useURLSearchParams'
-import apiClient from '../../../util/apiClient'
-import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
-import { getStudyYearRange } from '../../../util/yearSemesterUtils'
+import useURLSearchParams from '../../hooks/useURLSearchParams'
+import apiClient from '../../util/apiClient'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { getStudyYearRange } from '../../util/yearSemesterUtils'
 
 const getSummarySortFunction = sortField => {
   switch (sortField) {

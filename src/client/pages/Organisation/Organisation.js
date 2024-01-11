@@ -30,7 +30,7 @@ import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
-import ForOrganisation from '../CourseSummary/SummaryV2/ForOrganisation'
+import ForOrganisation from '../CourseSummary/ForOrganisation'
 
 const Organisation = () => {
   const { path, url } = useRouteMatch()

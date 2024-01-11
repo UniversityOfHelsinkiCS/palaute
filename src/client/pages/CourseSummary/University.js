@@ -1,7 +1,7 @@
 import React from 'react'
 import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaries } from './api'
-import { UNIVERSITY_ROOT_ID } from '../../../util/common'
+import { UNIVERSITY_ROOT_ID } from '../../util/common'
 import { useSummaryContext } from './context'
 
 /**
