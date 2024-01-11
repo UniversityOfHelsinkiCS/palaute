@@ -49,7 +49,7 @@ const SummaryInContext = () => {
         </Box>
         {user?.isAdmin && (
           <Button variant="text" onClick={handleUpdateData}>
-            Aja datanpäivitys
+            Aja datanpäivitys (vain admin)
           </Button>
         )}
       </Box>
