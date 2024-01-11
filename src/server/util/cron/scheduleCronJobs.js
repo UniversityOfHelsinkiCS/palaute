@@ -1,7 +1,6 @@
 const { CRON_DISABLED } = require('../config')
 const logger = require('../logger')
 const { mailer } = require('../../mailer')
-const { start: startViewsCron } = require('./refreshViewsCron')
 const { start: startPrecacheFeedbackTargetsCron } = require('./precacheFeedbackTargetsCron')
 const { start: startSummariesCron } = require('./summariesCron')
 
@@ -11,7 +10,6 @@ const scheduleCronJobs = async () => {
     return
   }
 
-  await startViewsCron()
   startSummariesCron()
   await startPrecacheFeedbackTargetsCron()
   await mailer.scheduleCronJobs()
