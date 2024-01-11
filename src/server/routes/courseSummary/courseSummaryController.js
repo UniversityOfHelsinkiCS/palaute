@@ -3,8 +3,6 @@ const { format } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
 
-const { getCourseRealisationSummaries } = require('../../services/summary')
-
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
 const { getSummaryQuestions } = require('../../services/questions')
@@ -15,7 +13,8 @@ const {
   getTeacherSummary,
   getUserOrganisationSummaries,
   getOrganisationSummaryWithTags,
-} = require('../../services/summary/summaryV2')
+  getCourseRealisationSummaries,
+} = require('../../services/summary')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
 const getAccessibleCourseRealisationIds = async user => {

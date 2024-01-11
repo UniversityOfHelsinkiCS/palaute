@@ -13,7 +13,7 @@ const {
   CourseUnitsTag,
   CourseRealisationsTag,
 } = require('../../models')
-const { sumSummaryDatas, sumSummaries } = require('./summaryUtils')
+const { sumSummaryDatas, sumSummaries } = require('./utils')
 const { ApplicationError } = require('../../util/customErrors')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
 const {
