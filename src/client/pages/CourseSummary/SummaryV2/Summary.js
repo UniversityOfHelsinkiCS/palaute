@@ -17,7 +17,6 @@ import SummaryScrollContainer from './SummaryScrollContainer'
 import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../../util/common'
 import GenerateReport from './GenerateReport'
 import CourseRealisationSummary from '../CourseRealisationSummary'
-import OrganisationSummary from '../OrganisationSummary'
 import { SummaryContextProvider } from './context'
 
 const SummaryInContext = () => {
@@ -94,10 +93,6 @@ const SummaryInContext = () => {
             component={University}
             hasAccess={hasAccessToUniversityLevel}
           />
-
-          <Route path="/course-summary/old" exact>
-            <OrganisationSummary />
-          </Route>
 
           <Route path="/course-summary/:code">
             <CourseRealisationSummary />
