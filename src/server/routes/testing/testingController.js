@@ -20,7 +20,6 @@ const {
   OrganisationFeedbackCorrespondent,
   Feedback,
 } = require('../../models')
-const { run } = require('../../util/cron/refreshViewsCron')
 
 const { ApplicationError } = require('../../util/customErrors')
 
@@ -402,11 +401,6 @@ const updateUser = async (req, res) => {
   return res.send(200)
 }
 
-const refreshSummary = async (req, res) => {
-  await run()
-  return res.send(200)
-}
-
 const router = Router()
 
 router.post('/clear/user/student', clearTestStudents)
@@ -423,6 +417,5 @@ router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
 
 router.put('/enableCourses', enableAllCourses)
-router.put('/refresh-summary', refreshSummary)
 
 module.exports = router
