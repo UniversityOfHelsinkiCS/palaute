@@ -19,13 +19,8 @@ https://www.postgresql.org/docs/current/functions-json.html
 Delete this comment if you find something better
 */
 
-const { QueryTypes } = require('sequelize')
 const { sequelize } = require('../../db/dbConnection')
-const {
-  OPEN_UNIVERSITY_ORG_ID,
-  WORKLOAD_QUESTION_ID,
-  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
-} = require('../../util/config')
+const { OPEN_UNIVERSITY_ORG_ID, WORKLOAD_QUESTION_ID } = require('../../util/config')
 
 const SUMMARY_VIEW_QUERY = `
 DROP MATERIALIZED VIEW IF EXISTS course_results_view;
@@ -149,36 +144,6 @@ ${SUMMARY_VIEW_QUERY}
 REFRESH MATERIALIZED VIEW feedback_target_counts_view;
 `
 
-const COURSE_REALISATION_SUMMARY_QUERY = `
-SELECT
-DISTINCT ON (cur.id)
-    cr.course_realisation_id as "courseRealisationId",
-    cr.course_code as "courseCode",
-    cr.organisation_id as "organisationId",
-    cr.is_open as "isOpen",
-    cr.question_ids as "questionIds",
-    cr.question_distribution as "questionDistribution",
-    cur.id as "id",
-    fbt.id as "feedbackTargetId",
-    fbt.feedback_count as "feedbackCount",
-    fbtc.student_count as "studentCount",
-    fbt.hidden_count as "hiddenCount",
-    LENGTH(fbt.feedback_response) > 3 AND (fbt.feedback_response_email_sent OR fbt.closes_at < :feedbackResponseEmailsSinceDate) as "feedbackResponseGiven",
-    fbt.closes_at as "closesAt",
-    cur.start_date as "startDate",
-    cur.end_date as "endDate",
-    cur.name,
-    cur.teaching_languages as "teachingLanguages"
-
-FROM course_results_view as cr
-INNER JOIN feedback_targets fbt ON fbt.course_realisation_id = cr.course_realisation_id
-INNER JOIN course_realisations cur ON cur.id = cr.course_realisation_id
-INNER JOIN feedback_target_counts_view fbtc ON fbtc.feedback_target_id = fbt.id
-WHERE 
-NOT fbt.hidden 
-AND course_code = :courseCode
-`
-
 /**
  * Views must be initialised when database is first created. This can be done in a migration for example.
  */
@@ -201,20 +166,8 @@ const runRefreshViewsQuery = async () => {
   })
 }
 
-const runCourseRealisationSummaryQuery = async courseCode => {
-  const allCuSummaries = await sequelize.query(COURSE_REALISATION_SUMMARY_QUERY, {
-    replacements: {
-      courseCode,
-      feedbackResponseEmailsSinceDate: FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
-    },
-    type: QueryTypes.SELECT,
-  })
-  return allCuSummaries
-}
-
 module.exports = {
   initialiseSummaryView,
   initialiseCountsView,
   runRefreshViewsQuery,
-  runCourseRealisationSummaryQuery,
 }
