@@ -31,13 +31,7 @@ const includeEmptyOrganisations = (organisations, organisationsToShow, questions
   return _.orderBy(allOrganisations, [org => (org.courseUnits.length > 0 ? 1 : 0)], ['desc'])
 }
 
-const getUserHiddenOrganisationCodes = async user => {
-  const customisation = await user.getSummaryCustomisation()
-  return customisation?.data?.hiddenRows ?? []
-}
-
 const getOrganisationSummaries = async ({
-  user,
   questions,
   organisationAccess,
   accessibleCourseRealisationIds = [],
@@ -46,16 +40,8 @@ const getOrganisationSummaries = async ({
   startDate = subMonths(new Date(), 24),
   endDate = new Date(),
 }) => {
-  // which ones to filter based on custom hidden rows
-  const codesToFilter =
-    organisationAccess?.length > 1 // the filtering feature is only available to users with >1 orgs
-      ? await getUserHiddenOrganisationCodes(user)
-      : []
-
   // orgs user has org access to
-  const organisationsToShow = organisationAccess
-    .filter(org => !codesToFilter.includes(org.organisation.code))
-    .map(org => org.organisation)
+  const organisationsToShow = organisationAccess.map(org => org.organisation)
 
   const organisationIds = organisationsToShow.map(org => org.id)
 

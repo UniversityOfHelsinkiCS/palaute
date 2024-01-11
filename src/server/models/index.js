@@ -14,7 +14,6 @@ const UpdaterStatus = require('./updaterStatus')
 const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
-const SummaryCustomisation = require('./summaryCustomisation')
 const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorrespondent')
 const Tag = require('./tag')
 const CourseRealisationsTag = require('./courseRealisationsTag')
@@ -174,12 +173,6 @@ User.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
 FeedbackTarget.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
-User.hasOne(SummaryCustomisation, {
-  as: 'summaryCustomisation',
-  foreignKey: 'user_id',
-})
-SummaryCustomisation.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
-
 Organisation.belongsToMany(User, {
   through: OrganisationFeedbackCorrespondent,
   as: 'users',
@@ -269,7 +262,6 @@ module.exports = {
   OrganisationLog,
   FeedbackTargetLog,
   ContinuousFeedback,
-  SummaryCustomisation,
   OrganisationFeedbackCorrespondent,
   CourseRealisationsTag,
   InactiveCourseRealisation,

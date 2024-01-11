@@ -8,7 +8,6 @@ const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
 const { getSummaryQuestions } = require('../../services/questions')
-const { updateCustomisation, getCustomisation } = require('./customisation')
 const {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
@@ -222,7 +221,5 @@ router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/organisations/:code', getOrganisations)
 router.get('/course-units/:code', getByCourseUnit)
-router.get('/customisation', getCustomisation)
-router.put('/customisation', updateCustomisation)
 
 module.exports = router
