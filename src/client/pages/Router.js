@@ -9,7 +9,7 @@ import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from '../components/common/LoadingProgress'
-import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
+import MyFeedbacks from './MyFeedbacks'
 import Summary from './CourseSummary/SummaryV2/Summary'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 
