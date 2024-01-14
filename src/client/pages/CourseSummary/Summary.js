@@ -48,19 +48,25 @@ const SummaryInContext = () => {
           <GenerateReport />
         </Box>
         {user?.isAdmin && (
-          <Button variant="text" onClick={handleUpdateData}>
+          <Button variant="text" onClick={handleUpdateData} data-cy="update-data">
             Aja datanpäivitys (vain admin)
           </Button>
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">
-        <RouterTab label={t('courseSummary:myCourses')} icon={<School />} to={`/course-summary/my-courses${search}`} />
+        <RouterTab
+          label={t('courseSummary:myCourses')}
+          icon={<School />}
+          to={`/course-summary/my-courses${search}`}
+          data-cy="my-courses"
+        />
 
         {hasAccessToMyOrganisations && (
           <RouterTab
             label={t('courseSummary:myOrganisations')}
             icon={<BarChartOutlined />}
             to={`/course-summary/my-organisations${search}`}
+            data-cy="my-organisations"
           />
         )}
 
@@ -73,6 +79,7 @@ const SummaryInContext = () => {
               </Box>
             }
             to={`/course-summary/university${search}`}
+            data-cy="university"
           />
         )}
       </RouterTabs>
