@@ -58,7 +58,7 @@ const EditInterimFeedback = () => {
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         data-cy="feedback-target-edit-interim-feedback"
         onClick={handleClose}
-        variant="text"
+        variant="outlined"
         startIcon={<Edit />}
       >
         {t('interimFeedback:editSurvey')}

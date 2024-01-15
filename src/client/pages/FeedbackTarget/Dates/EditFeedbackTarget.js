@@ -20,7 +20,7 @@ const EditFeedbackTargetDates = () => {
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         data-cy="feedback-target-edit-period"
         onClick={() => setDialogOpen(true)}
-        variant="text"
+        variant="outlined"
         startIcon={<Edit />}
       >
         {t('feedbackTargetSettings:editPeriodTitle')}

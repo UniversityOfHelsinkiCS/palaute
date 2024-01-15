@@ -87,7 +87,7 @@ const EditOrganisationSurvey = () => {
         data-cy="feedback-target-edit-organisation-survey"
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         onClick={handleClose}
-        variant="text"
+        variant="outlined"
         startIcon={<Edit />}
       >
         {t('organisationSurveys:editSurvey')}
