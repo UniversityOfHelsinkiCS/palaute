@@ -284,6 +284,82 @@ const getFeedbackTargets = async (req, res) => {
   return res.send(feedbackTargetsWithCount)
 }
 
+const getOrganisationSurveys = async (req, res) => {
+  const organisationSurveys = await FeedbackTarget.findAll({
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'name',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'feedbackCount',
+      'feedbackResponse',
+      'feedbackResponseEmailSent',
+      'opensAt',
+      'closesAt',
+    ],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        where: {
+          userCreated: true,
+        },
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            required: true,
+          },
+          {
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            required: true,
+            attributes: [],
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id'],
+        as: 'students',
+        required: false,
+        where: { accessStatus: 'STUDENT' },
+        include: {
+          model: User,
+          attributes: ['studentNumber'],
+          as: 'user',
+        },
+      },
+      {
+        model: UserFeedbackTarget,
+        attributes: ['id', 'userId', 'accessStatus'],
+        as: 'userFeedbackTargets',
+        required: false,
+        where: {
+          accessStatus: 'RESPONSIBLE_TEACHER',
+        },
+        include: {
+          model: User,
+          as: 'user',
+        },
+      },
+    ],
+    order: [['courseRealisation', 'endDate', 'DESC']],
+  })
+
+  return res.send(organisationSurveys)
+}
+
 const resetTestCourse = async (_, res) => {
   const feedbackTarget = await FeedbackTarget.findOne({
     where: {
@@ -553,6 +629,7 @@ router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/feedback-targets', findFeedbackTargets)
+router.get('/organisation-surveys', getOrganisationSurveys)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
 router.get('/inactive-course-realisations', getInactiveCourseRealisations)
