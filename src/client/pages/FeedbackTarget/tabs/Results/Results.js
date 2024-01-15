@@ -167,7 +167,7 @@ const Results = () => {
           </Box>
         )}
 
-        {!isMobile && (
+        {!isMobile && enoughStudents && (
           <Box>
             <FeedbackChart
               feedbacks={feedbacks}
