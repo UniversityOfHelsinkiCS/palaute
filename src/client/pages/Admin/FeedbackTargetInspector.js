@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Select, FormControl, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Select, MenuItem, TextField, Typography } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../util/apiClient'
