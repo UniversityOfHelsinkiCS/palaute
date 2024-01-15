@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Select, FormControl, MenuItem, TextField, Typography } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../util/apiClient'
@@ -45,50 +45,65 @@ const FeedbackTargetInspector = () => {
 
   return (
     <Box mt={4}>
-      <Box display="flex" alignItems="center">
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
         <TextField
+          sx={{ m: 1 }}
           variant="outlined"
-          label="id"
+          label="ID"
           value={query.id}
           onChange={e => handleChange({ ...query, id: e.target.value })}
         />
-        <Box m={1} />
+
         <TextField
+          sx={{ m: 1 }}
           variant="outlined"
-          label="course code"
+          label="Course Code"
           value={query.code}
           onFocus={() => setQuery({ ...query, id: '' })}
           onChange={e => handleChange({ ...query, code: e.target.value })}
         />
-        <Box m={1} />
-        <TextField
-          variant="outlined"
-          label="CU name"
-          value={query.name}
-          onFocus={() => setQuery({ ...query, id: '' })}
-          onChange={e => handleChange({ ...query, name: e.target.value })}
-        />
-        <Box m={1} />
-        <Button
-          onClick={() => {
-            const newQuery = {
-              ...query,
-              language: query.language === 'fi' ? 'en' : 'fi',
-            }
-            setQuery(newQuery)
-            if (query.name?.length > 2) {
-              runQuery(newQuery)
-            }
-          }}
-        >
-          {query.language === 'fi' ? 'finnish' : 'english'}
-        </Button>
+
+        <Box sx={{ width: '100%', position: 'relative' }}>
+          <TextField
+            fullWidth
+            label="CU Name"
+            value={query.name}
+            onFocus={() => setQuery({ ...query, id: '' })}
+            onChange={e => handleChange({ ...query, name: e.target.value })}
+            InputProps={{ sx: { pr: '64px' } }}
+          />
+          <Select
+            variant="standard"
+            disableUnderline
+            value={query.language}
+            onChange={event => {
+              const newQuery = {
+                ...query,
+                language: event.target.value,
+              }
+              setQuery(newQuery)
+              if (query.name?.length > 2) {
+                runQuery(newQuery)
+              }
+            }}
+            sx={{
+              position: 'absolute',
+              right: '8px',
+              top: '12px',
+              paddingLeft: '8px',
+              borderLeft: '2px solid rgba(0, 0, 0, 0.23)',
+            }}
+          >
+            <MenuItem value="fi">FI</MenuItem>
+            <MenuItem value="en">EN</MenuItem>
+          </Select>
+        </Box>
       </Box>
-      <Box m={2} />
-      <Typography>
+
+      <Typography sx={{ m: 2 }}>
         Showing {potentialFeedbackTargets.length}/{count} results
       </Typography>
-      <Box m={2} />
+
       {potentialFeedbackTargets.map(feedbackTarget => (
         <FeedbackTargetItem key={feedbackTarget.id} feedbackTarget={feedbackTarget} />
       ))}
