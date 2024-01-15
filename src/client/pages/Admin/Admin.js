@@ -63,6 +63,7 @@ const AdminView = () => {
           <Tab label="Norppa feedback" component={Link} to={`${url}/feedback`} />
           <Tab label="Norppa statistics" component={Link} to={`${url}/statistics`} />
           <Tab label="Search feedback targets" component={Link} to={`${url}/feedback-targets`} />
+          <Tab label="Search organisation surveys" component={Link} to={`${url}/organisation-surveys`} />
           <Tab label="Palautevastaavat" component={Link} to={`${url}/feedback-correspondents`} />
           <Tab label="Banners" component={Link} to={`${url}/banners`} />
           <Tab label="Updater" to={`${url}/updater`} component={Link} />
@@ -76,6 +77,7 @@ const AdminView = () => {
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />
+        <Route path={`${path}/organisation-surveys`} component={FeedbackTargetInspector} />
         <Route path={`${path}/feedback-correspondents`} component={FeedbackCorrespondents} />
         <Route path={`${path}/banners`} component={BannerView} />
         <Route path={`${path}/updater`} component={UpdaterView} />
