@@ -25,6 +25,23 @@ const NotEnoughFeedbacks = ({ t }) => (
   </Box>
 )
 
+const NotEnoughStudents = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning" data-cy="notEnoughStudents">
+      {t('feedbackTargetResults:notEnoughStudentsInfo')}
+    </Alert>
+  </Box>
+)
+
+const FeedbackNotVisibleAlert = ({ enoughStudents, enoughFeedbacks }) => {
+  const { t } = useTranslation()
+
+  if (!enoughStudents) return <NotEnoughStudents t={t} />
+  if (!enoughFeedbacks) return <NotEnoughFeedbacks t={t} />
+
+  return null
+}
+
 const OnlyTeacherAccess = ({ t }) => (
   <Box mt={2}>
     <Alert severity="info">{t('feedbackTargetResults:teacherAccessInfo')}</Alert>
@@ -100,6 +117,7 @@ const Results = () => {
     questionOrder,
     publicQuestionIds,
     publicityConfigurableQuestionIds,
+    studentCount,
     feedback,
     feedbackCount,
     opensAt,
@@ -108,7 +126,10 @@ const Results = () => {
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+
   const enoughFeedbacks = feedbackCount > 0
+  const enoughStudents = studentCount > 4
+  const showFeedback = enoughFeedbacks && enoughStudents
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
   const filtersVisible = isOrganisationReader || isResponsibleTeacher
@@ -159,9 +180,7 @@ const Results = () => {
           </Box>
         )}
 
-        {!enoughFeedbacks && <NotEnoughFeedbacks t={t} />}
-
-        {enoughFeedbacks && (
+        {showFeedback ? (
           <QuestionResults
             publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
             publicQuestionIds={publicQuestionIds ?? []}
@@ -173,6 +192,8 @@ const Results = () => {
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />
+        ) : (
+          <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />
         )}
       </Box>
     </>

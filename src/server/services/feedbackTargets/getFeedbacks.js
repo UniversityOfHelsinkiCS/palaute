@@ -143,6 +143,16 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
+
+  // if there are less than 5 students, do not show any feedbacks
+  if (studentFeedbackTargets.length < 5) {
+    return {
+      feedbacks: [],
+      feedbackVisible: false,
+      accessStatus: null,
+    }
+  }
+
   const groupingQuestionId = getGroupingQuestion(surveys)?.id
   const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
 
