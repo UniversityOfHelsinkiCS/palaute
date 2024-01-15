@@ -47,7 +47,7 @@ const FeedbackTargetInspector = () => {
     <Box mt={4}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
         <TextField
-          sx={{ m: 1 }}
+          sx={{ m: 1, width: '100%' }}
           variant="outlined"
           label="ID"
           value={query.id}
@@ -55,7 +55,7 @@ const FeedbackTargetInspector = () => {
         />
 
         <TextField
-          sx={{ m: 1 }}
+          sx={{ m: 1, width: '100%' }}
           variant="outlined"
           label="Course Code"
           value={query.code}
