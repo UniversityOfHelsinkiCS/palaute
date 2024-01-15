@@ -660,7 +660,7 @@ describe('Students', () => {
         en: 'New survey',
         sv: '',
       },
-      studentNumbers: ['014895968', '015303763', '015144922', '211111112'],
+      studentNumbers: ['014895968', '015303763', '015144922', '211111112', '013749950'],
       teacherIds: ['hy-hlo-111111112'],
       startDate: today,
       endDate: new Date().setDate(today.getDate() + 7),
