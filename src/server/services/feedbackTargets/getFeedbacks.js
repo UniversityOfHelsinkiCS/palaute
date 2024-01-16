@@ -147,7 +147,7 @@ const getFeedbacks = async (id, user, groupId) => {
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
 
   // Hide feedbacks for small courses to protect anonymity
-  if (FEEDBACK_HIDDEN_STUDENT_COUNT && studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
+  if (studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
     return {
       feedbacks: [],
       feedbackVisible: false,
