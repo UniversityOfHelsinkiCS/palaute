@@ -10,6 +10,9 @@ const getCourseRealisationSummaryEntities = async courseCode => {
         model: FeedbackTarget,
         as: 'feedbackTargets',
         attributes: ['id', 'closesAt', 'feedbackResponse'],
+        where: {
+          userCreated: false,
+        },
         required: true,
         include: [
           {

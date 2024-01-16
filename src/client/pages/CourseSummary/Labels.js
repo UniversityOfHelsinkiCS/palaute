@@ -42,7 +42,7 @@ const TeacherChips = ({ courseRealisation }) => {
 }
 
 export const CourseRealisationLabel = ({ courseRealisation, language }) => {
-  const { startDate, endDate, feedbackTargetId, name, teachingLanguages } = courseRealisation
+  const { startDate, endDate, name, teachingLanguages } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
@@ -50,8 +50,10 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
   const translatedName = getLanguageValue(name, language)
 
-  const link = feedbackTargetId ? (
-    <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`} underline="hover">
+  const feedbackTarget = courseRealisation.feedbackTargets[0]
+
+  const link = feedbackTarget ? (
+    <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`} underline="hover">
       {translatedName}
     </Link>
   ) : (
