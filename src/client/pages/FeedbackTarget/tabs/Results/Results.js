@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Box, Alert, Paper } from '@mui/material'
 import { useInView } from 'react-intersection-observer'
 
+import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
@@ -28,7 +29,7 @@ const NotEnoughFeedbacks = ({ t }) => (
 const NotEnoughStudents = ({ t }) => (
   <Box mb={2}>
     <Alert severity="warning" data-cy="notEnoughStudents">
-      {t('feedbackTargetResults:notEnoughStudentsInfo')}
+      {t('feedbackTargetResults:notEnoughStudentsInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
     </Alert>
   </Box>
 )
@@ -128,7 +129,7 @@ const Results = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const enoughFeedbacks = feedbackCount > 0
-  const enoughStudents = studentCount > 4
+  const enoughStudents = !FEEDBACK_HIDDEN_STUDENT_COUNT || studentCount >= FEEDBACK_HIDDEN_STUDENT_COUNT
   const showFeedback = enoughFeedbacks && enoughStudents
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()

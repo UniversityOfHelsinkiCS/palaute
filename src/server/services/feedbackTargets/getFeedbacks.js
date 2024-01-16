@@ -1,4 +1,6 @@
 const _ = require('lodash')
+
+const { FEEDBACK_HIDDEN_STUDENT_COUNT } = require('../../util/config')
 const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
@@ -144,8 +146,8 @@ const getFeedbacks = async (id, user, groupId) => {
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
 
-  // if there are less than 5 students, do not show any feedbacks
-  if (studentFeedbackTargets.length < 5) {
+  // Hide feedbacks for small courses to protect anonymity
+  if (FEEDBACK_HIDDEN_STUDENT_COUNT && studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
     return {
       feedbacks: [],
       feedbackVisible: false,

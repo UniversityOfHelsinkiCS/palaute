@@ -64,6 +64,14 @@ const config = {
   USER_CACHE_TTL: undefined,
 
   /**
+   * How many enrolled students are needed for feedback to be shown.
+   * Used to protect anonymity of students in small courses.
+   * e.g. one feedback given in a course with only one student.
+   * When set to zero, feedback is always shown.
+   * */
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 0,
+
+  /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
    */
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
