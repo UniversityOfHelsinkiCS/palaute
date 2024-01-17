@@ -13,8 +13,8 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
-import apiClient from '../../util/apiClient'
-import useInactiveCourseRealisations from '../../hooks/useInactiveCourseRealisations'
+import apiClient from '../../../../util/apiClient'
+import useInactiveCourseRealisations from '../../../../hooks/useInactiveCourseRealisations'
 
 const Enable = ({ cur, active, setActive }) => {
   const { enqueueSnackbar } = useSnackbar()

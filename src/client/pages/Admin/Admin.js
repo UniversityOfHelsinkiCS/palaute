@@ -7,18 +7,18 @@ import { useTranslation } from 'react-i18next'
 
 import { CONFIG_TEST_VALUE, images, PRIVATE_TEST } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import NorppaFeedbackView from './NorppaFeedbackView'
-import NorppaStatisticView from './NorppaStatisticsView'
-import UpdaterView from './UpdaterView'
+import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
+import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
+import UpdaterView from './tabs/Updater/UpdaterView'
 import Title from '../../components/common/Title'
 import { RouterTabs } from '../../components/common/RouterTabs'
-import MiscTab from './MiscTab'
+import MiscTab from './tabs/Misc/MiscTab'
 import FeedbackTargetInspector from './tabs/FeedbackTargetInspector/FeedbackTargetInspector'
 import UsersTab from './tabs/Users/UsersTab'
-import AccessTab from './AccessTab'
-import FeedbackCorrespondents from './FeedbackCorrespondents'
-import BannerView from './BannersView'
-import EnableCourses from './EnableCourses'
+import OrganisationAccess from './tabs/OrganisationAccess/OrganisationAccess'
+import FeedbackCorrespondents from './tabs/FeedbackCorrescpondents/FeedbackCorrespondents'
+import BannerView from './tabs/Banners/BannersView'
+import EnableCourses from './tabs/EnableCourses/EnableCourses'
 import CrashDebug from './CrashDebug'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/organisationSurveyInspector'
 
@@ -74,7 +74,7 @@ const AdminView = () => {
       <Switch>
         <Route path={`${path}/users`} component={UsersTab} />
         <Route path={`${path}/enable`} component={EnableCourses} />
-        <Route path={`${path}/access`} component={AccessTab} />
+        <Route path={`${path}/access`} component={OrganisationAccess} />
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />

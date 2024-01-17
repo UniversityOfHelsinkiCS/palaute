@@ -20,11 +20,11 @@ import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 
-import { getFaculties, getProgrammeAccessByFaculty } from './utils'
-import getAllUserAccess from '../../hooks/useAllUserAccess'
-import useOrganisationData from '../../hooks/useOrganisationData'
-import useHistoryState from '../../hooks/useHistoryState'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { getFaculties, getProgrammeAccessByFaculty } from '../../utils'
+import getAllUserAccess from '../../../../hooks/useAllUserAccess'
+import useOrganisationData from '../../../../hooks/useOrganisationData'
+import useHistoryState from '../../../../hooks/useHistoryState'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 
 const AccessTable = ({ access }) => {
   const sortByAccess = ({ access: a }, { access: b }) => {
@@ -90,7 +90,7 @@ const ProgrammeAccordion = ({ code, name, access }) => (
   </Accordion>
 )
 
-const AccessTab = () => {
+const Access = () => {
   const [access, setAccess] = useState([])
   const [facultyCode, setFaculty] = useHistoryState('organisationAccessFaculty', 'All')
 
@@ -137,4 +137,4 @@ const AccessTab = () => {
   )
 }
 
-export default AccessTab
+export default Access

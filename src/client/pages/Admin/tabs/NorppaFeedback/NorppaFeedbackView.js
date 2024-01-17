@@ -5,9 +5,9 @@ import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
-import useNorppaFeedbacks from '../../hooks/useNorppaFeedbacks'
-import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
+import useNorppaFeedbacks from '../../../../hooks/useNorppaFeedbacks'
+import apiClient from '../../../../util/apiClient'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 
 const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()

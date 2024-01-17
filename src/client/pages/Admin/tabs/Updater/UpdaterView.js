@@ -18,11 +18,11 @@ import {
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
 
-import apiClient from '../../util/apiClient'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
-import useUpdaterStatuses from '../../hooks/useUpdaterStatuses'
-import { GRAYLOG_URL, inProduction } from '../../util/common'
-import ExternalLink from '../../components/common/ExternalLink'
+import apiClient from '../../../../util/apiClient'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import useUpdaterStatuses from '../../../../hooks/useUpdaterStatuses'
+import { GRAYLOG_URL, inProduction } from '../../../../util/common'
+import ExternalLink from '../../../../components/common/ExternalLink'
 
 const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL

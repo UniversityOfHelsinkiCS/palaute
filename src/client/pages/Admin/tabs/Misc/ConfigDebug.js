@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
 import { useQuery } from 'react-query'
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../../util/apiClient'
 
 const ConfigDebug = () => {
   // eslint-disable-next-line no-undef
