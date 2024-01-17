@@ -21,7 +21,7 @@ import {
 
 import { useSnackbar } from 'notistack'
 
-import apiClient from '../../util/apiClient'
+import apiClient from '../../../util/apiClient'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>
