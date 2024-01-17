@@ -1,11 +1,12 @@
 import React from 'react'
 
-import { Box, Select, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'
 import FeedbackTargetItem from '../../Inspector/FeedbackTargetItem'
+import LocalesSearchField from '../../Inspector/LocalesSearchField'
 
 const FeedbackTargetInspector = () => {
   const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])
@@ -63,41 +64,13 @@ const FeedbackTargetInspector = () => {
           onChange={e => handleChange({ ...query, code: e.target.value })}
         />
 
-        <Box sx={{ width: '100%', position: 'relative' }}>
-          <TextField
-            fullWidth
-            label="CU Name"
-            value={query.name}
-            onFocus={() => setQuery({ ...query, id: '' })}
-            onChange={e => handleChange({ ...query, name: e.target.value })}
-            InputProps={{ sx: { pr: '64px' } }}
-          />
-          <Select
-            variant="standard"
-            disableUnderline
-            value={query.language}
-            onChange={event => {
-              const newQuery = {
-                ...query,
-                language: event.target.value,
-              }
-              setQuery(newQuery)
-              if (query.name?.length > 2) {
-                runQuery(newQuery)
-              }
-            }}
-            sx={{
-              position: 'absolute',
-              right: '8px',
-              top: '12px',
-              paddingLeft: '8px',
-              borderLeft: '2px solid rgba(0, 0, 0, 0.23)',
-            }}
-          >
-            <MenuItem value="fi">FI</MenuItem>
-            <MenuItem value="en">EN</MenuItem>
-          </Select>
-        </Box>
+        <LocalesSearchField
+          label="CU Name"
+          query={query}
+          setQuery={setQuery}
+          runQuery={runQuery}
+          handleChange={handleChange}
+        />
       </Box>
 
       <Typography sx={{ m: 2 }}>
