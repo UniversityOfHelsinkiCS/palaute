@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { Box, TextField, Typography } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'
-import FeedbackTargetItem from '../../Inspector/FeedbackTargetItem'
+
 import LocalesSearchField from '../../Inspector/LocalesSearchField'
+import InspectorResults from '../../Inspector/InspectorResults'
+import { parseDates } from '../../Inspector/utils'
 
 const FeedbackTargetInspector = () => {
   const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])
@@ -23,18 +25,7 @@ const FeedbackTargetInspector = () => {
     const { data } = await apiClient.get('/admin/feedback-targets', { params })
     const { feedbackTargets, count } = data
 
-    setPotentialFeedbackTargets(
-      feedbackTargets.map(fbt => ({
-        ...fbt,
-        opensAt: new Date(fbt.opensAt),
-        closesAt: new Date(fbt.closesAt),
-        courseRealisation: {
-          ...fbt.courseRealisation,
-          startDate: new Date(fbt.courseRealisation.startDate),
-          endDate: new Date(fbt.courseRealisation.endDate),
-        },
-      }))
-    )
+    setPotentialFeedbackTargets(parseDates(feedbackTargets))
     setCount(count)
   }, 600)
 
@@ -73,13 +64,7 @@ const FeedbackTargetInspector = () => {
         />
       </Box>
 
-      <Typography sx={{ m: 2 }}>
-        Showing {potentialFeedbackTargets.length}/{count} results
-      </Typography>
-
-      {potentialFeedbackTargets.map(feedbackTarget => (
-        <FeedbackTargetItem key={feedbackTarget.id} feedbackTarget={feedbackTarget} />
-      ))}
+      <InspectorResults feedbackTargets={potentialFeedbackTargets} count={count} />
     </Box>
   )
 }

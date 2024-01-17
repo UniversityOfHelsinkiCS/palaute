@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { Box, TextField, Typography } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'
-import FeedbackTargetItem from '../../Inspector/FeedbackTargetItem'
+
 import LocalesSearchField from '../../Inspector/LocalesSearchField'
+import InspectorResults from '../../Inspector/InspectorResults'
+import { parseDates } from '../../Inspector/utils'
 
 const OrganisationSurveyInspector = () => {
   const [potentialOrganisationSurveys, setPotentialOrganisationSurveys] = useHistoryState(
@@ -26,18 +28,7 @@ const OrganisationSurveyInspector = () => {
     const { data } = await apiClient.get('/admin/organisation-surveys', { params })
     const { feedbackTargets, count } = data
 
-    setPotentialOrganisationSurveys(
-      feedbackTargets.map(fbt => ({
-        ...fbt,
-        opensAt: new Date(fbt.opensAt),
-        closesAt: new Date(fbt.closesAt),
-        courseRealisation: {
-          ...fbt.courseRealisation,
-          startDate: new Date(fbt.courseRealisation.startDate),
-          endDate: new Date(fbt.courseRealisation.endDate),
-        },
-      }))
-    )
+    setPotentialOrganisationSurveys(parseDates(feedbackTargets))
     setCount(count)
   }, 600)
 
@@ -76,13 +67,7 @@ const OrganisationSurveyInspector = () => {
         />
       </Box>
 
-      <Typography sx={{ m: 2 }}>
-        Showing {potentialOrganisationSurveys.length}/{count} results
-      </Typography>
-
-      {potentialOrganisationSurveys.map(feedbackTarget => (
-        <FeedbackTargetItem key={feedbackTarget.id} feedbackTarget={feedbackTarget} />
-      ))}
+      <InspectorResults feedbackTargets={potentialOrganisationSurveys} count={count} />
     </Box>
   )
 }
