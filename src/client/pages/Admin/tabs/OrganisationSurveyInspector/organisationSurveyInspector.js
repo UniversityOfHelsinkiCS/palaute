@@ -7,22 +7,25 @@ import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'
 import FeedbackTargetItem from '../../Inspector/FeedbackTargetItem'
 
-const FeedbackTargetInspector = () => {
-  const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])
-  const [count, setCount] = useHistoryState('potentialFeedbackTargetCount', 0)
+const OrganisationSurveyInspector = () => {
+  const [potentialOrganisationSurveys, setPotentialOrganisationSurveys] = useHistoryState(
+    'potentialOrganisationSurveys',
+    []
+  )
+  const [count, setCount] = useHistoryState('potentialOrganisationSurveyCount', 0)
 
-  const [query, setQuery] = useHistoryState('feedback-target_query', {
+  const [query, setQuery] = useHistoryState('organisationSurveyQuery', {
     id: '',
-    code: '',
+    orgCode: '',
     name: '',
     language: 'fi',
   })
 
   const runQuery = debounce(async params => {
-    const { data } = await apiClient.get('/admin/feedback-targets', { params })
+    const { data } = await apiClient.get('/admin/organisation-surveys', { params })
     const { feedbackTargets, count } = data
 
-    setPotentialFeedbackTargets(
+    setPotentialOrganisationSurveys(
       feedbackTargets.map(fbt => ({
         ...fbt,
         opensAt: new Date(fbt.opensAt),
@@ -57,16 +60,16 @@ const FeedbackTargetInspector = () => {
         <TextField
           sx={{ m: 1, width: '100%' }}
           variant="outlined"
-          label="Course Code"
-          value={query.code}
+          label="Organisation Code"
+          value={query.orgCode}
           onFocus={() => setQuery({ ...query, id: '' })}
-          onChange={e => handleChange({ ...query, code: e.target.value })}
+          onChange={e => handleChange({ ...query, orgCode: e.target.value })}
         />
 
         <Box sx={{ width: '100%', position: 'relative' }}>
           <TextField
             fullWidth
-            label="CU Name"
+            label="Survey Name"
             value={query.name}
             onFocus={() => setQuery({ ...query, id: '' })}
             onChange={e => handleChange({ ...query, name: e.target.value })}
@@ -101,14 +104,14 @@ const FeedbackTargetInspector = () => {
       </Box>
 
       <Typography sx={{ m: 2 }}>
-        Showing {potentialFeedbackTargets.length}/{count} results
+        Showing {potentialOrganisationSurveys.length}/{count} results
       </Typography>
 
-      {potentialFeedbackTargets.map(feedbackTarget => (
+      {potentialOrganisationSurveys.map(feedbackTarget => (
         <FeedbackTargetItem key={feedbackTarget.id} feedbackTarget={feedbackTarget} />
       ))}
     </Box>
   )
 }
 
-export default FeedbackTargetInspector
+export default OrganisationSurveyInspector

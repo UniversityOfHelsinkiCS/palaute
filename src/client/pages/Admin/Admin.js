@@ -20,6 +20,7 @@ import FeedbackCorrespondents from './FeedbackCorrespondents'
 import BannerView from './BannersView'
 import EnableCourses from './EnableCourses'
 import CrashDebug from './CrashDebug'
+import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/organisationSurveyInspector'
 
 const ConfigTestValues = () => {
   const { t } = useTranslation()
@@ -77,7 +78,7 @@ const AdminView = () => {
         <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
         <Route path={`${path}/statistics`} component={NorppaStatisticView} />
         <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />
-        <Route path={`${path}/organisation-surveys`} component={FeedbackTargetInspector} />
+        <Route path={`${path}/organisation-surveys`} component={OrganisationSurveyInspector} />
         <Route path={`${path}/feedback-correspondents`} component={FeedbackCorrespondents} />
         <Route path={`${path}/banners`} component={BannerView} />
         <Route path={`${path}/updater`} component={UpdaterView} />
