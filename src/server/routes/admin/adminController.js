@@ -223,7 +223,7 @@ const findOrganisationSurveys = async (req, res) => {
           attributes: ['id', 'code', 'name'],
           through: { attributes: ['type'], as: 'courseUnitOrganisation' },
           required: true,
-          ...(orgCode && { where: { code: orgCode } }),
+          ...(orgCode && { where: { code: { [Op.iLike]: `${orgCode}%` } } }),
         },
       ],
     },
