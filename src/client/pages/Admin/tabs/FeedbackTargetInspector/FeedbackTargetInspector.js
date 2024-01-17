@@ -3,9 +3,9 @@ import React from 'react'
 import { Box, Select, MenuItem, TextField, Typography } from '@mui/material'
 import { debounce } from 'lodash'
 
-import apiClient from '../../util/apiClient'
-import useHistoryState from '../../hooks/useHistoryState'
-import FeedbackTargetItem from './FeedbackTargetItem'
+import apiClient from '../../../../util/apiClient'
+import useHistoryState from '../../../../hooks/useHistoryState'
+import FeedbackTargetItem from '../../Inspector/FeedbackTargetItem'
 
 const FeedbackTargetInspector = () => {
   const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])
