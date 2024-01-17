@@ -232,6 +232,12 @@ const findOrganisationSurveys = async (req, res) => {
       as: 'courseRealisation',
       attributes: ['startDate', 'endDate', 'name'],
       required: true,
+      include: {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseRealisationsOrganisation },
+      },
       ...(name?.length > 2 && {
         where: {
           [Op.or]: {
