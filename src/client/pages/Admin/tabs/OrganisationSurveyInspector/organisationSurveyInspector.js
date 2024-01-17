@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, TextField } from '@mui/material'
+import { Box } from '@mui/material'
 import { debounce } from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
@@ -9,6 +9,7 @@ import useHistoryState from '../../../../hooks/useHistoryState'
 import LocalesSearchField from '../../Inspector/LocalesSearchField'
 import InspectorResults from '../../Inspector/InspectorResults'
 import { parseDates } from '../../Inspector/utils'
+import TextSearchField from '../../Inspector/TextSearchField'
 
 const OrganisationSurveyInspector = () => {
   const [potentialOrganisationSurveys, setPotentialOrganisationSurveys] = useHistoryState(
@@ -41,17 +42,14 @@ const OrganisationSurveyInspector = () => {
   return (
     <Box mt={4}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
-        <TextField
-          sx={{ m: 1, width: '100%' }}
-          variant="outlined"
+        <TextSearchField
           label="ID"
           value={query.id}
+          onFocus={() => setQuery({ ...query, orgCode: '' })}
           onChange={e => handleChange({ ...query, id: e.target.value })}
         />
 
-        <TextField
-          sx={{ m: 1, width: '100%' }}
-          variant="outlined"
+        <TextSearchField
           label="Organisation Code"
           value={query.orgCode}
           onFocus={() => setQuery({ ...query, id: '' })}
