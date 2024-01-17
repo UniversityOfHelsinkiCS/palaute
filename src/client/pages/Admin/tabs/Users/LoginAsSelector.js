@@ -4,9 +4,9 @@ import { TextField, Box } from '@mui/material'
 
 import { debounce } from 'lodash'
 
-import apiClient from '../../util/apiClient'
-import UserAccordion from './UserAccordion'
-import { handleLoginAs } from './utils'
+import apiClient from '../../../../util/apiClient'
+import UserAccordion from '../../UserAccordion/UserAccordion'
+import { handleLoginAs } from '../../utils'
 
 const LoginAsSelector = () => {
   const [potentialUsers, setPotentialUsers] = useState([])
