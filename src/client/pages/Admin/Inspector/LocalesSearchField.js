@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box, Select, MenuItem, TextField } from '@mui/material'
 
-const LocalesSearchField = ({ label, handleChange, query, setQuery, runQuery }) => (
+const LocalesSearchField = ({ label, handleChange, query, setQuery }) => (
   <Box sx={{ width: '100%', position: 'relative' }}>
     <TextField
       fullWidth
@@ -16,16 +16,7 @@ const LocalesSearchField = ({ label, handleChange, query, setQuery, runQuery }) 
       variant="standard"
       disableUnderline
       value={query.language}
-      onChange={event => {
-        const newQuery = {
-          ...query,
-          language: event.target.value,
-        }
-        setQuery(newQuery)
-        if (query.name?.length > 2) {
-          runQuery(newQuery)
-        }
-      }}
+      onChange={e => handleChange({ ...query, language: e.target.value })}
       sx={{
         position: 'absolute',
         right: '8px',

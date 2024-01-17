@@ -55,13 +55,7 @@ const FeedbackTargetInspector = () => {
           onChange={e => handleChange({ ...query, code: e.target.value })}
         />
 
-        <LocalesSearchField
-          label="CU Name"
-          query={query}
-          setQuery={setQuery}
-          runQuery={runQuery}
-          handleChange={handleChange}
-        />
+        <LocalesSearchField label="CU Name" query={query} setQuery={setQuery} handleChange={handleChange} />
       </Box>
 
       <InspectorResults feedbackTargets={potentialFeedbackTargets} count={count} />

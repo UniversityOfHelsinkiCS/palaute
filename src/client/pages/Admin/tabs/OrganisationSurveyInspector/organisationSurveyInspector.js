@@ -58,13 +58,7 @@ const OrganisationSurveyInspector = () => {
           onChange={e => handleChange({ ...query, orgCode: e.target.value })}
         />
 
-        <LocalesSearchField
-          label="Survey Name"
-          query={query}
-          setQuery={setQuery}
-          runQuery={runQuery}
-          handleChange={handleChange}
-        />
+        <LocalesSearchField label="Survey Name" query={query} setQuery={setQuery} handleChange={handleChange} />
       </Box>
 
       <InspectorResults feedbackTargets={potentialOrganisationSurveys} count={count} />
