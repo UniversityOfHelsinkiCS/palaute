@@ -36,10 +36,10 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
 
   // eslint-disable-next-line no-nested-ternary
   const message = isOld
-    ? 'Kurssi on päättynyt yli vuosi sitten, eikä siihen voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.'
+    ? 'Palauteaika on päättynyt yli vuosi sitten, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.'
     : isEnded
-    ? 'Kurssi on päättynyt, eikä siihen voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea. Mikäli sinun kuuluisi pystyä antamaan palautetta kurssille, ota yhteyttä vastuuopettajaan.'
-    : 'Emme löytäneet ilmoittautumistasi tälle kurssille, jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.'
+    ? 'Palauteaika on päättynyt, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.'
+    : 'Emme löytäneet ilmoittautumistasi tälle kurssille. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.'
 
   return (
     <Box sx={{ marginBottom: '2rem' }}>
