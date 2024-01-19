@@ -40,5 +40,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
     'spaced-comment': 'off',
+    'import/no-unused-modules': [1, { unusedExports: true, missingExports: false }],
   },
 }
