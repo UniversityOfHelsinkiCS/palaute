@@ -14,7 +14,7 @@ import { getDateRangeString } from '../../util/getDateRangeString'
 import { getCourseCode, getPrimaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
-const ForbiddenErrorDetails = ({ errorMessage, feedbackTargetId }) => {
+const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isLoading } = useFeedbackTargetErrorViewDetails(feedbackTargetId)
 
@@ -22,7 +22,6 @@ const ForbiddenErrorDetails = ({ errorMessage, feedbackTargetId }) => {
 
   const { courseUnit, courseRealisation } = feedbackTarget || {}
 
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
 
@@ -37,10 +36,10 @@ const ForbiddenErrorDetails = ({ errorMessage, feedbackTargetId }) => {
 
   // eslint-disable-next-line no-nested-ternary
   const message = isOld
-    ? 'Kurssi on päättynyt yli vuosi sitten, eikä siihen voi enää antaa palautetta.'
+    ? 'Kurssi on päättynyt yli vuosi sitten, eikä siihen voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.'
     : isEnded
-    ? 'Kurssi on päättynyt, eikä siihen voi enää antaa palautetta.'
-    : 'Kurssin palaute ei ole vielä avautunut.'
+    ? 'Kurssi on päättynyt, eikä siihen voi enää antaa palautetta. Tarkista ylläolevista tiedoista, etät kurssi on oikea. Mikäli sinun kuuluisi pystyä antamaan palautetta kurssille, ota yhteyttä vastuuopettajaan.'
+    : 'Emme löytäneet ilmoittautumistasi tälle kurssille, jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.'
 
   return (
     <Box sx={{ marginBottom: '2rem' }}>
@@ -63,7 +62,6 @@ const ForbiddenErrorDetails = ({ errorMessage, feedbackTargetId }) => {
       </Box>
       <Box>
         <Typography variant="body1">{message}</Typography>
-        <Typography variant="body1">{errorMessage}</Typography>
       </Box>
     </Box>
   )
@@ -83,9 +81,11 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
   return (
     <Box m={4}>
       {response.status === 403 ? (
-        <ForbiddenErrorDetails errorMessage={t(message)} feedbackTargetId={id} />
+        <ForbiddenErrorDetails feedbackTargetId={id} />
       ) : (
-        <Typography variant="body1">{t(message)}</Typography>
+        <Typography sx={{ marginBottom: '2rem' }} variant="body1">
+          {t(message)}
+        </Typography>
       )}
       {response && (
         <Box>
