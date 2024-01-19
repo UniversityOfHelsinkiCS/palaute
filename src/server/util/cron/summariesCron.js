@@ -3,9 +3,7 @@ const { schedule } = require('./schedule')
 const { buildSummaries } = require('../../services/summary/buildSummaries')
 
 const run = async () => {
-  console.time('Build summaries')
   await buildSummaries()
-  console.timeEnd('Build summaries')
 }
 
 const start = () => {
@@ -18,5 +16,4 @@ const start = () => {
 
 module.exports = {
   start,
-  run,
 }
