@@ -108,6 +108,7 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
               </Typography>
               <Typography
                 data-cy={`${dataCyPrefix}feedback-target-visible-course-name`}
+                component="h2"
                 variant="h5"
                 color="textSecondary"
               >
