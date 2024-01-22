@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import apiClient from '../util/apiClient'
 
-export const queryKey = ['feedbackTargetErrorViewDetails']
+const queryKey = ['feedbackTargetErrorViewDetails']
 
 export const useFeedbackTargetErrorViewDetails = (feedbackTargetId, enable = true) => {
   const queryFn = async () => {
