@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Link } from 'react-router-dom'
 
@@ -22,6 +23,8 @@ import {
 import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../util/apiClient'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../../util/courseIdentifiers'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>
@@ -189,17 +192,37 @@ const Actions = ({ feedbackTarget }) => {
 }
 
 const FeedbackTargetItem = ({ feedbackTarget }) => {
+  const { i18n } = useTranslation()
+
   if (!feedbackTarget) return null
+
+  const {
+    id,
+    courseUnit,
+    courseRealisation,
+    administrativePersons,
+    responsibleTeachers,
+    teachers,
+    feedbackCount,
+    studentCount,
+    userCreated,
+  } = feedbackTarget
+
+  const primaryCourseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
+  const courseCode = getCourseCode(courseUnit)
 
   return (
     <Accordion>
       <AccordionSummary>
         <Box display="flex" width="100%">
-          <Typography style={{ flexShrink: 0, flexBasis: '15%' }}>{feedbackTarget.id}</Typography>
+          <Typography style={{ flexShrink: 0, flexBasis: '15%' }}>{id}</Typography>
           <Box m={2} />
-          <Typography style={{ flexShrink: 0, flexBasis: '16%' }}>{feedbackTarget.courseUnit.courseCode}</Typography>
+          <Typography style={{ flexShrink: 0, flexBasis: '16%' }}>{courseCode}</Typography>
           <Box m={2} />
-          <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{feedbackTarget.courseUnit.name?.fi}</Typography>
+          <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{primaryCourseName}</Typography>
           <Box m={2} />
           <Typography variant="body2">
             {feedbackTarget.opensAt.toLocaleDateString()} - {feedbackTarget.closesAt.toLocaleDateString()}
