@@ -24,7 +24,7 @@ import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../util/apiClient'
 import { getLanguageValue } from '../../../util/languageUtils'
-import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../../util/courseIdentifiers'
+import { getCourseCode, getPrimaryCourseName } from '../../../util/courseIdentifiers'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>
