@@ -87,7 +87,6 @@ const QuestionResults = React.memo(
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
                   feedbackTargetId={feedbackTargetId}
-                  t={t}
                 />
               </Box>
             ))}
@@ -107,7 +106,6 @@ const QuestionResults = React.memo(
               isResponsibleTeacher={isResponsibleTeacher}
               feedbackCount={feedbackCount}
               feedbackTargetId={feedbackTargetId}
-              t={t}
             />
           ))}
         </QuestionSection>
