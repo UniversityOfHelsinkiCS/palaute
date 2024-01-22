@@ -9,6 +9,31 @@ const _ = require('lodash')
 const { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation } = require('../../models')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
+const getTeachedFeedbackTargets = async user => {
+  const fbts = await FeedbackTarget.findAll({
+    attributes: [],
+    include: [
+      {
+        model: UserFeedbackTarget.scope('teachers'),
+        where: {
+          userId: user.id,
+        },
+        required: true,
+        as: 'userFeedbackTargets',
+        attributes: [],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        attributes: ['startDate', 'endDate'],
+      },
+    ],
+  })
+
+  return fbts
+}
+
 /**
  * Get user's preferred summary view type, either "organisation" or "teacher"
  * Depending on whether the user has courses with feedback in the current semester
@@ -56,28 +81,7 @@ const getPreferredSummaryView = async user => {
  * Otherwise if they have summary access, show "course-summary" tab by default.
  * Otherwise show "feedbacks" tab.
  */
-const getPreferredTab = async (user, hasSummaryAccess) => {
-  const fbts = await FeedbackTarget.findAll({
-    attributes: [],
-    include: [
-      {
-        model: UserFeedbackTarget.scope('teachers'),
-        where: {
-          userId: user.id,
-        },
-        required: true,
-        as: 'userFeedbackTargets',
-        attributes: [],
-      },
-      {
-        model: CourseRealisation,
-        as: 'courseRealisation',
-        required: true,
-        attributes: ['startDate', 'endDate'],
-      },
-    ],
-  })
-
+const getPreferredTab = (user, fbts, hasSummaryAccess) => {
   const now = new Date()
 
   const currentlyRunningAndUpcoming = _.sumBy(fbts, fbt =>
@@ -101,12 +105,15 @@ const getPreferredTab = async (user, hasSummaryAccess) => {
  * Compute user preferences
  */
 const getUserPreferences = async user => {
-  const hasSummaryAccess = user.iamGroups.length > 0 || Boolean(user.employeeNumber)
-  const preferredTab = await getPreferredTab(user, hasSummaryAccess)
+  const teachedFbts = await getTeachedFeedbackTargets(user)
+  const hasSummaryAccess = teachedFbts.length > 0
+  const hasCourseAccess = teachedFbts.length > 0
+  const preferredTab = getPreferredTab(user, teachedFbts, hasSummaryAccess)
   const summaryView = hasSummaryAccess ? await getPreferredSummaryView(user) : null
 
   return {
     hasSummaryAccess,
+    hasCourseAccess,
     summaryView,
     defaultView: preferredTab,
   }

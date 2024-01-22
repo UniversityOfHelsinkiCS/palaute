@@ -126,6 +126,7 @@ const NavBar = ({ guest = false }) => {
 
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
+  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -167,7 +168,7 @@ const NavBar = ({ guest = false }) => {
   )
 
   const links = [
-    courseSummaryIsAccessible && {
+    myCoursesIsAccessible && {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
@@ -179,7 +180,7 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
-    courseSummaryIsAccessible && {
+    (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
     },
