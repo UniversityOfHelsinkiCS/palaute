@@ -288,9 +288,26 @@ const findOrganisationSurveys = async (req, res) => {
     order: [['closesAt', 'DESC']],
   })
 
+  const organisatioSurveyCount = await FeedbackTarget.count({
+    where: {
+      userCreated: true,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id'],
+        where: {
+          userCreated: true,
+        },
+        required: true,
+      },
+    ],
+  })
+
   return res.send({
     params,
-    count: organisationSurveys.length,
+    count: organisatioSurveyCount,
     feedbackTargets: organisationSurveys,
   })
 }
