@@ -27,7 +27,7 @@ const NotEnoughFeedbacks = ({ t }) => (
 )
 
 const NotEnoughStudents = ({ t }) => (
-  <Box mb={2}>
+  <Box my={2}>
     <Alert severity="warning" data-cy="notEnoughStudents">
       {t('feedbackTargetResults:notEnoughStudentsInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
     </Alert>
