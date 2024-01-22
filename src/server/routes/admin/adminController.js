@@ -284,11 +284,14 @@ const findOrganisationSurveys = async (req, res) => {
   }
 
   const organisationSurveys = await FeedbackTarget.findAll({
+    where: {
+      userCreated: true,
+    },
     include,
     order: [['closesAt', 'DESC']],
   })
 
-  const organisatioSurveyCount = await FeedbackTarget.count({
+  const organisationSurveyCount = await FeedbackTarget.count({
     where: {
       userCreated: true,
     },
@@ -307,7 +310,7 @@ const findOrganisationSurveys = async (req, res) => {
 
   return res.send({
     params,
-    count: organisatioSurveyCount,
+    count: organisationSurveyCount,
     feedbackTargets: organisationSurveys,
   })
 }
