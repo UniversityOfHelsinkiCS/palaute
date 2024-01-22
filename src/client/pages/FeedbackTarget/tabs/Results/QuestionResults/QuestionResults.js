@@ -28,12 +28,12 @@ const QuestionResults = React.memo(
     feedbackCount,
     feedbackTargetId,
   }) => {
+    const { t } = useTranslation()
+
     const questionsWithFeedbacks = useMemo(
       () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
       [questions, feedbacks, publicQuestionIds]
     )
-
-    const { t } = useTranslation()
 
     const openQuestions = questionsWithFeedbacks.filter(
       q => q.type === 'OPEN' && (isOrganisationUser || isResponsibleTeacher || publicQuestionIds.includes(q.id))
