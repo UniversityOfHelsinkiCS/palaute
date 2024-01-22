@@ -565,7 +565,9 @@
     "qrCodeHelpText": "Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen",
     "deleteTeacherConfirmation": "Poista {{name}} opettajien joukosta?",
     "noFeedbackResponseYet": "Kurssin opettaja ei ole vielä antanut vastapalautetta",
-    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
+    "noAccessEndedCourse": "Palauteaika on päättynyt, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
     "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "interimFeedbackTab": "Välipalautteet"
   },
