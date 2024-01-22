@@ -1,8 +1,12 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useParams } from 'react-router'
+import { useTranslation } from 'react-i18next'
+
 import { Alert, Box, Link as MuiLink, Typography } from '@mui/material'
 import { KeyboardReturnOutlined } from '@mui/icons-material'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+
+import ForbiddenErrorDetails from './ForbiddenErrorDetails'
 
 /**
  * Display this with an appropriate message
@@ -11,12 +15,19 @@ import { Link } from 'react-router-dom'
  */
 const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => {
   const { t } = useTranslation()
+  const { id } = useParams()
 
   const supportEmail = t('links:supportEmail')
 
   return (
     <Box m={4}>
-      <Typography variant="body1">{t(message)}</Typography>
+      {response.status === 403 ? (
+        <ForbiddenErrorDetails feedbackTargetId={id} />
+      ) : (
+        <Typography sx={{ marginBottom: '2rem' }} variant="body1">
+          {t(message)}
+        </Typography>
+      )}
       {response && (
         <Box>
           <Typography color="textSecondary" variant="subtitle1">
@@ -24,6 +35,7 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
           </Typography>
         </Box>
       )}
+
       <Box mb={3} />
       <MuiLink to={returnTo} component={Link} underline="hover">
         <Box display="flex">
