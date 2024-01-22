@@ -25,11 +25,13 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
   const coursePeriod = getDateRangeString(courseRealisation.startDate, courseRealisation.endDate)
   const feedbackPeriod = getDateRangeString(feedbackTarget.opensAt, feedbackTarget.closesAt)
 
-  const courseCode = getCourseCode(courseUnit)
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
     i18n.language
   )
+
+  const courseCode = getCourseCode(courseUnit)
+  const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
 
   // eslint-disable-next-line no-nested-ternary
   const message = isOld
@@ -54,7 +56,7 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
           {primaryCourseName}
         </Typography>
         <Typography component="h2" variant="h5" color="textSecondary">
-          {courseCode}
+          {visibleCourseCode}
         </Typography>
       </Box>
 
