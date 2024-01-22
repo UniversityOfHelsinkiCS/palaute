@@ -196,17 +196,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
 
   if (!feedbackTarget) return null
 
-  const {
-    id,
-    courseUnit,
-    courseRealisation,
-    administrativePersons,
-    responsibleTeachers,
-    teachers,
-    feedbackCount,
-    studentCount,
-    userCreated,
-  } = feedbackTarget
+  const { id, courseUnit, courseRealisation, opensAt, closesAt } = feedbackTarget
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -225,7 +215,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
           <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{primaryCourseName}</Typography>
           <Box m={2} />
           <Typography variant="body2">
-            {feedbackTarget.opensAt.toLocaleDateString()} - {feedbackTarget.closesAt.toLocaleDateString()}
+            {opensAt.toLocaleDateString()} - {closesAt.toLocaleDateString()}
           </Typography>
         </Box>
       </AccordionSummary>
