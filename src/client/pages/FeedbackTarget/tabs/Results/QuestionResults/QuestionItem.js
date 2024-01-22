@@ -67,6 +67,19 @@ const QuestionItem = ({
     [publicQuestionIds]
   )
 
+  const handlePublicityToggle = isPublic => {
+    if (isPublic) {
+      onPublicityToggle(false)
+      return
+    }
+
+    // eslint-disable-next-line no-alert
+    const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
+    if (confirmation) {
+      onPublicityToggle(true)
+    }
+  }
+
   const Component = componentByType[question.type]
   const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
 
@@ -85,7 +98,7 @@ const QuestionItem = ({
               <QuestionPublicityToggle
                 checked={isPublic}
                 disabled={disabled}
-                onChange={() => onPublicityToggle(!isPublic)}
+                onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
             <Typography variant="body1">{label}</Typography>
