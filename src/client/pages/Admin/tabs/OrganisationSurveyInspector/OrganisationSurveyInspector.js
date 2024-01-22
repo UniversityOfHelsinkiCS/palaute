@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Box } from '@mui/material'
 import { debounce } from 'lodash'
@@ -38,6 +38,10 @@ const OrganisationSurveyInspector = () => {
     setQuery(newQuery)
     runQuery(newQuery)
   }
+
+  useEffect(() => {
+    runQuery(query)
+  }, [])
 
   return (
     <Box mt={4}>
