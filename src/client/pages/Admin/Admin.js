@@ -20,7 +20,7 @@ import FeedbackCorrespondents from './tabs/FeedbackCorrescpondents/FeedbackCorre
 import BannerView from './tabs/Banners/BannersView'
 import EnableCourses from './tabs/EnableCourses/EnableCourses'
 import CrashDebug from './CrashDebug'
-import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/organisationSurveyInspector'
+import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
 
 const ConfigTestValues = () => {
   const { t } = useTranslation()
