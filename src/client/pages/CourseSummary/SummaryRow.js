@@ -256,13 +256,20 @@ const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) =
 
 const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const { i18n, t } = useTranslation()
+
+  const labelExtras = []
+  if (courseUnit.partial) labelExtras.push(t('common:partiallyResponsible'))
+  if (courseUnit.separateOrganisation)
+    labelExtras.push(getLanguageValue(courseUnit.separateOrganisation.name, i18n.language))
+
   const label = (
     <CourseUnitLabel
       name={getLanguageValue(courseUnit.name, i18n.language)}
       code={courseUnit.courseCode}
-      partiallyResponsible={courseUnit.partial ? t('common:partiallyResponsible') : false}
+      extras={labelExtras}
     />
   )
+
   const link = `/course-summary/${courseUnit.courseCode}`
   const { summary } = courseUnit
   const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()

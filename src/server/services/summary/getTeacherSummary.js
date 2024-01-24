@@ -121,9 +121,9 @@ const getTeacherSummary = async ({ startDate, endDate, user, separateOrganisatio
             const separateCourseUnit = {
               ...cu.toJSON(),
               id: `${cu.id}-${separatedOrganisation.id}`,
-              courseCode: `${cu.courseCode} - ${separatedOrganisation.code}`,
               summary: separateSummary,
               courseRealisations: separateCourseRealisations,
+              separateOrganisation: separatedOrganisation,
             }
 
             resultingCourseUnits.push(separateCourseUnit)

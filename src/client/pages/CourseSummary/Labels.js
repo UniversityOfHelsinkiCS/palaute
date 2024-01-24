@@ -79,17 +79,17 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   )
 }
 
-export const CourseUnitLabel = ({ name, code, partiallyResponsible }) => (
+export const CourseUnitLabel = ({ name, code, extras = [] }) => (
   <Box display="flex" flexDirection="column" pl="0.5rem">
     <Box display="flex" gap="1rem" alignItems="center">
       <Typography variant="caption" color="textSecondary">
         {code}
       </Typography>
-      {partiallyResponsible && (
-        <Typography variant="caption" color="textSecondary">
-          ({partiallyResponsible})
+      {extras.map((extra, idx) => (
+        <Typography key={idx} variant="caption" color="textSecondary">
+          ({extra})
         </Typography>
-      )}
+      ))}
     </Box>
     <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
       {name}
