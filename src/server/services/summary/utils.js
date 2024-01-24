@@ -32,6 +32,43 @@ const sumQuestionResults = (results, questionId) => {
   }
 }
 
+const subtractSummary = (summary1, summary2) => {
+  if (summary1.startDate !== summary2.startDate || summary1.endDate !== summary2.endDate) {
+    throw new Error('Subtract summaries with different start or end dates is not allowed')
+  }
+
+  const data1 = summary1.data
+  const data2 = summary2.data
+
+  const data = {
+    result: {},
+    studentCount: data1.studentCount - data2.studentCount,
+    hiddenCount: data1.hiddenCount - data2.hiddenCount,
+    feedbackCount: data1.feedbackCount - data2.feedbackCount,
+    feedbackResponsePercentage: data1.feedbackResponsePercentage - data2.feedbackResponsePercentage,
+  }
+
+  for (const questionId of Object.keys(data1.result)) {
+    data.result[questionId] = sumQuestionResults(
+      [
+        data1.result[questionId],
+        {
+          distribution: Object.fromEntries(
+            Object.entries(data2.result[questionId].distribution).map(([optionId, count]) => [optionId, -count])
+          ),
+        },
+      ],
+      questionId
+    )
+  }
+
+  return {
+    startDate: summary1.startDate,
+    endDate: summary1.endDate,
+    data,
+  }
+}
+
 const sumSummaryDatas = summaryDatas => {
   const data = {
     result: {},
@@ -72,8 +109,8 @@ const sumSummaries = summaries => {
     return null
   }
   const data = sumSummaryDatas(summaries.map(s => s.data))
-  const startDate = datefns.min(summaries.map(s => datefns.parseISO(s.startDate)))
-  const endDate = datefns.max(summaries.map(s => datefns.parseISO(s.endDate)))
+  const startDate = datefns.format(datefns.min(summaries.map(s => datefns.parseISO(s.startDate))), 'yyyy-MM-dd')
+  const endDate = datefns.format(datefns.max(summaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
   const summary = summaries[0]
   summary.data = data
   summary.startDate = startDate
@@ -86,4 +123,5 @@ module.exports = {
   sumSummaryDatas,
   mapOptionIdToValue,
   sumSummaries,
+  subtractSummary,
 }

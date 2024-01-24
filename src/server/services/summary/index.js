@@ -4,9 +4,9 @@ const {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
   getOrganisationSummaryWithTags,
-  getTeacherSummary,
   getUserOrganisationSummaries,
 } = require('./summaryV2')
+const { getTeacherSummary } = require('./getTeacherSummary')
 
 module.exports = {
   getOrganisationSummary,

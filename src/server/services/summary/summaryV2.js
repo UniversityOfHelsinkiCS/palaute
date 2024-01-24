@@ -8,7 +8,6 @@ const {
   FeedbackTarget,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
-  UserFeedbackTarget,
   Tag,
   CourseUnitsTag,
   CourseRealisationsTag,
@@ -321,103 +320,6 @@ const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDa
   return organisation
 }
 
-const getTeacherSummary = async ({ startDate, endDate, user }) => {
-  const organisations = await Organisation.findAll({
-    attributes: ['id', 'name', 'code'],
-    include: [
-      {
-        model: Summary.scope({ method: ['at', startDate, endDate] }),
-        as: 'summaries',
-      },
-      {
-        model: CourseUnit,
-        attributes: ['id', 'groupId', 'name', 'courseCode'],
-        as: 'courseUnits',
-        required: true,
-        through: {
-          attributes: [],
-          where: {
-            type: 'PRIMARY',
-          },
-        },
-        include: [
-          {
-            model: Summary.scope({ method: ['at', startDate, endDate] }),
-            as: 'groupSummaries',
-            required: true,
-          },
-          {
-            model: FeedbackTarget,
-            attributes: ['id'],
-            as: 'feedbackTargets',
-            required: true,
-            include: [
-              {
-                model: UserFeedbackTarget,
-                as: 'userFeedbackTargets',
-                attributes: ['id'],
-                required: true,
-                where: {
-                  userId: user.id,
-                  accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-                },
-              },
-              {
-                model: CourseRealisation,
-                as: 'courseRealisation',
-                attributes: ['id', 'name', 'startDate', 'endDate'],
-                required: true,
-                include: [
-                  {
-                    model: Summary.scope({ method: ['at', startDate, endDate] }),
-                    as: 'summary',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  })
-
-  const organisationsJson = organisations.map(org => {
-    org.summary = sumSummaries(org.summaries)
-    delete org.dataValues.summaries
-
-    const groupedCourseUnits = _.groupBy(org.courseUnits, cu => cu.groupId)
-    const courseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
-      // Each of courseUnits has the same groupId and groupSummaries (calculated from the group...) so we can do this:
-      const cu = courseUnits[0]
-      cu.summary = sumSummaries(cu.groupSummaries)
-      delete cu.dataValues.groupSummaries
-
-      const courseRealisations = courseUnits.flatMap(cu =>
-        cu.feedbackTargets.map(fbt => {
-          const { courseRealisation: cur } = fbt
-          cur.summary = sumSummaries(cur.summary)
-
-          return cur.toJSON()
-        })
-      )
-
-      delete cu.dataValues.feedbackTargets
-
-      return {
-        ...cu.toJSON(),
-        courseRealisations,
-      }
-    })
-
-    return {
-      ...org.toJSON(),
-      courseUnits: _.orderBy(courseUnits, ['courseCode'], ['asc']),
-    }
-  })
-
-  return organisationsJson
-}
-
 const getUserOrganisationSummaries = async ({ startDate, endDate, user, viewingMode = 'flat' }) => {
   const organisationIds = await getSummaryAccessibleOrganisationIds(user)
 
@@ -475,6 +377,5 @@ module.exports = {
   ),
   getOrganisationSummaryWithCourseUnits: withOrganisationAccessCheck(getOrganisationSummaryWithCourseUnits),
   getOrganisationSummaryWithTags: withOrganisationAccessCheck(getOrganisationSummaryWithTags),
-  getTeacherSummary,
   getUserOrganisationSummaries,
 }
