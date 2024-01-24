@@ -35,9 +35,9 @@ const SeparateOrganisationModeSelector = ({ organisationId }) => {
 
   return (
     <ToggleButtonGroup exclusive value={getToggleButtonValue()} onChange={handleChange} color="primary" size="small">
-      <ToggleButton value="include">Sisällytä Avoin yo -kurssit</ToggleButton>
-      <ToggleButton value="separate">Näytä Avoin yo -kurssit erikseen</ToggleButton>
-      <ToggleButton value="hide">Piilota Avoin yo -kurssit</ToggleButton>
+      <ToggleButton value="include">{t('courseSummary:includeOpenUni')}</ToggleButton>
+      <ToggleButton value="separate">{t('courseSummary:separateOpenUni')}</ToggleButton>
+      <ToggleButton value="hide">{t('courseSummary:hideOpenUni')}</ToggleButton>
     </ToggleButtonGroup>
   )
 }

@@ -467,7 +467,10 @@
     "myCourses": "Kurssini",
     "newView": "Kokeile uutta näkymää",
     "treeView": "Näytä hierarkkisesti",
-    "flatView": "Näytä listana"
+    "flatView": "Näytä listana",
+    "includeOpenUni": "Sisällytä Avoin yo -kurssit",
+    "separateOpenUni": "Näytä Avoin yo -kurssit erikseen",
+    "hideOpenUni": "Piilota Avoin yo -kurssit"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",

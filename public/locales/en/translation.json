@@ -467,7 +467,10 @@
     "myCourses": "My courses",
     "newView": "Go to the new course summary",
     "treeView": "Show in a hierarchy",
-    "flatView": "Show in a list"
+    "flatView": "Show in a list",
+    "includeOpenUni": "Include open uni courses",
+    "separateOpenUni": "Show open uni courses separately",
+    "hideOpenUni": "Hide open uni courses"
   },
   "footer": {
     "contactSupport": "Contact support",
