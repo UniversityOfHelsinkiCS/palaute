@@ -545,7 +545,7 @@ export const OrganisationSummaryRow = ({
 }
 
 export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
-  const { sortBy, sortFunction } = useSummaryContext()
+  const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()
   const [isOpen, setIsOpen] = React.useState(true)
 
   const indentLineColor = useRandomColor(organisation?.code ?? '')
@@ -555,9 +555,11 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   const orderedCourseUnits = React.useMemo(
     () =>
       organisation?.courseUnits?.length > 0
-        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1])
+        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1]).filter(
+            cu => showSeparateOrganisationCourses || !cu.separateOrganisation
+          )
         : [],
-    [organisation, sortBy[0], sortBy[1]]
+    [organisation, sortBy[0], sortBy[1], showSeparateOrganisationCourses]
   )
 
   const access = useUserOrganisationAccessByCode(organisation?.code)

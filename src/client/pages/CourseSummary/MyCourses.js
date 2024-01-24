@@ -12,7 +12,7 @@ import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector
  */
 const MyCourses = () => {
   const { t } = useTranslation()
-  const { dateRange, questions, separateOrganisationId } = useSummaryContext()
+  const { dateRange, questions, separateOrganisationId, showSeparateOrganisationCourses } = useSummaryContext()
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
@@ -28,9 +28,11 @@ const MyCourses = () => {
       <SorterRow />
       {show &&
         organisations.length > 0 &&
-        organisations.map(organisation => (
-          <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
-        ))}
+        organisations
+          .filter(org => showSeparateOrganisationCourses || org.id !== separateOrganisationId)
+          .map(organisation => (
+            <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
+          ))}
       {show && organisations.length === 0 && (
         <Box my="1rem" mx="2rem">
           <Alert severity="info">{t('courseSummary:noCourses')}</Alert>

@@ -196,6 +196,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       questions,
       viewingMode,
       separateOrganisationId,
+      showSeparateOrganisationCourses,
     ]
   )
 
