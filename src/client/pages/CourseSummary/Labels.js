@@ -80,7 +80,7 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
 }
 
 export const CourseUnitLabel = ({ name, code, partiallyResponsible }) => (
-  <Box display="flex" flexDirection="column">
+  <Box display="flex" flexDirection="column" pl="0.5rem">
     <Box display="flex" gap="1rem" alignItems="center">
       <Typography variant="caption" color="textSecondary">
         {code}
@@ -102,7 +102,7 @@ export const OrganisationLabel = ({ organisation, dates }) => {
   const isFetching = useIsFetching(['summaries-v2', organisation?.id])
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" pl="0.5rem">
       <Typography variant="caption" color="textSecondary">
         {organisation?.code}
       </Typography>
@@ -122,7 +122,7 @@ export const TagLabel = ({ tag, dates }) => {
   const isFetching = useIsFetching(['summaries-v2', tag?.id])
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" pl="0.5rem">
       <Typography variant="caption" color="textSecondary">
         {t('courseSummary:tagLabel')}
       </Typography>

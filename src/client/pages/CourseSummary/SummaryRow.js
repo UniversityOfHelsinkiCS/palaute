@@ -53,7 +53,6 @@ const styles = {
     flexShrink: 0,
     minHeight: '48px',
     maxHeight: '74px',
-    paddingLeft: '0.5rem',
     paddingRight: '2.5rem',
     display: 'flex',
     justifyContent: 'space-between',
@@ -73,7 +72,6 @@ const styles = {
     flexShrink: 0,
     minHeight: '48px',
     maxHeight: '74px',
-    paddingLeft: '0.5rem',
     paddingRight: '2.5rem',
     display: 'flex',
     justifyContent: 'space-between',
@@ -589,7 +587,7 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
   )
 }
 
-export const SorterRow = ({ extraFilters }) => {
+export const SorterRow = () => {
   const { t, i18n } = useTranslation()
   const { dateRange, setDateRange, option, setOption, questions } = useSummaryContext()
 
@@ -598,15 +596,12 @@ export const SorterRow = ({ extraFilters }) => {
   }
 
   const filterComponent = (
-    <div>
-      <YearSemesterSelector
-        value={dateRange ?? { start: new Date(), end: new Date() }}
-        onChange={handleChangeTimeRange}
-        option={option}
-        setOption={setOption}
-      />
-      {extraFilters && extraFilters}
-    </div>
+    <YearSemesterSelector
+      value={dateRange ?? { start: new Date(), end: new Date() }}
+      onChange={handleChangeTimeRange}
+      option={option}
+      setOption={setOption}
+    />
   )
 
   return (
