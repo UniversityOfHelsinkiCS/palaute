@@ -465,7 +465,9 @@
     "noCourseRealisations": "No course realisations with feedback available for this course unit",
     "myOrganisations": "My organisations",
     "myCourses": "My courses",
-    "newView": "Go to the new course summary"
+    "newView": "Go to the new course summary",
+    "treeView": "Show in a hierarchy",
+    "flatView": "Show in a list"
   },
   "footer": {
     "contactSupport": "Contact support",

@@ -465,7 +465,9 @@
     "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
     "myOrganisations": "Organisaationi",
     "myCourses": "Kurssini",
-    "newView": "Kokeile uutta näkymää"
+    "newView": "Kokeile uutta näkymää",
+    "treeView": "Näytä hierarkkisesti",
+    "flatView": "Näytä listana"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",

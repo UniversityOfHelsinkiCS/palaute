@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, LinearProgress, ToggleButton, ToggleButtonGroup } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { Box, LinearProgress, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material'
 import { Reorder, Segment } from '@mui/icons-material'
 import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaryContext } from './context'
@@ -7,6 +8,7 @@ import { useOrganisationSummaries } from './api'
 import { useOrderedAndFilteredOrganisations } from './utils'
 
 const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
+  const { t } = useTranslation()
   const handleChange = (_ev, value) => {
     if (!value) return
     setViewingMode(value)
@@ -15,10 +17,14 @@ const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
   return (
     <ToggleButtonGroup exclusive value={viewingMode} onChange={handleChange} color="primary">
       <ToggleButton value="flat">
-        <Reorder />
+        <Tooltip title={t('courseSummary:flatView')}>
+          <Reorder />
+        </Tooltip>
       </ToggleButton>
       <ToggleButton value="tree">
-        <Segment />
+        <Tooltip title={t('courseSummary:treeView')}>
+          <Segment />
+        </Tooltip>
       </ToggleButton>
     </ToggleButtonGroup>
   )
