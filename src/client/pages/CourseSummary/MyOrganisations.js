@@ -15,15 +15,22 @@ const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
   }
 
   return (
-    <ToggleButtonGroup exclusive value={viewingMode} onChange={handleChange} color="primary">
+    <ToggleButtonGroup
+      exclusive
+      value={viewingMode}
+      onChange={handleChange}
+      color="primary"
+      size="small"
+      sx={{ height: '40px' }}
+    >
       <ToggleButton value="flat">
         <Tooltip title={t('courseSummary:flatView')}>
-          <Reorder />
+          <Reorder fontSize="medium" />
         </Tooltip>
       </ToggleButton>
       <ToggleButton value="tree">
         <Tooltip title={t('courseSummary:treeView')}>
-          <Segment />
+          <Segment fontSize="medium" />
         </Tooltip>
       </ToggleButton>
     </ToggleButtonGroup>

@@ -34,7 +34,14 @@ const SeparateOrganisationModeSelector = ({ organisationId }) => {
   }
 
   return (
-    <ToggleButtonGroup exclusive value={getToggleButtonValue()} onChange={handleChange} color="primary" size="small">
+    <ToggleButtonGroup
+      exclusive
+      value={getToggleButtonValue()}
+      onChange={handleChange}
+      color="primary"
+      size="small"
+      sx={{ height: '40px' }}
+    >
       <ToggleButton value="include">{t('courseSummary:includeOpenUni')}</ToggleButton>
       <ToggleButton value="separate">{t('courseSummary:separateOpenUni')}</ToggleButton>
       <ToggleButton value="hide">{t('courseSummary:hideOpenUni')}</ToggleButton>
