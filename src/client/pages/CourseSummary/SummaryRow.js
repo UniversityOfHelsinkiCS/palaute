@@ -121,46 +121,6 @@ const styles = {
   },
 }
 
-const useAccordionState = (id, enabled, forceOpen) => {
-  const key = `accordions-v2`
-
-  const initial = React.useMemo(() => {
-    if (!enabled) return false
-    if (forceOpen) return true
-
-    const str = localStorage.getItem(key)
-    if (typeof str === 'string') {
-      const ids = JSON.parse(str)
-      if (Array.isArray(ids)) {
-        return ids.includes(id)
-      }
-    }
-    return false
-  }, [key])
-
-  const [open, setOpen] = React.useState(initial)
-
-  React.useEffect(() => {
-    if (!enabled || forceOpen) return
-
-    let ids = []
-    const str = localStorage.getItem(key)
-    if (typeof str === 'string') {
-      ids = JSON.parse(str)
-      if (Array.isArray(ids)) {
-        if (open && !ids.includes(id)) {
-          ids.push(id)
-        } else if (!open) {
-          ids = ids.filter(aid => aid !== id)
-        }
-      }
-    }
-    localStorage.setItem(key, JSON.stringify(ids))
-  }, [open])
-
-  return [open, setOpen]
-}
-
 const Loader = () => (
   <Box
     display="flex"
@@ -213,7 +173,7 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
 
 const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) => {
   const [isTransitioning, startTransition] = React.useTransition()
-  const [isOpen, setIsOpen] = useAccordionState(tag.id, true)
+  const [isOpen, setIsOpen] = React.useState(false)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
   const indentLineColor = useRandomColor(tag?.code ?? '')
@@ -471,7 +431,7 @@ export const OrganisationSummaryRow = ({
   })
   const [isTransitioning, startTransition] = React.useTransition()
   const actuallyAlwaysOpen = alwaysOpen || initialOrganisation.initiallyExpanded
-  const [storedIsOpen, setIsOpen] = useAccordionState(organisationId, true)
+  const [storedIsOpen, setIsOpen] = React.useState(false)
   const isOpen = actuallyAlwaysOpen || storedIsOpen
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
 
