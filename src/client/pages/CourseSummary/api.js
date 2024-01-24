@@ -63,14 +63,16 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled, include, t
  * Fetches all summaries for a teacher based on their courses.
  * Returns a list of organisations with course units as children.
  */
-export const useTeacherSummaries = ({ startDate, endDate, enabled }) => {
+export const useTeacherSummaries = ({ startDate, endDate, enabled, separateOrganisationId }) => {
   const queryKey = ['summaries-v2-teacher', startDate, endDate]
+  if (separateOrganisationId) queryKey.push({ separateOrganisationId })
 
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/user-courses-v2`, {
       params: {
         startDate,
         endDate,
+        separateOrganisationId,
       },
     })
 

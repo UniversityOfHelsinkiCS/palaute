@@ -41,6 +41,8 @@ const summaryContext = React.createContext({
   questions: [],
   viewingMode: 'tree',
   setViewingMode: () => {},
+  separateOrganisationId: null,
+  setSeparateOrganisationId: () => {},
 })
 
 /**
@@ -149,6 +151,18 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setParams(params)
   })
 
+  // Separate organisation id
+  const [separateOrganisationId, setSeparateOrganisationId] = React.useState(() => {
+    const separateOrganisationId = params.get('separateOrganisationId')
+    return separateOrganisationId
+  })
+
+  const updateSeparateOrganisationIdQS = React.useCallback(separateOrganisationId => {
+    setSeparateOrganisationId(separateOrganisationId)
+    params.set('separateOrganisationId', separateOrganisationId)
+    setParams(params)
+  })
+
   const value = React.useMemo(
     () => ({
       showSummariesWithNoFeedback,
@@ -163,8 +177,19 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       questions,
       viewingMode,
       setViewingMode: updateViewingModeQS,
+      separateOrganisationId,
+      setSeparateOrganisationId: updateSeparateOrganisationIdQS,
     }),
-    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, viewingMode]
+    [
+      showSummariesWithNoFeedback,
+      dateRange,
+      option,
+      sortBy[0],
+      sortBy[1],
+      questions,
+      viewingMode,
+      separateOrganisationId,
+    ]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>
