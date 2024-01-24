@@ -6,7 +6,7 @@ const cache = require('./cache')
 const getByUsername = async username => {
   let user = cache.get(username)
 
-  if (!user) {
+  if (!user || user.username === NO_USER_USERNAME) {
     user = await User.findOne({
       where: { username },
     })
