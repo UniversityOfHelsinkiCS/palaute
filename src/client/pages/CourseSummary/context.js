@@ -41,8 +41,10 @@ const summaryContext = React.createContext({
   questions: [],
   viewingMode: 'tree',
   setViewingMode: () => {},
-  separateOrganisationId: null,
+  separateOrganisationId: '',
   setSeparateOrganisationId: () => {},
+  showSeparateOrganisationCourses: true,
+  setShowSeparateOrganisationCourses: () => {},
 })
 
 /**
@@ -154,7 +156,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
   // Separate organisation id
   const [separateOrganisationId, setSeparateOrganisationId] = React.useState(() => {
     const separateOrganisationId = params.get('separateOrganisationId')
-    return separateOrganisationId
+    return separateOrganisationId || ''
   })
 
   const updateSeparateOrganisationIdQS = React.useCallback(separateOrganisationId => {
@@ -162,6 +164,9 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     params.set('separateOrganisationId', separateOrganisationId)
     setParams(params)
   })
+
+  // Show separate organisation courses
+  const [showSeparateOrganisationCourses, setShowSeparateOrganisationCourses] = React.useState(true)
 
   const value = React.useMemo(
     () => ({
@@ -179,6 +184,8 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       setViewingMode: updateViewingModeQS,
       separateOrganisationId,
       setSeparateOrganisationId: updateSeparateOrganisationIdQS,
+      showSeparateOrganisationCourses,
+      setShowSeparateOrganisationCourses,
     }),
     [
       showSummariesWithNoFeedback,

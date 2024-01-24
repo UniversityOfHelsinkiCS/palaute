@@ -4,23 +4,27 @@ import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
 import { SorterRow, TeacherOrganisationSummaryRow } from './SummaryRow'
+import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
+import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector'
 
 /**
  *
  */
 const MyCourses = () => {
   const { t } = useTranslation()
-  const { dateRange, questions } = useSummaryContext()
+  const { dateRange, questions, separateOrganisationId } = useSummaryContext()
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
     enabled: true,
+    separateOrganisationId,
   })
 
   const show = !isOrganisationsLoading && questions?.length && organisations && questions
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch">
+    <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+      {OPEN_UNIVERSITY_ORG_ID && <SeparateOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
       <SorterRow />
       {show &&
         organisations.length > 0 &&
