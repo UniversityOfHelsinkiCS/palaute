@@ -21,7 +21,6 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
   const { t, i18n } = useTranslation()
 
   const handleRemove = () => {
-    // eslint-disable-next-line no-alert
     const hasConfirmed = window.confirm(t('questionEditor:removeOptionConfirmation'))
 
     if (hasConfirmed) {

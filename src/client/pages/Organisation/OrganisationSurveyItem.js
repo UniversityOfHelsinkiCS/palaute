@@ -51,7 +51,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const surveyName = getLanguageValue(organisationSurvey.name, language)
 
   const handleDelete = async () => {
-    // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('organisationSurveys:confirmRemoveSurvey'))) return
 
     await deleteOrganisationSurvey(organisationSurvey.id)

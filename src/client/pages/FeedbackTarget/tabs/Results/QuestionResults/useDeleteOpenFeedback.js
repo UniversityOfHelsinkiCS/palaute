@@ -26,7 +26,6 @@ const useDeleteOpenFeedback = () => {
   const canDelete = isAdmin
 
   const deleteAnswer = async feedback => {
-    // eslint-disable-next-line no-alert
     if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
 
     try {

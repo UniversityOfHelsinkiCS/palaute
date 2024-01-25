@@ -145,11 +145,7 @@ const Actions = ({ feedbackTarget }) => {
   const [updaterRunning, setUpdaterRunning] = useState(false)
 
   const resendFeedbackResponseEmail = async () => {
-    if (
-      // eslint-disable-next-line no-alert
-      !window.confirm(`Resend counter feedback email to students of ${feedbackTarget.courseUnit.name?.fi}?`)
-    )
-      return
+    if (!window.confirm(`Resend counter feedback email to students of ${feedbackTarget.courseUnit.name?.fi}?`)) return
     const body = { id: feedbackTarget.id }
     try {
       const res = await apiClient.put(`/admin/resend-response`, body)
@@ -160,11 +156,7 @@ const Actions = ({ feedbackTarget }) => {
   }
 
   const handleRunUpdater = feedbackTarget => async () => {
-    if (
-      // eslint-disable-next-line no-alert
-      !window.confirm(`Update enrollments of ${feedbackTarget.courseUnit.name?.fi}?`)
-    )
-      return
+    if (!window.confirm(`Update enrollments of ${feedbackTarget.courseUnit.name?.fi}?`)) return
     try {
       const req = apiClient.post(`/admin/run-updater/enrolments/${feedbackTarget?.courseRealisationId}`)
       setUpdaterRunning(true)

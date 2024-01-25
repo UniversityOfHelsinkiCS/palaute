@@ -21,7 +21,6 @@ const Enable = ({ cur, active, setActive }) => {
 
   const handleSetActive = async () => {
     const confirm = () =>
-      // eslint-disable-next-line no-alert
       window.confirm('Are you sure? Course realisation and associated feedback targets will be deleted immediately.')
 
     if (active && !confirm()) return

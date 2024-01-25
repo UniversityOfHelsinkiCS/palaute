@@ -57,7 +57,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const interimFeedbackName = getLanguageValue(interimFeedback.name, language)
 
   const handleDelete = async () => {
-    // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('interimFeedback:confirmRemoveSurvey'))) return
 
     await deleteInterimFeedback(interimFeedback.id)

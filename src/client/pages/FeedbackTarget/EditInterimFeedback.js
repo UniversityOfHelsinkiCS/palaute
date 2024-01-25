@@ -45,7 +45,7 @@ const EditInterimFeedback = () => {
         handleClose()
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
-      onError: error => {
+      onError: () => {
         handleClose()
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       },

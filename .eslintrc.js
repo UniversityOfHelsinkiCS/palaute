@@ -17,6 +17,7 @@ module.exports = {
     'arrow-body-style': 'warn',
     'no-param-reassign': 'off',
     'no-restricted-exports': 'off',
+    'no-alert': 'off',
     'react/prop-types': [
       1,
       {

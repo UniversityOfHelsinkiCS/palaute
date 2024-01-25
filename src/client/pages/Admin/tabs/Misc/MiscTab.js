@@ -15,10 +15,7 @@ const MiscTab = () => {
     await apiClient.post('/admin/reset-course', {})
   }
   const runPateCron = async () => {
-    if (
-      // eslint-disable-next-line no-alert
-      window.confirm('Will send all emails for today that have not yet been sent.')
-    ) {
+    if (window.confirm('Will send all emails for today that have not yet been sent.')) {
       try {
         await apiClient.post('/admin/run-pate', {})
         enqueueSnackbar('SUCCESS', { variant: 'success' })

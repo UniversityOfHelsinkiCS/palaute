@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import {
   Alert,
   Box,
@@ -213,7 +212,8 @@ const BannerView = () => {
       }
       queryClient.refetchQueries(['authorizedUser'])
     } catch (error) {
-      console.log('SOMETHING WENT WRONG')
+      // eslint-disable-next-line no-console
+      console.error(error)
     }
   }
 
@@ -223,7 +223,8 @@ const BannerView = () => {
       await apiClient.delete(`/admin/banners/${id}`)
       queryClient.refetchQueries(['authorizedUser'])
     } catch (error) {
-      console.log('SOMETHING WENT WRONG')
+      // eslint-disable-next-line no-console
+      console.error(error)
     }
   }
 

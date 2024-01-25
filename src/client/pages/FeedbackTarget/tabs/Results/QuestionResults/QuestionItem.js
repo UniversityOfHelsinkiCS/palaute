@@ -73,7 +73,6 @@ const QuestionItem = ({
       return
     }
 
-    // eslint-disable-next-line no-alert
     const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
     if (confirmation) {
       onPublicityToggle(true)
