@@ -3,16 +3,6 @@ import groupBy from 'lodash/groupBy'
 import { INCLUDE_COURSES } from '../../util/common'
 import { getInterimFeedbackName } from '../../util/courseIdentifiers'
 
-export const courseRealisationIsMisisingFeedback = courseRealisation => {
-  if (!Array.isArray(courseRealisation.feedbackTargets)) {
-    return false
-  }
-
-  const missing = courseRealisation.feedbackTargets.find(({ feedback }) => !feedback)
-
-  return Boolean(missing)
-}
-
 const courseRealisationSortFn = (a, b) =>
   new Date(b.feedbackTargets[0].closesAt) - new Date(a.feedbackTargets[0].closesAt)
 
@@ -22,12 +12,6 @@ export const sortCourseRealisations = courseRealisations => {
   copy.sort(courseRealisationSortFn)
 
   return copy
-}
-
-export const getDeletePath = userFeedbackTarget => {
-  const feedbackId = userFeedbackTarget?.feedback?.id
-
-  return feedbackId ? `/feedbacks/${feedbackId}` : null
 }
 
 export const getCourseRealisationsWithFeedbackTargets = feedbackTargets => {

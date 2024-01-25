@@ -96,11 +96,3 @@ export const RouterTab = ({
     )
   return tab
 }
-
-export const TabLabel = ({ icon, text }) => (
-  <Box display="flex" alignItems="center">
-    {icon}
-    <Box ml="0.5rem" />
-    {text}
-  </Box>
-)
