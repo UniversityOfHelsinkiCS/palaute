@@ -1,4 +1,6 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
+import qs from 'qs'
 
 import { Grid, Box, Typography } from '@mui/material'
 import OngoingIcon from '@mui/icons-material/Schedule'
@@ -7,16 +9,23 @@ import EndedIcon from '@mui/icons-material/Done'
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
-import { LoadingProgress } from '../../../components/common/LoadingProgress'
+
+import StatusTabs from './StatusTabs'
 import Title from '../../../components/common/Title'
+import { LoadingProgress } from '../../../components/common/LoadingProgress'
+
+import { getGroupedCourseUnits } from '../utils'
 
 const MyTeaching = () => {
-  const { courseUnits, isLoading } = useTeacherCourseUnits()
   const { t } = useTranslation()
+  const location = useLocation()
 
-  if (isLoading) {
-    return <LoadingProgress />
-  }
+  const { status = 'waiting' } = qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  })
+
+  const { courseUnits, isLoading } = useTeacherCourseUnits()
+  const { ongoing, upcoming, ended } = getGroupedCourseUnits(courseUnits)
 
   return (
     <>
@@ -26,6 +35,18 @@ const MyTeaching = () => {
           {t('teacherView:mainHeading')}
         </Typography>
       </Box>
+
+      <StatusTabs
+        sx={{ marginBottom: 3 }}
+        status={status}
+        counts={{
+          ongoing: ongoing?.length,
+          waiting: upcoming?.length,
+          given: ended?.length,
+        }}
+      />
+
+      {isLoading && <LoadingProgress />}
     </>
   )
 }
