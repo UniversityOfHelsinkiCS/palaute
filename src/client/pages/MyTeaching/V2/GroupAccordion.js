@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box } from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Divider } from '@mui/material'
 import Masonry from '@mui/lab/Masonry'
 
 import { useTranslation } from 'react-i18next'
@@ -36,9 +36,10 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
         <Masonry spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
-          {courseUnits.map(courseUnit => (
+          {courseUnits.map((courseUnit, i) => (
             <Box key={courseUnit.courseCode}>
               <CourseUnitAccordion courseUnit={courseUnit} group={group} />
+              <Divider />
             </Box>
           ))}
         </Masonry>
