@@ -152,6 +152,7 @@
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations",
     "noCourses": "No courses",
+    "noCoursesV2": "There are currently no courses to show",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
-import { Grid, Box, Typography } from '@mui/material'
+import { Alert, Grid, Box, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +23,9 @@ const MyTeaching = () => {
   })
 
   const { courseUnits, isLoading } = useTeacherCourseUnits()
-  const { ongoing, upcoming, ended } = getGroupedCourseUnits(courseUnits)
+  const groupedCourseUnits = useMemo(() => getGroupedCourseUnits(courseUnits), [courseUnits])
+  // const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
+  const sortedCourseUnits = []
 
   return (
     <>
@@ -38,13 +40,23 @@ const MyTeaching = () => {
         sx={{ marginBottom: 3 }}
         status={status}
         counts={{
-          ongoing: ongoing?.length,
-          waiting: upcoming?.length,
-          given: ended?.length,
+          ongoing: groupedCourseUnits.ongoing?.length,
+          waiting: groupedCourseUnits.upcoming?.length,
+          given: groupedCourseUnits.ended?.length,
         }}
       />
 
       {isLoading && <LoadingProgress />}
+
+      {sortedCourseUnits.length === 0 && (
+        <Alert data-cy="my-teaching-no-courses" severity="info">
+          {t('teacherView:noCoursesV2')}
+        </Alert>
+      )}
+
+      <Grid xs={12} sm={12} md={4} item>
+        adf
+      </Grid>
     </>
   )
 }
