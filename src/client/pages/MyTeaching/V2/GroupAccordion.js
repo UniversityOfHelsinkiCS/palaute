@@ -28,11 +28,11 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
   console.log(courseUnits)
 
   return (
-    <Accordion defaultExpanded>
+    <Accordion defaultExpanded sx={{ padding: 2 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box sx={styles.icon}>{icon}</Box>
-        <Typography sx={styles.title}>
-          {title} ({courseUnits.length})
+        <Typography component="h2" variant="h5" sx={styles.title}>
+          Yliopistokurssit ({courseUnits.length})
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
