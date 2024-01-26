@@ -6,6 +6,8 @@ import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaryContext } from './context'
 import { useOrganisationSummaries } from './api'
 import { useOrderedAndFilteredOrganisations } from './utils'
+import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
+import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector'
 
 const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
   const { t } = useTranslation()
@@ -41,11 +43,12 @@ const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
  *
  */
 const MyOrganisations = () => {
-  const { dateRange, viewingMode, setViewingMode } = useSummaryContext()
+  const { dateRange, viewingMode, setViewingMode, separateOrganisationId } = useSummaryContext()
   const { organisations, isLoading } = useOrganisationSummaries({
     startDate: dateRange.start,
     endDate: dateRange.end,
     viewingMode,
+    separateOrganisationId,
     enabled: true,
   })
 
@@ -54,6 +57,7 @@ const MyOrganisations = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <ViewingModeSelector viewingMode={viewingMode} setViewingMode={setViewingMode} />
+      {OPEN_UNIVERSITY_ORG_ID && <SeparateOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
       <SorterRow />
       {isLoading ? (
         <LinearProgress />
