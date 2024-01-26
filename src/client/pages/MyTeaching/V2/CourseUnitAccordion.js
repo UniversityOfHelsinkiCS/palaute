@@ -71,15 +71,13 @@ const RenderInterimFeedbackChip = ({ parentFeedbackTarget }) => {
   const isEnded = feedbackTargetIsEnded(parentFeedbackTarget)
   const isOld = feedbackTargetIsOld(parentFeedbackTarget)
 
-  const fetchInterimFeedbacks = !parentFeedbackTarget.userCreated && !isEnded && !isOld
+  const fetchInterimFeedbacks = !isEnded && !isOld
 
-  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(
-    parentFeedbackTarget?.id,
-    fetchInterimFeedbacks
-  )
+  const { interimFeedbacks, isLoading } = useInterimFeedbacks(parentFeedbackTarget?.id, fetchInterimFeedbacks)
 
-  if (!fetchInterimFeedbacks || isInterimFeedbacksLoading || interimFeedbacks?.length === 0) return null
+  if (!fetchInterimFeedbacks || isLoading || interimFeedbacks?.length === 0) return null
 
+  // Because the query returns all of the interim feedbacks, check if some of these are open
   const isOpenInterim = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
 
   if (!isOpenInterim) return null
@@ -95,6 +93,9 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
   const visibleCourseCode = getCourseCode(courseUnit)
   const { feedbackTarget } = courseRealisation
 
+  // Check that the feedback target is not an interim feedback or a organisation survey
+  const fetchInterimFeedbacks = !feedbackTarget.userCreated && !courseUnit.userCreated
+
   return (
     <Accordion
       sx={styles.accordion}
@@ -108,7 +109,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <RenderFeedbackResponseChip courseRealisation={courseRealisation} code={courseCode} />
-            {!courseUnit.userCreated && <RenderInterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
+            {fetchInterimFeedbacks && <RenderInterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
           </Box>
         </Box>
       </AccordionSummary>
