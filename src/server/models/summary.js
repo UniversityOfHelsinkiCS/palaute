@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL } = require('sequelize')
+const { Model, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, ARRAY } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 /**
@@ -28,6 +28,9 @@ Summary.init(
     endDate: {
       type: DATEONLY,
       allowNull: false,
+    },
+    extraResponsibleOrgIds: {
+      type: ARRAY(STRING),
     },
     /**
      * Has the following format:
@@ -65,7 +68,6 @@ Summary.init(
     sequelize,
     indexes: [
       {
-        unique: true,
         fields: ['entity_id', 'start_date', 'end_date'], // Must be underscored in this case
       },
     ],
