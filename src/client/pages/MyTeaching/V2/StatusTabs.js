@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 
+import OngoingIcon from '@mui/icons-material/Schedule'
+import UpcomingIcon from '@mui/icons-material/Event'
+import EndedIcon from '@mui/icons-material/Done'
+
 const styles = {
   badge: {
     '& .MuiBadge-badge': {
@@ -46,9 +50,23 @@ const StatusTabs = ({ status, counts, ...props }) => {
         label={t('teacherView:ongoingCourses')}
         status="ongoing"
         color="primary"
+        icon={<OngoingIcon />}
+        iconPosition="start"
       />
-      <StatusTab data-cy="my-teaching-upcoming-tab" label={t('teacherView:upcomingCourses')} status="upcoming" />
-      <StatusTab data-cy="my-feedbacks-ended-tab" label={t('teacherView:endedCourses')} status="ended" />
+      <StatusTab
+        data-cy="my-teaching-upcoming-tab"
+        label={t('teacherView:upcomingCourses')}
+        status="upcoming"
+        icon={<UpcomingIcon />}
+        iconPosition="start"
+      />
+      <StatusTab
+        data-cy="my-feedbacks-ended-tab"
+        label={t('teacherView:endedCourses')}
+        status="ended"
+        icon={<EndedIcon />}
+        iconPosition="start"
+      />
     </Tabs>
   )
 }

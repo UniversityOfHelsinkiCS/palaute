@@ -3,9 +3,7 @@ import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
 import { Grid, Box, Typography } from '@mui/material'
-import OngoingIcon from '@mui/icons-material/Schedule'
-import UpcomingIcon from '@mui/icons-material/Event'
-import EndedIcon from '@mui/icons-material/Done'
+
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
