@@ -3,14 +3,6 @@ const { sequelize } = require('../db/dbConnection')
 
 /**
  * Summary represents any single row in course summary.
- *
- * There are multiple different types:
- *
- * Organisation. Its children are either Course Units or other Organisations
- *
- * Course Unit. Its children are Course Realisations.
- *
- * Course Realisation. It has no children.
  */
 class Summary extends Model {}
 
