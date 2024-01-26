@@ -10,10 +10,13 @@ import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
 
 import { useInterimFeedbacks } from '../../../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
 
-const RenderInterimFeedbackChip = ({ parentFeedbackTarget }) => {
-  const { t } = useTranslation('teacherView')
+const InterimFeedbackChip = ({ parentFeedbackTarget }) => {
+  const { t } = useTranslation()
+
   const isEnded = feedbackTargetIsEnded(parentFeedbackTarget)
   const isOld = feedbackTargetIsOld(parentFeedbackTarget)
+
+  const url = `/targets/${parentFeedbackTarget.id}/interim-feedback`
 
   const fetchInterimFeedbacks = !isEnded && !isOld
 
@@ -23,10 +26,7 @@ const RenderInterimFeedbackChip = ({ parentFeedbackTarget }) => {
 
   // Because the query returns all of the interim feedbacks, check if some of these are open
   const isOpenInterim = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
-
   if (!isOpenInterim) return null
-
-  const url = `/targets/${parentFeedbackTarget.id}/interim-feedback`
 
   return (
     <LinkChip
@@ -40,4 +40,4 @@ const RenderInterimFeedbackChip = ({ parentFeedbackTarget }) => {
   )
 }
 
-export default RenderInterimFeedbackChip
+export default InterimFeedbackChip
