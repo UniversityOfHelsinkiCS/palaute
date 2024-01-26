@@ -67,16 +67,14 @@ const RenderFeedbackResponseChip = ({ courseRealisation, code }) => {
   return null
 }
 
-const RenderInterimFeedbackChip = ({ courseRealisation, enable }) => {
-  const { feedbackTarget } = courseRealisation
+const RenderInterimFeedbackChip = ({ parentFeedbackTarget }) => {
+  const isEnded = feedbackTargetIsEnded(parentFeedbackTarget)
+  const isOld = feedbackTargetIsOld(parentFeedbackTarget)
 
-  const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isOld = feedbackTargetIsOld(feedbackTarget)
-
-  const fetchInterimFeedbacks = !feedbackTarget.userCreated && !isEnded && !isOld && enable
+  const fetchInterimFeedbacks = !parentFeedbackTarget.userCreated && !isEnded && !isOld
 
   const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(
-    feedbackTarget?.id,
+    parentFeedbackTarget?.id,
     fetchInterimFeedbacks
   )
 
@@ -86,7 +84,7 @@ const RenderInterimFeedbackChip = ({ courseRealisation, enable }) => {
 
   if (!isOpenInterim) return null
 
-  return <InterimFeedbackChip id={feedbackTarget.id} />
+  return <InterimFeedbackChip id={parentFeedbackTarget.id} />
 }
 
 const CourseUnitAccordion = ({ courseUnit, group }) => {
@@ -95,6 +93,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
+  const { feedbackTarget } = courseRealisation
 
   return (
     <Accordion
@@ -109,7 +108,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <RenderFeedbackResponseChip courseRealisation={courseRealisation} code={courseCode} />
-            <RenderInterimFeedbackChip courseRealisation={courseRealisation} enable={!courseUnit.userCreated} />
+            {!courseUnit.userCreated && <RenderInterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
           </Box>
         </Box>
       </AccordionSummary>
