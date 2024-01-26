@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Grid } from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Box } from '@mui/material'
+import Masonry from '@mui/lab/Masonry'
 
 import { useTranslation } from 'react-i18next'
 
@@ -34,13 +35,13 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
-        <Grid spacing={2} container>
-          {courseUnits.map((courseUnit, i) => (
-            <Grid key={courseUnit.courseCode} xs={12} sm={6} md={4} item>
+        <Masonry spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
+          {courseUnits.map(courseUnit => (
+            <Box key={courseUnit.courseCode}>
               <CourseUnitAccordion courseUnit={courseUnit} group={group} />
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Masonry>
       </AccordionDetails>
     </Accordion>
   )
