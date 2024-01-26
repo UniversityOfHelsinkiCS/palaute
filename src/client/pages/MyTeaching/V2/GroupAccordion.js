@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import CourseUnitAccordion from '../CourseUnitAccordion'
+import CourseUnitAccordion from './CourseUnitAccordion'
 
 const styles = {
   title: {
@@ -38,7 +38,7 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
       <AccordionDetails sx={styles.details}>
         <Grid spacing={2} container>
           {courseUnits.map((courseUnit, i) => (
-            <Grid key={courseUnit.courseCode} xs={12} sm={12} md={4} item>
+            <Grid key={courseUnit.courseCode} xs={12} sm={6} md={4} item>
               <CourseUnitAccordion courseUnit={courseUnit} group={group} />
               {i < courseUnits.length - 1 && <Divider />}
             </Grid>
