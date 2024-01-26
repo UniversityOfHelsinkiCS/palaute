@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
-import { Alert, Grid, Box, Typography } from '@mui/material'
+import { Alert, Box, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +13,7 @@ import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 import { getGroupedCourseUnits } from '../utils'
+import GroupAccordion from './GroupAccordion'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
@@ -24,8 +25,8 @@ const MyTeaching = () => {
 
   const { courseUnits, isLoading } = useTeacherCourseUnits()
   const groupedCourseUnits = useMemo(() => getGroupedCourseUnits(courseUnits), [courseUnits])
-  // const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
-  const sortedCourseUnits = []
+  const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
+  //const sortedCourseUnits = []
 
   return (
     <>
@@ -48,15 +49,13 @@ const MyTeaching = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {sortedCourseUnits.length === 0 && (
+      {sortedCourseUnits.length === 0 ? (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
+      ) : (
+        <GroupAccordion courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
       )}
-
-      <Grid xs={12} sm={12} md={4} item>
-        adf
-      </Grid>
     </>
   )
 }
