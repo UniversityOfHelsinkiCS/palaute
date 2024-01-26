@@ -18,18 +18,14 @@ const styles = {
     flexDirection: 'column',
     padding: 0,
   },
-  icon: {
-    marginRight: theme => theme.spacing(1),
-  },
 }
 
-const GroupAccordion = ({ title, courseUnits, icon, group }) => {
+const GroupAccordion = ({ title, courseUnits, group }) => {
   const { t } = useTranslation()
 
   return (
     <Accordion defaultExpanded sx={{ padding: 2 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Box sx={styles.icon}>{icon}</Box>
         <Typography component="h2" variant="h5" sx={styles.title}>
           Yliopistokurssit ({courseUnits.length})
         </Typography>

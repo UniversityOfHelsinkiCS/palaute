@@ -37,16 +37,17 @@ const styles = {
   },
 }
 
-const getChip = (courseRealisation, code) => {
+const RenderFeedbackResponseChip = ({ courseRealisation, code }) => {
   const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
+
   const { parentFeedback } = useInterimFeedbackParent(feedbackTarget.id, feedbackTarget.userCreated)
 
-  const acualFeeback = parentFeedback || feedbackTarget
+  const acualFeedback = parentFeedback || feedbackTarget
 
-  const isEnded = feedbackTargetIsEnded(acualFeeback)
-  const isOpen = feedbackTargetIsOpen(acualFeeback)
-  const isOld = feedbackTargetIsOld(acualFeeback)
-  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = acualFeeback || {}
+  const isEnded = feedbackTargetIsEnded(acualFeedback)
+  const isOpen = feedbackTargetIsOpen(acualFeedback)
+  const isOld = feedbackTargetIsOld(acualFeedback)
+  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = acualFeedback || {}
   const isOngoing = feedbackTargetCourseIsOngoing({ opensAt, courseRealisation }) && !isOpen
 
   if (isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
@@ -66,7 +67,7 @@ const getChip = (courseRealisation, code) => {
   return null
 }
 
-const getInterimFeedbackChip = (courseRealisation, enable) => {
+const RenderInterimFeedbackChip = ({ courseRealisation, enable }) => {
   const { feedbackTarget } = courseRealisation
 
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -94,8 +95,6 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
-  const FeedbackResponseChip = getChip(courseRealisation, courseCode)
-  const InterimFeedbackChip = getInterimFeedbackChip(courseRealisation, !courseUnit.userCreated)
 
   return (
     <Accordion
@@ -109,8 +108,8 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Box sx={{ mr: 1 }}>{FeedbackResponseChip}</Box>
-            <Box>{InterimFeedbackChip}</Box>
+            <RenderFeedbackResponseChip courseRealisation={courseRealisation} code={courseCode} />
+            <RenderInterimFeedbackChip courseRealisation={courseRealisation} enable={!courseUnit.userCreated} />
           </Box>
         </Box>
       </AccordionSummary>
