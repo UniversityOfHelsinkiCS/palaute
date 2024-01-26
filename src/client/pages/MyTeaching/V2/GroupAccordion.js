@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Divider, Grid } from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Grid } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -25,8 +25,6 @@ const styles = {
 const GroupAccordion = ({ title, courseUnits, icon, group }) => {
   const { t } = useTranslation()
 
-  console.log(courseUnits)
-
   return (
     <Accordion defaultExpanded sx={{ padding: 2 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -40,7 +38,6 @@ const GroupAccordion = ({ title, courseUnits, icon, group }) => {
           {courseUnits.map((courseUnit, i) => (
             <Grid key={courseUnit.courseCode} xs={12} sm={6} md={4} item>
               <CourseUnitAccordion courseUnit={courseUnit} group={group} />
-              {i < courseUnits.length - 1 && <Divider />}
             </Grid>
           ))}
         </Grid>

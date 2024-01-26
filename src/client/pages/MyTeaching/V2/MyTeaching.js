@@ -9,11 +9,12 @@ import { useTranslation } from 'react-i18next'
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
 
 import StatusTabs from './StatusTabs'
+import GroupAccordion from './GroupAccordion'
+
 import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 import { getGroupedCourseUnits } from '../utils'
-import GroupAccordion from './GroupAccordion'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
@@ -24,9 +25,12 @@ const MyTeaching = () => {
   })
 
   const { courseUnits, isLoading } = useTeacherCourseUnits()
+
   const groupedCourseUnits = useMemo(() => getGroupedCourseUnits(courseUnits), [courseUnits])
   const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
   //const sortedCourseUnits = []
+
+  console.log(sortedCourseUnits)
 
   return (
     <>
@@ -49,7 +53,7 @@ const MyTeaching = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {sortedCourseUnits.length === 0 ? (
+      {sortedCourseUnits?.length === 0 ? (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
