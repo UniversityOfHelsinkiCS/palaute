@@ -20,17 +20,17 @@ const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
 
-  const { status = 'waiting' } = qs.parse(location.search, {
+  const { status = 'ongoing' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
 
   const { courseUnits, isLoading } = useTeacherCourseUnits()
 
+  /* const groupedCourseUnits = getGroupedCourseUnits(courseUnits)
+  const sortedCourseUnits = groupedCourseUnits[status] */
+
   const groupedCourseUnits = useMemo(() => getGroupedCourseUnits(courseUnits), [courseUnits])
   const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
-  //const sortedCourseUnits = []
-
-  console.log(sortedCourseUnits)
 
   return (
     <>
@@ -53,7 +53,7 @@ const MyTeaching = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {sortedCourseUnits?.length === 0 ? (
+      {!isLoading && sortedCourseUnits?.length === 0 ? (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
