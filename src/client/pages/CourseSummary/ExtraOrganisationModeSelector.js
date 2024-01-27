@@ -3,7 +3,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 
-const SeparateOrganisationModeSelector = ({ organisationId }) => {
+const ExtraOrganisationModeSelector = ({ organisationId }) => {
   const { t } = useTranslation()
   const { setExtraOrgId, extraOrgMode, setExtraOrgMode } = useSummaryContext()
 
@@ -38,4 +38,4 @@ const SeparateOrganisationModeSelector = ({ organisationId }) => {
   )
 }
 
-export default SeparateOrganisationModeSelector
+export default ExtraOrganisationModeSelector

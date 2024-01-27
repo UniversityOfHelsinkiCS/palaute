@@ -5,7 +5,7 @@ import { useSummaries } from './api'
 import { SummaryContextProvider, useSummaryContext } from './context'
 import SummaryScrollContainer from './SummaryScrollContainer'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, tagId } = useSummaryContext()
@@ -21,7 +21,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-        {OPEN_UNIVERSITY_ORG_ID && <SeparateOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+        {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
         <SorterRow />
         {isLoading ? (
           <LinearProgress />

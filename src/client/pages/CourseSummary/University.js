@@ -4,7 +4,7 @@ import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { OPEN_UNIVERSITY_ORG_ID, UNIVERSITY_ROOT_ID } from '../../util/common'
 import { useSummaryContext } from './context'
-import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
 
 /**
  *
@@ -20,7 +20,7 @@ const University = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      {OPEN_UNIVERSITY_ORG_ID && <SeparateOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+      {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
       <SorterRow />
       <OrganisationSummaryRow
         organisationId={UNIVERSITY_ROOT_ID}

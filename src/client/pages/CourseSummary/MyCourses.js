@@ -5,7 +5,7 @@ import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
 import { SorterRow, TeacherOrganisationSummaryRow } from './SummaryRow'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
 
 /**
  *
@@ -19,7 +19,7 @@ const MyCourses = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      {OPEN_UNIVERSITY_ORG_ID && <SeparateOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+      {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
       <SorterRow />
       {show &&
         organisations.length > 0 &&
