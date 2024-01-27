@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const {
-  Summary,
   Organisation,
   CourseUnit,
   CourseRealisation,
@@ -12,7 +11,7 @@ const {
   CourseUnitsTag,
   CourseRealisationsTag,
 } = require('../../models')
-const { sumSummaryDatas, sumSummaries } = require('./utils')
+const { sumSummaryDatas, sumSummaries, getScopedSummary } = require('./utils')
 const { ApplicationError } = require('../../util/customErrors')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
 const {
@@ -40,7 +39,9 @@ const withOrganisationAccessCheck = asyncFunction => async params => {
   return asyncFunction(params)
 }
 
-const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagId }) => {
+const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+
   const courseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'groupId', 'courseCode'],
     include: [
@@ -52,7 +53,7 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagI
         required: true,
       },
       {
-        model: Summary.scope({ method: ['at', startDate, endDate] }),
+        model: scopedSummary,
         as: 'groupSummaries',
         required: true,
       },
@@ -85,7 +86,16 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagI
   return aggregatedCourseUnits
 }
 
-const getCourseRealisationSummaries = async ({ organisationId, startDate, endDate, tagId }) => {
+const getCourseRealisationSummaries = async ({
+  organisationId,
+  startDate,
+  endDate,
+  tagId,
+  extraOrgId,
+  extraOrgMode,
+}) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+
   const courseRealisations = await CourseRealisation.findAll({
     attributes: ['id'],
     include: [
@@ -97,7 +107,7 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
         required: true,
       },
       {
-        model: Summary.scope({ method: ['at', startDate, endDate] }),
+        model: scopedSummary,
         as: 'summary',
         required: true,
       },
@@ -132,11 +142,13 @@ const getCourseRealisationSummaries = async ({ organisationId, startDate, endDat
   return courseRealisations
 }
 
-const getOrganisationSummary = async ({ organisationId, startDate, endDate }) => {
+const getOrganisationSummary = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: {
-      model: Summary.scope({ method: ['at', startDate, endDate] }),
+      model: scopedSummary,
       as: 'summaries',
       required: true,
     },
@@ -156,12 +168,22 @@ const getOrganisationSummary = async ({ organisationId, startDate, endDate }) =>
   return organisation
 }
 
-const getChildOrganisations = async ({ organisationId, startDate, endDate, organisationIds, universityWideAccess }) => {
+const getChildOrganisations = async ({
+  organisationId,
+  startDate,
+  endDate,
+  organisationIds,
+  universityWideAccess,
+  extraOrgId,
+  extraOrgMode,
+}) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
     include: [
       {
-        model: Summary.scope({ method: ['at', startDate, endDate] }),
+        model: scopedSummary,
         as: 'summaries',
         required: false,
       },
@@ -170,7 +192,7 @@ const getChildOrganisations = async ({ organisationId, startDate, endDate, organ
         as: 'childOrganisations',
         attributes: ['name', 'id', 'code'],
         include: {
-          model: Summary.scope({ method: ['at', startDate, endDate] }),
+          model: scopedSummary,
           as: 'summaries',
           required: false,
         },
@@ -196,6 +218,8 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   endDate,
   universityWideAccess,
   accessibleOrganisationIds,
+  extraOrgId,
+  extraOrgMode,
 }) => {
   // Get the main organisation and its children
   const rootOrganisation = await getChildOrganisations({
@@ -204,6 +228,8 @@ const getOrganisationSummaryWithChildOrganisations = async ({
     endDate,
     organisationIds: accessibleOrganisationIds,
     universityWideAccess,
+    extraOrgId,
+    extraOrgMode,
   })
 
   // Not found? Stop here.
@@ -245,11 +271,18 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   return organisation
 }
 
-const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate, endDate, tagId }) => {
+const getOrganisationSummaryWithCourseUnits = async ({
+  organisationId,
+  startDate,
+  endDate,
+  tagId,
+  extraOrgId,
+  extraOrgMode,
+}) => {
   const [organisation, courseUnits, courseRealisations] = await Promise.all([
-    getOrganisationSummary({ organisationId, startDate, endDate }),
-    getCourseUnitSummaries({ organisationId, startDate, endDate, tagId }),
-    getCourseRealisationSummaries({ organisationId, startDate, endDate, tagId }),
+    getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
+    getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
+    getCourseRealisationSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
   ])
 
   if (!organisation) {
@@ -290,8 +323,9 @@ const getOrganisationSummaryWithCourseUnits = async ({ organisationId, startDate
   return organisation
 }
 
-const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDate }) => {
-  const organisation = await getOrganisationSummary({ organisationId, startDate, endDate })
+const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const organisation = await getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode })
 
   if (!organisation) {
     return null
@@ -305,7 +339,7 @@ const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDa
   })
 
   const tagEntityIds = tags.map(tag => prefixTagId(tag.id))
-  const summaries = await Summary.scope({ method: ['at', startDate, endDate] }).findAll({
+  const summaries = await scopedSummary.findAll({
     where: {
       entityId: tagEntityIds,
     },

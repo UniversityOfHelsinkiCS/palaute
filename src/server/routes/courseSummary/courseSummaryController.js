@@ -57,7 +57,15 @@ const parseDates = (startDateString, endDateString) => {
  * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString, entityId, include, tagId: tagIdString } = req.query
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    entityId,
+    include,
+    tagId: tagIdString,
+    extraOrgId,
+    extraOrgMode,
+  } = req.query
   const { user } = req
 
   if (!entityId) {
@@ -75,6 +83,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   } else if (include === 'tags') {
     organisation = await getOrganisationSummaryWithTags({
@@ -82,6 +92,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   } else if (include === 'courseUnits') {
     organisation = await getOrganisationSummaryWithCourseUnits({
@@ -90,6 +102,8 @@ const getOrganisationsV2 = async (req, res) => {
       endDate,
       user,
       tagId,
+      extraOrgId,
+      extraOrgMode,
     })
   } else {
     organisation = await getOrganisationSummary({
@@ -97,6 +111,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   }
 
