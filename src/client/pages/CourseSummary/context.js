@@ -41,10 +41,10 @@ const summaryContext = React.createContext({
   questions: [],
   viewingMode: 'tree',
   setViewingMode: () => {},
-  separateOrganisationId: '',
-  setSeparateOrganisationId: () => {},
-  showSeparateOrganisationCourses: true,
-  setShowSeparateOrganisationCourses: () => {},
+  extraOrgId: '',
+  setExtraOrgId: () => {},
+  extraOrgMode: '',
+  setExtraOrgMode: () => {},
 })
 
 /**
@@ -154,19 +154,28 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
   })
 
   // Separate organisation id
-  const [separateOrganisationId, setSeparateOrganisationId] = React.useState(() => {
-    const separateOrganisationId = params.get('separateOrganisationId')
-    return separateOrganisationId || ''
+  const [extraOrgId, setExtraOrgId] = React.useState(() => {
+    const extraOrgId = params.get('extraOrgId')
+    return extraOrgId || ''
   })
 
-  const updateSeparateOrganisationIdQS = React.useCallback(separateOrganisationId => {
-    setSeparateOrganisationId(separateOrganisationId)
-    params.set('separateOrganisationId', separateOrganisationId)
+  const updateExtraOrgIdQS = React.useCallback(extraOrgId => {
+    setExtraOrgId(extraOrgId)
+    params.set('extraOrgId', extraOrgId)
     setParams(params)
   })
 
-  // Show separate organisation courses
-  const [showSeparateOrganisationCourses, setShowSeparateOrganisationCourses] = React.useState(true)
+  // How to show separate organisation courses
+  const [extraOrgMode, setExtraOrgMode] = React.useState(() => {
+    const extraOrgMode = params.get('extraOrgMode')
+    return extraOrgMode || ''
+  })
+
+  const updateExtraOrgModeQS = React.useCallback(extraOrgMode => {
+    setExtraOrgMode(extraOrgMode)
+    params.set('extraOrgMode', extraOrgMode)
+    setParams(params)
+  })
 
   const value = React.useMemo(
     () => ({
@@ -182,10 +191,10 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       questions,
       viewingMode,
       setViewingMode: updateViewingModeQS,
-      separateOrganisationId,
-      setSeparateOrganisationId: updateSeparateOrganisationIdQS,
-      showSeparateOrganisationCourses,
-      setShowSeparateOrganisationCourses,
+      extraOrgId,
+      setExtraOrgId: updateExtraOrgIdQS,
+      extraOrgMode,
+      setExtraOrgMode: updateExtraOrgModeQS,
     }),
     [
       showSummariesWithNoFeedback,
@@ -195,8 +204,8 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       sortBy[1],
       questions,
       viewingMode,
-      separateOrganisationId,
-      showSeparateOrganisationCourses,
+      extraOrgId,
+      extraOrgMode,
     ]
   )
 

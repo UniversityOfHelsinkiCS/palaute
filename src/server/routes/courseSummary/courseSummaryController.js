@@ -144,7 +144,7 @@ const getByCourseUnit = async (req, res) => {
 }
 
 const getCoursesV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString } = req.query
+  const { startDate: startDateString, endDate: endDateString, extraOrgId, extraOrgMode } = req.query
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -153,6 +153,8 @@ const getCoursesV2 = async (req, res) => {
     user,
     startDate,
     endDate,
+    extraOrgId,
+    extraOrgMode,
   })
 
   return res.send(organisations)

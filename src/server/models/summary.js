@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, ARRAY } = require('sequelize')
+const { Model, Op, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, ARRAY } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 /**
@@ -77,6 +77,22 @@ Summary.init(
           where: {
             startDate,
             endDate,
+          },
+        }
+      },
+      extraOrg(extraOrgId) {
+        return {
+          where: {
+            extraOrgIds: { [Op.contains]: [extraOrgId] },
+          },
+        }
+      },
+      noExtraOrg(extraOrgId) {
+        return {
+          where: {
+            [Op.not]: {
+              extraOrgIds: { [Op.contains]: [extraOrgId] },
+            },
           },
         }
       },

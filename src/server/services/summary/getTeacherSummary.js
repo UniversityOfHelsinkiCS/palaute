@@ -10,12 +10,28 @@ const {
 } = require('../../models')
 const { sumSummaries } = require('./utils')
 
-const getTeacherSummary = async ({ startDate, endDate, user }) => {
+const getScopedSummary = (startDate, endDate, extraOrgId, extraOrgMode) => {
+  const scopes = [{ method: ['at', startDate, endDate] }]
+
+  if (extraOrgId) {
+    if (extraOrgMode === 'exclude') {
+      scopes.push({ method: ['noExtraOrg', extraOrgId] })
+    }
+    if (extraOrgMode === 'only') {
+      scopes.push({ method: ['extraOrg', extraOrgId] })
+    }
+  }
+  return Summary.scope(scopes)
+}
+
+const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode }) => {
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
     include: [
       {
-        model: Summary.scope({ method: ['at', startDate, endDate] }),
+        model: scopedSummary,
         as: 'summaries',
       },
       {
@@ -31,7 +47,7 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
         },
         include: [
           {
-            model: Summary.scope({ method: ['at', startDate, endDate] }),
+            model: scopedSummary,
             as: 'groupSummaries',
             required: true,
           },
@@ -58,7 +74,7 @@ const getTeacherSummary = async ({ startDate, endDate, user }) => {
                 as: 'courseRealisation',
                 include: [
                   {
-                    model: Summary.scope({ method: ['at', startDate, endDate] }),
+                    model: scopedSummary,
                     as: 'summary',
                     required: true,
                   },

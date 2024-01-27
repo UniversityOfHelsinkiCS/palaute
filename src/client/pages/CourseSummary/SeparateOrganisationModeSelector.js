@@ -5,46 +5,35 @@ import { useSummaryContext } from './context'
 
 const SeparateOrganisationModeSelector = ({ organisationId }) => {
   const { t } = useTranslation()
-  const {
-    separateOrganisationId,
-    setSeparateOrganisationId,
-    showSeparateOrganisationCourses,
-    setShowSeparateOrganisationCourses,
-  } = useSummaryContext()
+  const { setExtraOrgId, extraOrgMode, setExtraOrgMode } = useSummaryContext()
 
   const handleChange = (_ev, value) => {
     if (value === 'include') {
-      setSeparateOrganisationId('')
-      setShowSeparateOrganisationCourses(true)
+      setExtraOrgId('')
+      setExtraOrgMode('')
     }
-    if (value === 'separate') {
-      setSeparateOrganisationId(organisationId)
-      setShowSeparateOrganisationCourses(true)
+    if (value === 'exclude') {
+      setExtraOrgId(organisationId)
+      setExtraOrgMode('exclude')
     }
-    if (value === 'hide') {
-      setSeparateOrganisationId(organisationId)
-      setShowSeparateOrganisationCourses(false)
+    if (value === 'only') {
+      setExtraOrgId(organisationId)
+      setExtraOrgMode('only')
     }
-  }
-
-  const getToggleButtonValue = () => {
-    if (separateOrganisationId === organisationId && showSeparateOrganisationCourses) return 'separate'
-    if (separateOrganisationId === organisationId && !showSeparateOrganisationCourses) return 'hide'
-    return 'include'
   }
 
   return (
     <ToggleButtonGroup
       exclusive
-      value={getToggleButtonValue()}
+      value={extraOrgMode}
       onChange={handleChange}
       color="primary"
       size="small"
       sx={{ height: '40px' }}
     >
       <ToggleButton value="include">{t('courseSummary:includeOpenUni')}</ToggleButton>
-      <ToggleButton value="separate">{t('courseSummary:separateOpenUni')}</ToggleButton>
-      <ToggleButton value="hide">{t('courseSummary:hideOpenUni')}</ToggleButton>
+      <ToggleButton value="exclude">{t('courseSummary:excludeOpenUni')}</ToggleButton>
+      <ToggleButton value="only">{t('courseSummary:onlyOpenUni')}</ToggleButton>
     </ToggleButtonGroup>
   )
 }

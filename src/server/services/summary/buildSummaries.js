@@ -57,19 +57,17 @@ const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisat
   )
 
 /**
- * Yields the variants of these entities that have only the extraOrgId responsible CURs in them.
+ * Yields the 1 or 2 variants of this entity, based on extraOrgId.
+ * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni curs and the other non-open uni curs.
+ * If curs of entity are one or another, only one entity would be yielded.
  */
-function* extraOrganisationVariants(entities, extraOrgId) {
-  for (const entity of entities) {
-    const extraOrgCurs = entity.courseRealisations.filter(cur => cur.extraOrgIds.includes(extraOrgId))
-    if (extraOrgCurs.length > 0) {
-      yield {
-        ..._.clone(entity),
-        courseRealisations: extraOrgCurs,
-      }
-    }
-  }
-}
+const getExtraOrgVariants = (entity, extraOrgId) =>
+  _.partition(entity.courseRealisations, cur => cur.extraOrgIds.includes(extraOrgId))
+    .filter(curs => curs.length > 0)
+    .map(curs => ({
+      ..._.clone(entity),
+      courseRealisations: curs,
+    }))
 
 const buildSummariesForPeriod = async ({
   startDate,
@@ -266,18 +264,15 @@ const buildSummariesForPeriod = async ({
       extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
+  console.log('curSummaries', courseRealisationSummaries.length)
 
   // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId)).map(
-    ([cuId, courseRealisations]) => ({
+  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId))
+    .map(([cuId, courseRealisations]) => ({
       entityId: cuId,
       courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
-    })
-  )
-
-  let l = courseUnitSummaries.length
-  courseUnitSummaries.push(...extraOrganisationVariants(courseUnitSummaries, separateOrgId))
-  console.log('open uni CUs:', l - courseUnitSummaries.length)
+    }))
+    .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 
   // Sum them up from CURs. Then we're done with CUs and could write CU summaries to db.
   for (const cu of courseUnitSummaries) {
@@ -287,18 +282,16 @@ const buildSummariesForPeriod = async ({
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
     cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
+  console.log('cuSummaries', courseUnitSummaries.length)
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
-  const courseUnitGroupSummaries = Object.entries(
-    _.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId)
-  ).map(([cuGroupId, courseRealisations]) => ({
-    entityId: cuGroupId,
-    courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
-  }))
-
-  l = courseUnitGroupSummaries.length
-  courseUnitGroupSummaries.push(...extraOrganisationVariants(courseUnitGroupSummaries, separateOrgId))
-  console.log('open uni CUGroups:', l - courseUnitGroupSummaries.length)
+  const courseUnitGroupSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId))
+    .map(([cuGroupId, courseRealisations]) => ({
+      entityId: cuGroupId,
+      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+    }))
+    .flatMap(cuGroup => getExtraOrgVariants(cuGroup, separateOrgId))
+  console.log('cuGroup', courseUnitGroupSummaries.length)
 
   // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
   for (const cuGroup of courseUnitGroupSummaries) {
@@ -313,19 +306,18 @@ const buildSummariesForPeriod = async ({
   const tagSummaries = _.uniqBy(
     courseRealisationSummaries.flatMap(cur => [...cur.curTags, ...cur.cuTags]),
     'id'
-  ).map(tag => ({
-    entityId: prefixTagId(tag.id),
-    courseRealisations: _.uniqBy(
-      courseRealisationSummaries.filter(
-        cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+  )
+    .map(tag => ({
+      entityId: prefixTagId(tag.id),
+      courseRealisations: _.uniqBy(
+        courseRealisationSummaries.filter(
+          cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+        ),
+        'entityId'
       ),
-      'entityId'
-    ),
-  }))
-
-  l = tagSummaries.length
-  tagSummaries.push(...extraOrganisationVariants(tagSummaries, separateOrgId))
-  console.log('open uni tag summaries:', l - tagSummaries.length)
+    }))
+    .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
+  console.log('tag', tagSummaries.length)
 
   // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
   for (const tag of tagSummaries) {
@@ -416,12 +408,10 @@ const buildSummariesForPeriod = async ({
     }
   }
 
-  l = orgSummaries.length
-  orgSummaries.push(...extraOrganisationVariants(orgSummaries, separateOrgId))
-  console.log('open uni org summaries:', orgSummaries.length - l)
+  const orgSummariesWithVariants = orgSummaries.flatMap(org => getExtraOrgVariants(org, separateOrgId))
 
   // Now we can actually calculate the org summaries from each org's CURs
-  for (const org of orgSummaries) {
+  for (const org of orgSummariesWithVariants) {
     org.data = sumSummaryDatas(org.courseRealisations.map(cur => cur.data))
     org.extraOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraOrgIds))
     delete org.courseRealisations
@@ -433,7 +423,7 @@ const buildSummariesForPeriod = async ({
     .concat(courseUnitSummaries)
     .concat(courseUnitGroupSummaries)
     .concat(tagSummaries)
-    .concat(orgSummaries)
+    .concat(orgSummariesWithVariants)
     .filter(summary => summary.data && summary.data.feedbackCount > 0)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
