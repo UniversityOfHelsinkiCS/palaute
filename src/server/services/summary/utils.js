@@ -1,5 +1,6 @@
 const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
+const { Summary } = require('../../models')
 
 const mapOptionIdToValue = (optionId, questionId) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
@@ -119,9 +120,24 @@ const sumSummaries = summaries => {
   return summary
 }
 
+const getScopedSummary = (startDate, endDate, extraOrgId, extraOrgMode) => {
+  const scopes = [{ method: ['at', startDate, endDate] }]
+
+  if (extraOrgId) {
+    if (extraOrgMode === 'exclude') {
+      scopes.push({ method: ['noExtraOrg', extraOrgId] })
+    }
+    if (extraOrgMode === 'only') {
+      scopes.push({ method: ['extraOrg', extraOrgId] })
+    }
+  }
+  return Summary.scope(scopes)
+}
+
 module.exports = {
   sumSummaryDatas,
   mapOptionIdToValue,
   sumSummaries,
   subtractSummary,
+  getScopedSummary,
 }

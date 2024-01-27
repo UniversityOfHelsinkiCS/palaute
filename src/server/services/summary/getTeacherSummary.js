@@ -1,28 +1,7 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
-const {
-  Organisation,
-  Summary,
-  CourseUnit,
-  FeedbackTarget,
-  UserFeedbackTarget,
-  CourseRealisation,
-} = require('../../models')
-const { sumSummaries } = require('./utils')
-
-const getScopedSummary = (startDate, endDate, extraOrgId, extraOrgMode) => {
-  const scopes = [{ method: ['at', startDate, endDate] }]
-
-  if (extraOrgId) {
-    if (extraOrgMode === 'exclude') {
-      scopes.push({ method: ['noExtraOrg', extraOrgId] })
-    }
-    if (extraOrgMode === 'only') {
-      scopes.push({ method: ['extraOrg', extraOrgId] })
-    }
-  }
-  return Summary.scope(scopes)
-}
+const { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
+const { sumSummaries, getScopedSummary } = require('./utils')
 
 const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode }) => {
   const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)

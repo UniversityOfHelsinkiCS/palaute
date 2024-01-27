@@ -1,12 +1,20 @@
 const { Op } = require('sequelize')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
-const { Summary, Organisation } = require('../../models')
-const { sumSummaries } = require('./utils')
+const { Organisation } = require('../../models')
+const { sumSummaries, getScopedSummary } = require('./utils')
 const { ApplicationError } = require('../../util/customErrors')
 
-const getUserOrganisationSummaries = async ({ startDate, endDate, user, viewingMode = 'flat' }) => {
+const getUserOrganisationSummaries = async ({
+  startDate,
+  endDate,
+  user,
+  viewingMode = 'flat',
+  extraOrgId,
+  extraOrgMode,
+}) => {
   const organisationIds = await getSummaryAccessibleOrganisationIds(user)
+  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code', 'parentId'],
@@ -17,7 +25,7 @@ const getUserOrganisationSummaries = async ({ startDate, endDate, user, viewingM
       },
     },
     include: {
-      model: Summary.scope({ method: ['at', startDate, endDate] }),
+      model: scopedSummary,
       as: 'summaries',
       required: false,
     },
