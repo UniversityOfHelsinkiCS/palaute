@@ -49,10 +49,10 @@ const getRelevantQuestionIds = async () => {
 }
 
 /**
- * Finds out the extraResponsibleOrgIds that are responsible for this CUR
+ * Finds out the extraOrgIds that are responsible for this CUR
  */
-const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisationIds, extraResponsibleOrgIds) =>
-  extraResponsibleOrgIds.filter(
+const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisationIds, extraOrgIds) =>
+  extraOrgIds.filter(
     orgId => courseUnitOrganisationIds.includes(orgId) || courseRealisationOrganisationIds.includes(orgId)
   )
 
@@ -61,7 +61,7 @@ const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisat
  */
 function* extraOrganisationVariants(entities, extraOrgId) {
   for (const entity of entities) {
-    const extraOrgCurs = entity.courseRealisations.filter(cur => cur.extraResponsibleOrgIds.includes(extraOrgId))
+    const extraOrgCurs = entity.courseRealisations.filter(cur => cur.extraOrgIds.includes(extraOrgId))
     if (extraOrgCurs.length > 0) {
       yield {
         ..._.clone(entity),
@@ -263,7 +263,7 @@ const buildSummariesForPeriod = async ({
       cuOrgIds,
       curTags: fbt.courseRealisation.tags,
       cuTags: fbt.courseUnit.tags,
-      extraResponsibleOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
+      extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
 
@@ -285,7 +285,7 @@ const buildSummariesForPeriod = async ({
     delete cu.courseRealisations // Now not needed anymore
 
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    cu.extraResponsibleOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraResponsibleOrgIds))
+    cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
@@ -306,7 +306,7 @@ const buildSummariesForPeriod = async ({
     delete cuGroup.courseRealisations // Now not needed anymore
 
     cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    cuGroup.extraResponsibleOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraResponsibleOrgIds))
+    cuGroup.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
@@ -333,7 +333,7 @@ const buildSummariesForPeriod = async ({
     delete tag.courseRealisations // Now not needed anymore
 
     tag.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    tag.extraResponsibleOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraResponsibleOrgIds))
+    tag.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
@@ -423,12 +423,12 @@ const buildSummariesForPeriod = async ({
   // Now we can actually calculate the org summaries from each org's CURs
   for (const org of orgSummaries) {
     org.data = sumSummaryDatas(org.courseRealisations.map(cur => cur.data))
-    org.extraResponsibleOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraResponsibleOrgIds))
+    org.extraOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraOrgIds))
     delete org.courseRealisations
     delete org.parent
   }
 
-  const relevantFields = ['entityId', 'data', 'extraResponsibleOrgIds']
+  const relevantFields = ['entityId', 'data', 'extraOrgIds']
   const allSummaries = courseRealisationSummaries
     .concat(courseUnitSummaries)
     .concat(courseUnitGroupSummaries)
