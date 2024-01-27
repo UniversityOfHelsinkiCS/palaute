@@ -43,15 +43,8 @@ const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
  *
  */
 const MyOrganisations = () => {
-  const { dateRange, viewingMode, setViewingMode, extraOrgId, extraOrgMode } = useSummaryContext()
-  const { organisations, isLoading } = useOrganisationSummaries({
-    startDate: dateRange.start,
-    endDate: dateRange.end,
-    viewingMode,
-    enabled: true,
-    extraOrgId,
-    extraOrgMode,
-  })
+  const { dateRange, viewingMode, setViewingMode } = useSummaryContext()
+  const { organisations, isLoading } = useOrganisationSummaries()
 
   const orderedAndFilteredOrganisations = useOrderedAndFilteredOrganisations(organisations)
 

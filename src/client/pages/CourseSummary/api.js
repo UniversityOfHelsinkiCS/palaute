@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
+import { useSummaryContext } from './context'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 
@@ -63,7 +64,11 @@ export const useSummaries = ({ startDate, endDate, entityId, enabled, include, t
  * Fetches all summaries for a teacher based on their courses.
  * Returns a list of organisations with course units as children.
  */
-export const useTeacherSummaries = ({ startDate, endDate, enabled, extraOrgId, extraOrgMode }) => {
+export const useTeacherSummaries = () => {
+  const { dateRange, extraOrgId, extraOrgMode } = useSummaryContext()
+
+  const { start: startDate, end: endDate } = dateRange
+
   const queryKey = ['summaries-v2-teacher', startDate, endDate]
   if (extraOrgId && extraOrgMode) queryKey.push({ extraOrgId, extraOrgMode })
 
@@ -81,7 +86,7 @@ export const useTeacherSummaries = ({ startDate, endDate, enabled, extraOrgId, e
   }
 
   const { data, ...rest } = useQuery(queryKey, queryFn, {
-    enabled,
+    enabled: true,
     retry: false,
     refetchOnWindowFocus: false,
     keepPreviousData: true,
@@ -96,7 +101,10 @@ export const useTeacherSummaries = ({ startDate, endDate, enabled, extraOrgId, e
 /**
  * Fetches all organisation rows for user based on their org access
  */
-export const useOrganisationSummaries = ({ startDate, endDate, viewingMode, enabled, extraOrgId, extraOrgMode }) => {
+export const useOrganisationSummaries = () => {
+  const { dateRange, viewingMode, extraOrgId, extraOrgMode } = useSummaryContext()
+  const { start: startDate, end: endDate } = dateRange
+
   const queryKey = ['summaries-v2-organisations', startDate, endDate, viewingMode]
   if (extraOrgId && extraOrgMode) queryKey.push({ extraOrgId, extraOrgMode })
 
@@ -115,7 +123,7 @@ export const useOrganisationSummaries = ({ startDate, endDate, viewingMode, enab
   }
 
   const { data, ...rest } = useQuery(queryKey, queryFn, {
-    enabled,
+    enabled: true,
     retry: false,
     refetchOnWindowFocus: false,
     keepPreviousData: true,

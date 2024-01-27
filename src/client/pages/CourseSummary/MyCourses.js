@@ -12,14 +12,8 @@ import SeparateOrganisationModeSelector from './SeparateOrganisationModeSelector
  */
 const MyCourses = () => {
   const { t } = useTranslation()
-  const { dateRange, questions, extraOrgId, extraOrgMode } = useSummaryContext()
-  const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries({
-    startDate: dateRange.start,
-    endDate: dateRange.end,
-    enabled: true,
-    extraOrgId,
-    extraOrgMode,
-  })
+  const { questions } = useSummaryContext()
+  const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries()
 
   const show = !isOrganisationsLoading && questions?.length && organisations && questions
 
