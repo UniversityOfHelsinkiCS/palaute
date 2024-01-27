@@ -29,7 +29,7 @@ Summary.init(
       type: DATEONLY,
       allowNull: false,
     },
-    extraResponsibleOrgIds: {
+    extraOrgIds: {
       type: ARRAY(STRING),
     },
     /**
