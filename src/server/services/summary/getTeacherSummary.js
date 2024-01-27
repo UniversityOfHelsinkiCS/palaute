@@ -7,11 +7,10 @@ const {
   FeedbackTarget,
   UserFeedbackTarget,
   CourseRealisation,
-  CourseRealisationsOrganisation,
 } = require('../../models')
-const { sumSummaries, subtractSummary } = require('./utils')
+const { sumSummaries } = require('./utils')
 
-const getTeacherSummary = async ({ startDate, endDate, user, separateOrganisationId }) => {
+const getTeacherSummary = async ({ startDate, endDate, user }) => {
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
     include: [
@@ -63,12 +62,6 @@ const getTeacherSummary = async ({ startDate, endDate, user, separateOrganisatio
                     as: 'summary',
                     required: true,
                   },
-                  {
-                    model: CourseRealisationsOrganisation,
-                    as: 'courseRealisationsOrganisations',
-                    separate: true,
-                    required: true,
-                  },
                 ],
               },
             ],
@@ -77,8 +70,6 @@ const getTeacherSummary = async ({ startDate, endDate, user, separateOrganisatio
       },
     ],
   })
-
-  const separatedOrganisation = separateOrganisationId ? await Organisation.findByPk(separateOrganisationId) : null
 
   const organisationsJson = organisations.map(org => {
     org.summary = sumSummaries(org.summaries)
@@ -102,33 +93,6 @@ const getTeacherSummary = async ({ startDate, endDate, user, separateOrganisatio
         delete cu.dataValues.feedbackTargets
 
         const resultingCourseUnits = []
-
-        // If we have separateOrganisationId, we want to create a separate cu summary by that organisation, and not include it in the course unit's summary.
-        if (separatedOrganisation) {
-          // First find all course realisations that belong to the separate organisation.
-          const separateCourseRealisations = courseRealisations.filter(cur =>
-            cur.courseRealisationsOrganisations.some(cro => cro.organisationId === separateOrganisationId)
-          )
-
-          // Summarise them.
-          const separateSummary = sumSummaries(separateCourseRealisations.map(cur => cur.summary))
-
-          if (separateSummary) {
-            // Subtract the separate summary from the main course unit summary.
-            cu.summary = subtractSummary(cu.summary, separateSummary)
-
-            // Create a separate course unit (its entirely artificial).
-            const separateCourseUnit = {
-              ...cu.toJSON(),
-              id: `${cu.id}-${separatedOrganisation.id}`,
-              summary: separateSummary,
-              courseRealisations: separateCourseRealisations,
-              separateOrganisation: separatedOrganisation,
-            }
-
-            resultingCourseUnits.push(separateCourseUnit)
-          }
-        }
 
         resultingCourseUnits.push({ ...cu.toJSON(), courseRealisations })
 

@@ -144,19 +144,15 @@ const getByCourseUnit = async (req, res) => {
 }
 
 const getCoursesV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString, separateOrganisationId } = req.query
+  const { startDate: startDateString, endDate: endDateString } = req.query
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
-  if (separateOrganisationId && typeof separateOrganisationId !== 'string') {
-    return ApplicationError.BadRequest('separateOrganisationId must be a string')
-  }
 
   const organisations = await getTeacherSummary({
     user,
     startDate,
     endDate,
-    separateOrganisationId,
   })
 
   return res.send(organisations)
