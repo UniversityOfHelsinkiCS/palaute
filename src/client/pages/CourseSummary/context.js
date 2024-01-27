@@ -43,7 +43,7 @@ const summaryContext = React.createContext({
   setViewingMode: () => {},
   extraOrgId: '',
   setExtraOrgId: () => {},
-  extraOrgMode: '',
+  extraOrgMode: 'include',
   setExtraOrgMode: () => {},
 })
 
@@ -168,7 +168,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
   // How to show separate organisation courses
   const [extraOrgMode, setExtraOrgMode] = React.useState(() => {
     const extraOrgMode = params.get('extraOrgMode')
-    return extraOrgMode || ''
+    return extraOrgMode || 'include'
   })
 
   const updateExtraOrgModeQS = React.useCallback(extraOrgMode => {
