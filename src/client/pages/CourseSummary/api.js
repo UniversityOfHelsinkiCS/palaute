@@ -5,7 +5,7 @@ import { useSummaryContext } from './context'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 
-const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId }) => {
+const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId, extraOrgId, extraOrgMode }) => {
   const { data } = await apiClient.get(`course-summaries/organisations-v2`, {
     params: {
       entityId,
@@ -13,6 +13,8 @@ const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId }) 
       endDate,
       include,
       tagId,
+      extraOrgId,
+      extraOrgMode,
     },
   })
 
@@ -41,11 +43,15 @@ export const getCourseUnits = async ({ startDate, endDate, organisationId }) => 
  * include can be 'childOrganisations' or 'courseUnits', in which case the organisation's
  * corresponding children are included in the response, allowing the row to be expanded.
  */
-export const useSummaries = ({ startDate, endDate, entityId, enabled, include, tagId }) => {
+export const useSummaries = ({ entityId, enabled, include }) => {
+  const { dateRange, tagId, extraOrgId, extraOrgMode } = useSummaryContext()
+  const { start: startDate, end: endDate } = dateRange
+
   const queryKey = ['summaries-v2', entityId, startDate, endDate, include]
   if (tagId) queryKey.push(tagId)
+  if (extraOrgId && extraOrgMode) queryKey.push({ extraOrgId, extraOrgMode })
 
-  const queryFn = () => fetchSummaries({ startDate, endDate, entityId, include, tagId })
+  const queryFn = () => fetchSummaries({ startDate, endDate, entityId, include, tagId, extraOrgId, extraOrgMode })
 
   const { data, ...rest } = useQuery(queryKey, queryFn, {
     enabled,

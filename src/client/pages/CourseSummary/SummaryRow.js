@@ -171,7 +171,7 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   </>
 )
 
-const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) => {
+const TagSummaryRow = ({ tag, questions, organisationId }) => {
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = React.useState(false)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
@@ -199,15 +199,7 @@ const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) =
           alignItems="stretch"
           gap="0.4rem"
         >
-          {isOpen && (
-            <CourseUnitsList
-              organisationId={organisationId}
-              startDate={startDate}
-              endDate={endDate}
-              questions={questions}
-              tagId={tag.id}
-            />
-          )}
+          {isOpen && <CourseUnitsList organisationId={organisationId} questions={questions} />}
         </Box>
       )}
     </Box>
@@ -269,11 +261,9 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   )
 }
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
-    startDate,
-    endDate,
     include: 'childOrganisations',
     enabled: !initialChildOrganisations?.length,
   })
@@ -289,8 +279,6 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
   return orderedAndFilteredOrganisations?.map(org => (
     <OrganisationSummaryRow
       key={org.id}
-      startDate={startDate}
-      endDate={endDate}
       organisation={org}
       organisationId={org.id}
       alwaysOpen={orderedAndFilteredOrganisations.length === 1}
@@ -298,11 +286,9 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
   ))
 }
 
-const TagList = ({ organisationId, initialTags, startDate, endDate, questions }) => {
+const TagList = ({ organisationId, initialTags, questions }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
-    startDate,
-    endDate,
     include: 'tags',
     enabled: !initialTags?.length,
   })
@@ -319,26 +305,16 @@ const TagList = ({ organisationId, initialTags, startDate, endDate, questions })
   }
 
   return orderedTags?.map(t => (
-    <TagSummaryRow
-      key={t.id}
-      tag={t}
-      questions={questions}
-      organisationId={organisationId}
-      startDate={startDate}
-      endDate={endDate}
-    />
+    <TagSummaryRow key={t.id} tag={t} questions={questions} organisationId={organisationId} />
   ))
 }
 
-const CourseUnitsList = ({ organisationId, initialCourseUnits, startDate, endDate, questions, tagId }) => {
+const CourseUnitsList = ({ organisationId, initialCourseUnits, questions }) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
-    startDate,
-    endDate,
     include: 'courseUnits',
     enabled: !initialCourseUnits?.length,
-    tagId,
   })
 
   const childCourseUnits = initialCourseUnits ?? organisation?.courseUnits
@@ -396,12 +372,10 @@ const OrganisationResults = ({ summary, questions, linkComponent }) => {
   )
 }
 
-const OrganisationResultsLoader = ({ organisationId, initialOrganisation, startDate, endDate, questions }) => {
+const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questions }) => {
   const initialSummary = initialOrganisation?.summary
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
-    startDate,
-    endDate,
     enabled: !initialSummary,
   })
 
@@ -418,13 +392,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, startD
   return <OrganisationResults summary={summary} questions={questions} linkComponent={linkComponent} />
 }
 
-export const OrganisationSummaryRow = ({
-  alwaysOpen = false,
-  startDate,
-  endDate,
-  organisation: initialOrganisation,
-  organisationId,
-}) => {
+export const OrganisationSummaryRow = ({ alwaysOpen = false, organisation: initialOrganisation, organisationId }) => {
   const { questions } = useSummaryContext()
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -456,8 +424,6 @@ export const OrganisationSummaryRow = ({
         <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         {inView && (
           <OrganisationResultsLoader
-            startDate={startDate}
-            endDate={endDate}
             questions={questions}
             organisationId={organisationId}
             initialOrganisation={initialOrganisation}
@@ -477,23 +443,17 @@ export const OrganisationSummaryRow = ({
               <ChildOrganisationsList
                 organisationId={organisationId}
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
-                startDate={startDate}
-                endDate={endDate}
               />
               {tagsEnabled && (
                 <TagList
                   organisationId={organisationId}
                   initialTags={initialOrganisation?.tags}
-                  startDate={startDate}
-                  endDate={endDate}
                   questions={questions}
                 />
               )}
               <CourseUnitsList
                 organisationId={organisationId}
                 initialCourseUnits={initialOrganisation?.courseUnits}
-                startDate={startDate}
-                endDate={endDate}
                 questions={questions}
               />
             </>
