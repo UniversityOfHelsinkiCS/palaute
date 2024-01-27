@@ -1,6 +1,5 @@
 /* eslint-disable no-continue */
 const { Op, QueryTypes } = require('sequelize')
-const Sentry = require('@sentry/node')
 const datefns = require('date-fns')
 const _ = require('lodash')
 const {
@@ -90,7 +89,6 @@ const buildSummariesForPeriod = async ({
   // Since the initial version, I've already added cu groups and tags.
 
   // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
-  console.time('db read')
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       // Only consider feedback targets that have feedback.
@@ -188,10 +186,6 @@ const buildSummariesForPeriod = async ({
     ],
     transaction,
   })
-  console.timeEnd('db read')
-  console.time('mangel')
-
-  console.log('fbts: ', feedbackTargets.length)
 
   // Start summing the stuff for course realisations
   const courseRealisationSummaries = []
@@ -264,7 +258,6 @@ const buildSummariesForPeriod = async ({
       extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
-  console.log('curSummaries', courseRealisationSummaries.length)
 
   // Make the initial CU summaries.
   const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId))
@@ -282,7 +275,6 @@ const buildSummariesForPeriod = async ({
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
     cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
-  console.log('cuSummaries', courseUnitSummaries.length)
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
   const courseUnitGroupSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId))
@@ -291,7 +283,6 @@ const buildSummariesForPeriod = async ({
       courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
     }))
     .flatMap(cuGroup => getExtraOrgVariants(cuGroup, separateOrgId))
-  console.log('cuGroup', courseUnitGroupSummaries.length)
 
   // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
   for (const cuGroup of courseUnitGroupSummaries) {
@@ -317,7 +308,6 @@ const buildSummariesForPeriod = async ({
       ),
     }))
     .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
-  console.log('tag', tagSummaries.length)
 
   // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
   for (const tag of tagSummaries) {
@@ -427,18 +417,14 @@ const buildSummariesForPeriod = async ({
     .filter(summary => summary.data && summary.data.feedbackCount > 0)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
-  console.timeEnd('mangel')
-  console.time('db write')
+
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, {
-    updateOnDuplicate: ['data'],
     transaction,
   })
-  console.timeEnd('db write')
 }
 
 const summariesHaveToBeFullyRebuilt = async () => {
-  return true /* eslint-disable */
   // If there are no summaries, they have to be built.
   // Also if there are summaries but they date back to more than 1 year, we should rebuild everything
   const latestSummary = await Summary.findOne({
@@ -521,7 +507,7 @@ const buildSummaries = async () => {
 
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    console.time(`${start.toISOString()}-${end.toISOString()}`)
+    // console.time(`${start.toISOString()}-${end.toISOString()}`)
 
     await sequelize.transaction(async transaction => {
       // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
@@ -543,7 +529,7 @@ const buildSummaries = async () => {
       })
     })
 
-    console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
+    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 
