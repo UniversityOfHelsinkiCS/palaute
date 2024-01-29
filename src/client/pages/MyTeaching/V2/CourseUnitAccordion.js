@@ -66,7 +66,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           <Typography component="h3" variant="body1" sx={{ mr: 2 }}>
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {fetchFeedbackResponseChip && (
               <FeedbackResponseChip
                 id={feedbackTargetId}
