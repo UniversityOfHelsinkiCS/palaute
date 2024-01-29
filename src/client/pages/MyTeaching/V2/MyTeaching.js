@@ -16,6 +16,7 @@ import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 import { getGroupedCourseUnits } from '../utils'
 import CourseGroupItems from './CourseGroup/CourseGroupItems'
+import CourseGroupTitle from './CourseGroup/CourseGroupTitle'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
@@ -57,6 +58,7 @@ const MyTeaching = () => {
         </Alert>
       ) : (
         <CourseGroup courseUnits={sortedCourseUnits}>
+          <CourseGroupTitle title="Yliopistokurssit" badgeCount={sortedCourseUnits.length} />
           <CourseGroupItems courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
         </CourseGroup>
       )}
