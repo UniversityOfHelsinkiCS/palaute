@@ -26,8 +26,8 @@ const MyTeaching = () => {
 
   const { courseUnits, isLoading } = useTeacherCourseUnits()
 
-  const groupedCourseUnits = useMemo(() => getGroupedCourseUnits(courseUnits), [courseUnits])
-  const sortedCourseUnits = useMemo(() => groupedCourseUnits[status], [groupedCourseUnits, status])
+  const groupedCourseUnits = getGroupedCourseUnits(courseUnits)
+  const sortedCourseUnits = groupedCourseUnits[status]
 
   return (
     <>
