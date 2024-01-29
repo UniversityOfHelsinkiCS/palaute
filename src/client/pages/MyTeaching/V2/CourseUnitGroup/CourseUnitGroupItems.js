@@ -1,19 +1,18 @@
 import React from 'react'
 
-import { Box, Divider } from '@mui/material'
-import Masonry from '@mui/lab/Masonry'
+import { Divider, Grid } from '@mui/material'
 
 import CourseUnitAccordion from '../CourseUnitAccordion'
 
 const CourseUnitGroupItems = ({ courseUnits, status }) => (
-  <Masonry spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
+  <Grid container spacing={2} columns={{ xs: 4, sm: 8 }}>
     {courseUnits.map(courseUnit => (
-      <Box key={courseUnit.courseCode}>
+      <Grid item xs={4} sm={4} key={courseUnit.courseCode}>
         <CourseUnitAccordion courseUnit={courseUnit} group={status} />
         <Divider />
-      </Box>
+      </Grid>
     ))}
-  </Masonry>
+  </Grid>
 )
 
 export default CourseUnitGroupItems
