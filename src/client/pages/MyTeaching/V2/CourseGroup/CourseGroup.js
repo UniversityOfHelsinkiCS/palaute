@@ -5,7 +5,7 @@ import Masonry from '@mui/lab/Masonry'
 
 import { useTranslation } from 'react-i18next'
 
-import CourseUnitAccordion from './CourseUnitAccordion'
+import CourseUnitAccordion from '../CourseUnitAccordion'
 
 const styles = {
   wrapper: {
@@ -35,7 +35,7 @@ const styles = {
   },
 }
 
-const GroupAccordion = ({ title, courseUnits, group }) => {
+const CourseGroup = ({ title, courseUnits, group }) => {
   const { t } = useTranslation()
 
   return (
@@ -58,4 +58,4 @@ const GroupAccordion = ({ title, courseUnits, group }) => {
   )
 }
 
-export default GroupAccordion
+export default CourseGroup

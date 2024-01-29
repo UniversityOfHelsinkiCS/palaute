@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
 
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
 
 import StatusTabs from './StatusTabs'
-import GroupAccordion from './GroupAccordion'
+import CourseGroup from './CourseGroup/CourseGroup'
 
 import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
@@ -55,7 +55,7 @@ const MyTeaching = () => {
           {t('teacherView:noCoursesV2')}
         </Alert>
       ) : (
-        <GroupAccordion courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
+        <CourseGroup courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
       )}
     </>
   )
