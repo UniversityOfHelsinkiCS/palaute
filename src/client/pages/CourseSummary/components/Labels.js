@@ -6,9 +6,9 @@ import { useIsFetching } from 'react-query'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
-import { getLanguageValue } from '../../util/languageUtils'
-import TeacherChip from '../../components/common/TeacherChip'
-import { getDateRangeString } from '../../util/getDateRangeString'
+import { getLanguageValue } from '../../../util/languageUtils'
+import TeacherChip from '../../../components/common/TeacherChip'
+import { getDateRangeString } from '../../../util/getDateRangeString'
 
 const TeacherChips = ({ courseRealisation }) => {
   const { t } = useTranslation()

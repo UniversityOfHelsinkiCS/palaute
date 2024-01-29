@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getLanguageValue } from '../../util/languageUtils'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 import VerticalHeading from './VerticalHeading'
 

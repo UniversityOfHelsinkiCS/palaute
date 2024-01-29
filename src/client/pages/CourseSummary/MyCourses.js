@@ -3,9 +3,10 @@ import { Alert, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
-import { SorterRow, TeacherOrganisationSummaryRow } from './SummaryRow'
+import { TeacherOrganisationSummaryRow } from './SummaryRow'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import SorterRow from './components/SorterRow'
 
 /**
  *

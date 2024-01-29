@@ -1,23 +1,20 @@
 import React from 'react'
 import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { ChevronRight } from '@mui/icons-material'
-import { Link as RouterLink } from 'react-router-dom'
 import { useInView } from 'react-intersection-observer'
-import { Box, ButtonBase, Typography, Tooltip, Skeleton } from '@mui/material'
+import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../util/languageUtils'
 import SummaryResultItem from '../../components/SummaryResultItem/SummaryResultItem'
-import { CourseUnitLabel, OrganisationLabel, TagLabel } from './Labels'
-import PercentageCell from './PercentageCell'
+import { CourseUnitLabel, OrganisationLabel, TagLabel } from './components/Labels'
+import PercentageCell from './components/PercentageCell'
 import useRandomColor from '../../hooks/useRandomColor'
 import { useOrderedAndFilteredOrganisations } from './utils'
 import { useSummaryContext } from './context'
-import Sort from './Sort'
-import { OrganisationLink } from './OrganisationLink'
+import { OrganisationLink } from './components/OrganisationLink'
 import { useUserOrganisationAccessByCode } from '../../hooks/useUserOrganisationAccess'
-import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import { TAGS_ENABLED } from '../../util/common'
+import RowHeader from './components/RowHeader'
 
 const styles = {
   resultCell: {
@@ -139,36 +136,6 @@ const Loader = () => (
       />
     </Box>
   </Box>
-)
-
-const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link }) => (
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  <>
-    {openable ? (
-      <ButtonBase onClick={handleOpenRow} sx={styles.accordionButton} variant="contained" disableRipple>
-        {label}
-        <Box sx={styles.arrowContainer}>
-          <ChevronRight sx={{ ...styles.arrow, ...(isOpen ? styles.arrowOpen : {}) }} />
-        </Box>
-      </ButtonBase>
-    ) : (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
-      <>
-        {link ? (
-          <ButtonBase
-            to={link}
-            component={RouterLink}
-            sx={{ ...styles.accordionButton, ...styles.link }}
-            variant="contained"
-          >
-            {label}
-          </ButtonBase>
-        ) : (
-          <Box sx={styles.unclickableLabel}>{label}</Box>
-        )}
-      </>
-    )}
-  </>
 )
 
 const TagSummaryRow = ({ tag, questions, organisationId }) => {
@@ -382,7 +349,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   const access = useUserOrganisationAccessByCode(initialOrganisation?.code)
 
   if (isLoading) {
-    return 'Ladataan...'
+    return <Loader />
   }
 
   const summary = initialSummary ?? organisation?.summary
@@ -512,45 +479,6 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
           ))}
         </Box>
       )}
-    </Box>
-  )
-}
-
-export const SorterRow = () => {
-  const { t, i18n } = useTranslation()
-  const { dateRange, setDateRange, option, setOption, questions } = useSummaryContext()
-
-  const handleChangeTimeRange = nextDateRange => {
-    setDateRange(nextDateRange)
-  }
-
-  const filterComponent = (
-    <YearSemesterSelector
-      value={dateRange ?? { start: new Date(), end: new Date() }}
-      onChange={handleChangeTimeRange}
-      option={option}
-      setOption={setOption}
-    />
-  )
-
-  return (
-    <Box display="flex" alignItems="stretch" gap="0.2rem">
-      <RowHeader label={filterComponent} />
-      {questions.map(q => (
-        <Sort
-          key={q.id}
-          field={q.id}
-          label={getLanguageValue(q.data.label, i18n.language)}
-          width={styles.resultCell.minWidth}
-        />
-      ))}
-      <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
-      <Sort field="feedbackPercentage" label={t('courseSummary:feedbackPercentage')} width={styles.percentCell.width} />
-      <Sort
-        field="feedbackResponsePercentage"
-        label={t('courseSummary:feedbackResponsePercentage')}
-        width={styles.percentCell.width}
-      />
     </Box>
   )
 }

@@ -2,12 +2,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, LinearProgress, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material'
 import { Reorder, Segment } from '@mui/icons-material'
-import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
+import { OrganisationSummaryRow } from './SummaryRow'
 import { useSummaryContext } from './context'
 import { useOrganisationSummaries } from './api'
 import { useOrderedAndFilteredOrganisations } from './utils'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import SorterRow from './components/SorterRow'
 
 const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
   const { t } = useTranslation()

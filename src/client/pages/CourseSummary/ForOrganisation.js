@@ -1,11 +1,12 @@
 import React from 'react'
 import { Box, LinearProgress } from '@mui/material'
-import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
+import { OrganisationSummaryRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { SummaryContextProvider, useSummaryContext } from './context'
-import SummaryScrollContainer from './SummaryScrollContainer'
+import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import ExtraOrganisationModeSelector from './ExtraOrganisationModeSelector'
+import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import SorterRow from './components/SorterRow'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, tagId } = useSummaryContext()

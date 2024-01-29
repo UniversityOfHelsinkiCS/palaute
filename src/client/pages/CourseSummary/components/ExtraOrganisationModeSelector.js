@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, FormControl, MenuItem, Select } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useSummaryContext } from './context'
+import { useSummaryContext } from '../context'
 
 const ExtraOrganisationModeSelector = ({ organisationId }) => {
   const { t } = useTranslation()

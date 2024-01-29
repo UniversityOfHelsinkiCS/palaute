@@ -11,7 +11,7 @@ import { Link, Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import SummaryResultItem from '../../components/SummaryResultItem'
-import PercentageCell from './PercentageCell'
+import PercentageCell from './components/PercentageCell'
 
 const styles = {
   resultCell: {
