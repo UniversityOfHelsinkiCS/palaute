@@ -11,7 +11,7 @@ const CourseGroupTitle = ({ title, badgeContent }) => (
       fontSize: '18px',
       fontWeight: theme => theme.typography.fontWeightMedium,
       position: 'absolute',
-      backgroundColor: '#fff',
+      backgroundColor: theme => theme.palette.background.default,
       width: 'full',
       zIndex: 1,
     }}
