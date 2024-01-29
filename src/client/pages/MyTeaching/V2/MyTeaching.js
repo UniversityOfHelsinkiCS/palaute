@@ -15,6 +15,7 @@ import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 import { getGroupedCourseUnits } from '../utils'
+import CourseGroupItems from './CourseGroup/CourseGroupItems'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
@@ -55,7 +56,9 @@ const MyTeaching = () => {
           {t('teacherView:noCoursesV2')}
         </Alert>
       ) : (
-        <CourseGroup courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
+        <CourseGroup courseUnits={sortedCourseUnits}>
+          <CourseGroupItems courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
+        </CourseGroup>
       )}
     </>
   )

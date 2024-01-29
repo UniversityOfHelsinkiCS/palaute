@@ -1,11 +1,8 @@
 import React from 'react'
 
-import { Typography, Box, Divider } from '@mui/material'
-import Masonry from '@mui/lab/Masonry'
+import { Typography, Box } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
-
-import CourseUnitAccordion from '../CourseUnitAccordion'
 
 const styles = {
   wrapper: {
@@ -35,7 +32,7 @@ const styles = {
   },
 }
 
-const CourseGroup = ({ title, courseUnits, group }) => {
+const CourseGroup = ({ title, courseUnits, children }) => {
   const { t } = useTranslation()
 
   return (
@@ -44,16 +41,7 @@ const CourseGroup = ({ title, courseUnits, group }) => {
         Yliopistokurssit ({courseUnits.length})
       </Typography>
 
-      <Box sx={styles.details}>
-        <Masonry spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
-          {courseUnits.map((courseUnit, i) => (
-            <Box key={courseUnit.courseCode}>
-              <CourseUnitAccordion courseUnit={courseUnit} group={group} />
-              <Divider />
-            </Box>
-          ))}
-        </Masonry>
-      </Box>
+      <Box sx={styles.details}>{children}</Box>
     </Box>
   )
 }
