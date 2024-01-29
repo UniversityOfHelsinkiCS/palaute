@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Typography } from '@mui/material'
+import { Badge, Typography } from '@mui/material'
 
-const CourseGroupTitle = ({ title, badgeCount }) => (
+const CourseGroupTitle = ({ title, badgeContent }) => (
   <Typography
     component="h2"
     sx={{
@@ -16,7 +16,10 @@ const CourseGroupTitle = ({ title, badgeCount }) => (
       zIndex: 1,
     }}
   >
-    {title} ({badgeCount})
+    {title}
+    {badgeContent && (
+      <Badge badgeContent={badgeContent} color="primary" sx={{ marginLeft: '1.5rem', marginRight: '1rem' }} />
+    )}
   </Typography>
 )
 

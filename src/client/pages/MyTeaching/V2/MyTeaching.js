@@ -57,8 +57,8 @@ const MyTeaching = () => {
           {t('teacherView:noCoursesV2')}
         </Alert>
       ) : (
-        <CourseGroup courseUnits={sortedCourseUnits}>
-          <CourseGroupTitle title="Yliopistokurssit" badgeCount={sortedCourseUnits.length} />
+        <CourseGroup>
+          <CourseGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
           <CourseGroupItems courseUnits={sortedCourseUnits} group={status.toUpperCase()} />
         </CourseGroup>
       )}
