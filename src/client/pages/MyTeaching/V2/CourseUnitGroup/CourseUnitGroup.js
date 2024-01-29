@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box } from '@mui/material'
 
-const CourseGroup = ({ children }) => (
+const CourseUnitGroup = ({ children }) => (
   <Box
     sx={{
       marginTop: '4rem',
@@ -20,4 +20,4 @@ const CourseGroup = ({ children }) => (
   </Box>
 )
 
-export default CourseGroup
+export default CourseUnitGroup
