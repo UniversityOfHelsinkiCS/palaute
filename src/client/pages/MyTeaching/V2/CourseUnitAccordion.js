@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
 
-import FeedbackTargetList from '../FeedbackTargetList'
+import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
 import InterimFeedbackChip from './chips/InterimFeedbackChip'
 
 import FeedbackResponseChip from '../FeedbackResponseChip'
@@ -66,7 +66,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
           <Typography component="h3" variant="body1" sx={{ mr: 2 }}>
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', marginTop: 2 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             {fetchFeedbackResponseChip && (
               <FeedbackResponseChip
                 id={feedbackTargetId}
