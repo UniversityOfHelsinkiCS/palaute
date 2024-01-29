@@ -7,12 +7,12 @@ const CourseUnitGroup = ({ children }) => (
     sx={{
       marginTop: '4rem',
       padding: '1rem',
-      borderTop: '1px solid #e0e0e0',
-      borderRight: '1px solid #e0e0e0',
-      borderLeft: '1px solid #e0e0e0',
+      borderTop: theme => `1px solid ${theme.palette.primary.light}`,
+      borderRight: theme => `1px solid ${theme.palette.primary.light}`,
+      borderLeft: theme => `1px solid ${theme.palette.primary.light}`,
       position: 'relative',
       '&:hover': {
-        borderColor: theme => theme.palette.primary.main,
+        borderColor: theme => theme.palette.primary.dark,
       },
     }}
   >
