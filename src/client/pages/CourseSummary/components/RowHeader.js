@@ -4,34 +4,6 @@ import { Box, ButtonBase } from '@mui/material'
 import { ChevronRight } from '@mui/icons-material'
 
 const styles = {
-  resultCell: {
-    whiteSpace: 'nowrap',
-    textAlign: 'center',
-    minWidth: '3.5rem',
-    aspectRatio: 1, // Make them square
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  countCell: {
-    whiteSpace: 'nowrap',
-    textAlign: 'center',
-    flexShrink: 0,
-    width: '7rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  percentCell: {
-    whiteSpace: 'nowrap',
-    textAlign: 'right',
-    width: '4rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    flexShrink: 0,
-  },
   accordionButton: {
     width: '22rem',
     flexShrink: 0,
@@ -84,24 +56,6 @@ const styles = {
   },
   arrowOpen: {
     transform: 'rotate(90deg)',
-  },
-  given: {
-    color: theme => theme.palette.success.main,
-    '&:hover': {
-      color: theme => theme.palette.success.light,
-    },
-  },
-  notGiven: {
-    color: theme => theme.palette.error.main,
-    '&:hover': {
-      color: theme => theme.palette.error.light,
-    },
-  },
-  feedbackOpen: {
-    color: theme => theme.palette.primary.main,
-    '&:hover': {
-      color: theme => theme.palette.primary.light,
-    },
   },
 }
 
