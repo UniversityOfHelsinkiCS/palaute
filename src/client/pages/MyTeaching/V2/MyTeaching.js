@@ -9,14 +9,16 @@ import { useTranslation } from 'react-i18next'
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
 
 import StatusTabs from './StatusTabs'
-import CourseGroup from './CourseUnitGroup/CourseUnitGroup'
+import CourseUnitAccordion from './CourseUnitAccordion'
+import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
+import CourseUnitGroupGrid from './CourseUnitGroup/CourseUnitGroupGrid'
+import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
+import CourseUnitGroupGridItem from './CourseUnitGroup/CourseUnitGroupGridItem'
 
 import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
 import { getGroupedCourseUnits } from '../utils'
-import CourseUnitGroupItems from './CourseUnitGroup/CourseUnitGroupItems'
-import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
@@ -57,10 +59,16 @@ const MyTeaching = () => {
           {t('teacherView:noCoursesV2')}
         </Alert>
       ) : (
-        <CourseGroup>
+        <CourseUnitGroup>
           <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
-          <CourseUnitGroupItems courseUnits={sortedCourseUnits} status={status.toUpperCase()} />
-        </CourseGroup>
+          <CourseUnitGroupGrid>
+            {sortedCourseUnits.map(courseUnit => (
+              <CourseUnitGroupGridItem key={courseUnit.courseCode}>
+                <CourseUnitAccordion courseUnit={courseUnit} group={status.toUpperCase()} />
+              </CourseUnitGroupGridItem>
+            ))}
+          </CourseUnitGroupGrid>
+        </CourseUnitGroup>
       )}
     </>
   )
