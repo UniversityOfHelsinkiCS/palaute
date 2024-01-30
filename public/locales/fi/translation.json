@@ -278,6 +278,8 @@
     "setHidden": "Piilota näkyvistä",
     "setVisible": "Poista piilotus",
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille",
+    "hideSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" on nyt piilotettu. ({{count}} kpl)",
+    "showSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" ovat nyt näkyviä. ({{count}} kpl)",
     "hidingFeatureInfoTitle": "Tietoa vastausten näkyvyydestä",
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
     "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät kurssin opiskelijoille.",

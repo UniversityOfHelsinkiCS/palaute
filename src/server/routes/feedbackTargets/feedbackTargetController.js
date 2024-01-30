@@ -18,6 +18,7 @@ const {
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit,
   getFeedbackTargetsForOrganisation,
+  hideFeedback,
 } = require('../../services/feedbackTargets')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
 
@@ -228,6 +229,14 @@ adRouter.get('/:id/logs', async (req, res) => {
   const logs = await getFeedbackTargetLogs({ feedbackTargetId, user })
 
   return res.send(logs)
+})
+
+adRouter.put('/:id/hide-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent, hidden } = req.body
+  const count = await hideFeedback({ user, feedbackTargetId, questionId, feedbackContent, hidden })
+  res.send({ hidden, count })
 })
 
 adRouter.use('/', interimFeedbackController)

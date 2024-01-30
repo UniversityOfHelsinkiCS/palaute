@@ -279,6 +279,8 @@
     "setHidden": "Hide this answer",
     "setVisible": "Unhide",
     "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and programme administrators",
+    "hideSuccess": "Ok. Answers to this question with the content \"{{content}}...\" ({{count}}) have been hidden.",
+    "showSuccess": "Ok. Answers to this question with the content  \"{{content}}...\" ({{count}}) have been made visible.",
     "hidingFeatureInfoTitle": "Info about hiding answers",
     "publishingInfo": "The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled \"Not public\".",
     "unpublishingInfo": "The answers to this questions are shown to students.",
