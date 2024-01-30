@@ -26,6 +26,8 @@ const useDeleteOpenFeedback = () => {
   const canDelete = isAdmin
 
   const deleteAnswer = async feedback => {
+    window.alert('TÄMÄ EI TOIMI JUURI NYT. VALITAN.')
+    return /* eslint-disable */
     if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
 
     try {
@@ -37,6 +39,7 @@ const useDeleteOpenFeedback = () => {
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
+    /* eslint-enable */
   }
 
   return {
