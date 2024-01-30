@@ -8,7 +8,7 @@ import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSumma
 import { copyLink, getCourseUnitSummaryPath } from './utils'
 import LinkButton from '../../components/common/LinkButton'
 import FeedbackTargetDates from './Dates/Dates'
-import PercentageCell from '../CourseSummary/PercentageCell'
+import PercentageCell from '../CourseSummary/components/PercentageCell'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { TagChip } from '../../components/common/TagChip'

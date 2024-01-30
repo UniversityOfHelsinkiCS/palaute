@@ -1,12 +1,9 @@
-import groupBy from 'lodash/groupBy'
 import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
 import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { getColor } from '../../../../../util/resultColors'
-
-const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 const COMMA_REPLACE = /,/g
 
@@ -150,39 +147,4 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
       ],
     },
   }
-}
-
-export const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
-  if (!questions) {
-    return []
-  }
-
-  const feedbacksArray = feedbacks ?? []
-
-  const feedbackData = feedbacksArray
-    .reduce(
-      (acc, feedback) => [
-        ...acc,
-        ...(Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []),
-      ],
-      []
-    ) // filter short answers which are not a number
-    .filter(answer => answer.data?.length > 1 === Number.isNaN(Number(answer.data)))
-
-  const feedbackDataByQuestionId = groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
-
-  return questionOrder
-    ? questionOrder
-        .map(id => questions.find(q => q.id === id))
-        .filter(q => INCLUDED_TYPES.includes(q?.type))
-        .map(q => ({
-          ...q,
-          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
-        }))
-    : questions
-        .filter(q => INCLUDED_TYPES.includes(q?.type))
-        .map(q => ({
-          ...q,
-          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
-        }))
 }
