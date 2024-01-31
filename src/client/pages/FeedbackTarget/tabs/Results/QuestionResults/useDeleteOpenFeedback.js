@@ -15,7 +15,7 @@ const useDeleteOpenFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const mutationFn = async ({ questionId, feedbackContent }) =>
-    apiClient.delete(`/feedback-targets/${feedbackTarget.id}/hide-feedback`, { feedbackContent, questionId })
+    apiClient.put(`/feedback-targets/${feedbackTarget.id}/delete-feedback`, { feedbackContent, questionId })
 
   const mutation = useMutation(mutationFn, {
     onSuccess: () => {

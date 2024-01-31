@@ -21,6 +21,7 @@ const {
   hideFeedback,
 } = require('../../services/feedbackTargets')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
+const { adminDeleteFeedback } = require('../../services/feedbackTargets/hideFeedback')
 
 const adRouter = Router()
 const noadRouter = Router()
@@ -237,6 +238,14 @@ adRouter.put('/:id/hide-feedback', async (req, res) => {
   const { questionId, feedbackContent, hidden } = req.body
   const count = await hideFeedback({ user, feedbackTargetId, questionId, feedbackContent, hidden })
   res.send({ hidden, count })
+})
+
+adRouter.put('/:id/delete-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent } = req.body
+  const count = await adminDeleteFeedback({ user, feedbackTargetId, questionId, feedbackContent })
+  res.send({ count })
 })
 
 adRouter.use('/', interimFeedbackController)
