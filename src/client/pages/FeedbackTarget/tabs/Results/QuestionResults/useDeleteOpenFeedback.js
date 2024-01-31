@@ -14,8 +14,8 @@ const useDeleteOpenFeedback = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const mutationFn = async ({ feedbackId, questionId }) =>
-    apiClient.delete(`/feedbacks/${feedbackId}/question/${questionId}`)
+  const mutationFn = async ({ questionId, feedbackContent }) =>
+    apiClient.delete(`/feedback-targets/${feedbackTarget.id}/hide-feedback`, { feedbackContent, questionId })
 
   const mutation = useMutation(mutationFn, {
     onSuccess: () => {
@@ -26,20 +26,17 @@ const useDeleteOpenFeedback = () => {
   const canDelete = isAdmin
 
   const deleteAnswer = async feedback => {
-    window.alert('TÄMÄ EI TOIMI JUURI NYT. VALITAN.')
-    return /* eslint-disable */
     if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
 
     try {
       await mutation.mutateAsync({
-        feedbackId: feedback.feedbackId,
+        feedbackContent: feedback.data,
         questionId: feedback.questionId,
       })
       enqueueSnackbar(t('feedbackTargetResults:deleteSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
-    /* eslint-enable */
   }
 
   return {
