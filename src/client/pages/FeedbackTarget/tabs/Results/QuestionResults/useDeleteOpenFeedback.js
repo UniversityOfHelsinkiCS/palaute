@@ -18,8 +18,12 @@ const useDeleteOpenFeedback = () => {
     apiClient.put(`/feedback-targets/${feedbackTarget.id}/delete-feedback`, { feedbackContent, questionId })
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: () => {
+    onSuccess: (response, { feedbackContent }) => {
       queryClient.refetchQueries(['feedbackTargetFeedbacks', String(feedbackTarget.id)])
+      enqueueSnackbar(
+        t('feedbackTargetResults:deleteSuccess', { content: feedbackContent, count: response.data.count }),
+        { variant: 'success' }
+      )
     },
   })
 
@@ -33,7 +37,6 @@ const useDeleteOpenFeedback = () => {
         feedbackContent: feedback.data,
         questionId: feedback.questionId,
       })
-      enqueueSnackbar(t('feedbackTargetResults:deleteSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
