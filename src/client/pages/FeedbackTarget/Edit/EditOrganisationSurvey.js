@@ -6,11 +6,11 @@ import { useSnackbar } from 'notistack'
 
 import { useTranslation } from 'react-i18next'
 
-import OrganisationSurveyEditor from '../Organisation/OrganisationSurveyEditor'
-import { useOrganisationSurvey } from '../Organisation/useOrganisationSurveys'
-import { useEditOrganisationSurveyMutation } from '../Organisation/useOrganisationSurveyMutation'
-import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../Organisation/utils'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
+import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
+import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
+import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
+import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()

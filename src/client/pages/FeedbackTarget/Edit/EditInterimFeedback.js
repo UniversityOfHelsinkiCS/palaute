@@ -6,10 +6,10 @@ import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
 
 import { useTranslation } from 'react-i18next'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
-import { useEditInterimFeedbackMutation } from './tabs/InterimFeedback/useInterimFeedbackMutation'
-import { getInterimFeedbackEditSchema } from './tabs/InterimFeedback/utils'
-import InterimFeedbackEditor from './tabs/InterimFeedback/InterimFeedbackEditor'
+import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import { useEditInterimFeedbackMutation } from '../tabs/InterimFeedback/useInterimFeedbackMutation'
+import { getInterimFeedbackEditSchema } from '../tabs/InterimFeedback/utils'
+import InterimFeedbackEditor from '../tabs/InterimFeedback/InterimFeedbackEditor'
 
 const EditInterimFeedback = () => {
   const { t } = useTranslation()

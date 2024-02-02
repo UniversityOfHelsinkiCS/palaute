@@ -14,16 +14,12 @@ import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../
 import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
 import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
-import EditFeedbackTargetDates from './Dates/EditFeedbackTarget'
-import EditInterimFeedback from './EditInterimFeedback'
-import EditOrganisationSurvey from './EditOrganisationSurvey'
+import FeedbackTargetEdit from './Edit/FeedbackTargetEdit'
 
 const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
   const { feedbackTarget, organisation, isStudent, isTeacher, isAdmin } = useFeedbackTargetContext()
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const isOrganisationSurvey = !isInterimFeedback && feedbackTarget.userCreated
 
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
     feedbackTarget.id,
@@ -46,6 +42,8 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
     userCreated,
   } = feedbackTarget
 
+  const isOrganisationSurvey = !isInterimFeedback && userCreated
+
   const parentCourseName = parentFeedback
     ? getLanguageValue(
         getPrimaryCourseName(parentFeedback?.courseUnit, parentFeedback?.courseRealisation, parentFeedback),
@@ -62,7 +60,6 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
     i18n.language
   )
 
-  let EditComponent
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
@@ -74,14 +71,6 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
 
   // This is necessary to identify which is related to interim feedback modal and which is related to the original fbt
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
-
-  if (isInterimFeedback) {
-    EditComponent = <EditInterimFeedback />
-  } else if (isOrganisationSurvey) {
-    EditComponent = <EditOrganisationSurvey />
-  } else {
-    EditComponent = <EditFeedbackTargetDates />
-  }
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
@@ -146,7 +135,10 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
               }}
             >
               <FeedbackTargetDates data-cy={`${dataCyPrefix}feedback-target-feedback-dates`} />
-              {!isStudent && EditComponent}
+
+              {!isStudent && (
+                <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
+              )}
 
               {isTeacher && (
                 <Box
