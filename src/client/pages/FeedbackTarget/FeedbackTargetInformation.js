@@ -5,13 +5,18 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import FeedbackTargetDates from './Dates/Dates'
 import PercentageCell from '../CourseSummary/components/PercentageCell'
 import { getLanguageValue } from '../../util/languageUtils'
-import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
+import {
+  getCourseCode,
+  getPrimaryCourseName,
+  getSecondaryCourseName,
+  getSurveyType,
+} from '../../util/courseIdentifiers'
 import { TagChip } from '../../components/common/TagChip'
 import TeacherList from './TeacherList/TeacherList'
 import FeedbackTargetEdit from './Edit/FeedbackTargetEdit'
 import FeedbackTargetLinks from './FeedbackTargetLinks'
 
-const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
+const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()
 
   const { feedbackTarget, isStudent, isTeacher } = useFeedbackTargetContext()
@@ -24,10 +29,7 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
     teachers,
     feedbackCount,
     studentCount,
-    userCreated,
   } = feedbackTarget
-
-  const isOrganisationSurvey = !isInterimFeedback && userCreated
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
@@ -38,6 +40,7 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
     i18n.language
   )
   const courseCode = getCourseCode(courseUnit)
+  const { isInterimFeedback, isOrganisationSurvey } = getSurveyType(courseUnit, feedbackTarget)
 
   // Show course code only if it is not already in the course name
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode

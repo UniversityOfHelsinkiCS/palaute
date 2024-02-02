@@ -33,7 +33,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import { getCourseCode, getPrimaryCourseName } from '../../util/courseIdentifiers'
+import { getCourseCode, getPrimaryCourseName, getSurveyType } from '../../util/courseIdentifiers'
 import { feedbackTargetIsOpenOrClosed } from './Dates/utils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
@@ -66,10 +66,7 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
-
-  const isInterimFeedback =
-    feedbackTarget.userCreated &&
-    !(feedbackTarget.courseUnit.userCreated && feedbackTarget.courseRealisation.userCreated)
+  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
 
   const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
   const showContinuousFeedbackTab =
@@ -102,7 +99,7 @@ const FeedbackTargetContent = () => {
       <Title>{`${visibleCourseCode} ${courseName}`}</Title>
       {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
 
-      <FeedbackTargetInformation isInterimFeedback={isInterimFeedback} />
+      <FeedbackTargetInformation />
 
       <Box
         mb="2rem"
