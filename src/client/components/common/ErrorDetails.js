@@ -11,7 +11,7 @@ import { getDateRangeString } from '../../util/getDateRangeString'
 import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
-const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
+const ErrorDetails = ({ feedbackTargetId }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isLoading } = useFeedbackTargetErrorViewDetails(feedbackTargetId)
 
@@ -106,4 +106,4 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
   )
 }
 
-export default ForbiddenErrorDetails
+export default ErrorDetails

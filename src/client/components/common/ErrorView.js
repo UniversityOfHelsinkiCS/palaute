@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Alert, Box, Card, CardMedia, Link as MuiLink, Typography } from '@mui/material'
 import { KeyboardReturnOutlined } from '@mui/icons-material'
 
-import ForbiddenErrorDetails from './ForbiddenErrorDetails'
+import ErrorDetails from './ErrorDetails'
 
 /**
  * Display this with an appropriate message
@@ -22,7 +22,7 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
   return (
     <Box m={4}>
       {response?.status === 403 ? (
-        <ForbiddenErrorDetails feedbackTargetId={id} />
+        <ErrorDetails feedbackTargetId={id} />
       ) : (
         <Typography sx={{ marginBottom: '2rem' }} variant="body1">
           {t(message)}
