@@ -38,6 +38,8 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
 
+  console.log(courseUnit)
+
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
 
@@ -61,7 +63,12 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="my-teaching-course-unit-item"
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`my-teaching-course-unit-accordion-${courseCode}`}>
+      <AccordionSummary
+        id={`course-unit-accordion-header-${courseCode}`}
+        aria-controls={`course-unit-accordion-content-${courseCode}`}
+        expandIcon={<ExpandMoreIcon />}
+        data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
+      >
         <Box>
           <Typography component="h3" variant="body1" sx={{ mr: 2 }}>
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
