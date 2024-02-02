@@ -90,7 +90,12 @@ const FeedbackTargetContent = () => {
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
 
   if (!feedbackCanBeGiven && !isTeacher) {
-    return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
+    return (
+      <ErrorView
+        message={t('feedbackTargetView:feedbackDisabled')}
+        response={{ status: 423, message: t('feedbackTargetView:feedbackDisabled') }}
+      />
+    )
   }
 
   return (
