@@ -5,7 +5,9 @@ import { OpenInNew } from '@mui/icons-material'
 
 const LinkButton = ({ title, to, external = false, ...rest }) => {
   const buttonProps = {
-    ...(external ? { component: MuiLink, href: to, endIcon: <OpenInNew /> } : { component: Link, to }),
+    ...(external
+      ? { component: MuiLink, href: to, rel: 'noopener noreferrer', target: '_blank', endIcon: <OpenInNew /> }
+      : { component: Link, to }),
   }
 
   return (
