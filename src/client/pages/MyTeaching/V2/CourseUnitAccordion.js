@@ -38,8 +38,6 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
 
   const { name, courseCode } = courseUnit
 
-  console.log(courseUnit)
-
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
 
