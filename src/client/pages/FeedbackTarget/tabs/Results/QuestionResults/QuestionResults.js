@@ -62,6 +62,7 @@ const QuestionResults = React.memo(
     feedbacks,
     isResponsibleTeacher,
     isOrganisationUser,
+    isOpen,
     feedbackCount,
     feedbackTargetId,
   }) => {
@@ -139,7 +140,7 @@ const QuestionResults = React.memo(
               key={q.id}
               question={q}
               publicQuestionIds={publicQuestionIds}
-              disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
+              disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
               isResponsibleTeacher={isResponsibleTeacher}
               feedbackCount={feedbackCount}
               feedbackTargetId={feedbackTargetId}

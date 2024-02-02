@@ -190,6 +190,7 @@ const Results = () => {
             feedbacks={feedbacks}
             isResponsibleTeacher={isResponsibleTeacher}
             isOrganisationUser={isOrganisationReader}
+            isOpen={isOpen}
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />
