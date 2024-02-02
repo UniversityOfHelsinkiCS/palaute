@@ -8,7 +8,7 @@ import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getDateRangeString } from '../../util/getDateRangeString'
-import { getCourseCode, getPrimaryCourseName } from '../../util/courseIdentifiers'
+import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
 const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
@@ -27,6 +27,11 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
+
+  const secondaryCourseName = getLanguageValue(
+    getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
     i18n.language
   )
 
@@ -59,6 +64,10 @@ const ForbiddenErrorDetails = ({ feedbackTargetId }) => {
           {visibleCourseCode}
         </Typography>
       </Box>
+
+      <Typography variant="body1" component="h2">
+        {secondaryCourseName}
+      </Typography>
 
       <Box
         component="dl"
