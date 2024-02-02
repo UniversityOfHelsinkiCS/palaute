@@ -21,7 +21,7 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
 
   return (
     <Box m={4}>
-      {response.status === 403 ? (
+      {response?.status === 403 ? (
         <ForbiddenErrorDetails feedbackTargetId={id} />
       ) : (
         <Typography sx={{ marginBottom: '2rem' }} variant="body1">
@@ -30,7 +30,7 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
       )}
       {response && (
         <Card sx={{ mx: 'auto', maxWidth: 500 }}>
-          <CardMedia component="img" src={`https://http.cat/${response.status}`} alt="" loading="lazy" />
+          <CardMedia component="img" src={`https://http.cat/${response?.status}`} alt="" loading="lazy" />
         </Card>
       )}
 
