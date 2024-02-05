@@ -104,59 +104,6 @@ const styles = {
   },
 }
 
-const ResponseGivenIcon = ({ link }) => {
-  const { t } = useTranslation()
-  return (
-    <Tooltip
-      title={`${t('courseSummary:feedbackResponseGiven')}.\n${t('courseSummary:clickForDetails')}`}
-      placement="right"
-    >
-      <Link to={link}>
-        <DoneIcon sx={styles.given} />
-      </Link>
-    </Tooltip>
-  )
-}
-
-const ResponseNotGivenIcon = ({ link }) => {
-  const { t } = useTranslation()
-  return (
-    <Tooltip
-      title={`${t('courseSummary:feedbackResponseNotGiven')}.\n${t('courseSummary:clickForDetails')}`}
-      placement="right"
-    >
-      <Link to={link}>
-        <ClearIcon sx={styles.notGiven} />
-      </Link>
-    </Tooltip>
-  )
-}
-
-const FeedbackOpenIcon = ({ link }) => {
-  const { t } = useTranslation()
-  return (
-    <Tooltip
-      title={`${t('courseSummary:feedbackStillOpen')}.\n${t('courseSummary:clickForDetails')}`}
-      placement="right"
-    >
-      <Link to={link}>
-        <AccessTimeIcon sx={styles.feedbackOpen} />
-      </Link>
-    </Tooltip>
-  )
-}
-
-const FeedbackResponseIndicator = ({ status, currentFeedbackTargetId }) => {
-  const link = `/targets/${currentFeedbackTargetId}`
-  return (
-    <Box display="flex" justifyContent="center">
-      {status === 'GIVEN' && <ResponseGivenIcon link={link} />}
-      {status === 'NONE' && <ResponseNotGivenIcon link={link} />}
-      {status === 'OPEN' && <FeedbackOpenIcon link={link} />}
-    </Box>
-  )
-}
-
 const SkeletonRow = ({ numberOfQuestions = 5 }) => (
   <tr>
     <td>
@@ -305,12 +252,7 @@ const ResultsRow = React.memo(
           <td css={styles.percentCell}>
             <PercentageCell label={`${percent}%`} percent={percent} />
           </td>
-          <td css={styles.percentCell}>
-            <FeedbackResponseIndicator
-              status={feedbackResponseGiven}
-              currentFeedbackTargetId={currentFeedbackTargetId}
-            />
-          </td>
+          <td css={styles.percentCell} />
           {cellsAfter}
         </TableRow>
         {acuallyOpen && children}

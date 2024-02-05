@@ -16,6 +16,8 @@ import { OrganisationLink } from './components/OrganisationLink'
 import { useUserOrganisationAccessByCode } from '../../hooks/useUserOrganisationAccess'
 import { TAGS_ENABLED } from '../../util/common'
 import RowHeader from './components/RowHeader'
+import CensoredCount from './components/CensoredCount'
+import FeedbackResponseIndicator from './components/FeedbackResponseIndicator'
 
 const styles = {
   resultCell: {
@@ -103,7 +105,7 @@ const TagSummaryRow = ({ tag, questions, organisationId }) => {
   )
 }
 
-const SummaryResultElements = ({ questions, summary }) => {
+const SummaryResultElements = ({ questions, summary, feedbackResponseIndicator }) => {
   const { t } = useTranslation()
   const data = summary?.data
   const percent = data ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : '-'
@@ -132,12 +134,19 @@ const SummaryResultElements = ({ questions, summary }) => {
         sx={styles.percentCell}
         tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
       />
-      <PercentageCell
-        label={`${feedbackResponsePercentage}%`}
-        percent={feedbackResponsePercentage}
-        sx={styles.percentCell}
-        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
-      />
+      {feedbackResponseIndicator ? (
+        <Box sx={styles.percentCell}>{feedbackResponseIndicator}</Box>
+      ) : (
+        <PercentageCell
+          label={`${feedbackResponsePercentage}%`}
+          percent={feedbackResponsePercentage}
+          sx={styles.percentCell}
+          tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
+        />
+      )}
+      {/* <Box sx={styles.countCell}> // @TODO access check to show hidden count
+        {Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}
+      </Box> */}
     </>
   )
 }
@@ -173,10 +182,21 @@ const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   const { i18n } = useTranslation()
   const { summary } = feedbackTarget.courseRealisation
 
+  const notGivenStatus = Date.parse(feedbackTarget.closesAt) > Date.now() ? 'OPEN' : 'NONE'
+  const responseStatus = summary?.data?.feedbackResponsePercentage === 1 ? 'GIVEN' : notGivenStatus
+
+  const feedbackResponseIndicator = (
+    <FeedbackResponseIndicator status={responseStatus} currentFeedbackTargetId={feedbackTarget.id} />
+  )
+
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
       <RowHeader label={<FeedbackTargetLabel feedbackTarget={feedbackTarget} language={i18n.language} />} />
-      <SummaryResultElements summary={summary} questions={questions} />
+      <SummaryResultElements
+        summary={summary}
+        questions={questions}
+        feedbackResponseIndicator={feedbackResponseIndicator}
+      />
     </Box>
   )
 }

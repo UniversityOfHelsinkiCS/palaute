@@ -8,7 +8,7 @@ import { useOrganisationSummaries } from './api'
 import { useOrderedAndFilteredOrganisations } from './utils'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRow from './components/SorterRow'
+import SorterRowWithFilters from './components/SorterRow'
 
 const ViewingModeSelector = ({ viewingMode, setViewingMode }) => {
   const { t } = useTranslation()
@@ -53,7 +53,7 @@ const MyOrganisations = () => {
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <ViewingModeSelector viewingMode={viewingMode} setViewingMode={setViewingMode} />
       {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-      <SorterRow />
+      <SorterRowWithFilters />
       {isLoading ? (
         <LinearProgress />
       ) : (
