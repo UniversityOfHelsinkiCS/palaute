@@ -6,7 +6,7 @@ import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
 import { useSummaries } from './api'
 import { getLanguageValue } from '../../util/languageUtils'
 import SummaryResultItem from '../../components/SummaryResultItem/SummaryResultItem'
-import { CourseUnitLabel, OrganisationLabel, TagLabel } from './components/Labels'
+import { FeedbackTargetLabel, CourseUnitLabel, OrganisationLabel, TagLabel } from './components/Labels'
 import PercentageCell from './components/PercentageCell'
 import useRandomColor from '../../hooks/useRandomColor'
 import { useOrderedAndFilteredOrganisations } from './utils'
@@ -170,20 +170,11 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 
 const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   const { i18n } = useTranslation()
-
-  const label = (
-    <CourseUnitLabel
-      name={getLanguageValue(feedbackTarget.courseRealisation.name, i18n.language)}
-      code={feedbackTarget.courseRealisation.id}
-    />
-  )
-
-  const link = `/targets/${feedbackTarget.id}/results`
   const { summary } = feedbackTarget.courseRealisation
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
-      <RowHeader label={label} link={link} />
+      <RowHeader label={<FeedbackTargetLabel feedbackTarget={feedbackTarget} language={i18n.language} />} />
       <SummaryResultElements summary={summary} questions={questions} />
     </Box>
   )

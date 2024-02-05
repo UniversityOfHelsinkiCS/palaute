@@ -10,13 +10,11 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import TeacherChip from '../../../components/common/TeacherChip'
 import { getDateRangeString } from '../../../util/getDateRangeString'
 
-const TeacherChips = ({ courseRealisation }) => {
+const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) => {
   const { t } = useTranslation()
   const responsibleTeacher = t('courseSummary:responsibleTeacher')
   const teacher = t('courseSummary:teacher')
   const administrativePerson = t('courseSummary:administrativePerson')
-
-  const { teachers, responsibleTeachers, administrativePersons } = courseRealisation
 
   return (
     <Box display="flex" flexWrap="wrap" maxWidth="100rem">
@@ -41,16 +39,14 @@ const TeacherChips = ({ courseRealisation }) => {
   )
 }
 
-export const CourseRealisationLabel = ({ courseRealisation, language }) => {
-  const { startDate, endDate, name, teachingLanguages } = courseRealisation
+export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
+  const { startDate, endDate, name, teachingLanguages } = feedbackTarget.courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
 
   const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
   const translatedName = getLanguageValue(name, language)
-
-  const feedbackTarget = courseRealisation.feedbackTargets[0]
 
   const link = feedbackTarget ? (
     <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`} underline="hover">
@@ -60,10 +56,17 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
     translatedName
   )
 
-  const languagesString = teachingLanguages.map(teachingLanguage => teachingLanguage[language]).join(', ')
+  const languagesString = teachingLanguages?.map(teachingLanguage => teachingLanguage[language]).join(', ')
+
+  const teachers = feedbackTarget.userFeedbackTargets
+    .filter(ufbt => ufbt.accessStatus === 'TEACHER')
+    .map(ufbt => ufbt.user)
+  const responsibleTeachers = feedbackTarget.userFeedbackTargets
+    .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER')
+    .map(ufbt => ufbt.user)
 
   return (
-    <>
+    <Box display="flex" flexDirection="column">
       {link}
       <Box display="flex" alignItems="center" mb={0.5}>
         <Typography color="textSecondary" variant="body2">
@@ -74,8 +77,8 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
           {languagesString}
         </Typography>
       </Box>
-      <TeacherChips courseRealisation={courseRealisation} />
-    </>
+      <TeacherChips teachers={teachers} responsibleTeachers={responsibleTeachers} administrativePersons={[]} />
+    </Box>
   )
 }
 

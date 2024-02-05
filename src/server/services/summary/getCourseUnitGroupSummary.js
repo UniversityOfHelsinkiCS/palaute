@@ -59,18 +59,18 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
           },
           {
             model: UserFeedbackTarget.scope('teachers'),
-            attributes: ['userId'],
+            attributes: ['userId', 'accessStatus'],
             as: 'userFeedbackTargets',
             include: {
               model: User,
-              attributes: ['firstName', 'lastName', 'email'],
+              attributes: ['id', 'firstName', 'lastName', 'email'],
               as: 'user',
             },
           },
         ],
       },
     ],
-    order: [['validityPeriod.startDate', 'desc']], // Ordering!
+    order: [['validityPeriod.startDate', 'desc']], // Ordering! Now [0] is the newest.
   })
 
   const feedbackTargets = courseUnits.flatMap(cu => cu.feedbackTargets)
