@@ -72,7 +72,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseRealisation,
             as: 'courseRealisation',
             required: true,
-            attributes: ['id', 'name', 'startDate', 'endDate'],
+            attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
             where: {
               [Op.or]: [
                 {
@@ -116,6 +116,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
   })
 
   const targets = userTargets
+    .filter(({ feedbackTarget }) => (feedbackTarget.userCreated ? feedbackTarget.courseRealisation.userCreated : true))
     .map(({ feedbackTarget }) => feedbackTarget)
     .filter(
       ({ courseUnit }) =>
