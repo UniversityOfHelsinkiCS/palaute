@@ -6,7 +6,7 @@ import { SummaryContextProvider, useSummaryContext } from './context'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRow from './components/SorterRow'
+import SorterRowWithFilters from './components/SorterRow'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, tagId } = useSummaryContext()
@@ -23,7 +23,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
         {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-        <SorterRow />
+        <SorterRowWithFilters />
         {isLoading ? (
           <LinearProgress />
         ) : (

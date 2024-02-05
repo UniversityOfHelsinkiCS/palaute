@@ -6,7 +6,7 @@ import { useTeacherSummaries } from './api'
 import { TeacherOrganisationSummaryRow } from './SummaryRow'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRow from './components/SorterRow'
+import SorterRowWithFilters from './components/SorterRow'
 
 /**
  *
@@ -21,7 +21,7 @@ const MyCourses = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-      <SorterRow />
+      <SorterRowWithFilters />
       {show &&
         organisations.length > 0 &&
         organisations.map(organisation => (
