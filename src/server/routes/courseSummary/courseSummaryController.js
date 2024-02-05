@@ -14,6 +14,7 @@ const {
   getUserOrganisationSummaries,
   getOrganisationSummaryWithTags,
   getCourseRealisationSummaries,
+  getCourseUnitGroupSummaries,
 } = require('../../services/summary')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
@@ -159,6 +160,18 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
+const getCourseUnitGroup = async (req, res) => {
+  const { user } = req
+  const { courseCode } = req.query
+
+  const courseUnitGroup = await getCourseUnitGroupSummaries({
+    user,
+    courseCode,
+  })
+
+  return res.send(courseUnitGroup)
+}
+
 const getCoursesV2 = async (req, res) => {
   const { startDate: startDateString, endDate: endDateString, extraOrgId, extraOrgMode } = req.query
   const { user } = req
@@ -200,5 +213,6 @@ router.get('/organisations-v2', getOrganisationsV2)
 router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/course-units/:code', getByCourseUnit)
+router.get('/course-unit-group', getCourseUnitGroup)
 
 module.exports = router

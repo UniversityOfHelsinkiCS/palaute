@@ -141,6 +141,29 @@ export const useOrganisationSummaries = () => {
   return { organisations, ...rest }
 }
 
+export const useCourseUnitGroupSummaries = ({ courseCode }) => {
+  const queryKey = ['summaries-course-unit-group', courseCode]
+  const queryFn = async () => {
+    const { data } = await apiClient.get(`course-summaries/course-unit-group`, {
+      params: {
+        courseCode,
+      },
+    })
+
+    return data
+  }
+
+  const { data, ...rest } = useQuery(queryKey, queryFn, {
+    enabled: true,
+    retry: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+    staleTime: TWELVE_HOURS,
+  })
+
+  return { courseUnitGroup: data, ...rest }
+}
+
 export const updateSummaries = async () => {
   if (!window.confirm('Tämä voi kestää yli minuutin. Oletko varma?')) return null
 

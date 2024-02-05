@@ -38,22 +38,9 @@ const styles = {
   },
 }
 
-const SorterRow = () => {
+export const SorterRow = ({ filterComponent }) => {
   const { t, i18n } = useTranslation()
-  const { dateRange, setDateRange, option, setOption, questions } = useSummaryContext()
-
-  const handleChangeTimeRange = nextDateRange => {
-    setDateRange(nextDateRange)
-  }
-
-  const filterComponent = (
-    <YearSemesterSelector
-      value={dateRange ?? { start: new Date(), end: new Date() }}
-      onChange={handleChangeTimeRange}
-      option={option}
-      setOption={setOption}
-    />
-  )
+  const { questions } = useSummaryContext()
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
@@ -77,4 +64,23 @@ const SorterRow = () => {
   )
 }
 
-export default SorterRow
+const SorterRowWithFilters = () => {
+  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
+
+  const handleChangeTimeRange = nextDateRange => {
+    setDateRange(nextDateRange)
+  }
+
+  const filterComponent = (
+    <YearSemesterSelector
+      value={dateRange ?? { start: new Date(), end: new Date() }}
+      onChange={handleChangeTimeRange}
+      option={option}
+      setOption={setOption}
+    />
+  )
+
+  return <SorterRow filterComponent={filterComponent} />
+}
+
+export default SorterRowWithFilters

@@ -18,6 +18,7 @@ import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../util/common'
 import GenerateReport from './GenerateReport'
 import CourseRealisationSummary from './CourseRealisationSummary'
 import { SummaryContextProvider } from './context'
+import ForCourseUnitGroup from './ForCourseUnitGroup'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -102,7 +103,7 @@ const SummaryInContext = () => {
           />
 
           <Route path="/course-summary/:code">
-            <CourseRealisationSummary />
+            <ForCourseUnitGroup />
           </Route>
 
           <Route path="/course-summary" exact>
