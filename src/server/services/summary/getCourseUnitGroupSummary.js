@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const {
   CourseUnit,
   FeedbackTarget,
@@ -53,7 +54,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
               {
                 model: Summary,
                 as: 'summary',
-                required: false,
+                required: true,
               },
             ],
           },
@@ -94,7 +95,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
     courseCode,
     name: courseUnits[0].name,
     summary: sumSummaries(courseUnits.flatMap(cu => cu.groupSummaries)),
-    feedbackTargets,
+    feedbackTargets: _.orderBy(feedbackTargets, fbt => fbt.courseRealisation.startDate, 'desc'),
   }
 
   return courseUnitGroup
