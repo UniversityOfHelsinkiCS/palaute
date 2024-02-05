@@ -85,7 +85,7 @@ const TagSummaryRow = ({ tag, questions, organisationId }) => {
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <RowHeader label={label} openable handleOpenRow={handleOpenRow} isOpen={nextIsOpen} />
-        <OrganisationResults summary={tag.summary} questions={questions} />
+        <SummaryResultElements summary={tag.summary} questions={questions} />
       </Box>
       {(isTransitioning || isOpen) && (
         <Box
@@ -169,7 +169,7 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 }
 
 const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
 
   const label = (
     <CourseUnitLabel
@@ -259,47 +259,6 @@ const CourseUnitsList = ({ organisationId, initialCourseUnits, questions }) => {
   return orderedCourseUnits?.map(cu => <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />)
 }
 
-const OrganisationResults = ({ summary, questions, linkComponent }) => {
-  const { t } = useTranslation()
-
-  const percent = summary ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : 0
-
-  const feedbackResponsePercentage = summary ? (summary.data.feedbackResponsePercentage * 100).toFixed() : 0
-
-  return (
-    <>
-      {questions.map(q => (
-        <SummaryResultItem
-          key={q.id}
-          question={q}
-          mean={summary ? summary.data.result[q.id]?.mean : 0}
-          distribution={summary ? summary.data.result[q.id]?.distribution : {}}
-          sx={styles.resultCell}
-          component="div"
-        />
-      ))}
-      <Tooltip title={t('common:feedbacksGivenRatio')} disableInteractive>
-        <Typography variant="body2" sx={styles.countCell}>
-          {summary ? summary.data.feedbackCount : '0'} / {summary ? summary.data.studentCount : '0'}
-        </Typography>
-      </Tooltip>
-      <PercentageCell
-        label={`${percent}%`}
-        percent={percent}
-        sx={styles.percentCell}
-        tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
-      />
-      <PercentageCell
-        label={`${feedbackResponsePercentage}%`}
-        percent={feedbackResponsePercentage}
-        sx={styles.percentCell}
-        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
-      />
-      {linkComponent}
-    </>
-  )
-}
-
 const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questions }) => {
   const initialSummary = initialOrganisation?.summary
   const { organisation, isLoading } = useSummaries({
@@ -317,7 +276,12 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
 
   const linkComponent = <OrganisationLink code={initialOrganisation?.code} access={access} />
 
-  return <OrganisationResults summary={summary} questions={questions} linkComponent={linkComponent} />
+  return (
+    <>
+      <SummaryResultElements summary={summary} questions={questions} />
+      {linkComponent}
+    </>
+  )
 }
 
 export const OrganisationSummaryRow = ({ alwaysOpen = false, organisation: initialOrganisation, organisationId }) => {
@@ -425,7 +389,8 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
     >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <RowHeader openable label={label} isOpen={isOpen} handleOpenRow={() => setIsOpen(!isOpen)} />
-        <OrganisationResults summary={organisation.summary} questions={questions} linkComponent={linkComponent} />
+        <SummaryResultElements summary={organisation.summary} questions={questions} />
+        {linkComponent}
       </Box>
       {isOpen && (
         <Box
@@ -457,6 +422,7 @@ export const CourseUnitGroupSummaryRow = ({ courseUnitGroup, questions }) => {
       flexDirection="column"
       alignItems="stretch"
       gap="0.4rem"
+      pt="0.5rem"
       sx={{ transition: 'padding-top 0.2s ease-out' }}
     >
       <Box display="flex" alignItems="stretch" gap="0.2rem">
