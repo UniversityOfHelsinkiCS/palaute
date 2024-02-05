@@ -64,6 +64,9 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
   const responsibleTeachers = feedbackTarget.userFeedbackTargets
     .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER')
     .map(ufbt => ufbt.user)
+  const administrativePersons = feedbackTarget.userFeedbackTargets
+    .filter(ufbt => ufbt.isAdministrativePerson)
+    .map(ufbt => ufbt.user)
 
   return (
     <Box display="flex" flexDirection="column">
@@ -77,7 +80,11 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
           {languagesString}
         </Typography>
       </Box>
-      <TeacherChips teachers={teachers} responsibleTeachers={responsibleTeachers} administrativePersons={[]} />
+      <TeacherChips
+        teachers={teachers}
+        responsibleTeachers={responsibleTeachers}
+        administrativePersons={administrativePersons}
+      />
     </Box>
   )
 }

@@ -60,7 +60,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
           },
           {
             model: UserFeedbackTarget.scope('teachers'),
-            attributes: ['userId', 'accessStatus'],
+            attributes: ['userId', 'accessStatus', 'isAdministrativePerson'],
             as: 'userFeedbackTargets',
             include: {
               model: User,

@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import { blueGrey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
@@ -421,7 +422,7 @@ export const CourseUnitGroupSummaryRow = ({ courseUnitGroup, questions }) => {
         <SummaryResultElements summary={courseUnitGroup.summary} questions={questions} />
       </Box>
       <Box
-        sx={{ pl: '2rem', borderLeft: `solid 3px`, pb: '0.5rem' }}
+        sx={{ pl: '2rem', borderLeft: `solid 3px ${blueGrey[100]}`, pb: '0.5rem' }}
         display="flex"
         flexDirection="column"
         alignItems="stretch"
