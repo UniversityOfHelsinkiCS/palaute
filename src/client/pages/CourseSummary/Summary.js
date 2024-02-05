@@ -16,7 +16,6 @@ import MyCourses from './MyCourses'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../util/common'
 import GenerateReport from './GenerateReport'
-import CourseRealisationSummary from './CourseRealisationSummary'
 import { SummaryContextProvider } from './context'
 import ForCourseUnitGroup from './ForCourseUnitGroup'
 

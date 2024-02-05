@@ -102,6 +102,45 @@ const TagSummaryRow = ({ tag, questions, organisationId }) => {
   )
 }
 
+const SummaryResultElements = ({ questions, summary }) => {
+  const { t } = useTranslation()
+  const data = summary?.data
+  const percent = data ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : '-'
+  const feedbackResponsePercentage = data ? (summary.data.feedbackResponsePercentage * 100).toFixed() : '-'
+
+  return (
+    <>
+      {questions.map(q => (
+        <SummaryResultItem
+          key={q.id}
+          question={q}
+          mean={data?.result?.[q.id]?.mean}
+          distribution={data ? data.result[q.id]?.distribution : {}}
+          sx={styles.resultCell}
+          component="div"
+        />
+      ))}
+      <Tooltip title={t('common:feedbacksGivenRatio')} disableInteractive>
+        <Typography variant="body2" sx={styles.countCell}>
+          {data ? `${data.feedbackCount} / ${data.studentCount}` : '-'}
+        </Typography>
+      </Tooltip>
+      <PercentageCell
+        label={`${percent}%`}
+        percent={percent}
+        sx={styles.percentCell}
+        tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
+      />
+      <PercentageCell
+        label={`${feedbackResponsePercentage}%`}
+        percent={feedbackResponsePercentage}
+        sx={styles.percentCell}
+        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
+      />
+    </>
+  )
+}
+
 const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
   const { i18n, t } = useTranslation()
 
@@ -120,39 +159,32 @@ const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 
   const link = `/course-summary/${courseUnit.courseCode}`
   const { summary } = courseUnit
-  const percent = ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed()
-  const feedbackResponsePercentage = (summary.data.feedbackResponsePercentage * 100).toFixed()
 
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
       <RowHeader label={label} link={link} />
-      {questions.map(q => (
-        <SummaryResultItem
-          key={q.id}
-          question={q}
-          mean={summary.data.result[q.id]?.mean}
-          distribution={summary.data.result[q.id]?.distribution}
-          sx={styles.resultCell}
-          component="div"
-        />
-      ))}
-      <Tooltip title={t('common:feedbacksGivenRatio')} disableInteractive>
-        <Typography variant="body2" sx={styles.countCell}>
-          {summary.data.feedbackCount} / {summary.data.studentCount}
-        </Typography>
-      </Tooltip>
-      <PercentageCell
-        label={`${percent}%`}
-        percent={percent}
-        sx={styles.percentCell}
-        tooltip={`${t('courseSummary:feedbackPercentage')}: ${percent}%`}
-      />
-      <PercentageCell
-        label={`${feedbackResponsePercentage}%`}
-        percent={feedbackResponsePercentage}
-        sx={styles.percentCell}
-        tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
-      />
+      <SummaryResultElements summary={summary} questions={questions} />
+    </Box>
+  )
+}
+
+const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
+  const { i18n, t } = useTranslation()
+
+  const label = (
+    <CourseUnitLabel
+      name={getLanguageValue(feedbackTarget.courseRealisation.name, i18n.language)}
+      code={feedbackTarget.courseRealisation.id}
+    />
+  )
+
+  const link = `/targets/${feedbackTarget.id}/results`
+  const { summary } = feedbackTarget.courseRealisation
+
+  return (
+    <Box display="flex" alignItems="stretch" gap="0.2rem">
+      <RowHeader label={label} link={link} />
+      <SummaryResultElements summary={summary} questions={questions} />
     </Box>
   )
 }
@@ -408,6 +440,40 @@ export const TeacherOrganisationSummaryRow = ({ organisation, questions }) => {
           ))}
         </Box>
       )}
+    </Box>
+  )
+}
+
+export const CourseUnitGroupSummaryRow = ({ courseUnitGroup, questions }) => {
+  const { i18n } = useTranslation()
+
+  const label = (
+    <CourseUnitLabel name={getLanguageValue(courseUnitGroup.name, i18n.language)} code={courseUnitGroup.courseCode} />
+  )
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="stretch"
+      gap="0.4rem"
+      sx={{ transition: 'padding-top 0.2s ease-out' }}
+    >
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
+        <RowHeader label={label} />
+        <SummaryResultElements summary={courseUnitGroup.summary} questions={questions} />
+      </Box>
+      <Box
+        sx={{ pl: '2rem', borderLeft: `solid 3px`, pb: '0.5rem' }}
+        display="flex"
+        flexDirection="column"
+        alignItems="stretch"
+        gap="0.4rem"
+      >
+        {courseUnitGroup.feedbackTargets.map(fbt => (
+          <FeedbackTargetSummaryRow key={fbt.id} feedbackTarget={fbt} questions={questions} />
+        ))}
+      </Box>
     </Box>
   )
 }
