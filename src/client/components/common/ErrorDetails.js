@@ -1,5 +1,5 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react'
-
 import { useTranslation } from 'react-i18next'
 
 import { Box, Typography } from '@mui/material'
@@ -11,11 +11,17 @@ import { getDateRangeString } from '../../util/getDateRangeString'
 import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
-const ErrorDetails = ({ feedbackTargetId }) => {
+const ErrorDetails = ({ feedbackTargetId, message, response }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isLoading } = useFeedbackTargetErrorViewDetails(feedbackTargetId)
 
-  if (!feedbackTarget || isLoading) return null
+  if (!feedbackTarget || isLoading) {
+    return (
+      <Box sx={{ mb: '2rem' }}>
+        <Typography variant="body1">{t(message)}</Typography>
+      </Box>
+    )
+  }
 
   const { courseUnit, courseRealisation, userCreated } = feedbackTarget || {}
 
@@ -38,15 +44,15 @@ const ErrorDetails = ({ feedbackTargetId }) => {
   const courseCode = getCourseCode(courseUnit)
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
 
-  // eslint-disable-next-line no-nested-ternary
-  const message = isOld
-    ? t('feedbackTargetView:noAccessOldCourse')
-    : isEnded
-    ? t('feedbackTargetView:noAccessEndedCourse')
-    : t('feedbackTargetView:noAccess')
+  const generateUnauthorizedMessage = () =>
+    isOld
+      ? 'feedbackTargetView:noAccessOldCourse'
+      : isEnded
+      ? 'feedbackTargetView:noAccessEndedCourse'
+      : 'feedbackTargetView:noAccess'
 
   return (
-    <Box sx={{ marginBottom: '2rem' }}>
+    <Box sx={{ mb: '2rem' }}>
       <Box
         sx={{
           display: 'flex',
@@ -54,7 +60,7 @@ const ErrorDetails = ({ feedbackTargetId }) => {
           alignItems: 'end',
           columnGap: '1rem',
           rowGap: '0.3rem',
-          marginBottom: '1rem',
+          mb: '1rem',
         }}
       >
         <Typography variant="h4" component="h1">
@@ -100,7 +106,9 @@ const ErrorDetails = ({ feedbackTargetId }) => {
         </Typography>
       </Box>
       <Box>
-        <Typography variant="body1">{message}</Typography>
+        <Typography variant="body1">
+          {response.status === 403 ? t(generateUnauthorizedMessage()) : t(message)}
+        </Typography>
       </Box>
     </Box>
   )

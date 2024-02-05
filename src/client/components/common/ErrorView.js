@@ -21,10 +21,10 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
 
   return (
     <Box m={4}>
-      {response?.status === 403 ? (
-        <ErrorDetails feedbackTargetId={id} />
+      {response?.status && id ? (
+        <ErrorDetails feedbackTargetId={id} message={message} response={response} />
       ) : (
-        <Typography sx={{ marginBottom: '2rem' }} variant="body1">
+        <Typography sx={{ mb: '2rem' }} variant="body1">
           {t(message)}
         </Typography>
       )}
