@@ -4,8 +4,8 @@ import { useParams } from 'react-router'
 import { useCourseUnitGroupSummaries } from './api'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { SorterRow } from './components/SorterRow'
-import { CourseUnitGroupSummaryRow } from './SummaryRow'
 import { useSummaryContext } from './context'
+import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
 
 const ForCourseUnitGroup = () => {
   const { code } = useParams()
