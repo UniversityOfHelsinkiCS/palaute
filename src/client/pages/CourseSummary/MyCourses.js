@@ -3,7 +3,7 @@ import { Alert, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
-import { TeacherOrganisationSummaryRow } from './SummaryRow'
+import TeacherOrganisationRow from './components/TeacherOrganisationRow'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
 import SorterRowWithFilters from './components/SorterRow'
@@ -25,7 +25,7 @@ const MyCourses = () => {
       {show &&
         organisations.length > 0 &&
         organisations.map(organisation => (
-          <TeacherOrganisationSummaryRow key={organisation.id} questions={questions} organisation={organisation} />
+          <TeacherOrganisationRow key={organisation.id} questions={questions} organisation={organisation} />
         ))}
       {show && organisations.length === 0 && (
         <Box my="1rem" mx="2rem">

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import { OrganisationSummaryRow } from './SummaryRow'
 import { useSummaries } from './api'
 import { OPEN_UNIVERSITY_ORG_ID, UNIVERSITY_ROOT_ID } from '../../util/common'
 import { useSummaryContext } from './context'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
 import SorterRowWithFilters from './components/SorterRow'
+import OrganisationSummaryRow from './components/OrganisationRow'
 
 /**
  *

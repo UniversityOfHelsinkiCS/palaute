@@ -1,9 +1,9 @@
 {
   "links": {
     "supportEmail": "coursefeedback@helsinki.fi",
-    "wikiRoot": "https://wiki.helsinki.fi/display/CF",
-    "wikiOrganisationHelp": "https://wiki.helsinki.fi/display/CF/4.+Koulutusohjelman+ohje",
-    "wikiTeacherHelp": "https://wiki.helsinki.fi/display/CF/3.+Opettajan+ohje",
+    "wikiRoot": "https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/",
+    "wikiOrganisationHelp": "https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Koulutusohjelman%20ohje/",
+    "wikiTeacherHelp": "https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/",
     "accessibility": "https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/documentation/accessibility.md",
     "dataProtection": "https://wiki.helsinki.fi/pages/viewpage.action?pageId=393554991",
     "toska": "https://toska.dev",
