@@ -73,12 +73,17 @@
     "university": "Universitet",
     "sort": "Sortera",
     "ascending": "stigande",
-    "descending": "fallande"
+    "descending": "fallande",
+    "notEditable": "Inställningen kan inte ändras, då den har offentligjorts på en högre nivå.",
+    "feedbacksGivenRatio": "Givna återkopplingar / Antal anmälda studenter",
+    "additional": "Ytterligare"
   },
   "validationErrors": {
     "required": "Fältet krävs",
     "wrongDate": "Förfrågans slutdatum är före startdatumet",
-    "invalidDate": "Ogiltigt datum"
+    "invalidDate": "Ogiltigt datum",
+    "invalidStudentNumbers": "Kontrollera de studentnumrena som är markerade som ogiltiga",
+    "overlappingStudentTeacher": "Den ansvariga personen kan inte samtidigt vara student på kursen"
   },
   "links": {
     "supportEmail": "",
@@ -147,11 +152,13 @@
     "editFeedbackResponse": "Redigera svar på responsen",
     "noCourseRealisations": "Inga kursinstanser",
     "noCourses": "Inga kurser",
+    "noCoursesV2": "Det finns för tillfället inga kurser att visa",
     "feedbackResponseGiven": "Svar på responsen given",
     "feedbackResponseNotSent": "Motrespons har inte skickats",
     "feedbackResponseMissing": "Svar på responsen saknas",
     "continuousFeedback": "Kontinuerlig respons",
     "feedbackOpen": "Responsen är öppen",
+    "interimFeedbackOpen": "Mellanrespons pågår",
     "ongoingCourses": "Pågående kurser",
     "upcomingCourses": "Kommande kurser",
     "endedCourses": "Avslutade kurser",
@@ -183,7 +190,9 @@
     "universityQuestion": "Universitetsnivå",
     "programmeQuestion": "Utbildningsprogramsnivå",
     "uneditableTooltip": "Detta är definierat på förhand och läggs till automatiskt i förfrågan och kan inte redigeras eller raderas",
-    "duplicate": "Duplicera"
+    "duplicate": "Duplicera",
+    "markDownSupport": "Dessa fält stöder <2>Markdown</2> innehåll.",
+    "addTextualContent": "Lägg till textfät"
   },
   "editFeedbackTarget": {
     "closesAt": "Stängs",
@@ -229,7 +238,8 @@
     "here": "här",
     "multipleChoiceQuestions": "Flervalsfrågor",
     "openQuestions": "Öppna frågor",
-    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen uppgift"
+    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen uppgift",
+    "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras."
   },
   "feedbackSummary": {
     "question": "Fråga",
@@ -240,6 +250,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Förfrågans resultat visas inte på grund av för få responser",
+    "notEnoughStudentsInfo": "För att bibehålla anonymitet visas inte enkätresultat när det finns färre än {{count}} anmälda studenter.",
     "onlyForEnrolledInfo": "Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare",
     "teacherAccessInfo": "Du har lärarbehörighet på kursen, d.v.s. du kan bara se svaren på frågor som är offentliga. Om du behöver breda insyn, be om rollen som ansvarslärare via Sisu.",
     "studentsWithFeedbackHeading": "Studeranden som givit respons",
@@ -262,6 +273,7 @@
     "modalTitle": "Skicka en påminnelse om respons via e-post",
     "writeAMessage": "Skriv ett meddelande till studerande",
     "emailMessage": "Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. Tack!\n << Meddelandet du skriver kommer synas här >>",
+    "emailMessageInfo": "(Meddelandets ingress är översatt till studentens föredragna språk)",
     "modalSubtitle": "Studeranden som har redan gett respons får inte påminnelsemeddelandet",
     "emailSent": "Påminnelse skickad",
     "setHidden": "Göm",
@@ -270,7 +282,11 @@
     "unpublishingInfo": "Denna fråga kommer att vara synlig för kursens studenter.",
     "publishingInfo": "Svaren på denna fråga är inte synliga för kursens studeranden. Om du vill kan du göra dem offentliga genom att klicka på knappen till vänster \"Inte offentlig\".",
     "hidingFeatureInfoTitle": "Information om att gömma svaren",
-    "hidingFeatureInfo": "Om ett svar innehåller konfidentiell information så som ett studerandenummer eller om svaret på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts."
+    "hidingFeatureInfo": "Om ett svar innehåller konfidentiell information så som ett studerandenummer eller om svaret på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts.",
+    "confirmDeleteFeedback": "Du är på väg att PERMANENT radera en students svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svaret? Skriv \"radera\" för att bekräfta.",
+    "deleteSuccess": "Svar \"{{content}}\" raderat. ({{count}})",
+    "hideSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har dolts. ({{count}}) st.",
+    "showSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har synligjorts. ({{count}}) st."
   },
   "groups": {
     "groupingSettings": "Gruppering",
@@ -308,6 +324,8 @@
     "none": "inga"
   },
   "studentsWithFeedback": {
+    "cannotShowBeforeFeedbackEnds": "Information om elever som lämnat feedback kan inte visas innan återkopplingsperioden har avslutats.",
+    "noFeedbackInfo": "Information om studenter som lämnat feedback kan inte visas. Antingen är det färre än fem studenter som har gett feedback eller så är listan över studenter som har gett feedback inaktiverad i programmets inställningar",
     "studentsList": "Studerande som gett respons"
   },
   "feedbackResponse": {
@@ -345,10 +363,57 @@
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
   },
   "organisationSurveys": {
+    "heading": "Utbildningsprogrammets undersökningsfunktion befinner sig fortfarande i utvecklingsfasen och undergår demoförsök",
     "startDate": "Från och med",
     "endDate": "Till",
     "surveys": "Undersökningar",
-    "newSurveyName": "Undersökningens namn"
+    "newSurveyName": "Undersökningens namn",
+    "editSurvey": "Redigera inställningarna för undersökningen",
+    "emptySurveys": "Det finns inga undersökningar för detta program ännu; du kan skapa en ny undersökning för programmet här.",
+    "addSurvey": "Skapa en ny programenkät",
+    "viewResults": "Visa resultat",
+    "students": "Studenter",
+    "editStudentNumberTitle": "Redigera enkätstudenter",
+    "editResponsibleTeacherTitle": "Redigera ansvarspersonerna för undersökningen",
+    "responsibleTeacherTitle": "Lägg till en ansvarsperson för undersökningen",
+    "responsibleTeacherEmail": "E-post",
+    "studentNumberTitle": "Lägg till studenter till undersökningen",
+    "studentNumberInputLabel": "Lägg in studentnummer här",
+    "studentNumberInformation": "Studentnummren kan separeras från varandra med följande tecken",
+    "studentNumberDelimeters": {
+      "comma": "Kommatecken",
+      "semicolon": "Semikolon",
+      "space": "Mellanslag",
+      "newline": "Ny rad"
+    },
+    "studentNumberExampleInput": "Till exempel, enligt följande",
+    "viewFeedback": "Visa undersökningen",
+    "givenFeedback": "Feedback har getts",
+    "confirmRemoveSurvey": "Är du säker på att du vill ta bort programundersökningen?",
+    "confirmStudentDelete": "Är du säker på att du vill ta bort studenten: {{ studentNumber }} från den här undersökningen?",
+    "removeSuccess": "Programundersökningen är borttagen",
+    "responsibleTeachers": "Ansvarsperson",
+    "remove": "Ta bort",
+    "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden"
+  },
+  "interimFeedback": {
+    "interimFeedback": "Mellanrespons",
+    "heading": "Mellanrespons-funktionen är fortfarande i utvecklingsfasen och undergår demoförsök",
+    "emptySurveys": "Det finns ingen mellanrespons funktion för detta program än; du kan skapa en ny mellanrespons för kursen här.",
+    "givenFeedback": "Mellanrespons har getts",
+    "viewFeedback": "Visa mellanrespons",
+    "viewResults": "Visa resultat",
+    "addSurvey": "Skapa en ny mellanrespons enkät",
+    "editSurvey": "Redigera mellanrespons enkäten",
+    "newSurveyName": "Namn på mellanrespons enkäten",
+    "responsibleTeachers": "Ansvarsperson",
+    "students": "Studenter",
+    "startDate": "Från",
+    "endDate": "Till",
+    "edit": "Redigera",
+    "remove": "Ta nort",
+    "confirmRemoveSurvey": "Är du säker på att du vill ta bort mellanrespons enkäten?",
+    "removeSuccess": "Mellanrespons enkäten har tagits bort"
   },
   "courseSummary": {
     "heading": "Sammandrag av kursens respons",
@@ -401,7 +466,13 @@
     "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
     "myOrganisations": "Mina utbildningsprogram",
     "myCourses": "Mina kurser",
-    "newView": "Prova den nya vyn"
+    "newView": "Prova den nya vyn",
+    "includeOpenUni": "Inkludera öppna uni-kurser",
+    "excludeOpenUni": "Uteslut öppna uni-kurser",
+    "onlyOpenUni": "Visa endast öppna uni-kurser",
+    "feedbackResponsePercentage": "Kurser där återkoppling ges",
+    "treeView": "Visa i en hierarki",
+    "flatView": "Visa i en lista"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",
@@ -413,7 +484,13 @@
     "noFeedbackTarget": "Det finns ingen respons tillgänglig för dig på denna kurs"
   },
   "organisationSettings": {
+    "searchUser": "E-post eller namn",
     "surveyInfo": "Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.",
+    "studentListVisibility": "Synlighet för elever som har gett feedback",
+    "studentListVisibilityInfo": "Studenter som lämnat feedback visas för kursens ansvariga lärare efter återkopplingsperioden har tagit slut om minst fem studenter har gett feedback.",
+    "studentListVisible": "Visa för alla kurser",
+    "studentListHidden": "Dölj för alla kurser",
+    "studentListByCourse": "Ställ in synligheten för varje kurs",
     "courseSettingsInfo": "Respons samlas endast in för aktiverade kurser",
     "settingsTab": "Inställningar",
     "generalSettings": "Allmänna inställningar",
@@ -495,7 +572,12 @@
     "deleteTeacherConfirmation": "Ta bort {{name}} från gruppen av lärare?",
     "noFeedbackResponseYet": "Kursens lärare har inte ännu gett motrespons",
     "noAccess": "Tyvärr kunde vi inte hitta din anmälan till den här kursen. Om du nyligen anmält dig kan du behöva vänta 1 eller 2 timmar.",
-    "notFound": "Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt"
+    "notFound": "Den här responsen hittas inte! Ifall du angett webbadressen manuellt, se till att den är korrekt",
+    "noAccessOldCourse": "Återkopplingsperioden avslutades för över ett år sedan, och feedback kan inte längre ges för denna kurs. Kontrollera informationen ovan för att säkerställa att kursen är korrekt.",
+    "noAccessEndedCourse": "Återkopplingsperioden har avslutats och feedback kan inte längre ges för denna kurs. Kontrollera informationen ovan för att säkerställa att kursen är korrekt.",
+    "surveyTabDisabledTooltip": "Enkäten kan inte längre redigeras efter att feedbacken har öppnats",
+    "editFeedbackResponseTab": "Redigera återkopplingsfeedback",
+    "interimFeedbackTab": "Mellanrespons"
   },
   "noadUser": {
     "noUser": "Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare",
