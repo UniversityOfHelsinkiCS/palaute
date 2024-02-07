@@ -16,7 +16,7 @@ import { OrganisationLink } from './components/OrganisationLink'
 import { useUserOrganisationAccessByCode } from '../../hooks/useUserOrganisationAccess'
 import { TAGS_ENABLED } from '../../util/common'
 import RowHeader from './components/RowHeader'
-import CensoredCount from './components/CensoredCount'
+// import CensoredCount from './components/CensoredCount'
 import FeedbackResponseIndicator from './components/FeedbackResponseIndicator'
 
 const styles = {
