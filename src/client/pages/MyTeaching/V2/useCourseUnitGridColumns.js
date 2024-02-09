@@ -4,19 +4,19 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 const useCourseUnitGridColumns = theme => {
   const [columns, setColumns] = useState(0)
 
-  const md = useMediaQuery(theme.breakpoints.up('md'))
-  const sm = useMediaQuery(theme.breakpoints.between('sm', 'md'))
-  const xs = useMediaQuery(theme.breakpoints.down('sm'))
+  const lg = useMediaQuery(theme.breakpoints.up('lg'))
+  const md = useMediaQuery(theme.breakpoints.between('md', 'lg'))
+  const sm = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
-    if (md) {
+    if (lg) {
       setColumns(3)
-    } else if (sm) {
+    } else if (md) {
       setColumns(2)
-    } else if (xs) {
+    } else if (sm) {
       setColumns(1)
     }
-  }, [md, sm, xs])
+  }, [lg, md, sm])
 
   return columns
 }

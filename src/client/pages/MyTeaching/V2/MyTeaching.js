@@ -71,11 +71,7 @@ const MyTeaching = () => {
             {columnCourseUnits.map((courseUnitColumn, i) => (
               <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
                 {courseUnitColumn.map(courseUnit => (
-                  <CourseUnitAccordion
-                    key={courseUnit.courseCode}
-                    courseUnit={courseUnit}
-                    group={status.toUpperCase()}
-                  />
+                  <CourseUnitItem key={courseUnit.courseCode} courseUnit={courseUnit} group={status.toUpperCase()} />
                 ))}
               </CourseUnitGroupGridColumn>
             ))}

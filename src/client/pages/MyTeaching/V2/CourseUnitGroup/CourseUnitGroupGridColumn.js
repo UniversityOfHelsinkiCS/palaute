@@ -3,7 +3,7 @@ import React from 'react'
 import { Grid } from '@mui/material'
 
 const CourseUnitGroupGridColumn = ({ children }) => (
-  <Grid container item direction="column" xs={12} sm={6} md={4}>
+  <Grid container item direction="column" sm={12} md={6} lg={4}>
     {children}
   </Grid>
 )

@@ -11,6 +11,21 @@ import { getRelevantCourseRealisation } from '../utils'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { getCourseCode } from '../../../util/courseIdentifiers'
 
+const styles = {
+  item: {
+    boxShadow: 'none',
+    my: 2,
+    '&:before': {
+      display: 'none',
+    },
+    minHeight: '100px',
+  },
+  details: {
+    display: 'block',
+    padding: 0,
+  },
+}
+
 const CourseUnitItem = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
 
@@ -25,7 +40,7 @@ const CourseUnitItem = ({ courseUnit, group }) => {
   const fetchInterimFeedbackChip = !feedbackTarget.userCreated && !courseUnit.userCreated
 
   return (
-    <Box sx={{ pt: 2 }} data-cy="my-teaching-course-unit-item">
+    <Box sx={styles.item} data-cy="my-teaching-course-unit-item">
       <Box sx={{ px: 2 }}>
         <Typography component="h3" variant="body1">
           {visibleCourseCode} {getLanguageValue(name, i18n.language)}
@@ -34,7 +49,7 @@ const CourseUnitItem = ({ courseUnit, group }) => {
         {fetchInterimFeedbackChip && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
       </Box>
 
-      <Box sx={{ display: 'block', padding: 0 }}>
+      <Box sx={styles.details}>
         <FeedbackTargetList courseCode={courseCode} group={group} />
       </Box>
     </Box>
