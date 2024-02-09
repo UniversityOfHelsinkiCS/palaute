@@ -7,26 +7,21 @@ import OngoingIcon from '@mui/icons-material/Schedule'
 import UpcomingIcon from '@mui/icons-material/Event'
 import EndedIcon from '@mui/icons-material/Done'
 
-const styles = {
-  badge: {
-    '& .MuiBadge-badge': {
-      top: 15,
-      right: 8,
-    },
-  },
-}
-
 const tabOrder = ['ongoing', 'upcoming', 'ended']
 
-const StatusTab = ({ status, count, color, ...props }) => {
-  const tab = <Tab component={Link} to={{ search: `?status=${status}` }} {...props} />
-
-  return (
-    <Badge sx={styles.badge} badgeContent={count} color={color}>
-      {tab}
-    </Badge>
-  )
-}
+const StatusTab = ({ status, count, color, label, ...props }) => (
+  <Tab
+    aria-label={label}
+    label={
+      <Badge badgeContent={count} color={color}>
+        {label}
+      </Badge>
+    }
+    component={Link}
+    to={{ search: `?status=${status}` }}
+    {...props}
+  />
+)
 
 const StatusTabs = ({ status, counts, ...props }) => {
   const { t } = useTranslation()
@@ -49,7 +44,6 @@ const StatusTabs = ({ status, counts, ...props }) => {
         data-cy="my-teaching-ongoing-tab"
         label={t('teacherView:ongoingCourses')}
         status="ongoing"
-        color="primary"
         icon={<OngoingIcon />}
         iconPosition="start"
       />
@@ -64,6 +58,8 @@ const StatusTabs = ({ status, counts, ...props }) => {
         data-cy="my-feedbacks-ended-tab"
         label={t('teacherView:endedCourses')}
         status="ended"
+        color="error"
+        count={counts.given}
         icon={<EndedIcon />}
         iconPosition="start"
       />
