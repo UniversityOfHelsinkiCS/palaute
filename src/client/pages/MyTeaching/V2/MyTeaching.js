@@ -56,7 +56,7 @@ const MyTeaching = () => {
         counts={{
           ongoing: groupedCourseUnits.ongoing?.length,
           waiting: groupedCourseUnits.upcoming?.length,
-          given: groupedCourseUnits.ended?.length,
+          ended: groupedCourseUnits.ended?.length,
         }}
       />
 

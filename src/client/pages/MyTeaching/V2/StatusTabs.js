@@ -13,7 +13,17 @@ const StatusTab = ({ status, count, color, label, ...props }) => (
   <Tab
     aria-label={label}
     label={
-      <Badge badgeContent={count} color={color}>
+      <Badge
+        sx={{
+          '& .MuiBadge-badge': {
+            right: -5,
+            top: -5,
+            padding: '0 4px',
+          },
+        }}
+        badgeContent={count}
+        color={color}
+      >
         {label}
       </Badge>
     }
@@ -59,7 +69,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
         label={t('teacherView:endedCourses')}
         status="ended"
         color="error"
-        count={counts.given}
+        count={counts.ended}
         icon={<EndedIcon />}
         iconPosition="start"
       />
