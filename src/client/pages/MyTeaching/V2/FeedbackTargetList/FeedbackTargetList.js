@@ -17,7 +17,7 @@ const FeedbackTargetList = ({ courseCode, group }) => {
   const targets = getRelevantFeedbackTargets(feedbackTargets ?? [])
 
   return (
-    <List>
+    <List sx={{ margin: 0, padding: 0 }}>
       {isLoading && <LoadingProgress />}
 
       {!isLoading && targets?.length === 0 ? (
