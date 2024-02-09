@@ -21,6 +21,7 @@ import { getCourseCode } from '../../../util/courseIdentifiers'
 const styles = {
   accordion: {
     boxShadow: 'none',
+    my: 2,
     margin: '0px !important',
     '&:before': {
       display: 'none',

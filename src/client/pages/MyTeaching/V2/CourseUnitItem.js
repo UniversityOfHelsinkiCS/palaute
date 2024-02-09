@@ -13,8 +13,8 @@ import { getCourseCode } from '../../../util/courseIdentifiers'
 
 const styles = {
   item: {
-    boxShadow: 'none',
-    my: 2,
+    backgroundColor: 'white',
+    mt: 2,
     '&:before': {
       display: 'none',
     },
@@ -41,7 +41,7 @@ const CourseUnitItem = ({ courseUnit, group }) => {
 
   return (
     <Box sx={styles.item} data-cy="my-teaching-course-unit-item">
-      <Box sx={{ px: 2 }}>
+      <Box sx={{ px: 2, pt: 2 }}>
         <Typography component="h3" variant="body1">
           {visibleCourseCode} {getLanguageValue(name, i18n.language)}
         </Typography>
