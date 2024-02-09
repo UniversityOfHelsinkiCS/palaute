@@ -60,42 +60,42 @@ const MyTeaching = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {!isLoading && sortedCourseUnits?.length === 0 ? (
+      {!isLoading && sortedCourseUnits?.length === 0 && (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
-      ) : (
-        <>
-          <CourseUnitGroup>
-            <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
-            <CourseUnitGroupGrid>
-              {columnCourseUnits.map((courseUnitColumn, i) => (
-                <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-                  {courseUnitColumn.map(courseUnit => (
-                    <CourseUnitAccordion
-                      key={courseUnit.courseCode}
-                      courseUnit={courseUnit}
-                      group={status.toUpperCase()}
-                    />
-                  ))}
-                </CourseUnitGroupGridColumn>
-              ))}
-            </CourseUnitGroupGrid>
-          </CourseUnitGroup>
+      )}
 
-          <CourseUnitGroup>
-            <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
-            <CourseUnitGroupGrid>
-              {columnCourseUnits.map((courseUnitColumn, i) => (
-                <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-                  {courseUnitColumn.map(courseUnit => (
-                    <CourseUnitItem key={courseUnit.courseCode} courseUnit={courseUnit} group={status.toUpperCase()} />
-                  ))}
-                </CourseUnitGroupGridColumn>
-              ))}
-            </CourseUnitGroupGrid>
-          </CourseUnitGroup>
-        </>
+      {!isLoading && status === 'ongoing' ? (
+        <CourseUnitGroup>
+          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
+          <CourseUnitGroupGrid>
+            {columnCourseUnits.map((courseUnitColumn, i) => (
+              <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+                {courseUnitColumn.map(courseUnit => (
+                  <CourseUnitItem key={courseUnit.courseCode} courseUnit={courseUnit} group={status.toUpperCase()} />
+                ))}
+              </CourseUnitGroupGridColumn>
+            ))}
+          </CourseUnitGroupGrid>
+        </CourseUnitGroup>
+      ) : (
+        <CourseUnitGroup>
+          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
+          <CourseUnitGroupGrid>
+            {columnCourseUnits.map((courseUnitColumn, i) => (
+              <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+                {courseUnitColumn.map(courseUnit => (
+                  <CourseUnitAccordion
+                    key={courseUnit.courseCode}
+                    courseUnit={courseUnit}
+                    group={status.toUpperCase()}
+                  />
+                ))}
+              </CourseUnitGroupGridColumn>
+            ))}
+          </CourseUnitGroupGrid>
+        </CourseUnitGroup>
       )}
     </>
   )
