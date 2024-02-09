@@ -1,19 +1,22 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import _ from 'lodash'
 import qs from 'qs'
-
-import { Alert, Box, Typography } from '@mui/material'
-
+import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from '@mui/material/styles'
+import { Alert, Box, Typography } from '@mui/material'
 
 import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
 
+import useCourseUnitGridColumns from './useCourseUnitGridColumns'
+
 import StatusTabs from './StatusTabs'
+import CourseUnitItem from './CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
 import CourseUnitGroupGrid from './CourseUnitGroup/CourseUnitGroupGrid'
 import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
-import CourseUnitGroupGridItem from './CourseUnitGroup/CourseUnitGroupGridItem'
+import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
@@ -22,7 +25,9 @@ import { getGroupedCourseUnits } from '../utils'
 
 const MyTeaching = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
   const location = useLocation()
+  const gridColumns = useCourseUnitGridColumns(theme)
 
   const { status = 'ongoing' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
@@ -32,6 +37,7 @@ const MyTeaching = () => {
 
   const groupedCourseUnits = getGroupedCourseUnits(courseUnits)
   const sortedCourseUnits = groupedCourseUnits[status]
+  const columnCourseUnits = _.chunk(sortedCourseUnits, Math.ceil(sortedCourseUnits.length / gridColumns))
 
   return (
     <>
@@ -62,10 +68,16 @@ const MyTeaching = () => {
         <CourseUnitGroup>
           <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
           <CourseUnitGroupGrid>
-            {sortedCourseUnits.map(courseUnit => (
-              <CourseUnitGroupGridItem key={courseUnit.courseCode}>
-                <CourseUnitAccordion courseUnit={courseUnit} group={status.toUpperCase()} />
-              </CourseUnitGroupGridItem>
+            {columnCourseUnits.map((courseUnitColumn, i) => (
+              <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+                {courseUnitColumn.map(courseUnit => (
+                  <CourseUnitAccordion
+                    key={courseUnit.courseCode}
+                    courseUnit={courseUnit}
+                    group={status.toUpperCase()}
+                  />
+                ))}
+              </CourseUnitGroupGridColumn>
             ))}
           </CourseUnitGroupGrid>
         </CourseUnitGroup>

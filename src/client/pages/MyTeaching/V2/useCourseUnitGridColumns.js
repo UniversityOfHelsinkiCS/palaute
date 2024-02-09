@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-const useColumns = theme => {
+const useCourseUnitGridColumns = theme => {
   const [columns, setColumns] = useState(0)
 
   const md = useMediaQuery(theme.breakpoints.up('md'))
@@ -21,4 +21,4 @@ const useColumns = theme => {
   return columns
 }
 
-export default useColumns
+export default useCourseUnitGridColumns
