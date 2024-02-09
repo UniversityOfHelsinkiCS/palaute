@@ -39,6 +39,8 @@ const MyTeaching = () => {
   const sortedCourseUnits = groupedCourseUnits[status]
   const columnCourseUnits = _.chunk(sortedCourseUnits, Math.ceil(sortedCourseUnits.length / gridColumns))
 
+  const CourseUnitComponent = status === 'ongoing' ? CourseUnitItem : CourseUnitAccordion
+
   return (
     <>
       <Title>{t('common:teacherPage')}</Title>
@@ -60,25 +62,10 @@ const MyTeaching = () => {
 
       {isLoading && <LoadingProgress />}
 
-      {!isLoading && sortedCourseUnits?.length === 0 && (
+      {!isLoading && sortedCourseUnits?.length === 0 ? (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
-      )}
-
-      {!isLoading && status === 'ongoing' ? (
-        <CourseUnitGroup>
-          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
-          <CourseUnitGroupGrid>
-            {columnCourseUnits.map((courseUnitColumn, i) => (
-              <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-                {courseUnitColumn.map(courseUnit => (
-                  <CourseUnitItem key={courseUnit.courseCode} courseUnit={courseUnit} group={status.toUpperCase()} />
-                ))}
-              </CourseUnitGroupGridColumn>
-            ))}
-          </CourseUnitGroupGrid>
-        </CourseUnitGroup>
       ) : (
         <CourseUnitGroup>
           <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
@@ -86,7 +73,7 @@ const MyTeaching = () => {
             {columnCourseUnits.map((courseUnitColumn, i) => (
               <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
                 {courseUnitColumn.map(courseUnit => (
-                  <CourseUnitAccordion
+                  <CourseUnitComponent
                     key={courseUnit.courseCode}
                     courseUnit={courseUnit}
                     group={status.toUpperCase()}
