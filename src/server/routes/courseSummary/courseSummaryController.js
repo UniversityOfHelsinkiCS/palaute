@@ -15,6 +15,7 @@ const {
   getOrganisationSummaryWithTags,
   getCourseRealisationSummaries,
   getCourseUnitGroupSummaries,
+  exportXLSX,
 } = require('../../services/summary')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
@@ -207,6 +208,35 @@ const getUserOrganisationsV2 = async (req, res) => {
   res.send(organisations)
 }
 
+const getXLSX = async (req, res) => {
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    includeOrgs: includeOrgsString,
+    includeCUs: includeCUsString,
+    includeCURs: includeCURsString,
+  } = req.query
+  console.log(req.query)
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const { xlsxFile, fileName } = await exportXLSX({
+    user,
+    startDate,
+    endDate,
+    includeOrgs: includeOrgsString === 'true',
+    includeCUs: includeCUsString === 'true',
+    includeCURs: includeCURsString === 'true',
+  })
+
+  res.writeHead(200, [
+    ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+    ['Content-Disposition', `attachment; filename=${fileName}`],
+  ])
+  res.end(xlsxFile)
+}
+
 const router = Router()
 
 router.get('/organisations-v2', getOrganisationsV2)
@@ -214,5 +244,6 @@ router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/course-units/:code', getByCourseUnit)
 router.get('/course-unit-group', getCourseUnitGroup)
+router.get('/export-xlsx', getXLSX)
 
 module.exports = router

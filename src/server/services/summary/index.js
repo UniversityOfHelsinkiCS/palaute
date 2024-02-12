@@ -8,6 +8,7 @@ const {
 const { getTeacherSummary } = require('./getTeacherSummary')
 const { getUserOrganisationSummaries } = require('./getUserOrganisationSummary')
 const { getCourseUnitGroupSummaries } = require('./getCourseUnitGroupSummary')
+const { exportXLSX } = require('./exportXLSX')
 
 module.exports = {
   getOrganisationSummary,
@@ -18,4 +19,5 @@ module.exports = {
   getUserOrganisationSummaries,
   getCourseRealisationSummaries,
   getCourseUnitGroupSummaries,
+  exportXLSX,
 }
