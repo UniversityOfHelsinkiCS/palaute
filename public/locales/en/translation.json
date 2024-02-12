@@ -37,9 +37,9 @@
     "feedbackNotGiven": "Not given",
     "feedbackHidden": "Hidden",
     "export": "Download",
-    "exportCsv": "Download as CSV",
-    "exportXLSX": "Download as XLSX",
-    "exportPdf": "Download as PDF",
+    "exportCsv": "Download CSV",
+    "exportXLSX": "Download XLSX",
+    "exportPdf": "Download PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",
     "dropZoneInfo1": "Drag a file here, or find it by clicking this box.",
@@ -476,6 +476,15 @@
     "includeOpenUni": "Include open uni courses",
     "excludeOpenUni": "Exclude open uni courses",
     "onlyOpenUni": "Show only open uni courses"
+  },
+  "generateReport": {
+    "selectIncluded": "Select content",
+    "organisations": "Organisations",
+    "courseUnits": "Course units",
+    "courseRealisations": "Course realisations",
+    "selectTimeRange": "Select timespan",
+    "selectedTime": "Currently selected",
+    "allTime": "All time"
   },
   "footer": {
     "contactSupport": "Contact support",

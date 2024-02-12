@@ -477,6 +477,15 @@
     "excludeOpenUni": "Näytä ilman Avoin yo -kursseja",
     "onlyOpenUni": "Näytä vain Avoin yo -kursseilla"
   },
+  "generateReport": {
+    "selectIncluded": "Valitse sisältö",
+    "organisations": "Organisaatiot",
+    "courseUnits": "Opintojaksot",
+    "courseRealisations": "Kurssitoteutukset",
+    "selectTimeRange": "Valitse aikaväli",
+    "selectedTime": "Nykyinen",
+    "allTime": "Koko historia"
+  },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
     "wikiLink": "Käyttöohje",
