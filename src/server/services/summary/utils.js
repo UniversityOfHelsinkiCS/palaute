@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { Summary } = require('../../models')
@@ -109,10 +110,20 @@ const sumSummaries = summaries => {
   if (!summaries?.length > 0) {
     return null
   }
-  const data = sumSummaryDatas(summaries.map(s => s.data))
-  const startDate = datefns.format(datefns.min(summaries.map(s => datefns.parseISO(s.startDate))), 'yyyy-MM-dd')
-  const endDate = datefns.format(datefns.max(summaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
-  const summary = summaries[0]
+
+  // De-duplicate input by entityId + startDate + endDate + extraOrgIds
+  const deduplicatedSummaries = _.uniqBy(
+    summaries,
+    s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
+  )
+
+  const data = sumSummaryDatas(deduplicatedSummaries.map(s => s.data))
+  const startDate = datefns.format(
+    datefns.min(deduplicatedSummaries.map(s => datefns.parseISO(s.startDate))),
+    'yyyy-MM-dd'
+  )
+  const endDate = datefns.format(datefns.max(deduplicatedSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
+  const summary = deduplicatedSummaries[0]
   summary.data = data
   summary.startDate = startDate
   summary.endDate = endDate

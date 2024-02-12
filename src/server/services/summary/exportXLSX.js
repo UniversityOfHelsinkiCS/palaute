@@ -64,7 +64,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     where: {
       id: courseUnitIds,
     },
-    attributes: ['courseCode', 'name', 'id'],
+    attributes: ['courseCode', 'name', 'id', 'groupId'],
     include: [
       {
         model: scopedSummary,
@@ -86,7 +86,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     .concat([t('common:studentCount'), t('courseSummary:feedbackCount'), t('courseSummary:feedbackResponsePercentage')])
 
   if (includeOrgs) {
-    const organisationsJson = _.uniqBy(organisations, 'id').map(org => {
+    const organisationsJson = organisations.map(org => {
       org.summary = sumSummaries(org.summaries)
       delete org.dataValues.summaries
       earliestStartDate = org.summary.startDate
@@ -110,7 +110,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
   }
 
   if (includeCUs) {
-    const courseUnitsJson = _.uniqBy(courseUnits, 'id').map(cu => {
+    const courseUnitsJson = _.uniqBy(courseUnits, 'groupId').map(cu => {
       cu.summary = sumSummaries(cu.groupSummaries)
       delete cu.dataValues.summaries
       earliestStartDate = cu.summary.startDate
@@ -119,6 +119,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     })
 
     const courseUnitsAoa = courseUnitsJson.map(cu => [
+      cu.groupId,
       cu.courseCode,
       getLanguageValue(cu.name, user.language),
       ...questions.map(q => cu.summary.data.result[q.id]?.mean ?? 0),
@@ -127,7 +128,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       cu.summary.data.feedbackResponsePercentage * 100,
     ])
 
-    const headers = [[t('common:courseCode'), t('common:name'), ...defaultHeaders]]
+    const headers = [['group_id', t('common:courseCode'), t('common:name'), ...defaultHeaders]]
 
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(headers.concat(courseUnitsAoa)), 'course-units')
   }
@@ -149,7 +150,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       },
     })
 
-    const courseRealisationsAoa = _.uniqBy(courseRealisations, 'id').map(cur => {
+    const courseRealisationsAoa = courseRealisations.map(cur => {
       earliestStartDate = cur.summary.startDate
       latestEndDate = cur.summary.endDate
 
@@ -165,7 +166,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       ]
     })
 
-    const headers = [[t('common:id'), t('common:name'), t('common:startDate'), t('common:endDate'), ...defaultHeaders]]
+    const headers = [['id', t('common:name'), t('common:startDate'), t('common:endDate'), ...defaultHeaders]]
 
     XLSX.utils.book_append_sheet(
       workbook,

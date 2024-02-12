@@ -94,12 +94,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
   const courseUnitGroup = {
     courseCode: courseUnits[0].courseCode,
     name: courseUnits[0].name,
-    summary: sumSummaries(
-      _.uniqBy(
-        courseUnits.flatMap(cu => cu.groupSummaries),
-        'entityId'
-      )
-    ),
+    summary: sumSummaries(courseUnits.flatMap(cu => cu.groupSummaries)),
     feedbackTargets: _.orderBy(feedbackTargets, fbt => fbt.courseRealisation.startDate, 'desc'),
   }
 
