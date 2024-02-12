@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -115,7 +116,7 @@ const GenerateReport = () => {
               disabled={!isValid || isLoading}
               sx={{ mt: '1rem' }}
               variant="contained"
-              endIcon={<Download />}
+              endIcon={isLoading ? <CircularProgress sx={{ color: 'primary.main' }} size={16} /> : <Download />}
             >
               {t('common:exportXLSX')}
             </Button>
