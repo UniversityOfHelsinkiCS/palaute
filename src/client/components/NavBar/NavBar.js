@@ -64,9 +64,10 @@ const styles = {
   norppaFeedback: {
     background: theme => theme.palette.warning.main,
     color: 'black',
-    padding: '6px 12px',
-    borderRadius: 4,
+    padding: '4px 10px',
+    borderRadius: 2,
     fontWeight: 'bold',
+    // fontSize: '8rem',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
