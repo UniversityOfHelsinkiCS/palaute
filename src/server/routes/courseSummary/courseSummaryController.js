@@ -215,8 +215,9 @@ const getXLSX = async (req, res) => {
     includeOrgs: includeOrgsString,
     includeCUs: includeCUsString,
     includeCURs: includeCURsString,
+    allTime: allTimeString,
   } = req.query
-  console.log(req.query)
+
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -228,6 +229,7 @@ const getXLSX = async (req, res) => {
     includeOrgs: includeOrgsString === 'true',
     includeCUs: includeCUsString === 'true',
     includeCURs: includeCURsString === 'true',
+    allTime: allTimeString === 'true',
   })
 
   res.writeHead(200, [

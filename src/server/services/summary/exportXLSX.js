@@ -11,17 +11,22 @@ const {
   CourseRealisationsOrganisation,
   CourseRealisation,
   CourseUnitsOrganisation,
+  Summary,
 } = require('../../models')
 const { getScopedSummary, sumSummaries } = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
+const { i18n } = require('../../util/i18n')
 
-const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs }) => {
+const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs, allTime }) => {
   const workbook = XLSX.utils.book_new()
 
-  const scopedSummary = getScopedSummary(startDate, endDate)
+  const scopedSummary = allTime ? Summary : getScopedSummary(startDate, endDate)
   const questions = await getSummaryQuestions()
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
   const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
+
+  let earliestStartDate = new Date(startDate)
+  let latestEndDate = new Date(endDate)
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
@@ -75,10 +80,17 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     ],
   })
 
+  const t = i18n.getFixedT(user.language)
+  const defaultHeaders = questions
+    .map(q => getLanguageValue(q.data.label, user.language))
+    .concat([t('common:studentCount'), t('courseSummary:feedbackCount'), t('courseSummary:feedbackResponsePercentage')])
+
   if (includeOrgs) {
-    const organisationsJson = organisations.map(org => {
+    const organisationsJson = _.uniqBy(organisations, 'id').map(org => {
       org.summary = sumSummaries(org.summaries)
       delete org.dataValues.summaries
+      earliestStartDate = org.summary.startDate
+      latestEndDate = org.summary.endDate
       return org.toJSON()
     })
 
@@ -86,33 +98,38 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     const organisationsAoa = organisationsJson.map(org => [
       org.code,
       getLanguageValue(org.name, user.language),
-      ...questions.map(q => org.summary.data.result[q.id].mean),
+      ...questions.map(q => org.summary.data.result[q.id]?.mean ?? 0),
       org.summary.data.studentCount,
       org.summary.data.feedbackCount,
       org.summary.data.feedbackResponsePercentage * 100,
     ])
 
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(organisationsAoa), 'organisations')
+    const headers = [[t('common:organisationCode'), t('common:name'), ...defaultHeaders]]
+
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(headers.concat(organisationsAoa)), 'organisations')
   }
 
   if (includeCUs) {
-    const courseUnitsJson = _.uniqBy(
-      courseUnits.map(cu => ({
-        summary: sumSummaries(cu.groupSummaries),
-        ...cu.toJSON(),
-      }))
-    )
+    const courseUnitsJson = _.uniqBy(courseUnits, 'id').map(cu => {
+      cu.summary = sumSummaries(cu.groupSummaries)
+      delete cu.dataValues.summaries
+      earliestStartDate = cu.summary.startDate
+      latestEndDate = cu.summary.endDate
+      return cu.toJSON()
+    })
 
     const courseUnitsAoa = courseUnitsJson.map(cu => [
       cu.courseCode,
       getLanguageValue(cu.name, user.language),
-      ...questions.map(q => cu.summary.data.result[q.id].mean),
+      ...questions.map(q => cu.summary.data.result[q.id]?.mean ?? 0),
       cu.summary.data.studentCount,
       cu.summary.data.feedbackCount,
       cu.summary.data.feedbackResponsePercentage * 100,
     ])
 
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(courseUnitsAoa), 'course-units')
+    const headers = [[t('common:courseCode'), t('common:name'), ...defaultHeaders]]
+
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(headers.concat(courseUnitsAoa)), 'course-units')
   }
 
   if (includeCURs) {
@@ -132,23 +149,34 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       },
     })
 
-    const courseRealisationsAoa = courseRealisations.map(cur => [
-      cur.id,
-      getLanguageValue(cur.name, user.language),
-      cur.startDate,
-      cur.endDate,
-      ...questions.map(q => cur.summary.data.result[q.id].mean),
-      cur.summary.data.studentCount,
-      cur.summary.data.feedbackCount,
-      cur.summary.data.feedbackResponsePercentage * 100,
-    ])
+    const courseRealisationsAoa = _.uniqBy(courseRealisations, 'id').map(cur => {
+      earliestStartDate = cur.summary.startDate
+      latestEndDate = cur.summary.endDate
 
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(courseRealisationsAoa), 'course-realisations')
+      return [
+        cur.id,
+        getLanguageValue(cur.name, user.language),
+        cur.startDate,
+        cur.endDate,
+        ...questions.map(q => cur.summary.data.result[q.id]?.mean ?? 0),
+        cur.summary.data.studentCount,
+        cur.summary.data.feedbackCount,
+        cur.summary.data.feedbackResponsePercentage * 100,
+      ]
+    })
+
+    const headers = [[t('common:id'), t('common:name'), t('common:startDate'), t('common:endDate'), ...defaultHeaders]]
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.aoa_to_sheet(headers.concat(courseRealisationsAoa)),
+      'course-realisations'
+    )
   }
 
   const xlsxFile = XLSX.write(workbook, { type: 'buffer', bookSST: false })
 
-  const fileName = `norppa_${startDate}-${endDate}.xlsx`
+  const fileName = `norppa_${earliestStartDate}-${latestEndDate}.xlsx`
 
   return {
     xlsxFile,

@@ -76,7 +76,12 @@
     "ascending": "ascending",
     "descending": "descending",
     "additional": "Additional",
-    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count"
+    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count",
+    "id": "Identifier",
+    "code": "Code",
+    "organisationCode": "Organisation code",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -429,7 +434,7 @@
     "feedbackPercentage": "Feedback percentage",
     "feedbackResponseGiven": "Counter feedback has been given",
     "feedbackResponseNotGiven": "Counter feedback has not been given",
-    "feedbackResponsePercentage": "Courses where feedback response given",
+    "feedbackResponsePercentage": "Courses where feedback response given (%)",
     "feedbackStillOpen": "Feedback for this course is still ongoing",
     "courseOngoing": "The course is still ongoing",
     "programmeSummary": "Programme summary",
@@ -459,9 +464,6 @@
     "semester": "Semester",
     "spring": "Spring",
     "fall": "Fall",
-    "name": "Name",
-    "code": "Code",
-    "organisationCode": "Organisation code",
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",

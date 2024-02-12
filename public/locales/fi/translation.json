@@ -76,7 +76,12 @@
     "ascending": "nousevasti",
     "descending": "laskevasti",
     "additional": "Täydentävät",
-    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä"
+    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä",
+    "id": "Tunniste",
+    "code": "Koodi",
+    "organisationCode": "Organisaatiokoodi",
+    "startDate": "Aloituspvm",
+    "endDate": "Lopetuspvm"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -429,7 +434,7 @@
     "clickForDetails": "Katso lisätiedot",
     "feedbackResponseGiven": "Vastapalaute on annettu",
     "feedbackResponseNotGiven": "Vastapalautetta ei ole annettu",
-    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu",
+    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu (%)",
     "feedbackStillOpen": "Kurssin palautejakso on vielä käynnissä",
     "courseOngoing": "Kurssi on vielä käynnissä",
     "programmeSummary": "Koulutusohjelman yhteenveto",
@@ -459,9 +464,6 @@
     "semester": "Lukukausi",
     "spring": "Kevät",
     "fall": "Syksy",
-    "name": "Nimi",
-    "code": "Koodi",
-    "organisationCode": "Organisaatiokoodi",
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",

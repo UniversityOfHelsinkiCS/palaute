@@ -45,6 +45,7 @@ const GenerateReport = () => {
           includeCURs,
           startDate: dateRange.start,
           endDate: dateRange.end,
+          allTime,
         },
       })
 
