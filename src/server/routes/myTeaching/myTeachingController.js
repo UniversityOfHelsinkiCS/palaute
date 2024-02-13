@@ -2,10 +2,9 @@ const { Router } = require('express')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, Tag } = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
-const { INCLUDE_COURSES } = require('../../util/config')
 
 const getCourseUnitsForTeacher = async (req, res) => {
   const { params, user } = req
@@ -67,7 +66,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
     const disabledCourse = courseUnit.organisations.some(org => org.disabledCourseCodes.includes(courseUnit.courseCode))
 
     return {
-      ...courseUnit.dataValues,
+      id: courseUnit.dataValues.id,
+      name: courseUnit.dataValues.name,
+      courseCode: courseUnit.dataValues.courseCode,
+      userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
       courseRealisations: courseRealisations.map(courseRealisation => {
         const acualCUR = courseRealisation.toJSON()
