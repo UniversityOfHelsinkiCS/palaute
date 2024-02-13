@@ -10,7 +10,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
   const { params, user } = req
 
   const courseUnits = await CourseUnit.findAll({
-    attributes: ['id', 'name', 'courseCode', 'userCreated'],
+    attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
     include: [
       {
         model: Organisation,
@@ -99,7 +99,18 @@ const getCourseUnitsForTeacher = async (req, res) => {
     }
   })
 
-  res.send(acualCUs)
+  const groupedCourseUnits = _.groupBy(acualCUs, 'courseCode')
+
+  const teacherCourseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
+    const sortedCourseUnit = _.orderBy(courseUnits, courseUnit => courseUnit.validityPeriod?.startDate, 'desc')
+
+    return {
+      ...courseUnits[0],
+      courseRealisations: sortedCourseUnit.flatMap(courseUnit => courseUnit.courseRealisations),
+    }
+  })
+
+  res.send(teacherCourseUnits)
 }
 
 const router = Router()
