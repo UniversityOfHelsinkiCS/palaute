@@ -88,7 +88,11 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
           return _.pick(feedbackTarget.toJSON(), targetFields)
         })
-        acualCUR.feedbackTargets = acualFBTs
+
+        const [interimFbts, fbts] = _.partition(acualFBTs, 'userCreated')
+
+        acualCUR.feedbackTargets = fbts
+        acualCUR.interimFeedbackTargets = interimFbts
 
         return acualCUR
       }),
