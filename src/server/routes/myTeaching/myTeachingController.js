@@ -73,7 +73,21 @@ const getCourseUnitsForTeacher = async (req, res) => {
       disabledCourse,
       courseRealisations: courseRealisations.map(courseRealisation => {
         const acualCUR = courseRealisation.toJSON()
-        const acualFBTs = feedbackTargets[courseRealisation.id].map(feedbackTarget => feedbackTarget.toJSON())
+        const acualFBTs = feedbackTargets[courseRealisation.id].map(feedbackTarget => {
+          const targetFields = [
+            'id',
+            'name',
+            'opensAt',
+            'closesAt',
+            'feedbackResponseSent',
+            'feedbackResponseGiven',
+            'feedbackCount',
+            'continuousFeedbackEnabled',
+            'userCreated',
+          ]
+
+          return _.pick(feedbackTarget.toJSON(), targetFields)
+        })
         acualCUR.feedbackTargets = acualFBTs
 
         return acualCUR
