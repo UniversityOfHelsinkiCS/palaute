@@ -7,9 +7,9 @@ const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organ
 const { sequelize } = require('../../db/dbConnection')
 
 const getCourseUnitsForTeacher = async (req, res) => {
-  const { params, user } = req
+  const { query, user } = req
 
-  const courseUnits = await CourseUnit.findAll({
+  const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
     include: [
       {
@@ -58,8 +58,24 @@ const getCourseUnitsForTeacher = async (req, res) => {
     ],
   })
 
-  const acualCUs = courseUnits.map(courseUnit => {
+  const acualCUs = teacherCourseUnits.map(courseUnit => {
     const courseRealisations = courseUnit.feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
+
+    const filteredCURs = courseRealisations.filter(courseRealisation => {
+      const now = new Date()
+
+      if (query.status === 'ongoing') {
+        return courseRealisation.startDate <= now && courseRealisation.endDate >= now
+      }
+      if (query.status === 'upcoming') {
+        return courseRealisation.startDate > now
+      }
+      if (query.status === 'ended') {
+        return courseRealisation.endDate < now
+      }
+
+      return null
+    })
 
     const feedbackTargets = _.groupBy(courseUnit.feedbackTargets, 'courseRealisationId')
 
@@ -71,7 +87,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       courseCode: courseUnit.dataValues.courseCode,
       userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
-      courseRealisations: courseRealisations.map(courseRealisation => {
+      courseRealisations: filteredCURs.map(courseRealisation => {
         const acualCUR = courseRealisation.toJSON()
         const acualFBTs = feedbackTargets[courseRealisation.id].map(feedbackTarget => {
           const targetFields = [
@@ -99,18 +115,20 @@ const getCourseUnitsForTeacher = async (req, res) => {
     }
   })
 
-  const groupedCourseUnits = _.groupBy(acualCUs, 'courseCode')
+  const filteredCUs = acualCUs.filter(courseUnit => courseUnit.courseRealisations.length > 0)
 
-  const teacherCourseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
-    const sortedCourseUnit = _.orderBy(courseUnits, courseUnit => courseUnit.validityPeriod?.startDate, 'desc')
+  const groupedCUs = _.groupBy(filteredCUs, 'courseCode')
+
+  const resultCourseUnits = Object.values(groupedCUs).map(courseUnits => {
+    const sortedCUs = _.orderBy(courseUnits, courseUnit => courseUnit.validityPeriod?.startDate, 'desc')
 
     return {
       ...courseUnits[0],
-      courseRealisations: sortedCourseUnit.flatMap(courseUnit => courseUnit.courseRealisations),
+      courseRealisations: sortedCUs.flatMap(courseUnit => courseUnit.courseRealisations),
     }
   })
 
-  res.send(teacherCourseUnits)
+  res.send(resultCourseUnits)
 }
 
 const router = Router()
