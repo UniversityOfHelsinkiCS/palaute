@@ -1,7 +1,7 @@
 const XLSX = require('xlsx')
 const _ = require('lodash')
 const { Op } = require('sequelize')
-const { getSummaryAccessibleOrganisationIds, getAccessibleCourseRealisationIds } = require('./access')
+const { getSummaryAccessibleOrganisationIds } = require('./access')
 const { getLanguageValue } = require('../../util/languageUtils')
 const { getSummaryQuestions } = require('../questions')
 const {
@@ -11,22 +11,23 @@ const {
   CourseRealisationsOrganisation,
   CourseRealisation,
   CourseUnitsOrganisation,
-  Summary,
 } = require('../../models')
 const { getScopedSummary, sumSummaries } = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
+const { getTeacherSummary } = require('./getTeacherSummary')
 
 const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs, allTime }) => {
   const workbook = XLSX.utils.book_new()
 
-  const scopedSummary = allTime ? Summary : getScopedSummary(startDate, endDate)
+  const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
   const questions = await getSummaryQuestions()
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
-  const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
 
   let earliestStartDate = new Date(startDate)
   let latestEndDate = new Date(endDate)
+
+  const teacherOrganisations = await getTeacherSummary({ user, startDate, endDate, allTime })
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
@@ -94,8 +95,10 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       return org.toJSON()
     })
 
+    const allOrganisations = _.uniqBy(organisationsJson.concat(teacherOrganisations), 'id')
+
     // In xlsx terms aoa = array of arrays
-    const organisationsAoa = organisationsJson.map(org => [
+    const organisationsAoa = allOrganisations.map(org => [
       org.code,
       getLanguageValue(org.name, user.language),
       ...questions.map(q => org.summary.data.result[q.id]?.mean ?? 0),
@@ -118,7 +121,9 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       return cu.toJSON()
     })
 
-    const courseUnitsAoa = courseUnitsJson.map(cu => [
+    const allCourseUnits = _.uniqBy(courseUnitsJson.concat(teacherOrganisations.flatMap(org => org.courseUnits)), 'id')
+
+    const courseUnitsAoa = allCourseUnits.map(cu => [
       cu.groupId,
       cu.courseCode,
       getLanguageValue(cu.name, user.language),
@@ -141,7 +146,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     const courseRealisations = await CourseRealisation.findAll({
       attributes: ['id', 'name', 'startDate', 'endDate'],
       where: {
-        id: _.uniq(accessibleCourseRealisationIds.concat(organisationCourseRealisationIds)),
+        id: _.uniq(organisationCourseRealisationIds),
       },
       include: {
         model: scopedSummary,
@@ -150,7 +155,14 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       },
     })
 
-    const courseRealisationsAoa = _.uniqBy(courseRealisations, 'id').map(cur => {
+    const allCourseRealisations = _.uniqBy(
+      courseRealisations.concat(
+        teacherOrganisations.flatMap(org => org.courseUnits.flatMap(cu => cu.courseRealisations))
+      ),
+      'id'
+    )
+
+    const courseRealisationsAoa = allCourseRealisations.map(cur => {
       earliestStartDate = cur.summary.startDate
       latestEndDate = cur.summary.endDate
 

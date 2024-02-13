@@ -131,8 +131,8 @@ const sumSummaries = summaries => {
   return summary
 }
 
-const getScopedSummary = (startDate, endDate, extraOrgId, extraOrgMode) => {
-  const scopes = [{ method: ['at', startDate, endDate] }]
+const getScopedSummary = ({ startDate, endDate, extraOrgId, extraOrgMode, allTime }) => {
+  const scopes = allTime ? [] : [{ method: ['at', startDate, endDate] }]
 
   if (extraOrgId) {
     if (extraOrgMode === 'exclude') {

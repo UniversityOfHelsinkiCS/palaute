@@ -3,8 +3,8 @@ const { Op } = require('sequelize')
 const { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 const { sumSummaries, getScopedSummary } = require('./utils')
 
-const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode, allTime }) => {
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode, allTime })
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],

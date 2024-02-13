@@ -40,7 +40,7 @@ const withOrganisationAccessCheck = asyncFunction => async params => {
 }
 
 const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const courseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'groupId', 'courseCode'],
@@ -94,7 +94,7 @@ const getCourseRealisationSummaries = async ({
   extraOrgId,
   extraOrgMode,
 }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const courseRealisations = await CourseRealisation.findAll({
     attributes: ['id'],
@@ -143,7 +143,7 @@ const getCourseRealisationSummaries = async ({
 }
 
 const getOrganisationSummary = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
@@ -177,7 +177,7 @@ const getChildOrganisations = async ({
   extraOrgId,
   extraOrgMode,
 }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const rootOrganisation = await Organisation.findByPk(organisationId, {
     attributes: ['name', 'id', 'code'],
@@ -324,7 +324,7 @@ const getOrganisationSummaryWithCourseUnits = async ({
 }
 
 const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
   const organisation = await getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode })
 
   if (!organisation) {

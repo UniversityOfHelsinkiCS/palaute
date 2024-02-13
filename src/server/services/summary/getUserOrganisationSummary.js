@@ -14,7 +14,7 @@ const getUserOrganisationSummaries = async ({
   extraOrgMode,
 }) => {
   const organisationIds = await getSummaryAccessibleOrganisationIds(user)
-  const scopedSummary = getScopedSummary(startDate, endDate, extraOrgId, extraOrgMode)
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code', 'parentId'],
