@@ -141,7 +141,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     const courseRealisations = await CourseRealisation.findAll({
       attributes: ['id', 'name', 'startDate', 'endDate'],
       where: {
-        id: accessibleCourseRealisationIds.concat(organisationCourseRealisationIds),
+        id: _.uniq(accessibleCourseRealisationIds.concat(organisationCourseRealisationIds)),
       },
       include: {
         model: scopedSummary,
@@ -150,7 +150,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
       },
     })
 
-    const courseRealisationsAoa = courseRealisations.map(cur => {
+    const courseRealisationsAoa = _.uniqBy(courseRealisations, 'id').map(cur => {
       earliestStartDate = cur.summary.startDate
       latestEndDate = cur.summary.endDate
 

@@ -27,7 +27,6 @@ const GenerateReport = () => {
   const [includeCUs, setIncludeCUs] = React.useState(false)
   const [includeCURs, setIncludeCURs] = React.useState(false)
   const [allTime, setAllTime] = React.useState(false)
-
   const isValid = includeOrgs || includeCUs || includeCURs
 
   const [isLoading, setIsLoading] = React.useState(false)
