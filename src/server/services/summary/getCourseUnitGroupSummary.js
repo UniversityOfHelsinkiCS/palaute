@@ -85,7 +85,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
 
   const hasOrgAccess = Object.values(orgAccess).some(o => allOrgIds.includes(o.id))
   if (!user.isAdmin && !hasOrgAccess) {
-    const hasCurAccess = feedbackTargets.some(fbt => accessibleCurIds.includes(fbt.courseRealisationId))
+    const hasCurAccess = feedbackTargets.some(fbt => accessibleCurIds.includes(fbt.courseRealisation.id))
     if (!hasCurAccess) {
       return ApplicationError.Forbidden('No access')
     }
