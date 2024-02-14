@@ -13,7 +13,7 @@
     "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
   },
   "mails": {
-    "instructionsAndSupport": "Contact support: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nUser instructions: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>More information about Norppa in Flamma</a>"
+    "instructionsAndSupport": "Contact support: <a href=mailto:coursefeedback@helsinki.fi>coursefeedback@helsinki.fi</a> <br/>\nUser instructions: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>More information about Norppa in Flamma</a>"
   },
   "test": {
     "testValue": "Illuminati-silmä o_O"
