@@ -120,7 +120,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         return _.pick(feedbackTarget, targetFields)
       })
 
-      const [interimFbts, fbts] = _.partition(acualFBTs, 'userCreated')
+      const [interimFbts, fbts] = _.partition(acualFBTs, fbt => fbt.userCreated && !courseRealisation.userCreated)
 
       const acualCUR = {
         ...courseRealisation.toJSON(),
