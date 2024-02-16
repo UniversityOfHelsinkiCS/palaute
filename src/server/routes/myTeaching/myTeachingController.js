@@ -48,7 +48,9 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: UserFeedbackTarget.scope('teachers'),
             as: 'userFeedbackTargets',
             required: true,
-            where: isOrganisationSurvey ? { userCreated: true } : { userId: user.id },
+            where: {
+              userId: user.id,
+            },
           },
           {
             model: UserFeedbackTarget.scope('students'),
