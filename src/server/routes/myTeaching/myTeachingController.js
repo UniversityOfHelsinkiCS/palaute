@@ -97,7 +97,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
       userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
       courseRealisations: filteredCURs.map(courseRealisation => {
-        const acualCUR = courseRealisation.toJSON()
         const acualFBTs = feedbackTargets[courseRealisation.id].map(target => {
           const targetFields = [
             'id',
@@ -120,10 +119,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
           return _.pick(feedbackTarget, targetFields)
         })
 
-        const [interimFbts, fbts] = _.partition(acualFBTs, 'userCreated')
-
-        acualCUR.feedbackTargets = fbts
-        acualCUR.interimFeedbackTargets = interimFbts
+        const acualCUR = {
+          ...courseRealisation.toJSON(),
+          feedbackTargets: acualFBTs,
+        }
 
         return acualCUR
       }),
