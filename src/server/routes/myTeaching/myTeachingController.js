@@ -9,8 +9,13 @@ const { sequelize } = require('../../db/dbConnection')
 const getCourseUnitsForTeacher = async (req, res) => {
   const { query, user } = req
 
+  const onlyOrganisationSurveys = query.onlyOrganisationSurveys === 'true'
+
   const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
+    where: {
+      userCreated: onlyOrganisationSurveys,
+    },
     include: [
       {
         model: Organisation,
