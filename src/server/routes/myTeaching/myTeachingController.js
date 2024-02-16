@@ -41,6 +41,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ],
         where: {
           feedbackType: 'courseRealisation',
+          userCreated: isOrganisationSurvey,
         },
         include: [
           {
