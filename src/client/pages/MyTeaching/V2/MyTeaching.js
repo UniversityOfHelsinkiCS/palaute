@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import { Alert, Box, Typography } from '@mui/material'
 
-import useTeacherCourseUnits from '../../../hooks/useTeacherCourseUnits'
+import useTeacherCourseUnits from './useTeacherCourseUnits'
 
 import useCourseUnitGridColumns from './useCourseUnitGridColumns'
 
@@ -21,8 +21,6 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 import Title from '../../../components/common/Title'
 import { LoadingProgress } from '../../../components/common/LoadingProgress'
 
-import { getGroupedCourseUnits } from '../utils'
-
 const MyTeaching = () => {
   const { t } = useTranslation()
   const theme = useTheme()
@@ -33,11 +31,13 @@ const MyTeaching = () => {
     ignoreQueryPrefix: true,
   })
 
-  const { courseUnits, isLoading } = useTeacherCourseUnits()
+  const { courseUnits, isLoading } = useTeacherCourseUnits({ status })
 
-  const groupedCourseUnits = getGroupedCourseUnits(courseUnits)
-  const sortedCourseUnits = groupedCourseUnits[status]
-  const columnCourseUnits = _.chunk(sortedCourseUnits, Math.ceil(sortedCourseUnits.length / gridColumns))
+  if (isLoading) return null
+
+  console.log(courseUnits)
+
+  const columnCourseUnits = _.chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
 
   const CourseUnitComponent = status === 'ongoing' ? CourseUnitItem : CourseUnitAccordion
 
@@ -54,21 +54,21 @@ const MyTeaching = () => {
         sx={{ marginBottom: 3 }}
         status={status}
         counts={{
-          ongoing: groupedCourseUnits.ongoing?.length,
-          waiting: groupedCourseUnits.upcoming?.length,
-          ended: groupedCourseUnits.ended?.length,
+          ongoing: 0,
+          upcoming: 0,
+          ended: 0,
         }}
       />
 
       {isLoading && <LoadingProgress />}
 
-      {!isLoading && sortedCourseUnits?.length === 0 ? (
+      {!isLoading && courseUnits?.length === 0 ? (
         <Alert data-cy="my-teaching-no-courses" severity="info">
           {t('teacherView:noCoursesV2')}
         </Alert>
       ) : (
         <CourseUnitGroup>
-          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={sortedCourseUnits.length} />
+          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={courseUnits.length} />
           <CourseUnitGroupGrid>
             {columnCourseUnits.map((courseUnitColumn, i) => (
               <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>

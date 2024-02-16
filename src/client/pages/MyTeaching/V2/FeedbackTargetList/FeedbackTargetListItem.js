@@ -37,25 +37,18 @@ const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetPrimaryText = ({ feedbackTarget }) => {
+const FeedbackTargetPrimaryText = ({ courseRealisation, feedbackTarget }) => {
   const { i18n } = useTranslation()
 
-  const {
-    id,
-    courseRealisation,
-    continuousFeedbackEnabled,
-    feedbackCount,
-    feedbackResponseSent,
-    feedbackResponseGiven,
-  } = feedbackTarget
-  const { name } = courseRealisation
+  const { id, continuousFeedbackEnabled, feedbackCount, feedbackResponseSent, feedbackResponseGiven } = feedbackTarget
+
+  feedbackTarget.courseRealisation = courseRealisation
 
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOngoing = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
-
-  const courseName = getLanguageValue(name, i18n.language)
+  const courseName = getLanguageValue(courseRealisation.name, i18n.language)
 
   const fetchFeedbackResponseChip =
     isOpen || (isOngoing && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))
@@ -114,14 +107,14 @@ const FeedbackTargetSecondaryText = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetListItem = ({ feedbackTarget, divider = true }) => {
+const FeedbackTargetListItem = ({ courseRealisation, feedbackTarget, divider = true }) => {
   const { id } = feedbackTarget
 
   return (
     <ListItem divider={divider} data-cy={`my-teaching-feedback-target-item-${id}`}>
       <ListItemText
         disableTypography
-        primary={<FeedbackTargetPrimaryText feedbackTarget={feedbackTarget} />}
+        primary={<FeedbackTargetPrimaryText courseRealisation={courseRealisation} feedbackTarget={feedbackTarget} />}
         secondary={<FeedbackTargetSecondaryText feedbackTarget={feedbackTarget} />}
       />
     </ListItem>

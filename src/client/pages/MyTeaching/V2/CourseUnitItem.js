@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
 
 import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
-import InterimFeedbackChip from './chips/InterimFeedbackChip'
 
-import { getRelevantCourseRealisation } from '../utils'
+import InterimFeedbackChip from './chips/InterimFeedbackChip'
 
 import { getLanguageValue } from '../../../util/languageUtils'
 import { getCourseCode } from '../../../util/courseIdentifiers'
@@ -29,28 +28,25 @@ const styles = {
 const CourseUnitItem = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
 
-  const { name, courseCode } = courseUnit
+  const { name, courseRealisations } = courseUnit
+  const courseRealisation = courseRealisations[0]
+  const { feedbackTargets, interimFeedbackTargets } = courseRealisation
 
-  const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
-
-  const { feedbackTarget } = courseRealisation
-
-  // Check that the feedback target is not an interim feedback or a organisation survey
-  const fetchInterimFeedbackChip = !feedbackTarget.userCreated && !courseUnit.userCreated
+  const courseName = getLanguageValue(name, i18n.language)
 
   return (
     <Box sx={styles.item} data-cy="my-teaching-course-unit-item">
       <Box sx={{ px: 2, pt: 2 }}>
         <Typography component="h3" variant="body1">
-          {visibleCourseCode} {getLanguageValue(name, i18n.language)}
+          {visibleCourseCode} {courseName}
         </Typography>
 
-        {fetchInterimFeedbackChip && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
+        {/* {interimFeedbackTargets.length > 0 && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />} */}
       </Box>
 
       <Box sx={styles.details}>
-        <FeedbackTargetList courseCode={courseCode} group={group} />
+        <FeedbackTargetList courseRealisation={courseRealisation} feedbackTargets={feedbackTargets} />
       </Box>
     </Box>
   )
