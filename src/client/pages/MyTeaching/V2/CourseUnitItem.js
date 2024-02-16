@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
 
 import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
-import FeedbackTargetListItem from './FeedbackTargetList/FeedbackTargetListItem'
 
 import InterimFeedbackChip from './chips/InterimFeedbackChip'
 
@@ -26,12 +25,10 @@ const styles = {
   },
 }
 
-const CourseUnitItem = ({ courseUnit, group }) => {
-  const { t, i18n } = useTranslation()
+const CourseUnitItem = ({ courseUnit }) => {
+  const { i18n } = useTranslation()
 
   const { name, courseRealisations } = courseUnit
-  const courseRealisation = courseRealisations[0]
-  const { feedbackTargets, interimFeedbackTargets } = courseRealisation
 
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
@@ -47,30 +44,9 @@ const CourseUnitItem = ({ courseUnit, group }) => {
       </Box>
 
       <Box sx={styles.details}>
-        <FeedbackTargetList>
-          {feedbackTargets?.length === 0 ? (
-            <Box p={2}>
-              <Typography color="textSecondary" align="center">
-                {t('teacherView:noCourseRealisations')}
-              </Typography>
-            </Box>
-          ) : (
-            feedbackTargets.map((target, i) => {
-              const feedbackTarget = {
-                ...target,
-                courseRealisation,
-              }
-
-              return (
-                <FeedbackTargetListItem
-                  key={feedbackTarget.id}
-                  feedbackTarget={feedbackTarget}
-                  divider={i < feedbackTargets.length - 1}
-                />
-              )
-            })
-          )}
-        </FeedbackTargetList>
+        {courseRealisations.map(courseRealisation => (
+          <FeedbackTargetList key={courseRealisation.id} courseRealisation={courseRealisation} />
+        ))}
       </Box>
     </Box>
   )

@@ -34,27 +34,15 @@ const styles = {
   },
 }
 
-const CourseUnitAccordion = ({ courseUnit, group }) => {
+const CourseUnitAccordion = ({ courseUnit }) => {
   const { i18n } = useTranslation()
 
-  const { name, courseCode } = courseUnit
+  const { name, courseCode, courseRealisations } = courseUnit
+  const courseRealisation = courseRealisations[0]
+  const { interimFeedbackTargets } = courseRealisation
 
-  const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
   const visibleCourseCode = getCourseCode(courseUnit)
-
-  const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
-  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = feedbackTarget || {}
-
-  const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const isOld = feedbackTargetIsOld(feedbackTarget)
-
-  const isOngoing = feedbackTargetCourseIsOngoing({ opensAt, courseRealisation }) && !isOpen
-
-  // Check that the feedback target is not an interim feedback or a organisation survey
-  const fetchInterimFeedbackChip = !feedbackTarget.userCreated && !courseUnit.userCreated
-  const fetchFeedbackResponseChip =
-    isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven
+  const courseName = getLanguageValue(name, i18n.language)
 
   return (
     <Accordion
@@ -70,26 +58,17 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
       >
         <Box>
           <Typography component="h3" variant="body1" sx={{ mr: 2 }}>
-            {visibleCourseCode} {getLanguageValue(name, i18n.language)}
+            {visibleCourseCode} {courseName}
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {fetchFeedbackResponseChip && (
-              <FeedbackResponseChip
-                id={feedbackTargetId}
-                feedbackResponseGiven={feedbackResponseGiven}
-                feedbackResponseSent={feedbackResponseSent}
-                isOld={isOld}
-                ongoing={isOpen}
-                continuous={isOngoing && continuousFeedbackEnabled}
-                data-cy={`feedbackResponseGiven-${courseCode}-${feedbackResponseGiven}`}
-              />
-            )}
-            {fetchInterimFeedbackChip && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
+            {/* {interimFeedbackTargets.length > 0 && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />} */}
           </Box>
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
-        <FeedbackTargetList courseCode={courseCode} group={group} />
+        {courseRealisations.map(courseRealisation => (
+          <FeedbackTargetList key={courseRealisation.id} courseRealisation={courseRealisation} />
+        ))}
       </AccordionDetails>
     </Accordion>
   )

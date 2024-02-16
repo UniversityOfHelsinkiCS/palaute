@@ -35,8 +35,6 @@ const MyTeaching = () => {
 
   if (isLoading) return null
 
-  console.log(courseUnits)
-
   const columnCourseUnits = _.chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
 
   const CourseUnitComponent = status === 'ongoing' ? CourseUnitItem : CourseUnitAccordion
@@ -68,16 +66,12 @@ const MyTeaching = () => {
         </Alert>
       ) : (
         <CourseUnitGroup>
-          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={courseUnits.length} />
+          <CourseUnitGroupTitle title="Yliopistokurssit" badgeContent={courseUnits?.length} />
           <CourseUnitGroupGrid>
             {columnCourseUnits.map((courseUnitColumn, i) => (
               <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
                 {courseUnitColumn.map(courseUnit => (
-                  <CourseUnitComponent
-                    key={courseUnit.courseCode}
-                    courseUnit={courseUnit}
-                    group={status.toUpperCase()}
-                  />
+                  <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
                 ))}
               </CourseUnitGroupGridColumn>
             ))}

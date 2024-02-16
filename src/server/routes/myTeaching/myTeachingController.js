@@ -53,6 +53,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: UserFeedbackTarget.scope('students'),
             as: 'students',
             required: false,
+            separate: true,
           },
           {
             model: CourseRealisation,
