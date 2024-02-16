@@ -41,7 +41,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
         ],
         where: {
           feedbackType: 'courseRealisation',
-          userCreated: isOrganisationSurvey,
         },
         include: [
           {
@@ -72,9 +71,12 @@ const getCourseUnitsForTeacher = async (req, res) => {
   })
 
   const acualCUs = teacherCourseUnits.map(courseUnit => {
-    const courseRealisations = courseUnit.feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
+    const initialCourseRealisations = courseUnit.feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
 
-    const filteredCURs = courseRealisations.filter(courseRealisation => {
+    // Interim feedbacks cause duplicate course realisations in the above array
+    const uniqueCourseRealisations = _.uniqBy(initialCourseRealisations, 'id')
+
+    const filteredCURs = uniqueCourseRealisations.filter(courseRealisation => {
       const now = new Date()
 
       if (query.status === 'ongoing') {
@@ -92,7 +94,42 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
     const feedbackTargets = _.groupBy(courseUnit.feedbackTargets, 'courseRealisationId')
 
+    // Course is not enabled for feedback in the organisation settings
     const disabledCourse = courseUnit.organisations.some(org => org.disabledCourseCodes.includes(courseUnit.courseCode))
+
+    const courseRealisations = filteredCURs.map(courseRealisation => {
+      const acualFBTs = feedbackTargets[courseRealisation.id].map(target => {
+        const targetFields = [
+          'id',
+          'name',
+          'opensAt',
+          'closesAt',
+          'feedbackResponseSent',
+          'feedbackResponseGiven',
+          'feedbackCount',
+          'continuousFeedbackEnabled',
+          'userCreated',
+          'studentCount',
+        ]
+
+        const feedbackTarget = {
+          ...target.toJSON(),
+          studentCount: target.students.length,
+        }
+
+        return _.pick(feedbackTarget, targetFields)
+      })
+
+      const [interimFbts, fbts] = _.partition(acualFBTs, 'userCreated')
+
+      const acualCUR = {
+        ...courseRealisation.toJSON(),
+        feedbackTargets: fbts,
+        interimFeedbackTargets: interimFbts,
+      }
+
+      return acualCUR
+    })
 
     return {
       id: courseUnit.dataValues.id,
@@ -100,36 +137,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       courseCode: courseUnit.dataValues.courseCode,
       userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
-      courseRealisations: filteredCURs.map(courseRealisation => {
-        const acualFBTs = feedbackTargets[courseRealisation.id].map(target => {
-          const targetFields = [
-            'id',
-            'name',
-            'opensAt',
-            'closesAt',
-            'feedbackResponseSent',
-            'feedbackResponseGiven',
-            'feedbackCount',
-            'continuousFeedbackEnabled',
-            'userCreated',
-            'studentCount',
-          ]
-
-          const feedbackTarget = {
-            ...target.toJSON(),
-            studentCount: target.students.length,
-          }
-
-          return _.pick(feedbackTarget, targetFields)
-        })
-
-        const acualCUR = {
-          ...courseRealisation.toJSON(),
-          feedbackTargets: acualFBTs,
-        }
-
-        return acualCUR
-      }),
+      courseRealisations,
     }
   })
 
