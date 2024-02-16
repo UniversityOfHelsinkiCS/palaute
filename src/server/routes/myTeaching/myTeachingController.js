@@ -9,12 +9,12 @@ const { sequelize } = require('../../db/dbConnection')
 const getCourseUnitsForTeacher = async (req, res) => {
   const { query, user } = req
 
-  const onlyOrganisationSurveys = query.onlyOrganisationSurveys === 'true'
+  const isOrganisationSurvey = query.isOrganisationSurvey === 'true'
 
   const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
     where: {
-      userCreated: onlyOrganisationSurveys,
+      userCreated: isOrganisationSurvey,
     },
     include: [
       {
@@ -44,13 +44,15 @@ const getCourseUnitsForTeacher = async (req, res) => {
         },
         include: [
           {
-            model: UserFeedbackTarget,
+            model: UserFeedbackTarget.scope('teachers'),
             as: 'userFeedbackTargets',
             required: true,
-            where: {
-              userId: user.id,
-              accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-            },
+            where: isOrganisationSurvey ? { userCreated: true } : { userId: user.id },
+          },
+          {
+            model: UserFeedbackTarget.scope('students'),
+            as: 'students',
+            required: false,
           },
           {
             model: CourseRealisation,
@@ -94,7 +96,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
       disabledCourse,
       courseRealisations: filteredCURs.map(courseRealisation => {
         const acualCUR = courseRealisation.toJSON()
-        const acualFBTs = feedbackTargets[courseRealisation.id].map(feedbackTarget => {
+        const acualFBTs = feedbackTargets[courseRealisation.id].map(target => {
           const targetFields = [
             'id',
             'name',
@@ -105,9 +107,15 @@ const getCourseUnitsForTeacher = async (req, res) => {
             'feedbackCount',
             'continuousFeedbackEnabled',
             'userCreated',
+            'studentCount',
           ]
 
-          return _.pick(feedbackTarget.toJSON(), targetFields)
+          const feedbackTarget = {
+            ...target.toJSON(),
+            studentCount: target.students.length,
+          }
+
+          return _.pick(feedbackTarget, targetFields)
         })
 
         const [interimFbts, fbts] = _.partition(acualFBTs, 'userCreated')
