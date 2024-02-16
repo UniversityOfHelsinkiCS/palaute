@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, Typography } from '@mui/material'
 
-import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
+import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 
-import InterimFeedbackChip from './chips/InterimFeedbackChip'
+import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
-import { getLanguageValue } from '../../../util/languageUtils'
-import { getCourseCode } from '../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../../util/languageUtils'
+import { getCourseCode } from '../../../../util/courseIdentifiers'
 
 const styles = {
   item: {

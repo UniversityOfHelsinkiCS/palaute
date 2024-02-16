@@ -4,19 +4,19 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
 
-import FeedbackTargetList from './FeedbackTargetList/FeedbackTargetList'
-import InterimFeedbackChip from './chips/InterimFeedbackChip'
+import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
+import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
-import FeedbackResponseChip from '../FeedbackResponseChip'
+import FeedbackResponseChip from '../../FeedbackResponseChip'
 
-import { getRelevantCourseRealisation } from '../utils'
+import { getRelevantCourseRealisation } from '../../utils'
 
-import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
-import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
-import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
-import { getLanguageValue } from '../../../util/languageUtils'
-import { getCourseCode } from '../../../util/courseIdentifiers'
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
+import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
+import { getLanguageValue } from '../../../../util/languageUtils'
+import { getCourseCode } from '../../../../util/courseIdentifiers'
 
 const styles = {
   accordion: {
@@ -38,8 +38,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   const { i18n } = useTranslation()
 
   const { name, courseCode, courseRealisations } = courseUnit
-  const courseRealisation = courseRealisations[0]
-  const { interimFeedbackTargets } = courseRealisation
 
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
