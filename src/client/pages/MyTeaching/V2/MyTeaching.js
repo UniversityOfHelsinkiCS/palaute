@@ -60,12 +60,13 @@ const MyTeaching = () => {
     <>
       <Title>{t('common:teacherPage')}</Title>
       <Box mb={2}>
-        <Typography variant="h4" component="h1">
+        <Typography id="my-teaching-title" variant="h4" component="h1">
           {t('teacherView:mainHeading')}
         </Typography>
       </Box>
 
       <StatusTabs
+        aria-labelledby="my-teaching-title"
         sx={{ marginBottom: 3 }}
         status={status}
         counts={{

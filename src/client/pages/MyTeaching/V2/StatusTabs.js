@@ -14,6 +14,7 @@ const StatusTab = ({ status, count, color, label, ...props }) => (
     aria-label={label}
     label={
       <Badge
+        aria-hidden
         sx={{
           '& .MuiBadge-badge': {
             right: -5,
