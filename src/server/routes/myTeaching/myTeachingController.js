@@ -64,6 +64,20 @@ const getCourseUnitsForTeacher = async (req, res) => {
             as: 'courseRealisation',
             required: true,
             attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
+            where: {
+              [Op.or]: [
+                query.status === 'ongoing' && {
+                  startDate: { [Op.lte]: new Date() },
+                  endDate: { [Op.gte]: new Date() },
+                },
+                query.status === 'upcoming' && {
+                  startDate: { [Op.gt]: new Date() },
+                },
+                query.status === 'ended' && {
+                  endDate: { [Op.lt]: new Date() },
+                },
+              ],
+            },
           },
         ],
       },
@@ -76,28 +90,12 @@ const getCourseUnitsForTeacher = async (req, res) => {
     // Interim feedbacks cause duplicate course realisations in the above array
     const uniqueCourseRealisations = _.uniqBy(initialCourseRealisations, 'id')
 
-    const filteredCURs = uniqueCourseRealisations.filter(courseRealisation => {
-      const now = new Date()
-
-      if (query.status === 'ongoing') {
-        return courseRealisation.startDate <= now && courseRealisation.endDate >= now
-      }
-      if (query.status === 'upcoming') {
-        return courseRealisation.startDate > now
-      }
-      if (query.status === 'ended') {
-        return courseRealisation.endDate < now
-      }
-
-      return null
-    })
-
     const feedbackTargets = _.groupBy(courseUnit.feedbackTargets, 'courseRealisationId')
 
     // Course is not enabled for feedback in the organisation settings
     const disabledCourse = courseUnit.organisations.some(org => org.disabledCourseCodes.includes(courseUnit.courseCode))
 
-    const courseRealisations = filteredCURs.map(courseRealisation => {
+    const courseRealisations = uniqueCourseRealisations.map(courseRealisation => {
       const acualFBTs = feedbackTargets[courseRealisation.id].map(target => {
         const targetFields = [
           'id',
