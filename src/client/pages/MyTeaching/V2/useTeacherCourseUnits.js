@@ -7,7 +7,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 
 const defaultCacheTime = 900000
 
-const useTeacherCourseUnits = (params, options = {}) => {
+export const useTeacherCourseUnits = (params, options = {}) => {
   const { i18n } = useTranslation()
 
   const queryFn = async () => {
@@ -25,4 +25,20 @@ const useTeacherCourseUnits = (params, options = {}) => {
   return { courseUnits, ...rest }
 }
 
-export default useTeacherCourseUnits
+export const useTeacherOrganisatioSurveys = (params, options = {}) => {
+  const { i18n } = useTranslation()
+
+  const queryFn = async () => {
+    const { data } = await apiClient.get('/my-teaching/courses', { params: { ...params, isOrganisationSurvey: true } })
+
+    return _.sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
+  }
+
+  const { data: courseUnits, ...rest } = useQuery(['teacherOrgSurveys', params.status], queryFn, {
+    cacheTime: defaultCacheTime,
+    staleTime: defaultCacheTime,
+    ...options,
+  })
+
+  return { courseUnits, ...rest }
+}
