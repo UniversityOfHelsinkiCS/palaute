@@ -169,7 +169,13 @@
     "upcomingCourses": "Tulevat kurssit",
     "endedCourses": "Päättyneet kurssit",
     "feedbackNotStarted": "Palautejakso ei ole vielä alkanut",
-    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Aktiiviset kyselyt",
+    "upcomingSurveys": "Tulevat kyselyt",
+    "endedSurveys": "Päättyneet kyselyt",
+    "mainHeadingV2": "Kyselyni",
+    "organisationSurveys": "Organisaatiokyselyt",
+    "universitySurveys": "Yliopistokyselyt"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
