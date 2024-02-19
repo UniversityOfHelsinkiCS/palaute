@@ -176,7 +176,9 @@
     "endedSurveys": "Ended surveys",
     "organisationSurveys": "Organisation surveys",
     "universitySurveys": "University surveys",
-    "disabledCourseWarning": "Feedback is disabled for this course"
+    "disabledCourseWarning": "Feedback is disabled for this course",
+    "newView": "Test the new view",
+    "oldView": "Go back to the old view"
   },
   "questionEditor": {
     "addQuestion": "Add question",

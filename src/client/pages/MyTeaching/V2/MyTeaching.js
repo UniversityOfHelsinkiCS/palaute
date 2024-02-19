@@ -19,6 +19,7 @@ import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
+import LinkButton from '../../../components/common/LinkButton'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -73,10 +74,11 @@ const MyTeaching = () => {
   return (
     <>
       <Title>{t('common:teacherPage')}</Title>
-      <Box mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <Typography id="my-teaching-title" variant="h4" component="h1">
           {t('teacherView:mainHeadingV2')}
         </Typography>
+        <LinkButton to="/courses/" title={t('teacherView:oldView')} />
       </Box>
 
       <StatusTabs

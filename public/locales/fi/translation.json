@@ -176,7 +176,9 @@
     "endedSurveys": "Päättyneet kyselyt",
     "organisationSurveys": "Organisaatiokyselyt",
     "universitySurveys": "Yliopistokyselyt",
-    "disabledCourseWarning": "Kurssin palaute ei ole käytössä"
+    "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
+    "newView": "Kokeile uutta näkymää",
+    "oldView": "Takaisin vanhaan näkymää"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
