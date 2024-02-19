@@ -149,6 +149,7 @@
   },
   "teacherView": {
     "mainHeading": "Opetukseni",
+    "mainHeadingV2": "Kyselyni",
     "copyLink": "Kopioi vastauslinkki",
     "copyResponseLink": "Kopioi linkki vastapalautteeseen",
     "copied": "Linkki kopioitu leikepöydälle",
@@ -173,7 +174,6 @@
     "activeSurveys": "Aktiiviset kyselyt",
     "upcomingSurveys": "Tulevat kyselyt",
     "endedSurveys": "Päättyneet kyselyt",
-    "mainHeadingV2": "Kyselyni",
     "organisationSurveys": "Organisaatiokyselyt",
     "universitySurveys": "Yliopistokyselyt"
   },

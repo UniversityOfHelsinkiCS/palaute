@@ -149,6 +149,7 @@
   },
   "teacherView": {
     "mainHeading": "My teaching",
+    "mainHeadingV2": "My surveys",
     "copyLink": "Copy answer form link",
     "copyResponseLink": "Copy link to counter feedback",
     "copied": "Link copied to clipboard",
@@ -169,7 +170,12 @@
     "upcomingCourses": "Upcoming courses",
     "endedCourses": "Ended courses",
     "feedbackNotStarted": "Feedback has not started",
-    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Active surveys",
+    "upcomingSurveys": "Upcoming surveys",
+    "endedSurveys": "Ended surveys",
+    "organisationSurveys": "Organisation surveys",
+    "universitySurveys": "University surveys"
   },
   "questionEditor": {
     "addQuestion": "Add question",
