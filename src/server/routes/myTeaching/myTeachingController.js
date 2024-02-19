@@ -145,10 +145,12 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
   const resultCourseUnits = Object.values(groupedCUs).map(courseUnits => {
     const sortedCUs = _.orderBy(courseUnits, courseUnit => courseUnit.validityPeriod?.startDate, 'desc')
+    const courseRealisations = sortedCUs.flatMap(courseUnit => courseUnit.courseRealisations)
+    const sortedCourseRealisations = _.orderBy(courseRealisations, 'startDate', 'desc')
 
     return {
       ...courseUnits[0],
-      courseRealisations: sortedCUs.flatMap(courseUnit => courseUnit.courseRealisations),
+      courseRealisations: sortedCourseRealisations,
     }
   })
 
