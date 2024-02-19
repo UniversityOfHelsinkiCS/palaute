@@ -44,7 +44,13 @@ const Footer = ({ user }) => {
               <Box>
                 <Typography>{inStaging ? 'STAGING' : 'DEVELOPMENT'}</Typography>
               </Box>
-              <img src={images.norppa_viskaali} style={styles.norppa} alt="Norppa drawing by tttriple" />
+              <img
+                src={images.norppa_viskaali}
+                loading="lazy"
+                height={100}
+                style={styles.norppa}
+                alt="Norppa drawing by tttriple"
+              />
             </>
           )}
           <div>
@@ -66,15 +72,15 @@ const Footer = ({ user }) => {
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
             <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
-              <img src={images.toska_color} style={styles.logo} alt="Toska" />
+              <img src={images.toska_color} loading="lazy" style={styles.logo} alt="Toska" />
             </Link>
             {duration && (
               <>
-                <Typography variant="subtitle1" fontSize={10}>
+                <Typography component="p" variant="subtitle1" fontSize={10}>
                   {t('footer:lastUpdate', { duration })}
                 </Typography>
                 {user.isAdmin && (
-                  <Typography variant="subtitle1" fontSize={10}>
+                  <Typography component="p" variant="subtitle1" fontSize={10}>
                     git sha = {GIT_SHA}
                   </Typography>
                 )}
