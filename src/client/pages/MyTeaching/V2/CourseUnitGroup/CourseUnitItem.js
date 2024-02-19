@@ -2,13 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
 
-import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
+import DisabledCourseWarning from './DisabledCourseWarning'
 
+import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
+
+import commonStyles from '../utils/styles'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
-import DisabledCourseWarning from './DisabledCourseWarning'
 
 const styles = {
   item: {
@@ -18,10 +20,6 @@ const styles = {
       display: 'none',
     },
     minHeight: '100px',
-  },
-  alert: {
-    backgroundColor: '#fddeaf',
-    border: '1px solid #6b3600',
   },
   details: {
     display: 'block',
@@ -38,7 +36,7 @@ const CourseUnitItem = ({ courseUnit }) => {
   const courseName = getLanguageValue(name, i18n.language)
 
   return (
-    <Box sx={{ ...styles.item, ...(disabledCourse && styles.alert) }} data-cy="my-teaching-course-unit-item">
+    <Box sx={{ ...styles.item, ...(disabledCourse && commonStyles.alert) }} data-cy="my-teaching-course-unit-item">
       <Box sx={{ px: 2, pt: 2 }}>
         <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           {visibleCourseCode} {courseName}
