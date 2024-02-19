@@ -41,7 +41,7 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
 
   const columnCourseUnits = _.chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
 
-  const CourseUnitComponent = status === 'ongoing' ? CourseUnitItem : CourseUnitAccordion
+  const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
   return (
     <CourseUnitGroup>
@@ -63,7 +63,7 @@ const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
 
-  const { status = 'ongoing' } = qs.parse(location.search, {
+  const { status = 'active' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
 
@@ -75,7 +75,7 @@ const MyTeaching = () => {
       <Title>{t('common:teacherPage')}</Title>
       <Box mb={2}>
         <Typography id="my-teaching-title" variant="h4" component="h1">
-          {t('teacherView:mainHeading')}
+          {t('teacherView:mainHeadingV2')}
         </Typography>
       </Box>
 
@@ -101,11 +101,19 @@ const MyTeaching = () => {
       )}
 
       {orgSurveyCourseUnits?.length > 0 && (
-        <RenderCourseUnitGroup groupTitle="Organisaatiokyselyt" courseUnits={orgSurveyCourseUnits} status={status} />
+        <RenderCourseUnitGroup
+          groupTitle={t('teacherView:organisationSurveys')}
+          courseUnits={orgSurveyCourseUnits}
+          status={status}
+        />
       )}
 
       {courseUnits?.length > 0 && (
-        <RenderCourseUnitGroup groupTitle="Yliopistokurssit" courseUnits={courseUnits} status={status} />
+        <RenderCourseUnitGroup
+          groupTitle={t('teacherView:universitySurveys')}
+          courseUnits={courseUnits}
+          status={status}
+        />
       )}
     </>
   )

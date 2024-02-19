@@ -53,21 +53,21 @@ const StatusTabs = ({ status, counts, ...props }) => {
     >
       <StatusTab
         data-cy="my-teaching-ongoing-tab"
-        label={t('teacherView:ongoingCourses')}
-        status="ongoing"
+        label={t('teacherView:activeSurveys')}
+        status="active"
         icon={<OngoingIcon />}
         iconPosition="start"
       />
       <StatusTab
         data-cy="my-teaching-upcoming-tab"
-        label={t('teacherView:upcomingCourses')}
+        label={t('teacherView:upcomingSurveys')}
         status="upcoming"
         icon={<UpcomingIcon />}
         iconPosition="start"
       />
       <StatusTab
         data-cy="my-feedbacks-ended-tab"
-        label={t('teacherView:endedCourses')}
+        label={t('teacherView:endedSurveys')}
         status="ended"
         color="error"
         count={counts.ended}
