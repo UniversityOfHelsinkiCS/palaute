@@ -4,7 +4,7 @@ import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
-import { Alert, Box, Typography } from '@mui/material'
+import { Alert, Box, Typography, Skeleton } from '@mui/material'
 
 import { useTeacherCourseUnits, useTeacherOrganisatioSurveys } from './useTeacherCourseUnits'
 
@@ -19,7 +19,21 @@ import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
-import { LoadingProgress } from '../../../components/common/LoadingProgress'
+
+const CourseUnitGroupSkeleton = () => (
+  <>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Skeleton>
+        <Typography id="my-teaching-title" variant="h5">
+          Yliopistokurssit
+        </Typography>
+      </Skeleton>
+      <Skeleton variant="circular" width={20} height={20} sx={{ marginLeft: '1.5rem' }} />
+    </Box>
+
+    <Skeleton variant="rectangular" height={250} />
+  </>
+)
 
 const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
   const theme = useTheme()
@@ -76,7 +90,9 @@ const MyTeaching = () => {
         }}
       />
 
-      {isLoading && isOrgSurveysLoading && <LoadingProgress />}
+      {isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
+
+      {isLoading && <CourseUnitGroupSkeleton />}
 
       {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
         <Alert data-cy="my-teaching-no-courses" severity="info">
