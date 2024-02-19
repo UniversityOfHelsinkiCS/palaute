@@ -23,7 +23,7 @@ import LinkButton from '../../../components/common/LinkButton'
 
 const CourseUnitGroupSkeleton = () => (
   <>
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', mt: 6 }}>
       <Skeleton>
         <Typography id="my-teaching-title" variant="h5">
           Yliopistokurssit
