@@ -7,22 +7,14 @@ import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
-import FeedbackResponseChip from '../../FeedbackResponseChip'
-
-import { getRelevantCourseRealisation } from '../../utils'
-
-import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
-import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
 
 const styles = {
   accordion: {
     boxShadow: 'none',
-    my: 2,
-    margin: '0px !important',
+    borderRadius: 0,
+    mt: 2,
     '&:before': {
       display: 'none',
     },
@@ -45,6 +37,7 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   return (
     <Accordion
       sx={styles.accordion}
+      square
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="my-teaching-course-unit-item"
     >
