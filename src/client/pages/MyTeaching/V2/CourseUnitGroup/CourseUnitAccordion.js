@@ -5,7 +5,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
 
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
+import DisabledCourseWarning from './DisabledCourseWarning'
+
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
+
+import commonStyles from '../utils/styles'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
@@ -29,14 +33,14 @@ const styles = {
 const CourseUnitAccordion = ({ courseUnit }) => {
   const { i18n } = useTranslation()
 
-  const { name, courseCode, courseRealisations } = courseUnit
+  const { name, courseCode, courseRealisations, disabledCourse } = courseUnit
 
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
 
   return (
     <Accordion
-      sx={styles.accordion}
+      sx={{ ...styles.accordion, ...(disabledCourse && commonStyles.alert) }}
       square
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="my-teaching-course-unit-item"
@@ -48,9 +52,12 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
       >
         <Box>
-          <Typography component="h3" variant="body1" sx={{ mr: 2 }}>
+          <Typography component="h3" variant="subtitle1" sx={{ mr: 2, fontWeight: 'bold' }}>
             {visibleCourseCode} {courseName}
           </Typography>
+
+          {disabledCourse && <DisabledCourseWarning />}
+
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {/* {interimFeedbackTargets.length > 0 && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />} */}
           </Box>
