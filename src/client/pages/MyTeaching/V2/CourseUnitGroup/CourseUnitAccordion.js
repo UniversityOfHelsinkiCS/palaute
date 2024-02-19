@@ -10,6 +10,7 @@ import DisabledCourseWarning from './DisabledCourseWarning'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
 import commonStyles from '../utils/styles'
+import latestCourseRealisationFeedbackResponseGiven from '../utils/utils'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
@@ -38,9 +39,15 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
 
+  const latestFeedbackResponseGiven = latestCourseRealisationFeedbackResponseGiven(courseRealisations)
+
   return (
     <Accordion
-      sx={{ ...styles.accordion, ...(disabledCourse && commonStyles.alert) }}
+      sx={{
+        ...styles.accordion,
+        ...(disabledCourse && commonStyles.alert),
+        ...(latestFeedbackResponseGiven && commonStyles.error),
+      }}
       square
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="my-teaching-course-unit-item"
