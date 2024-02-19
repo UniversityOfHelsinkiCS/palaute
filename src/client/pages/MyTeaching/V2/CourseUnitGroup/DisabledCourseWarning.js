@@ -9,7 +9,7 @@ const DisabledCourseWarning = () => {
   return (
     <Box sx={{ display: 'flex', gap: 2 }}>
       <WarningAmberIcon sx={{ color: '#6b3600' }} aria-hidden />
-      <Typography>Kurssin palaute ei ole käytössä.</Typography>
+      <Typography>{t('teacherView:disabledCourseWarning')}</Typography>
     </Box>
   )
 }
