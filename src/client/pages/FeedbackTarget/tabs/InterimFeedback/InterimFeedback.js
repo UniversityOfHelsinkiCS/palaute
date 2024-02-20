@@ -66,9 +66,6 @@ const InterimFeedback = () => {
 
   return (
     <Box mb={6} px={1}>
-      <Alert sx={{ mb: 2 }} severity="warning">
-        {t('interimFeedback:heading')}
-      </Alert>
       <Box sx={styles.buttonContainer}>
         <Button
           data-cy="interim-feedbacks-add-new"

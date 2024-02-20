@@ -412,7 +412,6 @@
   },
   "interimFeedback": {
     "interimFeedback": "Välipalaute",
-    "heading": "Välipalaute -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
     "emptySurveys": "Kurssilla ei ole yhtään välipalautetta, voit luoda välipalautteen kurssille täällä",
     "givenFeedback": "Palautteita annettu",
     "viewFeedback": "Näytä välipalaute",

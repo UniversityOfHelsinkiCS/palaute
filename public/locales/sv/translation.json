@@ -397,7 +397,6 @@
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",
-    "heading": "Mellanrespons-funktionen är fortfarande i utvecklingsfasen och undergår demoförsök",
     "emptySurveys": "Det finns ingen mellanrespons funktion för detta program än; du kan skapa en ny mellanrespons för kursen här.",
     "givenFeedback": "Mellanrespons har getts",
     "viewFeedback": "Visa mellanrespons",
