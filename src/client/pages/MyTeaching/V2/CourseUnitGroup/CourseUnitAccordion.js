@@ -6,6 +6,7 @@ import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '
 
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import DisabledCourseWarning from './DisabledCourseWarning'
+import FeedbackResponseChip from '../../FeedbackResponseChip'
 
 import commonStyles from '../utils/styles'
 import latestCourseRealisationFeedbackResponseGiven from '../utils/utils'
@@ -37,8 +38,7 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
 
-  const latestCourseRealisationFeedbackResponsseNotGiven =
-    latestCourseRealisationFeedbackResponseGiven(courseRealisations)
+  const latestFeedbackTargetResponseNotGiven = latestCourseRealisationFeedbackResponseGiven(courseRealisations)
 
   return (
     <Accordion
@@ -56,7 +56,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
         sx={{
           ...(disabledCourse && commonStyles.alert),
-          ...(latestCourseRealisationFeedbackResponsseNotGiven && commonStyles.error),
         }}
       >
         <Box>
@@ -65,6 +64,17 @@ const CourseUnitAccordion = ({ courseUnit }) => {
           </Typography>
 
           {disabledCourse && <DisabledCourseWarning />}
+
+          {latestFeedbackTargetResponseNotGiven && (
+            <FeedbackResponseChip
+              id={latestFeedbackTargetResponseNotGiven.id}
+              feedbackResponseGiven={latestFeedbackTargetResponseNotGiven.feedbackResponseGiven}
+              feedbackResponseSent={latestFeedbackTargetResponseNotGiven.feedbackResponseSent}
+              isOld={latestFeedbackTargetResponseNotGiven.isOld}
+              ongoing={false}
+              continuous={false}
+            />
+          )}
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
