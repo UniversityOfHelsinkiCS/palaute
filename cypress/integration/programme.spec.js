@@ -25,8 +25,6 @@ describe('Organisation settings', () => {
 
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.wait(500)
-
       cy.visit(`${baseUrl}/organisations/500-K005/survey`)
       cy.contains('Test question programme level')
     })
@@ -42,8 +40,6 @@ describe('Organisation settings', () => {
       cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
 
       cy.get('[data-cy=question-card-save-edit]').click()
-
-      cy.wait(500)
 
       cy.visit(`${baseUrl}/organisations/500-K005/survey`)
 
@@ -63,8 +59,6 @@ describe('Organisation settings', () => {
       cy.get('input[id^=likert-question-en-questions]').type('LIKERT TEST')
 
       cy.get('[data-cy=question-card-save-edit]').click()
-
-      cy.wait(500)
 
       cy.visit(`${baseUrl}/organisations/500-K005/summary`)
       cy.contains('LIKERT TEST')

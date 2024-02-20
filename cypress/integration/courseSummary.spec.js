@@ -7,21 +7,18 @@ const { baseUrl } = require('../support')
  * For test data, see src/server/services/testServices/initSummary.js
  */
 describe('Course summary', () => {
-  before(() => {
+  beforeEach(() => {
     cy.request({
       method: 'POST',
       url: '/api/test/init-summary',
       body: summaryUser,
       headers: admin,
     })
-  })
-
-  beforeEach(() => {
     cy.loginAs(summaryUser)
     cy.visit(`${baseUrl}/course-summary?startDate=2023-08-01&endDate=2024-07-31&option=year`)
   })
 
-  after(() => {
+  afterEach(() => {
     cy.request({
       method: 'POST',
       url: '/api/test/clear-summary',
@@ -30,7 +27,7 @@ describe('Course summary', () => {
     })
   })
 
-  it('Should have data in My Organisations', () => {
+  it('Should have data in My Organisations and my courses', () => {
     cy.get('[data-cy=my-organisations]').click()
 
     cy.contains('TEST_SUMMARY_ORG')
@@ -38,9 +35,7 @@ describe('Course summary', () => {
     cy.contains('5.00')
     cy.contains('2 / 2')
     cy.contains('100%')
-  })
 
-  it('Should have data in My Courses', () => {
     cy.get('[data-cy=my-courses]').click()
 
     cy.contains('TEST_SUMMARY_ORG')
