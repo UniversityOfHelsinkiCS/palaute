@@ -47,9 +47,8 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
 
   if (expandable) {
     return (
-      <ExpandableCourseUnitGroup
-        courseUnitGroupTitle={<CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />}
-      >
+      <ExpandableCourseUnitGroup>
+        <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
         <CourseUnitGroupGrid>
           {columnCourseUnits.map((courseUnitColumn, i) => (
             <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>

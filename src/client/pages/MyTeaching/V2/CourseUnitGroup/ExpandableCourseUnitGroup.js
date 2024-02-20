@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Children, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Collapse, IconButton } from '@mui/material'
@@ -25,9 +25,11 @@ const ExpandMore = ({ expand, ...props }) => (
   />
 )
 
-const ExpandableCourseUnitGroup = ({ courseUnitGroupTitle, children }) => {
+const ExpandableCourseUnitGroup = ({ children }) => {
   const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
+
+  const [courseUnitGroupTitle, ...courseUnitGroupContent] = Children.toArray(children)
 
   const handleExpand = () => setExpanded(!expanded)
 
@@ -55,7 +57,7 @@ const ExpandableCourseUnitGroup = ({ courseUnitGroupTitle, children }) => {
         <ExpandMoreIcon />
       </ExpandMore>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {children}
+        {courseUnitGroupContent}
       </Collapse>
     </Box>
   )
