@@ -34,8 +34,8 @@ const CourseUnitItem = ({ courseUnit }) => {
   const courseName = getLanguageValue(name, i18n.language)
 
   return (
-    <Box sx={{ ...styles.item, ...(disabledCourse && commonStyles.alert) }} data-cy="my-teaching-course-unit-item">
-      <Box sx={{ px: 2, pt: 2 }}>
+    <Box sx={{ ...styles.item }} data-cy="my-teaching-course-unit-item">
+      <Box sx={{ px: 2, py: 2, ...(disabledCourse && commonStyles.alert) }}>
         <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           {visibleCourseCode} {courseName}
         </Typography>

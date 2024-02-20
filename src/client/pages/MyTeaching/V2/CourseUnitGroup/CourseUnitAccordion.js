@@ -43,8 +43,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
     <Accordion
       sx={{
         ...styles.accordion,
-        ...(disabledCourse && commonStyles.alert),
-        ...(latestFeedbackResponseGiven && commonStyles.error),
       }}
       square
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
@@ -55,6 +53,10 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         aria-controls={`course-unit-accordion-content-${courseCode}`}
         expandIcon={<ExpandMoreIcon />}
         data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
+        sx={{
+          ...(disabledCourse && commonStyles.alert),
+          ...(latestFeedbackResponseGiven && commonStyles.error),
+        }}
       >
         <Box>
           <Typography component="h3" variant="subtitle1" sx={{ mr: 2, fontWeight: 'bold' }}>
