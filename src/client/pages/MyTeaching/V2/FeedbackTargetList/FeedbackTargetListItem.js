@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { parseISO } from 'date-fns'
 
-import { ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
+import { Box, ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
 
 import FeedbackResponseChip from '../../FeedbackResponseChip'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
@@ -38,7 +38,7 @@ const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetPrimaryText = ({ feedbackTarget }) => {
+const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip }) => {
   const { i18n } = useTranslation()
 
   const {
@@ -61,29 +61,28 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget }) => {
 
   return (
     <>
-      <Link
-        data-cy={`my-teaching-feedback-target-item-link-${id}`}
-        component={RouterLink}
-        to={`/targets/${id}`}
-        sx={{ marginRight: 2 }}
-      >
+      <Link data-cy={`my-teaching-feedback-target-item-link-${id}`} component={RouterLink} to={`/targets/${id}`}>
         {courseName}
       </Link>
-      {fetchFeedbackResponseChip && (
-        <FeedbackResponseChip
-          id={id}
-          feedbackResponseGiven={feedbackResponseGiven}
-          feedbackResponseSent={feedbackResponseSent}
-          isOld={isOld}
-          ongoing={isOpen}
-          continuous={isOngoing && continuousFeedbackEnabled}
-          data-cy={
-            isOpen
-              ? `feedbackOpen-${feedbackTarget.id}`
-              : `feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`
-          }
-        />
-      )}
+
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        {fetchInterimFeedbackChip && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
+        {fetchFeedbackResponseChip && (
+          <FeedbackResponseChip
+            id={id}
+            feedbackResponseGiven={feedbackResponseGiven}
+            feedbackResponseSent={feedbackResponseSent}
+            isOld={isOld}
+            ongoing={isOpen}
+            continuous={isOngoing && continuousFeedbackEnabled}
+            data-cy={
+              isOpen
+                ? `feedbackOpen-${feedbackTarget.id}`
+                : `feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`
+            }
+          />
+        )}
+      </Box>
       <FeedbackTargetPeriodInfo feedbackTarget={feedbackTarget} />
     </>
   )
@@ -113,14 +112,19 @@ const FeedbackTargetSecondaryText = ({ feedbackTarget }) => {
   )
 }
 
-const FeedbackTargetListItem = ({ feedbackTarget, divider = true }) => {
+const FeedbackTargetListItem = ({ feedbackTarget, fetchInterimFeedbackChip, divider = true }) => {
   const { id } = feedbackTarget
 
   return (
     <ListItem divider={divider} data-cy={`my-teaching-feedback-target-item-${id}`}>
       <ListItemText
         disableTypography
-        primary={<FeedbackTargetPrimaryText feedbackTarget={feedbackTarget} />}
+        primary={
+          <FeedbackTargetPrimaryText
+            feedbackTarget={feedbackTarget}
+            fetchInterimFeedbackChip={fetchInterimFeedbackChip}
+          />
+        }
         secondary={<FeedbackTargetSecondaryText feedbackTarget={feedbackTarget} />}
       />
     </ListItem>

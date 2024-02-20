@@ -3,11 +3,14 @@ import { Box, Typography, List } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import FeedbackTargetListItem from './FeedbackTargetListItem'
+import { hasOngoingInterimFeedbacks } from '../utils/utils'
 
 const FeedbackTargetList = ({ courseRealisation }) => {
   const { t } = useTranslation()
 
   const { feedbackTargets, interimFeedbackTargets } = courseRealisation
+
+  const fetchInterimFeedbackChip = hasOngoingInterimFeedbacks(interimFeedbackTargets)
 
   return (
     <List sx={{ margin: 0, padding: 0 }}>
@@ -27,6 +30,7 @@ const FeedbackTargetList = ({ courseRealisation }) => {
             <FeedbackTargetListItem
               key={feedbackTarget.id}
               feedbackTarget={feedbackTarget}
+              fetchInterimFeedbackChip={fetchInterimFeedbackChip}
               divider={i < feedbackTargets.length - 1}
             />
           )

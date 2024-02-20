@@ -1,5 +1,6 @@
 import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
 const getLatestFeedbackTarget = courseRealisations => {
   if (courseRealisations.length === 0) return true
@@ -14,5 +15,8 @@ const getLatestFeedbackTarget = courseRealisations => {
 
   return { ...latestFeedbackTarget, isOld, isEnded }
 }
+
+export const hasOngoingInterimFeedbacks = interimFeedbacktargets =>
+  interimFeedbacktargets.some(interimFeedbackTarget => feedbackTargetIsOpen(interimFeedbackTarget))
 
 export default getLatestFeedbackTarget
