@@ -377,7 +377,6 @@
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
   },
   "organisationSurveys": {
-    "heading": "Koulutusohjelman kyselyt -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
     "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",
     "givenFeedback": "Palautteita annettu",
     "viewFeedback": "Näytä kysely",

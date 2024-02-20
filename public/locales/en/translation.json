@@ -377,7 +377,6 @@
     "cannotOpenImmediately": "Feedback is already open or has ended"
   },
   "organisationSurveys": {
-    "heading": "Programme Surveys surveys feature is still in the development stage and in a demo trial",
     "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",
     "givenFeedback": "Feedbacks given",
     "viewFeedback": "View survey",
