@@ -17,7 +17,6 @@ const organisation = require('./organisations')
 const courseUnit = require('./courseUnits')
 const myTeaching = require('./myTeaching')
 const tags = require('./tags')
-const testing = require('./testing')
 const noad = require('./noad')
 const norppaFeedback = require('./norppaFeedback')
 const continuousFeedback = require('./continuousFeedback')
@@ -51,10 +50,6 @@ router.use('/tags', tags)
 router.use('/norppa-feedback', norppaFeedback)
 router.use('/continuous-feedback', continuousFeedback)
 router.use('/admin', admin)
-
-if (inE2EMode || inDevelopment) {
-  router.use('/test', testing)
-}
 
 // Link from courses-page
 router.use('/cur/:id', redirectFromCoursesPage)

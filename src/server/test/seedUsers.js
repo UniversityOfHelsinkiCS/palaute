@@ -5,7 +5,7 @@ const {
   Feedback,
   UserFeedbackTarget,
   NorppaFeedback,
-} = require('../../models')
+} = require('../models')
 
 const seedUsers = async users => {
   for (const user of users) {

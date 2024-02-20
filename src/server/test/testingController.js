@@ -1,7 +1,8 @@
 const { Op } = require('sequelize')
 const Router = require('express')
 const _ = require('lodash')
-const { sequelize } = require('../../db/dbConnection')
+const morgan = require('morgan')
+const { sequelize } = require('../db/dbConnection')
 
 const { testStudents, organisationCorrespondentUsers } = require('./utils/users')
 
@@ -19,15 +20,12 @@ const {
   CourseRealisationsTag,
   OrganisationFeedbackCorrespondent,
   Feedback,
-} = require('../../models')
+} = require('../models')
 
-const { ApplicationError } = require('../../util/customErrors')
-const { initTestSummary, clearTestSummary } = require('../../services/testServices/seedSummary')
-const { seedUsers, clearUsers } = require('../../services/testServices/seedUsers')
-const {
-  seedFeedbackTargetsForTeacher,
-  clearFeedbackTargetsForTeacher,
-} = require('../../services/testServices/seedFeedbackTargets')
+const { ApplicationError } = require('../util/customErrors')
+const { initTestSummary, clearTestSummary } = require('./seedSummary')
+const { seedUsers, clearUsers } = require('./seedUsers')
+const { seedFeedbackTargetsForTeacher, clearFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
 
 const seedTestUsers = async users => {
   await User.bulkCreate(users, {
@@ -443,6 +441,9 @@ const clearFeedbackTargets = async (req, res) => {
 }
 
 const router = Router()
+
+router.use(Router.json())
+router.use(morgan('dev'))
 
 router.post('/clear/user/student', clearTestStudents)
 router.post('/clear/user/correspondent/:organisationCode', clearTestCorrespondents)

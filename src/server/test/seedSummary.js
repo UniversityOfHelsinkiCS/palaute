@@ -11,10 +11,10 @@ const {
   OrganisationFeedbackCorrespondent,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
-} = require('../../models')
-const getUniversitySurvey = require('../surveys/universitySurvey')
+} = require('../models')
+const getUniversitySurvey = require('../services/surveys/universitySurvey')
 const { createTestObject, clearTestObject } = require('./utils')
-const { buildSummaries } = require('../summary/buildSummaries')
+const { buildSummaries } = require('../services/summary/buildSummaries')
 
 const getTestData = async () => {
   const TEST_ORG_ID = 'norppa-summary-test-org-1'

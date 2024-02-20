@@ -22,9 +22,8 @@ import { admin, testUsers } from '../fixtures/headers'
 beforeEach(() => {
   cy.request({
     method: 'POST',
-    url: 'api/test/seed-users',
+    url: 'test/seed-users',
     body: testUsers,
-    headers: admin,
   })
   // cy.enableTestUsers()
   // cy.setUpAdminTeacherView()

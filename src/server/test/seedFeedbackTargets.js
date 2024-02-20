@@ -10,7 +10,7 @@ const {
   Survey,
   FeedbackTargetLog,
   ContinuousFeedback,
-} = require('../../models')
+} = require('../models')
 const { createTestObject } = require('./utils')
 
 const TEST_COURSE_UNIT_ID = 'norppa-test-course-unit-id-2'

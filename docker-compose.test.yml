@@ -26,9 +26,12 @@ services:
     container_name: palaute_app_test
 
   db:
-    image: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi/palaute_test_db
+    image: postgres:15.4
     environment:
+      - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
     container_name: palaute_test_db
 
   jami:
