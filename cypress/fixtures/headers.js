@@ -25,7 +25,7 @@ const student = {
   givenname: 'Olli',
   sn: 'Oppilas',
   mail: 'opiskelija@toska.fi',
-  preferredLanguage: ' en',
+  preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-115054920',
 }
 
@@ -34,7 +34,7 @@ const studentHenri = {
   givenname: 'Henri',
   sn: 'Testaaja',
   mail: 'henri.testaaja@helsinki.fi',
-  preferredLanguage: ' en',
+  preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-124043339',
 }
 
@@ -43,7 +43,7 @@ const studentMiko = {
   givenname: 'Miko',
   sn: 'Testaaja',
   mail: 'miko.testaaja@helsinki.fi',
-  preferredLanguage: ' en',
+  preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-136095188',
 }
 
@@ -52,7 +52,7 @@ const studentVeikko = {
   givenname: 'Veikko',
   sn: 'Testaaja',
   mail: 'veikko.testaaja@helsinki.fi',
-  preferredLanguage: ' en',
+  preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-130991964',
 }
 
@@ -61,7 +61,7 @@ const studentRandom = {
   givenname: 'Random',
   sn: 'Testaaja',
   mail: 'random.testaaja@helsinki.fi',
-  preferredLanguage: ' en',
+  preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-111111111',
 }
 

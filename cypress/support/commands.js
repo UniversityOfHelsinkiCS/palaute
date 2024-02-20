@@ -12,6 +12,10 @@ import {
   summaryUser,
 } from '../fixtures/headers'
 
+Cypress.Commands.add('loginAs', user => {
+  localStorage.setItem('fakeUser', JSON.stringify(user))
+})
+
 Cypress.Commands.add('loginAsTeacher', () => {
   localStorage.setItem('fakeUser', JSON.stringify(admin))
 

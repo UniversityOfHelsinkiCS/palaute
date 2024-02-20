@@ -24,6 +24,10 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const { initTestSummary, clearTestSummary } = require('../../services/testServices/seedSummary')
 const { seedUsers, clearUsers } = require('../../services/testServices/seedUsers')
+const {
+  seedFeedbackTargetsForTeacher,
+  clearFeedbackTargetsForTeacher,
+} = require('../../services/testServices/seedFeedbackTargets')
 
 const seedTestUsers = async users => {
   await User.bulkCreate(users, {
@@ -401,7 +405,7 @@ const clearSummary = async (req, res) => {
   return res.send(200)
 }
 
-const userHeadersToUsers = userHeaders => ({
+const userHeadersToUser = userHeaders => ({
   id: userHeaders.hyPersonSisuId,
   username: userHeaders.uid,
   firstName: userHeaders.givenname,
@@ -410,14 +414,31 @@ const userHeadersToUsers = userHeaders => ({
 })
 
 const seedTestUsers2 = async (req, res) => {
-  const users = req.body.map(userHeadersToUsers)
+  const users = req.body.map(userHeadersToUser)
   await seedUsers(users)
   return res.send(201)
 }
 
 const clearTestUsers2 = async (req, res) => {
-  const users = req.body.map(userHeadersToUsers)
+  const users = req.body.map(userHeadersToUser)
   await clearUsers(users)
+  return res.send(204)
+}
+
+const seedFeedbackTargets = async (req, res) => {
+  const { teacher, student, opensAt, closesAt } = req.body
+  const fbts = await seedFeedbackTargetsForTeacher({
+    teacher: userHeadersToUser(teacher),
+    student: userHeadersToUser(student),
+    opensAt,
+    closesAt,
+  })
+  return res.send(fbts)
+}
+
+const clearFeedbackTargets = async (req, res) => {
+  const { teacher, student } = req.body
+  await clearFeedbackTargetsForTeacher({ teacher: userHeadersToUser(teacher), student: userHeadersToUser(student) })
   return res.send(204)
 }
 
@@ -440,5 +461,7 @@ router.post('/init-summary', initSummary)
 router.post('/clear-summary', clearSummary)
 router.post('/seed-users', seedTestUsers2)
 router.post('/clear-users', clearTestUsers2)
+router.post('/seed-feedback-targets', seedFeedbackTargets)
+router.post('/clear-feedback-targets', clearFeedbackTargets)
 
 module.exports = router

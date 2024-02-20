@@ -1,4 +1,3 @@
-const { uniqueId } = require('lodash')
 const { Op } = require('sequelize')
 const { startOfDay } = require('date-fns')
 const {
@@ -9,7 +8,6 @@ const {
   User,
   Feedback,
   UserFeedbackTarget,
-  Summary,
   OrganisationFeedbackCorrespondent,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
@@ -142,14 +140,6 @@ const initTestSummary = async ({ user }) => {
   }
 
   await buildSummaries()
-
-  const summary = await Summary.findOne({
-    where: {
-      entityId: testData.TEST_COURSE_REALISATION_ID,
-    },
-  })
-
-  console.log(summary.toJSON())
 }
 
 const clearTestSummary = async ({ user }) => {

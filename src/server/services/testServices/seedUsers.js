@@ -9,13 +9,12 @@ const {
 
 const seedUsers = async users => {
   for (const user of users) {
-    const [u] = await User.findOrCreate({
+    await User.findOrCreate({
       where: {
         id: user.id,
       },
       defaults: user,
     })
-    console.log(u.toJSON())
   }
 }
 

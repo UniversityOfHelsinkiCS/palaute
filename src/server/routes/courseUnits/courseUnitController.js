@@ -182,6 +182,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
     }
   })
 
+  console.log(courseUnits)
+
   return res.send(courseUnits)
 }
 
