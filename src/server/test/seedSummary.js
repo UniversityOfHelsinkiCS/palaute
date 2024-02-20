@@ -142,65 +142,6 @@ const initTestSummary = async ({ user }) => {
   await buildSummaries()
 }
 
-const clearTestSummary = async ({ user }) => {
-  const testData = await getTestData()
-
-  await clearTestObject(UserFeedbackTarget, {
-    userId: user.hyPersonSisuId,
-  })
-
-  await clearTestObject(OrganisationFeedbackCorrespondent, {
-    userId: user.hyPersonSisuId,
-  })
-
-  await clearTestObject(CourseUnitsOrganisation, {
-    courseUnitId: testData.TEST_COURSE_UNIT_ID,
-  })
-
-  await clearTestObject(CourseRealisationsOrganisation, {
-    courseRealisationId: testData.TEST_COURSE_REALISATION_ID,
-  })
-
-  for (const { userId } of testData.TEST_FEEDBACKS) {
-    await clearTestObject(UserFeedbackTarget, {
-      userId,
-    })
-    await clearTestObject(Feedback, {
-      userId,
-    })
-  }
-
-  await clearTestObject(FeedbackTarget, {
-    [Op.or]: {
-      courseRealisationId: testData.TEST_COURSE_REALISATION_ID,
-      courseUnitId: testData.TEST_COURSE_UNIT_ID,
-    },
-  }).then(async () => {
-    await clearTestObject(CourseRealisation, {
-      id: testData.TEST_COURSE_REALISATION_ID,
-    })
-
-    await clearTestObject(CourseUnit, {
-      id: testData.TEST_COURSE_UNIT_ID,
-    })
-  })
-
-  await clearTestObject(Organisation, {
-    code: testData.TEST_ORG_ID,
-  })
-
-  await clearTestObject(User, {
-    id: user.hyPersonSisuId,
-  })
-
-  for (const { id } of testData.TEST_STUDENTS) {
-    await clearTestObject(User, {
-      id,
-    })
-  }
-}
-
 module.exports = {
   initTestSummary,
-  clearTestSummary,
 }

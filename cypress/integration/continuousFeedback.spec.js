@@ -1,28 +1,9 @@
 /// <reference types="Cypress" />
 
-const { addDays } = require('date-fns')
-const { admin, teacher, student } = require('../fixtures/headers')
+const { teacher, student } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Continuous feedback', () => {
-  beforeEach(() => {
-    cy.request({
-      method: 'POST',
-      url: 'api/test/seed-feedback-targets',
-      body: { teacher, student, opensAt: addDays(new Date(), 1), closesAt: addDays(new Date(), 2) },
-      headers: admin,
-    })
-  })
-
-  afterEach(() => {
-    cy.request({
-      method: 'POST',
-      url: 'api/test/clear-feedback-targets',
-      body: { teacher, student },
-      headers: admin,
-    })
-  })
-
   it('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
     // Teacher enables continuous feedback
     cy.loginAs(teacher)

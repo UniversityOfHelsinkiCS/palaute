@@ -7,15 +7,14 @@ const {
   Organisation,
   CourseRealisationsOrganisation,
   CourseUnitsOrganisation,
-  Survey,
-  FeedbackTargetLog,
-  ContinuousFeedback,
 } = require('../models')
 const { createTestObject } = require('./utils')
-
-const TEST_COURSE_UNIT_ID = 'norppa-test-course-unit-id-2'
-const TEST_COURSE_REALISATION_ID = 'norppa-test-course-unit-realisation-id-2'
-const TEST_ORGANISATION_ID = 'norppa-test-organisation-id-2'
+const {
+  TEST_ORGANISATION_ID,
+  TEST_COURSE_UNIT_ID,
+  TEST_COURSE_REALISATION_ID,
+  TEST_ORGANISATION_CODE,
+} = require('./testIds')
 
 const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closesAt }) => {
   await createTestObject(Organisation, {
@@ -25,14 +24,14 @@ const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closes
       en: 'Test organisation',
       sv: 'asdasdasd',
     },
-    code: 'TEST_ORGANISATION',
+    code: TEST_ORGANISATION_CODE,
   })
 
   await createTestObject(CourseUnit, {
     id: TEST_COURSE_UNIT_ID,
     name: {
       fi: 'Testauskurssi',
-      en: 'Test course',
+      en: 'Testauskurssi',
       sv: 'asdasdasd',
     },
     courseCode: 'SUMMARY_TEST_COURSE',
@@ -92,63 +91,6 @@ const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closes
   return [fbt]
 }
 
-const clearFeedbackTargetsForTeacher = async ({ teacher, student }) => {
-  await UserFeedbackTarget.destroy({
-    where: {
-      userId: [teacher.id, student.id],
-    },
-  })
-  const fbt = await FeedbackTarget.findOne({
-    where: {
-      courseRealisationId: TEST_COURSE_REALISATION_ID,
-    },
-  })
-  await Survey.destroy({
-    where: {
-      feedbackTargetId: fbt.id,
-    },
-  })
-  await ContinuousFeedback.destroy({
-    where: {
-      feedbackTargetId: fbt.id,
-    },
-  })
-  await FeedbackTargetLog.destroy({
-    where: {
-      feedbackTargetId: fbt.id,
-    },
-  })
-  await fbt.destroy()
-  await CourseRealisationsOrganisation.destroy({
-    where: {
-      courseRealisationId: TEST_COURSE_REALISATION_ID,
-    },
-  })
-  await CourseRealisation.destroy({
-    where: {
-      id: TEST_COURSE_REALISATION_ID,
-    },
-  })
-
-  await CourseUnitsOrganisation.destroy({
-    where: {
-      courseUnitId: TEST_COURSE_UNIT_ID,
-    },
-  })
-  await CourseUnit.destroy({
-    where: {
-      id: TEST_COURSE_UNIT_ID,
-    },
-  })
-
-  await Organisation.destroy({
-    where: {
-      id: TEST_ORGANISATION_ID,
-    },
-  })
-}
-
 module.exports = {
   seedFeedbackTargetsForTeacher,
-  clearFeedbackTargetsForTeacher,
 }

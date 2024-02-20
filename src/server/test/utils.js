@@ -1,6 +1,10 @@
 const createTestObject = async (Model, data) => {
   const oldInstance = await Model.findOne({
-    where: data,
+    where: data.id
+      ? {
+          id: data.id,
+        }
+      : data,
   })
 
   if (oldInstance) {
@@ -8,7 +12,9 @@ const createTestObject = async (Model, data) => {
     return oldInstance
   }
 
-  return Model.create(data)
+  return Model.create(data, {
+    hooks: false,
+  })
 }
 
 const clearTestObject = (Model, where) => {
@@ -23,6 +29,7 @@ const clearTestObject = (Model, where) => {
   return Model.destroy({
     where,
     logging: console.log,
+    hooks: false,
   })
 }
 

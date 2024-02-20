@@ -16,27 +16,32 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+import { addDays } from 'date-fns'
 import { baseUrl } from './baseUrl'
-import { admin, testUsers } from '../fixtures/headers'
+import { admin, testUsers, teacher, student } from '../fixtures/headers'
 
 beforeEach(() => {
+  cy.request({
+    method: 'POST',
+    url: 'test/reset-db',
+  })
+
   cy.request({
     method: 'POST',
     url: 'test/seed-users',
     body: testUsers,
   })
+
+  cy.request({
+    method: 'POST',
+    url: 'test/seed-feedback-targets',
+    body: { teacher, student, opensAt: addDays(new Date(), 1), closesAt: addDays(new Date(), 2) },
+    headers: admin,
+  })
+
   // cy.enableTestUsers()
   // cy.setUpAdminTeacherView()
   // cy.setUpSecondaryTeacherView()
-})
-
-afterEach(() => {
-  cy.request({
-    method: 'POST',
-    url: 'api/test/clear-users',
-    body: testUsers,
-    headers: admin,
-  })
 })
 
 Cypress.on('uncaught:exception', err => {

@@ -23,9 +23,10 @@ const {
 } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
-const { initTestSummary, clearTestSummary } = require('./seedSummary')
-const { seedUsers, clearUsers } = require('./seedUsers')
-const { seedFeedbackTargetsForTeacher, clearFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
+const { initTestSummary } = require('./seedSummary')
+const { seedFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
+const { seedDb, seedUsers } = require('./seed')
+const { TEST_COURSE_REALISATION_ID } = require('./testIds')
 
 const seedTestUsers = async users => {
   await User.bulkCreate(users, {
@@ -313,10 +314,6 @@ const clearTestCorrespondents = async (req, res) => {
 }
 
 const updateCourseRealisation = async (req, res) => {
-  const { user } = req
-
-  if (!user) throw new ApplicationError('No user found', 404)
-
   const { feedbackTargetId } = req.params
 
   const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
@@ -398,11 +395,6 @@ const initSummary = async (req, res) => {
   return res.send(200)
 }
 
-const clearSummary = async (req, res) => {
-  await clearTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
-  return res.send(200)
-}
-
 const userHeadersToUser = userHeaders => ({
   id: userHeaders.hyPersonSisuId,
   username: userHeaders.uid,
@@ -417,12 +409,6 @@ const seedTestUsers2 = async (req, res) => {
   return res.send(201)
 }
 
-const clearTestUsers2 = async (req, res) => {
-  const users = req.body.map(userHeadersToUser)
-  await clearUsers(users)
-  return res.send(204)
-}
-
 const seedFeedbackTargets = async (req, res) => {
   const { teacher, student, opensAt, closesAt } = req.body
   const fbts = await seedFeedbackTargetsForTeacher({
@@ -434,10 +420,19 @@ const seedFeedbackTargets = async (req, res) => {
   return res.send(fbts)
 }
 
-const clearFeedbackTargets = async (req, res) => {
-  const { teacher, student } = req.body
-  await clearFeedbackTargetsForTeacher({ teacher: userHeadersToUser(teacher), student: userHeadersToUser(student) })
+const resetDb = async (req, res) => {
+  await seedDb()
   return res.send(204)
+}
+
+const getTestFbtId = async (req, res) => {
+  const fbt = await FeedbackTarget.findOne({
+    where: {
+      courseRealisationId: TEST_COURSE_REALISATION_ID,
+    },
+  })
+
+  return res.send({ id: fbt.id })
 }
 
 const router = Router()
@@ -459,10 +454,10 @@ router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
 
 router.post('/init-summary', initSummary)
-router.post('/clear-summary', clearSummary)
 router.post('/seed-users', seedTestUsers2)
-router.post('/clear-users', clearTestUsers2)
 router.post('/seed-feedback-targets', seedFeedbackTargets)
-router.post('/clear-feedback-targets', clearFeedbackTargets)
+router.post('/reset-db', resetDb)
+
+router.get('/test-fbt-id', getTestFbtId)
 
 module.exports = router

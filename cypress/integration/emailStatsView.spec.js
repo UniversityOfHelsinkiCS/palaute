@@ -20,7 +20,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 1')
     cy.contains('Teacher emails TODAY: 0')
     cy.contains('opiskelija@toska.fi')
-    cy.contains('now open: Functional Programming I')
+    cy.contains('now open: Testauskurssi')
   })
   it('shows the email when feedback response reminder should be sent', () => {
     cy.setFakeFeedbackCount(10)
@@ -31,7 +31,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 0')
     cy.contains(/Teacher emails TODAY: [^0]/)
     cy.contains('Tommi.testaaja@toska.fi')
-    cy.contains('has ended: Functional Programming I')
+    cy.contains('has ended: Testauskurssi')
   })
   it('allows to run email cronjob and result in success', () => {
     cy.loginAs(admin)

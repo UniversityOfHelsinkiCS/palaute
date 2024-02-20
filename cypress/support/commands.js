@@ -1,7 +1,9 @@
 import { admin, teacher } from '../fixtures/headers'
+import { baseUrl } from './baseUrl'
 
 Cypress.Commands.add('loginAs', user => {
   localStorage.setItem('fakeUser', JSON.stringify(user))
+  cy.visit(`${baseUrl}`)
 })
 
 /**
@@ -128,62 +130,21 @@ Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
   })
 })
 
-Cypress.Commands.add('setUpAdminTeacherView', () => {
-  const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisation/97',
-    headers: admin,
-    body: {
-      startDate: new Date().setDate(date.getDate() - 1),
-      endDate: new Date().setHours(date.getHours() - 10),
-      feedbackResponse: null,
-      feedbackResponseEmailSent: false,
-    },
-  })
-
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/user/hy-hlo-1441871',
-    headers: admin,
-    body: {
-      employeeNumber: '123456789',
-    },
-  })
-})
-
-Cypress.Commands.add('setUpSecondaryTeacherView', () => {
-  const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisations',
-    headers: admin,
-    body: {
-      feedbackTargetIds: [163, 165],
-      startDate: new Date().setHours(date.getHours() - 10),
-      endDate: new Date().setDate(date.getDate() + 14),
-    },
-  })
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/user/hy-hlo-51367956',
-    headers: admin,
-    body: {
-      employeeNumber: '987654321',
-    },
-  })
-})
-
 const setFeedbackDatesFromNow = (open, close) => {
   const date = new Date()
   cy.request({
-    method: 'PUT',
-    url: '/api/feedback-targets/163',
-    headers: teacher,
-    body: {
-      opensAt: new Date().setDate(date.getDate() + open),
-      closesAt: new Date().setDate(date.getDate() + close),
-    },
+    method: 'GET',
+    url: '/test/test-fbt-id',
+  }).then(response => {
+    cy.request({
+      method: 'PUT',
+      url: `/api/feedback-targets/${response.body.id}`,
+      headers: admin,
+      body: {
+        opensAt: new Date().setDate(date.getDate() + open),
+        closesAt: new Date().setDate(date.getDate() + close),
+      },
+    })
   })
 }
 
@@ -205,30 +166,39 @@ Cypress.Commands.add('setFeedbackOpeningSoon', () => {
 
 Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
   cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisation/163',
-    headers: admin,
-    body: {
-      feedbackCount,
-    },
+    method: 'GET',
+    url: '/test/test-fbt-id',
+  }).then(response => {
+    cy.request({
+      method: 'PUT',
+      url: `/test/courseRealisation/${response.body.id}`,
+      body: {
+        feedbackCount,
+      },
+    })
   })
 })
 
 Cypress.Commands.add('setContinuousFeedbackActive', () => {
   cy.request({
-    method: 'PUT',
-    url: '/api/feedback-targets/163',
-    headers: teacher,
-    body: {
-      continuousFeedbackEnabled: true,
-    },
+    method: 'GET',
+    url: '/test/test-fbt-id',
+  }).then(response => {
+    cy.request({
+      method: 'PUT',
+      url: `/api/feedback-targets/${response.body.id}`,
+      headers: admin,
+      body: {
+        continuousFeedbackEnabled: true,
+      },
+    })
   })
 })
 
 Cypress.Commands.add('enableTestUsers', () => {
   cy.request({
     method: 'PUT',
-    url: '/api/test/user/hy-hlo-1501077',
+    url: '/test/user/hy-hlo-1501077',
     headers: admin,
     body: {
       username: 'keolli',

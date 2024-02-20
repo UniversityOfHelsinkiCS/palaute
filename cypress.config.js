@@ -8,5 +8,6 @@ module.exports = defineConfig({
     baseUrl: 'http://localhost:3000',
     supportFile: 'cypress/support/commands.js',
     specPattern: 'cypress/**/*.spec.js',
+    experimentalRunAllSpecs: true,
   },
 })
