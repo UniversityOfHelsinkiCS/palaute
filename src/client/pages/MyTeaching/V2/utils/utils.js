@@ -13,7 +13,7 @@ const latestCourseRealisationFeedbackResponseGiven = courseRealisations => {
   const isEnded = feedbackTargetIsEnded(latestFeedbackTarget)
   const { feedbackResponseGiven, feedbackCount } = latestFeedbackTarget
 
-  if (!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0) return latestFeedbackTarget
+  if (!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0) return { ...latestFeedbackTarget, isOld }
 
   return null
 }

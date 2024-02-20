@@ -7,7 +7,7 @@ import FeedbackTargetListItem from './FeedbackTargetListItem'
 const FeedbackTargetList = ({ courseRealisation }) => {
   const { t } = useTranslation()
 
-  const { feedbackTargets } = courseRealisation
+  const { feedbackTargets, interimFeedbackTargets } = courseRealisation
 
   return (
     <List sx={{ margin: 0, padding: 0 }}>

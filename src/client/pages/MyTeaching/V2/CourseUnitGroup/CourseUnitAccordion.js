@@ -71,8 +71,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
               feedbackResponseGiven={latestFeedbackTargetResponseNotGiven.feedbackResponseGiven}
               feedbackResponseSent={latestFeedbackTargetResponseNotGiven.feedbackResponseSent}
               isOld={latestFeedbackTargetResponseNotGiven.isOld}
-              ongoing={false}
-              continuous={false}
             />
           )}
         </Box>
