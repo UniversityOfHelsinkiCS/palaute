@@ -5,10 +5,10 @@ import { Badge, Typography } from '@mui/material'
 const CourseGroupTitle = ({ title, badgeContent }) => (
   <Typography
     component="h2"
+    variant="h6"
     sx={{
-      marginTop: '-1.75em',
+      marginTop: '-1.7em',
       paddingX: '0.5em',
-      fontSize: '18px',
       fontWeight: theme => theme.typography.fontWeightMedium,
       position: 'absolute',
       backgroundColor: theme => theme.palette.background.default,

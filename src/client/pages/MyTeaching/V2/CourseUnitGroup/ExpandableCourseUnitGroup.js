@@ -47,15 +47,19 @@ const ExpandableCourseUnitGroup = ({ children }) => {
         },
       }}
     >
-      {courseUnitGroupTitle}
-      <ExpandMore
-        expand={expanded}
+      <Box
+        sx={{
+          '&:hover': {
+            cursor: 'pointer',
+          },
+        }}
         onClick={handleExpand}
-        aria-expanded={expanded}
-        aria-label={t('teacherView:expandMoreLabel')}
       >
-        <ExpandMoreIcon />
-      </ExpandMore>
+        {courseUnitGroupTitle}
+        <ExpandMore expand={expanded} aria-expanded={expanded} aria-label={t('teacherView:expandMoreLabel')}>
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </Box>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {courseUnitGroupContent}
       </Collapse>
