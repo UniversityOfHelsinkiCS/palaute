@@ -20,6 +20,7 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 
 import Title from '../../../components/common/Title'
 import LinkButton from '../../../components/common/LinkButton'
+import CourseUnitGroupAccordion from './CourseUnitGroup/CourseUnitGroupAccordion'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -45,18 +46,33 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
   return (
-    <CourseUnitGroup>
-      <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
-      <CourseUnitGroupGrid>
-        {columnCourseUnits.map((courseUnitColumn, i) => (
-          <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-            {courseUnitColumn.map(courseUnit => (
-              <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
-            ))}
-          </CourseUnitGroupGridColumn>
-        ))}
-      </CourseUnitGroupGrid>
-    </CourseUnitGroup>
+    <>
+      <CourseUnitGroupAccordion
+        courseUnitGroupTitle={<CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />}
+      >
+        <CourseUnitGroupGrid>
+          {columnCourseUnits.map((courseUnitColumn, i) => (
+            <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+              {courseUnitColumn.map(courseUnit => (
+                <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
+              ))}
+            </CourseUnitGroupGridColumn>
+          ))}
+        </CourseUnitGroupGrid>
+      </CourseUnitGroupAccordion>
+      <CourseUnitGroup>
+        <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
+        <CourseUnitGroupGrid>
+          {columnCourseUnits.map((courseUnitColumn, i) => (
+            <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+              {courseUnitColumn.map(courseUnit => (
+                <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
+              ))}
+            </CourseUnitGroupGridColumn>
+          ))}
+        </CourseUnitGroupGrid>
+      </CourseUnitGroup>
+    </>
   )
 }
 

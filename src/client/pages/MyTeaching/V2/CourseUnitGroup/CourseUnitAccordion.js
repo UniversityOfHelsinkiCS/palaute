@@ -47,7 +47,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         ...styles.accordion,
       }}
       square
-      TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
       data-cy="my-teaching-course-unit-item"
     >
       <AccordionSummary
