@@ -1,7 +1,7 @@
 import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 
-const latestCourseRealisationFeedbackResponseGiven = courseRealisations => {
+const getLatestFeedbackTarget = courseRealisations => {
   if (courseRealisations.length === 0) return true
 
   const latestCourseRealisation = courseRealisations[0]
@@ -11,11 +11,8 @@ const latestCourseRealisationFeedbackResponseGiven = courseRealisations => {
 
   const isOld = feedbackTargetIsOld(latestFeedbackTarget)
   const isEnded = feedbackTargetIsEnded(latestFeedbackTarget)
-  const { feedbackResponseGiven, feedbackCount } = latestFeedbackTarget
 
-  if (!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0) return { ...latestFeedbackTarget, isOld }
-
-  return null
+  return { ...latestFeedbackTarget, isOld, isEnded }
 }
 
-export default latestCourseRealisationFeedbackResponseGiven
+export default getLatestFeedbackTarget

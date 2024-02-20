@@ -9,7 +9,7 @@ import DisabledCourseWarning from './DisabledCourseWarning'
 import FeedbackResponseChip from '../../FeedbackResponseChip'
 
 import commonStyles from '../utils/styles'
-import latestCourseRealisationFeedbackResponseGiven from '../utils/utils'
+import getLatestFeedbackTarget from '../utils/utils'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
@@ -37,8 +37,9 @@ const CourseUnitAccordion = ({ courseUnit }) => {
 
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
+  const latestFeedbackTarget = getLatestFeedbackTarget(courseRealisations)
 
-  const latestFeedbackTargetResponseNotGiven = latestCourseRealisationFeedbackResponseGiven(courseRealisations)
+  const { id, feedbackResponseGiven, feedbackResponseSent, feedbackCount, isEnded, isOld } = latestFeedbackTarget
 
   return (
     <Accordion
@@ -65,12 +66,12 @@ const CourseUnitAccordion = ({ courseUnit }) => {
 
           {disabledCourse && <DisabledCourseWarning />}
 
-          {latestFeedbackTargetResponseNotGiven && (
+          {!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0 && (
             <FeedbackResponseChip
-              id={latestFeedbackTargetResponseNotGiven.id}
-              feedbackResponseGiven={latestFeedbackTargetResponseNotGiven.feedbackResponseGiven}
-              feedbackResponseSent={latestFeedbackTargetResponseNotGiven.feedbackResponseSent}
-              isOld={latestFeedbackTargetResponseNotGiven.isOld}
+              id={id}
+              feedbackResponseGiven={feedbackResponseGiven}
+              feedbackResponseSent={feedbackResponseSent}
+              isOld={isOld}
             />
           )}
         </Box>
