@@ -1,6 +1,6 @@
 const Router = require('express')
 const Sentry = require('@sentry/node')
-const { inE2EMode } = require('../util/config')
+const { inE2EMode, inDevelopment } = require('../util/config')
 const accessLogger = require('../middleware/accessLogger')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
@@ -52,7 +52,7 @@ router.use('/norppa-feedback', norppaFeedback)
 router.use('/continuous-feedback', continuousFeedback)
 router.use('/admin', admin)
 
-if (inE2EMode) {
+if (inE2EMode || inDevelopment) {
   router.use('/test', testing)
 }
 

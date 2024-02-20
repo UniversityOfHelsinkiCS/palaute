@@ -22,6 +22,8 @@ const {
 } = require('../../models')
 
 const { ApplicationError } = require('../../util/customErrors')
+const { initTestSummary, clearTestSummary } = require('../../services/testServices/seedSummary')
+const { seedUsers, clearUsers } = require('../../services/testServices/seedUsers')
 
 const seedTestUsers = async users => {
   await User.bulkCreate(users, {
@@ -317,11 +319,11 @@ const updateCourseRealisation = async (req, res) => {
 
   const feedbackTarget = await FeedbackTarget.findByPk(Number(feedbackTargetId))
 
-  if (!feedbackTarget) throw new ApplicationError('Feedback target not found', 404)
+  if (!feedbackTarget) ApplicationError.NotFound(`FBT ${feedbackTargetId} not found`)
 
   const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
 
-  if (!courseRealisation) throw new ApplicationError('Course realisation not found', 404)
+  if (!courseRealisation) ApplicationError.NotFound(`Course realisation ${courseRealisation.id} not found`)
 
   const updates = _.pick(req.body, ['startDate', 'endDate'])
 
@@ -359,12 +361,10 @@ const updateManyCourseRealisations = async (req, res) => {
   /* eslint-disable */
   for (const id of feedbackTargetIds) {
     const feedbackTarget = await FeedbackTarget.findByPk(Number(id))
-
-    if (!feedbackTarget) throw new ApplicationError('Feedback target not found', 404)
+    if (!feedbackTarget) ApplicationError.NotFound(`FBT ${id} not found`)
 
     const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
-
-    if (!courseRealisation) throw new ApplicationError('Course realisation not found', 404)
+    if (!courseRealisation) ApplicationError.NotFound(`CUR ${feedbackTarget.courseRealisationId} not found`)
 
     Object.assign(courseRealisation, updates)
 
@@ -372,16 +372,6 @@ const updateManyCourseRealisations = async (req, res) => {
   }
   /* eslint-enable */
 
-  return res.send(200)
-}
-
-const enableAllCourses = async (_, res) => {
-  await Organisation.update(
-    {
-      disabledCourseCodes: [],
-    },
-    { where: {} }
-  )
   return res.send(200)
 }
 
@@ -401,6 +391,36 @@ const updateUser = async (req, res) => {
   return res.send(200)
 }
 
+const initSummary = async (req, res) => {
+  await initTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
+  return res.send(200)
+}
+
+const clearSummary = async (req, res) => {
+  await clearTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
+  return res.send(200)
+}
+
+const userHeadersToUsers = userHeaders => ({
+  id: userHeaders.hyPersonSisuId,
+  username: userHeaders.uid,
+  firstName: userHeaders.givenname,
+  lastName: userHeaders.sn,
+  email: userHeaders.mail,
+})
+
+const seedTestUsers2 = async (req, res) => {
+  const users = req.body.map(userHeadersToUsers)
+  await seedUsers(users)
+  return res.send(201)
+}
+
+const clearTestUsers2 = async (req, res) => {
+  const users = req.body.map(userHeadersToUsers)
+  await clearUsers(users)
+  return res.send(204)
+}
+
 const router = Router()
 
 router.post('/clear/user/student', clearTestStudents)
@@ -416,6 +436,9 @@ router.put('/user/:userId', updateUser)
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
 router.put('/courseRealisations', updateManyCourseRealisations)
 
-router.put('/enableCourses', enableAllCourses)
+router.post('/init-summary', initSummary)
+router.post('/clear-summary', clearSummary)
+router.post('/seed-users', seedTestUsers2)
+router.post('/clear-users', clearTestUsers2)
 
 module.exports = router

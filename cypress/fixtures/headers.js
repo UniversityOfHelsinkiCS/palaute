@@ -4,7 +4,7 @@ const admin = {
   mail: 'grp-toska+mockadmin@helsinki.fi',
   sn: 'Luukkainen',
   preferredLanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-1441871',
+  hyPersonSisuId: 'test-hlo-1441871',
   employeeNumber: '9021313',
   hygroupcn: ['hy-employees'],
 }
@@ -15,7 +15,7 @@ const teacher = {
   sn: 'Testaaja',
   mail: 'Tommi.testaaja@toska.fi',
   preferredlanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-51367956',
+  hyPersonSisuId: 'test-hlo-51367956',
   employeeNumber: '123445678',
   hygroupcn: ['hy-employees'],
 }
@@ -26,7 +26,7 @@ const student = {
   sn: 'Oppilas',
   mail: 'opiskelija@toska.fi',
   preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-115054920',
+  hyPersonSisuId: 'test-hlo-115054920',
 }
 
 const studentHenri = {
@@ -35,7 +35,7 @@ const studentHenri = {
   sn: 'Testaaja',
   mail: 'henri.testaaja@helsinki.fi',
   preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-124043339',
+  hyPersonSisuId: 'test-hlo-124043339',
 }
 
 const studentMiko = {
@@ -44,7 +44,7 @@ const studentMiko = {
   sn: 'Testaaja',
   mail: 'miko.testaaja@helsinki.fi',
   preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-136095188',
+  hyPersonSisuId: 'test-hlo-136095188',
 }
 
 const studentVeikko = {
@@ -53,7 +53,7 @@ const studentVeikko = {
   sn: 'Testaaja',
   mail: 'veikko.testaaja@helsinki.fi',
   preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-130991964',
+  hyPersonSisuId: 'test-hlo-130991964',
 }
 
 const studentRandom = {
@@ -62,7 +62,7 @@ const studentRandom = {
   sn: 'Testaaja',
   mail: 'random.testaaja@helsinki.fi',
   preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-111111111',
+  hyPersonSisuId: 'test-hlo-111111111',
 }
 
 const studyCoordinator = {
@@ -71,7 +71,7 @@ const studyCoordinator = {
   sn: 'Dekaani',
   mail: 'dekaani@toska.fi',
   preferredLanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-1501077',
+  hyPersonSisuId: 'test-hlo-1501077',
   hygroupcn: ['hy-employees', 'grp-toska'],
 }
 
@@ -81,9 +81,32 @@ const organisationCorrespondent = {
   sn: 'Tester',
   mail: 'cs.correspondent@helsinki.fi',
   preferredLanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-111111112',
+  hyPersonSisuId: 'test-hlo-111111112',
   hygroupcn: ['hy-employees'],
 }
+
+const summaryUser = {
+  uid: 'summary-user',
+  givenname: 'Summary',
+  sn: 'mc Summaryface',
+  mail: 'asd.asd@helsinki.fi',
+  preferredLanguage: 'en',
+  hyPersonSisuId: 'test-hlo-111111113',
+  hygroupcn: ['hy-employees'],
+}
+
+const testUsers = [
+  admin,
+  teacher,
+  student,
+  studentHenri,
+  studentMiko,
+  studentVeikko,
+  studentRandom,
+  studyCoordinator,
+  organisationCorrespondent,
+  summaryUser,
+]
 
 module.exports = {
   admin,
@@ -95,4 +118,6 @@ module.exports = {
   studentRandom,
   studyCoordinator,
   organisationCorrespondent,
+  summaryUser,
+  testUsers,
 }

@@ -9,6 +9,7 @@ import {
   studentRandom,
   studyCoordinator,
   organisationCorrespondent,
+  summaryUser,
 } from '../fixtures/headers'
 
 Cypress.Commands.add('loginAsTeacher', () => {
@@ -77,6 +78,10 @@ Cypress.Commands.add('loginAsStudyCoordinator', () => {
 Cypress.Commands.add('loginAsOrganisationCorrespondent', () => {
   localStorage.setItem('fakeUser', JSON.stringify(organisationCorrespondent))
   cy.visit(baseUrl)
+})
+
+Cypress.Commands.add('loginAsSummaryUser', () => {
+  localStorage.setItem('fakeUser', JSON.stringify(summaryUser))
 })
 
 /**
@@ -297,14 +302,6 @@ Cypress.Commands.add('setContinuousFeedbackActive', () => {
     body: {
       continuousFeedbackEnabled: true,
     },
-  })
-})
-
-Cypress.Commands.add('enableCourses', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/enableCourses',
-    headers: admin,
   })
 })
 
