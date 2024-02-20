@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, Collapse, IconButton } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -25,6 +26,7 @@ const ExpandMore = ({ expand, ...props }) => (
 )
 
 const ExpandableCourseUnitGroup = ({ courseUnitGroupTitle, children }) => {
+  const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
 
   const handleExpand = () => setExpanded(!expanded)
@@ -44,7 +46,12 @@ const ExpandableCourseUnitGroup = ({ courseUnitGroupTitle, children }) => {
       }}
     >
       {courseUnitGroupTitle}
-      <ExpandMore expand={expanded} onClick={handleExpand} aria-expanded={expanded} aria-label="show more">
+      <ExpandMore
+        expand={expanded}
+        onClick={handleExpand}
+        aria-expanded={expanded}
+        aria-label={t('teacherView:expandMoreLabel')}
+      >
         <ExpandMoreIcon />
       </ExpandMore>
       <Collapse in={expanded} timeout="auto" unmountOnExit>

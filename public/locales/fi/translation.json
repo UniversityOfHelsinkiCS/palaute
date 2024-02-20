@@ -178,7 +178,8 @@
     "universitySurveys": "Yliopistokyselyt",
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
     "newView": "Kokeile uutta näkymää",
-    "oldView": "Takaisin vanhaan näkymää"
+    "oldView": "Takaisin vanhaan näkymää",
+    "expandMoreLabel": "Näytä piilotetut kyselyt"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
