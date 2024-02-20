@@ -37,7 +37,8 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
 
-  const latestFeedbackResponseGiven = latestCourseRealisationFeedbackResponseGiven(courseRealisations)
+  const latestCourseRealisationFeedbackResponsseNotGiven =
+    latestCourseRealisationFeedbackResponseGiven(courseRealisations)
 
   return (
     <Accordion
@@ -55,7 +56,7 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
         sx={{
           ...(disabledCourse && commonStyles.alert),
-          ...(latestFeedbackResponseGiven && commonStyles.error),
+          ...(latestCourseRealisationFeedbackResponsseNotGiven && commonStyles.error),
         }}
       >
         <Box>
