@@ -128,11 +128,7 @@ const MyTeaching = () => {
       )}
 
       {courseUnits?.length > 0 && (
-        <RenderCourseUnitGroup
-          groupTitle={t('teacherView:universitySurveys')}
-          courseUnits={courseUnits}
-          status={status}
-        />
+        <RenderCourseUnitGroup groupTitle={t('teacherView:courseSurveys')} courseUnits={courseUnits} status={status} />
       )}
     </>
   )
