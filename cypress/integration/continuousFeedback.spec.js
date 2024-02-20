@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 const { addDays } = require('date-fns')
 const { admin, teacher, student } = require('../fixtures/headers')
 const { baseUrl } = require('../support')

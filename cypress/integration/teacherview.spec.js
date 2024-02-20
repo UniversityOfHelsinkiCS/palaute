@@ -1,5 +1,8 @@
+/// <reference types="Cypress" />
+
 import { format } from 'date-fns'
 import { baseUrl } from '../support'
+import { admin, teacher } from '../fixtures/headers'
 
 // eslint-disable-next-line no-unused-vars
 const getDates = () => {
@@ -13,7 +16,7 @@ const getDates = () => {
 
 describe('Teacher view', () => {
   beforeEach(() => {
-    cy.loginAsTeacher()
+    cy.loginAs(admin)
   })
   it('A logged in teacher can view its courses', () => {
     cy.visit(`${baseUrl}/courses`)
@@ -69,7 +72,7 @@ describe('Teacher view', () => {
     cy.contains('Test description edited')
   })
   it('Teacher can view survey results', () => {
-    cy.loginAsSecondaryTeacher()
+    cy.loginAs(teacher)
     cy.get('div').contains('TKT21029 Functional Programming I').click()
     cy.get('a[href*="/targets/163"]').first().click()
     cy.visit(`${baseUrl}/targets/163/results`)

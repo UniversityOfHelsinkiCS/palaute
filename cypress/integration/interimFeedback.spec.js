@@ -1,4 +1,6 @@
-const { student } = require('../fixtures/headers')
+/// <reference types="Cypress" />
+
+const { student, teacher, admin } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Responsible Teachers', () => {
@@ -22,7 +24,7 @@ describe('Responsible Teachers', () => {
     cy.createInterimFeedback(parentId, interimFeedbackBody)
 
     // Login as Tommi Testaaja
-    cy.loginAsSecondaryTeacher()
+    cy.loginAs(teacher)
   })
 
   it('can fill in new interim feedbacks', () => {
@@ -318,7 +320,7 @@ describe('Students', () => {
     cy.createInterimFeedback(parentId, interimFeedbackBody)
 
     // Login as Olli Oppilas
-    cy.loginAsStudent()
+    cy.loginAs(student)
   })
 
   it('can view ongoing interim feedbacks and give interim feedback', () => {
@@ -395,7 +397,7 @@ describe('Admin Users', () => {
 
     cy.createInterimFeedback(parentId, interimFeedbackBody)
 
-    cy.loginAsAdmin()
+    cy.loginAs(admin)
   })
 
   it('can create questions for interim feedbacks regardles of ongoing feedback', () => {

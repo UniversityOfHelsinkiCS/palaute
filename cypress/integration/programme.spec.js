@@ -1,8 +1,11 @@
+/// <reference types="Cypress" />
+
+const { studyCoordinator } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Organisation settings', () => {
   beforeEach(() => {
-    cy.loginAsStudyCoordinator()
+    cy.loginAs(studyCoordinator)
   })
 
   describe('Programme survey', () => {

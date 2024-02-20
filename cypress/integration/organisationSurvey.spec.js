@@ -1,4 +1,6 @@
-import { studentRandom } from '../fixtures/headers'
+/// <reference types="Cypress" />
+
+import { admin, organisationCorrespondent, studentHenri, studentRandom, teacher } from '../fixtures/headers'
 
 const { baseUrl } = require('../support')
 
@@ -11,7 +13,7 @@ describe('Feedback Correspondents', () => {
     cy.seedTestStudents()
     cy.seedComputerScienceCorrespondents()
 
-    cy.loginAsOrganisationCorrespondent()
+    cy.loginAs(organisationCorrespondent)
   })
 
   it('can visit organisation survey page', () => {
@@ -488,7 +490,7 @@ describe('Responsible Teachers', () => {
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     // Login as Tommi Testaaja
-    cy.loginAsSecondaryTeacher()
+    cy.loginAs(teacher)
   })
 
   it('can view own organisation surveys if responsible teacher', () => {
@@ -559,7 +561,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assure the changes is visible
-    cy.loginAsOrganisationCorrespondent()
+    cy.loginAs(organisationCorrespondent)
 
     cy.visit(`${baseUrl}/organisations/500-K005/organisation-surveys`)
 
@@ -668,7 +670,7 @@ describe('Students', () => {
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
-    cy.loginAsStudent('henri')
+    cy.loginAs(studentHenri)
   })
 
   it('can view ongoing organisation surveys and give organisation survey feedback', () => {
@@ -748,7 +750,7 @@ describe('Admin Users', () => {
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
-    cy.loginAsAdmin()
+    cy.loginAs(admin)
   })
 
   it('can create questions for organisation survey regardles of ongoing feedback', () => {
@@ -814,7 +816,7 @@ describe('Admin Users', () => {
     cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('be.visible')
 
     // Assert that the survey also got removed from the students page
-    cy.loginAsStudent('random')
+    cy.loginAs(studentRandom)
 
     cy.visit(`${baseUrl}/feedbacks`)
 

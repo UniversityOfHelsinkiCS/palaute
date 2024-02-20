@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 const { admin, summaryUser } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
@@ -15,7 +17,7 @@ describe('Course summary', () => {
   })
 
   beforeEach(() => {
-    cy.loginAsSummaryUser()
+    cy.loginAs(summaryUser)
     cy.visit(`${baseUrl}/course-summary?startDate=2023-08-01&endDate=2024-07-31&option=year`)
   })
 
