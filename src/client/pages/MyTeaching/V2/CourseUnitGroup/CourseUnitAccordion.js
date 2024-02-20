@@ -7,8 +7,6 @@ import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import DisabledCourseWarning from './DisabledCourseWarning'
 
-import InterimFeedbackChip from '../chips/InterimFeedbackChip'
-
 import commonStyles from '../utils/styles'
 import latestCourseRealisationFeedbackResponseGiven from '../utils/utils'
 
@@ -64,10 +62,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
           </Typography>
 
           {disabledCourse && <DisabledCourseWarning />}
-
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {/* {interimFeedbackTargets.length > 0 && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />} */}
-          </Box>
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>

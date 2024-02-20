@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
 
 import DisabledCourseWarning from './DisabledCourseWarning'
-
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
-import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
 import commonStyles from '../utils/styles'
 
@@ -42,8 +40,6 @@ const CourseUnitItem = ({ courseUnit }) => {
           {visibleCourseCode} {courseName}
         </Typography>
         {disabledCourse && <DisabledCourseWarning />}
-
-        {/* {interimFeedbackTargets.length > 0 && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />} */}
       </Box>
 
       <Box sx={styles.details}>

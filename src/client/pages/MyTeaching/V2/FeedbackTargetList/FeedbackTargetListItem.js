@@ -6,6 +6,7 @@ import { parseISO } from 'date-fns'
 import { ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
 
 import FeedbackResponseChip from '../../FeedbackResponseChip'
+import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
