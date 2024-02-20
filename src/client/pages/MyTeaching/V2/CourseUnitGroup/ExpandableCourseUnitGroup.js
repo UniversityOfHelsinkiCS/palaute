@@ -24,7 +24,7 @@ const ExpandMore = ({ expand, ...props }) => (
   />
 )
 
-const CourseUnitGroupAccordion = ({ courseUnitGroupTitle, children }) => {
+const ExpandableCourseUnitGroup = ({ courseUnitGroupTitle, children }) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleExpand = () => setExpanded(!expanded)
@@ -54,4 +54,4 @@ const CourseUnitGroupAccordion = ({ courseUnitGroupTitle, children }) => {
   )
 }
 
-export default CourseUnitGroupAccordion
+export default ExpandableCourseUnitGroup

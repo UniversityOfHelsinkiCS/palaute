@@ -14,13 +14,13 @@ import StatusTabs from './StatusTabs'
 import CourseUnitItem from './CourseUnitGroup/CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
+import ExpandableCourseUnitGroup from './CourseUnitGroup/ExpandableCourseUnitGroup'
 import CourseUnitGroupGrid from './CourseUnitGroup/CourseUnitGroupGrid'
 import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
 import LinkButton from '../../../components/common/LinkButton'
-import CourseUnitGroupAccordion from './CourseUnitGroup/CourseUnitGroupAccordion'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -37,7 +37,7 @@ const CourseUnitGroupSkeleton = () => (
   </>
 )
 
-const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
+const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = false }) => {
   const theme = useTheme()
   const gridColumns = useCourseUnitGridColumns(theme)
 
@@ -45,9 +45,9 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
 
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
-  return (
-    <>
-      <CourseUnitGroupAccordion
+  if (expandable) {
+    return (
+      <ExpandableCourseUnitGroup
         courseUnitGroupTitle={<CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />}
       >
         <CourseUnitGroupGrid>
@@ -59,20 +59,23 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
             </CourseUnitGroupGridColumn>
           ))}
         </CourseUnitGroupGrid>
-      </CourseUnitGroupAccordion>
-      <CourseUnitGroup>
-        <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
-        <CourseUnitGroupGrid>
-          {columnCourseUnits.map((courseUnitColumn, i) => (
-            <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-              {courseUnitColumn.map(courseUnit => (
-                <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
-              ))}
-            </CourseUnitGroupGridColumn>
-          ))}
-        </CourseUnitGroupGrid>
-      </CourseUnitGroup>
-    </>
+      </ExpandableCourseUnitGroup>
+    )
+  }
+
+  return (
+    <CourseUnitGroup>
+      <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
+      <CourseUnitGroupGrid>
+        {columnCourseUnits.map((courseUnitColumn, i) => (
+          <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
+            {courseUnitColumn.map(courseUnit => (
+              <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
+            ))}
+          </CourseUnitGroupGridColumn>
+        ))}
+      </CourseUnitGroupGrid>
+    </CourseUnitGroup>
   )
 }
 
@@ -121,6 +124,7 @@ const MyTeaching = () => {
           groupTitle={t('teacherView:organisationSurveys')}
           courseUnits={orgSurveyCourseUnits}
           status={status}
+          expandable
         />
       )}
 
