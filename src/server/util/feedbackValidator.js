@@ -53,19 +53,16 @@ const validateFeedback = async (data, feedbackTarget) => {
       if (!validator) return
       answerIds.add(answer.questionId)
       if (!validator(answer.data, question)) {
-        console.log('Invalid answer', answer, question)
         valid = false
       }
     })
     feedbackTarget.questions.forEach(q => {
       if (q.required && mapTypeToValidator[q.type] && !answerIds.has(q.id)) {
-        console.log('Required question missing', q)
         valid = false
       }
     })
     return valid
   } catch (e) {
-    console.error(e)
     return false
   }
 }

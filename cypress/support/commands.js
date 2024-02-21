@@ -9,14 +9,14 @@ Cypress.Commands.add('loginAs', user => {
 
 Cypress.Commands.add('giveFeedback', headers => {
   cy.getTestFbtId().then(id => {
-    cy.getUniversityQuestionIds().then(questionIds => {
+    cy.getUniversityQuestions().then(questionIds => {
       cy.request({
         method: 'POST',
         url: '/api/feedbacks',
         headers,
         body: {
           feedbackTargetId: id,
-          data: questionIds.map(id => ({ questionId: id, data: '3' })),
+          data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
         },
       })
     })
@@ -174,15 +174,15 @@ Cypress.Commands.add('getTestFbtId', () =>
     })
 )
 
-Cypress.Commands.add('getUniversityQuestionIds', () =>
+Cypress.Commands.add('getUniversityQuestions', () =>
   cy
 
     .request({
       method: 'GET',
-      url: '/test/university-question-ids',
+      url: '/test/university-questions',
     })
     .then(response => {
-      cy.wrap(response.body).as('universityQuestionIds')
+      cy.wrap(response.body).as('universityQuestions')
     })
 )
 

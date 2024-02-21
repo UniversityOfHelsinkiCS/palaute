@@ -2,14 +2,15 @@ const Router = require('express')
 const _ = require('lodash')
 const morgan = require('morgan')
 
-const { FeedbackTarget, CourseRealisation, User, Question, Survey } = require('../models')
+const { FeedbackTarget, CourseRealisation, User } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 const { initTestSummary } = require('./seedSummary')
 const { seedFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
 const { seedDb, seedUsers, seedOrganisationCorrespondent } = require('./seed')
 const { TEST_COURSE_REALISATION_ID } = require('./testIds')
-const { UNIVERSITY_ROOT_ID } = require('../util/config')
+const { inProduction } = require('../util/config')
+const { getUniversitySurvey } = require('../services/surveys')
 
 const updateCourseRealisation = async (req, res) => {
   const { feedbackTargetId } = req.params
@@ -142,17 +143,20 @@ const getTestFbtId = async (req, res) => {
   return res.send({ id: fbt.id })
 }
 
-const getUniversityQuestionIds = async (req, res) => {
-  const srv = await Survey.findOne({
-    where: {
-      type: 'university',
-    },
-  })
-
-  return res.send(srv.questionIds)
+const getUniversityQuestions = async (req, res) => {
+  const srv = await getUniversitySurvey()
+  return res.send(srv.questions)
 }
 
 const router = Router()
+
+// A double safeguard against running test routes in production. This should never happen.
+router.use((_, __, next) => {
+  if (inProduction) {
+    throw new ApplicationError('Test router called in production.', 500)
+  }
+  next()
+})
 
 router.use(Router.json())
 router.use(morgan('dev'))
@@ -169,6 +173,6 @@ router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHan
 router.post('/reset-db', resetDb)
 
 router.get('/test-fbt-id', getTestFbtId)
-router.get('/university-question-ids', getUniversityQuestionIds)
+router.get('/university-questions', getUniversityQuestions)
 
 module.exports = router

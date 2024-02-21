@@ -57,20 +57,34 @@ const seedUniversity = async () => {
   )
 
   const questionIds = await Promise.all(
-    _.range(1, 6).map(async idx => {
-      const q = await Question.create({
-        type: 'LIKERT',
-        required: true,
-        data: {
-          label: {
-            fi: `Testikysymys ${idx}`,
-            en: `Test question ${idx}`,
-            sv: `Testfråga ${idx}`,
+    _.range(1, 6)
+      .map(async idx => {
+        const q = await Question.create({
+          type: 'LIKERT',
+          required: true,
+          data: {
+            label: {
+              fi: `Testikysymys ${idx}`,
+              en: `Test question ${idx}`,
+              sv: `Testfråga ${idx}`,
+            },
           },
-        },
+        })
+        return q.id
       })
-      return q.id
-    })
+      .concat(
+        Question.create({
+          type: 'OPEN',
+          required: false,
+          data: {
+            label: {
+              fi: `Avoin testikysymys`,
+              en: `Open test question`,
+              sv: `Öppen testfråga`,
+            },
+          },
+        }).then(q => q.id)
+      )
   )
 
   await Survey.create(
