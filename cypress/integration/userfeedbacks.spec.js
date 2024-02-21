@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 const { teacher, student } = require('../fixtures/headers')
-const { baseUrl } = require('../support')
 
 describe('User feedbacks view', () => {
   beforeEach(() => {
@@ -28,7 +27,7 @@ describe('User feedbacks view', () => {
   it('Teacher can censor a feedback', () => {
     // student gives feedback
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}`))
+    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })
@@ -40,20 +39,20 @@ describe('User feedbacks view', () => {
 
     // teacher censors the feedback
     cy.loginAs(teacher)
-    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/results`))
+    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
     cy.scrollTo('bottom', { ensureScrollable: false })
     cy.get('[data-testid="VisibilityIcon"]').click()
     cy.contains('This answer is hidden')
 
     // it is now hidden from student
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/results`))
+    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
     cy.contains('Other comments and such').should('not.exist')
   })
   it('Student can clear given feedback', () => {
     // student gives feedback
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}`))
+    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })
@@ -64,7 +63,7 @@ describe('User feedbacks view', () => {
     cy.get('[data-cy=feedback-view-give-feedback]').click()
 
     // student clears the feedback
-    cy.visit(`${baseUrl}`)
+    cy.visit(``)
     cy.contains('Given').click()
     cy.contains('Remove my feedback').click()
     cy.contains('Yes').click()

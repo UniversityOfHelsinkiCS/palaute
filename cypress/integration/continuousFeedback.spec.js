@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 const { teacher, student } = require('../fixtures/headers')
-const { baseUrl } = require('../support')
 
 describe('Continuous feedback', () => {
   beforeEach(() => {
@@ -10,8 +9,8 @@ describe('Continuous feedback', () => {
   it('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
     // Teacher enables continuous feedback
     cy.loginAs(teacher)
-    cy.visit(`${baseUrl}/courses`)
-    cy.contains('SUMMARY_TEST_COURSE').first().click()
+    cy.visit(`/courses`)
+    cy.contains('TEST_COURSE').first().click()
     cy.contains('Testauskurssin toteutus').first().click()
     cy.get('[data-cy="feedback-target-continuous-feedback-tab"]').click()
 
@@ -21,7 +20,7 @@ describe('Continuous feedback', () => {
 
     // Student gives continuous feedback
     cy.loginAs(student)
-    cy.visit(`${baseUrl}`)
+    cy.visit(``)
 
     cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
@@ -36,8 +35,8 @@ describe('Continuous feedback', () => {
     // Teacher replies to continuous feedback
     const response = 'Responding to continuous feedback'
     cy.loginAs(teacher)
-    cy.visit(`${baseUrl}/courses`)
-    cy.contains('SUMMARY_TEST_COURSE').first().click()
+    cy.visit(`/courses`)
+    cy.contains('TEST_COURSE').first().click()
     cy.contains('Testauskurssin toteutus').first().click()
     cy.get('[data-cy="feedback-target-continuous-feedback-tab"]').click()
 
@@ -52,7 +51,7 @@ describe('Continuous feedback', () => {
 
     // Student sees continuous feedback response
     cy.loginAs(student)
-    cy.visit(`${baseUrl}`)
+    cy.visit(``)
 
     cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()

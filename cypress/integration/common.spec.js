@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 import { admin, studentVeikko } from '../fixtures/headers'
-import { baseUrl } from '../support'
 
 describe('Common tests', () => {
   it('User can change language', () => {
@@ -16,18 +15,18 @@ describe('Common tests', () => {
   })
   it('CONFIG is populated correctly', () => {
     cy.loginAs(admin)
-    cy.visit(`${baseUrl}/admin/users`)
+    cy.visit(`/admin/users`)
     cy.contains('HY-Minttujam')
     cy.contains('Pahaminttu').should('not.exist')
   })
   it('Custom translation override is loaded correctly', () => {
     cy.loginAs(admin)
-    cy.visit(`${baseUrl}/admin/users`)
+    cy.visit(`/admin/users`)
     cy.contains('Illuminati-silmä')
   })
   it('Error view is shown when a component throws during render', () => {
     cy.loginAs(admin)
-    cy.visit(`${baseUrl}/admin/`)
+    cy.visit(`/admin/`)
     cy.get('[data-cy=errorButton]').click()
     cy.get('[data-cy=errorView]').should('exist')
   })

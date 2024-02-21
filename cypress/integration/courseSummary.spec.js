@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 const { summaryUser } = require('../fixtures/headers')
-const { baseUrl } = require('../support')
 
 /**
  * For test data, see src/server/services/testServices/initSummary.js
@@ -14,7 +13,7 @@ describe('Course summary', () => {
       body: summaryUser,
     })
     cy.loginAs(summaryUser)
-    cy.visit(`${baseUrl}/course-summary?startDate=2023-08-01&endDate=2024-07-31&option=year`)
+    cy.visit(`/course-summary?startDate=2023-08-01&endDate=2024-07-31&option=year`)
   })
 
   it('Should have data in My Organisations and my courses', () => {

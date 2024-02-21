@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 const { organisationCorrespondent } = require('../fixtures/headers')
-const { baseUrl } = require('../support')
 
 describe('Organisation settings', () => {
   beforeEach(() => {
@@ -12,7 +11,7 @@ describe('Organisation settings', () => {
 
   describe('Programme survey', () => {
     beforeEach(() => {
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.visit(`/organisations/TEST_ORG/survey`)
       cy.on('window:confirm', str => {
         expect(str).to.eq(
           'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?'
@@ -25,7 +24,7 @@ describe('Organisation settings', () => {
       cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.visit(`/organisations/TEST_ORG/survey`)
       cy.contains('Test question programme level')
     })
 
@@ -38,7 +37,7 @@ describe('Organisation settings', () => {
       cy.get('[data-cy=editQuestion]').first().click()
       cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
       cy.get('[data-cy=question-card-save-edit]').click()
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.visit(`/organisations/TEST_ORG/survey`)
       cy.contains('edited question')
     })
 
@@ -47,17 +46,17 @@ describe('Organisation settings', () => {
       cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.getTestFbtId().then(id => cy.visit(`${baseUrl}/targets/${id}`))
+      cy.getTestFbtId().then(id => cy.visit(`/targets/${id}`))
       cy.contains('Test question programme level')
 
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.visit(`/organisations/TEST_ORG/survey`)
       cy.get('[data-cy=editQuestion]').first().click()
       cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
       cy.get('[data-cy=question-card-save-edit]').click()
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.visit(`/organisations/TEST_ORG/survey`)
       cy.contains('edited question')
 
-      cy.getTestFbtId().then(id => cy.visit(`${baseUrl}/targets/${id}`))
+      cy.getTestFbtId().then(id => cy.visit(`/targets/${id}`))
       cy.contains('edited question')
     })
 
@@ -67,7 +66,7 @@ describe('Organisation settings', () => {
       cy.get('input[id^=likert-question-en-questions]').type('LIKERT TEST')
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.visit(`${baseUrl}/organisations/TEST_ORG/summary`)
+      cy.visit(`/organisations/TEST_ORG/summary`)
       cy.contains('LIKERT TEST')
     })
   })

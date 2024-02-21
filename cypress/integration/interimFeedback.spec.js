@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 
 const { student, teacher, admin } = require('../fixtures/headers')
-const { baseUrl } = require('../support')
 
 describe('Responsible Teachers', () => {
   beforeEach(() => {
@@ -26,7 +25,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can fill in new interim feedbacks', () => {
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
@@ -59,7 +58,7 @@ describe('Responsible Teachers', () => {
 
     // Visit the interim feedbacks
     cy.get('@parentId').then(parentId => {
-      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+      cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
     cy.get('@interimFeedback').then(interimFeedback => {
@@ -86,7 +85,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can view my teaching interim feedbacks if responsible teacher', () => {
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
@@ -159,7 +158,7 @@ describe('Responsible Teachers', () => {
 
   it('can edit interim feedbacks', () => {
     cy.get('@parentId').then(parentId => {
-      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+      cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
     cy.get('@interimFeedback').then(interimFeedback => {
@@ -237,7 +236,7 @@ describe('Responsible Teachers', () => {
 
   it('can not create/edit questions for ongoing interim feedback', () => {
     cy.get('@parentId').then(parentId => {
-      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+      cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
     cy.get('@interimFeedback').then(interimFeedback => {
@@ -264,7 +263,7 @@ describe('Responsible Teachers', () => {
     cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
 
     cy.get('@interimFeedback').then(interimFeedback => {
-      cy.visit(`${baseUrl}/targets/${interimFeedback.id}`)
+      cy.visit(`/targets/${interimFeedback.id}`)
     })
 
     cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('exist').click()
@@ -315,7 +314,7 @@ describe('Students', () => {
   })
 
   it('can view ongoing interim feedbacks and give interim feedback', () => {
-    cy.visit(`${baseUrl}/feedbacks`)
+    cy.visit(`/feedbacks`)
 
     cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
 
@@ -352,7 +351,7 @@ describe('Students', () => {
     cy.url().should('include', '/results')
 
     // Assert that the feedback page got updated
-    cy.visit(`${baseUrl}/feedbacks`)
+    cy.visit(`/feedbacks`)
 
     cy.get('@interimFeedback').then(interimFeedback => {
       // Awaiting tab check
@@ -391,7 +390,7 @@ describe('Admin Users', () => {
 
   it('can create questions for interim feedbacks regardles of ongoing feedback', () => {
     cy.get('@interimFeedback').then(interimFeedback => {
-      cy.visit(`${baseUrl}/targets/${interimFeedback.id}`)
+      cy.visit(`/targets/${interimFeedback.id}`)
     })
 
     cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('exist').click()
@@ -424,7 +423,7 @@ describe('Admin Users', () => {
     cy.giveInterimFeedback(student)
 
     cy.get('@parentId').then(parentId => {
-      cy.visit(`${baseUrl}/targets/${parentId}/interim-feedback`)
+      cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
     cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('not.exist')

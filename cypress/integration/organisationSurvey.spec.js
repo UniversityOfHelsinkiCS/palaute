@@ -12,8 +12,6 @@ import {
   teacher,
 } from '../fixtures/headers'
 
-const { baseUrl } = require('../support')
-
 describe('Feedback Correspondents', () => {
   beforeEach(() => {
     cy.seedTestOrgCorrespondent(organisationCorrespondent)
@@ -22,7 +20,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can visit organisation survey page', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/settings`)
+    cy.visit(`/organisations/TEST_ORG/settings`)
 
     cy.contains('Programme surveys').click()
 
@@ -32,7 +30,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can access new survey window and the form is rendered correctly', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').should('be.visible').click()
 
@@ -69,7 +67,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can fill in new organisation surveys', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
 
@@ -121,7 +119,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assert that the survey was created
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // Because there is no way of getting the organistaion survey's id
     // that was created above we just have to check some elements are rendered.
@@ -141,7 +139,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can not create survey with validation errors', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // try to save a new survey without inserting any information
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -181,7 +179,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it.skip('can not set the end date to be before the start date', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // try to set the end date to be before the start date
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -201,14 +199,14 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can edit organisation surveys', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // Create a new survey with just the name given
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // Assure that the survey does not have any students and only one responsible teacher
     cy.get('[data-cy^="organisation-survey-item-title-"]').should('exist')
@@ -239,7 +237,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assure the changes is visible
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('[data-cy^="organisation-survey-item-title-"]').should('exist').contains('Test survey')
     cy.get('[data-cy^="organisation-survey-feedback-count-percentage-"]').should('exist').contains('0/2')
@@ -260,7 +258,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
     // Assure that only the name changed
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('[data-cy^="organisation-survey-item-title-"]').should('not.contain', 'Test survey')
     cy.get('[data-cy^="organisation-survey-item-title-"]').should('contain', 'Greatest survey of them all!')
@@ -289,12 +287,12 @@ describe('Feedback Correspondents', () => {
       endDate: new Date().setDate(today.getDate() + 1),
     }
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     // Assert the survey data is correct
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="organisation-survey-item-title-${organisationSurvey.id}"]`).should('exist')
@@ -327,7 +325,7 @@ describe('Feedback Correspondents', () => {
     // Assure the changes is visible
     cy.giveOrganisationSurveyFeedback(student).then(() => {
       cy.get('@organisationSurvey').then(organisationSurvey => {
-        cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+        cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
         cy.get(`[data-cy="organisation-survey-item-title-${organisationSurvey.id}"]`).should('exist')
         cy.get(`[data-cy="organisation-survey-feedback-count-percentage-${organisationSurvey.id}"]`)
@@ -359,7 +357,7 @@ describe('Feedback Correspondents', () => {
       endDate: new Date().setDate(today.getDate() + 1),
     }
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
@@ -387,13 +385,13 @@ describe('Feedback Correspondents', () => {
       endDate: new Date().setDate(today.getDate() + 1),
     }
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
     cy.giveOrganisationSurveyFeedback(student)
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
@@ -432,7 +430,7 @@ describe('Feedback Correspondents', () => {
   })
 
   it('can create questions for organisation survey', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     // Create a new survey with just the name given
     cy.get('[data-cy="organisation-surveys-add-new"]').click()
@@ -493,7 +491,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can view own organisation surveys if responsible teacher', () => {
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Visit the organisation survey where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
@@ -536,7 +534,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can edit organisation surveys', () => {
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
@@ -562,7 +560,7 @@ describe('Responsible Teachers', () => {
     // Assure the changes is visible
     cy.loginAs(organisationCorrespondent)
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy^="organisation-survey-item-title-${organisationSurvey.id}"]`).should('exist')
@@ -579,7 +577,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can not create/edit questions for ongoing organistaion survey', () => {
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
@@ -607,7 +605,7 @@ describe('Responsible Teachers', () => {
 
     cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
 
-    cy.visit(`${baseUrl}/courses`)
+    cy.visit(`/courses`)
 
     // Edit the survey to add students and new responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click({ multiple: true })
@@ -672,7 +670,7 @@ describe('Students', () => {
   })
 
   it('can view ongoing organisation surveys and give organisation survey feedback', () => {
-    cy.visit(`${baseUrl}/feedbacks`)
+    cy.visit(`/feedbacks`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="feedback-item-${organisationSurvey.id}"]`).should('exist')
@@ -707,7 +705,7 @@ describe('Students', () => {
     cy.url().should('include', '/results')
 
     // Assert that the feedback page got updated
-    cy.visit(`${baseUrl}/feedbacks`)
+    cy.visit(`/feedbacks`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       // Awaiting tab check
@@ -745,7 +743,7 @@ describe('Admin Users', () => {
   })
 
   it('can create questions for organisation survey regardles of ongoing feedback', () => {
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
@@ -780,7 +778,7 @@ describe('Admin Users', () => {
   it('can delete organisation surveys after feedback has been given', () => {
     cy.giveOrganisationSurveyFeedback(student)
 
-    cy.visit(`${baseUrl}/organisations/TEST_ORG/organisation-surveys`)
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
     cy.get('[data-cy="organisation-surveys-no-surveys-alert"]').should('not.exist')
 
     cy.on('window:confirm', str => {
@@ -809,7 +807,7 @@ describe('Admin Users', () => {
     // Assert that the survey also got removed from the students page
     cy.loginAs(student)
 
-    cy.visit(`${baseUrl}/feedbacks`)
+    cy.visit(`/feedbacks`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
       // Awaiting tab check

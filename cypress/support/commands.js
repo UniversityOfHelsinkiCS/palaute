@@ -1,10 +1,9 @@
 import { addDays } from 'date-fns'
 import { admin, student, teacher } from '../fixtures/headers'
-import { baseUrl } from './baseUrl'
 
 Cypress.Commands.add('loginAs', user => {
   localStorage.setItem('fakeUser', JSON.stringify(user))
-  cy.visit(`${baseUrl}`)
+  cy.visit(`/`)
 })
 
 Cypress.Commands.add('giveFeedback', headers => {

@@ -17,7 +17,6 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
-import { baseUrl } from './baseUrl'
 import { testUsers } from '../fixtures/headers'
 
 beforeEach(() => {
@@ -43,8 +42,6 @@ Cypress.on('uncaught:exception', err => {
   }
   return true
 })
-
-export { baseUrl }
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
