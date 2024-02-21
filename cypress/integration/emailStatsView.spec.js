@@ -4,6 +4,9 @@ import { admin } from '../fixtures/headers'
 import { baseUrl } from '../support'
 
 describe('Admin email stats view', () => {
+  beforeEach(() => {
+    cy.createFeedbackTarget()
+  })
   it('shows 0 when no emails should be sent', () => {
     cy.setFeedbackNotYetOpen()
     cy.loginAs(admin)

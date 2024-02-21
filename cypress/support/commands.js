@@ -1,4 +1,5 @@
-import { admin, teacher } from '../fixtures/headers'
+import { addDays } from 'date-fns'
+import { admin, student, teacher } from '../fixtures/headers'
 import { baseUrl } from './baseUrl'
 
 Cypress.Commands.add('loginAs', user => {
@@ -128,6 +129,21 @@ Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
     body,
   }).then(response => {
     cy.wrap(response.body).as('interimFeedback')
+  })
+})
+
+Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extraStudents = 0 }) => {
+  cy.request({
+    method: 'POST',
+    url: 'test/seed-feedback-targets',
+    body: {
+      teacher,
+      student: enrolledStudent,
+      opensAt: addDays(new Date(), 1),
+      closesAt: addDays(new Date(), 2),
+      extraStudents,
+    },
+    headers: admin,
   })
 })
 

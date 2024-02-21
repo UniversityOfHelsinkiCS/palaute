@@ -5,10 +5,8 @@ const { baseUrl } = require('../support')
 
 describe('Responsible Teachers', () => {
   beforeEach(() => {
-    cy.clearInterimFeedbacks()
-
+    cy.createFeedbackTarget({ extraStudents: 5 })
     const today = new Date()
-    const parentId = '163'
     const interimFeedbackBody = {
       name: {
         fi: 'Testi välipalaute',
@@ -19,9 +17,9 @@ describe('Responsible Teachers', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.wrap(parentId).as('parentId')
+    cy.getTestFbtId().as('parentId')
 
-    cy.createInterimFeedback(parentId, interimFeedbackBody)
+    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
 
     // Login as Tommi Testaaja
     cy.loginAs(teacher)
@@ -31,7 +29,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`${baseUrl}/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TKT21029"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -73,7 +71,7 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
-        .contains('0/7')
+        .contains('0/6')
 
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
         .should('exist')
@@ -91,7 +89,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`${baseUrl}/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TKT21029"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -109,7 +107,7 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
-        .contains('0/7')
+        .contains('0/6')
 
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
         .should('exist')
@@ -135,12 +133,12 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-target-feedback-count"]').should('exist')
 
     // Assert no initial student feedbacks
-    cy.get('[data-cy="interim-feedback-target-feedback-count-percentage"]').should('exist').contains('0/7')
+    cy.get('[data-cy="interim-feedback-target-feedback-count-percentage"]').should('exist').contains('0/6')
 
     // Assert correct teacher list is rendered
     cy.get('[data-cy="interim-feedback-target-responsible-administrative-person-list"]').should('not.exist')
     cy.get('[data-cy="interim-feedback-target-responsible-teacher-list"]').should('exist')
-    cy.get('[data-cy="interim-feedback-target-teacher-list"]').should('exist')
+    cy.get('[data-cy="interim-feedback-target-teacher-list"]').should('not.exist')
 
     // Assert that the links are rendered correctly
     cy.get('[data-cy="interim-feedback-target-copy-student-link"]').should('exist')
@@ -166,16 +164,14 @@ describe('Responsible Teachers', () => {
 
     cy.get('@interimFeedback').then(interimFeedback => {
       // Assert that the feedback was created correctly
-      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`)
-        .should('exist')
-        .contains('Test interim feedback')
+      cy.get(`[data-cy="interim-feedback-item-title-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-not-open-${interimFeedback.id}"]`).should('not.exist')
       cy.get(`[data-cy="interim-feedback-open-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-period-info-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
-        .contains('0/7')
+        .contains('0/6')
 
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
         .should('exist')
@@ -193,7 +189,7 @@ describe('Responsible Teachers', () => {
     })
 
     // Change the interim feedbacks name fields
-    cy.get('[data-cy="formik-locales-field-fi-name"]').clear().type('Uusi välipalaute')
+    cy.get('[data-cy="formik-locales-field-fi-name"]').clear().type('New interim feedback')
     cy.get('[data-cy="formik-locales-field-sv-name"]').clear().type('New interim feedback')
     cy.get('[data-cy="formik-locales-field-en-name"]').clear().type('New interim feedback')
 
@@ -213,7 +209,7 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
-        .contains('0/7')
+        .contains('0/6')
 
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
         .should('exist')
@@ -255,7 +251,6 @@ describe('Responsible Teachers', () => {
 
   it('can create questions for interim feedbacks', () => {
     const today = new Date()
-    const parentId = '163'
     const interimFeedbackBody = {
       name: {
         fi: 'Uusin välipalaute',
@@ -265,8 +260,8 @@ describe('Responsible Teachers', () => {
       startDate: new Date().setDate(today.getDate() + 1),
       endDate: new Date().setDate(today.getDate() + 7),
     }
-
-    cy.createInterimFeedback(parentId, interimFeedbackBody)
+    cy.getTestFbtId().as('parentId')
+    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
 
     cy.get('@interimFeedback').then(interimFeedback => {
       cy.visit(`${baseUrl}/targets/${interimFeedback.id}`)
@@ -301,10 +296,8 @@ describe('Responsible Teachers', () => {
 
 describe('Students', () => {
   beforeEach(() => {
-    cy.clearInterimFeedbacks()
-
+    cy.createFeedbackTarget({ extraStudents: 5 })
     const today = new Date()
-    const parentId = '163'
     const interimFeedbackBody = {
       name: {
         fi: 'Testi välipalaute',
@@ -314,10 +307,8 @@ describe('Students', () => {
       startDate: today,
       endDate: new Date().setDate(today.getDate() + 7),
     }
-
-    cy.wrap(parentId).as('parentId')
-
-    cy.createInterimFeedback(parentId, interimFeedbackBody)
+    cy.getTestFbtId().as('parentId')
+    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
 
     // Login as Olli Oppilas
     cy.loginAs(student)
@@ -379,10 +370,8 @@ describe('Students', () => {
 
 describe('Admin Users', () => {
   beforeEach(() => {
-    cy.clearInterimFeedbacks()
-
+    cy.createFeedbackTarget({ extraStudents: 5 })
     const today = new Date()
-    const parentId = '163'
     const interimFeedbackBody = {
       name: {
         fi: 'Testi välipalaute',
@@ -393,9 +382,9 @@ describe('Admin Users', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.wrap(parentId).as('parentId')
+    cy.getTestFbtId().as('parentId')
 
-    cy.createInterimFeedback(parentId, interimFeedbackBody)
+    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
 
     cy.loginAs(admin)
   })
@@ -452,7 +441,7 @@ describe('Admin Users', () => {
       cy.get(`[data-cy="interim-feedback-feedback-count-${interimFeedback.id}"]`).should('exist')
       cy.get(`[data-cy="interim-feedback-feedback-count-percentage-${interimFeedback.id}"]`)
         .should('exist')
-        .contains('1/7')
+        .contains('1/6')
 
       cy.get(`[data-cy="interim-feedback-responsible-persons-${interimFeedback.id}"]`)
         .should('exist')

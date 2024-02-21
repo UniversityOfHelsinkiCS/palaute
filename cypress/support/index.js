@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -16,9 +17,8 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
-import { addDays } from 'date-fns'
 import { baseUrl } from './baseUrl'
-import { admin, testUsers, teacher, student } from '../fixtures/headers'
+import { testUsers } from '../fixtures/headers'
 
 beforeEach(() => {
   cy.request({
@@ -30,13 +30,6 @@ beforeEach(() => {
     method: 'POST',
     url: 'test/seed-users',
     body: testUsers,
-  })
-
-  cy.request({
-    method: 'POST',
-    url: 'test/seed-feedback-targets',
-    body: { teacher, student, opensAt: addDays(new Date(), 1), closesAt: addDays(new Date(), 2) },
-    headers: admin,
   })
 
   // cy.enableTestUsers()

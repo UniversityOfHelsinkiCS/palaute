@@ -115,12 +115,13 @@ const seedOrganisationCorrespondentHandler = async (req, res) => {
 }
 
 const seedFeedbackTargets = async (req, res) => {
-  const { teacher, student, opensAt, closesAt } = req.body
+  const { teacher, student, opensAt, closesAt, extraStudents } = req.body
   const fbts = await seedFeedbackTargetsForTeacher({
     teacher: userHeadersToUser(teacher),
     student: userHeadersToUser(student),
     opensAt,
     closesAt,
+    extraStudents,
   })
   return res.send(fbts)
 }

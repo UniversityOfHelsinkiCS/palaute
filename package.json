@@ -137,9 +137,8 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "dist/*",
-      "palaute/*",
-      "client/*"
+      "cypress",
+      "src/client"
     ]
   },
   "jest": {

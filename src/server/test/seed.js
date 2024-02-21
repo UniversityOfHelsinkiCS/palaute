@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { startOfDay } = require('date-fns')
 const {
   FeedbackTarget,
   User,
@@ -8,9 +9,18 @@ const {
   CourseUnit,
   OrganisationFeedbackCorrespondent,
   CourseRealisation,
+  CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
 } = require('../models')
 const { UNIVERSITY_ROOT_ID } = require('../util/config')
-const { TEST_ORGANISATION_ID } = require('./testIds')
+const {
+  TEST_ORGANISATION_ID,
+  TEST_ORGANISATION_CODE,
+  TEST_COURSE_UNIT_ID,
+  TEST_COURSE_CODE,
+  TEST_COURSE_REALISATION_ID,
+} = require('./testIds')
+const { createTestObject } = require('./utils')
 
 const seedUsers = async users => {
   for (const user of users) {
@@ -86,6 +96,50 @@ const seedDb = async () => {
 
   // Create university & university survey
   await seedUniversity()
+
+  // Seed test organisation
+  await createTestObject(Organisation, {
+    id: TEST_ORGANISATION_ID,
+    name: {
+      fi: 'Testiorganisaatio',
+      en: 'Test organisation',
+      sv: 'asdasdasd',
+    },
+    code: TEST_ORGANISATION_CODE,
+  })
+
+  await createTestObject(CourseUnit, {
+    id: TEST_COURSE_UNIT_ID,
+    name: {
+      fi: 'Testauskurssi',
+      en: 'Testauskurssi',
+      sv: 'asdasdasd',
+    },
+    courseCode: TEST_COURSE_CODE,
+  })
+
+  await createTestObject(CourseUnitsOrganisation, {
+    courseUnitId: TEST_COURSE_UNIT_ID,
+    organisationId: TEST_ORGANISATION_ID,
+    type: 'PRIMARY',
+  })
+
+  await createTestObject(CourseRealisation, {
+    id: TEST_COURSE_REALISATION_ID,
+    name: {
+      fi: 'Testauskurssin toteutus',
+      en: 'Test course realisation',
+      sv: 'asdasdasd',
+    },
+    startDate: startOfDay(new Date('2023-08-01')),
+    endDate: startOfDay(new Date('2023-12-31')),
+  })
+
+  await createTestObject(CourseRealisationsOrganisation, {
+    courseRealisationId: TEST_COURSE_REALISATION_ID,
+    organisationId: TEST_ORGANISATION_ID,
+    type: 'PRIMARY',
+  })
 }
 
 module.exports = {

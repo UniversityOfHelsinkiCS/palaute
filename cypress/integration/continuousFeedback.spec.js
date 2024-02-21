@@ -4,6 +4,9 @@ const { teacher, student } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Continuous feedback', () => {
+  beforeEach(() => {
+    cy.createFeedbackTarget()
+  })
   it('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
     // Teacher enables continuous feedback
     cy.loginAs(teacher)
