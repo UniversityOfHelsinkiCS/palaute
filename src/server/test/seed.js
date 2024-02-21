@@ -1,6 +1,16 @@
 const _ = require('lodash')
-const { FeedbackTarget, User, Organisation, Survey, Question, CourseUnit } = require('../models')
+const {
+  FeedbackTarget,
+  User,
+  Organisation,
+  Survey,
+  Question,
+  CourseUnit,
+  OrganisationFeedbackCorrespondent,
+  CourseRealisation,
+} = require('../models')
 const { UNIVERSITY_ROOT_ID } = require('../util/config')
+const { TEST_ORGANISATION_ID } = require('./testIds')
 
 const seedUsers = async users => {
   for (const user of users) {
@@ -13,8 +23,15 @@ const seedUsers = async users => {
   }
 }
 
+const seedOrganisationCorrespondent = async user => {
+  await OrganisationFeedbackCorrespondent.create({
+    userId: user.id,
+    organisationId: TEST_ORGANISATION_ID,
+  })
+}
+
 const seedUniversity = async () => {
-  const university = await Organisation.create(
+  await Organisation.create(
     {
       id: UNIVERSITY_ROOT_ID,
       name: {
@@ -46,7 +63,7 @@ const seedUniversity = async () => {
     })
   )
 
-  const survey = await Survey.create(
+  await Survey.create(
     {
       typeId: UNIVERSITY_ROOT_ID,
       type: 'university',
@@ -63,6 +80,7 @@ const seedDb = async () => {
 
   await FeedbackTarget.destroy({ where: {}, truncate: true, cascade: true })
   await User.destroy({ where: {}, truncate: true, cascade: true })
+  await CourseRealisation.destroy({ where: {}, truncate: true, cascade: true })
   await CourseUnit.destroy({ where: {}, truncate: true, cascade: true })
   await Organisation.destroy({ where: {}, truncate: true, cascade: true })
 
@@ -73,4 +91,5 @@ const seedDb = async () => {
 module.exports = {
   seedDb,
   seedUsers,
+  seedOrganisationCorrespondent,
 }

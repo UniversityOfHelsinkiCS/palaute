@@ -1,6 +1,6 @@
 const admin = {
   uid: 'mluukkai',
-  givenName: 'Matti',
+  givenname: 'Matti',
   mail: 'grp-toska+mockadmin@helsinki.fi',
   sn: 'Luukkainen',
   preferredLanguage: 'en',
@@ -27,6 +27,7 @@ const student = {
   mail: 'opiskelija@toska.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-115054920',
+  studentNumber: '010000001',
 }
 
 const studentHenri = {
@@ -36,6 +37,7 @@ const studentHenri = {
   mail: 'henri.testaaja@helsinki.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-124043339',
+  studentNumber: '010000002',
 }
 
 const studentMiko = {
@@ -45,6 +47,7 @@ const studentMiko = {
   mail: 'miko.testaaja@helsinki.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-136095188',
+  studentNumber: '010000003',
 }
 
 const studentVeikko = {
@@ -54,6 +57,7 @@ const studentVeikko = {
   mail: 'veikko.testaaja@helsinki.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-130991964',
+  studentNumber: '010000004',
 }
 
 const studentRandom = {
@@ -63,6 +67,7 @@ const studentRandom = {
   mail: 'random.testaaja@helsinki.fi',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-111111111',
+  studentNumber: '010000005',
 }
 
 const studyCoordinator = {
@@ -70,7 +75,7 @@ const studyCoordinator = {
   givenname: 'Daniel',
   sn: 'Dekaani',
   mail: 'dekaani@toska.fi',
-  preferredLanguage: 'en',
+  preferredLanguage: 'en ',
   hyPersonSisuId: 'test-hlo-1501077',
   hygroupcn: ['hy-employees', 'grp-toska'],
 }
@@ -80,9 +85,11 @@ const organisationCorrespondent = {
   givenname: 'Correspondent',
   sn: 'Tester',
   mail: 'cs.correspondent@helsinki.fi',
-  preferredLanguage: 'en',
+  preferredLanguage: 'en ',
   hyPersonSisuId: 'test-hlo-111111112',
   hygroupcn: ['hy-employees'],
+  employeeNumber: '000000000',
+  studentNumber: '010000006',
 }
 
 const summaryUser = {
@@ -94,6 +101,8 @@ const summaryUser = {
   hyPersonSisuId: 'test-hlo-111111113',
   hygroupcn: ['hy-employees'],
 }
+
+const getFullName = user => `${user.givenname} ${user.sn}`
 
 const testUsers = [
   admin,
@@ -120,4 +129,5 @@ module.exports = {
   organisationCorrespondent,
   summaryUser,
   testUsers,
+  getFullName,
 }

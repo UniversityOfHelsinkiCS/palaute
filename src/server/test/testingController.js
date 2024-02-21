@@ -1,317 +1,14 @@
-const { Op } = require('sequelize')
 const Router = require('express')
 const _ = require('lodash')
 const morgan = require('morgan')
-const { sequelize } = require('../db/dbConnection')
 
-const { testStudents, organisationCorrespondentUsers } = require('./utils/users')
-
-const {
-  FeedbackTarget,
-  CourseUnit,
-  CourseUnitsOrganisation,
-  CourseRealisation,
-  Organisation,
-  User,
-  UserFeedbackTarget,
-  Survey,
-  FeedbackTargetLog,
-  CourseRealisationsOrganisation,
-  CourseRealisationsTag,
-  OrganisationFeedbackCorrespondent,
-  Feedback,
-} = require('../models')
+const { FeedbackTarget, CourseRealisation, User } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 const { initTestSummary } = require('./seedSummary')
 const { seedFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
-const { seedDb, seedUsers } = require('./seed')
+const { seedDb, seedUsers, seedOrganisationCorrespondent } = require('./seed')
 const { TEST_COURSE_REALISATION_ID } = require('./testIds')
-
-const seedTestUsers = async users => {
-  await User.bulkCreate(users, {
-    ignoreDuplicates: true,
-  })
-}
-
-const clearTestUsers = async users => {
-  const userIds = users.map(user => user.id)
-
-  await User.destroy({
-    where: {
-      id: { [Op.in]: userIds },
-    },
-  })
-}
-
-const seedTestOrganisationCorrespondents = async (organisationCode, users) => {
-  const correspondentUserIds = users.map(user => user.id)
-
-  const organisation = await Organisation.findOne({
-    where: {
-      code: organisationCode,
-    },
-  })
-
-  await correspondentUserIds.forEach(async userId => {
-    await OrganisationFeedbackCorrespondent.create({
-      organisationId: organisation.id,
-      userId,
-    })
-  })
-}
-
-const clearTestOrganisationCorrespondents = async organisationCode => {
-  const organisation = await Organisation.findOne({
-    where: {
-      code: organisationCode,
-    },
-  })
-
-  await OrganisationFeedbackCorrespondent.destroy({
-    where: {
-      organisationId: organisation.id,
-    },
-  })
-}
-
-const clearUserFbts = async users => {
-  const userIds = users.map(user => user.id)
-
-  const t = await sequelize.transaction()
-
-  try {
-    await UserFeedbackTarget.destroy({
-      where: {
-        userId: { [Op.in]: userIds },
-      },
-    })
-
-    await Feedback.destroy({
-      where: {
-        userId: { [Op.in]: userIds },
-      },
-    })
-
-    await t.commit()
-  } catch (err) {
-    await t.rollback()
-    throw err
-  }
-}
-
-const clearOrganisatioSurveyFbts = async (req, res) => {
-  const organisationSurveyFbts = await FeedbackTarget.findAll({
-    where: {
-      userCreated: true,
-    },
-    include: [
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        where: {
-          userCreated: true,
-        },
-        required: true,
-        include: [
-          {
-            model: Organisation,
-            as: 'organisations',
-            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
-            required: true,
-          },
-          {
-            model: CourseUnitsOrganisation,
-            as: 'courseUnitsOrganisations',
-            required: true,
-            attributes: [],
-          },
-        ],
-      },
-    ],
-  })
-
-  const fbtIds = organisationSurveyFbts.map(fbt => fbt.id)
-  const curIds = organisationSurveyFbts.map(fbt => fbt.courseRealisationId)
-
-  const feedbacks = await UserFeedbackTarget.findAll({
-    attributes: ['feedbackId'],
-    where: {
-      feedbackTargetId: { [Op.in]: fbtIds },
-    },
-  })
-
-  const feedbackIds = feedbacks.map(fb => fb.feedbackId)
-
-  const t = await sequelize.transaction()
-
-  try {
-    await UserFeedbackTarget.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await Feedback.destroy({
-      where: {
-        id: { [Op.in]: feedbackIds },
-      },
-    })
-
-    await Survey.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await FeedbackTargetLog.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await FeedbackTarget.destroy({
-      where: {
-        id: { [Op.in]: fbtIds },
-      },
-    })
-
-    await CourseRealisationsOrganisation.destroy({
-      where: {
-        courseRealisationId: { [Op.in]: curIds },
-      },
-    })
-
-    await CourseRealisationsTag.destroy({
-      where: {
-        courseRealisationId: { [Op.in]: curIds },
-      },
-    })
-
-    await CourseRealisation.destroy({
-      where: {
-        id: { [Op.in]: curIds },
-      },
-    })
-
-    await t.commit()
-  } catch (err) {
-    await t.rollback()
-    throw err
-  }
-
-  return res.send(204)
-}
-
-const clearInterimFeedbackFbts = async (req, res) => {
-  const interimFeedbackFbts = await FeedbackTarget.findAll({
-    include: [
-      {
-        model: CourseUnit,
-        as: 'courseUnit',
-        required: true,
-        where: {
-          userCreated: false,
-        },
-      },
-      {
-        model: CourseRealisation,
-        as: 'courseRealisation',
-        required: true,
-        where: {
-          userCreated: false,
-        },
-      },
-    ],
-    where: {
-      userCreated: true,
-    },
-  })
-
-  const fbtIds = interimFeedbackFbts.map(fbt => fbt.id)
-
-  const feedbacks = await UserFeedbackTarget.findAll({
-    attributes: ['feedbackId'],
-    where: {
-      feedbackTargetId: { [Op.in]: fbtIds },
-    },
-  })
-
-  const feedbackIds = feedbacks.map(fb => fb.feedbackId)
-
-  const t = await sequelize.transaction()
-
-  try {
-    await UserFeedbackTarget.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await Feedback.destroy({
-      where: {
-        id: { [Op.in]: feedbackIds },
-      },
-    })
-
-    await Survey.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await FeedbackTargetLog.destroy({
-      where: {
-        feedbackTargetId: { [Op.in]: fbtIds },
-      },
-    })
-
-    await FeedbackTarget.destroy({
-      where: {
-        id: { [Op.in]: fbtIds },
-      },
-    })
-
-    await t.commit()
-  } catch (err) {
-    await t.rollback()
-    throw err
-  }
-
-  return res.send(204)
-}
-
-const createTestStudents = async (req, res) => {
-  await seedTestUsers(testStudents)
-
-  return res.send(201)
-}
-
-const clearTestStudents = async (req, res) => {
-  await clearUserFbts(testStudents)
-
-  await clearTestUsers(testStudents)
-
-  return res.send(204)
-}
-
-const createTestCorrespondents = async (req, res) => {
-  const { organisationCode } = req.params
-  await seedTestUsers(organisationCorrespondentUsers)
-
-  await seedTestOrganisationCorrespondents(organisationCode, organisationCorrespondentUsers)
-
-  return res.send(201)
-}
-
-const clearTestCorrespondents = async (req, res) => {
-  const { organisationCode } = req.params
-
-  await clearTestOrganisationCorrespondents(organisationCode)
-  await clearTestUsers(organisationCorrespondentUsers)
-
-  return res.send(204)
-}
 
 const updateCourseRealisation = async (req, res) => {
   const { feedbackTargetId } = req.params
@@ -401,12 +98,20 @@ const userHeadersToUser = userHeaders => ({
   firstName: userHeaders.givenname,
   lastName: userHeaders.sn,
   email: userHeaders.mail,
+  employeeNumber: userHeaders.employeeNumber,
+  studentNumber: userHeaders.studentNumber,
 })
 
 const seedTestUsers2 = async (req, res) => {
   const users = req.body.map(userHeadersToUser)
   await seedUsers(users)
   return res.send(201)
+}
+
+const seedOrganisationCorrespondentHandler = async (req, res) => {
+  const user = userHeadersToUser(req.body.user)
+  await seedOrganisationCorrespondent(user)
+  return res.send(200)
 }
 
 const seedFeedbackTargets = async (req, res) => {
@@ -440,14 +145,6 @@ const router = Router()
 router.use(Router.json())
 router.use(morgan('dev'))
 
-router.post('/clear/user/student', clearTestStudents)
-router.post('/clear/user/correspondent/:organisationCode', clearTestCorrespondents)
-router.post('/clear/organisation-surveys', clearOrganisatioSurveyFbts)
-router.post('/clear/interim-feedbacks', clearInterimFeedbackFbts)
-
-router.post('/seed/user/student', createTestStudents)
-router.post('/seed/user/correspondent/:organisationCode', createTestCorrespondents)
-
 router.put('/user/:userId', updateUser)
 
 router.put('/courseRealisation/:feedbackTargetId', updateCourseRealisation)
@@ -456,6 +153,7 @@ router.put('/courseRealisations', updateManyCourseRealisations)
 router.post('/init-summary', initSummary)
 router.post('/seed-users', seedTestUsers2)
 router.post('/seed-feedback-targets', seedFeedbackTargets)
+router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHandler)
 router.post('/reset-db', resetDb)
 
 router.get('/test-fbt-id', getTestFbtId)

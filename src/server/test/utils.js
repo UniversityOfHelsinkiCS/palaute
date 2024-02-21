@@ -8,6 +8,7 @@ const createTestObject = async (Model, data) => {
   })
 
   if (oldInstance) {
+    /* eslint-disable no-console */
     console.log('Object already exists', oldInstance.toJSON())
     return oldInstance
   }
@@ -17,23 +18,6 @@ const createTestObject = async (Model, data) => {
   })
 }
 
-const clearTestObject = (Model, where) => {
-  const instance = Model.findOne({
-    where,
-  })
-
-  if (!instance) {
-    console.warn('Object not found', where)
-  }
-
-  return Model.destroy({
-    where,
-    logging: console.log,
-    hooks: false,
-  })
-}
-
 module.exports = {
   createTestObject,
-  clearTestObject,
 }

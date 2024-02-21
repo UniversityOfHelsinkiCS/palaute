@@ -1,4 +1,3 @@
-const { Op } = require('sequelize')
 const { startOfDay } = require('date-fns')
 const {
   Organisation,
@@ -13,7 +12,7 @@ const {
   CourseRealisationsOrganisation,
 } = require('../models')
 const getUniversitySurvey = require('../services/surveys/universitySurvey')
-const { createTestObject, clearTestObject } = require('./utils')
+const { createTestObject } = require('./utils')
 const { buildSummaries } = require('../services/summary/buildSummaries')
 
 const getTestData = async () => {
@@ -36,8 +35,6 @@ const getTestData = async () => {
     userId: id,
     data: universitySurvey.questions.map(({ id }) => ({ questionId: id, data: '5' })),
   }))
-
-  // console.log(JSON.stringify(TEST_FEEDBACKS, null, 2))
 
   return {
     TEST_ORG_ID,

@@ -10,7 +10,7 @@ describe('Organisation settings', () => {
 
   describe('Programme survey', () => {
     beforeEach(() => {
-      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
       cy.on('window:confirm', str => {
         expect(str).to.eq(
           'You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?'
@@ -25,7 +25,7 @@ describe('Organisation settings', () => {
 
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
       cy.contains('Test question programme level')
     })
 
@@ -41,7 +41,7 @@ describe('Organisation settings', () => {
 
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.visit(`${baseUrl}/organisations/500-K005/survey`)
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
 
       cy.contains('edited question')
     })
@@ -60,7 +60,7 @@ describe('Organisation settings', () => {
 
       cy.get('[data-cy=question-card-save-edit]').click()
 
-      cy.visit(`${baseUrl}/organisations/500-K005/summary`)
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/summary`)
       cy.contains('LIKERT TEST')
     })
   })

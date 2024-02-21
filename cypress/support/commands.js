@@ -49,7 +49,7 @@ Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
  *
  * @returns {Cypress.Chainable} Yields the original survey object for further chaining.
  */
-Cypress.Commands.add('giveOrganisationSurveyFeedback', headers => {
+Cypress.Commands.add('giveOrganisationSurveyFeedback', headers =>
   cy.get('@organisationSurvey').then(survey => {
     const body = {
       feedbackTargetId: survey.id,
@@ -61,9 +61,10 @@ Cypress.Commands.add('giveOrganisationSurveyFeedback', headers => {
       url: '/api/feedbacks',
       headers,
       body,
+      retryOnStatusCodeFailure: true,
     })
   })
-})
+)
 
 /**
  * Custom Cypress command to give feedback for an interim feedback.
@@ -130,15 +131,23 @@ Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
   })
 })
 
+Cypress.Commands.add('getTestFbtId', () =>
+  cy
+    .request({
+      method: 'GET',
+      url: '/test/test-fbt-id',
+    })
+    .then(response => {
+      cy.wrap(response.body.id).as('testFbtId')
+    })
+)
+
 const setFeedbackDatesFromNow = (open, close) => {
   const date = new Date()
-  cy.request({
-    method: 'GET',
-    url: '/test/test-fbt-id',
-  }).then(response => {
+  cy.getTestFbtId().then(id => {
     cy.request({
       method: 'PUT',
-      url: `/api/feedback-targets/${response.body.id}`,
+      url: `/api/feedback-targets/${id}`,
       headers: admin,
       body: {
         opensAt: new Date().setDate(date.getDate() + open),
@@ -165,13 +174,10 @@ Cypress.Commands.add('setFeedbackOpeningSoon', () => {
 })
 
 Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
-  cy.request({
-    method: 'GET',
-    url: '/test/test-fbt-id',
-  }).then(response => {
+  cy.getTestFbtId().then(id => {
     cy.request({
       method: 'PUT',
-      url: `/test/courseRealisation/${response.body.id}`,
+      url: `/test/courseRealisation/${id}`,
       body: {
         feedbackCount,
       },
@@ -180,13 +186,10 @@ Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
 })
 
 Cypress.Commands.add('setContinuousFeedbackActive', () => {
-  cy.request({
-    method: 'GET',
-    url: '/test/test-fbt-id',
-  }).then(response => {
+  cy.getTestFbtId().then(id => {
     cy.request({
       method: 'PUT',
-      url: `/api/feedback-targets/${response.body.id}`,
+      url: `/api/feedback-targets/${id}`,
       headers: admin,
       body: {
         continuousFeedbackEnabled: true,
@@ -214,116 +217,10 @@ Cypress.Commands.add('refreshSummary', () => {
   })
 })
 
-/**
- * Custom Cypress command to seed test students for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.seedTestStudents();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('seedTestStudents', () => {
+Cypress.Commands.add('seedTestOrgCorrespondent', user => {
   cy.request({
     method: 'POST',
-    url: '/api/test/seed/user/student',
-    headers: admin,
-  })
-})
-
-/**
- * Custom Cypress command to clear test students for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.clearTestStudents();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('clearTestStudents', () => {
-  cy.request({
-    method: 'POST',
-    url: '/api/test/clear/user/student',
-    headers: admin,
-  })
-})
-
-/**
- * Custom Cypress command to clear organization surveys for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.clearOrganisationSurveys();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('clearOrganisationSurveys', () => {
-  cy.request({
-    method: 'POST',
-    url: '/api/test/clear/organisation-surveys',
-    headers: admin,
-  })
-})
-
-/**
- * Custom Cypress command to clear interim feedbacks for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.clearInterimFeedbacks();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('clearInterimFeedbacks', () => {
-  cy.request({
-    method: 'POST',
-    url: '/api/test/clear/interim-feedbacks',
-    headers: admin,
-  })
-})
-
-/**
- * Custom Cypress command to seed computer science correspondents for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.seedComputerScienceCorrespondents();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('seedComputerScienceCorrespondents', () => {
-  cy.request({
-    method: 'POST',
-    url: '/api/test/seed/user/correspondent/500-K005',
-    headers: admin,
-  })
-})
-
-/**
- * Custom Cypress command to clear computer science correspondents for testing purposes.
- *
- * @example
- * // Usage in Cypress test
- * cy.clearComputerScienceCorrespondents();
- *
- * @returns {void}
- *
- * @throws {Error} Will throw an error if the command encounters any issues.
- */
-Cypress.Commands.add('clearComputerScienceCorrespondents', () => {
-  cy.request({
-    method: 'POST',
-    url: '/api/test/clear/user/correspondent/500-K005',
-    headers: admin,
+    url: '/test/seed-organisation-correspondent',
+    body: { user },
   })
 })
