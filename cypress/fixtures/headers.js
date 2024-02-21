@@ -70,16 +70,6 @@ const studentRandom = {
   studentNumber: '010000005',
 }
 
-const studyCoordinator = {
-  uid: 'mluukkai',
-  givenname: 'Daniel',
-  sn: 'Dekaani',
-  mail: 'dekaani@toska.fi',
-  preferredLanguage: 'en ',
-  hyPersonSisuId: 'test-hlo-1501077',
-  hygroupcn: ['hy-employees', 'grp-toska'],
-}
-
 const organisationCorrespondent = {
   uid: 'orgcscorrespondent',
   givenname: 'Correspondent',
@@ -112,7 +102,6 @@ const testUsers = [
   studentMiko,
   studentVeikko,
   studentRandom,
-  studyCoordinator,
   organisationCorrespondent,
   summaryUser,
 ]
@@ -125,7 +114,6 @@ module.exports = {
   studentMiko,
   studentVeikko,
   studentRandom,
-  studyCoordinator,
   organisationCorrespondent,
   summaryUser,
   testUsers,

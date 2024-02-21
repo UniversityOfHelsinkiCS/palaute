@@ -2,13 +2,14 @@ const Router = require('express')
 const _ = require('lodash')
 const morgan = require('morgan')
 
-const { FeedbackTarget, CourseRealisation, User } = require('../models')
+const { FeedbackTarget, CourseRealisation, User, Question, Survey } = require('../models')
 
 const { ApplicationError } = require('../util/customErrors')
 const { initTestSummary } = require('./seedSummary')
 const { seedFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
 const { seedDb, seedUsers, seedOrganisationCorrespondent } = require('./seed')
 const { TEST_COURSE_REALISATION_ID } = require('./testIds')
+const { UNIVERSITY_ROOT_ID } = require('../util/config')
 
 const updateCourseRealisation = async (req, res) => {
   const { feedbackTargetId } = req.params
@@ -141,6 +142,16 @@ const getTestFbtId = async (req, res) => {
   return res.send({ id: fbt.id })
 }
 
+const getUniversityQuestionIds = async (req, res) => {
+  const srv = await Survey.findOne({
+    where: {
+      type: 'university',
+    },
+  })
+
+  return res.send(srv.questionIds)
+}
+
 const router = Router()
 
 router.use(Router.json())
@@ -158,5 +169,6 @@ router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHan
 router.post('/reset-db', resetDb)
 
 router.get('/test-fbt-id', getTestFbtId)
+router.get('/university-question-ids', getUniversityQuestionIds)
 
 module.exports = router

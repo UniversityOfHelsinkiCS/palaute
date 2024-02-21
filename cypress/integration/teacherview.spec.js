@@ -1,57 +1,46 @@
 /// <reference types="Cypress" />
 
-import { format } from 'date-fns'
 import { baseUrl } from '../support'
-import { admin, teacher } from '../fixtures/headers'
-
-// eslint-disable-next-line no-unused-vars
-const getDates = () => {
-  const date = new Date()
-
-  const startDate = format(new Date().setDate(date.getDate() - 1), 'dd.MM.yyyy')
-  const endDate = format(new Date().setHours(date.getHours() - 10), 'dd.MM.yyyy')
-
-  return { startDate, endDate }
-}
+import { student, teacher } from '../fixtures/headers'
 
 describe('Teacher view', () => {
   beforeEach(() => {
-    cy.loginAs(admin)
+    cy.createFeedbackTarget({ extraStudents: 5 })
+    cy.getTestFbtId().as('fbtId')
+    cy.loginAs(teacher)
   })
   it('A logged in teacher can view its courses', () => {
     cy.visit(`${baseUrl}/courses`)
     cy.contains('My teaching')
     cy.contains('Ongoing courses (0)')
     cy.contains('Upcoming courses (0)')
-    cy.contains('Ended courses')
+    cy.contains('Ended courses (1)')
   })
   it('A logged in teacher can view its ended courses', () => {
     cy.visit(`${baseUrl}/courses`)
     cy.contains('My teaching')
-    cy.contains('TKT20002 Software Development Methods')
-    cy.get('div').contains('TKT20002 Software Development Methods').click()
-    const { startDate, endDate } = getDates()
-    cy.contains(`${startDate} - ${endDate}`)
+    cy.contains('TEST_COURSE')
+    cy.get('div').contains('TEST_COURSE').click()
   })
   it('A logged in teacher can give counter feedback for an ended course', () => {
+    cy.setFeedbackClosed()
     cy.visit(`${baseUrl}/courses`)
-    cy.get('[data-cy=my-teaching-course-unit-accordion-TKT20002]').click()
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').click()
 
-    cy.visit(`${baseUrl}/targets/97/edit-feedback-response`)
+    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/edit-feedback-response`))
 
     cy.get('textarea').first().type('Counter feedback for students to see')
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
     cy.get('[data-cy=saveFeedbackResponse]').click()
     cy.visit(`${baseUrl}/courses`)
-    cy.contains('TKT20002').click()
-    cy.get('[data-cy=feedbackResponseGiven-97-true]')
+    cy.contains('TEST_COURSE').click()
+    cy.get('@fbtId').then(id => cy.get(`[data-cy=feedbackResponseGiven-${id}-true]`))
   })
   it('Teacher can add questions to a survey', () => {
-    cy.visit(`${baseUrl}/targets/165/edit`)
+    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/edit`))
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-en-questions]').type('Test question')
-
     cy.get('input[id^=likert-description-en-questions]').type('Test description')
 
     cy.get('[data-cy=question-card-save-edit]').click()
@@ -60,22 +49,29 @@ describe('Teacher view', () => {
     cy.contains('Test description')
   })
   it('Teacher can edit a question', () => {
-    cy.visit(`${baseUrl}/targets/165/edit`)
+    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/edit`))
+    cy.contains('Add question').click()
+    cy.get('li').contains('Scale of values').click()
+    cy.get('input[id^=likert-question-en-questions]').type('Test question')
+    cy.get('input[id^=likert-description-en-questions]').type('Test description')
+    cy.get('[data-cy=question-card-save-edit]').click()
+    cy.reload()
+
     cy.get('[data-cy=editQuestion]').first().click()
     cy.get('input[id^=likert-question-en-questions]').type(' edited')
-
     cy.get('input[id^=likert-description-en-questions]').type(' edited')
-
     cy.get('[data-cy=question-card-save-edit]').click()
     cy.reload()
     cy.contains('Test question edited')
     cy.contains('Test description edited')
   })
   it('Teacher can view survey results', () => {
-    cy.loginAs(teacher)
-    cy.get('div').contains('TKT21029 Functional Programming I').click()
-    cy.get('a[href*="/targets/163"]').first().click()
-    cy.visit(`${baseUrl}/targets/163/results`)
+    cy.setFeedbackActive()
+    cy.giveFeedback(student)
+    cy.visit(`${baseUrl}/courses`)
+    cy.get('div').contains('TEST_COURSE').click()
+    cy.get('@fbtId').then(id => cy.get(`a[href*="/targets/${id}"]`).first().click())
+    cy.get('@fbtId').then(id => cy.visit(`${baseUrl}/targets/${id}/results`))
     cy.contains('Feedback').click()
     cy.contains('Multiple choice questions')
   })

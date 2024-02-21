@@ -7,6 +7,22 @@ Cypress.Commands.add('loginAs', user => {
   cy.visit(`${baseUrl}`)
 })
 
+Cypress.Commands.add('giveFeedback', headers => {
+  cy.getTestFbtId().then(id => {
+    cy.getUniversityQuestionIds().then(questionIds => {
+      cy.request({
+        method: 'POST',
+        url: '/api/feedbacks',
+        headers,
+        body: {
+          feedbackTargetId: id,
+          data: questionIds.map(id => ({ questionId: id, data: '3' })),
+        },
+      })
+    })
+  })
+})
+
 /**
  * Custom Cypress command to create an organization survey.
  *
@@ -132,7 +148,7 @@ Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
   })
 })
 
-Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extraStudents = 0 }) => {
+Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extraStudents = 0 } = {}) => {
   cy.request({
     method: 'POST',
     url: 'test/seed-feedback-targets',
@@ -155,6 +171,18 @@ Cypress.Commands.add('getTestFbtId', () =>
     })
     .then(response => {
       cy.wrap(response.body.id).as('testFbtId')
+    })
+)
+
+Cypress.Commands.add('getUniversityQuestionIds', () =>
+  cy
+
+    .request({
+      method: 'GET',
+      url: '/test/university-question-ids',
+    })
+    .then(response => {
+      cy.wrap(response.body).as('universityQuestionIds')
     })
 )
 
@@ -211,25 +239,6 @@ Cypress.Commands.add('setContinuousFeedbackActive', () => {
         continuousFeedbackEnabled: true,
       },
     })
-  })
-})
-
-Cypress.Commands.add('enableTestUsers', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/test/user/hy-hlo-1501077',
-    headers: admin,
-    body: {
-      username: 'keolli',
-    },
-  })
-})
-
-Cypress.Commands.add('refreshSummary', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/refresh-summary',
-    headers: admin,
   })
 })
 

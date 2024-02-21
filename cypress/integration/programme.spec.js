@@ -1,11 +1,13 @@
 /// <reference types="Cypress" />
 
-const { studyCoordinator } = require('../fixtures/headers')
+const { organisationCorrespondent } = require('../fixtures/headers')
 const { baseUrl } = require('../support')
 
 describe('Organisation settings', () => {
   beforeEach(() => {
-    cy.loginAs(studyCoordinator)
+    cy.createFeedbackTarget()
+    cy.seedTestOrgCorrespondent(organisationCorrespondent)
+    cy.loginAs(organisationCorrespondent)
   })
 
   describe('Programme survey', () => {
@@ -20,44 +22,49 @@ describe('Organisation settings', () => {
 
     it('User with write access can ADD programme level questions', () => {
       cy.contains('Add textual content').click()
-
       cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
-
       cy.get('[data-cy=question-card-save-edit]').click()
 
       cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
-      cy.contains('Test question programme level')
-    })
-
-    it('New programme level question appears in feedback target survey', () => {
-      cy.visit(`${baseUrl}/targets/165`)
       cy.contains('Test question programme level')
     })
 
     it('User with write access can EDIT programme level questions', () => {
-      cy.get('[data-cy=editQuestion]').first().click()
-
-      cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
-
+      cy.contains('Add textual content').click()
+      cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
       cy.get('[data-cy=question-card-save-edit]').click()
+      cy.reload()
 
+      cy.get('[data-cy=editQuestion]').first().click()
+      cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
+      cy.get('[data-cy=question-card-save-edit]').click()
       cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
-
       cy.contains('edited question')
     })
 
     it('Edited programme level question appears in feedback target survey', () => {
-      cy.visit(`${baseUrl}/targets/165`)
+      cy.contains('Add textual content').click()
+      cy.get('textarea[id^=textual-context-text-en-questions]').type('Test question programme level')
+      cy.get('[data-cy=question-card-save-edit]').click()
+
+      cy.getTestFbtId().then(id => cy.visit(`${baseUrl}/targets/${id}`))
+      cy.contains('Test question programme level')
+
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.get('[data-cy=editQuestion]').first().click()
+      cy.get('textarea[id^=textual-context-text-en-questions]').type(' edited question')
+      cy.get('[data-cy=question-card-save-edit]').click()
+      cy.visit(`${baseUrl}/organisations/TEST_ORG/survey`)
+      cy.contains('edited question')
+
+      cy.getTestFbtId().then(id => cy.visit(`${baseUrl}/targets/${id}`))
       cy.contains('edited question')
     })
 
     it('New likert question appears in programmesummary', () => {
       cy.contains('Add question').click()
-
       cy.get('li').contains('Scale of values').click()
-
       cy.get('input[id^=likert-question-en-questions]').type('LIKERT TEST')
-
       cy.get('[data-cy=question-card-save-edit]').click()
 
       cy.visit(`${baseUrl}/organisations/TEST_ORG/summary`)
