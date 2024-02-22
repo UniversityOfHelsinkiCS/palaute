@@ -19,6 +19,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
+import { LANGUAGES } from '../../../../config/default'
 
 const styles = {
   toolbar: {
@@ -89,19 +90,15 @@ const styles = {
   },
 }
 
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
-  const languages = ['fi', 'sv', 'en']
-
-  return (
-    <Box sx={styles.container} ref={ref}>
-      {languages.map(l => (
-        <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
-          {l.toUpperCase()}
-        </MenuItem>
-      ))}
-    </Box>
-  )
-})
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
+  <Box sx={styles.container} ref={ref}>
+    {LANGUAGES.map(l => (
+      <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
+        {l.toUpperCase()}
+      </MenuItem>
+    ))}
+  </Box>
+))
 
 const NavBar = ({ guest = false }) => {
   const menuButtonRef = useRef()
@@ -245,8 +242,8 @@ const NavBar = ({ guest = false }) => {
         position="relative"
         sx={{
           zIndex: theme => theme.zIndex.drawer + 1,
-          background: theme => theme.palette.primary.dark,
-          boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
+          background: theme => theme.palette.primary.main,
+          boxShadow: theme => `0px 0px 6px 1px #aaa`,
           borderRadius: 0,
         }}
       >

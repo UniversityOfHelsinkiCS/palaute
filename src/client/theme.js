@@ -30,9 +30,9 @@ const useTheme = () => {
             ...(mode === 'light'
               ? {
                   primary: {
-                    light: '#4f96db',
-                    main: '#3770b3',
-                    dark: '#124c8c',
+                    light: '#5c00a8',
+                    main: '#4e008e',
+                    dark: '#0e0021',
                   },
                   secondary: {
                     main: '#e6c309',
@@ -125,10 +125,10 @@ const useTheme = () => {
               styleOverrides: {
                 containedPrimary: {
                   color: 'white',
-                  background: 'rgb(8 110 221)',
+                  background: 'rgb(78,0,142)',
                   boxShadow: '0 4px 14px 0 rgb(0 118 255 / 39%)',
                   '&:hover': {
-                    background: 'rgba(10,130,235,1)',
+                    background: 'rgb(92,0,168)',
                     boxShadow: '0 4px 14px 0 rgb(0 118 255 / 44%)',
                   },
                 },

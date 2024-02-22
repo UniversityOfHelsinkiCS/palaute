@@ -66,7 +66,9 @@ const FeedbackTargetInformation = ({ isInterimFeedback = false }) => {
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
-  const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
+  const courseRealisationId = courseRealisation?.id
+  const courseRealisationUrl = t('links:courseRealisationPage', { courseRealisationId })
+  const coursePageUrl = isTeacher ? courseRealisationUrl : `${t('links:courseUnitPageStudent')}${courseUnit?.id}`
   const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showTags = !isStudent && feedbackTarget?.tags?.length > 0
