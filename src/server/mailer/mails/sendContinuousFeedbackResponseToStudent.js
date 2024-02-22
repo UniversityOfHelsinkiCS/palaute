@@ -5,6 +5,7 @@ const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User } = require(
 const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId, {
@@ -49,14 +50,19 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
 
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
-  const url = `${PUBLIC_URL}/${feedbackTarget.id}/continuous-feedback`
+  const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/continuous-feedback`
 
   const t = i18n.getFixedT(language)
 
   const email = {
     to: studentEmail,
-    subject: t('mails:continuousFeedbackResponse:subject', { courseName: name[language ?? 'en'] }),
-    text: t('mails:continuousFeedbackResponse:text', { courseName: name[language ?? 'en'], response, dates, url }),
+    subject: t('mails:continuousFeedbackResponse:subject', { courseName: getLanguageValue(name, language) }),
+    text: t('mails:continuousFeedbackResponse:text', {
+      courseName: getLanguageValue(name, language),
+      response,
+      dates,
+      url,
+    }),
   }
 
   return email

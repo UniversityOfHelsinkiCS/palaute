@@ -104,8 +104,6 @@ const styles = {
   },
 }
 
-const getQuestion = (questions, questionId) => questions.find(q => q.id === questionId)
-
 const ResponseGivenIcon = ({ link }) => {
   const { t } = useTranslation()
   return (
@@ -215,14 +213,11 @@ const ResultsRow = React.memo(
     id,
     label,
     link,
-    results,
+    summary,
     questions,
     children,
     level = 0,
-    feedbackCount,
-    studentCount,
     feedbackResponseGiven,
-    feedbackResponsePercentage,
     currentFeedbackTargetId,
     accordionEnabled = false,
     accordionInitialOpen = false,
@@ -254,9 +249,9 @@ const ResultsRow = React.memo(
       })
     }
 
+    const feedbackCount = summary?.data?.feedbackCount ?? 0
+    const studentCount = summary?.data?.studentCount ?? 0
     const percent = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(0) : 0
-
-    const feedbackResponsePercent = (feedbackResponsePercentage * 100).toFixed(0)
 
     return (
       <>
@@ -293,38 +288,33 @@ const ResultsRow = React.memo(
               </>
             )}
           </td>
-          {results.map(({ questionId, mean, distribution, previous }) => (
+          {questions.map(q => (
             <SummaryResultItem
-              key={questionId}
-              question={getQuestion(questions, questionId)}
-              mean={mean}
-              distribution={distribution}
-              previous={previous}
+              key={q.id}
+              question={q}
+              mean={summary ? summary.data.result[q.id]?.mean : undefined}
+              distribution={summary ? summary.data.result[q.id]?.distribution : undefined}
               sx={styles.resultCell}
             />
           ))}
           <td css={styles.countCell}>
             <Typography component="div" variant="body2">
-              {feedbackCount}/{studentCount}
+              {summary?.data?.feedbackCount}/{studentCount}
             </Typography>
           </td>
           <td css={styles.percentCell}>
             <PercentageCell label={`${percent}%`} percent={percent} />
           </td>
           <td css={styles.percentCell}>
-            {feedbackResponsePercentage !== undefined ? (
-              <PercentageCell label={`${feedbackResponsePercent}%`} percent={feedbackResponsePercent} />
-            ) : (
-              <FeedbackResponseIndicator
-                status={feedbackResponseGiven}
-                currentFeedbackTargetId={currentFeedbackTargetId}
-              />
-            )}
+            <FeedbackResponseIndicator
+              status={feedbackResponseGiven}
+              currentFeedbackTargetId={currentFeedbackTargetId}
+            />
           </td>
           {cellsAfter}
         </TableRow>
         {acuallyOpen && children}
-        {isOpening && <SkeletonRow numberOfQuestions={results.length} />}
+        {isOpening && <SkeletonRow numberOfQuestions={questions.length} />}
       </>
     )
   }

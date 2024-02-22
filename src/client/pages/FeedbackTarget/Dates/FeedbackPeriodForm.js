@@ -135,6 +135,7 @@ const FeedbackPeriodForm = () => {
                 </Tooltip>
               )}
               <TooltipButton
+                data-cy="feedback-target-open-feedback-immediately"
                 variant="outlined"
                 color="primary"
                 onClick={handleOpenImmediatelyClick}

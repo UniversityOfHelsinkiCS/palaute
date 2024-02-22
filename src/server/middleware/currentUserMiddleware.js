@@ -6,29 +6,22 @@ const logger = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 const { getUserIams } = require('../util/jami')
 
-const getTestUser = async () => {
-  let testUser = await User.findByPk('abc1234')
-  if (testUser) return testUser
-  testUser = await User.create({
-    id: 'abc1234',
-    username: 'ohj_tosk',
-    email: 'grp-toska@helsinki.fi',
-    studentNumber: '092345321',
-    employeeNumber: '99999a9',
-    firstName: 'Gert',
-    lastName: 'Adamson',
-  })
-
-  return testUser
-}
-
-const getLoggedInAsUser = async (user, loggedInAsUserId) => {
-  if (!user.isAdmin) return undefined
-
+const getLoggedInAsUser = async loggedInAsUserId => {
   const loggedInAsUser = await User.findByPk(loggedInAsUserId)
   loggedInAsUser.iamGroups = await getUserIams(loggedInAsUserId)
+  await loggedInAsUser.populateAccess()
 
   return loggedInAsUser
+}
+
+const setLoggedInAsUser = async req => {
+  const loggedInAsUser = await getLoggedInAsUser(req.headers['x-admin-logged-in-as'])
+  if (loggedInAsUser) {
+    const originalUser = req.user
+    req.user = loggedInAsUser
+    req.user.mockedBy = originalUser.username
+    req.loginAs = true
+  }
 }
 
 const getUsernameFromToken = req => {
@@ -53,28 +46,22 @@ const getUsernameFromShibboHeaders = req => {
   return username
 }
 
+const isAdminLoginAs = req => req.user.isAdmin && req.headers['x-admin-logged-in-as']
+
 const currentUserMiddleware = async (req, _, next) => {
   const isNoAdPath = req.path.startsWith('/noad')
   req.noad = isNoAdPath
 
-  const username = isNoAdPath ? await getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
+  const username = isNoAdPath ? getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
 
-  if (username === 'ohj_tosk') {
-    req.user = await getTestUser()
-  } else {
-    req.user = await getUserByUsername(username)
-  }
+  req.user = await getUserByUsername(username)
 
-  if (req.headers['x-admin-logged-in-as']) {
-    const loggedInAsUser = await getLoggedInAsUser(req.user, req.headers['x-admin-logged-in-as'])
-    if (loggedInAsUser) {
-      req.user = loggedInAsUser
-      req.loginAs = true
-    }
-  }
-
-  if (!req.loginAs) req.user.iamGroups = req.iamGroups
+  req.user.iamGroups = req.iamGroups
   await req.user.populateAccess()
+
+  if (isAdminLoginAs(req)) {
+    await setLoggedInAsUser(req)
+  }
 
   return next()
 }

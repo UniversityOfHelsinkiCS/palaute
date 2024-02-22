@@ -158,6 +158,9 @@ const QuestionCard = ({
   const isGrouping = question.secondaryType === 'GROUPING'
   const canDuplicate = !isGrouping
 
+  const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
+  const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT' && question.type !== 'OPEN'
+
   const orderButtonsProps = {
     onMoveUp,
     onMoveDown,
@@ -184,7 +187,7 @@ const QuestionCard = ({
             </Box>
           </Grid>
           <Grid item xs={4} display="flex" justifyContent="center">
-            {question.type !== 'TEXT' && !isEditing && (
+            {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
@@ -208,16 +211,16 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button color="primary" variant="contained" onClick={onStopEditing} data-cy="saveQuestion">
+                  <Button data-cy="question-card-save-edit" color="primary" variant="contained" onClick={onStopEditing}>
                     {t('questionEditor:done')}
                   </Button>
                 </Box>
                 <EditActions
-                  publicityConfigurable={question.publicityConfigurable}
+                  publicityConfigurable={publicityConfigurable}
                   isPublic={question.public}
                   {...orderButtonsProps}
                   onRemove={onRemove}
-                  showRequiredToggle={showRequiredToggle}
+                  showRequiredToggle={requiredConfigurable}
                   name={name}
                 />
               </div>

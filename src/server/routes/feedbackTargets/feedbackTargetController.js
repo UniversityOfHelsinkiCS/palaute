@@ -1,8 +1,9 @@
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 
-const { createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetLog } = require('../../services/auditLog')
 const { mailer } = require('../../mailer')
+const interimFeedbackController = require('./interimFeedbackController')
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -65,6 +66,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     courseRealisationEndDateBefore: endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   } = req.query
 
   const feedbackTargets = await getFeedbackTargetsForCourseUnit({
@@ -76,6 +78,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   })
 
   return res.send(feedbackTargets)
@@ -148,11 +151,12 @@ adRouter.put('/:id/response', async (req, res) => {
 adRouter.put('/:id/remind-students', async (req, res) => {
   const { user } = req
   const feedbackTargetId = Number(req.params.id)
-  const { data: reminderText } = req.body.data
+  const { reminder: reminderText, courseName } = req.body.data
 
   const feedbackTarget = await remindStudentsOnFeedback({
     feedbackTargetId,
     reminderText,
+    courseName,
     user,
   })
 
@@ -171,7 +175,7 @@ adRouter.put('/:id/open-immediately', async (req, res) => {
     body: { feedbackOpeningReminderEmailSent: true, ...body },
   })
 
-  await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+  if (!updatedFeedbackTarget.userCreated) await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
 
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
@@ -213,6 +217,8 @@ adRouter.get('/:id/logs', async (req, res) => {
 
   return res.send(logs)
 })
+
+adRouter.use('/', interimFeedbackController)
 
 module.exports = {
   adRouter,

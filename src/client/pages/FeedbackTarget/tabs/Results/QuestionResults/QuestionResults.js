@@ -48,9 +48,9 @@ const QuestionResults = React.memo(
         <QuestionSection
           title={t('questionResults:multipleChoiceQuestions')}
           count={notOpenQuestions.length}
-          data-cy="multipleChoiceQuestions"
+          data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
         >
-          {/* <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography> */}
+          <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -61,13 +61,13 @@ const QuestionResults = React.memo(
               <Box
                 key={q.id}
                 sx={theme => ({
-                  width: '20%',
+                  width: '25%',
                   padding: '0.5rem',
                   [theme.breakpoints.down('xl')]: {
-                    width: '25%',
+                    width: '33%',
                   },
                   [theme.breakpoints.down('lg')]: {
-                    width: '33%',
+                    width: '50%',
                   },
                   [theme.breakpoints.down('md')]: {
                     width: '50%',
@@ -96,7 +96,7 @@ const QuestionResults = React.memo(
         <QuestionSection
           title={t('questionResults:openQuestions')}
           count={openQuestions.length}
-          data-cy="openQuestions"
+          data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
         >
           {openQuestions.map(q => (
             <QuestionItem

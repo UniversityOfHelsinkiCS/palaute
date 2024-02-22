@@ -1,17 +1,26 @@
 import React from 'react'
-
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
+import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
+
+import FeedbackTargetList from './FeedbackTargetList'
+import InterimFeedbackChip from './InterimFeedbackChip'
+import FeedbackResponseChip from './FeedbackResponseChip'
+
+import {
+  useInterimFeedbacks,
+  useInterimFeedbackParent,
+} from '../FeedbackTarget/tabs/InterimFeedback/useInterimFeedbacks'
+
+import { getRelevantCourseRealisation } from './utils'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import FeedbackTargetList from './FeedbackTargetList'
-import { getRelevantCourseRealisation } from './utils'
-import FeedbackResponseChip from './FeedbackResponseChip'
+import { getCourseCode } from '../../util/courseIdentifiers'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 
 const styles = {
   accordion: {
@@ -29,20 +38,25 @@ const styles = {
 
 const getChip = (courseRealisation, code) => {
   const { feedbackResponseGiven, feedbackResponseSent, feedbackTarget, feedbackCount } = courseRealisation
-  const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
-  const isOld = feedbackTargetIsOld(feedbackTarget)
-  const isCurrent = !isEnded && !isOpen && !isOld
-  const { id: feedbackTargetId, continuousFeedbackEnabled } = feedbackTarget || {}
+  const { parentFeedback } = useInterimFeedbackParent(feedbackTarget.id, feedbackTarget.userCreated)
 
-  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
+  const acualFeeback = parentFeedback || feedbackTarget
+
+  const isEnded = feedbackTargetIsEnded(acualFeeback)
+  const isOpen = feedbackTargetIsOpen(acualFeeback)
+  const isOld = feedbackTargetIsOld(acualFeeback)
+  const { id: feedbackTargetId, continuousFeedbackEnabled, opensAt } = acualFeeback || {}
+  const isOngoing = feedbackTargetCourseIsOngoing({ opensAt, courseRealisation }) && !isOpen
+
+  if (isOpen || (isOngoing && continuousFeedbackEnabled) || (feedbackCount > 0 && isEnded) || feedbackResponseGiven) {
     return (
       <FeedbackResponseChip
         id={feedbackTargetId}
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent || isOld}
+        feedbackResponseSent={feedbackResponseSent}
+        isOld={isOld}
         ongoing={isOpen}
-        continuous={isCurrent && continuousFeedbackEnabled}
+        continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={`feedbackResponseGiven-${code}-${feedbackResponseGiven}`}
       />
     )
@@ -51,26 +65,53 @@ const getChip = (courseRealisation, code) => {
   return null
 }
 
+const getInterimFeedbackChip = (courseRealisation, enable) => {
+  const { feedbackTarget } = courseRealisation
+
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOld = feedbackTargetIsOld(feedbackTarget)
+
+  const fetchInterimFeedbacks = !feedbackTarget.userCreated && !isEnded && !isOld && enable
+
+  const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(
+    feedbackTarget?.id,
+    fetchInterimFeedbacks
+  )
+
+  if (!fetchInterimFeedbacks || isInterimFeedbacksLoading || interimFeedbacks?.length === 0) return null
+
+  const isOpenInterim = interimFeedbacks.some(target => feedbackTargetIsOpen(target))
+
+  if (!isOpenInterim) return null
+
+  return <InterimFeedbackChip id={feedbackTarget.id} />
+}
+
 const CourseUnitAccordion = ({ courseUnit, group }) => {
   const { i18n } = useTranslation()
-
   const { name, courseCode } = courseUnit
+
   const courseRealisation = getRelevantCourseRealisation(courseUnit, group)
-  const chip = getChip(courseRealisation, courseCode)
+  const visibleCourseCode = getCourseCode(courseUnit)
+  const FeedbackResponseChip = getChip(courseRealisation, courseCode)
+  const InterimFeedbackChip = getInterimFeedbackChip(courseRealisation, !courseUnit.userCreated)
 
   return (
     <Accordion
       sx={styles.accordion}
       TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}
-      data-cy="courseUnitItem"
+      data-cy="my-teaching-course-unit-item"
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`courseUnitAccordion-${courseCode}`}>
-        <div>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`my-teaching-course-unit-accordion-${courseCode}`}>
+        <Box>
           <Typography>
-            {courseCode} {getLanguageValue(name, i18n.language)}
+            {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
-          {chip}
-        </div>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Box sx={{ mr: 1 }}>{FeedbackResponseChip}</Box>
+            <Box>{InterimFeedbackChip}</Box>
+          </Box>
+        </Box>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
         <FeedbackTargetList courseCode={courseCode} group={group} />

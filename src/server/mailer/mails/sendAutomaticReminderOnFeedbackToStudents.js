@@ -29,6 +29,7 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
       fbt.feedback_reminder_last_sent_at IS NULL
       OR fbt.feedback_reminder_last_sent_at < NOW() - interval '${FEEDBACK_REMINDER_COOLDOWN} hours'
     )
+    AND fbt.user_created = false
   `,
     {
       // Not using a replacement for FEEDBACK_REMINDER_COOLDOWN as sequelize somehow cant replace inside quotes here.

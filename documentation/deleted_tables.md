@@ -4,9 +4,12 @@ Aka. tables that are no longer referenced in code and are not created in migrati
 
 To make it clear which database tables are no longer in use, we list them here.
 
-|          Table name           |                                Comment                                 |
-| :---------------------------: | :--------------------------------------------------------------------: |
-| `feedback_target_date_checks` | was used for the admin only feature of the same name which was removed |
+|           Table name           |                                   Comment                                   |
+| :----------------------------: | :-------------------------------------------------------------------------: |
+| `feedback_target_date_checks`  |   was used for the admin only feature of the same name which was removed    |
+|    `summary_customisations`    | was used for users to hide organisations from their old course summary view |
+|     `course_results_view`      |                       was used for old course summary                       |
+| `feedback_targets_counts_view` |                       was used for old course summary                       |
 
 This means that if your database is so old that it includes any of these tables, you should be able to freely drop them.
 

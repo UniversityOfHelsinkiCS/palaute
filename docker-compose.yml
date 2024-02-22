@@ -14,27 +14,26 @@ services:
       - JAMI_HOST=jami
       - JAMI_PORT=3003
       - JWT_KEY=minttujam
-      - NODE_CONFIG_ENV=tau
-      - PATE_URL=http://pate:3473
-      - PATE_JWT=
+      - NODE_CONFIG_ENV=hy
+      - UPDATER_URL=http://updater:3000
     ports:
       - 3000:3000
       - 9229:9229
-    container_name: tuni-kpj-palaute_dev
+    container_name: palaute_dev
   db:
-    image: postgres:13.2
+    image: postgres:15.4
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5446:5432
+      - 5432:5432
     volumes:
       - pg_data:/data
-    container_name: tuni-kpj-palaute_db
+    container_name: palaute_db
   redis:
     image: redis:6.2.6
     command: redis-server
-    container_name: tuni-kpj-palaute_redis
+    container_name: palaute_redis
   adminer:
     image: adminer
     restart: always
@@ -51,47 +50,31 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@jami-db:5432/postgres
     ports:
       - 3003:3003
-    container_name: tuni-kpj-jami
+    container_name: jami
   jami-db:
-    image: postgres:13.2
+    image: postgres:15.4
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
-    container_name: tuni-kpj-jami-db
+    container_name: jami-db
     ports:
-      - 5437:5432
+      - 5433:5432
     volumes:
       - jami_data:/data
-  updater:
-    build:
-      context: ../tuni-kpj-updater
-      dockerfile: ../tuni-kpj-updater/dev.Dockerfile
-    image: updater-dev
-    volumes:
-      - ../norppa-updater:/usr/src/app
-    environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DATABASE=postgres
-    ports:
-      - 8000:3000
-    container_name: updater-dev
-  pate:
-    image: tuni-kpj-pate
-    container_name: tuni-kpj-pate
-    environment:
-      - PORT=3473
-      - NODE_ENV=dev
-      - JWT_KEY=
-      - JWT_SUB=tuni-kpj
-      - MAIL_FROM_ADDRESS=pate.leanware.fi
-      - SMTP_PORT=465
-      - SMTP_USERNAME=smtp_user_env
-      - SMTP_PASSWORD=smtp_password_env
-      - SMTP_HOST=smtp_host_env
-    ports:
-      - 3473:3473
+  # updater:
+  #  build:
+  #    context: ../norppa-updater
+  #    dockerfile: ../norppa-updater/dev.Dockerfile
+  #  image: updater-dev
+  #  volumes:
+  #    - ../norppa-updater:/usr/src/app
+  #  environment:
+  #    - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+  #    - REDIS_HOST=redis
+  #  ports:
+  #    - 8000:3000
+  #  container_name: updater-dev
+
 volumes:
   pg_data:
   jami_data:

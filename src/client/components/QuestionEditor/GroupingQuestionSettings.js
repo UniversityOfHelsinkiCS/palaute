@@ -102,7 +102,7 @@ const GroupingQuestionSettings = ({
             <AccordionDetails>
               <Box mt="1rem" mb="2rem" display="flex" gap="1rem" flexWrap="wrap">
                 <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
-                <GroupInformation groups={groups} />
+                {groups.length > 0 && <GroupInformation groups={groups} />}
               </Box>
 
               <Box mb="1rem">

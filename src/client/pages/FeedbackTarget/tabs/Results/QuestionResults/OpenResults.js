@@ -8,6 +8,7 @@ import ResultsContent from './ResultsContent'
 import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
 import { OpenFeedback } from '../../../../../components/OpenFeedback/OpenFeedback'
 import Markdown from '../../../../../components/common/Markdown'
+import useDeleteOpenFeedback from './useDeleteOpenFeedback'
 
 const styles = {
   list: theme => ({
@@ -59,8 +60,12 @@ const OpenResults = ({ question }) => {
   const { pathname } = useLocation()
   const isNoad = pathname.startsWith('/noad')
   const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
+  const { canDelete, deleteAnswer } = isNoad ? {} : useDeleteOpenFeedback()
 
-  const feedbacks = React.useMemo(() => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)), [question])
+  const feedbacks = React.useMemo(
+    () => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)).sort((a, b) => a.data.localeCompare(b.data)),
+    [question]
+  )
   const renderInitially = feedbacks.length < 10
   const { render, ref } = useRenderVisible({ initial: renderInitially })
 
@@ -80,6 +85,8 @@ const OpenResults = ({ question }) => {
                 content={<Markdown disallowImages>{f.data}</Markdown>}
                 hidden={f.hidden}
                 canHide={canHide}
+                canDelete={canDelete}
+                deleteAnswer={() => deleteAnswer(f)}
                 toggleVisibility={() => toggleVisibility(f)}
               />
             ))}

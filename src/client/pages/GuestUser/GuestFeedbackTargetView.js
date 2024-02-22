@@ -94,7 +94,7 @@ const GuestFeedbackTargetView = () => {
 
   const coursePeriod = getCoursePeriod(courseRealisation)
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
-  const coursePageUrl = `${t('links:courseUnitPage')}${feedbackTarget.courseUnit.id}`
+  const coursePageUrl = `${t('links:courseRealisationPage')}${feedbackTarget.courseRealisation.id}`
 
   const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
 

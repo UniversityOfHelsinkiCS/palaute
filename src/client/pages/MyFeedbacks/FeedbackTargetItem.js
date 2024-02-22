@@ -1,26 +1,29 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
+import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
-import { useSnackbar } from 'notistack'
+import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 import FeedbackClosedIcon from '@mui/icons-material/Lock'
 
-import { useQueryClient } from 'react-query'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import apiClient from '../../util/apiClient'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import { getCourseName } from './utils'
+import { getLanguageValue } from '../../util/languageUtils'
 import styles from '../../util/chipStyles'
+import apiClient from '../../util/apiClient'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../util/getDateRangeString'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="giveCourseFeedback">
+    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="feedback-item-give-feedback">
       {t('userFeedbacks:giveFeedbackButton')}
     </Button>
   )
@@ -45,23 +48,37 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <Box>
-      <Button variant="outlined" color="primary" component={Link} to={editPath} sx={{ mr: '1rem' }}>
+      <Button
+        data-cy="feedback-item-modify-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={editPath}
+        sx={{ mr: '1rem' }}
+      >
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
 
-      <Button variant="outlined" color="primary" component={Link} to={viewPath} sx={{ mr: '1rem' }}>
+      <Button
+        data-cy="feedback-item-view-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={viewPath}
+        sx={{ mr: '1rem' }}
+      >
         {t('userFeedbacks:viewFeedbackSummary')}
       </Button>
-      <Button color="error" onClick={handleOpen}>
+      <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog data-cy="feedback-item-clear-feedback-dialog" open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
-        <Button onClick={handleClose} color="primary">
+        <Button data-cy="feedback-item-view-feedback-cancel" onClick={handleClose} color="primary">
           {t('userFeedbacks:no')}
         </Button>
-        <Button onClick={handleSubmit} color="primary" autoFocus>
+        <Button data-cy="feedback-item-view-feedback-confirm" onClick={handleSubmit} color="primary" autoFocus>
           {t('userFeedbacks:yes')}
         </Button>
       </Dialog>
@@ -155,10 +172,9 @@ const FeedbackResponseChip = () => {
 }
 
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
-  const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
-
+  const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
+  const { enqueueSnackbar } = useSnackbar()
 
   const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
 
@@ -168,11 +184,17 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     closesAt: endDate,
   })
 
+  const courseName = getCourseName(feedbackTarget, t)
+  const translatedName = getLanguageValue(courseName, i18n.language)
+
+  const editPath = `/targets/${id}/feedback`
+  const viewPath = `/targets/${id}/results`
+
   const feedbackGiven = Boolean(feedback)
   const feedbackResponseGiven = feedbackResponse?.length > 3
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
-  const notStarted = !isOpen && !isEnded
+  const notStarted = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
   const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
@@ -181,11 +203,16 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 
-  const editPath = `/targets/${id}/feedback`
-  const viewPath = `/targets/${id}/results`
-
   return (
-    <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }} divider={divider} disableGutters>
+    <ListItem
+      data-cy={`feedback-item-${feedbackTarget.id}`}
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}
+      divider={divider}
+      disableGutters
+    >
+      <Typography variant="body1" fontWeight={600} component="h2">
+        {translatedName}
+      </Typography>
       <ListItemText primary={periodInfo} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 

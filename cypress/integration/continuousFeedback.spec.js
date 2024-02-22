@@ -22,7 +22,7 @@ describe('Continuous feedback', () => {
 
     cy.visit(`${baseUrl}`)
 
-    cy.get('[data-cy=continuousTab]').click()
+    cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
 
     cy.get('textarea').first().type('Giving continuous feedback')

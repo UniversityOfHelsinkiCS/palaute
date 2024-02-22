@@ -10,12 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { PersonOutlined } from '@mui/icons-material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import { LANGUAGES } from '../../util/common'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout } from './utils'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
@@ -91,29 +89,30 @@ const styles = {
   },
 }
 
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
-  <Box sx={styles.container} ref={ref}>
-    {LANGUAGES.map(l => (
-      <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
-        {l.toUpperCase()}
-      </MenuItem>
-    ))}
-  </Box>
-))
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
+  const languages = ['fi', 'sv', 'en']
+
+  return (
+    <Box sx={styles.container} ref={ref}>
+      {languages.map(l => (
+        <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
+          {l.toUpperCase()}
+        </MenuItem>
+      ))}
+    </Box>
+  )
+})
 
 const NavBar = ({ guest = false }) => {
+  const menuButtonRef = useRef()
   const { pathname } = useLocation()
+  const { t, i18n } = useTranslation()
+  const isMobile = useIsMobile()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
-  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
-    enabled: !guest,
-  })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
-  const { t, i18n } = useTranslation()
-  const menuButtonRef = useRef()
+
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useIsMobile()
-  // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
@@ -125,7 +124,8 @@ const NavBar = ({ guest = false }) => {
     enabled: isAdminUser,
   })
 
-  const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
+  const preferences = authorizedUser?.preferences ?? {}
+  const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -245,8 +245,8 @@ const NavBar = ({ guest = false }) => {
         position="relative"
         sx={{
           zIndex: theme => theme.zIndex.drawer + 1,
-          background: theme => theme.palette.primary.main,
-          boxShadow: theme => `0px 0px 6px 1px #aaa`,
+          background: theme => theme.palette.primary.dark,
+          boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
           borderRadius: 0,
         }}
       >

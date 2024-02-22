@@ -1,40 +1,9 @@
 import React from 'react'
-import * as _ from 'lodash'
 import { Box, IconButton, MenuItem, Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { startOfStudyYear } from '../../util/startOfStudyYear'
-
-// Year starting month
-const MONTH = 8
-
-const useYearSemesters = currentStart => {
-  const now = new Date()
-  const year = Math.min(currentStart.getFullYear(), startOfStudyYear(now).getFullYear())
-
-  let semesters = _.range(2021, now.getFullYear() + 1)
-    .flatMap(year => [
-      {
-        start: new Date(`${year}-01-01`),
-        end: new Date(`${year}-0${MONTH}-01`),
-      },
-      {
-        start: new Date(`${year}-0${MONTH}-01`),
-        end: new Date(`${year + 1}-01-01`),
-      },
-    ])
-    .map((s, i) => ({ ...s, spring: i % 2 === 0 }))
-    .reverse()
-  semesters = now.getMonth() + 1 < MONTH ? semesters.slice(1) : semesters
-
-  const currentSemester = semesters.find(s => s.start <= currentStart) || semesters.find(s => s.start <= now)
-
-  return {
-    year,
-    semesters,
-    currentSemester,
-  }
-}
+import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
+import { STUDY_YEAR_START_MONTH } from '../../util/common'
 
 const styles = {
   stepper: {
@@ -61,10 +30,13 @@ const styles = {
     userSelect: 'none',
   },
   button: {
+    color: theme => theme.palette.info.main,
     '&:hover': {
-      background: 0,
-      color: theme => theme.palette.info.light,
-      boxShadow: 'rgba(99, 99, 255, 0.2) 0px 2px 7px 0px',
+      background: theme => theme.palette.action.hover,
+      color: theme => theme.palette.text.primary,
+    },
+    '&:active': {
+      background: theme => theme.palette.action.selected,
     },
     marginX: '0.4rem',
   },
@@ -84,7 +56,7 @@ const YearStepper = ({ value, onChange }) => {
   }
 
   const now = new Date()
-  const currentYear = now.getFullYear() + (now.getMonth() + 1 >= MONTH ? 1 : 0)
+  const currentYear = now.getFullYear() + (now.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
 
   const displayValue = `${value} – ${value + 1}`
 
@@ -98,11 +70,18 @@ const YearStepper = ({ value, onChange }) => {
         disabled={!canDecrease}
         sx={[!canDecrease ? styles.disabledButton : {}, styles.button]}
         size="small"
+        disableTouchRipple
       >
         <ChevronLeft fontSize="large" />
       </IconButton>
       <Typography sx={styles.stepperValue}>{displayValue}</Typography>
-      <IconButton onClick={handleIncrease} sx={[!canIncrease ? styles.disabledButton : {}, styles.button]} size="small">
+      <IconButton
+        onClick={handleIncrease}
+        disabled={!canIncrease}
+        sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
+        size="small"
+        disableTouchRipple
+      >
         <ChevronRight fontSize="large" />
       </IconButton>
     </Box>
@@ -138,10 +117,8 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
   const { year, semesters, currentSemester } = useYearSemesters(value?.start ?? new Date())
 
   const handleYearChange = year => {
-    onChange({
-      start: new Date(`${year}-0${MONTH}-01`),
-      end: new Date(`${year + 1}-0${MONTH}-01`),
-    })
+    const range = getStudyYearRange(new Date(`${year + 1}-01-01`))
+    onChange(range)
   }
 
   const handleSemesterChange = ({ start, end }) => {
