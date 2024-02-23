@@ -21,6 +21,7 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 
 import Title from '../../../components/common/Title'
 import LinkButton from '../../../components/common/LinkButton'
+import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -45,36 +46,23 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
 
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
-  if (expandable) {
-    return (
-      <ExpandableCourseUnitGroup>
-        <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
-        <CourseUnitGroupGrid>
-          {columnCourseUnits.map((courseUnitColumn, i) => (
-            <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
-              {courseUnitColumn.map(courseUnit => (
-                <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
-              ))}
-            </CourseUnitGroupGridColumn>
-          ))}
-        </CourseUnitGroupGrid>
-      </ExpandableCourseUnitGroup>
-    )
-  }
+  const GroupContainer = expandable ? ExpandableCourseUnitGroup : CourseUnitGroup
 
   return (
-    <CourseUnitGroup>
+    <GroupContainer>
       <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
       <CourseUnitGroupGrid>
         {columnCourseUnits.map((courseUnitColumn, i) => (
           <CourseUnitGroupGridColumn key={`course-unit-grid-column-${i + 1}`}>
             {courseUnitColumn.map(courseUnit => (
-              <CourseUnitComponent key={courseUnit.courseCode} courseUnit={courseUnit} />
+              <CourseUnitItemContainer key={courseUnit.id}>
+                <CourseUnitComponent courseUnit={courseUnit} />
+              </CourseUnitItemContainer>
             ))}
           </CourseUnitGroupGridColumn>
         ))}
       </CourseUnitGroupGrid>
-    </CourseUnitGroup>
+    </GroupContainer>
   )
 }
 

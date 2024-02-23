@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const ExpandMore = ({ expand, ...props }) => (
   <IconButton
+    disableRipple
     sx={{
       position: 'absolute',
       top: -20,
@@ -38,13 +39,10 @@ const ExpandableCourseUnitGroup = ({ children }) => {
       sx={{
         marginTop: '4rem',
         padding: '1rem',
-        borderTop: theme => `1px solid ${theme.palette.primary.light}`,
-        borderRight: theme => (expanded ? `1px solid ${theme.palette.primary.light}` : ''),
-        borderLeft: theme => (expanded ? `1px dashed ${theme.palette.primary.light}` : ''),
+        borderTop: theme => `1px solid ${theme.palette.divider}`,
+        borderRight: theme => `1px solid ${expanded ? theme.palette.divider : 'transparent'}`,
+        borderLeft: theme => `1px dashed ${expanded ? theme.palette.divider : 'transparent'}`,
         position: 'relative',
-        '&:hover': {
-          borderColor: theme => theme.palette.primary.dark,
-        },
       }}
     >
       <Box

@@ -12,11 +12,6 @@ import { getCourseCode } from '../../../../util/courseIdentifiers'
 
 const styles = {
   item: {
-    backgroundColor: 'white',
-    mt: 2,
-    '&:before': {
-      display: 'none',
-    },
     minHeight: '100px',
   },
   details: {

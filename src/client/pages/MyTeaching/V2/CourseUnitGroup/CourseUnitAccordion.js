@@ -17,11 +17,7 @@ import { getCourseCode } from '../../../../util/courseIdentifiers'
 const styles = {
   accordion: {
     boxShadow: 'none',
-    borderRadius: 0,
-    mt: 2,
-    '&:before': {
-      display: 'none',
-    },
+    border: 'none',
     minHeight: '100px',
   },
   details: {
@@ -46,7 +42,6 @@ const CourseUnitAccordion = ({ courseUnit }) => {
       sx={{
         ...styles.accordion,
       }}
-      square
       data-cy="my-teaching-course-unit-item"
     >
       <AccordionSummary

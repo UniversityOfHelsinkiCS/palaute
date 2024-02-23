@@ -16,6 +16,7 @@ const CourseGroupTitle = ({ title, badgeContent }) => (
       backgroundColor: theme => theme.palette.background.default,
       width: 'full',
       zIndex: 1,
+      transition: 'background-color 100ms ease-in-out',
       '&:has(+ button:hover), &:has(+ button):hover': {
         backgroundColor: '#e3f2fd',
         borderRadius: '0.5em',
