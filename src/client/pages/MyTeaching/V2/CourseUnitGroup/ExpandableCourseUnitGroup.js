@@ -6,7 +6,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const ExpandMore = ({ expand, ...props }) => (
   <IconButton
-    disableRipple
     sx={{
       position: 'absolute',
       top: -20,
@@ -45,19 +44,15 @@ const ExpandableCourseUnitGroup = ({ children }) => {
         position: 'relative',
       }}
     >
-      <Box
-        sx={{
-          '&:hover': {
-            cursor: 'pointer',
-          },
-        }}
+      {courseUnitGroupTitle}
+      <ExpandMore
+        expand={expanded}
         onClick={handleExpand}
+        aria-expanded={expanded}
+        aria-label={t('teacherView:expandMoreLabel')}
       >
-        {courseUnitGroupTitle}
-        <ExpandMore expand={expanded} aria-expanded={expanded} aria-label={t('teacherView:expandMoreLabel')}>
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </Box>
+        <ExpandMoreIcon />
+      </ExpandMore>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {courseUnitGroupContent}
       </Collapse>
