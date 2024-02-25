@@ -18,7 +18,7 @@ const styles = {
   accordion: {
     boxShadow: 'none',
     border: 'none',
-    minHeight: '100px',
+    minHeight: '75px',
   },
   details: {
     display: 'block',
@@ -43,6 +43,7 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         ...styles.accordion,
       }}
       data-cy="my-teaching-course-unit-item"
+      disableGutters
     >
       <AccordionSummary
         id={`course-unit-accordion-header-${courseCode}`}
