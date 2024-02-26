@@ -17,9 +17,6 @@ const ExpandMore = ({ expand, ...props }) => (
         theme.transitions.create('transform', {
           duration: theme.transitions.duration.shortest,
         }),
-      '&:hover': {
-        backgroundColor: theme => theme.palette.background.default,
-      },
     }}
     {...props}
   />
