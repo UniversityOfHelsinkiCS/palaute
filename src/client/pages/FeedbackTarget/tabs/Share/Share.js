@@ -71,6 +71,18 @@ const Share = () => {
           </Typography>
         </Box>
       )}
+      {feedbackTarget.userCreated &&
+        feedbackTarget.tokenEnrolmentEnabled && ( // @feat Gradu survey
+          <Paper>
+            <Box p={2}>
+              <Chip label="TOKEN ENROLMENT" variant="outlined" />
+              <Box display="flex" alignItems="center" mt={1} ml={2}>
+                <div>TOKEN ENROLMENT</div>
+                <Box mr={2} />
+              </Box>
+            </Box>
+          </Paper>
+        )}
       {isEnded && (
         <>
           <Paper>

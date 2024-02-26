@@ -4,6 +4,7 @@ const { UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
+// @feat Gradu survey
 const enrollByToken = async ({ user, token }) => {
   const decoded = jwt.verify(token, process.env.JWT_KEY)
   const { feedbackTargetId } = decoded

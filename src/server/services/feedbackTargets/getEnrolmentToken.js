@@ -5,6 +5,7 @@ const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { JWT_KEY } = require('../../util/config')
 
 /**
+ * @feat Gradu survey
  * Returns a token that can be used to enrol to a feedback target.
  * Note that this is only allowed for userCreated feedbackTargets.
  * Only teachers and org admins can get the enrolment token.

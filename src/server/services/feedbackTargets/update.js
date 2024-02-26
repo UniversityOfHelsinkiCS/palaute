@@ -178,6 +178,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
     updates.questions = updatedQuestions
   }
 
+  // @feat Gradu survey
   if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
     return ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
   }
