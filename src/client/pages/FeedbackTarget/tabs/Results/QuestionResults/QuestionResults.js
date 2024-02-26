@@ -87,6 +87,7 @@ const QuestionResults = React.memo(
           title={t('questionResults:multipleChoiceQuestions')}
           count={notOpenQuestions.length}
           data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
+          sx={{ pageBreakAfter: 'always' }}
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
@@ -115,6 +116,9 @@ const QuestionResults = React.memo(
                   },
                   '@media print': {
                     width: '50%',
+                    pageBreakInside: 'avoid',
+                    pageBreakBefore: 'auto',
+                    pageBreakAfter: 'auto',
                   },
                 })}
               >
@@ -136,15 +140,16 @@ const QuestionResults = React.memo(
           data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
         >
           {openQuestions.map(q => (
-            <QuestionItem
-              key={q.id}
-              question={q}
-              publicQuestionIds={publicQuestionIds}
-              disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
-              isResponsibleTeacher={isResponsibleTeacher}
-              feedbackCount={feedbackCount}
-              feedbackTargetId={feedbackTargetId}
-            />
+            <div key={q.id} style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }}>
+              <QuestionItem
+                question={q}
+                publicQuestionIds={publicQuestionIds}
+                disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
+                isResponsibleTeacher={isResponsibleTeacher}
+                feedbackCount={feedbackCount}
+                feedbackTargetId={feedbackTargetId}
+              />
+            </div>
           ))}
         </QuestionSection>
       </>
