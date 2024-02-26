@@ -32,8 +32,11 @@ const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
         ...(Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []),
       ],
       []
-    ) // filter short answers which are not a number
-    .filter(answer => answer.data?.length > 1 === Number.isNaN(Number(answer.data)))
+    ) // filter short answers which are not a number, or answers that are blank
+    .filter(answer => {
+      const isNumber = !Number.isNaN(parseInt(answer.data, 10))
+      return isNumber || answer.data?.trim?.().length > 1
+    })
 
   const feedbackDataByQuestionId = _.groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
 
