@@ -11,6 +11,7 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
+  FeedbackTargetLog,
 } = require('../models')
 const { UNIVERSITY_ROOT_ID } = require('../util/config')
 const {
@@ -102,6 +103,7 @@ const seedUniversity = async () => {
 const seedDb = async () => {
   // First reset all tables
 
+  await FeedbackTargetLog.destroy({ where: {}, truncate: true, cascade: true })
   await FeedbackTarget.destroy({ where: {}, truncate: true, cascade: true })
   await User.destroy({ where: {}, truncate: true, cascade: true })
   await CourseRealisation.destroy({ where: {}, truncate: true, cascade: true })
