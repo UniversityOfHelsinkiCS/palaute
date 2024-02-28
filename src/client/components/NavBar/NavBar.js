@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { PersonOutlined } from '@mui/icons-material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import { LANGUAGES } from '../../util/common'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
@@ -19,7 +20,6 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
-import { LANGUAGES } from '../../../../config/default'
 
 const styles = {
   toolbar: {
