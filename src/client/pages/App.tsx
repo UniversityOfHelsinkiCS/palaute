@@ -11,7 +11,6 @@ import useTheme from '../theme'
 import usePinger from '../hooks/usePinger'
 import { inE2EMode } from '../util/common'
 
-/* eslint-disable */
 const App = () => {
   const theme = useTheme()
   usePinger({ enabled: !inE2EMode })
@@ -38,5 +37,5 @@ const App = () => {
     </LocalizationProvider>
   )
 }
-/* eslint-enable */
+
 export default App
