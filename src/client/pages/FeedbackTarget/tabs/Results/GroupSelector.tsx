@@ -5,8 +5,31 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
+import { User } from '../../../../types/User'
 
-const GroupButton = ({ option, onClick, ...props }) => {
+interface GroupOption {
+  id: string
+  name: string
+  studentCount?: number
+  teachers?: Array<User>
+}
+
+interface GroupButtonProps {
+  option: GroupOption
+  onClick: () => void
+  value: string
+  [key: string]: any
+}
+
+interface GroupSelectorProps {
+  groupId: string
+  setGroupId: (groupId: string) => void
+  groups: GroupOption[]
+  groupsAvailable: boolean
+  studentCount: number
+}
+
+const GroupButton: React.FC<GroupButtonProps> = ({ option, onClick, value, ...props }) => {
   const { t } = useTranslation()
 
   const buttonLabel = <Box p={1}>{option.name}</Box>
@@ -44,13 +67,19 @@ const GroupButton = ({ option, onClick, ...props }) => {
     )
 
   return (
-    <ToggleButton onClick={onClick} sx={{ p: 0 }} {...props}>
+    <ToggleButton onClick={onClick} sx={{ p: 0 }} value={value} {...props}>
       {buttonChildren}
     </ToggleButton>
   )
 }
 
-const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCount }) => {
+const GroupSelector: React.FC<GroupSelectorProps> = ({
+  groupId,
+  setGroupId,
+  groups,
+  groupsAvailable,
+  studentCount,
+}) => {
   const { i18n, t } = useTranslation()
   const [userSelectedGroupId, setUserSelectedGroupId] = React.useState(groupId)
 
@@ -61,32 +90,32 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
       </Box>
     )
 
-  const onSelect = groupId => {
-    setUserSelectedGroupId(groupId)
+  const onSelect = (selectedGroupId: string) => {
+    setUserSelectedGroupId(selectedGroupId)
     React.startTransition(() => {
-      setGroupId(groupId)
+      setGroupId(selectedGroupId)
     })
   }
 
-  const groupOptions = React.useMemo(
-    () =>
-      [
-        {
-          id: 'ALL',
-          name: t('common:all'),
-          teachers: [],
-          studentCount,
-        },
-      ].concat(
-        groups.map(group => ({
-          id: group.id,
-          name: getLanguageValue(group.name, i18n.language),
-          teachers: group.teachers,
-          studentCount: group.studentCount,
-        }))
-      ),
-    [groups]
-  )
+  const groupOptions: GroupOption[] = React.useMemo(() => {
+    // First option for "ALL"
+    const allOption: GroupOption = {
+      id: 'ALL',
+      name: t('common:all'),
+      teachers: [],
+      studentCount,
+    }
+
+    // Options for each group
+    const groupSpecificOptions: GroupOption[] = groups.map(group => ({
+      id: group.id,
+      name: getLanguageValue(group.name, i18n.language),
+      teachers: group.teachers,
+      studentCount: group.studentCount,
+    }))
+
+    return [allOption, ...groupSpecificOptions]
+  }, [groups, i18n.language, studentCount, t])
 
   return (
     <Box sx={{ overflow: 'auto' }}>
