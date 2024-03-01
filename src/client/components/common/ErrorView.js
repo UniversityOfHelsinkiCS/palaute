@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 
-import { Alert, Box, Card, CardMedia, Link as MuiLink, Typography } from '@mui/material'
+import { Alert, Box, Link as MuiLink, Typography } from '@mui/material'
 import { KeyboardReturnOutlined } from '@mui/icons-material'
 
 import ErrorDetails from './ErrorDetails'
@@ -27,11 +27,6 @@ const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => 
         <Typography sx={{ mb: '2rem' }} variant="body1">
           {t(message)}
         </Typography>
-      )}
-      {response && (
-        <Card sx={{ mx: 'auto', maxWidth: 500 }}>
-          <CardMedia component="img" src={`https://http.cat/${response?.status}`} alt="" loading="lazy" />
-        </Card>
       )}
 
       <Box mb={3} />

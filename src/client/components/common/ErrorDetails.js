@@ -44,7 +44,7 @@ const ErrorDetails = ({ feedbackTargetId, message, response }) => {
   const courseCode = getCourseCode(courseUnit)
   const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
 
-  const generateUnauthorizedMessage = () =>
+  const unauthorizedMessage = () =>
     isOld
       ? 'feedbackTargetView:noAccessOldCourse'
       : isEnded
@@ -106,9 +106,7 @@ const ErrorDetails = ({ feedbackTargetId, message, response }) => {
         </Typography>
       </Box>
       <Box>
-        <Typography variant="body1">
-          {response.status === 403 ? t(generateUnauthorizedMessage()) : t(message)}
-        </Typography>
+        <Typography variant="body1">{response.status === 403 ? t(unauthorizedMessage()) : t(message)}</Typography>
       </Box>
     </Box>
   )
