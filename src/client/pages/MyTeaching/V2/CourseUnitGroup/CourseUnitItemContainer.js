@@ -6,7 +6,6 @@ const CourseUnitItemContainer = ({ children }) => (
     sx={{
       mt: '1rem',
       borderRadius: '0.5rem',
-      // p: "1rem",
     }}
     elevation={1}
   >
