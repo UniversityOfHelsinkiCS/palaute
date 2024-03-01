@@ -91,10 +91,6 @@ const buildSummariesForPeriod = async ({
   // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
-      // Only consider feedback targets that have feedback.
-      feedbackCount: {
-        [Op.gt]: 0,
-      },
       userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
     },
     include: [
@@ -414,7 +410,7 @@ const buildSummariesForPeriod = async ({
     .concat(courseUnitGroupSummaries)
     .concat(tagSummaries)
     .concat(orgSummariesWithVariants)
-    .filter(summary => summary.data && summary.data.feedbackCount > 0)
+    .filter(summary => summary.data)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
 
