@@ -89,7 +89,7 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
   )
 
   return (
-    <Box>
+    <Box sx={{ overflow: 'auto' }}>
       <Typography variant="body2">{t('groups:chooseGroup')}</Typography>
       <ToggleButtonGroup value={userSelectedGroupId}>
         {groupOptions.map(opt => (
