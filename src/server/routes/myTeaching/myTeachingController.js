@@ -68,7 +68,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             as: 'courseRealisation',
             required: true,
             attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
-            where: {
+            /*             where: {
               [Op.or]: [
                 query.status === 'active' && {
                   startDate: { [Op.lte]: new Date() },
@@ -81,7 +81,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
                   endDate: { [Op.lt]: new Date() },
                 },
               ],
-            },
+            }, */
           },
         ],
       },
@@ -134,13 +134,39 @@ const getCourseUnitsForTeacher = async (req, res) => {
       return acualCUR
     })
 
+    const groupedCourseRealisations = courseRealisations.filter(courseRealisation => {
+      const now = new Date()
+
+      if (query.status === 'active') {
+        const activeCourseRealisation = courseRealisation.startDate <= now && courseRealisation.endDate >= now
+        const activeFeedbackTargets = courseRealisation.feedbackTargets.some(
+          fbt => fbt.opensAt <= now && fbt.closesAt >= now
+        )
+
+        return activeCourseRealisation || activeFeedbackTargets
+      }
+      if (query.status === 'upcoming') {
+        return courseRealisation.startDate > now
+      }
+      if (query.status === 'ended') {
+        const endedCourseRealisation = courseRealisation.endDate < now
+        const activeFeedbackTargets = courseRealisation.feedbackTargets.some(
+          fbt => fbt.opensAt <= now && fbt.closesAt >= now
+        )
+
+        return endedCourseRealisation && !activeFeedbackTargets
+      }
+
+      return null
+    })
+
     return {
       id: courseUnit.dataValues.id,
       name: courseUnit.dataValues.name,
       courseCode: courseUnit.dataValues.courseCode,
       userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
-      courseRealisations,
+      courseRealisations: groupedCourseRealisations,
     }
   })
 
