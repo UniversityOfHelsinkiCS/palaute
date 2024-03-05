@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Grid, Typography } from '@mui/material'
-import { useTranslation } from 'react-i18next'
+import { Alert, Box, Grid, Typography } from '@mui/material'
+import { useTranslation, Trans } from 'react-i18next'
 
+import AlertLink from '../common/AlertLink'
 import FormikTextField from '../common/FormikTextField'
 
 const LanguageOpenEditor = ({ name, language }) => {
@@ -10,12 +11,25 @@ const LanguageOpenEditor = ({ name, language }) => {
 
   return (
     <>
+      <Box mb={3}>
+        <Alert severity="info">
+          <Trans i18nKey="questionEditor:markDownSupport">
+            These fields supports{' '}
+            <AlertLink href={t('links:markdownHelp')} target="_blank">
+              Markdown
+            </AlertLink>{' '}
+            syntax
+          </Trans>
+        </Alert>
+      </Box>
+
       <Box mb={2}>
         <FormikTextField
           id={`open-question-${language}-${name}`}
           name={`${name}.data.label.${language}`}
           label={t('questionEditor:label')}
           fullWidth
+          multiline
         />
       </Box>
 
@@ -25,6 +39,7 @@ const LanguageOpenEditor = ({ name, language }) => {
         label={t('questionEditor:description')}
         helperText={t('questionEditor:descriptionHelper')}
         fullWidth
+        multiline
       />
     </>
   )

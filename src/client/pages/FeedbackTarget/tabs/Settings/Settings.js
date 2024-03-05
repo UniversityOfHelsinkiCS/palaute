@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router'
 import { Box } from '@mui/material'
 
 import useUpdateSettingsRead from './useUpdateSettingsRead'
 import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const Settings = () => {
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
+
   const updateSettingsRead = useUpdateSettingsRead()
   const { feedbackTarget, isResponsibleTeacher, isAdmin } = useFeedbackTargetContext()
 

@@ -9,12 +9,15 @@ import {
   LiveHelpOutlined,
   PollOutlined,
   SettingsOutlined,
+  DynamicFormOutlined,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
+import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
+import OrganisationSurveys from './OrganisationSurveys'
 import useOrganisation from '../../hooks/useOrganisation'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -23,11 +26,11 @@ import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
 import Title from '../../components/common/Title'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
-import OrganisationSummary from '../CourseSummary/OrganisationSummary'
 import ErrorView from '../../components/common/ErrorView'
 import errors from '../../util/errorMessage'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import LinkButton from '../../components/common/LinkButton'
+import ForOrganisation from '../CourseSummary/ForOrganisation'
 
 const Organisation = () => {
   const { path, url } = useRouteMatch()
@@ -82,6 +85,13 @@ const Organisation = () => {
           {hasWriteAccess && (
             <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
           )}
+          {ORGANISATION_SURVEYS_ENABLED && hasAdminAccess && (
+            <RouterTab
+              label={t('organisationSettings:organisationSurveysTab')}
+              icon={<DynamicFormOutlined />}
+              to={`${url}/organisation-surveys`}
+            />
+          )}
           <RouterTab
             label={t('organisationSettings:courseRealisationsTab')}
             to={`${url}/upcoming`}
@@ -117,8 +127,17 @@ const Organisation = () => {
           component={EditSurvey}
         />
 
+        {ORGANISATION_SURVEYS_ENABLED && (
+          <ProtectedRoute
+            path={`${path}/organisation-surveys`}
+            hasAccess={hasWriteAccess}
+            redirect={`${url}/summary`}
+            component={OrganisationSurveys}
+          />
+        )}
+
         <Route path={`${path}/summary`}>
-          <OrganisationSummary />
+          <ForOrganisation organisation={organisation} />
         </Route>
 
         <ProtectedRoute

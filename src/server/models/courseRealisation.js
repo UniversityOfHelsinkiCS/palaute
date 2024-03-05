@@ -33,6 +33,11 @@ CourseRealisation.init(
       defaultValue: false,
       allowNull: false,
     },
+    userCreated: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     teachingLanguages: {
       type: JSONB,
       allowNull: true,

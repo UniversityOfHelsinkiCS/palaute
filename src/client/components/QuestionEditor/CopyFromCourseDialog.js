@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import {
   Dialog,
@@ -20,10 +20,13 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
+import { useOrganisationSurveys } from '../../pages/Organisation/useOrganisationSurveys'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../common/LoadingProgress'
+import { getOrganisationSurveyCourseUnit } from './utils'
+import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 
 const styles = {
   listItem: {
@@ -88,14 +91,21 @@ const FeedbackTargetList = ({ feedbackTargets, onCopy }) => (
 
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
-  const { courseUnits } = useTeacherCourseUnits()
+  const { feedbackTarget } = useFeedbackTargetContext()
+  const {
+    courseUnit: { name, organisations, userCreated },
+  } = feedbackTarget
+  const { courseUnits = [] } = useTeacherCourseUnits()
+  const { surveys = [] } = useOrganisationSurveys(organisations[0]?.code, userCreated)
   const [value, setValue] = useState(null)
 
   const options = courseUnits ?? []
+  const organisationSurvey = getOrganisationSurveyCourseUnit(surveys)
 
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
     feedbackType: 'courseRealisation',
     includeSurveys: true,
+    isOrganisationSurvey: userCreated,
   })
 
   const getOptionLabel = option => `${option.courseCode} ${getLanguageValue(option.name, i18n.language)}`
@@ -111,6 +121,10 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions.length === 0
 
+  useEffect(() => {
+    if (userCreated) setValue(organisationSurvey)
+  }, [surveys])
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{t('editFeedbackTarget:copyFromCourseDialogTitle')}</DialogTitle>
@@ -118,15 +132,19 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         <Box mb={2}>
           <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
         </Box>
-        <Box mb={2}>
-          <Autocomplete
-            value={value}
-            onChange={handleValueChange}
-            options={options}
-            getOptionLabel={getOptionLabel}
-            renderInput={renderInput}
-          />
-        </Box>
+        {userCreated ? (
+          <Typography variant="h6">{getLanguageValue(name, i18n.language)}</Typography>
+        ) : (
+          <Box mb={2}>
+            <Autocomplete
+              value={value}
+              onChange={handleValueChange}
+              options={options}
+              getOptionLabel={getOptionLabel}
+              renderInput={renderInput}
+            />
+          </Box>
+        )}
         {!value && (
           <Typography color="textSecondary" align="center">
             {t('editFeedbackTarget:copyFromCourseChooseCourse')}

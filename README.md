@@ -29,6 +29,14 @@ To start the project in development mode use this command. It will start everyth
 $ npm run start
 ```
 
+To populate the Norppa and Jami databases from a backup in remote server, use
+
+```bash
+./scripts/get_prod_db.sh
+```
+
+If you are not in Toska, you can still use the script for reference.
+
 ### Stuck?
 
 If stuck reset everything and start from a clean slate:
@@ -39,7 +47,9 @@ $ npm run reset
 
 ### Commit guidelines
 
-Recommended to use [CommitSense](https://github.com/HRemonen/CommitSense)
+We like the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
+
+To automatically create commits that adhere to the spec, use [CommitSense](https://github.com/HRemonen/CommitSense).
 
 ## Documentation
 

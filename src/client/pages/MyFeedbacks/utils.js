@@ -1,6 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
 import { INCLUDE_COURSES } from '../../util/common'
+import { getInterimFeedbackName } from '../../util/courseIdentifiers'
 
 export const courseRealisationIsMisisingFeedback = courseRealisation => {
   if (!Array.isArray(courseRealisation.feedbackTargets)) {
@@ -75,4 +76,13 @@ export const filterFeedbackTargets = feedbackTargets => {
     given: feedbackTargets.given ? filter(feedbackTargets.given) : [],
     ended: feedbackTargets.ended ? filter(feedbackTargets.ended) : [],
   }
+}
+
+export const getCourseName = (feedbackTarget, t) => {
+  const { courseUnit, courseRealisation, userCreated } = feedbackTarget
+
+  if (courseUnit.userCreated) return courseRealisation.name
+  if (userCreated) return getInterimFeedbackName(feedbackTarget.name, courseUnit.name, t)
+
+  return courseUnit.name
 }

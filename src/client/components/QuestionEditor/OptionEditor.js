@@ -39,6 +39,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
             return (
               <Grid md={4} sm={12} xs={12} item key={language}>
                 <FormikTextField
+                  data-cy={`option-editor-new-option-${language}-name.${index}`}
                   name={`${name}.label.${language}`}
                   label={
                     <>
@@ -86,7 +87,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             ))}
           </Box>
 
-          <Button color="primary" onClick={() => arrayHelpers.push(createOption())}>
+          <Button data-cy="option-editor-add-option" color="primary" onClick={() => arrayHelpers.push(createOption())}>
             {t('questionEditor:addOption')}
           </Button>
         </>

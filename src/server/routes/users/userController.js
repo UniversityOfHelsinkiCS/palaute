@@ -1,25 +1,29 @@
 const { Op } = require('sequelize')
 const _ = require('lodash')
-
 const { Router } = require('express')
+
 const { ApplicationError } = require('../../util/customErrors')
 const { User, Banner } = require('../../models')
 const cache = require('../../services/users/cache')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
+const { getUserPreferences } = require('../../services/users')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : req.user.iamGroups ?? []
 
   if (!loginAs) {
-    user.lastLoggedIn = new Date()
-    await user.save()
+    await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
   }
 
-  const lastRestart = await getLastRestart()
-  const banners = await Banner.getForUser(user)
+  const [lastRestart, banners, organisations, preferences] = await Promise.all([
+    getLastRestart(),
+    Banner.getForUser(user),
+    user.getOrganisationAccess(),
+    getUserPreferences(user),
+  ])
 
   const isTeacher = !!user.employeeNumber
 
@@ -29,23 +33,61 @@ const login = async (req, res) => {
     iamGroups,
     lastRestart,
     banners,
+    organisations,
+    preferences,
   })
 }
 
-const getUserByEmail = async (req, res) => {
+const getUser = async (req, res) => {
   const {
-    query: { email },
+    query: { user, isEmployee },
   } = req
 
-  const params = { email }
+  let params = {}
+  let where = {}
+
+  const isFullName = user.split(' ').length === 2
+  const isEmail = user.includes('.') || user.includes('@')
+
+  if (isFullName) {
+    const [firstName, lastName] = user.split(' ')
+    params = { firstName, lastName }
+    where = {
+      firstName: {
+        [Op.iLike]: `%${firstName}%`,
+      },
+      lastName: {
+        [Op.iLike]: `%${lastName}%`,
+      },
+      email: {
+        [Op.ne]: null,
+      },
+    }
+  } else if (isEmail) {
+    params = { email: user }
+
+    where = {
+      email: { [Op.iLike]: `${user}%` },
+    }
+  } else {
+    where[Op.or] = {
+      firstName: {
+        [Op.iLike]: `%${user}%`,
+      },
+      lastName: {
+        [Op.iLike]: `%${user}%`,
+      },
+      email: {
+        [Op.ne]: null,
+      },
+    }
+  }
 
   const persons = await User.findAll({
-    attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
-      [Op.or]: {
-        email: { [Op.iLike]: `${email}%` },
-        secondaryEmail: { [Op.iLike]: `${email}%` },
-      },
+      ...where,
+      ...(isEmployee ? { [Op.not]: { employeeNumber: null } } : {}),
     },
     limit: 10,
   })
@@ -101,7 +143,7 @@ const router = Router()
 
 router.get('/login', login)
 router.get('/logout', logout)
-router.get('/users', getUserByEmail)
+router.get('/users', getUser)
 router.get('/users/access', getAllUserAccess)
 router.get('/users/:id', getUserDetails)
 

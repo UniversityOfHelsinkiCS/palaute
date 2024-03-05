@@ -5,6 +5,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
+import { sortGroups } from './utils'
 
 const GroupButton = ({ option, onClick, ...props }) => {
   const { t } = useTranslation()
@@ -68,6 +69,16 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
     })
   }
 
+  const localisatedGroups = groups
+    .map(({ id, name, teachers, studentCount }) => ({
+      id,
+      name: getLanguageValue(name, i18n.language),
+      teachers,
+      studentCount,
+    }))
+    .filter(group => group.studentCount > 0 && group.studentCount < studentCount)
+    .sort(sortGroups)
+
   const groupOptions = React.useMemo(
     () =>
       [
@@ -77,21 +88,22 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
           teachers: [],
           studentCount,
         },
-      ].concat(
-        groups.map(group => ({
-          id: group.id,
-          name: getLanguageValue(group.name, i18n.language),
-          teachers: group.teachers,
-          studentCount: group.studentCount,
-        }))
-      ),
-    [groups]
+      ].concat(localisatedGroups),
+    [localisatedGroups]
   )
 
   return (
     <Box>
-      <Typography variant="body2">{t('groups:chooseGroup')}</Typography>
-      <ToggleButtonGroup value={userSelectedGroupId}>
+      <Typography variant="body1">{t('groups:chooseGroup')}</Typography>
+      <ToggleButtonGroup
+        sx={{
+          mt: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+        }}
+        size="small"
+        value={userSelectedGroupId}
+      >
         {groupOptions.map(opt => (
           <GroupButton key={opt.id} value={opt.id} option={opt} onClick={() => onSelect(opt.id)} />
         ))}

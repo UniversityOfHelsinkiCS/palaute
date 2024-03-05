@@ -1,7 +1,8 @@
 # Kurssipalautejärjestelmän rekisteri- ja tietosuojaseloste
 
 ## Rekisterin nimi
-Helsingin Yliopiston kurssipalautejärjestelmä.
+
+Helsingin Yliopiston kurssipalautejärjestelmä Norppa.
 
 Tallennamme ja käsittelemme Helsingin yliopiston opiskelijoiden henkilötietoja EU:n tietosuojaasetuksen mukaisesti.
 
@@ -14,9 +15,7 @@ PL 68 (Pietari Kalmin katu 5)
 
 ## Rekisteriasioista vastaava henkilö
 
-- FIX, mluukkai / tttriple knows who
-
-Matti Luukkainen, mluukkai@cs.helsinki.fi
+Matti Luukkainen, matti.luukkainen@helsinki.fi
 
 ## Henkilötietojen käsittelyn tarkoitus
 

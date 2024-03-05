@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
 import { Typography, Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
 
@@ -24,6 +24,7 @@ import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import useOrganisationAccess from '../../../../hooks/useOrganisationAccess'
 import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const tada = keyframes({
   from: {
@@ -113,11 +114,11 @@ const FormContainer = ({
             {showSubmitButton && (
               <Box mt={2}>
                 <Button
+                  data-cy="feedback-view-give-feedback"
                   disabled={disabled}
                   color="primary"
                   variant="contained"
                   type="submit"
-                  data-cy="submitFeedbackButton"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </Button>
@@ -136,11 +137,11 @@ const FormContainer = ({
 }
 
 const FeedbackView = () => {
-  const { id } = useParams()
-  const { t, i18n } = useTranslation()
-  const { language } = i18n
-  const { enqueueSnackbar } = useSnackbar()
+  const id = useFeedbackTargetId()
+
   const history = useHistory()
+  const { t, i18n } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { authorizedUser } = useAuthorizedUser()
@@ -154,6 +155,7 @@ const FeedbackView = () => {
     return <LoadingProgress />
   }
 
+  const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
   // TODO clean up this shit again
   const isStudent = accessStatus === 'STUDENT'

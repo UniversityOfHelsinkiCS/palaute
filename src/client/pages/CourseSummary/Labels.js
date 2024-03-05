@@ -2,7 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { grey } from '@mui/material/colors'
 
-import { Box, Link, Typography } from '@mui/material'
+import { useIsFetching } from 'react-query'
+import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -41,7 +42,7 @@ const TeacherChips = ({ courseRealisation }) => {
 }
 
 export const CourseRealisationLabel = ({ courseRealisation, language }) => {
-  const { startDate, endDate, feedbackTargetId, name, teachingLanguages } = courseRealisation
+  const { startDate, endDate, name, teachingLanguages } = courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
@@ -49,8 +50,10 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
   const translatedName = getLanguageValue(name, language)
 
-  const link = feedbackTargetId ? (
-    <Link component={RouterLink} to={`/targets/${feedbackTargetId}/results`} underline="hover">
+  const feedbackTarget = courseRealisation.feedbackTargets[0]
+
+  const link = feedbackTarget ? (
+    <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`} underline="hover">
       {translatedName}
     </Link>
   ) : (
@@ -76,23 +79,60 @@ export const CourseRealisationLabel = ({ courseRealisation, language }) => {
   )
 }
 
-export const CourseUnitLabel = ({ name, code }) => (
+export const CourseUnitLabel = ({ name, code, partiallyResponsible }) => (
   <Box display="flex" flexDirection="column">
-    <Typography variant="caption" color="textSecondary">
-      {code}
+    <Box display="flex" gap="1rem" alignItems="center">
+      <Typography variant="caption" color="textSecondary">
+        {code}
+      </Typography>
+      {partiallyResponsible && (
+        <Typography variant="caption" color="textSecondary">
+          ({partiallyResponsible})
+        </Typography>
+      )}
+    </Box>
+    <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+      {name}
     </Typography>
-    <Typography variant="body2">{name}</Typography>
   </Box>
 )
 
-export const OrganisationLabel = ({ name, code, dates }) => (
-  <Box display="flex" flexDirection="column">
-    <Typography variant="caption" color="textSecondary">
-      {code}
-    </Typography>
-    <Box display="flex" gap="1rem">
-      <Typography variant="body2">{name}</Typography>
-      {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+export const OrganisationLabel = ({ organisation, dates }) => {
+  const { i18n } = useTranslation()
+  const isFetching = useIsFetching(['summaries-v2', organisation?.id])
+
+  return (
+    <Box display="flex" flexDirection="column">
+      <Typography variant="caption" color="textSecondary">
+        {organisation?.code}
+      </Typography>
+      <Box display="flex" gap="1rem">
+        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+          {getLanguageValue(organisation?.name, i18n.language)}
+        </Typography>
+        {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+        {Boolean(isFetching) && <CircularProgress size={20} />}
+      </Box>
     </Box>
-  </Box>
-)
+  )
+}
+
+export const TagLabel = ({ tag, dates }) => {
+  const { t, i18n } = useTranslation()
+  const isFetching = useIsFetching(['summaries-v2', tag?.id])
+
+  return (
+    <Box display="flex" flexDirection="column">
+      <Typography variant="caption" color="textSecondary">
+        {t('courseSummary:tagLabel')}
+      </Typography>
+      <Box display="flex" gap="1rem">
+        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+          {getLanguageValue(tag?.name, i18n.language)}
+        </Typography>
+        {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
+        {Boolean(isFetching) && <CircularProgress size={20} />}
+      </Box>
+    </Box>
+  )
+}

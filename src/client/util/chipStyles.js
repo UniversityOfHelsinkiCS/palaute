@@ -72,6 +72,16 @@ const styles = {
     color: '#003300',
     borderColor: '#33cc33',
   },
+  interim: {
+    background: theme => theme.palette.primary,
+    backgroundImage: 'linear-gradient(55deg, #e1bee7 10%, #ce93d8 30%, #e1bee7 50%)',
+    backgroundSize: '150px, 20px',
+    animation: css`
+      ${flow} 6.5s infinite forwards linear
+    `,
+    color: '#300d59',
+    borderColor: '#ab47bc',
+  },
 }
 
 export default styles

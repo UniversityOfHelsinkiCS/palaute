@@ -69,6 +69,7 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         attributes: ['accessStatus'],
+        required: false,
         include: {
           model: User,
           as: 'user',

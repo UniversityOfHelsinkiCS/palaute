@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, Paper } from '@mui/material'
 import { useInView } from 'react-intersection-observer'
 
+import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
@@ -16,6 +16,7 @@ import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
 import { getGroups } from './utils'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -24,6 +25,23 @@ const NotEnoughFeedbacks = ({ t }) => (
     </Alert>
   </Box>
 )
+
+const NotEnoughStudents = ({ t }) => (
+  <Box mb={2}>
+    <Alert severity="warning" data-cy="notEnoughStudents">
+      {t('feedbackTargetResults:notEnoughStudentsInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
+    </Alert>
+  </Box>
+)
+
+const FeedbackNotVisibleAlert = ({ enoughStudents, enoughFeedbacks }) => {
+  const { t } = useTranslation()
+
+  if (!enoughStudents) return <NotEnoughStudents t={t} />
+  if (!enoughFeedbacks) return <NotEnoughFeedbacks t={t} />
+
+  return null
+}
 
 const OnlyTeacherAccess = ({ t }) => (
   <Box mt={2}>
@@ -35,20 +53,34 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const { ref, inView } = useInView({ initialInView: true })
 
   const { feedbackTarget } = useFeedbackTargetContext()
+
   const { studentCount } = feedbackTarget
+
   const groups = getGroups(feedbackTarget)
+
   const hasMultipleGroups = groups?.length > 1
-  const groupsAvailable = feedbackResults?.groupsAvailable
   const feedbacks = feedbackResults?.feedbacks
+  const groupsAvailable = feedbackResults?.groupsAvailable
 
   const isSticky = hasMultipleGroups && groupsAvailable
   const isStuckTop = !inView && isSticky
 
   return (
-    <Box position={isSticky ? 'sticky' : 'initial'} top="-1px" zIndex="100">
+    <Box
+      sx={{
+        position: isSticky ? 'sticky' : 'initial',
+        top: '-1px',
+        zIndex: 100,
+      }}
+    >
       <Box h="1px" ref={ref} />
       <Paper
-        sx={{ p: '1rem', display: 'flex', alignItems: 'center', backgroundColor: isStuckTop ? 'white' : 'transparent' }}
+        sx={{
+          p: '1rem',
+          alignItems: 'center',
+          backgroundColor: isStuckTop ? 'white' : 'transparent',
+          position: 'relative',
+        }}
         elevation={isStuckTop ? 4 : 0}
       >
         {!isLoading && hasMultipleGroups && (
@@ -60,7 +92,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
             studentCount={studentCount}
           />
         )}
-        <Box ml="auto">
+        <Box sx={{ position: 'absolute', pt: 1.5, top: 0, right: 4 }}>
           <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
         </Box>
       </Paper>
@@ -69,15 +101,16 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
 }
 
 const Results = () => {
+  const id = useFeedbackTargetId()
+
   const { t } = useTranslation()
-  const { id } = useParams()
   const isMobile = useIsMobile()
-  const [groupId, setGroupId] = React.useState('ALL')
   const exportRef = useRef()
+  const [groupId, setGroupId] = React.useState('ALL')
+
   useChartConfig()
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
-
   const { feedbackTargetData, isLoading } = useFeedbackTargetFeedbacks(id, groupId)
 
   const {
@@ -85,6 +118,7 @@ const Results = () => {
     questionOrder,
     publicQuestionIds,
     publicityConfigurableQuestionIds,
+    studentCount,
     feedback,
     feedbackCount,
     opensAt,
@@ -93,7 +127,10 @@ const Results = () => {
   } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
+
   const enoughFeedbacks = feedbackCount > 0
+  const enoughStudents = !FEEDBACK_HIDDEN_STUDENT_COUNT || studentCount >= FEEDBACK_HIDDEN_STUDENT_COUNT
+  const showFeedback = enoughFeedbacks && enoughStudents
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
   const filtersVisible = isOrganisationReader || isResponsibleTeacher
@@ -125,11 +162,13 @@ const Results = () => {
 
         {isOpen && feedback && (
           <Box mb={2}>
-            <Alert severity="info">{t('feedbackTargetResults:thankYouMessage')}</Alert>
+            <Alert data-cy="feedback-target-results-thank-you" severity="info">
+              {t('feedbackTargetResults:thankYouMessage')}
+            </Alert>
           </Box>
         )}
 
-        {!isMobile && (
+        {!isMobile && enoughStudents && (
           <Box>
             <FeedbackChart
               feedbacks={feedbacks}
@@ -142,9 +181,7 @@ const Results = () => {
           </Box>
         )}
 
-        {!enoughFeedbacks && <NotEnoughFeedbacks t={t} />}
-
-        {enoughFeedbacks && (
+        {showFeedback ? (
           <QuestionResults
             publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
             publicQuestionIds={publicQuestionIds ?? []}
@@ -156,6 +193,8 @@ const Results = () => {
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />
+        ) : (
+          <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />
         )}
       </Box>
     </>

@@ -12,22 +12,24 @@ import { formatDate, getFeedbackPercentageString } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import FeedbackResponseChip from './FeedbackResponseChip'
+import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 
 const getChip = feedbackTarget => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
-  const isCurrent = !isEnded && !isOpen && !isOld
+  const isOngoing = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
   const { id, feedbackResponseSent, feedbackResponseGiven, feedbackCount, continuousFeedbackEnabled } = feedbackTarget
 
-  if (isOpen || (isCurrent && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
+  if (isOpen || (isOngoing && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))) {
     return (
       <FeedbackResponseChip
         id={id}
         feedbackResponseGiven={feedbackResponseGiven}
-        feedbackResponseSent={feedbackResponseSent || isOld}
+        feedbackResponseSent={feedbackResponseSent}
+        isOld={isOld}
         ongoing={isOpen}
-        continuous={isCurrent && continuousFeedbackEnabled}
+        continuous={isOngoing && continuousFeedbackEnabled}
         data-cy={
           isOpen
             ? `feedbackOpen-${feedbackTarget.id}`
@@ -43,19 +45,20 @@ const getChip = feedbackTarget => {
 const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const { i18n, t } = useTranslation()
 
-  const { id, feedbackCount, studentCount, courseRealisation, opensAt, closesAt } = feedbackTarget
+  const { id, feedbackCount, studentCount, courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
 
   const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
 
   const { name, startDate, endDate } = courseRealisation
 
+  const courseName = getLanguageValue(name, i18n.language)
+  const feedbackPeriod = t('teacherView:surveyOpen', {
+    closesAt: formatDate(closesAt),
+    opensAt: formatDate(opensAt),
+  })
+
   const periodInfo = (
-    <Tooltip
-      title={t('teacherView:surveyOpen', {
-        closesAt: formatDate(closesAt),
-        opensAt: formatDate(opensAt),
-      })}
-    >
+    <Tooltip title={feedbackPeriod}>
       <Typography>
         {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
@@ -65,15 +68,20 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true }) => {
   const chip = getChip(feedbackTarget)
 
   return (
-    <ListItem divider={divider} data-cy={`feedbackTargetItem-${id}`}>
+    <ListItem divider={divider} data-cy={`my-teaching-feedback-target-item-${id}`}>
       <ListItemText
         disableTypography
         primary={
           <>
-            <Link component={RouterLink} to={`/targets/${id}`} underline="hover">
-              {getLanguageValue(name, i18n.language)}{' '}
+            <Link
+              data-cy={`my-teaching-feedback-target-item-link-${id}`}
+              component={RouterLink}
+              to={`/targets/${id}`}
+              underline="hover"
+            >
+              {courseName}{' '}
             </Link>
-            {periodInfo}
+            {userCreated ? <Typography>{feedbackPeriod}</Typography> : periodInfo}
           </>
         }
         secondary={

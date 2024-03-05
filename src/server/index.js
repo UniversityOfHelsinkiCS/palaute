@@ -5,16 +5,15 @@ require('./util/i18n')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
+const v8 = require('v8')
 const { PORT, inProduction, inE2EMode } = require('./util/config')
 const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
-const { start: startViewsCron } = require('./util/refreshViewsCron')
-const { start: startPrecacheFeedbackTargetsCron } = require('./util/precacheFeedbackTargetsCron')
+const { scheduleCronJobs } = require('./util/cron/scheduleCronJobs')
 const logger = require('./util/logger')
-const { mailer } = require('./mailer')
 const { updateLastRestart } = require('./util/lastRestart')
 const { initializeFunctions } = require('./db/postgresFunctions')
-const v8 = require('v8');
+const updaterClient = require('./util/updaterClient')
 
 const app = express()
 
@@ -35,14 +34,12 @@ const start = async () => {
   await initializeFunctions()
   await redis.connect()
   await updateLastRestart()
-
-  await startViewsCron()
-  await startPrecacheFeedbackTargetsCron()
-  await mailer.scheduleCronJobs()
+  await updaterClient.ping().catch(() => logger.error('Updater not available'))
+  await scheduleCronJobs()
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
-    console.log(v8.getHeapStatistics());
+    console.log(v8.getHeapStatistics())
   })
 }
 

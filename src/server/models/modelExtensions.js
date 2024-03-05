@@ -33,6 +33,17 @@ FeedbackTarget.prototype.getSurveys = async function () {
     getUniversitySurvey(),
   ])
 
+  if (this.userCreated) {
+    universitySurvey.questionIds = []
+    universitySurvey.questions = []
+
+    return {
+      programmeSurveys: [],
+      teacherSurvey,
+      universitySurvey,
+    }
+  }
+
   return {
     programmeSurveys,
     teacherSurvey,
@@ -48,21 +59,25 @@ FeedbackTarget.prototype.getSurveys = async function () {
  */
 User.prototype.getOrganisationAccess = async function () {
   await this.populateAccess()
+  let { accessibleOrganisations } = this
 
-  const organisations = await Organisation.findAll({
-    where: {
-      code: {
-        [Op.in]: Object.keys(this.organisationAccess),
+  if (!accessibleOrganisations) {
+    accessibleOrganisations = await Organisation.findAll({
+      attributes: ['id', 'name', 'code', 'parentId'],
+      where: {
+        code: {
+          [Op.in]: Object.keys(this.organisationAccess),
+        },
       },
-    },
-    include: {
-      model: User,
-      as: 'users',
-      attributes: ['id', 'firstName', 'lastName', 'email'],
-    },
-  })
+      include: {
+        model: User,
+        as: 'users',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
+    })
+  }
 
-  return organisations.map(org => ({
+  return accessibleOrganisations.map(org => ({
     access: this.organisationAccess[org.code],
     organisation: org,
   }))
@@ -78,8 +93,11 @@ User.prototype.populateAccess = async function () {
   const organisationAccess = await getOrganisationAccess(this)
 
   this.organisationAccess = organisationAccess
-  this.specialGroup = organisationAccess.specialGroup
-  this.isAdmin = organisationAccess?.specialGroup?.superAdmin
+  this.specialGroup = organisationAccess.specialGroup ?? {}
+  this.isAdmin = this.specialGroup.superAdmin
+
+  // remove specialGroup from organisationAccess. Its confusing to have it there, other keys are organisation codes.
+  delete this.organisationAccess.specialGroup
 
   // Give admin access to configured users in development
   if (!inProduction) {
