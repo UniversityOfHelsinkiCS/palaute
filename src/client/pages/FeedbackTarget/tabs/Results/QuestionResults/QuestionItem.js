@@ -12,6 +12,7 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
+import { boxPrintStyle } from '../../../../../util/printStyle'
 
 const componentByType = {
   LIKERT: LikertResults,
@@ -89,7 +90,13 @@ const QuestionItem = ({
   const description = getLanguageValue(question?.data?.description, i18n.language)
 
   return (
-    <Card sx={{ height: '100%', p: '1rem' }}>
+    <Card
+      sx={{
+        height: '100%',
+        p: '1rem',
+        ...boxPrintStyle,
+      }}
+    >
       <Box display="flex" flexDirection="column" height="100%">
         <Box display="flex">
           <Box flexGrow={0} mr="auto" display="flex" flexDirection="column" rowGap="0.5rem" alignItems="start">

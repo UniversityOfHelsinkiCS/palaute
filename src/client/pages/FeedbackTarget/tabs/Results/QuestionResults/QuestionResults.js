@@ -118,7 +118,7 @@ const QuestionResults = React.memo(
                     width: '100%',
                   },
                   '@media print': {
-                    width: '50%',
+                    width: '30%',
                     pageBreakInside: 'avoid',
                     pageBreakBefore: 'auto',
                     pageBreakAfter: 'auto',
@@ -143,7 +143,7 @@ const QuestionResults = React.memo(
           data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
         >
           {openQuestions.map(q => (
-            <div key={q.id} style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }}>
+            <div key={q.id} /*style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }} */>
               <QuestionItem
                 question={q}
                 publicQuestionIds={publicQuestionIds}
