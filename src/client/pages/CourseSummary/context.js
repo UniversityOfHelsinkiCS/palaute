@@ -41,6 +41,10 @@ const summaryContext = React.createContext({
   questions: [],
   viewingMode: 'tree',
   setViewingMode: () => {},
+  extraOrgId: '',
+  setExtraOrgId: () => {},
+  extraOrgMode: 'include',
+  setExtraOrgMode: () => {},
 })
 
 /**
@@ -149,6 +153,30 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setParams(params)
   })
 
+  // Separate organisation id
+  const [extraOrgId, setExtraOrgId] = React.useState(() => {
+    const extraOrgId = params.get('extraOrgId')
+    return extraOrgId || ''
+  })
+
+  const updateExtraOrgIdQS = React.useCallback(extraOrgId => {
+    setExtraOrgId(extraOrgId)
+    params.set('extraOrgId', extraOrgId)
+    setParams(params)
+  })
+
+  // How to show separate organisation courses
+  const [extraOrgMode, setExtraOrgMode] = React.useState(() => {
+    const extraOrgMode = params.get('extraOrgMode')
+    return extraOrgMode || 'include'
+  })
+
+  const updateExtraOrgModeQS = React.useCallback(extraOrgMode => {
+    setExtraOrgMode(extraOrgMode)
+    params.set('extraOrgMode', extraOrgMode)
+    setParams(params)
+  })
+
   const value = React.useMemo(
     () => ({
       showSummariesWithNoFeedback,
@@ -163,8 +191,22 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       questions,
       viewingMode,
       setViewingMode: updateViewingModeQS,
+      extraOrgId,
+      setExtraOrgId: updateExtraOrgIdQS,
+      extraOrgMode,
+      setExtraOrgMode: updateExtraOrgModeQS,
     }),
-    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, viewingMode]
+    [
+      showSummariesWithNoFeedback,
+      dateRange,
+      option,
+      sortBy[0],
+      sortBy[1],
+      questions,
+      viewingMode,
+      extraOrgId,
+      extraOrgMode,
+    ]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>

@@ -37,9 +37,9 @@
     "feedbackNotGiven": "Not given",
     "feedbackHidden": "Hidden",
     "export": "Download",
-    "exportCsv": "Download as CSV",
-    "exportXLSX": "Donload as XLSX",
-    "exportPdf": "Download as PDF",
+    "exportCsv": "Download CSV",
+    "exportXLSX": "Download XLSX",
+    "exportPdf": "Download PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",
     "dropZoneInfo1": "Drag a file here, or find it by clicking this box.",
@@ -76,7 +76,12 @@
     "ascending": "ascending",
     "descending": "descending",
     "additional": "Additional",
-    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count"
+    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count",
+    "id": "Identifier",
+    "code": "Code",
+    "organisationCode": "Organisation code",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "validationErrors": {
     "required": "This field is required",
@@ -146,6 +151,7 @@
   },
   "teacherView": {
     "mainHeading": "My teaching",
+    "mainHeadingV2": "My surveys",
     "copyLink": "Copy answer form link",
     "copyResponseLink": "Copy link to counter feedback",
     "copied": "Link copied to clipboard",
@@ -154,6 +160,7 @@
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations",
     "noCourses": "No courses",
+    "noCoursesV2": "There are currently no courses to show",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",
@@ -165,7 +172,16 @@
     "upcomingCourses": "Upcoming courses",
     "endedCourses": "Ended courses",
     "feedbackNotStarted": "Feedback has not started",
-    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Active surveys",
+    "upcomingSurveys": "Upcoming surveys",
+    "endedSurveys": "Ended surveys",
+    "organisationSurveys": "Organisation surveys",
+    "courseSurveys": "Course surveys",
+    "disabledCourseWarning": "Feedback is disabled for this course",
+    "newView": "Test the new view",
+    "oldView": "Go back to the old view",
+    "expandMoreLabel": "Show hidden surveys"
   },
   "questionEditor": {
     "addQuestion": "Add question",
@@ -238,7 +254,8 @@
     "here": "here",
     "multipleChoiceQuestions": "Multiple choice questions",
     "openQuestions": "Open questions",
-    "multipleChoiceScale": "1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer"
+    "multipleChoiceScale": "1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer",
+    "publicQuestionConfirmation": "I have checked that the open answers to this question do not contain personal data or other sensitive information that cannot be published."
   },
   "feedbackSummary": {
     "question": "Question",
@@ -279,12 +296,14 @@
     "setHidden": "Hide this answer",
     "setVisible": "Unhide",
     "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and programme administrators",
+    "hideSuccess": "Ok. Answers to this question with the content \"{{content}}...\" ({{count}}) have been hidden.",
+    "showSuccess": "Ok. Answers to this question with the content  \"{{content}}...\" ({{count}}) have been made visible.",
     "hidingFeatureInfoTitle": "Info about hiding answers",
     "publishingInfo": "The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled \"Not public\".",
     "unpublishingInfo": "The answers to this questions are shown to students.",
     "hidingFeatureInfo": "If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published.",
     "confirmDeleteFeedback": "You are about to PERMANTENTLY delete a student's answer using admin rights. Are you sure you want to delete this answer? Type \"delete\" to confirm.",
-    "deleteSuccess": "Answer deleted."
+    "deleteSuccess": "Answer \"{{content}}\" deleted. ({{count}})"
   },
   "groups": {
     "groupingSettings": "Grouping",
@@ -361,7 +380,6 @@
     "cannotOpenImmediately": "Feedback is already open or has ended"
   },
   "organisationSurveys": {
-    "heading": "Programme Surveys surveys feature is still in the development stage and in a demo trial",
     "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",
     "givenFeedback": "Feedbacks given",
     "viewFeedback": "View survey",
@@ -397,7 +415,6 @@
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",
-    "heading": "Interim feedback feature is still in the development stage and in a demo trial",
     "emptySurveys": "There are no interim feedbacks for this programme yet; you can create a new interim feedback for the course here.",
     "givenFeedback": "Feedbacks given",
     "viewFeedback": "View interim feedback",
@@ -427,7 +444,7 @@
     "feedbackPercentage": "Feedback percentage",
     "feedbackResponseGiven": "Counter feedback has been given",
     "feedbackResponseNotGiven": "Counter feedback has not been given",
-    "feedbackResponsePercentage": "Courses where feedback response given",
+    "feedbackResponsePercentage": "Courses where feedback response given (%)",
     "feedbackStillOpen": "Feedback for this course is still ongoing",
     "courseOngoing": "The course is still ongoing",
     "programmeSummary": "Programme summary",
@@ -457,9 +474,6 @@
     "semester": "Semester",
     "spring": "Spring",
     "fall": "Fall",
-    "name": "Name",
-    "code": "Code",
-    "organisationCode": "Organisation code",
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
@@ -467,7 +481,21 @@
     "coursePage": "Course page",
     "myOrganisations": "My organisations",
     "myCourses": "My courses",
-    "newView": "Go to the new course summary"
+    "newView": "Go to the new course summary",
+    "treeView": "Show in a hierarchy",
+    "flatView": "Show in a list",
+    "includeOpenUni": "Include open uni courses",
+    "excludeOpenUni": "Exclude open uni courses",
+    "onlyOpenUni": "Show only open uni courses"
+  },
+  "generateReport": {
+    "selectIncluded": "Select content",
+    "organisations": "Organisations",
+    "courseUnits": "Course units",
+    "courseRealisations": "Course realisations",
+    "selectTimeRange": "Select timespan",
+    "selectedTime": "Currently selected",
+    "allTime": "All time"
   },
   "footer": {
     "contactSupport": "Contact support",
@@ -569,7 +597,9 @@
     "qrCodeHelpText": "Easiest way to share the QR-code is by screenshotting it",
     "deleteTeacherConfirmation": "Delete {{name}} from teachers?",
     "noFeedbackResponseYet": "The teacher of the course has not yet given counter feedback",
-    "noAccess": "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
+    "noAccess": "We couldn't find your enrolment for this course. If you enrollent recently, you might need to wait for 1-2 hours.",
+    "noAccessOldCourse": "The feedback period ended over a year ago, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
+    "noAccessEndedCourse": "The feedback period has ended, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
     "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
     "interimFeedbackTab": "Interim feedbacks"
   },

@@ -6,7 +6,7 @@ const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const v8 = require('v8')
-const { PORT, inProduction, inE2EMode } = require('./util/config')
+const { PORT, inProduction, inE2EMode, inDevelopment } = require('./util/config')
 const { connectToDatabase } = require('./db/dbConnection')
 const { redis } = require('./util/redisClient')
 const { scheduleCronJobs } = require('./util/cron/scheduleCronJobs')
@@ -20,6 +20,12 @@ const app = express()
 app.use(compression())
 app.use('/api', (req, res, next) => require('./routes')(req, res, next)) // eslint-disable-line
 app.use('/api', (_, res) => res.sendStatus(404))
+
+if (inDevelopment || inE2EMode) {
+  // eslint-disable-next-line global-require
+  const testRouter = require('./test')
+  app.use('/test', testRouter)
+}
 
 if (inProduction || inE2EMode) {
   const DIST_PATH = path.resolve(__dirname, '../../build')

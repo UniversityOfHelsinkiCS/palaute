@@ -33,7 +33,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import { getCourseCode, getPrimaryCourseName } from '../../util/courseIdentifiers'
+import { getCourseCode, getPrimaryCourseName, getSurveyType } from '../../util/courseIdentifiers'
 import { feedbackTargetIsOpenOrClosed } from './Dates/utils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
@@ -66,10 +66,14 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
-
-  const isInterimFeedback =
-    feedbackTarget.userCreated &&
-    !(feedbackTarget.courseUnit.userCreated && feedbackTarget.courseRealisation.userCreated)
+  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
+  const courseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
+  const courseCode = getCourseCode(courseUnit)
+  // Show course code only if it is not already in the course name
+  const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
 
   const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
   const showContinuousFeedbackTab =
@@ -85,16 +89,13 @@ const FeedbackTargetContent = () => {
   // This is necessary to identify which is related to interim feedback modal and which is related to the original fbt
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
 
-  const courseName = getLanguageValue(
-    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
-    i18n.language
-  )
-  const courseCode = getCourseCode(courseUnit)
-  // Show course code only if it is not already in the course name
-  const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
-
   if (!feedbackCanBeGiven && !isTeacher) {
-    return <ErrorView message={t('feedbackTargetView:feedbackDisabled')} />
+    return (
+      <ErrorView
+        message={t('feedbackTargetView:feedbackDisabled')}
+        response={{ status: 423, message: t('feedbackTargetView:feedbackDisabled') }}
+      />
+    )
   }
 
   return (
@@ -102,7 +103,7 @@ const FeedbackTargetContent = () => {
       <Title>{`${visibleCourseCode} ${courseName}`}</Title>
       {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
 
-      <FeedbackTargetInformation isInterimFeedback={isInterimFeedback} />
+      <FeedbackTargetInformation />
 
       <Box
         mb="2rem"

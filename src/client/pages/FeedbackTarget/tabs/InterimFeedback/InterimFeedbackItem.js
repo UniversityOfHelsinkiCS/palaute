@@ -8,7 +8,7 @@ import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../../../hooks/useInteractiveMutation'
 
-import PercentageCell from '../../../CourseSummary/PercentageCell'
+import PercentageCell from '../../../CourseSummary/components/PercentageCell'
 import FeedbackResponseChip from '../../../MyTeaching/FeedbackResponseChip'
 import ProtectedRoute from '../../../../components/common/ProtectedRoute'
 
@@ -57,7 +57,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const interimFeedbackName = getLanguageValue(interimFeedback.name, language)
 
   const handleDelete = async () => {
-    // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('interimFeedback:confirmRemoveSurvey'))) return
 
     await deleteInterimFeedback(interimFeedback.id)

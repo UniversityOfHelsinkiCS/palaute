@@ -16,6 +16,7 @@ const getOptional = (key, transform = val => val) => {
 }
 
 const inProduction = process.env.NODE_ENV === 'production'
+const inDevelopment = process.env.NODE_ENV === 'development'
 const inStaging = process.env.REACT_APP_STAGING === 'true'
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
 const basePath = process.env.PUBLIC_URL || ''
@@ -52,6 +53,7 @@ const PATE_URL = config.get('PATE_URL')
 const JAMI_URL = inProduction && !inStaging ? config.get('JAMI_URL') : `http://${JAMI_HOST}:${JAMI_PORT}`
 const PUBLIC_URL = config.get('PUBLIC_URL')
 const OPEN_UNIVERSITY_ORG_ID = config.get('OPEN_UNIVERSITY_ORG_ID')
+const UNIVERSITY_ROOT_ID = config.get('UNIVERSITY_ROOT_ID')
 const SUMMARY_EXCLUDED_ORG_IDS = config.get('SUMMARY_EXCLUDED_ORG_IDS')
 const SUMMARY_SKIP_ORG_IDS = config.get('SUMMARY_SKIP_ORG_IDS')
 const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPONSE_EMAILS_SINCE_DATE'))
@@ -70,6 +72,7 @@ const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = config.get('UNIVERSITY_LEVEL_VIE
 module.exports = {
   inE2EMode,
   inProduction,
+  inDevelopment,
   inStaging,
   basePath,
   GIT_SHA,
@@ -85,6 +88,7 @@ module.exports = {
   JAMI_URL,
   PUBLIC_URL,
   OPEN_UNIVERSITY_ORG_ID,
+  UNIVERSITY_ROOT_ID,
   SUMMARY_EXCLUDED_ORG_IDS,
   SUMMARY_SKIP_ORG_IDS,
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,

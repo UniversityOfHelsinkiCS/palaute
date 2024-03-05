@@ -15,7 +15,9 @@ const getLoggedInAsUser = async loggedInAsUserId => {
 }
 
 const setLoggedInAsUser = async req => {
-  const loggedInAsUser = await getLoggedInAsUser(req.headers['x-admin-logged-in-as'])
+  // User id must not contain slashes, so it's safe to use it directly.
+  const sanitizedUserIdFromHeader = req.headers['x-admin-logged-in-as']?.replace(/\//g, '') ?? ''
+  const loggedInAsUser = await getLoggedInAsUser(sanitizedUserIdFromHeader)
   if (loggedInAsUser) {
     const originalUser = req.user
     req.user = loggedInAsUser
