@@ -1,7 +1,8 @@
 # Kurssipalautejärjestelmän rekisteri- ja tietosuojaseloste
 
 ## Rekisterin nimi
-Helsingin Yliopiston kurssipalautejärjestelmä.
+
+Helsingin Yliopiston kurssipalautejärjestelmä Norppa.
 
 Tallennamme ja käsittelemme Helsingin yliopiston opiskelijoiden henkilötietoja EU:n tietosuojaasetuksen mukaisesti.
 
@@ -14,9 +15,7 @@ PL 68 (Pietari Kalmin katu 5)
 
 ## Rekisteriasioista vastaava henkilö
 
-- FIX, mluukkai / tttriple knows who
-
-Matti Luukkainen, mluukkai@cs.helsinki.fi
+Matti Luukkainen, matti.luukkainen@helsinki.fi
 
 ## Henkilötietojen käsittelyn tarkoitus
 
@@ -26,16 +25,16 @@ Asiakasrekisteriin tallennettuja henkilötietoja käytetään käyttäjien ja pa
 
 Henkilötiedot:
 
-* Etu- ja sukunimi
-* Sähköpostiosoite
-* Opiskelijanumero
-* Henkilökuntanumero
+- Etu- ja sukunimi
+- Sähköpostiosoite
+- Opiskelijanumero
+- Henkilökuntanumero
 
 Muu tietosisältö:
 
-* Kurssipalautelomakkeen tiedot; kysymys, kysymystyyppi ja järjestysnumero.
-* Annettu palaute; sekä tekstimuotoista että numeerista vastauksia kysymyksiin riippuen kysymystyypistä.
-* Kurssien perustiedot; kurssin nimi, järjestävä organisaatio, alkamis- ja päättymispäivät, vastuuhenkilö, osallistujat
+- Kurssipalautelomakkeen tiedot; kysymys, kysymystyyppi ja järjestysnumero.
+- Annettu palaute; sekä tekstimuotoista että numeerista vastauksia kysymyksiin riippuen kysymystyypistä.
+- Kurssien perustiedot; kurssin nimi, järjestävä organisaatio, alkamis- ja päättymispäivät, vastuuhenkilö, osallistujat
 
 ## Säännönmukaiset tietolähteet
 
@@ -59,10 +58,10 @@ Henkilötietoja ei siirretä EU:n tai ETA alueen ulkopuolelle.
 
 ## Rekisterin suojauksen periaatteet
 
-Sovelluksen yhteydessä olevaa rekisteriä ylläpidetään teknisenä tallenteena salatun tietoliikenneyhteyden kautta salasanoin ja palomuurein suojattuina. 
-Järjestelmään tallennettuihin tietoihin pääsevät ja niitä ovat oikeutettuja käyttämään vain nimetyt kurssipalautejärjestelmää työssään käyttävät ja järjestelmän ylläpidosta vastaavat yliopiston henkilökuntaan kuuluvat henkilöt. 
+Sovelluksen yhteydessä olevaa rekisteriä ylläpidetään teknisenä tallenteena salatun tietoliikenneyhteyden kautta salasanoin ja palomuurein suojattuina.
+Järjestelmään tallennettuihin tietoihin pääsevät ja niitä ovat oikeutettuja käyttämään vain nimetyt kurssipalautejärjestelmää työssään käyttävät ja järjestelmän ylläpidosta vastaavat yliopiston henkilökuntaan kuuluvat henkilöt.
 
-Rekisteriin sisältyvät henkilötiedot säilytetään luottamuksellisina. Rekisterin käyttö on ohjeistettu ja henkilörekisteriin pääsy on rajattu siten, että järjestelmään tallennettuihin rekisterin sisältämiin tietoihin pääsevät käsiksi ja niitä ovat oikeutettuja käyttämään vain ne henkilöt, joilla on tehtäviensä puolesta siihen oikeus ja jotka tarvitsevat tietoja tehtävässään. Henkilötietoja käsittelevällä henkilöstöllä on vaitiolovelvollisuus. 
+Rekisteriin sisältyvät henkilötiedot säilytetään luottamuksellisina. Rekisterin käyttö on ohjeistettu ja henkilörekisteriin pääsy on rajattu siten, että järjestelmään tallennettuihin rekisterin sisältämiin tietoihin pääsevät käsiksi ja niitä ovat oikeutettuja käyttämään vain ne henkilöt, joilla on tehtäviensä puolesta siihen oikeus ja jotka tarvitsevat tietoja tehtävässään. Henkilötietoja käsittelevällä henkilöstöllä on vaitiolovelvollisuus.
 
 Järjestelmään sisäänpääsy edellyttää rekisterin käyttäjältä käyttäjätunnuksen ja salasanan syöttämistä. Palvelinympäristö on suojattu salasanoilla ja asianmukaisella palomuurilla. Palvelimen ja käyttäjän koneen välinen tietoliikenne kulkee salattuna. Lisäksi rekisterinpitäjän tietoverkko ja laitteisto, jolla rekisteri sijaitsee, on suojattu palomuurilla ja muiden teknisten toimenpiteiden avulla. Henkilötietoja sisältävien aineistojen hävitys tehdään tietoturvallisesti.
 

@@ -17,9 +17,9 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
         <Button
           color="primary"
           form="feedback-response-form"
-          onClick={onSubmit}
           type="submit"
           data-cy="saveFeedbackResponse"
+          onClick={onSubmit}
         >
           {t('feedbackResponse:dialogSendEmailSubmit')}
         </Button>
@@ -41,13 +41,17 @@ const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
   }
 
   const handleSubmit = async () => {
-    onSubmit()
     handleCloseSubmitDialog()
+    onSubmit()
   }
 
   return (
     <>
-      <SubmitResponseDialog open={submitDialogOpen} onClose={handleCloseSubmitDialog} onSubmit={handleSubmit} />
+      <SubmitResponseDialog
+        open={submitDialogOpen}
+        onClose={handleCloseSubmitDialog}
+        onSubmit={handleCloseSubmitDialog}
+      />
       <Box display="flex" mr={2}>
         <Button
           disabled={disabled}

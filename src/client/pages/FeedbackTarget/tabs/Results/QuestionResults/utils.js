@@ -10,49 +10,7 @@ const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 const COMMA_REPLACE = /,/g
 
-/**
- * https://stackoverflow.com/questions/21409717/chart-js-and-long-labels
- * Takes a string phrase and breaks it into separate phrases
- * no bigger than 'maxwidth', breaks are made at complete words.
- */
-const formatLabel = (str, maxwidth) => {
-  if (!str) return []
-  const sections = []
-  const words = str.split(' ')
-  let temp = ''
-
-  words.forEach((item, index) => {
-    if (temp.length > 0) {
-      const concat = `${temp} ${item}`
-
-      if (concat.length > maxwidth) {
-        sections.push(temp)
-        temp = ''
-      } else if (index === words.length - 1) {
-        sections.push(concat)
-        return
-      } else {
-        temp = concat
-        return
-      }
-    }
-
-    if (index === words.length - 1) {
-      sections.push(item)
-      return
-    }
-
-    if (item.length < maxwidth) {
-      temp = item
-    } else {
-      sections.push(item)
-    }
-  })
-
-  return sections
-}
-
-const getScalesConfig = (totalFeedbacks, labels) => ({
+const getScalesConfig = totalFeedbacks => ({
   y: {
     grid: {
       display: false,
@@ -64,7 +22,13 @@ const getScalesConfig = (totalFeedbacks, labels) => ({
       },
       display: true,
       showLabelBackdrop: false,
-      callback: (_value, index, _ticks) => [labels[index][0]].concat(labels[index].length > 1 ? '...' : []),
+      callback(value) {
+        const lbl = this.getLabelForValue(value)
+        if (typeof lbl === 'string' && lbl.length > 16) {
+          return `${lbl.substring(0, 16)}...`
+        }
+        return lbl
+      },
     },
   },
   x: {
@@ -77,9 +41,9 @@ const getScalesConfig = (totalFeedbacks, labels) => ({
 
 const getAspectRatio = numberOfOptions => Math.min(1.05 / (numberOfOptions / 6), 1.3)
 
-const getChartOptions = (numberOfOptions, totalFeedbacks, labels) => ({
+const getChartOptions = (numberOfOptions, totalFeedbacks) => ({
   indexAxis: 'y',
-  scales: getScalesConfig(totalFeedbacks, labels),
+  scales: getScalesConfig(totalFeedbacks),
   maintainAspectRatio: true,
   aspectRatio: getAspectRatio(numberOfOptions),
   layout: {
@@ -125,7 +89,7 @@ export const getLikertChartConfig = (question, language, t, numberOfFeedbacks) =
   const displayLabels = ['5', '4', '3', '2', '1', dontKnowOption].map(l => [l])
 
   return {
-    options: getChartOptions(labels.length, numberOfFeedbacks, displayLabels),
+    options: getChartOptions(labels.length, numberOfFeedbacks),
     data: {
       labels: displayLabels,
       datasets: [
@@ -143,14 +107,14 @@ export const getMultipleChoiceChartConfig = (question, language, t, numberOfFeed
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 20))
+  const labels = arrayOptions.map(({ label }) => getLanguageValue(label, language), 80)
 
   const flatFeedbacks = flatMap(question.feedbacks, ({ data }) => data ?? [])
   const countByOptionId = countBy(flatFeedbacks, option => option)
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, numberOfFeedbacks, labels),
+    options: getChartOptions(arrayOptions.length, numberOfFeedbacks),
     data: {
       labels,
       datasets: [
@@ -168,14 +132,14 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
 
   const arrayOptions = question.data?.options ?? []
 
-  const labels = arrayOptions.map(({ label }) => formatLabel(getLanguageValue(label, language), 20))
+  const labels = arrayOptions.map(({ label }) => getLanguageValue(label, language), 80)
 
   const countByOptionId = countBy(question.feedbacks, ({ data }) => data ?? '_')
 
   const data = arrayOptions.map(({ id }) => countByOptionId[id] ?? 0)
 
   return {
-    options: getChartOptions(arrayOptions.length, numberOfFeedbacks, labels),
+    options: getChartOptions(arrayOptions.length, numberOfFeedbacks),
     data: {
       labels,
       datasets: [

@@ -31,12 +31,12 @@ import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../../components/common/TeacherChip'
 import MultiSelect from '../../components/common/MultiSelect'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
 import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
+import { getStudyYearRange } from '../../util/yearSemesterUtils'
 
 const SelectionContext = React.createContext({})
 
@@ -590,27 +590,16 @@ const SemesterOverview = ({ organisation }) => {
   const editMode = React.useRef(false)
   const [sidebarEditMode, setSidebarEditMode] = React.useState(false)
 
+  const studyYearRange = getStudyYearRange(new Date())
   const [filters, setFilters] = React.useState({
-    startDate: null,
-    endDate: null,
+    startDate: studyYearRange.start,
+    endDate: studyYearRange.end,
     teacherQuery: '',
     courseQuery: '',
     includeWithoutTeachers: false,
     noTags: false,
     tags: [],
   })
-
-  const { courseSummaryAccessInfo, isLoading: defaultDatesLoading } = useCourseSummaryAccessInfo()
-
-  React.useEffect(() => {
-    if (!courseSummaryAccessInfo?.defaultDateRange) return
-    const { startDate, endDate } = courseSummaryAccessInfo.defaultDateRange
-    setFilters({
-      ...filters,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-    })
-  }, [defaultDatesLoading])
 
   const onFeedbackTargetClick = React.useCallback(feedbackTarget => {
     React.startTransition(() => {
@@ -666,13 +655,11 @@ const SemesterOverview = ({ organisation }) => {
     })
   }, []) // And again
 
-  const { feedbackTargets, isLoading: feedbackTargetsLoading } = useOrganisationFeedbackTargets({
+  const { feedbackTargets, isLoading } = useOrganisationFeedbackTargets({
     code,
     filters,
     enabled: filters.startDate !== null,
   })
-
-  const isLoading = defaultDatesLoading || feedbackTargetsLoading
 
   // when data changes, object references in state have to be updated. Sucx
   React.useEffect(() => {

@@ -6,6 +6,7 @@ const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 const { PUBLIC_URL } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({
@@ -103,12 +104,12 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
 
   const hasMultipleFeedbackTargets = userFeedbackTargets.length > 1
 
-  const courseName = userFeedbackTargets[0].courseRealisation.name[language]
+  const courseName = getLanguageValue(userFeedbackTargets[0].courseRealisation.name, language)
 
   let courseNameLinksAndNewFeedback = ''
   for (const userFeedbackTarget of userFeedbackTargets) {
     const { feedbackTargetId: id } = userFeedbackTarget
-    const name = userFeedbackTarget.courseRealisation.name[language]
+    const name = getLanguageValue(userFeedbackTarget.courseRealisation.name, language)
 
     courseNameLinksAndNewFeedback = `${courseNameLinksAndNewFeedback}
     <a href=${`${PUBLIC_URL}/targets/${id}/continuous-feedback`}>${name}</a>

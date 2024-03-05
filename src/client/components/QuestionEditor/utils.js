@@ -54,8 +54,8 @@ export const createQuestion = ({ type, data = createQuestionData(type), options 
   data,
   required: false,
   editable: true,
-  public: true,
-  publicityConfigurable: true,
+  public: type !== 'OPEN' && type !== 'TEXT',
+  publicityConfigurable: type !== 'OPEN' && type !== 'TEXT',
   ...options,
 })
 
@@ -113,4 +113,10 @@ export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
     ...copyQuestion(q),
     editable: true,
   }))
+}
+
+export const getOrganisationSurveyCourseUnit = surveys => {
+  if (!surveys || surveys.length === 0) return null
+
+  return surveys[0]?.courseUnit ?? null
 }

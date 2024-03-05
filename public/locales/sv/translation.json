@@ -21,6 +21,7 @@
     "send": "Skicka",
     "show": "Visa",
     "hide": "Göm",
+    "cancel": "Avbryt",
     "accept": "Godkänn",
     "preview": "Förhandsvisning",
     "clearSelection": "Töm val",
@@ -34,10 +35,10 @@
     "feedback": "Respons",
     "feedbackGiven": "Given",
     "feedbackNotGiven": "Inte given",
+    "feedbackHidden": "Gömd",
     "dropZoneInfo1": "Dra hit en fil, eller hitta den genom att klicka på denhär rutan",
     "dropZoneInfo2": "En .csv fil mindre än 5MB godkänns",
     "feedbackHeader": "RESPONS",
-    "dirtyFormPrompt": "Sidan har osparade ändringar. Är du säker att du vill lämna sidan?",
     "actions": "Handlingar",
     "close": "Stäng",
     "required": "Krävs",
@@ -67,7 +68,12 @@
     "studyTracks": "Studieinriktningar",
     "currentlySelected": "Valda",
     "all": "Alla",
-    "studentCount": "Studerande"
+    "studentCount": "Studerande",
+    "partiallyResponsible": "Delansvarig",
+    "university": "Universitet",
+    "sort": "Sortera",
+    "ascending": "stigande",
+    "descending": "fallande"
   },
   "validationErrors": {
     "required": "Fältet krävs",
@@ -88,7 +94,8 @@
     "courseUnitPageStudent": "-",
     "courseRealisationPage": "",
     "courseSummaryCourseUnitLink": "-",
-    "courseSummaryCourseUnitLinkStudent": "-"
+    "courseSummaryCourseUnitLinkStudent": "-",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -304,8 +311,6 @@
     "none": "inga"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Personen som gett feedback kan inte se den så länge formuläret ännu är öppet.",
-    "noFeedbackInfo": "Ingen har tillsvidare givit respons",
     "studentsList": "Studerande som gett respons"
   },
   "feedbackResponse": {
@@ -337,10 +342,16 @@
     "everyone": "Alla användare"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Responsperiod",
+    "editPeriodTitle": "Redigera responsperiod",
     "cannotCloseImmediately": "Responsen är ännu inte igång",
     "cannotCloseImmediatelyWhenOpen": "Responsen har stängts eller kommer att stängas om en dag",
     "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
+  },
+  "organisationSurveys": {
+    "startDate": "Från och med",
+    "endDate": "Till",
+    "surveys": "Undersökningar",
+    "newSurveyName": "Undersökningens namn"
   },
   "courseSummary": {
     "heading": "Sammandrag av kursens respons",
@@ -349,6 +360,7 @@
     "noResults": "Inga responser",
     "feedbackResponse": "Svar på responsen för den senaste kursen given",
     "feedbackCount": "Antal respons",
+    "studentCount": "Studerande",
     "censoredCount": "Gömda responser",
     "feedbackPercentage": "Responsprocent",
     "clickForDetails": "Klicka för att se detaljer",
@@ -390,7 +402,10 @@
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
     "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
-    "coursePage": "Kurssida"
+    "coursePage": "Kurssida",
+    "myOrganisations": "Mina utbildningsprogram",
+    "myCourses": "Mina kurser",
+    "newView": "Prova den nya vyn"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",
@@ -403,14 +418,14 @@
   },
   "organisationSettings": {
     "surveyInfo": "Frågor på utbildningsprogramsnivå visas i varje förfrågan för utbildningsprogrammets kurser efter frågorna på universitetsnivå. Förfrågan har redan {{count}} frågor på universitetsnivå, men du kan lägga till fler frågor om du vill.",
-    "studentListVisible": "Visa studerandena som har gett respons till kursens ansvariga lärare",
     "courseSettingsInfo": "Respons samlas endast in för aktiverade kurser",
     "settingsTab": "Inställningar",
     "generalSettings": "Allmänna inställningar",
     "courseSettings": "Kursinställningar",
     "feedbackCorrespondent": "Korrespondent för responsen",
     "feedbackCorrespondents": "Korrespondenter för responsen",
-    "surveyTab": "Utbildningsprogrammets förfrågan",
+    "surveyTab": "Utbildningsprogrammets frågor",
+    "organisationSurveysTab": "Organisation surveys",
     "summaryTab": "Sammandrag",
     "courseRealisationsTab": "Hur kursen är implementerad",
     "openQuestionsTab": "Öppna frågor",
@@ -448,7 +463,7 @@
     "feedbackDisabled": "Denna respons är inte i bruk",
     "surveyTab": "Förfrågan",
     "feedbacksTab": "Responser",
-    "editFeedbackResponseTab": "Ge motrespons",
+    "giveFeedbackResponseTab": "Ge motrespons",
     "continuousFeedbackTab": "Kontinuerlig respons",
     "studentsWithFeedbackTab": "De som gett respons",
     "linkCopied": "Länken till responsen har kopierats till urklippet",
@@ -458,6 +473,7 @@
     "editFeedbackTab": "Redigera responsen",
     "coursePage": "Kurssida",
     "courseSummary": "Sammandrag av kursens genomföranden",
+    "courseSisuPage": "Course Sisu page",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
     "administrativePersons": "Administrativ person",

@@ -44,6 +44,11 @@ UserFeedbackTarget.init(
       allowNull: false,
       defaultValue: false,
     },
+    userCreated: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     underscored: true,

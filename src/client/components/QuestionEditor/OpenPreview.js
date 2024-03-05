@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { getLanguageValue } from '../../util/languageUtils'
-import PreviewBase from './PreviewBase'
+import MarkdownPreviewBase from './MarkdownPreviewBase'
 import TextField from '../common/TextField'
+
+import { getLanguageValue } from '../../util/languageUtils'
 
 const OpenPreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)
@@ -10,9 +11,9 @@ const OpenPreview = ({ question, language }) => {
   const required = question.required ?? false
 
   return (
-    <PreviewBase label={label} description={description} required={required}>
+    <MarkdownPreviewBase label={label} description={description} required={required}>
       <TextField multiline fullWidth />
-    </PreviewBase>
+    </MarkdownPreviewBase>
   )
 }
 

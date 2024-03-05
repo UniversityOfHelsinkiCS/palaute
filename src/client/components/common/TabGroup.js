@@ -16,25 +16,37 @@ export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
         {children}
       </Box>
     </Box>
-    <Divider orientation="vertical" flexItem />
   </Box>
 )
 
-export const TabGroupsContainer = ({ children }) => (
-  <Paper>
-    <Box
-      display="flex"
-      px="0.2rem"
-      alignItems="stretch"
-      sx={{
-        overflowX: 'auto',
-        '::-webkit-scrollbar': {
-          display: 'none',
-        },
-        borderRadius: '0.8rem',
-      }}
-    >
-      {children}
-    </Box>
-  </Paper>
-)
+export const TabGroupsContainer = ({ children }) => {
+  const childElements = children.filter(child => Boolean(child))
+
+  return (
+    <Paper>
+      <Box
+        display="flex"
+        px="0.2rem"
+        alignItems="stretch"
+        sx={{
+          overflowX: 'auto',
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+          borderRadius: '0.8rem',
+        }}
+      >
+        {React.Children.map(childElements, (child, i) => {
+          const lastChild = childElements.length === i + 1
+
+          return (
+            <>
+              {child}
+              {lastChild ? null : <Divider orientation="vertical" flexItem />}
+            </>
+          )
+        })}
+      </Box>
+    </Paper>
+  )
+}

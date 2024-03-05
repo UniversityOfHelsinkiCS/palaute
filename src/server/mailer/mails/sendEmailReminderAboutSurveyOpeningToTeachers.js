@@ -5,6 +5,7 @@ const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL, FEEDBACK_SYSTEM } = require('
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -15,6 +16,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
       },
       feedbackOpeningReminderEmailSent: false,
       feedbackType: 'courseRealisation',
+      userCreated: false,
     },
     include: [
       {
@@ -61,7 +63,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
 const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedbackTargets) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
   const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
-  const courseName = teacherFeedbackTargets[0].name[language]
+  const courseName = getLanguageValue(teacherFeedbackTargets[0].name, language)
 
   let courseNamesAndUrls = ''
 
@@ -86,7 +88,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
     }
 
     courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
-        ${name[language]}
+        ${getLanguageValue(name, language)}
         </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
 

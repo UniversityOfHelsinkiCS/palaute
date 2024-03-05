@@ -195,6 +195,8 @@ class FeedbackTarget extends Model {
    * @returns {Promise<FeedbackTarget?>} its previous feedback target
    */
   async getPrevious() {
+    if (this.userCreated) return null
+
     const courseRealisation = CourseRealisation.findByPk(this.courseRealisationId, { attributes: ['startDate'] })
 
     const currentTeachers = UserFeedbackTarget.findAll({
@@ -372,6 +374,11 @@ FeedbackTarget.init(
       },
     },
     sendContinuousFeedbackDigestEmail: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    userCreated: {
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,

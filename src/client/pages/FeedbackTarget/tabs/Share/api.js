@@ -5,7 +5,7 @@ import { updateCache } from '../../../../util/reactQuery'
 export const useSendReminderEmail = () => {
   const mutationFn = async ({ id, data }) =>
     apiClient.put(`/feedback-targets/${id}/remind-students`, {
-      data: { data },
+      data,
     })
 
   const mutation = useMutation(mutationFn, {

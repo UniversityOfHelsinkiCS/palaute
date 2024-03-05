@@ -49,7 +49,15 @@ const populateGroupInformation = feedbackTarget => {
  */
 const getFromDb = async id => {
   const fbt = await FeedbackTarget.findByPk(id, {
-    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'hidden', 'feedbackType', 'publicQuestionIds'],
+    attributes: [
+      'id',
+      'courseUnitId',
+      'courseRealisationId',
+      'hidden',
+      'feedbackType',
+      'publicQuestionIds',
+      'userCreated',
+    ],
     include: [
       {
         model: UserFeedbackTarget,
@@ -149,7 +157,7 @@ const getFromDb = async id => {
 }
 
 const getAdditionalDataFromCacheOrDb = async id => {
-  let data = cache.get(id)
+  let data = await cache.get(id)
   if (!data) {
     data = await getFromDb(id)
     cache.set(data.id, data)

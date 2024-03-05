@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Formik, Form, useField } from 'formik'
 
 import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
@@ -14,6 +13,7 @@ import ResponseEmailButton from './ResponseEmailButton'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import InstructionAccordion from '../../../../components/common/InstructionAccordion'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -28,10 +28,12 @@ const MarkdownPreview = () => {
 }
 
 const EditFeedbackResponse = () => {
-  const [sendEmail, setSendEmail] = useState(true)
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
+
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+
+  const [sendEmail, setSendEmail] = useState(true)
 
   const { feedbackTarget } = useFeedbackTargetContext()
   const updateFeedbackResponse = useUpdateFeedbackResponse()
@@ -46,6 +48,8 @@ const EditFeedbackResponse = () => {
   const feedbackResponseFormDisabled = now < closeTime
 
   const handleSubmit = async values => {
+    values.feedbackResponseEmailSent = !isSent && sendEmail
+
     try {
       await updateFeedbackResponse.mutateAsync({
         id,
@@ -98,12 +102,7 @@ const EditFeedbackResponse = () => {
                     disabled={
                       (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
                     }
-                    onSubmit={() =>
-                      handleSubmit({
-                        ...values,
-                        feedbackResponseEmailSent: !isSent && sendEmail,
-                      })
-                    }
+                    onSubmit={() => handleSubmit(values)}
                   />
                   <FormControlLabel
                     control={

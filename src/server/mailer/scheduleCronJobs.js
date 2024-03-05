@@ -1,12 +1,12 @@
 const { inProduction, inStaging } = require('../util/config')
 const logger = require('../util/logger')
-const { schedule } = require('../util/cron')
+const { schedule } = require('../util/cron/schedule')
 
 const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
-  sendAutomaticReminderOnFeedbackToStudents,
+  // sendAutomaticReminderOnFeedbackToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
 } = require('./mails')
 
@@ -30,7 +30,7 @@ const runPateCron = async () => {
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
   await sendEmailReminderAboutFeedbackResponseToTeachers()
-  await sendAutomaticReminderOnFeedbackToStudents()
+  // await sendAutomaticReminderOnFeedbackToStudents()
 }
 
 const startPateCron = async () => {

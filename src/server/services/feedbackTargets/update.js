@@ -4,7 +4,8 @@ const { parseFromTimeZone } = require('date-fns-timezone')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
-const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../auditLog')
+const { updateOrganisationSurvey } = require('../organisations/organisationSurveys')
 
 const filterUpdates = update => update !== undefined && update !== null
 
@@ -117,7 +118,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 
   await survey.save()
 
-  await createFeedbackTargetSurveyLog(surveyId, questions, user)
+  createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
 
   return updates
 }
@@ -137,6 +138,15 @@ const update = async ({ feedbackTargetId, user, body }) => {
       ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
+
+    // If organisation survey update course realisation activity period as well
+    if (feedbackTarget.courseRealisation.userCreated) {
+      const activityPeriod = {
+        startDate: updates.opensAt,
+        endDate: updates.closesAt,
+      }
+      await updateOrganisationSurvey(feedbackTarget.id, activityPeriod)
+    }
   }
 
   if (Array.isArray(questions)) {
@@ -166,13 +176,14 @@ const update = async ({ feedbackTargetId, user, body }) => {
     updates.questions = updatedQuestions
   }
 
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
+
   Object.assign(feedbackTarget, updates)
 
   // force hooks
   feedbackTarget.changed('updatedAt', true)
 
   await feedbackTarget.save()
-  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   return feedbackTarget
 }

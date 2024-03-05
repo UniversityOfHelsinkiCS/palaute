@@ -1,9 +1,9 @@
-import { Box, Paper, Typography } from '@mui/material'
-import { format } from 'date-fns'
+import { Box } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router'
 import useOrganisationLogs from '../../hooks/useOrganisationLogs'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { LogItem } from '../../components/Logs/LogItem'
 
 const getLogMessage = data => {
   let messages = []
@@ -67,22 +67,12 @@ const getLogMessage = data => {
     }
   }
 
+  if (data.mockedBy) {
+    messages = messages.concat(`(Mocked by ${data.mockedBy})`)
+  }
+
   return messages.join(', ')
 }
-
-const LogItem = ({ log }) => (
-  <Box m={2}>
-    <Paper>
-      <Box display="flex" p={2}>
-        <Typography>{format(new Date(log.createdAt), 'yyyy/MM/dd hh.mm')}</Typography>
-        <Box m={2} />
-        <Typography>{log.user.email}</Typography>
-        <Box m={2} />
-        <Typography>{getLogMessage(log.data)}</Typography>
-      </Box>
-    </Paper>
-  </Box>
-)
 
 const OrganisationLogs = () => {
   const { code } = useParams()
@@ -95,7 +85,7 @@ const OrganisationLogs = () => {
   return (
     <Box display="flex" flexDirection="column">
       {organisationLogs.map((log, idx) => (
-        <LogItem key={idx} log={log} />
+        <LogItem key={idx} log={log} parseLogMessage={getLogMessage} />
       ))}
     </Box>
   )

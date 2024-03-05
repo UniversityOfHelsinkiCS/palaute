@@ -27,9 +27,6 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 export const INCLUDE_COURSES = CONFIG?.INCLUDE_COURSES ?? []
 
 // eslint-disable-next-line no-undef
-export const STUDENT_LIST_BY_COURSE_ENABLED = CONFIG?.STUDENT_LIST_BY_COURSE_ENABLED ?? []
-
-// eslint-disable-next-line no-undef
 export const TAGS_ENABLED = CONFIG?.TAGS_ENABLED ?? []
 
 // eslint-disable-next-line no-undef
@@ -66,7 +63,13 @@ export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = CONFIG?.STUDENT_FEEDBACK_S
 export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
 
 // eslint-disable-next-line no-undef
+export const FEEDBACK_HIDDEN_STUDENT_COUNT = CONFIG?.FEEDBACK_HIDDEN_STUDENT_COUNT
+
+// eslint-disable-next-line no-undef
 export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
+
+// eslint-disable-next-line no-undef
+export const UNIVERSITY_ROOT_ID = CONFIG?.UNIVERSITY_ROOT_ID
 
 // eslint-disable-next-line no-undef
 export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS
@@ -78,7 +81,21 @@ export const SUMMARY_COLOR_SCALE_MIN = CONFIG?.SUMMARY_COLOR_SCALE_MIN
 export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX
 
 // eslint-disable-next-line no-undef
+export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = CONFIG?.UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS ?? []
+
+// eslint-disable-next-line no-undef
 export const WORKLOAD_QUESTION_ID_ORDER = CONFIG?.WORKLOAD_QUESTION_ID_ORDER ?? []
 
 // eslint-disable-next-line no-undef
 export const USE_ROLE_BASED_COURSE_LINKS = CONFIG?.USE_ROLE_BASED_COURSE_LINKS
+
+// eslint-disable-next-line no-undef
+export const ORGANISATION_SURVEYS_ENABLED = CONFIG?.ORGANISATION_SURVEYS_ENABLED
+
+// eslint-disable-next-line no-undef
+export const ALWAYS_SHOW_STUDENT_LIST = CONFIG?.ALWAYS_SHOW_STUDENT_LIST
+
+// eslint-disable-next-line no-undef
+export const INTERIM_FEEDBACKS_ENABLED = CONFIG?.INTERIM_FEEDBACKS_ENABLED
+
+export const STUDY_YEAR_START_MONTH = 8 // September

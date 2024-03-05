@@ -10,6 +10,7 @@ const {
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, getFeedbackTargetLink } = require('./util')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -21,6 +22,7 @@ const getOpenFeedbackTargetsForStudents = async () => {
         [Op.gte]: new Date(),
       },
       feedbackType: 'courseRealisation',
+      userCreated: false,
     },
     include: [
       {
@@ -73,7 +75,7 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
 
   const emailLanguage = !language ? 'en' : language
 
-  const courseName = name[emailLanguage] ? name[emailLanguage] : Object.values(name)[0]
+  const courseName = getLanguageValue(name, emailLanguage)
 
   let courseNamesAndUrls = ''
 

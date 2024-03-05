@@ -27,7 +27,6 @@ import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
 import apiClient from '../../util/apiClient'
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { STUDENT_LIST_BY_COURSE_ENABLED } from '../../util/common'
 import { TagChip } from '../../components/common/TagChip'
 import CourseUnitTagSelector from './CourseUnitTagSelector'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -123,7 +122,7 @@ const CourseUnitItem = ({
 const CourseUnitTable = React.memo(
   ({ courseUnits, query, organisation, onToggleDisabledCourses, onToggleStudentListVisible, onSelect }) => {
     const { t } = useTranslation()
-    const studentListVisibleFeatureEnabled = STUDENT_LIST_BY_COURSE_ENABLED.includes(organisation.code)
+    const studentListVisibleFeatureEnabled = organisation.studentListVisibleByCourse
 
     const filteredCourseUnits = courseUnits.filter(
       ({ courseCode, name }) =>

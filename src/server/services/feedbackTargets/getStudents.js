@@ -1,6 +1,6 @@
 const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
-const { STUDENT_LIST_BY_COURSE_ENABLED } = require('../../util/config')
+const { ALWAYS_SHOW_STUDENT_LIST } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const logger = require('../../util/logger')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
@@ -24,12 +24,12 @@ const getStudentListVisibility = async courseUnitId => {
   if (!organisationRows[0].length) return false
 
   const {
-    code,
     student_list_visible: studentListVisible,
+    student_list_visible_by_course: studentListVisibleByCourse,
     student_list_visible_course_codes: studentListVisibleCourseCodes,
   } = organisationRows[0][0]
 
-  if (STUDENT_LIST_BY_COURSE_ENABLED.includes(code)) {
+  if (studentListVisibleByCourse) {
     const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })
@@ -40,26 +40,7 @@ const getStudentListVisibility = async courseUnitId => {
   return studentListVisible ?? false
 }
 
-const getStudents = async ({ feedbackTargetId, user }) => {
-  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
-
-  if (!access?.canSeeStudents()) {
-    ApplicationError.Forbidden()
-  }
-
-  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
-
-  if (!studentListVisible) {
-    return []
-  }
-
-  /**
-   *  Anonymity is breached if teacher can see students while their feedback given status can change
-   */
-  if (feedbackTarget.isOpen()) {
-    return []
-  }
-
+const getStudentsWithFeedbackStatus = async feedbackTargetId => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -77,16 +58,40 @@ const getStudents = async ({ feedbackTargetId, user }) => {
     ],
   })
 
-  const users = studentFeedbackTargets.map(target => ({
+  const students = studentFeedbackTargets.map(target => ({
     ...target.user.dataValues,
     feedbackGiven: Boolean(target.feedback),
   }))
 
-  if (users.filter(u => u.feedbackGiven).length < 5) {
-    return []
-  }
+  return students
+}
 
-  return users
+const getStudents = async ({ feedbackTargetId, user }) => {
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
+
+  if (!access?.canSeeStudents()) ApplicationError.Forbidden()
+
+  const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
+
+  const studentsWithFeedback = await getStudentsWithFeedbackStatus(feedbackTargetId)
+
+  /**
+   * Show feedback given status if:
+   * - Showing feedback status is enabled for organisation
+   * - Course is no longer open so that feedback status cannot change
+   * - At least 5 students have given feedback
+   */
+  const showFeedbackGiven =
+    studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5
+
+  // Previous functionality to not show any student data if feedback given status is not shown
+  if (!ALWAYS_SHOW_STUDENT_LIST && !showFeedbackGiven) return []
+
+  if (showFeedbackGiven) return studentsWithFeedback
+
+  const studentsWithoutFeedback = studentsWithFeedback.map(({ feedbackGiven, ...rest }) => rest)
+
+  return studentsWithoutFeedback
 }
 
 module.exports = {

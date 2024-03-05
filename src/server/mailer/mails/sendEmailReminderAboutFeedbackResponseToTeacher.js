@@ -12,6 +12,7 @@ const {
 const { PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -67,7 +68,9 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
 
   const filteredFeedbackTargets = feedbackTargets.filter(fbt => {
     const disabledCourseCodes = fbt.courseUnit.organisations.flatMap(org => org.disabledCourseCodes)
-    return !disabledCourseCodes.includes(fbt.courseUnit.courseCode)
+    const isInterimFeedback = fbt.userCreated && !fbt.courseRealisation.userCreated
+
+    return !disabledCourseCodes.includes(fbt.courseUnit.courseCode) && !isInterimFeedback
   })
 
   const filteredByFeedbacks = filteredFeedbackTargets.filter(fbt => fbt.feedbackCount)
@@ -77,10 +80,13 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
 
 const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, allTeachers) => {
   const { language } = teacher
-  const courseName = feedbackTarget.courseUnit?.name[language || 'en']
+  const { userCreated } = feedbackTarget
+  const courseName = userCreated
+    ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
+    : getLanguageValue(feedbackTarget.courseUnit?.name)
 
   const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
-      ${feedbackTarget.courseUnit.name[language]}
+      ${courseName}
       </a> <br/>`
 
   const teachers = allTeachers.map(t => `${t.firstName} ${t.lastName}`)
@@ -89,8 +95,12 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
 
   const email = {
     to: teacher.email,
-    subject: t('mails:counterFeedbackReminder:subject', { courseName }),
-    text: t('mails:counterFeedbackReminder:text', { courseNamesAndUrls, teachers, FEEDBACK_SYSTEM }),
+    subject: t(`mails:counterFeedbackReminder:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+    text: t(`mails:counterFeedbackReminder:${userCreated ? 'customText' : 'text'}`, {
+      courseNamesAndUrls,
+      teachers,
+      FEEDBACK_SYSTEM,
+    }),
   }
 
   return email

@@ -16,6 +16,9 @@
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja yksikön palautevastaaville",
     "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille"
   },
+  "validationErrors": {
+    "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla myös opiskelija"
+  },
   "links": {
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
     "wikiRoot": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
@@ -95,6 +98,16 @@
   "publicQuestions": {
     "enrolled": "Opintojakson toteutukselle ilmoittautuneet opiskelijat"
   },
+  "organisationSurveys": {
+    "heading": "Yksikön kyselyt -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
+    "emptySurveys": "Yksiköllä ei ole vielä yhtään kyselyä, voit luoda uuden yksikön kyselyn täällä",
+    "addSurvey": "Luo uusi yksikön kysely",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän yksikön kyselyn?",
+    "removeSuccess": "Yksikön kysely poistettu"
+  },
+  "interimFeedback": {
+    "emptySurveys": "Toteutuksella ei ole yhtään välipalautetta, voit luoda välipalautteen toteutukselle täällä"
+  },
   "courseSummary": {
     "heading": "Palautteiden yhteenveto",
     "programmeLevelQuestions": "Yliopisto- ja yksikkötason kysymykset",
@@ -108,17 +121,25 @@
     "searchPlaceholder": "Rajaa opintojakson koodilla",
     "showHiddenOrganisations": "Valitse piilotetut yksiköt ({{count}})",
     "hidingInfo": "Voit piilottaa itseltäsi yksiköiden yhteenvetoja, jotka eivät ole sinulle kiinnostavia",
-    "coursePage": "Opintojakson tiedot SISUssa"
+    "coursePage": "Opintojakson tiedot SISUssa",
+    "noCourses": "Ei näytettäviä toteutuksia tältä aikaväliltä. Toteutuksesi saadessa palautetta se ilmestyy tänne.",
+    "myOrganisations": "Yksikköni",
+    "myCourses": "Opetukseni"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Tällä toteutuksella ei ole sinulle saatavilla olevaa palautetta"
   },
   "organisationSettings": {
     "surveyInfo": "Yksikkötason kysymykset näytetään jokaisessa yksikön opintojakson toteutuksen kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
-    "studentListVisible": "Näytä palautetta antaneet opiskelijat toteutuksen vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi. Mikäli haluat säätää palautteenantajien näyttämistä opintojaksokohtaisesti, laita tämä vipu pois päältä ja tee opintojaksokohtaiset valinnat alta.",
+    "studentListVisibility": "Palautetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palautetta antaneet opiskelijat näytetään toteutuksen vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisible": "Näytä kaikilla toteutuksilla",
+    "studentListHidden": "Piilota kaikilla toteutuksilla",
+    "studentListByCourse": "Aseta näkyvyys opintojaksokohtaisesti",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla opintojaksoilla",
     "courseSettings": "Opintojaksokohtaiset asetukset",
-    "surveyTab": "Yksikön kysely",
+    "surveyTab": "Yksikön kysymykset",
+    "organisationSurveysTab": "Yksikön kyselyt",
     "courseRealisationsTab": "Opintojaksot",
     "editProgrammeQuestionsDialogContent": "Olet muokkaamassa koko yksikön yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla yksikön opintojaksojen toteutuksilla. Oletko varma, että haluat muokata näitä kysymyksiä?",
     "findByCourseUnit": "Hae opintojaksoa",
@@ -133,7 +154,8 @@
     "noFeedbackResponseYet": "Toteutuksen vastuuopettaja ei ole vielä antanut vastapalautetta",
     "notFound": "Palautetta ei löytynyt Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "activateContinuousFeedback": "Ota jatkuva palaute käyttöön opintojakson toteutuksella",
-    "coursePage": "Opintojakson/toteutuksen tiedot Sisussa"
+    "coursePage": "Opintojakson/toteutuksen tiedot Sisussa",
+    "courseSisuPage": "Toteutuksen tiedot Sisussa"
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjautunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys toteutuksen opettajaan",

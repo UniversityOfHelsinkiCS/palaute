@@ -1,0 +1,298 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "PingResponse": {
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["status"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AccessRights": {
+        "properties": {
+          "admin": {
+            "type": "boolean"
+          },
+          "write": {
+            "type": "boolean"
+          },
+          "read": {
+            "type": "boolean"
+          }
+        },
+        "required": ["admin", "write", "read"],
+        "type": "object"
+      },
+      "AccessRightsKey": {
+        "properties": {},
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/AccessRights"
+        }
+      },
+      "SpecialGroup": {
+        "properties": {
+          "allProgrammes": {
+            "type": "boolean"
+          },
+          "superAdmin": {
+            "type": "boolean"
+          }
+        },
+        "required": ["allProgrammes", "superAdmin"],
+        "type": "object"
+      },
+      "AccessRightsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AccessRightsKey"
+          },
+          {
+            "properties": {
+              "specialGroup": {
+                "$ref": "#/components/schemas/SpecialGroup"
+              }
+            },
+            "type": "object"
+          }
+        ]
+      },
+      "PostAccessRequestBody": {
+        "properties": {
+          "iamGroups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": ["userId"],
+        "type": "object"
+      },
+      "LocalizedString": {
+        "properties": {
+          "en": {
+            "type": "string"
+          },
+          "fi": {
+            "type": "string"
+          }
+        },
+        "required": ["en", "fi"],
+        "type": "object"
+      },
+      "Programme": {
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/LocalizedString"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "key"],
+        "type": "object"
+      },
+      "Organisation": {
+        "properties": {
+          "programmes": {
+            "items": {
+              "$ref": "#/components/schemas/Programme"
+            },
+            "type": "array"
+          },
+          "name": {
+            "$ref": "#/components/schemas/LocalizedString"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": ["programmes", "name", "code"],
+        "type": "object"
+      },
+      "UserAccessResponse": {
+        "properties": {
+          "access": {
+            "$ref": "#/components/schemas/AccessRightsResponse"
+          },
+          "iamGroups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": ["access", "iamGroups", "id"],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "jami",
+    "version": "0.0.0",
+    "contact": {}
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/ping": {
+      "get": {
+        "operationId": "GetMessage",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/": {
+      "post": {
+        "operationId": "GetIAMData",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessRightsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostAccessRequestBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access-to-all": {
+      "get": {
+        "operationId": "GetAccessToAll",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessRightsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/organisation-data": {
+      "get": {
+        "operationId": "GetOrganisationData",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Organisation"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/all-access": {
+      "get": {
+        "operationId": "GetAllAccess",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserAccessResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/{userId}": {
+      "get": {
+        "operationId": "GetUserIam",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostAccessRequestBody"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}

@@ -1,19 +1,32 @@
 const { differenceInHours, format } = require('date-fns')
-const { CourseUnit } = require('../../models')
 const { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
-const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students, courseNames, reminder, closesAt) => {
+const sendReminderToGiveFeedbackToStudents = async (
+  urlToGiveFeedback,
+  students,
+  courseNames,
+  reminder,
+  closesAt,
+  userCreated
+) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
-    const courseName = courseNames[student.language ?? 'en']
+    const courseName = getLanguageValue(courseNames, student.language)
 
+    // Custom texts for user created feedback targets because they are not courses
     const email = {
       to: student.email,
-      subject: t('mails:reminderOnFeedbackToStudents:subject', { courseName }),
-      text: t('mails:reminderOnFeedbackToStudents:text', { url: urlToGiveFeedback, courseName, reminder, closesAt }),
+      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+      text: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
+        url: urlToGiveFeedback,
+        courseName,
+        reminder,
+        closesAt,
+      }),
     }
     return email
   })
@@ -23,12 +36,11 @@ const sendReminderToGiveFeedbackToStudents = async (urlToGiveFeedback, students,
   return emails
 }
 
-const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
+const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseName) => {
   if (differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) < FEEDBACK_REMINDER_COOLDOWN) {
     throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
   }
 
-  const courseUnit = await CourseUnit.findByPk(feedbackTarget.courseUnitId)
   const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback`
   const formattedStudents = students
@@ -44,9 +56,10 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder) => {
     const emails = await sendReminderToGiveFeedbackToStudents(
       url,
       formattedStudents,
-      courseUnit.name,
+      courseName,
       reminder,
-      formattedClosesAt
+      formattedClosesAt,
+      feedbackTarget.userCreated
     )
 
     feedbackTarget.feedbackReminderLastSentAt = new Date()
