@@ -104,6 +104,7 @@ const FeedbackTargetResultsView = () => {
             questions={questions}
             feedbacks={feedbacks}
             isResponsibleTeacher={false}
+            isOpen={isOpen}
             organisationAccess={false}
             feedbackCount={feedbackCount}
             feedbackTargetId={id}

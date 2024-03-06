@@ -42,6 +42,15 @@ class ApplicationError extends Error {
    * @param {string} msg
    * @throws {ApplicationError}
    */
+  static Conflict(msg = 'Conflict') {
+    throw new ApplicationError(msg, 409)
+  }
+
+  /**
+   *
+   * @param {string} msg
+   * @throws {ApplicationError}
+   */
   static BadRequest(msg = 'Bad request') {
     throw new ApplicationError(msg, 400)
   }

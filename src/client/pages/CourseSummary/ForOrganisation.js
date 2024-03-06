@@ -1,9 +1,12 @@
 import React from 'react'
-import { LinearProgress } from '@mui/material'
-import { OrganisationSummaryRow, SorterRow } from './SummaryRow'
+import { Box, LinearProgress } from '@mui/material'
 import { useSummaries } from './api'
 import { SummaryContextProvider, useSummaryContext } from './context'
-import SummaryScrollContainer from './SummaryScrollContainer'
+import SummaryScrollContainer from './components/SummaryScrollContainer'
+import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
+import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import SorterRowWithFilters from './components/SorterRow'
+import OrganisationSummaryRow from './components/OrganisationRow'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, tagId } = useSummaryContext()
@@ -18,18 +21,21 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
 
   return (
     <SummaryScrollContainer>
-      <SorterRow />
-      {isLoading ? (
-        <LinearProgress />
-      ) : (
-        <OrganisationSummaryRow
-          alwaysOpen
-          organisationId={initialOrganisation.id}
-          organisation={organisation}
-          startDate={dateRange.start}
-          endDate={dateRange.end}
-        />
-      )}
+      <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+        {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+        <SorterRowWithFilters />
+        {isLoading ? (
+          <LinearProgress />
+        ) : (
+          <OrganisationSummaryRow
+            alwaysOpen
+            organisationId={initialOrganisation.id}
+            organisation={organisation}
+            startDate={dateRange.start}
+            endDate={dateRange.end}
+          />
+        )}
+      </Box>
     </SummaryScrollContainer>
   )
 }

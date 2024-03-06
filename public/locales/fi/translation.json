@@ -76,7 +76,12 @@
     "ascending": "nousevasti",
     "descending": "laskevasti",
     "additional": "Täydentävät",
-    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä"
+    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä",
+    "id": "Tunniste",
+    "code": "Koodi",
+    "organisationCode": "Organisaatiokoodi",
+    "startDate": "Aloituspvm",
+    "endDate": "Lopetuspvm"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -146,6 +151,7 @@
   },
   "teacherView": {
     "mainHeading": "Opetukseni",
+    "mainHeadingV2": "Kyselyni",
     "copyLink": "Kopioi vastauslinkki",
     "copyResponseLink": "Kopioi linkki vastapalautteeseen",
     "copied": "Linkki kopioitu leikepöydälle",
@@ -155,6 +161,7 @@
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
     "noCourses": "Ei kursseja",
+    "noCoursesV2": "Ei näytettäviä kursseja tällä hetkellä",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
@@ -165,7 +172,16 @@
     "upcomingCourses": "Tulevat kurssit",
     "endedCourses": "Päättyneet kurssit",
     "feedbackNotStarted": "Palautejakso ei ole vielä alkanut",
-    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Aktiiviset kyselyt",
+    "upcomingSurveys": "Tulevat kyselyt",
+    "endedSurveys": "Päättyneet kyselyt",
+    "organisationSurveys": "Organisaatiokyselyt",
+    "courseSurveys": "Kurssikyselyt",
+    "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
+    "newView": "Kokeile uutta näkymää",
+    "oldView": "Takaisin vanhaan näkymää",
+    "expandMoreLabel": "Näytä piilotetut kyselyt"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
@@ -237,7 +253,8 @@
     "here": "täältä",
     "multipleChoiceQuestions": "Monivalintakysymykset",
     "openQuestions": "Avoimet kysymykset",
-    "multipleChoiceScale": "1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa"
+    "multipleChoiceScale": "1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa",
+    "publicQuestionConfirmation": "Olen tarkistanut, ettei tämän kysymyksen avoimissa vastauksissa ole henkilötietoja tai muita arkaluontoisia tietoja, joita ei voida julkaista."
   },
   "feedbackSummary": {
     "question": "Kysymys",
@@ -278,12 +295,14 @@
     "setHidden": "Piilota näkyvistä",
     "setVisible": "Poista piilotus",
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille",
+    "hideSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" on nyt piilotettu. ({{count}} kpl)",
+    "showSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" ovat nyt näkyviä. ({{count}} kpl)",
     "hidingFeatureInfoTitle": "Tietoa vastausten näkyvyydestä",
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
     "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät kurssin opiskelijoille.",
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
-    "deleteSuccess": "Vastaus poistettu"
+    "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
@@ -361,7 +380,6 @@
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
   },
   "organisationSurveys": {
-    "heading": "Koulutusohjelman kyselyt -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
     "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",
     "givenFeedback": "Palautteita annettu",
     "viewFeedback": "Näytä kysely",
@@ -397,7 +415,6 @@
   },
   "interimFeedback": {
     "interimFeedback": "Välipalaute",
-    "heading": "Välipalaute -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
     "emptySurveys": "Kurssilla ei ole yhtään välipalautetta, voit luoda välipalautteen kurssille täällä",
     "givenFeedback": "Palautteita annettu",
     "viewFeedback": "Näytä välipalaute",
@@ -427,7 +444,7 @@
     "clickForDetails": "Katso lisätiedot",
     "feedbackResponseGiven": "Vastapalaute on annettu",
     "feedbackResponseNotGiven": "Vastapalautetta ei ole annettu",
-    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu",
+    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu (%)",
     "feedbackStillOpen": "Kurssin palautejakso on vielä käynnissä",
     "courseOngoing": "Kurssi on vielä käynnissä",
     "programmeSummary": "Koulutusohjelman yhteenveto",
@@ -457,9 +474,6 @@
     "semester": "Lukukausi",
     "spring": "Kevät",
     "fall": "Syksy",
-    "name": "Nimi",
-    "code": "Koodi",
-    "organisationCode": "Organisaatiokoodi",
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
@@ -467,7 +481,21 @@
     "coursePage": "Kurssisivu",
     "myOrganisations": "Organisaationi",
     "myCourses": "Kurssini",
-    "newView": "Kokeile uutta näkymää"
+    "newView": "Kokeile uutta näkymää",
+    "treeView": "Näytä hierarkkisesti",
+    "flatView": "Näytä listana",
+    "includeOpenUni": "Sisällytä Avoin yo -kurssit",
+    "excludeOpenUni": "Näytä ilman Avoin yo -kursseja",
+    "onlyOpenUni": "Näytä vain Avoin yo -kursseilla"
+  },
+  "generateReport": {
+    "selectIncluded": "Valitse sisältö",
+    "organisations": "Organisaatiot",
+    "courseUnits": "Opintojaksot",
+    "courseRealisations": "Kurssitoteutukset",
+    "selectTimeRange": "Valitse aikaväli",
+    "selectedTime": "Nykyinen",
+    "allTime": "Koko historia"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
@@ -568,7 +596,9 @@
     "qrCodeHelpText": "Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen",
     "deleteTeacherConfirmation": "Poista {{name}} opettajien joukosta?",
     "noFeedbackResponseYet": "Kurssin opettaja ei ole vielä antanut vastapalautetta",
-    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
+    "noAccessEndedCourse": "Palauteaika on päättynyt, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
     "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "interimFeedbackTab": "Välipalautteet"
   },

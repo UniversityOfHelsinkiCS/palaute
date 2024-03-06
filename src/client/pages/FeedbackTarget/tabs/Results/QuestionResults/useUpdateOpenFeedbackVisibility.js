@@ -14,39 +14,33 @@ const useUpdateOpenFeedbackVisibility = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const mutationFn = async ({ feedbackId, questionId, hidden }) =>
-    apiClient.put(`/feedbacks/${feedbackId}/question/${questionId}`, { hidden })
+  const mutationFn = async ({ feedbackContent, feedbackTargetId, questionId, hidden }) =>
+    apiClient.put(`/feedback-targets/${feedbackTargetId}/hide-feedback`, { hidden, feedbackContent, questionId })
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: (response, { feedbackId, questionId }) => {
-      const { hidden } = response.data
+    onSuccess: (response, { feedbackContent }) => {
+      const { hidden, count } = response.data
 
-      queryClient.setQueriesData(['feedbackTargetFeedbacks', String(feedbackTarget.id)], data => {
-        const feedbacks = data?.feedbacks
-        if (!feedbacks) return data
+      enqueueSnackbar(
+        hidden
+          ? t('feedbackTargetResults:hideSuccess', { count, content: feedbackContent.slice(0, 20) })
+          : t('feedbackTargetResults:showSuccess', { count, content: feedbackContent.slice(0, 20) }),
+        { variant: 'info' }
+      )
 
-        const updatedFeedbacks = feedbacks.map(f =>
-          f.id === feedbackId
-            ? {
-                ...f,
-                data: f.data.map(q => (q.questionId === questionId ? { ...q, hidden } : q)),
-              }
-            : f
-        )
-
-        return { ...data, feedbacks: updatedFeedbacks }
-      })
+      queryClient.invalidateQueries(['feedbackTargetFeedbacks', String(feedbackTarget.id)])
     },
   })
 
   const canHide = isTeacher || isOrganisationAdmin
 
-  const toggleVisibility = async feedback => {
+  const toggleVisibility = async (feedback, feedbackTargetId) => {
     try {
       await mutation.mutateAsync({
-        feedbackId: feedback.feedbackId,
+        feedbackContent: feedback.data,
         questionId: feedback.questionId,
         hidden: !feedback.hidden,
+        feedbackTargetId,
       })
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })

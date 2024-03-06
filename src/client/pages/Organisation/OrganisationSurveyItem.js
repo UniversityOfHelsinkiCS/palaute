@@ -10,7 +10,7 @@ import { useDeleteOrganisationSurveyMutation } from './useOrganisationSurveyMuta
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
-import PercentageCell from '../CourseSummary/PercentageCell'
+import PercentageCell from '../CourseSummary/components/PercentageCell'
 import FeedbackResponseChip from '../MyTeaching/FeedbackResponseChip'
 
 import { getStartAndEndString } from '../../util/getDateRangeString'
@@ -51,7 +51,6 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const surveyName = getLanguageValue(organisationSurvey.name, language)
 
   const handleDelete = async () => {
-    // eslint-disable-next-line no-alert
     if ((!isAdmin && !allowDelete) || !window.confirm(t('organisationSurveys:confirmRemoveSurvey'))) return
 
     await deleteOrganisationSurvey(organisationSurvey.id)

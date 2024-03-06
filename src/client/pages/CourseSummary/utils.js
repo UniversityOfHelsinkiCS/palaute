@@ -1,13 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { isBefore, parseISO } from 'date-fns'
 import { useSummaryContext } from './context'
-
-export const getFeedbackResponseGiven = feedbackTarget => {
-  if (isBefore(Date.now(), parseISO(feedbackTarget.closesAt))) return 'OPEN'
-
-  return feedbackTarget.feedbackResponse ? 'GIVEN' : 'NONE'
-}
 
 export const useOrderedAndFilteredOrganisations = organisations => {
   const { showSummariesWithNoFeedback, sortBy, sortFunction } = useSummaryContext()

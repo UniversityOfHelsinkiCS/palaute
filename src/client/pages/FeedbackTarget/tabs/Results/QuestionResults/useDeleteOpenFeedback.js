@@ -14,27 +14,29 @@ const useDeleteOpenFeedback = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const mutationFn = async ({ feedbackId, questionId }) =>
-    apiClient.delete(`/feedbacks/${feedbackId}/question/${questionId}`)
+  const mutationFn = async ({ questionId, feedbackContent }) =>
+    apiClient.put(`/feedback-targets/${feedbackTarget.id}/delete-feedback`, { feedbackContent, questionId })
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: () => {
+    onSuccess: (response, { feedbackContent }) => {
       queryClient.refetchQueries(['feedbackTargetFeedbacks', String(feedbackTarget.id)])
+      enqueueSnackbar(
+        t('feedbackTargetResults:deleteSuccess', { content: feedbackContent, count: response.data.count }),
+        { variant: 'success' }
+      )
     },
   })
 
   const canDelete = isAdmin
 
   const deleteAnswer = async feedback => {
-    // eslint-disable-next-line no-alert
     if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
 
     try {
       await mutation.mutateAsync({
-        feedbackId: feedback.feedbackId,
+        feedbackContent: feedback.data,
         questionId: feedback.questionId,
       })
-      enqueueSnackbar(t('feedbackTargetResults:deleteSuccess'), { variant: 'success' })
     } catch (e) {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }

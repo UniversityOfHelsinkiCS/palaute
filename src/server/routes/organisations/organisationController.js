@@ -84,17 +84,11 @@ const getOrganisationByCode = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const { organisation, hasReadAccess, hasWriteAccess, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    read: true,
+  })
 
-  const theOrganisationAccess = organisationAccess.find(({ organisation }) => organisation.code === code)
-
-  if (!theOrganisationAccess) {
-    throw new ApplicationError(`Organisation by code ${code} is not found or it is not accessible`, 404)
-  }
-
-  const { access } = theOrganisationAccess
-
-  const organisation = await Organisation.findOne({
+  const theOrganisation = await Organisation.findOne({
     where: {
       code,
     },
@@ -107,12 +101,16 @@ const getOrganisationByCode = async (req, res) => {
     ],
   })
 
-  const tags = _.orderBy(await organisation.getTags(), tag => tag.name?.fi)
+  const tags = _.orderBy(await theOrganisation.getTags(), tag => tag.name?.fi)
 
   const publicOrganisation = {
     ...organisation.toJSON(),
     tags,
-    access,
+    access: {
+      read: hasReadAccess,
+      write: hasWriteAccess,
+      admin: hasAdminAccess,
+    },
   }
 
   return res.send(publicOrganisation)

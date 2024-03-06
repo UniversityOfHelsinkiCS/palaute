@@ -35,10 +35,7 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
   })
 
   const handleSubmit = async (values, actions) => {
-    const hasConfirmed =
-      warningSeen ||
-      // eslint-disable-next-line no-alert
-      window.confirm(t('organisationSettings:editProgrammeQuestionsDialogContent'))
+    const hasConfirmed = warningSeen || window.confirm(t('organisationSettings:editProgrammeQuestionsDialogContent'))
 
     if (!hasConfirmed) return
 
@@ -49,6 +46,7 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
       actions.resetForm({ values })
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e)
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }

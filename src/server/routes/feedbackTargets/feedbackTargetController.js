@@ -18,7 +18,10 @@ const {
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit,
   getFeedbackTargetsForOrganisation,
+  hideFeedback,
 } = require('../../services/feedbackTargets')
+const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
+const { adminDeleteFeedback } = require('../../services/feedbackTargets/hideFeedback')
 
 const adRouter = Router()
 const noadRouter = Router()
@@ -91,6 +94,7 @@ const getOne = async (req, res) => {
   const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.user.isAdmin)
   return res.send(result)
 }
+
 adRouter.get('/:id', getOne)
 noadRouter.get('/:id', getOne)
 
@@ -118,8 +122,18 @@ const getFeedbacks = async (req, res) => {
 
   return res.send(feedbackData)
 }
+
 adRouter.get('/:id/feedbacks', getFeedbacks)
 noadRouter.get('/:id/feedbacks', getFeedbacks)
+
+adRouter.get('/:id/error-view-details', async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+
+  const feedbackTarget = await getFeedbackErrorViewDetails(feedbackTargetId)
+
+  return res.send(feedbackTarget)
+})
 
 adRouter.get('/:id/students-with-feedback', async (req, res) => {
   const { user } = req
@@ -216,6 +230,22 @@ adRouter.get('/:id/logs', async (req, res) => {
   const logs = await getFeedbackTargetLogs({ feedbackTargetId, user })
 
   return res.send(logs)
+})
+
+adRouter.put('/:id/hide-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent, hidden } = req.body
+  const count = await hideFeedback({ user, feedbackTargetId, questionId, feedbackContent, hidden })
+  res.send({ hidden, count })
+})
+
+adRouter.put('/:id/delete-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent } = req.body
+  const count = await adminDeleteFeedback({ user, feedbackTargetId, questionId, feedbackContent })
+  res.send({ count })
 })
 
 adRouter.use('/', interimFeedbackController)

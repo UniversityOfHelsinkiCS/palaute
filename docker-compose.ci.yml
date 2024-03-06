@@ -3,24 +3,40 @@ version: '3.5'
 services:
   app:
     build:
-      context: .
+      context: ./
+      dockerfile: Dockerfile
       args:
         - E2E=true
         - NODE_CONFIG_ENV=hy
     command: ['npm','run', 'start:test']
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
+      - REDIS_HOST=redis
       - JAMI_HOST=jami
       - JAMI_PORT=3003
+      - JWT_KEY=minttujam
+      - REACT_APP_E2E=true
       - NODE_CONFIG_ENV=hy
+      - UPDATER_URL=http://updater:3000
     ports:
       - 8000:8000
     container_name: palaute_app_test
+    depends_on:
+      - db
+      - jami
+  
+  redis:
+    image: redis:6.2.6
+    command: redis-server
+    container_name: palaute_test_redis
 
   db:
-    image: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi/palaute_test_db
+    image: postgres:15.4
     environment:
+      - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
     container_name: palaute_test_db
   
   jami:
@@ -32,6 +48,8 @@ services:
     ports:
       - 3003:3003
     container_name: jami
+    depends_on:
+      - jami-db
 
   jami-db:
     image: postgres:13.2

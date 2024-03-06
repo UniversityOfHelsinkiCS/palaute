@@ -4,7 +4,7 @@ import useAuthorizedUser from './useAuthorizedUser'
  *
  * @returns { [organisationId]: { read: boolean, write: boolean, admin: boolean } } user's access object to each accessible organisation
  */
-export const useUserOrganisationAccess = () => {
+const useUserOrganisationAccess = () => {
   const { authorizedUser, isLoading } = useAuthorizedUser()
 
   if (isLoading || !authorizedUser) return {}

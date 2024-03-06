@@ -65,9 +65,10 @@ const styles = {
   norppaFeedback: {
     background: theme => theme.palette.warning.main,
     color: 'black',
-    padding: '6px 12px',
-    borderRadius: 4,
+    padding: '4px 10px',
+    borderRadius: 2,
     fontWeight: 'bold',
+    // fontSize: '8rem',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
@@ -123,6 +124,7 @@ const NavBar = ({ guest = false }) => {
 
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
+  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -164,7 +166,7 @@ const NavBar = ({ guest = false }) => {
   )
 
   const links = [
-    courseSummaryIsAccessible && {
+    myCoursesIsAccessible && {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
@@ -176,7 +178,7 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
-    courseSummaryIsAccessible && {
+    (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
     },

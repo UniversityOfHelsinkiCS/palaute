@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'lodash'
 import { SettingsBackupRestore } from '@mui/icons-material'
 import { Box, Button, IconButton } from '@mui/material'
 import { useSnackbar } from 'notistack'

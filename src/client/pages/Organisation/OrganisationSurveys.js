@@ -109,9 +109,6 @@ const OrganisationSurveys = () => {
 
   return (
     <Box mb={6} px={1}>
-      <Alert sx={{ mb: 2 }} severity="warning">
-        {t('organisationSurveys:heading')}
-      </Alert>
       <Box sx={styles.buttonContainer}>
         <Button
           data-cy="organisation-surveys-add-new"

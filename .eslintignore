@@ -3,3 +3,4 @@ dist
 stats.json
 build
 migrations
+.eslintrc.js

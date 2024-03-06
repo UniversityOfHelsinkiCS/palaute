@@ -20,6 +20,7 @@ const parseUpdates = body => {
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
     settingsReadByTeacher,
+    tokenEnrolmentEnabled,
   } = body
   const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
 
@@ -34,6 +35,7 @@ const parseUpdates = body => {
       continuousFeedbackEnabled,
       sendContinuousFeedbackDigestEmail,
       settingsReadByTeacher,
+      tokenEnrolmentEnabled,
     },
     filterUpdates
   )
@@ -127,7 +129,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canUpdate()) {
-    ApplicationError.Forbidden('No rights to update feedback target')
+    return ApplicationError.Forbidden('No rights to update feedback target')
   }
 
   const updates = parseUpdates(body)
@@ -135,7 +137,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
+      return ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
 
@@ -174,6 +176,11 @@ const update = async ({ feedbackTargetId, user, body }) => {
     updates.publicQuestionIds = updates.publicQuestionIds.filter(id => !removedIds.includes(id))
 
     updates.questions = updatedQuestions
+  }
+
+  // @feat Gradu survey
+  if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
+    return ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)

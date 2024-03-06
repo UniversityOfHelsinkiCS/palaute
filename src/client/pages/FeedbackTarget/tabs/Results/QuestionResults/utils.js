@@ -1,12 +1,9 @@
-import groupBy from 'lodash/groupBy'
 import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
 import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { getColor } from '../../../../../util/resultColors'
-
-const INCLUDED_TYPES = ['MULTIPLE_CHOICE', 'SINGLE_CHOICE', 'LIKERT', 'OPEN']
 
 const COMMA_REPLACE = /,/g
 
@@ -150,75 +147,4 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
       ],
     },
   }
-}
-
-export const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
-  if (!questions) {
-    return []
-  }
-
-  const feedbacksArray = feedbacks ?? []
-
-  const feedbackData = feedbacksArray
-    .reduce(
-      (acc, feedback) => [
-        ...acc,
-        ...(Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []),
-      ],
-      []
-    ) // filter short answers which are not a number
-    .filter(answer => answer.data?.length > 1 === Number.isNaN(Number(answer.data)))
-
-  const feedbackDataByQuestionId = groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
-
-  return questionOrder
-    ? questionOrder
-        .map(id => questions.find(q => q.id === id))
-        .filter(q => INCLUDED_TYPES.includes(q?.type))
-        .map(q => ({
-          ...q,
-          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
-        }))
-    : questions
-        .filter(q => INCLUDED_TYPES.includes(q?.type))
-        .map(q => ({
-          ...q,
-          feedbacks: feedbackDataByQuestionId[q.id] ?? [],
-        }))
-}
-
-const feedbacksNoZero = feedbacks => feedbacks.filter(feedback => parseInt(feedback.data, 10) > 0)
-
-export const countAverage = feedbacks => {
-  const filteredFeedbacks = feedbacksNoZero(feedbacks)
-
-  if (filteredFeedbacks.length === 0) {
-    return 0
-  }
-
-  const sum = filteredFeedbacks.reduce((a, b) => a + parseInt(b.data, 10), 0)
-  return (sum / filteredFeedbacks.length).toFixed(2)
-}
-
-export const countStandardDeviation = feedbacks => {
-  const filteredFeedbacks = feedbacksNoZero(feedbacks)
-  const n = filteredFeedbacks.length
-  const avg = countAverage(filteredFeedbacks)
-
-  if (filteredFeedbacks.length === 0) return 0
-
-  return Math.sqrt(filteredFeedbacks.map(f => (parseInt(f.data, 10) - avg) ** 2).reduce((a, b) => a + b) / n).toFixed(2)
-}
-
-export const countMedian = feedbacks => {
-  const filteredFeedbacks = feedbacksNoZero(feedbacks)
-  if (filteredFeedbacks.length === 0) return 0
-
-  filteredFeedbacks.sort((a, b) => a.data - b.data)
-
-  const half = Math.floor(filteredFeedbacks.length / 2)
-
-  if (filteredFeedbacks.length % 2) return filteredFeedbacks[half].data
-
-  return (parseInt(filteredFeedbacks[half - 1].data, 10) + parseInt(filteredFeedbacks[half].data, 10)) / 2.0
 }

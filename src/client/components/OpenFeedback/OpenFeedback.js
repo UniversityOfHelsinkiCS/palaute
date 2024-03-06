@@ -14,9 +14,11 @@ const styles = {
     p: '0.7rem',
     width: '100%',
     alignItems: 'start',
+    pageBreakAfter: 'auto',
   },
   hiddenListItem: theme => ({
     color: theme.palette.error.light,
+    '@media print': { display: 'none' },
   }),
   noPrint: {
     '@media print': { display: 'none' },

@@ -92,6 +92,8 @@ const GroupSelector = ({ groupId, setGroupId, groups, groupsAvailable, studentCo
     [localisatedGroups]
   )
 
+  if (groupOptions.length === 1) return null
+
   return (
     <Box>
       <Typography variant="body1">{t('groups:chooseGroup')}</Typography>

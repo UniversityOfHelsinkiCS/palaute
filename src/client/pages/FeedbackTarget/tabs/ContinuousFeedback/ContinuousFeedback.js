@@ -56,7 +56,7 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
             {canRespond && !response && (
-              <Button onClick={() => setShowResponse(!showResponse)}>
+              <Button onClick={() => setShowResponse(!showResponse)} data-cy="respondContinuousFeedback">
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
                   : t('feedbackTargetView:respondContinuousFeedback')}

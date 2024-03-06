@@ -1,4 +1,4 @@
-import { isAfter, differenceInDays, startOfDay, format } from 'date-fns'
+import { isAfter, differenceInDays, startOfDay } from 'date-fns'
 import _ from 'lodash'
 
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
@@ -42,7 +42,7 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   return errors
 }
 
-export const opensAtIsImmediately = values => {
+const opensAtIsImmediately = values => {
   const { opensAt } = values
 
   return startOfDay(opensAt).getTime() === startOfDay(new Date()).getTime()
@@ -64,5 +64,3 @@ export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
 
   return new Date() > closesAt || feedbackTargetIsOpen(feedbackTarget)
 }
-
-export const formatClosesAt = closesAt => format(new Date(closesAt), 'dd.MM.yyyy')

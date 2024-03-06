@@ -17,7 +17,6 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
       name: displayName,
     })
 
-    // eslint-disable-next-line no-alert
     if (window.confirm(message)) {
       try {
         await deleteResponsibleTeacher(feedbackTarget, teacher)
