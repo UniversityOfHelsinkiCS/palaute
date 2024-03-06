@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "docker-compose up",
-    "start:client": "NODE_ENV=development react-app-rewired start",
+    "start:tau": "docker-compose -f docker-compose.lw-dev.yml up",
+    "start:client:tau": "NODE_CONFIG_ENV=tau NODE_ENV=development react-app-rewired start",
     "start:server": "npm run clean-build:server && npm run build:server && NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\"",
     "bash": "docker-compose run app bash",
     "reset": "docker-compose down -v && docker-compose up --build",
