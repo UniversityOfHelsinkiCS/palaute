@@ -10,48 +10,27 @@ const {
   CourseUnit,
   Organisation,
   Summary,
-  Question,
+  Tag,
+  CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
 } = require('../../models')
-const { WORKLOAD_QUESTION_ID, WORKLOAD_QUESTION_ID_ORDER } = require('../../util/config')
+const { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
-const { sumSummaryDatas, mapOptionIdToValue } = require('./summaryUtils')
+const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
+const logger = require('../../util/logger')
+const { prefixTagId } = require('../../util/common')
 
-const startYear = 2021 // Nothing ending before this is considered
-const endYear = new Date().getFullYear() // Nothing ending after this is considered
-const splitMonth = '08'
-
-// Todo not reliable
-let rootOrganisations = []
-;(async () => {
+const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
     attributes: ['id'],
     where: {
       parentId: null,
     },
   })
-  rootOrganisations = rootOrgs.map(org => org.id)
-})()
+  return rootOrgs.map(org => org.id)
+}
 
-const datePeriods = (() => {
-  const dates = []
-  for (let year = startYear; year <= endYear; year++) {
-    dates.push({
-      // kevät
-      start: new Date(`${year}-01-01`),
-      end: new Date(`${year}-${splitMonth}-01`),
-    })
-    dates.push({
-      // syys
-      start: new Date(`${year}-${splitMonth}-01`),
-      end: new Date(`${year}-12-31`),
-    })
-  }
-  return dates
-})()
-
-// Todo not reliable
-let relevantQuestionIds = null
-;(async () => {
+const getRelevantQuestionIds = async () => {
   const [questions] = await sequelize.query(
     `
     SELECT q.id
@@ -64,43 +43,126 @@ let relevantQuestionIds = null
   )
 
   const questionIds = questions.map(q => q.id)
-  questionIds.push(WORKLOAD_QUESTION_ID)
 
-  relevantQuestionIds = new Set(questionIds)
-})()
+  return new Set(questionIds)
+}
 
-const buildSummariesForPeriod = async (startDate, endDate) => {
+/**
+ * Finds out the extraOrgIds that are responsible for this CUR
+ */
+const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisationIds, extraOrgIds) =>
+  extraOrgIds.filter(
+    orgId => courseUnitOrganisationIds.includes(orgId) || courseRealisationOrganisationIds.includes(orgId)
+  )
+
+/**
+ * Yields the 1 or 2 variants of this entity, based on extraOrgId.
+ * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni curs and the other non-open uni curs.
+ * If curs of entity are one or another, only one entity would be yielded.
+ */
+const getExtraOrgVariants = (entity, extraOrgId) =>
+  _.partition(entity.courseRealisations, cur => cur.extraOrgIds.includes(extraOrgId))
+    .filter(curs => curs.length > 0)
+    .map(curs => ({
+      ..._.clone(entity),
+      courseRealisations: curs,
+    }))
+
+const buildSummariesForPeriod = async ({
+  startDate,
+  endDate,
+  rootOrganisations,
+  relevantQuestionIds,
+  transaction,
+  separateOrgId,
+}) => {
   // ---------------- Phase 1: ------------------
-  // Build course realisation, course unit and organisation summaries from feedbacks for courses during this time period
+  // Build summary entities from feedbacks for courses during this time period
+  // We do this for the following entities, from "bottom up":
+  // 1. course realisations (built from feedback data)
+  // 2. course units (built from CURs)
+  // 3. course unit groups (--||--)
+  // 4. tags (--||--)
+  // 5. organisations
+  //
+  // This should be quite extensible should we want to add more different entities in the future.
+  // Since the initial version, I've already added cu groups and tags.
 
+  // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
+    },
     include: [
       {
         model: CourseRealisation,
         attributes: ['id', 'startDate', 'endDate'],
         as: 'courseRealisation',
         required: true,
+        // separate: true,
         where: {
-          startDate: {
-            [Op.between]: [startDate, endDate], // We might want to discuss this
+          [Op.or]: [
+            // Any overlap with the period
+            {
+              // Case: CUR starts during the period
+              startDate: {
+                [Op.between]: [startDate, endDate],
+              },
+            },
+            {
+              // Case: CUR ends during the period
+              endDate: {
+                [Op.between]: [startDate, endDate],
+              },
+            },
+            {
+              // Case: CUR starts before and ends after the period
+              [Op.and]: [
+                {
+                  startDate: {
+                    [Op.lte]: startDate,
+                  },
+                },
+                {
+                  endDate: {
+                    [Op.gte]: endDate,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        include: [
+          {
+            model: CourseRealisationsOrganisation,
+            as: 'courseRealisationsOrganisations',
+            // attributes: ['organisationId'], // Weird Sequelize thing #1, see below for more...
           },
-        },
-        include: {
-          model: Organisation,
-          as: 'organisations',
-          attributes: ['id', 'parentId'],
-        },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id'],
+          },
+        ],
       },
       {
         model: CourseUnit,
-        attributes: ['id'],
+        attributes: ['id', 'groupId'],
         as: 'courseUnit',
         required: true,
-        include: {
-          model: Organisation,
-          as: 'organisations',
-          attributes: ['id', 'parentId'],
-        },
+        // separate: true,
+        include: [
+          {
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            attributes: ['organisationId'],
+          },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id'],
+          },
+        ],
       },
       {
         model: UserFeedbackTarget,
@@ -110,6 +172,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
           accessStatus: 'STUDENT',
         },
         required: true,
+        separate: true,
         include: {
           model: Feedback,
           attributes: ['data', 'createdAt'],
@@ -117,7 +180,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
         },
       },
     ],
-    // limit: 100,
+    transaction,
   })
 
   // Start summing the stuff for course realisations
@@ -170,17 +233,11 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
-    // We mark the end date of this data to be at the time the last feedback was given.
-    // This is more accurate compared to CUR end date, which can sometimes be set arbitrarily far into the future by the teacher
-    // If no feedback was given, use the start date.
-    const endDate = fbt.feedbackCount
-      ? _.max(fbt.userFeedbackTargets.filter(ufbt => ufbt.feedback).map(ufbt => ufbt.feedback.createdAt))
-      : fbt.courseRealisation.startDate
+    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.dataValues.organisationI) // (implementation detail): Weird Sequelize thing #1, organisationId doesn't load in attributes: ['organisationId'] but in dataValues is truncated to 'organisationI'
+    const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
 
     courseRealisationSummaries.push({
       entityId: fbt.courseRealisation.id,
-      startDate: fbt.courseRealisation.startDate,
-      endDate,
       data: {
         result,
         studentCount: fbt.userFeedbackTargets.length,
@@ -189,18 +246,22 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
         feedbackResponsePercentage: Number(fbt.feedbackResponseEmailSent),
       },
       courseUnitId: fbt.courseUnit.id,
-      curOrganisations: fbt.courseRealisation.organisations.map(org => _.pick(org, ['id', 'parentId'])),
-      cuOrganisations: fbt.courseUnit.organisations.map(org => _.pick(org, ['id', 'parentId'])),
+      courseUnitGroupId: fbt.courseUnit.groupId,
+      curOrgIds,
+      cuOrgIds,
+      curTags: fbt.courseRealisation.tags,
+      cuTags: fbt.courseUnit.tags,
+      extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
 
   // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId)).map(
-    ([cuId, courseRealisations]) => ({
+  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId))
+    .map(([cuId, courseRealisations]) => ({
       entityId: cuId,
-      courseRealisations: _.uniqBy(courseRealisations, 'id'),
-    })
-  )
+      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+    }))
+    .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 
   // Sum them up from CURs. Then we're done with CUs and could write CU summaries to db.
   for (const cu of courseUnitSummaries) {
@@ -208,27 +269,65 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
     delete cu.courseRealisations // Now not needed anymore
 
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    cu.startDate = datefns.min(courseRealisations.map(cur => cur.startDate))
-    cu.endDate = datefns.max(courseRealisations.map(cur => cur.endDate))
+    cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
+  }
+
+  // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
+  const courseUnitGroupSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId))
+    .map(([cuGroupId, courseRealisations]) => ({
+      entityId: cuGroupId,
+      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+    }))
+    .flatMap(cuGroup => getExtraOrgVariants(cuGroup, separateOrgId))
+
+  // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
+  for (const cuGroup of courseUnitGroupSummaries) {
+    const { courseRealisations } = cuGroup
+    delete cuGroup.courseRealisations // Now not needed anymore
+
+    cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+    cuGroup.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
+  }
+
+  // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
+  const tagSummaries = _.uniqBy(
+    courseRealisationSummaries.flatMap(cur => [...cur.curTags, ...cur.cuTags]),
+    'id'
+  )
+    .map(tag => ({
+      entityId: prefixTagId(tag.id),
+      courseRealisations: _.uniqBy(
+        courseRealisationSummaries.filter(
+          cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+        ),
+        'entityId'
+      ),
+    }))
+    .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
+
+  // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
+  for (const tag of tagSummaries) {
+    const { courseRealisations } = tag
+    delete tag.courseRealisations // Now not needed anymore
+
+    tag.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+    tag.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
-  const orgSummaries = _.uniqBy(
-    courseRealisationSummaries.flatMap(cur => [...cur.cuOrganisations, ...cur.curOrganisations]),
-    'id'
-  ).map(org => ({
+  const orgIds = _.uniq(courseRealisationSummaries.flatMap(cur => [...cur.cuOrgIds, ...cur.curOrgIds]))
+  const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
+  const orgSummaries = orgs.map(org => ({
     entityId: org.id,
     parentId: org.parentId,
     parent: null,
     courseRealisations: _.uniqBy(
-      courseRealisationSummaries.filter(
-        cur => cur.curOrganisations.some(o => o.id === org.id) || cur.cuOrganisations.some(o => o.id === org.id)
-      ),
+      courseRealisationSummaries.filter(cur => cur.curOrgIds.includes(org.id) || cur.cuOrgIds.includes(org.id)),
       'entityId'
     ),
   }))
 
-  // ---------------- Phase 2: ------------------
+  // ---------------- Phase 2 (organisations): ------------------
   // Now we're done with the base layer, CURs, CUs and their direct responsible organisations,
   // and can start the generalising step where we
   // 1. iteratively find parent organisations of all found organisations.
@@ -259,6 +358,7 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
           [Op.in]: orgsMissingParentOrgs.map(o => o.parentId),
         },
       },
+      transaction,
     })
 
     // And add them to the list. Next iteration their children will be joined to them.
@@ -294,40 +394,138 @@ const buildSummariesForPeriod = async (startDate, endDate) => {
     }
   }
 
+  const orgSummariesWithVariants = orgSummaries.flatMap(org => getExtraOrgVariants(org, separateOrgId))
+
   // Now we can actually calculate the org summaries from each org's CURs
-  for (const org of orgSummaries) {
+  for (const org of orgSummariesWithVariants) {
     org.data = sumSummaryDatas(org.courseRealisations.map(cur => cur.data))
-    org.startDate = datefns.min(org.courseRealisations.map(cu => cu.startDate))
-    org.endDate = datefns.max(org.courseRealisations.map(cu => cu.endDate))
+    org.extraOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraOrgIds))
     delete org.courseRealisations
     delete org.parent
   }
 
-  // Write all summaries to db.
+  const relevantFields = ['entityId', 'data', 'extraOrgIds']
+  const allSummaries = courseRealisationSummaries
+    .concat(courseUnitSummaries)
+    .concat(courseUnitGroupSummaries)
+    .concat(tagSummaries)
+    .concat(orgSummariesWithVariants)
+    .filter(summary => summary.data)
+    .map(summary => _.pick(summary, relevantFields))
+    .map(summary => ({ ...summary, startDate, endDate }))
 
-  const relevantFields = ['entityId', 'startDate', 'endDate', 'data']
-  await Promise.all(
-    courseRealisationSummaries
-      .map(cur => _.pick(cur, relevantFields))
-      .concat(courseUnitSummaries.map(cu => _.pick(cu, relevantFields)))
-      .concat(orgSummaries.map(org => _.pick(org, relevantFields)))
-      .filter(summary => summary.data.feedbackCount > 0) // Don't make empty summary objects
-      .map(summary => Summary.upsert(summary, summary))
-  )
+  // Write all summaries to db.
+  await Summary.bulkCreate(allSummaries, {
+    transaction,
+  })
 }
 
-const buildSummaries = async () => {
-  await sequelize.query(`DELETE FROM summaries;`)
-  // First, consider N time spans. Each time span should be for one period.
-  // Lets say we have kevät and syys periods for each year, and the split is 01/08/
-  // The result will be N different "summary trees", one for each period.
-  // If user wants to see summaries from time range spanning multiple periods,
-  // the summaries will be summed elementwise. Example: university summary row for time range [2021K, 2022K] = 2021K + 2021S + 2022K
+const summariesHaveToBeFullyRebuilt = async () => {
+  // If there are no summaries, they have to be built.
+  // Also if there are summaries but they date back to more than 1 year, we should rebuild everything
+  const latestSummary = await Summary.findOne({
+    order: [['startDate', 'DESC']],
+  })
+  if (!latestSummary) {
+    return true
+  }
 
+  const diff = datefns.differenceInYears(new Date(), new Date(latestSummary.endDate))
+  if (diff > 0) {
+    return true
+  }
+  return false
+}
+
+/**
+ * Build summaries for all organisations, CUs and CURs.
+ * Summary rows will be created for each time period.
+ *
+ * Possible time periods are:
+ * All semesters starting from some defined year.
+ * All academic years starting from some defined year.
+ *
+ * This means that there will be possibly multiple summary rows for each organisation, CU and CURs,
+ * depending on from how many periods they have data from.
+ *
+ * For example, if organisation has CURs from between 2021S and 2023S, there will be
+ * Semesters 2021S, 2022K, 2022S, 2023K, 2023S, and...
+ * Academic years 2021, 2022, 2023.
+ * (in total 8)
+ *
+ * These represent all the different possible time period "views" the user can select in a summary view to see.
+ *
+ * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
+ */
+const buildSummaries = async () => {
+  let datePeriods = (() => {
+    const startYear = 2020 // Nothing ending before this is considered
+    const endYear = new Date().getFullYear() // Nothing ending after this is considered
+
+    const dates = []
+    for (let year = startYear; year <= endYear; year++) {
+      const startOfSpringSemester = new Date(`${year}-01-01`)
+      const startOfAutumnSemester = new Date(`${year}-08-01`)
+      const startOfNextSpringSemester = new Date(`${year + 1}-01-01`)
+      const endOfAcademicYear = new Date(`${year + 1}-07-31`)
+
+      dates.push({
+        // kevät
+        start: startOfSpringSemester,
+        end: datefns.subDays(startOfAutumnSemester, 1),
+      })
+      dates.push({
+        // syys
+        start: startOfAutumnSemester,
+        end: datefns.subDays(startOfNextSpringSemester, 1),
+      })
+      dates.push({
+        // full academic year
+        start: startOfAutumnSemester,
+        end: endOfAcademicYear,
+      })
+    }
+    return dates
+  })()
+
+  if (!(await summariesHaveToBeFullyRebuilt())) {
+    // Only rebuild summaries for the "current" time periods. Those are the ones that end in the future.
+    const now = new Date()
+    datePeriods = datePeriods.filter(({ end }) => end > now)
+    logger.info(`Rebuilding summaries for ${datePeriods.length} time periods.`)
+  } else {
+    logger.info(`Rebuilding summaries fully.`)
+  }
+
+  // Initialize root organisations and relevant question ids
+  const rootOrganisations = await getRootOrganisations()
+  const relevantQuestionIds = await getRelevantQuestionIds()
+
+  // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    console.time(`${start.toISOString()}-${end.toISOString()}`)
-    await buildSummariesForPeriod(start, end)
-    console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
+    // console.time(`${start.toISOString()}-${end.toISOString()}`)
+
+    await sequelize.transaction(async transaction => {
+      // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
+      await Summary.destroy({
+        where: {
+          startDate: start,
+          endDate: end,
+        },
+        transaction,
+      })
+
+      await buildSummariesForPeriod({
+        startDate: start,
+        endDate: end,
+        rootOrganisations,
+        relevantQuestionIds,
+        transaction,
+        separateOrgId: OPEN_UNIVERSITY_ORG_ID,
+      })
+    })
+
+    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 

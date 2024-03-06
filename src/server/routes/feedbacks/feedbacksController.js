@@ -20,10 +20,7 @@ const create = async (req, res) => {
   if (!access?.canGiveFeedback() || !userFeedbackTarget) ApplicationError.Forbidden('Not an enrolled student')
 
   if (userFeedbackTarget.feedbackId)
-    throw new ApplicationError(
-      'Attempt to create new feedback where one already exists. Use PUT to update the old',
-      400
-    )
+    throw new ApplicationError('Attempt to create new feedback where one already exists. Use PUT to update the old')
 
   if (!(await validateFeedback(data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
 
@@ -114,60 +111,12 @@ const destroy = async (req, res) => {
   return res.sendStatus(200)
 }
 
-const updateAnswerHidden = async (req, res) => {
-  const { user } = req
-  const { id: feedbackId, questionId } = req.params
-  const { hidden } = req.body
-  if (typeof hidden !== 'boolean') {
-    throw new ApplicationError('Invalid value for hidden', 400)
-  }
-
-  // find feedback
-  const feedback = await Feedback.findByPk(feedbackId, {
-    include: {
-      model: UserFeedbackTarget,
-      as: 'userFeedbackTarget',
-      attributes: ['feedbackTargetId'],
-    },
-  })
-
-  if (!feedback) ApplicationError.NotFound('Feedback not found')
-  const { userFeedbackTarget } = feedback
-
-  // check access
-  const { feedbackTarget, access } = await getFeedbackTargetContext({
-    feedbackTargetId: userFeedbackTarget.feedbackTargetId,
-    user,
-  })
-  if (!access?.canHideFeedback()) ApplicationError.Forbidden('Must be responsible teacher, organisation admin or admin')
-
-  // find and update question
-  let updated = false
-  feedback.data = feedback.data.map(answer => {
-    if (answer.questionId === Number(questionId)) {
-      updated = true
-      return { ...answer, hidden }
-    }
-    return answer
-  })
-
-  if (!updated) {
-    throw new ApplicationError('Question not found on feedback', 404)
-  }
-
-  await feedbackTarget.increment({ hiddenCount: hidden ? 1 : -1 })
-  await feedback.save()
-
-  return res.send({ hidden })
-}
-
 const adRouter = Router()
 
 adRouter.post('/', create)
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.delete('/:id', destroy)
-adRouter.put('/:id/question/:questionId', updateAnswerHidden)
 
 const noadRouter = Router()
 

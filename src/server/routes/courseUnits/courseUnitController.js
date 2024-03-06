@@ -62,6 +62,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
           'feedbackCount',
           'continuousFeedbackEnabled',
+          'userCreated',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -71,7 +72,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseRealisation,
             as: 'courseRealisation',
             required: true,
-            attributes: ['id', 'name', 'startDate', 'endDate'],
+            attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
             where: {
               [Op.or]: [
                 {
@@ -99,7 +100,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseUnit,
             as: 'courseUnit',
             required: true,
-            attributes: ['id', 'name', 'courseCode'],
+            attributes: ['id', 'name', 'courseCode', 'userCreated'],
             include: [
               {
                 model: Organisation,
@@ -115,6 +116,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
   })
 
   const targets = userTargets
+    .filter(({ feedbackTarget }) => (feedbackTarget.userCreated ? feedbackTarget.courseRealisation.userCreated : true))
     .map(({ feedbackTarget }) => feedbackTarget)
     .filter(
       ({ courseUnit }) =>
@@ -131,7 +133,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
   const targetsByCourseCode = _.groupBy(targets, ({ courseUnit }) => courseUnit.courseCode)
 
-  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled']
+  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled', 'userCreated']
   const courseUnits = Object.entries(targetsByCourseCode).map(([courseCode, unfilteredTargets]) => {
     const targets = unfilteredTargets.filter(
       target =>
@@ -140,7 +142,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.includes(target.courseRealisation.id)
     )
-    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
+    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name', 'userCreated'])
 
     const ongoingTargets = targets.filter(
       ({ courseRealisation }) => courseRealisation.startDate <= new Date() && courseRealisation.endDate >= new Date()
@@ -179,6 +181,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
       endedCourseRealisation: makeTargetObject(endedTarget),
     }
   })
+
+  console.log(courseUnits)
 
   return res.send(courseUnits)
 }

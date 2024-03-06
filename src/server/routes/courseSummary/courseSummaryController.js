@@ -1,19 +1,23 @@
 const { Router } = require('express')
-const { addYears } = require('date-fns')
+const { format } = require('date-fns')
 
 const { CourseUnit, Organisation } = require('../../models')
 
-const { getOrganisationSummaries, getCourseRealisationSummaries } = require('../../services/summary')
-
 const { ApplicationError } = require('../../util/customErrors')
 const { sequelize } = require('../../db/dbConnection')
-const logger = require('../../util/logger')
 const { getSummaryQuestions } = require('../../services/questions')
-const getSummaryDefaultDateRange = require('../../services/summary/summaryDefaultDateRange')
-const { updateCustomisation, getCustomisation } = require('./customisation')
-const { getOrganisationSummaryWithChildren } = require('../../services/summary/summaryV2')
-const { startOfStudyYear } = require('../../util/common')
-const { adminAccess } = require('../../middleware/adminAccess')
+const {
+  getOrganisationSummaryWithChildOrganisations,
+  getOrganisationSummaryWithCourseUnits,
+  getOrganisationSummary,
+  getTeacherSummary,
+  getUserOrganisationSummaries,
+  getOrganisationSummaryWithTags,
+  getCourseRealisationSummaries,
+  getCourseUnitGroupSummaries,
+  exportXLSX,
+} = require('../../services/summary')
+const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -38,109 +42,83 @@ const getAccessibleCourseRealisationIds = async user => {
   return rows.map(row => row.id)
 }
 
-const getAccessInfo = async (req, res) => {
-  const { user } = req
+/**
+ * Parse dates from query parameters. If both dates are not valid, default to current study year
+ */
+const parseDates = (startDateString, endDateString) => {
+  const parsedStartDate = Date.parse(startDateString)
+  const parsedEndDate = Date.parse(endDateString)
+  const hasDateRange = !Number.isNaN(parsedStartDate) && !Number.isNaN(parsedEndDate)
+  const startDateObj = hasDateRange ? parsedStartDate : startOfStudyYear(new Date())
+  const endDateObj = hasDateRange ? parsedEndDate : endOfStudyYear(new Date())
 
-  // shortcut for most students
-  if (user.iamGroups.length === 0 && !req.headers.employeenumber) {
-    return res.send({
-      accessible: false,
-      adminAccess: false,
-      defaultDateRange: null,
-    })
-  }
-
-  const { organisationAccess } = user
-  const accesses = Object.entries(organisationAccess)
-  const accessibleCourseRealisationIds = await getAccessibleCourseRealisationIds(user)
-  const hasReadOnSomeOrganisation = accesses.some(([, access]) => access.read)
-  const isAdminOfSomeOrganisation = accesses.some(([, access]) => access.admin)
-
-  const accessible = hasReadOnSomeOrganisation || accessibleCourseRealisationIds.length > 0
-
-  const defaultDateRange = accessible
-    ? await getSummaryDefaultDateRange({
-        user,
-        organisationAccess,
-      })
-    : null
-
-  // For grafana statistics
-  if (organisationAccess.length === 1) {
-    ;(async () => {
-      const organisation = await Organisation.findOne({ where: { code: accesses[0][0] } })
-      const { name, code } = organisation.dataValues
-      logger.info('Organisation access', {
-        organisationName: name.fi,
-        organisationCode: code,
-      })
-    })()
-  }
-
-  return res.send({
-    accessible,
-    adminAccess: isAdminOfSomeOrganisation,
-    defaultDateRange,
-  })
-}
-
-const getOrganisations = async (req, res) => {
-  const { user } = req
-  const { code } = req.params
-  const { includeOpenUniCourseUnits, tagId, startDate, endDate } = req.query
-
-  const [fullOrganisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
-    user.getOrganisationAccess(),
-    // dont query users teached courses if code is defined (looking at one organisation)
-    code ? [] : getAccessibleCourseRealisationIds(user),
-    getSummaryQuestions(code),
-  ])
-
-  const organisationAccess = code
-    ? fullOrganisationAccess.filter(org => org.organisation.code === code)
-    : fullOrganisationAccess
-
-  const parsedStartDate = startDate ? new Date(startDate) : null
-  const defaultEndDate = parsedStartDate ? addYears(parsedStartDate, 1) : null
-  const parsedEndDate = endDate ? new Date(endDate) : defaultEndDate
-
-  const { averageRow, organisations } = await getOrganisationSummaries({
-    user,
-    questions,
-    organisationAccess,
-    accessibleCourseRealisationIds,
-    includeOpenUniCourseUnits: includeOpenUniCourseUnits !== 'false',
-    tagId,
-    startDate: parsedStartDate,
-    endDate: parsedEndDate,
-  })
-
-  return res.send({
-    questions,
-    organisations,
-    averageRow,
-  })
+  return { startDate: format(startDateObj, 'yyyy-MM-dd'), endDate: format(endDateObj, 'yyyy-MM-dd') }
 }
 
 /**
- * Only accessible to admin currently.
+ * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
-  const { startDate, endDate, entityId } = req.query
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    entityId,
+    include,
+    tagId: tagIdString,
+    extraOrgId,
+    extraOrgMode,
+  } = req.query
+  const { user } = req
 
   if (!entityId) {
     return ApplicationError.BadRequest('Missing entityId')
   }
 
-  const questions = getSummaryQuestions()
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+  const tagId = tagIdString ? parseInt(tagIdString, 10) : null
 
-  const organisation = await getOrganisationSummaryWithChildren({
-    organisationId: entityId,
-    startDate: startDate ? new Date(startDate) : startOfStudyYear(new Date()),
-    endDate: endDate ? new Date(endDate) : new Date(),
-  })
+  let organisation
 
-  return res.send({ organisation, questions: await questions })
+  if (include === 'childOrganisations') {
+    organisation = await getOrganisationSummaryWithChildOrganisations({
+      organisationId: entityId,
+      startDate,
+      endDate,
+      user,
+      extraOrgId,
+      extraOrgMode,
+    })
+  } else if (include === 'tags') {
+    organisation = await getOrganisationSummaryWithTags({
+      organisationId: entityId,
+      startDate,
+      endDate,
+      user,
+      extraOrgId,
+      extraOrgMode,
+    })
+  } else if (include === 'courseUnits') {
+    organisation = await getOrganisationSummaryWithCourseUnits({
+      organisationId: entityId,
+      startDate,
+      endDate,
+      user,
+      tagId,
+      extraOrgId,
+      extraOrgMode,
+    })
+  } else {
+    organisation = await getOrganisationSummary({
+      organisationId: entityId,
+      startDate,
+      endDate,
+      user,
+      extraOrgId,
+      extraOrgMode,
+    })
+  }
+
+  return res.send({ organisation })
 }
 
 const getByCourseUnit = async (req, res) => {
@@ -186,14 +164,91 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
+const getCourseUnitGroup = async (req, res) => {
+  const { user } = req
+  const { courseCode } = req.query
+
+  const courseUnitGroup = await getCourseUnitGroupSummaries({
+    user,
+    courseCode,
+  })
+
+  return res.send(courseUnitGroup)
+}
+
+const getCoursesV2 = async (req, res) => {
+  const { startDate: startDateString, endDate: endDateString, extraOrgId, extraOrgMode } = req.query
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const organisations = await getTeacherSummary({
+    user,
+    startDate,
+    endDate,
+    extraOrgId,
+    extraOrgMode,
+  })
+
+  return res.send(organisations)
+}
+
+const getUserOrganisationsV2 = async (req, res) => {
+  const { startDate: startDateString, endDate: endDateString, viewingMode, extraOrgId, extraOrgMode } = req.query
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const organisations = await getUserOrganisationSummaries({
+    user,
+    startDate,
+    endDate,
+    viewingMode,
+    extraOrgId,
+    extraOrgMode,
+  })
+
+  res.send(organisations)
+}
+
+const getXLSX = async (req, res) => {
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    includeOrgs: includeOrgsString,
+    includeCUs: includeCUsString,
+    includeCURs: includeCURsString,
+    allTime: allTimeString,
+  } = req.query
+
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const { xlsxFile, fileName } = await exportXLSX({
+    user,
+    startDate,
+    endDate,
+    includeOrgs: includeOrgsString === 'true',
+    includeCUs: includeCUsString === 'true',
+    includeCURs: includeCURsString === 'true',
+    allTime: allTimeString === 'true',
+  })
+
+  res.writeHead(200, [
+    ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+    ['Content-Disposition', `attachment; filename=${fileName}`],
+  ])
+  res.end(xlsxFile)
+}
+
 const router = Router()
 
-router.get('/organisations', getOrganisations)
-router.get('/organisations-v2', adminAccess, getOrganisationsV2)
-router.get('/organisations/:code', getOrganisations)
+router.get('/organisations-v2', getOrganisationsV2)
+router.get('/user-courses-v2', getCoursesV2)
+router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/course-units/:code', getByCourseUnit)
-router.get('/access', getAccessInfo)
-router.get('/customisation', getCustomisation)
-router.put('/customisation', updateCustomisation)
+router.get('/course-unit-group', getCourseUnitGroup)
+router.get('/export-xlsx', getXLSX)
 
 module.exports = router

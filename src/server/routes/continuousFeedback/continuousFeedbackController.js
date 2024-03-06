@@ -3,6 +3,7 @@ const { ContinuousFeedback, UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { sendEmailContinuousFeedbackResponseToStudent } = require('../../mailer/mails')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
+const { adminAccess } = require('../../middleware/adminAccess')
 
 const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
   const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({
@@ -111,10 +112,31 @@ const respondToFeedback = async (req, res) => {
   return res.send(continuousFeedback)
 }
 
+const deleteFeedback = async (req, res) => {
+  const { user } = req
+
+  const feedbackTargetId = Number(req.params.id)
+  const continuousFeedbackId = Number(req.params.continuousFeedbackId)
+
+  const { access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
+  })
+
+  if (!access?.canAdminDeleteFeedback()) ApplicationError.Forbidden()
+
+  const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId)
+
+  await continuousFeedback.destroy()
+
+  return res.send(continuousFeedback)
+}
+
 const router = Router()
 
 router.get('/:id', getFeedbacks)
 router.post('/:id', submitFeedback)
 router.post('/:id/response/:continuousFeedbackId', respondToFeedback)
+router.delete('/:id/:continuousFeedbackId', adminAccess, deleteFeedback)
 
 module.exports = router

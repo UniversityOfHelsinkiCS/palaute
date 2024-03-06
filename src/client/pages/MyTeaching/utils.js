@@ -32,8 +32,12 @@ export const getRelevantCourseRealisation = (courseUnit, group) => {
   }
 }
 
+const isInterimFeedback = ({ userCreated, courseUnit }) => userCreated && !courseUnit.userCreated
+
 export const getRelevantFeedbackTargets = feedbackTargets => {
-  const courseRealisationTargets = feedbackTargets.filter(({ feedbackType }) => feedbackType === 'courseRealisation')
+  const courseRealisationTargets = feedbackTargets.filter(
+    fbt => fbt.feedbackType === 'courseRealisation' && !isInterimFeedback(fbt)
+  )
 
   return orderBy(courseRealisationTargets, [({ courseRealisation }) => courseRealisation.startDate], ['desc'])
 }

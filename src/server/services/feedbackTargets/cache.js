@@ -1,40 +1,54 @@
-const LRUCache = require('lru-cache')
-
 // because of dark javascript import magic, important to require them directly (or try if it works the normal way)
 const Organisation = require('../../models/organisation')
 const FeedbackTarget = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
 const logger = require('../../util/logger')
+const { redis } = require('../../util/redisClient')
 const { CourseRealisationsTag, CourseRealisation } = require('../../models')
-const { FEEDBACK_TARGET_CACHE_SIZE, FEEDBACK_TARGET_CACHE_TTL } = require('../../util/config')
+const { FEEDBACK_TARGET_CACHE_TTL } = require('../../util/config')
 
-const lru = new LRUCache({
-  max: FEEDBACK_TARGET_CACHE_SIZE,
-  ttl: FEEDBACK_TARGET_CACHE_TTL,
-})
+const getKey = feedbackTargetId => `feedbackTarget:${feedbackTargetId}`
 
 const cache = {
-  get: feedbackTargetId => lru.get(feedbackTargetId),
-  set: (id, feedbackTargetJson) => lru.set(id, feedbackTargetJson),
+  get: async feedbackTargetId => {
+    const feedbackTargetJson = await redis.get(getKey(feedbackTargetId))
+
+    if (!feedbackTargetJson) return null
+
+    return JSON.parse(feedbackTargetJson)
+  },
+  set: (feedbackTargetId, feedbackTarget) =>
+    redis.set(getKey(feedbackTargetId), JSON.stringify(feedbackTarget), { EX: FEEDBACK_TARGET_CACHE_TTL }),
   invalidate: feedbackTargetId => {
-    if (lru.delete(feedbackTargetId)) {
+    if (redis.delete(getKey(feedbackTargetId))) {
       logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
     }
   },
-  invalidateAll: () => {
+  invalidateAll: async () => {
     logger.info(`[CACHE] invalidate fbt ALL`)
-    lru.clear()
+
+    const pattern = getKey('*')
+    const keys = await redis.keys(pattern)
+    if (keys?.length > 0) redis.delete(keys)
+  },
+  entries: async () => {
+    const pattern = getKey('*')
+    const keys = await redis.keys(pattern)
+    if (!(keys?.length > 0)) return [] // Passing an empty array to mGet causes an error, so we need to check this
+
+    const cachedFeedbackTargets = await redis.mGet(keys)
+
+    return cachedFeedbackTargets.map(JSON.parse).filter(Boolean)
   },
 }
 
-const onOrganisationChange = organisationCode => {
-  const idstoInvalidate = []
-  for (const [key, fbt] of lru.entries()) {
+const onOrganisationChange = async organisationCode => {
+  const cachedFeedbackTargets = await cache.entries()
+  for (const fbt of cachedFeedbackTargets) {
     if (fbt.courseUnit.organisations.some(org => org.code === organisationCode)) {
-      idstoInvalidate.push(key)
+      cache.invalidate(fbt.id)
     }
   }
-  idstoInvalidate.forEach(cache.invalidate)
 }
 
 const onFeedbackTargetChange = feedbackTarget => {

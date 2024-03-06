@@ -20,7 +20,9 @@ const componentByType = {
   OPEN: OpenResults,
 }
 
-const VisibilityInfoBox = ({ t, isPublic }) => {
+const VisibilityInfoBox = ({ isPublic }) => {
+  const { t } = useTranslation()
+
   const content = (
     <>
       <span>{isPublic ? t('feedbackTargetResults:unpublishingInfo') : t('feedbackTargetResults:publishingInfo')}</span>
@@ -41,14 +43,8 @@ const QuestionItem = ({
   disabled,
   feedbackTargetId,
 }) => {
-  const isPublic = publicQuestionIds.includes(question.id)
-
-  const Component = componentByType[question.type]
-
-  const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
-
-  const { enqueueSnackbar } = useSnackbar()
   const { t, i18n } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
 
   const mutation = useQuestionPublicityMutation({
     resource: 'feedbackTarget',
@@ -71,6 +67,22 @@ const QuestionItem = ({
     [publicQuestionIds]
   )
 
+  const handlePublicityToggle = isPublic => {
+    if (isPublic) {
+      onPublicityToggle(false)
+      return
+    }
+
+    const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
+    if (confirmation) {
+      onPublicityToggle(true)
+    }
+  }
+
+  const Component = componentByType[question.type]
+  const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
+
+  const isPublic = publicQuestionIds.includes(question.id)
   const actualAnswers = _.sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
@@ -85,7 +97,7 @@ const QuestionItem = ({
               <QuestionPublicityToggle
                 checked={isPublic}
                 disabled={disabled}
-                onChange={() => onPublicityToggle(!isPublic)}
+                onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
             <Typography variant="body1">{label}</Typography>
@@ -96,7 +108,7 @@ const QuestionItem = ({
               <AverageResult question={question} />
             </Box>
           )}
-          {isResponsibleTeacher && question.type === 'OPEN' && <VisibilityInfoBox t={t} isPublic={isPublic} />}
+          {isResponsibleTeacher && question.type === 'OPEN' && <VisibilityInfoBox isPublic={isPublic} />}
         </Box>
         <Box display="flex" flexDirection="column" alignItems="stretch">
           {content}

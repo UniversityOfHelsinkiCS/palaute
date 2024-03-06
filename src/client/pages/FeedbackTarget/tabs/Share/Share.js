@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import QRCode from 'react-qr-code'
 
 import { Box, Button, Chip, Paper, Typography, Alert } from '@mui/material'
@@ -15,6 +14,7 @@ import ReminderEmailModal from './ReminderEmailModal'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
@@ -25,13 +25,14 @@ const StudentLinkCopyButton = ({ onClick, label }) => (
 )
 
 const Share = () => {
+  const id = useFeedbackTargetId()
+
+  const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+
   const [open, setOpen] = useState(false)
   const openModal = () => setOpen(true)
   const closeModal = () => setOpen(false)
-
-  const { id } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
-  const { t } = useTranslation()
 
   const { feedbackTarget } = useFeedbackTargetContext()
 
@@ -70,6 +71,18 @@ const Share = () => {
           </Typography>
         </Box>
       )}
+      {feedbackTarget.userCreated &&
+        feedbackTarget.tokenEnrolmentEnabled && ( // @feat Gradu survey
+          <Paper>
+            <Box p={2}>
+              <Chip label="TOKEN ENROLMENT" variant="outlined" />
+              <Box display="flex" alignItems="center" mt={1} ml={2}>
+                <div>TOKEN ENROLMENT</div>
+                <Box mr={2} />
+              </Box>
+            </Box>
+          </Paper>
+        )}
       {isEnded && (
         <>
           <Paper>

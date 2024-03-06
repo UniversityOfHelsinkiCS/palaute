@@ -48,6 +48,11 @@ Organisation.init(
       allowNull: false,
       defaultValue: false,
     },
+    studentListVisibleByCourse: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     disabledCourseCodes: {
       type: ARRAY(TEXT),
       allowNull: false,

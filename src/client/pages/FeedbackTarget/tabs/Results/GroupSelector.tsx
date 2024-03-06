@@ -6,6 +6,7 @@ import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
 import { User } from '../../../../types/User'
+import { sortGroups } from './utils'
 
 interface GroupOption {
   id: string
@@ -97,25 +98,30 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
     })
   }
 
-  const groupOptions: GroupOption[] = React.useMemo(() => {
-    // First option for "ALL"
-    const allOption: GroupOption = {
-      id: 'ALL',
-      name: t('common:all'),
-      teachers: [],
+  const localisatedGroups: GroupOption[] = groups
+    .map(({ id, name, teachers, studentCount }) => ({
+      id,
+      name: getLanguageValue(name, i18n.language),
+      teachers,
       studentCount,
-    }
-
-    // Options for each group
-    const groupSpecificOptions: GroupOption[] = groups.map(group => ({
-      id: group.id,
-      name: getLanguageValue(group.name, i18n.language),
-      teachers: group.teachers,
-      studentCount: group.studentCount,
     }))
+    .filter(group => group.studentCount && group.studentCount > 0 && group.studentCount < studentCount)
+    .sort(sortGroups)
 
-    return [allOption, ...groupSpecificOptions]
-  }, [groups, i18n.language, studentCount, t])
+  const groupOptions: GroupOption[] = React.useMemo(
+    () =>
+      [
+        {
+          id: 'ALL',
+          name: t('common:all'),
+          teachers: [],
+          studentCount,
+        },
+      ].concat(localisatedGroups),
+    [localisatedGroups]
+  )
+
+  if (groupOptions.length === 1) return null
 
   return (
     <Box sx={{ overflow: 'auto' }}>

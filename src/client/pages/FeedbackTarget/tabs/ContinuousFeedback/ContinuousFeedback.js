@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Box, Typography, Alert, Button } from '@mui/material'
+import { Box, Typography, Alert, Button, IconButton } from '@mui/material'
+import { DeleteForever } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import ResponseForm from './ResponseForm'
@@ -13,6 +14,7 @@ import ErrorView from '../../../../components/common/ErrorView'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import CardSection from '../../../../components/common/CardSection'
+import useDeleteContinuousFeedback from './useDeleteContinuousFeedback'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -37,7 +39,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   )
 }
 
-const FeedbackItem = ({ feedback, canRespond, refetch }) => {
+const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
@@ -49,16 +51,21 @@ const FeedbackItem = ({ feedback, canRespond, refetch }) => {
       <OpenFeedbackContainer>
         <Box width="100%">
           <Markdown>{data}</Markdown>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2" alignSelf="flex-end">
+          <Box display="flex">
+            <Typography variant="body2" sx={{ mr: 'auto' }}>
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
             {canRespond && !response && (
-              <Button onClick={() => setShowResponse(!showResponse)}>
+              <Button onClick={() => setShowResponse(!showResponse)} data-cy="respondContinuousFeedback">
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
                   : t('feedbackTargetView:respondContinuousFeedback')}
               </Button>
+            )}
+            {canDelete && (
+              <IconButton onClick={() => deleteAnswer(id)} size="small" disableRipple>
+                <DeleteForever sx={{ fontSize: '12px' }} />
+              </IconButton>
             )}
           </Box>
         </Box>
@@ -87,6 +94,7 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
 const ContinuousFeedbackList = ({ canRespond }) => {
   const { id } = useParams()
   const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
+  const { canDelete, deleteAnswer } = useDeleteContinuousFeedback()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -101,7 +109,14 @@ const ContinuousFeedbackList = ({ canRespond }) => {
   return (
     <Box>
       {sortedFeedbacks.map(feedback => (
-        <FeedbackItem key={feedback.id} feedback={feedback} canRespond={canRespond} refetch={refetch} />
+        <FeedbackItem
+          key={feedback.id}
+          feedback={feedback}
+          canRespond={canRespond}
+          refetch={refetch}
+          canDelete={canDelete}
+          deleteAnswer={deleteAnswer}
+        />
       ))}
     </Box>
   )
@@ -146,7 +161,7 @@ const ContinuousFeedback = () => {
             </Box>
           )}
 
-          <ContinuousFeedbackList canRespond={isResponsibleTeacher} />
+          <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />
 
           {isStudent && isOngoing && (
             <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>

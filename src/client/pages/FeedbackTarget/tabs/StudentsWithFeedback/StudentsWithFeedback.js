@@ -1,5 +1,4 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Alert } from '@mui/material'
@@ -7,33 +6,37 @@ import StudentTable from './StudentTable'
 import useStudentsWithFeedback from '../../../../hooks/useStudentsWithFeedback'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
-const StudentsWithFeedback = () => {
+const NoFeedbackAlert = ({ isEnded }) => {
   const { t } = useTranslation()
-  const { id } = useParams()
 
-  const { feedbackTarget } = useFeedbackTargetContext()
-  const isOpen = feedbackTargetIsOpen(feedbackTarget)
-
-  const { students, isLoading } = useStudentsWithFeedback(id)
-
-  if (isLoading) {
-    return <LoadingProgress />
-  }
-
-  const noFeedbackALert = (
+  return (
     <Box mb={2}>
       <Alert severity="info">
-        {isOpen ? t('studentsWithFeedback:cannotShowWhenOpen') : t('studentsWithFeedback:noFeedbackInfo')}
+        {isEnded ? t('studentsWithFeedback:noFeedbackInfo') : t('studentsWithFeedback:cannotShowBeforeFeedbackEnds')}
       </Alert>
     </Box>
   )
+}
+
+const StudentsWithFeedback = () => {
+  const id = useFeedbackTargetId()
+
+  const { feedbackTarget } = useFeedbackTargetContext()
+  const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const { students, isLoading } = useStudentsWithFeedback(id)
+
+  if (isLoading) return <LoadingProgress />
+
+  const feedbackStatusAvailable = students.some(student => 'feedbackGiven' in student)
+  const showStudentTable = students.length !== 0
 
   return (
     <>
-      {students.length === 0 && noFeedbackALert}
-      {students.length > 0 && <StudentTable students={students} feedbackTarget={feedbackTarget} />}
+      {!feedbackStatusAvailable && <NoFeedbackAlert isEnded={isEnded} />}
+      {showStudentTable && <StudentTable students={students} feedbackTarget={feedbackTarget} />}
     </>
   )
 }

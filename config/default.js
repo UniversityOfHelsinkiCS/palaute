@@ -20,14 +20,6 @@ const config = {
   INCLUDE_COURSES: [],
 
   /**
-   * Enables the feature for these organisations.
-   * Feature allows to select whether feedback targets related to a course code
-   * can see the list of students who have given feedback.
-   * Normally it is either on or off for all courses of organisation.
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: [],
-
-  /**
    * Enables tags for these organisations
    */
   TAGS_ENABLED: [],
@@ -45,22 +37,17 @@ const config = {
    * The order is: [too much, much, just right, little, too little]
    */
   WORKLOAD_QUESTION_ID_ORDER: [
-    'c5ecf5aa-76cc-4ded-985c-8cbd091a4a95',
-    '2ea2b421-5c85-47cd-9008-1acc008e009f',
-    'e35a20ca-8e0e-4c44-8c26-6a197be3d422',
-    'b2dab0a2-4139-4dfc-949c-fdca744495c2',
     'ae8bccc7-1c4f-4f22-9c4c-2879d4e123d5',
+    'b2dab0a2-4139-4dfc-949c-fdca744495c2',
+    'e35a20ca-8e0e-4c44-8c26-6a197be3d422',
+    '2ea2b421-5c85-47cd-9008-1acc008e009f',
+    'c5ecf5aa-76cc-4ded-985c-8cbd091a4a95',
   ],
 
   /**
    * How long JWT tokens in noad links last
    */
   NOAD_LINK_EXPIRATION_DAYS: 14,
-
-  /**
-   * How many fbts fit in LRU cache
-   */
-  FEEDBACK_TARGET_CACHE_SIZE: 250,
 
   /**
    * Optional TTL in ms for fbt cache. Small number effectively disables caching.
@@ -70,16 +57,19 @@ const config = {
   FEEDBACK_TARGET_CACHE_TTL: undefined,
 
   /**
-   * How many users fit in LRU cache
-   */
-  USER_CACHE_SIZE: 250,
-
-  /**
    * Optional TTL in ms for user cache. Small number effectively disables caching.
    * Disabling can sometimes be helpful for development but it will slow down every request and cause a lot of Jami calls.
    * Do not set if you don't want cache to do TTL checks.
    */
   USER_CACHE_TTL: undefined,
+
+  /**
+   * How many enrolled students are needed for feedback to be shown.
+   * Used to protect anonymity of students in small courses.
+   * e.g. one feedback given in a course with only one student.
+   * When set to zero, feedback is always shown.
+   * */
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 0,
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
@@ -152,6 +142,11 @@ const config = {
   DEV_USERNAME: 'mluukkai',
 
   /**
+   * Id of the university root organisation (for example Helsingin Yliopisto).
+   */
+  UNIVERSITY_ROOT_ID: 'hy-university-root-id',
+
+  /**
    * HY has some special cases for open university courses, especially how they are handled in summary stats. Should work when this id matches nothing.
    */
   OPEN_UNIVERSITY_ORG_ID: '',
@@ -161,6 +156,11 @@ const config = {
    * for example to workaround a universitys Sisu abuse that would cause weird organisations to appear in summary.
    */
   SUMMARY_EXCLUDED_ORG_IDS: [],
+
+  /**
+   * These orgs are "skipped" in the summary organisation tree, meaning that instead their child organisations are displayed directly under their parent.
+   */
+  SUMMARY_SKIP_ORG_IDS: [],
 
   /**
    * "Feedback response given" indicator in summary is given to targets where response is written AND email about response is sent.
@@ -218,6 +218,18 @@ const config = {
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
 
   /**
+   * Allow organisation admins to create custom surveys
+   */
+  ORGANISATION_SURVEYS_ENABLED: false,
+
+  /**
+   * Alway show list of students in feedback target view
+   * value: false = Only show list of students when studentListVisible is set at course or organisation level
+   * value: true  = Always show list of students, hide feedback given status if studentListVisible is not set
+   */
+  ALWAYS_SHOW_STUDENT_LIST: false,
+
+  /**
    * The course summary color scale used in summary views and fbt results view for LIKERT type values ranging from 1-5. (LIKERT options minimum is 1 so below 1 means no data)
    * First color in the scale is for NO DATA.
    * Second color is for everything below MIN, eg. the 'worst' color.
@@ -254,6 +266,12 @@ const config = {
    * This avoids endless failing loading of Norppa front page.
    */
   NO_USER_USERNAME: 'nonorppauser',
+
+  /**
+   * The special groups which can view the whole university level organisation tree. Given to users by Jami.
+   * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
+   */
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
 }
 
 module.exports = config

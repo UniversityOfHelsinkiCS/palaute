@@ -1,12 +1,13 @@
 import { React } from 'react'
 
 import { Box, Typography } from '@mui/material'
-import { useParams } from 'react-router'
+
 import useFeedbackTargetUsers from '../../../../hooks/useFeedbackTargetUsers'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const Links = () => {
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
 
   const { isLoading, users } = useFeedbackTargetUsers(id)
 

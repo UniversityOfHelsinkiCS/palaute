@@ -1,8 +1,9 @@
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 
-const { createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetLog } = require('../../services/auditLog')
 const { mailer } = require('../../mailer')
+const interimFeedbackController = require('./interimFeedbackController')
 const {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -17,7 +18,10 @@ const {
   remindStudentsOnFeedback,
   getFeedbackTargetsForCourseUnit,
   getFeedbackTargetsForOrganisation,
+  hideFeedback,
 } = require('../../services/feedbackTargets')
+const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
+const { adminDeleteFeedback } = require('../../services/feedbackTargets/hideFeedback')
 
 const adRouter = Router()
 const noadRouter = Router()
@@ -65,6 +69,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     courseRealisationEndDateBefore: endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   } = req.query
 
   const feedbackTargets = await getFeedbackTargetsForCourseUnit({
@@ -76,6 +81,7 @@ adRouter.get('/for-course-unit/:code', async (req, res) => {
     endDateBefore,
     feedbackType,
     includeSurveys,
+    isOrganisationSurvey,
   })
 
   return res.send(feedbackTargets)
@@ -88,6 +94,7 @@ const getOne = async (req, res) => {
   const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user, req.user.isAdmin)
   return res.send(result)
 }
+
 adRouter.get('/:id', getOne)
 noadRouter.get('/:id', getOne)
 
@@ -115,8 +122,18 @@ const getFeedbacks = async (req, res) => {
 
   return res.send(feedbackData)
 }
+
 adRouter.get('/:id/feedbacks', getFeedbacks)
 noadRouter.get('/:id/feedbacks', getFeedbacks)
+
+adRouter.get('/:id/error-view-details', async (req, res) => {
+  const feedbackTargetId = Number(req.params.id)
+  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+
+  const feedbackTarget = await getFeedbackErrorViewDetails(feedbackTargetId)
+
+  return res.send(feedbackTarget)
+})
 
 adRouter.get('/:id/students-with-feedback', async (req, res) => {
   const { user } = req
@@ -148,11 +165,12 @@ adRouter.put('/:id/response', async (req, res) => {
 adRouter.put('/:id/remind-students', async (req, res) => {
   const { user } = req
   const feedbackTargetId = Number(req.params.id)
-  const { data: reminderText } = req.body.data
+  const { reminder: reminderText, courseName } = req.body.data
 
   const feedbackTarget = await remindStudentsOnFeedback({
     feedbackTargetId,
     reminderText,
+    courseName,
     user,
   })
 
@@ -171,7 +189,7 @@ adRouter.put('/:id/open-immediately', async (req, res) => {
     body: { feedbackOpeningReminderEmailSent: true, ...body },
   })
 
-  await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
+  if (!updatedFeedbackTarget.userCreated) await mailer.sendEmailToStudentsWhenOpeningImmediately(feedbackTargetId)
 
   await createFeedbackTargetLog(updatedFeedbackTarget, { openImmediately: true }, user)
 
@@ -213,6 +231,24 @@ adRouter.get('/:id/logs', async (req, res) => {
 
   return res.send(logs)
 })
+
+adRouter.put('/:id/hide-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent, hidden } = req.body
+  const count = await hideFeedback({ user, feedbackTargetId, questionId, feedbackContent, hidden })
+  res.send({ hidden, count })
+})
+
+adRouter.put('/:id/delete-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const { questionId, feedbackContent } = req.body
+  const count = await adminDeleteFeedback({ user, feedbackTargetId, questionId, feedbackContent })
+  res.send({ count })
+})
+
+adRouter.use('/', interimFeedbackController)
 
 module.exports = {
   adRouter,

@@ -11,6 +11,7 @@ const getForCourseUnit = async ({
   endDateBefore,
   feedbackType,
   includeSurveys,
+  isOrganisationSurvey,
 }) => {
   const courseRealisationWhere = {
     [Op.and]: [
@@ -51,9 +52,7 @@ const getForCourseUnit = async ({
         model: UserFeedbackTarget.scope('teachers'),
         as: 'userFeedbackTargets',
         required: true,
-        where: {
-          userId: user.id,
-        },
+        where: isOrganisationSurvey ? { userCreated: true } : { userId: user.id },
       },
       {
         model: UserFeedbackTarget.scope('students'),
@@ -102,6 +101,7 @@ const getForCourseUnit = async ({
       'questions',
       'surveys',
       'feedbackCount',
+      'userCreated',
     ]),
     studentCount: target.students.length,
     feedbackResponseGiven: target.feedbackResponse?.length > 3,

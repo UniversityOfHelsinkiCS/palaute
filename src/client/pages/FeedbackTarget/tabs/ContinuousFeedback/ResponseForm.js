@@ -67,6 +67,7 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
               variant="contained"
               disabled={!sendEnabled(values.response, isSubmitting)}
               sx={styles.button}
+              data-cy="sendContinuousFeedbackResponse"
             >
               {response ? t('common:edit') : t('common:send')}
             </Button>

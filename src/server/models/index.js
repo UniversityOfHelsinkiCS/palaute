@@ -14,7 +14,6 @@ const UpdaterStatus = require('./updaterStatus')
 const OrganisationLog = require('./organisationLog')
 const FeedbackTargetLog = require('./feedbackTargetLog')
 const ContinuousFeedback = require('./continuousFeedback')
-const SummaryCustomisation = require('./summaryCustomisation')
 const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorrespondent')
 const Tag = require('./tag')
 const CourseRealisationsTag = require('./courseRealisationsTag')
@@ -26,6 +25,9 @@ const Summary = require('./summary')
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
+})
+CourseUnit.hasMany(FeedbackTarget, {
+  as: 'feedbackTargets',
 })
 
 FeedbackTarget.belongsTo(CourseRealisation, {
@@ -63,9 +65,25 @@ Survey.belongsTo(CourseUnit, {
   targetKey: 'courseCode',
 })
 
+Survey.belongsTo(Organisation, {
+  as: 'organisation',
+  foreignKey: 'typeId',
+  targetKey: 'code',
+})
+
+Organisation.hasMany(Survey, {
+  as: 'surveys',
+  foreignKey: 'typeId',
+  sourceKey: 'code',
+})
+
 CourseUnit.belongsToMany(Organisation, {
   through: CourseUnitsOrganisation,
   as: 'organisations',
+})
+
+CourseUnit.hasMany(CourseUnitsOrganisation, {
+  as: 'courseUnitsOrganisations',
 })
 
 Organisation.belongsToMany(CourseUnit, {
@@ -73,14 +91,26 @@ Organisation.belongsToMany(CourseUnit, {
   as: 'courseUnits',
 })
 
+Organisation.hasMany(CourseUnitsOrganisation, {
+  as: 'courseUnitsOrganisations',
+})
+
 CourseRealisation.belongsToMany(Organisation, {
   through: CourseRealisationsOrganisation,
   as: 'organisations',
 })
 
+CourseRealisation.hasMany(CourseRealisationsOrganisation, {
+  as: 'courseRealisationsOrganisations',
+})
+
 Organisation.belongsToMany(CourseRealisation, {
   through: CourseRealisationsOrganisation,
   as: 'courseRealisations',
+})
+
+Organisation.hasMany(CourseRealisationsOrganisation, {
+  as: 'courseRealisationsOrganisations',
 })
 
 Organisation.belongsTo(Organisation, {
@@ -151,12 +181,6 @@ User.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
 FeedbackTarget.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
 
-User.hasOne(SummaryCustomisation, {
-  as: 'summaryCustomisation',
-  foreignKey: 'user_id',
-})
-SummaryCustomisation.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
-
 Organisation.belongsToMany(User, {
   through: OrganisationFeedbackCorrespondent,
   as: 'users',
@@ -172,6 +196,7 @@ OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 
 Organisation.hasMany(Tag, { as: 'tags' })
 Tag.belongsTo(Organisation, { as: 'organisation' })
+
 CourseRealisation.belongsToMany(Tag, {
   through: CourseRealisationsTag,
   as: 'tags',
@@ -180,6 +205,10 @@ Tag.belongsToMany(CourseRealisation, {
   through: CourseRealisationsTag,
   as: 'courseRealisations',
 })
+Tag.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
+CourseRealisationsTag.belongsTo(Tag, { as: 'tag' })
+CourseRealisation.hasMany(CourseRealisationsTag, { as: 'courseRealisationsTags' })
+CourseRealisationsTag.belongsTo(CourseRealisation, { as: 'courseRealisation' })
 
 // Slightly fakd association here, as courseCode on CourseUnit is not unique constrained.
 // It works somewhat, but custom queries may sometimes be needed
@@ -189,7 +218,9 @@ CourseUnit.belongsToMany(Tag, {
   foreignKey: 'courseCode',
   as: 'tags',
 })
-Tag.hasMany(CourseUnitsTag)
+CourseUnit.hasMany(CourseUnitsTag, { as: 'courseUnitsTags', sourceKey: 'courseCode', foreignKey: 'courseCode' })
+Tag.hasMany(CourseUnitsTag, { as: 'courseUnitsTags' })
+CourseUnitsTag.belongsTo(Tag, { as: 'tag' })
 
 /**
  * Groups associations
@@ -213,8 +244,14 @@ Organisation.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
 CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 
+Summary.belongsTo(CourseUnit, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupCourseUnit' })
+CourseUnit.hasMany(Summary, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupSummaries' })
+
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
+
+Summary.belongsTo(FeedbackTarget, { foreignKey: 'entityId', targetKey: 'courseRealisationId', as: 'feedbackTarget' })
+FeedbackTarget.hasOne(Summary, { foreignKey: 'entityId', sourceKey: 'courseRealisationId', as: 'summary' })
 
 module.exports = {
   Feedback,
@@ -233,7 +270,6 @@ module.exports = {
   OrganisationLog,
   FeedbackTargetLog,
   ContinuousFeedback,
-  SummaryCustomisation,
   OrganisationFeedbackCorrespondent,
   CourseRealisationsTag,
   InactiveCourseRealisation,

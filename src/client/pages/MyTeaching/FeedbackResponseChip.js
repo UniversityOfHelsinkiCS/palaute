@@ -4,31 +4,44 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../util/chipStyles'
 import LinkChip from '../../components/common/LinkChip'
 
-const FeedbackResponseChip = ({ id, feedbackResponseGiven, feedbackResponseSent, ongoing, continuous, ...props }) => {
+function getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, continuous) {
+  const baseFeedbackUrl = interimFeedbackId ? `/targets/${id}/interim-feedback/${interimFeedbackId}` : `/targets/${id}`
+
+  if (feedbackResponseSent || ongoing) {
+    return `${baseFeedbackUrl}/results`
+  }
+  if (continuous) {
+    return `${baseFeedbackUrl}/continuous-feedback`
+  }
+  return `${baseFeedbackUrl}/edit-feedback-response`
+}
+
+const FeedbackResponseChip = ({
+  id,
+  interimFeedbackId = null,
+  feedbackResponseGiven,
+  feedbackResponseSent,
+  isOld,
+  ongoing,
+  continuous,
+  ...props
+}) => {
   const { t } = useTranslation()
+
+  if (isOld && (!feedbackResponseGiven || !feedbackResponseSent)) return null
 
   const notSentLabel = feedbackResponseGiven
     ? t('teacherView:feedbackResponseNotSent')
     : t('teacherView:feedbackResponseMissing')
-
   const label = feedbackResponseSent ? t('teacherView:feedbackResponseGiven') : notSentLabel
-
+  const ongoingLabel = t('teacherView:feedbackOpen')
   const continuousLabel = t('teacherView:continuousFeedback')
 
-  const ongoingLabel = t('teacherView:feedbackOpen')
-
+  const notSentStyle = feedbackResponseGiven ? styles.warning : styles.error
   const ongoingStyle = styles.shimmering
-
   const continuousStyle = styles.shimmeringSecondary
 
-  const notSentStyle = feedbackResponseGiven ? styles.warning : styles.error
-
-  const url =
-    feedbackResponseSent || ongoing
-      ? `/targets/${id}/results`
-      : continuous
-      ? `/targets/${id}/continuous-feedback`
-      : `/targets/${id}/edit-feedback-response`
+  const url = getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, continuous)
 
   const sx = feedbackResponseSent ? styles.success : notSentStyle
 

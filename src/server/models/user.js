@@ -133,10 +133,16 @@ User.init(
     organisationAccess: {
       type: VIRTUAL,
     },
+    accessibleOrganisations: {
+      type: VIRTUAL,
+    },
     specialGroup: {
       type: VIRTUAL,
     },
     isAdmin: {
+      type: VIRTUAL,
+    },
+    mockedBy: {
       type: VIRTUAL,
     },
   },

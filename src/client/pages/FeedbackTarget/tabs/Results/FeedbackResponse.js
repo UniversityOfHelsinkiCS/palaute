@@ -59,6 +59,7 @@ const FeedbackResponse = ({ feedbackTarget }) => {
                 color="primary"
                 component={Link}
                 to={`/targets/${id}/edit-feedback-response`}
+                sx={{ '@media print': { display: 'none' } }}
               >
                 {t('feedbackTargetResults:giveResponse')}
               </Button>

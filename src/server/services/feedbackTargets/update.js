@@ -4,7 +4,8 @@ const { parseFromTimeZone } = require('date-fns-timezone')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question } = require('../../models')
-const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../../util/auditLog')
+const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../auditLog')
+const { updateOrganisationSurvey } = require('../organisations/organisationSurveys')
 
 const filterUpdates = update => update !== undefined && update !== null
 
@@ -19,6 +20,7 @@ const parseUpdates = body => {
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
     settingsReadByTeacher,
+    tokenEnrolmentEnabled,
   } = body
   const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
 
@@ -33,6 +35,7 @@ const parseUpdates = body => {
       continuousFeedbackEnabled,
       sendContinuousFeedbackDigestEmail,
       settingsReadByTeacher,
+      tokenEnrolmentEnabled,
     },
     filterUpdates
   )
@@ -117,7 +120,7 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 
   await survey.save()
 
-  await createFeedbackTargetSurveyLog(surveyId, questions, user)
+  createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
 
   return updates
 }
@@ -126,7 +129,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canUpdate()) {
-    ApplicationError.Forbidden('No rights to update feedback target')
+    return ApplicationError.Forbidden('No rights to update feedback target')
   }
 
   const updates = parseUpdates(body)
@@ -134,9 +137,18 @@ const update = async ({ feedbackTargetId, user, body }) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
+      return ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
+
+    // If organisation survey update course realisation activity period as well
+    if (feedbackTarget.courseRealisation.userCreated) {
+      const activityPeriod = {
+        startDate: updates.opensAt,
+        endDate: updates.closesAt,
+      }
+      await updateOrganisationSurvey(feedbackTarget.id, activityPeriod)
+    }
   }
 
   if (Array.isArray(questions)) {
@@ -166,13 +178,19 @@ const update = async ({ feedbackTargetId, user, body }) => {
     updates.questions = updatedQuestions
   }
 
+  // @feat Gradu survey
+  if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
+    return ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
+  }
+
+  await createFeedbackTargetLog(feedbackTarget, updates, user)
+
   Object.assign(feedbackTarget, updates)
 
   // force hooks
   feedbackTarget.changed('updatedAt', true)
 
   await feedbackTarget.save()
-  await createFeedbackTargetLog(feedbackTarget, updates, user)
 
   return feedbackTarget
 }

@@ -2,6 +2,7 @@ const { format } = require('date-fns')
 const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
+const { getLanguageValue } = require('../../util/languageUtils')
 
 const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary,
@@ -9,19 +10,22 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   courseName,
   startDate,
   endDate,
-  feedbackResponse
+  feedbackResponse,
+  userCreated
 ) => {
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
   const emails = students.map(student => {
     const { language } = student
     const t = i18n.getFixedT(language)
-    const courseNameWithUserLanguage = courseName[language ?? 'en']
-  
+    const courseNameWithUserLanguage = getLanguageValue(courseName, language)
+
     const email = {
       to: student.email,
-      subject: t('mails:counterFeedbackNotificationToStudents:subject', { courseName: courseNameWithUserLanguage }),
-      text: t('mails:counterFeedbackNotificationToStudents:text', {
+      subject: t(`mails:counterFeedbackNotificationToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
+        courseName: courseNameWithUserLanguage,
+      }),
+      text: t(`mails:counterFeedbackNotificationToStudents:${userCreated ? 'customText' : 'text'}`, {
         courseName: courseNameWithUserLanguage,
         dates,
         feedbackResponse,
@@ -50,10 +54,11 @@ const sendFeedbackSummaryReminderToStudents = async (feedbackTarget, feedbackRes
   return sendNotificationAboutFeedbackResponseToStudents(
     url,
     formattedStudents,
-    courseUnit.name,
+    feedbackTarget.userCreated ? feedbackTarget.name : courseUnit.name,
     cr.startDate,
     cr.endDate,
-    feedbackResponse
+    feedbackResponse,
+    feedbackTarget.userCreated
   )
 }
 

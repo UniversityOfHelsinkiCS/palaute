@@ -1,4 +1,6 @@
 const _ = require('lodash')
+
+const { FEEDBACK_HIDDEN_STUDENT_COUNT } = require('../../util/config')
 const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
@@ -84,11 +86,30 @@ const filterByGroupId = (studentFeedbackTargets, groupId, groupsAvailable, group
   return studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
 }
 
+/**
+ * Shuffle feedbacks so that answers from the same student are not identifiable.
+ * @param {object[]} feedbacks
+ * @param {number[]} questionIds
+ */
+const shuffleFeedbacks = (feedbacks, questionIds) => {
+  const shuffledAnswers = _.shuffle(feedbacks.flatMap(({ data }) => data))
+  const answersByQuestion = _.groupBy(shuffledAnswers, 'questionId')
+
+  const shuffledFeedbacks = Array.from(feedbacks, feedback => feedback).map((feedback, i) => ({
+    ...feedback,
+    data: questionIds.map(questionId => answersByQuestion?.[questionId]?.[i] ?? { questionId, data: '' }),
+  }))
+
+  return shuffledFeedbacks
+}
+
 const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
   allFeedbacks.map(feedback => ({
     ...feedback,
     data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
+
+const getGroupingQuestion = surveys => surveys.teacherSurvey?.questions?.find(q => q.secondaryType === 'GROUPING')
 
 /**
  *
@@ -105,7 +126,7 @@ const getFeedbacks = async (id, user, groupId) => {
 
   if (!feedbackTarget) ApplicationError.NotFound()
 
-  const { publicQuestionIds, surveys } = additionalData
+  const { publicQuestionIds, surveys, questions } = additionalData
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
   const userFeedbackTarget = userFeedbackTargets[0]
 
@@ -124,7 +145,17 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
-  const groupingQuestionId = surveys.teacherSurvey?.getGroupingQuestion()?.id
+
+  // Hide feedbacks for small courses to protect anonymity
+  if (studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
+    return {
+      feedbacks: [],
+      feedbackVisible: false,
+      accessStatus: null,
+    }
+  }
+
+  const groupingQuestionId = getGroupingQuestion(surveys)?.id
   const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
 
   const studentFeedbackTargetsOfGroup = filterByGroupId(
@@ -140,9 +171,12 @@ const getFeedbacks = async (id, user, groupId) => {
     .filter(ufbt => ufbt.feedback)
     .map(ufbt => ufbt.feedback.toPublicObject())
 
+  const questionIds = questions.filter(({ type }) => type !== 'TEXT').map(({ id }) => id)
+  const shuffledFeedbacks = shuffleFeedbacks(allFeedbacks, questionIds)
+
   if (access.canSeeAllFeedbacks()) {
     return {
-      feedbacks: allFeedbacks,
+      feedbacks: shuffledFeedbacks,
       feedbackVisible: true,
       accessStatus: access,
       groupsAvailable,
@@ -150,7 +184,7 @@ const getFeedbacks = async (id, user, groupId) => {
     }
   }
 
-  const publicFeedbacks = getPublicFeedbacks(allFeedbacks, publicQuestionIds)
+  const publicFeedbacks = getPublicFeedbacks(shuffledFeedbacks, publicQuestionIds)
 
   return {
     feedbacks: publicFeedbacks,

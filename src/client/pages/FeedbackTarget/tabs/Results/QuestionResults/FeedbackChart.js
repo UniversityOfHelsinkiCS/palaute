@@ -28,18 +28,19 @@ const annotationLineColor = '#5f8faf'
 const labelBackgroundColor = '#0f0f0fa0'
 const labelTextColor = '#5f8fbf'
 
-const getLineAnnotation = (label, x, yAdjust = 0) => ({
+const getLineAnnotation = (label, x) => ({
   type: 'line',
   borderColor: annotationLineColor,
   borderDash: [6, 6],
   borderWidth: 1,
   label: {
     content: label,
-    position: 'start',
+    position: 'center',
     display: true,
     backgroundColor: 'white',
     color: labelTextColor,
-    yAdjust,
+    rotation: -90,
+    font: { size: 12, weigth: 'lighter' },
   },
   scaleID: 'x',
   value: x,
@@ -103,12 +104,11 @@ const buildChartConfig = (
     maximumFractionDigits: 0,
   }
 
-  const opensAtAnnotation = getLineAnnotation(t('editFeedbackTarget:opensAt'), opensAtDate, 15)
+  const opensAtAnnotation = getLineAnnotation(t('editFeedbackTarget:opensAt'), opensAtDate)
   const closesAtAnnotation = getLineAnnotation(t('editFeedbackTarget:closesAt'), Date.parse(closesAt))
   const reminderAnnotation = getLineAnnotation(
     t('feedbackTargetResults:reminderLastSent'),
-    subDays(Date.parse(feedbackReminderLastSentAt), 1),
-    -5
+    subDays(Date.parse(feedbackReminderLastSentAt), 1)
   )
   const latestValueAnnotation = {
     type: 'line',
@@ -121,7 +121,7 @@ const buildChartConfig = (
         feedbacks.length
       }/${studentCount})`,
       position: 'center',
-      yAdjust: -20,
+      yAdjust: 20,
       xAdjust: 10,
       display: true,
       color: labelTextColor,
@@ -150,7 +150,7 @@ const buildChartConfig = (
       aspectRatio: 5,
       maintainAspectRatio: false,
       resizeDelay: 100,
-
+      clip: { left: 0, top: false, right: 0, bottom: false },
       layout: {
         padding: {
           right: 50,
@@ -259,7 +259,14 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   )
 
   return (
-    <Box height="20rem" width="100%" my="1rem" display="flex" justifyContent="center">
+    <Box
+      data-cy="feedback-target-results-feedback-chart"
+      height="20rem"
+      width="100%"
+      my="1rem"
+      display="flex"
+      justifyContent="center"
+    >
       <Box minWidth="80%">
         <Line {...config} ref={chartRef} />
       </Box>

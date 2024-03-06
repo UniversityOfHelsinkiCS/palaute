@@ -11,7 +11,10 @@ const useAuthorizedUser = (options = {}) => {
 
       return data
     },
-    options
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+      ...options,
+    }
   )
 
   return { authorizedUser, ...rest }

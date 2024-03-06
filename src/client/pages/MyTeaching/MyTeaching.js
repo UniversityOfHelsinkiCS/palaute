@@ -11,6 +11,7 @@ import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
+import LinkButton from '../../components/common/LinkButton'
 
 const MyTeaching = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
@@ -25,10 +26,11 @@ const MyTeaching = () => {
   return (
     <>
       <Title>{t('common:teacherPage')}</Title>
-      <Box mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <Typography variant="h4" component="h1">
           {t('teacherView:mainHeading')}
         </Typography>
+        <LinkButton to="/courses/v2?status=active" title={t('teacherView:newView')} />
       </Box>
 
       <Grid spacing={2} container>

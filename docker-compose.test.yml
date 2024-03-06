@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: dev.Dockerfile
+      args:
+        - E2E=true
+        - REACT_APP_E2E=true
+    image: palaute_dev
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
+      - REDIS_HOST=redis
+      - JAMI_HOST=jami
+      - JAMI_PORT=3003
+      - JWT_KEY=minttujam
+      - REACT_APP_E2E=true
+      - NODE_CONFIG_ENV=hy
+      - UPDATER_URL=http://updater:3000
+    ports:
+      - 3000:3000
+      - 9229:9229
+    container_name: palaute_app_test
+
+  redis:
+    image: redis:6.2.6
+    command: redis-server
+    container_name: palaute_test_redis
+
+  db:
+    image: postgres:15.4
+    environment:
+      - PGDATA=/data
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    container_name: palaute_test_db
+
+  jami:
+    image: quay.io/toska/jami:production
+    environment:
+      - PORT=3003
+      - NODE_ENV=dev
+      - DATABASE_URL=postgres://postgres:postgres@jami-db:5432/postgres
+    ports:
+      - 3003:3003
+    container_name: jami
+
+  jami-db:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: jami-db

@@ -193,10 +193,11 @@ const config = {
     'hy-CUR-142349531',
   ],
 
-  /**
-   * Enabled for SOS
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
+  SUMMARY_SKIP_ORG_IDS: [
+    'hy-org-1001813299', // Tiedekuntiin kuulumattomat laitokset
+    'hy-org-1001812245', // Yliopistonpalvelut
+    'hy-org-75261977', // Erillislaitokset
+  ],
 
   /**
    * Tags enabled for kasvis and kielikeskus
@@ -211,13 +212,11 @@ const config = {
 
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
-  FEEDBACK_TARGET_CACHE_SIZE: 250,
+  FEEDBACK_TARGET_CACHE_TTL: 86_400, // 24h
 
-  FEEDBACK_TARGET_CACHE_TTL: undefined,
+  USER_CACHE_TTL: 86_400, // 24h
 
-  USER_CACHE_SIZE: 250,
-
-  USER_CACHE_TTL: undefined,
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 5,
 
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
@@ -237,15 +236,17 @@ const config = {
 
   PUBLIC_URL: 'https://norppa.helsinki.fi',
 
-  GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
+  GRAYLOG_URL: 'https://toska.cs.helsinki.fi/graylog',
 
   TRANSLATION_NAMESPACE: 'hy',
 
   DEV_USERNAME: 'mluukkai',
 
+  UNIVERSITY_ROOT_ID: 'hy-university-root-id',
+
   OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
 
-  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
+  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017', 'hy-org-116718610'],
 
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 
@@ -254,6 +255,12 @@ const config = {
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL', 'PRIVATE_TEST'],
 
   IAM_GROUPS_HEADER: 'hygroupcn',
+
+  ORGANISATION_SURVEYS_ENABLED: true,
+
+  INTERIM_FEEDBACKS_ENABLED: true,
+
+  ALWAYS_SHOW_STUDENT_LIST: true,
 
   GELF_TRANSPORT_ENABLED: true,
 
@@ -273,6 +280,8 @@ const config = {
   SUMMARY_COLOR_SCALE_MIN: 2.3,
 
   SUMMARY_COLOR_SCALE_MAX: 4.4,
+
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 }
 
 module.exports = config

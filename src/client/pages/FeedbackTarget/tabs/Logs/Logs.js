@@ -1,9 +1,11 @@
-import { Alert, Box, Paper, Typography } from '@mui/material'
+import { Alert, Box } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
-import { useParams } from 'react-router'
 import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { getLanguageValue } from '../../../../util/languageUtils'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { LogItem } from '../../../../components/Logs/LogItem'
 
 const getLogMessage = data => {
   if (!data) {
@@ -27,12 +29,14 @@ const getLogMessage = data => {
     )
   }
 
-  if (data.enabledPublicQuestions) {
-    messages = messages.concat(
-      data.enabledPublicQuestions.length > 0
-        ? `Set answers visible for question '${data.enabledPublicQuestions[0]?.data?.label?.en}'`
-        : `Set answers hidden for question '${data.disabledPublicQuestions[0]?.data?.label?.en}'`
-    )
+  if (data.enabledPublicQuestions?.length) {
+    const questionName = getLanguageValue(data.enabledPublicQuestions[0]?.data?.label, 'fi')
+    messages = messages.concat(`Set answers visible for question '${questionName}'`)
+  }
+
+  if (data.disabledPublicQuestions?.length) {
+    const questionName = getLanguageValue(data.disabledPublicQuestions[0]?.data?.label, 'fi')
+    messages = messages.concat(`Set answers hidden for question '${questionName}'`)
   }
 
   if (data.openImmediately !== undefined) {
@@ -43,15 +47,13 @@ const getLogMessage = data => {
 
   if (data.createQuestion) {
     const { label, content } = data.createQuestion
-    const question =
-      (label && (label.en || label.fi || label.sv)) || (content && (content.en || content.fi || content.sv))
+    const question = getLanguageValue(label, 'fi') || getLanguageValue(content, 'fi')
     messages = messages.concat(`Added question '${question}'`)
   }
 
   if (data.deleteQuestion) {
     const { label, content } = data.deleteQuestion
-    const question =
-      (label && (label.en || label.fi || label.sv)) || (content && (content.en || content.fi || content.sv))
+    const question = getLanguageValue(label, 'fi') || getLanguageValue(content, 'fi')
     messages = messages.concat(`Deleted question '${question}'`)
   }
 
@@ -65,25 +67,38 @@ const getLogMessage = data => {
     }
   }
 
+  if (data.feedbackResponse === 'created') {
+    messages = messages.concat(`Created feedback response`)
+  } else if (data.feedbackResponse === 'updated') {
+    messages = messages.concat(`Updated feedback response`)
+  }
+
+  if (data.sendFeedbackResponseEmail) {
+    messages = messages.concat(`Sent feedback response email`)
+  }
+
+  if (data.continuousFeedbackEnabled !== undefined) {
+    messages = data.continuousFeedbackEnabled
+      ? messages.concat(`Enabled continuous feedback`)
+      : messages.concat(`Disabled continuous feedback`)
+  }
+
+  if (data.sendContinuousFeedbackDigestEmails !== undefined) {
+    messages = data.sendContinuousFeedbackDigestEmails
+      ? messages.concat(`Enabled continuous feedback digest mail`)
+      : messages.concat(`Disabled continuous feedback digest mail`)
+  }
+
+  if (data.mockedBy) {
+    messages = messages.concat(`(Mocked by ${data.mockedBy})`)
+  }
+
   return messages.join(', ')
 }
 
-const LogItem = ({ log }) => (
-  <Box m={2}>
-    <Paper>
-      <Box display="flex" p={2}>
-        <Typography>{format(new Date(log.createdAt), 'yyyy/MM/dd hh.mm')}</Typography>
-        <Box m={2} />
-        <Typography>{log.user.email}</Typography>
-        <Box m={2} />
-        <Typography>{getLogMessage(log.data)}</Typography>
-      </Box>
-    </Paper>
-  </Box>
-)
-
 const Logs = () => {
-  const { id } = useParams()
+  const id = useFeedbackTargetId()
+
   const { feedbackTargetLogs, isLoading } = useFeedbackTargetLogs(id)
 
   if (isLoading) {
@@ -94,7 +109,7 @@ const Logs = () => {
     <Box display="flex" flexDirection="column">
       {!feedbackTargetLogs?.length > 0 && <Alert severity="info">No logs yet</Alert>}
       {feedbackTargetLogs.map((log, idx) => (
-        <LogItem key={idx} log={log} />
+        <LogItem key={idx} log={log} parseLogMessage={getLogMessage} />
       ))}
     </Box>
   )
