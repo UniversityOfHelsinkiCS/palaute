@@ -108,18 +108,17 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
     .filter(group => group.studentCount && group.studentCount > 0 && group.studentCount < studentCount)
     .sort(sortGroups)
 
-  const groupOptions: GroupOption[] = React.useMemo(
-    () =>
-      [
-        {
-          id: 'ALL',
-          name: t('common:all'),
-          teachers: [],
-          studentCount,
-        },
-      ].concat(localisatedGroups),
-    [localisatedGroups]
-  )
+  const groupOptions: GroupOption[] = React.useMemo(() => {
+    // First option for "ALL"
+    const allOption: GroupOption = {
+      id: 'ALL',
+      name: t('common:all'),
+      teachers: [],
+      studentCount,
+    }
+
+    return [allOption, ...localisatedGroups]
+  }, [localisatedGroups])
 
   if (groupOptions.length === 1) return null
 
