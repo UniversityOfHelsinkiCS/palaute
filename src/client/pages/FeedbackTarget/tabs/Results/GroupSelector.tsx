@@ -125,11 +125,13 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
   return (
     <Box sx={{ overflow: 'auto' }}>
       <Typography variant="body2">{t('groups:chooseGroup')}</Typography>
-      <ToggleButtonGroup value={userSelectedGroupId}>
-        {groupOptions.map(opt => (
-          <GroupButton key={opt.id} value={opt.id} option={opt} onClick={() => onSelect(opt.id)} />
-        ))}
-      </ToggleButtonGroup>
+      <Box sx={{ overflow: 'auto' }}>
+        <ToggleButtonGroup value={userSelectedGroupId}>
+          {groupOptions.map(opt => (
+            <GroupButton key={opt.id} value={opt.id} option={opt} onClick={() => onSelect(opt.id)} />
+          ))}
+        </ToggleButtonGroup>
+      </Box>
     </Box>
   )
 }
