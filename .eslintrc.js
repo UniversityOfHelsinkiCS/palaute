@@ -6,7 +6,7 @@ module.exports = {
     browser: true,
   },
   rules: {
-    'prettier/prettier': ['warn'],
+    // 'prettier/prettier': ['warn'],
     'max-len': [1, 400],
     'no-shadow': 0,
     'no-plusplus': 0,
