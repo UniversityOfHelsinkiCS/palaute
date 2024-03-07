@@ -73,7 +73,7 @@
     "openFeedbackImmediatelyDialogContent": "Olet avaamassa opintojakson toteutuksen palautetta. Huomioithan, että avattuasi palautteen et voi enää muokata sen kyselyä."
   },
   "questionResults": {
-    "multipleChoiceScale": "1= välttävä, 2= tyydyttävä, 3= hyvä, 4= kiitettävä, 5= erinomainen, eos= en osaa sanoa"
+    "multipleChoiceScale": ""
   },
   "feedbackTargetResults": {
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä toteutuksen vastuuopettaja on asettanut palautteen näkyväksi vain toteutukseen osallistujille",
