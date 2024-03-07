@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build project for eslint
         run: npm install
       - name: Run eslint
@@ -17,26 +17,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Login to toska docker registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi
           username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
           password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
 
-      - name: Prepare test data and start the application
+      - name: Start the application
         run: docker-compose -f docker-compose.ci.yml up -d
 
       - name: Cypress run
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v6
         with:
+          wait-on: 'http://localhost:8000'
+          config: baseUrl=http://localhost:8000
           browser: chrome
           install-command: npm i
 
       - name: Upload video
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*

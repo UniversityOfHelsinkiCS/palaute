@@ -91,6 +91,10 @@ Organisation.belongsToMany(CourseUnit, {
   as: 'courseUnits',
 })
 
+Organisation.hasMany(CourseUnitsOrganisation, {
+  as: 'courseUnitsOrganisations',
+})
+
 CourseRealisation.belongsToMany(Organisation, {
   through: CourseRealisationsOrganisation,
   as: 'organisations',
@@ -103,6 +107,10 @@ CourseRealisation.hasMany(CourseRealisationsOrganisation, {
 Organisation.belongsToMany(CourseRealisation, {
   through: CourseRealisationsOrganisation,
   as: 'courseRealisations',
+})
+
+Organisation.hasMany(CourseRealisationsOrganisation, {
+  as: 'courseRealisationsOrganisations',
 })
 
 Organisation.belongsTo(Organisation, {

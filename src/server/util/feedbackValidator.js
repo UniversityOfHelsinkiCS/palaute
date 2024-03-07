@@ -19,7 +19,7 @@ const validateSingleChoice = (data, question) => {
 
 const validateMultiChoice = (data, question) => {
   try {
-    if (!question.required && data === []) return true
+    if (!question.required) return true
     let valid = true
     const ids = question.data.options.map(opt => opt.id)
     data.forEach(id => {

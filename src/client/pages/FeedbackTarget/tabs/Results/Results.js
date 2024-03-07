@@ -27,7 +27,7 @@ const NotEnoughFeedbacks = ({ t }) => (
 )
 
 const NotEnoughStudents = ({ t }) => (
-  <Box mb={2}>
+  <Box my={2}>
     <Alert severity="warning" data-cy="notEnoughStudents">
       {t('feedbackTargetResults:notEnoughStudentsInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
     </Alert>
@@ -77,9 +77,9 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
       <Paper
         sx={{
           p: '1rem',
-          alignItems: 'center',
+          alignItems: 'end',
           backgroundColor: isStuckTop ? 'white' : 'transparent',
-          position: 'relative',
+          display: 'flex',
         }}
         elevation={isStuckTop ? 4 : 0}
       >
@@ -92,7 +92,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
             studentCount={studentCount}
           />
         )}
-        <Box sx={{ position: 'absolute', pt: 1.5, top: 0, right: 4 }}>
+        <Box ml="auto">
           <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
         </Box>
       </Paper>
@@ -190,6 +190,7 @@ const Results = () => {
             feedbacks={feedbacks}
             isResponsibleTeacher={isResponsibleTeacher}
             isOrganisationUser={isOrganisationReader}
+            isOpen={isOpen}
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
           />

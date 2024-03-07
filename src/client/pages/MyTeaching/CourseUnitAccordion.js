@@ -104,7 +104,7 @@ const CourseUnitAccordion = ({ courseUnit, group }) => {
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`my-teaching-course-unit-accordion-${courseCode}`}>
         <Box>
-          <Typography>
+          <Typography sx={{ mr: 2 }}>
             {visibleCourseCode} {getLanguageValue(name, i18n.language)}
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>

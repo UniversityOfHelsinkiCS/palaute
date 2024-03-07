@@ -1,16 +1,8 @@
-const { Model, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL } = require('sequelize')
+const { Model, Op, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, ARRAY } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 /**
  * Summary represents any single row in course summary.
- *
- * There are multiple different types:
- *
- * Organisation. Its children are either Course Units or other Organisations
- *
- * Course Unit. Its children are Course Realisations.
- *
- * Course Realisation. It has no children.
  */
 class Summary extends Model {}
 
@@ -36,6 +28,9 @@ Summary.init(
     endDate: {
       type: DATEONLY,
       allowNull: false,
+    },
+    extraOrgIds: {
+      type: ARRAY(STRING),
     },
     /**
      * Has the following format:
@@ -73,7 +68,6 @@ Summary.init(
     sequelize,
     indexes: [
       {
-        unique: true,
         fields: ['entity_id', 'start_date', 'end_date'], // Must be underscored in this case
       },
     ],
@@ -83,6 +77,22 @@ Summary.init(
           where: {
             startDate,
             endDate,
+          },
+        }
+      },
+      extraOrg(extraOrgId) {
+        return {
+          where: {
+            extraOrgIds: { [Op.contains]: [extraOrgId] },
+          },
+        }
+      },
+      noExtraOrg(extraOrgId) {
+        return {
+          where: {
+            [Op.not]: {
+              extraOrgIds: { [Op.contains]: [extraOrgId] },
+            },
           },
         }
       },

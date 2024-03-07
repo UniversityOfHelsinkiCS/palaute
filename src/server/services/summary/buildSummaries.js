@@ -1,6 +1,5 @@
 /* eslint-disable no-continue */
 const { Op, QueryTypes } = require('sequelize')
-const Sentry = require('@sentry/node')
 const datefns = require('date-fns')
 const _ = require('lodash')
 const {
@@ -12,8 +11,10 @@ const {
   Organisation,
   Summary,
   Tag,
+  CourseUnitsOrganisation,
+  CourseRealisationsOrganisation,
 } = require('../../models')
-const { WORKLOAD_QUESTION_ID } = require('../../util/config')
+const { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
 const logger = require('../../util/logger')
@@ -46,7 +47,35 @@ const getRelevantQuestionIds = async () => {
   return new Set(questionIds)
 }
 
-const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, relevantQuestionIds, transaction) => {
+/**
+ * Finds out the extraOrgIds that are responsible for this CUR
+ */
+const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisationIds, extraOrgIds) =>
+  extraOrgIds.filter(
+    orgId => courseUnitOrganisationIds.includes(orgId) || courseRealisationOrganisationIds.includes(orgId)
+  )
+
+/**
+ * Yields the 1 or 2 variants of this entity, based on extraOrgId.
+ * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni curs and the other non-open uni curs.
+ * If curs of entity are one or another, only one entity would be yielded.
+ */
+const getExtraOrgVariants = (entity, extraOrgId) =>
+  _.partition(entity.courseRealisations, cur => cur.extraOrgIds.includes(extraOrgId))
+    .filter(curs => curs.length > 0)
+    .map(curs => ({
+      ..._.clone(entity),
+      courseRealisations: curs,
+    }))
+
+const buildSummariesForPeriod = async ({
+  startDate,
+  endDate,
+  rootOrganisations,
+  relevantQuestionIds,
+  transaction,
+  separateOrgId,
+}) => {
   // ---------------- Phase 1: ------------------
   // Build summary entities from feedbacks for courses during this time period
   // We do this for the following entities, from "bottom up":
@@ -62,10 +91,6 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
   // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
-      // Only consider feedback targets that have feedback.
-      feedbackCount: {
-        [Op.gt]: 0,
-      },
       userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
     },
     include: [
@@ -74,6 +99,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
         attributes: ['id', 'startDate', 'endDate'],
         as: 'courseRealisation',
         required: true,
+        // separate: true,
         where: {
           [Op.or]: [
             // Any overlap with the period
@@ -108,9 +134,9 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
         },
         include: [
           {
-            model: Organisation,
-            as: 'organisations',
-            attributes: ['id', 'parentId'],
+            model: CourseRealisationsOrganisation,
+            as: 'courseRealisationsOrganisations',
+            // attributes: ['organisationId'], // Weird Sequelize thing #1, see below for more...
           },
           {
             model: Tag,
@@ -124,11 +150,12 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
         attributes: ['id', 'groupId'],
         as: 'courseUnit',
         required: true,
+        // separate: true,
         include: [
           {
-            model: Organisation,
-            as: 'organisations',
-            attributes: ['id', 'parentId'],
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            attributes: ['organisationId'],
           },
           {
             model: Tag,
@@ -145,6 +172,7 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
           accessStatus: 'STUDENT',
         },
         required: true,
+        separate: true,
         include: {
           model: Feedback,
           attributes: ['data', 'createdAt'],
@@ -205,6 +233,9 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
+    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.dataValues.organisationI) // (implementation detail): Weird Sequelize thing #1, organisationId doesn't load in attributes: ['organisationId'] but in dataValues is truncated to 'organisationI'
+    const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
+
     courseRealisationSummaries.push({
       entityId: fbt.courseRealisation.id,
       data: {
@@ -216,20 +247,21 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
       },
       courseUnitId: fbt.courseUnit.id,
       courseUnitGroupId: fbt.courseUnit.groupId,
-      curOrganisations: fbt.courseRealisation.organisations,
-      cuOrganisations: fbt.courseUnit.organisations,
+      curOrgIds,
+      cuOrgIds,
       curTags: fbt.courseRealisation.tags,
       cuTags: fbt.courseUnit.tags,
+      extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
   } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
 
   // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId)).map(
-    ([cuId, courseRealisations]) => ({
+  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId))
+    .map(([cuId, courseRealisations]) => ({
       entityId: cuId,
       courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
-    })
-  )
+    }))
+    .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 
   // Sum them up from CURs. Then we're done with CUs and could write CU summaries to db.
   for (const cu of courseUnitSummaries) {
@@ -237,15 +269,16 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     delete cu.courseRealisations // Now not needed anymore
 
     cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+    cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
-  const courseUnitGroupSummaries = Object.entries(
-    _.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId)
-  ).map(([cuGroupId, courseRealisations]) => ({
-    entityId: cuGroupId,
-    courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
-  }))
+  const courseUnitGroupSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId))
+    .map(([cuGroupId, courseRealisations]) => ({
+      entityId: cuGroupId,
+      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+    }))
+    .flatMap(cuGroup => getExtraOrgVariants(cuGroup, separateOrgId))
 
   // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
   for (const cuGroup of courseUnitGroupSummaries) {
@@ -253,21 +286,24 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     delete cuGroup.courseRealisations // Now not needed anymore
 
     cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+    cuGroup.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
   const tagSummaries = _.uniqBy(
     courseRealisationSummaries.flatMap(cur => [...cur.curTags, ...cur.cuTags]),
     'id'
-  ).map(tag => ({
-    entityId: prefixTagId(tag.id),
-    courseRealisations: _.uniqBy(
-      courseRealisationSummaries.filter(
-        cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+  )
+    .map(tag => ({
+      entityId: prefixTagId(tag.id),
+      courseRealisations: _.uniqBy(
+        courseRealisationSummaries.filter(
+          cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+        ),
+        'entityId'
       ),
-      'entityId'
-    ),
-  }))
+    }))
+    .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
 
   // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
   for (const tag of tagSummaries) {
@@ -275,20 +311,18 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     delete tag.courseRealisations // Now not needed anymore
 
     tag.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
+    tag.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
-  const orgSummaries = _.uniqBy(
-    courseRealisationSummaries.flatMap(cur => [...cur.cuOrganisations, ...cur.curOrganisations]),
-    'id'
-  ).map(org => ({
+  const orgIds = _.uniq(courseRealisationSummaries.flatMap(cur => [...cur.cuOrgIds, ...cur.curOrgIds]))
+  const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
+  const orgSummaries = orgs.map(org => ({
     entityId: org.id,
     parentId: org.parentId,
     parent: null,
     courseRealisations: _.uniqBy(
-      courseRealisationSummaries.filter(
-        cur => cur.curOrganisations.some(o => o.id === org.id) || cur.cuOrganisations.some(o => o.id === org.id)
-      ),
+      courseRealisationSummaries.filter(cur => cur.curOrgIds.includes(org.id) || cur.cuOrgIds.includes(org.id)),
       'entityId'
     ),
   }))
@@ -360,35 +394,28 @@ const buildSummariesForPeriod = async (startDate, endDate, rootOrganisations, re
     }
   }
 
+  const orgSummariesWithVariants = orgSummaries.flatMap(org => getExtraOrgVariants(org, separateOrgId))
+
   // Now we can actually calculate the org summaries from each org's CURs
-  for (const org of orgSummaries) {
+  for (const org of orgSummariesWithVariants) {
     org.data = sumSummaryDatas(org.courseRealisations.map(cur => cur.data))
+    org.extraOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraOrgIds))
     delete org.courseRealisations
     delete org.parent
   }
 
-  const relevantFields = ['entityId', 'data']
+  const relevantFields = ['entityId', 'data', 'extraOrgIds']
   const allSummaries = courseRealisationSummaries
     .concat(courseUnitSummaries)
     .concat(courseUnitGroupSummaries)
     .concat(tagSummaries)
-    .concat(orgSummaries)
-    .filter(summary => summary.data && summary.data.feedbackCount > 0)
+    .concat(orgSummariesWithVariants)
+    .filter(summary => summary.data)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
 
-  // Make sure no duplicates
-  const uniqueSummaries = _.uniqBy(allSummaries, 'entityId')
-  if (uniqueSummaries.length !== allSummaries.length) {
-    // Warning, duplicates found. Find and report duplicates.
-    const duplicates = _.differenceBy(allSummaries, uniqueSummaries, ({ entityId }) => entityId)
-    Sentry.setExtra('duplicates', duplicates)
-    Sentry.captureMessage(`Duplicate summaries found for ${duplicates.length} entities.`)
-  }
-
   // Write all summaries to db.
-  await Summary.bulkCreate(uniqueSummaries, {
-    updateOnDuplicate: ['data'],
+  await Summary.bulkCreate(allSummaries, {
     transaction,
   })
 }
@@ -476,7 +503,7 @@ const buildSummaries = async () => {
 
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    console.time(`${start.toISOString()}-${end.toISOString()}`)
+    // console.time(`${start.toISOString()}-${end.toISOString()}`)
 
     await sequelize.transaction(async transaction => {
       // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
@@ -488,10 +515,17 @@ const buildSummaries = async () => {
         transaction,
       })
 
-      await buildSummariesForPeriod(start, end, rootOrganisations, relevantQuestionIds, transaction)
+      await buildSummariesForPeriod({
+        startDate: start,
+        endDate: end,
+        rootOrganisations,
+        relevantQuestionIds,
+        transaction,
+        separateOrgId: OPEN_UNIVERSITY_ORG_ID,
+      })
     })
 
-    console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
+    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 

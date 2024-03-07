@@ -76,7 +76,6 @@ const EditActions = ({
   const { t } = useTranslation()
 
   const handleRemove = () => {
-    // eslint-disable-next-line no-alert
     const hasConfirmed = window.confirm(t('questionEditor:removeQuestionConfirmation'))
 
     if (hasConfirmed) {

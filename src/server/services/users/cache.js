@@ -24,7 +24,7 @@ const cache = {
 
     const pattern = getKey('*')
     const keys = await redis.keys(pattern)
-    redis.delete(keys)
+    if (keys?.length > 0) redis.delete(keys)
   },
 }
 

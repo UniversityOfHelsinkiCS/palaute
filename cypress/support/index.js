@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -16,16 +17,31 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
-import { baseUrl } from './baseUrl'
+import { testUsers } from '../fixtures/headers'
 
 beforeEach(() => {
-  cy.enableCourses()
-  cy.enableTestUsers()
-  cy.setUpAdminTeacherView()
-  cy.setUpSecondaryTeacherView()
+  cy.request({
+    method: 'POST',
+    url: 'test/reset-db',
+  })
+
+  cy.request({
+    method: 'POST',
+    url: 'test/seed-users',
+    body: testUsers,
+  })
+
+  // cy.enableTestUsers()
+  // cy.setUpAdminTeacherView()
+  // cy.setUpSecondaryTeacherView()
 })
 
-export { baseUrl }
+Cypress.on('uncaught:exception', err => {
+  if (err.message.includes('THIS_IS_A_TEST_ERROR_CAUSED_BY_ADMIN_PLEASE_IGNORE')) {
+    return false
+  }
+  return true
+})
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

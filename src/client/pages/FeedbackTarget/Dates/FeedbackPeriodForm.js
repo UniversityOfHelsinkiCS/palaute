@@ -70,7 +70,6 @@ const FeedbackPeriodForm = () => {
   }
 
   const handleSubmitWithAdminPower = values => {
-    // eslint-disable-next-line no-alert
     if (!window.confirm('WARNING: using admin powers to circumvent validation. Are you sure?')) return
     handleSubmit(values)
   }

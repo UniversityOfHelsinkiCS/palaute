@@ -5,8 +5,9 @@ module.exports = defineConfig({
   viewportWidth: 1800,
   viewportHeight: 1200,
   e2e: {
-    baseUrl: 'http://localhost:8000',
-    supportFile: 'cypress/support/commands.js',
+    baseUrl: 'http://localhost:3000',
+    supportFile: 'cypress/support/index.js',
     specPattern: 'cypress/**/*.spec.js',
+    experimentalRunAllSpecs: true,
   },
 })

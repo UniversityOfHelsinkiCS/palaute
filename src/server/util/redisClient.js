@@ -35,10 +35,14 @@ const client = {
     } catch (error) {
       logger.warn('Connection to redis failed, cache not available')
       Sentry.captureException(new Error('Redis connection failed, cache not available'))
+      // Mock the client methods to avoid errors
       client.get = () => Promise.resolve(null)
       client.set = () => Promise.resolve(null)
-      client.flushDb = () => Promise.resolve(null)
       client.expire = () => Promise.resolve(null)
+      client.delete = () => Promise.resolve(null)
+      client.keys = () => Promise.resolve(null)
+      client.mGet = () => Promise.resolve(null)
+      client.flushDb = () => Promise.resolve(null)
     }
   },
 

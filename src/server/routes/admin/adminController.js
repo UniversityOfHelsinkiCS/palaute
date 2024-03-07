@@ -201,6 +201,120 @@ const findFeedbackTargets = async (req, res) => {
   })
 }
 
+const findOrganisationSurveys = async (req, res) => {
+  const {
+    query: { id, orgCode, name, language },
+  } = req
+  const params = {}
+
+  const include = [
+    {
+      model: CourseUnit,
+      as: 'courseUnit',
+      attributes: ['courseCode', 'name'],
+      where: {
+        userCreated: true,
+      },
+      required: true,
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          attributes: ['id', 'code', 'name'],
+          through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+          required: true,
+          ...(orgCode && { where: { code: { [Op.iLike]: `${orgCode}%` } } }),
+        },
+      ],
+    },
+    {
+      model: CourseRealisation,
+      as: 'courseRealisation',
+      attributes: ['startDate', 'endDate', 'name'],
+      required: true,
+      include: {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseRealisationsOrganisation },
+      },
+      ...(name?.length > 2 && {
+        where: {
+          [Op.or]: {
+            [`name.${language}`]: { [Op.iLike]: `${name}%` },
+          },
+        },
+      }),
+    },
+    {
+      model: UserFeedbackTarget,
+      attributes: ['id'],
+      as: 'students',
+      required: false,
+      where: { accessStatus: 'STUDENT' },
+      include: {
+        model: User,
+        attributes: ['studentNumber'],
+        as: 'user',
+      },
+    },
+    {
+      model: UserFeedbackTarget,
+      attributes: ['id', 'userId', 'accessStatus'],
+      as: 'userFeedbackTargets',
+      required: false,
+      where: {
+        accessStatus: 'RESPONSIBLE_TEACHER',
+      },
+      include: {
+        model: User,
+        as: 'user',
+      },
+    },
+  ]
+
+  const numberId = Number(id)
+  if (numberId) {
+    const result = await FeedbackTarget.findByPk(numberId, { include })
+    params.id = numberId
+    return res.send({
+      params,
+      feedbackTargets: result ? [result.toJSON()] : [],
+    })
+  }
+
+  const organisationSurveys = await FeedbackTarget.findAll({
+    where: {
+      userCreated: true,
+    },
+    include,
+    order: [['closesAt', 'DESC']],
+  })
+
+  const organisationSurveyCount = await FeedbackTarget.count({
+    where: {
+      userCreated: true,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id'],
+        where: {
+          userCreated: true,
+        },
+        required: true,
+      },
+    ],
+  })
+
+  return res.send({
+    params,
+    count: organisationSurveyCount,
+    feedbackTargets: organisationSurveys,
+  })
+}
+
 const resendFeedbackResponseEmail = async (req, res) => {
   const { id } = req.body
   const idNumber = Number(id)
@@ -553,6 +667,7 @@ router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/feedback-targets', findFeedbackTargets)
+router.get('/organisation-surveys', findOrganisationSurveys)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
 router.get('/inactive-course-realisations', getInactiveCourseRealisations)

@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
+const { Summary } = require('../../models')
 
 const mapOptionIdToValue = (optionId, questionId) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
@@ -30,6 +31,43 @@ const sumQuestionResults = (results, questionId) => {
   return {
     mean: totalAnsweredCount > 0 ? totalValue / totalAnsweredCount : 0,
     distribution,
+  }
+}
+
+const subtractSummary = (summary1, summary2) => {
+  if (summary1.startDate !== summary2.startDate || summary1.endDate !== summary2.endDate) {
+    throw new Error('Subtract summaries with different start or end dates is not allowed')
+  }
+
+  const data1 = summary1.data
+  const data2 = summary2.data
+
+  const data = {
+    result: {},
+    studentCount: data1.studentCount - data2.studentCount,
+    hiddenCount: data1.hiddenCount - data2.hiddenCount,
+    feedbackCount: data1.feedbackCount - data2.feedbackCount,
+    feedbackResponsePercentage: data1.feedbackResponsePercentage - data2.feedbackResponsePercentage,
+  }
+
+  for (const questionId of Object.keys(data1.result)) {
+    data.result[questionId] = sumQuestionResults(
+      [
+        data1.result[questionId],
+        {
+          distribution: Object.fromEntries(
+            Object.entries(data2.result[questionId].distribution).map(([optionId, count]) => [optionId, -count])
+          ),
+        },
+      ],
+      questionId
+    )
+  }
+
+  return {
+    startDate: summary1.startDate,
+    endDate: summary1.endDate,
+    data,
   }
 }
 
@@ -72,10 +110,20 @@ const sumSummaries = summaries => {
   if (!summaries?.length > 0) {
     return null
   }
-  const data = sumSummaryDatas(summaries.map(s => s.data))
-  const startDate = datefns.min(summaries.map(s => datefns.parseISO(s.startDate)))
-  const endDate = datefns.max(summaries.map(s => datefns.parseISO(s.endDate)))
-  const summary = summaries[0]
+
+  // De-duplicate input by entityId + startDate + endDate + extraOrgIds
+  const deduplicatedSummaries = _.uniqBy(
+    summaries,
+    s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
+  )
+
+  const data = sumSummaryDatas(deduplicatedSummaries.map(s => s.data))
+  const startDate = datefns.format(
+    datefns.min(deduplicatedSummaries.map(s => datefns.parseISO(s.startDate))),
+    'yyyy-MM-dd'
+  )
+  const endDate = datefns.format(datefns.max(deduplicatedSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
+  const summary = deduplicatedSummaries[0]
   summary.data = data
   summary.startDate = startDate
   summary.endDate = endDate
@@ -83,73 +131,24 @@ const sumSummaries = summaries => {
   return summary
 }
 
-const getLikertMean = distribution => {
-  const entries = [
-    distribution['1'] || 0,
-    distribution['2'] || 0,
-    distribution['3'] || 0,
-    distribution['4'] || 0,
-    distribution['5'] || 0,
-  ]
+const getScopedSummary = ({ startDate, endDate, extraOrgId, extraOrgMode, allTime }) => {
+  const scopes = allTime ? [] : [{ method: ['at', startDate, endDate] }]
 
-  // hack to convert possible strings to numbers when doing math
-  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
-
-  if (totalCount === 0) return 0
-
-  let sum = 0
-  for (let i = 0; i < entries.length; i++) {
-    const count = entries[i]
-    const value = i + 1
-    sum += value * count
+  if (extraOrgId) {
+    if (extraOrgMode === 'exclude') {
+      scopes.push({ method: ['noExtraOrg', extraOrgId] })
+    }
+    if (extraOrgMode === 'only') {
+      scopes.push({ method: ['extraOrg', extraOrgId] })
+    }
   }
-
-  return _.round(sum / totalCount, 2)
-}
-
-/**
- * Only used for WORKLOAD questions
- * @param {*} distribution
- * @param {*} question
- * @returns
- */
-const getSingleChoiceMean = (distribution, question) => {
-  const entries = []
-
-  for (let i = 0; i < question.data.options.length; i++) {
-    const optionId = question.data.options[i].id
-    entries.push(distribution[optionId] || 0)
-  }
-
-  // hack to convert possible strings to numbers when doing math
-  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
-
-  if (totalCount === 0) return 0
-
-  let sum = 0
-  for (let i = 0; i < entries.length; i++) {
-    const count = entries[i]
-    const value = i + 1
-    sum += value * count
-  }
-
-  return _.round(sum / totalCount, 2)
-}
-
-const getMean = (distribution, question) => {
-  switch (question.type) {
-    case 'LIKERT':
-      return getLikertMean(distribution)
-    case 'SINGLE_CHOICE':
-      return getSingleChoiceMean(distribution, question)
-    default:
-      return 0
-  }
+  return Summary.scope(scopes)
 }
 
 module.exports = {
-  getMean,
   sumSummaryDatas,
   mapOptionIdToValue,
   sumSummaries,
+  subtractSummary,
+  getScopedSummary,
 }

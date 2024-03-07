@@ -14,6 +14,8 @@ const {
   getUserOrganisationSummaries,
   getOrganisationSummaryWithTags,
   getCourseRealisationSummaries,
+  getCourseUnitGroupSummaries,
+  exportXLSX,
 } = require('../../services/summary')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 
@@ -57,7 +59,15 @@ const parseDates = (startDateString, endDateString) => {
  * Get organisation summary, optionally with child organisations or course units
  */
 const getOrganisationsV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString, entityId, include, tagId: tagIdString } = req.query
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    entityId,
+    include,
+    tagId: tagIdString,
+    extraOrgId,
+    extraOrgMode,
+  } = req.query
   const { user } = req
 
   if (!entityId) {
@@ -75,6 +85,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   } else if (include === 'tags') {
     organisation = await getOrganisationSummaryWithTags({
@@ -82,6 +94,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   } else if (include === 'courseUnits') {
     organisation = await getOrganisationSummaryWithCourseUnits({
@@ -90,6 +104,8 @@ const getOrganisationsV2 = async (req, res) => {
       endDate,
       user,
       tagId,
+      extraOrgId,
+      extraOrgMode,
     })
   } else {
     organisation = await getOrganisationSummary({
@@ -97,6 +113,8 @@ const getOrganisationsV2 = async (req, res) => {
       startDate,
       endDate,
       user,
+      extraOrgId,
+      extraOrgMode,
     })
   }
 
@@ -146,8 +164,20 @@ const getByCourseUnit = async (req, res) => {
   })
 }
 
+const getCourseUnitGroup = async (req, res) => {
+  const { user } = req
+  const { courseCode } = req.query
+
+  const courseUnitGroup = await getCourseUnitGroupSummaries({
+    user,
+    courseCode,
+  })
+
+  return res.send(courseUnitGroup)
+}
+
 const getCoursesV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString } = req.query
+  const { startDate: startDateString, endDate: endDateString, extraOrgId, extraOrgMode } = req.query
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -156,13 +186,15 @@ const getCoursesV2 = async (req, res) => {
     user,
     startDate,
     endDate,
+    extraOrgId,
+    extraOrgMode,
   })
 
   return res.send(organisations)
 }
 
 const getUserOrganisationsV2 = async (req, res) => {
-  const { startDate: startDateString, endDate: endDateString, viewingMode } = req.query
+  const { startDate: startDateString, endDate: endDateString, viewingMode, extraOrgId, extraOrgMode } = req.query
   const { user } = req
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -172,9 +204,42 @@ const getUserOrganisationsV2 = async (req, res) => {
     startDate,
     endDate,
     viewingMode,
+    extraOrgId,
+    extraOrgMode,
   })
 
   res.send(organisations)
+}
+
+const getXLSX = async (req, res) => {
+  const {
+    startDate: startDateString,
+    endDate: endDateString,
+    includeOrgs: includeOrgsString,
+    includeCUs: includeCUsString,
+    includeCURs: includeCURsString,
+    allTime: allTimeString,
+  } = req.query
+
+  const { user } = req
+
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
+
+  const { xlsxFile, fileName } = await exportXLSX({
+    user,
+    startDate,
+    endDate,
+    includeOrgs: includeOrgsString === 'true',
+    includeCUs: includeCUsString === 'true',
+    includeCURs: includeCURsString === 'true',
+    allTime: allTimeString === 'true',
+  })
+
+  res.writeHead(200, [
+    ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+    ['Content-Disposition', `attachment; filename=${fileName}`],
+  ])
+  res.end(xlsxFile)
 }
 
 const router = Router()
@@ -183,5 +248,7 @@ router.get('/organisations-v2', getOrganisationsV2)
 router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
 router.get('/course-units/:code', getByCourseUnit)
+router.get('/course-unit-group', getCourseUnitGroup)
+router.get('/export-xlsx', getXLSX)
 
 module.exports = router

@@ -22,11 +22,4 @@ i18n
     keySeparator: ':',
   })
 
-const t = (key, options) => i18n.t(key, options)
-
-const getFixedT = lang => {
-  const t = i18n.getFixedT(lang)
-  return t
-}
-
-module.exports = { i18n, t, getFixedT }
+module.exports = { i18n }

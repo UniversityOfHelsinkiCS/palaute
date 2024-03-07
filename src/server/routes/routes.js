@@ -1,6 +1,6 @@
 const Router = require('express')
 const Sentry = require('@sentry/node')
-const { inE2EMode } = require('../util/config')
+const { inE2EMode, inDevelopment } = require('../util/config')
 const accessLogger = require('../middleware/accessLogger')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
@@ -15,8 +15,8 @@ const admin = require('./admin')
 const courseSummary = require('./courseSummary')
 const organisation = require('./organisations')
 const courseUnit = require('./courseUnits')
+const myTeaching = require('./myTeaching')
 const tags = require('./tags')
-const testing = require('./testing')
 const noad = require('./noad')
 const norppaFeedback = require('./norppaFeedback')
 const continuousFeedback = require('./continuousFeedback')
@@ -45,14 +45,11 @@ router.use('/surveys', surveys)
 router.use('/course-summaries', courseSummary)
 router.use('/organisations', organisation)
 router.use('/course-units', courseUnit)
+router.use('/my-teaching', myTeaching)
 router.use('/tags', tags)
 router.use('/norppa-feedback', norppaFeedback)
 router.use('/continuous-feedback', continuousFeedback)
 router.use('/admin', admin)
-
-if (inE2EMode) {
-  router.use('/test', testing)
-}
 
 // Link from courses-page
 router.use('/cur/:id', redirectFromCoursesPage)

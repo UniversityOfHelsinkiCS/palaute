@@ -9,6 +9,7 @@ import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
 import { OpenFeedback } from '../../../../../components/OpenFeedback/OpenFeedback'
 import Markdown from '../../../../../components/common/Markdown'
 import useDeleteOpenFeedback from './useDeleteOpenFeedback'
+import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
 
 const styles = {
   list: theme => ({
@@ -61,6 +62,7 @@ const OpenResults = ({ question }) => {
   const isNoad = pathname.startsWith('/noad')
   const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
   const { canDelete, deleteAnswer } = isNoad ? {} : useDeleteOpenFeedback()
+  const { feedbackTarget } = useFeedbackTargetContext()
 
   const feedbacks = React.useMemo(
     () => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)).sort((a, b) => a.data.localeCompare(b.data)),
@@ -87,7 +89,7 @@ const OpenResults = ({ question }) => {
                 canHide={canHide}
                 canDelete={canDelete}
                 deleteAnswer={() => deleteAnswer(f)}
-                toggleVisibility={() => toggleVisibility(f)}
+                toggleVisibility={() => toggleVisibility(f, feedbackTarget.id)}
               />
             ))}
         </Box>
