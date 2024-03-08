@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 import apiClient from '../../../../util/apiClient'
 import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
+import queryClient from '../../../../util/queryClient'
 
 const isEmpty = value => {
   if (Array.isArray(value)) {
@@ -137,6 +138,11 @@ export const saveValues = async (values, feedbackTarget) => {
   const feedbackData = Object.entries(answers).map(([questionId, data]) => ({
     questionId: Number(questionId),
     data,
+  }))
+
+  queryClient.setQueryData(['feedbackTarget', feedbackTarget.id], prev => ({
+    ...prev,
+    feedback: feedbackData,
   }))
 
   const { id: feedbackTargetId, feedback } = feedbackTarget

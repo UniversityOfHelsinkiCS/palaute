@@ -45,8 +45,15 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 const FeedbackTargetContent = () => {
   const { path, url } = useRouteMatch()
   const { t, i18n } = useTranslation()
-  const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
-    useFeedbackTargetContext()
+  const {
+    feedbackTarget,
+    isStudent,
+    isTeacher,
+    isAdmin,
+    isOrganisationAdmin,
+    isResponsibleTeacher,
+    justGivenFeedback,
+  } = useFeedbackTargetContext()
 
   const {
     courseUnit,
@@ -75,7 +82,7 @@ const FeedbackTargetContent = () => {
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
 
-  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
+  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded || justGivenFeedback
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld

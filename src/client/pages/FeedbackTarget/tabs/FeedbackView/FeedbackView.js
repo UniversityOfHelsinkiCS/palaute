@@ -11,7 +11,6 @@ import { useSnackbar } from 'notistack'
 
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
-import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
@@ -22,9 +21,9 @@ import { makeValidate, getInitialValues, saveValues, getQuestions, formatDate, c
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import useOrganisationAccess from '../../../../hooks/useOrganisationAccess'
 import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const tada = keyframes({
   from: {
@@ -145,11 +144,9 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { authorizedUser } = useAuthorizedUser()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
-
-  const orgAccess = useOrganisationAccess(feedbackTarget)
+  const { feedbackTarget, setJustGivenFeedback, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } =
+    useFeedbackTargetContext()
+  const isLoading = !feedbackTarget
 
   if (isLoading) {
     return <LoadingProgress />
@@ -158,11 +155,7 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
   // TODO clean up this shit again
-  const isStudent = accessStatus === 'STUDENT'
-  const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER'
-  const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher
   const isOutsider = accessStatus === 'NONE'
-  const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
@@ -183,7 +176,7 @@ const FeedbackView = () => {
         })
       } else {
         await saveValues(values, feedbackTarget)
-
+        setJustGivenFeedback(true)
         history.push(`/targets/${id}/results`)
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
