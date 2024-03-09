@@ -2,7 +2,7 @@
 
 More commonly known as **Norppa**
 
-The open source course feedback system used by University of Helsinki and Tampere University
+The open-source course feedback system used by the University of Helsinki and Tampere University
 
 Production in <https://norppa.helsinki.fi>
 
@@ -15,11 +15,11 @@ Feel free to create a pull request.
 
 ### Environment configuration
 
-Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add correct values for the variables based on the documentation.
+Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add the correct values for the variables based on the documentation.
 
 ### How users can get started with Palaute
 
-Clone the repo, install docker to get started!
+Clone the repo, and install docker to get started!
 
 Before starting the project for the first time run `npm i` to install needed development dependencies.
 
@@ -29,7 +29,7 @@ To start the project in development mode use this command. It will start everyth
 $ npm run start
 ```
 
-To populate the Norppa and Jami databases from a backup in remote server, use
+To populate the Norppa and Jami databases from a backup in a remote server, use
 
 ```bash
 ./scripts/get_prod_db.sh
@@ -90,7 +90,7 @@ graph TB
 
 ```
 
-When implementing Norppa for your organisation, you will implement your own updater, jami, pate and possibly some kind of importer, as well as analytics.
+When implementing Norppa for your organization, you will implement your own Updater, Jami, Pate, and possibly some kind of importer, as well as analytics.
 
 ### Topics
 
@@ -115,7 +115,7 @@ When implementing Norppa for your organisation, you will implement your own upda
 ### Documentation Feedback
 
 Need something documented or see a problem in existing docs?
-Please give feedback in the form of issues (add the documentation tag). All kinds of feedback is welcome from everyone reading the Norppa documentation.
+Please give feedback in the form of issues (add the documentation tag). All kinds of feedback are welcome from everyone reading the Norppa documentation.
 
 ## Maintainers <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
 
