@@ -68,20 +68,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
             as: 'courseRealisation',
             required: true,
             attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
-            /*             where: {
-              [Op.or]: [
-                query.status === 'active' && {
-                  startDate: { [Op.lte]: new Date() },
-                  endDate: { [Op.gte]: new Date() },
-                },
-                query.status === 'upcoming' && {
-                  startDate: { [Op.gt]: new Date() },
-                },
-                query.status === 'ended' && {
-                  endDate: { [Op.lt]: new Date() },
-                },
-              ],
-            }, */
           },
         ],
       },
