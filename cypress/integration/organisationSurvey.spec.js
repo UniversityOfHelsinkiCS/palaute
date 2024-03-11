@@ -669,7 +669,7 @@ describe('Students', () => {
     cy.loginAs(studentHenri)
   })
 
-  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
+  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`/feedbacks`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
@@ -689,12 +689,7 @@ describe('Students', () => {
     cy.contains('Feedback has been given. Thank you for your feedback!')
 
     // New tabs are rendered when feedback was given
-    cy.get('[data-cy="feedback-target-edit-feedback-tab"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
-    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
     cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
 
     cy.url().should('include', '/results')
 

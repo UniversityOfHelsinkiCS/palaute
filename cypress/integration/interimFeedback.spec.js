@@ -316,7 +316,7 @@ describe('Students', () => {
     cy.loginAs(student)
   })
 
-  it.only('can view ongoing interim feedbacks and give interim feedback', () => {
+  it('can view ongoing interim feedbacks and give interim feedback', () => {
     cy.visit(`/feedbacks`)
 
     cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
