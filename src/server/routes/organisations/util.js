@@ -7,11 +7,7 @@ const getAccessAndOrganisation = async (user, code, requiredAccess) => {
   const { access, organisation: organisationByAccess } =
     organisationAccess.find(({ organisation }) => organisation.code === code) ?? {}
   // eslint-disable-next-line no-nested-ternary
-  const organisation = organisationByAccess
-    ? organisationAccess
-    : user.isAdmin
-    ? await Organisation.findOne({ where: { code } })
-    : null
+  const organisation = organisationByAccess || (user.isAdmin ? await Organisation.findOne({ where: { code } }) : null)
 
   const hasReadAccess = user.isAdmin || Boolean(access?.read)
   const hasWriteAccess = user.isAdmin || Boolean(access?.write)
