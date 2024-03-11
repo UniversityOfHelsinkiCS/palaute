@@ -37,7 +37,7 @@ const getLogMessage = data => {
 
   if (data.newFeedbackCorrespondent !== undefined) {
     messages = messages.concat(
-      `Set feedback correspondent to ${data.newFeedbackCorrespondent?.firstName} ${data.newFeedbackCorrespondent?.lastName}`
+      `Added ${data.newFeedbackCorrespondent?.firstName} ${data.newFeedbackCorrespondent?.lastName} to the feedback correspondents`
     )
   }
 
