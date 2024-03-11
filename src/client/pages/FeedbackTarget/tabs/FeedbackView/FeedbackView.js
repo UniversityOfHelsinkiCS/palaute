@@ -17,7 +17,7 @@ import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
 import AlertLink from '../../../../components/common/AlertLink'
 
-import { makeValidate, getInitialValues, saveValues, getQuestions, formatDate, checkIsFeedbackOpen } from './utils'
+import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedbackOpen, useSaveValues } from './utils'
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
@@ -144,8 +144,7 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { authorizedUser } = useAuthorizedUser()
-  const { feedbackTarget, setJustGivenFeedback, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } =
-    useFeedbackTargetContext()
+  const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
   const isLoading = !feedbackTarget
 
   if (isLoading) {
@@ -167,6 +166,7 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
+  const mutation = useSaveValues()
 
   const handleSubmit = async values => {
     try {
@@ -175,8 +175,13 @@ const FeedbackView = () => {
           variant: 'error',
         })
       } else {
-        await saveValues(values, feedbackTarget)
-        setJustGivenFeedback(true)
+        const feedbackData = Object.entries(values.answers).map(([questionId, data]) => ({
+          questionId: Number(questionId),
+          data,
+        }))
+
+        await mutation.mutateAsync(feedbackData)
+
         history.push(`/targets/${id}/results`)
 
         enqueueSnackbar(t('feedbackView:successAlert'), {

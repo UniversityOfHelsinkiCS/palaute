@@ -67,6 +67,8 @@ const FeedbackTargetContent = () => {
     userCreated,
   } = feedbackTarget
 
+  const feedbackGiven = feedback || justGivenFeedback
+
   const defaultPath = `/targets/${feedbackTarget.id}/feedback`
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -82,7 +84,7 @@ const FeedbackTargetContent = () => {
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
 
-  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded || justGivenFeedback
+  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedbackGiven || isEnded
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
@@ -126,7 +128,7 @@ const FeedbackTargetContent = () => {
             title={t('common:survey')}
             hideTitle={isStudent}
           >
-            {feedback && isOpen ? (
+            {feedbackGiven && isOpen ? (
               <RouterTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}

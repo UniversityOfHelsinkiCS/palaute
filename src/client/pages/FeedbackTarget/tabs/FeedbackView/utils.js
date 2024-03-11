@@ -1,9 +1,11 @@
 import { parseISO, lightFormat } from 'date-fns'
 import _ from 'lodash'
+import { useMutation } from 'react-query'
 
 import apiClient from '../../../../util/apiClient'
 import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
 import queryClient from '../../../../util/queryClient'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const isEmpty = value => {
   if (Array.isArray(value)) {
@@ -132,35 +134,37 @@ export const getInitialValues = feedbackTarget => {
   return { answers }
 }
 
-export const saveValues = async (values, feedbackTarget) => {
-  const { answers } = values
+export const useSaveValues = () => {
+  const { feedbackTarget } = useFeedbackTargetContext()
 
-  const feedbackData = Object.entries(answers).map(([questionId, data]) => ({
-    questionId: Number(questionId),
-    data,
-  }))
+  const mutation = useMutation(
+    async feedback => {
+      if (feedbackTarget.feedback) {
+        const { data } = await apiClient.put(`/feedbacks/${feedbackTarget.feedback.id}`, {
+          data: feedback,
+        })
 
-  queryClient.setQueryData(['feedbackTarget', feedbackTarget.id], prev => ({
-    ...prev,
-    feedback: feedbackData,
-  }))
+        return data
+      }
 
-  const { id: feedbackTargetId, feedback } = feedbackTarget
+      const { data } = await apiClient.post('/feedbacks', {
+        feedbackTargetId: feedbackTarget.id,
+        data: feedback,
+      })
 
-  if (feedback) {
-    const { data } = await apiClient.put(`/feedbacks/${feedback.id}`, {
-      data: feedbackData,
-    })
+      return data
+    },
+    {
+      onSuccess: feedback => {
+        queryClient.setQueryData(['feedbackTarget', String(feedbackTarget.id)], prev => ({
+          ...prev,
+          feedback,
+        }))
+      },
+    }
+  )
 
-    return data
-  }
-
-  const { data } = await apiClient.post('/feedbacks', {
-    feedbackTargetId,
-    data: feedbackData,
-  })
-
-  return data
+  return mutation
 }
 
 export const saveContinuousFeedback = async (values, feedbackTargetId) => {

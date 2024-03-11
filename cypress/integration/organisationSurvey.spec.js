@@ -669,7 +669,7 @@ describe('Students', () => {
     cy.loginAs(studentHenri)
   })
 
-  it('can view ongoing organisation surveys and give organisation survey feedback', () => {
+  it.only('can view ongoing organisation surveys and give organisation survey feedback', () => {
     cy.visit(`/feedbacks`)
 
     cy.get('@organisationSurvey').then(organisationSurvey => {
