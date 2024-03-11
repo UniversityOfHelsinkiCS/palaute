@@ -117,8 +117,14 @@ const createOrganisationLog = async (organisation, updates, user) => {
 
   if (updates.studentListVisible !== undefined) data.studentListVisible = Boolean(updates.studentListVisible)
 
-  if (updates.responsibleUserId !== undefined) {
-    data.newFeedbackCorrespondent = await User.findByPk(updates.responsibleUserId, {
+  if (updates.newFeedbackCorrespondent !== undefined) {
+    data.newFeedbackCorrespondent = await User.findByPk(updates.newFeedbackCorrespondent, {
+      attributes: ['id', 'firstName', 'lastName'],
+    })
+  }
+
+  if (updates.removedFeedbackCorrespondent !== undefined) {
+    data.removedFeedbackCorrespondent = await User.findByPk(updates.removedFeedbackCorrespondent, {
       attributes: ['id', 'firstName', 'lastName'],
     })
   }
