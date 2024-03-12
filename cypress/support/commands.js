@@ -159,6 +159,8 @@ Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extra
       extraStudents,
     },
     headers: admin,
+  }).then(response => {
+    cy.wrap(response.body).as('feedbackTarget')
   })
 })
 
