@@ -12,7 +12,7 @@ describe('Continuous feedback', () => {
     // Teacher enables continuous feedback
     cy.visit(`/courses`)
 
-    cy.get('[data-cy=my-feedbacks-ended-tab]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
@@ -30,7 +30,7 @@ describe('Continuous feedback', () => {
     cy.loginAs(student)
     cy.visit(``)
 
-    cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
+    cy.get('[data-cy=my-teaching-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
 
     cy.get('textarea').first().type('Giving continuous feedback')
@@ -44,7 +44,7 @@ describe('Continuous feedback', () => {
     cy.loginAs(teacher)
     cy.visit(`/courses`)
 
-    cy.get('[data-cy=my-feedbacks-ended-tab]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
@@ -67,7 +67,7 @@ describe('Continuous feedback', () => {
     cy.loginAs(student)
     cy.visit(``)
 
-    cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
+    cy.get('[data-cy=my-teaching-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
     cy.get('[data-cy=feedback-target-continuous-feedback-tab]').click()
 
