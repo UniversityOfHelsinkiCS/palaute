@@ -19,7 +19,7 @@ import { formatDate, getFeedbackPercentageString } from '../../utils'
 const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
+  const { id, courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
   const { startDate, endDate } = courseRealisation
 
   const feedbackPeriod = t('teacherView:surveyOpen', {
@@ -31,7 +31,7 @@ const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
 
   return (
     <Tooltip title={feedbackPeriod}>
-      <Typography data-cy={`my-teaching-feedback-target-period-info-${feedbackTarget.id}`}>
+      <Typography data-cy={`my-teaching-feedback-target-period-info-${id}`}>
         {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
     </Tooltip>
