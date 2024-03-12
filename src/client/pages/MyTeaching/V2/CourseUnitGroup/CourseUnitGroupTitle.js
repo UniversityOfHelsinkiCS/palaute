@@ -4,6 +4,7 @@ import { Badge, Typography } from '@mui/material'
 
 const CourseGroupTitle = ({ title, badgeContent }) => (
   <Typography
+    data-cy={`course-unit-group-title-${title}`}
     component="h2"
     variant="h6"
     sx={{
