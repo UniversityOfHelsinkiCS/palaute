@@ -1,27 +1,28 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import path from 'path'
+import express, { Request, Response, NextFunction } from 'express'
+import compression from 'compression'
+import v8 from 'v8'
+import { PORT, inProduction, inE2EMode, inDevelopment } from './util/config'
+import { connectToDatabase } from './db/dbConnection'
+import { redis } from './util/redisClient'
+import { scheduleCronJobs } from './util/cron/scheduleCronJobs'
+import logger from './util/logger'
+import { updateLastRestart } from './util/lastRestart'
+import { initializeFunctions } from './db/postgresFunctions'
+import updaterClient from './util/updaterClient'
+
 require('dotenv').config()
 require('express-async-errors')
 require('./models/modelExtensions')
 require('./util/i18n')
-const path = require('path')
-const express = require('express')
-const compression = require('compression')
-const v8 = require('v8')
-const { PORT, inProduction, inE2EMode, inDevelopment } = require('./util/config')
-const { connectToDatabase } = require('./db/dbConnection')
-const { redis } = require('./util/redisClient')
-const { scheduleCronJobs } = require('./util/cron/scheduleCronJobs')
-const logger = require('./util/logger')
-const { updateLastRestart } = require('./util/lastRestart')
-const { initializeFunctions } = require('./db/postgresFunctions')
-const updaterClient = require('./util/updaterClient')
 
 const app = express()
 
 app.use(compression())
 // eslint-disable-next-line global-require
-app.use('/api', (req: any, res: any, next: any) => require('./routes')(req, res, next))
-app.use('/api', (_: any, res: { sendStatus: (arg0: number) => any }) => res.sendStatus(404))
+app.use('/api', (req: Request, res: Response, next: NextFunction) => require('./routes')(req, res, next))
+app.use('/api', (_: Request, res: Response) => res.sendStatus(404))
 
 if (inDevelopment || inE2EMode) {
   // eslint-disable-next-line global-require
@@ -34,7 +35,7 @@ if (inProduction || inE2EMode) {
   const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
 
   app.use(express.static(DIST_PATH))
-  app.get('*', (_req: any, res: { sendFile: (arg0: any) => any }) => res.sendFile(INDEX_PATH))
+  app.get('*', (_req: Request, res: Response) => res.sendFile(INDEX_PATH))
 }
 
 const start = async () => {
@@ -47,10 +48,11 @@ const start = async () => {
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
+    // eslint-disable-next-line no-console
     console.log(v8.getHeapStatistics())
   })
 }
 
 start()
 
-module.exports = app
+export default app
