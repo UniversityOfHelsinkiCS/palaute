@@ -8,7 +8,7 @@ describe('Continuous feedback', () => {
 
     cy.loginAs(teacher)
   })
-  it.only('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
+  it('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
     // Teacher enables continuous feedback
     cy.visit(`/courses`)
 
