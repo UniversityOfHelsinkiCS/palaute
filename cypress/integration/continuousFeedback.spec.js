@@ -5,13 +5,21 @@ const { teacher, student } = require('../fixtures/headers')
 describe('Continuous feedback', () => {
   beforeEach(() => {
     cy.createFeedbackTarget()
-  })
-  it('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
-    // Teacher enables continuous feedback
+
     cy.loginAs(teacher)
+  })
+  it.only('Teacher can enable continuous feedback, student can then give it, teacher can then respond to it and student can see the response', () => {
+    // Teacher enables continuous feedback
     cy.visit(`/courses`)
-    cy.contains('TEST_COURSE').first().click()
-    cy.contains('Testauskurssin toteutus').first().click()
+
+    cy.get('[data-cy=my-feedbacks-ended-tab]').click()
+
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+
+    cy.get('@feedbackTarget').then(([fbt]) => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${fbt.id}"]`).should('exist').click()
+    })
+
     cy.get('[data-cy="feedback-target-continuous-feedback-tab"]').click()
 
     cy.get('[data-cy=activateContinuousFeedback]').click()
@@ -36,8 +44,15 @@ describe('Continuous feedback', () => {
     const response = 'Responding to continuous feedback'
     cy.loginAs(teacher)
     cy.visit(`/courses`)
-    cy.contains('TEST_COURSE').first().click()
-    cy.contains('Testauskurssin toteutus').first().click()
+
+    cy.get('[data-cy=my-feedbacks-ended-tab]').click()
+
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+
+    cy.get('@feedbackTarget').then(([fbt]) => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${fbt.id}"]`).should('exist').click()
+    })
+
     cy.get('[data-cy="feedback-target-continuous-feedback-tab"]').click()
 
     cy.contains('Giving continuous feedback')
