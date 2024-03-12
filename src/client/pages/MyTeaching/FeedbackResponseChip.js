@@ -51,10 +51,10 @@ const FeedbackResponseChip = ({
         continuous
           ? `feedback-response-chip-continuous-${id}`
           : ongoing
-          ? `feedbackOpen-${id}`
+          ? `feedback-response-chip-open-${id}`
           : feedbackResponseGiven
           ? feedbackResponseSent
-            ? `feedbackResponseGiven-${id}-${Boolean(feedbackResponseGiven)}`
+            ? `feedback-response-chip-given-${id}`
             : `feedback-response-chip-not-sent-${id}`
           : `feedback-response-chip-missing-${id}`
       }

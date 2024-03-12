@@ -72,7 +72,7 @@ describe('Teacher view', () => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
-      cy.get(`[data-cy="feedbackOpen-${id}"]`).click()
+      cy.get(`[data-cy="feedback-response-chip-open-${id}"]`).click()
     })
 
     // Counter feedback chip is rendered for ended course
@@ -135,7 +135,7 @@ describe('Teacher view', () => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
-      cy.get(`[data-cy="feedbackResponseGiven-${id}-true"]`).first().click()
+      cy.get(`[data-cy="feedback-response-chip-given-${id}"]`).first().click()
     })
 
     // Interim feedback chip is rendered
@@ -185,7 +185,7 @@ describe('Teacher view', () => {
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').click()
 
     cy.contains('TEST_COURSE').click()
-    cy.get('@fbtId').then(id => cy.get(`[data-cy=feedbackResponseGiven-${id}-true]`))
+    cy.get('@fbtId').then(id => cy.get(`[data-cy=feedback-response-chip-given-${id}]`))
   })
 
   it('Teacher can add questions to a survey', () => {
