@@ -41,7 +41,6 @@ describe('Continuous feedback', () => {
     cy.contains('Giving continuous feedback')
 
     // Teacher replies to continuous feedback
-    const response = 'Responding to continuous feedback'
     cy.loginAs(teacher)
     cy.visit(`/courses`)
 
@@ -58,11 +57,11 @@ describe('Continuous feedback', () => {
     cy.contains('Giving continuous feedback')
 
     cy.get('[data-cy=respondContinuousFeedback]').click()
-    cy.get('textarea').first().type(response)
+    cy.get('textarea').first().type('Responding to continuous feedback')
     cy.get('[data-cy=sendContinuousFeedbackResponse]').click()
 
     cy.contains('Response sent succesfully')
-    cy.contains(response)
+    cy.contains('Responding to continuous feedback')
 
     // Student sees continuous feedback response
     cy.loginAs(student)
@@ -72,6 +71,6 @@ describe('Continuous feedback', () => {
     cy.get('[data-cy=giveContinuousFeedback]').click()
     cy.get('[data-cy=feedback-target-continuous-feedback-tab]').click()
 
-    cy.contains(response)
+    cy.contains('Responding to continuous feedback')
   })
 })
