@@ -128,7 +128,7 @@ const FeedbackTargetContent = () => {
             title={t('common:survey')}
             hideTitle={isStudent}
           >
-            {feedbackGiven && isOpen ? (
+            {(justGivenFeedback || feedback) && isOpen ? (
               <RouterTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}
