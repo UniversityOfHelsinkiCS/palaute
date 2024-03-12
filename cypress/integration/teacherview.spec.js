@@ -44,6 +44,91 @@ describe('Teacher view', () => {
     })
   })
 
+  it.only('Teacher view feedback chips are rendered correctly', () => {
+    // Continuous feedback chip is rendered
+    cy.visit(`/courses`)
+    cy.setFeedbackOpeningSoon()
+    cy.setContinuousFeedbackActive()
+
+    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedback-response-chip-continuous-${id}"]`).should('exist')
+    })
+
+    // Ongoing feedback chip is rendered
+    cy.setFeedbackActive()
+    cy.visit(`/courses`)
+
+    cy.get('[data-cy=my-teaching-active-tab]').contains('Active surveys').should('exist').click()
+    cy.get('[data-cy="my-teaching-no-courses"]').should('not.exist')
+
+    cy.get('[data-cy=my-teaching-course-unit-item-TEST_COURSE]').should('exist')
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedbackOpen-${id}"]`).click()
+    })
+
+    // Counter feedback chip is rendered for ended course
+    cy.visit(`/courses`)
+
+    cy.giveFeedback(student)
+    cy.setFeedbackClosed()
+
+    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
+
+    // Check that the counter feedback missing chip is rendered on the CU level
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="feedbackResponseGiven-${id}-false"]`)
+    })
+
+    // Check that the counter feedback missing chip is rendered on the feedback target level
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedbackResponseGiven-${id}-false"]`)
+    })
+
+    cy.pause()
+
+    // Interim feedback chip is rendered
+    cy.visit(`/courses`)
+    cy.setFeedbackActive()
+
+    const today = new Date()
+    const interimFeedbackBody = {
+      name: {
+        fi: 'Testi välipalaute',
+        en: 'Test interim feedback',
+        sv: '',
+      },
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 7),
+    }
+
+    cy.getTestFbtId().as('parentId')
+
+    cy.get('@parentId').then(parentId => {
+      cy.createInterimFeedback(parentId, interimFeedbackBody)
+
+      cy.get(`[data-cy="my-teaching-active-tab"]`).contains('Active surveys').should('exist').click()
+      cy.get(`[data-cy="my-teaching-course-unit-item-TEST_COURSE"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${parentId}"]`).should('exist')
+
+      cy.get(`[data-cy="interim-feedback-chip-${parentId}"]`).should('exist')
+    })
+  })
+
   it('A logged in teacher can give counter feedback for an ended course', () => {
     cy.setFeedbackClosed()
 
