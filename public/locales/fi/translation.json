@@ -175,8 +175,6 @@
     "organisationSurveys": "Organisaatiokyselyt",
     "courseSurveys": "Kurssikyselyt",
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
-    "newView": "Kokeile uutta näkymää",
-    "oldView": "Takaisin vanhaan näkymää",
     "expandMoreLabel": "Näytä piilotetut kyselyt"
   },
   "questionEditor": {

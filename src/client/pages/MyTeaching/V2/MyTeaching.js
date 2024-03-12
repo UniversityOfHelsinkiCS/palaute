@@ -20,7 +20,6 @@ import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
-import LinkButton from '../../../components/common/LinkButton'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 
 const CourseUnitGroupSkeleton = () => (
@@ -84,7 +83,6 @@ const MyTeaching = () => {
         <Typography id="my-teaching-title" variant="h4" component="h1">
           {t('teacherView:mainHeading')}
         </Typography>
-        <LinkButton to="/courses/" title={t('teacherView:oldView')} />
       </Box>
 
       <StatusTabs
