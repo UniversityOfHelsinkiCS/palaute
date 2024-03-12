@@ -30,7 +30,7 @@ describe('Continuous feedback', () => {
     cy.loginAs(student)
     cy.visit(``)
 
-    cy.get('[data-cy=my-teaching-continuous-tab]').click()
+    cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
 
     cy.get('textarea').first().type('Giving continuous feedback')
@@ -67,7 +67,7 @@ describe('Continuous feedback', () => {
     cy.loginAs(student)
     cy.visit(``)
 
-    cy.get('[data-cy=my-teaching-continuous-tab]').click()
+    cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
     cy.get('[data-cy=feedback-target-continuous-feedback-tab]').click()
 
