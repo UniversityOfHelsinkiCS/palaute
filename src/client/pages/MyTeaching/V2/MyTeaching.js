@@ -102,7 +102,7 @@ const MyTeaching = () => {
 
       {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
         <Alert data-cy="my-teaching-no-courses" severity="info">
-          {t('teacherView:noCoursesV2')}
+          {t('teacherView:noCourses')}
         </Alert>
       )}
 
