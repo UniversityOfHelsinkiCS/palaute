@@ -52,7 +52,11 @@ const FeedbackResponseChip = ({
           ? `feedback-response-chip-continuous-${id}`
           : ongoing
           ? `feedbackOpen-${id}`
-          : `feedbackResponseGiven-${id}-${Boolean(feedbackResponseGiven)}`
+          : feedbackResponseGiven
+          ? feedbackResponseSent
+            ? `feedbackResponseGiven-${id}-${Boolean(feedbackResponseGiven)}`
+            : `feedback-response-chip-not-sent-${id}`
+          : `feedback-response-chip-missing-${id}`
       }
       to={url}
       label={continuous ? continuousLabel : ongoing ? ongoingLabel : label}

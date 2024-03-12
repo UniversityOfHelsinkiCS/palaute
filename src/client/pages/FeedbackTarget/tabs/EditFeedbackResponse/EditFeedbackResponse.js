@@ -107,6 +107,7 @@ const EditFeedbackResponse = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                        data-cy="feedback-response-send-email-checkbox"
                         color="primary"
                         checked={sendEmail || isSent}
                         disabled={isSent}

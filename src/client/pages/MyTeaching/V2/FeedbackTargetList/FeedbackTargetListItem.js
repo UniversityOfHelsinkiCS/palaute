@@ -57,7 +57,9 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip })
   const courseName = getLanguageValue(courseRealisation.name, i18n.language)
 
   const fetchFeedbackResponseChip =
-    isOpen || (isOngoing && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))
+    isOpen ||
+    (isOngoing && continuousFeedbackEnabled) ||
+    (isEnded && (feedbackCount > 0 || Boolean(feedbackResponseGiven)))
 
   return (
     <>
