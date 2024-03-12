@@ -86,7 +86,7 @@ describe('Teacher view', () => {
     // Check that the counter feedback missing chip is rendered on the CU level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
     cy.get('@fbtId').then(id => {
-      cy.get(`[data-cy="feedbackResponseGiven-${id}-false"]`)
+      cy.get(`[data-cy="feedback-response-chip-missing-${id}"]`)
     })
 
     // Check that the counter feedback missing chip is rendered on the feedback target level
@@ -95,10 +95,48 @@ describe('Teacher view', () => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
-      cy.get(`[data-cy="feedbackResponseGiven-${id}-false"]`)
+      cy.get(`[data-cy="feedback-response-chip-missing-${id}"]`)
     })
 
-    cy.pause()
+    // Check that the counter feedback given chip is rendered on the feedback target level
+
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedback-response-chip-missing-${id}"]`).first().click()
+    })
+
+    cy.get('textarea').first().type('Counter feedback for students to see')
+    // Do not send the email
+    cy.get('[data-cy="feedback-response-send-email-checkbox"]').click()
+    cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
+
+    cy.visit(`/courses`)
+    cy.get('[data-cy=my-teaching-ended-tab]').click()
+
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedback-response-chip-not-sent-${id}"]`).first().click()
+    })
+
+    // Send the feedback response email, which should render a new chip after the response is sent
+    cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
+    cy.get('[data-cy=saveFeedbackResponse]').click()
+
+    cy.visit(`/courses`)
+    cy.get('[data-cy=my-teaching-ended-tab]').click()
+
+    cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
+    cy.get('@fbtId').then(id => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
+      cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
+
+      cy.get(`[data-cy="feedbackResponseGiven-${id}-true"]`).first().click()
+    })
 
     // Interim feedback chip is rendered
     cy.visit(`/courses`)
