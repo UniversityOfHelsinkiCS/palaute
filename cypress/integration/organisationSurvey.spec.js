@@ -493,8 +493,11 @@ describe('Responsible Teachers', () => {
   it('can view own organisation surveys if responsible teacher', () => {
     cy.visit(`/courses`)
 
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
     // Visit the organisation survey where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_ORG-SRV"').should('exist').click()
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
     })
@@ -536,8 +539,11 @@ describe('Responsible Teachers', () => {
   it('can edit organisation surveys', () => {
     cy.visit(`/courses`)
 
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
     // Edit the survey to add students and new responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_ORG-SRV"').should('exist').click()
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
     })
@@ -579,8 +585,11 @@ describe('Responsible Teachers', () => {
   it('can not create/edit questions for ongoing organistaion survey', () => {
     cy.visit(`/courses`)
 
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
     // Edit the survey to add students and new responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_ORG-SRV"').should('exist').click()
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
     })
@@ -607,8 +616,14 @@ describe('Responsible Teachers', () => {
 
     cy.visit(`/courses`)
 
+    cy.get('[data-cy="my-teaching-upcoming-tab"').should('exist').click()
+
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
     // Edit the survey to add students and new responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click({ multiple: true })
+    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_ORG-SRV"').should('exist').click()
+
     cy.get('@organisationSurvey').then(organisationSurvey => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
     })
