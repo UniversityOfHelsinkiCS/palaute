@@ -31,7 +31,7 @@ const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
 
   return (
     <Tooltip title={feedbackPeriod}>
-      <Typography>
+      <Typography data-cy={`my-teaching-feedback-target-period-info-${feedbackTarget.id}`}>
         {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
     </Tooltip>

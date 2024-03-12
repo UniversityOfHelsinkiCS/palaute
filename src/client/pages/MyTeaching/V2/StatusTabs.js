@@ -52,7 +52,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
       {...props}
     >
       <StatusTab
-        data-cy="my-teaching-ongoing-tab"
+        data-cy="my-teaching-active-tab"
         label={t('teacherView:activeSurveys')}
         status="active"
         icon={<OngoingIcon />}
@@ -66,7 +66,7 @@ const StatusTabs = ({ status, counts, ...props }) => {
         iconPosition="start"
       />
       <StatusTab
-        data-cy="my-feedbacks-ended-tab"
+        data-cy="my-teaching-ended-tab"
         label={t('teacherView:endedSurveys')}
         status="ended"
         color="error"
