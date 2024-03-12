@@ -175,7 +175,9 @@
     "organisationSurveys": "Organisation surveys",
     "courseSurveys": "Course surveys",
     "disabledCourseWarning": "Feedback is disabled for this course",
-    "expandMoreLabel": "Show hidden surveys"
+    "expandMoreLabel": "Show hidden surveys",
+    "survey": "Survey",
+    "surveys": "Surveys"
   },
   "questionEditor": {
     "addQuestion": "Add question",
