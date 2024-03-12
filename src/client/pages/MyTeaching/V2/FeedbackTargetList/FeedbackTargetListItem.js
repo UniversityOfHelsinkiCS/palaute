@@ -75,11 +75,6 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip })
             isOld={isOld}
             ongoing={isOpen}
             continuous={isOngoing && continuousFeedbackEnabled}
-            data-cy={
-              isOpen
-                ? `feedbackOpen-${feedbackTarget.id}`
-                : `feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`
-            }
           />
         )}
       </Box>

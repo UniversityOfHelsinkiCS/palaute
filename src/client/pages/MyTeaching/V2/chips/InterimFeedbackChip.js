@@ -12,6 +12,7 @@ const InterimFeedbackChip = ({ parentFeedbackTarget }) => {
 
   return (
     <LinkChip
+      data-cy={`interim-feedback-chip-${parentFeedbackTarget.id}`}
       to={url}
       label={t('teacherView:interimFeedbackOpen')}
       sx={{

@@ -47,6 +47,13 @@ const FeedbackResponseChip = ({
 
   return (
     <LinkChip
+      data-cy={
+        continuous
+          ? `feedback-response-chip-continuous-${id}`
+          : ongoing
+          ? `feedbackOpen-${id}`
+          : `feedbackResponseGiven-${id}-${Boolean(feedbackResponseGiven)}`
+      }
       to={url}
       label={continuous ? continuousLabel : ongoing ? ongoingLabel : label}
       sx={{
