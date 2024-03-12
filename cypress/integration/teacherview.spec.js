@@ -153,9 +153,7 @@ describe('Teacher view', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.getTestFbtId().as('parentId')
-
-    cy.get('@parentId').then(parentId => {
+    cy.get('@fbtId').then(parentId => {
       cy.createInterimFeedback(parentId, interimFeedbackBody)
 
       cy.get(`[data-cy="my-teaching-active-tab"]`).contains('Active surveys').should('exist').click()
