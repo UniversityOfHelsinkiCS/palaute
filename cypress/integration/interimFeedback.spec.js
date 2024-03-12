@@ -5,6 +5,8 @@ const { student, teacher, admin } = require('../fixtures/headers')
 describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.createFeedbackTarget({ extraStudents: 5 })
+    cy.setFeedbackActive()
+
     const today = new Date()
     const interimFeedbackBody = {
       name: {
@@ -28,7 +30,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -88,7 +90,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
