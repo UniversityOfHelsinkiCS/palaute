@@ -49,8 +49,6 @@ $ npm run reset
 
 We like the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
 
-To automatically create commits that adhere to the spec, use [CommitSense](https://github.com/HRemonen/CommitSense).
-
 ## Documentation
 
 ### Service architecture overview
