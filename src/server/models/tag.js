@@ -39,6 +39,9 @@ Tag.init(
         return hash(this.name.fi)
       },
     },
+    summary: {
+      type: VIRTUAL,
+    },
   },
   {
     underscored: true,

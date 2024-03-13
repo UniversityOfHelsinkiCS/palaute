@@ -53,11 +53,7 @@ const NorppaFeedback = () => {
   }
 
   const confirmSubmit = event => {
-    if (
-      // eslint-disable-next-line no-alert
-      !window.confirm(t('norppaFeedback:confirm'))
-    )
-      event.preventDefault()
+    if (!window.confirm(t('norppaFeedback:confirm'))) event.preventDefault()
   }
   return (
     <Box>

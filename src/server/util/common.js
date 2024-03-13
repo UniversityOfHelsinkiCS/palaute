@@ -1,3 +1,6 @@
+const { addYears, subDays, startOfDay, endOfDay } = require('date-fns')
+const { parseFromTimeZone } = require('date-fns-timezone')
+
 const isNumber = value => !Number.isNaN(parseInt(value, 10))
 
 const normalizeOrganisationCode = r => {
@@ -13,28 +16,6 @@ const normalizeOrganisationCode = r => {
   const suffix = `${left[0]}${right}`
   const providercode = `${prefix}0-${suffix}`
   return providercode
-}
-
-const mapToDegreeCode = organisationCode => {
-  if (!organisationCode) return ''
-
-  const isKielikeskusOrAvoin = ['H906', 'H930'].includes(organisationCode)
-  if (isKielikeskusOrAvoin) {
-    return organisationCode
-  }
-
-  if (organisationCode.length < 7) return ''
-  const doctoral = organisationCode[0] === 'T'
-  if (doctoral) {
-    return organisationCode
-  }
-
-  const [start, end] = organisationCode.split('-')
-  if (end && end.length < 3) return ''
-  if (start.length < 2) return ''
-  const masters = end[0] === 'M'
-  const code = `${masters ? 'M' : 'K'}H${start.substr(0, 2)}_${end.substr(-3)}`
-  return code
 }
 
 // Year starting month
@@ -58,8 +39,39 @@ const startOfStudyYear = date => {
   return new Date(`${year}-${MONTH}-01`)
 }
 
+/**
+ *
+ * @param {Date | string | number} date
+ * @returns {Date} last day of study year
+ */
+const endOfStudyYear = date => {
+  const start = startOfStudyYear(date)
+  return subDays(addYears(start, 1), 1)
+}
+
+const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+
+const formatActivityPeriod = ({ startDate, endDate }) => {
+  if (!startDate || !endDate) return null
+
+  return {
+    startDate: startOfDay(parseDate(startDate)),
+    endDate: endOfDay(parseDate(endDate)),
+  }
+}
+
+/**
+ * Transform tagId to the prefixed format used in summaries entityIds.
+ * This is for avoiding conflicts with other entityIds that may come from external APIs.
+ * @param {number} tagId - the original tagId
+ * @returns {string} the prefixed tagId, e.g. 'norppa-tag-1234'
+ */
+const prefixTagId = tagId => `norppa-tag-${tagId}`
+
 module.exports = {
   normalizeOrganisationCode,
-  mapToDegreeCode,
   startOfStudyYear,
+  endOfStudyYear,
+  formatActivityPeriod,
+  prefixTagId,
 }

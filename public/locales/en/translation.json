@@ -21,6 +21,7 @@
     "send": "Send",
     "show": "Show",
     "hide": "Hide",
+    "cancel": "Cancel",
     "accept": "Accept",
     "preview": "Preview",
     "clearSelection": "Clear selection",
@@ -34,15 +35,16 @@
     "feedback": "Feedback",
     "feedbackGiven": "Given",
     "feedbackNotGiven": "Not given",
+    "feedbackHidden": "Hidden",
     "export": "Download",
-    "exportCsv": "Download as CSV",
-    "exportPdf": "Download as PDF",
+    "exportCsv": "Download CSV",
+    "exportXLSX": "Download XLSX",
+    "exportPdf": "Download PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",
     "dropZoneInfo1": "Drag a file here, or find it by clicking this box.",
     "dropZoneInfo2": "One .csv-ended file, under 5MB is accepted",
     "feedbackHeader": "FEEDBACK",
-    "dirtyFormPrompt": "The page has unsaved changes. Are you sure want to leave the page?",
     "actions": "Actions",
     "close": "Close",
     "required": "Required",
@@ -63,15 +65,30 @@
     "notPublicShortInfo": "Visible only to responsible teachers and programme admins",
     "publicShortInfo": "Visible to enrolled students",
     "editable": "You can change this setting",
+    "notEditable": "Setting cannot be changed, it's set at a higher level",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",
     "all": "All",
-    "studentCount": "Students"
+    "studentCount": "Students",
+    "partiallyResponsible": "Partially responsible",
+    "university": "University",
+    "sort": "Sort",
+    "ascending": "ascending",
+    "descending": "descending",
+    "additional": "Additional",
+    "feedbacksGivenRatio": "Feedbacks given / Enrolled student count",
+    "id": "Identifier",
+    "code": "Code",
+    "organisationCode": "Organisation code",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "validationErrors": {
     "required": "This field is required",
     "wrongDate": "Survey closing date is before opening date",
-    "invalidDate": "Invalid date"
+    "invalidDate": "Invalid date",
+    "invalidStudentNumbers": "Please check the indicated invalid student numbers",
+    "overlappingStudentTeacher": "Responsible person can not be a student at the same time"
   },
   "links": {
     "supportEmail": "-",
@@ -85,7 +102,10 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseSummaryCourseUnitLink": "-",
+    "courseSummaryCourseUnitLinkStudent": "-",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
@@ -131,6 +151,7 @@
   },
   "teacherView": {
     "mainHeading": "My teaching",
+    "mainHeadingV2": "My surveys",
     "copyLink": "Copy answer form link",
     "copyResponseLink": "Copy link to counter feedback",
     "copied": "Link copied to clipboard",
@@ -139,20 +160,32 @@
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations",
     "noCourses": "No courses",
+    "noCoursesV2": "There are currently no courses to show",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",
     "feedbackResponseMissing": "Counter feedback missing",
     "continuousFeedback": "Continuous feedback",
     "feedbackOpen": "Feedback open",
+    "interimFeedbackOpen": "Interim feedback open",
     "ongoingCourses": "Ongoing courses",
     "upcomingCourses": "Upcoming courses",
     "endedCourses": "Ended courses",
     "feedbackNotStarted": "Feedback has not started",
-    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Feedback period: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Active surveys",
+    "upcomingSurveys": "Upcoming surveys",
+    "endedSurveys": "Ended surveys",
+    "organisationSurveys": "Organisation surveys",
+    "courseSurveys": "Course surveys",
+    "disabledCourseWarning": "Feedback is disabled for this course",
+    "newView": "Test the new view",
+    "oldView": "Go back to the old view",
+    "expandMoreLabel": "Show hidden surveys"
   },
   "questionEditor": {
     "addQuestion": "Add question",
+    "addTextualContent": "Add textual content",
     "likertQuestion": "Scale of values",
     "openQuestion": "Open question",
     "singleChoiceQuestion": "Single choice question",
@@ -176,7 +209,8 @@
     "universityQuestion": "University level",
     "programmeQuestion": "Programme level",
     "uneditableTooltip": "This is predefined and automatically added to the survey and it can not be edited or removed",
-    "duplicate": "Duplicate"
+    "duplicate": "Duplicate",
+    "markDownSupport": "These fields supports <2>Markdown</2> content"
   },
   "editFeedbackTarget": {
     "closesAt": "Closes at",
@@ -192,10 +226,10 @@
     "noUnsavedChanges": "No unsaved changes",
     "openImmediately": "Open feedback now",
     "openImmediatelyConfirm": "When feedback is open the survey can no longer be edited, do you still want to open the feedback?",
-    "copyFromCourseDialogTitle": "Copy questions from another course",
+    "copyFromCourseDialogTitle": "Copy questions from another survey",
     "copySuccessSnackbar": "The questions have been copied into the survey",
     "copyQuestionsButton": "Copy questions",
-    "copyFromCourseButton": "Copy questions from another course",
+    "copyFromCourseButton": "Copy questions from another survey",
     "copyFromCourseInfoAlert": "You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions",
     "copyFromCourseChooseCourse": "Choose a course to see its realisations",
     "copyFromCourseNoQuestions": "None of the realisations on the course have any questions",
@@ -220,7 +254,8 @@
     "here": "here",
     "multipleChoiceQuestions": "Multiple choice questions",
     "openQuestions": "Open questions",
-    "multipleChoiceScale": "1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer"
+    "multipleChoiceScale": "1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer",
+    "publicQuestionConfirmation": "I have checked that the open answers to this question do not contain personal data or other sensitive information that cannot be published."
   },
   "feedbackSummary": {
     "question": "Question",
@@ -231,6 +266,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
+    "notEnoughStudentsInfo": "To protect the anonymity of feedback, survey results are not shown when there are fewer than {{count}} enrolled students.",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
     "studentsWithFeedbackHeading": "Students who have given feedback",
@@ -253,15 +289,21 @@
     "modalTitle": "Send a reminder about feedback via email",
     "writeAMessage": "Write a message to students",
     "emailMessage": "Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>",
+    "customEmailMessage": "Dear recipient! \n Please answer the survey {{courseName}}. The answering period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>",
+    "emailMessageInfo": "(The preamble is translated to the student's preferred language)",
     "modalSubtitle": "Students who have already given feedback wont receive this email",
     "emailSent": "Reminder email sent",
     "setHidden": "Hide this answer",
     "setVisible": "Unhide",
     "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and programme administrators",
+    "hideSuccess": "Ok. Answers to this question with the content \"{{content}}...\" ({{count}}) have been hidden.",
+    "showSuccess": "Ok. Answers to this question with the content  \"{{content}}...\" ({{count}}) have been made visible.",
     "hidingFeatureInfoTitle": "Info about hiding answers",
     "publishingInfo": "The answers to this questions are not shown to students. You can publish the answers to enrolled students from the button on the left titled \"Not public\".",
     "unpublishingInfo": "The answers to this questions are shown to students.",
-    "hidingFeatureInfo": "If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published."
+    "hidingFeatureInfo": "If some answer contains personal information such as student number, or the answer is otherwise inappropriate, you can hide it with the eye-icon on the right. This has effect only when the answers are published.",
+    "confirmDeleteFeedback": "You are about to PERMANTENTLY delete a student's answer using admin rights. Are you sure you want to delete this answer? Type \"delete\" to confirm.",
+    "deleteSuccess": "Answer \"{{content}}\" deleted. ({{count}})"
   },
   "groups": {
     "groupingSettings": "Grouping",
@@ -301,8 +343,8 @@
     "none": "none"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "The list of students who have given feedback cannot be shown while the feedback is open.",
-    "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
+    "cannotShowBeforeFeedbackEnds": "Information about students who have given feedback cannot be shown before the feedback period has ended.",
+    "noFeedbackInfo": "Information about students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the programme's settings",
     "studentsList": "Students who have given feedback"
   },
   "feedbackResponse": {
@@ -332,10 +374,62 @@
     "everyone": "Everyone"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Feedback period",
+    "editPeriodTitle": "Edit feedback period",
     "cannotCloseImmediately": "Feedback is not yet open",
     "cannotCloseImmediatelyWhenOpen": "Feedback either closes within a day or has already ended",
     "cannotOpenImmediately": "Feedback is already open or has ended"
+  },
+  "organisationSurveys": {
+    "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",
+    "givenFeedback": "Feedbacks given",
+    "viewFeedback": "View survey",
+    "viewResults": "View results",
+    "addSurvey": "Create new programme survey",
+    "editSurvey": "Edit survey settings",
+    "newSurveyName": "Survey name",
+    "responsibleTeachers": "Responsible persons",
+    "responsibleTeacherTitle": "Add a responsible person to this survey",
+    "editResponsibleTeacherTitle": "Edit surveys responsible persons",
+    "responsibleTeacherEmail": "Email",
+    "students": "Students",
+    "studentNumberTitle": "Add students to this survey",
+    "editStudentNumberTitle": "Edit surveys students",
+    "studentNumberInputLabel": "Paste student numbers here",
+    "studentNumberInformation": "Student numbers can be separated by the following characters",
+    "studentNumberDelimeters": {
+      "comma": "Comma",
+      "semicolon": "Semicolon",
+      "space": "Space",
+      "newline": "Newline"
+    },
+    "studentNumberExampleInput": "For example, as follows",
+    "confirmStudentDelete": "Are you sure you want to remove the student: {{ studentNumber }} from this survey?",
+    "startDate": "From",
+    "endDate": "To",
+    "surveys": "surveys",
+    "edit": "Edit",
+    "remove": "Remove",
+    "confirmRemoveSurvey": "Are you sure you want to remove this programme survey?",
+    "removeSuccess": "Programme survey removed",
+    "feedbacksGivenRatio": "Feedbacks given / Student count"
+  },
+  "interimFeedback": {
+    "interimFeedback": "Interim Feedback",
+    "emptySurveys": "There are no interim feedbacks for this programme yet; you can create a new interim feedback for the course here.",
+    "givenFeedback": "Feedbacks given",
+    "viewFeedback": "View interim feedback",
+    "viewResults": "View results",
+    "addSurvey": "Create new interim feedback",
+    "editSurvey": "Edit interim feedback",
+    "newSurveyName": "Interim feedback name",
+    "responsibleTeachers": "Responsible persons",
+    "students": "Students",
+    "startDate": "From",
+    "endDate": "To",
+    "edit": "Edit",
+    "remove": "Remove",
+    "confirmRemoveSurvey": "Are you sure you want to remove this interim feedback?",
+    "removeSuccess": "Interim feedback removed"
   },
   "courseSummary": {
     "heading": "Summary of course feedback",
@@ -345,10 +439,12 @@
     "clickForDetails": "Click for details",
     "feedbackResponse": "Latest course counter feedback given",
     "feedbackCount": "Feedback count",
+    "studentCount": "Student count",
     "censoredCount": "Manually hidden feedbacks",
     "feedbackPercentage": "Feedback percentage",
     "feedbackResponseGiven": "Counter feedback has been given",
     "feedbackResponseNotGiven": "Counter feedback has not been given",
+    "feedbackResponsePercentage": "Courses where feedback response given (%)",
     "feedbackStillOpen": "Feedback for this course is still ongoing",
     "courseOngoing": "The course is still ongoing",
     "programmeSummary": "Programme summary",
@@ -378,13 +474,28 @@
     "semester": "Semester",
     "spring": "Spring",
     "fall": "Fall",
-    "name": "Name",
-    "code": "Code",
-    "organisationCode": "Organisation code",
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
-    "noCourseRealisations": "No course realisations with feedback available for this course unit"
+    "noCourseRealisations": "No course realisations with feedback available for this course unit",
+    "coursePage": "Course page",
+    "myOrganisations": "My organisations",
+    "myCourses": "My courses",
+    "newView": "Go to the new course summary",
+    "treeView": "Show in a hierarchy",
+    "flatView": "Show in a list",
+    "includeOpenUni": "Include open uni courses",
+    "excludeOpenUni": "Exclude open uni courses",
+    "onlyOpenUni": "Show only open uni courses"
+  },
+  "generateReport": {
+    "selectIncluded": "Select content",
+    "organisations": "Organisations",
+    "courseUnits": "Course units",
+    "courseRealisations": "Course realisations",
+    "selectTimeRange": "Select timespan",
+    "selectedTime": "Currently selected",
+    "allTime": "All time"
   },
   "footer": {
     "contactSupport": "Contact support",
@@ -396,15 +507,20 @@
     "noFeedbackTarget": "This course does not have a feedback available to you"
   },
   "organisationSettings": {
-    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
-    "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback",
+    "surveyInfo": "Programme level questions are displayed in every programme's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions. You can change the answers visibility from the 'Public'/'Not public'-button, but only if the question isn't already set as public at a higher level.",
+    "studentListVisibility": "Visibility of students who have given feedback",
+    "studentListVisibilityInfo": "Students who have given feedback are shown to the course's responsible teacher after the feedback period has ended if at least five students have given feedback.",
+    "studentListVisible": "Show for all courses",
+    "studentListHidden": "Hide for all courses",
+    "studentListByCourse": "Set visibility for each course",
     "courseSettingsInfo": "Feedback is only collected from activated courses",
     "settingsTab": "Settings",
     "generalSettings": "General settings",
     "courseSettings": "Course settings",
     "feedbackCorrespondent": "Feedback liaison",
     "feedbackCorrespondents": "Feedback liaisons",
-    "surveyTab": "Programme survey",
+    "surveyTab": "Programme questions",
+    "organisationSurveysTab": "Programme surveys",
     "summaryTab": "Summary",
     "courseRealisationsTab": "Course realisations",
     "openQuestionsTab": "Open questions",
@@ -436,7 +552,8 @@
     "courseUnitTagInfo": "Course realisation inherits {{count}} studytracks from its course unit {{code}}",
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
-    "showCurName": "Show course realisation names"
+    "showCurName": "Show course realisation names",
+    "searchUser": "Email or name"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",
@@ -444,7 +561,8 @@
     "feedbacksTab": "Answers",
     "feedbackResponseTab": "Counter feedback",
     "continuousFeedbackTab": "Continuous feedback",
-    "editFeedbackResponseTab": "Give counter feedback",
+    "giveFeedbackResponseTab": "Give counter feedback",
+    "editFeedbackResponseTab": "Edit counter feedback",
     "studentsWithFeedbackTab": "Respondents",
     "linkCopied": "A link to the feedback has been copied to clipboard",
     "copyLink": "Copy student's feedback link",
@@ -453,11 +571,13 @@
     "feedbackPeriod": "Feedback open",
     "coursePage": "Course page",
     "courseSummary": "Summary of course's instances",
+    "courseSisuPage": "Course Sisu page",
     "teachers": "Teachers",
     "responsibleTeachers": "Responsible teachers",
     "administrativePersons": "Administrative persons",
     "shareTab": "Share",
     "surveySettingsTab": "Edit",
+    "surveyTabDisabledTooltip": "Survey can no longer be edited after the feedback has opened",
     "results": "Results",
     "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course, before the actual course feedback starts on the course end date.",
     "activateContinuousFeedback": "Activate continuous feedback for the course",
@@ -477,8 +597,11 @@
     "qrCodeHelpText": "Easiest way to share the QR-code is by screenshotting it",
     "deleteTeacherConfirmation": "Delete {{name}} from teachers?",
     "noFeedbackResponseYet": "The teacher of the course has not yet given counter feedback",
-    "noAccess": "Sorry, we couldn't find your enrolment to this course. If you enrollent recently, you might have to wait 1 or 2 hours.",
-    "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct"
+    "noAccess": "We couldn't find your enrolment for this course. If you enrollent recently, you might need to wait for 1-2 hours.",
+    "noAccessOldCourse": "The feedback period ended over a year ago, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
+    "noAccessEndedCourse": "The feedback period has ended, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
+    "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
+    "interimFeedbackTab": "Interim feedbacks"
   },
   "noadUser": {
     "noUser": "Something went wrong, you are currently not logged in. Try going through the email link again or contact the course teacher",
@@ -500,7 +623,9 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Please give feedback on the course {{courseName}}",
-      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+      "customSubject": "Please answer the survey {{courseName}}",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}",
+      "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
     },
     "continuousFeedbackResponse": {
       "subject": "Your feedback received a response on on the course {{courseName}}",
@@ -518,17 +643,20 @@
     },
     "counterFeedbackReminder": {
       "subject": "Please give counter feedback for the course {{courseName}}",
-      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
+      "customSubject": "Please give counter feedback for the survey {{courseName}}",
+      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}",
+      "customText": "Dear recipient! <br/>\nThe answering period for the survey has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the survey name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all survey participants. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "A new counter feedback from your teacher to course {{courseName}}",
-      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+      "text": "Dear student!\n\n The teacher of the course {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>",
+      "customText": "Dear student!\n\n The administrator of the survey {{courseName}} {{dates}} has responded to the feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the survey responses here: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Feedback for the course {{courseName}} is about to start",
       "subjectMultiple": "The feedback for your courses are about to start",
       "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "-"
+    "instructionsAndSupport": "Contact support."
   }
 }

@@ -13,6 +13,9 @@ const getUniversitySurvey = async () => {
   const universitySurvey = await Survey.findOne({
     where: { type: 'university' },
   })
+  if (!universitySurvey) {
+    throw new Error('University survey not found')
+  }
   await universitySurvey.populateQuestions()
 
   const numericQuestionIds = universitySurvey.questions

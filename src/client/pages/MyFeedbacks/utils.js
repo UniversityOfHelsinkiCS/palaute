@@ -1,16 +1,7 @@
 import groupBy from 'lodash/groupBy'
 
 import { INCLUDE_COURSES } from '../../util/common'
-
-export const courseRealisationIsMisisingFeedback = courseRealisation => {
-  if (!Array.isArray(courseRealisation.feedbackTargets)) {
-    return false
-  }
-
-  const missing = courseRealisation.feedbackTargets.find(({ feedback }) => !feedback)
-
-  return Boolean(missing)
-}
+import { getInterimFeedbackName } from '../../util/courseIdentifiers'
 
 const courseRealisationSortFn = (a, b) =>
   new Date(b.feedbackTargets[0].closesAt) - new Date(a.feedbackTargets[0].closesAt)
@@ -21,12 +12,6 @@ export const sortCourseRealisations = courseRealisations => {
   copy.sort(courseRealisationSortFn)
 
   return copy
-}
-
-export const getDeletePath = userFeedbackTarget => {
-  const feedbackId = userFeedbackTarget?.feedback?.id
-
-  return feedbackId ? `/feedbacks/${feedbackId}` : null
 }
 
 export const getCourseRealisationsWithFeedbackTargets = feedbackTargets => {
@@ -75,4 +60,13 @@ export const filterFeedbackTargets = feedbackTargets => {
     given: feedbackTargets.given ? filter(feedbackTargets.given) : [],
     ended: feedbackTargets.ended ? filter(feedbackTargets.ended) : [],
   }
+}
+
+export const getCourseName = (feedbackTarget, t) => {
+  const { courseUnit, courseRealisation, userCreated } = feedbackTarget
+
+  if (courseUnit.userCreated) return courseRealisation.name
+  if (userCreated) return getInterimFeedbackName(feedbackTarget.name, courseUnit.name, t)
+
+  return courseUnit.name
 }

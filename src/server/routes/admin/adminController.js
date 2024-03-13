@@ -15,7 +15,6 @@ const {
   UserFeedbackTarget,
   User,
   UpdaterStatus,
-  FeedbackTargetDateCheck,
   Organisation,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
@@ -28,6 +27,7 @@ const logger = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
 const { adminAccess } = require('../../middleware/adminAccess')
+const { buildSummaries } = require('../../services/summary/buildSummaries')
 
 const runUpdater = async (_, res) => {
   logger.info('Running updater on demand')
@@ -198,6 +198,120 @@ const findFeedbackTargets = async (req, res) => {
     params,
     count,
     feedbackTargets: result.map(r => r.toJSON()),
+  })
+}
+
+const findOrganisationSurveys = async (req, res) => {
+  const {
+    query: { id, orgCode, name, language },
+  } = req
+  const params = {}
+
+  const include = [
+    {
+      model: CourseUnit,
+      as: 'courseUnit',
+      attributes: ['courseCode', 'name'],
+      where: {
+        userCreated: true,
+      },
+      required: true,
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          attributes: ['id', 'code', 'name'],
+          through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+          required: true,
+          ...(orgCode && { where: { code: { [Op.iLike]: `${orgCode}%` } } }),
+        },
+      ],
+    },
+    {
+      model: CourseRealisation,
+      as: 'courseRealisation',
+      attributes: ['startDate', 'endDate', 'name'],
+      required: true,
+      include: {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseRealisationsOrganisation },
+      },
+      ...(name?.length > 2 && {
+        where: {
+          [Op.or]: {
+            [`name.${language}`]: { [Op.iLike]: `${name}%` },
+          },
+        },
+      }),
+    },
+    {
+      model: UserFeedbackTarget,
+      attributes: ['id'],
+      as: 'students',
+      required: false,
+      where: { accessStatus: 'STUDENT' },
+      include: {
+        model: User,
+        attributes: ['studentNumber'],
+        as: 'user',
+      },
+    },
+    {
+      model: UserFeedbackTarget,
+      attributes: ['id', 'userId', 'accessStatus'],
+      as: 'userFeedbackTargets',
+      required: false,
+      where: {
+        accessStatus: 'RESPONSIBLE_TEACHER',
+      },
+      include: {
+        model: User,
+        as: 'user',
+      },
+    },
+  ]
+
+  const numberId = Number(id)
+  if (numberId) {
+    const result = await FeedbackTarget.findByPk(numberId, { include })
+    params.id = numberId
+    return res.send({
+      params,
+      feedbackTargets: result ? [result.toJSON()] : [],
+    })
+  }
+
+  const organisationSurveys = await FeedbackTarget.findAll({
+    where: {
+      userCreated: true,
+    },
+    include,
+    order: [['closesAt', 'DESC']],
+  })
+
+  const organisationSurveyCount = await FeedbackTarget.count({
+    where: {
+      userCreated: true,
+    },
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id'],
+        where: {
+          userCreated: true,
+        },
+        required: true,
+      },
+    ],
+  })
+
+  return res.send({
+    params,
+    count: organisationSurveyCount,
+    feedbackTargets: organisationSurveys,
   })
 }
 
@@ -417,42 +531,6 @@ const getNorppaStatistics = async (req, res) => {
   return res.send(resultsWithBetterAvoin)
 }
 
-const getFeedbackTargetsToCheck = async (req, res) => {
-  const relevantFeedbackTargetDateChecks = await FeedbackTargetDateCheck.findAll({
-    where: {},
-    attributes: ['is_solved', 'created_at'],
-    include: [
-      {
-        model: FeedbackTarget,
-        attributes: ['id', 'opens_at', 'closes_at'],
-        as: 'feedback_target',
-        include: [
-          {
-            model: CourseRealisation,
-            attributes: ['name', 'start_date', 'end_date'],
-            as: 'courseRealisation',
-          },
-        ],
-      },
-    ],
-  })
-
-  return res.send(relevantFeedbackTargetDateChecks)
-}
-
-const solveFeedbackTargetDateCheck = async (req, res) => {
-  if (!req.body || !req?.params.id) return res.status(400).send()
-
-  const { id } = req.params
-  const { isSolved } = req.body
-
-  if (!id) return res.status(400)
-
-  await FeedbackTargetDateCheck.update({ is_solved: isSolved }, { where: { feedback_target_id: id } })
-
-  return res.status(200).send()
-}
-
 const createBanner = async (req, res) => {
   const { body } = req
 
@@ -567,6 +645,14 @@ const getNodeConfigEnv = (_req, res) => {
   return res.send({ NODE_CONFIG_ENV })
 }
 
+const updateSummariesTable = async (_req, res) => {
+  logger.info('Starting to update summaries')
+  const start = Date.now()
+  await buildSummaries()
+  const duration = Date.now() - start
+  return res.send({ duration })
+}
+
 const router = Router()
 
 router.use(adminAccess)
@@ -580,9 +666,8 @@ router.post('/run-pate', runPate)
 router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
-router.get('/changed-closing-dates', getFeedbackTargetsToCheck)
-router.put('/changed-closing-dates/:id', solveFeedbackTargetDateCheck)
 router.get('/feedback-targets', findFeedbackTargets)
+router.get('/organisation-surveys', findOrganisationSurveys)
 router.put('/resend-response', resendFeedbackResponseEmail)
 router.get('/feedback-correspondents', getFeedbackCorrespondents)
 router.get('/inactive-course-realisations', getInactiveCourseRealisations)
@@ -591,4 +676,5 @@ router.post('/banners', createBanner)
 router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
 router.get('/node-config-env', getNodeConfigEnv)
+router.post('/build-summaries', updateSummariesTable)
 module.exports = router

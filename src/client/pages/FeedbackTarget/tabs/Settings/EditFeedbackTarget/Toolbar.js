@@ -21,20 +21,10 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
   const history = useHistory()
 
-  const handleClick = e => {
-    e.preventDefault()
-    // eslint-disable-next-line no-alert
-    const redirect = window.confirm(t('editFeedbackTarget:showPreviewConfirmation'))
-    if (redirect) {
-      history.push(previewLink)
-    }
-    return false
-  }
-
   return (
     <FixedContainer>
       <Box sx={styles.container}>
-        <Button color="primary" variant="contained" onClick={handleClick}>
+        <Button color="primary" variant="contained" onClick={() => history.push(previewLink)}>
           {t('editFeedbackTarget:showPreview')}
         </Button>
 

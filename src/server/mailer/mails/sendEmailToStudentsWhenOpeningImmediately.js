@@ -16,6 +16,7 @@ const getFeedbackTargetOpeningImmediately = async feedbackTargetId => {
     where: {
       id: feedbackTargetId,
       feedbackType: 'courseRealisation',
+      userCreated: false,
     },
     include: [
       {

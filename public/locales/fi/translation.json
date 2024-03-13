@@ -21,6 +21,7 @@
     "send": "Lähetä",
     "show": "Näytä",
     "hide": "Piilota",
+    "cancel": "Peruuta",
     "accept": "Hyväksy",
     "preview": "Esikatselu",
     "clearSelection": "Tyhjennä valinta",
@@ -34,10 +35,10 @@
     "feedback": "Palaute",
     "feedbackGiven": "Annettu",
     "feedbackNotGiven": "Ei annettu",
+    "feedbackHidden": "Piilotettu",
     "dropZoneInfo1": "Vedä tiedosto tähän tai hae se klikkaamalla laatikkoa.",
     "dropZoneInfo2": "Alle 5MB .csv-päätteinen tiedosto hyväksytään.",
     "feedbackHeader": "PALAUTE",
-    "dirtyFormPrompt": "Sivulla on tallentamattomia muutoksia. Oletko varma, että haluat siirtyä pois sivulta?",
     "actions": "Toiminnot",
     "close": "Sulje",
     "required": "Pakollinen",
@@ -54,7 +55,8 @@
     "notPublic": "Ei julkinen",
     "export": "Lataa",
     "exportPdf": "Lataa pdf",
-    "exportCsv": "Lataa csv",
+    "exportXLSX": "Lataa XLSX",
+    "exportCsv": "Lataa CSV",
     "combineCSV": "Yhdistä Sisu-CSV:n kanssa",
     "downloadCSV": "Lataa tiedosto",
     "changePublicity": "Muuta näkyvyyttä",
@@ -62,16 +64,31 @@
     "publicInfo": "Vastaukset näkyvät kurssin opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja hallinnolle",
     "publicShortInfo": "Näkyy kurssin opiskelijoille",
+    "notEditable": "Asetusta ei voi muuttaa, se on valittu julkiseksi ylemmällä tasolla",
     "editable": "Voit muuttaa tätä asetusta",
     "studyTracks": "Opintosuunnat",
     "currentlySelected": "Valittuna",
     "all": "Kaikki",
-    "studentCount": "Opiskelijoita"
+    "studentCount": "Opiskelijoita",
+    "partiallyResponsible": "Osavastuullinen",
+    "university": "Yliopisto",
+    "sort": "Järjestä",
+    "ascending": "nousevasti",
+    "descending": "laskevasti",
+    "additional": "Täydentävät",
+    "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä",
+    "id": "Tunniste",
+    "code": "Koodi",
+    "organisationCode": "Organisaatiokoodi",
+    "startDate": "Aloituspvm",
+    "endDate": "Lopetuspvm"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
     "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
-    "invalidDate": "Virheellinen päivämäärä"
+    "invalidDate": "Virheellinen päivämäärä",
+    "invalidStudentNumbers": "Tarkistaisitko merkityt virheelliset opiskelijanumerot",
+    "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla kurssin opiskelija"
   },
   "links": {
     "supportEmail": "-",
@@ -85,7 +102,10 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseSummaryCourseUnitLink": "-",
+    "courseSummaryCourseUnitLinkStudent": "-",
+    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Kurssipalautteeni",
@@ -131,6 +151,7 @@
   },
   "teacherView": {
     "mainHeading": "Opetukseni",
+    "mainHeadingV2": "Kyselyni",
     "copyLink": "Kopioi vastauslinkki",
     "copyResponseLink": "Kopioi linkki vastapalautteeseen",
     "copied": "Linkki kopioitu leikepöydälle",
@@ -140,24 +161,36 @@
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
     "noCourses": "Ei kursseja",
+    "noCoursesV2": "Ei näytettäviä kursseja tällä hetkellä",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
     "continuousFeedback": "Jatkuva palaute",
     "feedbackOpen": "Palaute käynnissä",
+    "interimFeedbackOpen": "Välipalaute käynnissä",
     "ongoingCourses": "Käynnissä olevat kurssit",
     "upcomingCourses": "Tulevat kurssit",
     "endedCourses": "Päättyneet kurssit",
     "feedbackNotStarted": "Palautejakso ei ole vielä alkanut",
-    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Palautteenantoaika: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Aktiiviset kyselyt",
+    "upcomingSurveys": "Tulevat kyselyt",
+    "endedSurveys": "Päättyneet kyselyt",
+    "organisationSurveys": "Organisaatiokyselyt",
+    "courseSurveys": "Kurssikyselyt",
+    "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
+    "newView": "Kokeile uutta näkymää",
+    "oldView": "Takaisin vanhaan näkymää",
+    "expandMoreLabel": "Näytä piilotetut kyselyt"
   },
   "questionEditor": {
-    "addQuestion": "Lisää osio tai kysymys",
+    "addQuestion": "Lisää kysymys",
+    "addTextualContent": "Lisää tekstiosio",
     "likertQuestion": "Arvoasteikkokysymys",
     "openQuestion": "Avoin kysymys",
     "singleChoiceQuestion": "Monivalintakysymys - valitse yksi",
     "multipleChoiceQuestion": "Monivalintakysymys - valitse monta",
-    "textualContent": "Tekstuaalinen sisältö",
+    "textualContent": "Tekstiosio",
     "moveUp": "Siirrä ylös",
     "moveDown": "Siirrä alas",
     "removeQuestion": "Poista kysymys",
@@ -176,7 +209,8 @@
     "universityQuestion": "Yliopistotaso",
     "programmeQuestion": "Koulutusohjelmataso",
     "uneditableTooltip": "Tämä on määritetty etukäteen ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa",
-    "duplicate": "Duplikoi"
+    "duplicate": "Duplikoi",
+    "markDownSupport": "Kentät tukevat <2>Markdown</2> sisältöä"
   },
   "editFeedbackTarget": {
     "closesAt": "Sulkeutuu",
@@ -191,10 +225,10 @@
     "warningAboutOpeningCourse": "HUOM! Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.\n      Palautteen tulee olla auki vähintään yhden vuorokauden ajan.\n      Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo> mikäli ongelmia ilmenee.",
     "noUnsavedChanges": "Ei tallentamattomia muutoksia",
     "openImmediately": "Avaa palaute heti",
-    "copyFromCourseDialogTitle": "Kopioi kysymykset toiselta kurssilta",
+    "copyFromCourseDialogTitle": "Kopioi kysymykset toisesta kyselystä",
     "copySuccessSnackbar": "Kysymykset on kopioitu kyselyyn",
     "copyQuestionsButton": "Kopioi kysymykset",
-    "copyFromCourseButton": "Kopioi kysymykset toiselta kurssilta",
+    "copyFromCourseButton": "Kopioi kysymykset toisesta kyselystä",
     "copyFromCourseInfoAlert": "Voit kopioida kysymyksiä opettamiltasi kursseilta. Valitse ensin kurssi ja sen jälkeen toteutus, jonka kysymykset haluat kopioida",
     "copyFromCourseChooseCourse": "Valitse kurssi nähdäksesi sen toteutukset",
     "copyFromCourseNoQuestions": "Millään kurssin toteutuksella ei ole omia kysymyksiä",
@@ -219,7 +253,8 @@
     "here": "täältä",
     "multipleChoiceQuestions": "Monivalintakysymykset",
     "openQuestions": "Avoimet kysymykset",
-    "multipleChoiceScale": "1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa"
+    "multipleChoiceScale": "1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa",
+    "publicQuestionConfirmation": "Olen tarkistanut, ettei tämän kysymyksen avoimissa vastauksissa ole henkilötietoja tai muita arkaluontoisia tietoja, joita ei voida julkaista."
   },
   "feedbackSummary": {
     "question": "Kysymys",
@@ -230,6 +265,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
+    "notEnoughStudentsInfo": "Palautteen anonyymiuden suojaamiseksi tuloksia ei näytetä, kun ilmoittautuneita opiskelijoita on alle {{count}}.",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
     "studentsWithFeedbackHeading": "Opiskelijat, jotka ovat antaneet palautetta",
@@ -252,15 +288,21 @@
     "modalTitle": "Lähetä muistutus palautteesta sähköpostilla",
     "writeAMessage": "Kirjoita viesti opiskelijoille",
     "emailMessage": "Hyvä opiskelija! \n Vastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
+    "customEmailMessage": "Hyvä vastaanottaja! \n Vastaathan kyselyyn {{courseName}}. Vastausaika päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
+    "emailMessageInfo": "(Viestin alkuosa kääntyy opiskelijan käyttämälle kielelle)",
     "modalSubtitle": "Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä",
     "emailSent": "Muistutusviesti lähetetty",
     "setHidden": "Piilota näkyvistä",
     "setVisible": "Poista piilotus",
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille",
+    "hideSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" on nyt piilotettu. ({{count}} kpl)",
+    "showSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" ovat nyt näkyviä. ({{count}} kpl)",
     "hidingFeatureInfoTitle": "Tietoa vastausten näkyvyydestä",
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy kurssin opiskelijoille. Halutessasi voit julkistaa ne kurssin opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
-    "unpublishingInfo": "Tämän kysymyksen näkyvät kurssin opiskelijoille.",
-    "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu."
+    "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät kurssin opiskelijoille.",
+    "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
+    "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
+    "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
@@ -300,8 +342,8 @@
     "none": "ei ole"
   },
   "studentsWithFeedback": {
-    "cannotShowWhenOpen": "Palautteenantajia ei voida näyttää palautteen ollessa auki.",
-    "noFeedbackInfo": "Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
+    "cannotShowBeforeFeedbackEnds": "Tietoa palautteen antajista ei voida näyttää ennen kuin palautteenantojakso on päättynyt.",
+    "noFeedbackInfo": "Tietoa palautteen antaneista opiskelijoista ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä koulutusohjelman asetuksissa",
     "studentsList": "Palautteen antaneet opiskelijat"
   },
   "feedbackResponse": {
@@ -332,10 +374,62 @@
     "everyone": "Kaikki käyttäjät"
   },
   "feedbackTargetSettings": {
-    "editPeriodTitle": "Palautteen käynnissäoloaika",
+    "editPeriodTitle": "Muokkaa palautteen käynnissäoloaikaa",
     "cannotCloseImmediately": "Palaute ei vielä ole käynnissä",
     "cannotCloseImmediatelyWhenOpen": "Palaute on sulkeutunut tai sulkeutuu päivän kuluttua",
     "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
+  },
+  "organisationSurveys": {
+    "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",
+    "givenFeedback": "Palautteita annettu",
+    "viewFeedback": "Näytä kysely",
+    "viewResults": "Näytä tulokset",
+    "addSurvey": "Luo uusi koulutusohjelman kysely",
+    "editSurvey": "Muokkaa kyselyn asetuksia",
+    "newSurveyName": "Kyselyn nimi",
+    "responsibleTeachers": "Vastuuhenkilöt",
+    "responsibleTeacherTitle": "Lisää kyselylle vastuuhenkilö",
+    "editResponsibleTeacherTitle": "Muokkaa kyselyn vastuuhenkilöitä",
+    "responsibleTeacherEmail": "Sähköposti",
+    "students": "Opiskelijat",
+    "studentNumberTitle": "Lisää kyselylle opiskelijoita",
+    "editStudentNumberTitle": "Muokkaa kyselyn opiskelijoita",
+    "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
+    "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
+    "studentNumberDelimeters": {
+      "comma": "Pilkulla",
+      "semicolon": "Puolipisteellä",
+      "space": "Välilyönnillä",
+      "newline": "Rivinvaihdolla"
+    },
+    "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
+    "confirmStudentDelete": "Haluatko varmasti poistaa opiskelijan: {{ studentNumber }} tästä kyselystä?",
+    "startDate": "Alkaen",
+    "endDate": "Loppuen",
+    "surveys": "kyselyt",
+    "edit": "Muokkaa",
+    "remove": "Poista",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
+    "removeSuccess": "Koulutusohjelman kysely poistettu",
+    "feedbacksGivenRatio": "Palautteita annettu / Opiskelijoiden määrä"
+  },
+  "interimFeedback": {
+    "interimFeedback": "Välipalaute",
+    "emptySurveys": "Kurssilla ei ole yhtään välipalautetta, voit luoda välipalautteen kurssille täällä",
+    "givenFeedback": "Palautteita annettu",
+    "viewFeedback": "Näytä välipalaute",
+    "viewResults": "Näytä tulokset",
+    "addSurvey": "Luo uusi välipalaute",
+    "editSurvey": "Muokkaa välipalautetta",
+    "newSurveyName": "Välipalautteen nimi",
+    "responsibleTeachers": "Vastuuhenkilöt",
+    "students": "Opiskelijat",
+    "startDate": "Alkaen",
+    "endDate": "Loppuen",
+    "edit": "Muokkaa",
+    "remove": "Poista",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän välipalautteen?",
+    "removeSuccess": "Välipalaute poistettu"
   },
   "courseSummary": {
     "heading": "Kurssipalautteiden yhteenveto",
@@ -344,11 +438,13 @@
     "noResults": "Ei palautteita",
     "feedbackResponse": "Viimeisimmän kurssin vastapalaute annettu",
     "feedbackCount": "Palautteiden määrä",
+    "studentCount": "Opiskelijoiden määrä",
     "censoredCount": "Piilotettuja palautteita",
     "feedbackPercentage": "Palauteprosentti",
     "clickForDetails": "Katso lisätiedot",
     "feedbackResponseGiven": "Vastapalaute on annettu",
     "feedbackResponseNotGiven": "Vastapalautetta ei ole annettu",
+    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu (%)",
     "feedbackStillOpen": "Kurssin palautejakso on vielä käynnissä",
     "courseOngoing": "Kurssi on vielä käynnissä",
     "programmeSummary": "Koulutusohjelman yhteenveto",
@@ -378,13 +474,28 @@
     "semester": "Lukukausi",
     "spring": "Kevät",
     "fall": "Syksy",
-    "name": "Nimi",
-    "code": "Koodi",
-    "organisationCode": "Organisaatiokoodi",
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
-    "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta"
+    "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
+    "coursePage": "Kurssisivu",
+    "myOrganisations": "Organisaationi",
+    "myCourses": "Kurssini",
+    "newView": "Kokeile uutta näkymää",
+    "treeView": "Näytä hierarkkisesti",
+    "flatView": "Näytä listana",
+    "includeOpenUni": "Sisällytä Avoin yo -kurssit",
+    "excludeOpenUni": "Näytä ilman Avoin yo -kursseja",
+    "onlyOpenUni": "Näytä vain Avoin yo -kursseilla"
+  },
+  "generateReport": {
+    "selectIncluded": "Valitse sisältö",
+    "organisations": "Organisaatiot",
+    "courseUnits": "Opintojaksot",
+    "courseRealisations": "Kurssitoteutukset",
+    "selectTimeRange": "Valitse aikaväli",
+    "selectedTime": "Nykyinen",
+    "allTime": "Koko historia"
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",
@@ -396,15 +507,20 @@
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"
   },
   "organisationSettings": {
-    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
-    "studentListVisible": "Näytä palautetta antaneet opiskelijat kurssin vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi",
+    "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. Kysymysten vastausten näkyvyyttä voit muuttaa 'Julkinen'/'Ei julkinen'-painikkeesta, mutta vain jos kysymystä ei ole ylemmällä tasolla vielä valittu julkiseksi.",
+    "studentListVisibility": "Palauttetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palauttetta antaneet opiskelijat näytetään kurssin vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisible": "Näytä kaikilla kursseilla",
+    "studentListHidden": "Piilota kaikilla kursseilla",
+    "studentListByCourse": "Aseta näkyvyys kurssikohtaisesti",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla kursseilla",
     "settingsTab": "Asetukset",
     "generalSettings": "Yleiset asetukset",
     "courseSettings": "Kurssikohtaiset asetukset",
     "feedbackCorrespondent": "Palautevastaava",
     "feedbackCorrespondents": "Palautevastaavat",
-    "surveyTab": "Koulutusohjelman kysely",
+    "surveyTab": "Koulutusohjelman kysymykset",
+    "organisationSurveysTab": "Koulutusohjelman kyselyt",
     "summaryTab": "Yhteenveto",
     "courseRealisationsTab": "Kurssitoteutukset",
     "openQuestionsTab": "Avoimet kysymykset",
@@ -436,15 +552,17 @@
     "courseUnitTagInfo": "Kurssilla {{code}} on {{count}} opintosuunta(a), jotka periytyvät tälle toteutukselle",
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
-    "showCurName": "Näytä kurssitoteutusten nimet"
+    "showCurName": "Näytä kurssitoteutusten nimet",
+    "searchUser": "Sähköposti tai nimi"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",
     "surveyTab": "Kysely",
     "feedbacksTab": "Vastaukset",
-    "editFeedbackResponseTab": "Anna vastapalaute",
+    "giveFeedbackResponseTab": "Anna vastapalaute",
+    "editFeedbackResponseTab": "Muokkaa vastapalautetta",
     "continuousFeedbackTab": "Jatkuva palaute",
-    "studentsWithFeedbackTab": "Palautteenantajat",
+    "studentsWithFeedbackTab": "Opiskelijat",
     "linkCopied": "Linkki palautteeseen on kopioitu leikepöydälle",
     "copyLink": "Kopioi opiskelijan vastauslinkki",
     "editFeedbackTab": "Muokkaa palautetta",
@@ -452,12 +570,14 @@
     "feedbackPeriod": "Palaute käynnissä",
     "coursePage": "Kurssisivu",
     "courseSummary": "Kurssin toteutusten yhteenveto",
+    "courseSisuPage": "Kurssin Sisu sivu",
     "teachers": "Opettajat",
     "responsibleTeachers": "Vastuuopettajat",
     "administrativePersons": "Hallintohenkilöt",
     "shareTab": "Jaa",
     "results": "Tulokset",
     "surveySettingsTab": "Muokkaus",
+    "surveyTabDisabledTooltip": "Kyselyä ei voi enää muokata palautteen aukeamisen jälkeen",
     "continuousFeedbackInfo": "Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.",
     "activateContinuousFeedback": "Ota jatkuva palaute käyttöön kurssilla",
     "activateContinuousFeedbackDigest": "Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta",
@@ -476,8 +596,11 @@
     "qrCodeHelpText": "Saat helpoiten jaettua QR-koodin ottamalla siitä ruudunkaappauksen",
     "deleteTeacherConfirmation": "Poista {{name}} opettajien joukosta?",
     "noFeedbackResponseYet": "Kurssin opettaja ei ole vielä antanut vastapalautetta",
-    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Jos olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
-    "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein."
+    "noAccess": "Emme löytäneet ilmoittautumistasi tälle kurssille. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
+    "noAccessEndedCourse": "Palauteaika on päättynyt, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
+    "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
+    "interimFeedbackTab": "Välipalautteet"
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan",
@@ -499,7 +622,9 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta kurssille {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
+      "customSubject": "Vastaa kyselyyn {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}",
+      "customText": "Hyvä vastaanottaja!\n\n Vastaathan kyselyyn <a href={{- url}}>{{courseName}}</a>. Vastausaika päättyy {{closesAt}}. Kiitos!\n\n{{reminder}}"
     },
     "continuousFeedbackResponse": {
       "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
@@ -517,17 +642,21 @@
     },
     "counterFeedbackReminder": {
       "subject": "Annathan vastapalautetta kurssillesi {{courseName}}",
-      "text": "Hyvä opettaja! <br/>\nPalautejakso kurssille on päättynyt: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}"
+      "customSubject": "Annathan vastapalautetta kyselylle {{courseName}}",
+      "text": "Hyvä opettaja! <br/>\nPalautejakso kurssille on päättynyt: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kurssin nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kurssin opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}",
+      "customText": "Hyvä vastaanottaja! <br/>\nVastausaika kyselylle on päättynyt: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla kyselyn nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille kyselyn osallistujille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty vastuuhenkilöille {{teachers, list}}"
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "Uusi vastapalaute opettajaltasi kurssilla {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
+      "customSubject": "Uusi vastapalaute kyselylle {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Kurssin {{courseName}} {{dates}} opettaja on antanut vastapalautteen kurssin opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kurssin palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>",
+      "customText": "Hyvä opiskelija!\n\n Kyselyn {{courseName}} {{dates}} vastuuhenkilö on antanut vastapalautteen kyselyn vastaajilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa kyselyn vastauksia täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseName}}</a>"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Palautejakso opettamallesi kurssille {{courseName}} on alkamassa",
       "subjectMultiple": "Palautejakso opettamillesi kursseille on alkamassa",
       "text": "Hyvä opettaja! <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
-    "instructionsAndSupport": "-"
+    "instructionsAndSupport": "Ota yhteyttä tukeen."
   }
 }

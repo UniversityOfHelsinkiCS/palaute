@@ -193,10 +193,11 @@ const config = {
     'hy-CUR-142349531',
   ],
 
-  /**
-   * Enabled for SOS
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: ['700-K003', '700-M008'],
+  SUMMARY_SKIP_ORG_IDS: [
+    'hy-org-1001813299', // Tiedekuntiin kuulumattomat laitokset
+    'hy-org-1001812245', // Yliopistonpalvelut
+    'hy-org-75261977', // Erillislaitokset
+  ],
 
   /**
    * Tags enabled for kasvis and kielikeskus
@@ -211,13 +212,11 @@ const config = {
 
   NOAD_LINK_EXPIRATION_DAYS: 14,
 
-  FEEDBACK_TARGET_CACHE_SIZE: 250,
+  FEEDBACK_TARGET_CACHE_TTL: 86_400, // 24h
 
-  FEEDBACK_TARGET_CACHE_TTL: undefined,
+  USER_CACHE_TTL: 86_400, // 24h
 
-  USER_CACHE_SIZE: 250,
-
-  USER_CACHE_TTL: undefined,
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 5,
 
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
@@ -229,23 +228,25 @@ const config = {
 
   CONFIG_NAME: 'HY',
 
-  SENTRY_DSN: 'https://8877ea30aa714216b27b22c8aa395723@sentry.cs.helsinki.fi/6',
+  SENTRY_DSN: 'https://b41a87ca77fbe0da75b6c078381a66d4@toska.cs.helsinki.fi/15',
 
   PATE_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate',
 
   JAMI_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami',
 
-  PUBLIC_URL: 'https://coursefeedback.helsinki.fi',
+  PUBLIC_URL: 'https://norppa.helsinki.fi',
 
-  GRAYLOG_URL: 'https://graylog.toska.cs.helsinki.fi',
+  GRAYLOG_URL: 'https://toska.cs.helsinki.fi/graylog',
 
   TRANSLATION_NAMESPACE: 'hy',
 
   DEV_USERNAME: 'mluukkai',
 
+  UNIVERSITY_ROOT_ID: 'hy-university-root-id',
+
   OPEN_UNIVERSITY_ORG_ID: 'hy-org-48645785',
 
-  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017'],
+  SUMMARY_EXCLUDED_ORG_IDS: ['hy-org-48901898', 'hy-org-48902017', 'hy-org-116718610'],
 
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 
@@ -255,7 +256,32 @@ const config = {
 
   IAM_GROUPS_HEADER: 'hygroupcn',
 
+  ORGANISATION_SURVEYS_ENABLED: true,
+
+  INTERIM_FEEDBACKS_ENABLED: true,
+
+  ALWAYS_SHOW_STUDENT_LIST: true,
+
   GELF_TRANSPORT_ENABLED: true,
+
+  SUMMARY_COLORS: [
+    '#d5d6f0',
+    '#c9586f',
+    '#e66067',
+    '#f57368',
+    '#fb8c6e',
+    '#fba678',
+    '#dbda7d',
+    '#9ec27c',
+    '#60a866',
+    '#008c59',
+  ],
+
+  SUMMARY_COLOR_SCALE_MIN: 2.3,
+
+  SUMMARY_COLOR_SCALE_MAX: 4.4,
+
+  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 }
 
 module.exports = config

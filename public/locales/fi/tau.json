@@ -14,7 +14,11 @@
     "notPublicInfo": "Vastaukset näkyvät vain vastuuopettajille ja yksikön palautevastaaville",
     "publicInfo": "Vastaukset näkyvät toteutukselle ilmoittautuneille opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja yksikön palautevastaaville",
-    "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille"
+    "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille",
+    "organisationCode": "Yksikkökoodi"
+  },
+  "validationErrors": {
+    "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla myös opiskelija"
   },
   "links": {
     "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
@@ -29,7 +33,9 @@
     "adminGraylog": "",
     "courseUnitPage": "https://sis-tuni.funidata.fi/teacher/courseunit/",
     "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/",
-    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo"
+    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo",
+    "courseSummaryCourseUnitLink": "https://sis-tuni.funidata.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseSummaryCourseUnitLinkStudent": "https://sis-tuni.funidata.fi/student/courseunit/{{courseUnitId}}/brochure"
   },
   "userFeedbacks": {
     "mainHeading": "Opintojaksopalautteeni",
@@ -43,9 +49,13 @@
   "teacherView": {
     "noCourseRealisations": "Ei opintojakson toteutuksia",
     "noCourses": "Ei toteutuksia",
+    "noCoursesV2": "Ei näytettäviä toteutuksia tällä hetkellä",
     "ongoingCourses": "Käynnissä olevat opintojaksot",
     "upcomingCourses": "Tulevat opintojaksot",
-    "endedCourses": "Päättyneet opintojaksot"
+    "endedCourses": "Päättyneet opintojaksot",
+    "organisationSurveys": "Yksikkökyselyt",
+    "courseSurveys": "Toteutuskyselyt",
+    "disabledCourseWarning": "Opintojakson palaute ei ole käytössä"
   },
   "questionEditor": {
     "programmeQuestion": "Yksikkötaso"
@@ -93,6 +103,16 @@
   "publicQuestions": {
     "enrolled": "Opintojakson toteutukselle ilmoittautuneet opiskelijat"
   },
+  "organisationSurveys": {
+    "heading": "Yksikön kyselyt -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
+    "emptySurveys": "Yksiköllä ei ole vielä yhtään kyselyä, voit luoda uuden yksikön kyselyn täällä",
+    "addSurvey": "Luo uusi yksikön kysely",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän yksikön kyselyn?",
+    "removeSuccess": "Yksikön kysely poistettu"
+  },
+  "interimFeedback": {
+    "emptySurveys": "Toteutuksella ei ole yhtään välipalautetta, voit luoda välipalautteen toteutukselle täällä"
+  },
   "courseSummary": {
     "heading": "Palautteiden yhteenveto",
     "programmeLevelQuestions": "Yliopisto- ja yksikkötason kysymykset",
@@ -105,17 +125,37 @@
     "searchLabel": "Rajaa opintojaksoja",
     "searchPlaceholder": "Rajaa opintojakson koodilla",
     "showHiddenOrganisations": "Valitse piilotetut yksiköt ({{count}})",
-    "hidingInfo": "Voit piilottaa itseltäsi yksiköiden yhteenvetoja, jotka eivät ole sinulle kiinnostavia"
+    "hidingInfo": "Voit piilottaa itseltäsi yksiköiden yhteenvetoja, jotka eivät ole sinulle kiinnostavia",
+    "coursePage": "Opintojakson tiedot SISUssa",
+    "noCourses": "Ei näytettäviä toteutuksia tältä aikaväliltä. Toteutuksesi saadessa palautetta se ilmestyy tänne.",
+    "myOrganisations": "Yksikköni",
+    "myCourses": "Opetukseni",
+    "includeOpenUni": "Sisällytä Avoin yo -opintojaksot",
+    "excludeOpenUni": "Näytä ilman Avoin yo -opintojaksot",
+    "onlyOpenUni": "Näytä vain Avoin yo -opintojaksot"
+  },
+  "generateReport": {
+    "organisations": "Yksiköt",
+    "courseUnits": "Opintojaksot",
+    "courseRealisations": "Toteutukset",
+    "selectTimeRange": "Valitse aikaväli",
+    "selectedTime": "Nykyinen",
+    "allTime": "Koko historia"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Tällä toteutuksella ei ole sinulle saatavilla olevaa palautetta"
   },
   "organisationSettings": {
     "surveyInfo": "Yksikkötason kysymykset näytetään jokaisessa yksikön opintojakson toteutuksen kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
-    "studentListVisible": "Näytä palautetta antaneet opiskelijat toteutuksen vastuuopettajille, jos palautetta antaneita opiskelijoita on vähintään viisi",
+    "studentListVisibility": "Palautetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palautetta antaneet opiskelijat näytetään toteutuksen vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisible": "Näytä kaikilla toteutuksilla",
+    "studentListHidden": "Piilota kaikilla toteutuksilla",
+    "studentListByCourse": "Aseta näkyvyys opintojaksokohtaisesti",
     "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla opintojaksoilla",
     "courseSettings": "Opintojaksokohtaiset asetukset",
-    "surveyTab": "Yksikön kysely",
+    "surveyTab": "Yksikön kysymykset",
+    "organisationSurveysTab": "Yksikön kyselyt",
     "courseRealisationsTab": "Opintojaksot",
     "editProgrammeQuestionsDialogContent": "Olet muokkaamassa koko yksikön yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla yksikön opintojaksojen toteutuksilla. Oletko varma, että haluat muokata näitä kysymyksiä?",
     "findByCourseUnit": "Hae opintojaksoa",
@@ -129,7 +169,12 @@
     "continuousFeedbackStudentInfo": "Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy palautteen käsittelijälle.",
     "noFeedbackResponseYet": "Toteutuksen vastuuopettaja ei ole vielä antanut vastapalautetta",
     "notFound": "Palautetta ei löytynyt Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
-    "activateContinuousFeedback": "Ota jatkuva palaute käyttöön opintojakson toteutuksella"
+    "activateContinuousFeedback": "Ota jatkuva palaute käyttöön opintojakson toteutuksella",
+    "coursePage": "Opintojakson/toteutuksen tiedot Sisussa",
+    "courseSisuPage": "Toteutuksen tiedot Sisussa",
+    "noAccess": "Emme löytäneet ilmoittautumistasi tälle toteutukselle. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea.",
+    "noAccessEndedCourse": "Palauteaika on päättynyt, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea."
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjautunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys toteutuksen opettajaan",

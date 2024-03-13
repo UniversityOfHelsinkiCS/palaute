@@ -1,0 +1,124 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "EmailSendResponse": {
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["status"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Email": {
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": ["to", "subject", "text"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "EmailRequest": {
+        "properties": {
+          "emails": {
+            "items": {
+              "$ref": "#/components/schemas/Email"
+            },
+            "type": "array"
+          },
+          "settings": {},
+          "template": {}
+        },
+        "required": ["emails", "settings", "template"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PingResponse": {
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["status"],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "pate",
+    "version": "0.0.0",
+    "contact": {}
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "post": {
+        "operationId": "SendEmailRequest",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailSendResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "operationId": "GetMessage",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}

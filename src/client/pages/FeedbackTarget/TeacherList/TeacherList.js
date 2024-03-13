@@ -6,7 +6,7 @@ import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import TeacherChip from '../../../components/common/TeacherChip'
 import { deleteResponsibleTeacher } from './api'
 
-const TeacherList = ({ teachers, title, open }) => {
+const TeacherList = ({ teachers, title, open, ...rest }) => {
   const { t } = useTranslation()
   const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
 
@@ -17,7 +17,6 @@ const TeacherList = ({ teachers, title, open }) => {
       name: displayName,
     })
 
-    // eslint-disable-next-line no-alert
     if (window.confirm(message)) {
       try {
         await deleteResponsibleTeacher(feedbackTarget, teacher)
@@ -29,7 +28,13 @@ const TeacherList = ({ teachers, title, open }) => {
   }
 
   return (
-    <Accordion elevation={0} sx={{ bgcolor: 'transparent', mb: '1rem' }} disableGutters defaultExpanded={open}>
+    <Accordion
+      {...rest}
+      elevation={0}
+      sx={{ bgcolor: 'transparent', mb: '1rem' }}
+      disableGutters
+      defaultExpanded={open}
+    >
       <AccordionSummary sx={{ py: 0, mb: '-0.5rem' }} expandIcon={<ExpandMore />}>
         <Typography variant="body2" sx={{ mr: '0.5rem' }}>
           {title} ({teachers.length})

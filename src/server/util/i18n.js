@@ -9,7 +9,7 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['fi', 'en', 'sv'],
-    ns: ['translation', TRANSLATION_NAMESPACE],
+    ns: ['translation', TRANSLATION_NAMESPACE], // https://www.i18next.com/principles/fallback#namespace-fallback
     defaultNS: TRANSLATION_NAMESPACE,
     fallbackNS: 'translation',
     load: ['fi', 'en', 'sv'], // load all langs on initialization
@@ -22,11 +22,4 @@ i18n
     keySeparator: ':',
   })
 
-const t = (key, options) => i18n.t(key, options)
-
-const getFixedT = lang => {
-  const t = i18n.getFixedT(lang)
-  return t
-}
-
-module.exports = { i18n, t, getFixedT }
+module.exports = { i18n }

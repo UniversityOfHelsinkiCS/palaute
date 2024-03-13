@@ -15,7 +15,7 @@ const styles = {
   },
 }
 
-const ExportButton = ({ CsvLink, PdfLink, label, disabled = false }) => {
+const ExportButton = ({ XLSXLink, PdfLink, label, disabled = false }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = e => {
@@ -52,9 +52,9 @@ const ExportButton = ({ CsvLink, PdfLink, label, disabled = false }) => {
           horizontal: 'center',
         }}
       >
-        {CsvLink && (
-          <MenuItem value="csv" sx={styles.menuitem}>
-            {CsvLink}
+        {XLSXLink && (
+          <MenuItem value="xlsx" sx={styles.menuitem}>
+            {XLSXLink}
           </MenuItem>
         )}
         {PdfLink && (

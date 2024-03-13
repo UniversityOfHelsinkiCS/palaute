@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDropzone } from 'react-dropzone'
@@ -48,6 +47,9 @@ const DropZone = ({ students }) => {
     reader.onabort = () => alert('file reading was aborted')
     reader.onerror = () => alert('file reading has failed')
     reader.onload = () => {
+      // Remove .csv ending, shorten to fit into 32 character limit
+      const filename = `${acceptedFiles[0].name.slice(0, -4).slice(0, 17)}_feedback.xlsx`
+
       const re = /[;\t]/gm
       const re2 = /["\r]/gm
       const fileString = reader.result
@@ -55,7 +57,7 @@ const DropZone = ({ students }) => {
       rows = rows.map(row => row.replaceAll(re2, '').split(re))
 
       setData(rows)
-      setFilename(acceptedFiles[0].name.slice(0, -4))
+      setFilename(filename)
     }
     acceptedFiles.forEach(file => reader.readAsText(file))
   }
@@ -87,13 +89,13 @@ const DropZone = ({ students }) => {
             <p>{t('common:dropZoneInfo2')}</p>
           </div>
         </div>
-        <ExportCsv headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
+        <ExportXLSX headers={data[0]} rows={data.slice(1)} students={students} filename={filename} />
       </Box>
     </Box>
   )
 }
 
-const ExportCsv = ({ headers, rows, students, filename }) => {
+const ExportXLSX = ({ headers, rows, students, filename }) => {
   const { t } = useTranslation()
 
   const isStudentNumber = value => {
@@ -137,9 +139,9 @@ const ExportCsv = ({ headers, rows, students, filename }) => {
         variant="outlined"
         color="primary"
         style={{ margin: 10, width: '170px' }}
-        onClick={() => writeFileXLSX(workbook, `${filename}_combined.xlsx`)}
+        onClick={() => writeFileXLSX(workbook, filename)}
       >
-        {t('common:downloadCSV')}
+        {t('common:exportXLSX')}
       </Button>
     </Box>
   )

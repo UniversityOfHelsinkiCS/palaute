@@ -1,4 +1,4 @@
-const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT, INTEGER } = require('sequelize')
+const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT, INTEGER, VIRTUAL } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 class Organisation extends Model {
@@ -48,6 +48,11 @@ Organisation.init(
       allowNull: false,
       defaultValue: false,
     },
+    studentListVisibleByCourse: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     disabledCourseCodes: {
       type: ARRAY(TEXT),
       allowNull: false,
@@ -62,6 +67,9 @@ Organisation.init(
       type: ARRAY(INTEGER),
       allowNull: false,
       defaultValue: [],
+    },
+    summary: {
+      type: VIRTUAL,
     },
   },
   {

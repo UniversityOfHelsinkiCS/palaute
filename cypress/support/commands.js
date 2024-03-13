@@ -1,131 +1,202 @@
-import { baseUrl } from './baseUrl'
+import { addDays } from 'date-fns'
+import { admin, student, teacher } from '../fixtures/headers'
 
-const adminUser = {
-  uid: 'mluukkai',
-  givenName: 'Matti',
-  mail: 'grp-toska+mockadmin@helsinki.fi',
-  sn: 'Luukkainen',
-  preferredLanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-1441871',
-  employeeNumber: '9021313',
-  hygroupcn: ['hy-employees'],
-}
-
-const teacher = {
-  uid: 'testiman',
-  givenname: 'Tommi',
-  sn: 'Testaaja',
-  mail: 'Tommi.testaaja@toska.fi',
-  preferredlanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-51367956',
-  employeeNumber: '123445678',
-  hygroupcn: ['hy-employees'],
-}
-
-const student = {
-  uid: 'oppilasolli',
-  givenname: 'Olli',
-  sn: 'Oppilas',
-  mail: 'opiskelija@toska.fi',
-  preferredLanguage: ' en',
-  hyPersonSisuId: 'hy-hlo-115054920',
-}
-
-const studyCoordinator = {
-  uid: 'mluukkai',
-  givenname: 'Daniel',
-  sn: 'Dekaani',
-  mail: 'dekaani@toska.fi',
-  preferredLanguage: 'en',
-  hyPersonSisuId: 'hy-hlo-1501077',
-  hygroupcn: ['hy-employees', 'grp-toska'],
-}
-
-Cypress.Commands.add('loginAsTeacher', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(adminUser))
-
-  cy.visit(baseUrl)
+Cypress.Commands.add('loginAs', user => {
+  localStorage.setItem('fakeUser', JSON.stringify(user))
+  cy.visit(`/`)
 })
 
-Cypress.Commands.add('loginAsAdmin', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(adminUser))
-
-  cy.visit(baseUrl)
-})
-
-Cypress.Commands.add('loginAsSecondaryTeacher', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(teacher))
-
-  cy.visit(baseUrl)
-})
-
-Cypress.Commands.add('loginAsStudent', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(student))
-  // cy.reload(true)
-  cy.visit(baseUrl)
-})
-
-Cypress.Commands.add('loginAsStudyCoordinator', () => {
-  localStorage.setItem('fakeUser', JSON.stringify(studyCoordinator))
-  cy.visit(baseUrl)
-})
-
-Cypress.Commands.add('setUpAdminTeacherView', () => {
-  const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisation/97',
-    headers: adminUser,
-    body: {
-      startDate: new Date().setDate(date.getDate() - 1),
-      endDate: new Date().setHours(date.getHours() - 10),
-      feedbackResponse: null,
-      feedbackResponseEmailSent: false,
-    },
-  })
-
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/user/hy-hlo-1441871',
-    headers: adminUser,
-    body: {
-      employeeNumber: '123456789',
-    },
+Cypress.Commands.add('giveFeedback', headers => {
+  cy.getTestFbtId().then(id => {
+    cy.getUniversityQuestions().then(questionIds => {
+      cy.request({
+        method: 'POST',
+        url: '/api/feedbacks',
+        headers,
+        body: {
+          feedbackTargetId: id,
+          data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
+        },
+      })
+    })
   })
 })
 
-Cypress.Commands.add('setUpSecondaryTeacherView', () => {
-  const date = new Date()
+/**
+ * Custom Cypress command to create an organization survey.
+ *
+ * @param {string} orgCode - The organization code for which the survey is being created.
+ * @param {Object} body - The request body for creating the organization survey.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.createOrganisationSurvey('your_org_code', {
+ *   // your survey creation data here
+ * })
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
+Cypress.Commands.add('createOrganisationSurvey', (orgCode, body) => {
   cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisations',
-    headers: adminUser,
-    body: {
-      feedbackTargetIds: [163, 165],
-      startDate: new Date().setHours(date.getHours() - 10),
-      endDate: new Date().setDate(date.getDate() + 14),
-    },
-  })
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/user/hy-hlo-51367956',
-    headers: adminUser,
-    body: {
-      employeeNumber: '987654321',
-    },
+    method: 'POST',
+    url: `/api/organisations/${orgCode}/surveys`,
+    headers: admin,
+    body,
+  }).then(response => {
+    cy.wrap(response.body).as('organisationSurvey')
   })
 })
+
+/**
+ * Custom Cypress command to give feedback for an organization survey.
+ *
+ * Given header is the student that the feedback is given as.
+ * Be sure that the headers match the students in the survey otherwise it is not possible to give feedback
+ *
+ * The feedback is given to the organisation survey created using the 'createOrganisationSurvey' Cypress Command.
+ *
+ * @memberOf Cypress.Chainable
+ *
+ * @param {Object} headers - The headers for the HTTP request, see cypress/fixtures/headers.js
+ *
+ * @see createOrganisationSurvey
+ *
+ * @returns {Cypress.Chainable} Yields the original survey object for further chaining.
+ */
+Cypress.Commands.add('giveOrganisationSurveyFeedback', headers =>
+  cy.get('@organisationSurvey').then(survey => {
+    const body = {
+      feedbackTargetId: survey.id,
+      data: [],
+    }
+
+    cy.request({
+      method: 'POST',
+      url: '/api/feedbacks',
+      headers,
+      body,
+      retryOnStatusCodeFailure: true,
+    })
+  })
+)
+
+/**
+ * Custom Cypress command to give feedback for an interim feedback.
+ *
+ * Given header is the student that the feedback is given as.
+ * Be sure that the headers match the students in the survey otherwise it is not possible to give feedback
+ *
+ * The feedback is given to the organisation survey created using the 'createInterimFeedback' Cypress Command.
+ *
+ * @memberOf Cypress.Chainable
+ *
+ * @param {Object} headers - The headers for the HTTP request, see cypress/fixtures/headers.js
+ *
+ * @see createInterimFeedback
+ *
+ * @returns {Cypress.Chainable} Yields the original survey object for further chaining.
+ */
+Cypress.Commands.add('giveInterimFeedback', headers => {
+  cy.get('@interimFeedback').then(interimFeedback => {
+    const body = {
+      feedbackTargetId: interimFeedback.id,
+      data: [],
+    }
+
+    cy.request({
+      method: 'POST',
+      url: '/api/feedbacks',
+      headers,
+      body,
+    })
+  })
+})
+
+/**
+ * Custom Cypress command to create an interim feedback.
+ *
+ * @param {string} parentId - The feedback target id that the interim feedback will be created to
+ * @param {Object} body - The request body for creating the interim feedback.
+ *
+ * @example
+ * // Usage in Cypress test
+ * cy.createInterimFeedback('163', {
+ *  name: {
+ *    fi: "Uusi välipalaute",
+ *    en: "New interim feedback",
+ *    sv: "",
+ *  },
+ *  startDate: new Date(),
+ *  endDate: new Date()
+ * })
+ *
+ * @returns {void}
+ *
+ * @throws {Error} Will throw an error if the command encounters any issues.
+ */
+Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
+  cy.request({
+    method: 'POST',
+    url: `/api/feedback-targets/${parentId}/interimFeedbacks`,
+    headers: admin,
+    body,
+  }).then(response => {
+    cy.wrap(response.body).as('interimFeedback')
+  })
+})
+
+Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extraStudents = 0 } = {}) => {
+  cy.request({
+    method: 'POST',
+    url: 'test/seed-feedback-targets',
+    body: {
+      teacher,
+      student: enrolledStudent,
+      opensAt: addDays(new Date(), 1),
+      closesAt: addDays(new Date(), 2),
+      extraStudents,
+    },
+    headers: admin,
+  })
+})
+
+Cypress.Commands.add('getTestFbtId', () =>
+  cy
+    .request({
+      method: 'GET',
+      url: '/test/test-fbt-id',
+    })
+    .then(response => {
+      cy.wrap(response.body.id).as('testFbtId')
+    })
+)
+
+Cypress.Commands.add('getUniversityQuestions', () =>
+  cy
+
+    .request({
+      method: 'GET',
+      url: '/test/university-questions',
+    })
+    .then(response => {
+      cy.wrap(response.body).as('universityQuestions')
+    })
+)
 
 const setFeedbackDatesFromNow = (open, close) => {
   const date = new Date()
-  cy.request({
-    method: 'PUT',
-    url: '/api/feedback-targets/163',
-    headers: teacher,
-    body: {
-      opensAt: new Date().setDate(date.getDate() + open),
-      closesAt: new Date().setDate(date.getDate() + close),
-    },
+  cy.getTestFbtId().then(id => {
+    cy.request({
+      method: 'PUT',
+      url: `/api/feedback-targets/${id}`,
+      headers: admin,
+      body: {
+        opensAt: new Date().setDate(date.getDate() + open),
+        closesAt: new Date().setDate(date.getDate() + close),
+      },
+    })
   })
 }
 
@@ -146,50 +217,34 @@ Cypress.Commands.add('setFeedbackOpeningSoon', () => {
 })
 
 Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/courseRealisation/163',
-    headers: adminUser,
-    body: {
-      feedbackCount,
-    },
+  cy.getTestFbtId().then(id => {
+    cy.request({
+      method: 'PUT',
+      url: `/test/courseRealisation/${id}`,
+      body: {
+        feedbackCount,
+      },
+    })
   })
 })
 
 Cypress.Commands.add('setContinuousFeedbackActive', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/feedback-targets/163',
-    headers: teacher,
-    body: {
-      continuousFeedbackEnabled: true,
-    },
+  cy.getTestFbtId().then(id => {
+    cy.request({
+      method: 'PUT',
+      url: `/api/feedback-targets/${id}`,
+      headers: admin,
+      body: {
+        continuousFeedbackEnabled: true,
+      },
+    })
   })
 })
 
-Cypress.Commands.add('enableCourses', () => {
+Cypress.Commands.add('seedTestOrgCorrespondent', user => {
   cy.request({
-    method: 'PUT',
-    url: '/api/test/enableCourses',
-    headers: adminUser,
-  })
-})
-
-Cypress.Commands.add('enableTestUsers', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/user/hy-hlo-1501077',
-    headers: adminUser,
-    body: {
-      username: 'keolli',
-    },
-  })
-})
-
-Cypress.Commands.add('refreshSummary', () => {
-  cy.request({
-    method: 'PUT',
-    url: '/api/test/refresh-summary',
-    headers: adminUser,
+    method: 'POST',
+    url: '/test/seed-organisation-correspondent',
+    body: { user },
   })
 })

@@ -1,7 +1,17 @@
-/* eslint-disable no-alert */
 import React, { useState } from 'react'
 
-import { TextField, Card, CardContent, CardActions, Button, Box, Typography, Alert } from '@mui/material'
+import {
+  TextField,
+  Card,
+  CardContent,
+  Button,
+  Box,
+  Typography,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -25,16 +35,18 @@ const updateFeedbackCorrespondents =
     return data
   }
 
-const CorrepondentSelector = ({ add }) => {
-  const [potentialUsers, setPotentialUsers] = useState([])
+const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotentialUsers }) => {
   const { t } = useTranslation()
 
-  const handleChange = debounce(async ({ target }) => {
-    const query = target.value
-    if (query.length < 5) return
+  const updateUsers = debounce(async query => {
+    if (query.length < 5) {
+      setPotentialUsers([])
+      return
+    }
 
     const params = {
-      email: query,
+      user: query,
+      isEmployee: true,
     }
 
     const { data } = await apiClient.get('/users', { params })
@@ -43,6 +55,11 @@ const CorrepondentSelector = ({ add }) => {
     setPotentialUsers(persons)
   }, 400)
 
+  const handleChange = ({ target }) => {
+    setQuery(target.value)
+    updateUsers(target.value)
+  }
+
   return (
     <Box>
       <Card>
@@ -50,28 +67,40 @@ const CorrepondentSelector = ({ add }) => {
           <Typography variant="body1">{t('organisationSettings:newCorrespondent')}</Typography>
           <Box mb={2} />
           <TextField
-            style={{ width: '30em', paddingBottom: 10 }}
-            label={t('organisationSettings:email')}
+            style={{ width: '100%', paddingBottom: 10 }}
+            label={t('organisationSettings:searchUser')}
+            value={query}
             variant="outlined"
             onChange={handleChange}
+            type="text"
           />
         </CardContent>
+        {potentialUsers.length > 0 && (
+          <List
+            sx={{
+              width: '100%',
+              bgcolor: 'background.paper',
+              position: 'relative',
+              overflow: 'auto',
+              maxHeight: 300,
+              mb: 2,
+            }}
+          >
+            {potentialUsers.map(user => (
+              <ListItem key={`user-${user.id}`}>
+                <ListItemText
+                  primary={`${user.firstName} ${user.lastName} - ${user.email}`}
+                  primaryTypographyProps={{ fontWeight: 'bold' }}
+                />
+
+                <Button onClick={() => add(user)} variant="outlined">
+                  {t('organisationSettings:setAsCorrespondent')}
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Card>
-      <Box my={1} />
-      {potentialUsers.map(user => (
-        <Card key={user.id}>
-          <CardContent>
-            <b>
-              {user.firstName} {user.lastName} - {user.email}
-            </b>
-          </CardContent>
-          <CardActions>
-            <Button onClick={() => add(user)} variant="outlined">
-              {t('organisationSettings:setAsCorrespondent')}
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
     </Box>
   )
 }
@@ -87,10 +116,15 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
             <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
             </Typography>
-            <Typography>{correspondent.email.toLowerCase()}</Typography>
+            <Typography>{correspondent.email?.toLowerCase()}</Typography>
           </Box>
           <Box>
-            <Button color="secondary" onClick={() => remove(correspondent)} data-cy="resetCorrespondentButton">
+            <Button
+              color="error"
+              variant="outlined"
+              onClick={() => remove(correspondent)}
+              data-cy="resetCorrespondentButton"
+            >
               {t('organisationSettings:remove')}
             </Button>
           </Box>
@@ -105,6 +139,8 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const queryClient = useQueryClient()
+  const [query, setQuery] = useState('')
+  const [potentialUsers, setPotentialUsers] = useState([])
 
   const mutation = useMutation(updateFeedbackCorrespondents(code), {
     onSuccess: data => {
@@ -112,6 +148,7 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
         ...organisation,
         users: data,
       }))
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     },
     onError: () => {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
@@ -146,11 +183,15 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
 
   const add = async user => {
     if (!confirmChange(user, true)) return
+
     await mutation.mutateAsync({ userId: user.id, add: true })
+    setQuery('')
+    setPotentialUsers([])
   }
 
   const remove = async user => {
     if (!confirmChange(user, false)) return
+
     await mutation.mutateAsync({ userId: user.id, add: false })
   }
 
@@ -166,7 +207,13 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
       ) : (
         <Alert severity="warning">{t('organisationSettings:correspondentMissing')}</Alert>
       )}
-      <CorrepondentSelector add={add} />
+      <CorrepondentSelector
+        add={add}
+        query={query}
+        setQuery={setQuery}
+        potentialUsers={potentialUsers}
+        setPotentialUsers={setPotentialUsers}
+      />
     </div>
   )
 }

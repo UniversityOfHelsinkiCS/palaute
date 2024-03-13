@@ -17,6 +17,10 @@ const LOGS = 10
 const DELETE_TEACHER = 11
 const TOKENS = 12
 const SEND_REMINDER_EMAIL = 13
+const CREATE_INTERIM_FEEDBACK = 14
+const DELETE_ANSWER = 15
+const UPDATE_ORGANISATION_SURVEYS = 16
+const ENABLE_TOKEN_ENROLMENT = 17 // @feat Gradu survey
 
 const ALL = [
   UPDATE,
@@ -33,6 +37,10 @@ const ALL = [
   DELETE_TEACHER,
   TOKENS,
   SEND_REMINDER_EMAIL,
+  CREATE_INTERIM_FEEDBACK,
+  DELETE_ANSWER,
+  UPDATE_ORGANISATION_SURVEYS,
+  ENABLE_TOKEN_ENROLMENT,
 ].sort()
 
 Object.freeze(ALL)
@@ -54,6 +62,8 @@ const RIGHTS = {
     STUDENTS,
     SEND_REMINDER_EMAIL,
     HIDE_FEEDBACK,
+    UPDATE_ORGANISATION_SURVEYS,
+    ENABLE_TOKEN_ENROLMENT,
   ],
   ORGANISATION_READ: [PUBLIC_FEEDBACKS],
   RESPONSIBLE_TEACHER: [
@@ -66,6 +76,9 @@ const RIGHTS = {
     CONTINUOUS_FEEDBACK_RESPONSE,
     SEND_REMINDER_EMAIL,
     HIDE_FEEDBACK,
+    CREATE_INTERIM_FEEDBACK,
+    UPDATE_ORGANISATION_SURVEYS,
+    ENABLE_TOKEN_ENROLMENT,
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
   STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK, GIVE_FEEDBACK],
@@ -125,6 +138,10 @@ class Access {
     return hasRight(this.accessStatus, HIDE_FEEDBACK)
   }
 
+  canAdminDeleteFeedback() {
+    return hasRight(this.accessStatus, DELETE_ANSWER)
+  }
+
   canSeeLogs() {
     return hasRight(this.accessStatus, LOGS)
   }
@@ -139,6 +156,18 @@ class Access {
 
   canSendReminderEmail() {
     return hasRight(this.accessStatus, SEND_REMINDER_EMAIL)
+  }
+
+  canCreateInterimFeedback() {
+    return hasRight(this.accessStatus, CREATE_INTERIM_FEEDBACK)
+  }
+
+  canUpdateOrganisationSurvey() {
+    return hasRight(this.accessStatus, UPDATE_ORGANISATION_SURVEYS)
+  }
+
+  canEnableTokenEnrolment() {
+    return hasRight(this.accessStatus, ENABLE_TOKEN_ENROLMENT)
   }
 
   // Role enum

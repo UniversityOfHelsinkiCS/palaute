@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question, Organisation } = require('../../models')
-const { createOrganisationSurveyLog } = require('../../util/auditLog')
+const { createOrganisationSurveyLog } = require('../../services/auditLog')
 const { getUniversitySurvey: _getUniversitySurvey } = require('../../services/surveys')
 
 const checkUserWriteAccess = async (survey, user) => {
@@ -79,7 +79,31 @@ const getUniversitySurvey = async (req, res) => {
   return res.send(survey)
 }
 
-const getProgrammeSurvey = async (req, res) => {
+const getFullOrganisationSurvey = async (req, res) => {
+  const { organisationCode } = req.params
+
+  const universitySurvey = await _getUniversitySurvey()
+  const [survey] = await Survey.findAll({
+    where: {
+      type: 'programme',
+      typeId: organisationCode,
+    },
+  })
+
+  if (!survey) {
+    return res.send(universitySurvey)
+  }
+
+  await survey.populateQuestions()
+
+  const questions = universitySurvey.questions.concat(survey.questions)
+
+  const response = { ...universitySurvey, questions }
+
+  return res.send(response)
+}
+
+const getProgrammeSurveyForEditor = async (req, res) => {
   const { surveyCode } = req.params
 
   const [survey] = await Survey.findOrCreate({
@@ -113,6 +137,7 @@ const router = Router()
 
 router.put('/:id', update)
 router.get('/university', getUniversitySurvey)
-router.get('/programme/:surveyCode', getProgrammeSurvey)
+router.get('/organisation/:organisationCode', getFullOrganisationSurvey)
+router.get('/programme/:surveyCode', getProgrammeSurveyForEditor)
 
 module.exports = router

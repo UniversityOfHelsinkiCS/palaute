@@ -1,4 +1,4 @@
-import { normalizeOrganisationCode } from '../CourseSummary/utils'
+import { normalizeOrganisationCode } from '../../util/normaliseOrganisationCode'
 
 export const getHeaders = () => [
   'Id',

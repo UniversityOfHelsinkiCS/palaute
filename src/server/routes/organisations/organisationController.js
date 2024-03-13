@@ -1,13 +1,14 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
+const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const { Organisation, OrganisationLog, User } = require('../../models')
-
 const { ApplicationError } = require('../../util/customErrors')
-const { createOrganisationLog } = require('../../util/auditLog')
+const { createOrganisationLog } = require('../../services/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
 const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
+const organisationSurveyRouter = require('./organisationSurveyController')
 const { getOrganisationData: getOrganisationDataFromJami } = require('../../util/jami')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
@@ -49,6 +50,7 @@ const updateOrganisation = async (req, res) => {
 
   const updates = _.pick(body, [
     'studentListVisible',
+    'studentListVisibleByCourse',
     'disabledCourseCodes',
     'studentListVisibleCourseCodes',
     'publicQuestionIds',
@@ -82,33 +84,44 @@ const getOrganisationByCode = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const { organisation, hasReadAccess, hasWriteAccess, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    read: true,
+  })
 
-  const theOrganisationAccess = organisationAccess.find(({ organisation }) => organisation.code === code)
+  const theOrganisation = await Organisation.findOne({
+    where: {
+      code,
+    },
+    include: [
+      {
+        model: User,
+        as: 'users',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
+    ],
+  })
 
-  if (!theOrganisationAccess) {
-    throw new ApplicationError(`Organisation by code ${code} is not found or it is not accessible`, 404)
-  }
-
-  const { organisation, access } = theOrganisationAccess
-
-  const tags = _.orderBy(await organisation.getTags(), tag => tag.name?.fi)
+  const tags = _.orderBy(await theOrganisation.getTags(), tag => tag.name?.fi)
 
   const publicOrganisation = {
     ...organisation.toJSON(),
     tags,
-    access,
+    access: {
+      read: hasReadAccess,
+      write: hasWriteAccess,
+      admin: hasAdminAccess,
+    },
   }
 
   return res.send(publicOrganisation)
 }
 
 const getOrganisationLogs = async (req, res) => {
-  const { isAdmin } = req
+  const { user } = req
   const { code } = req.params
 
-  if (!isAdmin) {
-    return res.send([])
+  if (!user.isAdmin) {
+    throw new ApplicationError('Forbidden', 403)
   }
 
   const { organisationLogs } = await Organisation.findOne({
@@ -156,6 +169,7 @@ router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
+if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.use('/', feedbackCorrespondentRouter)
 
 module.exports = router

@@ -6,7 +6,6 @@ const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organ
 
 const { sequelize } = require('../../db/dbConnection')
 const { INCLUDE_COURSES } = require('../../util/config')
-const logger = require('../../util/logger')
 
 const getCourseUnitsForTeacher = async (req, res) => {
   const { user } = req
@@ -43,10 +42,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
   const latestEndedCourseRealisationIds = latestEndedCourseRealisationsRows.map(row => row.course_realisation_id)
 
-  // log latestEndedCourseRealisationIds
-  logger.info(`latestEndedCourseRealisationIds:`)
-  logger.info(latestEndedCourseRealisationIds)
-
   const userTargets = await UserFeedbackTarget.findAll({
     where: {
       userId: user.id,
@@ -67,6 +62,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
           'feedbackCount',
           'continuousFeedbackEnabled',
+          'userCreated',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -76,7 +72,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseRealisation,
             as: 'courseRealisation',
             required: true,
-            attributes: ['id', 'name', 'startDate', 'endDate'],
+            attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
             where: {
               [Op.or]: [
                 {
@@ -104,7 +100,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
             model: CourseUnit,
             as: 'courseUnit',
             required: true,
-            attributes: ['id', 'name', 'courseCode'],
+            attributes: ['id', 'name', 'courseCode', 'userCreated'],
             include: [
               {
                 model: Organisation,
@@ -118,17 +114,14 @@ const getCourseUnitsForTeacher = async (req, res) => {
       },
     ],
   })
-  logger.info(`userTargets:`)
-  logger.info(`${JSON.stringify(userTargets)}`)
 
   const targets = userTargets
+    .filter(({ feedbackTarget }) => (feedbackTarget.userCreated ? feedbackTarget.courseRealisation.userCreated : true))
     .map(({ feedbackTarget }) => feedbackTarget)
     .filter(
       ({ courseUnit }) =>
         !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
     )
-  logger.info(`targets:`)
-  logger.info(`${JSON.stringify(targets)}`)
 
   const courseUnitByCourseCode = targets.reduce(
     (acc, { courseUnit }) => ({
@@ -140,7 +133,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
 
   const targetsByCourseCode = _.groupBy(targets, ({ courseUnit }) => courseUnit.courseCode)
 
-  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled']
+  const targetFields = ['id', 'name', 'opensAt', 'closesAt', 'continuousFeedbackEnabled', 'userCreated']
   const courseUnits = Object.entries(targetsByCourseCode).map(([courseCode, unfilteredTargets]) => {
     const targets = unfilteredTargets.filter(
       target =>
@@ -149,9 +142,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
           target.courseRealisation.endDate >= new Date(2021, 9, 1)) ||
         INCLUDE_COURSES.includes(target.courseRealisation.id)
     )
-    logger.info(`targets 2:`)
-    logger.info(`${JSON.stringify(targets)}`)
-    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name'])
+    const courseUnit = _.pick(courseUnitByCourseCode[courseCode].toJSON(), ['courseCode', 'name', 'userCreated'])
 
     const ongoingTargets = targets.filter(
       ({ courseRealisation }) => courseRealisation.startDate <= new Date() && courseRealisation.endDate >= new Date()
@@ -190,6 +181,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
       endedCourseRealisation: makeTargetObject(endedTarget),
     }
   })
+
+  console.log(courseUnits)
 
   return res.send(courseUnits)
 }

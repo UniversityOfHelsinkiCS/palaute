@@ -9,7 +9,7 @@ import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questio
 import QuestionEditorActions from './QuestionEditorActions'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 
-const TypeItem = ({ onClick, label, disabled, disabledText }) =>
+const TypeItem = ({ dataCy, onClick, label, disabled, disabledText }) =>
   disabled && disabledText ? (
     <Tooltip title={disabledText}>
       <div>
@@ -19,7 +19,7 @@ const TypeItem = ({ onClick, label, disabled, disabledText }) =>
       </div>
     </Tooltip>
   ) : (
-    <MenuItem onClick={onClick} disabled={disabled}>
+    <MenuItem data-cy={dataCy} onClick={onClick} disabled={disabled}>
       {label}
     </MenuItem>
   )
@@ -34,15 +34,27 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   }
 
   return (
-    <Menu anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <TypeItem onClick={() => handleChooseType('LIKERT')} label={t('questionEditor:likertQuestion')} />
-      <TypeItem onClick={() => handleChooseType('OPEN')} label={t('questionEditor:openQuestion')} />
-      <TypeItem onClick={() => handleChooseType('SINGLE_CHOICE')} label={t('questionEditor:singleChoiceQuestion')} />
+    <Menu data-cy="question-editor-type-menu" anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
       <TypeItem
+        dataCy="question-editor-type-menu-select-likert"
+        onClick={() => handleChooseType('LIKERT')}
+        label={t('questionEditor:likertQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-open-question"
+        onClick={() => handleChooseType('OPEN')}
+        label={t('questionEditor:openQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-single-choice"
+        onClick={() => handleChooseType('SINGLE_CHOICE')}
+        label={t('questionEditor:singleChoiceQuestion')}
+      />
+      <TypeItem
+        dataCy="question-editor-type-menu-select-multiple-choice"
         onClick={() => handleChooseType('MULTIPLE_CHOICE')}
         label={t('questionEditor:multipleChoiceQuestion')}
       />
-      <TypeItem onClick={() => handleChooseType('TEXT')} label={t('questionEditor:textualContent')} />
     </Menu>
   )
 }
@@ -56,12 +68,12 @@ const QuestionEditorForm = ({
   actions,
   groupingQuestionSettings,
 }) => {
-  const [menuOpen, setMenuOpen] = useState(false)
   const addButtonRef = useRef()
+  const { t, i18n } = useTranslation()
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
-  const { t, i18n } = useTranslation()
-  const [editingQuestionId, setEditingQuestionId] = useState()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [editingQuestionId, setEditingQuestionId] = useState(null)
 
   const handleStopEditing = async () => {
     if (editingQuestionId) {
@@ -103,6 +115,7 @@ const QuestionEditorForm = ({
                   name={`questions.${index}`}
                   onRemove={() => {
                     arrayHelpers.remove(index)
+                    handleStopEditing()
                     onRemoveQuestion()
                   }}
                   onMoveUp={() => {
@@ -140,21 +153,39 @@ const QuestionEditorForm = ({
                 language={i18n.language}
               />
 
-              <Box display="flex">
+              <Box sx={{ display: 'flex' }}>
                 {editable && (
-                  <Button
-                    color="primary"
-                    onClick={() => {
-                      setMenuOpen(true)
-                      handleStopEditing()
-                    }}
-                    ref={addButtonRef}
-                  >
-                    {t('questionEditor:addQuestion')}
-                  </Button>
+                  <Box>
+                    <Button
+                      data-cy="question-editor-add-question"
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        setMenuOpen(true)
+                        handleStopEditing()
+                      }}
+                      ref={addButtonRef}
+                      disabled={Boolean(editingQuestionId)}
+                      sx={{ mr: 2 }}
+                    >
+                      {t('questionEditor:addQuestion')}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        const textContent = createQuestion({ type: 'TEXT' })
+                        arrayHelpers.push(textContent)
+                        setEditingQuestionId(getQuestionId(textContent))
+                      }}
+                      disabled={Boolean(editingQuestionId)}
+                      sx={{ mr: 2 }}
+                    >
+                      {t('questionEditor:addTextualContent')}
+                    </Button>
+                  </Box>
                 )}
-
-                {actions && <Box ml={editable ? 1 : 0}>{actions}</Box>}
+                {actions && <Box>{actions}</Box>}
               </Box>
             </>
           )}

@@ -5,11 +5,13 @@ import { Edit } from '@mui/icons-material'
 import styles from '../../util/chipStyles'
 
 const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null)
   const { t } = useTranslation()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const notEditableInfo = checked ? t('common:notEditable') : ''
 
   const tooltipText = `${checked ? t('common:publicShortInfo') : t('common:notPublicShortInfo')}. ${
-    !disabled ? t('common:editable') : ''
+    !disabled ? t('common:editable') : notEditableInfo
   }`
 
   return (

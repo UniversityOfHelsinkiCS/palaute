@@ -20,12 +20,14 @@ const LikertResultItem = ({ mean, previous, question, ...props }) => {
 
   const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
 
-  const tooltipTitle = `${questionLabel}: ${mean || t('courseSummary:noResults')}`
+  const fixedMean = mean?.toFixed(2)
+
+  const tooltipTitle = `${questionLabel}: ${fixedMean || t('courseSummary:noResults')}`
 
   return (
     <ResultItemBase tooltipTitle={tooltipTitle} mean={mean} {...props}>
       <div style={styles.content}>
-        <Typography fontWeight="500">{mean?.toFixed(2) || '–'}</Typography>
+        <Typography fontWeight="500">{fixedMean || '–'}</Typography>
       </div>
     </ResultItemBase>
   )

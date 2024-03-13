@@ -17,6 +17,7 @@ module.exports = {
     'arrow-body-style': 'warn',
     'no-param-reassign': 'off',
     'no-restricted-exports': 'off',
+    'no-alert': 'off',
     'react/prop-types': [
       1,
       {
@@ -40,5 +41,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
     'spaced-comment': 'off',
+    'import/no-unused-modules': [1, { unusedExports: true, missingExports: false }],
   },
 }

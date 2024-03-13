@@ -12,10 +12,10 @@ const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm }) => 
       <DialogTitle>{t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}</DialogTitle>
       <DialogContent>{t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}</DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={onClose}>
+        <Button data-cy="feedback-target-open-feedback-immediately-cancel" color="primary" onClick={onClose}>
           {t('editFeedbackTarget:openFeedbackImmediatelyDialogCancel')}
         </Button>
-        <Button color="primary" onClick={onConfirm}>
+        <Button data-cy="feedback-target-open-feedback-immediately-confirm" color="primary" onClick={onConfirm}>
           {t('editFeedbackTarget:openFeedbackImmediatelyDialogConfirm')}
         </Button>
       </DialogActions>

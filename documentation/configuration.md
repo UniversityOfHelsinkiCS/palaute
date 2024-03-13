@@ -24,12 +24,14 @@ and `const value = config.get('key')`. The config values can be getted and parse
 Client configuration is slightly more involved.
 A global `CONFIG` object is populated at build time using the webpack DefinePlugin (see `config-overrides.js`).
 
-Currently this means that all config values are shipped in the build, which may not be desirable.
+By default the `CONFIG` object contains all the values in config, but if you wish to exclude some from it (as they are technically public) you should add the excluded fields to the `PRIVATE_KEYS` config.
 
 Because eslint (and we) don't like custom global objects like `CONFIG`, the values required by client are safely parsed in `src/client/util/common` to exported constants.
 
 As client configuration happens at build time, you need to set the env `NODE_CONFIG_ENV` in the build context. See `docker-compose.ci.yml` and `Dockerfile` for example.
 CI workflows may also need to set it, see `.github/production.yml`.
+
+Unfortunately this method is not very nice for development. To get the client configuration to refresh, you have to stop and recreate the container (?).
 
 ## Debugging
 
@@ -40,4 +42,4 @@ A widget titled 'Configuration' at `/admin/misc` displays the values of `CONFIG`
 
 - [ ] Config validation
 - [ ] Common logic to read and safely parse values with different types
-- [ ] Ability to select which values are shipped in the build
+- [x] Ability to select which values are shipped in the build

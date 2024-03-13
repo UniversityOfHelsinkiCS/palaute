@@ -3,16 +3,16 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Admin from './Admin'
-import useCourseSummaryAccessInfo from '../hooks/useCourseSummaryAccessInfo'
-import CourseSummary from './CourseSummary'
 import MyTeaching from './MyTeaching'
+import MyTeachingV2 from './MyTeaching/V2/MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from './NorppaFeedback'
 import { LoadingProgress } from '../components/common/LoadingProgress'
-import useIsMobile from '../hooks/useIsMobile'
-import MyFeedbacks from './MyFeedbacks/MyFeedbacks'
+import MyFeedbacks from './MyFeedbacks'
+import Summary from './CourseSummary/Summary'
+import useAuthorizedUser from '../hooks/useAuthorizedUser'
 
 const styles = {
   container: theme => ({
@@ -31,21 +31,15 @@ const styles = {
 }
 
 const Home = () => {
-  const { courseSummaryAccessInfo, isLoading: accessInfoLoading } = useCourseSummaryAccessInfo()
-  const isMobile = useIsMobile()
+  const { authorizedUser, isLoading } = useAuthorizedUser()
+  const preferences = authorizedUser?.preferences ?? {}
+  const defaultView = preferences.defaultView ?? 'feedbacks'
 
-  if (accessInfoLoading) {
+  if (isLoading) {
     return <LoadingProgress />
   }
 
-  if (!isMobile && courseSummaryAccessInfo.adminAccess) {
-    return <Redirect to="/course-summary" />
-  }
-
-  if (courseSummaryAccessInfo.accessible) {
-    return <Redirect to="/courses" />
-  }
-  return <Redirect to="/feedbacks" />
+  return <Redirect to={`/${defaultView}`} />
 }
 
 const Router = () => (
@@ -54,9 +48,10 @@ const Router = () => (
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={MyFeedbacks} exact />
       <Route path="/courses" component={MyTeaching} exact />
+      <Route path="/courses/v2" component={MyTeachingV2} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
-      <Route path="/course-summary" component={CourseSummary} />
+      <Route path="/course-summary" component={Summary} />
       <Route path="/cur/:id" component={CourseRealisation} />
       <Route path="/norppa-feedback" component={NorppaFeedback} />
       <Route path="/admin" component={Admin} />

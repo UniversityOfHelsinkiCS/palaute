@@ -15,7 +15,6 @@ import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStude
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
 import { handleLogout } from './utils'
-import useCourseSummaryAccessInfo from '../../hooks/useCourseSummaryAccessInfo'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
@@ -66,9 +65,10 @@ const styles = {
   norppaFeedback: {
     background: theme => theme.palette.warning.main,
     color: 'black',
-    padding: '6px 12px',
-    borderRadius: 4,
+    padding: '4px 10px',
+    borderRadius: 2,
     fontWeight: 'bold',
+    // fontSize: '8rem',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
@@ -102,18 +102,15 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
 ))
 
 const NavBar = ({ guest = false }) => {
+  const menuButtonRef = useRef()
   const { pathname } = useLocation()
+  const { t, i18n } = useTranslation()
+  const isMobile = useIsMobile()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
-  const { courseSummaryAccessInfo } = useCourseSummaryAccessInfo({
-    enabled: !guest,
-  })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
-  const { t, i18n } = useTranslation()
-  const menuButtonRef = useRef()
+
   const [menuOpen, setMenuOpen] = useState(false)
-  const isMobile = useIsMobile()
-  // const theme = useTheme()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
@@ -125,7 +122,9 @@ const NavBar = ({ guest = false }) => {
     enabled: isAdminUser,
   })
 
-  const courseSummaryIsAccessible = courseSummaryAccessInfo?.accessible ?? false
+  const preferences = authorizedUser?.preferences ?? {}
+  const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
+  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -167,7 +166,7 @@ const NavBar = ({ guest = false }) => {
   )
 
   const links = [
-    courseSummaryIsAccessible && {
+    myCoursesIsAccessible && {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
@@ -179,7 +178,7 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
-    courseSummaryIsAccessible && {
+    (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
     },

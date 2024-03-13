@@ -66,7 +66,6 @@ const getNorppaFeedbackCount = async (req, res) => {
   const feedbacks = await NorppaFeedback.count({
     where: {
       solved: false,
-      responseWanted: true,
     },
   })
 
