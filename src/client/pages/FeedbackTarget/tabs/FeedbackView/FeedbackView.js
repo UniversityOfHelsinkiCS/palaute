@@ -142,6 +142,7 @@ const FeedbackView = () => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
+  const submitMutation = useSaveValues()
 
   const { authorizedUser } = useAuthorizedUser()
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
@@ -166,7 +167,6 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
-  const mutation = useSaveValues()
 
   const handleSubmit = async values => {
     try {
@@ -180,7 +180,7 @@ const FeedbackView = () => {
           data,
         }))
 
-        await mutation.mutateAsync(feedbackData)
+        await submitMutation.mutateAsync(feedbackData)
 
         history.push(`/targets/${id}/results`)
 
