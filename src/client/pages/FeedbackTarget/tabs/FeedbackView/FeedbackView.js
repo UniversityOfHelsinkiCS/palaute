@@ -135,6 +135,8 @@ const FormContainer = ({
   )
 }
 
+const feedbackGivenSnackbarContent = (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
+
 const FeedbackView = () => {
   const id = useFeedbackTargetId()
 
@@ -187,7 +189,7 @@ const FeedbackView = () => {
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 6000,
-          content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
+          content: feedbackGivenSnackbarContent,
         })
       }
     } catch (e) {
