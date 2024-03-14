@@ -50,6 +50,10 @@ To populate the Norppa and Jami databases from a backup in a remote server, use
 
 Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add the correct values for the variables based on the documentation.
 
+### High-level development guidelines
+
+Use feature flags for large new features or changes. Define them in [configuration](documentation/configuration.md). This allows the different parties using Norppa to adopt new features at their own pace.
+
 ## Documentation
 
 The source code and documentation in this repo is the only source of truth for the Norppa technicalities. The written docs are quite limited in scope. If you're using Norppa, we hope you aid in their improvement.
