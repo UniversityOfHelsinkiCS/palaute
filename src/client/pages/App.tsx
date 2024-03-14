@@ -13,7 +13,6 @@ import usePinger from '../hooks/usePinger'
 import { inE2EMode, UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
 
-/* eslint-disable */
 const App = () => {
   const customUiConfig = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
@@ -43,5 +42,5 @@ const App = () => {
     </LocalizationProvider>
   )
 }
-/* eslint-enable */
+
 export default App

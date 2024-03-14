@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: dev-backend.Dockerfile
+    image: palaute_dev
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - DATABASE_URL=postgres://postgres:norppa@host.docker.internal:5448/postgres?targetServerType=primary
+      - REDIS_HOST=redis
+      - JAMI_HOST=host.docker.internal
+      - JAMI_PORT=3005
+      - UPDATER_URL=http://host.docker.internal:3002
+      - JWT_KEY=testitau
+      - NODE_CONFIG_ENV=tau
+      - PATE_URL=http://host.docker.internal:3006
+      - PATE_JWT=
+    ports:
+      - 8000:8000
+      - 9229:9229
+    container_name: tuni-kpj-palaute_dev
+  redis:
+    image: redis:6.2.6
+    command: redis-server
+    container_name: tuni-kpj-palaute_redis
