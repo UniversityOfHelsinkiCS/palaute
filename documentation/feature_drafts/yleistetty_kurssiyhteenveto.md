@@ -49,7 +49,7 @@ Nykyiseen näkyvyyteen liittyy useita epäloogisuuksia ja parannuskohteita. HY:s
 
 Korjataan bugit ja epäselvyydet statistiikan laskennassa (esim. #1052).
 
-Uusi laskentatapa tuottaa luotettavampaa dataa. HY:llä huomasimme, että vanha laskentatapa jätti useita organisaatioita näkymättömiin. 
+Uusi laskentatapa tuottaa luotettavampaa dataa. HY:llä huomasimme, että vanha laskentatapa jätti useita organisaatioita näkymättömiin.
 
 Parannetaan ylläpidettävyyttä. Nykyinen yhteenveto lasketaan parilla isolla "SQL-matolla", joiden ymmärtäminen ja muuttaminen on haastava jopa alkuperäisille toteuttajille.
 
@@ -70,7 +70,7 @@ Tulevat koskemaan erityisesti `services/summary` -hakemiston koodia ja `routes/c
 
 Nykyinen materialized view `course_results_view` poistetaan.
 
-Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata tallennetaan. 
+Tilalle tulee Summary-modeli (taulun nimi `summaries`), johon statistiikkadata tallennetaan.
 
 ### Muutokset fronttiin
 
