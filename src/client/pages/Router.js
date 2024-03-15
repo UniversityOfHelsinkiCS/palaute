@@ -3,7 +3,8 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Admin from './Admin'
-import MyTeaching from './MyTeaching/V2/MyTeaching'
+import MyTeaching from './MyTeaching'
+import MyTeachingV2 from './MyTeaching/V2/MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
@@ -12,6 +13,7 @@ import { LoadingProgress } from '../components/common/LoadingProgress'
 import MyFeedbacks from './MyFeedbacks'
 import Summary from './CourseSummary/Summary'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
+import { NEW_TEACHING_VIEW_ENABLED } from '../util/common'
 
 const styles = {
   container: theme => ({
@@ -46,7 +48,7 @@ const Router = () => (
     <Switch>
       <Route path="/" component={Home} exact />
       <Route path="/feedbacks" component={MyFeedbacks} exact />
-      <Route path="/courses" component={MyTeaching} exact />
+      <Route path="/courses" component={NEW_TEACHING_VIEW_ENABLED ? MyTeachingV2 : MyTeaching} exact />
       <Route path="/targets/:id" component={FeedbackTarget} />
       <Route path="/organisations/:code" component={Organisation} />
       <Route path="/course-summary" component={Summary} />

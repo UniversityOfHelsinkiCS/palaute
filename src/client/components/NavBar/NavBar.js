@@ -19,6 +19,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
+import { NEW_TEACHING_VIEW_ENABLED } from '../../util/common'
 
 const styles = {
   toolbar: {
@@ -170,7 +171,7 @@ const NavBar = ({ guest = false }) => {
 
   const links = [
     myCoursesIsAccessible && {
-      label: t('navBar:myCourses'),
+      label: NEW_TEACHING_VIEW_ENABLED ? t('navBar:myCoursesV2') : t('navBar:myCourses'),
       to: '/courses',
     },
     isStudent && {

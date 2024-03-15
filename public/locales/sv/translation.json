@@ -306,7 +306,8 @@
   },
   "navBar": {
     "myFeedbacks": "Mina responser",
-    "myCourses": "Mina undersökning",
+    "myCourses": "Mina kurser",
+    "myCoursesV2": "Mina undersökning",
     "logOut": "Logga ut",
     "admin": "Admin",
     "courseSummary": "Kurssammandrag",

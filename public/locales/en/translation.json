@@ -322,7 +322,8 @@
   },
   "navBar": {
     "myFeedbacks": "My feedback",
-    "myCourses": "My surveys",
+    "myCourses": "My teaching",
+    "myCoursesV2": "My surveys",
     "logOut": "Log out",
     "admin": "Admin",
     "courseSummary": "Course summary",

@@ -321,7 +321,8 @@
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
-    "myCourses": "Kyselyni",
+    "myCourses": "Opetukseni",
+    "myCoursesV2": "Kyselyni",
     "logOut": "Kirjaudu ulos",
     "admin": "Ylläpito",
     "courseSummary": "Kurssiyhteenveto",
