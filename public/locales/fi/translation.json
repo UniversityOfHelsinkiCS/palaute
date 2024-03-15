@@ -503,8 +503,8 @@
   },
   "organisationSettings": {
     "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. Kysymysten vastausten näkyvyyttä voit muuttaa 'Julkinen'/'Ei julkinen'-painikkeesta, mutta vain jos kysymystä ei ole ylemmällä tasolla vielä valittu julkiseksi.",
-    "studentListVisibility": "Palauttetta antaneiden opiskelijoiden näkyvyys",
-    "studentListVisibilityInfo": "Palauttetta antaneet opiskelijat näytetään kurssin vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisibility": "Palautetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palautetta antaneet opiskelijat näytetään kurssin vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
     "studentListVisible": "Näytä kaikilla kursseilla",
     "studentListHidden": "Piilota kaikilla kursseilla",
     "studentListByCourse": "Aseta näkyvyys kurssikohtaisesti",
