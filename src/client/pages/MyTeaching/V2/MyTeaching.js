@@ -81,7 +81,7 @@ const MyTeaching = () => {
       <Title>{t('common:teacherPage')}</Title>
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <Typography id="my-teaching-title" variant="h4" component="h1">
-          {t('teacherView:mainHeading')}
+          {t('teacherView:mainHeadingV2')}
         </Typography>
       </Box>
 

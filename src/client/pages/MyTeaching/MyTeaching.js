@@ -11,7 +11,6 @@ import { getGroupedCourseUnits } from './utils'
 import GroupAccordion from './GroupAccordion'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
-import { NEW_TEACHING_VIEW_ENABLED } from '../../util/common'
 
 const MyTeaching = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits()
@@ -28,7 +27,7 @@ const MyTeaching = () => {
       <Title>{t('common:teacherPage')}</Title>
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <Typography variant="h4" component="h1">
-          {NEW_TEACHING_VIEW_ENABLED ? t('teacherView:mainHeadingV2') : t('teacherView:mainHeading')}
+          {t('teacherView:mainHeading')}
         </Typography>
       </Box>
 

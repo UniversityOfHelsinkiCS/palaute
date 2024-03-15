@@ -283,7 +283,7 @@ const config = {
 
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 
-  NEW_TEACHING_VIEW_ENABLED: false,
+  NEW_TEACHING_VIEW_ENABLED: true,
 }
 
 module.exports = config
