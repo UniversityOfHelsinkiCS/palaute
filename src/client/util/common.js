@@ -11,8 +11,6 @@ export const images = {
   norppa_viskaali: norppaViskaali,
 }
 
-export const colors = {}
-
 export const basePath = process.env.PUBLIC_URL || ''
 
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
@@ -37,8 +35,6 @@ export const FEEDBACK_REMINDER_COOLDOWN = config?.FEEDBACK_REMINDER_COOLDOWN
 
 export const CONFIG_TEST_VALUE = config?.CONFIG_TEST_VALUE
 
-export const CONFIG_NAME = config?.CONFIG_NAME
-
 export const SENTRY_DSN = config?.SENTRY_DSN
 
 export const GRAYLOG_URL = config?.GRAYLOG_URL
@@ -50,8 +46,6 @@ export const LANGUAGES = config?.LANGUAGES
 export const DEV_USERNAME = config?.DEV_USERNAME
 
 export const PRIVATE_TEST = config?.PRIVATE_TEST // This is expected to be undefined in e2e tests
-
-export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = config?.STUDENT_FEEDBACK_SHOW_REALISATION_NAME
 
 export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = config?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
 
