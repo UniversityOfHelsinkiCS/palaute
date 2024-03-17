@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { intersection } from 'lodash-es'
 import { Redirect, Route, Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -36,7 +36,7 @@ const SummaryInContext = () => {
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
   const hasAccessToUniversityLevel =
     user?.isAdmin ||
-    _.intersection(UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS, Object.keys(user?.specialGroup ?? {})).length > 0
+    intersection(UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS, Object.keys(user?.specialGroup ?? {})).length > 0
 
   return (
     <>

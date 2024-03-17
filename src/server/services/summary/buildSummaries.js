@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 const { Op, QueryTypes } = require('sequelize')
 const datefns = require('date-fns')
-const _ = require('lodash')
+const _ = require('lodash-es')
 const {
   Feedback,
   UserFeedbackTarget,

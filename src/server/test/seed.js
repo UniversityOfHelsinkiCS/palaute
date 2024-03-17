@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 const { startOfDay } = require('date-fns')
 const {
   FeedbackTarget,

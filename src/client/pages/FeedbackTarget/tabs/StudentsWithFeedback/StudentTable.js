@@ -5,7 +5,7 @@ import { parseISO, format } from 'date-fns'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
-import _ from 'lodash'
+import { orderBy } from 'lodash-es'
 
 import { sortTable } from '../../../../util/tableUtils'
 import DropZone from './DropZone'
@@ -64,20 +64,20 @@ const ExportXLSX = ({ students, fileName }) => {
 const StudentTable = ({ students, feedbackTarget }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
-  const [orderBy, setOrderBy] = useState('lastName')
+  const [orderByKey, setOrderByKey] = useState('lastName')
   const { t } = useTranslation()
 
   const handleRequestSort = (e, property) => {
-    const isAsc = orderBy === property && order === 'asc'
+    const isAsc = orderByKey === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
+    setOrderByKey(property)
   }
 
   const feedbackStatusAvailable = students.some(student => 'feedbackGiven' in student)
 
   const studentsData = useMemo(
     () =>
-      _.orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
+      orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
         firstName,
         lastName,
         studentNumber,
@@ -121,41 +121,41 @@ const StudentTable = ({ students, feedbackTarget }) => {
               id="firstName"
               name={t('common:firstName')}
               order={order}
-              orderBy={orderBy}
+              orderBy={orderByKey}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="lastName"
               name={t('common:lastName')}
               order={order}
-              orderBy={orderBy}
+              orderBy={orderByKey}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="studentNumber"
               name={t('common:studentNumber')}
               order={order}
-              orderBy={orderBy}
+              orderBy={orderByKey}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="email"
               name={t('common:email')}
               order={order}
-              orderBy={orderBy}
+              orderBy={orderByKey}
               onRequestSort={handleRequestSort}
             />
             <TableHeadCell
               id="feedbackGiven"
               name={t('common:feedback')}
               order={order}
-              orderBy={orderBy}
+              orderBy={orderByKey}
               onRequestSort={handleRequestSort}
             />
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortTable(students, order, orderBy).map(
+          {sortTable(students, order, orderByKey).map(
             ({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
               <TableRow key={id}>
                 <TableCell>{firstName}</TableCell>

@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 const datefns = require('date-fns')
 const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
 const { Summary } = require('../../models')

@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 const { startOfDay, endOfDay } = require('date-fns')
 const { parseFromTimeZone } = require('date-fns-timezone')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')

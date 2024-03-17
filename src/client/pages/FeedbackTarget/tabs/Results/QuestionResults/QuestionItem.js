@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
-import _ from 'lodash'
+import { sumBy, uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
@@ -55,7 +55,7 @@ const QuestionItem = ({
   const onPublicityToggle = React.useCallback(
     async isPublic => {
       const newPublicQuestionIds = isPublic
-        ? _.uniq(publicQuestionIds.concat(question.id))
+        ? uniq(publicQuestionIds.concat(question.id))
         : publicQuestionIds.filter(id => id !== question.id)
 
       try {
@@ -84,7 +84,7 @@ const QuestionItem = ({
   const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
 
   const isPublic = publicQuestionIds.includes(question.id)
-  const actualAnswers = _.sumBy(question.feedbacks, f => (f.data ? 1 : 0))
+  const actualAnswers = sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)

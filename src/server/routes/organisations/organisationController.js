@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 const { Router } = require('express')
 
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')

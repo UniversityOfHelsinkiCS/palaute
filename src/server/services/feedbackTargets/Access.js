@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 
 // Actions 'enum'
 // HEY YOU THERE if you can think of better solution, its your responsibility to implement!!!

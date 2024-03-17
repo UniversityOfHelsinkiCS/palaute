@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { partition } from 'lodash-es'
 
 export const getFormInitialValues = ({
   teacherQuestions,
@@ -17,7 +17,7 @@ export const getFormInitialValues = ({
     editable: canEditTeacher,
   }))
 
-  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+  const [groupingQuestions, otherTeacherQuestions] = partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
   const questions = [
     ...(universityQuestions ?? []).map(question => ({

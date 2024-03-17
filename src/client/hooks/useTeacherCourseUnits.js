@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'react-query'
 
@@ -15,7 +15,7 @@ const useTeacherCourseUnits = (options = {}) => {
   const queryFn = async () => {
     const { data } = await apiClient.get('/course-units/responsible')
 
-    return _.sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
+    return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
   const { data: courseUnits, ...rest } = useQuery(queryKey, queryFn, {

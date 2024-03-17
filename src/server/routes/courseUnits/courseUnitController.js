@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { Op } = require('sequelize')
-const _ = require('lodash')
+const _ = require('lodash-es')
 
 const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, Tag } = require('../../models')
 

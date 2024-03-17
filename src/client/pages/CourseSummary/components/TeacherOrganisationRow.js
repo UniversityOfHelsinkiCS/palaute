@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import _ from 'lodash'
+import { orderBy } from 'lodash-es'
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useSummaryContext } from '../context'
 import { OrganisationLabel } from './Labels'
@@ -20,7 +20,7 @@ const TeacherOrganisationRow = ({ organisation, questions }) => {
   const orderedCourseUnits = React.useMemo(
     () =>
       organisation?.courseUnits?.length > 0
-        ? _.orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1]).filter(
+        ? orderBy(organisation.courseUnits, cu => sortFunction(cu.summary), sortBy[1]).filter(
             cu => showSeparateOrganisationCourses || !cu.separateOrganisation
           )
         : [],

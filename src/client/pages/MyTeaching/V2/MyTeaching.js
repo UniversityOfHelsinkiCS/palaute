@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { chunk } from 'lodash-es'
 import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -41,7 +41,7 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   const theme = useTheme()
   const gridColumns = useCourseUnitGridColumns(theme)
 
-  const columnCourseUnits = _.chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
+  const columnCourseUnits = chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
 
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 

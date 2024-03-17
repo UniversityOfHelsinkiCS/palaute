@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 
 const { UserFeedbackTarget, User, CourseRealisation, CourseUnit, FeedbackTarget, Summary } = require('../../models')
 const languages = require('../../util/languages.json')

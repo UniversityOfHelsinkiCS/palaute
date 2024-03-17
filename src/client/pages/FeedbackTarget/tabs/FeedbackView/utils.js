@@ -1,5 +1,5 @@
 import { parseISO, lightFormat } from 'date-fns'
-import _ from 'lodash'
+import { partition } from 'lodash-es'
 import { useMutation } from 'react-query'
 
 import apiClient from '../../../../util/apiClient'
@@ -66,10 +66,7 @@ export const getQuestions = feedbackTarget => {
       []
     )
     const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
-    const [groupingQuestions, otherTeacherQuestions] = _.partition(
-      teacherQuestions,
-      q => q.secondaryType === 'GROUPING'
-    )
+    const [groupingQuestions, otherTeacherQuestions] = partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
     // Initial ordering
     const allQuestionsInInitialOrder = [
@@ -94,7 +91,7 @@ export const getQuestions = feedbackTarget => {
   const filteredProgrammeQuestions = programmeSurveyQuestions.filter(q => q.type !== 'OPEN')
 
   const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
-  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+  const [groupingQuestions, otherTeacherQuestions] = partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
   // Default ordering
   const allQuestions = [

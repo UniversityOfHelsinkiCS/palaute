@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const _ = require('lodash')
+const _ = require('lodash-es')
 
 const { User, Organisation } = require('../../models')
 

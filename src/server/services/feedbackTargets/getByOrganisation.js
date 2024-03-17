@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const _ = require('lodash-es')
 const { compareAsc, subDays, getDate, addMonths, getYear } = require('date-fns')
 const { Op } = require('sequelize')
 const {

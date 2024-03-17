@@ -1,5 +1,5 @@
 const XLSX = require('xlsx')
-const _ = require('lodash')
+const _ = require('lodash-es')
 const { Op } = require('sequelize')
 const { getSummaryAccessibleOrganisationIds } = require('./access')
 const { getLanguageValue } = require('../../util/languageUtils')

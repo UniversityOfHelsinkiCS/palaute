@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 const { Op, DATE, ENUM, STRING, Model, JSONB, BOOLEAN, VIRTUAL, ARRAY, INTEGER, TEXT } = require('sequelize')
 
-const _ = require('lodash')
+const _ = require('lodash-es')
 
 const Organisation = require('./organisation')
 const CourseRealisation = require('./courseRealisation')
