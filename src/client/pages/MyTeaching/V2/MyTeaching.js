@@ -5,12 +5,15 @@ import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import { Alert, Box, Typography, Skeleton } from '@mui/material'
+import OngoingIcon from '@mui/icons-material/Schedule'
+import UpcomingIcon from '@mui/icons-material/Event'
+import EndedIcon from '@mui/icons-material/Done'
 
 import { useTeacherCourseUnits, useTeacherOrganisatioSurveys } from './useTeacherCourseUnits'
 
 import useCourseUnitGridColumns from './useCourseUnitGridColumns'
 
-import StatusTabs from './StatusTabs'
+import { StatusTabs, StatusTab } from './StatusTabs'
 import CourseUnitItem from './CourseUnitGroup/CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
@@ -85,16 +88,31 @@ const MyTeaching = () => {
         </Typography>
       </Box>
 
-      <StatusTabs
-        aria-labelledby="my-teaching-title"
-        sx={{ marginBottom: 3 }}
-        status={status}
-        counts={{
-          ongoing: 0,
-          upcoming: 0,
-          ended: 0,
-        }}
-      />
+      <StatusTabs aria-labelledby="my-teaching-title" sx={{ marginBottom: 3 }} status={status}>
+        <StatusTab
+          data-cy="my-teaching-active-tab"
+          label={t('teacherView:activeSurveys')}
+          status="active"
+          icon={<OngoingIcon />}
+          iconPosition="start"
+        />
+        <StatusTab
+          data-cy="my-teaching-upcoming-tab"
+          label={t('teacherView:upcomingSurveys')}
+          status="upcoming"
+          icon={<UpcomingIcon />}
+          iconPosition="start"
+        />
+        <StatusTab
+          data-cy="my-teaching-ended-tab"
+          label={t('teacherView:endedSurveys')}
+          status="ended"
+          color="error"
+          count={0}
+          icon={<EndedIcon />}
+          iconPosition="start"
+        />
+      </StatusTabs>
 
       {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
 
