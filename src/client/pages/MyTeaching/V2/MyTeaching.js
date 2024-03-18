@@ -13,7 +13,7 @@ import { useTeacherCourseUnits, useTeacherOrganisatioSurveys } from './useTeache
 
 import useCourseUnitGridColumns from './useCourseUnitGridColumns'
 
-import { StatusTabs, StatusTab } from './StatusTabs'
+import { StatusTabs, StatusTab } from '../../../components/common/StatusTabs'
 import CourseUnitItem from './CourseUnitGroup/CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
