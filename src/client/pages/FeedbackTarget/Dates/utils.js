@@ -32,7 +32,7 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
     errors.closesAt = 'editFeedbackTarget:closesAtBeforeOpensAtError'
   }
   if (closesAt < new Date() && !isOver) {
-    errors.closesAt = 'editFeedbackTarget:opensAtInPastError'
+    errors.closesAt = 'editFeedbackTarget:closesAtInPastError'
   }
 
   if (opensAt && closesAt && Math.abs(differenceInDays(opensAt, closesAt)) < 1) {
