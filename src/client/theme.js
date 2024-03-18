@@ -69,6 +69,21 @@ const useTheme = () => {
                     dark: '#6b0000',
                     light: '#ffb3b3',
                   },
+                  chipOngoing: {
+                    main: '#006ba8',
+                    dark: '#09233d',
+                    light: '#edf7ff',
+                  },
+                  chipContinuous: {
+                    main: '#027902',
+                    dark: '#003300',
+                    light: '#ccffcc',
+                  },
+                  chipInterim: {
+                    main: '#621b6f',
+                    dark: '#300d59',
+                    light: '#ead8ee',
+                  },
                 }
               : {}),
           },
