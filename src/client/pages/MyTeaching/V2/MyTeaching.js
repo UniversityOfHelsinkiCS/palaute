@@ -29,9 +29,7 @@ const CourseUnitGroupSkeleton = () => (
   <>
     <Box sx={{ display: 'flex', alignItems: 'center', mt: 6 }}>
       <Skeleton>
-        <Typography id="my-teaching-title" variant="h5">
-          Yliopistokurssit
-        </Typography>
+        <Typography variant="h5">Yliopistokurssit</Typography>
       </Skeleton>
       <Skeleton variant="circular" width={20} height={20} sx={{ marginLeft: '1.5rem' }} />
     </Box>
