@@ -6,16 +6,13 @@ import qs from 'qs'
 
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
-import StatusTabs from './StatusTabs'
 
 import { filterFeedbackTargets, getCourseRealisationsWithFeedbackTargets, sortCourseRealisations } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
+import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 
 const styles = {
-  heading: {
-    marginBottom: 2,
-  },
   statusTabs: {
     marginBottom: 3,
   },
@@ -47,24 +44,43 @@ const MyFeedbacks = () => {
   )
 
   const showNoFeedbackAlert = !isLoading && sortedCourseRealisations.length === 0
+  const counts = {
+    ongoing: filteredFeedbackTargets.ongoing?.length,
+    waiting: filteredFeedbackTargets.waiting?.length,
+    given: filteredFeedbackTargets.given?.length,
+    ended: filteredFeedbackTargets.ended?.length,
+  }
+
+  const tabOrder = ['waiting', 'given', 'ended']
+  if (counts.ongoing && !tabOrder.includes('ongoing')) tabOrder.unshift('ongoing')
 
   return (
-    <div>
+    <>
       <Title>{t('common:feedbacks')}</Title>
-      <Typography variant="h4" component="h1" sx={styles.heading}>
+      <Typography id="my-feedbacks-title" variant="h4" component="h1">
         {t('userFeedbacks:mainHeading')}
       </Typography>
 
-      <StatusTabs
-        sx={styles.statusTabs}
-        status={status}
-        counts={{
-          ongoing: filteredFeedbackTargets.ongoing?.length,
-          waiting: filteredFeedbackTargets.waiting?.length,
-          given: filteredFeedbackTargets.given?.length,
-          ended: filteredFeedbackTargets.ended?.length,
-        }}
-      />
+      <StatusTabs aria-labelledby="my-feedbacks-title" status={status} tabOrder={tabOrder}>
+        {counts.ongoing && (
+          <StatusTab
+            data-cy="my-feedbacks-continuous-tab"
+            label={t('userFeedbacks:continuousFeedbackTab')}
+            status="ongoing"
+            count={counts.ongoing}
+            color="primary"
+          />
+        )}
+        <StatusTab
+          data-cy="my-feedbacks-waiting-tab"
+          label={t('userFeedbacks:waitingForFeedbackTab')}
+          status="waiting"
+          count={counts.waiting}
+          color="primary"
+        />
+        <StatusTab data-cy="my-feedbacks-given-tab" label={t('userFeedbacks:feedbackGivenTab')} status="given" />
+        <StatusTab data-cy="my-feedbacks-closed-tab" label={t('userFeedbacks:feedbackClosedTab')} status="ended" />
+      </StatusTabs>
 
       {isLoading && <LoadingProgress />}
 
@@ -79,7 +95,7 @@ const MyFeedbacks = () => {
           <CourseRealisationItem courseRealisation={courseRealisation} />
         </Fragment>
       ))}
-    </div>
+    </>
   )
 }
 
