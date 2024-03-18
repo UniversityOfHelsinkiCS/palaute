@@ -41,16 +41,15 @@ const FeedbackPeriodForm = () => {
   const closeWarningDialog = () => setWarningDialogOpen(false)
 
   const handleConfirmWarning = () => {
-    const { current: warningOrigin } = warningOriginRef
     const { current: submitPayload } = submitPayloadRef
 
-    if (warningOrigin === 'formSubmit') {
-      handleSubmitFeedbackPeriod(...submitPayload)
+    handleSubmitFeedbackPeriod(...submitPayload)
 
-      const [values, actions] = submitPayload
+    const [values, actions] = submitPayload
 
-      actions?.resetForm({ values })
-    } else {
+    actions?.resetForm({ values })
+
+    if (warningOriginRef.current === 'openImmediately') {
       handleOpenFeedbackImmediately()
     }
 
@@ -59,7 +58,10 @@ const FeedbackPeriodForm = () => {
 
   const handleSubmit = (values, actions) => {
     submitPayloadRef.current = [values, actions]
-    warningOriginRef.current = 'formSubmit'
+
+    if (warningOriginRef.current === 'openImmediately') {
+      values.opensAt = new Date()
+    }
 
     if (requiresSubmitConfirmation(values)) {
       handleOpenWarningDialog()
@@ -72,12 +74,6 @@ const FeedbackPeriodForm = () => {
   const handleSubmitWithAdminPower = values => {
     if (!window.confirm('WARNING: using admin powers to circumvent validation. Are you sure?')) return
     handleSubmit(values)
-  }
-
-  const handleOpenImmediatelyClick = () => {
-    warningOriginRef.current = 'openImmediately'
-
-    handleOpenWarningDialog()
   }
 
   const submitButtonTooltip = errors => Object.values(errors).map(t).join('\n')
@@ -137,7 +133,10 @@ const FeedbackPeriodForm = () => {
                 data-cy="feedback-target-open-feedback-immediately"
                 variant="outlined"
                 color="primary"
-                onClick={handleOpenImmediatelyClick}
+                type="submit"
+                onClick={() => {
+                  warningOriginRef.current = 'openImmediately'
+                }}
                 disabled={!openImmediatelyEnabled}
                 tooltip={cannotOpenImmediatelyMessage}
                 endIcon={<WarningAmber />}
