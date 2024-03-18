@@ -2,8 +2,6 @@ import React from 'react'
 import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-const tabOrder = ['ongoing', 'upcoming', 'ended']
-
 export const StatusTab = ({ status, count, color, label, ...props }) => (
   <Tab
     aria-label={label}
@@ -29,9 +27,7 @@ export const StatusTab = ({ status, count, color, label, ...props }) => (
   />
 )
 
-export const StatusTabs = ({ status, children, ...props }) => {
-  if (!tabOrder.includes('ongoing')) tabOrder.unshift('ongoing')
-
+export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
   const index = tabOrder.indexOf(status)
   const value = index < 0 ? 0 : index
 
@@ -42,6 +38,7 @@ export const StatusTabs = ({ status, children, ...props }) => {
       variant="scrollable"
       scrollButtons="auto"
       value={value}
+      sx={{ my: 3 }}
       {...props}
     >
       {children}

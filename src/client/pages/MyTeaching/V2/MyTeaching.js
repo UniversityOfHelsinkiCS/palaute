@@ -80,13 +80,11 @@ const MyTeaching = () => {
   return (
     <>
       <Title>{t('common:teacherPage')}</Title>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <Typography id="my-teaching-title" variant="h4" component="h1">
-          {t('teacherView:mainHeadingV2')}
-        </Typography>
-      </Box>
+      <Typography id="my-teaching-title" variant="h4" component="h1">
+        {t('teacherView:mainHeadingV2')}
+      </Typography>
 
-      <StatusTabs aria-labelledby="my-teaching-title" sx={{ marginBottom: 3 }} status={status}>
+      <StatusTabs aria-labelledby="my-teaching-title" status={status} tabOrder={['ongoing', 'upcoming', 'ended']}>
         <StatusTab
           data-cy="my-teaching-active-tab"
           label={t('teacherView:activeSurveys')}
