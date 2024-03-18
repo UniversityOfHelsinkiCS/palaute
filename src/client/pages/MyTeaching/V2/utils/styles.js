@@ -1,8 +1,8 @@
 const commonStyles = {
   alert: {
-    backgroundColor: '#fddeaf',
+    backgroundColor: theme => theme.palette.warning.extraLight,
     border: '1px solid #6b3600',
-    color: '#6b3600',
+    color: theme => theme.palette.warning.dark,
     borderRadius: '0.5em',
   },
 }

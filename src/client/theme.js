@@ -51,8 +51,10 @@ const useTheme = () => {
                     default: grey[50],
                   },
                   warning: {
-                    main: '#e6c309',
-                    light: '#ffd700',
+                    main: '#ffc107',
+                    light: '#ffcd38',
+                    extraLight: '#fff3c4',
+                    dark: '#665216',
                   },
                   chipSuccess: {
                     main: '#2e7d32',
