@@ -2,7 +2,7 @@ import React from 'react'
 import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-export const StatusTab = ({ status, count, color, label, ...props }) => (
+export const StatusTab = ({ status, count, badgeColor, label, ...props }) => (
   <Tab
     aria-label={label}
     label={
@@ -16,7 +16,7 @@ export const StatusTab = ({ status, count, color, label, ...props }) => (
           },
         }}
         badgeContent={count}
-        color={color}
+        color={badgeColor}
       >
         {label}
       </Badge>

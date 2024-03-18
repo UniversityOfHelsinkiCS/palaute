@@ -12,17 +12,6 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
 import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 
-const styles = {
-  statusTabs: {
-    marginBottom: 3,
-  },
-  progressContainer: {
-    padding: theme => theme.spacing(4, 0),
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}
-
 const MyFeedbacks = () => {
   const location = useLocation()
 
@@ -68,7 +57,7 @@ const MyFeedbacks = () => {
             label={t('userFeedbacks:continuousFeedbackTab')}
             status="ongoing"
             count={counts.ongoing}
-            color="primary"
+            badgeColor="primary"
           />
         )}
         <StatusTab
@@ -76,7 +65,7 @@ const MyFeedbacks = () => {
           label={t('userFeedbacks:waitingForFeedbackTab')}
           status="waiting"
           count={counts.waiting}
-          color="primary"
+          badgeColor="primary"
         />
         <StatusTab data-cy="my-feedbacks-given-tab" label={t('userFeedbacks:feedbackGivenTab')} status="given" />
         <StatusTab data-cy="my-feedbacks-closed-tab" label={t('userFeedbacks:feedbackClosedTab')} status="ended" />

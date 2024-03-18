@@ -103,8 +103,7 @@ const MyTeaching = () => {
           data-cy="my-teaching-ended-tab"
           label={t('teacherView:endedSurveys')}
           status="ended"
-          color="error"
-          count={0}
+          badgeColor="error"
           icon={<EndedIcon />}
           iconPosition="start"
         />
