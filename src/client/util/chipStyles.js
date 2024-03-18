@@ -35,19 +35,19 @@ const styles = {
     ...common,
   },
   success: {
-    borderColor: theme => theme.palette.success.main,
-    color: theme => theme.palette.success.main,
+    borderColor: theme => theme.palette.chipSuccess.main,
+    color: theme => theme.palette.chipSuccess.main,
   },
   error: {
-    borderColor: theme => theme.palette.error.light,
-    color: theme => theme.palette.error.light,
+    borderColor: theme => theme.palette.chipError.main,
+    color: theme => theme.palette.chipError.main,
     animation: css`
       ${pulse} 2s 1s alternate infinite
     `,
   },
   warning: {
-    borderColor: theme => theme.palette.warning.dark,
-    color: theme => theme.palette.warning.dark,
+    borderColor: theme => theme.palette.chipWarning.main,
+    color: theme => theme.palette.chipWarning.main,
     animation: css`
       ${pulse} 2.2s 0s alternate infinite
     `,

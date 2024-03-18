@@ -54,6 +54,21 @@ const useTheme = () => {
                     main: '#e6c309',
                     light: '#ffd700',
                   },
+                  chipSuccess: {
+                    main: '#2e7d32',
+                    dark: '#005704',
+                    light: '#bdffc0',
+                  },
+                  chipWarning: {
+                    main: '#8b7218',
+                    dark: '#6b3600',
+                    light: '#fddeaf',
+                  },
+                  chipError: {
+                    main: '#d32f2f',
+                    dark: '#6b0000',
+                    light: '#ffb3b3',
+                  },
                 }
               : {}),
           },
