@@ -5,7 +5,7 @@
  * These are computed automatically based on user access rights & teacher associations etc...
  */
 
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation } = require('../../models')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
 

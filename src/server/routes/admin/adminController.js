@@ -1,7 +1,7 @@
 const Router = require('express')
 
 const { Op } = require('sequelize')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { format, subMonths } = require('date-fns')
 
 const { ApplicationError } = require('../../util/customErrors')

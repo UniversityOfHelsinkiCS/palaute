@@ -1,5 +1,5 @@
 const Router = require('express')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const morgan = require('morgan')
 
 const { FeedbackTarget, CourseRealisation, User } = require('../models')

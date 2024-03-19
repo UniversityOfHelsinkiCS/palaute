@@ -1,4 +1,4 @@
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { Op, fn, col } = require('sequelize')
 const { subDays } = require('date-fns')
 const { inProduction, inStaging } = require('../config')

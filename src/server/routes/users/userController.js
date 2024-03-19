@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { Router } = require('express')
 
 const { ApplicationError } = require('../../util/customErrors')

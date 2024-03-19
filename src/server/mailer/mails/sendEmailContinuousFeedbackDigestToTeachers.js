@@ -1,4 +1,4 @@
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { subDays } = require('date-fns')
 const { Op } = require('sequelize')
 const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbackTarget } = require('../../models')

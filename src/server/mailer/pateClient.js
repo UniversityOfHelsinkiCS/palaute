@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const axios = require('axios')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
 const { inProduction, inStaging, PATE_URL } = require('../util/config')

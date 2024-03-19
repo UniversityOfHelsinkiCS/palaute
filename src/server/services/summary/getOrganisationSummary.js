@@ -1,4 +1,4 @@
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { Op } = require('sequelize')
 const {
   Organisation,

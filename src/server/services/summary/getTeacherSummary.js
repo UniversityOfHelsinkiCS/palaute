@@ -1,4 +1,4 @@
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { Op } = require('sequelize')
 const { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 const { sumSummaries, getScopedSummary } = require('./utils')

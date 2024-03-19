@@ -1,5 +1,5 @@
 const { subDays, addDays, format } = require('date-fns')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { sequelize } = require('../../db/dbConnection')
 
 const { createRecipientsForFeedbackTargets } = require('./util')

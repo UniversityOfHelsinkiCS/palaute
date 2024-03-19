@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const _ = require('lodash-es')
+const _ = require('lodash')
 const { OrganisationLog, Organisation, Question, User } = require('../../models')
 
 const createFromData = async (organisationId, user, data) => {

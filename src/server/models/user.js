@@ -1,5 +1,5 @@
 const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL } = require('sequelize')
-const _ = require('lodash-es')
+const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
 const UserFeedbackTarget = require('./userFeedbackTarget')

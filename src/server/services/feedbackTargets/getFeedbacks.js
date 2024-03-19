@@ -1,4 +1,4 @@
-const _ = require('lodash-es')
+const _ = require('lodash')
 
 const { FEEDBACK_HIDDEN_STUDENT_COUNT } = require('../../util/config')
 const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
