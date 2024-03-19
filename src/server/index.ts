@@ -31,7 +31,7 @@ if (inDevelopment || inE2EMode) {
 }
 
 if (inProduction || inE2EMode) {
-  const DIST_PATH = path.resolve(__dirname, '../../build')
+  const DIST_PATH = path.resolve(__dirname, '../../build/client')
   const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
 
   app.use(express.static(DIST_PATH))
