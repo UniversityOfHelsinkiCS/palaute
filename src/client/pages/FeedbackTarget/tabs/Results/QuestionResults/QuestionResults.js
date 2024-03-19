@@ -92,7 +92,7 @@ const QuestionResults = React.memo(
           data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
           sx={{ pageBreakAfter: 'always' }}
         >
-          {/*<Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>*/}
+          <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
             sx={{
               display: 'flex',
