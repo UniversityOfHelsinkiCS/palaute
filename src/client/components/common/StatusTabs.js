@@ -23,6 +23,15 @@ export const StatusTab = ({ status, count, badgeColor, label, ...props }) => (
     }
     component={Link}
     to={{ search: `?status=${status}` }}
+    sx={{
+      '&:hover': {
+        color: theme => theme.palette.primary.light,
+        opacity: 1,
+      },
+      '&.Mui-focusVisible': {
+        color: theme => theme.palette.primary.dark,
+      },
+    }}
     {...props}
   />
 )
