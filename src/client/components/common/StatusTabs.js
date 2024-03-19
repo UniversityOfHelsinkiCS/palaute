@@ -33,13 +33,25 @@ export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
 
   return (
     <Tabs
-      indicatorColor="primary"
       textColor="primary"
       variant="scrollable"
       scrollButtons="auto"
       value={value}
-      sx={{ my: 3 }}
+      sx={{
+        my: 3,
+        '& .MuiTabs-indicator': {
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          maxWidth: 80,
+          width: '100%',
+          backgroundColor: theme => theme.palette.primary.main,
+        },
+      }}
       {...props}
+      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
     >
       {children}
     </Tabs>
