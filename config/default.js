@@ -218,6 +218,20 @@ const config = {
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
 
   /**
+   * Custom config file to use. A custom UI config file with the same name should be located under src/client/config/<UI_CONFIG_NAME>.js.
+   * For example, UI_CONFIG_NAME is first set as 'tau-ui' and then a custom theme file named tau-ui.js is added into the src/client/config/ - folder.
+   * The file is a JavaScript file that returns images, styles, and theme properties.
+   * - images property returns an object with different image URLs to be replaced (currently, only logo image override is available).
+   *   The most convenient way is to add the image into assets, import it to the config file and use that reference as the image URL.
+   * - styles property returns an object with different component style overrides in js-format (currently, only logo styles overrides are available)
+   * - theme property returns a function that returns a Material UI theme options object
+   *   Function description: (Mode: light | dark) => ThemeOptions
+   *   The existing theme in src/client/theme.js can be used as an example
+   *   More info about theming: https://mui.com/material-ui/customization/theming/
+   */
+  UI_CONFIG_NAME: null,
+
+  /**
    * Allow organisation admins to create custom surveys
    */
   ORGANISATION_SURVEYS_ENABLED: false,

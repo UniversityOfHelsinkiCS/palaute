@@ -1,9 +1,28 @@
-import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { green, grey, lightBlue } from '@mui/material/colors'
-import { useMemo } from 'react'
-import { deepmerge } from '@mui/utils'
 
-const defaultTheme = mode => ({
+import logo from '../assets/tau_logo.svg'
+
+const images = {
+  logo,
+}
+
+const styles = {
+  logo: {
+    link: {
+      alignItems: 'center',
+      display: 'flex',
+    },
+    image: {
+      height: 'auto',
+      width: '192px',
+    },
+    text: {
+      paddingBottom: '0',
+    },
+  },
+}
+
+const theme = mode => ({
   typography: {
     fontFamily: [
       '"Open Sans"',
@@ -24,9 +43,9 @@ const defaultTheme = mode => ({
     ...(mode === 'light'
       ? {
           primary: {
-            light: '#4f96db',
-            main: '#3770b3',
-            dark: '#124c8c',
+            main: '#4e008e',
+            light: '#5c00a8',
+            dark: '#0e0021',
           },
           secondary: {
             main: '#e6c309',
@@ -119,10 +138,10 @@ const defaultTheme = mode => ({
       styleOverrides: {
         containedPrimary: {
           color: 'white',
-          background: 'rgb(8 110 221)',
+          background: 'rgb(78,0,142)',
           boxShadow: '0 4px 14px 0 rgb(0 118 255 / 39%)',
           '&:hover': {
-            background: 'rgba(10,130,235,1)',
+            background: 'rgb(92,0,168)',
             boxShadow: '0 4px 14px 0 rgb(0 118 255 / 44%)',
           },
         },
@@ -131,17 +150,4 @@ const defaultTheme = mode => ({
   },
 })
 
-const useTheme = customTheme => {
-  const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
-  const mode = prefersDarkMode ? 'dark' : 'light'
-  const baseTheme = createTheme(defaultTheme(mode))
-
-  return useMemo(
-    () =>
-      customTheme
-        ? responsiveFontSizes(deepmerge(baseTheme, createTheme(customTheme(mode))))
-        : responsiveFontSizes(baseTheme),
-    [mode, customTheme]
-  )
-}
-export default useTheme
+export default { images, styles, theme }
