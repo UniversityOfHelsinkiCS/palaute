@@ -16,7 +16,7 @@
     "clean-build:server": "rimraf ./build/server",
     "build": "npm run clean-build && npm run build:server && npm run build:client",
     "start:front": "react-app-rewired start",
-    "start:prod": "NODE_ENV=production node ./build/server/index.js",
+    "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/server/index.js",
     "start:test": "NODE_ENV=test node ./src/server/index.js",
     "start:dev": "npm run build && npm run build:server && NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-app-rewired start\"",
     "test": "npm run test:setup && sleep 10 &&  npm run test:e2e",
