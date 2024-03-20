@@ -3,37 +3,13 @@ import React from 'react'
 import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
-import { formatDuration, intervalToDuration } from 'date-fns'
 
 import ExternalLink from './common/ExternalLink'
 
-import { GIT_SHA, images, inProduction, inStaging } from '../util/common'
-
-import { localeForLanguage } from '../util/languageUtils'
-
-const styles = {
-  logo: {
-    marginLeft: '2rem',
-    width: '80px',
-    height: 'auto',
-  },
-  norppa: {
-    height: '100px',
-  },
-}
+import { inProduction, inStaging } from '../util/common'
 
 const Footer = ({ user }) => {
-  const { t, i18n } = useTranslation()
-  const duration = Date.parse(user?.lastRestart)
-    ? formatDuration(
-        intervalToDuration({
-          start: Date.parse(user?.lastRestart),
-          end: Date.now(),
-        }),
-        { locale: localeForLanguage(i18n.language) }
-      )
-    : ''
-
+  const { t } = useTranslation()
   return (
     <Box marginTop="auto" pt="1rem">
       <Divider />
