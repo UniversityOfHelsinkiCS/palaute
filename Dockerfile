@@ -5,6 +5,7 @@ ENV TZ="Europe/Helsinki"
 WORKDIR /opt/app-root/src
 
 # Build time env variables
+ARG EXPOSE_PORT=8000
 
 ARG NODE_CONFIG_ENV
 ENV NODE_CONFIG_ENV=$NODE_CONFIG_ENV
@@ -28,6 +29,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE $EXPOSE_PORT
 
 CMD ["npm", "run", "start:prod"]
