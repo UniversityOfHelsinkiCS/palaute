@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
 import { Tabs, Box, Tooltip, Badge, Paper, Tab } from '@mui/material'
 
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 const stripSearch = path => path.split('?')[0]
 

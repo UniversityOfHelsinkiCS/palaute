@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { TextField, Box } from '@mui/material'
 
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 import apiClient from '../../../../util/apiClient'
 import UserAccordion from '../../UserAccordion/UserAccordion'

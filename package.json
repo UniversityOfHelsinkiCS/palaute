@@ -64,7 +64,8 @@
     "immer": "^9.0.19",
     "intersection-observer": "^0.12.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "notistack": "^2.0.5",
@@ -116,13 +117,7 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.7.1",
     "react-error-overlay": "^6.0.11",
-    "react-scripts": "^5.0.1",
-    "stream-browserify": "^3.0.0",
-    "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "browserify-fs": "^1.0.0",
-    "util": "^0.12.4"
+    "react-scripts": "^5.0.1"
   },
   "browserslist": {
     "production": [

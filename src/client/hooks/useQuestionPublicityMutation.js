@@ -1,10 +1,10 @@
-import _ from 'lodash'
+import { kebabCase } from 'lodash-es'
 import { useMutation } from 'react-query'
 import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
 const useQuestionPublicityMutation = ({ resource, resourceId }) => {
-  const resourcePathName = _.kebabCase(resource)
+  const resourcePathName = kebabCase(resource)
   const mutationFn = async publicQuestionIds => {
     const res = await apiClient.put(`/${resourcePathName}s/${resourceId}`, {
       publicQuestionIds,

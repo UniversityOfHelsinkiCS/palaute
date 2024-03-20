@@ -1,5 +1,5 @@
 import { addHours, startOfDay, subDays } from 'date-fns'
-import _ from 'lodash'
+import { groupBy, sortBy } from 'lodash-es'
 import React from 'react'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
@@ -58,8 +58,8 @@ const buildChartConfig = (
 ) => {
   const gradient = getGradient(chart?.ctx, chart?.chartArea)
 
-  const initialData = _.sortBy(
-    Object.entries(_.groupBy(feedbacks, f => addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime())).map(
+  const initialData = sortBy(
+    Object.entries(groupBy(feedbacks, f => addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime())).map(
       ([date, feedbacks]) => ({
         x: Number(date),
         y: feedbacks.length / studentCount,

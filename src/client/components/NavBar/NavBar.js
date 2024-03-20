@@ -1,7 +1,7 @@
 import React, { useRef, useState, forwardRef } from 'react'
 
 import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Divider, ButtonBase, Box, Container } from '@mui/material'
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -139,7 +139,7 @@ const NavBar = ({ guest = false }) => {
   }
 
   const handleBannerClose = id => {
-    const newIds = _.uniq((seenBannerIds ?? []).concat(id))
+    const newIds = uniq((seenBannerIds ?? []).concat(id))
     setSeenBannerIds(newIds)
   }
 
