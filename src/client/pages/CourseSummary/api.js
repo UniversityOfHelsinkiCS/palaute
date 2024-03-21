@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query'
 import apiClient from '../../util/apiClient'
-import queryClient from '../../util/queryClient'
 import { useSummaryContext } from './context'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
@@ -19,23 +18,6 @@ const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId, ex
   })
 
   return data
-}
-
-export const getCourseUnits = async ({ startDate, endDate, organisationId }) => {
-  // Check RQ cache first
-  const queryKey = ['summaries-v2', organisationId, startDate, endDate, 'courseUnits']
-  const cachedCourseUnits = queryClient.getQueryData(queryKey)
-  if (cachedCourseUnits) return cachedCourseUnits
-
-  // If not found in cache, fetch from API
-  const courseUnits = await fetchSummaries({
-    startDate,
-    endDate,
-    entityId: organisationId,
-    include: 'courseUnits',
-  })
-
-  return courseUnits
 }
 
 /**
@@ -141,14 +123,18 @@ export const useOrganisationSummaries = () => {
   return { organisations, ...rest }
 }
 
-export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate }) => {
-  const queryKey = ['summaries-course-unit-group', courseCode, startDate, endDate]
+export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, allTime }) => {
+  const queryKey = allTime
+    ? ['summaries-course-unit-group', courseCode, 'all']
+    : ['summaries-course-unit-group', courseCode, startDate, endDate]
+
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/course-unit-group`, {
       params: {
         courseCode,
         startDate,
         endDate,
+        allTime,
       },
     })
 

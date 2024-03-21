@@ -12,10 +12,11 @@ const { sumSummaries, getScopedSummary } = require('./utils')
 const { getAccessibleCourseRealisationIds } = require('./access')
 const { ApplicationError } = require('../../util/customErrors')
 
-const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate }) => {
+const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate, allTime }) => {
   const orgAccess = await user.getOrganisationAccess()
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
-  const scopedSummary = getScopedSummary({ startDate, endDate, allTime: false })
+  console.log(allTime)
+  const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
 
   // Early exit for students, "DOS prevention" :D
   if (Object.keys(orgAccess).length === 0 && accessibleCurIds.length === 0)

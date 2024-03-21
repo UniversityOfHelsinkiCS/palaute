@@ -12,17 +12,18 @@ import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
 const ForCourseUnitGroup = () => {
   const { t } = useTranslation()
   const { code } = useParams()
-  const { dateRange, questions } = useSummaryContext()
+  const { dateRange, questions, option } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
     courseCode: code,
     startDate: dateRange.start,
     endDate: dateRange.end,
+    allTime: option === 'all',
   })
 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-        <SorterRowWithFilters />
+        <SorterRowWithFilters allTime />
         {isLoading ? (
           <LinearProgress />
         ) : courseUnitGroup ? (
