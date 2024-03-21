@@ -1,25 +1,34 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react'
-import { Box, LinearProgress } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { Alert, Box, LinearProgress } from '@mui/material'
 import { useParams } from 'react-router'
 import { useCourseUnitGroupSummaries } from './api'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
-import { SorterRow } from './components/SorterRow'
+import SorterRowWithFilters from './components/SorterRow'
 import { useSummaryContext } from './context'
 import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
 
 const ForCourseUnitGroup = () => {
+  const { t } = useTranslation()
   const { code } = useParams()
-  const { questions } = useSummaryContext()
-  const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({ courseCode: code })
+  const { dateRange, questions } = useSummaryContext()
+  const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
+    courseCode: code,
+    startDate: dateRange.start,
+    endDate: dateRange.end,
+  })
 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-        <SorterRow />
+        <SorterRowWithFilters />
         {isLoading ? (
           <LinearProgress />
-        ) : (
+        ) : courseUnitGroup ? (
           <CourseUnitGroupSummaryRow courseUnitGroup={courseUnitGroup} questions={questions} />
+        ) : (
+          <Alert severity="info">{t('courseSummary:noCourseRealisations')}</Alert>
         )}
       </Box>
     </SummaryScrollContainer>

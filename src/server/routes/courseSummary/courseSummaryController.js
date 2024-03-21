@@ -163,11 +163,14 @@ const getByCourseUnit = async (req, res) => {
 
 const getCourseUnitGroup = async (req, res) => {
   const { user } = req
-  const { courseCode } = req.query
+  const { courseCode, startDate: startDateString, endDate: endDateString } = req.query
+  const { startDate, endDate } = parseDates(startDateString, endDateString)
 
   const courseUnitGroup = await getCourseUnitGroupSummaries({
     user,
     courseCode,
+    startDate,
+    endDate,
   })
 
   return res.send(courseUnitGroup)

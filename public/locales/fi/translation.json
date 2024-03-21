@@ -475,7 +475,7 @@
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
-    "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
+    "noCourseRealisations": "Tällä opintojaksolla ei ole toteutuksia valitulla aikavälillä",
     "myOrganisations": "Organisaationi",
     "myCourses": "Kurssini",
     "newView": "Kokeile uutta näkymää",

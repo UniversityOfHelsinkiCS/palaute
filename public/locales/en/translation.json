@@ -156,7 +156,7 @@
     "showStudentsWithFeedback": "Show students who have given feedback",
     "feedbackCount": "{{count}}/{{totalCount}} feedback given",
     "giveFeedbackResponse": "Give counter feedback",
-    "noCourseRealisations": "No course realisations",
+    "noCourseRealisations": "No course realisations for the selected time period",
     "noCourses": "There are currently no surveys to show",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",

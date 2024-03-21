@@ -141,12 +141,14 @@ export const useOrganisationSummaries = () => {
   return { organisations, ...rest }
 }
 
-export const useCourseUnitGroupSummaries = ({ courseCode }) => {
-  const queryKey = ['summaries-course-unit-group', courseCode]
+export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate }) => {
+  const queryKey = ['summaries-course-unit-group', courseCode, startDate, endDate]
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/course-unit-group`, {
       params: {
         courseCode,
+        startDate,
+        endDate,
       },
     })
 
