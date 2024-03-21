@@ -15,7 +15,6 @@ const { ApplicationError } = require('../../util/customErrors')
 const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate, allTime }) => {
   const orgAccess = await user.getOrganisationAccess()
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
-  console.log(allTime)
   const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
 
   // Early exit for students, "DOS prevention" :D

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Checkbox, FormControl, FormControlLabel } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from '../context'
 import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
