@@ -9,7 +9,6 @@ Cronjobs can be disabled by setting `CRON_DISABLED` environmental variable to `'
 |           `updater`           | Updater  |                                To update Sisu data                                | Depends on implementation (1.30 for hy) |  `High`  |
 |          `pateCron`           |  Norppa  |                           To send daily scheduled mail                            |                  11.15                  |  `High`  |
 |   `continuousFeedbackCron`    |  Norppa  |                  To send cfb digest mail to responsible teachers                  |                  8.00                   | `Medium` |
-|      `refreshViewsCron`       |  Norppa  |                  To refresh course summary database views daily                   |                  6.30                   | `Medium` |
 |        `summariesCron`        |  Norppa  |                   To refresh course summary v2 summaries-table                    |                  5.20                   | `Medium` |
 | `precacheFeedbackTargetsCron` |  Norppa  | To cache feedback targets that have just opened and will soon see a visitor spike |                  3.10                   |  `Low`   |
 
