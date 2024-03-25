@@ -5,12 +5,15 @@ import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
 import { Alert, Box, Typography, Skeleton } from '@mui/material'
+import OngoingIcon from '@mui/icons-material/Schedule'
+import UpcomingIcon from '@mui/icons-material/Event'
+import EndedIcon from '@mui/icons-material/Done'
 
 import { useTeacherCourseUnits, useTeacherOrganisatioSurveys } from './useTeacherCourseUnits'
 
 import useCourseUnitGridColumns from './useCourseUnitGridColumns'
 
-import StatusTabs from './StatusTabs'
+import { StatusTabs, StatusTab } from '../../../components/common/StatusTabs'
 import CourseUnitItem from './CourseUnitGroup/CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
@@ -26,9 +29,7 @@ const CourseUnitGroupSkeleton = () => (
   <>
     <Box sx={{ display: 'flex', alignItems: 'center', mt: 6 }}>
       <Skeleton>
-        <Typography id="my-teaching-title" variant="h5">
-          Yliopistokurssit
-        </Typography>
+        <Typography variant="h5">Yliopistokurssit</Typography>
       </Skeleton>
       <Skeleton variant="circular" width={20} height={20} sx={{ marginLeft: '1.5rem' }} />
     </Box>
@@ -79,22 +80,34 @@ const MyTeaching = () => {
   return (
     <>
       <Title>{t('common:teacherPage')}</Title>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <Typography id="my-teaching-title" variant="h4" component="h1">
-          {t('teacherView:mainHeadingV2')}
-        </Typography>
-      </Box>
+      <Typography id="my-teaching-title" variant="h4" component="h1">
+        {t('teacherView:mainHeadingV2')}
+      </Typography>
 
-      <StatusTabs
-        aria-labelledby="my-teaching-title"
-        sx={{ marginBottom: 3 }}
-        status={status}
-        counts={{
-          ongoing: 0,
-          upcoming: 0,
-          ended: 0,
-        }}
-      />
+      <StatusTabs aria-labelledby="my-teaching-title" status={status} tabOrder={['ongoing', 'upcoming', 'ended']}>
+        <StatusTab
+          data-cy="my-teaching-active-tab"
+          label={t('teacherView:activeSurveys')}
+          status="active"
+          icon={<OngoingIcon />}
+          iconPosition="start"
+        />
+        <StatusTab
+          data-cy="my-teaching-upcoming-tab"
+          label={t('teacherView:upcomingSurveys')}
+          status="upcoming"
+          icon={<UpcomingIcon />}
+          iconPosition="start"
+        />
+        <StatusTab
+          data-cy="my-teaching-ended-tab"
+          label={t('teacherView:endedSurveys')}
+          status="ended"
+          badgeColor="error"
+          icon={<EndedIcon />}
+          iconPosition="start"
+        />
+      </StatusTabs>
 
       {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
 

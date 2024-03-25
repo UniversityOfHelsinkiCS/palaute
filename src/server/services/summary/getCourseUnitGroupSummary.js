@@ -3,19 +3,19 @@ const {
   CourseUnit,
   FeedbackTarget,
   CourseRealisation,
-  Summary,
   CourseRealisationsOrganisation,
   CourseUnitsOrganisation,
   UserFeedbackTarget,
   User,
 } = require('../../models')
-const { sumSummaries } = require('./utils')
+const { sumSummaries, getScopedSummary } = require('./utils')
 const { getAccessibleCourseRealisationIds } = require('./access')
 const { ApplicationError } = require('../../util/customErrors')
 
-const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
+const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate, allTime }) => {
   const orgAccess = await user.getOrganisationAccess()
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
+  const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
 
   // Early exit for students, "DOS prevention" :D
   if (Object.keys(orgAccess).length === 0 && accessibleCurIds.length === 0)
@@ -32,7 +32,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
         attributes: ['organisationId'],
       },
       {
-        model: Summary,
+        model: scopedSummary,
         as: 'groupSummaries',
       },
       {
@@ -52,7 +52,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
                 attributes: ['organisationId'],
               },
               {
-                model: Summary,
+                model: scopedSummary,
                 as: 'summary',
                 required: true,
               },
@@ -73,6 +73,10 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode }) => {
     ],
     order: [['validityPeriod.startDate', 'desc']], // Ordering! Now [0] is the newest.
   })
+
+  if (!courseUnits?.length > 0) {
+    return null
+  }
 
   const feedbackTargets = courseUnits.flatMap(cu => cu.feedbackTargets)
   const cuOrgIds = courseUnits.flatMap(cu => cu.courseUnitsOrganisations.map(cuo => cuo.organisationId))

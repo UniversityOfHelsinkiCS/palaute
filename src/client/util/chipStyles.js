@@ -35,19 +35,19 @@ const styles = {
     ...common,
   },
   success: {
-    borderColor: theme => theme.palette.success.main,
-    color: theme => theme.palette.success.main,
+    borderColor: theme => theme.palette.chipSuccess.main,
+    color: theme => theme.palette.chipSuccess.main,
   },
   error: {
-    borderColor: theme => theme.palette.error.light,
-    color: theme => theme.palette.error.light,
+    borderColor: theme => theme.palette.chipError.main,
+    color: theme => theme.palette.chipError.main,
     animation: css`
       ${pulse} 2s 1s alternate infinite
     `,
   },
   warning: {
-    borderColor: theme => theme.palette.warning.dark,
-    color: theme => theme.palette.warning.dark,
+    borderColor: theme => theme.palette.chipWarning.main,
+    color: theme => theme.palette.chipWarning.main,
     animation: css`
       ${pulse} 2.2s 0s alternate infinite
     `,
@@ -59,8 +59,8 @@ const styles = {
     animation: css`
       ${flow} 6.5s infinite forwards linear
     `,
-    color: '#09233d',
-    borderColor: '#a3bed9',
+    color: theme => theme.palette.chipOngoing.dark,
+    borderColor: theme => theme.palette.chipOngoing.main,
   },
   shimmeringSecondary: {
     background: theme => theme.palette.primary,
@@ -69,18 +69,18 @@ const styles = {
     animation: css`
       ${flow} 6.5s infinite forwards linear
     `,
-    color: '#003300',
-    borderColor: '#33cc33',
+    color: theme => theme.palette.chipContinuous.dark,
+    borderColor: theme => theme.palette.chipContinuous.main,
   },
   interim: {
     background: theme => theme.palette.primary,
-    backgroundImage: 'linear-gradient(55deg, #e1bee7 10%, #ce93d8 30%, #e1bee7 50%)',
+    backgroundImage: 'linear-gradient(55deg, #ead8ee 10%, #d4b4d9 30%, #ead8ee 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
       ${flow} 6.5s infinite forwards linear
     `,
-    color: '#300d59',
-    borderColor: '#ab47bc',
+    color: theme => theme.palette.chipInterim.dark,
+    borderColor: theme => theme.palette.chipInterim.main,
   },
 }
 

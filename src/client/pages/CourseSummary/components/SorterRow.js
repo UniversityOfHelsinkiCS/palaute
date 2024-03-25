@@ -38,7 +38,7 @@ const styles = {
   },
 }
 
-export const SorterRow = ({ filterComponent }) => {
+const SorterRow = ({ filterComponent }) => {
   const { t, i18n } = useTranslation()
   const { questions } = useSummaryContext()
 
@@ -64,7 +64,7 @@ export const SorterRow = ({ filterComponent }) => {
   )
 }
 
-const SorterRowWithFilters = () => {
+const SorterRowWithFilters = ({ allTime = false }) => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
@@ -77,6 +77,7 @@ const SorterRowWithFilters = () => {
       onChange={handleChangeTimeRange}
       option={option}
       setOption={setOption}
+      allowAll={allTime}
     />
   )
 
