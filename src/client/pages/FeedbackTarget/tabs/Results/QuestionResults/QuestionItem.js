@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
-import _ from 'lodash'
+import { sumBy, uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
@@ -12,6 +12,7 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
+import { boxPrintStyle } from '../../../../../util/printStyle'
 
 const componentByType = {
   LIKERT: LikertResults,
@@ -54,7 +55,7 @@ const QuestionItem = ({
   const onPublicityToggle = React.useCallback(
     async isPublic => {
       const newPublicQuestionIds = isPublic
-        ? _.uniq(publicQuestionIds.concat(question.id))
+        ? uniq(publicQuestionIds.concat(question.id))
         : publicQuestionIds.filter(id => id !== question.id)
 
       try {
@@ -83,13 +84,19 @@ const QuestionItem = ({
   const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
 
   const isPublic = publicQuestionIds.includes(question.id)
-  const actualAnswers = _.sumBy(question.feedbacks, f => (f.data ? 1 : 0))
+  const actualAnswers = sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)
 
   return (
-    <Card sx={{ height: '100%', p: '1rem' }}>
+    <Card
+      sx={{
+        height: '100%',
+        p: '1rem',
+        ...boxPrintStyle,
+      }}
+    >
       <Box display="flex" flexDirection="column" height="100%">
         <Box display="flex">
           <Box flexGrow={0} mr="auto" display="flex" flexDirection="column" rowGap="0.5rem" alignItems="start">

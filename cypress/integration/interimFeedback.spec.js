@@ -5,6 +5,8 @@ const { student, teacher, admin } = require('../fixtures/headers')
 describe('Responsible Teachers', () => {
   beforeEach(() => {
     cy.createFeedbackTarget({ extraStudents: 5 })
+    cy.setFeedbackActive()
+
     const today = new Date()
     const interimFeedbackBody = {
       name: {
@@ -28,7 +30,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -88,7 +90,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-accordion-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -222,7 +224,10 @@ describe('Responsible Teachers', () => {
 
       // Assert that the interim feedback may be deleted if no feedbacks are given
       cy.on('window:confirm', str => {
-        expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+        expect(str).to.be.oneOf([
+          'Are you sure you want to remove this interim feedback?',
+          'Haluatko varmasti poistaa tämän välipalautteen?',
+        ])
       })
 
       cy.get(`[data-cy="interim-feedback-delete-${interimFeedback.id}"]`).should('exist').click()
@@ -337,10 +342,7 @@ describe('Students', () => {
     // New tabs are rendered when feedback was given
     cy.get('[data-cy="interim-feedback-target-edit-feedback-tab"]').should('exist')
     cy.get('[data-cy="interim-feedback-target-results-tab"]').should('exist').click()
-    cy.get('[data-cy="feedback-target-results-thank-you"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-multiple-choice-questions-0"]').should('exist')
-    cy.get('[data-cy="feedback-target-results-open-questions-0"]').should('exist')
+    cy.get('[data-cy="notEnoughFeedbacks"]').should('exist')
 
     cy.url().should('include', '/results')
 
@@ -429,7 +431,10 @@ describe('Admin Users', () => {
     cy.get('[data-cy="interim-feedbacks-no-surveys-alert"]').should('not.exist')
 
     cy.on('window:confirm', str => {
-      expect(str).to.eq('Are you sure you want to remove this interim feedback?')
+      expect(str).to.be.oneOf([
+        'Are you sure you want to remove this interim feedback?',
+        'Haluatko varmasti poistaa tämän välipalautteen?',
+      ])
     })
 
     cy.get('@interimFeedback').then(interimFeedback => {

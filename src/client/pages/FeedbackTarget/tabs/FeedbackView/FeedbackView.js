@@ -11,20 +11,19 @@ import { useSnackbar } from 'notistack'
 
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
-import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
 import AlertLink from '../../../../components/common/AlertLink'
 
-import { makeValidate, getInitialValues, saveValues, getQuestions, formatDate, checkIsFeedbackOpen } from './utils'
+import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedbackOpen, useSaveValues } from './utils'
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import useOrganisationAccess from '../../../../hooks/useOrganisationAccess'
 import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const tada = keyframes({
   from: {
@@ -136,6 +135,8 @@ const FormContainer = ({
   )
 }
 
+const feedbackGivenSnackbarContent = (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
+
 const FeedbackView = () => {
   const id = useFeedbackTargetId()
 
@@ -143,13 +144,11 @@ const FeedbackView = () => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
+  const submitMutation = useSaveValues()
 
   const { authorizedUser } = useAuthorizedUser()
-  const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
-    skipCache: true,
-  })
-
-  const orgAccess = useOrganisationAccess(feedbackTarget)
+  const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
+  const isLoading = !feedbackTarget
 
   if (isLoading) {
     return <LoadingProgress />
@@ -158,11 +157,7 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
   // TODO clean up this shit again
-  const isStudent = accessStatus === 'STUDENT'
-  const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER'
-  const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher
   const isOutsider = accessStatus === 'NONE'
-  const isOrganisationAdmin = orgAccess.admin
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
@@ -182,14 +177,19 @@ const FeedbackView = () => {
           variant: 'error',
         })
       } else {
-        await saveValues(values, feedbackTarget)
+        const feedbackData = Object.entries(values.answers).map(([questionId, data]) => ({
+          questionId: Number(questionId),
+          data,
+        }))
+
+        await submitMutation.mutateAsync(feedbackData)
 
         history.push(`/targets/${id}/results`)
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 6000,
-          content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
+          content: feedbackGivenSnackbarContent,
         })
       }
     } catch (e) {

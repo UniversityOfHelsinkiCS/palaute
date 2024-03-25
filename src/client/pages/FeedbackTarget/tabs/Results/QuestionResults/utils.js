@@ -1,5 +1,4 @@
-import countBy from 'lodash/countBy'
-import flatMap from 'lodash/flatMap'
+import { countBy, flatMap } from 'lodash-es'
 import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'

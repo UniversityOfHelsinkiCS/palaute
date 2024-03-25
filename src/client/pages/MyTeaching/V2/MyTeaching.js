@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { chunk } from 'lodash-es'
 import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,6 @@ import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
 
 import Title from '../../../components/common/Title'
-import LinkButton from '../../../components/common/LinkButton'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 
 const CourseUnitGroupSkeleton = () => (
@@ -42,7 +41,7 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   const theme = useTheme()
   const gridColumns = useCourseUnitGridColumns(theme)
 
-  const columnCourseUnits = _.chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
+  const columnCourseUnits = chunk(courseUnits, Math.ceil(courseUnits.length / gridColumns))
 
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
@@ -84,7 +83,6 @@ const MyTeaching = () => {
         <Typography id="my-teaching-title" variant="h4" component="h1">
           {t('teacherView:mainHeadingV2')}
         </Typography>
-        <LinkButton to="/courses/" title={t('teacherView:oldView')} />
       </Box>
 
       <StatusTabs
@@ -102,7 +100,7 @@ const MyTeaching = () => {
 
       {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
         <Alert data-cy="my-teaching-no-courses" severity="info">
-          {t('teacherView:noCoursesV2')}
+          {t('teacherView:noCourses')}
         </Alert>
       )}
 

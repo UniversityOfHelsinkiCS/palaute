@@ -45,8 +45,15 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 const FeedbackTargetContent = () => {
   const { path, url } = useRouteMatch()
   const { t, i18n } = useTranslation()
-  const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
-    useFeedbackTargetContext()
+  const {
+    feedbackTarget,
+    isStudent,
+    isTeacher,
+    isAdmin,
+    isOrganisationAdmin,
+    isResponsibleTeacher,
+    justGivenFeedback,
+  } = useFeedbackTargetContext()
 
   const {
     courseUnit,
@@ -59,6 +66,8 @@ const FeedbackTargetContent = () => {
     feedbackCanBeGiven,
     userCreated,
   } = feedbackTarget
+
+  const feedbackGiven = feedback || justGivenFeedback
 
   const defaultPath = `/targets/${feedbackTarget.id}/feedback`
 
@@ -75,7 +84,7 @@ const FeedbackTargetContent = () => {
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
 
-  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedback || isEnded
+  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedbackGiven || isEnded
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
@@ -119,7 +128,7 @@ const FeedbackTargetContent = () => {
             title={t('common:survey')}
             hideTitle={isStudent}
           >
-            {feedback && isOpen ? (
+            {(justGivenFeedback || feedback) && isOpen ? (
               <RouterTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}

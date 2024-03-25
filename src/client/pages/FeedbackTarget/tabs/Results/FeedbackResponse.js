@@ -7,6 +7,7 @@ import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
+import { boxPrintStyle } from '../../../../util/printStyle'
 
 const styles = {
   title: {
@@ -35,7 +36,7 @@ const FeedbackResponse = ({ feedbackTarget }) => {
   const canGiveFeedbackResponse = isEnded && isResponsibleTeacher
 
   return (
-    <Card sx={{ borderRadius: '1rem' }}>
+    <Card sx={{ borderRadius: '1rem', ...boxPrintStyle }}>
       <CardContent>
         <Typography component="h2" sx={styles.title}>
           {t('feedbackTargetResults:responseHeading')}

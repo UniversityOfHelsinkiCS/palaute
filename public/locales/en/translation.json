@@ -159,8 +159,7 @@
     "feedbackCount": "{{count}}/{{totalCount}} feedback given",
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations",
-    "noCourses": "No courses",
-    "noCoursesV2": "There are currently no courses to show",
+    "noCourses": "There are currently no surveys to show",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",
@@ -179,9 +178,9 @@
     "organisationSurveys": "Organisation surveys",
     "courseSurveys": "Course surveys",
     "disabledCourseWarning": "Feedback is disabled for this course",
-    "newView": "Test the new view",
-    "oldView": "Go back to the old view",
-    "expandMoreLabel": "Show hidden surveys"
+    "expandMoreLabel": "Show hidden surveys",
+    "survey": "Survey",
+    "surveys": "Surveys"
   },
   "questionEditor": {
     "addQuestion": "Add question",
@@ -327,6 +326,7 @@
   "navBar": {
     "myFeedbacks": "My feedback",
     "myCourses": "My teaching",
+    "myCoursesV2": "My surveys",
     "logOut": "Log out",
     "admin": "Admin",
     "courseSummary": "Course summary",

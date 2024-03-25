@@ -1,7 +1,7 @@
 import React, { useRef, useState, forwardRef } from 'react'
 
 import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Divider, ButtonBase, Box, Container } from '@mui/material'
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { PersonOutlined } from '@mui/icons-material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import { LANGUAGES } from '../../util/common'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import Logo from './Logo'
@@ -20,6 +19,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
+import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES } from '../../util/common'
 
 const styles = {
   toolbar: {
@@ -135,7 +135,7 @@ const NavBar = ({ guest = false }) => {
   }
 
   const handleBannerClose = id => {
-    const newIds = _.uniq((seenBannerIds ?? []).concat(id))
+    const newIds = uniq((seenBannerIds ?? []).concat(id))
     setSeenBannerIds(newIds)
   }
 
@@ -167,7 +167,7 @@ const NavBar = ({ guest = false }) => {
 
   const links = [
     myCoursesIsAccessible && {
-      label: t('navBar:myCourses'),
+      label: NEW_TEACHING_VIEW_ENABLED ? t('navBar:myCoursesV2') : t('navBar:myCourses'),
       to: '/courses',
     },
     isStudent && {

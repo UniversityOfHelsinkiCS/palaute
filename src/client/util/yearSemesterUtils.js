@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { range } from 'lodash-es'
 import { addYears, subDays } from 'date-fns'
 import { startOfStudyYear } from './startOfStudyYear'
 import { STUDY_YEAR_START_MONTH } from './common'
@@ -17,7 +17,7 @@ export const useYearSemesters = currentStart => {
   const now = new Date()
   const year = Math.min(currentStart.getFullYear(), startOfStudyYear(now).getFullYear())
 
-  let semesters = _.range(2021, now.getFullYear() + 1)
+  let semesters = range(2021, now.getFullYear() + 1)
     .flatMap(year => [
       {
         start: new Date(`${year}-01-01`),

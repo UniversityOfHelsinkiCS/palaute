@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 import QuestionEditor from './QuestionEditor'
 import { validateQuestions } from './utils'
@@ -22,7 +22,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
 
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
-      ? _.uniq(feedbackTarget.publicQuestionIds.concat(question.id))
+      ? uniq(feedbackTarget.publicQuestionIds.concat(question.id))
       : feedbackTarget.publicQuestionIds.filter(id => id !== question.id)
     await togglePublicity(newPublicQuestionIds)
   }

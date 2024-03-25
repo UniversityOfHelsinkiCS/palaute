@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { orderBy, sum, uniq } from 'lodash-es'
 import {
   Box,
   Link as MuiLink,
@@ -194,7 +194,7 @@ const CourseRealisationTagSelector = ({ feedbackTargets, organisation, onClose }
     <TagSelector
       mutation={onSubmit}
       objectIds={courseRealisationIds}
-      originalTagIds={_.uniq(
+      originalTagIds={uniq(
         feedbackTargets.flatMap(fbt => fbt.tags.filter(t => t.from === 'courseRealisation').map(t => t.id))
       )}
       tags={organisation.tags}
@@ -441,7 +441,7 @@ const Filters = React.memo(({ onChange, value, organisation }) => {
   }))
 
   const valueIsActive = value => value && value.length !== 0
-  const activeCount = _.sum(Object.values(value).map(v => (valueIsActive(v) ? 1 : 0))) - 2 // subtract the 2 date pickers
+  const activeCount = sum(Object.values(value).map(v => (valueIsActive(v) ? 1 : 0))) - 2 // subtract the 2 date pickers
 
   return (
     <Box position="sticky" top="0" mb={2} zIndex={1}>
@@ -556,7 +556,7 @@ const CalendarView = React.memo(({ feedbackTargets }) => {
 })
 
 const ListView = React.memo(({ feedbackTargets }) => {
-  const flatFeedbackTargets = _.orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode)
+  const flatFeedbackTargets = orderBy(feedbackTargets?.flatMap(), fbt => fbt.courseUnit.courseCode)
 
   return (
     <Box my={1.5}>

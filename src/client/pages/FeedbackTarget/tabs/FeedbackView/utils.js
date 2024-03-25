@@ -1,8 +1,11 @@
 import { parseISO, lightFormat } from 'date-fns'
-import _ from 'lodash'
+import { partition } from 'lodash-es'
+import { useMutation } from 'react-query'
 
 import apiClient from '../../../../util/apiClient'
 import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
+import queryClient from '../../../../util/queryClient'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const isEmpty = value => {
   if (Array.isArray(value)) {
@@ -63,10 +66,7 @@ export const getQuestions = feedbackTarget => {
       []
     )
     const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
-    const [groupingQuestions, otherTeacherQuestions] = _.partition(
-      teacherQuestions,
-      q => q.secondaryType === 'GROUPING'
-    )
+    const [groupingQuestions, otherTeacherQuestions] = partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
     // Initial ordering
     const allQuestionsInInitialOrder = [
@@ -91,7 +91,7 @@ export const getQuestions = feedbackTarget => {
   const filteredProgrammeQuestions = programmeSurveyQuestions.filter(q => q.type !== 'OPEN')
 
   const teacherQuestions = surveys?.teacherSurvey?.questions ?? []
-  const [groupingQuestions, otherTeacherQuestions] = _.partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
+  const [groupingQuestions, otherTeacherQuestions] = partition(teacherQuestions, q => q.secondaryType === 'GROUPING')
 
   // Default ordering
   const allQuestions = [
@@ -131,30 +131,37 @@ export const getInitialValues = feedbackTarget => {
   return { answers }
 }
 
-export const saveValues = async (values, feedbackTarget) => {
-  const { answers } = values
+export const useSaveValues = () => {
+  const { feedbackTarget } = useFeedbackTargetContext()
 
-  const feedbackData = Object.entries(answers).map(([questionId, data]) => ({
-    questionId: Number(questionId),
-    data,
-  }))
+  const mutation = useMutation(
+    async feedback => {
+      if (feedbackTarget.feedback) {
+        const { data } = await apiClient.put(`/feedbacks/${feedbackTarget.feedback.id}`, {
+          data: feedback,
+        })
 
-  const { id: feedbackTargetId, feedback } = feedbackTarget
+        return data
+      }
 
-  if (feedback) {
-    const { data } = await apiClient.put(`/feedbacks/${feedback.id}`, {
-      data: feedbackData,
-    })
+      const { data } = await apiClient.post('/feedbacks', {
+        feedbackTargetId: feedbackTarget.id,
+        data: feedback,
+      })
 
-    return data
-  }
+      return data
+    },
+    {
+      onSuccess: feedback => {
+        queryClient.setQueryData(['feedbackTarget', String(feedbackTarget.id)], prev => ({
+          ...prev,
+          feedback,
+        }))
+      },
+    }
+  )
 
-  const { data } = await apiClient.post('/feedbacks', {
-    feedbackTargetId,
-    data: feedbackData,
-  })
-
-  return data
+  return mutation
 }
 
 export const saveContinuousFeedback = async (values, feedbackTargetId) => {

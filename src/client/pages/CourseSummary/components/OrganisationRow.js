@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
-import _ from 'lodash'
+import { orderBy } from 'lodash-es'
 import RowHeader from './RowHeader'
 import { TAGS_ENABLED } from '../../../util/common'
 import useRandomColor from '../../../hooks/useRandomColor'
@@ -83,7 +83,7 @@ const TagList = ({ organisationId, initialTags, questions }) => {
   const childTags = initialTags ?? organisation?.tags
 
   const orderedTags = React.useMemo(
-    () => (childTags?.length > 0 ? _.orderBy(childTags, t => t.name, 'asc') : []),
+    () => (childTags?.length > 0 ? orderBy(childTags, t => t.name, 'asc') : []),
     [organisation]
   )
 

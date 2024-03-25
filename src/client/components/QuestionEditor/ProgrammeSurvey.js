@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 
 import { useSnackbar } from 'notistack'
 
@@ -54,7 +54,7 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
 
   const onPublicityToggle = async (question, isPublic) => {
     const newPublicQuestionIds = isPublic
-      ? _.uniq(organisation.publicQuestionIds.concat(question.id))
+      ? uniq(organisation.publicQuestionIds.concat(question.id))
       : organisation.publicQuestionIds.filter(id => id !== question.id)
 
     try {

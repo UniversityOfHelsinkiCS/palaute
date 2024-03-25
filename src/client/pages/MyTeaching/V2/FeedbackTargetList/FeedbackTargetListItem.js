@@ -19,7 +19,7 @@ import { formatDate, getFeedbackPercentageString } from '../../utils'
 const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
   const { t } = useTranslation()
 
-  const { courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
+  const { id, courseRealisation, opensAt, closesAt, userCreated } = feedbackTarget
   const { startDate, endDate } = courseRealisation
 
   const feedbackPeriod = t('teacherView:surveyOpen', {
@@ -31,7 +31,7 @@ const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
 
   return (
     <Tooltip title={feedbackPeriod}>
-      <Typography>
+      <Typography data-cy={`my-teaching-feedback-target-period-info-${id}`}>
         {t('feedbackTargetView:coursePeriod')}: {formatDate(startDate)} - {formatDate(endDate)}
       </Typography>
     </Tooltip>
@@ -57,7 +57,9 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip })
   const courseName = getLanguageValue(courseRealisation.name, i18n.language)
 
   const fetchFeedbackResponseChip =
-    isOpen || (isOngoing && continuousFeedbackEnabled) || (isEnded && (feedbackCount > 0 || feedbackResponseGiven))
+    isOpen ||
+    (isOngoing && continuousFeedbackEnabled) ||
+    (isEnded && (feedbackCount > 0 || Boolean(feedbackResponseGiven)))
 
   return (
     <>
@@ -75,11 +77,6 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip })
             isOld={isOld}
             ongoing={isOpen}
             continuous={isOngoing && continuousFeedbackEnabled}
-            data-cy={
-              isOpen
-                ? `feedbackOpen-${feedbackTarget.id}`
-                : `feedbackResponseGiven-${feedbackTarget.id}-${feedbackResponseGiven}`
-            }
           />
         )}
       </Box>
