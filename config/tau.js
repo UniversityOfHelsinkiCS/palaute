@@ -247,6 +247,9 @@ const config = {
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: true,
 
   UI_CONFIG_NAME: 'tau-ui',
+
+  CUSTOM_FOOTER_COMPONENT: 'Footer-tau',
+
   /**
    * Allow organisation admins to create custom surveys
    */

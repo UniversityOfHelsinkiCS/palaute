@@ -232,6 +232,13 @@ const config = {
   UI_CONFIG_NAME: null,
 
   /**
+   * Custom footer component to use. Footer-default is HY original footer. If university would like to use
+   * its own footer, a new footer component should be created in src/client/components and folder name of that
+   * component should be set here.
+   */
+  CUSTOM_FOOTER_COMPONENT: 'Footer-default',
+
+  /**
    * Allow organisation admins to create custom surveys
    */
   ORGANISATION_SURVEYS_ENABLED: false,

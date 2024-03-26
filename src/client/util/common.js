@@ -72,6 +72,9 @@ export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
 export const UI_CONFIG_NAME = CONFIG?.UI_CONFIG_NAME
 
 // eslint-disable-next-line no-undef
+export const CUSTOM_FOOTER_COMPONENT = CONFIG?.CUSTOM_FOOTER_COMPONENT
+
+// eslint-disable-next-line no-undef
 export const UNIVERSITY_ROOT_ID = CONFIG?.UNIVERSITY_ROOT_ID
 
 // eslint-disable-next-line no-undef
