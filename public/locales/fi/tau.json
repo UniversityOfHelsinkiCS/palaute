@@ -31,11 +31,9 @@
     "toska": "",
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
-    "courseUnitPage": "https://sis-tuni.funidata.fi/teacher/courseunit/",
-    "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/",
-    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{courseRealisationId}}/information/basicinfo",
-    "courseSummaryCourseUnitLink": "https://sis-tuni.funidata.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
-    "courseSummaryCourseUnitLinkStudent": "https://sis-tuni.funidata.fi/student/courseunit/{{courseUnitId}}/brochure"
+    "courseUnitPage": "https://sis-tuni.funidata.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/{{courseUnitId}}",
+    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "userFeedbacks": {
     "mainHeading": "Opintojaksopalautteeni",
@@ -170,8 +168,8 @@
     "noFeedbackResponseYet": "Toteutuksen vastuuopettaja ei ole vielä antanut vastapalautetta",
     "notFound": "Palautetta ei löytynyt Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "activateContinuousFeedback": "Ota jatkuva palaute käyttöön opintojakson toteutuksella",
-    "coursePage": "Opintojakson/toteutuksen tiedot Sisussa",
-    "courseSisuPage": "Toteutuksen tiedot Sisussa",
+    "coursePage": "Opintojakson tiedot Sisussa",
+    "courseRealisationPage": "Toteutuksen tiedot Sisussa",
     "noAccess": "Emme löytäneet ilmoittautumistasi tälle toteutukselle. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
     "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea.",
     "noAccessEndedCourse": "Palauteaika on päättynyt, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea."

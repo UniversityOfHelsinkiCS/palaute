@@ -97,10 +97,7 @@
     "adminGraylog": "",
     "courseUnitPage": "",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "",
-    "courseSummaryCourseUnitLink": "-",
-    "courseSummaryCourseUnitLinkStudent": "-",
-    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -549,7 +546,7 @@
     "editFeedbackTab": "Redigera responsen",
     "coursePage": "Kurssida",
     "courseSummary": "Sammandrag av kursens genomföranden",
-    "courseSisuPage": "Course Sisu page",
+    "courseRealisationPage": "Course Sisu page",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
     "administrativePersons": "Administrativ person",
