@@ -97,7 +97,7 @@
     "adminGraylog": "",
     "courseUnitPage": "",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
