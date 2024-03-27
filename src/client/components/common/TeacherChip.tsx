@@ -1,7 +1,17 @@
 import { Chip, Tooltip } from '@mui/material'
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { User } from '../../types/User'
 
-const TeacherChip = ({ user, onDelete, tooltip, outlined = false, style = {}, tooltipPlacement }) => (
+interface TeacherChipProps {
+  user: User
+  onDelete?: () => void
+  tooltip?: string
+  outlined?: boolean
+  style?: CSSProperties
+  tooltipPlacement: 'bottom' | 'top' | 'left' | 'right'
+}
+
+const TeacherChip: React.FC<TeacherChipProps> = ({ user, onDelete, tooltip, outlined, style, tooltipPlacement }) => (
   <Tooltip title={tooltip || user.email} placement={tooltipPlacement}>
     <Chip
       variant={outlined ? 'outlined' : 'filled'}
@@ -21,5 +31,12 @@ const TeacherChip = ({ user, onDelete, tooltip, outlined = false, style = {}, to
     />
   </Tooltip>
 )
+
+TeacherChip.defaultProps = {
+  onDelete: undefined,
+  tooltip: undefined,
+  outlined: false,
+  style: {},
+}
 
 export default TeacherChip

@@ -170,6 +170,11 @@ const config = {
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
 
   /**
+   * This controls sending of automatic reminders to students to give feedback
+   */
+  SEND_AUTOMATIC_REMINDER_ALWAYS: false,
+
+  /**
    * Keys defined here are filtered away from frontend config during build process.
    */
   PRIVATE_KEYS: ['JAMI_URL', 'PATE_URL'],
@@ -206,6 +211,27 @@ const config = {
       4. feedbacktarget questions (teacher's questions)
   */
   STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: false,
+
+  /**
+   * Custom config file to use. A custom UI config file with the same name should be located under src/client/config/<UI_CONFIG_NAME>.js.
+   * For example, UI_CONFIG_NAME is first set as 'tau-ui' and then a custom theme file named tau-ui.js is added into the src/client/config/ - folder.
+   * The file is a JavaScript file that returns images, styles, and theme properties.
+   * - images property returns an object with different image URLs to be replaced (currently, only logo image override is available).
+   *   The most convenient way is to add the image into assets, import it to the config file and use that reference as the image URL.
+   * - styles property returns an object with different component style overrides in js-format (currently, only logo styles overrides are available)
+   * - theme property returns a function that returns a Material UI theme options object
+   *   Function description: (Mode: light | dark) => ThemeOptions
+   *   The existing theme in src/client/theme.js can be used as an example
+   *   More info about theming: https://mui.com/material-ui/customization/theming/
+   */
+  UI_CONFIG_NAME: null,
+
+  /**
+   * Custom footer component to use. Footer-default is HY original footer. If university would like to use
+   * its own footer, a new footer component should be created in src/client/components and folder name of that
+   * component should be set here.
+   */
+  CUSTOM_FOOTER_COMPONENT: 'Footer-default',
 
   /**
    * Allow organisation admins to create custom surveys
@@ -250,6 +276,12 @@ const config = {
    * Make sure it's fit to your data, eg. if a lot of values are above 4.5 you might want to increase it and vice versa.
    */
   SUMMARY_COLOR_SCALE_MAX: 4.5,
+
+  /**
+   * In case a user tries to access Norppa without having his user information in users table, this value is used instead of uid header to fetch user information from the database.
+   * This avoids endless failing loading of Norppa front page.
+   */
+  NO_USER_USERNAME: 'nonorppauser',
 
   /**
    * The special groups which can view the whole university level organisation tree. Given to users by Jami.

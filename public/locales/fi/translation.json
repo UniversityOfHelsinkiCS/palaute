@@ -102,8 +102,7 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-",
-    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Kurssipalautteeni",
@@ -476,6 +475,7 @@
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
     "noCourseRealisations": "Tällä opintojaksolla ei ole toteutuksia valitulla aikavälillä",
+    "coursePage": "Kurssisivu",
     "myOrganisations": "Organisaationi",
     "myCourses": "Kurssini",
     "newView": "Kokeile uutta näkymää",
@@ -567,7 +567,7 @@
     "feedbackPeriod": "Palaute käynnissä",
     "coursePage": "Kurssisivu",
     "courseSummary": "Kurssin toteutusten yhteenveto",
-    "courseSisuPage": "Kurssin Sisu sivu",
+    "courseRealisationPage": "Kurssin Sisu sivu",
     "teachers": "Opettajat",
     "responsibleTeachers": "Vastuuopettajat",
     "administrativePersons": "Hallintohenkilöt",
