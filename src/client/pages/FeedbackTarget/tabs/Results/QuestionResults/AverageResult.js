@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { countBy, round } from 'lodash-es'
 import SummaryResultItem from '../../../../../components/SummaryResultItem'
 
 const styles = {
@@ -14,7 +14,7 @@ const styles = {
   },
 }
 
-const getDistribution = feedbacks => _.countBy(feedbacks, f => String(f.data))
+const getDistribution = feedbacks => countBy(feedbacks, f => String(f.data))
 
 const getLikertMean = distribution => {
   const entries = [
@@ -37,7 +37,7 @@ const getLikertMean = distribution => {
     sum += value * count
   }
 
-  return _.round(sum / totalCount, 2)
+  return round(sum / totalCount, 2)
 }
 
 const getSingleChoiceMean = (distribution, question) => {
@@ -60,7 +60,7 @@ const getSingleChoiceMean = (distribution, question) => {
     sum += value * count
   }
 
-  return _.round(sum / totalCount, 2)
+  return round(sum / totalCount, 2)
 }
 
 const getMean = (question, distribution) => {

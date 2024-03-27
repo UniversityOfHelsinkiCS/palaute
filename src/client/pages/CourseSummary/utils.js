@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { orderBy } from 'lodash-es'
 import { useSummaryContext } from './context'
 
 export const useOrderedAndFilteredOrganisations = organisations => {
@@ -8,7 +8,7 @@ export const useOrderedAndFilteredOrganisations = organisations => {
     () =>
       !organisations
         ? []
-        : _.orderBy(
+        : orderBy(
             showSummariesWithNoFeedback ? organisations : organisations.filter(org => !!org.summary),
             org => sortFunction(org.summary),
             sortBy[1]

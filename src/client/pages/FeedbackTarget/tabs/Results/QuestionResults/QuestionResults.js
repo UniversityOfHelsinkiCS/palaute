@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import _ from 'lodash'
+import { groupBy } from 'lodash-es'
 
 import { Box, Typography, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -38,7 +38,7 @@ const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
       return isNumber || answer.data?.trim?.().length > 1
     })
 
-  const feedbackDataByQuestionId = _.groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
+  const feedbackDataByQuestionId = groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
 
   return questionOrder
     ? questionOrder
@@ -118,7 +118,7 @@ const QuestionResults = React.memo(
                     width: '100%',
                   },
                   '@media print': {
-                    width: '50%',
+                    width: '30%',
                     pageBreakInside: 'avoid',
                     pageBreakBefore: 'auto',
                     pageBreakAfter: 'auto',
@@ -143,7 +143,7 @@ const QuestionResults = React.memo(
           data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
         >
           {openQuestions.map(q => (
-            <div key={q.id} style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }}>
+            <div key={q.id} /*style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }} */>
               <QuestionItem
                 question={q}
                 publicQuestionIds={publicQuestionIds}

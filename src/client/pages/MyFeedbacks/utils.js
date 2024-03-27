@@ -1,4 +1,4 @@
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'lodash-es'
 
 import { INCLUDE_COURSES } from '../../util/common'
 import { getInterimFeedbackName } from '../../util/courseIdentifiers'

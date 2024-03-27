@@ -43,6 +43,7 @@ const ExpandableCourseUnitGroup = ({ children }) => {
     >
       {courseUnitGroupTitle}
       <ExpandMore
+        data-cy="course-unit-group-expand-more"
         expand={expanded}
         onClick={handleExpand}
         aria-expanded={expanded}

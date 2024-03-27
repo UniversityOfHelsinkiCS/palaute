@@ -109,6 +109,9 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
  * @param {{
  * 	value: { start: Date, end: Date },
  * 	onChange: ({ start: Date, end: Date }) => (),
+ *  option: string,
+ *  setOption: (string) => void,
+ *  allowAll: boolean
  * }} params
  * @returns
  */
@@ -139,9 +142,17 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
     <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.stepper}>
         <ToggleButtonGroup value={option} onChange={handleOptionChange} color="primary">
-          {allowAll && <ToggleButton value="all">{t('courseSummary:all')}</ToggleButton>}
-          <ToggleButton value="year">{t('courseSummary:year')}</ToggleButton>
-          <ToggleButton value="semester">{t('courseSummary:semester')}</ToggleButton>
+          {allowAll && (
+            <ToggleButton value="all" size="small">
+              {t('courseSummary:all')}
+            </ToggleButton>
+          )}
+          <ToggleButton value="year" size="small">
+            {t('courseSummary:year')}
+          </ToggleButton>
+          <ToggleButton value="semester" size="small">
+            {t('courseSummary:semester')}
+          </ToggleButton>
         </ToggleButtonGroup>
         {option !== 'all' && (
           <Box>

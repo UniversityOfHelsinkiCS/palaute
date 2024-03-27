@@ -3,6 +3,7 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { boxPrintStyle } from '../../util/printStyle'
 
 const styles = {
   listItem: {
@@ -15,6 +16,7 @@ const styles = {
     width: '100%',
     alignItems: 'start',
     pageBreakAfter: 'auto',
+    ...boxPrintStyle,
   },
   hiddenListItem: theme => ({
     color: theme.palette.error.light,

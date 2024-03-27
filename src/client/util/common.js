@@ -11,8 +11,6 @@ export const images = {
   norppa_viskaali: norppaViskaali,
 }
 
-export const colors = {}
-
 export const basePath = process.env.PUBLIC_URL || ''
 
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
@@ -21,87 +19,62 @@ export const inProduction = process.env.NODE_ENV === 'production'
 export const inStaging = process.env.REACT_APP_STAGING === 'true'
 export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-// CONFIG is populated by webpack defineplugin.
-
+// The config is populated by webpack defineplugin. The variable
+// with the caps is replaced with the entire config, so read it
+// into a variable first if there are going to be repeated reads,
+// or otherwise that big config object is duplicated many times
+// in the build.
 // eslint-disable-next-line no-undef
-export const INCLUDE_COURSES = CONFIG?.INCLUDE_COURSES ?? []
+const config = CONFIG
 
-// eslint-disable-next-line no-undef
-export const TAGS_ENABLED = CONFIG?.TAGS_ENABLED ?? []
+export const INCLUDE_COURSES = config?.INCLUDE_COURSES ?? []
 
-// eslint-disable-next-line no-undef
-export const FEEDBACK_REMINDER_COOLDOWN = CONFIG?.FEEDBACK_REMINDER_COOLDOWN
+export const TAGS_ENABLED = config?.TAGS_ENABLED ?? []
 
-// eslint-disable-next-line no-undef
-export const CONFIG_TEST_VALUE = CONFIG?.CONFIG_TEST_VALUE
+export const FEEDBACK_REMINDER_COOLDOWN = config?.FEEDBACK_REMINDER_COOLDOWN
 
-// eslint-disable-next-line no-undef
-export const CONFIG_NAME = CONFIG?.CONFIG_NAME
+export const CONFIG_TEST_VALUE = config?.CONFIG_TEST_VALUE
 
-// eslint-disable-next-line no-undef
-export const SENTRY_DSN = CONFIG?.SENTRY_DSN
+export const SENTRY_DSN = config?.SENTRY_DSN
 
-// eslint-disable-next-line no-undef
-export const GRAYLOG_URL = CONFIG?.GRAYLOG_URL
+export const GRAYLOG_URL = config?.GRAYLOG_URL
 
-// eslint-disable-next-line no-undef
-export const TRANSLATION_NAMESPACE = CONFIG?.TRANSLATION_NAMESPACE
+export const TRANSLATION_NAMESPACE = config?.TRANSLATION_NAMESPACE
 
-// eslint-disable-next-line no-undef
-export const LANGUAGES = CONFIG?.LANGUAGES
+export const LANGUAGES = config?.LANGUAGES
 
-// eslint-disable-next-line no-undef
-export const DEV_USERNAME = CONFIG?.DEV_USERNAME
+export const DEV_USERNAME = config?.DEV_USERNAME
 
-// eslint-disable-next-line no-undef
-export const PRIVATE_TEST = CONFIG?.PRIVATE_TEST // This is expected to be undefined in e2e tests
+export const PRIVATE_TEST = config?.PRIVATE_TEST // This is expected to be undefined in e2e tests
 
-// eslint-disable-next-line no-undef
-export const STUDENT_FEEDBACK_SHOW_REALISATION_NAME = CONFIG?.STUDENT_FEEDBACK_SHOW_REALISATION_NAME
+export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = config?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
 
-// eslint-disable-next-line no-undef
-export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = CONFIG?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
+export const FEEDBACK_HIDDEN_STUDENT_COUNT = config?.FEEDBACK_HIDDEN_STUDENT_COUNT
 
-// eslint-disable-next-line no-undef
-export const FEEDBACK_HIDDEN_STUDENT_COUNT = CONFIG?.FEEDBACK_HIDDEN_STUDENT_COUNT
+export const OPEN_UNIVERSITY_ORG_ID = config?.OPEN_UNIVERSITY_ORG_ID
 
-// eslint-disable-next-line no-undef
-export const OPEN_UNIVERSITY_ORG_ID = CONFIG?.OPEN_UNIVERSITY_ORG_ID
+export const UNIVERSITY_ROOT_ID = config?.UNIVERSITY_ROOT_ID
 
-// eslint-disable-next-line no-undef
-export const UI_CONFIG_NAME = CONFIG?.UI_CONFIG_NAME
+export const UI_CONFIG_NAME = config?.UI_CONFIG_NAME
 
-// eslint-disable-next-line no-undef
-export const CUSTOM_FOOTER_COMPONENT = CONFIG?.CUSTOM_FOOTER_COMPONENT
+export const CUSTOM_FOOTER_COMPONENT = config?.CUSTOM_FOOTER_COMPONENT
 
-// eslint-disable-next-line no-undef
-export const UNIVERSITY_ROOT_ID = CONFIG?.UNIVERSITY_ROOT_ID
+export const SUMMARY_COLORS = config?.SUMMARY_COLORS
 
-// eslint-disable-next-line no-undef
-export const SUMMARY_COLORS = CONFIG?.SUMMARY_COLORS
+export const SUMMARY_COLOR_SCALE_MIN = config?.SUMMARY_COLOR_SCALE_MIN
 
-// eslint-disable-next-line no-undef
-export const SUMMARY_COLOR_SCALE_MIN = CONFIG?.SUMMARY_COLOR_SCALE_MIN
+export const SUMMARY_COLOR_SCALE_MAX = config?.SUMMARY_COLOR_SCALE_MAX
 
-// eslint-disable-next-line no-undef
-export const SUMMARY_COLOR_SCALE_MAX = CONFIG?.SUMMARY_COLOR_SCALE_MAX
+export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = config?.UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS ?? []
 
-// eslint-disable-next-line no-undef
-export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = CONFIG?.UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS ?? []
+export const WORKLOAD_QUESTION_ID_ORDER = config?.WORKLOAD_QUESTION_ID_ORDER ?? []
 
-// eslint-disable-next-line no-undef
-export const WORKLOAD_QUESTION_ID_ORDER = CONFIG?.WORKLOAD_QUESTION_ID_ORDER ?? []
+export const ORGANISATION_SURVEYS_ENABLED = config?.ORGANISATION_SURVEYS_ENABLED
 
-// eslint-disable-next-line no-undef
-export const USE_ROLE_BASED_COURSE_LINKS = CONFIG?.USE_ROLE_BASED_COURSE_LINKS
+export const ALWAYS_SHOW_STUDENT_LIST = config?.ALWAYS_SHOW_STUDENT_LIST
 
-// eslint-disable-next-line no-undef
-export const ORGANISATION_SURVEYS_ENABLED = CONFIG?.ORGANISATION_SURVEYS_ENABLED
-
-// eslint-disable-next-line no-undef
-export const ALWAYS_SHOW_STUDENT_LIST = CONFIG?.ALWAYS_SHOW_STUDENT_LIST
-
-// eslint-disable-next-line no-undef
-export const INTERIM_FEEDBACKS_ENABLED = CONFIG?.INTERIM_FEEDBACKS_ENABLED
+export const INTERIM_FEEDBACKS_ENABLED = config?.INTERIM_FEEDBACKS_ENABLED
 
 export const STUDY_YEAR_START_MONTH = 8 // September
+
+export const NEW_TEACHING_VIEW_ENABLED = config?.NEW_TEACHING_VIEW_ENABLED

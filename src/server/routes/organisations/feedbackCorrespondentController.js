@@ -2,6 +2,7 @@ const { Router } = require('express')
 const { User, OrganisationFeedbackCorrespondent } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
+const { createOrganisationLog } = require('../../services/auditLog')
 
 const addOrganisationFeedbackCorrespondent = async (req, res) => {
   const { user } = req
@@ -24,6 +25,12 @@ const addOrganisationFeedbackCorrespondent = async (req, res) => {
     organisationId: organisation.id,
     userId,
   })
+
+  const logUpdates = {
+    newFeedbackCorrespondent: userId,
+  }
+
+  await createOrganisationLog(organisation, logUpdates, user)
 
   const users = await organisation.getUsers()
 
@@ -52,6 +59,12 @@ const removeOrganisationFeedbackCorrespondent = async (req, res) => {
       userId,
     },
   })
+
+  const logUpdates = {
+    removedFeedbackCorrespondent: userId,
+  }
+
+  await createOrganisationLog(organisation, logUpdates, user)
 
   const users = await organisation.getUsers()
 

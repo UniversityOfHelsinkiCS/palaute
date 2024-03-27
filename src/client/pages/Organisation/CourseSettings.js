@@ -65,16 +65,14 @@ const CourseUnitItem = ({
 }) => {
   const labelId = `courseUnitItem-${courseCode}`
 
-  const link = (
-    <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
-      {name}
-    </MuiLink>
-  )
-
   return (
     <TableRow>
       <TableCell>{courseCode}</TableCell>
-      <TableCell>{link}</TableCell>
+      <TableCell>
+        <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
+          {name}
+        </MuiLink>
+      </TableCell>
       {organisationTags.length > 0 && (
         <TableCell>
           <Box display="flex" flexWrap="wrap">

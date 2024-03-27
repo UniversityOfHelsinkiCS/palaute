@@ -45,8 +45,40 @@ const defaultTheme = mode => ({
             default: grey[50],
           },
           warning: {
-            main: '#e6c309',
-            light: '#ffd700',
+            main: '#ffc107',
+            light: '#ffcd38',
+            extraLight: '#fff3c4',
+            dark: '#665216',
+          },
+          chipSuccess: {
+            main: '#2e7d32',
+            dark: '#005704',
+            light: '#bdffc0',
+          },
+          chipWarning: {
+            main: '#8b7218',
+            dark: '#6b3600',
+            light: '#fddeaf',
+          },
+          chipError: {
+            main: '#d32f2f',
+            dark: '#6b0000',
+            light: '#ffb3b3',
+          },
+          chipOngoing: {
+            main: '#006ba8',
+            dark: '#09233d',
+            light: '#edf7ff',
+          },
+          chipContinuous: {
+            main: '#027902',
+            dark: '#003300',
+            light: '#ccffcc',
+          },
+          chipInterim: {
+            main: '#621b6f',
+            dark: '#300d59',
+            light: '#ead8ee',
           },
         }
       : {}),

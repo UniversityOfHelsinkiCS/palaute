@@ -12,7 +12,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
@@ -56,7 +56,7 @@ const UserPermissionsWindow = ({ isOpen, onClose }) => {
                 </Tooltip>
               </Typography>
               <Box mb={2} />
-              {_.uniq((authorizedUser?.iamGroups ?? []).concat(user?.iamGroups))
+              {uniq((authorizedUser?.iamGroups ?? []).concat(user?.iamGroups))
                 .filter(Boolean)
                 .map(iam => (
                   <Box

@@ -6,19 +6,29 @@ Cypress.Commands.add('loginAs', user => {
   cy.visit(`/`)
 })
 
+Cypress.Commands.add('buildSummaries', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/admin/build-summaries',
+    headers: admin,
+  })
+})
+
 Cypress.Commands.add('giveFeedback', headers => {
   cy.getTestFbtId().then(id => {
-    cy.getUniversityQuestions().then(questionIds => {
-      cy.request({
-        method: 'POST',
-        url: '/api/feedbacks',
-        headers,
-        body: {
-          feedbackTargetId: id,
-          data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
-        },
+    cy.getUniversityQuestions()
+      .then(questionIds => {
+        cy.request({
+          method: 'POST',
+          url: '/api/feedbacks',
+          headers,
+          body: {
+            feedbackTargetId: id,
+            data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
+          },
+        })
       })
-    })
+      .then(() => cy.buildSummaries())
   })
 })
 
@@ -160,6 +170,10 @@ Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extra
     },
     headers: admin,
   })
+    .then(response => {
+      cy.wrap(response.body).as('feedbackTarget')
+    })
+    .then(() => cy.buildSummaries())
 })
 
 Cypress.Commands.add('getTestFbtId', () =>

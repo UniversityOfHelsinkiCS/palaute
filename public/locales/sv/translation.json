@@ -143,6 +143,7 @@
   },
   "teacherView": {
     "mainHeading": "Mina kurser",
+    "mainHeadingV2": "Mina undersökningar",
     "copyLink": "Kopiera svar via länk",
     "copyResponseLink": "Kopiera länken till svaret på responsen",
     "copied": "Länk kopierat till urklippet",
@@ -151,8 +152,7 @@
     "giveFeedbackResponse": "Ge svar på responsen",
     "editFeedbackResponse": "Redigera svar på responsen",
     "noCourseRealisations": "Inga kursinstanser",
-    "noCourses": "Inga kurser",
-    "noCoursesV2": "Det finns för tillfället inga kurser att visa",
+    "noCourses": "Det finns för tillfället inga undersökningar att visa",
     "feedbackResponseGiven": "Svar på responsen given",
     "feedbackResponseNotSent": "Motrespons har inte skickats",
     "feedbackResponseMissing": "Svar på responsen saknas",
@@ -308,6 +308,7 @@
   "navBar": {
     "myFeedbacks": "Mina responser",
     "myCourses": "Mina kurser",
+    "myCoursesV2": "Mina undersökning",
     "logOut": "Logga ut",
     "admin": "Admin",
     "courseSummary": "Kurssammandrag",

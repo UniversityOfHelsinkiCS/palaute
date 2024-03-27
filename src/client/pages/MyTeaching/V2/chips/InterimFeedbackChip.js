@@ -8,10 +8,13 @@ import styles from '../../../../util/chipStyles'
 const InterimFeedbackChip = ({ parentFeedbackTarget }) => {
   const { t } = useTranslation()
 
+  const { id: parentId } = parentFeedbackTarget
+
   const url = `/targets/${parentFeedbackTarget.id}/interim-feedback`
 
   return (
     <LinkChip
+      data-cy={`interim-feedback-chip-${parentId}`}
       to={url}
       label={t('teacherView:interimFeedbackOpen')}
       sx={{

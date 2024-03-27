@@ -157,8 +157,7 @@
     "giveFeedbackResponse": "Anna vastapalaute",
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
-    "noCourses": "Ei kursseja",
-    "noCoursesV2": "Ei näytettäviä kursseja tällä hetkellä",
+    "noCourses": "Ei näytettäviä kyselyitä tällä hetkellä",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
@@ -176,9 +175,9 @@
     "organisationSurveys": "Organisaatiokyselyt",
     "courseSurveys": "Kurssikyselyt",
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
-    "newView": "Kokeile uutta näkymää",
-    "oldView": "Takaisin vanhaan näkymää",
-    "expandMoreLabel": "Näytä piilotetut kyselyt"
+    "expandMoreLabel": "Näytä piilotetut kyselyt",
+    "survey": "Kysely",
+    "surveys": "Kyselyä"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
@@ -323,6 +322,7 @@
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
     "myCourses": "Opetukseni",
+    "myCoursesV2": "Kyselyni",
     "logOut": "Kirjaudu ulos",
     "admin": "Ylläpito",
     "courseSummary": "Kurssiyhteenveto",
@@ -474,7 +474,7 @@
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
-    "noCourseRealisations": "Tämän opintojakson toteutukset eivät ole saaneet vielä palautetta",
+    "noCourseRealisations": "Tällä opintojaksolla ei ole toteutuksia valitulla aikavälillä",
     "coursePage": "Kurssisivu",
     "myOrganisations": "Organisaationi",
     "myCourses": "Kurssini",
@@ -505,8 +505,8 @@
   },
   "organisationSettings": {
     "surveyInfo": "Koulutusohjelmatason kysymykset näytetään jokaisessa koulutusohjelman kurssin kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. Kysymysten vastausten näkyvyyttä voit muuttaa 'Julkinen'/'Ei julkinen'-painikkeesta, mutta vain jos kysymystä ei ole ylemmällä tasolla vielä valittu julkiseksi.",
-    "studentListVisibility": "Palauttetta antaneiden opiskelijoiden näkyvyys",
-    "studentListVisibilityInfo": "Palauttetta antaneet opiskelijat näytetään kurssin vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisibility": "Palautetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palautetta antaneet opiskelijat näytetään kurssin vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
     "studentListVisible": "Näytä kaikilla kursseilla",
     "studentListHidden": "Piilota kaikilla kursseilla",
     "studentListByCourse": "Aseta näkyvyys kurssikohtaisesti",

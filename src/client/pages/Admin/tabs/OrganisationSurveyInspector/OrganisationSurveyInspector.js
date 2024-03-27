@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { Box } from '@mui/material'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'

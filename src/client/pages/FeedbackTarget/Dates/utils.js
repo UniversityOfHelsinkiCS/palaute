@@ -1,5 +1,5 @@
 import { isAfter, differenceInDays, startOfDay } from 'date-fns'
-import _ from 'lodash'
+import { isNaN } from 'lodash-es'
 
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 
@@ -11,7 +11,7 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   if (!closesAt) {
     errors.closesAt = 'validationErrors:required'
   }
-  if (_.isNaN(Date.parse(closesAt))) {
+  if (isNaN(Date.parse(closesAt))) {
     errors.closesAt = 'validationErrors:invalidDate'
     return errors
   }
@@ -19,7 +19,7 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
   if (!opensAt) {
     errors.opensAt = 'validationErrors:required'
   }
-  if (_.isNaN(Date.parse(opensAt))) {
+  if (isNaN(Date.parse(opensAt))) {
     errors.opensAt = 'validationErrors:invalidDate'
     return errors
   }
@@ -32,7 +32,7 @@ export const validateFeedbackPeriod = (isOpen, isOver) => values => {
     errors.closesAt = 'editFeedbackTarget:closesAtBeforeOpensAtError'
   }
   if (closesAt < new Date() && !isOver) {
-    errors.closesAt = 'editFeedbackTarget:opensAtInPastError'
+    errors.closesAt = 'editFeedbackTarget:closesAtInPastError'
   }
 
   if (opensAt && closesAt && Math.abs(differenceInDays(opensAt, closesAt)) < 1) {

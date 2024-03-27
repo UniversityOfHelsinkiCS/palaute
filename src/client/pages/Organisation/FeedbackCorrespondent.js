@@ -16,7 +16,7 @@ import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../../components/common/LoadingProgress'

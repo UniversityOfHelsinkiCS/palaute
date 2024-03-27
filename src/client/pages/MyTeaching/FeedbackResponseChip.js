@@ -16,6 +16,19 @@ function getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, co
   return `${baseFeedbackUrl}/edit-feedback-response`
 }
 
+function getDataCyLabel(id, continuous, ongoing, feedbackResponseGiven, feedbackResponseSent) {
+  if (continuous) {
+    return `feedback-response-chip-continuous-${id}`
+  }
+  if (ongoing) {
+    return `feedback-response-chip-open-${id}`
+  }
+  if (feedbackResponseGiven) {
+    return feedbackResponseSent ? `feedback-response-chip-given-${id}` : `feedback-response-chip-not-sent-${id}`
+  }
+  return `feedback-response-chip-missing-${id}`
+}
+
 const FeedbackResponseChip = ({
   id,
   interimFeedbackId = null,
@@ -42,11 +55,13 @@ const FeedbackResponseChip = ({
   const continuousStyle = styles.shimmeringSecondary
 
   const url = getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, continuous)
+  const dataCy = getDataCyLabel(id, continuous, ongoing, feedbackResponseGiven, feedbackResponseSent)
 
   const sx = feedbackResponseSent ? styles.success : notSentStyle
 
   return (
     <LinkChip
+      data-cy={dataCy}
       to={url}
       label={continuous ? continuousLabel : ongoing ? ongoingLabel : label}
       sx={{

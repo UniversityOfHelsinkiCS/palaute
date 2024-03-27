@@ -17,7 +17,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
 

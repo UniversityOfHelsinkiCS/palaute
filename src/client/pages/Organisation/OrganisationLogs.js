@@ -37,9 +37,13 @@ const getLogMessage = data => {
 
   if (data.newFeedbackCorrespondent !== undefined) {
     messages = messages.concat(
-      data.newFeedbackCorrespondent
-        ? `Set feedback correspondent to ${data.newFeedbackCorrespondent.firstName} ${data.newFeedbackCorrespondent.lastName}`
-        : `Removed feedback correspondent`
+      `Added ${data.newFeedbackCorrespondent?.firstName} ${data.newFeedbackCorrespondent?.lastName} to the feedback correspondents`
+    )
+  }
+
+  if (data.removedFeedbackCorrespondent !== undefined) {
+    messages = messages.concat(
+      `Removed ${data.removedFeedbackCorrespondent?.firstName} ${data.removedFeedbackCorrespondent?.lastName} from the feedback correspondents`
     )
   }
 

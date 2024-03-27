@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash'
+import { orderBy } from 'lodash-es'
 import { lightFormat, startOfHour } from 'date-fns'
 
 export const getGroupedCourseUnits = courseUnits => {

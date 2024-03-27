@@ -2,56 +2,64 @@
 
 More commonly known as **Norppa**
 
-The open source course feedback system used by University of Helsinki and Tampere University
+The open-source course feedback system used by the University of Helsinki and Tampere University
 
 Production in <https://norppa.helsinki.fi>
 
-## Found a bug or have a feature request?
+## Contributing
+
+### Found a bug or have a feature request?
 
 Write an issue if you find mistakes, problems or something to improve in Palaute.
 Feel free to create a pull request.
-
-## Contributing
-
-### Environment configuration
-
-Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add correct values for the variables based on the documentation.
-
-### How users can get started with Palaute
-
-Clone the repo, install docker to get started!
-
-Before starting the project for the first time run `npm i` to install needed development dependencies.
-
-To start the project in development mode use this command. It will start everything in development mode:
-
-```bash
-$ npm run start
-```
-
-To populate the Norppa and Jami databases from a backup in remote server, use
-
-```bash
-./scripts/get_prod_db.sh
-```
-
-If you are not in Toska, you can still use the script for reference.
-
-### Stuck?
-
-If stuck reset everything and start from a clean slate:
-
-```bash
-$ npm run reset
-```
 
 ### Commit guidelines
 
 We like the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
 
-To automatically create commits that adhere to the spec, use [CommitSense](https://github.com/HRemonen/CommitSense).
+## Running locally
+
+Clone the repo, and install docker to get started!
+
+Before starting the project for the first time run `npm i` to install development dependencies.
+
+Start frontend, backend and [Jami](github.com/UniversityOfHelsinkiCS/jami) in development mode:
+
+```bash
+$ npm start
+# or
+$ docker compose up
+```
+
+To run tests, you can use these commands:
+
+```bash
+$ npm run test:cypress # Open Cypress UI
+$ npm run test:run # Run all Cypress specs in headless mode
+$ npm test # CI, build test app and run all specs. Slow!
+```
+
+To populate the Norppa and Jami databases from a backup in a remote server, use
+
+```bash
+./scripts/get_prod_db.sh
+```
+
+(If you're not in Toska, you can still use the script for reference)
+
+### Environment configuration
+
+Create a `.env` file inside the project's root directory. In that file, copy the contents of the `.env.template` file and add the correct values for the variables based on the documentation.
+
+### High-level development guidelines
+
+Use feature flags for large new features or changes. Define them in [configuration](documentation/configuration.md). This allows the different parties using Norppa to adopt new features at their own pace.
 
 ## Documentation
+
+The source code and documentation in this repo is the only source of truth for the Norppa technicalities. The written docs are quite limited in scope. If you're using Norppa, we hope you aid in their improvement.
+
+Need something documented or see a problem in existing docs? Do not hesitate to create an issue or a PR. All kinds of contributions are welcome from everyone reading the Norppa documentation.
 
 ### Service architecture overview
 
@@ -90,7 +98,7 @@ graph TB
 
 ```
 
-When implementing Norppa for your organisation, you will implement your own updater, jami, pate and possibly some kind of importer, as well as analytics.
+When implementing Norppa for your organization, you will implement your own Updater, Jami, Pate, and possibly some kind of importer, as well as analytics.
 
 ### Topics
 
@@ -107,23 +115,15 @@ When implementing Norppa for your organisation, you will implement your own upda
 - [Question data format](documentation/question_formats.md)
 - [Feedback target visibility](documentation/feedback_target_visibility.md)
 
-### Documentation guidelines
+Maintained by **[Toska](https://toska.dev/)** <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
 
-- Document whatever cannot be documented in code or needs visibility for a broader audience.
-- The biggest and only crime is to not delete or update outdated documentation when you notice it. No need to ask for permission to do so.
+Users and contributors:
 
-### Documentation Feedback
+University of Helsinki,
 
-Need something documented or see a problem in existing docs?
-Please give feedback in the form of issues (add the documentation tag). All kinds of feedback is welcome from everyone reading the Norppa documentation.
+Tampere University
 
-## Maintainers <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
-
-**[Toska](https://toska.dev/)**
-
-University of Helsinki.
-
-## Credits
+## Artwork credits
 
 Seal emojis & gif by https://github.com/googlefonts/noto-emoji/ licenced under SIL
 

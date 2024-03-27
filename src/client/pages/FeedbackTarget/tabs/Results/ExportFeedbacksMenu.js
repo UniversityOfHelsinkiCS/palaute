@@ -3,7 +3,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 import { Button } from '@mui/material'
-import * as _ from 'lodash'
+import { flatMap, keyBy, orderBy } from 'lodash-es'
 
 import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
@@ -26,7 +26,7 @@ const styles = {
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map(f => f.questionId)
-  const sortedQuestions = _.orderBy(questions, q => orderOfIds.indexOf(q.id))
+  const sortedQuestions = orderBy(questions, q => orderOfIds.indexOf(q.id))
 
   const headers = sortedQuestions
     .filter(q => {
@@ -39,11 +39,11 @@ const getHeaders = (questions, feedbacks, language) => {
 }
 
 const getData = (questions, feedbacks, language) => {
-  const options = _.flatMap(questions, q =>
+  const options = flatMap(questions, q =>
     ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type) ? q.data?.options ?? [] : []
   )
 
-  const optionById = _.keyBy(options, ({ id }) => id)
+  const optionById = keyBy(options, ({ id }) => id)
 
   const data = feedbacks.map(f => {
     const feedback = f.data

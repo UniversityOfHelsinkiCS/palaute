@@ -36,9 +36,10 @@ const styles = {
       background: theme.palette.info.main,
     },
     '@media print': {
-      overflow: 'visible',
+      overflowY: 'visible',
       maxHeight: '100%',
       height: 'auto',
+      display: 'block',
     },
   }),
 }
@@ -68,13 +69,13 @@ const OpenResults = ({ question }) => {
     () => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)).sort((a, b) => a.data.localeCompare(b.data)),
     [question]
   )
-  const renderInitially = feedbacks.length < 10
+  const renderInitially = true // feedbacks.length < 10
   const { render, ref } = useRenderVisible({ initial: renderInitially })
 
   return (
     <ResultsContent>
       <Box display="flex" justifyContent="center">
-        <Box sx={[styles.list, { maxHeight: '800px' }]} ref={ref}>
+        <Box sx={[styles.list]} ref={ref}>
           {!render && (
             <Box display="flex" alignSelf="stretch" justifyContent="center">
               <CircularProgress />
