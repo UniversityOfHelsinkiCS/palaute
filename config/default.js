@@ -281,7 +281,7 @@ const config = {
    * In case a user tries to access Norppa without having his user information in users table, this value is used instead of uid header to fetch user information from the database.
    * This avoids endless failing loading of Norppa front page.
    */
-  NO_USER_USERNAME: 'nonorppauser',
+  NO_USER_USERNAME: null,
 
   /**
    * The special groups which can view the whole university level organisation tree. Given to users by Jami.
