@@ -4,8 +4,9 @@ import { Box, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from './FormikTextField'
+import { LANGUAGES } from '../../util/common'
 
-const FormikLocalesFieldEditor = ({ name, localesLabelString, languages = ['fi', 'sv', 'en'] }) => {
+const FormikLocalesFieldEditor = ({ name, localesLabelString, languages = LANGUAGES }) => {
   const { i18n } = useTranslation()
 
   return (

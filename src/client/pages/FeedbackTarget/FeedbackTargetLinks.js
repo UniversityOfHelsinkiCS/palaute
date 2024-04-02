@@ -40,8 +40,10 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
 
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
 
-  const coursePageUrl = `${t('links:courseRealisationPage')}${courseRealisation.id}`
-  const sisuPageUrl = `${t('links:courseSisuPage', { sisuId: courseRealisation.id })}`
+  const coursePageUrl = isTeacher
+    ? `${t('links:courseUnitPage', { courseUnitId: feedbackTarget.courseUnit?.id })}`
+    : `${t('links:courseUnitPageStudent', { courseUnitId: feedbackTarget.courseUnit?.id })}`
+  const realisationPageUrl = `${t('links:courseRealisationPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
 
@@ -114,8 +116,8 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
       {isAdmin && !userCreated && (
         <LinkButton
           data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
-          to={sisuPageUrl}
-          title={t('feedbackTargetView:courseSisuPage')}
+          to={realisationPageUrl}
+          title={t('feedbackTargetView:courseRealisationPage')}
           external
         />
       )}
