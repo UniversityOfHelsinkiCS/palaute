@@ -11,8 +11,9 @@ module.exports = {
     'no-shadow': 0,
     'no-plusplus': 0,
     'import/no-unresolved': 'off',
+    'import/extensions': 'off',
     'react/jsx-filename-extension': 'off',
-    'eslintreact/jsx-props-no-spreading': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'no-unused-vars': 'warn',
     'arrow-body-style': 'warn',
     'no-param-reassign': 'off',
@@ -25,7 +26,6 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
-    'react/jsx-props-no-spreading': 'off',
     'react/no-array-index-key': 'off',
     'react/jsx-boolean-value': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
@@ -43,4 +43,24 @@ module.exports = {
     'spaced-comment': 'off',
     'import/no-unused-modules': [1, { unusedExports: true, missingExports: false }],
   },
+  overrides: [
+    {
+      files: ['./**/*.ts', './**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: ['./src/client/tsconfig.json', './src/server/tsconfig.json'],
+      },
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
+        'linebreak-style': ['error', 'unix'],
+        quotes: ['error', 'single'],
+        '@typescript-eslint/no-explicit-any': 0,
+      },
+    },
+  ],
 }

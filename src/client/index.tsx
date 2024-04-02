@@ -27,7 +27,12 @@ const ensureDevUser = () => {
 
 ensureDevUser()
 
-const container = document.getElementById('root')
+const container: HTMLElement | null = document.getElementById('root')
+
+if (!container) {
+  throw new Error('Root container is missing.')
+}
+
 const root = createRoot(container)
 
 root.render(
