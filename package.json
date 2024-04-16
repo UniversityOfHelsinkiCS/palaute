@@ -6,11 +6,11 @@
   "scripts": {
     "start": "docker-compose up",
     "start:tau": "docker-compose -f docker-compose.lw-dev.yml up",
-    "start:client:tau": "cross-env NODE_CONFIG_ENV=tau NODE_ENV=development react-app-rewired start",
+    "start:client:tau": "npm run ts-check:client && cross-env NODE_CONFIG_ENV=tau NODE_ENV=development react-app-rewired start",
     "start:server": "npm run clean-build:server && npm run build:server && NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\"",
     "bash": "docker-compose run app bash",
     "reset": "docker-compose down -v && docker-compose up --build",
-    "build:client": "BUILD_PATH=build/client DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
+    "build:client": "npm run ts-check:client && BUILD_PATH=build/client DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
     "build:server": "NODE_ENV=development tsc --build src/server",
     "clean-build": "rimraf ./build",
     "clean-build:server": "rimraf ./build/server",
