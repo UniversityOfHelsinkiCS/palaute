@@ -19,7 +19,7 @@
     "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/server/index.js",
     "start:test": "NODE_ENV=test node ./src/server/index.js",
     "test": "npm run test:setup && sleep 10 && npm run test:e2e",
-    "start:dev": "npm run build && NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-app-rewired start\"",
+    "start:dev": "NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\" \"CHOKIDAR_USEPOLLING=true react-app-rewired start\"",
     "test:setup": "docker-compose down && docker-compose -f docker-compose.ci.yml rm -vf && docker-compose -f docker-compose.ci.yml up -d --build",
     "test:setuplocal": "docker-compose -f docker-compose.test.yml up",
     "test:e2e": "CYPRESS_BASE_URL=http://localhost:8000 cypress run",
