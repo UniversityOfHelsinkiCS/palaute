@@ -45,7 +45,7 @@ const theme = mode => ({
           primary: {
             main: '#4e008e',
             light: '#5c00a8',
-            dark: '#0e0021',
+            dark: '#4e008e',
           },
           secondary: {
             main: '#e6c309',
