@@ -2,8 +2,11 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { green, grey, lightBlue } from '@mui/material/colors'
 import { useMemo } from 'react'
 import { deepmerge } from '@mui/utils'
+import { PaletteMode, ThemeOptions } from '@mui/material'
 
-const defaultTheme = mode => ({
+type ThemeFunction = (mode: PaletteMode | undefined) => ThemeOptions
+
+const defaultTheme = (mode: PaletteMode | undefined) => ({
   typography: {
     fontFamily: [
       '"Open Sans"',
@@ -163,9 +166,9 @@ const defaultTheme = mode => ({
   },
 })
 
-const useTheme = customTheme => {
-  const prefersDarkMode = false // useMediaQuery('(prefers-color-scheme: dark)')
-  const mode = prefersDarkMode ? 'dark' : 'light'
+const useTheme = (customTheme: ThemeFunction) => {
+  const prefersDarkMode = false
+  const mode: 'dark' | 'light' = prefersDarkMode ? 'dark' : 'light'
   const baseTheme = createTheme(defaultTheme(mode))
 
   return useMemo(

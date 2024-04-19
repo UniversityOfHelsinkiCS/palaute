@@ -14,7 +14,8 @@ import { inE2EMode, UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
 
 const App = () => {
-  const customUiConfig = useCustomUiConfig(UI_CONFIG_NAME)
+  // TODO: add type for customUiConfig
+  const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
   usePinger({ enabled: !inE2EMode })
 
