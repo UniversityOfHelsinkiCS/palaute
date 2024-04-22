@@ -192,7 +192,7 @@
     "uneditableTooltip": "Detta är definierat på förhand och läggs till automatiskt i förfrågan och kan inte redigeras eller raderas",
     "duplicate": "Duplicera",
     "markDownSupport": "Dessa fält stöder <2>Markdown</2> innehåll.",
-    "addTextualContent": "Lägg till textfät"
+    "addTextualContent": "Lägg till textfält"
   },
   "editFeedbackTarget": {
     "closesAt": "Stängs",
