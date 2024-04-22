@@ -18,6 +18,7 @@ import ExternalLink from '../../components/common/ExternalLink'
 
 import { getCoursePeriod, getFeedbackPeriod } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 
 const styles = {
   datesContainer: {
@@ -34,12 +35,11 @@ const styles = {
   },
   headingContainer: theme => ({
     display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    mt: 4,
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-    },
   }),
   copyLinkButtonContainer: theme => ({
     paddingLeft: theme.spacing(2),
@@ -84,7 +84,7 @@ const GuestFeedbackTargetView = () => {
     return <Redirect to="/noad/courses" />
   }
 
-  const { accessStatus, courseRealisation, opensAt, feedback } = feedbackTarget
+  const { accessStatus, courseUnit, courseRealisation, opensAt, feedback } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -96,14 +96,25 @@ const GuestFeedbackTargetView = () => {
   const feedbackPeriod = getFeedbackPeriod(feedbackTarget)
   const coursePageUrl = `${t('links:courseRealisationPage')}${feedbackTarget.courseRealisation.id}`
 
-  const courseRealisationName = getLanguageValue(courseRealisation?.name, i18n.language)
+  const primaryCourseName = getLanguageValue(
+    getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
+    i18n.language
+  )
+  const secondaryCourseName = getLanguageValue(
+    getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
+    i18n.language
+  )
 
   return (
     <>
       <Box mb={2}>
         <Box sx={styles.headingContainer}>
           <Typography variant="h4" component="h1">
-            {courseRealisationName}
+            {primaryCourseName}
+          </Typography>
+
+          <Typography variant="body1" component="h2" sx={{ mr: '1rem' }}>
+            {secondaryCourseName}
           </Typography>
         </Box>
 
