@@ -45,7 +45,7 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
     onSuccess: data => {
       const { id, name, opensAt, closesAt } = data
 
-      queryClient.invalidateQueries(queryKey)
+      queryClient.invalidateQueries('organisationSurvey')
 
       updateCache(['feedbackTarget', String(id)], draft => {
         draft.opensAt = opensAt
