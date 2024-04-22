@@ -9,7 +9,6 @@ import { getUpperLevelQuestions, getOrganisationNames, feedbackTargetIsOpenOrClo
 import { TeacherSurvey } from '../../../../../components/QuestionEditor'
 import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
 import CardSection from '../../../../../components/common/CardSection'
-import { getSurveyType } from '../../../../../util/courseIdentifiers'
 
 const styles = {
   heading: {
@@ -31,7 +30,6 @@ const EditFeedbackTarget = () => {
   const { language } = i18n
 
   const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
-  const { isInterimFeedback } = getSurveyType(feedbackTarget.courseUnit, feedbackTarget)
 
   if (!feedbackTarget || (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdmin)) {
     return null
@@ -41,7 +39,7 @@ const EditFeedbackTarget = () => {
 
   const organisationNames = getOrganisationNames(feedbackTarget, language)
 
-  const previewLink = isInterimFeedback
+  const previewLink = interimFeedbackId
     ? `/targets/${id}/interim-feedback/${interimFeedbackId}/feedback`
     : `/targets/${id}/feedback`
 
