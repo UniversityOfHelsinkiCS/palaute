@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { differenceInMonths, parseISO, getYear } = require('date-fns')
 
-const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit } = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Summary } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
 
@@ -41,6 +41,11 @@ const getAllTeacherCourseUnits = async user => {
             },
           },
           {
+            model: Summary,
+            as: 'summary',
+            required: false,
+          },
+          {
             model: CourseRealisation,
             as: 'courseRealisation',
             required: true,
@@ -75,8 +80,9 @@ const getEndedFeedbacksWithMissingResponse = async courseUnits => {
 
     const { feedbackResponseGiven, closesAt } = latestEndedFeedbackTarget.toJSON()
     const isOld = differenceInMonths(new Date(), closesAt) > 12
+    const noStudentFeedbackGiven = latestEndedFeedbackTarget.summary?.data?.feedbackCount === 0
 
-    if (isOld || feedbackResponseGiven) {
+    if (isOld || feedbackResponseGiven || noStudentFeedbackGiven) {
       return null
     }
 
@@ -92,10 +98,10 @@ const getMyTeachingTabCounts = async user => {
   const endedFeedbacksWithMissingResponse = await getEndedFeedbacksWithMissingResponse(teacherCourseUnits)
 
   const tabCounts = {
-    ended: 0,
+    ended: endedFeedbacksWithMissingResponse.length,
   }
 
-  return endedFeedbacksWithMissingResponse
+  return tabCounts
 }
 
 module.exports = {
