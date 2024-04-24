@@ -53,7 +53,7 @@ const getRelevantQuestionIds = async () => {
 
   const questionIds = questions.map(q => q.id)
 
-  return new Set(questionIds)
+  return new Set(questionIds) // It is important that there are no duplicates.
 }
 
 /**

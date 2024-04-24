@@ -197,6 +197,10 @@ const config = {
     'hy-org-1001813299', // Tiedekuntiin kuulumattomat laitokset
     'hy-org-1001812245', // Yliopistonpalvelut
     'hy-org-75261977', // Erillislaitokset
+    'hy-org-2024-03-27-5', // Tiedekunnat
+    'hy-org-2024-03-27-4', // Rehtorin alaiset laitokset
+    'hy-org-2024-03-27-2', // Muut yksiköt
+    'hy-org-2024-03-27-1', // Lailla erikseen säädetyt laitokset
   ],
 
   /**
