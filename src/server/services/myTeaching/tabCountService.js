@@ -80,9 +80,9 @@ const getEndedFeedbacksWithMissingResponse = async courseUnits => {
 
     const { feedbackResponseGiven, closesAt } = latestEndedFeedbackTarget.toJSON()
     const isOld = differenceInMonths(new Date(), closesAt) > 12
-    const noStudentFeedbackGiven = latestEndedFeedbackTarget.summary?.data?.feedbackCount === 0
+    const feedbackCount = latestEndedFeedbackTarget.summary?.data?.feedbackCount || 0
 
-    if (isOld || feedbackResponseGiven || noStudentFeedbackGiven) {
+    if (isOld || feedbackResponseGiven || feedbackCount === 0) {
       return null
     }
 
