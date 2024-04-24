@@ -83,7 +83,7 @@ const getEndedFeedbacksWithMissingResponse = async courseUnits => {
     return latestEndedFeedbackTarget
   })
 
-  return latestEndedFeedbackTargets
+  return latestEndedFeedbackTargets.filter(Boolean)
 }
 
 const getMyTeachingTabCounts = async user => {
