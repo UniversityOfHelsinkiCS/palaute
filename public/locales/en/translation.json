@@ -178,7 +178,8 @@
     "disabledCourseWarning": "Feedback is disabled for this course",
     "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
-    "surveys": "Surveys"
+    "surveys": "Surveys",
+    "badgeLabel": "{{count}} items need your attention"
   },
   "questionEditor": {
     "addQuestion": "Add question",

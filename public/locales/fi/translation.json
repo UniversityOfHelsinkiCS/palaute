@@ -178,7 +178,8 @@
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
-    "surveys": "Kyselyä"
+    "surveys": "Kyselyä",
+    "badgeLabel": "{{count}} kohdetta tarvitsevat huomiotasi"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
