@@ -1,13 +1,13 @@
 const _ = require('lodash')
 const { differenceInMonths, parseISO, getYear } = require('date-fns')
 
-const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Summary } = require('../../models')
+const { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
 
-const getAllTeacherCourseUnits = async user => {
+const getTeacherCourseUnits = async user => {
   const teacherCourseUnits = await CourseUnit.findAll({
-    attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
+    attributes: ['id', 'name', 'courseCode'],
     where: {
       userCreated: false,
     },
@@ -18,18 +18,11 @@ const getAllTeacherCourseUnits = async user => {
         required: true,
         attributes: [
           'id',
-          'name',
           'opensAt',
           'closesAt',
           ['feedback_response_email_sent', 'feedbackResponseSent'],
           [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
-          'continuousFeedbackEnabled',
-          'userCreated',
-          'courseRealisationId',
         ],
-        where: {
-          feedbackType: 'courseRealisation',
-        },
         include: [
           {
             model: UserFeedbackTarget.scope('teachers'),
@@ -44,12 +37,6 @@ const getAllTeacherCourseUnits = async user => {
             model: Summary,
             as: 'summary',
             required: false,
-          },
-          {
-            model: CourseRealisation,
-            as: 'courseRealisation',
-            required: true,
-            attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
           },
         ],
       },
@@ -93,7 +80,7 @@ const getEndedFeedbacksWithMissingResponse = async courseUnits => {
 }
 
 const getMyTeachingTabCounts = async user => {
-  const teacherCourseUnits = await getAllTeacherCourseUnits(user)
+  const teacherCourseUnits = await getTeacherCourseUnits(user)
 
   const endedFeedbacksWithMissingResponse = await getEndedFeedbacksWithMissingResponse(teacherCourseUnits)
 
