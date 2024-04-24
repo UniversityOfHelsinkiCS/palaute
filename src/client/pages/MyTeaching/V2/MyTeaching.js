@@ -24,6 +24,7 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 
 import Title from '../../../components/common/Title'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
+import { useMyTeachingTabCounts } from './useMyTeachingTabCounts'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -76,6 +77,7 @@ const MyTeaching = () => {
 
   const { courseUnits, isLoading } = useTeacherCourseUnits({ status })
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({ status })
+  const { tabCounts } = useMyTeachingTabCounts()
 
   return (
     <>
@@ -103,6 +105,7 @@ const MyTeaching = () => {
           data-cy="my-teaching-ended-tab"
           label={t('teacherView:endedSurveys')}
           status="ended"
+          count={tabCounts?.ended}
           badgeColor="error"
           icon={<EndedIcon />}
           iconPosition="start"
