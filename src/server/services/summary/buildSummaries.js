@@ -20,6 +20,10 @@ const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
 const logger = require('../../util/logger')
 const { prefixTagId } = require('../../util/common')
 
+/**
+ * Find all root organisation ids. There usually should be only one, which in config is UNIVERSITY_ROOT_ID,
+ * but we'll get them all from db just in case.
+ */
 const getRootOrganisations = async () => {
   const rootOrgs = await Organisation.findAll({
     attributes: ['id'],
@@ -30,6 +34,11 @@ const getRootOrganisations = async () => {
   return rootOrgs.map(org => org.id)
 }
 
+/**
+ * Get the ids of all relevant questions for summaries.
+ * These are all the LIKERT and WORKLOAD questions in university or programme level surveys.
+ * Other types of questions are not displayed.
+ */
 const getRelevantQuestionIds = async () => {
   const [questions] = await sequelize.query(
     `
@@ -99,7 +108,7 @@ const buildSummariesForPeriod = async ({
         attributes: ['id', 'startDate', 'endDate'],
         as: 'courseRealisation',
         required: true,
-        // separate: true,
+        // separate: true,  // Tested, did not improve performance
         where: {
           [Op.or]: [
             // Any overlap with the period
@@ -150,7 +159,7 @@ const buildSummariesForPeriod = async ({
         attributes: ['id', 'groupId'],
         as: 'courseUnit',
         required: true,
-        // separate: true,
+        // separate: true, // Tested, did not improve performance
         include: [
           {
             model: CourseUnitsOrganisation,
@@ -172,7 +181,7 @@ const buildSummariesForPeriod = async ({
           accessStatus: 'STUDENT',
         },
         required: true,
-        separate: true,
+        separate: true, // Tested, DID improve performance
         include: {
           model: Feedback,
           attributes: ['data', 'createdAt'],
@@ -457,7 +466,7 @@ const summariesHaveToBeFullyRebuilt = async () => {
  *
  * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
  */
-const buildSummaries = async () => {
+const buildSummaries = async (forceAll = false) => {
   let datePeriods = (() => {
     const startYear = 2020 // Nothing ending before this is considered
     const endYear = new Date().getFullYear() // Nothing ending after this is considered
@@ -488,7 +497,9 @@ const buildSummaries = async () => {
     return dates
   })()
 
-  if (!(await summariesHaveToBeFullyRebuilt())) {
+  const rebuildAll = forceAll || (await summariesHaveToBeFullyRebuilt())
+
+  if (!rebuildAll) {
     // Only rebuild summaries for the "current" time periods. Those are the ones that end in the future.
     const now = new Date()
     datePeriods = datePeriods.filter(({ end }) => end > now)
