@@ -116,14 +116,21 @@ const FilterRow = () => {
 const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const [params] = useURLSearchParams()
 
+  const startDate = params.get('startDate')
+  const endDate = params.get('endDate')
   const { status = 'active' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
 
   const { tabCounts } = useMyTeachingTabCounts()
-  const { courseUnits, isLoading } = useTeacherCourseUnits({ status })
-  const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({ status })
+  const { courseUnits, isLoading } = useTeacherCourseUnits({ status, startDate, endDate })
+  const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({
+    status,
+    startDate,
+    endDate,
+  })
 
   return (
     <Box sx={{ position: 'relative' }}>
