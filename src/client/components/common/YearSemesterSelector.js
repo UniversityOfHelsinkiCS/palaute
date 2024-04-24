@@ -88,12 +88,12 @@ const YearStepper = ({ value, onChange }) => {
   )
 }
 
-const SemesterSelector = ({ value, onChange, semesters }) => {
+export const SemesterSelector = ({ value, onChange, semesters }) => {
   const { t } = useTranslation()
 
   return (
     <Box sx={styles.selectorContainer}>
-      <Select value={value} onChange={event => onChange(event.target.value)}>
+      <Select value={value} onChange={event => onChange(event.target.value)} size="small">
         {semesters.map(s => (
           <MenuItem value={s} key={s.start}>
             {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
