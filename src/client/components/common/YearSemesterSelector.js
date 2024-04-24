@@ -1,5 +1,14 @@
 import React from 'react'
-import { Box, IconButton, MenuItem, Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import {
+  Box,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
@@ -88,19 +97,19 @@ const YearStepper = ({ value, onChange }) => {
   )
 }
 
-export const SemesterSelector = ({ value, onChange, semesters }) => {
+export const SemesterSelector = ({ value, onChange, semesters, sx = styles.selectorContainer }) => {
   const { t } = useTranslation()
 
   return (
-    <Box sx={styles.selectorContainer}>
-      <Select value={value} onChange={event => onChange(event.target.value)} size="small">
+    <FormControl sx={sx} size="small">
+      <Select value={value} onChange={event => onChange(event.target.value)}>
         {semesters.map(s => (
           <MenuItem value={s} key={s.start}>
             {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
           </MenuItem>
         ))}
       </Select>
-    </Box>
+    </FormControl>
   )
 }
 
