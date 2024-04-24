@@ -3,6 +3,7 @@ import {
   Box,
   FormControl,
   IconButton,
+  InputLabel,
   MenuItem,
   Select,
   ToggleButton,
@@ -55,7 +56,7 @@ const styles = {
   },
 }
 
-const YearStepper = ({ value, onChange }) => {
+const YearStepper = ({ value, onChange, labelledBy }) => {
   const handleIncrease = () => {
     onChange(value + 1)
   }
@@ -73,7 +74,7 @@ const YearStepper = ({ value, onChange }) => {
   const canDecrease = value > 2020
 
   return (
-    <Box sx={styles.stepperContainer}>
+    <Box sx={styles.stepperContainer} aria-labelledby={labelledBy ?? undefined}>
       <IconButton
         onClick={handleDecrease}
         disabled={!canDecrease}
@@ -97,12 +98,20 @@ const YearStepper = ({ value, onChange }) => {
   )
 }
 
-export const SemesterSelector = ({ value, onChange, semesters, sx = styles.selectorContainer }) => {
+export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.selectorContainer }) => {
   const { t } = useTranslation()
 
   return (
     <FormControl sx={sx} size="small">
-      <Select value={value} onChange={event => onChange(event.target.value)}>
+      {!labelledBy && <InputLabel id="semester-selector-label">{t('courseSummary:semester')}</InputLabel>}
+      <Select
+        id="semester-selector"
+        labelId={!labelledBy ? 'semester-selector-label' : undefined}
+        label={!labelledBy ? t('courseSummary:semester') : undefined}
+        aria-labelledby={labelledBy ?? undefined}
+        value={value}
+        onChange={event => onChange(event.target.value)}
+      >
         {semesters.map(s => (
           <MenuItem value={s} key={s.start}>
             {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
@@ -150,7 +159,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.stepper}>
-        <ToggleButtonGroup value={option} onChange={handleOptionChange} color="primary">
+        <ToggleButtonGroup id="year-semester-selector" value={option} onChange={handleOptionChange} color="primary">
           {allowAll && (
             <ToggleButton value="all" size="small">
               {t('courseSummary:all')}
@@ -166,9 +175,14 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
         {option !== 'all' && (
           <Box>
             {option === 'year' ? (
-              <YearStepper value={year} onChange={handleYearChange} />
+              <YearStepper value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
             ) : (
-              <SemesterSelector value={currentSemester} onChange={handleSemesterChange} semesters={semesters} />
+              <SemesterSelector
+                value={currentSemester}
+                onChange={handleSemesterChange}
+                semesters={semesters}
+                labelledBy="year-semester-selector"
+              />
             )}
           </Box>
         )}
