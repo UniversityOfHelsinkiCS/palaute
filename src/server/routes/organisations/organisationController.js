@@ -106,6 +106,7 @@ const getOrganisationByCode = async (req, res) => {
   const publicOrganisation = {
     ...organisation.toJSON(),
     tags,
+    users: theOrganisation?.users ?? [],
     access: {
       read: hasReadAccess,
       write: hasWriteAccess,

@@ -25,7 +25,7 @@ const styles = {
 }
 
 const EditFeedbackTarget = () => {
-  const { id } = useParams()
+  const { id, interimFeedbackId } = useParams()
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
@@ -38,6 +38,10 @@ const EditFeedbackTarget = () => {
   const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(q => q.type !== 'TEXT')
 
   const organisationNames = getOrganisationNames(feedbackTarget, language)
+
+  const previewLink = interimFeedbackId
+    ? `/targets/${id}/interim-feedback/${interimFeedbackId}/feedback`
+    : `/targets/${id}/feedback`
 
   return (
     <CardSection title={t('feedbackView:editSurvey')}>
@@ -63,7 +67,7 @@ const EditFeedbackTarget = () => {
 
       <Toolbar
         onSave={() => {}}
-        previewLink={`/targets/${id}/feedback`}
+        previewLink={previewLink}
         language={language}
         onLanguageChange={newLanguage => {
           i18n.changeLanguage(newLanguage)
