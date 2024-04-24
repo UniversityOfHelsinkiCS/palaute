@@ -1,6 +1,7 @@
 import React from 'react'
 import { chunk } from 'lodash-es'
 import qs from 'qs'
+import { format, isValid } from 'date-fns'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
@@ -25,6 +26,9 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 import Title from '../../../components/common/Title'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 import { useMyTeachingTabCounts } from './useMyTeachingTabCounts'
+import { SemesterSelector } from '../../../components/common/YearSemesterSelector'
+import { getStudyYearRange, useYearSemesters } from '../../../util/yearSemesterUtils'
+import useURLSearchParams from '../../../hooks/useURLSearchParams'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -75,12 +79,30 @@ const MyTeaching = () => {
     ignoreQueryPrefix: true,
   })
 
+  const { tabCounts } = useMyTeachingTabCounts()
   const { courseUnits, isLoading } = useTeacherCourseUnits({ status })
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({ status })
-  const { tabCounts } = useMyTeachingTabCounts()
+
+  const [params, setParams] = useURLSearchParams()
+  const [dateRange, setDateRange] = React.useState(() => {
+    const start = new Date(String(params.get('startDate')))
+    const end = new Date(String(params.get('endDate')))
+
+    return isValid(start) && isValid(end) ? { start, end } : getStudyYearRange(new Date())
+  })
+  const { semesters, currentSemester } = useYearSemesters(dateRange?.start ?? { start: new Date(), end: new Date() })
+
+  const handleChangeTimeRange = nextDateRange => {
+    setDateRange(nextDateRange)
+    if (isValid(nextDateRange.start) && isValid(nextDateRange.end)) {
+      params.set('startDate', format(nextDateRange.start, 'yyyy-MM-dd'))
+      params.set('endDate', format(nextDateRange.end, 'yyyy-MM-dd'))
+      setParams(params)
+    }
+  }
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       <Title>{t('common:teacherPage')}</Title>
       <Typography id="my-teaching-title" variant="h4" component="h1">
         {t('teacherView:mainHeadingV2')}
@@ -120,6 +142,19 @@ const MyTeaching = () => {
         </Alert>
       )}
 
+      {status === 'ended' && (
+        <SemesterSelector
+          value={currentSemester}
+          onChange={handleChangeTimeRange}
+          semesters={semesters}
+          sx={{
+            position: { md: 'absolute' },
+            right: 0,
+            top: { md: 80 },
+          }}
+        />
+      )}
+
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup
           groupTitle={t('teacherView:organisationSurveys')}
@@ -132,7 +167,7 @@ const MyTeaching = () => {
       {courseUnits?.length > 0 && (
         <RenderCourseUnitGroup groupTitle={t('teacherView:courseSurveys')} courseUnits={courseUnits} status={status} />
       )}
-    </>
+    </Box>
   )
 }
 
