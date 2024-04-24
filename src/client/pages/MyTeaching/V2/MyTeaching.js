@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { chunk } from 'lodash-es'
 import qs from 'qs'
 import { format, isValid } from 'date-fns'
@@ -27,7 +27,7 @@ import Title from '../../../components/common/Title'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 import { useMyTeachingTabCounts } from './useMyTeachingTabCounts'
 import { SemesterSelector } from '../../../components/common/YearSemesterSelector'
-import { getStudyYearRange, useYearSemesters } from '../../../util/yearSemesterUtils'
+import { useYearSemesters } from '../../../util/yearSemesterUtils'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
 
 const CourseUnitGroupSkeleton = () => (
@@ -71,6 +71,48 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   )
 }
 
+const FilterRow = () => {
+  const [params, setParams] = useURLSearchParams()
+  const [dateRange, setDateRange] = React.useState(() => {
+    const start = new Date(String(params.get('startDate')))
+    const end = new Date(String(params.get('endDate')))
+
+    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
+  })
+
+  const { semesters, currentSemester } = useYearSemesters(dateRange.start)
+
+  useEffect(() => {
+    if (!params.get('startDate') || !params.get('endDate')) {
+      params.set('startDate', format(currentSemester.start, 'yyyy-MM-dd'))
+      params.set('endDate', format(currentSemester.end, 'yyyy-MM-dd'))
+      setParams(params)
+      setDateRange({ start: currentSemester.start, end: currentSemester.end })
+    }
+  }, [currentSemester, params, setParams])
+
+  const handleChangeTimeRange = nextDateRange => {
+    setDateRange(nextDateRange)
+    if (isValid(nextDateRange.start) && isValid(nextDateRange.end)) {
+      params.set('startDate', format(nextDateRange.start, 'yyyy-MM-dd'))
+      params.set('endDate', format(nextDateRange.end, 'yyyy-MM-dd'))
+      setParams(params)
+    }
+  }
+
+  return (
+    <Box
+      sx={{
+        position: { md: 'absolute' },
+        right: 0,
+        top: { md: 80 },
+      }}
+    >
+      <SemesterSelector value={currentSemester} onChange={handleChangeTimeRange} semesters={semesters} sx={{ mx: 2 }} />
+    </Box>
+  )
+}
+
 const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
@@ -82,24 +124,6 @@ const MyTeaching = () => {
   const { tabCounts } = useMyTeachingTabCounts()
   const { courseUnits, isLoading } = useTeacherCourseUnits({ status })
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({ status })
-
-  const [params, setParams] = useURLSearchParams()
-  const [dateRange, setDateRange] = React.useState(() => {
-    const start = new Date(String(params.get('startDate')))
-    const end = new Date(String(params.get('endDate')))
-
-    return isValid(start) && isValid(end) ? { start, end } : getStudyYearRange(new Date())
-  })
-  const { semesters, currentSemester } = useYearSemesters(dateRange?.start ?? { start: new Date(), end: new Date() })
-
-  const handleChangeTimeRange = nextDateRange => {
-    setDateRange(nextDateRange)
-    if (isValid(nextDateRange.start) && isValid(nextDateRange.end)) {
-      params.set('startDate', format(nextDateRange.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(nextDateRange.end, 'yyyy-MM-dd'))
-      setParams(params)
-    }
-  }
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -142,18 +166,7 @@ const MyTeaching = () => {
         </Alert>
       )}
 
-      {status === 'ended' && (
-        <SemesterSelector
-          value={currentSemester}
-          onChange={handleChangeTimeRange}
-          semesters={semesters}
-          sx={{
-            position: { md: 'absolute' },
-            right: 0,
-            top: { md: 80 },
-          }}
-        />
-      )}
+      {status === 'ended' && <FilterRow />}
 
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup
