@@ -31,7 +31,8 @@
     "ts-check:server": "tsc --skipLibCheck --noEmit --project src/server/tsconfig.json",
     "ts-check": "concurrently --kill-others-on-fail --raw \"npm run ts-check:client\" \"npm run ts-check:server\"",
     "prepare": "husky install",
-    "translations": "node ./tools/analyzeTranslations.js"
+    "translations": "node ./tools/analyzeTranslations.js",
+    "ndc": "npx no-dead-code@latest"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": "eslint",
