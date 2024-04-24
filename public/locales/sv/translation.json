@@ -96,8 +96,8 @@
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
     "courseUnitPage": "",
-    "courseRealisationPage": "",
-    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseUnitPageStudent": "-",
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",
@@ -463,6 +463,7 @@
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
     "noCourseRealisations": "Medel använda för att implementera denna kurs har ännu inte fått feedback",
+    "coursePage": "Kurssida",
     "myOrganisations": "Mina utbildningsprogram",
     "myCourses": "Mina kurser",
     "newView": "Prova den nya vyn",
@@ -545,7 +546,7 @@
     "editFeedbackTab": "Redigera responsen",
     "coursePage": "Kurssida",
     "courseSummary": "Sammandrag av kursens genomföranden",
-    "courseSisuPage": "Course Sisu page",
+    "courseRealisationPage": "Course Sisu page",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
     "administrativePersons": "Administrativ person",

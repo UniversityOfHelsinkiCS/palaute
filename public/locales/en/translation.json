@@ -102,8 +102,7 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-",
-    "courseSisuPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "-"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
@@ -477,6 +476,7 @@
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
     "noCourseRealisations": "No course realisations with feedback available for this course unit",
+    "coursePage": "Course page",
     "myOrganisations": "My organisations",
     "myCourses": "My courses",
     "newView": "Go to the new course summary",
@@ -569,7 +569,7 @@
     "feedbackPeriod": "Feedback open",
     "coursePage": "Course page",
     "courseSummary": "Summary of course's instances",
-    "courseSisuPage": "Course Sisu page",
+    "courseRealisationPage": "Course Sisu page",
     "teachers": "Teachers",
     "responsibleTeachers": "Responsible teachers",
     "administrativePersons": "Administrative persons",

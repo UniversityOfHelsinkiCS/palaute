@@ -19,7 +19,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
-import { NEW_TEACHING_VIEW_ENABLED } from '../../util/common'
+import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES } from '../../util/common'
 
 const styles = {
   toolbar: {
@@ -91,19 +91,15 @@ const styles = {
   },
 }
 
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => {
-  const languages = ['fi', 'sv', 'en']
-
-  return (
-    <Box sx={styles.container} ref={ref}>
-      {languages.map(l => (
-        <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
-          {l.toUpperCase()}
-        </MenuItem>
-      ))}
-    </Box>
-  )
-})
+const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
+  <Box sx={styles.container} ref={ref}>
+    {LANGUAGES.map(l => (
+      <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
+        {l.toUpperCase()}
+      </MenuItem>
+    ))}
+  </Box>
+))
 
 const NavBar = ({ guest = false }) => {
   const menuButtonRef = useRef()
