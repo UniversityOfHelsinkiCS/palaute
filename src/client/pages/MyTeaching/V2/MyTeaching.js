@@ -71,14 +71,8 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   )
 }
 
-const FilterRow = () => {
+const FilterRow = ({ dateRange, setDateRange }) => {
   const [params, setParams] = useURLSearchParams()
-  const [dateRange, setDateRange] = React.useState(() => {
-    const start = new Date(String(params.get('startDate')))
-    const end = new Date(String(params.get('endDate')))
-
-    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
-  })
 
   const { semesters, currentSemester } = useYearSemesters(dateRange.start)
 
@@ -116,21 +110,31 @@ const FilterRow = () => {
 const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
-  const [params] = useURLSearchParams()
 
-  const startDate = params.get('startDate')
-  const endDate = params.get('endDate')
+  const [params] = useURLSearchParams()
+  const [dateRange, setDateRange] = React.useState(() => {
+    const start = new Date(String(params.get('startDate')))
+    const end = new Date(String(params.get('endDate')))
+
+    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
+  })
+
+  const startDate = format(dateRange.start, 'yyyy-MM-dd')
+  const endDate = format(dateRange.end, 'yyyy-MM-dd')
+
   const { status = 'active' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
 
-  const { tabCounts } = useMyTeachingTabCounts()
-  const { courseUnits, isLoading } = useTeacherCourseUnits({ status, startDate, endDate })
-  const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } = useTeacherOrganisatioSurveys({
+  const queryParams = {
     status,
-    startDate,
-    endDate,
-  })
+    ...(status === 'ended' && { startDate, endDate }),
+  }
+
+  const { tabCounts } = useMyTeachingTabCounts()
+  const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
+  const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } =
+    useTeacherOrganisatioSurveys(queryParams)
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -173,7 +177,7 @@ const MyTeaching = () => {
         </Alert>
       )}
 
-      {status === 'ended' && <FilterRow />}
+      {status === 'ended' && <FilterRow dateRange={dateRange} setDateRange={setDateRange} />}
 
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup
