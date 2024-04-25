@@ -157,6 +157,7 @@
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations for the selected time period",
     "noCourses": "There are currently no surveys to show",
+    "noFilteredCourses": "There are currently no surveys to show for the selected filters",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",

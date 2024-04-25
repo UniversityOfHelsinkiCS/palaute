@@ -158,6 +158,7 @@
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
     "noCourses": "Ei näytettäviä kyselyitä tällä hetkellä",
+    "noFilteredCourses": "Ei näytettäviä kyselyitä, jotka täyttävät hakuehdot",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
