@@ -71,12 +71,16 @@ const getAllTeacherCourseUnits = async (user, query) => {
             where: {
               ...(activityPeriod?.startDate &&
                 activityPeriod?.endDate && {
-                  [Op.and]: [
+                  [Op.or]: [
                     {
-                      startDate: { [Op.gte]: activityPeriod?.startDate },
+                      startDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
                     },
                     {
-                      endDate: { [Op.lte]: activityPeriod?.endDate },
+                      endDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
                     },
                   ],
                 }),
