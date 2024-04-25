@@ -157,6 +157,9 @@ export const useSaveValues = () => {
           ...prev,
           feedback,
         }))
+
+        // Invalidate the waiting feedback count for the student
+        queryClient.invalidateQueries('myFeedbacksWaitingFeedbackCount')
       },
     }
   )
