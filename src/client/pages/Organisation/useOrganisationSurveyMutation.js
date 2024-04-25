@@ -4,6 +4,7 @@ import { endOfDay, startOfDay } from 'date-fns'
 import { queryKey } from './useOrganisationSurveys'
 import queryClient from '../../util/queryClient'
 import apiClient from '../../util/apiClient'
+import { updateCache } from '../../util/reactQuery'
 
 export const useCreateOrganisationSurveyMutation = organisationCode => {
   const mutationFn = async ({ name, startDate, endDate, studentNumbers, teacherIds }) => {
@@ -41,8 +42,16 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
   }
 
   const mutation = useMutation(mutationFn, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey)
+    onSuccess: data => {
+      const { id, name, opensAt, closesAt } = data
+
+      queryClient.invalidateQueries('organisationSurvey')
+
+      updateCache(['feedbackTarget', String(id)], draft => {
+        draft.opensAt = opensAt
+        draft.closesAt = closesAt
+        draft.courseRealisation.name = name
+      })
     },
   })
 

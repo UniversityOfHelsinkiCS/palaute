@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useHistory, Link } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 
 import { Typography, Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
 
@@ -22,7 +22,6 @@ import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedba
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
-import useFeedbackTargetId from '../../useFeedbackTargetId'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const tada = keyframes({
@@ -138,7 +137,7 @@ const FormContainer = ({
 const feedbackGivenSnackbarContent = (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
 
 const FeedbackView = () => {
-  const id = useFeedbackTargetId()
+  const { id, interimFeedbackId } = useParams()
 
   const history = useHistory()
   const { t, i18n } = useTranslation()
@@ -156,6 +155,7 @@ const FeedbackView = () => {
 
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
+
   // TODO clean up this shit again
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -169,6 +169,10 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(feedbackTarget)
   const validate = makeValidate(questions)
+
+  const editLink = interimFeedbackId
+    ? `/targets/${id}/interim-feedback/${interimFeedbackId}/edit`
+    : `/targets/${id}/edit`
 
   const handleSubmit = async values => {
     try {
@@ -262,7 +266,7 @@ const FeedbackView = () => {
         <Box mt={2}>
           <Toolbar
             showEdit={isResponsibleTeacher}
-            editLink={`/targets/${feedbackTarget.id}/edit`}
+            editLink={editLink}
             language={language}
             onLanguageChange={handleLanguageChange}
           />
