@@ -307,6 +307,11 @@ const config = {
    * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
    */
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['allProgrammes'],
+
+  /**
+   * Enabling the new version of Teaching / Opetukseni / Kyselyni -view
+   */
+  NEW_TEACHING_VIEW_ENABLED: true,
 }
 
 module.exports = config
