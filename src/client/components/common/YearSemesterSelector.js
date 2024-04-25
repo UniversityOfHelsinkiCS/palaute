@@ -112,11 +112,17 @@ export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = 
         value={value}
         onChange={event => onChange(event.target.value)}
       >
-        {semesters.map(s => (
-          <MenuItem value={s} key={s.start}>
-            {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
-          </MenuItem>
-        ))}
+        {semesters.map(s => {
+          const semesterName = `${s.start.getFullYear()} ${
+            s.spring ? t('courseSummary:spring') : t('courseSummary:fall')
+          }`
+
+          return (
+            <MenuItem data-cy={`semester-selector-item-${semesterName}`} value={s} key={s.start}>
+              {semesterName}
+            </MenuItem>
+          )
+        })}
       </Select>
     </FormControl>
   )
