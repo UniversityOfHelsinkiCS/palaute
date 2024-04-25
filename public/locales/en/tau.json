@@ -8,7 +8,8 @@
   },
   "common": {
     "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
-    "notPublicShortInfo": "Visible only to responsible teachers and unit admins"
+    "notPublicShortInfo": "Visible only to responsible teachers and unit admins",
+    "teacherPage": "My surveys"
   },
   "links": {
     "accessibility": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-systems-accessibility-statement",
