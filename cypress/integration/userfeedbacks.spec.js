@@ -64,7 +64,7 @@ describe('User feedbacks view', () => {
     cy.contains('Other comments and such').should('not.exist')
   })
 
-  it.only('Student can clear given feedback', () => {
+  it('Student can clear given feedback', () => {
     cy.loginAs(student)
 
     // Check that the notification badge is visible in the navbar
