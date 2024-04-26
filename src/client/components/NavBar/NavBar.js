@@ -208,7 +208,7 @@ const NavBar = ({ guest = false }) => {
     isStudent && {
       label: t('navBar:myFeedbacks'),
       to: '/feedbacks',
-      badgeCount: waitingFeedbackCount?.count,
+      badgeCount: waitingFeedbackCount,
     },
     courseSummaryIsAccessible && {
       label: t('navBar:courseSummary'),
@@ -231,7 +231,7 @@ const NavBar = ({ guest = false }) => {
 
   const navBarLinks = (
     <Box data-cy="navbar-links" sx={styles.linkContainer}>
-      {links.map(({ label, to, active }, index) => (
+      {links.map(({ label, to, badgeCount, active }, index) => (
         <ButtonBase
           data-cy={`navbar-link-${label}`}
           component={Link}
@@ -240,7 +240,7 @@ const NavBar = ({ guest = false }) => {
           to={to}
           focusRipple
         >
-          <NavLabelWrapper renderBadge={!waitingFeedbackCountLoading && waitingFeedbackCount}>{label}</NavLabelWrapper>
+          <NavLabelWrapper renderBadge={badgeCount}>{label}</NavLabelWrapper>
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
