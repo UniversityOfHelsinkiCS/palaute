@@ -60,6 +60,8 @@ module.exports = {
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single'],
         '@typescript-eslint/no-explicit-any': 0,
+        'no-use-before-define': 'off',
+        'lines-between-class-members': 'off',
       },
     },
   ],
