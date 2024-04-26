@@ -8,7 +8,7 @@ describe('User feedbacks view', () => {
     cy.setFeedbackActive()
     cy.getTestFbtId().as('fbtId')
   })
-  it.only('A feedback is visible after teacher has set it active', () => {
+  it('A feedback is visible after teacher has set it active', () => {
     // student gives feedback
     cy.loginAs(student)
 
@@ -37,6 +37,7 @@ describe('User feedbacks view', () => {
       .children('[data-cy="navbar-notification-badge"]')
       .should('not.exist')
   })
+
   it('Teacher can censor a feedback', () => {
     // student gives feedback
     cy.loginAs(student)
@@ -62,6 +63,7 @@ describe('User feedbacks view', () => {
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
     cy.contains('Other comments and such').should('not.exist')
   })
+
   it('Student can clear given feedback', () => {
     // student gives feedback
     cy.loginAs(student)
