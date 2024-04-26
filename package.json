@@ -32,7 +32,7 @@
     "ts-check": "concurrently --kill-others-on-fail --raw \"npm run ts-check:client\" \"npm run ts-check:server\"",
     "prepare": "husky install",
     "translations": "node ./tools/analyzeTranslations.js",
-    "ndc": "npx no-dead-code@latest"
+    "ndc": "npx no-dead-code@latest --ignore .eslintrc.js config prettier.config.js"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": "eslint",
