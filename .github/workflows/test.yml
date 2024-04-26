@@ -42,3 +42,7 @@ jobs:
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
+
+      - name: Check logs
+        run: docker compose -f docker-compose.ci.yml logs
+        if: failure()
