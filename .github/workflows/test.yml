@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build project for eslint
-        run: npm install
+        run: npm ci
       - name: Run eslint
         run: npm run lint
 
@@ -35,7 +35,7 @@ jobs:
           wait-on: 'http://localhost:8000'
           config: baseUrl=http://localhost:8000
           browser: chrome
-          install-command: npm i
+          install-command: npm ci
 
       - name: Upload video
         uses: actions/upload-artifact@v4
