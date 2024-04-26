@@ -32,8 +32,8 @@ export type SummaryData = {
 class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Summary>> {
   declare id: CreationOptional<number>
   declare entityId: string
-  declare startDate: Date
-  declare endDate: Date
+  declare startDate: string
+  declare endDate: string
   declare extraOrgIds: string[]
   declare data: SummaryData
   declare children?: Summary[]

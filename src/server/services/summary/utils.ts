@@ -78,18 +78,15 @@ const sumSummaries = (summaries: Summary[]) => {
   // De-duplicate input by entityId + startDate + endDate + extraOrgIds
   const deduplicatedSummaries = _.uniqBy(
     summaries,
-    (s: any) => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
+    s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
   )
 
-  const data = sumSummaryDatas(deduplicatedSummaries.map((s: any) => s.data))
+  const data = sumSummaryDatas(deduplicatedSummaries.map(s => s.data))
   const startDate = datefns.format(
-    datefns.min(deduplicatedSummaries.map((s: any) => datefns.parseISO(s.startDate))),
+    datefns.min(deduplicatedSummaries.map(s => datefns.parseISO(s.startDate))),
     'yyyy-MM-dd'
   )
-  const endDate = datefns.format(
-    datefns.max(deduplicatedSummaries.map((s: any) => datefns.parseISO(s.endDate))),
-    'yyyy-MM-dd'
-  )
+  const endDate = datefns.format(datefns.max(deduplicatedSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
   const summary = deduplicatedSummaries[0]
   summary.data = data
   summary.startDate = startDate
