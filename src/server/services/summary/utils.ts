@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import datefns from 'date-fns'
+import * as datefns from 'date-fns'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { Summary } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
