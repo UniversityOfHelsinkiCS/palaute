@@ -8,10 +8,17 @@ describe('User feedbacks view', () => {
     cy.setFeedbackActive()
     cy.getTestFbtId().as('fbtId')
   })
-  it('A feedback is visible after teacher has set it active', () => {
+  it.only('A feedback is visible after teacher has set it active', () => {
     // student gives feedback
     cy.loginAs(student)
 
+    // Check that the notification badge is visible in the navbar
+    cy.get('[data-cy="navbar-link-My feedback"]')
+      .should('exist')
+      .children('[data-cy="navbar-notification-badge"]')
+      .should('exist')
+
+    // Give feedback
     cy.get('[data-cy=feedback-item-give-feedback]').click()
     cy.contains('This feedback is anonymous. Fields marked with an asterisk (*) are required')
     cy.get('input[value=5]').each($el => {
@@ -23,6 +30,12 @@ describe('User feedbacks view', () => {
     })
     cy.get('[data-cy=feedback-view-give-feedback]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
+
+    // Notification badge should be gone now that feedback has been given
+    cy.get('[data-cy="navbar-link-My feedback"]')
+      .should('exist')
+      .children('[data-cy="navbar-notification-badge"]')
+      .should('not.exist')
   })
   it('Teacher can censor a feedback', () => {
     // student gives feedback

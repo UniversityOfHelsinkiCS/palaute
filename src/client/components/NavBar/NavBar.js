@@ -124,7 +124,7 @@ const NavLabelWrapper = ({ renderBadge, children }) => {
 
   if (renderBadge) {
     return (
-      <Badge aria-label={t('navBar:badgeLabel')} color="secondary" variant="dot">
+      <Badge data-cy="navbar-notification-badge" aria-label={t('navBar:badgeLabel')} color="secondary" variant="dot">
         {baseElement}
       </Badge>
     )
@@ -230,9 +230,16 @@ const NavBar = ({ guest = false }) => {
     }))
 
   const navBarLinks = (
-    <Box sx={styles.linkContainer}>
+    <Box data-cy="navbar-links" sx={styles.linkContainer}>
       {links.map(({ label, to, active }, index) => (
-        <ButtonBase component={Link} key={index} sx={[styles.link, active && styles.activeLink]} to={to} focusRipple>
+        <ButtonBase
+          data-cy={`navbar-link-${label}`}
+          component={Link}
+          key={index}
+          sx={[styles.link, active && styles.activeLink]}
+          to={to}
+          focusRipple
+        >
           <NavLabelWrapper renderBadge={!waitingFeedbackCountLoading && waitingFeedbackCount}>{label}</NavLabelWrapper>
         </ButtonBase>
       ))}
