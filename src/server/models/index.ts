@@ -1,27 +1,27 @@
-const Feedback = require('./feedback')
-const User = require('./user')
-const CourseRealisation = require('./courseRealisation')
-const FeedbackTarget = require('./feedbackTarget')
-const Question = require('./question')
-const Survey = require('./survey')
-const CourseUnit = require('./courseUnit')
-const UserFeedbackTarget = require('./userFeedbackTarget')
-const Organisation = require('./organisation')
-const CourseUnitsOrganisation = require('./courseUnitsOrganisation')
-const CourseRealisationsOrganisation = require('./courseRealisationsOrganisation')
-const NorppaFeedback = require('./norppaFeedback')
-const UpdaterStatus = require('./updaterStatus')
-const OrganisationLog = require('./organisationLog')
-const FeedbackTargetLog = require('./feedbackTargetLog')
-const ContinuousFeedback = require('./continuousFeedback')
-const OrganisationFeedbackCorrespondent = require('./organisationFeedbackCorrespondent')
-const Tag = require('./tag')
-const CourseRealisationsTag = require('./courseRealisationsTag')
-const Banner = require('./banner')
-const InactiveCourseRealisation = require('./inactiveCourseRealisation')
-const CourseUnitsTag = require('./courseUnitsTag')
-const Group = require('./group')
-const Summary = require('./summary')
+import Feedback from './feedback'
+import User from './user'
+import CourseRealisation from './courseRealisation'
+import FeedbackTarget from './feedbackTarget'
+import Question from './question'
+import Survey from './survey'
+import CourseUnit from './courseUnit'
+import UserFeedbackTarget from './userFeedbackTarget'
+import Organisation from './organisation'
+import CourseUnitsOrganisation from './courseUnitsOrganisation'
+import CourseRealisationsOrganisation from './courseRealisationsOrganisation'
+import NorppaFeedback from './norppaFeedback'
+import UpdaterStatus from './updaterStatus'
+import OrganisationLog from './organisationLog'
+import FeedbackTargetLog from './feedbackTargetLog'
+import ContinuousFeedback from './continuousFeedback'
+import OrganisationFeedbackCorrespondent from './organisationFeedbackCorrespondent'
+import Tag from './tag'
+import CourseRealisationsTag from './courseRealisationsTag'
+import Banner from './banner'
+import InactiveCourseRealisation from './inactiveCourseRealisation'
+import CourseUnitsTag from './courseUnitsTag'
+import Group from './group'
+import Summary from './summary'
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -141,12 +141,12 @@ NorppaFeedback.belongsTo(User, {
 
 OrganisationLog.belongsTo(Organisation, {
   as: 'organisation',
-  foreign_key: 'organisation_id',
+  foreignKey: 'organisation_id',
 })
 
 OrganisationLog.belongsTo(User, {
   as: 'user',
-  foreign_key: 'user_id',
+  foreignKey: 'user_id',
 })
 
 User.hasMany(OrganisationLog, { as: 'organisationLogs' })
@@ -155,12 +155,12 @@ Organisation.hasMany(OrganisationLog, { as: 'organisationLogs' })
 
 FeedbackTargetLog.belongsTo(FeedbackTarget, {
   as: 'feedback_target',
-  foreign_key: 'feedback_target_id',
+  foreignKey: 'feedback_target_id',
 })
 
 FeedbackTargetLog.belongsTo(User, {
   as: 'user',
-  foreign_key: 'user_id',
+  foreignKey: 'user_id',
 })
 
 User.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
@@ -169,12 +169,12 @@ FeedbackTarget.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
 ContinuousFeedback.belongsTo(FeedbackTarget, {
   as: 'feedback_target',
-  foreign_key: 'feedback_target_id',
+  foreignKey: 'feedback_target_id',
 })
 
 ContinuousFeedback.belongsTo(User, {
   as: 'user',
-  foreign_key: 'user_id',
+  foreignKey: 'user_id',
 })
 
 User.hasMany(ContinuousFeedback, { as: 'continuousFeedbacks' })
@@ -244,7 +244,7 @@ Organisation.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 Summary.belongsTo(CourseUnit, { foreignKey: 'entityId', as: 'courseUnit' })
 CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 
-Summary.belongsTo(CourseUnit, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupCourseUnit' })
+Summary.belongsTo(CourseUnit, { targetKey: 'groupId', foreignKey: 'entityId', as: 'groupCourseUnit' })
 CourseUnit.hasMany(Summary, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupSummaries' })
 
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
@@ -253,7 +253,7 @@ CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
 Summary.belongsTo(FeedbackTarget, { foreignKey: 'entityId', targetKey: 'courseRealisationId', as: 'feedbackTarget' })
 FeedbackTarget.hasOne(Summary, { foreignKey: 'entityId', sourceKey: 'courseRealisationId', as: 'summary' })
 
-module.exports = {
+export {
   Feedback,
   User,
   CourseRealisation,

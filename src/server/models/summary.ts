@@ -13,17 +13,16 @@ import {
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
 
+export type SummaryResult = {
+  mean: number
+  distribution: Record<string, number>
+}
+
 export type SummaryData = {
   feedbackCount: number
   studentCount: number
   hiddenCount: number
-  result: Record<
-    string,
-    {
-      mean: number
-      distribution: Record<string, number>
-    }
-  >
+  result: Record<string, SummaryResult>
   feedbackResponsePercentage: number
 }
 
