@@ -64,9 +64,16 @@ describe('User feedbacks view', () => {
     cy.contains('Other comments and such').should('not.exist')
   })
 
-  it('Student can clear given feedback', () => {
-    // student gives feedback
+  it.only('Student can clear given feedback', () => {
     cy.loginAs(student)
+
+    // Check that the notification badge is visible in the navbar
+    cy.get('[data-cy="navbar-link-My feedback"]')
+      .should('exist')
+      .children('[data-cy="navbar-notification-badge"]')
+      .should('exist')
+
+    // student gives feedback
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
@@ -77,6 +84,12 @@ describe('User feedbacks view', () => {
     })
     cy.get('[data-cy=feedback-view-give-feedback]').click()
 
+    // Notification badge should be gone now that feedback has been given
+    cy.get('[data-cy="navbar-link-My feedback"]')
+      .should('exist')
+      .children('[data-cy="navbar-notification-badge"]')
+      .should('not.exist')
+
     // student clears the feedback
     cy.visit(``)
     cy.contains('Given').click()
@@ -84,5 +97,11 @@ describe('User feedbacks view', () => {
     cy.contains('Yes').click()
     cy.contains('Awaiting').click()
     cy.get('[data-cy=feedback-item-give-feedback]').should('exist')
+
+    // Notification badge should be back now that feedback has been cleared
+    cy.get('[data-cy="navbar-link-My feedback"]')
+      .should('exist')
+      .children('[data-cy="navbar-notification-badge"]')
+      .should('exist')
   })
 })
