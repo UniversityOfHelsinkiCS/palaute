@@ -24,10 +24,12 @@ describe('Teacher view', () => {
     cy.get('[data-cy="my-teaching-no-courses"]').should('exist')
 
     cy.get('[data-cy="my-teaching-ended-tab"]').contains('Ended surveys').should('exist').click()
-    cy.get('[data-cy="my-teaching-no-courses"]').should('not.exist')
+    cy.get('[data-cy="my-teaching-no-courses"]').should('exist')
 
     cy.get('[id=semester-selector]').click()
     cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
+
+    cy.get('[data-cy="my-teaching-no-courses"]').should('not.exist')
 
     cy.get('[data-cy="course-unit-group-title-Course surveys"]')
       .should('exist')
