@@ -331,7 +331,8 @@
     "courseSummary": "Course summary",
     "nameFallback": "Menu",
     "feedback": "Give feedback to Norppa developers",
-    "userInformation": "My information"
+    "userInformation": "My information",
+    "badgeLabel": "You have new feedbacks to give"
   },
   "userInformation": {
     "iamGroups": "IAM-groups",

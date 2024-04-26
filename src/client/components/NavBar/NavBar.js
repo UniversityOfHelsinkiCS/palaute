@@ -114,6 +114,8 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
 ))
 
 const NavLabelWrapper = ({ renderBadge, children }) => {
+  const { t } = useTranslation()
+
   const baseElement = (
     <Box fontWeight="fontWeightMedium" fontSize={15} mx={1}>
       {children}
@@ -122,7 +124,7 @@ const NavLabelWrapper = ({ renderBadge, children }) => {
 
   if (renderBadge) {
     return (
-      <Badge color="secondary" variant="dot">
+      <Badge aria-label={t('navBar:badgeLabel')} color="secondary" variant="dot">
         {baseElement}
       </Badge>
     )
