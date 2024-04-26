@@ -43,7 +43,6 @@ const config = {
     'hy-CUR-142630573',
     'hy-CUR-142441501',
     'hy-opt-cur-2021-7f93a0cf-c849-4280-aeef-3ee2b9bb01fc',
-    'hy-cur-test',
     'hy-CUR-142418452',
     'hy-opt-cur-2122-78220cb5-1bad-4b19-88c3-d4d6a45c8a42',
     'hy-CUR-142475480',
