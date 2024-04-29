@@ -41,6 +41,7 @@ const getTeacherCourseUnits = async (user, query) => {
             model: Summary,
             as: 'summary',
             required: false,
+            attributes: ['data'],
           },
           {
             model: CourseRealisation,
