@@ -71,10 +71,8 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   )
 }
 
-const FilterRow = ({ dateRange, setDateRange }) => {
+const FilterRow = ({ semesters, currentSemester, setDateRange }) => {
   const [params, setParams] = useURLSearchParams()
-
-  const { semesters, currentSemester } = useYearSemesters(dateRange.start)
 
   useEffect(() => {
     if (!params.get('startDate') || !params.get('endDate')) {
@@ -118,6 +116,7 @@ const MyTeaching = () => {
 
     return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
   })
+  const { semesters, currentSemester } = useYearSemesters(dateRange.start)
 
   const startDate = format(dateRange.start, 'yyyy-MM-dd')
   const endDate = format(dateRange.end, 'yyyy-MM-dd')
@@ -131,7 +130,12 @@ const MyTeaching = () => {
     ...(status === 'ended' && { startDate, endDate }),
   }
 
-  const { tabCounts } = useMyTeachingTabCounts()
+  const tabCountsQueryParams = {
+    startDate: semesters[0].start,
+    endDate: semesters[0].end,
+  }
+
+  const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } =
     useTeacherOrganisatioSurveys(queryParams)
@@ -177,7 +181,9 @@ const MyTeaching = () => {
         </Alert>
       )}
 
-      {status === 'ended' && <FilterRow dateRange={dateRange} setDateRange={setDateRange} />}
+      {status === 'ended' && (
+        <FilterRow semesters={semesters} currentSemester={currentSemester} setDateRange={setDateRange} />
+      )}
 
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup
