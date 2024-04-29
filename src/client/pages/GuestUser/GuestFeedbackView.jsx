@@ -65,7 +65,7 @@ const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
     sx={styles.alert}
     ref={ref}
     elevation={6}
-    icon={<span css={styles.icon}>🎉</span>}
+    icon={<span style={styles.icon}>🎉</span>}
     {...props}
   >
     {children}

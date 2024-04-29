@@ -9,6 +9,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 
 import InterimFeedbackEditor from './InterimFeedbackEditor'
+// eslint-disable-next-line import/no-cycle
 import InterimFeedbackItem from './InterimFeedbackItem'
 import { getInitialInterimFeedbackValues, getInterimFeedbackSchema } from './utils'
 import { useInterimFeedbacks } from './useInterimFeedbacks'

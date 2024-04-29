@@ -53,12 +53,12 @@ const EmailAccordion = () => {
           <Typography>Email statistics</Typography>
         </AccordionSummary>
         <AccordionDetails sx={styles.details}>
-          <div css={styles.emailCounts}>
+          <div style={styles.emailCounts}>
             <Typography sx={styles.count}>Student emails TODAY: {studentEmails}</Typography>
             <Typography sx={styles.count}>Teacher emails TODAY: {teacherEmails}</Typography>
           </div>
-          <div css={styles.emailCounts}>
-            <div css={styles.container}>
+          <div style={styles.emailCounts}>
+            <div style={styles.container}>
               <Typography>Approximate teacher emails this week (~ +5-10%)</Typography>
               {teacherEmailCounts.map((row, index) => (
                 <Typography key={index}>
@@ -66,7 +66,7 @@ const EmailAccordion = () => {
                 </Typography>
               ))}
             </div>
-            <div css={styles.container}>
+            <div style={styles.container}>
               <Typography>Approximate student emails this week (~ +5-10%)</Typography>
               {studentEmailCounts.map((row, index) => (
                 <Typography key={index}>

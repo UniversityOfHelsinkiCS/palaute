@@ -27,6 +27,7 @@ import Links from './tabs/Links'
 import Settings from './tabs/Settings'
 import Logs from './tabs/Logs'
 import ContinuousFeedback from './tabs/ContinuousFeedback'
+// eslint-disable-next-line import/no-cycle
 import InterimFeedback from './tabs/InterimFeedback'
 import { RouterTab } from '../../components/common/RouterTabs'
 import { getLanguageValue } from '../../util/languageUtils'

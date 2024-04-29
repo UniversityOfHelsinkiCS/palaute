@@ -41,10 +41,8 @@ import { getStudyYearRange } from '../../util/yearSemesterUtils'
 const SelectionContext = React.createContext({})
 
 class FeedbackTargetGrouping {
-  years = []
-
   constructor(yearGroupedFeedbackTargets) {
-    this.years = yearGroupedFeedbackTargets
+    this.years = yearGroupedFeedbackTargets ?? []
   }
 
   filter(fn) {
