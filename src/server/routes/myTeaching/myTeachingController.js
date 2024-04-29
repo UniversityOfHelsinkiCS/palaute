@@ -11,9 +11,9 @@ const getCourseUnitsForTeacher = async (req, res) => {
 }
 
 const getTabCounts = async (req, res) => {
-  const { user } = req
+  const { query, user } = req
 
-  const tabCounts = await getMyTeachingTabCounts(user)
+  const tabCounts = await getMyTeachingTabCounts(user, query)
 
   res.send(tabCounts)
 }

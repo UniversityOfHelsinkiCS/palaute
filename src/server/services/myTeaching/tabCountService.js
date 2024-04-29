@@ -1,11 +1,15 @@
 const _ = require('lodash')
 const { differenceInMonths, parseISO, getYear } = require('date-fns')
 
-const { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary } = require('../../models')
+const { Op } = require('sequelize')
+const { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary, CourseRealisation } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
+const { formatActivityPeriod } = require('../../util/common')
 
-const getTeacherCourseUnits = async user => {
+const getTeacherCourseUnits = async (user, query) => {
+  const activityPeriod = formatActivityPeriod(query)
+
   const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode'],
     where: {
@@ -37,6 +41,37 @@ const getTeacherCourseUnits = async user => {
             model: Summary,
             as: 'summary',
             required: false,
+          },
+          {
+            model: CourseRealisation,
+            as: 'courseRealisation',
+            required: true,
+            attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
+            where: {
+              ...(activityPeriod?.startDate &&
+                activityPeriod?.endDate && {
+                  [Op.or]: [
+                    {
+                      startDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      endDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      startDate: {
+                        [Op.lte]: activityPeriod.startDate,
+                      },
+                      endDate: {
+                        [Op.gte]: activityPeriod.endDate,
+                      },
+                    },
+                  ],
+                }),
+            },
           },
         ],
       },
@@ -79,8 +114,8 @@ const getEndedFeedbacksWithMissingResponse = async courseUnits => {
   return latestEndedFeedbackTargets.filter(Boolean)
 }
 
-const getMyTeachingTabCounts = async user => {
-  const teacherCourseUnits = await getTeacherCourseUnits(user)
+const getMyTeachingTabCounts = async (user, query) => {
+  const teacherCourseUnits = await getTeacherCourseUnits(user, query)
 
   const endedFeedbacksWithMissingResponse = await getEndedFeedbacksWithMissingResponse(teacherCourseUnits)
 
