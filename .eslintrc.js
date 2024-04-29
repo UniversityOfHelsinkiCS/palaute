@@ -1,6 +1,13 @@
 module.exports = {
   extends: ['airbnb', 'prettier', 'plugin:cypress/recommended'],
-  plugins: ['prettier', 'cypress'],
+  plugins: ['import', 'react', 'react-hooks', 'jsx-a11y', 'prettier', 'cypress'],
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
   env: {
     browser: true,
   },
