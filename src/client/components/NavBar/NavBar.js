@@ -153,7 +153,7 @@ const NavBar = ({ guest = false }) => {
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
     enabled: isAdminUser,
   })
-  const { waitingFeedbackCount, isLoading: waitingFeedbackCountLoading } = useWaitingFeedbackCount({
+  const { waitingFeedbackCount } = useWaitingFeedbackCount({
     enabled: isStudent,
   })
 
@@ -231,11 +231,11 @@ const NavBar = ({ guest = false }) => {
 
   const navBarLinks = (
     <Box data-cy="navbar-links" sx={styles.linkContainer}>
-      {links.map(({ label, to, badgeCount, active }, index) => (
+      {links.map(({ label, to, badgeCount, active }) => (
         <ButtonBase
           data-cy={`navbar-link-${label}`}
           component={Link}
-          key={index}
+          key={label}
           sx={[styles.link, active && styles.activeLink]}
           to={to}
           focusRipple
