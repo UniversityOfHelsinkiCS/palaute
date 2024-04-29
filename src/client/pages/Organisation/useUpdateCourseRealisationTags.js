@@ -1,6 +1,7 @@
-const { useMutation } = require('react-query')
-const { default: apiClient } = require('../../util/apiClient')
-const { default: queryClient } = require('../../util/queryClient')
+import { useMutation } from 'react-query'
+
+import apiClient from '../util/apiClient'
+import queryClient from '../../util/queryClient'
 
 const useUpdateCourseRealisationTags = () => {
   const mutationFn = async ({ organisationCode, courseRealisationIds, tagIds }) =>
