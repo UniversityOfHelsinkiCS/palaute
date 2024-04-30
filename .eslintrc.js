@@ -36,6 +36,7 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
+    'import/no-unused-modules': 'off',
     'react/display-name': 'off',
     'react/prop-types': [
       1,
