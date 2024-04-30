@@ -5,7 +5,6 @@ module.exports = {
     'plugin:cypress/recommended',
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
-    'plugin:prettier/recommended',
   ],
   plugins: ['import', 'react', 'react-hooks', 'jsx-a11y', 'prettier', 'cypress'],
   parserOptions: {
