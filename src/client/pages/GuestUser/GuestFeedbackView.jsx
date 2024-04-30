@@ -1,8 +1,8 @@
-import React, { useState, forwardRef } from 'react'
+import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
-import { Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
+import { Button, Box, Card, CardContent, Alert } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -25,52 +25,7 @@ import {
 
 import { saveValues } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-
-const tada = keyframes({
-  from: {
-    transform: 'scale3d(1, 1, 1)',
-  },
-
-  '10%, 20%': {
-    transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -6deg)',
-  },
-
-  '30%, 50%, 70%, 90%': {
-    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 6deg)',
-  },
-
-  '40%, 60%, 80%': {
-    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -6deg)',
-  },
-  to: {
-    transform: 'scale3d(1, 1, 1)',
-  },
-})
-
-const styles = {
-  alert: {
-    fontSize: '1.1rem',
-    fontWeight: theme => theme.typography.fontWeightBold,
-  },
-  icon: css`
-    animation: ${tada} 2500ms;
-    animation-delay: 500ms;
-  `,
-}
-
-const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
-  <Alert
-    variant="filled"
-    severity="success"
-    sx={styles.alert}
-    ref={ref}
-    elevation={6}
-    icon={<span style={styles.icon}>🎉</span>}
-    {...props}
-  >
-    {children}
-  </Alert>
-))
+import feedbackGivenSnackbarContent from '../FeedbackTarget/tabs/FeedbackView/FeedbackGivenSnackBar'
 
 const FormContainer = ({
   onSubmit,
@@ -160,7 +115,7 @@ const GuestFeedbackView = () => {
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 5999,
-          content: (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>,
+          content: feedbackGivenSnackbarContent,
         })
       }
     } catch (e) {
