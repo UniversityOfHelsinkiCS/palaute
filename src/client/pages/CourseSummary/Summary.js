@@ -4,14 +4,13 @@ import { Redirect, Route, Switch } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
-import { BarChartOutlined, School } from '@mui/icons-material'
+import { BarChartOutlined, School, LocationCity } from '@mui/icons-material'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import MyOrganisations from './MyOrganisations'
 import University from './University'
 import { updateSummaries } from './api'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
-import hyLogo from '../../assets/hy_logo_black.svg'
 import MyCourses from './MyCourses'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../util/common'
@@ -73,11 +72,7 @@ const SummaryInContext = () => {
         {hasAccessToUniversityLevel && (
           <RouterTab
             label={t('common:university')}
-            icon={
-              <Box sx={{ width: '1.5rem', height: 'auto' }}>
-                <img src={hyLogo} alt="HY" />
-              </Box>
-            }
+            icon={<LocationCity />}
             to={`/course-summary/university${search}`}
             data-cy="university"
           />
