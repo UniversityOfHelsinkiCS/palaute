@@ -56,7 +56,6 @@ module.exports = {
     ],
     'react/jsx-boolean-value': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
-    'react/jsx-filename-extension': 'off',
     'react/jsx-props-no-spreading': 'off',
   },
   overrides: [
