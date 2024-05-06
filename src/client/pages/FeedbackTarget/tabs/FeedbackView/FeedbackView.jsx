@@ -1,9 +1,9 @@
-import React, { useState, forwardRef } from 'react'
+import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import { useParams, useHistory, Link } from 'react-router-dom'
 
-import { Typography, Button, Box, Card, CardContent, Alert, keyframes, css } from '@mui/material'
+import { Typography, Button, Box, Card, CardContent, Alert } from '@mui/material'
 
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -21,58 +21,8 @@ import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedba
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-
-const tada = keyframes({
-  from: {
-    transform: 'scale3d(1, 1, 1)',
-  },
-
-  '10%, 20%': {
-    transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -6deg)',
-  },
-
-  '30%, 50%, 70%, 90%': {
-    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 6deg)',
-  },
-
-  '40%, 60%, 80%': {
-    transform: 'scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -6deg)',
-  },
-  to: {
-    transform: 'scale3d(1, 1, 1)',
-  },
-})
-
-const styles = {
-  alert: {
-    fontSize: '1.1rem',
-    fontWeight: theme => theme.typography.fontWeightBold,
-  },
-  icon: css`
-    animation: ${tada} 2500ms;
-    animation-delay: 500ms;
-  `,
-}
-
-const FeedbackGivenSnackbar = forwardRef(({ children, ...props }, ref) => (
-  <Alert
-    variant="filled"
-    severity="success"
-    sx={styles.alert}
-    ref={ref}
-    elevation={6}
-    icon={
-      <span css={styles.icon}>
-        <SeasonalEmoji />
-      </span>
-    }
-    {...props}
-  >
-    {children}
-  </Alert>
-))
+import feedbackGivenSnackbarContent from './FeedbackGivenSnackBar'
 
 const FormContainer = ({
   onSubmit,
@@ -133,8 +83,6 @@ const FormContainer = ({
     </Formik>
   )
 }
-
-const feedbackGivenSnackbarContent = (key, message) => <FeedbackGivenSnackbar id={key}>{message}</FeedbackGivenSnackbar>
 
 const FeedbackView = () => {
   const { id, interimFeedbackId } = useParams()

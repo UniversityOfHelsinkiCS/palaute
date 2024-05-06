@@ -17,6 +17,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
 import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
+// eslint-disable-next-line import/no-cycle
 import InterimFeedbackModal from './InterimFeedbackModal'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {

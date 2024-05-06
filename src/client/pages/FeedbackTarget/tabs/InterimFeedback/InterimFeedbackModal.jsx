@@ -13,6 +13,7 @@ import useOrganisations from '../../../../hooks/useOrganisations'
 import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
 
 import { FeedbackTargetContextProvider } from '../../FeedbackTargetContext'
+// eslint-disable-next-line import/no-cycle
 import FeedbackTargetContent from '../../FeedbackTargetContent'
 
 const InterimFeedbackModal = () => {
