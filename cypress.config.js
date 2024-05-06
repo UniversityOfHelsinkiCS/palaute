@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { defineConfig } from 'cypress'
+const { defineConfig } = require('cypress')
 
-export default defineConfig({
+module.exports = defineConfig({
   defaultCommandTimeout: 60000,
   viewportWidth: 1800,
   viewportHeight: 1200,
