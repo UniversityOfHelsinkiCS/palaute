@@ -13,7 +13,7 @@
     "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/server/index.js",
     "start:test": "NODE_ENV=test node --max-old-space-size=4096 ./build/server/index.js",
     "build": "npm run clean-build && npm run build:server && npm run build:client",
-    "build:client": "npm run ts-check:client && BUILD_PATH=build/client DISABLE_ESLINT_PLUGIN=true tsc && vite build",
+    "build:client": "npm run ts-check:client && DISABLE_ESLINT_PLUGIN=true tsc && vite build",
     "build:server": "NODE_ENV=development tsc --build src/server",
     "clean-build": "rimraf ./build",
     "clean-build:server": "rimraf ./build/server",
