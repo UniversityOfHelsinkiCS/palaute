@@ -26,7 +26,8 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 // eslint-disable-next-line no-undef
 const config = CONFIG
 
-export const basePath = inDevelopment || inE2EMode || inStaging ? '' : config?.PUBLIC_URL
+// eslint-disable-next-line no-nested-ternary
+export const basePath = inDevelopment || inE2EMode ? '' : inStaging ? '/norppa' : config?.PUBLIC_URL
 
 export const INCLUDE_COURSES = config?.INCLUDE_COURSES ?? []
 
