@@ -19,7 +19,7 @@ const inProduction = process.env.NODE_ENV === 'production'
 const inDevelopment = process.env.NODE_ENV === 'development'
 const inStaging = process.env.REACT_APP_STAGING === 'true'
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
-const basePath = process.env.PUBLIC_URL || ''
+const basePath = process.env.BASE_PATH || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 

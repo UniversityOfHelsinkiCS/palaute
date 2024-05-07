@@ -18,7 +18,7 @@ export const inProduction = process.env.NODE_ENV === 'production'
 export const inStaging = process.env.REACT_APP_STAGING === 'true'
 export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
-export const basePath = inDevelopment || inE2EMode ? '' : process.env.PUBLIC_URL
+export const basePath = inDevelopment || inE2EMode ? '' : process.env.BASE_PATH
 
 // The config is populated by webpack defineplugin. The variable
 // with the caps is replaced with the entire config, so read it
