@@ -11,8 +11,6 @@ export const images = {
   norppa_viskaali: norppaViskaali,
 }
 
-export const basePath = process.env.PUBLIC_URL || ''
-
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 export const inProduction = process.env.NODE_ENV === 'production'
@@ -26,6 +24,8 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 // in the build.
 // eslint-disable-next-line no-undef
 const config = CONFIG
+
+export const basePath = inProduction ? config?.PUBLIC_URL : ''
 
 export const INCLUDE_COURSES = config?.INCLUDE_COURSES ?? []
 
