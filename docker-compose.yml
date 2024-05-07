@@ -20,7 +20,6 @@ services:
       - 3000:3000
       - 9229:9229
     container_name: palaute_dev
-    # command: sleep infinity
   db:
     image: postgres:15.4
     environment:
