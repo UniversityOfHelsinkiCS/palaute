@@ -118,6 +118,7 @@ const config = {
    * The public url of the app, to be used for example in email links.
    * Why is it defined here in addition to the normal build argument? I don't trust it's given to the server properly.
    * Might not be required once mails are extracted away from server
+   * UPDATE 7.5.2024: This is pretty much true that this is used for the mailing
    */
   PUBLIC_URL: 'https://norppa.helsinki.fi/',
 
