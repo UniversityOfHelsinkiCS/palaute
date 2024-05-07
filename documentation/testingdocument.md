@@ -8,8 +8,6 @@ The tests are run against an empty database that is cleared and seeded at the be
 
 `npm run test` to run the tests against a production build. This is used in actions CI. Warn, building the frontend takes approx. 60 seconds.
 
-`npm run test:setuplocal` to spin up quickly the app in dev mode with an empty database.
-
 `npm run test:cypress` to open the Cypress UI, ready to start testing the app.
 
 `npm run test:run` to run all the Cypress specs in headless mode
@@ -20,7 +18,7 @@ The `npm run test` command builds the testing environment each time from scratch
 
 For writing tests locally there is a docker compose file for the purpose that allows you to make changes to the build while developing. Essentially meaning that the tests are run in dev envinroment rather than builded application.
 
-`docker compose -f docker-compose.test.yml up --build` will start the docker compose and all the services.
+`npm run test:setuplocal` to spin up quickly the app in dev mode with an empty database.
 
 When all of the services are running in the docker compose, Cypress can be started either in the headless mode with `npm run test:run` or opened with `npm run test:cypress`.
 
