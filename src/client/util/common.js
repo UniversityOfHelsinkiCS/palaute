@@ -18,6 +18,8 @@ export const inProduction = process.env.NODE_ENV === 'production'
 export const inStaging = process.env.REACT_APP_STAGING === 'true'
 export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 
+export const basePath = inDevelopment || inE2EMode ? '' : process.env.PUBLIC_URL
+
 // The config is populated by webpack defineplugin. The variable
 // with the caps is replaced with the entire config, so read it
 // into a variable first if there are going to be repeated reads,
@@ -25,8 +27,6 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 // in the build.
 // eslint-disable-next-line no-undef
 const config = CONFIG
-
-export const basePath = inDevelopment || inE2EMode ? '' : process.env.PUBLIC_URL
 
 export const INCLUDE_COURSES = config?.INCLUDE_COURSES ?? []
 
