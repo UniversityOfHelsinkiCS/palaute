@@ -13,6 +13,7 @@ export const images = {
 
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
+export const inDevelopment = process.env.NODE_ENV === 'development'
 export const inProduction = process.env.NODE_ENV === 'production'
 export const inStaging = process.env.REACT_APP_STAGING === 'true'
 export const inE2EMode = process.env.REACT_APP_E2E === 'true'
@@ -25,7 +26,7 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 // eslint-disable-next-line no-undef
 const config = CONFIG
 
-export const basePath = inProduction ? config?.PUBLIC_URL : ''
+export const basePath = inDevelopment || inE2EMode || inStaging ? '' : config?.PUBLIC_URL
 
 export const INCLUDE_COURSES = config?.INCLUDE_COURSES ?? []
 
