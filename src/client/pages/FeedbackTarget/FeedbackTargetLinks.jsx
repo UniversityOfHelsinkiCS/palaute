@@ -41,8 +41,8 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
 
   const coursePageUrl = isTeacher
-    ? `${t('links:courseUnitPage', { courseUnitId: feedbackTarget.courseUnit?.id })}`
-    : `${t('links:courseUnitPageStudent', { courseUnitId: feedbackTarget.courseUnit?.id })}`
+    ? `${t('links:courseUnitPage', { courseRealisationId: courseRealisation.id })}`
+    : `${t('links:courseUnitPageStudent', { courseRealisationId: courseRealisation.id })}`
   const realisationPageUrl = `${t('links:courseRealisationPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
   const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
