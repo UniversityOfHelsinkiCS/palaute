@@ -9,7 +9,6 @@ const inStaging = process.env.REACT_APP_STAGING === 'true'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()],
-  base: inStaging ? '/norppa' : '/',
   server: {
     proxy: {
       '/api/': {
