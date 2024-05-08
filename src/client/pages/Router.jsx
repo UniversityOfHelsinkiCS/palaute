@@ -1,20 +1,20 @@
 import { Container } from '@mui/material'
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import { NEW_TEACHING_VIEW_ENABLED } from '../util/common'
 
-const Admin = lazy(() => import('./Admin'))
-const MyTeaching = lazy(() => import('./MyTeaching'))
-const MyTeachingV2 = lazy(() => import('./MyTeaching/V2/MyTeaching'))
-const CourseRealisation = lazy(() => import('./CourseRealisation'))
-const Organisation = lazy(() => import('./Organisation'))
-const FeedbackTarget = lazy(() => import('./FeedbackTarget'))
-const NorppaFeedback = lazy(() => import('./NorppaFeedback'))
-const MyFeedbacks = lazy(() => import('./MyFeedbacks'))
-const Summary = lazy(() => import('./CourseSummary/Summary'))
+import Admin from './Admin'
+import MyTeaching from './MyTeaching'
+import MyTeachingV2 from './MyTeaching/V2/MyTeaching'
+import CourseRealisation from './CourseRealisation'
+import Organisation from './Organisation'
+import FeedbackTarget from './FeedbackTarget'
+import NorppaFeedback from './NorppaFeedback'
+import MyFeedbacks from './MyFeedbacks'
+import Summary from './CourseSummary/Summary'
 
 const styles = {
   container: theme => ({
