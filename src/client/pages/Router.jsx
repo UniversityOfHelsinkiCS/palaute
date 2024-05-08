@@ -15,6 +15,7 @@ import FeedbackTarget from './FeedbackTarget'
 import NorppaFeedback from './NorppaFeedback'
 import MyFeedbacks from './MyFeedbacks'
 import Summary from './CourseSummary/Summary'
+import Search from './Search/Search'
 
 const styles = {
   container: theme => ({
@@ -48,15 +49,16 @@ const Router = () => (
   <Container sx={styles.container}>
     <Suspense fallback={<LoadingProgress />}>
       <Switch>
-        <Route path="/" component={Home} exact />
         <Route path="/feedbacks" component={MyFeedbacks} exact />
         <Route path="/courses" component={NEW_TEACHING_VIEW_ENABLED ? MyTeachingV2 : MyTeaching} exact />
         <Route path="/targets/:id" component={FeedbackTarget} />
         <Route path="/organisations/:code" component={Organisation} />
         <Route path="/course-summary" component={Summary} />
+        <Route path="/search" component={Search} />
         <Route path="/cur/:id" component={CourseRealisation} />
         <Route path="/norppa-feedback" component={NorppaFeedback} />
         <Route path="/admin" component={Admin} />
+        <Route path="/" component={Home} />
       </Switch>
     </Suspense>
   </Container>

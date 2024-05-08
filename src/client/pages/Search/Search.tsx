@@ -1,0 +1,196 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns/esm'
+import { Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
+import { useQuery } from 'react-query'
+import apiClient from '../../util/apiClient'
+import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
+import useOrganisations from '../../hooks/useOrganisations'
+import useURLSearchParams from '../../hooks/useURLSearchParams'
+import Title from '../../components/common/Title'
+import { getLanguageValue } from '../../util/languageUtils'
+import ExternalLink from '../../components/common/ExternalLink'
+
+const styles: {
+  [key: string]: SxProps<Theme>
+} = {
+  date: {
+    position: 'sticky',
+    top: '4rem',
+    height: '1rem',
+    minWidth: '5rem',
+    textTransform: 'capitalize',
+    color: theme => theme.palette.text.secondary,
+    fontSize: '16px',
+  },
+  year: {
+    color: theme => theme.palette.text.primary,
+  },
+  item: {
+    textTransform: 'none',
+    fontWeight: 'inherit',
+    padding: 0,
+    backgroundColor: 'white',
+    borderRadius: '3px',
+    '&:hover': {
+      color: theme => theme.palette.primary.main,
+      backgroundColor: 'white',
+    },
+  },
+  specialItem: {
+    background: theme => theme.palette.action.disabled,
+  },
+  selectedItem: {
+    color: theme => theme.palette.primary.main,
+    outline: theme => `${theme.palette.info.light} solid 3px`,
+  },
+  filtersHead: {
+    color: theme => theme.palette.text.secondary,
+  },
+  filtersContent: {
+    background: theme => theme.palette.background.default,
+  },
+}
+
+const useOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
+  const queryKey = ['organisationFeedbackTargets', organisationCode, startDate, endDate]
+
+  const queryFn = async () => {
+    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${organisationCode}`, {
+      params: { startDate, endDate },
+    })
+
+    return feedbackTargets
+  }
+
+  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
+    enabled: !!organisationCode,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
+
+  return { feedbackTargetGrouping: new FeedbackTargetGrouping(feedbackTargets), ...rest }
+}
+
+const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
+  const { t, i18n } = useTranslation()
+  return (
+    <Paper
+      sx={{
+        p: '0.5rem',
+        m: '0.3rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        borderRadius: '0.3rem',
+      }}
+    >
+      <Box fontSize="16px" display="flex" alignItems="start" gap={1}>
+        <Typography color="textSecondary">{fbt.courseUnit.courseCode}</Typography>
+        <Typography fontWeight={400}>{getLanguageValue(fbt.courseUnit.name, i18n.language)}</Typography>
+        <ExternalLink href={t('links:courseUnitPage', { courseRealisationId: fbt.courseRealisation.id })}>
+          {t('search:coursePageLink')}
+        </ExternalLink>
+      </Box>
+      <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
+        {getLanguageValue(fbt.courseRealisation.name, i18n.language)}
+      </Typography>
+    </Paper>
+  )
+}
+
+const toMonth = (date: string, locale: Intl.LocalesArgument) =>
+  new Date(date).toLocaleString(locale, { month: 'short' })
+
+const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
+  const { i18n } = useTranslation()
+
+  return (
+    <>
+      {feedbackTargetGrouping.years.map(([year, months]) => (
+        <Box display="flex" key={year}>
+          <Box sx={[styles.date, styles.year] as SxProps<Theme>} mt={1.5}>
+            {year}
+          </Box>
+          <Box>
+            {months.map(([firstDayOfMonth, days]) => (
+              <Box display="flex" mb={4} key={firstDayOfMonth}>
+                <Box sx={styles.date} mt={1.5}>
+                  {toMonth(firstDayOfMonth, i18n.language)}
+                </Box>
+                <Box>
+                  {days.map(([startDate, feedbackTargets]) => (
+                    <Box key={startDate} display="flex" my={1.5}>
+                      <Box sx={styles.date} mr={2}>
+                        {format(Date.parse(startDate), 'dd/MM')}
+                      </Box>
+                      <Box display="flex" flexWrap="wrap">
+                        {feedbackTargets.map(fbt => (
+                          <FeedbackTargetItem key={fbt.id} fbt={fbt} />
+                        ))}
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      ))}
+    </>
+  )
+}
+
+const Search = () => {
+  const { t, i18n } = useTranslation()
+  const { organisations, isLoading: isOrganisationsLoading } = useOrganisations()
+  const [searchParams, setSearchParams] = useURLSearchParams()
+  const [code, setCode] = React.useState<string | null>(searchParams.get('code'))
+  const { feedbackTargetGrouping, isLoading } = useOrganisationFeedbackTargets(code, '2021-01-01', '2021-12-31')
+
+  return (
+    <>
+      <Title>{t('search:title')}</Title>
+      <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
+        <Typography variant="h4" component="h1">
+          {t('search:title')}
+        </Typography>
+        {code && (
+          <Typography variant="h5" color="textSecondary">
+            {code}
+          </Typography>
+        )}
+      </Box>
+      {!isOrganisationsLoading && (
+        <Autocomplete
+          data-cy="formik-search-input"
+          id="search"
+          fullWidth
+          defaultValue={null}
+          onChange={(_, r: any) => {
+            searchParams.set('code', r.code)
+            setSearchParams(searchParams)
+            setCode(r.code)
+          }}
+          options={organisations}
+          filterOptions={options => options}
+          onInputChange={() => {}}
+          getOptionLabel={(org: any) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
+          renderInput={params => (
+            <TextField
+              {...params}
+              inputProps={{
+                ...params.inputProps,
+                'data-cy': 'formik-search-input',
+              }}
+              label={t('search:searchField')}
+            />
+          )}
+        />
+      )}
+      {!isLoading && <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />}
+    </>
+  )
+}
+
+export default Search
