@@ -8,7 +8,7 @@ const initializeSentry = () => {
   Sentry.init({
     dsn: SENTRY_DSN,
     release: GIT_SHA,
-    integrations: [new Integrations.BrowserTracing()],
+    integrations: [new Integrations.BrowserTracing(), Sentry.captureConsoleIntegration()],
     tracesSampleRate: 1.0,
   })
 }
