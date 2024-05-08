@@ -3,7 +3,7 @@ import { Integrations } from '@sentry/tracing'
 import { inProduction, inStaging, GIT_SHA, inE2EMode, SENTRY_DSN } from './common'
 
 const initializeSentry = () => {
-  if (!inProduction || inStaging || inE2EMode) return
+  if (!inProduction || inE2EMode) return
 
   Sentry.init({
     dsn: SENTRY_DSN,
