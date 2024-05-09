@@ -5,13 +5,13 @@ import { Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from 
 import { useQuery } from 'react-query'
 import apiClient from '../../util/apiClient'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
-import useOrganisations from '../../hooks/useOrganisations'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
 import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import ExternalLink from '../../components/common/ExternalLink'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import { getStudyYearRange } from '../../util/yearSemesterUtils'
+import useOrganisationsList from '../../hooks/useOrganisationsList'
 
 const styles: {
   [key: string]: SxProps<Theme>
@@ -147,7 +147,7 @@ type DateRange = { start: Date; end: Date }
 
 const Search = () => {
   const { t, i18n } = useTranslation()
-  const { organisations, isLoading: isOrganisationsLoading } = useOrganisations()
+  const { organisationsList, isLoading: isOrganisationsLoading } = useOrganisationsList()
   const [searchParams, setSearchParams] = useURLSearchParams()
   const [code, setCode] = React.useState<string | null>(searchParams.get('code'))
   const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
@@ -199,7 +199,7 @@ const Search = () => {
             setSearchParams(searchParams)
             setCode(r.code)
           }}
-          options={organisations}
+          options={organisationsList}
           filterOptions={options => options}
           onInputChange={() => {}}
           getOptionLabel={(org: any) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
