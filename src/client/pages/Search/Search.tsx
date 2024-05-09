@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { format } from 'date-fns/esm'
+import { format, isValid } from 'date-fns/esm'
 import { Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
 import { useQuery } from 'react-query'
 import apiClient from '../../util/apiClient'
@@ -10,6 +10,8 @@ import useURLSearchParams from '../../hooks/useURLSearchParams'
 import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import ExternalLink from '../../components/common/ExternalLink'
+import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
+import { getStudyYearRange } from '../../util/yearSemesterUtils'
 
 const styles: {
   [key: string]: SxProps<Theme>
@@ -141,12 +143,37 @@ const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: Feed
   )
 }
 
+type DateRange = { start: Date; end: Date }
+
 const Search = () => {
   const { t, i18n } = useTranslation()
   const { organisations, isLoading: isOrganisationsLoading } = useOrganisations()
   const [searchParams, setSearchParams] = useURLSearchParams()
   const [code, setCode] = React.useState<string | null>(searchParams.get('code'))
-  const { feedbackTargetGrouping, isLoading } = useOrganisationFeedbackTargets(code, '2021-01-01', '2021-12-31')
+  const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
+
+  const [dateRange, setDateRange] = React.useState<DateRange>(() => {
+    // Converting to string is important, params.get may return 0 which would take us to the 70s
+    const start = new Date(String(searchParams.get('startDate')))
+    const end = new Date(String(searchParams.get('endDate')))
+
+    return isValid(start) && isValid(end) ? { start, end } : getStudyYearRange(new Date())
+  })
+
+  const updateDateRangeQS = (newDateRange: DateRange) => {
+    setDateRange(newDateRange)
+    if (isValid(newDateRange.start) && isValid(newDateRange.end)) {
+      searchParams.set('startDate', format(newDateRange.start, 'yyyy-MM-dd'))
+      searchParams.set('endDate', format(newDateRange.end, 'yyyy-MM-dd'))
+      setSearchParams(searchParams)
+    }
+  }
+
+  const { feedbackTargetGrouping, isLoading } = useOrganisationFeedbackTargets(
+    code,
+    dateRange.start.toISOString(),
+    dateRange.end.toISOString()
+  )
 
   return (
     <>
@@ -188,6 +215,17 @@ const Search = () => {
           )}
         />
       )}
+      <YearSemesterSelector
+        value={dateRange}
+        onChange={updateDateRangeQS}
+        allowAll={false}
+        option={option}
+        setOption={newOption => {
+          searchParams.set('option', newOption)
+          setSearchParams(searchParams)
+          setOption(newOption)
+        }}
+      />
       {!isLoading && <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />}
     </>
   )

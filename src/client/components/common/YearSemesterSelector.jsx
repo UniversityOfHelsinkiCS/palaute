@@ -132,7 +132,7 @@ export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = 
  *
  * @param {{
  * 	value: { start: Date, end: Date },
- * 	onChange: ({ start: Date, end: Date }) => (),
+ * 	onChange: ({ start: Date, end: Date }) => void,
  *  option: string,
  *  setOption: (string) => void,
  *  allowAll: boolean
