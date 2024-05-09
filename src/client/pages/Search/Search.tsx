@@ -54,13 +54,16 @@ const styles: {
   },
 }
 
-const useOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
-  const queryKey = ['organisationFeedbackTargets', organisationCode, startDate, endDate]
+const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
+  const queryKey = ['publicOrganisationFeedbackTargets', organisationCode, startDate, endDate]
 
   const queryFn = async () => {
-    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${organisationCode}`, {
-      params: { startDate, endDate },
-    })
+    const { data: feedbackTargets } = await apiClient.get(
+      `/feedback-targets/for-organisation/${organisationCode}/public`,
+      {
+        params: { startDate, endDate },
+      }
+    )
 
     return feedbackTargets
   }
@@ -106,6 +109,8 @@ const toMonth = (date: string, locale: Intl.LocalesArgument) =>
 
 const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
   const { i18n } = useTranslation()
+
+  console.log(feedbackTargetGrouping.years)
 
   return (
     <>
@@ -169,7 +174,7 @@ const Search = () => {
     }
   }
 
-  const { feedbackTargetGrouping, isLoading } = useOrganisationFeedbackTargets(
+  const { feedbackTargetGrouping, isLoading } = usePublicOrganisationFeedbackTargets(
     code,
     dateRange.start.toISOString(),
     dateRange.end.toISOString()

@@ -19,6 +19,7 @@ const {
   getFeedbackTargetsForCourseUnit,
   getFeedbackTargetsForOrganisation,
   hideFeedback,
+  getPublicFeedbackTargetsForOrganisation,
 } = require('../../services/feedbackTargets')
 const { getWaitingFeedbackCountForStudent } = require('../../services/feedbackTargets/getForStudent')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
@@ -42,6 +43,21 @@ adRouter.get('/for-organisation/:code', async (req, res) => {
 
   return res.send(feedbackTargets)
 })
+
+const getPublicTargetsForOrganisation = async (req, res) => {
+  const { code } = req.params
+  const { startDate, endDate } = req.query
+  if (!code) throw new ApplicationError('Missing code', 400)
+
+  const feedbackTargets = await getPublicFeedbackTargetsForOrganisation({
+    organisationCode: code,
+    startDate,
+    endDate,
+  })
+
+  return res.send(feedbackTargets)
+}
+adRouter.get('/for-organisation/:code/public', getPublicTargetsForOrganisation)
 
 adRouter.get('/for-student', async (req, res) => {
   const { user } = req
