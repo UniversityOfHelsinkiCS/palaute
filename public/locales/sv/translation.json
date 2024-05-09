@@ -596,6 +596,11 @@
     "anonymous": "Lähetä anonyymisti Skicka anonymt",
     "anonymousInfo": "Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet."
   },
+  "search": {
+    "title": "Sök programmets kurser",
+    "searchField": "Välj ett program",
+    "coursePageLink": "Kursens sida"
+  },
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Ge gärna respons på kursen {{courseName}}",

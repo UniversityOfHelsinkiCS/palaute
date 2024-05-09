@@ -110,8 +110,6 @@ const toMonth = (date: string, locale: Intl.LocalesArgument) =>
 const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
   const { i18n } = useTranslation()
 
-  console.log(feedbackTargetGrouping.years)
-
   return (
     <>
       {feedbackTargetGrouping.years.map(([year, months]) => (

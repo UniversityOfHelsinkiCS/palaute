@@ -619,6 +619,11 @@
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
   },
+  "search": {
+    "title": "Hae ohjelman opetusta",
+    "searchField": "Valitse ohjelma",
+    "coursePageLink": "Kurssisivu"
+  },
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta kurssille {{courseName}}",
