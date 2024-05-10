@@ -221,6 +221,7 @@ const Search = () => {
               label={t('search:searchField')}
             />
           )}
+          noOptionsText={t('search:noOptions')}
         />
       )}
       <YearSemesterSelector

@@ -623,7 +623,8 @@
   "search": {
     "title": "Hae ohjelman opetusta",
     "searchField": "Valitse ohjelma",
-    "coursePageLink": "Kurssisivu"
+    "coursePageLink": "Kurssisivu",
+    "noOptions": "Ei hakutuloksia"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {
