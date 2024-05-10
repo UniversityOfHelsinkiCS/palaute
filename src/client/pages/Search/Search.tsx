@@ -199,9 +199,14 @@ const Search = () => {
           fullWidth
           defaultValue={null}
           onChange={(_, r: any) => {
-            searchParams.set('code', r.code)
+            if (r?.code) {
+              searchParams.set('code', r.code)
+              setCode(r.code)
+            } else {
+              searchParams.delete('code')
+              setCode(null)
+            }
             setSearchParams(searchParams)
-            setCode(r.code)
           }}
           options={organisationsList}
           filterOptions={options =>
