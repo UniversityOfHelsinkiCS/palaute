@@ -152,6 +152,7 @@ const Search = () => {
   const { t, i18n } = useTranslation()
   const { organisationsList, isLoading: isOrganisationsLoading } = useOrganisationsList()
   const [searchParams, setSearchParams] = useURLSearchParams()
+  const [searchedName, setSearchedName] = React.useState<string>('')
   const [code, setCode] = React.useState<string | null>(searchParams.get('code'))
   const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
 
@@ -203,8 +204,12 @@ const Search = () => {
             setCode(r.code)
           }}
           options={organisationsList}
-          filterOptions={options => options}
-          onInputChange={() => {}}
+          filterOptions={options =>
+            options.filter(o =>
+              getLanguageValue(o.name, i18n.language).toLowerCase().includes(searchedName.toLowerCase())
+            )
+          }
+          onInputChange={(e, value) => setSearchedName(value)}
           getOptionLabel={(org: any) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
           renderInput={params => (
             <TextField
