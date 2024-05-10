@@ -24,6 +24,7 @@ const {
 const { getWaitingFeedbackCountForStudent } = require('../../services/feedbackTargets/getForStudent')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
 const { adminDeleteFeedback } = require('../../services/feedbackTargets/hideFeedback')
+const { PUBLIC_COURSE_BROWSER_ENABLED } = require('../../util/config')
 
 const adRouter = Router()
 const noadRouter = Router()
@@ -57,7 +58,9 @@ const getPublicTargetsForOrganisation = async (req, res) => {
 
   return res.send(feedbackTargets)
 }
-adRouter.get('/for-organisation/:code/public', getPublicTargetsForOrganisation)
+if (PUBLIC_COURSE_BROWSER_ENABLED) {
+  adRouter.get('/for-organisation/:code/public', getPublicTargetsForOrganisation)
+}
 
 adRouter.get('/for-student', async (req, res) => {
   const { user } = req

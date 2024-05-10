@@ -31,7 +31,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
-import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES } from '../../util/common'
+import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/common'
 import useWaitingFeedbackCount from './useWaitingFeedbackCount'
 
 const styles = {
@@ -210,7 +210,7 @@ const NavBar = ({ guest = false }) => {
       to: '/feedbacks',
       badgeCount: waitingFeedbackCount,
     },
-    {
+    PUBLIC_COURSE_BROWSER_ENABLED && {
       label: t('navBar:browseCourses'),
       to: '/search',
     },

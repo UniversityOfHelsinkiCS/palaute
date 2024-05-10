@@ -186,11 +186,6 @@ const Search = () => {
         <Typography variant="h4" component="h1">
           {t('search:title')}
         </Typography>
-        {code && (
-          <Typography variant="h5" color="textSecondary">
-            {code}
-          </Typography>
-        )}
       </Box>
       {!isOrganisationsLoading && (
         <Autocomplete

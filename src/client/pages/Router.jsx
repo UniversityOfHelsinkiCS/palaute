@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
-import { NEW_TEACHING_VIEW_ENABLED } from '../util/common'
+import { NEW_TEACHING_VIEW_ENABLED, PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
 
 import Admin from './Admin'
 import MyTeaching from './MyTeaching'
@@ -54,7 +54,7 @@ const Router = () => (
         <Route path="/targets/:id" component={FeedbackTarget} />
         <Route path="/organisations/:code" component={Organisation} />
         <Route path="/course-summary" component={Summary} />
-        <Route path="/search" component={Search} />
+        {PUBLIC_COURSE_BROWSER_ENABLED && <Route path="/search" component={Search} />}
         <Route path="/cur/:id" component={CourseRealisation} />
         <Route path="/norppa-feedback" component={NorppaFeedback} />
         <Route path="/admin" component={Admin} />

@@ -240,6 +240,14 @@ const config = {
   ORGANISATION_SURVEYS_ENABLED: false,
 
   /**
+   * Whether the public course browser feature is enabled. 
+   * This feature allows ANY user to browse the courses and their public information 
+   * (CUR and CU names, code and dates) by organisation.
+   * Setting this to true enables both the frontend route and the backend api endpoints for the feature.
+   */
+  PUBLIC_COURSE_BROWSER_ENABLED: false,
+
+  /**
    * Alway show list of students in feedback target view
    * value: false = Only show list of students when studentListVisible is set at course or organisation level
    * value: true  = Always show list of students, hide feedback given status if studentListVisible is not set
