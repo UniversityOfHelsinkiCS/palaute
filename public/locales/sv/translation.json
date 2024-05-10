@@ -601,7 +601,8 @@
     "title": "Sök programmets kurser",
     "searchField": "Välj ett program",
     "coursePageLink": "Kursens sida",
-    "noOptions": "Inga program hittades"
+    "noOptions": "Inga program hittades",
+    "noCourses": "Inga kurser hittades"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

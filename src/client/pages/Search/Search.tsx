@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { format, isValid } from 'date-fns/esm'
-import { Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
+import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
 import { useQuery } from 'react-query'
 import apiClient from '../../util/apiClient'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
@@ -10,7 +10,7 @@ import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import ExternalLink from '../../components/common/ExternalLink'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
-import { getStudyYearRange } from '../../util/yearSemesterUtils'
+import { getSemesterRange } from '../../util/yearSemesterUtils'
 import useOrganisationsList from '../../hooks/useOrganisationsList'
 
 const styles: {
@@ -161,7 +161,7 @@ const Search = () => {
     const start = new Date(String(searchParams.get('startDate')))
     const end = new Date(String(searchParams.get('endDate')))
 
-    return isValid(start) && isValid(end) ? { start, end } : getStudyYearRange(new Date())
+    return isValid(start) && isValid(end) ? { start, end } : getSemesterRange(new Date())
   })
 
   const updateDateRangeQS = (newDateRange: DateRange) => {
@@ -235,7 +235,12 @@ const Search = () => {
           setOption(newOption)
         }}
       />
-      {!isLoading && <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />}
+      {!isLoading &&
+        (feedbackTargetGrouping.years.length === 0 ? (
+          <Alert severity="info">{t('search:noCourses')}</Alert>
+        ) : (
+          <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />
+        ))}
     </>
   )
 }

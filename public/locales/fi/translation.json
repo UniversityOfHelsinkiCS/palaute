@@ -624,7 +624,8 @@
     "title": "Hae ohjelman opetusta",
     "searchField": "Valitse ohjelma",
     "coursePageLink": "Kurssisivu",
-    "noOptions": "Ei hakutuloksia"
+    "noOptions": "Ei hakutuloksia",
+    "noCourses": "Ei kursseja tällä ohjelmalla valitulla aikavälillä"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

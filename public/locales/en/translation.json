@@ -625,7 +625,8 @@
     "title": "Search program's courses",
     "searchField": "Select a program",
     "coursePageLink": "Course page",
-    "noOptions": "No matching programs found"
+    "noOptions": "No matching programs found",
+    "noCourses": "No courses found for the selected program in this time range"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {
