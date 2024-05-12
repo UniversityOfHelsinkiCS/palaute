@@ -203,7 +203,7 @@ const Search = () => {
       <YearSemesterSelector
         value={dateRange}
         onChange={updateDateRangeQS}
-        allowAll={false}
+        futureYears={1}
         option={option}
         setOption={newOption => {
           searchParams.set('option', newOption)
