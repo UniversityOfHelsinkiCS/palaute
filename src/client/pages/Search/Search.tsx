@@ -236,7 +236,7 @@ const Search = () => {
         }}
       />
       {!isLoading &&
-        (feedbackTargetGrouping.years.length === 0 ? (
+        (code && feedbackTargetGrouping.years.length === 0 ? (
           <Alert severity="info">{t('search:noCourses')}</Alert>
         ) : (
           <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />
