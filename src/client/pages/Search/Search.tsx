@@ -28,30 +28,6 @@ const styles: {
   year: {
     color: theme => theme.palette.text.primary,
   },
-  item: {
-    textTransform: 'none',
-    fontWeight: 'inherit',
-    padding: 0,
-    backgroundColor: 'white',
-    borderRadius: '3px',
-    '&:hover': {
-      color: theme => theme.palette.primary.main,
-      backgroundColor: 'white',
-    },
-  },
-  specialItem: {
-    background: theme => theme.palette.action.disabled,
-  },
-  selectedItem: {
-    color: theme => theme.palette.primary.main,
-    outline: theme => `${theme.palette.info.light} solid 3px`,
-  },
-  filtersHead: {
-    color: theme => theme.palette.text.secondary,
-  },
-  filtersContent: {
-    background: theme => theme.palette.background.default,
-  },
 }
 
 const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
