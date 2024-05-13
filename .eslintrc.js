@@ -44,6 +44,8 @@ module.exports = {
         skipUndeclared: true,
       },
     ],
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off',
     'react/no-array-index-key': 'off',
     'react/destructuring-assignment': 'warn',
     'react/no-unstable-nested-components': 'warn',
