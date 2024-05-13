@@ -323,6 +323,7 @@
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
+    "browseCourses": "Selaa kursseja",
     "myCourses": "Opetukseni",
     "myCoursesV2": "Kyselyni",
     "logOut": "Kirjaudu ulos",
@@ -618,6 +619,13 @@
     "successAlert": "Palaute lähetetty onnistuneesti!",
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+  },
+  "search": {
+    "title": "Hae ohjelman opetusta",
+    "searchField": "Valitse ohjelma",
+    "coursePageLink": "Kurssisivu",
+    "noOptions": "Ei hakutuloksia",
+    "noCourses": "Ei kursseja tällä ohjelmalla valitulla aikavälillä"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

@@ -37,46 +37,9 @@ import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { getStudyYearRange } from '../../util/yearSemesterUtils'
+import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 
 const SelectionContext = React.createContext({})
-
-class FeedbackTargetGrouping {
-  constructor(yearGroupedFeedbackTargets) {
-    this.years = yearGroupedFeedbackTargets ?? []
-  }
-
-  filter(fn) {
-    const filtered = this.years
-      .map(([d, months]) => [
-        d,
-        months
-          .map(([d, days]) => [d, days.map(([d, fbts]) => [d, fbts.filter(fn)]).filter(([, fbts]) => fbts.length > 0)])
-          .filter(([, days]) => days.length > 0),
-      ])
-      .filter(([, months]) => months.length > 0)
-
-    return new FeedbackTargetGrouping(filtered)
-  }
-
-  flatMap(fn) {
-    const mapFn = typeof fn === 'function' ? fn : x => x
-    const mapped = []
-    this.forEach(fbt => mapped.push(mapFn(fbt)))
-    return mapped
-  }
-
-  forEach(fn) {
-    for (const year of this.years) {
-      for (const month of year[1]) {
-        for (const day of month[1]) {
-          for (const fbt of day[1]) {
-            fn(fbt)
-          }
-        }
-      }
-    }
-  }
-}
 
 const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) => {
   const deferredFilters = React.useDeferredValue(filters)

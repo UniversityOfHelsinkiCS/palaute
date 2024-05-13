@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
+const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const { Organisation, OrganisationLog, User } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
@@ -40,6 +41,12 @@ const getOrganisationData = async (req, res) => {
   const data = await getOrganisationDataFromJami()
 
   return res.send(data)
+}
+
+const getOrganisationsListHandler = async (req, res) => {
+  const organisationsList = await getOrganisationsList()
+
+  return res.send(organisationsList)
 }
 
 const updateOrganisation = async (req, res) => {
@@ -166,6 +173,7 @@ const router = Router()
 
 router.get('/', getOrganisations)
 router.get('/data', getOrganisationData)
+router.get('/list', getOrganisationsListHandler)
 router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)

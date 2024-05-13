@@ -10,7 +10,7 @@ const useURLSearchParams = () => {
       const nextSearch = nextParams.toString()
       window.history.replaceState({}, '', `${location.pathname}?${nextSearch}`)
     }, []),
-  ]
+  ] as [URLSearchParams, (nextParams: URLSearchParams) => void]
 }
 
 export default useURLSearchParams
