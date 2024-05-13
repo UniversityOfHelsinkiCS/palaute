@@ -30,6 +30,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { TagChip } from '../../components/common/TagChip'
 import CourseUnitTagSelector from './CourseUnitTagSelector'
 import { getLanguageValue } from '../../util/languageUtils'
+import queryClient from '../../util/queryClient'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, language = 'en') =>
   (courseUnits ?? []).map(({ id, courseCode, name, tags }) => ({
@@ -223,6 +224,8 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
 
         setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+
+        queryClient.invalidateQueries('organisation')
       } catch (error) {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
