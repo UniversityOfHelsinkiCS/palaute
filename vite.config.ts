@@ -20,7 +20,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'build/client',
-    sourcemap: 'hidden',
+    sourcemap: true,
   },
   define: {
     'process.env': process.env,

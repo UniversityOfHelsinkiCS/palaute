@@ -141,7 +141,10 @@ export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   const { summary } = feedbackTarget.courseRealisation
 
   const notGivenStatus = Date.parse(feedbackTarget.closesAt) > Date.now() ? 'OPEN' : 'NONE'
-  const responseStatus = summary?.data?.feedbackResponsePercentage === 1 ? 'GIVEN' : notGivenStatus
+  const responseStatus =
+    summary?.data?.feedbackResponsePercentage === 1 || feedbackTarget.feedbackResponse?.length
+      ? 'GIVEN'
+      : notGivenStatus
 
   const feedbackResponseIndicator = (
     <FeedbackResponseIndicator status={responseStatus} currentFeedbackTargetId={feedbackTarget.id} />
