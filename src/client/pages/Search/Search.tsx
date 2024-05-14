@@ -210,6 +210,7 @@ const Search = () => {
           setSearchParams(searchParams)
           setOption(newOption)
         }}
+        allowAll={false}
       />
       {!isLoading &&
         (code && feedbackTargetGrouping.years.length === 0 ? (
