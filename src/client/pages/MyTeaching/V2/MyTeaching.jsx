@@ -26,8 +26,8 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 import Title from '../../../components/common/Title'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 import { useMyTeachingTabCounts } from './useMyTeachingTabCounts'
-import { SemesterSelector } from '../../../components/common/YearSemesterSelector'
-import { useYearSemesters } from '../../../util/yearSemesterUtils'
+import { AcademicYearSelector } from '../../../components/common/YearSemesterSelector'
+import { getStudyYearRange, useYearSemesters } from '../../../util/yearSemesterUtils'
 import useURLSearchParams from '../../../hooks/useURLSearchParams'
 
 const CourseUnitGroupSkeleton = () => (
@@ -71,23 +71,28 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
   )
 }
 
-const FilterRow = ({ semesters, currentSemester, setDateRange }) => {
+const FilterRow = ({ dateRange, setDateRange }) => {
   const [params, setParams] = useURLSearchParams()
+
+  const { year } = useYearSemesters(dateRange.start)
+  const range = getStudyYearRange(new Date(`${year + 1}-01-01`))
 
   useEffect(() => {
     if (!params.get('startDate') || !params.get('endDate')) {
-      params.set('startDate', format(currentSemester.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(currentSemester.end, 'yyyy-MM-dd'))
+      params.set('startDate', format(range.start, 'yyyy-MM-dd'))
+      params.set('endDate', format(range.end, 'yyyy-MM-dd'))
       setParams(params)
-      setDateRange({ start: currentSemester.start, end: currentSemester.end })
+      setDateRange({ start: range.start, end: range.end })
     }
-  }, [currentSemester, params, setParams])
+  }, [params, setParams])
 
-  const handleChangeTimeRange = nextDateRange => {
-    setDateRange(nextDateRange)
-    if (isValid(nextDateRange.start) && isValid(nextDateRange.end)) {
-      params.set('startDate', format(nextDateRange.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(nextDateRange.end, 'yyyy-MM-dd'))
+  const handleChangeTimeRange = nextYear => {
+    const newRange = getStudyYearRange(new Date(`${nextYear + 1}-01-01`))
+
+    setDateRange(newRange)
+    if (isValid(newRange.start) && isValid(newRange.end)) {
+      params.set('startDate', format(newRange.start, 'yyyy-MM-dd'))
+      params.set('endDate', format(newRange.end, 'yyyy-MM-dd'))
       setParams(params)
     }
   }
@@ -100,7 +105,14 @@ const FilterRow = ({ semesters, currentSemester, setDateRange }) => {
         top: { md: 80 },
       }}
     >
-      <SemesterSelector value={currentSemester} onChange={handleChangeTimeRange} semesters={semesters} sx={{ mx: 2 }} />
+      <Typography component="p" id="my-teaching-academic-year-label">
+        Valittu lukuvuosi
+      </Typography>
+      <AcademicYearSelector
+        value={year}
+        onChange={handleChangeTimeRange}
+        labelledBy="my-teaching-academic-year-label"
+      />
     </Box>
   )
 }
@@ -116,7 +128,7 @@ const MyTeaching = () => {
 
     return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
   })
-  const { semesters, currentSemester } = useYearSemesters(dateRange.start)
+  const ongoingAcademicYearRange = getStudyYearRange(new Date())
 
   const startDate = format(dateRange.start, 'yyyy-MM-dd')
   const endDate = format(dateRange.end, 'yyyy-MM-dd')
@@ -131,8 +143,8 @@ const MyTeaching = () => {
   }
 
   const tabCountsQueryParams = {
-    startDate: semesters[0].start,
-    endDate: semesters[0].end,
+    startDate: ongoingAcademicYearRange.start,
+    endDate: ongoingAcademicYearRange.end,
   }
 
   const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
@@ -182,9 +194,7 @@ const MyTeaching = () => {
         </Alert>
       )}
 
-      {status === 'ended' && (
-        <FilterRow semesters={semesters} currentSemester={currentSemester} setDateRange={setDateRange} />
-      )}
+      {status === 'ended' && <FilterRow dateRange={dateRange} setDateRange={setDateRange} />}
 
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup
