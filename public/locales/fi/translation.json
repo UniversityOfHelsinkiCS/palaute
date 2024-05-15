@@ -179,7 +179,7 @@
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
     "surveys": "Kyselyä",
-    "badgeLabel": "{{count}} kohdetta tarvitsevat huomiotasi"
+    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyseyiltä."
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",

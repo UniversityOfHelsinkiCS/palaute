@@ -179,7 +179,7 @@
     "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
     "surveys": "Surveys",
-    "badgeLabel": "{{count}} items need your attention"
+    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year."
   },
   "questionEditor": {
     "addQuestion": "Add question",
