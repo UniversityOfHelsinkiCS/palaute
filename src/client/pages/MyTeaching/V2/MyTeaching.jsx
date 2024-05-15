@@ -156,9 +156,22 @@ const MyTeaching = () => {
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } =
     useTeacherOrganisatioSurveys(queryParams)
 
+  const getPageTitle = () => {
+    switch (status) {
+      case 'active':
+        return `${t('teacherView:activeSurveys')} | ${t('teacherView:mainHeadingV2')}`
+      case 'upcoming':
+        return `${t('teacherView:upcomingSurveys')} | ${t('teacherView:mainHeadingV2')}`
+      case 'ended':
+        return `${t('teacherView:endedSurveys')} | ${t('teacherView:mainHeadingV2')}`
+      default:
+        return t('teacherView:mainHeadingV2')
+    }
+  }
+
   return (
     <Box sx={{ position: 'relative' }}>
-      <Title>{t('teacherView:mainHeadingV2')}</Title>
+      <Title>{getPageTitle()}</Title>
       <Typography id="my-teaching-title" variant="h4" component="h1">
         {t('teacherView:mainHeadingV2')}
       </Typography>
