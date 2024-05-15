@@ -1,11 +1,10 @@
 import React from 'react'
-import { Tabs, Tab, Badge } from '@mui/material'
+import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
     <Badge
-      aria-label={countLabel}
       sx={{
         '& .MuiBadge-badge': {
           right: -5,
@@ -13,7 +12,11 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
           padding: '0 4px',
         },
       }}
-      badgeContent={count}
+      badgeContent={
+        <Tooltip title={countLabel} placement="top" arrow>
+          <span>{count}</span>
+        </Tooltip>
+      }
       color={badgeColor}
     >
       {label}
