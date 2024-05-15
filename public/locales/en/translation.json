@@ -178,7 +178,8 @@
     "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
     "surveys": "Surveys",
-    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year."
+    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year",
+    "academicYearSelectLabel": "Selected academic year"
   },
   "questionEditor": {
     "addQuestion": "Add question",

@@ -72,6 +72,7 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
 }
 
 const FilterRow = ({ dateRange, setDateRange }) => {
+  const { t } = useTranslation()
   const [params, setParams] = useURLSearchParams()
 
   const { year } = useYearSemesters(dateRange.start)
@@ -103,10 +104,13 @@ const FilterRow = ({ dateRange, setDateRange }) => {
         position: { md: 'absolute' },
         right: 0,
         top: { md: 80 },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
-      <Typography component="p" id="my-teaching-academic-year-label">
-        Valittu lukuvuosi
+      <Typography component="p" id="my-teaching-academic-year-label" variant="body2">
+        {t('teacherView:academicYearSelectLabel')}
       </Typography>
       <AcademicYearSelector
         value={year}
