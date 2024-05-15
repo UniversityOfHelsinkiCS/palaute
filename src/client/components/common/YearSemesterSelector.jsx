@@ -89,6 +89,7 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
     onChange(MIN_YEAR)
   }
 
+  // Handle keyboard events per the following document: https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/
   const handleKeyPress = event => {
     let flag = false
 
@@ -100,16 +101,6 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
 
       case 'ArrowUp':
         handleIncrease()
-        flag = true
-        break
-
-      case 'PageDown':
-        handleDecrease(5)
-        flag = true
-        break
-
-      case 'PageUp':
-        handleIncrease(5)
         flag = true
         break
 
