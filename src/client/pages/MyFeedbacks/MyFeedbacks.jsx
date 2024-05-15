@@ -43,9 +43,26 @@ const MyFeedbacks = () => {
   const tabOrder = ['waiting', 'given', 'ended']
   if (counts.ongoing && !tabOrder.includes('ongoing')) tabOrder.unshift('ongoing')
 
+  const getPageTitle = () => {
+    const baseTitle = t('userFeedbacks:mainHeading')
+
+    switch (status) {
+      case 'ongoing':
+        return `${t('userFeedbacks:continuousFeedbackTab')} | ${baseTitle}`
+      case 'waiting':
+        return `${t('userFeedbacks:waitingForFeedbackTab')} | ${baseTitle}`
+      case 'given':
+        return `${t('userFeedbacks:feedbackGivenTab')} | ${baseTitle}`
+      case 'ended':
+        return `${t('userFeedbacks:feedbackClosedTab')} | ${baseTitle}`
+      default:
+        return baseTitle
+    }
+  }
+
   return (
     <>
-      <Title>{t('common:feedbacks')}</Title>
+      <Title>{getPageTitle()}</Title>
       <Typography id="my-feedbacks-title" variant="h4" component="h1">
         {t('userFeedbacks:mainHeading')}
       </Typography>
