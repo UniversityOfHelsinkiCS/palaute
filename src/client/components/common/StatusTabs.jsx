@@ -1,11 +1,8 @@
 import React from 'react'
 import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
-  const { t } = useTranslation()
-
   const labelElement = count ? (
     <Badge
       aria-label={countLabel}
