@@ -18,6 +18,7 @@ import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../util/common'
 import GenerateReport from './GenerateReport'
 import { SummaryContextProvider } from './context'
 import ForCourseUnitGroup from './ForCourseUnitGroup'
+import Title from '../../components/common/Title'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -41,6 +42,7 @@ const SummaryInContext = () => {
   return (
     <>
       <Box mb="6rem" px={1}>
+        <Title>{t('courseSummary:heading')}</Title>
         <Box display="flex" gap="1rem" alignItems="end">
           <Typography variant="h4" component="h1">
             {t('courseSummary:heading')}
