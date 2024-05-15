@@ -81,11 +81,11 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
     }
   }
 
-  const handleIncreaseMax = () => {
+  const handleSetMaxValue = () => {
     onChange(CURRENT_YEAR - 1)
   }
 
-  const handleDecreaseMin = () => {
+  const handleSetMinValue = () => {
     onChange(MIN_YEAR)
   }
 
@@ -105,12 +105,12 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
         break
 
       case 'Home':
-        handleDecreaseMin()
+        handleSetMinValue()
         flag = true
         break
 
       case 'End':
-        handleIncreaseMax()
+        handleSetMaxValue()
         flag = true
         break
 
