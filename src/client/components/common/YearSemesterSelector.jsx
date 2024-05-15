@@ -56,7 +56,16 @@ const styles = {
   },
 }
 
-const YearStepper = ({ value, onChange, labelledBy }) => {
+export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
+  const NOW = new Date()
+  const MIN_YEAR = 2020
+  const CURRENT_YEAR = NOW.getFullYear() + (NOW.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
+
+  const displayValue = `${value} – ${value + 1}`
+
+  const canIncrease = value + 1 < CURRENT_YEAR
+  const canDecrease = value > MIN_YEAR
+
   const handleIncrease = () => {
     onChange(value + 1)
   }
@@ -65,16 +74,16 @@ const YearStepper = ({ value, onChange, labelledBy }) => {
     onChange(value - 1)
   }
 
-  const now = new Date()
-  const currentYear = now.getFullYear() + (now.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
-
-  const displayValue = `${value} – ${value + 1}`
-
-  const canIncrease = value + 1 < currentYear
-  const canDecrease = value > 2020
-
   return (
-    <Box sx={styles.stepperContainer} aria-labelledby={labelledBy ?? undefined}>
+    <Box
+      sx={styles.stepperContainer}
+      role="spinbutton"
+      aria-labelledby={labelledBy ?? undefined}
+      aria-valuenow={value}
+      aria-valuemin={MIN_YEAR}
+      aria-valuemax={CURRENT_YEAR - 1}
+      aria-valuetext={displayValue}
+    >
       <IconButton
         onClick={handleDecrease}
         disabled={!canDecrease}
@@ -82,9 +91,11 @@ const YearStepper = ({ value, onChange, labelledBy }) => {
         size="small"
         disableTouchRipple
       >
-        <ChevronLeft fontSize="large" />
+        <ChevronLeft />
       </IconButton>
-      <Typography sx={styles.stepperValue}>{displayValue}</Typography>
+      <Typography component="span" sx={styles.stepperValue}>
+        {displayValue}
+      </Typography>
       <IconButton
         onClick={handleIncrease}
         disabled={!canIncrease}
@@ -92,7 +103,7 @@ const YearStepper = ({ value, onChange, labelledBy }) => {
         size="small"
         disableTouchRipple
       >
-        <ChevronRight fontSize="large" />
+        <ChevronRight />
       </IconButton>
     </Box>
   )
@@ -182,7 +193,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
         {option !== 'all' && (
           <Box>
             {option === 'year' ? (
-              <YearStepper value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
+              <AcademicYearSelector value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
             ) : (
               <SemesterSelector
                 value={currentSemester}
