@@ -157,15 +157,17 @@ const MyTeaching = () => {
     useTeacherOrganisatioSurveys(queryParams)
 
   const getPageTitle = () => {
+    const baseTitle = t('teacherView:mainHeadingV2')
+
     switch (status) {
       case 'active':
-        return `${t('teacherView:activeSurveys')} | ${t('teacherView:mainHeadingV2')}`
+        return `${t('teacherView:activeSurveys')} | ${baseTitle}`
       case 'upcoming':
-        return `${t('teacherView:upcomingSurveys')} | ${t('teacherView:mainHeadingV2')}`
+        return `${t('teacherView:upcomingSurveys')} | ${baseTitle}`
       case 'ended':
-        return `${t('teacherView:endedSurveys')} | ${t('teacherView:mainHeadingV2')}`
+        return `${t('teacherView:endedSurveys')} | ${baseTitle}`
       default:
-        return t('teacherView:mainHeadingV2')
+        return baseTitle
     }
   }
 
