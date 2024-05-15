@@ -142,7 +142,7 @@ const MyTeaching = () => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <Title>{t('common:teacherPage')}</Title>
+      <Title>{t('teacherView:mainHeadingV2')}</Title>
       <Typography id="my-teaching-title" variant="h4" component="h1">
         {t('teacherView:mainHeadingV2')}
       </Typography>

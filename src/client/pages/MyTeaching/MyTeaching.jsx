@@ -24,7 +24,7 @@ const MyTeaching = () => {
 
   return (
     <>
-      <Title>{t('common:teacherPage')}</Title>
+      <Title>{t('teacherView:mainHeading')}</Title>
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <Typography variant="h4" component="h1">
           {t('teacherView:mainHeading')}
