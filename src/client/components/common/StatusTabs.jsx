@@ -3,12 +3,12 @@ import { Tabs, Tab, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-export const StatusTab = ({ status, count, badgeColor, label, ...props }) => {
+export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const { t } = useTranslation()
 
   const labelElement = count ? (
     <Badge
-      aria-label={t('teacherView:badgeLabel', { count })}
+      aria-label={countLabel}
       sx={{
         '& .MuiBadge-badge': {
           right: -5,
