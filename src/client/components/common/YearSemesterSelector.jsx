@@ -66,16 +66,76 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
   const canIncrease = value + 1 < CURRENT_YEAR
   const canDecrease = value > MIN_YEAR
 
-  const handleIncrease = () => {
-    onChange(value + 1)
+  const handleIncrease = (increment = 1) => {
+    if (value + increment <= CURRENT_YEAR) {
+      onChange(value + increment)
+    }
+    if (value + increment >= CURRENT_YEAR) {
+      onChange(CURRENT_YEAR - 1)
+    }
   }
 
-  const handleDecrease = () => {
-    onChange(value - 1)
+  const handleDecrease = (decrement = 1) => {
+    if (value - decrement >= MIN_YEAR) {
+      onChange(value - decrement)
+    }
+  }
+
+  const handleIncreaseMax = () => {
+    onChange(CURRENT_YEAR - 1)
+  }
+
+  const handleDecreaseMin = () => {
+    onChange(MIN_YEAR)
+  }
+
+  const handleKeyPress = event => {
+    let flag = false
+
+    switch (event.code) {
+      case 'ArrowDown':
+        handleDecrease()
+        flag = true
+        break
+
+      case 'ArrowUp':
+        handleIncrease()
+        flag = true
+        break
+
+      case 'PageDown':
+        handleDecrease(5)
+        flag = true
+        break
+
+      case 'PageUp':
+        handleIncrease(5)
+        flag = true
+        break
+
+      case 'Home':
+        handleDecreaseMin()
+        flag = true
+        break
+
+      case 'End':
+        handleIncreaseMax()
+        flag = true
+        break
+
+      default:
+        break
+    }
+
+    if (flag) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
   }
 
   return (
     <Box
+      tabIndex={0}
       sx={styles.stepperContainer}
       role="spinbutton"
       aria-labelledby={labelledBy ?? undefined}
@@ -83,9 +143,11 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
       aria-valuemin={MIN_YEAR}
       aria-valuemax={CURRENT_YEAR - 1}
       aria-valuetext={displayValue}
+      onKeyDown={handleKeyPress}
     >
       <IconButton
-        onClick={handleDecrease}
+        tabIndex={-1}
+        onClick={() => handleDecrease()}
         disabled={!canDecrease}
         sx={[!canDecrease ? styles.disabledButton : {}, styles.button]}
         size="small"
@@ -97,7 +159,8 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
         {displayValue}
       </Typography>
       <IconButton
-        onClick={handleIncrease}
+        tabIndex={-1}
+        onClick={() => handleIncrease()}
         disabled={!canIncrease}
         sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
         size="small"
