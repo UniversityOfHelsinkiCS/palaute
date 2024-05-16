@@ -126,6 +126,7 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
 
   return (
     <Box
+      id="academic-year-selector"
       tabIndex={0}
       sx={styles.stepperContainer}
       role="spinbutton"
