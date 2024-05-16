@@ -4,11 +4,13 @@
 import toscalogoColor from '../assets/toscalogo_color.svg'
 import toscalogoGrayscale from '../assets/toscalogo_grayscale.svg'
 import norppaViskaali from '../assets/norppa_holy_smoke.png'
+import stylizedNorppa from '../assets/stylized_norppa.png'
 
 export const images = {
   toska_color: toscalogoColor,
   toska_grayscale: toscalogoGrayscale,
   norppa_viskaali: norppaViskaali,
+  norppa_stylized: stylizedNorppa,
 }
 
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''

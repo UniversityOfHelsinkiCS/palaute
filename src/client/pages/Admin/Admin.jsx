@@ -55,6 +55,7 @@ const AdminView = () => {
         <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" style={{ height: '20vh' }} />
         <ConfigTestValues />
         <CrashDebug />
+        <img src={images.norppa_stylized} alt="Stylized norppa" style={{ height: '20vh' }} />
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
