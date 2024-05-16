@@ -45,7 +45,7 @@ describe('Teacher view', () => {
     })
   })
 
-  it.only('Teacher view feedback chips are rendered correctly', () => {
+  it('Teacher view feedback chips are rendered correctly', () => {
     // Continuous feedback chip is rendered
     cy.visit(`/courses`)
     cy.setFeedbackOpeningSoon()
