@@ -83,9 +83,10 @@ describe('Teacher view', () => {
     cy.giveFeedback(student)
     cy.setFeedbackClosed()
 
+    // Check that the missing counter feedback badge is rendered on the status tabs
+    cy.visit(`/courses`)
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
 
-    // Check that the missing counter feedback badge is rendered on the status tabs
     cy.get('[data-cy="status-tab-badge"]')
       .should('exist')
     
