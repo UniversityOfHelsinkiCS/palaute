@@ -14,9 +14,6 @@ describe('Continuous feedback', () => {
 
     cy.get('[data-cy=my-teaching-ended-tab]').click()
 
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
-
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
     cy.get('@feedbackTarget').then(([fbt]) => {
@@ -48,9 +45,6 @@ describe('Continuous feedback', () => {
     cy.visit(`/courses`)
 
     cy.get('[data-cy=my-teaching-ended-tab]').click()
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
