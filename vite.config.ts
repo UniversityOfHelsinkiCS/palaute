@@ -4,8 +4,6 @@ import eslint from 'vite-plugin-eslint'
 import * as config from 'config'
 import { defineConfig } from 'vite'
 
-const inStaging = process.env.REACT_APP_STAGING === 'true'
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()],
@@ -14,6 +12,9 @@ export default defineConfig({
       '/api/': {
         target: 'http://localhost:8000',
       },
+      '/test/': {
+        target: 'http://localhost:8000',
+      }
     },
     host: true,
     port: 3000,
