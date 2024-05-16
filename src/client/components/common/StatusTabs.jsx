@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
     <Badge
+      data-cy="status-tab-badge"
       sx={{
         '& .MuiBadge-badge': {
           right: -5,
@@ -13,7 +14,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
         },
       }}
       badgeContent={
-        <Tooltip title={countLabel} placement="top" arrow>
+        <Tooltip data-cy="status-tab-badge-tooltip" title={countLabel} placement="top" arrow>
           <span>{count}</span>
         </Tooltip>
       }
