@@ -86,10 +86,10 @@ describe('Teacher view', () => {
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
 
     // Check that the missing counter feedback badge is rendered on the status tabs
-    cy.get('[data-cy=my-teaching-ended-tab]')
-      .children('[data-cy="status-tab-badge"]')
+    cy.get('[data-cy="status-tab-badge"]')
       .should('exist')
-      .get('[data-cy="status-tab-badge-tooltip"]')
+    
+    cy.get('[data-cy="status-tab-badge-tooltip"]')
       .should('exist')
       .should('have.text', '1')
       .should('have.attr', 'aria-label', '1 missing counter feedbacks from the last academic year')
