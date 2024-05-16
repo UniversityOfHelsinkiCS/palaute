@@ -14,7 +14,7 @@ The tests are run against an empty database that is cleared and seeded at the be
 
 ### How to write and run tests locally
 
-The `npm run test` command builds the testing environment each time from scratch and takes significant amount of time because of that. The base image in [Dockerfile](/Dockerfile) must be changed to node for this to work locally as the openshift image is not available.
+The `npm run test` command builds the testing environment each time from scratch and takes significant amount of time because of that. The base image in [Dockerfile](/Dockerfile) must be changed to node for this to work locally as the redhat image is not available.
 
 For writing tests locally there is a docker compose file for the purpose that allows you to make changes to the build while developing. Essentially meaning that the tests are run in dev envinroment rather than builded application.
 
