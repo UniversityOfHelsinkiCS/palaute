@@ -1,5 +1,6 @@
 {
   "navBar": {
+    "myCoursesV2": "Palautekyselyni",
     "admin": "Admin TAU",
     "myFeedbacks": "Opintojaksopalautteeni",
     "courseSummary": "Palautteiden yhteenveto"
@@ -46,6 +47,7 @@
     "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun opintojakson toteutus on käynnissä. Tämä palaute annetaan anonyymisti."
   },
   "teacherView": {
+    "mainHeadingV2": "Palautekyselyni",
     "noCourseRealisations": "Ei opintojakson toteutuksia",
     "noCourses": "Ei toteutuksia",
     "noCoursesV2": "Ei näytettäviä toteutuksia tällä hetkellä",
@@ -53,8 +55,11 @@
     "upcomingCourses": "Tulevat opintojaksot",
     "endedCourses": "Päättyneet opintojaksot",
     "organisationSurveys": "Yksikkökyselyt",
-    "courseSurveys": "Toteutuskyselyt",
-    "disabledCourseWarning": "Opintojakson palaute ei ole käytössä"
+    "courseSurveys": "Opintojaksot ja palautekyselyt",
+    "disabledCourseWarning": "Opintojakson palaute ei ole käytössä",
+    "activeSurveys": "Käynnissä",
+    "upcomingSurveys": "Tulevat",
+    "endedSurveys": "Päättyneet"
   },
   "questionEditor": {
     "programmeQuestion": "Yksikkötaso"

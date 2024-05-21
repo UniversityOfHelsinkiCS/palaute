@@ -1,5 +1,6 @@
 {
   "navBar": {
+    "myCoursesV2": "My feedback surveys",
     "admin": "Admin TAU",
     "courseSummary": "Feedback summary"
   },
@@ -26,7 +27,12 @@
     "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "teacherView": {
-    "noCourseRealisations": "No course implementations"
+    "mainHeadingV2": "My feedback surveys",
+    "courseSurveys": "Courses and feedback surveys",
+    "noCourseRealisations": "No course implementations",
+    "activeSurveys": "Ongoing",
+    "upcomingSurveys": "Upcoming",
+    "endedSurveys": "Ended"
   },
   "questionEditor": {
     "programmeQuestion": "Unit level"
