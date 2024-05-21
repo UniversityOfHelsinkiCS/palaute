@@ -62,6 +62,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         filterOptions={options => options}
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
+        freeSolo
         ChipProps={{
           'data-cy': `formik-responsible-teacher-input-field-chip`,
         }}
