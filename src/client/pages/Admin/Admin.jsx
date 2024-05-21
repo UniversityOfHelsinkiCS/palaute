@@ -52,7 +52,7 @@ const AdminView = () => {
       <Title>Admin</Title>
       <Box display="flex" alignItems="end">
         <h1>Admin page</h1>
-        <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" style={{ height: '20vh' }} />
+        <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" style={{ height: '150px' }} />
         <ConfigTestValues />
         <CrashDebug />
         <img src={images.norppa_stylized} alt="Stylized norppa" style={{ height: '20vh' }} />
