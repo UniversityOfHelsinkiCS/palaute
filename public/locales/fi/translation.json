@@ -178,7 +178,7 @@
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
     "surveys": "Kyselyä",
-    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyseyiltä",
+    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä",
     "academicYearSelectLabel": "Valittu lukuvuosi"
   },
   "questionEditor": {
