@@ -21,9 +21,9 @@
     "toska": "",
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "",
-    "courseUnitPage": "https://sis-tuni.funidata.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
-    "courseUnitPageStudent": "https://sis-tuni.funidata.fi/student/courseunit/{{courseUnitId}}",
-    "courseRealisationPage": "https://sis-tuni.funidata.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseUnitPage": "https://sisu.tuni.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseUnitPageStudent": "https://sisu.tuni.fi/student/courseunit/{{courseUnitId}}",
+    "courseRealisationPage": "https://sisu.tuni.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "teacherView": {
     "noCourseRealisations": "No course implementations"
