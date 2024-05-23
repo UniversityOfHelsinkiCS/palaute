@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
-import { Tabs, Box, Tooltip, Badge, Paper, Tab } from '@mui/material'
+import { Tabs, Box, Tooltip, Badge, Tab } from '@mui/material'
 
 import { get } from 'lodash-es'
 
@@ -14,11 +14,26 @@ export const RouterTabs = ({ children, ...props }) => {
     .findIndex(c => !!matchPath(pathname, { path: stripSearch(get(c, 'props.to')) }))
 
   return (
-    <Paper>
-      <Tabs value={activeIndex < 0 ? 0 : activeIndex} {...props} sx={{ borderRadius: '0.8rem' }}>
-        {children}
-      </Tabs>
-    </Paper>
+    <Tabs
+      value={activeIndex < 0 ? 0 : activeIndex}
+      sx={{
+        my: 3,
+        '& .MuiTabs-indicator': {
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          maxWidth: 80,
+          width: '100%',
+          backgroundColor: theme => theme.palette.primary.main,
+        },
+      }}
+      {...props}
+      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+    >
+      {children}
+    </Tabs>
   )
 }
 
@@ -38,7 +53,7 @@ export const RouterTab = ({
   const active = !!matchPath(pathname, { path: stripSearch(to) })
 
   let content = icon ? (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+    <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
       {icon}
       {label}
     </Box>
@@ -62,7 +77,6 @@ export const RouterTab = ({
   const tab = (
     <Box
       sx={{
-        borderBottom: '3px solid',
         py: '0.2rem',
         px: '0.2rem',
         borderColor: active ? 'primary.main' : 'transparent',

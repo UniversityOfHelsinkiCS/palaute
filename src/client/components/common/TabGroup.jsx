@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Divider, Paper, Typography } from '@mui/material'
+import { Box, Divider, Paper, Tabs, Typography } from '@mui/material'
 
 export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
   <Box display="flex" flexDirection="column" pt="0.6rem">
@@ -25,9 +25,9 @@ export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
         </Typography>
       </Box>
     )}
-    <Box role="tablist" aria-labelledby={`tab-list-${title}`} sx={{ display: 'flex', alignItems: 'end' }}>
+    <Tabs aria-labelledby={`tab-list-${title}`} sx={{ display: 'flex', alignItems: 'end' }}>
       {children}
-    </Box>
+    </Tabs>
   </Box>
 )
 
@@ -35,17 +35,15 @@ export const TabGroupsContainer = ({ children }) => {
   const childElements = children.filter(child => Boolean(child))
 
   return (
-    <Paper>
+    <Paper sx={{ px: '0.5rem' }}>
       <Box
         display="flex"
-        px="0.2rem"
         alignItems="stretch"
         sx={{
           overflowX: 'auto',
           '::-webkit-scrollbar': {
             display: 'none',
           },
-          borderRadius: '0.8rem',
         }}
       >
         {React.Children.map(childElements, (child, i) => {
