@@ -36,7 +36,9 @@ const AdUser = () => {
   return (
     <Box display="flex" flexDirection="column" height="100vh" sx={{ overflowX: 'hidden' }}>
       <NavBar />
-      <Router />
+      <Box component="main" id="main-content">
+        <Router />
+      </Box>
       <DevTools />
       <Footer user={authorizedUser} />
     </Box>
