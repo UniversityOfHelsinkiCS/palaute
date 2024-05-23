@@ -35,9 +35,9 @@ const Footer = ({ user }) => {
     : ''
 
   return (
-    <Box marginTop="auto" pt="1rem">
+    <Box component="footer" marginTop="auto" pt="1rem">
       <Divider />
-      <Container component="footer" maxWidth="xl">
+      <Container maxWidth="xl">
         <Box my="2rem" display="flex" justifyContent="space-between" alignItems="center">
           {!inProduction && (
             <>
