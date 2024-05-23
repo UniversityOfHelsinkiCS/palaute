@@ -81,7 +81,11 @@ export const RouterTab = ({
           color: active ? 'primary.main' : 'text.secondary',
           opacity: 1,
           '&:hover': {
-            backgroundColor: theme.palette.action.hover,
+            color: theme => theme.palette.primary.light,
+            opacity: 1,
+          },
+          '&.Mui-focusVisible': {
+            color: theme => theme.palette.primary.dark,
           },
         })}
       />
