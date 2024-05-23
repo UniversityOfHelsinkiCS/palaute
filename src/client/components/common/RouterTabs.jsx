@@ -38,9 +38,8 @@ export const RouterTab = ({
   const active = !!matchPath(pathname, { path: stripSearch(to) })
 
   let content = icon ? (
-    <Box display="flex" alignItems="center">
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
       {icon}
-      <Box ml="0.5rem" />
       {label}
     </Box>
   ) : (
