@@ -13,11 +13,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
           padding: '0 4px',
         },
       }}
-      badgeContent={
-        <Tooltip data-cy="status-tab-badge-tooltip" title={countLabel} placement="top" arrow>
-          <span>{count}</span>
-        </Tooltip>
-      }
+      badgeContent={<span>{count}</span>}
       color={badgeColor}
     >
       {label}
@@ -26,7 +22,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
     label
   )
 
-  return (
+  const tabElement = (
     <Tab
       label={labelElement}
       component={Link}
@@ -43,6 +39,16 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
       {...props}
     />
   )
+
+  if (count) {
+    return (
+      <Tooltip title={countLabel} placement="top" arrow>
+        {tabElement}
+      </Tooltip>
+    )
+  }
+
+  return tabElement
 }
 
 export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
