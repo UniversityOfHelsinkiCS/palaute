@@ -5,6 +5,8 @@ export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
   <Box display="flex" flexDirection="column" pt="0.6rem">
     {!hideTitle && (
       <Box
+        role="region"
+        aria-labelledby={`tab-list-${title}`}
         sx={{
           display: 'flex',
           gap: '0.5rem',
@@ -25,38 +27,34 @@ export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
         </Typography>
       </Box>
     )}
-    <Tabs aria-labelledby={`tab-list-${title}`} sx={{ display: 'flex', alignItems: 'end' }}>
+    <Box display="flex" alignItems="end">
       {children}
-    </Tabs>
+    </Box>
   </Box>
 )
 
-export const TabGroupsContainer = ({ children }) => {
-  const childElements = children.filter(child => Boolean(child))
-
-  return (
-    <Paper sx={{ px: '0.5rem' }}>
-      <Box
-        display="flex"
-        alignItems="stretch"
-        sx={{
-          overflowX: 'auto',
-          '::-webkit-scrollbar': {
-            display: 'none',
-          },
-        }}
-      >
-        {React.Children.map(childElements, (child, i) => {
-          const lastChild = childElements.length === i + 1
-
-          return (
-            <>
-              {child}
-              {lastChild ? null : <Divider orientation="vertical" flexItem />}
-            </>
-          )
-        })}
-      </Box>
-    </Paper>
-  )
-}
+export const TabGroupsContainer = ({ children }) => (
+  <Paper>
+    <Tabs
+      variant="scrollable"
+      scrollButtons="auto"
+      value={false}
+      sx={{
+        my: 3,
+        '& .MuiTabs-indicator': {
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          maxWidth: 80,
+          width: '100%',
+          backgroundColor: theme => theme.palette.primary.main,
+        },
+      }}
+      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+    >
+      {children}
+    </Tabs>
+  </Paper>
+)

@@ -89,7 +89,6 @@ export const RouterTab = ({
         disabled={disabled}
         {...props}
         sx={theme => ({
-          borderRadius: '0.5rem',
           transition: theme.transitions.create('background-color'),
           color: active ? 'primary.main' : 'text.secondary',
           opacity: 1,
