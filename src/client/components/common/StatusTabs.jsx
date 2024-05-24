@@ -42,7 +42,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
 
   if (count) {
     return (
-      <Tooltip title={countLabel} placement="top" arrow>
+      <Tooltip data-cy="status-tab-badge-tooltip" title={countLabel} placement="top" arrow>
         {tabElement}
       </Tooltip>
     )
