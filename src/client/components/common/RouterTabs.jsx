@@ -75,33 +75,26 @@ export const RouterTab = ({
   }
 
   const tab = (
-    <Box
-      sx={{
-        py: '0.2rem',
-        px: '0.2rem',
-        borderColor: active ? 'primary.main' : 'transparent',
-      }}
-    >
-      <Tab
-        label={content}
-        component={Link}
-        to={to}
-        disabled={disabled}
-        {...props}
-        sx={theme => ({
-          transition: theme.transitions.create('background-color'),
-          color: active ? 'primary.main' : 'text.secondary',
+    <Tab
+      label={content}
+      component={Link}
+      to={to}
+      disabled={disabled}
+      {...props}
+      sx={theme => ({
+        padding: '0.5rem 1rem',
+        transition: theme.transitions.create('background-color'),
+        color: active ? 'primary.main' : 'text.secondary',
+        opacity: 1,
+        '&:hover': {
+          color: theme => theme.palette.primary.light,
           opacity: 1,
-          '&:hover': {
-            color: theme => theme.palette.primary.light,
-            opacity: 1,
-          },
-          '&.Mui-focusVisible': {
-            color: theme => theme.palette.primary.dark,
-          },
-        })}
-      />
-    </Box>
+        },
+        '&.Mui-focusVisible': {
+          color: theme => theme.palette.primary.dark,
+        },
+      })}
+    />
   )
 
   if (disabled)
