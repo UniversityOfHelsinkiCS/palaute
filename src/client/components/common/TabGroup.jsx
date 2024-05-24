@@ -1,5 +1,84 @@
 import React from 'react'
-import { Box, Divider, Paper, Typography } from '@mui/material'
+import { useLocation, matchPath, Link } from 'react-router-dom'
+
+import { Tab, Tooltip, Badge, Box, Divider, Paper, Typography } from '@mui/material'
+
+const stripSearch = path => path.split('?')[0]
+
+export const TabGroupTab = ({
+  icon,
+  label,
+  to,
+  disabled,
+  disabledTooltip,
+  badge,
+  badgeContent,
+  badgeColor = 'primary',
+  badgeVisible = true,
+  ...props
+}) => {
+  const { pathname } = useLocation()
+  const active = !!matchPath(pathname, { path: stripSearch(to) })
+
+  let content = icon ? (
+    <Box display="flex" alignItems="center">
+      {icon}
+      <Box ml="0.5rem" />
+      {label}
+    </Box>
+  ) : (
+    label
+  )
+
+  if (badge && badgeVisible) {
+    content = (
+      <Badge
+        color={badgeColor}
+        variant={badgeContent ? 'standard' : 'dot'}
+        overlap="rectangular"
+        badgeContent={badgeContent}
+      >
+        {content}
+      </Badge>
+    )
+  }
+
+  const tab = (
+    <Box
+      sx={{
+        borderBottom: '3px solid',
+        py: '0.2rem',
+        px: '0.2rem',
+        borderColor: active ? 'primary.main' : 'transparent',
+      }}
+    >
+      <Tab
+        label={content}
+        component={Link}
+        to={to}
+        disabled={disabled}
+        {...props}
+        sx={theme => ({
+          borderRadius: '0.5rem',
+          transition: theme.transitions.create('background-color'),
+          color: active ? 'primary.main' : 'text.secondary',
+          opacity: 1,
+          '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+          },
+        })}
+      />
+    </Box>
+  )
+
+  if (disabled)
+    return (
+      <Tooltip title={disabledTooltip} placement="top">
+        {tab}
+      </Tooltip>
+    )
+  return tab
+}
 
 export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
   <Box display="flex">
