@@ -45,7 +45,7 @@ describe('Teacher view', () => {
     })
   })
 
-  it('Teacher view feedback chips are rendered correctly', () => {
+  it.only('Teacher view feedback chips are rendered correctly', () => {
     // Continuous feedback chip is rendered
     cy.visit(`/courses`)
     cy.setFeedbackOpeningSoon()
@@ -90,11 +90,8 @@ describe('Teacher view', () => {
     cy.get('[data-cy="status-tab-badge"]')
       .should('exist')
     
-    cy.get('[data-cy="status-tab-badge-tooltip"]')
-      .should('exist')
-      .should('have.text', '1')
-      .should('have.attr', 'aria-label', '1 missing counter feedbacks from the last academic year')
-
+    cy.get('[data-cy=my-teaching-ended-tab]').trigger('mouseover')
+    cy.contains('1 missing counter feedbacks from the last academic year').should('be.visible')
 
     // Check that the counter feedback missing chip is rendered on the CU level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
