@@ -125,7 +125,8 @@
     "feedbackEndedChip": "Feedback has ended",
     "continuousFeedbackChip": "Continuous feedback",
     "feedbackResponseGiven": "Teacher has given counter feedback",
-    "deleted": "Your feedback has been deleted"
+    "deleted": "Your feedback has been deleted",
+    "waitingBadgeLabel": "{{count}} feedbacks missing"
   },
   "feedbackView": {
     "submitButton": "Give feedback",

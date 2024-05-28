@@ -80,6 +80,7 @@ const MyFeedbacks = () => {
         <StatusTab
           data-cy="my-feedbacks-waiting-tab"
           label={t('userFeedbacks:waitingForFeedbackTab')}
+          countLabel={t('userFeedbacks:waitingBadgeLabel', { count: counts.waiting })}
           status="waiting"
           count={counts.waiting}
           badgeColor="primary"
