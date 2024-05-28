@@ -125,14 +125,17 @@ const MyTeaching = () => {
   const { t } = useTranslation()
   const location = useLocation()
 
+  const ongoingAcademicYearRange = getStudyYearRange(new Date())
+
   const [params] = useURLSearchParams()
   const [dateRange, setDateRange] = React.useState(() => {
     const start = new Date(String(params.get('startDate')))
     const end = new Date(String(params.get('endDate')))
 
-    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
+    return isValid(start) && isValid(end)
+      ? { start, end }
+      : { start: ongoingAcademicYearRange.start, end: ongoingAcademicYearRange.end }
   })
-  const ongoingAcademicYearRange = getStudyYearRange(new Date())
 
   const startDate = format(dateRange.start, 'yyyy-MM-dd')
   const endDate = format(dateRange.end, 'yyyy-MM-dd')
@@ -147,8 +150,8 @@ const MyTeaching = () => {
   }
 
   const tabCountsQueryParams = {
-    startDate: ongoingAcademicYearRange.start,
-    endDate: ongoingAcademicYearRange.end,
+    startDate,
+    endDate,
   }
 
   const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
