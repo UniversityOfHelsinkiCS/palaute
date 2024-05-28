@@ -138,8 +138,6 @@ const MyTeaching = () => {
     return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
   })
 
-  console.log(dateRange)
-
   const startDate = format(new Date(dateRange.start), 'yyyy-MM-dd')
   const endDate = format(new Date(dateRange.end), 'yyyy-MM-dd')
 
@@ -156,8 +154,6 @@ const MyTeaching = () => {
     startDate,
     endDate,
   }
-
-  console.log(startDate)
 
   const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
