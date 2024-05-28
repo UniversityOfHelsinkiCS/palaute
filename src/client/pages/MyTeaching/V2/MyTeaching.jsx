@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { chunk } from 'lodash-es'
 import qs from 'qs'
-import { format, isValid, parse } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
@@ -80,8 +80,8 @@ const FilterRow = ({ dateRange, setDateRange }) => {
 
   useEffect(() => {
     if (!params.get('startDate') || !params.get('endDate')) {
-      params.set('startDate', format(parse('', '', range.start), 'yyyy-MM-dd'))
-      params.set('endDate', format(parse('', '', range.end), 'yyyy-MM-dd'))
+      params.set('startDate', format(new Date(range.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(new Date(range.end), 'yyyy-MM-dd'))
       setParams(params)
       setDateRange({ start: range.start, end: range.end })
     }
@@ -92,8 +92,8 @@ const FilterRow = ({ dateRange, setDateRange }) => {
 
     setDateRange(newRange)
     if (isValid(newRange.start) && isValid(newRange.end)) {
-      params.set('startDate', format(parse('', '', newRange.start), 'yyyy-MM-dd'))
-      params.set('endDate', format(parse('', '', newRange.end), 'yyyy-MM-dd'))
+      params.set('startDate', format(new Date(newRange.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(new Date(newRange.end), 'yyyy-MM-dd'))
       setParams(params)
     }
   }
@@ -129,16 +129,19 @@ const MyTeaching = () => {
 
   const [params] = useURLSearchParams()
   const [dateRange, setDateRange] = React.useState(() => {
-    const start = new Date(String(params.get('startDate')))
-    const end = new Date(String(params.get('endDate')))
+    const paramsStart = params.get('startDate')
+    const paramsEnd = params.get('endDate')
 
-    return isValid(start) && isValid(end)
-      ? { start, end }
-      : { start: ongoingAcademicYearRange.start, end: ongoingAcademicYearRange.end }
+    const start = paramsStart ? new Date(String(params.get('startDate'))) : ongoingAcademicYearRange.start
+    const end = paramsEnd ? new Date(String(params.get('endDate'))) : ongoingAcademicYearRange.end
+
+    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
   })
 
-  const startDate = format(parse('', '', dateRange.start), 'yyyy-MM-dd')
-  const endDate = format(parse('', '', dateRange.end), 'yyyy-MM-dd')
+  console.log(dateRange)
+
+  const startDate = format(new Date(dateRange.start), 'yyyy-MM-dd')
+  const endDate = format(new Date(dateRange.end), 'yyyy-MM-dd')
 
   const { status = 'active' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
@@ -153,6 +156,8 @@ const MyTeaching = () => {
     startDate,
     endDate,
   }
+
+  console.log(startDate)
 
   const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
