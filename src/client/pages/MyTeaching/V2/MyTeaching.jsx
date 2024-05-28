@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { chunk } from 'lodash-es'
 import qs from 'qs'
-import { format, isValid } from 'date-fns'
+import { format, isValid, parse } from 'date-fns'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
@@ -80,8 +80,8 @@ const FilterRow = ({ dateRange, setDateRange }) => {
 
   useEffect(() => {
     if (!params.get('startDate') || !params.get('endDate')) {
-      params.set('startDate', format(range.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(range.end, 'yyyy-MM-dd'))
+      params.set('startDate', format(parse('', '', range.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(parse('', '', range.end), 'yyyy-MM-dd'))
       setParams(params)
       setDateRange({ start: range.start, end: range.end })
     }
@@ -92,8 +92,8 @@ const FilterRow = ({ dateRange, setDateRange }) => {
 
     setDateRange(newRange)
     if (isValid(newRange.start) && isValid(newRange.end)) {
-      params.set('startDate', format(newRange.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(newRange.end, 'yyyy-MM-dd'))
+      params.set('startDate', format(parse('', '', newRange.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(parse('', '', newRange.end), 'yyyy-MM-dd'))
       setParams(params)
     }
   }
@@ -137,8 +137,8 @@ const MyTeaching = () => {
       : { start: ongoingAcademicYearRange.start, end: ongoingAcademicYearRange.end }
   })
 
-  const startDate = format(dateRange.start, 'yyyy-MM-dd')
-  const endDate = format(dateRange.end, 'yyyy-MM-dd')
+  const startDate = format(parse('', '', dateRange.start), 'yyyy-MM-dd')
+  const endDate = format(parse('', '', dateRange.end), 'yyyy-MM-dd')
 
   const { status = 'active' } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
