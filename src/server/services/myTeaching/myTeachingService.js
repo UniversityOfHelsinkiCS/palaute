@@ -44,6 +44,7 @@ const getAllTeacherCourseUnits = async (user, query) => {
           'continuousFeedbackEnabled',
           'userCreated',
           'courseRealisationId',
+          'feedbackCount',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -57,6 +58,13 @@ const getAllTeacherCourseUnits = async (user, query) => {
             where: {
               userId: user.id,
             },
+          },
+          {
+            model: UserFeedbackTarget.scope('students'),
+            as: 'students',
+            required: false,
+            separate: true,
+            attributes: ['id'],
           },
           {
             model: Summary,
@@ -131,8 +139,8 @@ const getGroupedCourseUnits = (courseUnits, query) => {
 
         const feedbackTarget = {
           ...target.toJSON(),
-          studentCount: target.summary?.data?.studentCount || 0,
-          feedbackCount: target.summary?.data?.feedbackCount || 0,
+          studentCount: target.userCreated ? target.students.length : target.summary?.data?.studentCount || 0,
+          feedbackCount: target.userCreated ? target.feedbackCount : target.summary?.data?.feedbackCount || 0,
         }
 
         return _.pick(feedbackTarget, targetFields)
