@@ -137,6 +137,8 @@ const getGroupedCourseUnits = (courseUnits, query) => {
           'studentCount',
         ]
 
+        // Summary data is not available for organisation surveys, which is why
+        // we need to fetch the student count and feedback count from the feedback target
         const feedbackTarget = {
           ...target.toJSON(),
           studentCount: target.userCreated ? target.students.length : target.summary?.data?.studentCount || 0,
