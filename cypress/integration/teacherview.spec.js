@@ -88,7 +88,9 @@ describe('Teacher view', () => {
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
 
     cy.get('[data-cy="status-tab-badge"]')
-      .should('exist')
+      .as('badge')
+    
+    cy.get('@badge').contains('1').should('exist')
     
     cy.get('[data-cy=my-teaching-ended-tab]').trigger('mouseover')
     cy.contains('Ended surveys: 1 missing counter feedbacks from the last academic year').should('be.visible')
