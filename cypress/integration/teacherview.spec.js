@@ -45,13 +45,17 @@ describe('Teacher view', () => {
     })
   })
 
-  it('Teacher view feedback chips are rendered correctly', () => {
+  it.only('Teacher view feedback chips are rendered correctly', () => {
     // Continuous feedback chip is rendered
     cy.visit(`/courses`)
     cy.setFeedbackOpeningSoon()
     cy.setContinuousFeedbackActive()
 
-    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .contains('Ended surveys')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
@@ -85,7 +89,11 @@ describe('Teacher view', () => {
 
     // Check that the missing counter feedback badge is rendered on the status tabs
     cy.visit(`/courses`)
-    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .contains('Ended surveys')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy="status-tab-badge"]')
       .as('badge')
@@ -125,7 +133,10 @@ describe('Teacher view', () => {
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
 
     cy.visit(`/courses`)
-    cy.get('[data-cy=my-teaching-ended-tab]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+    .as('endedTab')
+  
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
     cy.get('@fbtId').then(id => {
@@ -140,7 +151,10 @@ describe('Teacher view', () => {
     cy.get('[data-cy=saveFeedbackResponse]').click()
 
     cy.visit(`/courses`)
-    cy.get('[data-cy=my-teaching-ended-tab]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
     cy.get('@fbtId').then(id => {
