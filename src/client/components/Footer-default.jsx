@@ -49,7 +49,7 @@ const Footer = ({ user }) => {
                 loading="lazy"
                 height={100}
                 style={styles.norppa}
-                alt="Norppa drawing by tttriple"
+                alt="Happy looking seal named Norppa lying on a surface with a hat on its head and a stick in its mouth"
               />
             </>
           )}
