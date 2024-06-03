@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended"
   ],
-  "reviewers": ["@hremonen"],
+  "reviewers": ["hremonen"],
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
