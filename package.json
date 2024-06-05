@@ -178,6 +178,5 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/cypress"
     ]
-  },
-  "proxy": "http://localhost:8000"
+  }
 }
