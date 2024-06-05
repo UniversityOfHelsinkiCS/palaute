@@ -12,4 +12,4 @@ RUN npm i
 
 EXPOSE $EXPOSE_PORT
 
-CMD ["npm", "run", "start:server"]
+CMD ["npm", "run", "start:server:tau"]
