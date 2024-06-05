@@ -81,7 +81,7 @@ const Footer = ({ user }) => {
                 </Typography>
                 {user.isAdmin && (
                   <Typography component="p" variant="subtitle1" fontSize={10}>
-                    git sha = {GIT_SHA}
+                    BUILD = {GIT_SHA}
                   </Typography>
                 )}
               </>
