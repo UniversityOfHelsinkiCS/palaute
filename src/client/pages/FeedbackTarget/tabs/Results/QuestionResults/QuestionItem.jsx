@@ -107,6 +107,9 @@ const QuestionItem = ({
                 onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
+            <Typography variant="caption" color="textSecondary">
+              {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
+            </Typography>
             <Typography variant="body1">{label}</Typography>
             <Typography variant="body2">{description}</Typography>
           </Box>
