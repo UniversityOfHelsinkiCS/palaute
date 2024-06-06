@@ -90,13 +90,22 @@ const QuestionResults = React.memo(
           title={t('questionResults:multipleChoiceQuestions')}
           count={notOpenQuestions.length}
           data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
-          sx={{ pageBreakAfter: 'always' }}
+          sx={{
+            '@media print': {
+              pageBreakBefore: 'always',
+              pageBreakAfter: 'always',
+            },
+          }}
         >
           <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
           <Box
             sx={{
               display: 'flex',
               flexWrap: 'wrap',
+              '@media print': {
+                mt: '1rem',
+                pageBreakAfter: 'auto',
+              },
             }}
           >
             {notOpenQuestions.map(q => (
@@ -118,10 +127,9 @@ const QuestionResults = React.memo(
                     width: '100%',
                   },
                   '@media print': {
-                    width: '30%',
+                    width: '33%',
                     pageBreakInside: 'avoid',
-                    pageBreakBefore: 'auto',
-                    pageBreakAfter: 'auto',
+                    display: 'inline-block',
                   },
                 })}
               >
@@ -141,9 +149,25 @@ const QuestionResults = React.memo(
           title={t('questionResults:openQuestions')}
           count={openQuestions.length}
           data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
+          sx={{
+            '@media print': {
+              pageBreakBefore: 'always',
+              pageBreakAfter: 'always',
+            },
+          }}
         >
           {openQuestions.map(q => (
-            <div key={q.id} /*style={{ pageBreakBefore: 'auto', pageBreakAfter: 'auto' }} */>
+            <Box
+              key={q.id}
+              sx={{
+                '@media print': {
+                  mt: '1rem',
+                  display: 'block',
+                  pageBreakBefore: 'always',
+                  pageBreakAfter: 'auto',
+                },
+              }}
+            >
               <QuestionItem
                 question={q}
                 publicQuestionIds={publicQuestionIds}
@@ -152,7 +176,7 @@ const QuestionResults = React.memo(
                 feedbackCount={feedbackCount}
                 feedbackTargetId={feedbackTargetId}
               />
-            </div>
+            </Box>
           ))}
         </QuestionSection>
       </>
