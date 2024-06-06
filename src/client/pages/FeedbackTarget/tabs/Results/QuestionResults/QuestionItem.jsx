@@ -120,12 +120,7 @@ const QuestionItem = ({
           )}
           {isResponsibleTeacher && question.type === 'OPEN' && <VisibilityInfoBox isPublic={isPublic} />}
         </Box>
-        <Box display="flex" flexDirection="column" alignItems="stretch">
-          {content}
-          <Typography variant="caption" color="textSecondary">
-            {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
-          </Typography>
-        </Box>
+        {content}
       </Box>
     </Card>
   )
