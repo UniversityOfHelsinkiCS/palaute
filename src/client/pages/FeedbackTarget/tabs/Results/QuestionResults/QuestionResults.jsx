@@ -104,7 +104,7 @@ const QuestionResults = React.memo(
               flexWrap: 'wrap',
               '@media print': {
                 mt: '1rem',
-                pageBreakAfter: 'auto',
+                pageBreakAfter: 'always',
               },
             }}
           >
@@ -145,6 +145,9 @@ const QuestionResults = React.memo(
             ))}
           </Box>
         </QuestionSection>
+
+        <Box sx={{ '@media print': { pageBreakBefore: 'always' } }} />
+
         <QuestionSection
           title={t('questionResults:openQuestions')}
           count={openQuestions.length}
@@ -152,7 +155,6 @@ const QuestionResults = React.memo(
           sx={{
             '@media print': {
               pageBreakBefore: 'always',
-              pageBreakAfter: 'always',
             },
           }}
         >
@@ -163,8 +165,7 @@ const QuestionResults = React.memo(
                 '@media print': {
                   mt: '1rem',
                   display: 'block',
-                  pageBreakBefore: 'always',
-                  pageBreakAfter: 'auto',
+                  pageBreakAfter: 'always',
                 },
               }}
             >
