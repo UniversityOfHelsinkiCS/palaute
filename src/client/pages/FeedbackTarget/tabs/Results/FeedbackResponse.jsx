@@ -21,10 +21,9 @@ const FeedbackResponse = ({ feedbackTarget }) => {
     <>
       <Typography
         component="h2"
+        variant="h6"
         sx={{
-          fontWeight: 'semibold',
-          fontSize: '1.5rem',
-          '@media print': { fontSize: '1.2rem' },
+          fontWeight: 'medium',
           mb: '2rem',
         }}
       >
