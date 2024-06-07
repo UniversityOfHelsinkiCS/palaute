@@ -11,7 +11,10 @@ import { boxPrintStyle } from '../../../../util/printStyle'
 
 const styles = {
   title: {
-    marginBottom: theme => theme.spacing(2),
+    fontWeight: 'semibold',
+    fontSize: '1.5rem',
+    '@media print': { fontSize: '1.2rem' },
+    mb: '1rem',
   },
   responseBox: theme => ({
     paddingX: '3rem',
@@ -44,11 +47,9 @@ const FeedbackResponse = ({ feedbackTarget }) => {
 
         {!feedbackResponse && <Alert severity="info">{t('feedbackTargetResults:noResponseInfo')}</Alert>}
         {feedbackResponse && (
-          <OpenFeedbackContainer sx={styles.responseBox}>
-            <Box>
-              <Markdown>{feedbackResponse}</Markdown>
-            </Box>
-          </OpenFeedbackContainer>
+          <Box sx={styles.responseBox}>
+            <Markdown>{feedbackResponse}</Markdown>
+          </Box>
         )}
 
         {isResponsibleTeacher && !feedbackResponse && (
