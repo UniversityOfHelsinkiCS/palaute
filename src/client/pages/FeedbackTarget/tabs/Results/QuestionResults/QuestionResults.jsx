@@ -148,38 +148,40 @@ const QuestionResults = React.memo(
 
         <Box sx={{ '@media print': { pageBreakBefore: 'always' } }} />
 
-        <QuestionSection
-          title={t('questionResults:openQuestions')}
-          count={openQuestions.length}
-          data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
-          sx={{
-            '@media print': {
-              pageBreakBefore: 'always',
-            },
-          }}
-        >
-          {openQuestions.map(q => (
-            <Box
-              key={q.id}
-              sx={{
-                '@media print': {
-                  mt: '1rem',
-                  display: 'block',
-                  pageBreakAfter: 'always',
-                },
-              }}
-            >
-              <QuestionItem
-                question={q}
-                publicQuestionIds={publicQuestionIds}
-                disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
-                isResponsibleTeacher={isResponsibleTeacher}
-                feedbackCount={feedbackCount}
-                feedbackTargetId={feedbackTargetId}
-              />
-            </Box>
-          ))}
-        </QuestionSection>
+        {openQuestions.length > 0 && (
+          <QuestionSection
+            title={t('questionResults:openQuestions')}
+            count={openQuestions.length}
+            data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
+            sx={{
+              '@media print': {
+                pageBreakBefore: 'always',
+              },
+            }}
+          >
+            {openQuestions.map(q => (
+              <Box
+                key={q.id}
+                sx={{
+                  '@media print': {
+                    mt: '1rem',
+                    display: 'block',
+                    pageBreakAfter: 'always',
+                  },
+                }}
+              >
+                <QuestionItem
+                  question={q}
+                  publicQuestionIds={publicQuestionIds}
+                  disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
+                  isResponsibleTeacher={isResponsibleTeacher}
+                  feedbackCount={feedbackCount}
+                  feedbackTargetId={feedbackTargetId}
+                />
+              </Box>
+            ))}
+          </QuestionSection>
+        )}
       </>
     )
   }
