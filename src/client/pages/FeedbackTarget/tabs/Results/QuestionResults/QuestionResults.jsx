@@ -8,7 +8,7 @@ import QuestionItem from './QuestionItem'
 
 const QuestionSection = ({ title, count, children, ...props }) => (
   <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem" {...props}>
-    <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
+    <Box display="flex" gap="1rem" mb="1rem" alignItems="center">
       <Typography
         component="h2"
         sx={{ fontWeight: 'semibold', fontSize: '1.5rem', '@media print': { fontSize: '1.2rem' } }}
