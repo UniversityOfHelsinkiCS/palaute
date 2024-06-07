@@ -9,7 +9,7 @@ import QuestionItem from './QuestionItem'
 const QuestionSection = ({ title, count, children, ...props }) => (
   <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem" {...props}>
     <Box display="flex" gap="1rem" mb="1rem" alignItems="end">
-      <Typography component="h4">{title}</Typography>
+      <Typography component="h2">{title}</Typography>
       <Chip label={count} variant="outlined" size="small" />
     </Box>
     {children}
