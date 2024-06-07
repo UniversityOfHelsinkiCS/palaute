@@ -6,7 +6,6 @@ import { Typography, Box, Button, Card, CardContent, Alert, Tooltip } from '@mui
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
-import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import { boxPrintStyle } from '../../../../util/printStyle'
 
 const styles = {
@@ -15,18 +14,11 @@ const styles = {
     fontSize: '1.5rem',
     '@media print': { fontSize: '1.2rem' },
     mb: '1rem',
+    px: '1rem',
   },
-  responseBox: theme => ({
-    paddingX: '3rem',
-    [theme.breakpoints.down('md')]: {
-      paddingX: '2rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      paddingX: '1rem',
-    },
-    paddingTop: '2rem',
-    paddingBottom: '1.5rem',
-  }),
+  responseBox: {
+    p: '1rem',
+  },
 }
 
 const FeedbackResponse = ({ feedbackTarget }) => {
