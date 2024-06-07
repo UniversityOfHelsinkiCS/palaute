@@ -154,31 +154,23 @@ const Results = () => {
       {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
 
       <Box ref={exportRef}>
-        {feedbackHasStarted && !isOpen && enoughFeedbacks && (
-          <Box mt={4} mb={2}>
-            <FeedbackResponse feedbackTarget={feedbackTarget} />
-          </Box>
-        )}
+        {feedbackHasStarted && !isOpen && enoughFeedbacks && <FeedbackResponse feedbackTarget={feedbackTarget} />}
 
         {isOpen && feedback && (
-          <Box mb={2}>
-            <Alert data-cy="feedback-target-results-thank-you" severity="info">
-              {t('feedbackTargetResults:thankYouMessage')}
-            </Alert>
-          </Box>
+          <Alert data-cy="feedback-target-results-thank-you" severity="info" sx={{ mb: 2 }}>
+            {t('feedbackTargetResults:thankYouMessage')}
+          </Alert>
         )}
 
         {!isMobile && enoughStudents && (
-          <Box>
-            <FeedbackChart
-              feedbacks={feedbacks}
-              studentCount={groupStudentCount}
-              opensAt={opensAt}
-              closesAt={closesAt}
-              feedbackReminderLastSentAt={feedbackReminderLastSentAt}
-              t={t}
-            />
-          </Box>
+          <FeedbackChart
+            feedbacks={feedbacks}
+            studentCount={groupStudentCount}
+            opensAt={opensAt}
+            closesAt={closesAt}
+            feedbackReminderLastSentAt={feedbackReminderLastSentAt}
+            t={t}
+          />
         )}
 
         {showFeedback ? (

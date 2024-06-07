@@ -36,7 +36,7 @@ const FeedbackResponse = ({ feedbackTarget }) => {
   const canGiveFeedbackResponse = isEnded && isResponsibleTeacher
 
   return (
-    <Card sx={{ borderRadius: '1rem', ...boxPrintStyle }}>
+    <Card sx={{ mb: '4rem', borderRadius: '1rem', ...boxPrintStyle }}>
       <CardContent>
         <Typography component="h2" sx={styles.title}>
           {t('feedbackTargetResults:responseHeading')}
