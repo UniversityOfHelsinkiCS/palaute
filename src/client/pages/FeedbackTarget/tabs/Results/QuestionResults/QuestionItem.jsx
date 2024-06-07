@@ -107,11 +107,11 @@ const QuestionItem = ({
                 onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
+            <Typography variant="body1">{label}</Typography>
+            <Typography variant="body2">{description}</Typography>
             <Typography variant="caption" color="textSecondary">
               {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
             </Typography>
-            <Typography variant="body1">{label}</Typography>
-            <Typography variant="body2">{description}</Typography>
           </Box>
           {(question.type === 'LIKERT' || question.secondaryType === 'WORKLOAD') && (
             <Box ml="0.5rem">
