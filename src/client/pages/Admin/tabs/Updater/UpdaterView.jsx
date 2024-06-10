@@ -25,9 +25,14 @@ import ExternalLink from '../../../../components/common/ExternalLink'
 
 const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL
-  const start = updaterStatus.startedAt
-  const end = updaterStatus.finishedAt || new Date()
-  return `${baseUrl}/search?q=app%3A+norppa-updater&rangetype=absolute&from=${start}&to=${end}`
+
+  // Graylog uses relative time ranges in seconds
+  const startDate = new Date(updaterStatus.startedAt).toISOString()
+  const endDate = updaterStatus.finishedAt ? new Date(updaterStatus.finishedAt).toISOString() : new Date().toISOString()
+
+  return `${baseUrl}/search?q=app%3A+norppa-updater&rangetype=absolute&from=${encodeURIComponent(
+    startDate
+  )}&to=${encodeURIComponent(endDate)}`
 }
 
 const StatusChip = ({ status }) => {
