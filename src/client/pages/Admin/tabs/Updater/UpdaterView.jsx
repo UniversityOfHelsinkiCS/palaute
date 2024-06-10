@@ -26,7 +26,6 @@ import ExternalLink from '../../../../components/common/ExternalLink'
 const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL
 
-  // Graylog uses relative time ranges in seconds
   const startDate = new Date(updaterStatus.startedAt).toISOString()
   const endDate = updaterStatus.finishedAt ? new Date(updaterStatus.finishedAt).toISOString() : new Date().toISOString()
 
