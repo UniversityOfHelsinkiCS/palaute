@@ -288,6 +288,12 @@ const config = {
    * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
    */
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
+
+  /**
+   * If this is set to true students can only see feedback target's feedbacks after the feedback target has
+   * closed (its closes_at date is in the past).
+   */
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: false,
 }
 
 module.exports = config

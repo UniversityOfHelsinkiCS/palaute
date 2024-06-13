@@ -312,6 +312,11 @@ const config = {
    * Enabling the new version of Teaching / Opetukseni / Kyselyni -view
    */
   NEW_TEACHING_VIEW_ENABLED: true,
+
+  /**
+   * TAU wants to show feedbacks to students only after the feedback target has ended
+   */
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: true,
 }
 
 module.exports = config
