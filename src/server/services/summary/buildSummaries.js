@@ -57,15 +57,15 @@ const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisat
 
 /**
  * Yields the 1 or 2 variants of this entity, based on extraOrgId.
- * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni curs and the other non-open uni curs.
- * If curs of entity are one or another, only one entity would be yielded.
+ * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni fbtSums and the other non-open uni fbtSums.
+ * If fbtSums of entity are one or another, only one entity would be yielded.
  */
 const getExtraOrgVariants = (entity, extraOrgId) =>
-  _.partition(entity.courseRealisations, cur => cur.extraOrgIds.includes(extraOrgId))
-    .filter(curs => curs.length > 0)
-    .map(curs => ({
+  _.partition(entity.feedbackTargets, fbtsum => fbtsum.extraOrgIds.includes(extraOrgId))
+    .filter(fbtSums => fbtSums.length > 0)
+    .map(fbtSums => ({
       ..._.clone(entity),
-      courseRealisations: curs,
+      feedbackTargets: fbtSums,
     }))
 
 const buildSummariesForPeriod = async ({
@@ -183,8 +183,8 @@ const buildSummariesForPeriod = async ({
     transaction,
   })
 
-  // Start summing the stuff for course realisations
-  const courseRealisationSummaries = []
+  // Start summing the stuff for feedback targets
+  const feedbackTargetsSummaries = []
 
   for (const fbt of feedbackTargets) {
     // Ignore those that have no students
@@ -236,8 +236,10 @@ const buildSummariesForPeriod = async ({
     const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.dataValues.organisationI) // (implementation detail): Weird Sequelize thing #1, organisationId doesn't load in attributes: ['organisationId'] but in dataValues is truncated to 'organisationI'
     const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
 
-    courseRealisationSummaries.push({
-      entityId: fbt.courseRealisation.id,
+    feedbackTargetsSummaries.push({
+      entityId: fbt.id.toString(),
+      entityType: 'feedbackTarget',
+      feedbackTargetId: fbt.id,
       data: {
         result,
         studentCount: fbt.userFeedbackTargets.length,
@@ -245,6 +247,7 @@ const buildSummariesForPeriod = async ({
         feedbackCount: fbt.feedbackCount,
         feedbackResponsePercentage: Number(fbt.feedbackResponseEmailSent),
       },
+      courseRealisationId: fbt.courseRealisation.id,
       courseUnitId: fbt.courseUnit.id,
       courseUnitGroupId: fbt.courseUnit.groupId,
       curOrgIds,
@@ -253,82 +256,111 @@ const buildSummariesForPeriod = async ({
       cuTags: fbt.courseUnit.tags,
       extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
     })
-  } // CURs are now done and we could write CUR summaries to db. But we leave db operations to the end.
+  } // FBTs are now done and we could write FBTs summaries to db. But we leave db operations to the end.
 
-  // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitId))
-    .map(([cuId, courseRealisations]) => ({
-      entityId: cuId,
-      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+  console.log('FBTs done')
+  console.log(feedbackTargetsSummaries.length)
+
+  // Make the initial CUR summaries.
+  const courseRealisationSummaries = Object.entries(
+    _.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseRealisationId)
+  )
+    .map(([curId, feedbackTargets]) => ({
+      entityId: curId,
+      entityType: 'courseRealisation',
+      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
     }))
     .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 
-  // Sum them up from CURs. Then we're done with CUs and could write CU summaries to db.
-  for (const cu of courseUnitSummaries) {
-    const { courseRealisations } = cu
-    delete cu.courseRealisations // Now not needed anymore
+  // Sum them up from FBTs. Then we're done with CURs and could write CUR summaries to db.
+  for (const cur of courseRealisationSummaries) {
+    const { feedbackTargets } = cur
+    delete cur.feedbackTargets // Now not needed anymore
 
-    cu.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    cu.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
+    cur.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
+    cur.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+  }
+
+  // Make the initial CU summaries.
+  const courseUnitSummaries = Object.entries(_.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseUnitId))
+    .map(([cuId, feedbackTargets]) => ({
+      entityId: cuId,
+      entityType: 'courseUnit',
+      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
+    }))
+    .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
+
+  // Sum them up from FBTs. Then we're done with CUs and could write CU summaries to db.
+  for (const cu of courseUnitSummaries) {
+    const { feedbackTargets } = cu
+    delete cu.feedbackTargets // Now not needed anymore
+
+    cu.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
+    cu.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
   }
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
-  const courseUnitGroupSummaries = Object.entries(_.groupBy(courseRealisationSummaries, cur => cur.courseUnitGroupId))
-    .map(([cuGroupId, courseRealisations]) => ({
+  const courseUnitGroupSummaries = Object.entries(
+    _.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseUnitGroupId)
+  )
+    .map(([cuGroupId, feedbackTargets]) => ({
       entityId: cuGroupId,
-      courseRealisations: _.uniqBy(courseRealisations, 'entityId'),
+      entityType: 'courseUnitGroup',
+      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
     }))
     .flatMap(cuGroup => getExtraOrgVariants(cuGroup, separateOrgId))
 
   // Sum them up from CURs. Then we're done with CU groups and could write CU group summaries to db.
   for (const cuGroup of courseUnitGroupSummaries) {
-    const { courseRealisations } = cuGroup
-    delete cuGroup.courseRealisations // Now not needed anymore
+    const { feedbackTargets } = cuGroup
+    delete cuGroup.feedbackTargets // Now not needed anymore
 
-    cuGroup.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    cuGroup.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
+    cuGroup.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
+    cuGroup.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
   }
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
   const tagSummaries = _.uniqBy(
-    courseRealisationSummaries.flatMap(cur => [...cur.curTags, ...cur.cuTags]),
+    feedbackTargetsSummaries.flatMap(fbtsum => [...fbtsum.curTags, ...fbtsum.cuTags]),
     'id'
   )
     .map(tag => ({
       entityId: prefixTagId(tag.id),
-      courseRealisations: _.uniqBy(
-        courseRealisationSummaries.filter(
-          cur => cur.curTags.some(t => t.id === tag.id) || cur.cuTags.some(t => t.id === tag.id)
+      entityType: 'tag',
+      feedbackTargets: _.uniqBy(
+        feedbackTargetsSummaries.filter(
+          fbtsum => fbtsum.curTags.some(t => t.id === tag.id) || fbtsum.cuTags.some(t => t.id === tag.id)
         ),
-        'entityId'
+        'feedbackTargetId'
       ),
     }))
     .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
 
   // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
   for (const tag of tagSummaries) {
-    const { courseRealisations } = tag
-    delete tag.courseRealisations // Now not needed anymore
+    const { feedbackTargets } = tag
+    delete tag.feedbackTargets // Now not needed anymore
 
-    tag.data = sumSummaryDatas(courseRealisations.map(cur => cur.data))
-    tag.extraOrgIds = _.uniq(courseRealisations.flatMap(cur => cur.extraOrgIds))
+    tag.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
+    tag.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
-  const orgIds = _.uniq(courseRealisationSummaries.flatMap(cur => [...cur.cuOrgIds, ...cur.curOrgIds]))
+  const orgIds = _.uniq(feedbackTargetsSummaries.flatMap(fbtsum => [...fbtsum.cuOrgIds, ...fbtsum.curOrgIds]))
   const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
   const orgSummaries = orgs.map(org => ({
     entityId: org.id,
+    entityType: 'organisation',
     parentId: org.parentId,
     parent: null,
-    courseRealisations: _.uniqBy(
-      courseRealisationSummaries.filter(cur => cur.curOrgIds.includes(org.id) || cur.cuOrgIds.includes(org.id)),
-      'entityId'
+    feedbackTargets: _.uniqBy(
+      feedbackTargetsSummaries.filter(fbtsum => fbtsum.curOrgIds.includes(org.id) || fbtsum.cuOrgIds.includes(org.id)),
+      'feedbackTargetId'
     ),
   }))
 
   // ---------------- Phase 2 (organisations): ------------------
-  // Now we're done with the base layer, CURs, CUs and their direct responsible organisations,
+  // Now we're done with the base layer, FBTs, CURs, CUs and their direct responsible organisations,
   // and can start the generalising step where we
   // 1. iteratively find parent organisations of all found organisations.
   // 2. populate their CURs that their child organisations are responsible for. (Above we already populated their directly responsible courses)
@@ -365,9 +397,10 @@ const buildSummariesForPeriod = async ({
     newParentOrgs.forEach(org => {
       orgSummaries.push({
         entityId: org.id,
+        entityType: 'organisation',
         parentId: org.parentId,
         parent: null,
-        courseRealisations: [],
+        feedbackTargets: [],
       })
     })
   } while (maxIterations-- > 0)
@@ -382,7 +415,7 @@ const buildSummariesForPeriod = async ({
   const populateParentsCURs = organisation => {
     const { parent } = organisation
     if (!parent) return // organisation is a root
-    parent.courseRealisations = _.uniqBy(parent.courseRealisations.concat(organisation.courseRealisations), 'entityId')
+    parent.feedbackTargets = _.uniqBy(parent.feedbackTargets.concat(organisation.feedbackTargets), 'feedbackTargetId')
     populateParentsCURs(parent)
   }
 
@@ -398,14 +431,15 @@ const buildSummariesForPeriod = async ({
 
   // Now we can actually calculate the org summaries from each org's CURs
   for (const org of orgSummariesWithVariants) {
-    org.data = sumSummaryDatas(org.courseRealisations.map(cur => cur.data))
-    org.extraOrgIds = _.uniq(org.courseRealisations.flatMap(cur => cur.extraOrgIds))
-    delete org.courseRealisations
+    org.data = sumSummaryDatas(org.feedbackTargets.map(fbtsum => fbtsum.data))
+    org.extraOrgIds = _.uniq(org.feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    delete org.feedbackTargets
     delete org.parent
   }
 
-  const relevantFields = ['entityId', 'data', 'extraOrgIds']
-  const allSummaries = courseRealisationSummaries
+  const relevantFields = ['entityId', 'entityType', 'feedbackTargetId', 'data', 'extraOrgIds']
+  const allSummaries = feedbackTargetsSummaries
+    .concat(courseRealisationSummaries)
     .concat(courseUnitSummaries)
     .concat(courseUnitGroupSummaries)
     .concat(tagSummaries)
@@ -413,6 +447,10 @@ const buildSummariesForPeriod = async ({
     .filter(summary => summary.data)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
+
+  console.log('All summaries done')
+
+  console.log('bulk create starts')
 
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, {
@@ -514,7 +552,7 @@ const buildSummaries = async () => {
         },
         transaction,
       })
-
+      console.log('Deleted old summaries for period')
       await buildSummariesForPeriod({
         startDate: start,
         endDate: end,
@@ -523,6 +561,7 @@ const buildSummaries = async () => {
         transaction,
         separateOrgId: OPEN_UNIVERSITY_ORG_ID,
       })
+      console.log('Built summaries for period')
     })
 
     // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
