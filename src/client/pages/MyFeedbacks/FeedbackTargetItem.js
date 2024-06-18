@@ -184,6 +184,16 @@ const FeedbackResponseChip = () => {
   )
 }
 
+const PeriodInfoAddition = ({ isEnded }) => {
+  const { t } = useTranslation()
+
+  if (!isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return <ListItemText primary={t('userFeedbacks:summaryAvailableWhenEnded')} />
+  }
+
+  return null
+}
+
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -227,6 +237,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
         {translatedName}
       </Typography>
       <ListItemText primary={periodInfo} />
+      <PeriodInfoAddition isEnded={isEnded} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
       <Box
