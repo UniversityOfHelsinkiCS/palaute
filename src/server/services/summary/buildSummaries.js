@@ -450,7 +450,7 @@ const buildSummariesForPeriod = async ({
 
   console.log('All summaries done')
 
-  console.log('bulk create starts')
+  console.log('Bulk create starts')
 
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, {
@@ -561,7 +561,7 @@ const buildSummaries = async () => {
         transaction,
         separateOrgId: OPEN_UNIVERSITY_ORG_ID,
       })
-      console.log('Built summaries for period')
+      console.log('Built summaries for period done')
     })
 
     // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
