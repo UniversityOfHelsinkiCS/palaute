@@ -258,9 +258,6 @@ const buildSummariesForPeriod = async ({
     })
   } // FBTs are now done and we could write FBTs summaries to db. But we leave db operations to the end.
 
-  console.log('FBTs done')
-  console.log(feedbackTargetsSummaries.length)
-
   // Make the initial CUR summaries.
   const courseRealisationSummaries = Object.entries(
     _.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseRealisationId)
@@ -448,10 +445,6 @@ const buildSummariesForPeriod = async ({
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
 
-  console.log('All summaries done')
-
-  console.log('Bulk create starts')
-
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, {
     transaction,
@@ -552,7 +545,6 @@ const buildSummaries = async () => {
         },
         transaction,
       })
-      console.log('Deleted old summaries for period')
       await buildSummariesForPeriod({
         startDate: start,
         endDate: end,
@@ -561,7 +553,6 @@ const buildSummaries = async () => {
         transaction,
         separateOrgId: OPEN_UNIVERSITY_ORG_ID,
       })
-      console.log('Built summaries for period done')
     })
 
     // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
