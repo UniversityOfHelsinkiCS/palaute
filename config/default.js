@@ -288,6 +288,12 @@ const config = {
    * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
    */
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: true,
 }
 
 module.exports = config

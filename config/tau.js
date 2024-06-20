@@ -312,6 +312,12 @@ const config = {
    * Enabling the new version of Teaching / Opetukseni / Kyselyni -view
    */
   NEW_TEACHING_VIEW_ENABLED: true,
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: false,
 }
 
 module.exports = config

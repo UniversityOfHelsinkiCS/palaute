@@ -3,6 +3,7 @@ const { User, OrganisationFeedbackCorrespondent } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 const { createOrganisationLog } = require('../../services/auditLog')
+const { ENABLE_CORRESPONDENT_MANAGEMENT } = require('../../util/config')
 
 const addOrganisationFeedbackCorrespondent = async (req, res) => {
   const { user } = req
@@ -73,7 +74,9 @@ const removeOrganisationFeedbackCorrespondent = async (req, res) => {
 
 const router = Router()
 
-router.post('/:code/feedback-correspondents', addOrganisationFeedbackCorrespondent)
-router.delete('/:code/feedback-correspondents/:userId', removeOrganisationFeedbackCorrespondent)
+if (ENABLE_CORRESPONDENT_MANAGEMENT) {
+  router.post('/:code/feedback-correspondents', addOrganisationFeedbackCorrespondent)
+  router.delete('/:code/feedback-correspondents/:userId', removeOrganisationFeedbackCorrespondent)
+}
 
 module.exports = router
