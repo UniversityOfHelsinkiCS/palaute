@@ -120,7 +120,7 @@ const config = {
    * e.g. one feedback given in a course with only one student.
    * When set to zero, feedback is always shown.
    * */
-  FEEDBACK_HIDDEN_STUDENT_COUNT: 5,
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 0,
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
