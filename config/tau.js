@@ -120,7 +120,7 @@ const config = {
    * e.g. one feedback given in a course with only one student.
    * When set to zero, feedback is always shown.
    * */
-  FEEDBACK_HIDDEN_STUDENT_COUNT: 0,
+  FEEDBACK_HIDDEN_STUDENT_COUNT: 5,
 
   /**
    * How many days before feedbackTarget opening to send a reminder to responsible teachers
@@ -317,6 +317,12 @@ const config = {
    * TAU wants to show feedbacks to students only after the feedback target has ended
    */
   SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: true,
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: false,
 }
 
 module.exports = config

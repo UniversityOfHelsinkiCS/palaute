@@ -294,6 +294,12 @@ const config = {
    * closed (its closes_at date is in the past).
    */
   SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: false,
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: true,
 }
 
 module.exports = config

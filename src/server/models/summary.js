@@ -21,6 +21,14 @@ Summary.init(
       type: STRING,
       allowNull: true,
     },
+    entityType: {
+      type: STRING,
+      allowNull: true,
+    },
+    feedbackTargetId: {
+      type: INTEGER,
+      allowNull: true,
+    },
     startDate: {
       type: DATEONLY,
       allowNull: false,
@@ -29,6 +37,7 @@ Summary.init(
       type: DATEONLY,
       allowNull: false,
     },
+
     extraOrgIds: {
       type: ARRAY(STRING),
     },
@@ -63,7 +72,6 @@ Summary.init(
   },
   {
     underscored: true,
-    timestamps: false,
     tableName: 'summaries',
     sequelize,
     indexes: [
