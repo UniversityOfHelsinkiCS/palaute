@@ -126,7 +126,8 @@
     "feedbackEndedChip": "Palaute on päättynyt",
     "continuousFeedbackChip": "Jatkuva palaute",
     "feedbackResponseGiven": "Opettaja on antanut vastapalautteen",
-    "deleted": "Palautteesi on poistettu"
+    "deleted": "Palautteesi on poistettu",
+    "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen."
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",

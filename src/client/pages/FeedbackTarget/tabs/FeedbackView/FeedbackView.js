@@ -24,6 +24,8 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import SeasonalEmoji from '../../../../components/common/SeasonalEmoji'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../../../util/common'
+
 const tada = keyframes({
   from: {
     transform: 'scale3d(1, 1, 1)',
@@ -188,7 +190,11 @@ const FeedbackView = () => {
 
         await submitMutation.mutateAsync(feedbackData)
 
-        history.push(`/targets/${id}/results`)
+        if (SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+          history.push(`/feedbacks?status=given`)
+        } else {
+          history.push(`/targets/${id}/results`)
+        }
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',

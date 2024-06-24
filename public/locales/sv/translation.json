@@ -121,7 +121,8 @@
     "feedbackEndedChip": "Responsen har avslutats",
     "continuousFeedbackChip": "Kontinuerlig respons",
     "feedbackResponseGiven": "Läraren har gett återkoppling på den givna feedbacken.",
-    "deleted": "Din respons har tagits bort"
+    "deleted": "Din respons har tagits bort",
+    "summaryAvailableWhenEnded": "Sammanfattning av feedback kommer att finnas tillgänglig efter att feedbackperioden har avslutats."
   },
   "feedbackView": {
     "submitButton": "Ge respons",

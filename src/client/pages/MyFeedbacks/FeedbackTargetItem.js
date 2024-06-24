@@ -18,6 +18,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -59,16 +60,8 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
 
-      <Button
-        data-cy="feedback-item-view-feedback"
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={viewPath}
-        sx={{ mr: '1rem' }}
-      >
-        {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
+      <FeedbackSummaryButtonForOpenGivenTarget viewPath={viewPath} />
+
       <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>
@@ -84,6 +77,26 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       </Dialog>
     </Box>
   )
+}
+
+const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
+  const { t } = useTranslation()
+
+  if (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return (
+      <Button
+        data-cy="feedback-item-view-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={viewPath}
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:viewFeedbackSummary')}
+      </Button>
+    )
+  }
+  return null
 }
 
 const FeedbackEndedActions = ({ viewPath }) => {
@@ -171,6 +184,16 @@ const FeedbackResponseChip = () => {
   )
 }
 
+const PeriodInfoAddition = ({ isEnded }) => {
+  const { t } = useTranslation()
+
+  if (!isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return <ListItemText primary={t('userFeedbacks:summaryAvailableWhenEnded')} />
+  }
+
+  return null
+}
+
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -214,6 +237,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
         {translatedName}
       </Typography>
       <ListItemText primary={periodInfo} />
+      <PeriodInfoAddition isEnded={isEnded} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
       <Box

@@ -314,6 +314,11 @@ const config = {
   NEW_TEACHING_VIEW_ENABLED: true,
 
   /**
+   * TAU wants to show feedbacks to students only after the feedback target has ended
+   */
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: true,
+
+  /**
    * Feedback correspondents can be added and removed in norppa (organisation settings).
    * This setting enables/disables this feature.
    */
