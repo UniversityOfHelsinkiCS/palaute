@@ -323,6 +323,12 @@ const config = {
    * This setting enables/disables this feature.
    */
   ENABLE_CORRESPONDENT_MANAGEMENT: false,
+
+  /**
+   * TAU uses student numbers shorter than nine characters and does _NOT_ want
+   * a leading zero added to their student numbers.
+   */
+  ADD_LEADING_ZERO_TO_STUDENT_NUMBERS: false,
 }
 
 module.exports = config
