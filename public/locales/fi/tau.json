@@ -199,7 +199,7 @@
     "surveyOpeningEmailToStudents": {
       "subject": "Opintojakson {{courseName}} palautelomake on avautunut",
       "subjectMultiple": "Opintojaksopalaute on avautunut",
-      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVoit muokata vastauksia kyselyn ollessa auki, ja kyselyn sulkeuduttua pääset halutessasi näkemään kyselyn palautekoosteen."
     },
     "continuousFeedbackDigest": {
       "subject": "Uutta jatkuvaa palautetta opettamallesi opintojaksolle {{courseName}}",
