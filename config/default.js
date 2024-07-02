@@ -300,6 +300,14 @@ const config = {
    * This setting enables/disables this feature.
    */
   ENABLE_CORRESPONDENT_MANAGEMENT: true,
+
+  /**
+   * This controls if course codes are added in front of course names in both
+   * Norppa's UI and in the emails it sends. Notice that {{ courseCode }} needs
+   * to be added in the translation json files if course codes are needed in
+   * emails.
+   */
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES: false,
 }
 
 module.exports = config

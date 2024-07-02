@@ -11,7 +11,8 @@ const sendReminderToGiveFeedbackToStudents = async (
   courseNames,
   reminder,
   closesAt,
-  userCreated
+  userCreated,
+  courseCode
 ) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
@@ -20,7 +21,10 @@ const sendReminderToGiveFeedbackToStudents = async (
     // Custom texts for user created feedback targets because they are not courses
     const email = {
       to: student.email,
-      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
+        courseName,
+        courseCode,
+      }),
       text: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
         url: urlToGiveFeedback,
         courseName,
@@ -59,7 +63,8 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
       courseName,
       reminder,
       formattedClosesAt,
-      feedbackTarget.userCreated
+      feedbackTarget.userCreated,
+      feedbackTarget.courseUnit.courseCode
     )
 
     feedbackTarget.feedbackReminderLastSentAt = new Date()

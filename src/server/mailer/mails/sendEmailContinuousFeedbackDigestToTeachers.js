@@ -4,7 +4,7 @@ const { Op } = require('sequelize')
 const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbackTarget } = require('../../models')
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
-const { PUBLIC_URL } = require('../../util/config')
+const { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
 
@@ -105,11 +105,17 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
   const hasMultipleFeedbackTargets = userFeedbackTargets.length > 1
 
   const courseName = getLanguageValue(userFeedbackTargets[0].courseRealisation.name, language)
+  const { courseCode } = userFeedbackTargets[0].courseUnit
 
   let courseNameLinksAndNewFeedback = ''
   for (const userFeedbackTarget of userFeedbackTargets) {
     const { feedbackTargetId: id } = userFeedbackTarget
-    const name = getLanguageValue(userFeedbackTarget.courseRealisation.name, language)
+    let name = ''
+    if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+      name = `${courseCode} ${getLanguageValue(userFeedbackTarget.courseRealisation.name, language)}`
+    } else {
+      name = getLanguageValue(userFeedbackTarget.courseRealisation.name, language)
+    }
 
     courseNameLinksAndNewFeedback = `${courseNameLinksAndNewFeedback}
     <a href=${`${PUBLIC_URL}/targets/${id}/continuous-feedback`}>${name}</a>
@@ -121,7 +127,7 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
   const t = i18n.getFixedT(language)
   const subject = hasMultipleFeedbackTargets
     ? t('mails:continuousFeedbackDigest:subjectMultiple')
-    : t('mails:continuousFeedbackDigest:subject', { courseName })
+    : t('mails:continuousFeedbackDigest:subject', { courseName, courseCode })
 
   const email = {
     to: teacherEmail,

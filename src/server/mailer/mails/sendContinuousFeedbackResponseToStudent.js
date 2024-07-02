@@ -47,6 +47,7 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
   const { response, user, feedback_target: feedbackTarget } = continuousFeedback
   const { language, email: studentEmail } = user
   const { name, startDate, endDate } = feedbackTarget.courseRealisation
+  const { courseCode } = feedbackTarget.courseUnit
 
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
@@ -56,12 +57,16 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
 
   const email = {
     to: studentEmail,
-    subject: t('mails:continuousFeedbackResponse:subject', { courseName: getLanguageValue(name, language) }),
+    subject: t('mails:continuousFeedbackResponse:subject', {
+      courseName: getLanguageValue(name, language),
+      courseCode,
+    }),
     text: t('mails:continuousFeedbackResponse:text', {
       courseName: getLanguageValue(name, language),
       response,
       dates,
       url,
+      courseCode,
     }),
   }
 
