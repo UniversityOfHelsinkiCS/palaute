@@ -323,6 +323,11 @@ const config = {
    * This setting enables/disables this feature.
    */
   ENABLE_CORRESPONDENT_MANAGEMENT: false,
+
+  /**
+   * TAU does not want to see HY Norppa logo
+   */
+  SHOW_NORPPA_HY_LOGO: false,
 }
 
 module.exports = config

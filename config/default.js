@@ -300,6 +300,11 @@ const config = {
    * This setting enables/disables this feature.
    */
   ENABLE_CORRESPONDENT_MANAGEMENT: true,
+
+  /**
+   * This controls visibility of the HY smoking seal logo
+   */
+  SHOW_NORPPA_HY_LOGO: true,
 }
 
 module.exports = config
