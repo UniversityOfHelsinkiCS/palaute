@@ -81,17 +81,18 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
 const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, allTeachers) => {
   const { language } = teacher
   const { userCreated } = feedbackTarget
-  let courseName = userCreated
+  const courseName = userCreated
     ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
     : getLanguageValue(feedbackTarget.courseUnit?.name)
   const { courseCode } = feedbackTarget.courseUnit
 
+  let courseNamesAndUrlsDisplayName = courseName
   if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
-    courseName = `${courseCode} ${courseName}`
+    courseNamesAndUrlsDisplayName = `${courseCode} ${courseNamesAndUrlsDisplayName}`
   }
 
   const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
-      ${courseName}
+      ${courseNamesAndUrlsDisplayName}
       </a> <br/>`
 
   const teachers = allTeachers.map(t => `${t.firstName} ${t.lastName}`)

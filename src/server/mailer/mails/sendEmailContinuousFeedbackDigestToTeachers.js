@@ -1,7 +1,14 @@
 const _ = require('lodash')
 const { subDays } = require('date-fns')
 const { Op } = require('sequelize')
-const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, UserFeedbackTarget } = require('../../models')
+const {
+  ContinuousFeedback,
+  FeedbackTarget,
+  CourseRealisation,
+  User,
+  UserFeedbackTarget,
+  CourseUnit,
+} = require('../../models')
 const logger = require('../../util/logger')
 const { pate } = require('../pateClient')
 const { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
@@ -35,6 +42,12 @@ const getTeachersWithContinuousFeedback = async () => {
         model: CourseRealisation,
         as: 'courseRealisation',
         attributes: ['id', 'name'],
+        required: true,
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id', 'courseCode'],
         required: true,
       },
       {
@@ -80,6 +93,7 @@ const getTeachersWithContinuousFeedback = async () => {
     userFeedbackTargets: teacher.userFeedbackTargets.map(({ dataValues: ufbt }) => ({
       ...ufbt,
       courseRealisation: courseRealisations.find(({ feedbackTargetId }) => feedbackTargetId === ufbt.feedbackTargetId),
+      courseUnit: feedbackTargets.find(fbt => fbt.id === ufbt.feedbackTargetId).courseUnit,
       continuousFeedback: newContinuousFeedback.filter(
         ({ feedbackTargetId }) => feedbackTargetId === ufbt.feedbackTargetId
       ),

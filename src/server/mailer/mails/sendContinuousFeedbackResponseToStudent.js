@@ -1,7 +1,7 @@
 const { format } = require('date-fns')
 const { Op } = require('sequelize')
 
-const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User } = require('../../models')
+const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, CourseUnit } = require('../../models')
 const { PUBLIC_URL } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
@@ -27,6 +27,12 @@ const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
             model: CourseRealisation,
             as: 'courseRealisation',
             attributes: ['id', 'name', 'startDate', 'endDate'],
+            required: true,
+          },
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+            attributes: ['id', 'courseCode'],
             required: true,
           },
         ],
@@ -77,7 +83,6 @@ const sendEmailContinuousFeedbackResponseToStudent = async continuousFeedbackId 
   const continuousFeedback = await getStudentWithContinuousFeedbackResponse(continuousFeedbackId)
 
   const emailToBeSent = emailContinuousFeedbackResponseToStudent(continuousFeedback)
-
   ContinuousFeedback.update(
     {
       responseEmailSent: true,
