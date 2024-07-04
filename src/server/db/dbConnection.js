@@ -5,7 +5,7 @@ const { DATABASE_URL } = require('../util/config')
 
 const DB_CONNECTION_RETRY_LIMIT = 10
 
-const sequelize = new Sequelize(DATABASE_URL, { logging: false })
+const sequelize = new Sequelize(DATABASE_URL, { logging: false, minifyAliases: true })
 
 const runMigrations = async () => {
   const migrator = new Umzug({

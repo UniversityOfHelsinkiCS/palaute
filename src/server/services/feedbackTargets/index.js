@@ -16,6 +16,7 @@ const { getForCourseUnit } = require('./getForCourseUnit')
 const { getByOrganisation } = require('./getByOrganisation')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 const { hideFeedback } = require('./hideFeedback')
+const { notGivingFeedback } = require('./notGivingFeedback')
 const cache = require('./cache')
 
 module.exports = {
@@ -34,6 +35,7 @@ module.exports = {
   getFeedbackTargetsForCourseUnit: getForCourseUnit,
   getFeedbackTargetsForOrganisation: getByOrganisation,
   hideFeedback,
+  notGivingFeedback,
   getFeedbackTargetContext,
   feedbackTargetCache: cache,
 }
