@@ -71,6 +71,7 @@ class FeedbackTarget extends Model {
         ],
         where: {
           accessStatus: 'STUDENT',
+          notGivingFeedback: false,
           feedbackId: {
             [Op.is]: null,
           },
