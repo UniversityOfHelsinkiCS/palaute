@@ -27,12 +27,12 @@ export const filterCoursesWithNoResponses = courses => {
 }
 
 export const filterCoursesByDate = (courses, dateRange) => {
+  console.log(JSON.stringify(dateRange))
   const filteredCourses = courses.map(course => ({
     ...course,
     realisations: course.realisations.filter(
       realisation =>
-        isWithinInterval(parseISO(realisation.startDate), dateRange) ||
-        isWithinInterval(parseISO(realisation.endDate), dateRange)
+        dateRange.end >= parseISO(realisation.startDate) && dateRange.start <= parseISO(realisation.endDate)
     ),
   }))
 
