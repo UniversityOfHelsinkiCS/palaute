@@ -36,7 +36,7 @@ type Semester = { start: Date; end: Date; spring: boolean }
 
 export const useYearSemesters = (currentStart: Date, futureYears = 0) => {
   const now = new Date()
-  const year = Math.min(currentStart.getFullYear(), startOfStudyYear(now).getFullYear())
+  const year = Math.min(currentStart.getFullYear(), startOfStudyYear(now).getFullYear() + futureYears)
 
   let semesters: Semester[] = range(2021, now.getFullYear() + 1 + futureYears)
     .flatMap((yr: number) => [
