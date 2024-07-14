@@ -16,15 +16,18 @@ import useOrganisationsList from '../../hooks/useOrganisationsList'
 const styles: {
   [key: string]: SxProps<Theme>
 } = {
-  date: {
+  date: theme => ({
     position: 'sticky',
     top: '4rem',
+    [theme.breakpoints.down('md')]: {
+      position: 'static',
+    },
     height: '1rem',
     minWidth: '5rem',
     textTransform: 'capitalize',
-    color: theme => theme.palette.text.secondary,
+    color: theme.palette.text.secondary,
     fontSize: '16px',
-  },
+  }),
   year: {
     color: theme => theme.palette.text.primary,
   },
@@ -86,23 +89,30 @@ const toMonth = (date: string, locale: Intl.LocalesArgument) =>
 const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
   const { i18n } = useTranslation()
 
+  const timeSectionStyle: SxProps<Theme> = theme => ({
+    display: 'flex',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
+  })
+
   return (
     <>
       {feedbackTargetGrouping.years.map(([year, months]) => (
-        <Box display="flex" key={year}>
+        <Box key={year} sx={timeSectionStyle}>
           <Box sx={[styles.date, styles.year] as SxProps<Theme>} mt={1.5}>
             {year}
           </Box>
           <Box>
             {months.map(([firstDayOfMonth, days]) => (
-              <Box display="flex" mb={4} key={firstDayOfMonth}>
+              <Box mb={4} key={firstDayOfMonth} sx={timeSectionStyle}>
                 <Box sx={styles.date} mt={1.5}>
                   {toMonth(firstDayOfMonth, i18n.language)}
                 </Box>
                 <Box>
                   {days.map(([startDate, feedbackTargets]) => (
-                    <Box key={startDate} display="flex" my={1.5}>
-                      <Box sx={styles.date} mr={2}>
+                    <Box key={startDate} my={1.5} sx={timeSectionStyle}>
+                      <Box sx={styles.date} mr={2} mb={1.5}>
                         {format(Date.parse(startDate), 'dd/MM')}
                       </Box>
                       <Box display="flex" flexWrap="wrap">
