@@ -69,14 +69,25 @@ const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
         borderRadius: '0.3rem',
       }}
     >
-      <Box fontSize="16px" display="flex" alignItems="start" gap={1}>
-        <Typography color="textSecondary">{fbt.courseUnit.courseCode}</Typography>
-        <Typography fontWeight={400}>{getLanguageValue(fbt.courseUnit.name, i18n.language)}</Typography>
+      <Typography color="textSecondary" fontSize={14}>
+        {fbt.courseUnit.courseCode}
+      </Typography>
+      <Box
+        sx={{
+          display: 'inline-block',
+          flexWrap: 'wrap',
+          columnGap: 1,
+          alignItems: 'start',
+        }}
+      >
+        <Typography sx={{ fontWeight: 400, display: 'inline', mr: 1 }}>
+          {getLanguageValue(fbt.courseUnit.name, i18n.language)}
+        </Typography>
         <ExternalLink href={t('links:courseUnitPage', { courseRealisationId: fbt.courseRealisation.id })}>
           {t('search:coursePageLink')}
         </ExternalLink>
       </Box>
-      <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
+      <Typography color="textSecondary" sx={{ fontSize: '14px', fontWeight: 400 }}>
         {getLanguageValue(fbt.courseRealisation.name, i18n.language)}
       </Typography>
     </Paper>
