@@ -27,7 +27,6 @@ export const filterCoursesWithNoResponses = courses => {
 }
 
 export const filterCoursesByDate = (courses, dateRange) => {
-  console.log(JSON.stringify(dateRange))
   const filteredCourses = courses.map(course => ({
     ...course,
     realisations: course.realisations.filter(
