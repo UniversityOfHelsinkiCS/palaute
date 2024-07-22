@@ -134,7 +134,7 @@
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-cypress": "^3.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-prettier": "^4.2.1",
