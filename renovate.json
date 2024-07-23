@@ -21,11 +21,9 @@
       "matchPackageNames": ["node"],
       "versionCompatibility": "^(?<version>[^-]+)(?<compatibility>-.*)?$",
       "versioning": "node"
-    },
-    {
-      "vulnerabilityAlerts": {
-        "labels": ["security"]
-      }
     }
-  ]
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  }
 }
