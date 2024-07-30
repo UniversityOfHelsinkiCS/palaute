@@ -32,6 +32,8 @@ export type SummaryData = {
 class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Summary>> {
   declare id: CreationOptional<number>
   declare entityId: string
+  declare entityType: string
+  declare feedbackTargetId: number
   declare startDate: string
   declare endDate: string
   declare extraOrgIds: string[]
