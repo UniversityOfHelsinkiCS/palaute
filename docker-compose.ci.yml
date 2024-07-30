@@ -26,7 +26,7 @@ services:
       - jami
   
   redis:
-    image: redis:6.2.14
+    image: redis:7.4.0
     command: redis-server
     container_name: palaute_test_redis
 
