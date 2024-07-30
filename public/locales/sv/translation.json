@@ -47,7 +47,6 @@
     "settings": "Inställningar",
     "feedbacks": "Mina responser",
     "survey": "Förfrågan",
-    "teacherPage": "Mina kurser",
     "courseSummaryPage": "Kurssammandrag",
     "norppaFeedback": "Ge respons",
     "today": "idag",
@@ -308,6 +307,7 @@
   },
   "navBar": {
     "myFeedbacks": "Mina responser",
+    "browseCourses": "Bläddra kurser",
     "myCourses": "Mina kurser",
     "myCoursesV2": "Mina undersökning",
     "logOut": "Logga ut",
@@ -596,6 +596,13 @@
     "successAlert": "Responsen har skickats!",
     "anonymous": "Lähetä anonyymisti Skicka anonymt",
     "anonymousInfo": "Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet."
+  },
+  "search": {
+    "title": "Sök programmets kurser",
+    "searchField": "Välj ett program",
+    "coursePageLink": "Kursens sida",
+    "noOptions": "Inga program hittades",
+    "noCourses": "Inga kurser hittades"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

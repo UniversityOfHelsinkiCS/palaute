@@ -1,6 +1,8 @@
 import { useQuery } from 'react-query'
 import apiClient from '../util/apiClient'
 
+const isNetworkError = error => !!error.isAxiosError && !error.response
+
 const usePinger = (options = {}) => {
   const queryKey = 'ping'
 
@@ -19,7 +21,7 @@ const usePinger = (options = {}) => {
       refetchOnReconnect: 'always',
       cacheTime: 7 * 60 * 1000,
       onError: error => {
-        if (error?.message?.toLowerCase() === 'network error') window.location.reload()
+        if (isNetworkError(error)) window.location.reload()
       },
       ...options,
     }

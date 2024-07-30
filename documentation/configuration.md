@@ -22,7 +22,7 @@ and `const value = config.get('key')`. The config values can be getted and parse
 ### Client
 
 Client configuration is slightly more involved.
-A global `CONFIG` object is populated at build time using the webpack DefinePlugin (see `config-overrides.js`).
+A global `CONFIG` object is populated at build time using Vite in the [vite.config](/vite.config.ts).
 
 By default the `CONFIG` object contains all the values in config, but if you wish to exclude some from it (as they are technically public) you should add the excluded fields to the `PRIVATE_KEYS` config.
 

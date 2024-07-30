@@ -24,10 +24,6 @@ describe('Teacher view', () => {
     cy.get('[data-cy="my-teaching-no-courses"]').should('exist')
 
     cy.get('[data-cy="my-teaching-ended-tab"]').contains('Ended surveys').should('exist').click()
-    cy.get('[data-cy="my-teaching-no-courses"]').should('exist')
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
 
     cy.get('[data-cy="my-teaching-no-courses"]').should('not.exist')
 
@@ -55,10 +51,11 @@ describe('Teacher view', () => {
     cy.setFeedbackOpeningSoon()
     cy.setContinuousFeedbackActive()
 
-    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .contains('Ended surveys')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
@@ -90,10 +87,21 @@ describe('Teacher view', () => {
     cy.giveFeedback(student)
     cy.setFeedbackClosed()
 
-    cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
+    // Check that the missing counter feedback badge is rendered on the status tabs
+    cy.visit(`/courses`)
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .contains('Ended surveys')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
+    cy.get('[data-cy="status-tab-badge"]')
+      .as('badge')
+    
+    cy.get('@badge').contains('1').should('exist')
+    
+    cy.get('[data-cy=my-teaching-ended-tab]').trigger('mouseover')
+    cy.contains('Ended surveys: 1 missing counter feedbacks from the last academic year').should('be.visible')
 
     // Check that the counter feedback missing chip is rendered on the CU level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
@@ -125,10 +133,10 @@ describe('Teacher view', () => {
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
 
     cy.visit(`/courses`)
-    cy.get('[data-cy=my-teaching-ended-tab]').click()
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+    .as('endedTab')
+  
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
     cy.get('@fbtId').then(id => {
@@ -143,10 +151,10 @@ describe('Teacher view', () => {
     cy.get('[data-cy=saveFeedbackResponse]').click()
 
     cy.visit(`/courses`)
-    cy.get('[data-cy=my-teaching-ended-tab]').click()
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
+    cy.get('[data-cy=my-teaching-ended-tab]')
+      .as('endedTab')
+    
+    cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
     cy.get('@fbtId').then(id => {
@@ -189,9 +197,6 @@ describe('Teacher view', () => {
     cy.visit(`/courses`)
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').should('exist').click()
 
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
-
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').click()
 
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/edit-feedback-response`))
@@ -202,9 +207,6 @@ describe('Teacher view', () => {
 
     cy.visit(`/courses`)
     cy.get('[data-cy=my-teaching-ended-tab]').contains('Ended surveys').click()
-
-    cy.get('[id=semester-selector]').click()
-    cy.get('[data-cy="semester-selector-item-2023 Fall"]').click()
 
     cy.contains('TEST_COURSE').click()
 

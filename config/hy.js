@@ -2,7 +2,7 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  DEV_ADMINS: ['mluukkai', 'vesuvesu', 'kemiko'],
+  DEV_ADMINS: ['mluukkai'],
 
   /**
    * These courses bypass the starting after 1.9 filter.
@@ -260,6 +260,8 @@ const config = {
   IAM_GROUPS_HEADER: 'hygroupcn',
 
   ORGANISATION_SURVEYS_ENABLED: true,
+
+  PUBLIC_COURSE_BROWSER_ENABLED: true,
 
   INTERIM_FEEDBACKS_ENABLED: true,
 

@@ -4,20 +4,23 @@
 import toscalogoColor from '../assets/toscalogo_color.svg'
 import toscalogoGrayscale from '../assets/toscalogo_grayscale.svg'
 import norppaViskaali from '../assets/norppa_holy_smoke.png'
+import stylizedNorppa from '../assets/stylized_norppa.png'
 
 export const images = {
   toska_color: toscalogoColor,
   toska_grayscale: toscalogoGrayscale,
   norppa_viskaali: norppaViskaali,
+  norppa_stylized: stylizedNorppa,
 }
-
-export const basePath = process.env.PUBLIC_URL || ''
 
 export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
+export const inDevelopment = process.env.NODE_ENV === 'development'
 export const inProduction = process.env.NODE_ENV === 'production'
 export const inStaging = process.env.REACT_APP_STAGING === 'true'
 export const inE2EMode = process.env.REACT_APP_E2E === 'true'
+
+export const basePath = inDevelopment || inE2EMode ? '' : process.env.BASE_PATH
 
 // The config is populated by webpack defineplugin. The variable
 // with the caps is replaced with the entire config, so read it
@@ -70,6 +73,8 @@ export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS = config?.UNIVERSITY_LEVEL_
 export const WORKLOAD_QUESTION_ID_ORDER = config?.WORKLOAD_QUESTION_ID_ORDER ?? []
 
 export const ORGANISATION_SURVEYS_ENABLED = config?.ORGANISATION_SURVEYS_ENABLED
+
+export const PUBLIC_COURSE_BROWSER_ENABLED = config?.PUBLIC_COURSE_BROWSER_ENABLED
 
 export const ALWAYS_SHOW_STUDENT_LIST = config?.ALWAYS_SHOW_STUDENT_LIST
 

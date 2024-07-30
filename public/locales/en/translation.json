@@ -53,7 +53,6 @@
     "settings": "Settings",
     "feedbacks": "Feedbacks",
     "survey": "Survey",
-    "teacherPage": "My teaching",
     "courseSummaryPage": "Course summary",
     "norppaFeedback": "Give feedback to Norppa developers",
     "today": "today",
@@ -127,7 +126,8 @@
     "continuousFeedbackChip": "Continuous feedback",
     "feedbackResponseGiven": "Teacher has given counter feedback",
     "deleted": "Your feedback has been deleted",
-    "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended."
+    "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended.",
+    "waitingBadgeLabel": "{{count}} feedbacks missing"
   },
   "feedbackView": {
     "submitButton": "Give feedback",
@@ -180,7 +180,8 @@
     "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
     "surveys": "Surveys",
-    "badgeLabel": "{{count}} items need your attention"
+    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year",
+    "academicYearSelectLabel": "Selected academic year"
   },
   "questionEditor": {
     "addQuestion": "Add question",
@@ -325,6 +326,7 @@
   },
   "navBar": {
     "myFeedbacks": "My feedback",
+    "browseCourses": "Browse courses",
     "myCourses": "My teaching",
     "myCoursesV2": "My surveys",
     "logOut": "Log out",
@@ -620,6 +622,13 @@
     "successAlert": "Feedback has been sent succesfully",
     "anonymousInfo": "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
     "anonymous": "Send anonymously"
+  },
+  "search": {
+    "title": "Search program's courses",
+    "searchField": "Select a program",
+    "coursePageLink": "Course page",
+    "noOptions": "No matching programs found",
+    "noCourses": "No courses found for the selected program in this time range"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

@@ -47,7 +47,6 @@
     "settings": "Asetukset",
     "feedbacks": "Palautteet",
     "survey": "Kysely",
-    "teacherPage": "Opetukseni",
     "courseSummaryPage": "Kurssiyhteenveto",
     "norppaFeedback": "Anna palautetta",
     "today": "tänään",
@@ -127,7 +126,8 @@
     "continuousFeedbackChip": "Jatkuva palaute",
     "feedbackResponseGiven": "Opettaja on antanut vastapalautteen",
     "deleted": "Palautteesi on poistettu",
-    "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen."
+    "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen.",
+    "waitingBadgeLabel": "{{count}} kappaletta puuttuvia palautteita"
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",
@@ -180,7 +180,8 @@
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
     "surveys": "Kyselyä",
-    "badgeLabel": "{{count}} kohdetta tarvitsevat huomiotasi"
+    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä",
+    "academicYearSelectLabel": "Valittu lukuvuosi"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
@@ -324,6 +325,7 @@
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
+    "browseCourses": "Selaa kursseja",
     "myCourses": "Opetukseni",
     "myCoursesV2": "Kyselyni",
     "logOut": "Kirjaudu ulos",
@@ -619,6 +621,13 @@
     "successAlert": "Palaute lähetetty onnistuneesti!",
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+  },
+  "search": {
+    "title": "Hae ohjelman opetusta",
+    "searchField": "Valitse ohjelma",
+    "coursePageLink": "Kurssisivu",
+    "noOptions": "Ei hakutuloksia",
+    "noCourses": "Ei kursseja tällä ohjelmalla valitulla aikavälillä"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

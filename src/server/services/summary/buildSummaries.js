@@ -254,7 +254,7 @@ const buildSummariesForPeriod = async ({
         studentCount: fbt.userFeedbackTargets.length,
         hiddenCount: fbt.hiddenCount,
         feedbackCount: fbt.feedbackCount,
-        feedbackResponsePercentage: Number(fbt.feedbackResponseEmailSent),
+        feedbackResponsePercentage: fbt.feedbackResponse?.length ? 1 : 0,
       },
       courseRealisationId: fbt.courseRealisation.id,
       courseUnitId: fbt.courseUnit.id,
