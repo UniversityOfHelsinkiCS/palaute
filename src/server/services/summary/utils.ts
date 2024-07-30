@@ -1,20 +1,21 @@
-const _ = require('lodash')
-const datefns = require('date-fns')
-const { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } = require('../../util/config')
-const { Summary } = require('../../models')
+import _ from 'lodash'
+import * as datefns from 'date-fns'
+import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
+import { Summary } from '../../models'
+import { SummaryData, SummaryResult } from '../../models/summary'
 
-const mapOptionIdToValue = (optionId, questionId) => {
+const mapOptionIdToValue = (optionId: string, questionId: string) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
     return WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) + 1
   }
   return Number(optionId)
 }
 
-const sumQuestionResults = (results, questionId) => {
-  const distribution = {}
+const sumQuestionResults = (results: SummaryResult[], questionId: string) => {
+  const distribution: Record<string, number> = {}
 
   for (const result of results) {
-    Object.entries(result.distribution).forEach(([optionId, count]) => {
+    Object.entries(result.distribution).forEach(([optionId, count]: [string, number]) => {
       distribution[optionId] = (distribution[optionId] ?? 0) + count
     })
   }
@@ -34,45 +35,8 @@ const sumQuestionResults = (results, questionId) => {
   }
 }
 
-const subtractSummary = (summary1, summary2) => {
-  if (summary1.startDate !== summary2.startDate || summary1.endDate !== summary2.endDate) {
-    throw new Error('Subtract summaries with different start or end dates is not allowed')
-  }
-
-  const data1 = summary1.data
-  const data2 = summary2.data
-
-  const data = {
-    result: {},
-    studentCount: data1.studentCount - data2.studentCount,
-    hiddenCount: data1.hiddenCount - data2.hiddenCount,
-    feedbackCount: data1.feedbackCount - data2.feedbackCount,
-    feedbackResponsePercentage: data1.feedbackResponsePercentage - data2.feedbackResponsePercentage,
-  }
-
-  for (const questionId of Object.keys(data1.result)) {
-    data.result[questionId] = sumQuestionResults(
-      [
-        data1.result[questionId],
-        {
-          distribution: Object.fromEntries(
-            Object.entries(data2.result[questionId].distribution).map(([optionId, count]) => [optionId, -count])
-          ),
-        },
-      ],
-      questionId
-    )
-  }
-
-  return {
-    startDate: summary1.startDate,
-    endDate: summary1.endDate,
-    data,
-  }
-}
-
-const sumSummaryDatas = summaryDatas => {
-  const data = {
+const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
+  const data: SummaryData = {
     result: {},
     studentCount: 0,
     hiddenCount: 0,
@@ -106,8 +70,8 @@ const sumSummaryDatas = summaryDatas => {
   return data
 }
 
-const sumSummaries = summaries => {
-  if (!summaries?.length > 0) {
+const sumSummaries = (summaries: Summary[]) => {
+  if (!summaries?.length) {
     return null
   }
 
@@ -151,8 +115,20 @@ const sumSummaries = summaries => {
   return summary
 }
 
-const getScopedSummary = ({ startDate, endDate, extraOrgId, extraOrgMode, allTime }) => {
-  const scopes = allTime ? [] : [{ method: ['at', startDate, endDate] }]
+const getScopedSummary = ({
+  startDate,
+  endDate,
+  extraOrgId,
+  extraOrgMode,
+  allTime,
+}: {
+  startDate: string
+  endDate: string
+  extraOrgId?: string
+  extraOrgMode?: string
+  allTime?: boolean
+}) => {
+  const scopes: any = allTime ? [] : [{ method: ['at', startDate, endDate] }]
 
   if (extraOrgId) {
     if (extraOrgMode === 'exclude') {
@@ -165,10 +141,4 @@ const getScopedSummary = ({ startDate, endDate, extraOrgId, extraOrgMode, allTim
   return Summary.scope(scopes)
 }
 
-module.exports = {
-  sumSummaryDatas,
-  mapOptionIdToValue,
-  sumSummaries,
-  subtractSummary,
-  getScopedSummary,
-}
+export { sumSummaryDatas, mapOptionIdToValue, sumSummaries, getScopedSummary }

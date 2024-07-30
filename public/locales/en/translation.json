@@ -158,6 +158,7 @@
     "giveFeedbackResponse": "Give counter feedback",
     "noCourseRealisations": "No course realisations for the selected time period",
     "noCourses": "There are currently no surveys to show",
+    "noFilteredCourses": "There are currently no surveys to show for the selected filters",
     "editFeedbackResponse": "Edit counter feedback",
     "feedbackResponseGiven": "Counter feedback given",
     "feedbackResponseNotSent": "Counter feedback not sent",
@@ -178,7 +179,8 @@
     "disabledCourseWarning": "Feedback is disabled for this course",
     "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
-    "surveys": "Surveys"
+    "surveys": "Surveys",
+    "badgeLabel": "{{count}} items need your attention"
   },
   "questionEditor": {
     "addQuestion": "Add question",
@@ -330,7 +332,8 @@
     "courseSummary": "Course summary",
     "nameFallback": "Menu",
     "feedback": "Give feedback to Norppa developers",
-    "userInformation": "My information"
+    "userInformation": "My information",
+    "badgeLabel": "You have new feedbacks to give"
   },
   "userInformation": {
     "iamGroups": "IAM-groups",

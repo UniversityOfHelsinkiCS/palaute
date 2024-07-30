@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 
 const {
   UserFeedbackTarget,
@@ -10,9 +11,12 @@ const {
 } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
+const { formatActivityPeriod } = require('../../util/common')
 
 const getAllTeacherCourseUnits = async (user, query) => {
   const isOrganisationSurvey = query.isOrganisationSurvey === 'true'
+
+  const activityPeriod = formatActivityPeriod(query)
 
   const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
@@ -64,6 +68,31 @@ const getAllTeacherCourseUnits = async (user, query) => {
             as: 'courseRealisation',
             required: true,
             attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
+            where: {
+              ...(activityPeriod?.startDate &&
+                activityPeriod?.endDate && {
+                  [Op.or]: [
+                    {
+                      startDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      endDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      startDate: {
+                        [Op.lte]: activityPeriod.startDate,
+                      },
+                      endDate: {
+                        [Op.gte]: activityPeriod.endDate,
+                      },
+                    },
+                  ],
+                }),
+            },
           },
         ],
       },

@@ -1,10 +1,43 @@
-const { Model, Op, JSONB, STRING, DATEONLY, INTEGER, VIRTUAL, ARRAY } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import {
+  Model,
+  Op,
+  JSONB,
+  STRING,
+  DATEONLY,
+  INTEGER,
+  VIRTUAL,
+  ARRAY,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
+import { sequelize } from '../db/dbConnection'
+
+export type SummaryResult = {
+  mean: number
+  distribution: Record<string, number>
+}
+
+export type SummaryData = {
+  feedbackCount: number
+  studentCount: number
+  hiddenCount: number
+  result: Record<string, SummaryResult>
+  feedbackResponsePercentage: number
+}
 
 /**
  * Summary represents any single row in course summary.
  */
-class Summary extends Model {}
+class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Summary>> {
+  declare id: CreationOptional<number>
+  declare entityId: string
+  declare startDate: string
+  declare endDate: string
+  declare extraOrgIds: string[]
+  declare data: SummaryData
+  declare children?: Summary[]
+}
 
 Summary.init(
   {
@@ -41,27 +74,6 @@ Summary.init(
     extraOrgIds: {
       type: ARRAY(STRING),
     },
-    /**
-     * Has the following format:
-     * ```
-     * {
-     *  feedbackCount: number,
-     *  studentCount: number,
-     *  hiddenCount: number,
-     *  result: {
-     *    [questionId: string]: {
-     *      mean: number,
-     *      distribution: {
-     *        [optionId: string]: number,
-     *      },
-     *    },
-     *  },
-     *  feedbackResponsePercentage: number (0-1),
-     * }
-     * ```
-     *
-     * These data are supposed to be easily aggregateable.
-     */
     data: {
       type: JSONB,
       allowNull: false,
@@ -80,7 +92,7 @@ Summary.init(
       },
     ],
     scopes: {
-      at(startDate, endDate) {
+      at(startDate: Date, endDate: Date) {
         return {
           where: {
             startDate,
@@ -88,14 +100,14 @@ Summary.init(
           },
         }
       },
-      extraOrg(extraOrgId) {
+      extraOrg(extraOrgId: string) {
         return {
           where: {
             extraOrgIds: { [Op.contains]: [extraOrgId] },
           },
         }
       },
-      noExtraOrg(extraOrgId) {
+      noExtraOrg(extraOrgId: string) {
         return {
           where: {
             [Op.not]: {
@@ -108,4 +120,4 @@ Summary.init(
   }
 )
 
-module.exports = Summary
+export default Summary

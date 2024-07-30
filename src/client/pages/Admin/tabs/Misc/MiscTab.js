@@ -11,9 +11,6 @@ import apiClient from '../../../../util/apiClient'
 const MiscTab = () => {
   const { enqueueSnackbar } = useSnackbar()
 
-  const resetTestCourse = async () => {
-    await apiClient.post('/admin/reset-course', {})
-  }
   const runPateCron = async () => {
     if (window.confirm('Will send all emails for today that have not yet been sent.')) {
       try {
@@ -36,9 +33,6 @@ const MiscTab = () => {
         Run pateCron
       </Button>
       <Box m="1rem" />
-      <Button variant="contained" color="primary" onClick={resetTestCourse}>
-        Reset test course
-      </Button>
     </>
   )
 }

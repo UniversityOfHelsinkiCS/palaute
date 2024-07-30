@@ -1,6 +1,18 @@
 import React, { useRef, useState, forwardRef } from 'react'
 
-import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, Divider, ButtonBase, Box, Container } from '@mui/material'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Menu,
+  MenuItem,
+  IconButton,
+  Divider,
+  ButtonBase,
+  Box,
+  Container,
+  Badge,
+} from '@mui/material'
 import { uniq } from 'lodash-es'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -20,6 +32,7 @@ import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
 import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES } from '../../util/common'
+import useWaitingFeedbackCount from './useWaitingFeedbackCount'
 
 const styles = {
   toolbar: {
@@ -68,7 +81,6 @@ const styles = {
     padding: '4px 10px',
     borderRadius: 2,
     fontWeight: 'bold',
-    // fontSize: '8rem',
     alignItems: 'center',
     display: 'flex',
     '&:hover': {
@@ -101,6 +113,26 @@ const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
   </Box>
 ))
 
+const NavLabelWrapper = ({ renderBadge, children }) => {
+  const { t } = useTranslation()
+
+  const baseElement = (
+    <Box fontWeight="fontWeightMedium" fontSize={15} mx={1}>
+      {children}
+    </Box>
+  )
+
+  if (renderBadge) {
+    return (
+      <Badge data-cy="navbar-notification-badge" aria-label={t('navBar:badgeLabel')} color="secondary" variant="dot">
+        {baseElement}
+      </Badge>
+    )
+  }
+
+  return baseElement
+}
+
 const NavBar = ({ guest = false }) => {
   const menuButtonRef = useRef()
   const { pathname } = useLocation()
@@ -120,6 +152,9 @@ const NavBar = ({ guest = false }) => {
 
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
     enabled: isAdminUser,
+  })
+  const { waitingFeedbackCount } = useWaitingFeedbackCount({
+    enabled: isStudent,
   })
 
   const preferences = authorizedUser?.preferences ?? {}
@@ -173,6 +208,7 @@ const NavBar = ({ guest = false }) => {
     isStudent && {
       label: t('navBar:myFeedbacks'),
       to: '/feedbacks',
+      badgeCount: waitingFeedbackCount,
     },
     courseSummaryIsAccessible && {
       label: t('navBar:courseSummary'),
@@ -194,12 +230,17 @@ const NavBar = ({ guest = false }) => {
     }))
 
   const navBarLinks = (
-    <Box sx={styles.linkContainer}>
-      {links.map(({ label, to, active }, index) => (
-        <ButtonBase component={Link} key={index} sx={[styles.link, active && styles.activeLink]} to={to} focusRipple>
-          <Box fontWeight="fontWeightMedium" fontSize={15} mx={1}>
-            {label}
-          </Box>
+    <Box data-cy="navbar-links" sx={styles.linkContainer}>
+      {links.map(({ label, to, badgeCount, active }) => (
+        <ButtonBase
+          data-cy={`navbar-link-${label}`}
+          component={Link}
+          key={label}
+          sx={[styles.link, active && styles.activeLink]}
+          to={to}
+          focusRipple
+        >
+          <NavLabelWrapper renderBadge={badgeCount}>{label}</NavLabelWrapper>
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (

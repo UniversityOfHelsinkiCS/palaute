@@ -20,6 +20,7 @@ const {
   getFeedbackTargetsForOrganisation,
   hideFeedback,
 } = require('../../services/feedbackTargets')
+const { getWaitingFeedbackCountForStudent } = require('../../services/feedbackTargets/getForStudent')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
 const { adminDeleteFeedback } = require('../../services/feedbackTargets/hideFeedback')
 
@@ -46,6 +47,12 @@ adRouter.get('/for-student', async (req, res) => {
   const { user } = req
   const feedbackTargets = await getFeedbackTargetsForStudent({ user })
   return res.send(feedbackTargets)
+})
+
+adRouter.get('/for-student/waiting-count', async (req, res) => {
+  const { user } = req
+  const waitingFeedbackCount = await getWaitingFeedbackCountForStudent({ user })
+  return res.send(waitingFeedbackCount)
 })
 
 adRouter.get('/for-course-realisation/:id', async (req, res) => {

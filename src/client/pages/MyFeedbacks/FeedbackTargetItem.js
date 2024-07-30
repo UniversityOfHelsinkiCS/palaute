@@ -223,6 +223,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
     queryClient.invalidateQueries('feedbackTargetsForStudent')
+    // Invalidate the waiting feedback count for the student
+    queryClient.invalidateQueries('myFeedbacksWaitingFeedbackCount')
+
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 

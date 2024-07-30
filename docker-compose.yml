@@ -34,7 +34,7 @@ services:
     image: redis:6.2.6
     command: redis-server
     container_name: palaute_redis
-  adminer:
+  adminer: # http://localhost:8080/?pgsql=db&username=postgres&db=postgres&ns=public
     image: adminer
     restart: always
     environment:

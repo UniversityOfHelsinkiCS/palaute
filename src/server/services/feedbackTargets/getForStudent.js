@@ -69,6 +69,18 @@ const getForStudent = async ({ user }) => {
   return grouped
 }
 
+const getWaitingFeedbackCountForStudent = async ({ user }) => {
+  const feedbackTargets = await getFeedbackTargetsForStudent(user.id)
+  const now = Date.now()
+
+  const count = feedbackTargets.filter(
+    fbt => Date.parse(fbt.opensAt) < now && Date.parse(fbt.closesAt) > now && !fbt.feedback
+  ).length
+
+  return { count }
+}
+
 module.exports = {
   getForStudent,
+  getWaitingFeedbackCountForStudent,
 }

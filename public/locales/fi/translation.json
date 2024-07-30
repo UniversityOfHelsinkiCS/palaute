@@ -159,6 +159,7 @@
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
     "noCourses": "Ei näytettäviä kyselyitä tällä hetkellä",
+    "noFilteredCourses": "Ei näytettäviä kyselyitä, jotka täyttävät hakuehdot",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
@@ -178,7 +179,8 @@
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
-    "surveys": "Kyselyä"
+    "surveys": "Kyselyä",
+    "badgeLabel": "{{count}} kohdetta tarvitsevat huomiotasi"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
@@ -329,7 +331,8 @@
     "courseSummary": "Kurssiyhteenveto",
     "nameFallback": "Valikko",
     "feedback": "Anna palautetta Norpan kehittäjille",
-    "userInformation": "Omat tietoni"
+    "userInformation": "Omat tietoni",
+    "badgeLabel": "Sinulla on uusia palautteita annettavaksi"
   },
   "userInformation": {
     "iamGroups": "IAM-ryhmät",

@@ -1,5 +1,15 @@
 import React from 'react'
-import { Box, IconButton, MenuItem, Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import {
+  Box,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
@@ -46,7 +56,7 @@ const styles = {
   },
 }
 
-const YearStepper = ({ value, onChange }) => {
+const YearStepper = ({ value, onChange, labelledBy }) => {
   const handleIncrease = () => {
     onChange(value + 1)
   }
@@ -64,7 +74,7 @@ const YearStepper = ({ value, onChange }) => {
   const canDecrease = value > 2020
 
   return (
-    <Box sx={styles.stepperContainer}>
+    <Box sx={styles.stepperContainer} aria-labelledby={labelledBy ?? undefined}>
       <IconButton
         onClick={handleDecrease}
         disabled={!canDecrease}
@@ -88,19 +98,33 @@ const YearStepper = ({ value, onChange }) => {
   )
 }
 
-const SemesterSelector = ({ value, onChange, semesters }) => {
+export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.selectorContainer }) => {
   const { t } = useTranslation()
 
   return (
-    <Box sx={styles.selectorContainer}>
-      <Select value={value} onChange={event => onChange(event.target.value)}>
-        {semesters.map(s => (
-          <MenuItem value={s} key={s.start}>
-            {`${s.start.getFullYear()} ${s.spring ? t('courseSummary:spring') : t('courseSummary:fall')}`}
-          </MenuItem>
-        ))}
+    <FormControl sx={sx} size="small">
+      {!labelledBy && <InputLabel id="semester-selector-label">{t('courseSummary:semester')}</InputLabel>}
+      <Select
+        id="semester-selector"
+        labelId={!labelledBy ? 'semester-selector-label' : undefined}
+        label={!labelledBy ? t('courseSummary:semester') : undefined}
+        aria-labelledby={labelledBy ?? undefined}
+        value={value}
+        onChange={event => onChange(event.target.value)}
+      >
+        {semesters.map(s => {
+          const semesterName = `${s.start.getFullYear()} ${
+            s.spring ? t('courseSummary:spring') : t('courseSummary:fall')
+          }`
+
+          return (
+            <MenuItem data-cy={`semester-selector-item-${semesterName}`} value={s} key={s.start}>
+              {semesterName}
+            </MenuItem>
+          )
+        })}
       </Select>
-    </Box>
+    </FormControl>
   )
 }
 
@@ -141,7 +165,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.stepper}>
-        <ToggleButtonGroup value={option} onChange={handleOptionChange} color="primary">
+        <ToggleButtonGroup id="year-semester-selector" value={option} onChange={handleOptionChange} color="primary">
           {allowAll && (
             <ToggleButton value="all" size="small">
               {t('courseSummary:all')}
@@ -157,9 +181,14 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
         {option !== 'all' && (
           <Box>
             {option === 'year' ? (
-              <YearStepper value={year} onChange={handleYearChange} />
+              <YearStepper value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
             ) : (
-              <SemesterSelector value={currentSemester} onChange={handleSemesterChange} semesters={semesters} />
+              <SemesterSelector
+                value={currentSemester}
+                onChange={handleSemesterChange}
+                semesters={semesters}
+                labelledBy="year-semester-selector"
+              />
             )}
           </Box>
         )}
