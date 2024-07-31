@@ -16,8 +16,7 @@
     "publicInfo": "Vastaukset näkyvät toteutukselle ilmoittautuneille opiskelijoille",
     "notPublicShortInfo": "Näkyy vain vastuuopettajille ja yksikön palautevastaaville",
     "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille",
-    "organisationCode": "Yksikkökoodi",
-    "teacherPage": "Kyselyni"
+    "organisationCode": "Yksikkökoodi"
   },
   "validationErrors": {
     "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla myös opiskelija"
