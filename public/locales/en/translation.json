@@ -126,7 +126,8 @@
     "feedbackEndedChip": "Feedback has ended",
     "continuousFeedbackChip": "Continuous feedback",
     "feedbackResponseGiven": "Teacher has given counter feedback",
-    "deleted": "Your feedback has been deleted"
+    "deleted": "Your feedback has been deleted",
+    "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended."
   },
   "feedbackView": {
     "submitButton": "Give feedback",

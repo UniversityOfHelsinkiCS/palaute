@@ -307,6 +307,38 @@ const config = {
    * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
    */
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['allProgrammes'],
+
+  /**
+   * Enabling the new version of Teaching / Opetukseni / Kyselyni -view
+   */
+  NEW_TEACHING_VIEW_ENABLED: true,
+
+  /**
+   * TAU wants to show feedbacks to students only after the feedback target has ended
+   */
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: true,
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: false,
+
+  /**
+   * TAU wants users to see course codes in addition to course names in both
+   * Norppa UI and in the emails Norppa sends.
+   */
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES: true,
+
+  /**
+   * TAU does not want to see HY Norppa logo
+   */
+  SHOW_NORPPA_HY_LOGO: false,
+
+  /**
+   * TAU does not want to have the courses tab visible in organisation settings
+   */
+  SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: false,
 }
 
 module.exports = config

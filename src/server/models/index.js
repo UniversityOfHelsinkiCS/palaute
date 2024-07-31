@@ -247,11 +247,11 @@ CourseUnit.hasMany(Summary, { foreignKey: 'entityId', as: 'summaries' })
 Summary.belongsTo(CourseUnit, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupCourseUnit' })
 CourseUnit.hasMany(Summary, { sourceKey: 'groupId', foreignKey: 'entityId', as: 'groupSummaries' })
 
+Summary.belongsTo(FeedbackTarget, { foreignKey: 'feedbackTargetId', as: 'feedbackTarget' })
+FeedbackTarget.hasOne(Summary, { foreignKey: 'feedbackTargetId', as: 'summary' })
+
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
-
-Summary.belongsTo(FeedbackTarget, { foreignKey: 'entityId', targetKey: 'courseRealisationId', as: 'feedbackTarget' })
-FeedbackTarget.hasOne(Summary, { foreignKey: 'entityId', sourceKey: 'courseRealisationId', as: 'summary' })
 
 module.exports = {
   Feedback,

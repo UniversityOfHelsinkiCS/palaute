@@ -18,6 +18,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/common'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -59,16 +60,8 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
         {t('userFeedbacks:modifyFeedbackButton')}
       </Button>
 
-      <Button
-        data-cy="feedback-item-view-feedback"
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={viewPath}
-        sx={{ mr: '1rem' }}
-      >
-        {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
+      <FeedbackSummaryButtonForOpenGivenTarget viewPath={viewPath} />
+
       <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </Button>
@@ -84,6 +77,26 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       </Dialog>
     </Box>
   )
+}
+
+const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
+  const { t } = useTranslation()
+
+  if (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return (
+      <Button
+        data-cy="feedback-item-view-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={viewPath}
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:viewFeedbackSummary')}
+      </Button>
+    )
+  }
+  return null
 }
 
 const FeedbackEndedActions = ({ viewPath }) => {
@@ -171,6 +184,23 @@ const FeedbackResponseChip = () => {
   )
 }
 
+const PeriodInfoAddition = ({ isEnded }) => {
+  const { t } = useTranslation()
+
+  if (!isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return <ListItemText primary={t('userFeedbacks:summaryAvailableWhenEnded')} />
+  }
+
+  return null
+}
+
+const getCourseDisplayName = (translatedName, courseCode) => {
+  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+    return `${courseCode} ${translatedName}`
+  }
+  return `${translatedName}`
+}
+
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -186,6 +216,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const courseName = getCourseName(feedbackTarget, t)
   const translatedName = getLanguageValue(courseName, i18n.language)
+  const courseDisplayName = getCourseDisplayName(translatedName, feedbackTarget.courseUnit.courseCode)
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
@@ -211,9 +242,10 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       disableGutters
     >
       <Typography variant="body1" fontWeight={600} component="h2">
-        {translatedName}
+        {courseDisplayName}
       </Typography>
       <ListItemText primary={periodInfo} />
+      <PeriodInfoAddition isEnded={isEnded} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
       <Box

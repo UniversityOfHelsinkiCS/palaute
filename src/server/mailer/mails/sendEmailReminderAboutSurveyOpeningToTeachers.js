@@ -1,7 +1,12 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
-const { TEACHER_REMINDER_DAYS_TO_OPEN, PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
+const {
+  TEACHER_REMINDER_DAYS_TO_OPEN,
+  PUBLIC_URL,
+  FEEDBACK_SYSTEM,
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES,
+} = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
 const { i18n } = require('../../util/i18n')
@@ -64,6 +69,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
   const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
   const courseName = getLanguageValue(teacherFeedbackTargets[0].name, language)
+  const { courseCode } = teacherFeedbackTargets[0].courseUnit
 
   let courseNamesAndUrls = ''
 
@@ -74,6 +80,14 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
     const { id, name, opensAt, closesAt } = feedbackTarget
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
+    const fbtCourseCode = feedbackTarget.courseUnit.courseCode
+
+    let displayName = ''
+    if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+      displayName = `${fbtCourseCode} ${getLanguageValue(name, language)}`
+    } else {
+      displayName = `${getLanguageValue(name, language)}`
+    }
 
     const openFrom = {
       en: `Open from ${humanOpensAtDate} `,
@@ -88,14 +102,14 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
     }
 
     courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
-        ${getLanguageValue(name, language)}
+        ${displayName}
         </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
   }
 
   const t = i18n.getFixedT(language)
   const subject = hasMultipleFeedbackTargets
     ? t('mails:reminderAboutSurveyOpeningToTeachers:subjectMultiple')
-    : t('mails:reminderAboutSurveyOpeningToTeachers:subject', { courseName })
+    : t('mails:reminderAboutSurveyOpeningToTeachers:subject', { courseName, courseCode })
 
   const email = {
     to: emailAddress,
