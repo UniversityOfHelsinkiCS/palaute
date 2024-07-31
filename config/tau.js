@@ -329,6 +329,16 @@ const config = {
    * Norppa UI and in the emails Norppa sends.
    */
   SHOW_COURSE_CODES_WITH_COURSE_NAMES: true,
+
+  /**
+   * TAU does not want to see HY Norppa logo
+   */
+  SHOW_NORPPA_HY_LOGO: false,
+
+  /**
+   * TAU does not want to have the courses tab visible in organisation settings
+   */
+  SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: false,
 }
 
 module.exports = config
