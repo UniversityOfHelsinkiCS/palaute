@@ -325,6 +325,12 @@ const config = {
   ENABLE_CORRESPONDENT_MANAGEMENT: false,
 
   /**
+   * TAU wants users to see course codes in addition to course names in both
+   * Norppa UI and in the emails Norppa sends.
+   */
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES: true,
+
+  /**
    * TAU does not want to see HY Norppa logo
    */
   SHOW_NORPPA_HY_LOGO: false,

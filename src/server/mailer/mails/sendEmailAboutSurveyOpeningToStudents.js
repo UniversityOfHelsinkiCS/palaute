@@ -76,6 +76,7 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
   const emailLanguage = !language ? 'en' : language
 
   const courseName = getLanguageValue(name, emailLanguage)
+  const { courseCode } = studentFeedbackTargets[0].courseUnit
 
   let courseNamesAndUrls = ''
 
@@ -87,7 +88,7 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
 
   const subject = hasMultipleFeedbackTargets
     ? t('mails:surveyOpeningEmailToStudents:subjectMultiple')
-    : t('mails:surveyOpeningEmailToStudents:subject', { courseName })
+    : t('mails:surveyOpeningEmailToStudents:subject', { courseName, courseCode })
 
   const email = {
     to: emailAddress,
