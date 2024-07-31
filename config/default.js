@@ -300,6 +300,11 @@ const config = {
    * This setting enables/disables this feature.
    */
   ENABLE_CORRESPONDENT_MANAGEMENT: true,
+
+  /**
+   * Controls visibility of the courses tab in organisation settings
+   */
+  SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: true,
 }
 
 module.exports = config
