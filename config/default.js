@@ -302,6 +302,11 @@ const config = {
   ENABLE_CORRESPONDENT_MANAGEMENT: true,
 
   /**
+   * This controls visibility of the HY smoking seal logo
+   */
+  SHOW_NORPPA_HY_LOGO: true,
+
+  /**
    * Controls visibility of the courses tab in organisation settings
    */
   SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: true,
