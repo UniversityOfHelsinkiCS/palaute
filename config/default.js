@@ -302,6 +302,12 @@ const config = {
   ENABLE_CORRESPONDENT_MANAGEMENT: true,
 
   /**
+   * Student numbers copied from excel sometimes lose their leading zeros. Norppa can
+   * try to fix this automatically. Currently in use only in OrganisationSurveyEditor.
+   */
+  ADD_LEADING_ZERO_TO_STUDENT_NUMBERS: true,
+
+  /**
    * This controls if course codes are added in front of course names in both
    * Norppa's UI and in the emails it sends. Notice that {{ courseCode }} needs
    * to be added in the translation json files if course codes are needed in
