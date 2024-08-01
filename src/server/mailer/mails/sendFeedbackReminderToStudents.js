@@ -4,6 +4,7 @@ const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
+const { CourseUnit } = require('../../models')
 
 const sendReminderToGiveFeedbackToStudents = async (
   urlToGiveFeedback,
@@ -11,7 +12,8 @@ const sendReminderToGiveFeedbackToStudents = async (
   courseNames,
   reminder,
   closesAt,
-  userCreated
+  userCreated,
+  courseCode
 ) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
@@ -20,12 +22,16 @@ const sendReminderToGiveFeedbackToStudents = async (
     // Custom texts for user created feedback targets because they are not courses
     const email = {
       to: student.email,
-      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+      subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
+        courseName,
+        courseCode,
+      }),
       text: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
         url: urlToGiveFeedback,
         courseName,
         reminder,
         closesAt,
+        courseCode,
       }),
     }
     return email
@@ -41,6 +47,7 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
     throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
   }
 
+  const courseUnit = await CourseUnit.findByPk(feedbackTarget.CourseUnitId)
   const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback`
   const formattedStudents = students
@@ -59,7 +66,8 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
       courseName,
       reminder,
       formattedClosesAt,
-      feedbackTarget.userCreated
+      feedbackTarget.userCreated,
+      courseUnit.courseCode
     )
 
     feedbackTarget.feedbackReminderLastSentAt = new Date()

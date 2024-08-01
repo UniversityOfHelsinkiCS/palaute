@@ -23,6 +23,7 @@ import FormikDatePicker from '../../components/common/FormikDatePicker'
 
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
+import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
 
 const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
@@ -166,13 +167,16 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         }}
         onInputChange={(_, newInputValue) => {
           const options = newInputValue.split(/[,\n; ]/)
-
           if (options.length > 1) {
             const studentNumbers = value
               .concat(options)
               .filter(v => v)
-              .map(v => (v.length >= 9 ? v : `0${v}`))
-
+              .map(v => {
+                if (v.length < 9 && ADD_LEADING_ZERO_TO_STUDENT_NUMBERS) {
+                  return `0${v}`
+                }
+                return v
+              })
             setValue(studentNumbers)
             formikProps.setFieldValue('studentNumbers', studentNumbers)
           } else {
