@@ -68,7 +68,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
         <CardContent>
           <Typography
             data-cy={`interim-feedback-item-title-${interimFeedback.id}`}
-            sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
+            sx={{ fontWeight: 'light' }}
             variant="h5"
             component="div"
           >

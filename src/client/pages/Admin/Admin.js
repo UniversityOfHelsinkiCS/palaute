@@ -5,7 +5,7 @@ import { Route, Switch, useRouteMatch } from 'react-router'
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { CONFIG_TEST_VALUE, images, PRIVATE_TEST } from '../../util/common'
+import { CONFIG_TEST_VALUE, images, PRIVATE_TEST, SHOW_NORPPA_HY_LOGO } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
 import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
@@ -40,6 +40,13 @@ const ConfigTestValues = () => {
   )
 }
 
+const NorppaLogo = () => {
+  if (SHOW_NORPPA_HY_LOGO) {
+    return <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" sx={{ height: '1vh' }} />
+  }
+  return <div style={{ marginLeft: 'auto' }} />
+}
+
 const AdminView = () => {
   const { path, url } = useRouteMatch()
 
@@ -52,7 +59,7 @@ const AdminView = () => {
       <Title>Admin</Title>
       <Box display="flex" alignItems="end">
         <h1>Admin page</h1>
-        <img src={images.norppa_viskaali} alt="Epic norppa by ttriple" sx={{ height: '1vh' }} />
+        <NorppaLogo />
         <ConfigTestValues />
         <CrashDebug />
       </Box>

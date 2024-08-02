@@ -176,6 +176,8 @@ class FeedbackTarget extends Model {
       include: [{ model: Organisation, as: 'organisations', required: true }],
     })
 
+    if (!courseUnit) return false
+
     const { organisations } = courseUnit
 
     return organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))

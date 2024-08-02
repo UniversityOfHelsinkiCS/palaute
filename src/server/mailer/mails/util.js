@@ -1,6 +1,11 @@
 const { format } = require('date-fns')
 const jwt = require('jsonwebtoken')
-const { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL } = require('../../util/config')
+const {
+  JWT_KEY,
+  NOAD_LINK_EXPIRATION_DAYS,
+  PUBLIC_URL,
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES,
+} = require('../../util/config')
 
 const getNoAdUrl = (username, userId, days) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
@@ -9,10 +14,12 @@ const getNoAdUrl = (username, userId, days) => {
 
 const getFeedbackTargetLink = feedbackTarget => {
   const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } = feedbackTarget
+  const { courseCode } = feedbackTarget.courseUnit
   const language = feedbackTarget.language ? feedbackTarget.language : 'en'
 
   const closeDate = new Date(closesAt)
   const formattedCloseDate = format(closeDate, 'dd.MM.yyyy')
+
   const expirationDate = (() => {
     const d = new Date(closeDate)
     d.setDate(d.getDate() + NOAD_LINK_EXPIRATION_DAYS)
@@ -50,19 +57,26 @@ const getFeedbackTargetLink = feedbackTarget => {
     sv: `går ut ${formattedExpirationDate}`,
   }
 
+  let displayName = ''
+  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+    displayName = `${courseCode} ${name[language]}`
+  } else {
+    displayName = `${name[language]}`
+  }
+
   if (noAdUser) {
     const noAdUrl = getNoAdUrl(username, userId, daysUntilExpiration)
-    return `<i><a href=${noAdUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
+    return `<i><a href=${noAdUrl}>${displayName}</a></i> (${openUntil[language]})<br/>`
   }
   if (possiblyNoAdUser) {
     const adUrl = `${PUBLIC_URL}/targets/${id}/feedback`
     const noAdUrl = getNoAdUrl(username, userId, daysUntilExpiration)
-    return `<i>${name[language]}</i> (${openUntil[language]})<br/>${adLinkInfo[language]}, <a href=${adUrl}>${linkText[language]}</a> 
+    return `<i>${displayName}</i> (${openUntil[language]})<br/>${adLinkInfo[language]}, <a href=${adUrl}>${linkText[language]}</a> 
         ${noAdLinkInfo[language]}, <a href=${noAdUrl}>${linkText[language]}</a> (${noAdLinkExpirationInfo[language]})<br/>`
   }
 
   const adUrl = `${PUBLIC_URL}/targets/${id}/feedback`
-  return `<i><a href=${adUrl}>${name[language]}</a></i> (${openUntil[language]})<br/>`
+  return `<i><a href=${adUrl}>${displayName}</a></i> (${openUntil[language]})<br/>`
 }
 
 const createRecipientsForFeedbackTargets = async (
@@ -100,6 +114,7 @@ const createRecipientsForFeedbackTargets = async (
               possiblyNoAdUser,
               userId: user.id,
               username: user.username,
+              courseUnit: feedbackTarget.courseUnit,
             },
           ])
         })
