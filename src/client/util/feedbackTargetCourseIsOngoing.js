@@ -1,4 +1,5 @@
 const feedbackTargetCourseIsOngoing = ({ courseRealisation, opensAt }) => {
+  if (!courseRealisation) return false
   const { startDate } = courseRealisation
 
   if (!startDate || !opensAt) return false
