@@ -53,7 +53,7 @@ class FeedbackTarget extends Model {
     })
   }
 
-  async getStudentsWhoHaveNotGivenFeedback() {
+  async getStudentsWhoHaveNotReactedToSurvey() {
     return User.findAll({
       include: {
         model: UserFeedbackTarget,
