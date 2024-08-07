@@ -26,7 +26,6 @@ const create = async (req, res) => {
 
   // Updating userFeedbackTarget as well when the user gives feedback
   userFeedbackTarget.notGivingFeedback = false
-  userFeedbackTarget.save()
 
   const newFeedback = await Feedback.create({
     data,
