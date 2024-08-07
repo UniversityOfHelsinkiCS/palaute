@@ -49,7 +49,7 @@ const sendFeedbackSummaryReminderToStudents = async (feedbackTarget, feedbackRes
   const students = await feedbackTarget.getStudentsForFeedbackTarget()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/results`
   const formattedStudents = students
-    .filter(student => student.email && !student.userFeedbackTargets[0].notGivingFeedback)
+    .filter(student => student.email)
     .map(student => ({
       email: student.email,
       language: student.language || 'en',
