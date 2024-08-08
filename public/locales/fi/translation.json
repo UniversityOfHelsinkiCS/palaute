@@ -109,6 +109,7 @@
     "giveFeedbackButton": "Anna palautetta",
     "modifyFeedbackButton": "Muokkaa palautettani",
     "clearFeedbackButton": "Poista palautteeni",
+    "notGivingFeedbackButton": "En anna palautetta",
     "clearConfirmationQuestion": "Haluatko varmasti poistaa antamasi palautteen?",
     "yes": "Kyllä",
     "no": "Ei",
@@ -121,12 +122,15 @@
     "waitingForFeedbackTab": "Odottaa",
     "feedbackGivenTab": "Annetut",
     "feedbackGivenChip": "Palaute annettu",
+    "iDidNotGiveFeedbackChip": "En antanut palautetta",
     "waitingForFeedbackChip": "Palaute puuttuu",
     "feedbackNotStartedChip": "Palaute ei ole alkanut",
     "feedbackEndedChip": "Palaute on päättynyt",
     "continuousFeedbackChip": "Jatkuva palaute",
     "feedbackResponseGiven": "Opettaja on antanut vastapalautteen",
     "deleted": "Palautteesi on poistettu",
+    "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
+    "noFeedbackGivenChip": "En antanut palautetta",
     "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen."
   },
   "feedbackView": {

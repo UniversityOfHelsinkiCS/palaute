@@ -104,6 +104,7 @@
     "giveFeedbackButton": "Ge respons",
     "modifyFeedbackButton": "Redigera responsen",
     "clearFeedbackButton": "Töm responsen",
+    "notGivingFeedbackButton": "Jag kommer inte att ge feedback",
     "clearConfirmationQuestion": "Är du säker på att du vill tömma denna respons?",
     "yes": "Ja",
     "no": "Nej",
@@ -116,12 +117,15 @@
     "waitingForFeedbackTab": "Väntar på respons",
     "feedbackGivenTab": "Givna",
     "feedbackGivenChip": "Responsen är given",
+    "iDidNotGiveFeedbackChip": "Jag gav ingen feedback",
     "waitingForFeedbackChip": "Responsen saknas",
     "feedbackNotStartedChip": "Responsen har inte börjat",
     "feedbackEndedChip": "Responsen har avslutats",
     "continuousFeedbackChip": "Kontinuerlig respons",
     "feedbackResponseGiven": "Läraren har gett återkoppling på den givna feedbacken.",
     "deleted": "Din respons har tagits bort",
+    "noFeedbackGiven": "Ditt beslut att inte ge feedback har noterats",
+    "noFeedbackGivenChip": "Jag gav ingen feedback",
     "summaryAvailableWhenEnded": "Sammanfattning av feedback kommer att finnas tillgänglig efter att feedbackperioden har avslutats."
   },
   "feedbackView": {

@@ -109,6 +109,7 @@
     "giveFeedbackButton": "Give feedback",
     "modifyFeedbackButton": "Edit my feedback",
     "clearFeedbackButton": "Remove my feedback",
+    "notGivingFeedbackButton": "I will not give feedback",
     "clearConfirmationQuestion": "Are you sure you want to remove your feedback?",
     "yes": "Yes",
     "no": "No",
@@ -121,12 +122,15 @@
     "waitingForFeedbackTab": "Awaiting",
     "feedbackGivenTab": "Given",
     "feedbackGivenChip": "Feedback is given",
+    "iDidNotGiveFeedbackChip": "I did not give feedback",
     "waitingForFeedbackChip": "Feedback is missing",
     "feedbackNotStartedChip": "Feedback has not started",
     "feedbackEndedChip": "Feedback has ended",
     "continuousFeedbackChip": "Continuous feedback",
     "feedbackResponseGiven": "Teacher has given counter feedback",
     "deleted": "Your feedback has been deleted",
+    "noFeedbackGiven": "Your decision to not give feedback has been noted",
+    "noFeedbackGivenChip": "I did not give feedback",
     "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended."
   },
   "feedbackView": {

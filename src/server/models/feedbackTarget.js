@@ -53,7 +53,7 @@ class FeedbackTarget extends Model {
     })
   }
 
-  async getStudentsWhoHaveNotGivenFeedback() {
+  async getStudentsWhoHaveNotReactedToSurvey() {
     return User.findAll({
       include: {
         model: UserFeedbackTarget,
@@ -71,6 +71,7 @@ class FeedbackTarget extends Model {
         ],
         where: {
           accessStatus: 'STUDENT',
+          notGivingFeedback: false,
           feedbackId: {
             [Op.is]: null,
           },
