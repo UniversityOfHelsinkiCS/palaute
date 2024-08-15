@@ -56,23 +56,22 @@ const styles = {
   },
 }
 
-export const AcademicYearSelector = ({ value, onChange, labelledBy, futureYears }) => {
+export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
   const NOW = new Date()
   const MIN_YEAR = 2020
   const CURRENT_YEAR = NOW.getFullYear() + (NOW.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
-  const MAX_YEAR = CURRENT_YEAR + futureYears
 
   const displayValue = `${value} – ${value + 1}`
 
-  const canIncrease = value + 1 < MAX_YEAR
+  const canIncrease = value + 1 < CURRENT_YEAR
   const canDecrease = value > MIN_YEAR
 
   const handleIncrease = (increment = 1) => {
-    if (value + increment <= MAX_YEAR) {
+    if (value + increment <= CURRENT_YEAR) {
       onChange(value + increment)
     }
-    if (value + increment >= MAX_YEAR) {
-      onChange(MAX_YEAR - 1)
+    if (value + increment >= CURRENT_YEAR) {
+      onChange(CURRENT_YEAR - 1)
     }
   }
 
@@ -83,7 +82,7 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy, futureYears 
   }
 
   const handleSetMaxValue = () => {
-    onChange(MAX_YEAR - 1)
+    onChange(CURRENT_YEAR - 1)
   }
 
   const handleSetMinValue = () => {
@@ -134,7 +133,7 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy, futureYears 
       aria-labelledby={labelledBy ?? undefined}
       aria-valuenow={value}
       aria-valuemin={MIN_YEAR}
-      aria-valuemax={MAX_YEAR - 1}
+      aria-valuemax={CURRENT_YEAR - 1}
       aria-valuetext={displayValue}
       onKeyDown={handleKeyPress}
     >
@@ -249,12 +248,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
         {option !== 'all' && (
           <Box>
             {option === 'year' ? (
-              <AcademicYearSelector
-                value={year}
-                onChange={handleYearChange}
-                futureYears={futureYears}
-                labelledBy="year-semester-selector"
-              />
+              <AcademicYearSelector value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
             ) : (
               <SemesterSelector
                 value={currentSemester}

@@ -16,18 +16,15 @@ import useOrganisationsList from '../../hooks/useOrganisationsList'
 const styles: {
   [key: string]: SxProps<Theme>
 } = {
-  date: theme => ({
+  date: {
     position: 'sticky',
     top: '4rem',
-    [theme.breakpoints.down('md')]: {
-      position: 'static',
-    },
     height: '1rem',
     minWidth: '5rem',
     textTransform: 'capitalize',
-    color: theme.palette.text.secondary,
+    color: theme => theme.palette.text.secondary,
     fontSize: '16px',
-  }),
+  },
   year: {
     color: theme => theme.palette.text.primary,
   },
@@ -69,25 +66,14 @@ const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
         borderRadius: '0.3rem',
       }}
     >
-      <Typography color="textSecondary" fontSize={14}>
-        {fbt.courseUnit.courseCode}
-      </Typography>
-      <Box
-        sx={{
-          display: 'inline-block',
-          flexWrap: 'wrap',
-          columnGap: 1,
-          alignItems: 'start',
-        }}
-      >
-        <Typography sx={{ fontWeight: 400, display: 'inline', mr: 1 }}>
-          {getLanguageValue(fbt.courseUnit.name, i18n.language)}
-        </Typography>
+      <Box fontSize="16px" display="flex" alignItems="start" gap={1}>
+        <Typography color="textSecondary">{fbt.courseUnit.courseCode}</Typography>
+        <Typography fontWeight={400}>{getLanguageValue(fbt.courseUnit.name, i18n.language)}</Typography>
         <ExternalLink href={t('links:courseUnitPage', { courseRealisationId: fbt.courseRealisation.id })}>
           {t('search:coursePageLink')}
         </ExternalLink>
       </Box>
-      <Typography color="textSecondary" sx={{ fontSize: '14px', fontWeight: 400 }}>
+      <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
         {getLanguageValue(fbt.courseRealisation.name, i18n.language)}
       </Typography>
     </Paper>
@@ -100,30 +86,23 @@ const toMonth = (date: string, locale: Intl.LocalesArgument) =>
 const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
   const { i18n } = useTranslation()
 
-  const timeSectionStyle: SxProps<Theme> = theme => ({
-    display: 'flex',
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
-    },
-  })
-
   return (
     <>
       {feedbackTargetGrouping.years.map(([year, months]) => (
-        <Box key={year} sx={timeSectionStyle}>
+        <Box display="flex" key={year}>
           <Box sx={[styles.date, styles.year] as SxProps<Theme>} mt={1.5}>
             {year}
           </Box>
           <Box>
             {months.map(([firstDayOfMonth, days]) => (
-              <Box mb={4} key={firstDayOfMonth} sx={timeSectionStyle}>
+              <Box display="flex" mb={4} key={firstDayOfMonth}>
                 <Box sx={styles.date} mt={1.5}>
                   {toMonth(firstDayOfMonth, i18n.language)}
                 </Box>
                 <Box>
                   {days.map(([startDate, feedbackTargets]) => (
-                    <Box key={startDate} my={1.5} sx={timeSectionStyle}>
-                      <Box sx={styles.date} mr={2} mb={1.5}>
+                    <Box key={startDate} display="flex" my={1.5}>
+                      <Box sx={styles.date} mr={2}>
                         {format(Date.parse(startDate), 'dd/MM')}
                       </Box>
                       <Box display="flex" flexWrap="wrap">
