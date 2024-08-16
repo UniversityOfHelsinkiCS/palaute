@@ -1,9 +1,8 @@
-const os = require('os')
+import os from 'os'
+import winston from 'winston'
+import { WinstonGelfTransporter } from 'winston-gelf-transporter'
 
-const winston = require('winston')
-const { WinstonGelfTransporter } = require('winston-gelf-transporter')
-
-const { inProduction, GELF_TRANSPORT_ENABLED } = require('./config')
+import { inProduction, GELF_TRANSPORT_ENABLED } from './config'
 
 const { combine, timestamp, printf, splat } = winston.format
 
@@ -15,6 +14,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 if (!inProduction) {
   const devFormat = printf(
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     ({ level, message, timestamp, ...rest }) => `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`
   )
 
@@ -27,7 +27,7 @@ if (!inProduction) {
 }
 
 if (inProduction) {
-  const levels = {
+  const levels: { [key: string]: number } = {
     error: 0,
     warn: 1,
     info: 2,
@@ -63,6 +63,4 @@ if (inProduction) {
   }
 }
 
-const logger = winston.createLogger({ transports })
-
-module.exports = logger
+export const logger = winston.createLogger({ transports })
