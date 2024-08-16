@@ -13,7 +13,7 @@ import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
-import { UI_CONFIG_NAME } from '../util/common'
+import { inDevelopment, inE2EMode, UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
 
 const App = () => {
@@ -22,9 +22,11 @@ const App = () => {
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
 
-  useEffect(() => {
-    initShibbolethPinger()
-  }, [])
+  if (!inDevelopment || !inE2EMode) {
+    useEffect(() => {
+      initShibbolethPinger()
+    }, [])
+  }
 
   // Change the document language according to the i18n language
   i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
