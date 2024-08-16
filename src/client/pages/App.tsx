@@ -4,6 +4,8 @@ import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
+// @ts-expect-error Because the package is not typed
 import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
 
 import LocalizationProvider from '../components/LocalizationProvider'
