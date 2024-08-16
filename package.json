@@ -23,7 +23,7 @@
     "test:e2e": "CYPRESS_BASE_URL=http://localhost:8000 cypress run",
     "test:cypress": "cypress open",
     "test:run": "cypress run",
-    "format": "prettier --write 'src/**/*.js'",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,md}'",
     "lint": "concurrently --kill-others-on-fail --raw \"npm run ts-check\" \"eslint 'src/**/*.{js,jsx,ts,tsx}'\"",
     "bash": "docker-compose run app bash",
     "reset": "docker-compose down -v && docker-compose up --build",
@@ -36,7 +36,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "eslint",
-    "src/**/*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
+    "**/*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
   },
   "engines": {
     "node": ">=14.7"
