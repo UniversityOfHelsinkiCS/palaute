@@ -2,7 +2,7 @@
 const Organisation = require('../../models/organisation')
 const FeedbackTarget = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { redis } = require('../../util/redisClient')
 const { CourseRealisationsTag, CourseRealisation } = require('../../models')
 const { FEEDBACK_TARGET_CACHE_TTL } = require('../../util/config')

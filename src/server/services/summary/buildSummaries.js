@@ -17,7 +17,7 @@ const {
 const { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { prefixTagId } = require('../../util/common')
 
 /**

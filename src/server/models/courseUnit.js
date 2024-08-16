@@ -1,6 +1,6 @@
 const { Model, JSONB, STRING, BOOLEAN, VIRTUAL } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 
 class CourseUnit extends Model {
   async isStudentListVisible() {

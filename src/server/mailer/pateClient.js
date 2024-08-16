@@ -4,7 +4,7 @@ const _ = require('lodash')
 const Sentry = require('@sentry/node')
 
 const { inProduction, inStaging, PATE_URL } = require('../util/config')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 
 const template = {
   from: 'Norppa',
