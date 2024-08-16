@@ -100,7 +100,7 @@
     "redis": "^4.2.0",
     "resize-observer-polyfill": "^1.5.1",
     "sequelize": "^6.35.1",
-    "umzug": "^2.3.0",
+    "umzug": "^3.0.0",
     "unfuck-spa-shibboleth-session": "^4.1.0",
     "unfuck-utf8-headers-middleware": "^1.0.1",
     "uuid": "^10.0.0",
