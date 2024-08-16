@@ -30,7 +30,7 @@
     "ts-check:client": "tsc --skipLibCheck --noEmit --project src/client/tsconfig.json",
     "ts-check:server": "tsc --skipLibCheck --noEmit --project src/server/tsconfig.json",
     "ts-check": "concurrently --kill-others-on-fail --raw \"npm run ts-check:client\" \"npm run ts-check:server\"",
-    "prepare": "husky install",
+    "prepare": "husky",
     "translations": "node ./tools/analyzeTranslations.js",
     "ndc": "npx no-dead-code@latest --ignore .eslintrc.js config prettier.config.js"
   },
