@@ -56,6 +56,8 @@ const createUserFeedbackTargets = async (parentFeedbackTargetId, interimFeedback
     raw: true,
   })
 
+  console.log(`parentUserFeedbackTargets: ${JSON.stringify(parentUserFeedbackTargets)}`)
+
   const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
     parentUserFeedbackTargets.map(({ accessStatus, userId, isAdministrativePerson, groupIds }) => ({
       accessStatus,
