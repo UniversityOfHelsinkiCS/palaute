@@ -9,10 +9,15 @@ import DisabledCourseWarning from './DisabledCourseWarning'
 import FeedbackResponseChip from '../../FeedbackResponseChip'
 
 import commonStyles from '../utils/styles'
-import getLatestFeedbackTarget from '../utils/utils'
+import { getLatestFeedbackTarget, hasOngoingInterimFeedbacks } from '../utils/utils'
 
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseCode } from '../../../../util/courseIdentifiers'
+
+import InterimFeedbackChip from '../chips/InterimFeedbackChip'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
+import { SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../../util/common'
 
 const styles = {
   accordion: {
@@ -37,6 +42,27 @@ const CourseUnitAccordion = ({ courseUnit }) => {
 
   const { id, feedbackResponseGiven, feedbackResponseSent, feedbackCount, isEnded, isOld } = latestFeedbackTarget
 
+  let continuousFeedbackTargetFound = false
+  let ongoingFeedbackTargetFound = false
+  courseRealisations.forEach(cr => {
+    if (cr.feedbackTargets) {
+      for (const fbt of cr.feedbackTargets) {
+        const isOpen = feedbackTargetIsOpen(fbt)
+        const { opensAt } = fbt
+        const isOngoing = feedbackTargetCourseIsOngoing({ courseRealisation: cr, opensAt }) && !isOpen
+        if (isOngoing && fbt.continuousFeedbackEnabled) {
+          continuousFeedbackTargetFound = true
+        } else if (isOpen) {
+          ongoingFeedbackTargetFound = true
+        }
+      }
+    }
+  })
+
+  const fetchInterimFeedbackChip = courseRealisations.some(courseRealisation =>
+    hasOngoingInterimFeedbacks(courseRealisation.interimFeedbackTargets)
+  )
+
   return (
     <Accordion
       sx={{
@@ -52,6 +78,7 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         data-cy={`my-teaching-course-unit-accordion-${courseCode}`}
         sx={{
           ...(disabledCourse && commonStyles.alert),
+          '.MuiAccordionSummary-content': { flexDirection: 'column' },
         }}
       >
         <Box>
@@ -60,15 +87,35 @@ const CourseUnitAccordion = ({ courseUnit }) => {
           </Typography>
 
           {disabledCourse && <DisabledCourseWarning />}
+        </Box>
+        <Box sx={{ pr: 2, pt: 1, display: 'flex', flexWrap: 'wrap' }}>
+          <Box>
+            {!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0 && (
+              <FeedbackResponseChip
+                id={id}
+                feedbackResponseGiven={feedbackResponseGiven}
+                feedbackResponseSent={feedbackResponseSent}
+                isOld={isOld}
+              />
+            )}
+          </Box>
 
-          {!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0 && (
-            <FeedbackResponseChip
-              id={id}
-              feedbackResponseGiven={feedbackResponseGiven}
-              feedbackResponseSent={feedbackResponseSent}
-              isOld={isOld}
-            />
+          {SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS && (
+            <Box>
+              <Box sx={{ mr: 1 }}>{fetchInterimFeedbackChip && <InterimFeedbackChip />}</Box>
+            </Box>
           )}
+
+          {SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS &&
+            (ongoingFeedbackTargetFound || continuousFeedbackTargetFound) && (
+              <Box>
+                <FeedbackResponseChip
+                  id={undefined}
+                  ongoing={ongoingFeedbackTargetFound}
+                  continuous={continuousFeedbackTargetFound}
+                />
+              </Box>
+            )}
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>

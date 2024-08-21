@@ -51,7 +51,8 @@
     "multipleChoiceScale": ""
   },
   "feedbackTargetResults": {
-    "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and unit administrators"
+    "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and unit administrators",
+    "emailMessage": "Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
   },
   "studentsWithFeedback": {
     "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the unit's settings"
@@ -85,16 +86,16 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Please give feedback on the course {{courseCode}} {{courseName}}",
-      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseCode}} {{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseCode}} {{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}} \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
     },
     "continuousFeedbackResponse": {
       "subject": "Your feedback received a response on on the course {{courseCode}} {{courseName}}",
-      "text": "Dear student!\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseCode}} {{courseName}}</a>"
+      "text": "Dear student!\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseCode}} {{courseName}}</a> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
     },
     "surveyOpeningEmailToStudents": {
       "subject": "Course feedback for course {{courseCode}} {{courseName}} has opened",
       "subjectMultiple": "Course feedback has opened",
-      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and university operations.\nYou will be able to edit your answers during the feedback period, and a summary will be available in Norppa after the feedback period has ended."
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and university operations.\nYou will be able to edit your answers during the feedback period, and a summary will be available in Norppa after the feedback period has ended. \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
     },
     "continuousFeedbackDigest": {
       "subject": "New continuous feedback on your course {{courseCode}} {{courseName}}",
@@ -107,7 +108,7 @@
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "A new counter feedback from your teacher to course {{courseCode}} {{courseName}}",
-      "text": "Dear student!\n\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a>"
+      "text": "Dear student!\n\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Feedback for the course {{courseCode}} {{courseName}} is about to start",

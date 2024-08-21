@@ -324,6 +324,11 @@ const config = {
    * Controls visibility of the courses tab in organisation settings
    */
   SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: true,
+
+  /**
+   * Controls showing of chits at course unit level based on the chits of its feedback targets
+   */
+  SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: false,
 }
 
 module.exports = config

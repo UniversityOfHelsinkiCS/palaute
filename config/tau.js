@@ -345,6 +345,11 @@ const config = {
    * TAU does not want to have the courses tab visible in organisation settings
    */
   SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: false,
+
+  /**
+   * Controls showing of chits at course unit level based on the chits of its feedback targets
+   */
+  SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: true,
 }
 
 module.exports = config
