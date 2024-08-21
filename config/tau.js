@@ -347,9 +347,9 @@ const config = {
   SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: false,
 
   /**
-   * Controls showing of chits at course unit level based on the chits of its feedback targets
+   * Controls showing of chips at course unit level based on the chips of its feedback targets
    */
-  SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: true,
+  SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: true,
 }
 
 module.exports = config

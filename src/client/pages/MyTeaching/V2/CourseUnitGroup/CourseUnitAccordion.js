@@ -17,7 +17,7 @@ import { getCourseCode } from '../../../../util/courseIdentifiers'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
-import { SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../../util/common'
+import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../../util/common'
 
 const styles = {
   accordion: {
@@ -100,13 +100,13 @@ const CourseUnitAccordion = ({ courseUnit }) => {
             )}
           </Box>
 
-          {SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS && (
+          {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS && (
             <Box>
               <Box sx={{ mr: 1 }}>{fetchInterimFeedbackChip && <InterimFeedbackChip />}</Box>
             </Box>
           )}
 
-          {SHOW_CHITS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS &&
+          {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS &&
             (ongoingFeedbackTargetFound || continuousFeedbackTargetFound) && (
               <Box>
                 <FeedbackResponseChip
