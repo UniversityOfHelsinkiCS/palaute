@@ -272,8 +272,8 @@ const PeriodInfoAddition = ({ isEnded }) => {
   return null
 }
 
-const getCourseDisplayName = (translatedName, courseCode) => {
-  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+const getCourseDisplayName = (translatedName, courseCode, isOrganisationSurvey) => {
+  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES && !isOrganisationSurvey) {
     return `${courseCode} ${translatedName}`
   }
   return `${translatedName}`
@@ -294,7 +294,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const courseName = getCourseName(feedbackTarget, t)
   const translatedName = getLanguageValue(courseName, i18n.language)
-  const courseDisplayName = getCourseDisplayName(translatedName, feedbackTarget.courseUnit.courseCode)
+  const courseDisplayName = getCourseDisplayName(
+    translatedName,
+    feedbackTarget.courseUnit.courseCode,
+    feedbackTarget.courseUnit.userCreated
+  )
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`

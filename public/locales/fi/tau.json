@@ -86,7 +86,7 @@
     "giveResponseInfo": "Vastapalautteen voi antaa toteutuksen palauteajan päätyttyä",
     "closeImmediatelyConfirm": "Palautejakson loputtua palautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?",
     "closeImmediatelyTomorrowConfirm": "Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua palautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?",
-    "emailMessage": "Hyvä opiskelija! \n Vastaathan opintojakson {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >>",
+    "emailMessage": "Hyvä opiskelija! \n Vastaathan opintojakson {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa",
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai yksikön hallintohenkilöille",
     "publishingInfo": "Tämän kysymyksen vastaukset eivät näy toteutuksen opiskelijoille. Halutessasi voit julkistaa ne toteutuksen opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
     "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät toteutuksen opiskelijoille."
@@ -190,16 +190,16 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta opintojaksolle {{courseCode}} {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Vastaathan opintojakson <a href={{- url}}>{{courseCode}} {{courseName}}</a> palautteeseen. Palautekysely sulkeutuu {{closesAt}}. Kiitos!\n\n{{reminder}}"
+      "text": "Hyvä opiskelija!\n\n Vastaathan opintojakson <a href={{- url}}>{{courseCode}} {{courseName}}</a> palautteeseen. Palautekysely sulkeutuu {{closesAt}}. Kiitos!\n\n{{reminder}} \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
     },
     "continuousFeedbackResponse": {
       "subject": "Opettaja vastasi palautteeseesi opintojaksolla {{courseCode}} {{courseName}}",
-      "text": "Hyvä opiskelija!\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseCode}} {{courseName}}</a>"
+      "text": "Hyvä opiskelija!\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseCode}} {{courseName}}</a> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
     },
     "surveyOpeningEmailToStudents": {
       "subject": "Opintojakson {{courseCode}} {{courseName}} palautelomake on avautunut",
       "subjectMultiple": "Opintojaksopalaute on avautunut",
-      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVoit muokata vastauksia kyselyn ollessa auki, ja kyselyn sulkeuduttua pääset halutessasi näkemään kyselyn palautekoosteen Norpassa."
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVoit muokata vastauksia kyselyn ollessa auki, ja kyselyn sulkeuduttua pääset halutessasi näkemään kyselyn palautekoosteen Norpassa. \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
     },
     "continuousFeedbackDigest": {
       "subject": "Uutta jatkuvaa palautetta opettamallesi opintojaksolle {{courseCode}} {{courseName}}",
@@ -212,7 +212,7 @@
     },
     "counterFeedbackNotificationToStudents": {
       "subject": "Uusi vastapalaute opettajaltasi opintojaksolla {{courseCode}} {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on antanut vastapalautteen opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa opintojakson palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a>"
+      "text": "Hyvä opiskelija!\n\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on antanut vastapalautteen opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa opintojakson palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
     },
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Palautekysely opettamallesi opintojaksolle {{courseCode}} {{courseName}} on aukeamassa",

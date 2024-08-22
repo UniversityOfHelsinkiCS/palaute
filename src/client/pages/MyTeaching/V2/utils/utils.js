@@ -2,7 +2,7 @@ import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
-const getLatestFeedbackTarget = courseRealisations => {
+export const getLatestFeedbackTarget = courseRealisations => {
   if (courseRealisations.length === 0) return true
 
   const latestCourseRealisation = courseRealisations[0]
