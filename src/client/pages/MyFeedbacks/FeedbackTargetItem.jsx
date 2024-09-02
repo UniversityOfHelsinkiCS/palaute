@@ -18,6 +18,7 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
+import { getCourseCode } from '../../util/courseIdentifiers'
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
@@ -176,7 +177,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
+  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit } = feedbackTarget
 
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -185,6 +186,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   })
 
   const courseName = getCourseName(feedbackTarget, t)
+  const visibleCourseCode = getCourseCode(courseUnit)
   const translatedName = getLanguageValue(courseName, i18n.language)
 
   const editPath = `/targets/${id}/feedback`
@@ -214,7 +216,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       disableGutters
     >
       <Typography variant="body1" fontWeight={600} component="h2">
-        {translatedName}
+        {visibleCourseCode} {translatedName}
       </Typography>
       <ListItemText primary={periodInfo} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
