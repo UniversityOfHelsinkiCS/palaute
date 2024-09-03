@@ -13,7 +13,7 @@ import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
-import { inDevelopment, inE2EMode, UI_CONFIG_NAME } from '../util/common'
+import { inProduction, UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
 
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
 
-  if (!inDevelopment || !inE2EMode) {
+  if (inProduction) {
     useEffect(() => {
       initShibbolethPinger()
     }, [])
