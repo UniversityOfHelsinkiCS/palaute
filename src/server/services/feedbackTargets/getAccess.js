@@ -12,9 +12,11 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
   // User not directly associated. Lets check if they have access through organisation
   const organisationAccess = await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
 
-  let orgAccess = Access.ORGANISATION_READ
+  let orgAccess = null
   if (organisationAccess.admin) {
     orgAccess = Access.ORGANISATION_ADMIN
+  } else if (organisationAccess.read) {
+    orgAccess = Access.ORGANISATION_READ
   }
 
   // only direct access, return that
