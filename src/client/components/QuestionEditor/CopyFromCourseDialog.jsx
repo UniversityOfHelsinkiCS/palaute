@@ -115,7 +115,10 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const handleValueChange = (event, newValue) => setValue(newValue)
 
   const feedbackTargetsWithQuestions = useMemo(
-    () => (feedbackTargets ?? []).filter(t => t.surveys?.teacherSurvey?.questions?.length > 0).slice(0, 10),
+    () =>
+      (feedbackTargets ?? [])
+        .filter(t => t.surveys?.teacherSurvey?.questions?.length > 0 && t.id !== feedbackTarget.id)
+        .slice(0, 10),
     [feedbackTargets]
   )
 
@@ -133,7 +136,9 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
           <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
         </Box>
         {userCreated ? (
-          <Typography variant="h6">{getLanguageValue(name, i18n.language)}</Typography>
+          <Typography component="h3" variant="h6">
+            {getLanguageValue(name, i18n.language)}
+          </Typography>
         ) : (
           <Box mb={2}>
             <Autocomplete
