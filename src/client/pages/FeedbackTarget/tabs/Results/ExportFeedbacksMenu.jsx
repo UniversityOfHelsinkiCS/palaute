@@ -93,10 +93,8 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
 
   return (
     <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
-      <>
-        {hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
-        {hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
-      </>
+      {hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      {hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
     </ExportButton>
   )
 }
