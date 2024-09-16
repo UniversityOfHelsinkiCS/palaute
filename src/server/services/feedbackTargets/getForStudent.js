@@ -35,7 +35,7 @@ const getFeedbackTargetsForStudent = async userId => {
           {
             model: Organisation,
             as: 'organisations',
-            through: { attributes: ['type'], as: 'courseUnitOrganisation' },
+            through: { attributes: ['type', 'noFeedbackAllowed'], as: 'courseUnitOrganisation' },
             required: true,
           },
         ],
@@ -57,11 +57,18 @@ const getForStudent = async ({ user }) => {
   const feedbackTargets = await getFeedbackTargetsForStudent(user.id)
 
   const now = Date.now()
+
+  // userFeedbackTargets table has a unique constraint for user_id <-> feedback_target_id
+  // combination so referring to fbt.userFeedbackTargets[0] should be fine
   const grouped = {
     waiting: feedbackTargets.filter(
-      fbt => Date.parse(fbt.opensAt) < now && Date.parse(fbt.closesAt) > now && !fbt.feedback
+      fbt =>
+        Date.parse(fbt.opensAt) < now &&
+        Date.parse(fbt.closesAt) > now &&
+        !fbt.feedback &&
+        !fbt.userFeedbackTargets[0].notGivingFeedback
     ),
-    given: feedbackTargets.filter(fbt => fbt.feedback),
+    given: feedbackTargets.filter(fbt => fbt.feedback || fbt.userFeedbackTargets[0].notGivingFeedback),
     ended: feedbackTargets.filter(fbt => Date.parse(fbt.closesAt) < now),
     ongoing: feedbackTargets.filter(fbt => Date.parse(fbt.opensAt) > now),
   }
