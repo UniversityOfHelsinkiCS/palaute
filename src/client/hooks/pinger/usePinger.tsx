@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CUSTOM_SESSION_PINGER } from '../../util/common'
 
-const usePinger = () => {
+const usePinger = (pingerName: string) => {
   const [pinger, setPinger] = useState(null)
 
   useEffect(() => {
-    import(`./Pinger-${CUSTOM_SESSION_PINGER}.tsx`).then(pingerModule => {
-      if (pingerModule.default) setPinger(pingerModule.default)
+    import(`./Pinger-${pingerName}.tsx`).then(pingerModule => {
+      if (pingerModule?.default) setPinger(pingerModule?.default)
     })
-  }, [])
+  }, [pingerName])
 
   return useMemo(() => pinger, [setPinger])
 }

@@ -10,17 +10,16 @@ import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
-import { UI_CONFIG_NAME } from '../util/common'
+import { CUSTOM_SESSION_PINGER, UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
-import useShibbolethPinger from '../hooks/pinger/Pinger-shibboleth'
+import usePinger from '../hooks/pinger/usePinger'
 
 const App = () => {
   const { i18n } = useTranslation()
 
+  usePinger(CUSTOM_SESSION_PINGER)
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
-
-  useShibbolethPinger()
 
   // Change the document language according to the i18n language
   i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
