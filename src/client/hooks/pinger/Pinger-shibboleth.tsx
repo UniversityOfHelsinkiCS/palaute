@@ -8,6 +8,8 @@ const useShibbolethPinger = () => {
   if (inProduction || inStaging) {
     useEffect(() => {
       initShibbolethPinger()
+
+      console.log('Shibboleth pinger initialized')
     }, [])
   }
 }
