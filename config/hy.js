@@ -1,3 +1,5 @@
+const { CUSTOM_SESSION_PINGER } = require('./default')
+
 /**
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
@@ -289,6 +291,8 @@ const config = {
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 
   NEW_TEACHING_VIEW_ENABLED: true,
+
+  CUSTOM_SESSION_PINGER: 'shibboleth',
 }
 
 module.exports = config
