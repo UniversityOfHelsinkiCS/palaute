@@ -12,7 +12,7 @@ import GuestUser from './GuestUser'
 import useTheme from '../theme'
 import { UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
-import usePinger from '../hooks/pinger/usePinger'
+import useShibbolethPinger from '../hooks/pinger/Pinger-shibboleth'
 
 const App = () => {
   const { i18n } = useTranslation()
@@ -20,7 +20,7 @@ const App = () => {
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
 
-  usePinger()
+  useShibbolethPinger()
 
   // Change the document language according to the i18n language
   i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
