@@ -1,5 +1,3 @@
-const { CUSTOM_SESSION_PINGER } = require('./default')
-
 /**
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
