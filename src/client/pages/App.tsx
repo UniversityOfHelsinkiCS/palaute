@@ -1,20 +1,18 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-// @ts-expect-error Because the package is not typed
-import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'
-
 import LocalizationProvider from '../components/LocalizationProvider'
 import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
-import { inProduction, UI_CONFIG_NAME } from '../util/common'
+import { UI_CONFIG_NAME } from '../util/common'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
+import usePinger from '../hooks/pinger/usePinger'
 
 const App = () => {
   const { i18n } = useTranslation()
@@ -22,11 +20,7 @@ const App = () => {
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
 
-  if (inProduction) {
-    useEffect(() => {
-      initShibbolethPinger()
-    }, [])
-  }
+  usePinger()
 
   // Change the document language according to the i18n language
   i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
