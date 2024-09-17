@@ -302,9 +302,8 @@ const config = {
    * Custom session pinger hook to use. The pinger is used to check if the login session is still valid.
    * The pinger hooks reside in src/client/hooks/pinger direcotry. The default pinger is 'Pinger-default'
    * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
-   * This is because Vite dynamic import limitations https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations.
    */
-  CUSTOM_SESSION_PINGER: 'default',
+  CUSTOM_SESSION_PINGER: 'Pinger-default',
 }
 
 module.exports = config

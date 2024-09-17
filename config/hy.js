@@ -290,7 +290,7 @@ const config = {
 
   NEW_TEACHING_VIEW_ENABLED: true,
 
-  CUSTOM_SESSION_PINGER: 'shibboleth',
+  CUSTOM_SESSION_PINGER: 'Pinger-shibboleth',
 }
 
 module.exports = config

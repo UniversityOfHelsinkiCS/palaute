@@ -1,34 +1,15 @@
-import { useEffect, useState } from 'react'
+import useShibbolethPinger from './Pinger-shibboleth'
+import useDefaultPinger from './Pinger-default'
 
-const usePinger = (pingerName: string) => {
-  const [pinger, setPinger] = useState<(() => void) | null>(null)
+const usePinger = (pingerName: 'Pinger-default' | 'Pinger-shibboleth') => {
+  const PingerHooks = {
+    'Pinger-default': useDefaultPinger,
+    'Pinger-shibboleth': useShibbolethPinger,
+  }
 
-  useEffect(() => {
-    let isMounted = true
+  const pingerHook = PingerHooks[pingerName]
 
-    import(`./Pinger-${pingerName}.tsx`)
-      .then(pingerModule => {
-        if (pingerModule?.default && typeof pingerModule.default === 'function' && isMounted) {
-          setPinger(() => pingerModule.default)
-        }
-      })
-      .catch(error => {
-        throw new Error(`Failed to load the pinger: ${pingerName}`, error)
-      })
-
-    return () => {
-      isMounted = false
-      setPinger(null)
-    }
-  }, [pingerName])
-
-  useEffect(() => {
-    if (typeof pinger === 'function') {
-      pinger()
-
-      console.log(`Pinger ${pingerName} is running`)
-    }
-  }, [pinger])
+  pingerHook()
 }
 
 export default usePinger
