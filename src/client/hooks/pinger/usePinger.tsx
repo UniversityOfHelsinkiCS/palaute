@@ -5,7 +5,9 @@ const usePinger = (pingerName: string) => {
 
   useEffect(() => {
     import(`./Pinger-${pingerName}.tsx`).then(pingerModule => {
-      if (pingerModule?.default) setPinger(pingerModule?.default)
+      if (pingerModule?.default) {
+        setPinger(() => pingerModule?.default)
+      }
     })
   }, [pingerName])
 

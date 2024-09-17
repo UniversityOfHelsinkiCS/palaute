@@ -17,9 +17,10 @@ import usePinger from '../hooks/pinger/usePinger'
 const App = () => {
   const { i18n } = useTranslation()
 
-  usePinger(CUSTOM_SESSION_PINGER)
   const customUiConfig: any = useCustomUiConfig(UI_CONFIG_NAME)
   const theme = useTheme(customUiConfig?.theme)
+
+  usePinger(CUSTOM_SESSION_PINGER)
 
   // Change the document language according to the i18n language
   i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
