@@ -1,4 +1,4 @@
-const { Model, INTEGER, STRING } = require('sequelize')
+const { Model, INTEGER, STRING, BOOLEAN } = require('sequelize')
 const { sequelize } = require('../db/dbConnection')
 
 class CourseUnitsOrganisation extends Model {}
@@ -22,6 +22,11 @@ CourseUnitsOrganisation.init(
     organisationId: {
       type: STRING,
       allowNull: false,
+    },
+    noFeedbackAllowed: {
+      type: BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   {

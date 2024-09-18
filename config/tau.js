@@ -345,6 +345,11 @@ const config = {
    * TAU does not want to have the courses tab visible in organisation settings
    */
   SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: false,
+
+  /**
+   * Controls showing of chips at course unit level based on the chips of its feedback targets
+   */
+  SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: true,
 }
 
 module.exports = config

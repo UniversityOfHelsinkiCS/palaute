@@ -48,7 +48,7 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
   }
 
   const courseUnit = await CourseUnit.findByPk(feedbackTarget.CourseUnitId)
-  const students = await feedbackTarget.getStudentsWhoHaveNotGivenFeedback()
+  const students = await feedbackTarget.getStudentsWhoHaveNotReactedToSurvey()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback`
   const formattedStudents = students
     .filter(student => student.email)

@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Chip } from '@mui/material'
 import styles from '../../util/chipStyles'
 import LinkChip from '../../components/common/LinkChip'
 
@@ -54,10 +55,25 @@ const FeedbackResponseChip = ({
   const ongoingStyle = styles.shimmering
   const continuousStyle = styles.shimmeringSecondary
 
+  const sx = feedbackResponseSent ? styles.success : notSentStyle
+
   const url = getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, continuous)
   const dataCy = getDataCyLabel(id, continuous, ongoing, feedbackResponseGiven, feedbackResponseSent)
 
-  const sx = feedbackResponseSent ? styles.success : notSentStyle
+  if (!id) {
+    return (
+      <Chip
+        onClick={undefined}
+        href={undefined}
+        variant="outlined"
+        size="small"
+        label={continuous ? continuousLabel : ongoing ? ongoingLabel : label}
+        sx={{
+          ...(continuous ? continuousStyle : ongoing ? ongoingStyle : sx),
+        }}
+      />
+    )
+  }
 
   return (
     <LinkChip
