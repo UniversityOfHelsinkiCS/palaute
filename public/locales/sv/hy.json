@@ -10,6 +10,7 @@
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "https://toska.cs.helsinki.fi/graylog",
     "courseUnitPage": "https://studies.helsinki.fi/kurser/studieavsnitt/{{courseUnitId}}/",
+    "courseUnitPageStudent": "https://studies.helsinki.fi/kurser/studieavsnitt/{{courseUnitId}}/",
     "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "mails": {
