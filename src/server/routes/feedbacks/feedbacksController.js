@@ -24,6 +24,9 @@ const create = async (req, res) => {
 
   if (!(await validateFeedback(data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
 
+  // Updating userFeedbackTarget as well when the user gives feedback
+  userFeedbackTarget.notGivingFeedback = false
+
   const newFeedback = await Feedback.create({
     data,
     userId,
@@ -81,8 +84,11 @@ const update = async (req, res) => {
 
   if (!(await validateFeedback(req.body.data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
 
-  feedback.data = req.body.data
+  // Updating userFeedbackTarget as well when the user gives feedback
+  userFeedbackTarget.notGivingFeedback = false
+  userFeedbackTarget.save()
 
+  feedback.data = req.body.data
   const updatedFeedback = await feedback.save()
 
   return res.send(updatedFeedback)

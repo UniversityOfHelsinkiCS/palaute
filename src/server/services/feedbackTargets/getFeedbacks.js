@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const { FEEDBACK_HIDDEN_STUDENT_COUNT } = require('../../util/config')
+const { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } = require('../../util/config')
 const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
@@ -136,7 +136,10 @@ const getFeedbacks = async (id, user, groupId) => {
     feedbackTarget,
   })
 
-  if (!access?.canSeePublicFeedbacks() && feedbackVisibility !== 'ALL') {
+  if (
+    (!access?.canSeePublicFeedbacks() && feedbackVisibility !== 'ALL') ||
+    (access.accessStatus === 'STUDENT' && !feedbackTarget.isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING)
+  ) {
     return {
       feedbacks: [],
       feedbackVisible: false,

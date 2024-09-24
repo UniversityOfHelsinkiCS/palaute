@@ -9,7 +9,7 @@ const {
   User,
   UserFeedbackTarget,
 } = require('../../models')
-const { PUBLIC_URL, FEEDBACK_SYSTEM } = require('../../util/config')
+const { PUBLIC_URL, FEEDBACK_SYSTEM, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
@@ -84,9 +84,15 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const courseName = userCreated
     ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
     : getLanguageValue(feedbackTarget.courseUnit?.name)
+  const { courseCode } = feedbackTarget.courseUnit
+
+  let courseNamesAndUrlsDisplayName = courseName
+  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
+    courseNamesAndUrlsDisplayName = `${courseCode} ${courseNamesAndUrlsDisplayName}`
+  }
 
   const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
-      ${courseName}
+      ${courseNamesAndUrlsDisplayName}
       </a> <br/>`
 
   const teachers = allTeachers.map(t => `${t.firstName} ${t.lastName}`)
@@ -95,7 +101,10 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
 
   const email = {
     to: teacher.email,
-    subject: t(`mails:counterFeedbackReminder:${userCreated ? 'customSubject' : 'subject'}`, { courseName }),
+    subject: t(`mails:counterFeedbackReminder:${userCreated ? 'customSubject' : 'subject'}`, {
+      courseName,
+      courseCode,
+    }),
     text: t(`mails:counterFeedbackReminder:${userCreated ? 'customText' : 'text'}`, {
       courseNamesAndUrls,
       teachers,

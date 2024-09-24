@@ -61,7 +61,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
       <CardContent>
         <Typography
           data-cy={`organisation-survey-item-title-${organisationSurvey.id}`}
-          sx={{ textTransform: 'capitalize', fontWeight: 'light' }}
+          sx={{ fontWeight: 'light' }}
           variant="h5"
           component="div"
         >

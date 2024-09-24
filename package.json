@@ -8,13 +8,16 @@
     "start:dev:front": "vite",
     "start:dev:server": "NODE_OPTIONS='--no-warnings --loader ts-node/esm' nodemon --watch 'src/server/**/*' -e js,ts,tsx --exec ts-node src/server/index.ts",
     "start:tau": "docker compose -f docker-compose.lw-dev.yml up",
+
+    "start:redis:tau": "docker compose -f docker-compose.redis.yml up",
     "start:client:tau": "npm run ts-check:client && cross-env NODE_CONFIG_ENV=tau NODE_ENV=development vite",
-    "start:server:tau": "npm run clean-build:server && npm run build:server && NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L ./build/server/index.js\"",
+    "start:server:tau": "npm run clean-build:server && npm run build:server && cross-env NODE_CONFIG_ENV=tau NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L --env-file .env ./build/server/index.js\"",
+
     "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/server/index.js",
     "start:test": "NODE_ENV=test node --max-old-space-size=4096 ./build/server/index.js",
     "build": "npm run clean-build && npm run build:server && npm run build:client",
     "build:client": "npm run ts-check:client && DISABLE_ESLINT_PLUGIN=true tsc && vite build",
-    "build:server": "NODE_ENV=development tsc --build src/server",
+    "build:server": "cross-env NODE_ENV=development && tsc --build src/server",
     "clean-build": "rimraf ./build",
     "clean-build:server": "rimraf ./build/server",
     "test": "npm run test:setup && sleep 10 && npm run test:e2e",
@@ -116,7 +119,7 @@
     "@babel/preset-typescript": "^7.21.5",
     "@types/compression": "^1.7.2",
     "@types/jest": "^29.5.1",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.7",
     "@types/lodash-es": "^4.17.12",
     "@types/minimist": "^1.2.2",
     "@types/node": "^20.0.0",
@@ -171,8 +174,10 @@
     "ignore": [
       "cypress",
       "src/client",
-      "build/client"
-    ]
+      "build/client",
+      "**/**.log"
+    ],
+    "delay": "2500"
   },
   "jest": {
     "modulePathIgnorePatterns": [

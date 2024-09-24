@@ -52,6 +52,15 @@ const getData = (questions, feedbacks, language) => {
         const q = questions.find(q => q.id === d.questionId)
 
         if (['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)) {
+          if (Array.isArray(d.data)) {
+            return d.data
+              .map(optionId => {
+                const option = optionById[optionId]
+                return getLanguageValue(option?.label, language)
+              })
+              .join(', ')
+          }
+
           const option = optionById[d.data]
           return getLanguageValue(option?.label, language)
         }

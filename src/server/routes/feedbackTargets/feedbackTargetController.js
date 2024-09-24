@@ -20,6 +20,7 @@ const {
   getFeedbackTargetsForOrganisation,
   hideFeedback,
   getPublicFeedbackTargetsForOrganisation,
+  notGivingFeedback,
 } = require('../../services/feedbackTargets')
 const { getWaitingFeedbackCountForStudent } = require('../../services/feedbackTargets/getForStudent')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
@@ -272,6 +273,13 @@ adRouter.put('/:id/delete-feedback', async (req, res) => {
   const { questionId, feedbackContent } = req.body
   const count = await adminDeleteFeedback({ user, feedbackTargetId, questionId, feedbackContent })
   res.send({ count })
+})
+
+adRouter.put('/:id/not-giving-feedback', async (req, res) => {
+  const { user } = req
+  const { id: feedbackTargetId } = req.params
+  const result = await notGivingFeedback({ feedbackTargetId, user })
+  res.send({ result })
 })
 
 adRouter.use('/', interimFeedbackController)

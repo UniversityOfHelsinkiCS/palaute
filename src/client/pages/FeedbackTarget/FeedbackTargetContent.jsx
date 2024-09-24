@@ -17,7 +17,11 @@ import {
   ForumOutlined,
 } from '@mui/icons-material'
 
-import { ALWAYS_SHOW_STUDENT_LIST, INTERIM_FEEDBACKS_ENABLED } from '../../util/common'
+import {
+  ALWAYS_SHOW_STUDENT_LIST,
+  INTERIM_FEEDBACKS_ENABLED,
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING,
+} from '../../util/common'
 import Results from './tabs/Results'
 import FeedbackView from './tabs/FeedbackView'
 import StudentsWithFeedback from './tabs/StudentsWithFeedback'
@@ -83,8 +87,12 @@ const FeedbackTargetContent = () => {
   const courseCode = getCourseCode(courseUnit)
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
-
-  const showResultsSection = isAdmin || isOrganisationAdmin || isTeacher || feedbackGiven || isEnded
+  const showResultsSection =
+    isAdmin ||
+    isOrganisationAdmin ||
+    isTeacher ||
+    isEnded ||
+    (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING && feedbackGiven)
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld

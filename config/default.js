@@ -297,6 +297,47 @@ const config = {
    * One should maybe have only one such group, and abstract the bulk of the access logic to Jami.
    */
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
+
+  /**
+   * If this is set to true students can only see feedback target's feedbacks after the feedback target has
+   * closed (its closes_at date is in the past).
+   */
+  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: false,
+
+  /**
+   * Feedback correspondents can be added and removed in norppa (organisation settings).
+   * This setting enables/disables this feature.
+   */
+  ENABLE_CORRESPONDENT_MANAGEMENT: true,
+
+  /**
+   * Student numbers copied from excel sometimes lose their leading zeros. Norppa can
+   * try to fix this automatically. Currently in use only in OrganisationSurveyEditor.
+   */
+  ADD_LEADING_ZERO_TO_STUDENT_NUMBERS: true,
+
+  /**
+   * This controls if course codes are added in front of course names in both
+   * Norppa's UI and in the emails it sends. Notice that {{ courseCode }} needs
+   * to be added in the translation json files if course codes are needed in
+   * emails.
+   */
+  SHOW_COURSE_CODES_WITH_COURSE_NAMES: false,
+
+  /**
+   * This controls visibility of the HY smoking seal logo
+   */
+  SHOW_NORPPA_HY_LOGO: true,
+
+  /**
+   * Controls visibility of the courses tab in organisation settings
+   */
+  SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: true,
+
+  /**
+   * Controls showing of chips at course unit level based on the chips of its feedback targets
+   */
+  SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: false,
 }
 
 module.exports = config
