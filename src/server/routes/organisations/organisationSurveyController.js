@@ -56,13 +56,17 @@ const getOrganisationSurveys = async (req, res) => {
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { name, startDate, endDate, studentNumbers, teacherIds } = req.body
+  const { name, startDate, endDate, studentNumbers: initialStudentNumbers, teacherIds: initialTeacherIds } = req.body
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
+
+  // Remove duplicates from studentNumbers and teacherIds
+  const studentNumbers = [...new Set(initialStudentNumbers)]
+  const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
   if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })

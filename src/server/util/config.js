@@ -19,7 +19,7 @@ const inProduction = process.env.NODE_ENV === 'production'
 const inDevelopment = process.env.NODE_ENV === 'development'
 const inStaging = process.env.REACT_APP_STAGING === 'true'
 const inE2EMode = process.env.REACT_APP_E2E === 'true'
-const basePath = process.env.PUBLIC_URL || ''
+const basePath = process.env.BASE_PATH || ''
 
 const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
@@ -59,6 +59,7 @@ const SUMMARY_SKIP_ORG_IDS = config.get('SUMMARY_SKIP_ORG_IDS')
 const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPONSE_EMAILS_SINCE_DATE'))
 const SEND_AUTOMATIC_REMINDER_ALWAYS = config.get('SEND_AUTOMATIC_REMINDER_ALWAYS')
 const ORGANISATION_SURVEYS_ENABLED = config.get('ORGANISATION_SURVEYS_ENABLED')
+const PUBLIC_COURSE_BROWSER_ENABLED = config.get('PUBLIC_COURSE_BROWSER_ENABLED')
 const ALWAYS_SHOW_STUDENT_LIST = config.get('ALWAYS_SHOW_STUDENT_LIST')
 const IAM_GROUPS_HEADER = config.get('IAM_GROUPS_HEADER')
 const TRANSLATION_NAMESPACE = config.get('TRANSLATION_NAMESPACE')
@@ -100,6 +101,7 @@ module.exports = {
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE,
   SEND_AUTOMATIC_REMINDER_ALWAYS,
   ORGANISATION_SURVEYS_ENABLED,
+  PUBLIC_COURSE_BROWSER_ENABLED,
   ALWAYS_SHOW_STUDENT_LIST,
   IAM_GROUPS_HEADER,
   TRANSLATION_NAMESPACE,

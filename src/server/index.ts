@@ -2,7 +2,6 @@
 import path from 'path'
 import express, { Request, Response, NextFunction } from 'express'
 import compression from 'compression'
-import v8 from 'v8'
 import { PORT, inProduction, inE2EMode, inDevelopment } from './util/config'
 import { connectToDatabase } from './db/dbConnection'
 import { redis } from './util/redisClient'
@@ -48,8 +47,6 @@ const start = async () => {
 
   app.listen(PORT, () => {
     logger.info(`Started on port ${PORT}`)
-    // eslint-disable-next-line no-console
-    console.log(v8.getHeapStatistics())
   })
 }
 

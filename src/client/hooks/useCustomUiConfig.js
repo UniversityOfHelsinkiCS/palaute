@@ -5,7 +5,7 @@ const useCustomUiConfig = configName => {
 
   useEffect(() => {
     if (configName) {
-      import(`../config/${configName}`).then(uiConfigModule => {
+      import(`../config/${configName}.js`).then(uiConfigModule => {
         if (uiConfigModule?.default) setCustomUiConfig(uiConfigModule?.default)
       })
     }

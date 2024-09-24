@@ -11,7 +11,7 @@ interface TeacherChipProps {
   tooltipPlacement: 'bottom' | 'top' | 'left' | 'right'
 }
 
-const TeacherChip: React.FC<TeacherChipProps> = ({ user, onDelete, tooltip, outlined, style, tooltipPlacement }) => (
+const TeacherChip = ({ user, onDelete, tooltip, outlined, style, tooltipPlacement }: TeacherChipProps) => (
   <Tooltip title={tooltip || user.email} placement={tooltipPlacement}>
     <Chip
       variant={outlined ? 'outlined' : 'filled'}
@@ -31,12 +31,5 @@ const TeacherChip: React.FC<TeacherChipProps> = ({ user, onDelete, tooltip, outl
     />
   </Tooltip>
 )
-
-TeacherChip.defaultProps = {
-  onDelete: undefined,
-  tooltip: undefined,
-  outlined: false,
-  style: {},
-}
 
 export default TeacherChip

@@ -8,7 +8,7 @@ class Survey extends Model {
    * @param {Survey} survey
    * @returns {Promise<Question[]>}
    */
-  static getQuestionsOfSurvey = async survey => {
+  static async getQuestionsOfSurvey(survey) {
     const questions = await Question.findAll({
       where: {
         id: {
