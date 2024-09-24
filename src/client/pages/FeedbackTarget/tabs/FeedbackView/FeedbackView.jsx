@@ -23,6 +23,7 @@ import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import feedbackGivenSnackbarContent from './FeedbackGivenSnackBar'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../../../util/common'
 
 const FormContainer = ({
   onSubmit,
@@ -136,7 +137,11 @@ const FeedbackView = () => {
 
         await submitMutation.mutateAsync(feedbackData)
 
-        history.push(`/targets/${id}/results`)
+        if (SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+          history.push(`/feedbacks?status=given`)
+        } else {
+          history.push(`/targets/${id}/results`)
+        }
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',

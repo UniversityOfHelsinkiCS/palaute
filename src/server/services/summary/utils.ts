@@ -80,14 +80,34 @@ const sumSummaries = (summaries: Summary[]) => {
     summaries,
     s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
   )
+  //remove those summaries which have startDate and endDate between other summaries and se keyvalues
+  const filteredSummaries = deduplicatedSummaries.filter(s => {
+    return !deduplicatedSummaries.some(s2 => {
+      const key1 = `${s.entityId}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
+      const key2 = `${s2.entityId}:${s2.extraOrgIds ? s2.extraOrgIds.join('+') : ''}`
 
-  const data = sumSummaryDatas(deduplicatedSummaries.map(s => s.data))
-  const startDate = datefns.format(
-    datefns.min(deduplicatedSummaries.map(s => datefns.parseISO(s.startDate))),
-    'yyyy-MM-dd'
-  )
-  const endDate = datefns.format(datefns.max(deduplicatedSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
-  const summary = deduplicatedSummaries[0]
+      const timespan1 = `${s.startDate}:${s.endDate}`
+      const timespan2 = `${s2.startDate}:${s2.endDate}`
+
+      return (
+        datefns.isWithinInterval(datefns.parseISO(s.startDate), {
+          start: datefns.parseISO(s2.startDate),
+          end: datefns.parseISO(s2.endDate),
+        }) &&
+        datefns.isWithinInterval(datefns.parseISO(s.endDate), {
+          start: datefns.parseISO(s2.startDate),
+          end: datefns.parseISO(s2.endDate),
+        }) &&
+        key1 === key2 &&
+        timespan1 !== timespan2
+      )
+    })
+  })
+
+  const data = sumSummaryDatas(filteredSummaries.map(s => s.data))
+  const startDate = datefns.format(datefns.min(filteredSummaries.map(s => datefns.parseISO(s.startDate))), 'yyyy-MM-dd')
+  const endDate = datefns.format(datefns.max(filteredSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
+  const summary = filteredSummaries[0]
   summary.data = data
   summary.startDate = startDate
   summary.endDate = endDate
