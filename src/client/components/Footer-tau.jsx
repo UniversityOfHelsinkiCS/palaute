@@ -33,10 +33,10 @@ const Footer = ({ user }) => {
             </Grid>
             <Grid item xs={12} md={6}>
               <Grid container spacing={2} justifyContent="flex-end">
-                <Grid item xs={12} md={'auto'}>
+                <Grid item xs={12} md="auto">
                   <ExternalLink href={t('links:accessibility')}>{t('footer:accessibilityDocument')}</ExternalLink>
                 </Grid>
-                <Grid item xs={12} md={'auto'}>
+                <Grid item xs={12} md="auto">
                   <Typography>
                     <ExternalLink href={t('links:dataProtection')}>
                       {t('feedbackView:dataProtectionNotice')}
@@ -44,7 +44,7 @@ const Footer = ({ user }) => {
                   </Typography>
                 </Grid>
                 {user && user.isTeacher && (
-                  <Grid item xs={12} md={'auto'}>
+                  <Grid item xs={12} md="auto">
                     <Typography>
                       <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
                     </Typography>
