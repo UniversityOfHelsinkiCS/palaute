@@ -51,9 +51,9 @@ const GroupButton: React.FC<GroupButtonProps> = ({ option, onClick, value, ...pr
                 <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
                   {t('groups:teachersOfGroup')}
                 </Typography>
-                {option.teachers.map(t => (
-                  <div key={t.id}>
-                    <TeacherChip user={t} tooltipPlacement="right" />
+                {option.teachers.map(teacher => (
+                  <div key={teacher.id}>
+                    <TeacherChip user={teacher} tooltipPlacement="right" />
                   </div>
                 ))}
               </>
@@ -99,11 +99,11 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
   }
 
   const localisatedGroups: GroupOption[] = groups
-    .map(({ id, name, teachers, studentCount }) => ({
-      id,
-      name: getLanguageValue(name, i18n.language),
-      teachers,
-      studentCount,
+    .map(group => ({
+      id: group.id,
+      name: getLanguageValue(group.name, i18n.language),
+      teachers: group.teachers,
+      studentCount: group.studentCount,
     }))
     .filter(group => group.studentCount && group.studentCount > 0 && group.studentCount < studentCount)
     .sort(sortGroups)

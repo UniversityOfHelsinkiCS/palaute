@@ -16,5 +16,5 @@ export const startOfStudyYear = date => {
 
   const year = d.getFullYear() - (d.getMonth() + 1 < MONTH ? 1 : 0)
 
-  return new Date(`${year}-${MONTH}-01`)
+  return new Date(`${year}-0${MONTH}-01`)
 }

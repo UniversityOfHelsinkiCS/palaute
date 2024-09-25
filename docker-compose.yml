@@ -21,7 +21,7 @@ services:
       - 9229:9229
     container_name: palaute_dev
   db:
-    image: postgres:15.4
+    image: postgres:15.7
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
@@ -31,10 +31,10 @@ services:
       - pg_data:/data
     container_name: palaute_db
   redis:
-    image: redis:6.2.6
+    image: redis:6.2.14
     command: redis-server
     container_name: palaute_redis
-  adminer:
+  adminer: # http://localhost:8080/?pgsql=db&username=postgres&db=postgres&ns=public
     image: adminer
     restart: always
     environment:
@@ -52,7 +52,7 @@ services:
       - 3003:3003
     container_name: jami
   jami-db:
-    image: postgres:15.4
+    image: postgres:15.7
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
@@ -78,3 +78,5 @@ services:
 volumes:
   pg_data:
   jami_data:
+
+  

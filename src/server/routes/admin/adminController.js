@@ -9,7 +9,6 @@ const updaterClient = require('../../util/updaterClient')
 
 const {
   FeedbackTarget,
-  Feedback,
   CourseRealisation,
   CourseUnit,
   UserFeedbackTarget,
@@ -398,69 +397,6 @@ const getFeedbackTargets = async (req, res) => {
   return res.send(feedbackTargetsWithCount)
 }
 
-const resetTestCourse = async (_, res) => {
-  const feedbackTarget = await FeedbackTarget.findOne({
-    where: {
-      courseUnitId: 'hy-cu-test',
-    },
-  })
-  if (feedbackTarget) {
-    const userFeedbackTargets = await UserFeedbackTarget.findAll({
-      where: {
-        feedbackTargetId: feedbackTarget.id,
-      },
-    })
-    await userFeedbackTargets.reduce(async (p, uft) => {
-      await p
-      if (uft.feedbackId) {
-        await Feedback.destroy({
-          where: {
-            id: uft.feedbackId,
-          },
-        })
-      }
-    }, Promise.resolve())
-    await UserFeedbackTarget.destroy({
-      where: {
-        feedbackTargetId: feedbackTarget.id,
-      },
-    })
-  }
-  await FeedbackTarget.destroy({
-    where: {
-      courseUnitId: 'hy-cu-test',
-    },
-  })
-  await FeedbackTarget.create({
-    feedbackType: 'courseRealisation',
-    typeId: 'hy-cur-test',
-    courseUnitId: 'hy-cu-test',
-    courseRealisationId: 'hy-cur-test',
-    name: {
-      fi: '-',
-    },
-    hidden: false,
-    opensAt: '2021-08-01',
-    closesAt: '2021-09-01',
-  })
-  const newTarget = await FeedbackTarget.findOne({
-    where: {
-      courseUnitId: 'hy-cu-test',
-    },
-  })
-  await UserFeedbackTarget.create({
-    feedbackTargetId: newTarget.id,
-    accessStatus: 'RESPONSIBLE_TEACHER',
-    userId: 'hy-hlo-1441871', // mluukkai
-  })
-  await UserFeedbackTarget.create({
-    feedbackTargetId: newTarget.id,
-    accessStatus: 'STUDENT',
-    userId: 'hy-hlo-135680147', // varisleo
-  })
-  return res.send({})
-}
-
 const findEmailsForToday = async (_, res) => {
   const { students, teachers, teacherEmailCounts, studentEmailCounts } = await mailer.returnEmailsToBeSentToday()
 
@@ -663,7 +599,6 @@ router.post('/run-updater', runUpdater)
 router.post('/run-updater/enrolments/:courseRealisationId', runUpdaterForEnrolmentsOfCourse)
 router.get('/updater-status', getUpdaterStatuses)
 router.post('/run-pate', runPate)
-router.post('/reset-course', resetTestCourse)
 router.get('/emails', findEmailsForToday)
 router.get('/norppa-statistics', getNorppaStatistics)
 router.get('/feedback-targets', findFeedbackTargets)

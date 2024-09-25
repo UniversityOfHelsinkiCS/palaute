@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
 
 ENV TZ="Europe/Helsinki"
 
@@ -14,7 +14,7 @@ ARG GIT_SHA
 ENV REACT_APP_GIT_SHA=$GIT_SHA
 
 ARG BASE_PATH
-ENV PUBLIC_URL=$BASE_PATH
+ENV BASE_PATH=$BASE_PATH
 
 ARG E2E
 ENV REACT_APP_E2E=$E2E

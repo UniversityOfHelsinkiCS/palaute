@@ -1,0 +1,37 @@
+import react from '@vitejs/plugin-react-swc'
+import eslint from 'vite-plugin-eslint'
+
+import * as config from 'config'
+import { defineConfig } from 'vite'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react(), eslint()],
+  server: {
+    proxy: {
+      '/api/': {
+        target: 'http://127.0.0.1:8000',
+      },
+      '/test/': {
+        target: 'http://127.0.0.1:8000',
+      }
+    },
+    host: true,
+    port: 3000,
+  },
+  build: {
+    outDir: 'build/client',
+    sourcemap: true,
+  },
+  define: {
+    'process.env': process.env,
+    CONFIG: (() => {
+      const configObj = config.util.toObject(undefined)
+      for (const key of config.get('PRIVATE_KEYS')) {
+        delete configObj[key]
+      }
+
+      return configObj
+    })(),
+  },
+})

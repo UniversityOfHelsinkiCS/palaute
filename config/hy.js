@@ -2,7 +2,7 @@
  * This config used by HY is loaded when NODE_CONFIG_ENV=hy
  */
 const config = {
-  DEV_ADMINS: ['mluukkai', 'vesuvesu', 'kemiko'],
+  DEV_ADMINS: ['mluukkai'],
 
   /**
    * These courses bypass the starting after 1.9 filter.
@@ -43,7 +43,6 @@ const config = {
     'hy-CUR-142630573',
     'hy-CUR-142441501',
     'hy-opt-cur-2021-7f93a0cf-c849-4280-aeef-3ee2b9bb01fc',
-    'hy-cur-test',
     'hy-CUR-142418452',
     'hy-opt-cur-2122-78220cb5-1bad-4b19-88c3-d4d6a45c8a42',
     'hy-CUR-142475480',
@@ -197,6 +196,10 @@ const config = {
     'hy-org-1001813299', // Tiedekuntiin kuulumattomat laitokset
     'hy-org-1001812245', // Yliopistonpalvelut
     'hy-org-75261977', // Erillislaitokset
+    'hy-org-2024-03-27-5', // Tiedekunnat
+    'hy-org-2024-03-27-4', // Rehtorin alaiset laitokset
+    'hy-org-2024-03-27-2', // Muut yksiköt
+    'hy-org-2024-03-27-1', // Lailla erikseen säädetyt laitokset
   ],
 
   /**
@@ -257,6 +260,8 @@ const config = {
   IAM_GROUPS_HEADER: 'hygroupcn',
 
   ORGANISATION_SURVEYS_ENABLED: true,
+
+  PUBLIC_COURSE_BROWSER_ENABLED: true,
 
   INTERIM_FEEDBACKS_ENABLED: true,
 

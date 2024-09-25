@@ -19,7 +19,7 @@ describe('Course summary', () => {
   it('Should have data in My Organisations and my courses', () => {
     cy.get('[data-cy=my-organisations]').click()
 
-    cy.contains('TEST_SUMMARY_ORG')
+    cy.contains('TEST_SUMMARY_ORG', { timeout: 12000 })
     cy.contains('SUMMARY_TEST_COURSE')
     cy.contains('5.00')
     cy.contains('2 / 2')

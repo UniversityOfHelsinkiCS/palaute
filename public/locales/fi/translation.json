@@ -47,7 +47,6 @@
     "settings": "Asetukset",
     "feedbacks": "Palautteet",
     "survey": "Kysely",
-    "teacherPage": "Opetukseni",
     "courseSummaryPage": "Kurssiyhteenveto",
     "norppaFeedback": "Anna palautetta",
     "today": "tänään",
@@ -129,9 +128,10 @@
     "continuousFeedbackChip": "Jatkuva palaute",
     "feedbackResponseGiven": "Opettaja on antanut vastapalautteen",
     "deleted": "Palautteesi on poistettu",
+    "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen.",
+    "waitingBadgeLabel": "{{count}} kappaletta puuttuvia palautteita",
     "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
-    "noFeedbackGivenChip": "En antanut palautetta",
-    "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen."
+    "noFeedbackGivenChip": "En antanut palautetta"
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",
@@ -163,6 +163,7 @@
     "editFeedbackResponse": "Muokkaa vastapalautetta",
     "noCourseRealisations": "Ei kurssitoteutuksia",
     "noCourses": "Ei näytettäviä kyselyitä tällä hetkellä",
+    "noFilteredCourses": "Ei näytettäviä kyselyitä, jotka täyttävät hakuehdot",
     "feedbackResponseGiven": "Vastapalaute annettu",
     "feedbackResponseNotSent": "Vastapalaute lähettämättä",
     "feedbackResponseMissing": "Vastapalaute puuttuu",
@@ -182,7 +183,9 @@
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
     "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
-    "surveys": "Kyselyä"
+    "surveys": "Kyselyä",
+    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä",
+    "academicYearSelectLabel": "Valittu lukuvuosi"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",
@@ -326,6 +329,7 @@
   },
   "navBar": {
     "myFeedbacks": "Kurssipalautteeni",
+    "browseCourses": "Selaa kursseja",
     "myCourses": "Opetukseni",
     "myCoursesV2": "Kyselyni",
     "logOut": "Kirjaudu ulos",
@@ -333,7 +337,8 @@
     "courseSummary": "Kurssiyhteenveto",
     "nameFallback": "Valikko",
     "feedback": "Anna palautetta Norpan kehittäjille",
-    "userInformation": "Omat tietoni"
+    "userInformation": "Omat tietoni",
+    "badgeLabel": "Sinulla on uusia palautteita annettavaksi"
   },
   "userInformation": {
     "iamGroups": "IAM-ryhmät",
@@ -620,6 +625,13 @@
     "successAlert": "Palaute lähetetty onnistuneesti!",
     "anonymous": "Lähetä anonyymisti",
     "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+  },
+  "search": {
+    "title": "Hae ohjelman opetusta",
+    "searchField": "Valitse ohjelma",
+    "coursePageLink": "Kurssisivu",
+    "noOptions": "Ei hakutuloksia",
+    "noCourses": "Ei kursseja tällä ohjelmalla valitulla aikavälillä"
   },
   "mails": {
     "reminderOnFeedbackToStudents": {

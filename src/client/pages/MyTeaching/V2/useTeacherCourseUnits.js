@@ -16,11 +16,15 @@ export const useTeacherCourseUnits = (params, options = {}) => {
     return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
-  const { data: courseUnits, ...rest } = useQuery(['teacherCourseUnits', params.status], queryFn, {
-    cacheTime: defaultCacheTime,
-    staleTime: defaultCacheTime,
-    ...options,
-  })
+  const { data: courseUnits, ...rest } = useQuery(
+    ['teacherCourseUnits', params.status, params.startDate, params.endDate],
+    queryFn,
+    {
+      cacheTime: defaultCacheTime,
+      staleTime: defaultCacheTime,
+      ...options,
+    }
+  )
 
   return { courseUnits, ...rest }
 }
@@ -34,11 +38,15 @@ export const useTeacherOrganisatioSurveys = (params, options = {}) => {
     return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
-  const { data: courseUnits, ...rest } = useQuery(['teacherOrgSurveys', params.status], queryFn, {
-    cacheTime: defaultCacheTime,
-    staleTime: defaultCacheTime,
-    ...options,
-  })
+  const { data: courseUnits, ...rest } = useQuery(
+    ['teacherOrgSurveys', params.status, params.startDate, params.endDate],
+    queryFn,
+    {
+      cacheTime: defaultCacheTime,
+      staleTime: defaultCacheTime,
+      ...options,
+    }
+  )
 
   return { courseUnits, ...rest }
 }
