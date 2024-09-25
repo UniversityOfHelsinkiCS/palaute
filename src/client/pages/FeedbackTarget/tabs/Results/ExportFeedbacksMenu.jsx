@@ -24,20 +24,21 @@ const getHeaders = (questions, feedbacks, language) => {
 }
 
 const getData = (questions, feedbacks, language) => {
+  //Filter to choice questions only
   const choiceQuestions = questions.filter(q => ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type))
 
-  // optionIds are not unique, so we need to create unique ids for options by adding questionId to the beginning of the id
+  // optionIds are not unique, so we need to create unique ids for options by adding questionId to the beginning of the id and set it as questionOptionId
   choiceQuestions.forEach(question => {
     if (question.data && question.data.options) {
       question.data.options.forEach(option => {
-        option.id = `${question.id}_${option.id}`
+        option.questionOptionId = `${question.id}_${option.id}`
       })
     }
   })
 
   const options = flatMap(choiceQuestions, q => q.data?.options ?? [])
 
-  const optionById = keyBy(options, ({ id }) => id)
+  const optionById = keyBy(options, ({ questionOptionId }) => questionOptionId)
 
   const data = feedbacks.map(f => {
     const feedback = f.data
