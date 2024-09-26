@@ -32,6 +32,7 @@ $ docker compose up
 ```
 
 To run tests, you can use these commands:
+
 ```bash
 $ npm run test:cypress # Open Cypress UI
 $ npm run test:run # Run all Cypress specs in headless mode
@@ -113,7 +114,6 @@ When implementing Norppa for your organization, you will implement your own Upda
 - [Deleted tables](documentation/deleted_tables.md)
 - [Question data format](documentation/question_formats.md)
 - [Feedback target visibility](documentation/feedback_target_visibility.md)
-
 
 Maintained by **[Toska](https://toska.dev/)** <img src="https://raw.githubusercontent.com/UniversityOfHelsinkiCS/palaute/382d97e68827acfa56d1a29781e0f94e8777626b/src/client/assets/toscalogo_color.svg" width="100px" />
 

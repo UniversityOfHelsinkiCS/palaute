@@ -54,12 +54,12 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
                 as: 'courseRealisationsOrganisations',
                 attributes: ['organisationId'],
               },
-              {
-                model: scopedSummary,
-                as: 'summary',
-                required: true,
-              },
             ],
+          },
+          {
+            model: scopedSummary,
+            as: 'summary',
+            required: true,
           },
           {
             model: UserFeedbackTarget.scope('teachers'),

@@ -138,7 +138,7 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
 
 export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   const { i18n } = useTranslation()
-  const { summary } = feedbackTarget.courseRealisation
+  const { summary } = feedbackTarget
 
   const notGivenStatus = Date.parse(feedbackTarget.closesAt) > Date.now() ? 'OPEN' : 'NONE'
   const responseStatus =

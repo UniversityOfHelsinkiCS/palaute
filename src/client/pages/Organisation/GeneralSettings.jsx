@@ -24,6 +24,7 @@ import FeedbackCorrespondent from './FeedbackCorrespondent'
 import CourseSettings from './CourseSettings'
 import useOrganisation from '../../hooks/useOrganisation'
 import Tags from './Tags'
+import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/common'
 
 const saveGeneralSettings = async ({ code, studentListVisible, studentListVisibleByCourse }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -116,8 +117,12 @@ const GeneralSettings = () => {
     <Box>
       <GeneralSettingsContainer organisation={organisation} />
       <Box mb="5rem" />
-      <FeedbackCorrespondent organisation={organisation} />
-      <Box mb="5rem" />
+      {ENABLE_CORRESPONDENT_MANAGEMENT && (
+        <>
+          <FeedbackCorrespondent organisation={organisation} />
+          <Box mb="5rem" />
+        </>
+      )}
       {organisation.tags?.length > 0 && (
         <>
           <Tags organisation={organisation} />
