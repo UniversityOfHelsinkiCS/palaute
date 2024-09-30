@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const { Op } = require('sequelize')
 
 const {
   UserFeedbackTarget,
@@ -10,9 +11,12 @@ const {
 } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
+const { formatActivityPeriod } = require('../../util/common')
 
 const getAllTeacherCourseUnits = async (user, query) => {
   const isOrganisationSurvey = query.isOrganisationSurvey === 'true'
+
+  const activityPeriod = formatActivityPeriod(query)
 
   const teacherCourseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'courseCode', 'userCreated', 'validityPeriod'],
@@ -40,6 +44,7 @@ const getAllTeacherCourseUnits = async (user, query) => {
           'continuousFeedbackEnabled',
           'userCreated',
           'courseRealisationId',
+          'feedbackCount',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -55,6 +60,13 @@ const getAllTeacherCourseUnits = async (user, query) => {
             },
           },
           {
+            model: UserFeedbackTarget.scope('students'),
+            as: 'students',
+            required: false,
+            separate: true,
+            attributes: ['id'],
+          },
+          {
             model: Summary,
             as: 'summary',
             required: false,
@@ -64,6 +76,31 @@ const getAllTeacherCourseUnits = async (user, query) => {
             as: 'courseRealisation',
             required: true,
             attributes: ['id', 'name', 'startDate', 'endDate', 'userCreated'],
+            where: {
+              ...(activityPeriod?.startDate &&
+                activityPeriod?.endDate && {
+                  [Op.or]: [
+                    {
+                      startDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      endDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      startDate: {
+                        [Op.lte]: activityPeriod.startDate,
+                      },
+                      endDate: {
+                        [Op.gte]: activityPeriod.endDate,
+                      },
+                    },
+                  ],
+                }),
+            },
           },
         ],
       },
@@ -100,10 +137,12 @@ const getGroupedCourseUnits = (courseUnits, query) => {
           'studentCount',
         ]
 
+        // Summary data is not available for organisation surveys, which is why
+        // we need to fetch the student count and feedback count from the feedback target
         const feedbackTarget = {
           ...target.toJSON(),
-          studentCount: target.summary?.data?.studentCount || 0,
-          feedbackCount: target.summary?.data?.feedbackCount || 0,
+          studentCount: target.userCreated ? target.students.length : target.summary?.data?.studentCount || 0,
+          feedbackCount: target.userCreated ? target.feedbackCount : target.summary?.data?.feedbackCount || 0,
         }
 
         return _.pick(feedbackTarget, targetFields)

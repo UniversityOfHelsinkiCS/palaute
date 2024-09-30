@@ -1,3 +1,4 @@
+/* eslint-disable cypress/unsafe-to-chain-command */
 /// <reference types="Cypress" />
 
 const { student, teacher, admin } = require('../fixtures/headers')
@@ -320,8 +321,6 @@ describe('Students', () => {
 
   it('can view ongoing interim feedbacks and give interim feedback', () => {
     cy.visit(`/feedbacks`)
-
-    cy.get('[data-cy="my-feedbacks-waiting-tab"]').should('exist').click()
 
     cy.get('@interimFeedback').then(interimFeedback => {
       cy.get(`[data-cy="feedback-item-${interimFeedback.id}"]`).should('exist').click()

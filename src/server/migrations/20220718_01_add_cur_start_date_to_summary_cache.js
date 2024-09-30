@@ -1,4 +1,4 @@
-const { DATE, DATEONLY } = require('sequelize')
+const { DATEONLY } = require('sequelize')
 
 module.exports = {
   up: async queryInterface => {

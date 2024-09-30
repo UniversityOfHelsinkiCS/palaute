@@ -1,6 +1,5 @@
 const Router = require('express')
 const Sentry = require('@sentry/node')
-const { inE2EMode, inDevelopment } = require('../util/config')
 const accessLogger = require('../middleware/accessLogger')
 const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')

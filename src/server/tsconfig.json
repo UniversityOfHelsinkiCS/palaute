@@ -16,5 +16,11 @@
     "resolveJsonModule": true
   },
   "include": ["./"],
-  "composite": true
+  "composite": true,
+  "ts-node": {
+    "esm": false,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

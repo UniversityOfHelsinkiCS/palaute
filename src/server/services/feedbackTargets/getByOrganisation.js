@@ -12,6 +12,73 @@ const {
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
+const getYearGrouped = feedbackTargets => {
+  const dateGrouped = Object.entries(_.groupBy(feedbackTargets, fbt => fbt.startDate)).sort(([a], [b]) =>
+    compareAsc(Date.parse(a), Date.parse(b))
+  )
+
+  const monthGrouped = Object.entries(
+    _.groupBy(dateGrouped, ([date]) => {
+      const d = Date.parse(date)
+      return subDays(d, getDate(d) - 1) // first day of month
+    })
+  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
+
+  return Object.entries(_.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date)))).sort(([a], [b]) =>
+    a.localeCompare(b)
+  )
+}
+
+const getPublicByOrganisation = async ({ organisationCode, startDate, endDate }) => {
+  const start = startDate ? new Date(startDate) : new Date()
+  const end = endDate ? new Date(endDate) : addMonths(start, 12)
+
+  const feedbackTargets = await FeedbackTarget.findAll({
+    attributes: ['id', 'name', 'opensAt', 'closesAt'],
+    include: [
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        attributes: ['id', 'name', 'startDate', 'endDate', 'isMoocCourse', 'teachingLanguages'],
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: [],
+            required: true,
+            where: {
+              code: organisationCode,
+            },
+          },
+        ],
+        where: {
+          startDate: {
+            [Op.gte]: start,
+          },
+          endDate: {
+            [Op.lte]: end,
+          },
+        },
+      },
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id', 'name', 'courseCode'],
+      },
+    ],
+  })
+
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.courseRealisation.id)
+  const fbtsWithStartDate = feedbackTargetsWithUniqueCurs.map(fbt => {
+    const fbtJson = fbt.toJSON()
+    fbtJson.startDate = fbt.courseRealisation.startDate
+    return fbtJson
+  })
+
+  return getYearGrouped(fbtsWithStartDate)
+}
+
 const getByOrganisation = async ({ organisationCode, startDate, endDate, user }) => {
   const organisationAccess = await user.organisationAccess
 
@@ -111,24 +178,10 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user })
       }
     })
 
-  const dateGrouped = Object.entries(_.groupBy(feedbackTargetsWithStudentCounts, fbt => fbt.startDate)).sort(
-    ([a], [b]) => compareAsc(Date.parse(a), Date.parse(b))
-  )
-
-  const monthGrouped = Object.entries(
-    _.groupBy(dateGrouped, ([date]) => {
-      const d = Date.parse(date)
-      return subDays(d, getDate(d) - 1) // first day of month
-    })
-  ).sort(([a], [b]) => compareAsc(Date.parse(a), Date.parse(b)))
-
-  const yearGrouped = Object.entries(_.groupBy(monthGrouped, ([date]) => getYear(Date.parse(date)))).sort(([a], [b]) =>
-    a.localeCompare(b)
-  )
-
-  return yearGrouped
+  return getYearGrouped(feedbackTargetsWithStudentCounts)
 }
 
 module.exports = {
   getByOrganisation,
+  getPublicByOrganisation,
 }

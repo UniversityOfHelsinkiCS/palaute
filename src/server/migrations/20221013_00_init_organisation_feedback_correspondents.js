@@ -1,6 +1,4 @@
-const { Op, QueryTypes } = require('sequelize')
 const { STRING, DATE, INTEGER } = require('sequelize')
-const { Organisation } = require('../models')
 
 module.exports = {
   up: async queryInterface => {

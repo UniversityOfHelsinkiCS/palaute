@@ -1,5 +1,6 @@
-const { useQuery } = require('react-query')
-const { default: apiClient } = require('../util/apiClient')
+import { useQuery } from 'react-query'
+
+import apiClient from '../util/apiClient'
 
 const useAllUserAccess = (options = {}) => {
   const queryKey = 'allUserAccess'

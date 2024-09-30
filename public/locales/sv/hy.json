@@ -9,8 +9,8 @@
     "toska": "https://toska.dev",
     "markdownHelp": "https://commonmark.org/help/",
     "adminGraylog": "https://toska.cs.helsinki.fi/graylog",
-    "courseUnitPage": "https://studies.helsinki.fi/opintotarjonta/cu/",
-    "courseRealisationPage": "https://studies.helsinki.fi/opintotarjonta/cur/"
+    "courseUnitPage": "https://studies.helsinki.fi/kurssit/toteutus/{{courseRealisationId}}/",
+    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "mails": {
     "instructionsAndSupport": "Kontakta stödet: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nAnvändarinstruktioner: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Mer information om Norppa i flamma</a>"

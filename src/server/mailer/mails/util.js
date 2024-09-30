@@ -93,7 +93,7 @@ const createRecipientsForFeedbackTargets = async (
       .filter(options.whereOpenEmailNotSent ? u => !u.UserFeedbackTarget.feedbackOpenEmailSent : () => true)
       .forEach(user => {
         const certainlyNoAdUser = user.username === user.id
-        const possiblyNoAdUser = feedbackTarget.courseRealisation.isMoocCourse && !user.degreeStudyright
+        const possiblyNoAdUser = feedbackTarget.courseRealisation.isMoocCourse && !user.degreeStudyRight
 
         const sendToBothEmails = !options.primaryOnly && (certainlyNoAdUser || possiblyNoAdUser)
 
