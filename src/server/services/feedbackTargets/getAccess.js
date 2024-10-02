@@ -13,10 +13,12 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
   const organisationAccess = await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
 
   let orgAccess = null
-  if (organisationAccess.admin) {
-    orgAccess = Access.ORGANISATION_ADMIN
-  } else if (organisationAccess.read) {
-    orgAccess = Access.ORGANISATION_READ
+  if (organisationAccess) {
+    if (organisationAccess.admin) {
+      orgAccess = Access.ORGANISATION_ADMIN
+    } else if (organisationAccess.read) {
+      orgAccess = Access.ORGANISATION_READ
+    }
   }
 
   // only direct access, return that
