@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const { ApplicationError } = require('../util/customErrors')
 const { JWT_KEY } = require('../util/config')
 const { User } = require('../models')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 const { getUserByUsername } = require('../services/users')
 const { getUserIams } = require('../util/jami')
 

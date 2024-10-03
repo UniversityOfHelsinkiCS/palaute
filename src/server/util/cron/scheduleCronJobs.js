@@ -1,5 +1,5 @@
 const { CRON_DISABLED } = require('../config')
-const logger = require('../logger')
+const { logger } = require('../logger')
 const { mailer } = require('../../mailer')
 const { start: startPrecacheFeedbackTargetsCron } = require('./precacheFeedbackTargetsCron')
 const { start: startSummariesCron } = require('./summariesCron')

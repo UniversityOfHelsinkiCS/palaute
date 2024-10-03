@@ -13,7 +13,7 @@ describe('Course summary', () => {
       body: summaryUser,
     })
     cy.loginAs(summaryUser)
-    cy.visit(`/course-summary?startDate=2023-08-01&endDate=2024-07-31&option=year`)
+    cy.visit(`/course-summary`)
   })
 
   it('Should have data in My Organisations and my courses', () => {

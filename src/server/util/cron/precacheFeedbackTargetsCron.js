@@ -2,7 +2,7 @@ const _ = require('lodash')
 const { Op, fn, col } = require('sequelize')
 const { subDays } = require('date-fns')
 const { inProduction, inStaging } = require('../config')
-const logger = require('../logger')
+const { logger } = require('../logger')
 const { schedule } = require('./schedule')
 const { FeedbackTarget, UserFeedbackTarget } = require('../../models')
 const { cacheFeedbackTargetById } = require('../../services/feedbackTargets')
@@ -37,9 +37,9 @@ const run = async () => {
 
   logger.info(`
     Precached ${ordered.length} feedback targets with a total of ${_.sumBy(
-    ordered,
-    'studentCount'
-  )} students, total time ${((Date.now() - start) / 1000).toFixed()}s`)
+      ordered,
+      'studentCount'
+    )} students, total time ${((Date.now() - start) / 1000).toFixed()}s`)
 }
 
 const start = async () => {

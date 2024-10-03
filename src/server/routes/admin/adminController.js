@@ -22,7 +22,7 @@ const {
 } = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 
 const { mailer } = require('../../mailer')
 const { adminAccess } = require('../../middleware/adminAccess')
