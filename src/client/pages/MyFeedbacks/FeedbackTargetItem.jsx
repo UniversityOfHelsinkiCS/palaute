@@ -337,7 +337,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       disableGutters
     >
       <Typography variant="body1" fontWeight={600} component="h2">
-        {translatedName}
+        {visibleCourseCode} {courseDisplayName}
       </Typography>
       <ListItemText primary={periodInfo} />
       <PeriodInfoAddition isEnded={isEnded} />
