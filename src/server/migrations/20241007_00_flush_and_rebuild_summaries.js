@@ -1,4 +1,4 @@
-const { buildSummaries } = require('services/summary/buildSummaries')
+const { buildSummaries } = require('../services/summary/buildSummaries')
 
 module.exports = {
   up: async queryInterface => {
