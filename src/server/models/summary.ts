@@ -32,6 +32,8 @@ export type SummaryData = {
 class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Summary>> {
   declare id: CreationOptional<number>
   declare entityId: string
+  declare entityType: string
+  declare feedbackTargetId: number
   declare startDate: string
   declare endDate: string
   declare extraOrgIds: string[]
@@ -54,6 +56,14 @@ Summary.init(
       type: STRING,
       allowNull: true,
     },
+    entityType: {
+      type: STRING,
+      allowNull: true,
+    },
+    feedbackTargetId: {
+      type: INTEGER,
+      allowNull: true,
+    },
     startDate: {
       type: DATEONLY,
       allowNull: false,
@@ -62,6 +72,7 @@ Summary.init(
       type: DATEONLY,
       allowNull: false,
     },
+
     extraOrgIds: {
       type: ARRAY(STRING),
     },
@@ -75,7 +86,6 @@ Summary.init(
   },
   {
     underscored: true,
-    timestamps: false,
     tableName: 'summaries',
     sequelize,
     indexes: [

@@ -9,37 +9,66 @@ import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typogra
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 import FeedbackClosedIcon from '@mui/icons-material/Lock'
+import FeedbackNotGivenIcon from '@mui/icons-material/Close'
 
 import { getCourseName } from './utils'
 import { getLanguageValue } from '../../util/languageUtils'
 import styles from '../../util/chipStyles'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import noFeedbackAllowed from '../../util/noFeedbackAllowed'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
+import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingFeedback'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/common'
 import { getCourseCode } from '../../util/courseIdentifiers'
 
-const NoFeedbackActions = ({ editPath }) => {
+const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
   const { t } = useTranslation()
 
   return (
-    <Button variant="contained" color="primary" to={editPath} component={Link} data-cy="feedback-item-give-feedback">
-      {t('userFeedbacks:giveFeedbackButton')}
-    </Button>
+    <div>
+      <Button
+        variant="contained"
+        color="primary"
+        to={editPath}
+        component={Link}
+        data-cy="feedback-item-give-feedback"
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:giveFeedbackButton')}
+      </Button>
+
+      <NotGivingFeedbackButton noFeedbackAllowed={noFeedbackAllowed} onNotGivingFeedback={onNotGivingFeedback} />
+    </div>
   )
 }
 
-const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
+const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }) => {
+  const { t } = useTranslation()
+
+  if (noFeedbackAllowed) {
+    return (
+      <Button
+        variant="contained"
+        color="error"
+        onClick={onNotGivingFeedback}
+        data-cy="feedback-item-not-giving-feedback"
+      >
+        {t('userFeedbacks:notGivingFeedbackButton')}
+      </Button>
+    )
+  }
+  return null
+}
+
+const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
     setOpen(false)
-  }
-
-  const handleOpen = () => {
-    setOpen(true)
   }
 
   const handleSubmit = async () => {
@@ -49,30 +78,11 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <Box>
-      <Button
-        data-cy="feedback-item-modify-feedback"
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={editPath}
-        sx={{ mr: '1rem' }}
-      >
-        {t('userFeedbacks:modifyFeedbackButton')}
-      </Button>
+      <GiveModifyFeedbackButton notGivingFeedback={notGivingFeedback} editPath={editPath} componentLink={Link} />
 
-      <Button
-        data-cy="feedback-item-view-feedback"
-        variant="outlined"
-        color="primary"
-        component={Link}
-        to={viewPath}
-        sx={{ mr: '1rem' }}
-      >
-        {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
-      <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
-        {t('userFeedbacks:clearFeedbackButton')}
-      </Button>
+      <FeedbackSummaryButtonForOpenGivenTarget viewPath={viewPath} />
+
+      <RemoveFeedbackButton notGivingFeedback={notGivingFeedback} setOpen={setOpen} />
 
       <Dialog data-cy="feedback-item-clear-feedback-dialog" open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
@@ -85,6 +95,74 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
       </Dialog>
     </Box>
   )
+}
+
+const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }) => {
+  const { t } = useTranslation()
+
+  if (notGivingFeedback) {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        to={editPath}
+        component={componentLink}
+        data-cy="feedback-item-give-feedback"
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:giveFeedbackButton')}
+      </Button>
+    )
+  }
+  return (
+    <Button
+      data-cy="feedback-item-modify-feedback"
+      variant="outlined"
+      color="primary"
+      component={componentLink}
+      to={editPath}
+      sx={{ mr: '1rem' }}
+    >
+      {t('userFeedbacks:modifyFeedbackButton')}
+    </Button>
+  )
+}
+
+const RemoveFeedbackButton = ({ notGivingFeedback, setOpen }) => {
+  const { t } = useTranslation()
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  if (notGivingFeedback) {
+    return null
+  }
+  return (
+    <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
+      {t('userFeedbacks:clearFeedbackButton')}
+    </Button>
+  )
+}
+
+const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
+  const { t } = useTranslation()
+
+  if (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return (
+      <Button
+        data-cy="feedback-item-view-feedback"
+        variant="outlined"
+        color="primary"
+        component={Link}
+        to={viewPath}
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:viewFeedbackSummary')}
+      </Button>
+    )
+  }
+  return null
 }
 
 const FeedbackEndedActions = ({ viewPath }) => {
@@ -172,6 +250,36 @@ const FeedbackResponseChip = () => {
   )
 }
 
+const NoFeedbackGivenChip = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Chip
+      variant="outlined"
+      icon={<FeedbackNotGivenIcon color="chipError" />}
+      label={t('userFeedbacks:noFeedbackGivenChip')}
+      sx={styles.error}
+    />
+  )
+}
+
+const PeriodInfoAddition = ({ isEnded }) => {
+  const { t } = useTranslation()
+
+  if (!isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
+    return <ListItemText primary={t('userFeedbacks:summaryAvailableWhenEnded')} />
+  }
+
+  return null
+}
+
+const getCourseDisplayName = (translatedName, courseCode, isOrganisationSurvey) => {
+  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES && !isOrganisationSurvey) {
+    return `${courseCode} ${translatedName}`
+  }
+  return `${translatedName}`
+}
+
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
@@ -188,6 +296,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const courseName = getCourseName(feedbackTarget, t)
   const visibleCourseCode = getCourseCode(courseUnit)
   const translatedName = getLanguageValue(courseName, i18n.language)
+  const courseDisplayName = getCourseDisplayName(
+    translatedName,
+    feedbackTarget.courseUnit.courseCode,
+    feedbackTarget.courseUnit.userCreated
+  )
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
@@ -197,6 +310,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const notStarted = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
+  const noFeedbackAllowedEnabled = noFeedbackAllowed(feedbackTarget)
+  const notGivingFeedback = feedbackTargetNotGivingFeedback(feedbackTarget)
   const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
@@ -208,6 +323,12 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 
+  const onNotGivingFeedback = async () => {
+    await apiClient.put(`/feedback-targets/${feedbackTarget.id}/not-giving-feedback`)
+    queryClient.invalidateQueries('feedbackTargetsForStudent')
+    enqueueSnackbar(t('userFeedbacks:noFeedbackGiven'), { variant: 'success' })
+  }
+
   return (
     <ListItem
       data-cy={`feedback-item-${feedbackTarget.id}`}
@@ -216,9 +337,10 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       disableGutters
     >
       <Typography variant="body1" fontWeight={600} component="h2">
-        {visibleCourseCode} {translatedName}
+        {translatedName}
       </Typography>
       <ListItemText primary={periodInfo} />
+      <PeriodInfoAddition isEnded={isEnded} />
       {notStarted && continuousFeedbackEnabled && <ListItemText primary={t('userFeedbacks:continousFeedbackActive')} />}
 
       <Box
@@ -229,21 +351,33 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
         columnGap="1rem"
         sx={theme => ({ [theme.breakpoints.down('sm')]: { flexDirection: 'column', alignItems: 'start' } })}
       >
-        {isEnded && !feedbackGiven && <FeedbackEndedChip />}
+        {isEnded && !feedbackGiven && !notGivingFeedback && <FeedbackEndedChip />}
         {notStarted && !continuousFeedbackEnabled && <FeedbackNotStartedChip />}
         {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackChip />}
         {feedbackGiven && <FeedbackGivenChip />}
-        {isOpen && !feedbackGiven && <NoFeedbackChip />}
+        {isOpen && !feedbackGiven && !notGivingFeedback && <NoFeedbackChip />}
         {feedbackResponseGiven && <FeedbackResponseChip />}
+        {noFeedbackAllowedEnabled && notGivingFeedback && <NoFeedbackGivenChip />}
       </Box>
 
       <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
         {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackActions viewPath={editPath} />}
-        {isOpen && feedbackGiven && (
-          <FeedbackGivenActions editPath={editPath} onDelete={onDelete} viewPath={viewPath} />
+        {isOpen && (feedbackGiven || notGivingFeedback) && (
+          <FeedbackGivenActions
+            editPath={editPath}
+            onDelete={onDelete}
+            viewPath={viewPath}
+            notGivingFeedback={notGivingFeedback}
+          />
         )}
-        {isOpen && !feedbackGiven && <NoFeedbackActions editPath={editPath} />}
+        {isOpen && !feedbackGiven && !notGivingFeedback && (
+          <NoFeedbackActions
+            editPath={editPath}
+            noFeedbackAllowed={noFeedbackAllowedEnabled}
+            onNotGivingFeedback={onNotGivingFeedback}
+          />
+        )}
       </Box>
     </ListItem>
   )

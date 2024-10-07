@@ -13,7 +13,7 @@ import {
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
-import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
+import { ORGANISATION_SURVEYS_ENABLED, SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS } from '../../util/common'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
 import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
@@ -92,11 +92,13 @@ const Organisation = () => {
               to={`${url}/organisation-surveys`}
             />
           )}
-          <RouterTab
-            label={t('organisationSettings:courseRealisationsTab')}
-            to={`${url}/upcoming`}
-            icon={<CalendarTodayOutlined />}
-          />
+          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
+            <RouterTab
+              label={t('organisationSettings:courseRealisationsTab')}
+              to={`${url}/upcoming`}
+              icon={<CalendarTodayOutlined />}
+            />
+          )}
           <RouterTab label={t('organisationSettings:summaryTab')} to={`${url}/summary`} icon={<PollOutlined />} />
           {hasAdminAccess && (
             <RouterTab

@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { format, parseISO, isWithinInterval } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 export const getUpperLevelQuestions = survey =>
   (survey?.universitySurvey?.questions ?? []).filter(q => q.type !== 'TEXT')
@@ -29,8 +29,9 @@ export const filterCoursesWithNoResponses = courses => {
 export const filterCoursesByDate = (courses, dateRange) => {
   const filteredCourses = courses.map(course => ({
     ...course,
-    realisations: course.realisations.filter(realisation =>
-      isWithinInterval(parseISO(realisation.startDate), dateRange)
+    realisations: course.realisations.filter(
+      realisation =>
+        dateRange.end >= parseISO(realisation.startDate) && dateRange.start <= parseISO(realisation.endDate)
     ),
   }))
 

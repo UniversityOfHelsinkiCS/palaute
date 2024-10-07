@@ -11,7 +11,8 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
   startDate,
   endDate,
   feedbackResponse,
-  userCreated
+  userCreated,
+  courseCode
 ) => {
   const dates = `(${format(startDate, 'dd.MM')} - ${format(endDate, 'dd.MM.yyyy')})`
 
@@ -24,12 +25,14 @@ const sendNotificationAboutFeedbackResponseToStudents = async (
       to: student.email,
       subject: t(`mails:counterFeedbackNotificationToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
         courseName: courseNameWithUserLanguage,
+        courseCode,
       }),
       text: t(`mails:counterFeedbackNotificationToStudents:${userCreated ? 'customText' : 'text'}`, {
         courseName: courseNameWithUserLanguage,
         dates,
         feedbackResponse,
         urlToSeeFeedbackSummary,
+        courseCode,
       }),
     }
     return email
@@ -58,7 +61,8 @@ const sendFeedbackSummaryReminderToStudents = async (feedbackTarget, feedbackRes
     cr.startDate,
     cr.endDate,
     feedbackResponse,
-    feedbackTarget.userCreated
+    feedbackTarget.userCreated,
+    courseUnit.courseCode
   )
 }
 

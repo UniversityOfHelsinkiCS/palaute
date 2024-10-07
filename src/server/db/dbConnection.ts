@@ -6,7 +6,7 @@ import { DATABASE_URL } from '../util/config'
 
 const DB_CONNECTION_RETRY_LIMIT = 10
 
-export const sequelize = new Sequelize(DATABASE_URL, { logging: false })
+export const sequelize = new Sequelize(DATABASE_URL, { logging: false, minifyAliases: true })
 
 const umzug = new Umzug({
   migrations: {
