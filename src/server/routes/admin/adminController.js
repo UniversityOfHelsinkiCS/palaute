@@ -583,11 +583,10 @@ const getNodeConfigEnv = (_req, res) => {
 
 const updateSummariesTable = async (req, res) => {
   const { forceAll } = req.body
-
-  logger.info('Starting to update summaries table with forceAll:', forceAll)
+  logger.info('Starting to update summaries table')
 
   const start = Date.now()
-  await buildSummaries(forceAll) // force all summaries to be rebuilt
+  await buildSummaries(forceAll) // force all determines if the summaries are completely rebuilt
   const duration = Date.now() - start
 
   return res.send({ duration })

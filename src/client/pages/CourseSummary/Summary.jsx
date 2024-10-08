@@ -24,8 +24,8 @@ const SummaryInContext = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { search } = window.location
 
-  const handleUpdateData = async updateAll => {
-    const duration = await updateSummaries({ forceAll: updateAll })
+  const handleUpdateData = async forceAll => {
+    const duration = await updateSummaries({ forceAll })
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
   }
 
