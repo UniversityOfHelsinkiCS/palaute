@@ -581,11 +581,15 @@ const getNodeConfigEnv = (_req, res) => {
   return res.send({ NODE_CONFIG_ENV })
 }
 
-const updateSummariesTable = async (_req, res) => {
-  logger.info('Starting to update summaries')
+const updateSummariesTable = async (req, res) => {
+  const { forceAll } = req.body
+
+  logger.info('Starting to update summaries table with forceAll:', forceAll)
+
   const start = Date.now()
-  await buildSummaries()
+  await buildSummaries(forceAll) // force all summaries to be rebuilt
   const duration = Date.now() - start
+
   return res.send({ duration })
 }
 
