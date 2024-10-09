@@ -1,6 +1,6 @@
 const redis = require('redis')
 const Sentry = require('@sentry/node')
-const logger = require('./logger')
+const { logger } = require('./logger')
 const { REDIS_CONFIG } = require('./config')
 
 const reconnectStrategy = attempts => {

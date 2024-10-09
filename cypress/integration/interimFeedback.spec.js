@@ -31,7 +31,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist')
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
@@ -91,7 +91,7 @@ describe('Responsible Teachers', () => {
     cy.visit(`/courses`)
 
     // Visit the coursepage where teacher is the responsible teacher
-    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist').click()
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist')
     cy.get('@parentId').then(parentId => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })

@@ -1,9 +1,11 @@
+import { AxiosError } from 'axios'
 import { useQuery } from 'react-query'
-import apiClient from '../util/apiClient'
+import apiClient from '../../util/apiClient'
 
-const isNetworkError = error => !!error.isAxiosError && !error.response
+const isNetworkError = (error: unknown): error is AxiosError =>
+  !!(error as AxiosError).isAxiosError && !(error as AxiosError).response
 
-const usePinger = (options = {}) => {
+const useDefaultPinger = (options = {}) => {
   const queryKey = 'ping'
 
   useQuery(
@@ -28,4 +30,4 @@ const usePinger = (options = {}) => {
   )
 }
 
-export default usePinger
+export default useDefaultPinger

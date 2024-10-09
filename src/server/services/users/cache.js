@@ -1,4 +1,4 @@
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { USER_CACHE_TTL } = require('../../util/config')
 const { redis } = require('../../util/redisClient')
 const { User } = require('../../models')

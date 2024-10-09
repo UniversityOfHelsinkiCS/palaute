@@ -62,7 +62,7 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     .filter(ufbt => ufbt.accessStatus === 'TEACHER')
     .map(ufbt => ufbt.user)
   const responsibleTeachers = feedbackTarget.userFeedbackTargets
-    .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER')
+    .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
     .map(ufbt => ufbt.user)
   const administrativePersons = feedbackTarget.userFeedbackTargets
     .filter(ufbt => ufbt.isAdministrativePerson)

@@ -152,10 +152,10 @@ export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, al
   return { courseUnitGroup: data, ...rest }
 }
 
-export const updateSummaries = async () => {
+export const updateSummaries = async ({ forceAll }) => {
   if (!window.confirm('Tämä voi kestää yli minuutin. Oletko varma?')) return null
 
-  const { data } = await apiClient.post('admin/build-summaries')
+  const { data } = await apiClient.post('admin/build-summaries', { forceAll })
 
   return data.duration
 }

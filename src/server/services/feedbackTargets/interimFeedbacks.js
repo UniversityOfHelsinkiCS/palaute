@@ -13,7 +13,7 @@ const {
   User,
 } = require('../../models')
 
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { formatActivityPeriod } = require('../../util/common')
 const { ApplicationError } = require('../../util/customErrors')
 

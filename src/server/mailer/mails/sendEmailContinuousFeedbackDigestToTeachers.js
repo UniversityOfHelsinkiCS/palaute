@@ -9,7 +9,7 @@ const {
   UserFeedbackTarget,
   CourseUnit,
 } = require('../../models')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { pate } = require('../pateClient')
 const { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
 const { i18n } = require('../../util/i18n')

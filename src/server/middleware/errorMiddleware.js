@@ -1,6 +1,6 @@
 const Sentry = require('@sentry/node')
 const { ApplicationError } = require('../util/customErrors')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 
 const errorHandler = (error, req, res, next) => {
   logger.error(`${error.message} ${error.name} ${error.stack}`)
