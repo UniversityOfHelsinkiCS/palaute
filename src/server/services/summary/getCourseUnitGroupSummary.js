@@ -90,7 +90,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
   )
   const allOrgIds = cuOrgIds.concat(curOrgIds)
 
-  const hasOrgAccess = Object.values(orgAccess).some(o => allOrgIds.includes(o.id))
+  const hasOrgAccess = Object.values(orgAccess).some(o => allOrgIds.includes(o.organisation.id))
   if (!user.isAdmin && !hasOrgAccess) {
     const hasCurAccess = feedbackTargets.some(fbt => accessibleCurIds.includes(fbt.courseRealisation.id))
     if (!hasCurAccess) {
