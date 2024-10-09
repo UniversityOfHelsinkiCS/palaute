@@ -94,7 +94,7 @@
     "react-intersection-observer": "^8.31.1",
     "react-markdown": "^8.0.6",
     "react-qr-code": "^2.0.3",
-    "react-query": "^3.18.0",
+    "@tanstack/react-query": "^4.0.5",
     "react-router": "^5.3.3",
     "react-router-dom": "^5.3.3",
     "react-to-print": "^2.15.1",
