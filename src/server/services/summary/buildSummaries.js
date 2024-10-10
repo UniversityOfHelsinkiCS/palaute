@@ -242,7 +242,7 @@ const buildSummariesForPeriod = async ({
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
-    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.dataValues.organisationI) // (implementation detail): Weird Sequelize thing #1, organisationId doesn't load in attributes: ['organisationId'] but in dataValues is truncated to 'organisationI'
+    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.organisationId)
     const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
 
     feedbackTargetsSummaries.push({

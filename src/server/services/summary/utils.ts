@@ -81,28 +81,29 @@ const sumSummaries = (summaries: Summary[]) => {
     s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
   )
   //remove those summaries which have startDate and endDate between other summaries and se keyvalues
-  const filteredSummaries = deduplicatedSummaries.filter(s => {
-    return !deduplicatedSummaries.some(s2 => {
-      const key1 = `${s.entityId}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
-      const key2 = `${s2.entityId}:${s2.extraOrgIds ? s2.extraOrgIds.join('+') : ''}`
+  const filteredSummaries = deduplicatedSummaries.filter(
+    s =>
+      !deduplicatedSummaries.some(s2 => {
+        const key1 = `${s.entityId}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
+        const key2 = `${s2.entityId}:${s2.extraOrgIds ? s2.extraOrgIds.join('+') : ''}`
 
-      const timespan1 = `${s.startDate}:${s.endDate}`
-      const timespan2 = `${s2.startDate}:${s2.endDate}`
+        const timespan1 = `${s.startDate}:${s.endDate}`
+        const timespan2 = `${s2.startDate}:${s2.endDate}`
 
-      return (
-        datefns.isWithinInterval(datefns.parseISO(s.startDate), {
-          start: datefns.parseISO(s2.startDate),
-          end: datefns.parseISO(s2.endDate),
-        }) &&
-        datefns.isWithinInterval(datefns.parseISO(s.endDate), {
-          start: datefns.parseISO(s2.startDate),
-          end: datefns.parseISO(s2.endDate),
-        }) &&
-        key1 === key2 &&
-        timespan1 !== timespan2
-      )
-    })
-  })
+        return (
+          datefns.isWithinInterval(datefns.parseISO(s.startDate), {
+            start: datefns.parseISO(s2.startDate),
+            end: datefns.parseISO(s2.endDate),
+          }) &&
+          datefns.isWithinInterval(datefns.parseISO(s.endDate), {
+            start: datefns.parseISO(s2.startDate),
+            end: datefns.parseISO(s2.endDate),
+          }) &&
+          key1 === key2 &&
+          timespan1 !== timespan2
+        )
+      })
+  )
 
   const data = sumSummaryDatas(filteredSummaries.map(s => s.data))
   const startDate = datefns.format(datefns.min(filteredSummaries.map(s => datefns.parseISO(s.startDate))), 'yyyy-MM-dd')
