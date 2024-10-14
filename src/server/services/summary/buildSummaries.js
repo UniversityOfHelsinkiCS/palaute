@@ -545,8 +545,6 @@ const buildSummaries = async (forceAll = false) => {
 
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    // console.time(`${start.toISOString()}-${end.toISOString()}`)
-
     await sequelize.transaction(async transaction => {
       // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
       await Summary.destroy({
@@ -565,8 +563,6 @@ const buildSummaries = async (forceAll = false) => {
         separateOrgId: OPEN_UNIVERSITY_ORG_ID,
       })
     })
-
-    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 
