@@ -80,15 +80,28 @@ const sumSummaries = (summaries: Summary[]) => {
     summaries,
     s => `${s.entityId}:${s.startDate}:${s.endDate}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
   )
-  //remove those summaries which have startDate and endDate between other summaries and se keyvalues
-  const filteredSummaries = deduplicatedSummaries.filter(
-    s =>
+
+  // Filter out invalid dates and summaries with overlapping time spans
+  const filteredSummaries = deduplicatedSummaries.filter(s => {
+    const isValidDateRange =
+      datefns.isValid(datefns.parseISO(s.startDate)) && datefns.isValid(datefns.parseISO(s.endDate))
+
+    if (!isValidDateRange) {
+      return false
+    }
+
+    return (
+      isValidDateRange &&
       !deduplicatedSummaries.some(s2 => {
         const key1 = `${s.entityId}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
         const key2 = `${s2.entityId}:${s2.extraOrgIds ? s2.extraOrgIds.join('+') : ''}`
 
         const timespan1 = `${s.startDate}:${s.endDate}`
         const timespan2 = `${s2.startDate}:${s2.endDate}`
+
+        if (!datefns.isValid(datefns.parseISO(s2.startDate)) || !datefns.isValid(datefns.parseISO(s2.endDate))) {
+          return false
+        }
 
         return (
           datefns.isWithinInterval(datefns.parseISO(s.startDate), {
@@ -103,11 +116,22 @@ const sumSummaries = (summaries: Summary[]) => {
           timespan1 !== timespan2
         )
       })
-  )
+    )
+  })
 
+  // If filteredSummaries is empty or has invalid dates, handle gracefully
+  if (!filteredSummaries.length) return null
+
+  // Sum up summary data
   const data = sumSummaryDatas(filteredSummaries.map(s => s.data))
-  const startDate = datefns.format(datefns.min(filteredSummaries.map(s => datefns.parseISO(s.startDate))), 'yyyy-MM-dd')
-  const endDate = datefns.format(datefns.max(filteredSummaries.map(s => datefns.parseISO(s.endDate))), 'yyyy-MM-dd')
+
+  // Handle valid dates and avoid invalid time errors
+  const validStartDates = filteredSummaries.map(s => datefns.parseISO(s.startDate)).filter(datefns.isValid)
+  const validEndDates = filteredSummaries.map(s => datefns.parseISO(s.endDate)).filter(datefns.isValid)
+
+  const startDate = datefns.format(datefns.min(validStartDates), 'yyyy-MM-dd')
+  const endDate = datefns.format(datefns.max(validEndDates), 'yyyy-MM-dd')
+
   const summary = filteredSummaries[0]
   summary.data = data
   summary.startDate = startDate
