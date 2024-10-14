@@ -154,7 +154,6 @@ const getScopedSummary = ({
   allTime?: boolean
 }) => {
   const scopes: any = allTime ? [] : [{ method: ['at', startDate, endDate] }]
-
   if (extraOrgId) {
     if (extraOrgMode === 'exclude') {
       scopes.push({ method: ['noExtraOrg', extraOrgId] })
