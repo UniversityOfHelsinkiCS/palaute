@@ -54,7 +54,7 @@ const SummaryInContext = () => {
               Aja datanpäivitys (Nykyisille ajanjaksoille)
             </Button>
             <Button variant="text" onClick={() => handleUpdateData(true)} data-cy="force-update-data">
-              Aja datanpäivity (Koko historialle)
+              Aja datanpäivitys (Koko historialle)
             </Button>
           </>
         )}
