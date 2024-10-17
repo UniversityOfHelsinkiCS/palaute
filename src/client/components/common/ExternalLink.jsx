@@ -10,7 +10,7 @@ const styles = {
 }
 
 const ExternalLink = ({ children, ...props }) => (
-  <Link target="_blank" rel="noopener" {...props} underline="hover">
+  <Link target="_blank" rel="noopener" {...props} underline="always">
     {children}
     <ExternalLinkIcon sx={styles.icon} />
   </Link>
