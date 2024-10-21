@@ -59,7 +59,7 @@
     "axios": "^1.7.2",
     "buffer": "^6.0.3",
     "chart.js": "^3.4.0",
-    "chartjs-adapter-date-fns": "^2.0.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-annotation": "^2.0.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "classnames": "^2.3.1",
