@@ -26,6 +26,6 @@ services:
       - 9229:9229
     container_name: tuni-kpj-palaute_dev
   redis:
-    image: redis:6.2.16
+    image: redis:7.4.1
     command: redis-server
     container_name: tuni-kpj-palaute_redis
