@@ -25,7 +25,6 @@ import {
 
 import { saveValues } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import feedbackGivenSnackbarContent from '../FeedbackTarget/tabs/FeedbackView/FeedbackGivenSnackBar'
 
 const FormContainer = ({
   onSubmit,
@@ -114,8 +113,7 @@ const GuestFeedbackView = () => {
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
-          autoHideDuration: 5999,
-          content: feedbackGivenSnackbarContent,
+          autoHideDuration: 6000,
         })
       }
     } catch (e) {

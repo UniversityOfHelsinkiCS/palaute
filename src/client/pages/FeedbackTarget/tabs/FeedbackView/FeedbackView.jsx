@@ -22,7 +22,6 @@ import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedba
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import feedbackGivenSnackbarContent from './FeedbackGivenSnackBar'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../../../util/common'
 
 const FormContainer = ({
@@ -105,7 +104,6 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
 
-  // TODO clean up this shit again
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -146,7 +144,6 @@ const FeedbackView = () => {
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 6000,
-          content: feedbackGivenSnackbarContent,
         })
       }
     } catch (e) {
