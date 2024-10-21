@@ -31,7 +31,7 @@ services:
     container_name: palaute_test_redis
 
   db:
-    image: postgres:15.8
+    image: postgres:17.0
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
@@ -50,7 +50,7 @@ services:
     container_name: jami
 
   jami-db:
-    image: postgres:13.16
+    image: postgres:17.0
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: jami-db
