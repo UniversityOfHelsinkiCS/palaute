@@ -1,0 +1,22 @@
+name: Feature branches & pull requests
+
+on:
+  pull_request:
+    types: [opened]
+  push:
+    branches:
+      - '!master'
+      - '!tau'
+      - '*' 
+      - '*/*'
+      - '**'
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: test
+
