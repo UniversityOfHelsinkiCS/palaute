@@ -31,7 +31,7 @@ services:
       - pg_data:/data
     container_name: palaute_db
   redis:
-    image: redis:6.2.16
+    image: redis:7.4.1
     command: redis-server
     container_name: palaute_redis
   adminer: # http://localhost:8080/?pgsql=db&username=postgres&db=postgres&ns=public

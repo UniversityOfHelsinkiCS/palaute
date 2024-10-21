@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   redis:
-    image: redis:6.2.16
+    image: redis:7.4.1
     command: redis-server
     container_name: tuni-kpj-palaute_redis
     ports:
