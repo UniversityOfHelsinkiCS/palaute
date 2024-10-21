@@ -1,11 +1,10 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import { useSummaries } from './api'
-import { OPEN_UNIVERSITY_ORG_ID, UNIVERSITY_ROOT_ID } from '../../util/common'
+import { UNIVERSITY_ROOT_ID } from '../../util/common'
 import { useSummaryContext } from './context'
-import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRowWithFilters from './components/SorterRow'
 import OrganisationSummaryRow from './components/OrganisationRow'
+import SummaryRowFilters from './components/SummaryRowFilters'
 
 /**
  *
@@ -21,8 +20,7 @@ const University = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-      <SorterRowWithFilters />
+      <SummaryRowFilters filterType="university" />
       <OrganisationSummaryRow
         organisationId={UNIVERSITY_ROOT_ID}
         organisation={universityOrganisation}
