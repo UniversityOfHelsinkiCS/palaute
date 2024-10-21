@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
 import TeacherOrganisationRow from './components/TeacherOrganisationRow'
-import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
-import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRowWithFilters from './components/SorterRow'
+import SummaryRowFilters from './components/SummaryRowFilters'
 
 /**
  *
@@ -20,8 +18,7 @@ const MyCourses = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-      <SorterRowWithFilters />
+      <SummaryRowFilters filterType="my-courses" />
       {show &&
         organisations.length > 0 &&
         organisations.map(organisation => (
