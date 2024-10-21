@@ -4,12 +4,9 @@ on:
   pull_request:
     types: [opened]
   push:
-    branches:
-      - '!master'
-      - '!tau'
-      - '*' 
-      - '*/*'
-      - '**'
+    branches-ignore:
+      - master
+      - tau
 
 jobs:
   test:
