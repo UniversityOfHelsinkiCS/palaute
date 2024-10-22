@@ -25,7 +25,7 @@ const getHeaders = (questions, feedbacks, language) => {
 
 const getData = (questions, feedbacks, language) => {
   const options = flatMap(questions, q =>
-    ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type) ? q.data?.options ?? [] : []
+    ['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type) ? (q.data?.options ?? []) : []
   )
 
   const optionById = keyBy(options, ({ id }) => id)
@@ -89,7 +89,7 @@ const ExportPdfLink = ({ componentRef }) => {
   const { t } = useTranslation()
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
     pageStyle: '',
   })
 
