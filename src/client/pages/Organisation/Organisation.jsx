@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Route, useRouteMatch, useParams, Redirect, Routes } from 'react-router-dom'
+import { Route, useParams, Redirect, Routes } from 'react-router-dom'
 
 import { Box, Typography } from '@mui/material'
 import {
@@ -33,7 +33,6 @@ import LinkButton from '../../components/common/LinkButton'
 import ForOrganisation from '../CourseSummary/ForOrganisation'
 
 const Organisation = () => {
-  const { url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
@@ -76,59 +75,46 @@ const Organisation = () => {
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">
           {hasAdminAccess && (
-            <RouterTab
-              label={t('organisationSettings:settingsTab')}
-              icon={<SettingsOutlined />}
-              to={`${url}/settings`}
-            />
+            <RouterTab label={t('organisationSettings:settingsTab')} icon={<SettingsOutlined />} to="/settings" />
           )}
           {hasWriteAccess && (
-            <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to={`${url}/survey`} />
+            <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to="/survey" />
           )}
           {ORGANISATION_SURVEYS_ENABLED && hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:organisationSurveysTab')}
               icon={<DynamicFormOutlined />}
-              to={`${url}/organisation-surveys`}
+              to="/organisation-surveys"
             />
           )}
           {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
             <RouterTab
               label={t('organisationSettings:courseRealisationsTab')}
-              to={`${url}/upcoming`}
+              to="/upcoming"
               icon={<CalendarTodayOutlined />}
             />
           )}
-          <RouterTab label={t('organisationSettings:summaryTab')} to={`${url}/summary`} icon={<PollOutlined />} />
+          <RouterTab label={t('organisationSettings:summaryTab')} to="/summary" icon={<PollOutlined />} />
           {hasAdminAccess && (
-            <RouterTab
-              label={t('organisationSettings:openQuestionsTab')}
-              to={`${url}/open`}
-              icon={<CommentOutlined />}
-            />
+            <RouterTab label={t('organisationSettings:openQuestionsTab')} to="/open" icon={<CommentOutlined />} />
           )}
-          {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
+          {isAdmin && <RouterTab label="Organisation Logs" to="/logs" />}
         </RouterTabs>
       </Box>
       <Routes>
-        <ProtectedRoute
-          path="/settings"
-          hasAccess={hasAdminAccess}
-          redirect={`${url}/summary`}
-          component={GeneralSettings}
-        />
+        <ProtectedRoute path="/settings" hasAccess={hasAdminAccess} redirect="/summary" component={GeneralSettings} />
 
         <Route path="/upcoming">
           <SemesterOverview organisation={organisation} />
         </Route>
 
-        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect={`${url}/summary`} component={EditSurvey} />
+        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect="/summary" component={EditSurvey} />
 
         {ORGANISATION_SURVEYS_ENABLED && (
           <ProtectedRoute
             path="/organisation-surveys"
             hasAccess={hasWriteAccess}
-            redirect={`${url}/summary`}
+            redirect="/summary"
             component={OrganisationSurveys}
           />
         )}
@@ -140,11 +126,11 @@ const Organisation = () => {
         <ProtectedRoute
           path="/open"
           hasAccess={hasAdminAccess}
-          redirect={`${url}/summary`}
+          redirect="/summary"
           component={ProgrammeOpenQuestions}
         />
 
-        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect={`${url}/summary`} component={OrganisationLogs} />
+        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect="/summary" component={OrganisationLogs} />
 
         <Redirect to="/summary" />
       </Routes>

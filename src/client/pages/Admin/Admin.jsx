@@ -1,6 +1,6 @@
 import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import { Route, Routes, useRouteMatch } from 'react-router'
+import { Route, Routes } from 'react-router'
 
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -48,8 +48,6 @@ const NorppaLogo = () => {
 }
 
 const AdminView = () => {
-  const { url } = useRouteMatch()
-
   const { authorizedUser } = useAuthorizedUser()
 
   if (!authorizedUser?.isAdmin) return <Redirect to="/" />
@@ -68,17 +66,17 @@ const AdminView = () => {
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab label="Users" component={Link} to={`${url}/users`} />
-          <Tab label="Enable courses" component={Link} to={`${url}/enable`} />
-          <Tab label="Organisation Access" component={Link} to={`${url}/access`} />
-          <Tab label="Norppa feedback" component={Link} to={`${url}/feedback`} />
-          <Tab label="Norppa statistics" component={Link} to={`${url}/statistics`} />
-          <Tab label="Search feedback targets" component={Link} to={`${url}/feedback-targets`} />
-          <Tab label="Search organisation surveys" component={Link} to={`${url}/organisation-surveys`} />
-          <Tab label="Palautevastaavat" component={Link} to={`${url}/feedback-correspondents`} />
-          <Tab label="Banners" component={Link} to={`${url}/banners`} />
-          <Tab label="Updater" to={`${url}/updater`} component={Link} />
-          <Tab label="Misc" component={Link} to={`${url}/misc`} />
+          <Tab label="Users" component={Link} to="/users" />
+          <Tab label="Enable courses" component={Link} to="/enable" />
+          <Tab label="Organisation Access" component={Link} to="/access" />
+          <Tab label="Norppa feedback" component={Link} to="/feedback" />
+          <Tab label="Norppa statistics" component={Link} to="/statistics" />
+          <Tab label="Search feedback targets" component={Link} to="/feedback-targets" />
+          <Tab label="Search organisation surveys" component={Link} to="/organisation-surveys" />
+          <Tab label="Palautevastaavat" component={Link} to="/feedback-correspondents" />
+          <Tab label="Banners" component={Link} to="/banners" />
+          <Tab label="Updater" to="/updater" component={Link} />
+          <Tab label="Misc" component={Link} to="/misc" />
         </RouterTabs>
       </Box>
       <Routes>

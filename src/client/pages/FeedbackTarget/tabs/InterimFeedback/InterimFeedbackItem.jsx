@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Link, useRouteMatch, useParams, Routes } from 'react-router-dom'
+import { Link, useParams, Routes } from 'react-router-dom'
 
 import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
@@ -21,7 +21,6 @@ import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
 import InterimFeedbackModal from './InterimFeedbackModal'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
-  const { url } = useRouteMatch()
   const { id: parentId } = useParams()
   const { t, i18n } = useTranslation()
 
@@ -130,7 +129,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
             variant="outlined"
             sx={{ mt: 2 }}
             component={Link}
-            to={`${url}/${interimFeedback.id}/feedback`}
+            to={`/${interimFeedback.id}/feedback`}
           >
             {t('interimFeedback:viewFeedback')}
           </Button>
@@ -142,7 +141,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               variant="outlined"
               sx={{ mt: 2, ml: 2 }}
               component={Link}
-              to={`${url}/${interimFeedback.id}/results`}
+              to={`/${interimFeedback.id}/results`}
             >
               {t('interimFeedback:viewResults')}
             </Button>

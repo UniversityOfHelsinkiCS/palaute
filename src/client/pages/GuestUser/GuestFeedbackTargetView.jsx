@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jcssImportSource @emotion/react */
 
-import { Route, useRouteMatch, useParams, Redirect, Link, Routes } from 'react-router-dom'
+import { Route, useParams, Redirect, Link, Routes } from 'react-router-dom'
 
 import { Box, Typography, Tab } from '@mui/material'
 
@@ -68,7 +68,6 @@ const useAutoselectLanguage = (feedbackTarget, changeLanguage) => {
 }
 
 const GuestFeedbackTargetView = () => {
-  const { url } = useRouteMatch()
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
@@ -145,11 +144,9 @@ const GuestFeedbackTargetView = () => {
           <Tab
             label={feedback && isOpen ? t('feedbackTargetView:editFeedbackTab') : t('feedbackTargetView:surveyTab')}
             component={Link}
-            to={`${url}/feedback`}
+            to="/feedback"
           />
-          {showFeedbacksTab && (
-            <Tab label={t('feedbackTargetView:feedbacksTab')} component={Link} to={`${url}/results`} />
-          )}
+          {showFeedbacksTab && <Tab label={t('feedbackTargetView:feedbacksTab')} component={Link} to="/results" />}
         </RouterTabs>
       </Box>
       <Routes>
