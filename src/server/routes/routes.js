@@ -5,7 +5,7 @@ const currentUserMiddleware = require('../middleware/currentUserMiddleware')
 const shibbolethCharsetMiddleware = require('../middleware/shibbolethCharsetMiddleware')
 const errorMiddleware = require('../middleware/errorMiddleware')
 const iamGroupsMiddleware = require('../middleware/iamGroupsMiddleware')
-const initializeSentry = require('../util/sentry')
+const { initializeSentry } = require('../util/sentry.ts')
 const feedbacks = require('./feedbacks')
 const users = require('./users')
 const surveys = require('./surveys')
@@ -23,10 +23,8 @@ const { redirectFromCoursesPage } = require('./misc/coursesPageController')
 
 const router = Router()
 
-initializeSentry(router)
+initializeSentry()
 
-router.use(Sentry.Handlers.requestHandler())
-router.use(Sentry.Handlers.tracingHandler())
 router.use(Router.json())
 router.use(shibbolethCharsetMiddleware)
 router.use(accessLogger)
@@ -53,7 +51,7 @@ router.use('/admin', admin)
 // Link from courses-page
 router.use('/cur/:id', redirectFromCoursesPage)
 
-router.use(Sentry.Handlers.errorHandler())
+Sentry.setupExpressErrorHandler(router)
 router.use(errorMiddleware)
 
 module.exports = router
