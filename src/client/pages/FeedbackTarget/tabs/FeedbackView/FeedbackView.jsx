@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 
 import { Typography, Button, Box, Card, CardContent, Alert } from '@mui/material'
 
@@ -85,15 +85,15 @@ const FormContainer = ({
 }
 
 const FeedbackView = () => {
-  const { id, interimFeedbackId } = useParams()
-
-  const history = useHistory()
+  const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
-  const submitMutation = useSaveValues()
-
+  const { id, interimFeedbackId } = useParams()
   const { authorizedUser } = useAuthorizedUser()
+
+  const submitMutation = useSaveValues()
+  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
+
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
   const isLoading = !feedbackTarget
 
@@ -136,9 +136,9 @@ const FeedbackView = () => {
         await submitMutation.mutateAsync(feedbackData)
 
         if (SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
-          history.push(`/feedbacks?status=given`)
+          navigate(`/feedbacks?status=given`)
         } else {
-          history.push(`/targets/${id}/results`)
+          navigate(`/targets/${id}/results`)
         }
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
