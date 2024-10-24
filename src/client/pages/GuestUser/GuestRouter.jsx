@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
+import { Route, Routes, Redirect, useLocation } from 'react-router-dom'
 import { Container } from '@mui/material'
 import { useParams } from 'react-router'
 
@@ -32,14 +32,14 @@ const ParseToken = () => {
 
 const GuestRouter = () => (
   <Container sx={styles.container}>
-    <Switch>
+    <Routes>
       <Route path="/noad" exact>
         <Redirect to="/noad/courses" />
       </Route>
       <Route path="/noad/token/:token" component={ParseToken} />
       <Route path="/noad/courses" component={GuestCourses} />
       <Route path="/noad/targets/:id" component={GuestFeedbackTargetView} />
-    </Switch>
+    </Routes>
   </Container>
 )
 

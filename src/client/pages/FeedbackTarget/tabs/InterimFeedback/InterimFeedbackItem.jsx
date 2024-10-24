@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Link, Switch, useRouteMatch, useParams } from 'react-router-dom'
+import { Link, useRouteMatch, useParams, Routes } from 'react-router-dom'
 
 import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
@@ -21,7 +21,7 @@ import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
 import InterimFeedbackModal from './InterimFeedbackModal'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
-  const { path, url } = useRouteMatch()
+  const { url } = useRouteMatch()
   const { id: parentId } = useParams()
   const { t, i18n } = useTranslation()
 
@@ -162,14 +162,14 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
         </CardContent>
       </Card>
 
-      <Switch>
+      <Routes>
         <ProtectedRoute
-          path={`${path}/:interimFeedbackId`}
+          path="/:interimFeedbackId"
           component={InterimFeedbackModal}
           hasAccess
           redirectPath={defaultPath}
         />
-      </Switch>
+      </Routes>
     </>
   )
 }

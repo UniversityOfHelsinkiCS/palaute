@@ -1,6 +1,6 @@
 import { Container } from '@mui/material'
 import React, { Suspense } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Redirect, Routes } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
@@ -48,7 +48,7 @@ const Home = () => {
 const Router = () => (
   <Container sx={styles.container}>
     <Suspense fallback={<LoadingProgress />}>
-      <Switch>
+      <Routes>
         <Route path="/feedbacks" component={MyFeedbacks} exact />
         <Route path="/courses" component={NEW_TEACHING_VIEW_ENABLED ? MyTeachingV2 : MyTeaching} exact />
         <Route path="/targets/:id" component={FeedbackTarget} />
@@ -59,7 +59,7 @@ const Router = () => (
         <Route path="/norppa-feedback" component={NorppaFeedback} />
         <Route path="/admin" component={Admin} />
         <Route path="/" component={Home} />
-      </Switch>
+      </Routes>
     </Suspense>
   </Container>
 )

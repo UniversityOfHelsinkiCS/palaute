@@ -1,6 +1,6 @@
 import React from 'react'
 import { intersection } from 'lodash-es'
-import { Redirect, Route, Switch } from 'react-router'
+import { Redirect, Route, Routes } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
@@ -86,7 +86,7 @@ const SummaryInContext = () => {
         )}
       </RouterTabs>
       <SummaryScrollContainer>
-        <Switch>
+        <Routes>
           <ProtectedRoute path="/course-summary/my-courses" component={MyCourses} hasAccess />
 
           <ProtectedRoute
@@ -110,7 +110,7 @@ const SummaryInContext = () => {
           <Route path="/course-summary" exact>
             <Redirect to={`/course-summary/${preferredView}`} />
           </Route>
-        </Switch>
+        </Routes>
       </SummaryScrollContainer>
     </>
   )

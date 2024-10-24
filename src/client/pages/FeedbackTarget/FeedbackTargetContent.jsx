@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { Switch, useRouteMatch, Redirect, Routes } from 'react-router-dom'
 
 import { Alert, Box } from '@mui/material'
 
@@ -47,7 +47,7 @@ import { TabGroup, TabGroupsContainer, TabGroupTab } from '../../components/comm
 import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
-  const { path, url } = useRouteMatch()
+  const { url } = useRouteMatch()
   const { t, i18n } = useTranslation()
   const {
     feedbackTarget,
@@ -257,49 +257,39 @@ const FeedbackTargetContent = () => {
         </TabGroupsContainer>
       </Box>
 
-      <Switch>
+      <Routes>
+        <ProtectedRoute path="/edit" component={Settings} hasAccess={showSettingsTab} redirectPath={defaultPath} />
+        <ProtectedRoute path="/results" component={Results} hasAccess={showResultsSection} redirectPath={defaultPath} />
+        <ProtectedRoute path="/feedback" component={FeedbackView} hasAccess />
         <ProtectedRoute
-          path={`${path}/edit`}
-          component={Settings}
-          hasAccess={showSettingsTab}
-          redirectPath={defaultPath}
-        />
-        <ProtectedRoute
-          path={`${path}/results`}
-          component={Results}
-          hasAccess={showResultsSection}
-          redirectPath={defaultPath}
-        />
-        <ProtectedRoute path={`${path}/feedback`} component={FeedbackView} hasAccess />
-        <ProtectedRoute
-          path={`${path}/continuous-feedback`}
+          path="/continuous-feedback"
           component={ContinuousFeedback}
           hasAccess={showContinuousFeedbackTab}
           redirectPath={defaultPath}
         />
         <ProtectedRoute
-          path={`${path}/interim-feedback`}
+          path="/interim-feedback"
           component={InterimFeedback}
           hasAccess={showInterimFeedbackTab}
           redirectPath={defaultPath}
         />
         <ProtectedRoute
-          path={`${path}/students-with-feedback`}
+          path="/students-with-feedback"
           component={StudentsWithFeedback}
           hasAccess={showStudentsWithFeedbackTab}
           redirectPath={defaultPath}
         />
-        <ProtectedRoute path={`${path}/share`} component={Share} hasAccess={showLinksTab} redirectPath={defaultPath} />
-        <ProtectedRoute path={`${path}/togen`} component={Links} hasAccess={isAdmin} redirectPath={defaultPath} />
+        <ProtectedRoute path="/share" component={Share} hasAccess={showLinksTab} redirectPath={defaultPath} />
+        <ProtectedRoute path="/togen" component={Links} hasAccess={isAdmin} redirectPath={defaultPath} />
         <ProtectedRoute
-          path={`${path}/edit-feedback-response`}
+          path="/edit-feedback-response"
           redirectPath={defaultPath}
           component={EditFeedbackResponse}
           hasAccess={showEditFeedbackResponseTab}
         />
-        <ProtectedRoute path={`${path}/logs`} component={Logs} hasAccess={isAdmin} redirectPath={defaultPath} />
-        <Redirect to={`${path}/feedback`} />
-      </Switch>
+        <ProtectedRoute path="/logs" component={Logs} hasAccess={isAdmin} redirectPath={defaultPath} />
+        <Redirect to="/feedback" />
+      </Routes>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import { Route, Switch, useRouteMatch } from 'react-router'
+import { Route, Routes, useRouteMatch } from 'react-router'
 
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -48,7 +48,7 @@ const NorppaLogo = () => {
 }
 
 const AdminView = () => {
-  const { path, url } = useRouteMatch()
+  const { url } = useRouteMatch()
 
   const { authorizedUser } = useAuthorizedUser()
 
@@ -81,19 +81,19 @@ const AdminView = () => {
           <Tab label="Misc" component={Link} to={`${url}/misc`} />
         </RouterTabs>
       </Box>
-      <Switch>
-        <Route path={`${path}/users`} component={UsersTab} />
-        <Route path={`${path}/enable`} component={EnableCourses} />
-        <Route path={`${path}/access`} component={OrganisationAccess} />
-        <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
-        <Route path={`${path}/statistics`} component={NorppaStatisticView} />
-        <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />
-        <Route path={`${path}/organisation-surveys`} component={OrganisationSurveyInspector} />
-        <Route path={`${path}/feedback-correspondents`} component={FeedbackCorrespondents} />
-        <Route path={`${path}/banners`} component={BannerView} />
-        <Route path={`${path}/updater`} component={UpdaterView} />
-        <Route path={`${path}/misc`} component={MiscTab} />
-      </Switch>
+      <Routes>
+        <Route path="/users" component={UsersTab} />
+        <Route path="/enable" component={EnableCourses} />
+        <Route path="/access" component={OrganisationAccess} />
+        <Route path="/feedback" component={NorppaFeedbackView} />
+        <Route path="/statistics" component={NorppaStatisticView} />
+        <Route path="/feedback-targets" component={FeedbackTargetInspector} />
+        <Route path="/organisation-surveys" component={OrganisationSurveyInspector} />
+        <Route path="/feedback-correspondents" component={FeedbackCorrespondents} />
+        <Route path="/banners" component={BannerView} />
+        <Route path="/updater" component={UpdaterView} />
+        <Route path="/misc" component={MiscTab} />
+      </Routes>
     </>
   )
 }

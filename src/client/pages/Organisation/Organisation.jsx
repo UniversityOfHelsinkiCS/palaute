@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Route, Switch, useRouteMatch, useParams, Redirect } from 'react-router-dom'
+import { Route, useRouteMatch, useParams, Redirect, Routes } from 'react-router-dom'
 
 import { Box, Typography } from '@mui/material'
 import {
@@ -33,7 +33,7 @@ import LinkButton from '../../components/common/LinkButton'
 import ForOrganisation from '../CourseSummary/ForOrganisation'
 
 const Organisation = () => {
-  const { path, url } = useRouteMatch()
+  const { url } = useRouteMatch()
   const { code } = useParams()
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
@@ -110,54 +110,44 @@ const Organisation = () => {
           {isAdmin && <RouterTab label="Organisation Logs" to={`${url}/logs`} />}
         </RouterTabs>
       </Box>
-      <Switch>
+      <Routes>
         <ProtectedRoute
-          path={`${path}/settings`}
+          path="/settings"
           hasAccess={hasAdminAccess}
           redirect={`${url}/summary`}
           component={GeneralSettings}
         />
 
-        <Route path={`${path}/upcoming`}>
+        <Route path="/upcoming">
           <SemesterOverview organisation={organisation} />
         </Route>
 
-        <ProtectedRoute
-          path={`${path}/survey`}
-          hasAccess={hasWriteAccess}
-          redirect={`${url}/summary`}
-          component={EditSurvey}
-        />
+        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect={`${url}/summary`} component={EditSurvey} />
 
         {ORGANISATION_SURVEYS_ENABLED && (
           <ProtectedRoute
-            path={`${path}/organisation-surveys`}
+            path="/organisation-surveys"
             hasAccess={hasWriteAccess}
             redirect={`${url}/summary`}
             component={OrganisationSurveys}
           />
         )}
 
-        <Route path={`${path}/summary`}>
+        <Route path="/summary">
           <ForOrganisation organisation={organisation} />
         </Route>
 
         <ProtectedRoute
-          path={`${path}/open`}
+          path="/open"
           hasAccess={hasAdminAccess}
           redirect={`${url}/summary`}
           component={ProgrammeOpenQuestions}
         />
 
-        <ProtectedRoute
-          path={`${path}/logs`}
-          hasAccess={isAdmin}
-          redirect={`${url}/summary`}
-          component={OrganisationLogs}
-        />
+        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect={`${url}/summary`} component={OrganisationLogs} />
 
-        <Redirect to={`${path}/summary`} />
-      </Switch>
+        <Redirect to="/summary" />
+      </Routes>
     </>
   )
 }
