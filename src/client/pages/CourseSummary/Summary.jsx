@@ -95,7 +95,6 @@ const SummaryInContext = () => {
                 <MyCourses />
               </ProtectedRoute>
             }
-            hasAccess
           />
 
           <Route

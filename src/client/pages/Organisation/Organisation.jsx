@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Route, useParams, Routes, Navigate } from 'react-router-dom'
+import { Route, useParams, Routes, Navigate, useMatch } from 'react-router-dom'
 
 import { Box, Typography } from '@mui/material'
 import {
@@ -34,6 +34,7 @@ import ForOrganisation from '../CourseSummary/ForOrganisation'
 
 const Organisation = () => {
   const { code } = useParams()
+  const { pathnameBase } = useMatch('/organisations/:code/*')
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
@@ -75,67 +76,99 @@ const Organisation = () => {
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">
           {hasAdminAccess && (
-            <RouterTab label={t('organisationSettings:settingsTab')} icon={<SettingsOutlined />} to="/settings" />
+            <RouterTab
+              label={t('organisationSettings:settingsTab')}
+              icon={<SettingsOutlined />}
+              to={`${pathnameBase}/settings`}
+            />
           )}
           {hasWriteAccess && (
-            <RouterTab label={t('organisationSettings:surveyTab')} icon={<LiveHelpOutlined />} to="/survey" />
+            <RouterTab
+              label={t('organisationSettings:surveyTab')}
+              icon={<LiveHelpOutlined />}
+              to={`${pathnameBase}/survey`}
+            />
           )}
           {ORGANISATION_SURVEYS_ENABLED && hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:organisationSurveysTab')}
               icon={<DynamicFormOutlined />}
-              to="/organisation-surveys"
+              to={`${pathnameBase}/organisation-surveys`}
             />
           )}
           {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
             <RouterTab
               label={t('organisationSettings:courseRealisationsTab')}
-              to="/upcoming"
+              to={`${pathnameBase}/upcoming`}
               icon={<CalendarTodayOutlined />}
             />
           )}
-          <RouterTab label={t('organisationSettings:summaryTab')} to="/summary" icon={<PollOutlined />} />
+          <RouterTab
+            label={t('organisationSettings:summaryTab')}
+            to={`${pathnameBase}/summary`}
+            icon={<PollOutlined />}
+          />
           {hasAdminAccess && (
-            <RouterTab label={t('organisationSettings:openQuestionsTab')} to="/open" icon={<CommentOutlined />} />
+            <RouterTab
+              label={t('organisationSettings:openQuestionsTab')}
+              to={`${pathnameBase}/open`}
+              icon={<CommentOutlined />}
+            />
           )}
-          {isAdmin && <RouterTab label="Organisation Logs" to="/logs" />}
+          {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} />}
         </RouterTabs>
       </Box>
       <Routes>
-        <ProtectedRoute
+        <Route
           path="/settings"
-          hasAccess={hasAdminAccess}
-          redirect="/summary"
-          component={<GeneralSettings />}
+          element={
+            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath="/summary">
+              <GeneralSettings />
+            </ProtectedRoute>
+          }
         />
 
-        <Route path="/upcoming">
-          <SemesterOverview organisation={organisation} />
-        </Route>
+        <Route path="/upcoming" element={<SemesterOverview organisation={organisation} />} />
 
-        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect="/summary" component={<EditSurvey />} />
+        <Route
+          path="/survey"
+          element={
+            <ProtectedRoute hasAccess={hasWriteAccess} redirectPath="/summary">
+              <EditSurvey />
+            </ProtectedRoute>
+          }
+        />
 
         {ORGANISATION_SURVEYS_ENABLED && (
-          <ProtectedRoute
+          <Route
             path="/organisation-surveys"
-            hasAccess={hasWriteAccess}
-            redirect="/summary"
-            component={<OrganisationSurveys />}
+            element={
+              <ProtectedRoute hasAccess={hasWriteAccess} redirectPath="/summary">
+                <OrganisationSurveys />
+              </ProtectedRoute>
+            }
           />
         )}
 
-        <Route path="/summary">
-          <ForOrganisation organisation={organisation} />
-        </Route>
+        <Route path="/summary" element={<ForOrganisation organisation={organisation} />} />
 
-        <ProtectedRoute
+        <Route
           path="/open"
-          hasAccess={hasAdminAccess}
-          redirect="/summary"
-          component={<ProgrammeOpenQuestions />}
+          element={
+            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath="/summary">
+              <ProgrammeOpenQuestions />
+            </ProtectedRoute>
+          }
         />
 
-        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect="/summary" component={<OrganisationLogs />} />
+        <Route
+          path="/logs"
+          element={
+            <ProtectedRoute hasAccess={isAdmin} redirectPath="/summary">
+              <OrganisationLogs />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/summary" />} />
       </Routes>
