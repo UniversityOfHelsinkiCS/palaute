@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { CONFIG_TEST_VALUE, images, PRIVATE_TEST, SHOW_NORPPA_HY_LOGO } from '../../util/common'
+import { CONFIG_TEST_VALUE, PRIVATE_TEST } from '../../util/common'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
 import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
