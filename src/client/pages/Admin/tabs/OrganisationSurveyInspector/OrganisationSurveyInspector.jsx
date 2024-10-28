@@ -39,10 +39,6 @@ const OrganisationSurveyInspector = () => {
     runQuery(newQuery)
   }
 
-  useEffect(() => {
-    runQuery(query)
-  }, [])
-
   return (
     <Box mt={4}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
