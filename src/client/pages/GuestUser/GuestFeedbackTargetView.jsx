@@ -84,8 +84,6 @@ const GuestFeedbackTargetView = () => {
     return <Navigate to="/noad/courses" />
   }
 
-  console.log(pathnameBase)
-
   const { accessStatus, courseUnit, courseRealisation, opensAt, feedback } = feedbackTarget
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
