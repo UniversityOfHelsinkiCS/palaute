@@ -33,10 +33,10 @@ const ParseToken = () => {
 const GuestRouter = () => (
   <Container sx={styles.container}>
     <Routes>
-      <Route path="/noad" exact element={<Navigate to="/noad/courses" />} />
-      <Route path="/noad/token/:token" component={ParseToken} />
-      <Route path="/noad/courses" component={GuestCourses} />
-      <Route path="/noad/targets/:id" component={GuestFeedbackTargetView} />
+      <Route path="/" exact element={<Navigate to="/noad/courses" />} />
+      <Route path="/token/:token" element={<ParseToken />} />
+      <Route path="/courses" element={<GuestCourses />} />
+      <Route path="/targets/:id/*" element={<GuestFeedbackTargetView />} />
     </Routes>
   </Container>
 )

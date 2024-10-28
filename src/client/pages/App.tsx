@@ -36,7 +36,7 @@ const App = () => {
             <Suspense fallback={null}>
               <SnackbarProvider maxSnack={3} preventDuplicate autoHideDuration={10_000}>
                 <Routes>
-                  <Route path="/noad" element={<GuestUser />} />
+                  <Route path="/noad/*" element={<GuestUser />} />
                   <Route path="/*" element={<AdUser />} />
                 </Routes>
               </SnackbarProvider>

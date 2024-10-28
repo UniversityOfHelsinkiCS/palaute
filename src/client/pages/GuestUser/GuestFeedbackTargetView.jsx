@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jcssImportSource @emotion/react */
 
-import { Route, useParams, Link, Routes, Navigate } from 'react-router-dom'
+import { Route, useParams, Link, Routes, Navigate, useMatch } from 'react-router-dom'
 
 import { Box, Typography, Tab } from '@mui/material'
 
@@ -69,6 +69,7 @@ const useAutoselectLanguage = (feedbackTarget, changeLanguage) => {
 
 const GuestFeedbackTargetView = () => {
   const { id } = useParams()
+  const { pathnameBase } = useMatch('/noad/targets/:id/*')
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
@@ -82,6 +83,8 @@ const GuestFeedbackTargetView = () => {
   if (!feedbackTarget) {
     return <Navigate to="/noad/courses" />
   }
+
+  console.log(pathnameBase)
 
   const { accessStatus, courseUnit, courseRealisation, opensAt, feedback } = feedbackTarget
 
@@ -144,14 +147,16 @@ const GuestFeedbackTargetView = () => {
           <Tab
             label={feedback && isOpen ? t('feedbackTargetView:editFeedbackTab') : t('feedbackTargetView:surveyTab')}
             component={Link}
-            to="/feedback"
+            to={`${pathnameBase}/feedback`}
           />
-          {showFeedbacksTab && <Tab label={t('feedbackTargetView:feedbacksTab')} component={Link} to="/results" />}
+          {showFeedbacksTab && (
+            <Tab label={t('feedbackTargetView:feedbacksTab')} component={Link} to={`${pathnameBase}/results`} />
+          )}
         </RouterTabs>
       </Box>
       <Routes>
-        <Route path="/feedback" element={GuestFeedbackView} />
-        <Route path="/results" element={GuestFeedbackTargetResults} />
+        <Route path="/feedback" element={<GuestFeedbackView />} />
+        <Route path="/results" element={<GuestFeedbackTargetResults />} />
         <Route path="*" element={<Navigate to="/feedback" />} />
       </Routes>
     </>
